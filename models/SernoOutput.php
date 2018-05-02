@@ -31,4 +31,9 @@ public function behaviors()
              ]
         );
     }
+    
+    public static function getDb()
+    {
+            return Yii::$app->get('db_mis7');
+    }
 }

@@ -9,19 +9,17 @@ use Yii;
 /**
  * This is the base-model class for table "tb_serno_output".
  *
- * @property string $pk_plan
- * @property string $uniq_plan
- * @property integer $num_plan
- * @property string $stc_plan
- * @property string $gmc_plan
- * @property integer $qty_plan
- * @property string $prod_plan
- * @property string $ship_plan
- * @property integer $prod_week_plan
- * @property integer $ship_week_plan
- * @property string $mdsi_plan
- * @property integer $prod_output_plan
- * @property integer $ship_output_plan
+ * @property string $pk
+ * @property integer $id
+ * @property string $stc
+ * @property string $dst
+ * @property integer $num
+ * @property string $gmc
+ * @property integer $qty
+ * @property integer $output
+ * @property integer $adv
+ * @property string $etd
+ * @property integer $cntr
  * @property string $aliasModel
  */
 abstract class SernoOutput extends \yii\db\ActiveRecord
@@ -37,6 +35,13 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
         return 'tb_serno_output';
     }
 
+    /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb()
+    {
+        return Yii::$app->get('db_mis7');
+    }
 
     /**
      * @inheritdoc
@@ -44,12 +49,14 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pk_plan', 'prod_output_plan', 'ship_output_plan'], 'required'],
-            [['num_plan', 'qty_plan', 'prod_week_plan', 'ship_week_plan', 'prod_output_plan', 'ship_output_plan'], 'integer'],
-            [['pk_plan', 'prod_plan', 'ship_plan'], 'string', 'max' => 10],
-            [['uniq_plan', 'stc_plan'], 'string', 'max' => 6],
-            [['gmc_plan'], 'string', 'max' => 7],
-            [['mdsi_plan'], 'string', 'max' => 9]
+            [['pk'], 'required'],
+            [['id', 'num', 'qty', 'output', 'adv', 'cntr'], 'integer'],
+            [['dst'], 'string'],
+            [['etd'], 'safe'],
+            [['pk'], 'string', 'max' => 20],
+            [['stc'], 'string', 'max' => 6],
+            [['gmc'], 'string', 'max' => 7],
+            [['pk'], 'unique']
         ];
     }
 
@@ -59,19 +66,17 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'pk_plan' => 'Pk Plan',
-            'uniq_plan' => 'Uniq Plan',
-            'num_plan' => 'Num Plan',
-            'stc_plan' => 'Stc Plan',
-            'gmc_plan' => 'Gmc Plan',
-            'qty_plan' => 'Qty Plan',
-            'prod_plan' => 'Prod Plan',
-            'ship_plan' => 'Ship Plan',
-            'prod_week_plan' => 'Prod Week Plan',
-            'ship_week_plan' => 'Ship Week Plan',
-            'mdsi_plan' => 'Mdsi Plan',
-            'prod_output_plan' => 'Prod Output Plan',
-            'ship_output_plan' => 'Ship Output Plan',
+            'pk' => 'Pk',
+            'id' => 'ID',
+            'stc' => 'Stc',
+            'dst' => 'Dst',
+            'num' => 'Num',
+            'gmc' => 'Gmc',
+            'qty' => 'Qty',
+            'output' => 'Output',
+            'adv' => 'Adv',
+            'etd' => 'Etd',
+            'cntr' => 'Cntr',
         ];
     }
 

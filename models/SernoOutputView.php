@@ -13,7 +13,7 @@ class SernoOutputView extends BaseSernoOutput
 {
     public static function tableName()
     {
-        return 'serno_output_view';
+        return 'tb_serno_output_view';
     }
 
     public function behaviors()

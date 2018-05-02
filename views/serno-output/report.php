@@ -4,7 +4,7 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 
-$this->title = Yii::t('app', 'Plan Summary Report');
+$this->title = Yii::t('app', 'Production Summary Report');
 $this->params['breadcrumbs'][] = $this->title;
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 $color = 'DodgerBlue';
@@ -33,10 +33,10 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 
-$startDate = new DateTime(date('Y-m-02'));
+$startDate = new DateTime(date('Y-m-01'));
 $endDate = new DateTime(date('Y-m-t'));
-$startWeek = $startDate->format('W');
-$endWeek = $endDate->format('W');
+$startWeek = $startDate->format('W')-1;
+$endWeek = $endDate->format('W')-1;
 ?>
     
 <div class="nav-tabs-custom">
@@ -73,21 +73,23 @@ $endWeek = $endDate->format('W');
                 echo '<div class="tab-pane" id="tab_1_' . $j .'">';
             }
 
+            
             //$sernoFg = app\models\SernoFgSumViewWeek::find()->where(['week_no' => $j])->orderBy('shipto ASC')->all();
-            $sernoFg = app\models\SernoOutputView::find()->where(['ship_week_plan' => $j])->orderBy('ship_plan ASC')->all();
+            $sernoFg = app\models\SernoOutputView::find()->where(['week_no' => $j])->orderBy('etd ASC')->all();
             $dataClose = [];
             $dataOpen = [];
             $dataName = [];
 
             foreach ($sernoFg as $value) {
-                $presentase = round(($value->prod_output_plan/$value->qty_plan)*100);
+                $presentase = round(($value->output/$value->qty)*100);
                 //$dataClose[] = (int)$presentase;
                 $dataClose[] = [
                     'y' => (int)$presentase,
-                    'url' => 'http://localhost/prod-report/web/serno-output?q=' . $value->ship_plan
+                    //'url' => 'http://localhost/prod-report/web/serno-output?q=' . $value->ship_plan
                 ];
                 $dataOpen[] = (int)(100 - $presentase);
-                $dataName[] = $value->ship_plan;
+                //$dataName[] = $value->etd;
+                $dataName[] = date('d-M-Y', strtotime($value->etd));
             }
             echo Highcharts::widget([
             'scripts' => [
