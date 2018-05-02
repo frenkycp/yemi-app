@@ -80,11 +80,6 @@ class BatchController extends Controller
     public $tables = [];
 
     /**
-     * @var array skip db tables for generating models
-     */
-    public $skipTables = [];
-
-    /**
      * @var string eg. `app_`
      */
     public $tablePrefix = '';
@@ -274,7 +269,6 @@ class BatchController extends Controller
                 'messageCategory',
                 'singularEntities',
                 'tables',
-                'skipTables',
                 'tablePrefix',
                 'modelDb',
                 'modelNamespace',
@@ -318,19 +312,9 @@ class BatchController extends Controller
         $this->appConfig['id'] = 'temp';
         $this->modelGenerator = new ModelGenerator(['db' => $this->modelDb]);
 
-        if ($this->tables && $this->skipTables) {
-            $this->stderr("Only one property of 'tables' or 'skipTables' can be set." . PHP_EOL);
-            return false;
-        }
-
         if (!$this->tables) {
             $this->modelGenerator->tableName = '*';
             $this->tables = $this->modelGenerator->getTableNames();
-            foreach ($this->tables AS $i => $table) {
-                if (in_array($table, $this->skipTables)) {
-                    unset($this->tables[$i]);
-                }
-            }
             $tableList = implode("\n\t- ", $this->tables);
             $msg = "Are you sure that you want to run action \"{$action->id}\" for the following tables?\n\t- {$tableList}\n\n";
             if (!$this->confirm($msg)) {
@@ -362,6 +346,7 @@ class BatchController extends Controller
     {
         // create models
         foreach ($this->tables as $table) {
+            //var_dump($this->tableNameMap, $table);exit;
             $params = [
                 'interactive' => $this->interactive,
                 'overwrite' => $this->overwrite,
@@ -431,10 +416,10 @@ class BatchController extends Controller
                 'interactive' => $this->interactive,
                 'overwrite' => $this->overwrite,
                 'template' => $this->template,
-                'modelClass' => $this->modelNamespace . '\\' . $name,
-                'searchModelClass' => $this->crudSearchModelNamespace . '\\' . $name . $this->crudSearchModelSuffix,
+                'modelClass' => $this->modelNamespace.'\\'.$name,
+                'searchModelClass' => $this->crudSearchModelNamespace.'\\'.$name.$this->crudSearchModelSuffix,
                 'controllerNs' => $this->crudControllerNamespace,
-                'controllerClass' => $this->crudControllerNamespace . '\\' . $name . 'Controller',
+                'controllerClass' => $this->crudControllerNamespace.'\\'.$name.'Controller',
                 'viewPath' => $this->crudViewPath,
                 'pathPrefix' => $this->crudPathPrefix,
                 'tablePrefix' => $this->tablePrefix,
@@ -478,13 +463,13 @@ class BatchController extends Controller
             $config = $GLOBALS['config'];
         } else {
             $config = \yii\helpers\ArrayHelper::merge(
-                require(\Yii::getAlias('@app') . '/../common/config/main.php'),
-                (is_file(\Yii::getAlias('@app') . '/../common/config/main-local.php')) ?
-                    require(\Yii::getAlias('@app') . '/../common/config/main-local.php')
+                require(\Yii::getAlias('@app').'/../common/config/main.php'),
+                (is_file(\Yii::getAlias('@app').'/../common/config/main-local.php')) ?
+                    require(\Yii::getAlias('@app').'/../common/config/main-local.php')
                     : [],
-                require(\Yii::getAlias('@app') . '/../console/config/main.php'),
-                (is_file(\Yii::getAlias('@app') . '/../console/config/main-local.php')) ?
-                    require(\Yii::getAlias('@app') . '/../console/config/main-local.php')
+                require(\Yii::getAlias('@app').'/../console/config/main.php'),
+                (is_file(\Yii::getAlias('@app').'/../console/config/main-local.php')) ?
+                    require(\Yii::getAlias('@app').'/../console/config/main-local.php')
                     : []
             );
         }
@@ -500,7 +485,7 @@ class BatchController extends Controller
     private function createDirectoryFromNamespace($ns)
     {
         echo \Yii::getRootAlias($ns);
-        $dir = \Yii::getAlias('@' . str_replace('\\', '/', ltrim($ns, '\\')));
+        $dir = \Yii::getAlias('@'.str_replace('\\', '/', ltrim($ns, '\\')));
         @mkdir($dir);
     }
 }

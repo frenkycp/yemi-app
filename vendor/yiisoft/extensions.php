@@ -269,7 +269,7 @@ return array (
   'schmunk42/yii2-giiant' => 
   array (
     'name' => 'schmunk42/yii2-giiant',
-    'version' => '0.10.1.0',
+    'version' => '0.10.0.0',
     'alias' => 
     array (
       '@schmunk42/giiant' => $vendorDir . '/schmunk42/yii2-giiant/src',
