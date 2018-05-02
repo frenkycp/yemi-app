@@ -43,6 +43,14 @@ public function search($params)
 {
 $query = SernoOutputModel::find();
 
+if(isset($params['index_type']))
+{
+    if($params['index_type'] == 1)
+    {
+        $query = SernoOutputModel::find()->where('output<qty')->andWhere(['etd' => $params['etd']]);
+    }
+}
+
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
 ]);

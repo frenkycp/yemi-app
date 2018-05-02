@@ -104,15 +104,16 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
             },
             'contentOptions' => ['nowrap'=>'nowrap']
         ],
-			'pk',
-			'id',
-			'num',
+			//'pk',
+                    'gmc',
+			//'id',
+			//'num',
 			'qty',
 			'output',
-			'adv',
-			'cntr',
-			/*'dst:ntext',*/
-			/*'etd',*/
+			//'adv',
+			//'cntr',
+			'dst:ntext',
+			'etd',
 			/*'stc',*/
 			/*'gmc',*/
         ],

@@ -3,6 +3,7 @@ use miloschuman\highcharts\Highcharts;
 use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 $this->title = Yii::t('app', 'Production Summary Report');
 $this->params['breadcrumbs'][] = $this->title;
@@ -85,7 +86,8 @@ $endWeek = $endDate->format('W')-1;
                 //$dataClose[] = (int)$presentase;
                 $dataClose[] = [
                     'y' => (int)$presentase,
-                    //'url' => 'http://localhost/prod-report/web/serno-output?q=' . $value->ship_plan
+                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
+                    //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
                 ];
                 $dataOpen[] = (int)(100 - $presentase);
                 //$dataName[] = $value->etd;
@@ -99,7 +101,7 @@ $endWeek = $endDate->format('W')-1;
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 350,
+                    'height' => 500,
                     'width' => null
                 ],
                 'credits' => [
@@ -145,6 +147,7 @@ $endWeek = $endDate->format('W')-1;
                         'point' => [
                             'events' => [
                                 //'click' => new JsExpression('function(){ location.href = this.options.url; }')
+                                'click' => new JsExpression('function(){ window.open(this.options.url); }')
                             ]
                         ]
                     ]

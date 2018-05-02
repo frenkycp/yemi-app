@@ -12,8 +12,8 @@ class AdminLtePluginAsset extends AssetBundle
         'iCheck/all.css',
         //'bootstrap-slider/slider.css',
         //'bootstrap-wysihtml5/bootstrap-wysihtml5.css',
-        'datepicker/datepicker3.css',
-        'select2/select2.css',
+        //'datepicker/datepicker3.css',
+        //'select2/select2.css',
     ];
     public $js = [
         'iCheck/icheck.js',
@@ -21,7 +21,7 @@ class AdminLtePluginAsset extends AssetBundle
         //'bootstrap-wysihtml5/bootstrap-wysihtml5.all.js',
         //'chartjs/Chart.js',
         //'datepicker/bootstrap-datepicker.js',
-        'select2/select2.full.js',
+        //'select2/select2.full.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
