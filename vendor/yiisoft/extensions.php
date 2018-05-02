@@ -212,16 +212,6 @@ return array (
       '@dmstr/helpers' => $vendorDir . '/dmstr/yii2-helpers/src',
     ),
   ),
-  'schmunk42/yii2-giiant' => 
-  array (
-    'name' => 'schmunk42/yii2-giiant',
-    'version' => '0.10.0.0',
-    'alias' => 
-    array (
-      '@schmunk42/giiant' => $vendorDir . '/schmunk42/yii2-giiant/src',
-    ),
-    'bootstrap' => 'schmunk42\\giiant\\Bootstrap',
-  ),
   'miloschuman/yii2-highcharts-widget' => 
   array (
     'name' => 'miloschuman/yii2-highcharts-widget',
@@ -275,5 +265,15 @@ return array (
     array (
       '@kartik/growl' => $vendorDir . '/kartik-v/yii2-widget-growl',
     ),
+  ),
+  'schmunk42/yii2-giiant' => 
+  array (
+    'name' => 'schmunk42/yii2-giiant',
+    'version' => '0.10.1.0',
+    'alias' => 
+    array (
+      '@schmunk42/giiant' => $vendorDir . '/schmunk42/yii2-giiant/src',
+    ),
+    'bootstrap' => 'schmunk42\\giiant\\Bootstrap',
   ),
 );

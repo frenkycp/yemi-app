@@ -1,7 +1,7 @@
 <?php
 use scotthuangzl\googlechart\GoogleChart;
 
-$this->title = 'Production Report';
+$this->title = 'YEMI - Apps';
 
 ?>
 

@@ -6,8 +6,8 @@ use yii\helpers\Html;
 * @var yii\web\View $this
 * @var app\models\TpPartList $model
 */
-    
-$this->title = Yii::t('app', 'Tp Part List') . " " . $model->tp_part_list_id . ', ' . 'Edit';
+
+$this->title = Yii::t('app', 'Tp Part List');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tp Part List'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => (string)$model->tp_part_list_id, 'url' => ['view', 'tp_part_list_id' => $model->tp_part_list_id]];
 $this->params['breadcrumbs'][] = 'Edit';

@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 /**
 * @var yii\web\View $this
-* @var app\models\search\TpPartList $model
+* @var app\models\search\TpPartListSearch $model
 * @var yii\widgets\ActiveForm $form
 */
 ?>
@@ -25,7 +25,33 @@ use yii\widgets\ActiveForm;
 
 		<?= $form->field($model, 'part_name') ?>
 
-		<?= $form->field($model, 'rev_no') ?>
+		<?= $form->field($model, 'um') ?>
+
+		<?php // echo $form->field($model, 'hpl_desc') ?>
+
+		<?php // echo $form->field($model, 'analyst') ?>
+
+		<?php // echo $form->field($model, 'analyst_desc') ?>
+
+		<?php // echo $form->field($model, 'curr') ?>
+
+		<?php // echo $form->field($model, 'unit_price') ?>
+
+		<?php // echo $form->field($model, 'standard_price') ?>
+
+		<?php // echo $form->field($model, 'fix_lt') ?>
+
+		<?php // echo $form->field($model, 'dts_lt') ?>
+
+		<?php // echo $form->field($model, 'min_qty') ?>
+
+		<?php // echo $form->field($model, 'multi_qty') ?>
+
+		<?php // echo $form->field($model, 'ss_qty') ?>
+
+		<?php // echo $form->field($model, 'sloc') ?>
+
+		<?php // echo $form->field($model, 'rev_no') ?>
 
 		<?php // echo $form->field($model, 'total_product') ?>
 

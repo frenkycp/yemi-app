@@ -7,7 +7,7 @@ use yii\helpers\Html;
 * @var app\models\TpPartList $model
 */
 
-$this->title = 'Create';
+$this->title = Yii::t('app', 'Tp Part List');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tp Part Lists'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

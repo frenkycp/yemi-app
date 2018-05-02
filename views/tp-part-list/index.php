@@ -23,7 +23,7 @@ if($session->has('success'))
                 'type' => Growl::TYPE_SUCCESS,
                 'title' => 'Well done!',
                 'icon' => 'glyphicon glyphicon-ok-sign',
-                'body' => 'You successfully read this important alert message.',
+                'body' => 'You successfully import TP Part List.',
                 'showSeparator' => true,
                 'delay' => 0,
                 'pluginOptions' => [
@@ -48,7 +48,8 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 
 $gridColumn = [
     [
-        'class' => 'yii\grid\ActionColumn',
+        'class' => 'kartik\grid\ActionColumn',
+        'vAlign' => 'middle',
         'template' => $actionColumnTemplateString,
         'buttons' => [
             'view' => function ($url, $model, $key) {
@@ -74,12 +75,14 @@ $gridColumn = [
         'hAlign' => 'center',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
+        'width' => '200px',
         //'enableSorting' => false,
     ],
     [
         'attribute' => 'part_no',
         'label' => 'Part No',
         'hAlign' => 'center',
+        'width' => '100px',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
         //'enableSorting' => false,
@@ -89,36 +92,53 @@ $gridColumn = [
         //'hAlign' => 'center',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
+        'width' => '300px',
         'enableSorting' => false,
     ],
     [
         'attribute' => 'total_product',
+        'value' => function ($model){
+            return rtrim(rtrim(sprintf('%.8F', $model->total_product), '0'), ".");
+        },
         'label' => 'Product',
         'hAlign' => 'center',
+        'width' => '70px',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
         'enableSorting' => false,
     ],
     [
         'attribute' => 'total_assy',
+        'value' => function ($model){
+            return rtrim(rtrim(sprintf('%.8F', $model->total_assy), '0'), ".");
+        },
         'label' => 'Assy',
         'hAlign' => 'center',
+        'width' => '70px',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
         'enableSorting' => false,
     ],
     [
         'attribute' => 'total_spare_part',
+        'value' => function ($model){
+            return rtrim(rtrim(sprintf('%.8F', $model->total_spare_part), '0'), ".");
+        },
         'label' => 'Sparepart',
         'hAlign' => 'center',
+        'width' => '70px',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
         'enableSorting' => false,
     ],
     [
         'attribute' => 'total_requirement',
+        'value' => function ($model){
+            return rtrim(rtrim(sprintf('%.8F', $model->total_requirement), '0'), ".");
+        },
         'label' => 'Total',
         'hAlign' => 'center',
+        'width' => '70px',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
         'enableSorting' => false,
@@ -193,6 +213,7 @@ $gridColumn = [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => $gridColumn,
+        'options' => ['style' => 'font-size:12px;'],
         'containerOptions' => ['style' => 'overflow: auto'],
         'headerRowOptions' => ['class' => 'kartik-sheet-style'],
         'filterRowOptions' => ['class' => 'kartik-sheet-style'],
@@ -209,7 +230,7 @@ $gridColumn = [
         ],
         'panel' => [
             'type' => 'info',
-            'footer' => false,
+            //'footer' => false,
         ],
     ]);
     ?>

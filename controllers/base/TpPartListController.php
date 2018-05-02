@@ -5,7 +5,7 @@
 namespace app\controllers\base;
 
 use app\models\TpPartList;
-    use app\models\search\TpPartList as TpPartListSearch;
+    use app\models\search\TpPartListSearch;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;

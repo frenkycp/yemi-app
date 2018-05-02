@@ -1,3 +1,3 @@
 <?php
-header("location: /prod-report/web/");
+header("location: /yemi-app/web/");
 ?>

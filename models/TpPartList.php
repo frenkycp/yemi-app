@@ -28,7 +28,7 @@ class TpPartList extends BaseTpPartList
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['uploadFile'], 'file', 'checkExtensionByMimeType' => false, 'skipOnEmpty' => false, 'extensions' => 'xls, xlsx'],
+                [['uploadFile'], 'file', 'checkExtensionByMimeType' => false, 'skipOnEmpty' => true, 'extensions' => 'xls, xlsx'],
                 [['speaker_model'], 'required'],
             ]
         );

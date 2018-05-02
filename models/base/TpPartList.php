@@ -13,6 +13,19 @@ use Yii;
  * @property string $speaker_model
  * @property string $part_no
  * @property string $part_name
+ * @property string $um
+ * @property string $hpl_desc
+ * @property string $analyst
+ * @property string $analyst_desc
+ * @property string $curr
+ * @property double $unit_price
+ * @property double $standard_price
+ * @property integer $fix_lt
+ * @property integer $dts_lt
+ * @property double $min_qty
+ * @property double $multi_qty
+ * @property double $ss_qty
+ * @property string $sloc
  * @property integer $rev_no
  * @property double $total_product
  * @property double $total_assy
@@ -58,21 +71,22 @@ abstract class TpPartList extends \yii\db\ActiveRecord
         return 'tp_part_list';
     }
 
-
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['rev_no'], 'integer'],
-            [['total_product', 'total_assy', 'total_spare_part', 'total_requirement', 'present_qty', 'qty', 'transportation_cost'], 'number'],
+            [['unit_price', 'standard_price', 'min_qty', 'multi_qty', 'ss_qty', 'total_product', 'total_assy', 'total_spare_part', 'total_requirement', 'present_qty', 'qty', 'transportation_cost'], 'number'],
+            [['fix_lt', 'dts_lt', 'rev_no'], 'integer'],
             [['present_due_date', 'last_modified'], 'safe'],
-            [['speaker_model', 'present_po', 'dcn_no', 'direct_po_trf', 'delivery_conf_etd', 'delivery_conf_eta', 'act_delivery_etd', 'act_delivery_eta', 'transport_by'], 'string', 'max' => 50],
+            [['speaker_model', 'sloc', 'present_po', 'dcn_no', 'direct_po_trf', 'delivery_conf_etd', 'delivery_conf_eta', 'act_delivery_etd', 'act_delivery_eta', 'transport_by'], 'string', 'max' => 50],
             [['part_no', 'part_type', 'part_status', 'caf_no', 'purch_status', 'pc_status', 'pe_confirm', 'status', 'qa_judgement', 'qa_remark'], 'string', 'max' => 20],
             [['part_name'], 'string', 'max' => 200],
-            [['pc_remarks'], 'string', 'max' => 100],
-            [['invoice'], 'string', 'max' => 30],
+            [['um', 'curr'], 'string', 'max' => 5],
+            [['hpl_desc', 'invoice'], 'string', 'max' => 30],
+            [['analyst'], 'string', 'max' => 10],
+            [['analyst_desc', 'pc_remarks'], 'string', 'max' => 100],
             [['last_modified_by'], 'string', 'max' => 45]
         ];
     }
@@ -87,6 +101,19 @@ abstract class TpPartList extends \yii\db\ActiveRecord
             'speaker_model' => 'Speaker Model',
             'part_no' => 'Part No',
             'part_name' => 'Part Name',
+            'um' => 'Um',
+            'hpl_desc' => 'Hpl Desc',
+            'analyst' => 'Analyst',
+            'analyst_desc' => 'Analyst Desc',
+            'curr' => 'Curr',
+            'unit_price' => 'Unit Price',
+            'standard_price' => 'Standard Price',
+            'fix_lt' => 'Fix Lt',
+            'dts_lt' => 'Dts Lt',
+            'min_qty' => 'Min Qty',
+            'multi_qty' => 'Multi Qty',
+            'ss_qty' => 'Ss Qty',
+            'sloc' => 'Sloc',
             'rev_no' => 'Rev No',
             'total_product' => 'Total Product',
             'total_assy' => 'Total Assy',

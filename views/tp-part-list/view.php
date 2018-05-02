@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = 'View';
 
     </div>
 
-    <hr />
+    <hr/>
 
     <?php $this->beginBlock('app\models\TpPartList'); ?>
 
@@ -72,7 +72,11 @@ $this->params['breadcrumbs'][] = 'View';
     <?= DetailView::widget([
     'model' => $model,
     'attributes' => [
-            'rev_no',
+            'unit_price',
+        'standard_price',
+        'min_qty',
+        'multi_qty',
+        'ss_qty',
         'total_product',
         'total_assy',
         'total_spare_part',
@@ -80,9 +84,13 @@ $this->params['breadcrumbs'][] = 'View';
         'present_qty',
         'qty',
         'transportation_cost',
+        'fix_lt',
+        'dts_lt',
+        'rev_no',
         'present_due_date',
         'last_modified',
         'speaker_model',
+        'sloc',
         'present_po',
         'dcn_no',
         'direct_po_trf',
@@ -102,8 +110,13 @@ $this->params['breadcrumbs'][] = 'View';
         'qa_judgement',
         'qa_remark',
         'part_name',
-        'pc_remarks',
+        'um',
+        'curr',
+        'hpl_desc',
         'invoice',
+        'analyst',
+        'analyst_desc',
+        'pc_remarks',
         'last_modified_by',
     ],
     ]); ?>

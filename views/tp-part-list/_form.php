@@ -19,7 +19,17 @@ use yii\helpers\StringHelper;
     'id' => 'TpPartList',
     'layout' => 'horizontal',
     'enableClientValidation' => true,
-    'errorSummaryCssClass' => 'error-summary alert alert-danger'
+    'errorSummaryCssClass' => 'error-summary alert alert-danger',
+    'fieldConfig' => [
+             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+             'horizontalCssClasses' => [
+                 'label' => 'col-sm-2',
+                 'offset' => 'col-sm-offset-4',
+                 'wrapper' => 'col-sm-8',
+                 'error' => '',
+                 'hint' => '',
+             ],
+         ],
     ]
     );
     ?>
@@ -29,9 +39,41 @@ use yii\helpers\StringHelper;
 
         <p>
             
+<?php //echo Yii::$app->user->identity->role->name; ?>
+<!-- attribute speaker_model -->
+			<?= $form->field($model, 'speaker_model')->textInput(['maxlength' => true]) ?>
 
-<!-- attribute rev_no -->
-			<?= $form->field($model, 'rev_no')->textInput() ?>
+<!-- attribute part_no -->
+			<?= $form->field($model, 'part_no')->textInput(['maxlength' => true]) ?>
+
+<!-- attribute part_name -->
+			<?= $form->field($model, 'part_name')->textInput(['maxlength' => true]) ?>
+
+        <div style="<?= Yii::$app->user->identity->role->name == 'PURCH' ? '' : 'display:none;' ?>">
+            <!-- attribute present_po -->
+			<?= $form->field($model, 'present_po')->textInput(['maxlength' => true]) ?>
+
+<!-- attribute present_qty -->
+			<?= $form->field($model, 'present_qty')->textInput() ?>
+
+<!-- attribute present_due_date -->
+			<?= $form->field($model, 'present_due_date')->textInput() ?>
+        </div>
+        <div style="<?= Yii::$app->user->identity->role->name == 'PURCH' ? 'display:none;' : '' ?>">
+            <!-- attribute unit_price -->
+			<?= $form->field($model, 'unit_price')->textInput() ?>
+
+<!-- attribute standard_price -->
+			<?= $form->field($model, 'standard_price')->textInput() ?>
+
+<!-- attribute min_qty -->
+			<?= $form->field($model, 'min_qty')->textInput() ?>
+
+<!-- attribute multi_qty -->
+			<?= $form->field($model, 'multi_qty')->textInput() ?>
+
+<!-- attribute ss_qty -->
+			<?= $form->field($model, 'ss_qty')->textInput() ?>
 
 <!-- attribute total_product -->
 			<?= $form->field($model, 'total_product')->textInput() ?>
@@ -45,26 +87,26 @@ use yii\helpers\StringHelper;
 <!-- attribute total_requirement -->
 			<?= $form->field($model, 'total_requirement')->textInput() ?>
 
-<!-- attribute present_qty -->
-			<?= $form->field($model, 'present_qty')->textInput() ?>
-
 <!-- attribute qty -->
 			<?= $form->field($model, 'qty')->textInput() ?>
 
 <!-- attribute transportation_cost -->
 			<?= $form->field($model, 'transportation_cost')->textInput() ?>
 
-<!-- attribute present_due_date -->
-			<?= $form->field($model, 'present_due_date')->textInput() ?>
+<!-- attribute fix_lt -->
+			<?= $form->field($model, 'fix_lt')->textInput() ?>
+
+<!-- attribute dts_lt -->
+			<?= $form->field($model, 'dts_lt')->textInput() ?>
+
+<!-- attribute rev_no -->
+			<?= $form->field($model, 'rev_no')->textInput() ?>
 
 <!-- attribute last_modified -->
-			<?= $form->field($model, 'last_modified')->textInput() ?>
+			<?= '';//$form->field($model, 'last_modified')->textInput() ?>
 
-<!-- attribute speaker_model -->
-			<?= $form->field($model, 'speaker_model')->textInput(['maxlength' => true]) ?>
-
-<!-- attribute present_po -->
-			<?= $form->field($model, 'present_po')->textInput(['maxlength' => true]) ?>
+<!-- attribute sloc -->
+			<?= $form->field($model, 'sloc')->textInput(['maxlength' => true]) ?>
 
 <!-- attribute dcn_no -->
 			<?= $form->field($model, 'dcn_no')->textInput(['maxlength' => true]) ?>
@@ -86,9 +128,6 @@ use yii\helpers\StringHelper;
 
 <!-- attribute transport_by -->
 			<?= $form->field($model, 'transport_by')->textInput(['maxlength' => true]) ?>
-
-<!-- attribute part_no -->
-			<?= $form->field($model, 'part_no')->textInput(['maxlength' => true]) ?>
 
 <!-- attribute part_type -->
 			<?= $form->field($model, 'part_type')->textInput(['maxlength' => true]) ?>
@@ -117,17 +156,32 @@ use yii\helpers\StringHelper;
 <!-- attribute qa_remark -->
 			<?= $form->field($model, 'qa_remark')->textInput(['maxlength' => true]) ?>
 
-<!-- attribute part_name -->
-			<?= $form->field($model, 'part_name')->textInput(['maxlength' => true]) ?>
+<!-- attribute um -->
+			<?= $form->field($model, 'um')->textInput(['maxlength' => true]) ?>
 
-<!-- attribute pc_remarks -->
-			<?= $form->field($model, 'pc_remarks')->textInput(['maxlength' => true]) ?>
+<!-- attribute curr -->
+			<?= $form->field($model, 'curr')->textInput(['maxlength' => true]) ?>
+
+<!-- attribute hpl_desc -->
+			<?= $form->field($model, 'hpl_desc')->textInput(['maxlength' => true]) ?>
 
 <!-- attribute invoice -->
 			<?= $form->field($model, 'invoice')->textInput(['maxlength' => true]) ?>
 
+<!-- attribute analyst -->
+			<?= $form->field($model, 'analyst')->textInput(['maxlength' => true]) ?>
+
+<!-- attribute analyst_desc -->
+			<?= $form->field($model, 'analyst_desc')->textInput(['maxlength' => true]) ?>
+
+<!-- attribute pc_remarks -->
+			<?= $form->field($model, 'pc_remarks')->textInput(['maxlength' => true]) ?>
+
 <!-- attribute last_modified_by -->
-			<?= $form->field($model, 'last_modified_by')->textInput(['maxlength' => true]) ?>
+			<?= '';//$form->field($model, 'last_modified_by')->textInput(['maxlength' => true]) ?>
+        </div>
+
+<!-- attribute uploadFile -->
         </p>
         <?php $this->endBlock(); ?>
         

@@ -4,12 +4,24 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'production-report',
-	'name' => 'Production',
+	'name' => 'YEMI - Apps',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
 		'session' => [
 			'name' => 'prod-report-20180222',
+        ],
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages', // if advanced application, set @frontend/messages
+                    'sourceLanguage' => 'ru-RU',
+                    'fileMap' => [
+                        //'main' => 'main.php',
+                    ],
+                ],
+            ],
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
