@@ -49,10 +49,22 @@ if(isset($params['index_type']))
     {
         $query = SernoOutputModel::find()->where('output<qty')->andWhere(['etd' => $params['etd']]);
     }
+    if($params['index_type'] == 2)
+    {
+        $query = SernoOutputModel::find()->where('output=qty')->andWhere(['etd' => $params['etd']]);
+    }
 }
 
 $dataProvider = new ActiveDataProvider([
-'query' => $query,
+    'query' => $query,
+    'sort' => [
+        'attributes' => [
+            'dst', 'gmc'
+        ],
+        'defaultOrder' => [
+            'dst' => SORT_ASC,
+        ]
+    ],
 ]);
 
 $this->load($params);

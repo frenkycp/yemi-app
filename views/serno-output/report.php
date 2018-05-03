@@ -86,10 +86,14 @@ $endWeek = $endDate->format('W')-1;
                 //$dataClose[] = (int)$presentase;
                 $dataClose[] = [
                     'y' => (int)$presentase,
-                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
+                    'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
                     //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
                 ];
-                $dataOpen[] = (int)(100 - $presentase);
+                //$dataOpen[] = (int)(100 - $presentase);
+                $dataOpen[] = [
+                    'y' => (int)(100 - $presentase),
+                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
+                ];
                 //$dataName[] = $value->etd;
                 $dataName[] = date('d-M-Y', strtotime($value->etd));
             }
