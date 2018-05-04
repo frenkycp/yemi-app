@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoOutput extends BaseSernoOutput
 {
-    public $description;
+    public $description, $week_no;
 
     public function behaviors()
     {
@@ -26,10 +26,10 @@ class SernoOutput extends BaseSernoOutput
     public function rules()
     {
         return ArrayHelper::merge(
-             parent::rules(),
-             [
-                  # custom validation rules
-             ]
+            parent::rules(),
+            [
+                [['description'], 'safe']
+            ]
         );
     }
     

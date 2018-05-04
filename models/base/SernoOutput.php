@@ -20,6 +20,7 @@ use Yii;
  * @property integer $adv
  * @property string $etd
  * @property integer $cntr
+ * @property integer $ng
  * @property string $aliasModel
  */
 abstract class SernoOutput extends \yii\db\ActiveRecord
@@ -50,7 +51,7 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     {
         return [
             [['pk'], 'required'],
-            [['id', 'num', 'qty', 'output', 'adv', 'cntr'], 'integer'],
+            [['id', 'num', 'qty', 'output', 'adv', 'cntr', 'ng'], 'integer'],
             [['dst'], 'string'],
             [['etd'], 'safe'],
             [['pk'], 'string', 'max' => 20],
@@ -77,6 +78,7 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'adv' => 'Adv',
             'etd' => 'Etd',
             'cntr' => 'Cntr',
+            'ng' => 'Ng',
         ];
     }
 

@@ -76,22 +76,34 @@ $endWeek = $endDate->format('W')-1;
 
             
             //$sernoFg = app\models\SernoFgSumViewWeek::find()->where(['week_no' => $j])->orderBy('shipto ASC')->all();
-            $sernoFg = app\models\SernoOutputView::find()->where(['week_no' => $j])->orderBy('etd ASC')->all();
+            //$sernoFg = app\models\SernoOutputView::find()->where(['week_no' => $j])->orderBy('etd ASC')->all();
+            $sernoFg = app\models\SernoOutput::find()->select(['dst, gmc, etd, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(etd,2) as week_no'])
+                    ->where(['WEEK(etd,2)' => $j])
+                    ->groupBy('etd')
+                    ->all();
             $dataClose = [];
             $dataOpen = [];
+            $dataOther = [];
             $dataName = [];
 
             foreach ($sernoFg as $value) {
-                $presentase = round(($value->output/$value->qty)*100);
+                $totalClose = $value->output - $value->ng;
+                $presentaseNg = round(($value->ng/$value->qty)*100);
+                $presentase = round(($totalClose/$value->qty)*100);
                 //$dataClose[] = (int)$presentase;
                 $dataClose[] = [
-                    'y' => (int)$presentase,
+                    'y' => (int)($presentase),
                     'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
+                    //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
+                ];
+                $dataOther[] = [
+                    'y' => (int)$presentaseNg,
+                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
                     //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
                 ];
                 //$dataOpen[] = (int)(100 - $presentase);
                 $dataOpen[] = [
-                    'y' => (int)(100 - $presentase),
+                    'y' => (int)(100 - ($presentase + $presentaseNg)),
                     'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
                 ];
                 //$dataName[] = $value->etd;
@@ -135,7 +147,7 @@ $endWeek = $endDate->format('W')-1;
                 ],
                 'plotOptions' => [
                     'column' => [
-                        'stacking' => 'percent',
+                        'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
                             'format' => '{point.percentage:.0f}%',
@@ -150,8 +162,8 @@ $endWeek = $endDate->format('W')-1;
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
-                                //'click' => new JsExpression('function(){ location.href = this.options.url; }')
-                                'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                'click' => new JsExpression('function(){ location.href = this.options.url; }')
+                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                             ]
                         ]
                     ]
@@ -165,6 +177,14 @@ $endWeek = $endDate->format('W')-1;
                             'enabled' => false
                         ],
                         'showInLegend' => false
+                    ],
+                    [
+                        'name' => 'NG',
+                        'data' => $dataOther,
+                        'color' => 'pink',
+                        'dataLabels' => [
+                            'enabled' => false
+                        ],
                     ],
                     [
                         'name' => 'Completed',

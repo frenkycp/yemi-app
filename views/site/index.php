@@ -1,7 +1,7 @@
 <?php
 use scotthuangzl\googlechart\GoogleChart;
 
-$this->title = 'YEMI - Apps';
+$this->title = 'Centered Information System';
 
 ?>
 

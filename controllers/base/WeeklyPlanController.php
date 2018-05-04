@@ -4,8 +4,8 @@
 
 namespace app\controllers\base;
 
-use app\models\SernoOutput;
-    use app\models\search\SernoOutput as SernoOutputSearch;
+use app\models\WeeklyPlan;
+    use app\models\search\WeeklyPlanSearch;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
@@ -13,9 +13,9 @@ use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 
 /**
-* SernoOutputController implements the CRUD actions for SernoOutput model.
+* WeeklyPlanController implements the CRUD actions for WeeklyPlan model.
 */
-class SernoOutputController extends Controller
+class WeeklyPlanController extends Controller
 {
 
 
@@ -27,12 +27,12 @@ public $enableCsrfValidation = false;
 
 
 /**
-* Lists all SernoOutput models.
+* Lists all WeeklyPlan models.
 * @return mixed
 */
 public function actionIndex()
 {
-    $searchModel  = new SernoOutputSearch;
+    $searchModel  = new WeeklyPlanSearch;
     $dataProvider = $searchModel->search($_GET);
 
 Tabs::clearLocalStorage();
@@ -47,34 +47,34 @@ return $this->render('index', [
 }
 
 /**
-* Displays a single SernoOutput model.
-* @param string $pk
+* Displays a single WeeklyPlan model.
+* @param integer $id
 *
 * @return mixed
 */
-public function actionView($pk)
+public function actionView($id)
 {
 \Yii::$app->session['__crudReturnUrl'] = Url::previous();
 Url::remember();
 Tabs::rememberActiveState();
 
 return $this->render('view', [
-'model' => $this->findModel($pk),
+'model' => $this->findModel($id),
 ]);
 }
 
 /**
-* Creates a new SernoOutput model.
+* Creates a new WeeklyPlan model.
 * If creation is successful, the browser will be redirected to the 'view' page.
 * @return mixed
 */
 public function actionCreate()
 {
-$model = new SernoOutput;
+$model = new WeeklyPlan;
 
 try {
 if ($model->load($_POST) && $model->save()) {
-return $this->redirect(['view', 'pk' => $model->pk]);
+return $this->redirect(['view', 'id' => $model->id]);
 } elseif (!\Yii::$app->request->isPost) {
 $model->load($_GET);
 }
@@ -86,14 +86,14 @@ return $this->render('create', ['model' => $model]);
 }
 
 /**
-* Updates an existing SernoOutput model.
+* Updates an existing WeeklyPlan model.
 * If update is successful, the browser will be redirected to the 'view' page.
-* @param string $pk
+* @param integer $id
 * @return mixed
 */
-public function actionUpdate($pk)
+public function actionUpdate($id)
 {
-$model = $this->findModel($pk);
+$model = $this->findModel($id);
 
 if ($model->load($_POST) && $model->save()) {
 return $this->redirect(Url::previous());
@@ -105,15 +105,15 @@ return $this->render('update', [
 }
 
 /**
-* Deletes an existing SernoOutput model.
+* Deletes an existing WeeklyPlan model.
 * If deletion is successful, the browser will be redirected to the 'index' page.
-* @param string $pk
+* @param integer $id
 * @return mixed
 */
-public function actionDelete($pk)
+public function actionDelete($id)
 {
 try {
-$this->findModel($pk)->delete();
+$this->findModel($id)->delete();
 } catch (\Exception $e) {
 $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
 \Yii::$app->getSession()->addFlash('error', $msg);
@@ -121,7 +121,7 @@ return $this->redirect(Url::previous());
 }
 
 // TODO: improve detection
-$isPivot = strstr('$pk',',');
+$isPivot = strstr('$id',',');
 if ($isPivot == true) {
 return $this->redirect(Url::previous());
 } elseif (isset(\Yii::$app->session['__crudReturnUrl']) && \Yii::$app->session['__crudReturnUrl'] != '/') {
@@ -136,15 +136,15 @@ return $this->redirect(['index']);
 }
 
 /**
-* Finds the SernoOutput model based on its primary key value.
+* Finds the WeeklyPlan model based on its primary key value.
 * If the model is not found, a 404 HTTP exception will be thrown.
-* @param string $pk
-* @return SernoOutput the loaded model
+* @param integer $id
+* @return WeeklyPlan the loaded model
 * @throws HttpException if the model cannot be found
 */
-protected function findModel($pk)
+protected function findModel($id)
 {
-if (($model = SernoOutput::findOne($pk)) !== null) {
+if (($model = WeeklyPlan::findOne($id)) !== null) {
 return $model;
 } else {
 throw new HttpException(404, 'The requested page does not exist.');

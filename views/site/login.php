@@ -21,7 +21,7 @@ $fieldOptions2 = [
 
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>YEMI APP</b></a>
+        <a href="#"><b>Welcome to CIS</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">

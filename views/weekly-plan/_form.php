@@ -7,16 +7,16 @@ use yii\helpers\StringHelper;
 
 /**
 * @var yii\web\View $this
-* @var app\models\SernoOutput $model
+* @var app\models\WeeklyPlan $model
 * @var yii\widgets\ActiveForm $form
 */
 
 ?>
 
-<div class="serno-output-form">
+<div class="weekly-plan-form">
 
     <?php $form = ActiveForm::begin([
-    'id' => 'SernoOutput',
+    'id' => 'WeeklyPlan',
     'layout' => 'horizontal',
     'enableClientValidation' => true,
     'errorSummaryCssClass' => 'error-summary alert alert-danger',
@@ -40,43 +40,23 @@ use yii\helpers\StringHelper;
         <p>
             
 
-<!-- attribute pk -->
-			<?= $form->field($model, 'pk')->textInput(['maxlength' => true]) ?>
+<!-- attribute week -->
+			<?= $form->field($model, 'week')->textInput() ?>
 
-<!-- attribute id -->
-			<?= $form->field($model, 'id')->textInput() ?>
+<!-- attribute plan_qty -->
+			<?= $form->field($model, 'plan_qty')->textInput() ?>
 
-<!-- attribute num -->
-			<?= $form->field($model, 'num')->textInput() ?>
+<!-- attribute actual_qty -->
+			<?= $form->field($model, 'actual_qty')->textInput() ?>
 
-<!-- attribute qty -->
-			<?= $form->field($model, 'qty')->textInput() ?>
+<!-- attribute flag -->
+			<?= $form->field($model, 'flag')->textInput() ?>
 
-<!-- attribute output -->
-			<?= $form->field($model, 'output')->textInput() ?>
+<!-- attribute category -->
+			<?= $form->field($model, 'category')->textInput(['maxlength' => true]) ?>
 
-<!-- attribute adv -->
-			<?= $form->field($model, 'adv')->textInput() ?>
-
-<!-- attribute cntr -->
-			<?= $form->field($model, 'cntr')->textInput() ?>
-
-<!-- attribute ng -->
-			<?= $form->field($model, 'ng')->textInput() ?>
-
-<!-- attribute dst -->
-			<?= $form->field($model, 'dst')->textarea(['rows' => 6]) ?>
-
-<!-- attribute etd -->
-			<?= $form->field($model, 'etd')->textInput() ?>
-
-<!-- attribute stc -->
-			<?= $form->field($model, 'stc')->textInput(['maxlength' => true]) ?>
-
-<!-- attribute gmc -->
-			<?= $form->field($model, 'gmc')->textInput(['maxlength' => true]) ?>
-
-<!-- attribute description -->
+<!-- attribute period -->
+			<?= $form->field($model, 'period')->textInput(['maxlength' => true]) ?>
         </p>
         <?php $this->endBlock(); ?>
         
@@ -86,7 +66,7 @@ use yii\helpers\StringHelper;
                     'encodeLabels' => false,
                     'items' => [ 
                         [
-    'label'   => Yii::t('app', 'SernoOutput'),
+    'label'   => Yii::t('app', 'WeeklyPlan'),
     'content' => $this->blocks['main'],
     'active'  => true,
 ],

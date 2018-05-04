@@ -1,27 +1,16 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\grid\GridView;
 
 /**
 * @var yii\web\View $this
 * @var yii\data\ActiveDataProvider $dataProvider
-    * @var app\models\search\SernoOutput $searchModel
+    * @var app\models\search\WeeklyPlanSearch $searchModel
 */
-$status = '';
-if(isset($_GET['index_type']))
-{
-    if($_GET['index_type'] == 1)
-    {
-        $status = ' (Open)';
-    }
-    if($_GET['index_type'] == 2)
-    {
-        $status = ' (Closed)';
-    }
-}
 
-$this->title = Yii::t('app', 'Serno Outputs');
+$this->title = Yii::t('app', 'Weekly Plans');
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -33,9 +22,9 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
-$gridColumns = [
+$columns = [
     /* [
-        'class' => 'yii\grid\ActionColumn',
+        'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
             'view' => function ($url, $model, $key) {
@@ -56,38 +45,52 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ], */
     [
-        'attribute' => 'dst',
+        'attribute' => 'category',
         'hAlign' => 'center'
     ],
     [
-        'attribute' => 'gmc',
+        'attribute' => 'period',
         'hAlign' => 'center'
     ],
     [
-        'attribute' => 'description',
-        'value' => 'sernoMaster.description',
-        'label' => 'Description'
-    ],
-    [
-        'attribute' => 'qty',
+        'attribute' => 'week',
         'hAlign' => 'center'
     ],
     [
-        'attribute' => 'output',
-        'hAlign' => 'center'
+        'attribute' => 'plan_qty',
+        'hAlign' => 'center',
+        'enableSorting' => false,
+        'filter' => false,
+        'pageSummary' => true
     ],
     [
-        'attribute' => 'qtyBalance',
-        'label' => 'Minus',
-        'hAlign' => 'center'
+        'attribute' => 'actual_qty',
+        'value' => 'actualQty',
+        'hAlign' => 'center',
+        'enableSorting' => false,
+        'filter' => false,
+        'pageSummary' => true
     ],
     [
-        'attribute' => 'ng',
-        'hAlign' => 'center'
+        'attribute' => 'balance_qty',
+        'value' => 'balanceQty',
+        'hAlign' => 'center',
+        'enableSorting' => false,
+        'filter' => false,
+        'pageSummary' => true
+    ],
+    [
+        'attribute' => 'percentage',
+        'value' => 'weekPercentage',
+        'label' => 'Completion',
+        'hAlign' => 'center',
+        'format' => 'raw'
+        //'enableSorting' => false,
+        //'filter' => false,
     ],
 ];
 ?>
-<div class="giiant-crud serno-output-index">
+<div class="giiant-crud weekly-plan-index">
 
     <?php
 //             echo $this->render('_search', ['model' =>$searchModel]);
@@ -97,14 +100,10 @@ $gridColumns = [
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
     <h1 style="display: none;">
-        <?= Yii::t('app', 'Production Status' . $status) ?>
+        <?= Yii::t('app', 'Weekly Plans') ?>
         <small>
-            List <?= isset($_GET['etd']) ? $_GET['etd'] : '' ?>
+            List
         </small>
-        <?php
-        $tgl = isset($_GET['etd']) ? $_GET['etd'] : '';
-        $heading = Yii::t('app', 'Production Status' . $status) . ' ' . $tgl;
-        ?>
     </h1>
     <div class="clearfix crud-navigation" style="display: none;">
         <div class="pull-left">
@@ -141,15 +140,14 @@ $gridColumns = [
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'columns' => $gridColumns,
+            'filterModel' => $searchModel,
+            'columns' => $columns,
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
+            'showPageSummary' => true,
             'toolbar' =>  [
-                ['content' => 
-                    Html::a('Chart', ['report'], ['data-pjax' => 0, 'class' => 'btn btn-info', 'title' => Yii::t('kvgrid', 'Show Weekly Report Chart')])
-                ],
                 '{export}',
                 '{toggleData}',
             ],
@@ -159,18 +157,7 @@ $gridColumns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => $heading
             ],
-        /* 'dataProvider' => $dataProvider,
-        'pager' => [
-        'class' => yii\widgets\LinkPager::className(),
-        'firstPageLabel' => 'First',
-        'lastPageLabel' => 'Last',
-        ],
-                    //'filterModel' => $searchModel,
-                'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
-        'headerRowOptions' => ['class'=>'x'],
-        'columns' => $gridColumns, */
         ]); ?>
     </div>
 
