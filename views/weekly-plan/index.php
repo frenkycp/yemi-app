@@ -72,7 +72,8 @@ $columns = [
         'hAlign' => 'center',
         'enableSorting' => false,
         'filter' => false,
-        'pageSummary' => true
+        'pageSummary' => true,
+        'format' => ['decimal',0]
     ],
     [
         'attribute' => 'actual_qty',
@@ -80,7 +81,8 @@ $columns = [
         'hAlign' => 'center',
         'enableSorting' => false,
         'filter' => false,
-        'pageSummary' => true
+        'pageSummary' => true,
+        'format' => ['decimal',0]
     ],
     [
         'attribute' => 'balance_qty',
@@ -88,7 +90,8 @@ $columns = [
         'hAlign' => 'center',
         'enableSorting' => false,
         'filter' => false,
-        'pageSummary' => true
+        'pageSummary' => true,
+        'format' => ['decimal',0]
     ],
     [
         'attribute' => 'percentage',
