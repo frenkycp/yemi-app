@@ -13,6 +13,30 @@ use kartik\grid\GridView;
 $this->title = Yii::t('app', 'Weekly Plans');
 $this->params['breadcrumbs'][] = $this->title;
 
+date_default_timezone_set('Asia/Jakarta');
+
+function weekOfMonth($date) {
+    // estract date parts
+    list($y, $m, $d) = explode('-', date('Y-m-d', strtotime($date)));
+
+    // current week, min 1
+    $w = 1;
+
+    // for each day since the start of the month
+    for ($i = 1; $i <= $d; ++$i) {
+        // if that day was a sunday and is not the first day of month
+        if ($i > 1 && date('w', strtotime("$y-$m-$i")) == 0) {
+            // increment current week
+            ++$w;
+        }
+    }
+
+    // now return
+    return $w;
+}
+
+
+
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
@@ -36,6 +60,37 @@ if($totPlan > 0)
 {
     $totPercentage = round(($totActual / $totPlan) * 100);
 }
+
+$myWeek = [];
+
+$weekStart = [
+    '18' => '2018-05-01',
+    '19' => '2018-05-06',
+    '20' => '2018-05-13',
+    '21' => '2018-05-20',
+    '22' => '2018-05-27',
+];
+
+$myWeek[18] = [
+    'start' => '2018-05-01',
+    'end' => '2018-05-05',
+];
+$myWeek[19] = [
+    'start' => '2018-05-06',
+    'end' => '2018-05-12',
+];
+$myWeek[20] = [
+    'start' => '2018-05-13',
+    'end' => '2018-05-19',
+];
+$myWeek[21] = [
+    'start' => '2018-05-20',
+    'end' => '2018-05-26',
+];
+$myWeek[22] = [
+    'start' => '2018-05-27',
+    'end' => '2018-06-02',
+];
 
 //$totPercentage = 98;
 $columns = [
@@ -73,10 +128,30 @@ $columns = [
         'attribute' => 'week',
         'value' => function($model)
         {
+    $myWeek[18] = [
+    'start' => '2018-05-01',
+    'end' => '2018-05-05',
+];
+$myWeek[19] = [
+    'start' => '2018-05-06',
+    'end' => '2018-05-12',
+];
+$myWeek[20] = [
+    'start' => '2018-05-13',
+    'end' => '2018-05-19',
+];
+$myWeek[21] = [
+    'start' => '2018-05-20',
+    'end' => '2018-05-26',
+];
+$myWeek[22] = [
+    'start' => '2018-05-27',
+    'end' => '2018-06-02',
+];
             $week = $model->week;
             $year = substr($model->period, 0, 4);
             $return = $model->getStartAndEndDate($week+1, $year);
-            return 'Week-' . $week . ' (' . $return['week_start'] . ' - ' . $return['week_end'] . ')';
+            return 'Week-' . $week . ' (' . $myWeek[$week]['start'] . ' - ' . $myWeek[$week]['end'] . ')';
         },
         'hAlign' => 'center'
     ],
@@ -186,6 +261,7 @@ $columns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
+                'heading' => 'Last update : ' . date('d M Y H:i:s')
             ],
         ]); ?>
     </div>

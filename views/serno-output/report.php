@@ -36,8 +36,8 @@ $this->registerJs($script, View::POS_HEAD );
 
 $startDate = new DateTime(date('Y-m-01'));
 $endDate = new DateTime(date('Y-m-t'));
-$startWeek = $startDate->format('W')-1;
-$endWeek = $endDate->format('W')-1;
+$startWeek = $startDate->format('W');
+$endWeek = $endDate->format('W');
 ?>
     
 <div class="nav-tabs-custom">
@@ -77,9 +77,9 @@ $endWeek = $endDate->format('W')-1;
             
             //$sernoFg = app\models\SernoFgSumViewWeek::find()->where(['week_no' => $j])->orderBy('shipto ASC')->all();
             //$sernoFg = app\models\SernoOutputView::find()->where(['week_no' => $j])->orderBy('etd ASC')->all();
-            $sernoFg = app\models\SernoOutput::find()->select(['dst, gmc, etd, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(etd,2) as week_no'])
-                    ->where(['WEEK(etd,2)' => $j])
-                    ->groupBy('etd')
+            $sernoFg = app\models\SernoOutput::find()->select(['dst, gmc, etd, ship, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(ship,4) as week_no'])
+                    ->where(['WEEK(ship,4)' => $j])
+                    ->groupBy('ship')
                     ->all();
             $dataClose = [];
             $dataOpen = [];
@@ -93,21 +93,21 @@ $endWeek = $endDate->format('W')-1;
                 //$dataClose[] = (int)$presentase;
                 $dataClose[] = [
                     'y' => (int)($presentase),
-                    'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
+                    'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->ship]),
                     //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
                 ];
                 $dataOther[] = [
                     'y' => (int)$presentaseNg,
-                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
+                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->ship]),
                     //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
                 ];
                 //$dataOpen[] = (int)(100 - $presentase);
                 $dataOpen[] = [
                     'y' => (int)(100 - ($presentase + $presentaseNg)),
-                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
+                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->ship]),
                 ];
                 //$dataName[] = $value->etd;
-                $dataName[] = date('d-M-Y', strtotime($value->etd));
+                $dataName[] = date('d-M-Y', strtotime($value->ship));
             }
             echo Highcharts::widget([
             'scripts' => [
