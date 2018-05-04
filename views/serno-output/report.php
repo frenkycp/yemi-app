@@ -140,7 +140,7 @@ $endWeek = $endDate->format('W')-1;
                     'title' => [
                         'text' => 'Total Completion'
                     ],
-                    'gridLineWidth' => 0
+                    'gridLineWidth' => 0,
                 ],
                 'tooltip' => [
                     //'enabled' => false

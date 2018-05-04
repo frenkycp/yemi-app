@@ -22,6 +22,16 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+
+$totActual = 0;
+$totPlan = 0;
+$data = $dataProvider->getModels();
+foreach ($data as $key => $value) {
+    $totActual = $totActual + $value['actualQty'];
+    $totPlan = $totPlan + $value['plan_qty'];
+}
+$totPercentage = round(($totActual / $totPlan) * 100);
+//$totPercentage = 98;
 $columns = [
     /* [
         'class' => 'kartik\grid\ActionColumn',
@@ -46,7 +56,8 @@ $columns = [
     ], */
     [
         'attribute' => 'category',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'pageSummary' => 'Total',
     ],
     [
         'attribute' => 'period',
@@ -84,11 +95,13 @@ $columns = [
         'value' => 'weekPercentage',
         'label' => 'Completion',
         'hAlign' => 'center',
-        'format' => 'raw'
+        'format' => 'percent',
+        'pageSummary' => $totPercentage . '%',
         //'enableSorting' => false,
         //'filter' => false,
     ],
 ];
+
 ?>
 <div class="giiant-crud weekly-plan-index">
 
