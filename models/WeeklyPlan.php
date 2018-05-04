@@ -33,6 +33,15 @@ class WeeklyPlan extends BaseWeeklyPlan
         );
     }
     
+    function getStartAndEndDate($week, $year) {
+        $dto = new \DateTime();
+        $ret['week_start'] = $dto->setISODate($year, $week)->format('d M Y');
+        //$ret['week_start'] = date("Y-m-d", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT)));
+        $ret['week_end'] = $dto->modify('+6 days')->format('d M Y');
+        //$ret['week_end'] = date("Y-m-d", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT).' +6 days'));
+        return $ret;
+    }
+    
     public function getActualQty()
     {
         $outputWeek = SernoOutputViewWeek::find()->where(['id' => $this->period, 'week_no' => $this->week])->one();

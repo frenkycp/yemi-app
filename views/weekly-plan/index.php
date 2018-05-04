@@ -30,7 +30,13 @@ foreach ($data as $key => $value) {
     $totActual = $totActual + $value['actualQty'];
     $totPlan = $totPlan + $value['plan_qty'];
 }
-$totPercentage = round(($totActual / $totPlan) * 100);
+
+$totPercentage = 0;
+if($totPlan > 0)
+{
+    $totPercentage = round(($totActual / $totPlan) * 100);
+}
+
 //$totPercentage = 98;
 $columns = [
     /* [
@@ -65,6 +71,13 @@ $columns = [
     ],
     [
         'attribute' => 'week',
+        'value' => function($model)
+        {
+            $week = $model->week;
+            $year = substr($model->period, 0, 4);
+            $return = $model->getStartAndEndDate($week+1, $year);
+            return 'Week-' . $week . ' (' . $return['week_start'] . ' - ' . $return['week_end'] . ')';
+        },
         'hAlign' => 'center'
     ],
     [
