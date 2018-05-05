@@ -79,7 +79,7 @@ $endWeek = $endDate->format('W');
             //$sernoFg = app\models\SernoOutputView::find()->where(['week_no' => $j])->orderBy('etd ASC')->all();
             $sernoFg = app\models\SernoOutput::find()->select(['dst, gmc, etd, ship, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(ship,4) as week_no'])
                     ->where(['WEEK(ship,4)' => $j])
-                    ->groupBy('ship')
+                    ->groupBy('etd')
                     ->all();
             $dataClose = [];
             $dataOpen = [];
@@ -89,25 +89,25 @@ $endWeek = $endDate->format('W');
             foreach ($sernoFg as $value) {
                 $totalClose = $value->output - $value->ng;
                 $presentaseNg = round(($value->ng/$value->qty)*100);
-                $presentase = round(($totalClose/$value->qty)*100);
+                $presentase = floor(($totalClose/$value->qty)*100);
                 //$dataClose[] = (int)$presentase;
                 $dataClose[] = [
                     'y' => (int)($presentase),
-                    'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->ship]),
+                    'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
                     //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
                 ];
                 $dataOther[] = [
                     'y' => (int)$presentaseNg,
-                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->ship]),
+                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
                     //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
                 ];
                 //$dataOpen[] = (int)(100 - $presentase);
                 $dataOpen[] = [
                     'y' => (int)(100 - ($presentase + $presentaseNg)),
-                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->ship]),
+                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
                 ];
                 //$dataName[] = $value->etd;
-                $dataName[] = date('d-M-Y', strtotime($value->ship));
+                $dataName[] = date('d-M-Y', strtotime($value->etd));
             }
             echo Highcharts::widget([
             'scripts' => [

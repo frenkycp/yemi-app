@@ -58,7 +58,7 @@ foreach ($data as $key => $value) {
 $totPercentage = 0;
 if($totPlan > 0)
 {
-    $totPercentage = round(($totActual / $totPlan) * 100);
+    $totPercentage = round(($totActual / $totPlan) * 100, 1);
 }
 
 $myWeek = [];
@@ -186,7 +186,7 @@ $myWeek[22] = [
         'value' => 'weekPercentage',
         'label' => 'Completion',
         'hAlign' => 'center',
-        'format' => 'percent',
+        //'format' => 'percent',
         'pageSummary' => $totPercentage . '%',
         //'enableSorting' => false,
         //'filter' => false,
