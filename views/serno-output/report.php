@@ -34,18 +34,37 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 
+
+
+function getSundayWeekNumber($date)
+{
+    //$date = new DateTime(strtotime($date));
+    $weekNumber = (int)$date->format('W');
+
+    if ($date->format('w') === '0') { // Sunday
+        $weekNumber += 1;
+        if (53 === $weekNumber) { // If the week is now 53, subtract 52
+            $weekNumber -= 52;
+        }
+    }
+
+    return $weekNumber;
+}
+
 $startDate = new DateTime(date('Y-m-01'));
 $endDate = new DateTime(date('Y-m-t'));
-$startWeek = $startDate->format('W');
-$endWeek = $endDate->format('W');
+$startWeek = getSundayWeekNumber($startDate);
+$endWeek = getSundayWeekNumber($endDate);
+//$startWeek = $startDate->format('W');
+//$endWeek = $endDate->format('W');
 ?>
-    
+
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php
         for($i = $startWeek; $i <= $endWeek; $i++)
         {
-            if($i == $startWeek)
+            if($i == getSundayWeekNumber(new DateTime(date('Y-m-d'))))
             {
                 echo '<li class="active"><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
             }
@@ -94,17 +113,18 @@ $endWeek = $endDate->format('W');
                 $dataClose[] = [
                     'y' => (int)($presentase),
                     'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
-                    //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
+                    'qty' => $totalClose,
                 ];
                 $dataOther[] = [
                     'y' => (int)$presentaseNg,
                     'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
-                    //'url' => 'http://localhost/yemi-app/web/serno-output/index?index_type=1'
+                    'qty' => $value->ng,
                 ];
                 //$dataOpen[] = (int)(100 - $presentase);
                 $dataOpen[] = [
                     'y' => (int)(100 - ($presentase + $presentaseNg)),
                     'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
+                    'qty' => $value->qty - $value->output,
                 ];
                 //$dataName[] = $value->etd;
                 $dataName[] = date('d-M-Y', strtotime($value->etd));
@@ -150,7 +170,7 @@ $endWeek = $endDate->format('W');
                         'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
-                            'format' => '{point.percentage:.0f}%',
+                            
                             'style' => [
                                 'fontSize' => '14px',
                             ],
@@ -174,7 +194,9 @@ $endWeek = $endDate->format('W');
                         'data' => $dataOpen,
                         'color' => 'FloralWhite',
                         'dataLabels' => [
-                            'enabled' => false
+                            'enabled' => true,
+                            'color' => 'black',
+                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
                         ],
                         'showInLegend' => false
                     ],
@@ -190,6 +212,10 @@ $endWeek = $endDate->format('W');
                         'name' => 'Completed',
                         'data' => $dataClose,
                         'color' => $color,
+                        'dataLabels' => [
+                            'enabled' => true,
+                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
+                        ]
                     ]
                 ]
             ],
