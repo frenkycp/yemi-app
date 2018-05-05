@@ -8,7 +8,9 @@ use yii\helpers\Url;
 $this->title = Yii::t('app', 'Production Summary Report');
 $this->params['breadcrumbs'][] = $this->title;
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
-$color = 'DodgerBlue';
+$color = 'DarkSlateBlue';
+
+date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {
@@ -57,14 +59,15 @@ $startWeek = getSundayWeekNumber($startDate);
 $endWeek = getSundayWeekNumber($endDate);
 //$startWeek = $startDate->format('W');
 //$endWeek = $endDate->format('W');
+$weekToday = getSundayWeekNumber(new DateTime(date('Y-m-d')))+1;
 ?>
-
+<h4>Last Updated : <?= date('d-m-Y H:i:s') ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php
         for($i = $startWeek; $i <= $endWeek; $i++)
         {
-            if($i == getSundayWeekNumber(new DateTime(date('Y-m-d'))))
+            if($i == $weekToday)
             {
                 echo '<li class="active"><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
             }
@@ -84,7 +87,7 @@ $endWeek = getSundayWeekNumber($endDate);
         <?php
         for($j = $startWeek; $j <= $endWeek; $j++)
         {
-            if($j == $startWeek)
+            if($j == $weekToday)
             {
                 echo '<div class="tab-pane active" id="tab_1_' . $j .'">';
             }
@@ -170,9 +173,10 @@ $endWeek = getSundayWeekNumber($endDate);
                         'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
-                            
+                            //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                             'style' => [
                                 'fontSize' => '14px',
+                                'fontWeight' => '0'
                             ],
                         ],
                         'borderWidth' => 2,
@@ -197,6 +201,9 @@ $endWeek = getSundayWeekNumber($endDate);
                             'enabled' => true,
                             'color' => 'black',
                             'format' => '{point.percentage:.0f}%<br/>({point.qty})',
+                            'style' => [
+                                'textOutline' => '0px'
+                            ],
                         ],
                         'showInLegend' => false
                     ],
@@ -205,7 +212,13 @@ $endWeek = getSundayWeekNumber($endDate);
                         'data' => $dataOther,
                         'color' => 'pink',
                         'dataLabels' => [
-                            'enabled' => false
+                            'enabled' => false,
+                            /* 'color' => 'black',
+                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
+                            'style' => [
+                                'textOutline' => '0px'
+                            ], */
+                            
                         ],
                     ],
                     [
@@ -215,6 +228,9 @@ $endWeek = getSundayWeekNumber($endDate);
                         'dataLabels' => [
                             'enabled' => true,
                             'format' => '{point.percentage:.0f}%<br/>({point.qty})',
+                            'style' => [
+                                'textOutline' => '0px'
+                            ],
                         ]
                     ]
                 ]
