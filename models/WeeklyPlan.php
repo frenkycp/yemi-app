@@ -59,7 +59,7 @@ class WeeklyPlan extends BaseWeeklyPlan
     {
         $planQty = $this->plan_qty;
         $actualQty = $this->getActualQty();
-        $presentase = ($actualQty / $planQty);
-        return $presentase;
+        $presentase = round(($actualQty / $planQty) * 100, 1);
+        return $presentase . '%';
     }
 }
