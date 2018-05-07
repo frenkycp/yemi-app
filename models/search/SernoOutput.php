@@ -49,13 +49,18 @@ if(isset($params['index_type']))
     {
         $query = SernoOutputModel::find()->where('output<qty')->andWhere(['etd' => $params['etd']]);
     }
-    if($params['index_type'] == 2)
+    elseif($params['index_type'] == 2)
     {
         $query = SernoOutputModel::find()->where('output=qty')->andWhere(['etd' => $params['etd']]);
     }
-    if($params['index_type'] == 3)
+    elseif($params['index_type'] == 3)
     {
         $query = SernoOutputModel::find()->where('ng>0')->andWhere(['etd' => $params['etd']]);
+    }
+
+    if(isset($params['stc']))
+    {
+        $query = $query->andWhere(['stc' => $params['stc']]);
     }
 }
 

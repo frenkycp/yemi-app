@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoOutput extends BaseSernoOutput
 {
-    public $description, $week_no;
+    public $description, $week_no, $cust_desc;
 
     public function behaviors()
     {
@@ -52,7 +52,7 @@ class SernoOutput extends BaseSernoOutput
     
     public static function getDb()
     {
-            return Yii::$app->get('db_mis7');
+        return Yii::$app->get('db_mis7');
     }
     
     public function getQtyBalance()
@@ -63,5 +63,10 @@ class SernoOutput extends BaseSernoOutput
     public function getSernoMaster()
     {
         return $this->hasOne(SernoMaster::className(), ['gmc' => 'gmc']);
+    }
+
+    public function getShipCustomer()
+    {
+        return $this->hasOne(ShipCustomer::className(), ['customer_code' => 'stc']);
     }
 }

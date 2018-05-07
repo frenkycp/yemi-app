@@ -59,9 +59,9 @@ $startWeek = getSundayWeekNumber($startDate);
 $endWeek = getSundayWeekNumber($endDate);
 //$startWeek = $startDate->format('W');
 //$endWeek = $endDate->format('W');
-$weekToday = getSundayWeekNumber(new DateTime(date('Y-m-d')))+1;
+$weekToday = getSundayWeekNumber(new DateTime(date('Y-m-d')));
 ?>
-<h4>Last Updated : <?= date('d-m-Y H:i:s') ?></h4>
+<h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php
@@ -130,7 +130,7 @@ $weekToday = getSundayWeekNumber(new DateTime(date('Y-m-d')))+1;
                     'qty' => $value->qty - $value->output,
                 ];
                 //$dataName[] = $value->etd;
-                $dataName[] = date('d-M-Y', strtotime($value->etd));
+                $dataName[] = date('Y-m-d', strtotime($value->etd));
             }
             echo Highcharts::widget([
             'scripts' => [
@@ -140,7 +140,7 @@ $weekToday = getSundayWeekNumber(new DateTime(date('Y-m-d')))+1;
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 500,
+                    'height' => 400,
                     'width' => null
                 ],
                 'credits' => [
@@ -156,7 +156,10 @@ $weekToday = getSundayWeekNumber(new DateTime(date('Y-m-d')))+1;
                     'type' => 'category'
                 ],
                 'xAxis' => [
-                    'categories' => $dataName
+                    'categories' => $dataName,
+                    'labels' => [
+                        'formatter' => new JsExpression('function(){ return \'<a href="container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
+                    ],
                 ],
                 'yAxis' => [
                     'min' => 0,
@@ -186,7 +189,7 @@ $weekToday = getSundayWeekNumber(new DateTime(date('Y-m-d')))+1;
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
-                                'click' => new JsExpression('function(){ location.href = this.options.url; }')
+                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
                                 //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                             ]
                         ]

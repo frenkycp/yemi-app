@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\grid\GridView;
 
 /**
@@ -33,8 +34,14 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+$main_link = ['report'];
+if(isset($_GET['stc']))
+{
+    $main_link = ['container-report', 'etd' => $_GET['etd']];
+}
+
 $gridColumns = [
-    /* [
+    [
         'class' => 'yii\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -54,10 +61,15 @@ $gridColumns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ], */
+    ],
+    [
+        'attribute' => 'cust_desc',
+        'value' => 'shipCustomer.customer_desc',
+        'label' => 'Customer Description'
+    ],
     [
         'attribute' => 'dst',
-        'hAlign' => 'center'
+        //'hAlign' => 'center'
     ],
     [
         'attribute' => 'gmc',
