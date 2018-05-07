@@ -39,7 +39,12 @@ class SernoOutputController extends base\SernoOutputController
 			];
             //$dataOpen[] = 50;
             //$dataClose[] = 50;
-            $dataName[] = $value->customer_desc . ' (' . $value->total_cntr . 'kontainer)';
+            $str_container = '_container)';
+            if($value->total_cntr > 1)
+            {
+            	$str_container = '_containers)';
+            }
+            $dataName[] = $value->customer_desc . ' (' . $value->total_cntr . $str_container;
 		}
 		//return json_encode($dataOpen);
 

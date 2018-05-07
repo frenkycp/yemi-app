@@ -37,7 +37,7 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 $main_link = ['report'];
 if(isset($_GET['stc']))
 {
-    $main_link = ['container-report', 'etd' => $_GET['etd']];
+    $main_link = ['container-progress', 'etd' => $_GET['etd']];
 }
 
 $gridColumns = [
@@ -160,7 +160,7 @@ $gridColumns = [
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 
-                    Html::a('Main View', ['report'], ['data-pjax' => 0, 'class' => 'btn btn-success', 'title' => Yii::t('kvgrid', 'Show Weekly Report Chart')])
+                    Html::a('Back', $main_link, ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Show Weekly Report Chart')])
                 ],
                 '{export}',
                 '{toggleData}',
