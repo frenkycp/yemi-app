@@ -5,13 +5,14 @@ namespace app\models;
 use Yii;
 use \app\models\base\SernoOutput as BaseSernoOutput;
 use yii\helpers\ArrayHelper;
+use app\models\SernoMaster;
 
 /**
  * This is the model class for table "tb_serno_output".
  */
 class SernoOutput extends BaseSernoOutput
 {
-    public $description, $week_no, $cust_desc;
+    public $description, $week_no, $cust_desc, $plan_actual, $part_full_desc;
 
     public function behaviors()
     {
@@ -36,7 +37,6 @@ class SernoOutput extends BaseSernoOutput
     public function attributeLabels()
     {
         return [
-            'pk' => 'Pk',
             'id' => 'ID',
             'stc' => 'Stc',
             'dst' => 'Destination',
@@ -45,8 +45,12 @@ class SernoOutput extends BaseSernoOutput
             'qty' => 'Plan',
             'output' => 'Actual',
             'adv' => 'Adv',
+            'ng' => 'NG',
             'etd' => 'Etd',
             'cntr' => 'Cntr',
+            'cust_desc' => 'Customer Description',
+            'category' => 'Category',
+            'remark' => 'Remark'
         ];
     }
     
@@ -63,6 +67,12 @@ class SernoOutput extends BaseSernoOutput
     public function getSernoMaster()
     {
         return $this->hasOne(SernoMaster::className(), ['gmc' => 'gmc']);
+    }
+
+    public function getPartName()
+    {
+        $sernoMaster = SernoMaster::find()->where(['gmc' => $this->gmc])->one();
+        return $sernoMaster->model . ' // ' . $sernoMaster->color . ' // ' . $sernoMaster->dest;
     }
 
     public function getShipCustomer()

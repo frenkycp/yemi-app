@@ -18,7 +18,7 @@ class SernoOutput extends SernoOutputModel
 public function rules()
 {
 return [
-[['pk', 'stc', 'dst', 'gmc', 'etd'], 'safe'],
+[['pk', 'stc', 'dst', 'gmc', 'etd', 'category'], 'safe'],
             [['id', 'num', 'qty', 'output', 'adv', 'cntr'], 'integer'],
 ];
 }
@@ -58,27 +58,28 @@ if(isset($params['index_type']))
         $query = SernoOutputModel::find()->where('ng>0')->andWhere(['etd' => $params['etd']]);
     }
 
-    if(isset($params['stc']))
+    if(isset($params['dst']))
     {
-        $query = $query->andWhere(['stc' => $params['stc']]);
+        $query = $query->andWhere(['dst' => $params['dst']]);
     }
 }
 
 $query->joinWith('sernoMaster');
+$query->joinWith('shipCustomer');
 
 $dataProvider = new ActiveDataProvider([
     'query' => $query,
     'sort' => [
         'attributes' => [
-            'dst',
+            //'dst',
             'gmc',
-            'description' => [
-                'asc'=>['tb_serno_master.model'=>SORT_ASC],
-                'desc'=>['tb_serno_master.model'=>SORT_DESC],
+            'cust_desc' => [
+                'asc'=>['tb_ship_customer.customer_desc'=>SORT_ASC],
+                'desc'=>['tb_ship_customer.customer_desc'=>SORT_DESC],
             ],
         ],
         'defaultOrder' => [
-            'dst' => SORT_ASC,
+            'cust_desc' => SORT_ASC,
         ]
     ],
 ]);
@@ -103,6 +104,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'stc', $this->stc])
+            ->andFilterWhere(['like', 'category', $this->category])
             ->andFilterWhere(['like', 'dst', $this->dst])
             ->andFilterWhere(['like', 'gmc', $this->gmc]);
 

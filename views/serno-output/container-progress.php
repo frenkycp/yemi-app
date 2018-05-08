@@ -8,7 +8,8 @@ use yii\helpers\Url;
 $this->title = Yii::t('app', 'Container Report');
 $this->params['breadcrumbs'][] = $this->title;
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
-$color = 'DarkSlateBlue';
+$color = 'CadetBlue';
+$font_color = 'black';
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -109,7 +110,7 @@ $this->registerJs($script, View::POS_HEAD );
 	                        'color' => 'FloralWhite',
 	                        'dataLabels' => [
 	                            'enabled' => true,
-	                            'color' => 'black',
+	                            'color' => $font_color,
 	                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
 	                            'style' => [
 	                                'textOutline' => '0px'
@@ -123,6 +124,7 @@ $this->registerJs($script, View::POS_HEAD );
 	                        'color' => $color,
 	                        'dataLabels' => [
 	                            'enabled' => true,
+	                            'color' => $font_color,
 	                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
 	                            'style' => [
 	                                'textOutline' => '0px'

@@ -55,7 +55,8 @@ $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
 } else {
 Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
+    //$actionColumnTemplateString = "{view} {update} {delete}";
+    $actionColumnTemplateString = "{edit}";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
@@ -67,7 +68,7 @@ if(isset($_GET['stc']))
 
 $gridColumns = [
     [
-        'class' => 'yii\grid\ActionColumn',
+        'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
             'view' => function ($url, $model, $key) {
@@ -77,6 +78,14 @@ $gridColumns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            },
+            'edit' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'Update Data'),
+                    'data-pjax' => '0',
+                    'class' => 'btn btn-success btn-xs'
+                ];
+                return Html::a('Edit', Url::to(['update', 'pk' => $model->pk]), $options);
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -85,43 +94,93 @@ $gridColumns = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap']
+        'contentOptions' => ['nowrap'=>'nowrap'],
+        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'cust_desc',
         'value' => 'shipCustomer.customer_desc',
-        'label' => 'Customer Description'
+        'label' => 'Customer Description',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'dst',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'mergeHeader' => true,
         //'hAlign' => 'center'
     ],
     [
         'attribute' => 'gmc',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
     ],
     [
         'attribute' => 'description',
         'value' => 'sernoMaster.description',
-        'label' => 'Description'
+        'label' => 'Description',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'etd',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'pageSummary' => 'Total',
+        'width' => '100px',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'qty',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '60px',
+        'mergeHeader' => true,
+        'pageSummary' => true,
+        'format' => ['decimal',0]
     ],
     [
         'attribute' => 'output',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '60px',
+        'mergeHeader' => true,
+        'pageSummary' => true,
+        'format' => ['decimal',0]
     ],
     [
         'attribute' => 'qtyBalance',
         'label' => 'Minus',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '60px',
+        'mergeHeader' => true,
+        'pageSummary' => true,
+        'format' => ['decimal',0]
     ],
     [
         'attribute' => 'ng',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '60px',
+        'mergeHeader' => true,
+        'pageSummary' => true,
+        'format' => ['decimal',0]
     ],
+    [
+        'attribute' => 'category',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+        'filter' => ['MACHINE' => 'MACHINE', 'MAN' => 'MAN', 'MATERIAL' => 'MATERIAL', 'METHOD' => 'METHOD']
+    ],
+    [
+        'attribute' => 'remark',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+    ],
+    
 ];
 ?>
 <div class="giiant-crud serno-output-index">
@@ -178,7 +237,14 @@ $gridColumns = [
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
             'columns' => $gridColumns,
+            'hover' => true,
+            'showPageSummary' => true,
+            //'condensed' => true,
+            'striped' => true,
+            //'floatHeader'=>true,
+            //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],

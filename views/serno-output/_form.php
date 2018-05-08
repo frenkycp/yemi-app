@@ -41,40 +41,47 @@ use yii\helpers\StringHelper;
             
 
 <!-- attribute pk -->
-			<?= $form->field($model, 'pk')->textInput(['maxlength' => true]) ?>
+			<?= '';//$form->field($model, 'pk')->textInput(['maxlength' => true]) ?>
 
 <!-- attribute id -->
-			<?= $form->field($model, 'id')->textInput() ?>
+			<?= '';//$form->field($model, 'id')->textInput() ?>
 
 <!-- attribute num -->
-			<?= $form->field($model, 'num')->textInput() ?>
+			<?= '';//$form->field($model, 'num')->textInput() ?>
 
-<!-- attribute qty -->
-			<?= $form->field($model, 'qty')->textInput() ?>
-
-<!-- attribute output -->
-			<?= $form->field($model, 'output')->textInput() ?>
-
-<!-- attribute adv -->
-			<?= $form->field($model, 'adv')->textInput() ?>
-
-<!-- attribute cntr -->
-			<?= $form->field($model, 'cntr')->textInput() ?>
-
-<!-- attribute ng -->
-			<?= $form->field($model, 'ng')->textInput() ?>
+            <?= $form->field($model, 'cust_desc')->textInput(['maxlength' => true, 'readonly' => true, 'value' => $model->shipCustomer->customer_desc]) ?>
 
 <!-- attribute dst -->
-			<?= $form->field($model, 'dst')->textarea(['rows' => 6]) ?>
-
-<!-- attribute etd -->
-			<?= $form->field($model, 'etd')->textInput() ?>
-
-<!-- attribute stc -->
-			<?= $form->field($model, 'stc')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'dst')->textInput(['maxlength' => true, 'readonly' => true]) ?>
 
 <!-- attribute gmc -->
-			<?= $form->field($model, 'gmc')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'part_full_desc')->textInput(['readonly' => true, 'value' => $model->gmc . ' (' . $model->partName . ')'])->label('Product') ?>
+
+<!-- attribute etd -->
+            <?= $form->field($model, 'etd')->textInput(['readonly' => true]) ?>
+
+<!-- attribute qty -->
+			<?= $form->field($model, 'qty')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute output -->
+			<?= $form->field($model, 'output')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute ng -->
+			<?= ''; //$form->field($model, 'ng')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute ship -->
+			<?= '';//$form->field($model, 'ship')->textInput() ?>
+
+<!-- attribute category -->
+			<?= $form->field($model, 'category')->dropDownList([
+                'MACHINE' => 'MACHINE', 
+                'MAN' => 'MAN',
+                'MATERIAL' => 'MATERIAL',
+                'METHOD' => 'METHOD'
+            ], ['prompt' => 'Select NG Category']) ?>
+
+<!-- attribute remark -->
+			<?= $form->field($model, 'remark')->textInput(['maxlength' => true]) ?>
 
 <!-- attribute description -->
         </p>
@@ -86,7 +93,7 @@ use yii\helpers\StringHelper;
                     'encodeLabels' => false,
                     'items' => [ 
                         [
-    'label'   => Yii::t('app', 'SernoOutput'),
+    'label'   => Yii::t('app', $model->pk),
     'content' => $this->blocks['main'],
     'active'  => true,
 ],
@@ -94,7 +101,6 @@ use yii\helpers\StringHelper;
                  ]
     );
     ?>
-        <hr/>
 
         <?php echo $form->errorSummary($model); ?>
 

@@ -22,7 +22,7 @@ class SernoOutputController extends base\SernoOutputController
     public function actionContainerProgress()
     {
     	$etd = \Yii::$app->request->get('etd');
-    	$container = ContainerView::find()->where(['etd' => $etd])->all();
+    	$container = ContainerView::find()->where(['etd' => $etd])->orderBy('dst ASC')->all();
 
 		foreach ($container as $key => $value) {
 			$close_percentage = (int)floor(($value->output / $value->qty) * 100);
@@ -30,12 +30,12 @@ class SernoOutputController extends base\SernoOutputController
 			$dataOpen[] = [
 				'y' => $open_percentage,
 				'qty' => $value->balance,
-				'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd, 'stc' => $value->stc]),
+				'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd, 'dst' => $value->dst]),
 			];
             $dataClose[] = [
 				'y' => $close_percentage,
 				'qty' => $value->output,
-				'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd, 'stc' => $value->stc]),
+				'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd, 'dst' => $value->dst]),
 			];
             //$dataOpen[] = 50;
             //$dataClose[] = 50;
@@ -44,7 +44,7 @@ class SernoOutputController extends base\SernoOutputController
             {
             	$str_container = '_containers)';
             }
-            $dataName[] = $value->customer_desc . ' (' . $value->total_cntr . $str_container;
+            $dataName[] = $value->dst . ' (' . $value->total_cntr . $str_container;
 		}
 		//return json_encode($dataOpen);
 
@@ -54,4 +54,25 @@ class SernoOutputController extends base\SernoOutputController
     		'dataName' => $dataName
     	]);
     }
+
+    public function actionUpdate($pk)
+	{
+		$model = $this->findModel($pk);
+
+		if ($model->load($_POST)) {
+			if($model->category == ''){
+				$model->remark = '';
+			}
+			if($model->save()){
+				return $this->redirect(Url::previous());
+			}else{
+				return json_encode($model->errors);
+			}
+			
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+			]);
+		}
+	}
 }

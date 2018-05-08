@@ -19,8 +19,11 @@ use Yii;
  * @property integer $output
  * @property integer $adv
  * @property string $etd
+ * @property string $ship
  * @property integer $cntr
  * @property integer $ng
+ * @property string $category
+ * @property string $remark
  * @property string $aliasModel
  */
 abstract class SernoOutput extends \yii\db\ActiveRecord
@@ -53,10 +56,12 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             [['pk'], 'required'],
             [['id', 'num', 'qty', 'output', 'adv', 'cntr', 'ng'], 'integer'],
             [['dst'], 'string'],
-            [['etd'], 'safe'],
+            [['etd', 'ship'], 'safe'],
             [['pk'], 'string', 'max' => 20],
             [['stc'], 'string', 'max' => 6],
             [['gmc'], 'string', 'max' => 7],
+            [['category'], 'string', 'max' => 10],
+            [['remark'], 'string', 'max' => 50],
             [['pk'], 'unique']
         ];
     }
@@ -77,8 +82,11 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'output' => 'Output',
             'adv' => 'Adv',
             'etd' => 'Etd',
+            'ship' => 'Ship',
             'cntr' => 'Cntr',
             'ng' => 'Ng',
+            'category' => 'Category',
+            'remark' => 'Remark',
         ];
     }
 

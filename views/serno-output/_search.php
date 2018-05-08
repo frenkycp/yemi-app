@@ -37,9 +37,15 @@ use yii\widgets\ActiveForm;
 
 		<?php // echo $form->field($model, 'etd') ?>
 
+		<?php // echo $form->field($model, 'ship') ?>
+
 		<?php // echo $form->field($model, 'cntr') ?>
 
 		<?php // echo $form->field($model, 'ng') ?>
+
+		<?php // echo $form->field($model, 'category') ?>
+
+		<?php // echo $form->field($model, 'remark') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
