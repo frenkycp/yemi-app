@@ -25,6 +25,30 @@ if(isset($_GET['index_type']))
 $this->title = Yii::t('app', 'Serno Outputs');
 $this->params['breadcrumbs'][] = $this->title;
 
+$this->registerCss(".tab-content > .tab-pane,
+.pill-content > .pill-pane {
+    display: block;     
+    height: 0;          
+    overflow-y: hidden; 
+}
+
+.tab-content > .active,
+.pill-content > .active {
+    height: auto;       
+} ");
+
+$script = <<< JS
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout("refreshPage();", 600000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+JS;
+$this->registerJs($script, View::POS_HEAD );
+
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;

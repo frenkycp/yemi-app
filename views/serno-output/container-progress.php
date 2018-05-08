@@ -40,7 +40,7 @@ $this->registerJs($script, View::POS_HEAD );
 
 <div class="box box-success">
 	<div class="box-header with-border">
-		<h3 class="box-title"><?= date('d F Y'); ?></h3>
+		<h3 class="box-title"><?= date('d F Y', strtotime(Yii::$app->request->get('etd'))); ?></h3>
 	</div>
 	<div class="box-body no-padding">
 		<div class="row">
