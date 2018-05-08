@@ -68,6 +68,9 @@ if(isset($_GET['stc']))
 
 $gridColumns = [
     [
+        'class' => '\kartik\grid\SerialColumn'
+    ],
+    [
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -96,6 +99,7 @@ $gridColumns = [
         },
         'contentOptions' => ['nowrap'=>'nowrap'],
         'vAlign' => 'middle',
+        'hidden' => in_array(Yii::$app->user->identity->username, ['admin', 'prd']) ? false : true,
     ],
     [
         'attribute' => 'cust_desc',

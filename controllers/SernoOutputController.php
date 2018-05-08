@@ -23,6 +23,7 @@ class SernoOutputController extends base\SernoOutputController
     {
     	$etd = \Yii::$app->request->get('etd');
     	$container = ContainerView::find()->where(['etd' => $etd])->orderBy('dst ASC')->all();
+    	$total_container = 0;
 
 		foreach ($container as $key => $value) {
 			$close_percentage = (int)floor(($value->output / $value->qty) * 100);
@@ -44,14 +45,21 @@ class SernoOutputController extends base\SernoOutputController
             {
             	$str_container = '_containers)';
             }
+            $total_container += $value->total_cntr;
             $dataName[] = $value->dst . ' (' . $value->total_cntr . $str_container;
 		}
 		//return json_encode($dataOpen);
+		$containerStr = $total_container . ' Container';
+		if($total_container > 1)
+		{
+			$containerStr = $total_container . ' Containers';
+		}
 
     	return $this->render('container-progress', [
     		'dataOpen' => $dataOpen,
     		'dataClose' => $dataClose,
-    		'dataName' => $dataName
+    		'dataName' => $dataName,
+    		'containerStr' => $containerStr
     	]);
     }
 
