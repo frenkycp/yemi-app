@@ -122,6 +122,7 @@ $gridColumns = [
         'value' => 'sernoMaster.description',
         'label' => 'Description',
         'vAlign' => 'middle',
+        'width' => '150px',
     ],
     [
         'attribute' => 'etd',
@@ -179,6 +180,7 @@ $gridColumns = [
         'attribute' => 'remark',
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'width' => '170px',
     ],
     
 ];
