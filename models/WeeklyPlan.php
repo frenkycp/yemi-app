@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WeeklyPlan extends BaseWeeklyPlan
 {
-    public $percentage = 0;
+    public $percentage = 0, $week_range;
 
     public function behaviors()
     {

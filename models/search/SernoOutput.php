@@ -112,7 +112,7 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'tb_serno_master.model', $this->description])
             ->andFilterWhere(['like', 'category', $this->category])
             ->andFilterWhere(['like', 'dst', $this->dst])
-            ->andFilterWhere(['like', 'gmc', $this->gmc]);
+            ->andFilterWhere(['like', 'tb_serno_output.gmc', $this->gmc]);
 
 return $dataProvider;
 }

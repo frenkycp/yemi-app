@@ -117,6 +117,10 @@ $gridColumns = [
         'vAlign' => 'middle',
         'pageSummary' => 'Total',
         'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
         //'mergeHeader' => true,
     ],
     [
@@ -131,6 +135,10 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'description',

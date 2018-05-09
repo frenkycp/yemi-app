@@ -84,29 +84,49 @@ $columns = [
         },
         'contentOptions' => ['nowrap'=>'nowrap']
     ], */
-    [
+    /* [
         'attribute' => 'category',
         'hAlign' => 'center',
-        'pageSummary' => 'Total',
         'vAlign' => 'middle',
-    ],
+    ], */
     [
         'attribute' => 'period',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'week',
         'value' => function($model)
         {
             $week = $model->week;
-            $start_date = date('d M Y', strtotime($model->weekStartDate));
-            $end_date = date('d M Y', strtotime($model->weekEndDate));
-            return '<b>Week-' . $week . '</b> (' . $start_date . ' - ' . $end_date . ')';
+            return '<b>Week-' . $week;
         },
         'format' => 'raw',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'week_range',
+        'label' => 'ETD - SUB',
+        'value' => function($model)
+        {
+            $week = $model->week;
+            $start_date = date('d M Y', strtotime($model->weekStartDate));
+            $end_date = date('d M Y', strtotime($model->weekEndDate));
+            return $start_date . ' - ' . $end_date;
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'pageSummary' => 'Total',
     ],
     [
         'attribute' => 'plan_qty',
