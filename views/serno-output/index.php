@@ -61,14 +61,15 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $main_link = ['report'];
-if(isset($_GET['stc']))
+if(isset($_GET['dst']))
 {
     $main_link = ['container-progress', 'etd' => $_GET['etd']];
 }
 
 $gridColumns = [
     [
-        'class' => '\kartik\grid\SerialColumn'
+        'class' => '\kartik\grid\SerialColumn',
+        'width' => '30px',
     ],
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -99,6 +100,7 @@ $gridColumns = [
         },
         'contentOptions' => ['nowrap'=>'nowrap'],
         'vAlign' => 'middle',
+        'width' => '60px',
         'hidden' => in_array(Yii::$app->user->identity->username, ['admin', 'prd']) ? false : true,
     ],
     [
@@ -107,6 +109,15 @@ $gridColumns = [
         'label' => 'Customer Description',
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'hidden' => \Yii::$app->request->get('dst') !== null ? false : true,
+    ],
+    [
+        'attribute' => 'etd',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'pageSummary' => 'Total',
+        'width' => '100px',
+        //'mergeHeader' => true,
     ],
     [
         'attribute' => 'dst',
@@ -126,15 +137,7 @@ $gridColumns = [
         'value' => 'sernoMaster.description',
         'label' => 'Description',
         'vAlign' => 'middle',
-        'width' => '150px',
-    ],
-    [
-        'attribute' => 'etd',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'pageSummary' => 'Total',
-        'width' => '100px',
-        'mergeHeader' => true,
+        'width' => '170px',
     ],
     [
         'attribute' => 'qty',

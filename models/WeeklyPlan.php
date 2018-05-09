@@ -62,4 +62,21 @@ class WeeklyPlan extends BaseWeeklyPlan
         $presentase = round(($actualQty / $planQty) * 100, 1);
         return $presentase . '%';
     }
+
+    public function getCalendarView()
+    {
+        return $this->hasOne(CalendarView::className(), ['week_ship' => 'week']);
+    }
+
+    public function getWeekStartDate()
+    {
+        $calendar = SernoCalendar::find()->where(['week_ship' => $this->week])->orderBy('ship ASC')->one();
+        return $calendar->ship;
+    }
+
+    public function getWeekEndDate()
+    {
+        $calendar = SernoCalendar::find()->where(['week_ship' => $this->week])->orderBy('ship DESC')->one();
+        return $calendar->ship;
+    }
 }

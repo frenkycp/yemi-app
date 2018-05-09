@@ -5,6 +5,8 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\ContainerView;
 use yii\helpers\Url;
+use dmstr\bootstrap\Tabs;
+use app\models\search\SernoOutput as SernoOutputSearch;
 
 class SernoOutputController extends base\SernoOutputController
 {
@@ -13,6 +15,29 @@ class SernoOutputController extends base\SernoOutputController
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
+
+    public function actionIndex()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+	    $searchModel  = new SernoOutputSearch;
+	    $searchModel->etd = date('Y-m');
+	    if(\Yii::$app->request->get('etd') !== null)
+	    {
+	    	$searchModel->etd = \Yii::$app->request->get('etd');
+	    }
+	    
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('index', [
+		'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
+	}
     
     public function actionReport()
     {

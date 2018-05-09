@@ -72,6 +72,7 @@ $dataProvider = new ActiveDataProvider([
     'sort' => [
         'attributes' => [
             'dst',
+            'etd',
             'gmc',
             'cust_desc' => [
                 'asc'=>['tb_ship_customer.customer_desc'=>SORT_ASC],
@@ -102,12 +103,12 @@ $query->andFilterWhere([
             'qty' => $this->qty,
             'output' => $this->output,
             'adv' => $this->adv,
-            'etd' => $this->etd,
             'cntr' => $this->cntr,
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'stc', $this->stc])
+            ->andFilterWhere(['like', 'etd', $this->etd])
             ->andFilterWhere(['like', 'tb_serno_master.model', $this->description])
             ->andFilterWhere(['like', 'category', $this->category])
             ->andFilterWhere(['like', 'dst', $this->dst])

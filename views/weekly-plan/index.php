@@ -61,37 +61,6 @@ if($totPlan > 0)
     $totPercentage = round(($totActual / $totPlan) * 100, 1);
 }
 
-$myWeek = [];
-
-$weekStart = [
-    '18' => '2018-05-01',
-    '19' => '2018-05-06',
-    '20' => '2018-05-13',
-    '21' => '2018-05-20',
-    '22' => '2018-05-27',
-];
-
-$myWeek[18] = [
-    'start' => '2018-05-01',
-    'end' => '2018-05-05',
-];
-$myWeek[19] = [
-    'start' => '2018-05-06',
-    'end' => '2018-05-12',
-];
-$myWeek[20] = [
-    'start' => '2018-05-13',
-    'end' => '2018-05-19',
-];
-$myWeek[21] = [
-    'start' => '2018-05-20',
-    'end' => '2018-05-26',
-];
-$myWeek[22] = [
-    'start' => '2018-05-27',
-    'end' => '2018-06-02',
-];
-
 //$totPercentage = 98;
 $columns = [
     /* [
@@ -119,41 +88,25 @@ $columns = [
         'attribute' => 'category',
         'hAlign' => 'center',
         'pageSummary' => 'Total',
+        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'period',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'week',
         'value' => function($model)
         {
-    $myWeek[18] = [
-    'start' => '2018-05-01',
-    'end' => '2018-05-05',
-];
-$myWeek[19] = [
-    'start' => '2018-05-06',
-    'end' => '2018-05-12',
-];
-$myWeek[20] = [
-    'start' => '2018-05-13',
-    'end' => '2018-05-19',
-];
-$myWeek[21] = [
-    'start' => '2018-05-20',
-    'end' => '2018-05-26',
-];
-$myWeek[22] = [
-    'start' => '2018-05-27',
-    'end' => '2018-06-02',
-];
             $week = $model->week;
-            $year = substr($model->period, 0, 4);
-            $return = $model->getStartAndEndDate($week+1, $year);
-            return 'Week-' . $week . ' (' . $myWeek[$week]['start'] . ' - ' . $myWeek[$week]['end'] . ')';
+            $start_date = date('d M Y', strtotime($model->weekStartDate));
+            $end_date = date('d M Y', strtotime($model->weekEndDate));
+            return '<b>Week-' . $week . '</b> (' . $start_date . ' - ' . $end_date . ')';
         },
-        'hAlign' => 'center'
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'plan_qty',
@@ -161,7 +114,8 @@ $myWeek[22] = [
         'enableSorting' => false,
         'filter' => false,
         'pageSummary' => true,
-        'format' => ['decimal',0]
+        'format' => ['decimal',0],
+        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'actual_qty',
@@ -170,7 +124,8 @@ $myWeek[22] = [
         'enableSorting' => false,
         'filter' => false,
         'pageSummary' => true,
-        'format' => ['decimal',0]
+        'format' => ['decimal',0],
+        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'balance_qty',
@@ -179,13 +134,15 @@ $myWeek[22] = [
         'enableSorting' => false,
         'filter' => false,
         'pageSummary' => true,
-        'format' => ['decimal',0]
+        'format' => ['decimal',0],
+        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'percentage',
         'value' => 'weekPercentage',
         'label' => 'Completion',
         'hAlign' => 'center',
+        'vAlign' => 'middle',
         //'format' => 'percent',
         'pageSummary' => $totPercentage . '%',
         //'enableSorting' => false,

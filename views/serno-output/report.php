@@ -53,15 +53,16 @@ function getSundayWeekNumber($date)
     return $weekNumber;
 }
 
-$startDate = new DateTime(date('Y-m-01'));
-$endDate = new DateTime(date('Y-m-t'));
-$startWeek = getSundayWeekNumber($startDate);
-$endWeek = getSundayWeekNumber($endDate);
+$startDate = date('Y-m-01');
+$endDate = date('Y-m-t');
+$startWeek = app\models\SernoCalendar::find()->where(['ship' => $startDate])->one()->week_ship;
+$endWeek = app\models\SernoCalendar::find()->where(['ship' => $endDate])->one()->week_ship;
 //$startWeek = $startDate->format('W');
 //$endWeek = $endDate->format('W');
-$weekToday = getSundayWeekNumber(new DateTime(date('Y-m-d')));
+$date_today = date('Y-m-d');
+$weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->one()->week_ship;
 ?>
-<h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5>
+<u><h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5></u>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php
