@@ -3,75 +3,31 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
-use yii\web\View;
 
 /**
 * @var yii\web\View $this
 * @var yii\data\ActiveDataProvider $dataProvider
-    * @var app\models\search\SernoOutput $searchModel
+    * @var app\models\search\MesinCheckNgSearch $searchModel
 */
-$status = '';
-if(isset($_GET['index_type']))
-{
-    if($_GET['index_type'] == 1)
-    {
-        $status = ' (Open)';
-    }
-    if($_GET['index_type'] == 2)
-    {
-        $status = ' (Closed)';
-    }
-}
 
-$this->title = Yii::t('app', 'Serno Outputs');
+$this->title = Yii::t('app', 'Machine Check Data');
 $this->params['breadcrumbs'][] = $this->title;
-
-$this->registerCss(".tab-content > .tab-pane,
-.pill-content > .pill-pane {
-    display: block;     
-    height: 0;          
-    overflow-y: hidden; 
-}
-
-.tab-content > .active,
-.pill-content > .active {
-    height: auto;       
-} ");
-
-$script = <<< JS
-    window.onload = setupRefresh;
-
-    function setupRefresh() {
-      setTimeout("refreshPage();", 600000); // milliseconds
-    }
-    function refreshPage() {
-       window.location = location.href;
-    }
-JS;
-$this->registerJs($script, View::POS_HEAD );
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
 } else {
 Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    //$actionColumnTemplateString = "{view} {update} {delete}";
-    $actionColumnTemplateString = "{edit}";
+    $actionColumnTemplateString = "{view} {update} {delete}";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
-$main_link = ['report'];
-if(isset($_GET['dst']))
-{
-    $main_link = ['container-progress', 'etd' => $_GET['etd']];
-}
-
-$gridColumns = [
+$grid_columns = [
     [
         'class' => '\kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-    [
+    /* [
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -82,14 +38,6 @@ $gridColumns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            },
-            'edit' => function ($url, $model, $key) {
-                $options = [
-                    'title' => Yii::t('cruds', 'Update Data'),
-                    'data-pjax' => '0',
-                    'class' => 'btn btn-success btn-xs'
-                ];
-                return Html::a('Edit', Url::to(['update', 'pk' => $model->pk]), $options);
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -98,109 +46,102 @@ $gridColumns = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap'],
-        'vAlign' => 'middle',
-        'width' => '60px',
-        'hidden' => in_array(Yii::$app->user->identity->username, ['admin', 'prd']) ? false : true,
-    ],
+        'contentOptions' => ['nowrap'=>'nowrap']
+    ], */
     [
-        'attribute' => 'cust_desc',
-        'value' => 'shipCustomer.customer_desc',
-        'label' => 'Customer Description',
+        'attribute' => 'location',
         'vAlign' => 'middle',
-        'mergeHeader' => true,
-        'hidden' => \Yii::$app->request->get('dst') !== null ? false : true,
-    ],
-    [
-        'attribute' => 'etd',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'pageSummary' => 'Total',
-        'width' => '100px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center;'
-        ],
-        //'mergeHeader' => true,
-    ],
-    [
-        'attribute' => 'dst',
-        'vAlign' => 'middle',
-        'width' => '90px',
-        'mergeHeader' => true,
+        //'width' => '100px',
+        'hidden' => true,
         //'hAlign' => 'center'
     ],
     [
-        'attribute' => 'gmc',
-        'hAlign' => 'center',
+        'attribute' => 'area',
         'vAlign' => 'middle',
-        'width' => '90px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center;'
+        //'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'mesin_id',
+        'label' => 'Machine ID',
+        'vAlign' => 'middle',
+        //'width' => '100px',
+        'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'mesin_nama',
+        'label' => 'Machine Name',
+        'vAlign' => 'middle',
+        'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'mesin_no',
+        'label' => 'NO',
+        'vAlign' => 'middle',
+        'width' => '4%',
+        'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'mesin_bagian',
+        'label' => 'Parts',
+        'filter' => false,
+        'vAlign' => 'middle',
+        //'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'mesin_bagian_ket',
+        'label' => 'Parts Info',
+        'filter' => false,
+        'vAlign' => 'middle',
+        //'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'mesin_catatan',
+        'label' => 'Parts Remarks',
+        'filter' => false,
+        'vAlign' => 'middle',
+        //'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'repair_note',
+        'label' => 'Repair Note',
+        'filter' => false,
+        'vAlign' => 'middle',
+        //'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'repair_status',
+        'label' => 'Status',
+        //'width' => '100px',
+        'value' => function($model){
+            if ($model->repair_status == 'O') {
+                return 'OPEN';
+            }else {
+                return 'CLOSED';
+            }
+        },
+        'vAlign' => 'middle',
+        'filter' => [
+            'O' => 'OPEN',
+            'C' => 'CLOSED'
         ],
+        'hAlign' => 'center'
     ],
     [
-        'attribute' => 'description',
-        'value' => 'sernoMaster.description',
-        'label' => 'Description',
+        'attribute' => 'mesin_last_update',
+        'label' => 'Last Update',
         'vAlign' => 'middle',
-        'width' => '170px',
+        //'width' => '150px',
+        //'hAlign' => 'center'
     ],
-    [
-        'attribute' => 'qty',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '60px',
-        'mergeHeader' => true,
-        'pageSummary' => true,
-        'format' => ['decimal',0]
-    ],
-    [
-        'attribute' => 'output',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '60px',
-        'mergeHeader' => true,
-        'pageSummary' => true,
-        'format' => ['decimal',0]
-    ],
-    [
-        'attribute' => 'qtyBalance',
-        'label' => 'Minus',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '60px',
-        'mergeHeader' => true,
-        'pageSummary' => true,
-        'format' => ['decimal',0]
-    ],
-    [
-        'attribute' => 'ng',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '60px',
-        'mergeHeader' => true,
-        'pageSummary' => true,
-        'format' => ['decimal',0]
-    ],
-    [
-        'attribute' => 'category',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '100px',
-        'filter' => ['MACHINE' => 'MACHINE', 'MAN' => 'MAN', 'MATERIAL' => 'MATERIAL', 'METHOD' => 'METHOD']
-    ],
-    [
-        'attribute' => 'remark',
-        'vAlign' => 'middle',
-        'mergeHeader' => true,
-        'width' => '170px',
-    ],
-    
-];
+]
 ?>
-<div class="giiant-crud serno-output-index">
+<div class="giiant-crud mesin-check-ng-index">
 
     <?php
 //             echo $this->render('_search', ['model' =>$searchModel]);
@@ -210,14 +151,10 @@ $gridColumns = [
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
     <h1 style="display: none;">
-        <?= Yii::t('app', 'Production Status' . $status) ?>
+        <?= Yii::t('app', 'Mesin Check Ngs') ?>
         <small>
-            List <?= isset($_GET['etd']) ? $_GET['etd'] : '' ?>
+            List
         </small>
-        <?php
-        $tgl = isset($_GET['etd']) ? $_GET['etd'] : '';
-        $heading = Yii::t('app', 'Production Status' . $status) . ' ' . $tgl;
-        ?>
     </h1>
     <div class="clearfix crud-navigation" style="display: none;">
         <div class="pull-left">
@@ -251,13 +188,14 @@ $gridColumns = [
         </div>
     </div>
 
+    <!-- <hr /> -->
+
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'columns' => $gridColumns,
+            'columns' => $grid_columns,
             'hover' => true,
-            'showPageSummary' => true,
             //'condensed' => true,
             'striped' => true,
             //'floatHeader'=>true,
@@ -268,7 +206,7 @@ $gridColumns = [
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 
-                    Html::a('Back', $main_link, ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Show Weekly Report Chart')])
+                    Html::a('Back', ['ng-progress'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Show Weekly Report Chart')])
                 ],
                 '{export}',
                 '{toggleData}',
@@ -279,7 +217,8 @@ $gridColumns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => $heading
+                'heading' => $heading,
+                //'footer' => false,
             ],
         ]); ?>
     </div>

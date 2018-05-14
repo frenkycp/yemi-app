@@ -5,10 +5,9 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Production Summary Report');
+$this->title = Yii::t('app', 'NG Progress Report');
 $this->params['breadcrumbs'][] = $this->title;
-//$color = new JsExpression('Highcharts.getOptions().colors[7]');
-$color = 'DarkSlateBlue';
+$color = 'ForestGreen';
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -40,14 +39,14 @@ $startDate = date('Y-m-01');
 $endDate = date('Y-m-t');
 $startWeek = app\models\SernoCalendar::find()->where(['ship' => $startDate])->one()->week_ship;
 $endWeek = app\models\SernoCalendar::find()->where(['ship' => $endDate])->one()->week_ship;
-//$startWeek = $startDate->format('W');
-//$endWeek = $endDate->format('W');
 $date_today = date('Y-m-d');
 $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->one()->week_ship;
+
 ?>
-<u><h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5></u>
+
+<u><h5>Last Updated : <?= date('d-M-Y H:i:s') ?></h5></u>
 <div class="nav-tabs-custom">
-    <ul class="nav nav-tabs">
+	<ul class="nav nav-tabs">
         <?php
         for($i = $startWeek; $i <= $endWeek; $i++)
         {
@@ -74,42 +73,37 @@ $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->on
             {
                 echo '<div class="tab-pane" id="tab_1_' . $j .'">';
             }
-
-            
-            //$sernoFg = app\models\SernoFgSumViewWeek::find()->where(['week_no' => $j])->orderBy('shipto ASC')->all();
-            //$sernoFg = app\models\SernoOutputView::find()->where(['week_no' => $j])->orderBy('etd ASC')->all();
-            $sernoFg = app\models\SernoOutput::find()->select(['dst, gmc, etd, ship, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(ship,4) as week_no'])
-                    ->where(['WEEK(ship,4)' => $j])
-                    ->groupBy('etd')
-                    ->all();
+            $ngProgress = app\models\MesinCheckNg::find()->select(['CONVERT(date, [db_owner].[MESIN_CHECK_NG].[mesin_last_update]) as tgl, DATEPART(wk, [db_owner].[MESIN_CHECK_NG].[mesin_last_update]) as week_no, SUM(CASE WHEN repair_status=\'O\' THEN 1 ELSE 0 END) as total_open, SUM(CASE WHEN repair_status=\'C\' THEN 1 ELSE 0 END) as total_close'])
+            ->where(['DATEPART(wk, [db_owner].[MESIN_CHECK_NG].[mesin_last_update])' => $j])
+            ->groupBy('CONVERT(date, [db_owner].[MESIN_CHECK_NG].[mesin_last_update]), DATEPART(wk, [db_owner].[MESIN_CHECK_NG].[mesin_last_update])')->all();
             $dataClose = [];
             $dataOpen = [];
             $dataOther = [];
             $dataName = [];
 
-            foreach ($sernoFg as $value) {
-                $totalClose = $value->output - $value->ng;
-                $presentaseNg = round(($value->ng/$value->qty)*100);
-                $presentase = floor(($totalClose/$value->qty)*100);
+            foreach ($ngProgress as $value) {
+                $total_open = $value->total_open;
+                $total_close = $value->total_close;
+                $total_data = $total_open + $total_close;
+                $presentase = floor(($total_close/$total_data)*100);
                 //$dataClose[] = (int)$presentase;
                 $dataClose[] = [
                     'y' => (int)($presentase),
-                    'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
-                    'qty' => $totalClose,
-                ];
-                $dataOther[] = [
-                    'y' => (int)$presentaseNg,
-                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
-                    'qty' => $value->ng,
+                    'url' => Url::to(['index',
+                        'repair_status' => 'C',
+                        'mesin_last_update' => $value->tgl]),
+                    'qty' => $total_close,
                 ];
                 //$dataOpen[] = (int)(100 - $presentase);
                 $dataOpen[] = [
-                    'y' => (int)(100 - ($presentase + $presentaseNg)),
-                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
-                    'qty' => $value->qty - $value->output,
+                    'y' => (int)(100 - $presentase),
+                    'url' => Url::to(['index',
+                        'repair_status' => 'O',
+                        'mesin_last_update' => $value->tgl]),
+                    'qty' => $total_open,
                 ];
                 //$dataName[] = $value->etd;
-                $dataName[] = date('Y-m-d', strtotime($value->etd));
+                $dataName[] = date('Y-m-d', strtotime($value->tgl));
             }
             echo Highcharts::widget([
             'scripts' => [
@@ -126,7 +120,7 @@ $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->on
                     'enabled' =>false
                 ],
                 'title' => [
-                    'text' => 'Weekly Report'
+                    'text' => 'NG Completion'
                 ],
                 'subtitle' => [
                     'text' => 'Week ' . $j
@@ -188,20 +182,6 @@ $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->on
                             ],
                         ],
                         'showInLegend' => false
-                    ],
-                    [
-                        'name' => 'NG',
-                        'data' => $dataOther,
-                        'color' => 'pink',
-                        'dataLabels' => [
-                            'enabled' => false,
-                            /* 'color' => 'black',
-                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
-                            'style' => [
-                                'textOutline' => '0px'
-                            ], */
-                            
-                        ],
                     ],
                     [
                         'name' => 'Completed',
