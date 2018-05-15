@@ -40,7 +40,10 @@ class SiteController extends Controller
     public function actionIndex()
     {
         //return $this->render('index');
-        return $this->redirect(['weekly-plan/index']);
+        if (\Yii::$app->user->identity->username == 'yemi') {
+            return $this->redirect(['weekly-plan/index']);
+        }
+        return $this->render('index2');
     }
 
     public function actionProfile()

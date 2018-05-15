@@ -23,7 +23,7 @@ if(isset($_GET['index_type']))
     }
 }
 
-$this->title = Yii::t('app', 'Serno Outputs');
+$this->title = Yii::t('app', 'Production Data');
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCss(".tab-content > .tab-pane,
@@ -216,7 +216,8 @@ $gridColumns = [
         </small>
         <?php
         $tgl = isset($_GET['etd']) ? $_GET['etd'] : '';
-        $heading = Yii::t('app', 'Production Status' . $status) . ' ' . $tgl;
+        //$heading = Yii::t('app', 'Production Status' . $status) . ' ' . $tgl;
+        $heading = Yii::t('app', 'List Data');
         ?>
     </h1>
     <div class="clearfix crud-navigation" style="display: none;">
