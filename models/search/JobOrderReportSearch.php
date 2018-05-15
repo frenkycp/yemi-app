@@ -61,8 +61,8 @@ public function search($params)
             {
                   //$today = $time->format('Y-m-d');
                   //$query = JobOrder::find()->where(['SCH_DATE' => $today])->orderBy('SCH_DATE ASC');
-                  //$thisMonth = $time->format('Ym');
-                  $query = JobOrderMonth::find();
+                  $thisMonth = $time->format('n');
+                  $query = JobOrderMonth::find()->where(['like', 'MONTH(SCH_DATE)', $thisMonth]);
             }
       }else{
             //$thisMonth = $time->format('Ym');

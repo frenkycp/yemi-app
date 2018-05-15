@@ -11,7 +11,7 @@ class SidebarMenu extends Widget
 {
     public static function getMenu($roleId, $parentId=NULL){
         $output = [];
-        foreach(Menu::find()->where(["parent_id"=>$parentId])->all() as $menu){
+        foreach(Menu::find()->where(["parent_id"=>$parentId])->orderBy('order ASC')->all() as $menu){
             $obj = [
                 "label" => $menu->name,
                 "icon" => $menu->icon,

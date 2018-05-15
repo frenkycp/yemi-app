@@ -2,17 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\search\MesinCheckNgSearch;
-use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
+use app\models\search\MesinCheckDtrSearch;
 
 /**
-* This is the class for controller "MesinCheckNgController".
+* This is the class for controller "MesinCheckDtrController".
 */
-class MesinCheckNgController extends \app\controllers\base\MesinCheckNgController
+class MesinCheckDtrController extends \app\controllers\base\MesinCheckDtrController
 {
 	
 	public function behaviors()
@@ -23,12 +22,9 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 
 	public function actionIndex()
 	{
-	    $searchModel  = new MesinCheckNgSearch;
-	    if (\Yii::$app->request->get('mesin_last_update') !== null) {
-	    	$searchModel->mesin_last_update = \Yii::$app->request->get('mesin_last_update');
-	    }
-	    if (\Yii::$app->request->get('repair_status') !== null) {
-	    	$searchModel->repair_status = \Yii::$app->request->get('repair_status');
+	    $searchModel  = new MesinCheckDtrSearch;
+	    if (\Yii::$app->request->get('master_plan_maintenance') !== null) {
+	    	$searchModel->master_plan_maintenance = \Yii::$app->request->get('master_plan_maintenance');
 	    }
 	    $dataProvider = $searchModel->search($_GET);
 
@@ -43,8 +39,8 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 		]);
 	}
 
-	public function actionNgProgress()
+	public function actionWeeklyChart()
 	{
-		return $this->render('ng-progress', []);
+		return $this->render('weekly-chart');
 	}
 }
