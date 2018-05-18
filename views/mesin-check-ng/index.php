@@ -148,6 +148,14 @@ $grid_columns = [
         'width' => '120px',
         'hAlign' => 'center'
     ],
+    [
+        'attribute' => 'repair_plan',
+        'label' => 'Repair Plan',
+        'vAlign' => 'middle',
+        'format' => ['date', 'php:d-M-Y H:i:s'],
+        'width' => '120px',
+        'hAlign' => 'center'
+    ],
 ]
 ?>
 <div class="giiant-crud mesin-check-ng-index">
