@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use app\models\search\MesinCheckDtrSearch;
+use app\models\MesinCheckTbl;
 
 /**
 * This is the class for controller "MesinCheckDtrController".
@@ -39,8 +40,37 @@ class MesinCheckDtrController extends \app\controllers\base\MesinCheckDtrControl
 		]);
 	}
 
-	public function actionWeeklyChart()
+	public function actionGetCheckSheet($mesin_id, $mesin_periode)
 	{
-		return $this->render('weekly-chart');
+		$check_sheet = MesinCheckTbl::find()->where(['mesin_id' => $mesin_id, 'mesin_periode' => $mesin_periode])->all();
+
+		$data = '<table class="table table-bordered table-striped table-hover">';
+		$data .= '
+		<tr>
+			<th>Machine ID</th>
+			<th style="width:100px;">Periode</th>
+			<th>Machine Name</th>
+			<th>No</th>
+			<th>Machine Part</th>
+			<th>Check Remark</th>
+		</tr>
+		';
+
+		foreach ($check_sheet as $value) {
+			$data .= '
+			<tr>
+				<td>' . $value->mesin_id . '</td>
+				<td>' . $value->mesin_periode . '</td>
+				<td>' . $value->mesin_nama . '</td>
+				<td>' . $value->mesin_no . '</td>
+				<td>' . $value->mesin_bagian . '</td>
+				<td>' . $value->mesin_bagian_ket . '</td>
+			</tr>
+			';
+		}
+
+		$data .= '</table>';
+
+		return $data;
 	}
 }

@@ -43,8 +43,39 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 		]);
 	}
 
-	public function actionNgProgress()
+	public function actionGetSparePart($mesin_id = 'MNT00481')
 	{
-		return $this->render('ng-progress', []);
+		$sql = "{CALL SPARE_PART_STOCK(:MACHINE)}";
+		// passing the params into to the sql query
+		$params = [':MACHINE'=>$mesin_id];
+		// execute the sql command
+		$result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryAll();
+		$data = '<table class="table table-bordered table-striped table-hover">';
+		$data .= 
+		'<tr>
+			<th>Machine ID</th>
+			<th>Item</th>
+			<th>Item Description</th>
+			<th>UM</th>
+			<th>ON HAND</th>
+			<th>PO</th>
+			<th>IMR</th>
+		</tr>'
+		;
+		foreach ($result as $value) {
+			$data .= '
+			<tr>
+				<td>' . $value['MACHINE'] . '</td>
+				<td>' . $value['ITEM'] . '</td>
+				<td>' . $value['ITEM_DESC'] . '</td>
+				<td>' . $value['UM'] . '</td>
+				<td>' . $value['ONHAND'] . '</td>
+				<td>' . $value['PO'] . '</td>
+				<td>' . $value['IMR'] . '</td>
+			</tr>
+			';
+		}
+		$data .= '</table>';
+		return $data;
 	}
 }

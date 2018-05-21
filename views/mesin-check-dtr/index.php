@@ -22,10 +22,18 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+$this->registerJs("$(function() {
+   $('.popupModal').click(function(e) {
+     e.preventDefault();
+     $('#modal').modal('show').find('.modal-body')
+     .load($(this).attr('href'));
+   });
+});");
+
 $grid_columns = [
-    /* [
+    [
 	    'class' => 'yii\grid\ActionColumn',
-	    'template' => $actionColumnTemplateString,
+	    'template' => "{check_sheet}",
 	    'buttons' => [
 	        'view' => function ($url, $model, $key) {
 	            $options = [
@@ -34,7 +42,15 @@ $grid_columns = [
 	                'data-pjax' => '0',
 	            ];
 	            return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-	        }
+	        },
+            'check_sheet' => function ($url, $model, $key) {
+                $options = [
+                    'title' => 'View Check Sheet',
+                    'class' => 'popupModal',
+                ];
+                $url = ['get-check-sheet', 'mesin_id' => $model->mesin_id, 'mesin_periode' => $model->mesin_periode];
+                return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, $options);
+            },
 	    ],
 	    'urlCreator' => function($action, $model, $key, $index) {
 	        // using the column name as key, not mapping to 'id' like the standard generator
@@ -43,7 +59,7 @@ $grid_columns = [
 	        return Url::toRoute($params);
 	    },
 	    'contentOptions' => ['nowrap'=>'nowrap']
-	], */
+	],
 	[
         'attribute' => 'mesin_id',
         'label' => 'Machine ID',
@@ -103,7 +119,7 @@ $grid_columns = [
         ?>
 
     
-    <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
+    <?php //\yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
     <h1 style="display: none;">
         <?= Yii::t('app', 'Mesin Check Dtrs') ?>
@@ -158,10 +174,10 @@ $grid_columns = [
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            'pjax' => true, // pjax is set to always true for this demo
+            //'pjax' => false, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 
-                    Html::a('Back', ['weekly-chart'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Back to Chart')])
+                    Html::a('Back', ['/masterplan-report/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Back to Chart')])
                 ],
                 '{export}',
                 '{toggleData}',
@@ -176,11 +192,20 @@ $grid_columns = [
                 //'footer' => false,
             ],
         ]); ?>
+
+        <?php
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal',
+                'header' => '<h3>Check Sheet</h3>',
+                'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+        ?>
     </div>
 
 </div>
 
 
-<?php \yii\widgets\Pjax::end() ?>
+<?php //\yii\widgets\Pjax::end() ?>
 
 

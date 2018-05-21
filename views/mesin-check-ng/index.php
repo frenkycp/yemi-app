@@ -22,6 +22,14 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+$this->registerJs("$(function() {
+   $('.popupModal').click(function(e) {
+     e.preventDefault();
+     $('#modal').modal('show').find('.modal-body')
+     .load($(this).attr('href'));
+   });
+});");
+
 $grid_columns = [
     /* [
         'class' => '\kartik\grid\SerialColumn',
@@ -71,8 +79,23 @@ $grid_columns = [
     ],
     [
         'attribute' => 'mesin_id',
+        'format' => 'raw',
         'label' => 'Machine ID',
         'vAlign' => 'middle',
+        'hidden' => true,
+        //'width' => '100px',
+        'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'mesin_id',
+        'value'=> function($data)
+        { 
+            return  Html::a($data->mesin_id, ['get-spare-part','mesin_id'=>$data->mesin_id], ['class' => 'btn btn-primary popupModal']);
+        },
+        'format' => 'raw',
+        'label' => 'Machine ID',
+        'vAlign' => 'middle',
+        'hiddenFromExport' => true,
         //'width' => '100px',
         'hAlign' => 'center'
     ],
@@ -165,7 +188,7 @@ $grid_columns = [
         ?>
 
     
-    <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
+    <?php //\yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
     <h1 style="display: none;">
         <?= Yii::t('app', 'Mesin Check Ngs') ?>
@@ -220,10 +243,10 @@ $grid_columns = [
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            'pjax' => true, // pjax is set to always true for this demo
+            //'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 
-                    Html::a('Back', ['ng-progress'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Back to Chart')])
+                    Html::a('Back', ['/ng-report/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Back to Chart')])
                 ],
                 '{export}',
                 '{toggleData}',
@@ -238,11 +261,19 @@ $grid_columns = [
                 //'footer' => false,
             ],
         ]); ?>
+        <?php
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal',
+                'header' => '<h3>Machine Spare Parts</h3>',
+                'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+        ?>
     </div>
 
 </div>
 
 
-<?php \yii\widgets\Pjax::end() ?>
+<?php //\yii\widgets\Pjax::end() ?>
 
 
