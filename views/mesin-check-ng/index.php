@@ -246,7 +246,7 @@ $grid_columns = [
             //'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 
-                    Html::a('Back', ['/ng-report/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Back to Chart')])
+                    Html::a('View Chart', ['/ng-report/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Back to Chart')])
                 ],
                 '{export}',
                 '{toggleData}',
