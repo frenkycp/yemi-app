@@ -103,12 +103,12 @@ $grid_columns = [
         'attribute' => 'mesin_nama',
         'label' => 'Machine Name',
         'vAlign' => 'middle',
-        'width' => '150px',
+        'width' => '100px',
         //'hAlign' => 'center'
     ],
     [
         'attribute' => 'mesin_no',
-        'label' => 'Sequence',
+        'label' => 'Seq',
         'vAlign' => 'middle',
         'width' => '50px',
         'hAlign' => 'center'
@@ -118,7 +118,7 @@ $grid_columns = [
         'label' => 'Parts',
         'filter' => false,
         'vAlign' => 'middle',
-        //'width' => '150px',
+        'width' => '100px',
         //'hAlign' => 'center'
     ],
     [
@@ -135,6 +135,14 @@ $grid_columns = [
         'filter' => false,
         'vAlign' => 'middle',
         //'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'mesin_periode',
+        'label' => 'Periode',
+        'filter' => false,
+        'vAlign' => 'middle',
+        'width' => '80px',
         //'hAlign' => 'center'
     ],
     [
