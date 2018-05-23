@@ -183,7 +183,7 @@ $grid_columns = [
         'attribute' => 'repair_plan',
         'label' => 'Repair Plan',
         'vAlign' => 'middle',
-        'format' => ['date', 'php:d-M-Y H:i:s'],
+        'format' => ['date', 'php:d-M-Y'],
         'width' => '120px',
         'hAlign' => 'center'
     ],

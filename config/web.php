@@ -9,7 +9,7 @@ $config = [
     'bootstrap' => ['log'],
     'components' => [
 		'session' => [
-			'name' => 'prod-report-20180222',
+			'name' => 'yemi-apps',
         ],
         'i18n' => [
             'translations' => [

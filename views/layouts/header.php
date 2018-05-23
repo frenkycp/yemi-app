@@ -251,7 +251,7 @@ use yii\helpers\Html;
                             </p>
                         </li>
                         <!-- Menu Body -->
-                        <li class="user-body">
+                        <li class="user-body" style="display: none;">
                             <!-- <div class="col-xs-4 text-center">
                                 <a href="#">Followers</a>
                             </div>
@@ -263,19 +263,19 @@ use yii\helpers\Html;
                             </div> -->
                         </li>
                         <!-- Menu Footer-->
-                        <li class="user-footer">
+                        <li class="user-footer" style="background-color: #605ca8;">
                             <div class="pull-left">
                                 <?= Html::a(
                                     'Profile',
                                     ['site/profile'],
-                                    ['class' => 'btn btn-default btn-flat']
+                                    ['class' => 'btn btn-primary btn-flat']
                                 ) ?>
                             </div>
                             <div class="pull-right">
                                 <?= Html::a(
                                     'Sign out',
                                     ['/site/logout'],
-                                    ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
+                                    ['data-method' => 'post', 'class' => 'btn btn-danger btn-flat']
                                 ) ?>
                             </div>
                         </li>
