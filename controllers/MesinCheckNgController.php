@@ -30,6 +30,9 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 	    if (\Yii::$app->request->get('repair_status') !== null) {
 	    	$searchModel->repair_status = \Yii::$app->request->get('repair_status');
 	    }
+	    if (\Yii::$app->request->get('ticket_no') !== null) {
+	    	$searchModel->urutan = \Yii::$app->request->get('ticket_no');
+	    }
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

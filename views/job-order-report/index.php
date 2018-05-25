@@ -58,6 +58,7 @@ $gridColumn = [
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
         'enableSorting' => false,
+        'width' => '130px'
     ],
     [
         'attribute' => 'ITEM_DESC',
@@ -66,21 +67,24 @@ $gridColumn = [
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
         'enableSorting' => false,
+        'width' => '150px'
     ],
     [
         'attribute' => 'DESTINATION',
         //'hAlign' => 'center',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
+        'width' => '100px',
         'enableSorting' => false,
     ],
     [
         'attribute' => 'LOC_DESC',
         'value' => 'LOC_DESC',
-        //'hAlign' => 'center',
+        'hAlign' => 'center',
         //'headerOptions' => ['style' => 'text-align: center;'],
         'vAlign' => 'middle',
         'enableSorting' => false,
+        'width' => '80px',
     ],
     [
         'attribute' => 'SCH_DATE',
@@ -88,32 +92,43 @@ $gridColumn = [
         'vAlign' => 'middle',
         'format' => ['date', 'php:d-M-Y'],
         'enableSorting' => false,
+        'width' => '120px',
     ],
     [
         'attribute' => 'ORDER_QTY',
+        'label' => 'Order<br/>Qty',
+        'encodeLabel' => false,
         'value' => 'ORDER_QTY',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'enableSorting' => false,
+        'width' => '60px'
     ],
     [
         'attribute' => 'COMMIT_QTY',
+        'label' => 'Commit<br/>Qty',
+        'encodeLabel' => false,
         'value' => 'COMMIT_QTY',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'enableSorting' => false,
+        'width' => '60px'
     ],
     [
         'attribute' => 'OPEN_QTY',
+        'label' => 'Open<br/>Qty',
+        'encodeLabel' => false,
         'value' => 'OPEN_QTY',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'enableSorting' => false,
+        'width' => '60px'
     ],
     [
         'attribute' => 'DANDORI',
+        'encodeLabel' => false,
         'value' => 'DANDORI',
-        'label' => 'Dandori (Minute)',
+        'label' => 'Dandori<br/>(Minute)',
         'contentOptions' => [
             'style' => 'width: 100px; white-space: normal;'
         ],
@@ -123,7 +138,8 @@ $gridColumn = [
     ],
     [
         'attribute' => 'LOST_TIME',
-        'label' => 'Lost (Minute)',
+        'encodeLabel' => false,
+        'label' => 'Lost<br/>(Minute)',
         'value' => 'LOST_TIME',
         'contentOptions' => [
             'style' => 'width: 100px; white-space: normal;'
@@ -222,7 +238,7 @@ $gridColumn = [
     ], */
 ];
 
-/* $fullExportMenu = ExportMenu::widget([
+/*$fullExportMenu = ExportMenu::widget([
     'dataProvider' => $dataProvider,
     'columns' => $gridColumns,
     'target' => ExportMenu::TARGET_BLANK,
@@ -231,7 +247,7 @@ $gridColumn = [
     'dropdownOptions' => [
         'label' => '<i class="glyphicon glyphicon-export"></i> Full'
     ],
-]); */
+]);*/
 
 $script = <<< JS
     window.onload = setupRefresh;
@@ -294,17 +310,18 @@ $this->registerJs($script, View::POS_HEAD );
 
     <!-- <hr /> -->
     <?php
-    $dp = $dataProvider->getModels();
+   /* $dataProviderCopy = $dataProvider;
+    $dp = $dataProviderCopy->getModels();
     $orderQty = 0;
     $commitQty = 0;
-    if($dataProvider->getCount() > 0)
+    if($dataProviderCopy->getCount() > 0)
     {
         foreach ($dp as $value) {
             $orderQty += $value->ORDER_QTY;
             $commitQty += $value->COMMIT_QTY;
         }
         $percentage = round(($commitQty/$orderQty)*100);
-    }
+    }*/
     ?>
 
     <?php
@@ -386,7 +403,7 @@ $this->registerJs($script, View::POS_HEAD );
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            //'filterModel' => $searchModel,
+            'filterModel' => $searchModel,
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'responsiveWrap' => false,
@@ -413,11 +430,11 @@ $this->registerJs($script, View::POS_HEAD );
                     ]
                 ]) */,
             //'footer' => false,
-            'before' => false
+            //'before' => false
         ],
         'beforeHeader'=>[
         [
-        'columns'=>[
+        /*'columns'=>[
         ['content' => GoogleChart::widget( array('visualization' => 'Gauge', 'packages' => 'gauge',
                             'data' => array(
                                 array('Label', 'Value'),
@@ -435,21 +452,22 @@ $this->registerJs($script, View::POS_HEAD );
                                 'minorTicks' => 5
                             )
                         )), 'options'=>['colspan'=>4]],
-        ],
+        ],*/
         'options'=>['class'=>'skip-export'] // remove this row from export
         ]
     ],
         'toolbar' => [
-            //'{export}',
+            '{export}',
+            '{toggleData}',
         ],
-        /* 'export' => [
+        /*'export' => [
             'fontAwesome' => true,
             'itemsAfter'=> [
                 '<li role="presentation" class="divider"></li>',
                 '<li class="dropdown-header">Export All Data</li>',
                 $fullExportMenu
             ],
-        ], */
+        ],*/
         
         'columns' => $gridColumn,
         ]); ?>

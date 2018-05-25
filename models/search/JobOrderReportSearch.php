@@ -61,8 +61,10 @@ public function search($params)
             {
                   //$today = $time->format('Y-m-d');
                   //$query = JobOrder::find()->where(['SCH_DATE' => $today])->orderBy('SCH_DATE ASC');
-                  $thisMonth = $time->format('n');
-                  $query = JobOrderMonth::find()->where(['like', 'MONTH(SCH_DATE)', $thisMonth]);
+                  //$thisMonth = $time->format('n');
+                  //$query = JobOrderMonth::find()->where(['like', 'MONTH(SCH_DATE)', $thisMonth]);
+                  $thisMonth = date('Ym');
+                  $query = JobOrderMonth::find()->where(['PERIODE' => $thisMonth]);
             }
       }else{
             //$thisMonth = $time->format('Ym');
@@ -73,9 +75,9 @@ public function search($params)
 
 
 $dataProvider = new ActiveDataProvider([
-      'pagination' => [
+      /*'pagination' => [
             'pagesize' => 20,
-      ],
+      ],*/
       'query' => $query,
       'sort' => ['attributes' => ['SCH_DATE']],
 ]);

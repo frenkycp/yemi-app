@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MesinCheckNg extends BaseMesinCheckNg
 {
-    public $total_open, $total_close, $tgl;
+    public $total_open, $total_close, $tgl, $closing_day_total;
 
     public function behaviors()
     {
@@ -36,5 +36,16 @@ class MesinCheckNg extends BaseMesinCheckNg
     public static function getDb()
     {
             return Yii::$app->get('db_sql_server');
+    }
+
+    public function getClosingDayTotal()
+    {
+        $start_date = new \DateTime(date('Y-m-d', strtotime($this->mesin_last_update)));
+        $end_date = new \DateTime(date('Y-m-d'));
+        if ($this->repair_aktual !== null) {
+            $end_date = new \DateTime(date('Y-m-d', strtotime($this->repair_aktual)));
+        }
+
+        return $start_date->diff($end_date)->format("%d");
     }
 }

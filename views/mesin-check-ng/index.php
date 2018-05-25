@@ -25,8 +25,7 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 $this->registerJs("$(function() {
    $('.popupModal').click(function(e) {
      e.preventDefault();
-     $('#modal').modal('show').find('.modal-body')
-     .load($(this).attr('href'));
+     $('#modal').modal('show').find('.modal-body').load($(this).attr('href'));
    });
 });");
 
@@ -126,6 +125,7 @@ $grid_columns = [
         'label' => 'Parts Info',
         'filter' => false,
         'vAlign' => 'middle',
+        'hidden' => true,
         //'width' => '150px',
         //'hAlign' => 'center'
     ],
@@ -180,12 +180,30 @@ $grid_columns = [
         'hAlign' => 'center'
     ],
     [
+        'attribute' => 'repair_aktual',
+        'vAlign' => 'middle',
+        'format' => ['date', 'php:d-M-Y H:i:s'],
+        'width' => '120px',
+        'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'closing_day_total',
+        'label' => 'Days',
+        'vAlign' => 'middle',
+        'value' => 'closingDayTotal',
+        'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 60px;'
+        ],
+    ],
+    [
         'attribute' => 'repair_plan',
         'label' => 'Repair Plan',
         'vAlign' => 'middle',
         'format' => ['date', 'php:d-M-Y'],
         'width' => '120px',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        //'hidden' => true
     ],
 ]
 ?>
@@ -254,7 +272,7 @@ $grid_columns = [
             //'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 
-                    Html::a('View Chart', ['/ng-report/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Back to Chart')])
+                    Html::a('View Chart', ['/mnt-progress/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'View Chart')])
                 ],
                 '{export}',
                 '{toggleData}',
