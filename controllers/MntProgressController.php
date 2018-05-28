@@ -11,7 +11,10 @@ class MntProgressController extends Controller
 	public function actionIndex()
 	{
 		$current_month = date('Y-m');
-		$tmp_data = MesinCheckNg::find()->where(['like', 'CONVERT(VARCHAR(10),mesin_last_update,120)', $current_month])->orderBy('mesin_nama ASC')->all();
+		$tmp_data = MesinCheckNg::find()
+		->where(['like', 'CONVERT(VARCHAR(10),mesin_last_update,120)', $current_month])
+		->andWhere(['repair_status' => 'O'])
+		->orderBy('mesin_nama ASC')->all();
 		$data_categories = [];
 		$data_date = [];
 		$title = date('F Y');

@@ -18,7 +18,7 @@ class SernoOutput extends SernoOutputModel
 public function rules()
 {
 return [
-[['pk', 'stc', 'dst', 'gmc', 'etd', 'category', 'description'], 'safe'],
+[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms'], 'safe'],
             [['id', 'num', 'qty', 'output', 'adv', 'cntr'], 'integer'],
 ];
 }
@@ -41,21 +41,24 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = SernoOutputModel::find();
+//$query = SernoOutputModel::find();
+$query = SernoOutputModel::find()
+->select('tb_serno_output.id, dst, tb_serno_output.gmc, SUM( qty ) AS qty, SUM( output ) AS output, stc, vms, etd, ship')
+->groupBy('uniq');
 
 if(isset($params['index_type']))
 {
     if($params['index_type'] == 1)
     {
-        $query = SernoOutputModel::find()->where('output<qty')->andWhere(['etd' => $params['etd']]);
+        $query = $query->andWhere('output<qty')->andWhere(['etd' => $params['etd']]);
     }
     elseif($params['index_type'] == 2)
     {
-        $query = SernoOutputModel::find()->where('output=qty')->andWhere(['etd' => $params['etd']]);
+        $query = $query->andWhere('output=qty')->andWhere(['etd' => $params['etd']]);
     }
     elseif($params['index_type'] == 3)
     {
-        $query = SernoOutputModel::find()->where('ng>0')->andWhere(['etd' => $params['etd']]);
+        $query = $query->andWhere('ng>0')->andWhere(['etd' => $params['etd']]);
     }
 
     if(isset($params['dst']))
@@ -98,7 +101,7 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'id' => $this->id,
+            'tb_serno_output.id' => $this->id,
             'num' => $this->num,
             'qty' => $this->qty,
             'output' => $this->output,

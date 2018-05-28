@@ -71,7 +71,7 @@ $gridColumns = [
         'class' => '\kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -102,7 +102,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'width' => '60px',
         'hidden' => in_array(Yii::$app->user->identity->username, ['admin', 'prd']) ? false : true,
-    ],
+    ],*/
     [
         'attribute' => 'cust_desc',
         'value' => 'shipCustomer.customer_desc',
@@ -116,25 +116,28 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'pageSummary' => 'Total',
-        'width' => '100px',
+        'width' => '120px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 120px;'
         ],
         //'mergeHeader' => true,
     ],
     [
         'attribute' => 'dst',
         'vAlign' => 'middle',
-        'width' => '90px',
-        'mergeHeader' => true,
+        'width' => '150px',
+        //'mergeHeader' => true,
+        'contentOptions' => [
+            'style' => 'min-width: 120px;',
+        ],
         //'hAlign' => 'center'
     ],
     [
         'attribute' => 'gmc',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '90px',
+        'width' => '120px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center;'
@@ -146,6 +149,9 @@ $gridColumns = [
         'label' => 'Description',
         'vAlign' => 'middle',
         'width' => '170px',
+        'contentOptions' => [
+            'style' => 'min-width: 150px;',
+        ],
     ],
     [
         'attribute' => 'qty',
@@ -184,7 +190,7 @@ $gridColumns = [
         'pageSummary' => true,
         'format' => ['decimal',0]
     ],
-    [
+    /*[
         'attribute' => 'category',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -196,7 +202,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'mergeHeader' => true,
         'width' => '170px',
-    ],
+    ],*/
     
 ];
 ?>

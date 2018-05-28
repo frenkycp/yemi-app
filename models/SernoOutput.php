@@ -12,7 +12,7 @@ use app\models\SernoMaster;
  */
 class SernoOutput extends BaseSernoOutput
 {
-    public $description, $week_no, $cust_desc, $plan_actual, $part_full_desc;
+    public $description, $week_no, $cust_desc, $plan_actual, $part_full_desc, $line, $balance, $total_cntr;
 
     public function behaviors()
     {

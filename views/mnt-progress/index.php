@@ -44,7 +44,7 @@ echo Highcharts::widget([
     	'chart' => [
     		'type' => 'columnrange',
     		'inverted' => true,
-    		'height' => 4000,
+    		'height' => 450,
     	],
     	'title' => [
 	        'text' => $title

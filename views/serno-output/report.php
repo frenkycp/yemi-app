@@ -8,7 +8,8 @@ use yii\helpers\Url;
 $this->title = Yii::t('app', 'Production Summary Report');
 $this->params['breadcrumbs'][] = $this->title;
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
-$color = 'DarkSlateBlue';
+//$color = 'DarkSlateBlue';
+$color = 'rgba(72,61,139,0.6)';
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -195,6 +196,7 @@ $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->on
                         'color' => 'pink',
                         'dataLabels' => [
                             'enabled' => false,
+
                             /* 'color' => 'black',
                             'format' => '{point.percentage:.0f}%<br/>({point.qty})',
                             'style' => [
@@ -209,7 +211,8 @@ $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->on
                         'color' => $color,
                         'dataLabels' => [
                             'enabled' => true,
-                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
+                            'color' => 'black',
+                            'format' => '{point.percentage:.0f}%',
                             'style' => [
                                 'textOutline' => '0px'
                             ],

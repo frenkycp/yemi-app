@@ -128,7 +128,7 @@ $this->registerJs($script, View::POS_HEAD );
 	                        'dataLabels' => [
 	                            'enabled' => true,
 	                            'color' => $font_color,
-	                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
+	                            'format' => '{point.percentage:.0f}%',
 	                            'style' => [
 	                                'textOutline' => '0px'
 	                            ],
