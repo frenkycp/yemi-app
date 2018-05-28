@@ -40,11 +40,14 @@ $this->registerJs($script, View::POS_HEAD );
 $startDate = date('Y-m-01');
 $endDate = date('Y-m-t');
 $startWeek = app\models\SernoCalendar::find()->where(['ship' => $startDate])->one()->week_ship;
-$endWeek = app\models\SernoCalendar::find()->where(['ship' => $endDate])->one()->week_ship;
+$endWeek = app\models\SernoCalendar::find()->where(['ship' => $endDate])->one()->week_ship+1;
 //$startWeek = $startDate->format('W');
 //$endWeek = $endDate->format('W');
 $date_today = date('Y-m-d');
+
 $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->one()->week_ship;
+$startWeek = $weekToday - 2;
+$endWeek = $weekToday + 4;
 ?>
 <u><h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5></u>
 <div class="nav-tabs-custom">
