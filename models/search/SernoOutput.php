@@ -44,6 +44,7 @@ public function search($params)
 //$query = SernoOutputModel::find();
 $query = SernoOutputModel::find()
 ->select('tb_serno_output.id, dst, tb_serno_output.gmc, SUM( qty ) AS qty, SUM( output ) AS output, stc, vms, etd, ship')
+->where(['<>', 'stc', 'ADVANCE'])
 ->groupBy('uniq');
 
 if(isset($params['index_type']))

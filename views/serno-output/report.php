@@ -80,7 +80,10 @@ $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->on
             //$sernoFg = app\models\SernoFgSumViewWeek::find()->where(['week_no' => $j])->orderBy('shipto ASC')->all();
             //$sernoFg = app\models\SernoOutputView::find()->where(['week_no' => $j])->orderBy('etd ASC')->all();
             $sernoFg = app\models\SernoOutput::find()->select(['dst, gmc, etd, ship, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(ship,4) as week_no'])
-                    ->where(['WEEK(ship,4)' => $j])
+                    ->where([
+                        'WEEK(ship,4)' => $j,
+                    ])
+                    ->andWhere(['<>', 'stc', 'ADVANCE'])
                     ->groupBy('etd')
                     ->all();
             $dataClose = [];
