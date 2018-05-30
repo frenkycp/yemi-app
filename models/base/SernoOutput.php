@@ -57,7 +57,7 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             [['id', 'num', 'qty', 'output', 'adv', 'cntr', 'ng'], 'integer'],
             [['dst'], 'string'],
             [['etd', 'ship'], 'safe'],
-            [['pk'], 'string', 'max' => 20],
+            [['pk'], 'string', 'max' => 35],
             [['stc'], 'string', 'max' => 6],
             [['gmc'], 'string', 'max' => 7],
             [['category'], 'string', 'max' => 10],
