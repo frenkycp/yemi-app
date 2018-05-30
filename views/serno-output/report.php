@@ -37,17 +37,6 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 
-$startDate = date('Y-m-01');
-$endDate = date('Y-m-t');
-$startWeek = app\models\SernoCalendar::find()->where(['ship' => $startDate])->one()->week_ship;
-$endWeek = app\models\SernoCalendar::find()->where(['ship' => $endDate])->one()->week_ship+1;
-//$startWeek = $startDate->format('W');
-//$endWeek = $endDate->format('W');
-$date_today = date('Y-m-d');
-
-$weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->one()->week_ship;
-$startWeek = $weekToday - 2;
-$endWeek = $weekToday + 4;
 ?>
 <u><h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5></u>
 <div class="nav-tabs-custom">
@@ -65,6 +54,18 @@ $endWeek = $weekToday + 4;
             }
         }
         ?>
+        <!--<li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                Dropdown <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                <li role="presentation" class="divider"></li>
+                <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+            </ul>
+        </li>-->
     </ul>
     <div class="tab-content">
         <?php
@@ -79,12 +80,10 @@ $endWeek = $weekToday + 4;
                 echo '<div class="tab-pane" id="tab_1_' . $j .'">';
             }
 
-            
-            //$sernoFg = app\models\SernoFgSumViewWeek::find()->where(['week_no' => $j])->orderBy('shipto ASC')->all();
-            //$sernoFg = app\models\SernoOutputView::find()->where(['week_no' => $j])->orderBy('etd ASC')->all();
             $sernoFg = app\models\SernoOutput::find()->select(['dst, gmc, etd, ship, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(ship,4) as week_no'])
                     ->where([
                         'WEEK(ship,4)' => $j,
+                        'LEFT(id,4)' => date('Y'),
                     ])
                     ->andWhere(['<>', 'stc', 'ADVANCE'])
                     ->groupBy('etd')
