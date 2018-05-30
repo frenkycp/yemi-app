@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\WeeklyPlanSearch $searchModel
 */
 
-$this->title = Yii::t('app', 'Weekly Plans');
+$this->title = Yii::t('app', 'Weekly Summary');
 $this->params['breadcrumbs'][] = $this->title;
 
 date_default_timezone_set('Asia/Jakarta');

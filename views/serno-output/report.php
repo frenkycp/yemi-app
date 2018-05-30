@@ -5,7 +5,7 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Production Summary Report');
+$this->title = Yii::t('app', 'Shipping Chart');
 $this->params['breadcrumbs'][] = $this->title;
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 //$color = 'DarkSlateBlue';

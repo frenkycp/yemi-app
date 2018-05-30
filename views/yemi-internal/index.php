@@ -23,7 +23,7 @@ if(isset($_GET['index_type']))
     }
 }
 
-$this->title = Yii::t('app', 'YEMI Internal');
+$this->title = Yii::t('app', 'Production Data');
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerCss(".tab-content > .tab-pane,
