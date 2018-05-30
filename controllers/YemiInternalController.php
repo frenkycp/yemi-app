@@ -29,16 +29,6 @@ class YemiInternalController extends SernoOutputController
     	{
     		$searchModel->vms = \Yii::$app->request->get('vms');
     	}
-
-	    if(\Yii::$app->request->get('id') == null)
-	    {
-	    	//$searchModel->id = date('Ym');
-	    }
-	    //$searchModel->etd = date('Y-m');
-	    //if(\Yii::$app->request->get('etd') !== null)
-	    //{
-	    	//$searchModel->etd = \Yii::$app->request->get('etd');
-	    //}
 	    
 	    $dataProvider = $searchModel->search($_GET);
 

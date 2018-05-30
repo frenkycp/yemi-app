@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['pk', 'stc', 'dst', 'gmc', 'etd', 'category', 'description', 'line', 'vms'], 'safe'],
-            [['id', 'num', 'qty', 'output', 'adv', 'cntr'], 'integer'],
+            [['id', 'num', 'adv', 'cntr', 'is_minus', 'qty', 'output'], 'integer'],
 ];
 }
 
@@ -43,6 +43,8 @@ public function search($params)
 {
 $query = SernoOutputModel::find();
 
+//$query = SernoOutputModel::find()->where('output<qty');
+
 if(isset($params['index_type']))
 {
     if($params['index_type'] == 1)
@@ -57,11 +59,6 @@ if(isset($params['index_type']))
     {
         $query = SernoOutputModel::find()->where('ng>0')->andWhere(['vms' => $params['vms']]);
     }
-
-    if(isset($params['dst']))
-    {
-        $query = $query->andWhere(['dst' => $params['dst']]);
-    }
 }
 
 $query->joinWith('sernoMaster');
@@ -74,6 +71,7 @@ $dataProvider = new ActiveDataProvider([
             'line',
             'vms',
             'gmc',
+            'etd',
             'cust_desc' => [
                 'asc'=>['tb_ship_customer.customer_desc'=>SORT_ASC],
                 'desc'=>['tb_ship_customer.customer_desc'=>SORT_DESC],
@@ -102,9 +100,9 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'tb_serno_output.id' => $this->id,
-            'num' => $this->num,
-            'qty' => $this->qty,
-            'output' => $this->output,
+            //'num' => $this->num,
+            //'qty' => $this->qty,
+            //'output' => $this->output,
             'adv' => $this->adv,
             'cntr' => $this->cntr,
             'vms' => $this->vms,
@@ -118,6 +116,10 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'category', $this->category])
             ->andFilterWhere(['like', 'dst', $this->dst])
             ->andFilterWhere(['like', 'tb_serno_output.gmc', $this->gmc]);
+
+        if ($this->is_minus == 1) {
+            $query->andFilterWhere(['<>', '(qty - output)', 0]);
+        }
 
 return $dataProvider;
 }

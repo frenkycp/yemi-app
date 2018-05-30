@@ -111,6 +111,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px;'
         ],
+        'pageSummary' => 'Total',
         'hAlign' => 'center'
     ],
     [
@@ -179,11 +180,16 @@ $gridColumns = [
         'format' => ['decimal',0]
     ],
     [
-        'attribute' => 'qtyBalance',
+        'attribute' => 'is_minus',
+        'value' => 'qtyBalance',
         'label' => 'Minus',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '60px',
+        'filter' => [
+            1 => 'Minus',
+        ],
+        'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'All'],
         //'mergeHeader' => true,
         'pageSummary' => true,
         'format' => ['decimal',0]
@@ -209,7 +215,6 @@ $gridColumns = [
         'attribute' => 'etd',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'pageSummary' => 'Total',
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
