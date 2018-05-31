@@ -1,0 +1,151 @@
+<?php
+
+namespace app\controllers;
+use yii\web\Controller;
+use app\models\MpInOut;
+
+class HrgaEmpLevelMonthlyController extends Controller
+{
+	public function actionIndex()
+	{
+		$title = '2018';
+		$subtitle = '';
+		$data = [];
+		$category_arr = [];
+		$name_arr = [];
+
+		$menu = 1;
+
+		$name_arr = $this->getDataName($menu);
+		$emp_data = $this->getEmployeeData($menu);
+
+		$period_arr = MpInOut::find()
+		->select('DISTINCT(PERIOD)')
+		->where([
+			'LEFT(PERIOD,4)' => date('Y')
+		])
+		->all();
+
+		foreach ($name_arr as $name) {
+			$tmp_data = [];
+			foreach ($period_arr as $period) {
+				$tmp_period = $period->PERIOD;
+				foreach ($emp_data as $value) {
+					if ($name == $value->category && $tmp_period == $value->PERIOD) {
+						$tmp_data[] = (int)$value->total_emp;
+					}
+				}
+				if (!in_array($tmp_period, $category_arr)) {
+					$category_arr[] = $tmp_period;
+				}
+			}
+			
+			$data[] = [
+				'name' => $name,
+				'data' => $tmp_data,
+				'type' => 'column',
+				'yAxis' => 1,
+			];
+		}
+		$data[] = [
+			'name' => 'Production',
+			'data' => [
+				null,
+				null,
+				null,
+				128636,
+				143270,
+				87720,
+				144243,
+				131347,
+				126091,
+				124424,
+				112678,
+				99383,
+			],
+			'type' => 'spline',
+		];
+
+		return $this->render('index', [
+			'title' => $title,
+			'subtitle' => $subtitle,
+			'data' => $data,
+			'category' => $category_arr,
+			'section' => $this->getSection()
+		]);
+	}
+
+	public function getDataName($menu)
+	{
+		$category_arr = [];
+		if ($menu == 1) {
+			$data_arr =  MpInOut::find()
+			->select([
+				'category' => 'DISTINCT(PKWT)'
+			])
+			->all();
+		} elseif ($menu == 2) {
+			$data_arr =  MpInOut::find()
+			->select([
+				'category' => 'DISTINCT(SECTION)'
+			])
+			->all();
+		}
+
+		foreach ($data_arr as $value) {
+			$category_arr[] = $value->category;
+		}
+		return $category_arr;
+	}
+
+	public function getEmployeeData($menu)
+	{
+		if ($menu == 1) {
+			$emp_data = MpInOut::find()
+			->select([
+				'PERIOD' => 'PERIOD',
+				'category' => 'PKWT',
+				'total_emp' => 'COUNT(NIK)'
+			])
+			->where([
+				'AKHIR_BULAN' => 'end_of_month',
+				'LEFT(PERIOD,4)' => date('Y')
+			])
+			->groupBy('PERIOD, PKWT')
+			->orderBy('PERIOD, PKWT')
+			->all();
+		} elseif ($menu == 2) {
+			$emp_data = MpInOut::find()
+			->select([
+				'PERIOD' => 'PERIOD',
+				'category' => 'SECTION',
+				'total_emp' => 'COUNT(NIK)'
+			])
+			->where([
+				'AKHIR_BULAN' => 'end_of_month',
+				'LEFT(PERIOD,4)' => date('Y')
+			])
+			->groupBy('PERIOD, SECTION')
+			->orderBy('PERIOD, SECTION')
+			->all();
+		}
+
+		return $emp_data;
+		
+	}
+
+	public function getSection()
+	{
+		$section_arr = [];
+		$section_data_arr = MpInOut::find()
+		->select('DISTINCT(SECTION)')
+		->orderBy('SECTION ASC')
+		->all();
+
+		foreach ($section_data_arr as $value) {
+			$section_arr[] = $value->SECTION;
+		}
+
+		return $section_arr;
+	}
+}
