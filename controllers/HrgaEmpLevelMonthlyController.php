@@ -6,6 +6,12 @@ use app\models\MpInOut;
 
 class HrgaEmpLevelMonthlyController extends Controller
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+	
 	public function actionIndex()
 	{
 		$title = '2018';
@@ -50,9 +56,9 @@ class HrgaEmpLevelMonthlyController extends Controller
 		$data[] = [
 			'name' => 'Production',
 			'data' => [
-				null,
-				null,
-				null,
+				99474,
+				102819,
+				88697,
 				128636,
 				143270,
 				87720,

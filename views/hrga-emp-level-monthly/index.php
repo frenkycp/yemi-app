@@ -64,7 +64,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 420,
+                    'height' => 500,
                 ],
                 'credits' => [
                     'enabled' =>false
@@ -91,7 +91,9 @@ echo '</pre>';*/
                             'style' => [
                                 //'color' => Highcharts.getOptions().colors[1]
                             ]
-                        ]
+                        ],
+                        'min' => 0,
+                        //'max' => 160000
                     ],
                     [
                         'labels' => [
@@ -106,6 +108,7 @@ echo '</pre>';*/
                                 //'color' => Highcharts.getOptions().colors[1]
                             ]
                         ],
+                        'max' => 3000,
                         'opposite' => true
                     ]
                     /*'min' => 0,
