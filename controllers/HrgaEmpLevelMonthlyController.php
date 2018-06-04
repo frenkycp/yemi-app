@@ -11,7 +11,7 @@ class HrgaEmpLevelMonthlyController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-	
+
 	public function actionIndex()
 	{
 		$title = '2018';
@@ -47,7 +47,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 			}
 			
 			$data[] = [
-				'name' => $name,
+				'name' => explode('-', $name, 2),
 				'data' => $tmp_data,
 				'type' => 'column',
 				'yAxis' => 1,
@@ -89,6 +89,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 			->select([
 				'category' => 'DISTINCT(PKWT)'
 			])
+			->orderBy('PKWT ASC')
 			->all();
 		} elseif ($menu == 2) {
 			$data_arr =  MpInOut::find()

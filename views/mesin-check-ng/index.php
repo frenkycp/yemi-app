@@ -29,6 +29,8 @@ $this->registerJs("$(function() {
    });
 });");
 
+//date_default_timezone_set('Asia/Jakarta');
+
 $grid_columns = [
     /* [
         'class' => '\kartik\grid\SerialColumn',
@@ -175,14 +177,20 @@ $grid_columns = [
         'attribute' => 'mesin_last_update',
         'label' => 'Last Update',
         'vAlign' => 'middle',
-        'format' => ['date', 'php:d-M-Y H:i:s'],
+        'value' => function($model){
+            return date('d-M-Y H:i:s', strtotime($model->mesin_last_update));
+        },
+        //'format' => ['date', 'php:d-M-Y H:i:s'],
         'width' => '120px',
         'hAlign' => 'center'
     ],
     [
         'attribute' => 'repair_aktual',
         'vAlign' => 'middle',
-        'format' => ['date', 'php:d-M-Y H:i:s'],
+        'value' => function($model){
+            return date('d-M-Y H:i:s', strtotime($model->repair_aktual));
+        },
+        //'format' => ['date', 'php:d-M-Y H:i:s'],
         'width' => '120px',
         'hAlign' => 'center'
     ],
