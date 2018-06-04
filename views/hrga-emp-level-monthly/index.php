@@ -93,7 +93,7 @@ echo '</pre>';*/
                             ]
                         ],
                         'min' => 0,
-                        //'max' => 160000
+                        'max' => 150000
                     ],
                     [
                         'labels' => [
@@ -108,8 +108,16 @@ echo '</pre>';*/
                                 //'color' => Highcharts.getOptions().colors[1]
                             ]
                         ],
-                        'max' => 3000,
-                        'opposite' => true
+                        'max' => 2500,
+                        'opposite' => true,
+                        'stackLabels' => [
+                            'enabled' => true,
+                            'allowOverlap' => true,
+                            'style' => [
+                                //'fontWeight' => 'bold',
+                                //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            ]
+                        ]
                     ]
                     /*'min' => 0,
                     'title' => [
@@ -135,6 +143,15 @@ echo '</pre>';*/
                             ],
                             //'color' => 'Black'
                             //color => (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
+                        ]
+                    ],
+                    'series' => [
+                        'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                            ]
                         ]
                     ]
                 ],

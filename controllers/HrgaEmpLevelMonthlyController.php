@@ -3,6 +3,7 @@
 namespace app\controllers;
 use yii\web\Controller;
 use app\models\MpInOut;
+use yii\helpers\Url;
 
 class HrgaEmpLevelMonthlyController extends Controller
 {
@@ -34,11 +35,15 @@ class HrgaEmpLevelMonthlyController extends Controller
 
 		foreach ($name_arr as $name) {
 			$tmp_data = [];
+			$split_name_arr = explode('-', $name, 2);
 			foreach ($period_arr as $period) {
 				$tmp_period = $period->PERIOD;
 				foreach ($emp_data as $value) {
 					if ($name == $value->category && $tmp_period == $value->PERIOD) {
-						$tmp_data[] = (int)$value->total_emp;
+						$tmp_data[] = [
+							'y' => (int)$value->total_emp,
+							'url' => Url::to(['hrga-emp-data/index', 'period' => $tmp_period, 'category' => $value->category]),
+						];
 					}
 				}
 				if (!in_array($tmp_period, $category_arr)) {
@@ -47,7 +52,8 @@ class HrgaEmpLevelMonthlyController extends Controller
 			}
 			
 			$data[] = [
-				'name' => explode('-', $name, 2),
+				//'name' => explode('-', $name, 2),
+				'name' => $split_name_arr[1],
 				'data' => $tmp_data,
 				'type' => 'column',
 				'yAxis' => 1,
@@ -71,6 +77,10 @@ class HrgaEmpLevelMonthlyController extends Controller
 			],
 			'type' => 'spline',
 		];
+
+		foreach ($category_arr as $key => $value) {
+			$category_arr[$key] = date('M', strtotime(substr_replace($value, '-', 4, 0)));
+		}
 
 		return $this->render('index', [
 			'title' => $title,

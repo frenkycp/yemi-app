@@ -58,7 +58,7 @@ abstract class MpInOut extends \yii\db\ActiveRecord
     {
         return [
             [['MP_ID'], 'required'],
-            [['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TINGKATAN', 'AKHIR_BULAN'], 'string'],
+            [['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT'], 'string'],
             [['KONTRAK_KE', 'SKILL', 'JUMLAH'], 'integer'],
             [['TANGGAL', 'KONTRAK_START', 'KONTRAK_END'], 'safe'],
             [['MP_ID'], 'unique']
