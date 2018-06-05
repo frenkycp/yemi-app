@@ -178,7 +178,7 @@ $grid_columns = [
         'label' => 'Last Update',
         'vAlign' => 'middle',
         'value' => function($model){
-            return date('d-M-Y H:i:s', strtotime($model->mesin_last_update));
+            return $model->mesin_last_update == null ? '-' : date('d-M-Y H:i:s', strtotime($model->mesin_last_update));
         },
         //'format' => ['date', 'php:d-M-Y H:i:s'],
         'width' => '120px',
@@ -188,7 +188,7 @@ $grid_columns = [
         'attribute' => 'repair_aktual',
         'vAlign' => 'middle',
         'value' => function($model){
-            return date('d-M-Y H:i:s', strtotime($model->repair_aktual));
+            return $model->repair_aktual == null ? '-' : date('d-M-Y H:i:s', strtotime($model->repair_aktual));
         },
         //'format' => ['date', 'php:d-M-Y H:i:s'],
         'width' => '120px',

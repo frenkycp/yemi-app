@@ -89,6 +89,7 @@ $config = [
         'db_sql_server' => require(__DIR__ . '/db_sql_server.php'),
         'db_mis7' => require(__DIR__ . '/db_mis7.php'),
         'db_wsus' => require(__DIR__ . '/db_wsus.php'),
+        'db_wh_app' => require(__DIR__ . '/db_wh_app.php'),
     ],
     'params' => $params,
     'modules' => [

@@ -99,7 +99,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '15%',
-        'format' => ['date', 'php:d-M-Y']
+        'value' => function($model){
+            return $model->master_plan_maintenance == null ? '-' : date('d-M-Y', strtotime($model->master_plan_maintenance));
+        },
+        //'format' => ['date', 'php:d-M-Y']
     ],
     [
         'attribute' => 'mesin_last_update',
@@ -107,7 +110,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '20%',
-        'format' => ['date', 'php:d-M-Y H:i:s'],
+        'value' => function($model){
+            return $model->mesin_last_update == null ? '-' : date('d-M-Y', strtotime($model->mesin_last_update));
+        },
+        //'format' => ['date', 'php:d-M-Y H:i:s'],
         //'width' => '120px',
     ],
 ];
