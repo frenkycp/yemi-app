@@ -14,19 +14,10 @@ use yii\filters\VerbFilter;
  */
 class PlanReceivingController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
     public function behaviors()
     {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
     }
 
     /**
