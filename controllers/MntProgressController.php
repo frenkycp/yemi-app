@@ -8,6 +8,12 @@ use yii\helpers\Url;
 
 class MntProgressController extends Controller
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
 	public function actionIndex()
 	{
 		$current_month = date('Y-m');

@@ -24,15 +24,21 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 
 $this->registerJs("$(function() {
    $('.popupModal').click(function(e) {
-     e.preventDefault();
-     $('#modal').modal('show').find('.modal-body')
-     .load($(this).attr('href'));
+        e.preventDefault();
+        $('#modal').modal('show').find('.modal-body')
+        .load($(this).attr('href'));
+   });
+   $('.popupHistory').click(function(e) {
+        e.preventDefault();
+        $('#history_modal').modal('show').find('.modal-body')
+        .load($(this).attr('href'));
    });
 });");
 
 $grid_columns = [
     [
 	    'class' => 'yii\grid\ActionColumn',
+        //'template' => "{check_sheet} {history}",
 	    'template' => "{check_sheet}",
 	    'buttons' => [
 	        'view' => function ($url, $model, $key) {
@@ -50,6 +56,14 @@ $grid_columns = [
                 ];
                 $url = ['get-check-sheet', 'mesin_id' => $model->mesin_id, 'mesin_periode' => $model->mesin_periode];
                 return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, $options);
+            },
+            'history' => function ($url, $model, $key) {
+                $options = [
+                    'title' => 'View History',
+                    'class' => 'popupHistory',
+                ];
+                $url = ['get-history', 'mesin_id' => $model->mesin_id, 'mesin_periode' => $model->mesin_periode];
+                return Html::a('<span class="glyphicon glyphicon-time"></span>', $url, $options);
             },
 	    ],
 	    'urlCreator' => function($action, $model, $key, $index) {
@@ -203,6 +217,13 @@ $grid_columns = [
             yii\bootstrap\Modal::begin([
                 'id' =>'modal',
                 'header' => '<h3>Check Sheet</h3>',
+                'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+
+            yii\bootstrap\Modal::begin([
+                'id' =>'history_modal',
+                'header' => '<h3>History</h3>',
                 'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();

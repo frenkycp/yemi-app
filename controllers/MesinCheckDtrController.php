@@ -8,6 +8,7 @@ use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use app\models\search\MesinCheckDtrSearch;
 use app\models\MesinCheckTbl;
+use app\models\MasterplanHistory;
 
 /**
 * This is the class for controller "MesinCheckDtrController".
@@ -73,4 +74,36 @@ class MesinCheckDtrController extends \app\controllers\base\MesinCheckDtrControl
 
 		return $data;
 	}
+
+	/*public function actionGetHistory($mesin_id, $mesin_periode)
+	{
+		$data = '<table class="table table-bordered table-striped table-hover">';
+		$data .= '
+		<tr>
+			<th>Machine ID</th>
+			<th>Machine Name</th>
+			<th style="width:100px;">Periode</th>
+			<th>Location</th>
+			<th>Area</th>
+			<th>Last Check</th>
+		</tr>
+		';
+
+		$history = MasterplanHistory::find()->where(['mesin_id' => $mesin_id, 'mesin_periode' => $mesin_periode])->all();
+
+		foreach ($history as $value) {
+			$data .= '
+			<tr>
+				<td>' . $value->mesin_id . '</td>
+				<td>' . $value->mesin_nama . '</td>
+				<td>' . $value->mesin_periode . '</td>
+				<td>' . $value->location . '</td>
+				<td>' . $value->area . '</td>
+				<td>' . date('d-M-Y H:i:s', strtotime($value->mesin_last_update)) . '</td>
+			</tr>
+			';
+		}
+
+		return $data;
+	}*/
 }

@@ -17,6 +17,12 @@ class ContainerViewController extends Controller
 	*/
 	public $enableCsrfValidation = false;
 
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+
 	/**
 	* Lists all SernoOutput models.
 	* @return mixed

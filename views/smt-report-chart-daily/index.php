@@ -99,7 +99,10 @@ echo '</pre>';*/
                     'plotOptions' => [
                         'line' => [
                             'dataLabels' => [
-                                'enabled' => true
+                                'enabled' => true,
+                                'style' => [
+                                    'textOutline' => '0px'
+                                ],
                             ],
                             //'enableMouseTracking' => false
                         ]

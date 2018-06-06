@@ -3,13 +3,19 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use app\models\JobOrderView3 as SmtReport;
+use app\models\JobOrderView4 as SmtReport;
 
 /**
  * summary
  */
 class SmtReportChartDailyController extends Controller
 {
+    public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
     public function actionIndex()
     {
     	$data = [];
@@ -34,7 +40,7 @@ class SmtReportChartDailyController extends Controller
 			$location = trim($value->LOC);
 			$data[$location]['category'][] = $value->DATE;
 			$data[$location]['utilization'][] = $value->UTILIZATION;
-			$data[$location]['eficiency'][] = $value->EFISIENSI;
+			$data[$location]['eficiency'][] = $value->EFFICIENCY;
 		}
 
     	return $this->render('index', [
