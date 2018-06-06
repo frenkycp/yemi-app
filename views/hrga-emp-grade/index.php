@@ -51,7 +51,7 @@ $this->registerJs($script, View::POS_HEAD );
             'scripts' => [
                 'modules/exporting',
                 //'themes/grid-light',
-                'themes/sand-signika',
+                //'themes/sand-signika',
                 'themes/dark-unica',
             ],
             'options' => [

@@ -6,7 +6,7 @@ use app\models\MpInOut;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 
-class HrgaEmpLevelMonthlyController extends Controller
+class HrgaEmpDeptMonthlyController extends Controller
 {
 	public function behaviors()
     {
@@ -22,7 +22,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 		$category_arr = [];
 		$name_arr = [];
 
-		$menu = 1;
+		$menu = 2;
 
 		$name_arr = $this->getDataName($menu);
 		$emp_data = $this->getEmployeeData($menu);
