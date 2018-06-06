@@ -93,7 +93,7 @@ echo '</pre>';*/
                             ]
                         ],
                         'min' => 0,
-                        'max' => 7500
+                        'max' => 6000
                     ],
                     [
                         'labels' => [
@@ -108,13 +108,13 @@ echo '</pre>';*/
                                 //'color' => Highcharts.getOptions().colors[1]
                             ]
                         ],
-                        'max' => 2500,
+                        'max' => 2000,
                         'opposite' => true,
                         'stackLabels' => [
                             'enabled' => true,
                             'allowOverlap' => true,
                             'style' => [
-                                //'fontWeight' => 'bold',
+                                'fontWeight' => 'bold',
                                 //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                             ]
                         ]
@@ -141,6 +141,7 @@ echo '</pre>';*/
                                 //'fontSize' => '14px',
                                 'fontWeight' => '0'
                             ],
+                            'allowOverlap' => true,
                             //'color' => 'Black'
                             //color => (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
                         ]

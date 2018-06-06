@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\MpInOut;
 use yii\helpers\Url;
+use yii\web\JsExpression;
 
 class HrgaEmpLevelMonthlyController extends Controller
 {
@@ -59,24 +60,46 @@ class HrgaEmpLevelMonthlyController extends Controller
 				'yAxis' => 1,
 			];
 		}
+
+		$working_days = [19, 20, 21, 21, 21, 17, 23, 22, 20, 23, 20, 18];
+
 		$data[] = [
-			'name' => 'Production',
+			'name' => 'Speaker',
 			'data' => [
-				(float)round(99474/19),
-				(float)round(102819/20),
-				(float)round(88697/21),
-				(float)round(128636/21),
-				(float)round(143270/21),
-				(float)round(87720/17),
-				(float)round(144243/23),
-				(float)round(131347/22),
-				(float)round(126091/20),
-				(float)round(124424/23),
-				(float)round(112678/20),
-				(float)round(99383/18),
+				(float)round(69899/19),
+				(float)round(71567/20),
+				(float)round(75302/21),
+				(float)round(91344/21),
+				(float)round(97979/21),
+				(float)round(78801/17),
+				(float)round(114912/23),
+				(float)round(100531/22),
+				(float)round(93424/20),
+				(float)round(94870/23),
+				(float)round(82814/20),
+				(float)round(71618/18),
 			],
 			'type' => 'spline',
+			'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
 		];
+		/*$data[] = [
+			'name' => 'Other',
+			'data' => [
+				(float)round(29575/19),
+				(float)round(31252/20),
+				(float)round(13395/21),
+				(float)round(37292/21),
+				(float)round(45291/21),
+				(float)round(8919/17),
+				(float)round(29331/23),
+				(float)round(30816/22),
+				(float)round(32667/20),
+				(float)round(29554/23),
+				(float)round(29864/20),
+				(float)round(27765/18),
+			],
+			'type' => 'spline',
+		];*/
 
 		foreach ($category_arr as $key => $value) {
 			$category_arr[$key] = date('M', strtotime(substr_replace($value, '-', 4, 0)));
