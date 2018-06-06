@@ -5,7 +5,7 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Employee Chart Grade Quantity');
+$this->title = Yii::t('app', 'Grade Structure');
 $this->params['breadcrumbs'][] = $this->title;
 $color = 'ForestGreen';
 

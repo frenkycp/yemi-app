@@ -15,7 +15,7 @@ class HrgaEmpGradeController extends Controller
     
     public function actionIndex()
     {
-    	$title = 'Employee Grade Quantity';
+    	$title = 'Employee Grade Structure';
     	$subtitle = '';
     	$data = [];
     	$emp_data_male = [];
