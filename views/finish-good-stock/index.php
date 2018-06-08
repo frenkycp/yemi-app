@@ -5,9 +5,11 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Shipping Stock');
+$this->title = Yii::t('app', 'Finish Goods Stock : ' . $grand_total);
 $this->params['breadcrumbs'][] = $this->title;
 $color = 'ForestGreen';
+
+date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {
@@ -44,7 +46,7 @@ echo '</pre>';*/
 ?>
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= 'Total Stock ' . date('d M\' Y') . ' : ' . '<span class="text-green">' . $grand_total . '</span>' ?></h3>
+        <h3 class="box-title"><?= 'Update Stock ' . date('d M\' Y H:i:s') ?></h3>
     </div>
     <div class="box-body no-padding">
         <?php
