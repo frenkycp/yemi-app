@@ -32,12 +32,17 @@ class FinishGoodStockController extends Controller
     	->where(['>', 'output', 0])
     	->andWhere(['>=', 'etd', date('Y-m-d')])
     	->andWhere(['!=', 'stc', 'ADVANCE'])
+        ->andWhere(['!=', 'stc', 'NOSO'])
     	->groupBy('dst')
     	->orderBy('stock_qty DESC')
     	->all();
 
+        $grand_total = 0;
+
     	foreach ($stock_arr as $stock_data) {
     		$x_categories[] = $stock_data->dst;
+
+            $grand_total += (int)$stock_data->stock_qty;
 
     		$detail_stock = SernoOutput::find()
     		->select([
@@ -48,7 +53,7 @@ class FinishGoodStockController extends Controller
     		->andWhere(['>=', 'etd', date('Y-m-d')])
     		->andWhere(['dst' => $stock_data->dst])
     		->groupBy('gmc')
-    		->orderBy('gmc ASC')
+    		->orderBy('stock_qty DESC')
     		->all();
 
     		$remark = '<table class="table table-bordered table-striped table-hover">';
@@ -82,7 +87,8 @@ class FinishGoodStockController extends Controller
     		'title' => $title,
     		'subtitle' => $subtitle,
     		'categories' => $x_categories,
-    		'data' => $data
+    		'data' => $data,
+            'grand_total' => $grand_total
     	]);
     }
 }

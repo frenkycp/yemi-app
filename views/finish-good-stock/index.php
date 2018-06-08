@@ -44,7 +44,7 @@ echo '</pre>';*/
 ?>
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= date('d-M-Y') ?></h3>
+        <h3 class="box-title"><?= 'Total Stock ' . date('d M\' Y') . ' : ' . '<span class="text-green">' . $grand_total . '</span>' ?></h3>
     </div>
     <div class="box-body no-padding">
         <?php
