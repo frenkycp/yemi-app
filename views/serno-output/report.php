@@ -5,11 +5,13 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Shipping Chart');
+$this->title = Yii::t('app', 'Shipping Chart 週次出荷（コンテナー別）');
 $this->params['breadcrumbs'][] = $this->title;
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 //$color = 'DarkSlateBlue';
 $color = 'rgba(72,61,139,0.6)';
+
+$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 

@@ -9,6 +9,8 @@ $this->title = Yii::t('app', 'Finish Goods Stock (完成品在庫) : ' . $grand_
 $this->params['breadcrumbs'][] = $this->title;
 $color = 'ForestGreen';
 
+$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+
 date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss(".tab-content > .tab-pane,

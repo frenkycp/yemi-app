@@ -10,10 +10,12 @@ use kartik\grid\GridView;
     * @var app\models\search\WeeklyPlanSearch $searchModel
 */
 
-$this->title = Yii::t('app', 'Weekly Summary');
+$this->title = Yii::t('app', 'Weekly Summary 週次出荷（予算対実績）');
 $this->params['breadcrumbs'][] = $this->title;
 
 date_default_timezone_set('Asia/Jakarta');
+
+$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 function weekOfMonth($date) {
     // estract date parts
