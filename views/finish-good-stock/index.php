@@ -5,7 +5,7 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Finish Goods Stock (完成品在庫) : ' . $grand_total);
+$this->title = 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . $grand_total . '</b>';
 $this->params['breadcrumbs'][] = $this->title;
 $color = 'ForestGreen';
 

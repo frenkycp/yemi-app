@@ -5,7 +5,7 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Shipping Chart 週次出荷（コンテナー別）');
+$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->params['breadcrumbs'][] = $this->title;
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 //$color = 'DarkSlateBlue';
