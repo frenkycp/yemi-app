@@ -52,6 +52,7 @@ class SernoOutputController extends base\SernoOutputController
     		'max_week' => 'MAX(WEEK(ship,4))'
     	])
     	->where(['<>', 'stc', 'ADVANCE'])
+    	->andWhere(['<>', 'stc', 'NOSO'])
     	->andWhere(['LEFT(id,4)' => date('Y')])
     	->groupBy('tahun')
     	->one();

@@ -86,6 +86,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'LEFT(id,4)' => date('Y'),
                     ])
                     ->andWhere(['<>', 'stc', 'ADVANCE'])
+                    ->andWhere(['<>', 'stc', 'NOSO'])
                     ->groupBy('etd')
                     ->all();
             $dataClose = [];
