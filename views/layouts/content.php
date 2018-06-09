@@ -12,7 +12,14 @@ use dmstr\widgets\Alert;
                 <?php
                 if ($this->title !== null) {
                     //echo \yii\helpers\Html::encode($this->title);
-                    echo $this->title;
+                    $this_title = $this->title;
+                    if (is_array($this_title)) {
+                        echo $this_title['page_title'];
+                    } else {
+                        //echo \yii\helpers\Html::encode($this->title);
+                        echo $this->title;
+                    }
+                    
                 } else {
                     echo \yii\helpers\Inflector::camel2words(
                         \yii\helpers\Inflector::id2camel($this->context->module->id)

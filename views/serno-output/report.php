@@ -5,8 +5,13 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
-$this->params['breadcrumbs'][] = $this->title;
+//$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
+$this->title = [
+    'page_title' => 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>',
+    'tab_title' => 'Shipping Chart',
+    'breadcrumbs_title' => 'Shipping Chart'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 //$color = 'DarkSlateBlue';
 $color = 'rgba(72,61,139,0.6)';

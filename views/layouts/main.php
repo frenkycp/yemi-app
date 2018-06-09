@@ -18,7 +18,15 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
     <meta charset="<?= Yii::$app->charset ?>"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?php 
+    $this_title = $this->title;
+    if (is_array($this_title)) {
+        echo $this_title['tab_title'];
+    } else {
+        Html::encode($this->title);
+    }
+     
+    ?></title>
     <script>
         var baseUrl = "<?= Yii::$app->urlManager->baseUrl ?>";
     </script>

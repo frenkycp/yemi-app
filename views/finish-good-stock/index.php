@@ -6,7 +6,12 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . $grand_total . '</b>';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . $grand_total . '</b>',
+    'tab_title' => 'Finish Goods Stock',
+    'breadcrumbs_title' => 'Finish Goods Stock'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
 $this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
