@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\web\View;
+use app\models\SernoOutput;
 
 /**
 * @var yii\web\View $this
@@ -23,8 +24,22 @@ if(isset($_GET['index_type']))
     }
 }
 
-$this->title = Yii::t('app', 'Production Data');
-$this->params['breadcrumbs'][] = $this->title;
+$totActual = 0;
+$totPlan = 0;
+/*$data = $dataProvider->models;
+foreach ($data as $key => $value) {
+    $totActual = $totActual + $value['output'];
+    $totPlan = $totPlan + $value['qty'];
+}*/
+
+$this->title = [
+    'page_title' => 'Monthly Production Schedule (月次生産計画)',
+    'tab_title' => 'Monthly Production Schedule',
+    'breadcrumbs_title' => 'Monthly Production Schedule'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {
