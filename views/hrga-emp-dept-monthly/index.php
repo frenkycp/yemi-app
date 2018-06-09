@@ -5,11 +5,17 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Employee Data Monthly');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Manpower Planning by Department (要員計画・部門別)',
+    'tab_title' => 'Manpower Planning by Department',
+    'breadcrumbs_title' => 'Manpower Planning by Department'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
 date_default_timezone_set('Asia/Jakarta');
+
+$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {

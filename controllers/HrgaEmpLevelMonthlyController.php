@@ -26,6 +26,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 
 		$name_arr = $this->getDataName($menu);
 		$emp_data = $this->getEmployeeData($menu);
+		$today_period = date('Ym');
 
 		$period_arr = MpInOut::find()
 		->select('DISTINCT(PERIOD)')
@@ -33,18 +34,24 @@ class HrgaEmpLevelMonthlyController extends Controller
 			'LEFT(PERIOD,4)' => date('Y')
 		])
 		->all();
-
+		$this_period_qty = 0;
 		foreach ($name_arr as $name) {
 			$tmp_data = [];
 			$split_name_arr = explode('-', $name, 2);
+			
 			foreach ($period_arr as $period) {
 				$tmp_period = $period->PERIOD;
+				
 				foreach ($emp_data as $value) {
 					if ($name == $value->category && $tmp_period == $value->PERIOD) {
 						$tmp_data[] = [
 							'y' => (int)$value->total_emp,
 							'url' => Url::to(['hrga-emp-data/index', 'period' => $tmp_period, 'category' => $value->category]),
 						];
+						if ($tmp_period == $today_period) {
+							$this_period_qty += (int)$value->total_emp;
+						}
+						
 					}
 				}
 				if (!in_array($tmp_period, $category_arr)) {
@@ -111,7 +118,8 @@ class HrgaEmpLevelMonthlyController extends Controller
 			'data' => $data,
 			'category' => $category_arr,
 			'section' => $this->getDepartment(),
-			'menu' => $menu
+			'menu' => $menu,
+			'this_period_qty' => $this_period_qty,
 		]);
 	}
 
