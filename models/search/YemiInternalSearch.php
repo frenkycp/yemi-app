@@ -105,12 +105,12 @@ $query->andFilterWhere([
             //'output' => $this->output,
             'adv' => $this->adv,
             'cntr' => $this->cntr,
-            'vms' => $this->vms,
             'tb_serno_master.line' => $this->line,
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'stc', $this->stc])
+            ->andFilterWhere(['like', 'vms', $this->vms])
             ->andFilterWhere(['like', 'etd', $this->etd])
             ->andFilterWhere(['like', 'tb_serno_master.model', $this->description])
             ->andFilterWhere(['like', 'category', $this->category])

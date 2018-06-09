@@ -64,7 +64,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 				'name' => $menu == 1 ? $split_name_arr[1] : $name,
 				'data' => $tmp_data,
 				'type' => 'column',
-				'yAxis' => 1,
+				
 			];
 		}
 
@@ -88,6 +88,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 			],
 			'type' => 'spline',
 			'color' => new JsExpression('Highcharts.getOptions().colors[12]'),
+			'yAxis' => 1,
 		];
 		/*$data[] = [
 			'name' => 'Other',

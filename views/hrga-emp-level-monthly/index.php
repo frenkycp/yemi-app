@@ -86,22 +86,6 @@ echo '</pre>';*/
                     'categories' => $category
                 ],
                 'yAxis' => [
-                    [//primary axis
-                        'labels' => [
-                            'format' => '{value}',
-                            'style' => [
-                                //'color' => Highcharts.getOptions().colors[1]
-                            ]
-                        ],
-                        'title' => [
-                            'text' => 'Total Production',
-                            'style' => [
-                                //'color' => Highcharts.getOptions().colors[1]
-                            ]
-                        ],
-                        'min' => 0,
-                        'max' => 6000
-                    ],
                     [
                         'labels' => [
                             'format' => '{value}',
@@ -110,13 +94,14 @@ echo '</pre>';*/
                             ]
                         ],
                         'title' => [
-                            'text' => 'Total Employee',
+                            'text' => 'Total Employee (人数)',
                             'style' => [
+                                'font-family' => "'MS PGothic', Osaka, Arial, sans-serif"
                                 //'color' => Highcharts.getOptions().colors[1]
                             ]
                         ],
                         'max' => 2500,
-                        'opposite' => true,
+                        
                         'stackLabels' => [
                             'enabled' => true,
                             'allowOverlap' => true,
@@ -125,7 +110,26 @@ echo '</pre>';*/
                                 //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                             ]
                         ]
-                    ]
+                    ],
+                    [//primary axis
+                        'labels' => [
+                            'format' => '{value}',
+                            'style' => [
+                                //'color' => Highcharts.getOptions().colors[1]
+                            ]
+                        ],
+                        'title' => [
+                            'text' => 'Total Production Qty exclude KD  (生産台数・KDを含まない)',
+                            'style' => [
+                                'font-family' => "'MS PGothic', Osaka, Arial, sans-serif",
+                                //'color' => Highcharts.getOptions().colors[1]
+                            ]
+                        ],
+                        'min' => 0,
+                        'max' => 6000,
+                        'opposite' => true,
+                    ],
+                    
                     /*'min' => 0,
                     'title' => [
                         'text' => 'Total fruit consumption'
