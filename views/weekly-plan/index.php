@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\WeeklyPlanSearch $searchModel
 */
 
-$this->title = 'Weekly Summary <span class="text-green">週次出荷（予算対実績）</span>';
+$this->title = 'Weekly Summary <span class="text-green">週次出荷（計画対実績）</span>';
 $this->params['breadcrumbs'][] = $this->title;
 
 date_default_timezone_set('Asia/Jakarta');
