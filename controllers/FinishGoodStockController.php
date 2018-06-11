@@ -38,11 +38,34 @@ class FinishGoodStockController extends Controller
     	->all();
 
         $grand_total = 0;
+        $grand_total_kubikasi = 0;
 
     	foreach ($stock_arr as $stock_data) {
     		$x_categories[] = $stock_data->dst;
-
             $grand_total += (int)$stock_data->stock_qty;
+
+            $total_kubikasi = 0;
+
+            $dest_kubikasi_arr = SernoOutput::find()
+            ->select([
+                'gmc' => 'gmc',
+                'stock_qty' => 'SUM(output)'
+            ])
+            ->where(['>', 'output', 0])
+            ->andWhere(['>=', 'etd', date('Y-m-d')])
+            ->andWhere(['!=', 'stc', 'ADVANCE'])
+            ->andWhere(['!=', 'stc', 'NOSO'])
+            ->andWhere(['dst' => $stock_data->dst])
+            ->groupBy('gmc')
+            ->all();
+
+            foreach ($dest_kubikasi_arr as $value) {
+                $gmc = $value->gmc;
+                $m3 = (float)$value->getItemM3()->volume;
+                $total_kubikasi += (int)$value->stock_qty * $m3;
+            }
+
+            $grand_total_kubikasi += $total_kubikasi;
 
     		$detail_stock = SernoOutput::find()
     		->select([
@@ -79,16 +102,21 @@ class FinishGoodStockController extends Controller
 
     		$data[] = [
     			'y' => (int)$stock_data->stock_qty,
-    			'remark' => $remark
+    			'remark' => $remark,
+                'total_kubikasi' => $total_kubikasi,
     		];
     	}
+
+        $total_kontainer = round($grand_total_kubikasi / 54);
 
     	return $this->render('index', [
     		'title' => $title,
     		'subtitle' => $subtitle,
     		'categories' => $x_categories,
     		'data' => $data,
-            'grand_total' => $grand_total
+            'grand_total' => $grand_total,
+            'grand_total_kubikasi' => $grand_total_kubikasi,
+            'total_kontainer' => $total_kontainer
     	]);
     }
 }

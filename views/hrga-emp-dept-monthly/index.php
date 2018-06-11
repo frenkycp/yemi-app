@@ -163,7 +163,29 @@ echo '</pre>';*/
                                 'click' => new JsExpression('function(){ location.href = this.options.url; }'),
                                 //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                             ]
-                        ]
+                        ],
+                        /*'events' => [
+                            'legendItemClick' => new JsExpression('
+                                function(event) {
+                                    if (!this.visible)
+                                        return false;
+
+                                    var seriesIndex = this.index;
+                                    var series = this.chart.series;
+
+                                    for (var i = 0; i < series.length; i++)
+                                    {
+                                        if (series[i].index != seriesIndex)
+                                        {
+                                            series[i].visible ?
+                                            series[i].hide() :
+                                            series[i].show();
+                                        } 
+                                    }
+                                    return false;
+                                }
+                            ')
+                        ]*/
                     ]
                 ],
                 'series' => $data

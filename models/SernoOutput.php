@@ -79,4 +79,9 @@ class SernoOutput extends BaseSernoOutput
     {
         return $this->hasOne(ShipCustomer::className(), ['customer_code' => 'stc']);
     }
+
+    public function getItemM3()
+    {
+        return $this->hasOne(ItemM3::className(), ['item' => 'gmc'])->one();
+    }
 }

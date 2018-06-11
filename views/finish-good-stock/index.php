@@ -5,9 +5,8 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . $grand_total . '</b>';
 $this->title = [
-    'page_title' => 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . $grand_total . '</b>',
+    'page_title' => 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> (' . round($grand_total_kubikasi, 2) . ' m3 <--> ' . $total_kontainer . ' kontainer)',
     'tab_title' => 'Finish Goods Stock',
     'breadcrumbs_title' => 'Finish Goods Stock'
 ];
@@ -59,7 +58,7 @@ echo '</pre>';*/
         <?php
         echo Highcharts::widget([
             'scripts' => [
-                'modules/exporting',
+                //'modules/exporting',
                 //'themes/grid-light',
                 'themes/sand-signika',
                 //'themes/dark-unica',
@@ -97,7 +96,8 @@ echo '</pre>';*/
                 'plotOptions' => [
                     'bar' => [
                         'dataLabels' => [
-                            'enabled' => true
+                            'enabled' => true,
+                            'format' => '{point.y} ({point.total_kubikasi:.2f} m3)'
                         ]
                     ],
                     'series' => [
