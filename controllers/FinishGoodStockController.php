@@ -85,15 +85,18 @@ class FinishGoodStockController extends Controller
     			<th style="text-align: center;">GMC</th>
     			<th>Description</th>
     			<th style="text-align: center;">Qty</th>
+                <th style="text-align: center;">Cubic (m3)</th>
     		</tr>
     		';
 
     		foreach ($detail_stock as $detail) {
+
     			$remark .= '
     			<tr>
     				<td style="text-align: center;">' . $detail->gmc . '</td>
     				<td>' . $detail->getPartName() . '</td>
     				<td style="text-align: center;">' . $detail->stock_qty . '</td>
+                    <td style="text-align: center;">' . round(($detail->stock_qty * $detail->getItemM3()->volume), 1) . '</td>
     			</tr>
     			';
     		}
@@ -103,11 +106,11 @@ class FinishGoodStockController extends Controller
     		$data[] = [
     			'y' => (int)$stock_data->stock_qty,
     			'remark' => $remark,
-                'total_kubikasi' => $total_kubikasi,
+                'total_kubikasi' => round($total_kubikasi, 1),
     		];
     	}
 
-        $total_kontainer = round($grand_total_kubikasi / 54);
+        $total_kontainer = round($grand_total_kubikasi / 54, 1);
 
     	return $this->render('index', [
     		'title' => $title,
@@ -115,7 +118,7 @@ class FinishGoodStockController extends Controller
     		'categories' => $x_categories,
     		'data' => $data,
             'grand_total' => $grand_total,
-            'grand_total_kubikasi' => $grand_total_kubikasi,
+            'grand_total_kubikasi' => round($grand_total_kubikasi, 1),
             'total_kontainer' => $total_kontainer
     	]);
     }

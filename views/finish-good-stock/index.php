@@ -6,14 +6,14 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = [
-    'page_title' => 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> (' . round($grand_total_kubikasi, 2) . ' m3 &efDot; ' . $total_kontainer . ' containers)',
+    'page_title' => 'Finish Goods Stock <span class="text-green japanesse">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers)',
     'tab_title' => 'Finish Goods Stock',
     'breadcrumbs_title' => 'Finish Goods Stock'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -54,7 +54,7 @@ echo '</pre>';*/
     <div class="box-header with-border">
         <h3 class="box-title"><?= 'Update Stock ' . date('d M\' Y H:i:s') ?></h3>
     </div>
-    <div class="box-body no-padding">
+    <div class="box-body">
         <?php
         echo Highcharts::widget([
             'scripts' => [
@@ -66,7 +66,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'bar',
-                    'height' => 500
+                    'height' => 450
                 ],
                 'credits' => [
                     'enabled' => false
@@ -97,7 +97,7 @@ echo '</pre>';*/
                     'bar' => [
                         'dataLabels' => [
                             'enabled' => true,
-                            'format' => '{point.y} ({point.total_kubikasi:.2f} m3)'
+                            'format' => '{point.y} pcs ({point.total_kubikasi} m3)'
                         ]
                     ],
                     'series' => [
@@ -131,5 +131,8 @@ echo '</pre>';*/
         ]);
         yii\bootstrap\Modal::end();
         ?>
+        <hr>
+        <h4 class="text-light-blue"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></h4>
     </div>
+    
 </div>
