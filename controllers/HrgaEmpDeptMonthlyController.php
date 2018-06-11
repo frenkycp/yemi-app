@@ -43,7 +43,7 @@ class HrgaEmpDeptMonthlyController extends Controller
 					if ($name == $value->category && $tmp_period == $value->PERIOD) {
 						$tmp_data[] = [
 							'y' => (int)$value->total_emp,
-							'url' => Url::to(['hrga-emp-data/index', 'period' => $tmp_period, 'category' => $value->category]),
+							'url' => Url::to(['hrga-emp-data/index', 'period' => $tmp_period, 'department' => $value->category]),
 						];
 					}
 				}

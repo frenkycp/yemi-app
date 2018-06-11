@@ -23,7 +23,7 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
     if (is_array($this_title)) {
         echo $this_title['tab_title'];
     } else {
-        Html::encode($this->title);
+        echo Html::encode($this->title);
     }
      
     ?></title>

@@ -37,6 +37,10 @@ class HrgaEmpDataController extends Controller
 	    	$searchModel->PKWT = \Yii::$app->request->get('category');
 	    }
 
+	    if (\Yii::$app->request->get('department') !== null) {
+	    	$searchModel->DEPARTEMEN = \Yii::$app->request->get('department');
+	    }
+
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
