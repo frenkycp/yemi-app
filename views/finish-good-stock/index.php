@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = [
-    'page_title' => 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> (' . round($grand_total_kubikasi, 2) . ' m3 &efDot; ' . $total_kontainer . ' kontainer)',
+    'page_title' => 'Finish Goods Stock <span class="text-green">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> (' . round($grand_total_kubikasi, 2) . ' m3 &efDot; ' . $total_kontainer . ' containers)',
     'tab_title' => 'Finish Goods Stock',
     'breadcrumbs_title' => 'Finish Goods Stock'
 ];
