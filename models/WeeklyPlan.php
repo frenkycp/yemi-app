@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WeeklyPlan extends BaseWeeklyPlan
 {
-    public $percentage = 0, $week_range;
+    public $percentage = 0, $week_range, $perccentage_export;
 
     public function behaviors()
     {
@@ -59,7 +59,22 @@ class WeeklyPlan extends BaseWeeklyPlan
     {
         $planQty = $this->plan_qty;
         $actualQty = $this->getActualQty();
-        $presentase = round(($actualQty / $planQty) * 100, 1);
+        $presentase = 0;
+        if ($planQty > 0) {
+            $presentase = round(($actualQty / $planQty) * 100, 1);
+        }
+        
+        return $presentase . '%';
+    }
+
+    public function getWeekPercentageExport()
+    {
+        $planQty = $this->plan_export;
+        $actualQty = $this->actual_export;
+        $presentase = 0;
+        if ($planQty > 0) {
+            $presentase = round(($actualQty / $planQty) * 100, 1);
+        }
         return $presentase . '%';
     }
 

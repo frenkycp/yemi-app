@@ -56,16 +56,27 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 
 $totActual = 0;
 $totPlan = 0;
+$totActualExport = 0;
+$totPlanExport = 0;
+
 $data = $dataProvider->getModels();
 foreach ($data as $key => $value) {
     $totActual = $totActual + $value['actualQty'];
     $totPlan = $totPlan + $value['plan_qty'];
+    $totActualExport += $value['actual_export'];
+    $totPlanExport += $value['plan_export'];
 }
 
 $totPercentage = 0;
 if($totPlan > 0)
 {
     $totPercentage = round(($totActual / $totPlan) * 100, 1);
+}
+
+$totPercentageExport = 0;
+if($totPlanExport > 0)
+{
+    $totPercentageExport = round(($totActualExport / $totPlanExport) * 100, 1);
 }
 
 //$totPercentage = 98;
@@ -172,6 +183,44 @@ $columns = [
         'vAlign' => 'middle',
         //'format' => 'percent',
         'pageSummary' => $totPercentage . '%',
+        //'enableSorting' => false,
+        //'filter' => false,
+    ],
+    [
+        'attribute' => 'plan_export',
+        'hAlign' => 'center',
+        'enableSorting' => false,
+        'filter' => false,
+        'pageSummary' => true,
+        'format' => ['decimal',0],
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'actual_export',
+        'hAlign' => 'center',
+        'enableSorting' => false,
+        'filter' => false,
+        'pageSummary' => true,
+        'format' => ['decimal',0],
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'balance_export',
+        'hAlign' => 'center',
+        'enableSorting' => false,
+        'filter' => false,
+        'pageSummary' => true,
+        'format' => ['decimal',0],
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'percentage_export',
+        'value' => 'weekPercentageExport',
+        'label' => 'Completion Export',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        //'format' => 'percent',
+        'pageSummary' => $totPercentageExport . '%',
         //'enableSorting' => false,
         //'filter' => false,
     ],
