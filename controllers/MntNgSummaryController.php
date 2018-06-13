@@ -9,14 +9,22 @@ use app\models\MesinNgFreq04;
  */
 class MntNgSummaryController extends Controller
 {
+    public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+
     public function actionIndex()
     {
     	$title = '';
     	$subtitle = '';
     	$data = [];
     	$categories = [];
+        $today_month = date('n');
+        $today_year = date('Y');
     	$category_arr = $this->getCategories();
-    	$period_arr = $this->getPeriodArr();
+    	$period_arr = $this->getWeeklyPeriod($today_month, $today_year);
     	
     	$data_ng = MesinNgFreq04::find()
     	->select([
@@ -25,6 +33,9 @@ class MntNgSummaryController extends Controller
     		'total_freq' => 'SUM(freq_kerusakan)',
     		'total_lama_perbaikan' => 'SUM(lama_perbaikan_menit)'
     	])
+        ->where([
+            'periode_kerusakan' => date('Ym')
+        ])
     	->groupBy('periode_kerusakan, area')
     	->orderBy('periode_kerusakan, area')
     	->all();
@@ -34,11 +45,11 @@ class MntNgSummaryController extends Controller
 
     		foreach ($period_arr as $period) {
     			$tmp_period = $period;
+                $x_axis_name = date('M Y') . ' Week ' . $period;
     			$tmp_total = 0;
     			
-    			if (!in_array($tmp_period, $categories)) {
-    				//$categories[] = $tmp_period;
-					$categories[] = date('M Y', strtotime(date($tmp_period)));
+    			if (!in_array($x_axis_name, $categories)) {
+					$categories[] = $x_axis_name;
 				}
 				$tmp_data[] = 15;
     		}
@@ -52,8 +63,53 @@ class MntNgSummaryController extends Controller
     		'title' => $title,
     		'subtitle' => $subtitle,
     		'data' => $data,
-    		'categories' => $categories
+    		'categories' => $categories,
+            'week_total' => $total_week
     	]);
+    }
+
+    public function weeks($month, $year){
+            $firstday = date("w", mktime(0, 0, 0, $month, 1, $year)); 
+            $lastday = date("t", mktime(0, 0, 0, $month, 1, $year)); 
+            if ($firstday!=0) $count_weeks = 1 + ceil(($lastday-8+$firstday)/7);
+            else $count_weeks = 1 + ceil(($lastday-1)/7);
+            return $count_weeks;
+    } 
+
+    public function getWeeks($date, $rollover)
+    {
+        $cut = substr($date, 0, 8);
+        $daylen = 86400;
+
+        $timestamp = strtotime($date);
+        $first = strtotime($cut . "00");
+        $elapsed = ($timestamp - $first) / $daylen;
+
+        $weeks = 1;
+
+        for ($i = 1; $i <= $elapsed; $i++)
+        {
+            $dayfind = $cut . (strlen($i) < 2 ? '0' . $i : $i);
+            $daytimestamp = strtotime($dayfind);
+
+            $day = strtolower(date("l", $daytimestamp));
+
+            if($day == strtolower($rollover))  $weeks ++;
+        }
+
+        return $weeks;
+    }
+
+    public function getWeeklyPeriod($month, $year)
+    {
+        $period_arr = [];
+        $total_week = $this->weeks($month, $year);
+
+        for ($i = 1; $i <= $total_week; $i++) {
+            $period_arr[] = $i;
+        }
+
+        return $period_arr;
     }
 
     public function getPeriodArr()
@@ -66,13 +122,18 @@ class MntNgSummaryController extends Controller
     		$start_year -= 1;
     	}
 
-    	for ($i = 1; $i < 12; $i++) {
-    		$start_month++;
+    	for ($i = 1; $i <= 1; $i++) {
+    		
     		if ($start_month > 12) {
     			$start_month -= 12;
     			$start_year += 1;
     		}
-    		$period_arr[] = $start_year . str_pad($start_month, 2, '0', STR_PAD_LEFT);
+
+            for ($j = 1; $j <= 4; $j++) {
+                $period_arr[] = $start_year . str_pad($start_month, 2, '0', STR_PAD_LEFT) . '_W' . $i;
+            }
+    		
+            $start_month++;
     	}
 
     	return $period_arr;

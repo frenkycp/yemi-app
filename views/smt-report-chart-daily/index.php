@@ -82,6 +82,9 @@ echo '</pre>';*/
                     //'themes/grid-light',
                 ],
                 'options' => [
+                    'chart' => [
+                        //'type' => 'spline'
+                    ],
                     'credits' => [
                         'enabled' =>false
                     ],
@@ -103,6 +106,7 @@ echo '</pre>';*/
                                 'style' => [
                                     'textOutline' => '0px'
                                 ],
+                                'allowOverlap' => true
                             ],
                             //'enableMouseTracking' => false
                         ]

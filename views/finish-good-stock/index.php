@@ -66,7 +66,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'bar',
-                    'height' => 450
+                    'height' => 500
                 ],
                 'credits' => [
                     'enabled' => false

@@ -12,7 +12,7 @@ use yii\helpers\ArrayHelper;
 class SernoInput extends BaseSernoInput
 {
 
-public function behaviors()
+    public function behaviors()
     {
         return ArrayHelper::merge(
             parent::behaviors(),
@@ -30,5 +30,15 @@ public function behaviors()
                   # custom validation rules
              ]
         );
+    }
+
+    public static function getDb()
+    {
+        return Yii::$app->get('db_mis7');
+    }
+
+    public function getSernoOutput()
+    {
+        return $this->hasOne(SernoOutput::className(), ['pk' => 'plan']);
     }
 }

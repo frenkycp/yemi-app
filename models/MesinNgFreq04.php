@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MesinNgFreq04 extends BaseMesinNgFreq04
 {
+    public $total_freq, $total_lama_perbaikan;
 
     public function behaviors()
     {

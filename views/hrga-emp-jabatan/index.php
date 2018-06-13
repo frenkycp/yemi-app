@@ -5,23 +5,13 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'NG Summary');
+$this->title = 'HRGA Employee by Jabatan';
 $this->params['breadcrumbs'][] = $this->title;
 $color = 'ForestGreen';
 
+$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+
 date_default_timezone_set('Asia/Jakarta');
-
-$this->registerCss(".tab-content > .tab-pane,
-.pill-content > .pill-pane {
-    display: block;     
-    height: 0;          
-    overflow-y: hidden; 
-}
-
-.tab-content > .active,
-.pill-content > .active {
-    height: auto;       
-} ");
 
 $script = <<< JS
     window.onload = setupRefresh;
@@ -35,25 +25,27 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 
-/*echo '<pre>';
-print_r($data);
-echo '<pre>';*/
 ?>
 
-<div class="box box-info">
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title"><?= date('d M Y') ?></h3>
+    </div>
     <div class="box-body">
         <?php
         echo Highcharts::widget([
             'scripts' => [
-                'modules/exporting',
-                'themes/grid-light'
+                //'modules/exporting',
+                'themes/grid-light',
+                //'themes/sand-signika',
+                //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
-                    'type' => 'column',
+                    'type' => 'bar',
                 ],
                 'credits' => [
-                    'enabled' =>false
+                    'enabled' => false
                 ],
                 'title' => [
                     'text' => $title
@@ -61,47 +53,46 @@ echo '<pre>';*/
                 'subtitle' => [
                     'text' => $subtitle
                 ],
+                'legend' => [
+                    'enabled' => false
+                ],
                 'xAxis' => [
                     'categories' => $categories
                 ],
                 'yAxis' => [
                     'min' => 0,
                     'title' => [
-                        'text' => 'Total NG'
+                        'text' => 'Qty',
+                        'align' => 'high'
                     ],
-                    'stackLabels' => [
-                        'enabled' => true,
-                        'style' => [
-                            'fontWeight' => 'bold',
-                            //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        ]
+                    'labels' => [
+                        'overflow' => 'justify'
                     ]
                 ],
                 'plotOptions' => [
-                    'column' => [
-                        'stacking' => 'normal',
+                    'bar' => [
                         'dataLabels' => [
                             'enabled' => true,
-                            'style' => [
-                                'textOutline' => '0px',
-                                'fontWeight' => '0'
-                            ],
-                            //'allowOverlap' => \Yii::$app->request->get('menu') !== null ? false : true,
-                            //'color' => 'Black'
-                            //color => (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white'
                         ]
                     ],
                     'series' => [
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
-                                //'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
                                 //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                             ]
                         ]
                     ]
                 ],
-                'series' => $data
+                'series' => [
+                    [
+                        'name' => 'Total Employee',
+                        'data' => $data,
+                        'colorByPoint' => true
+                        //'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+                    ]
+                ]
             ],
         ]);
         ?>

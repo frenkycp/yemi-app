@@ -28,6 +28,10 @@ use Yii;
  * @property integer $JUMLAH
  * @property string $TINGKATAN
  * @property string $AKHIR_BULAN
+ * @property integer $LAMA_KONTRAK
+ * @property string $PKWT
+ * @property string $GRADE
+ * @property string $JABATAN_SR_GROUP
  * @property string $aliasModel
  */
 abstract class MpInOut extends \yii\db\ActiveRecord
@@ -58,8 +62,8 @@ abstract class MpInOut extends \yii\db\ActiveRecord
     {
         return [
             [['MP_ID'], 'required'],
-            [['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT'], 'string'],
-            [['KONTRAK_KE', 'SKILL', 'JUMLAH'], 'integer'],
+            [['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT', 'GRADE', 'JABATAN_SR_GROUP'], 'string'],
+            [['KONTRAK_KE', 'SKILL', 'JUMLAH', 'LAMA_KONTRAK'], 'integer'],
             [['TANGGAL', 'KONTRAK_START', 'KONTRAK_END'], 'safe'],
             [['MP_ID'], 'unique']
         ];
@@ -90,6 +94,10 @@ abstract class MpInOut extends \yii\db\ActiveRecord
             'JUMLAH' => 'Jumlah',
             'TINGKATAN' => 'Tingkatan',
             'AKHIR_BULAN' => 'Akhir  Bulan',
+            'LAMA_KONTRAK' => 'Lama  Kontrak',
+            'PKWT' => 'Pkwt',
+            'GRADE' => 'Grade',
+            'JABATAN_SR_GROUP' => 'Jabatan  Sr  Group',
         ];
     }
 

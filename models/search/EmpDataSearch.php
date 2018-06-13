@@ -18,7 +18,7 @@ class EmpDataSearch extends EmpData
 public function rules()
 {
 return [
-[['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TANGGAL', 'KONTRAK_START', 'KONTRAK_END', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT'], 'safe'],
+[['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TANGGAL', 'KONTRAK_START', 'KONTRAK_END', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT', 'JABATAN_SR_GROUP'], 'safe'],
             [['KONTRAK_KE', 'SKILL', 'JUMLAH'], 'integer'],
 ];
 }
@@ -57,7 +57,6 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'KONTRAK_KE' => $this->KONTRAK_KE,
-            'TANGGAL' => $this->TANGGAL,
             'KONTRAK_START' => $this->KONTRAK_START,
             'KONTRAK_END' => $this->KONTRAK_END,
             'SKILL' => $this->SKILL,
@@ -65,6 +64,7 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'MP_ID', $this->MP_ID])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),TANGGAL,120)', $this->TANGGAL])
             ->andFilterWhere(['like', 'NIK', $this->NIK])
             ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])
             ->andFilterWhere(['like', 'JENIS_KELAMIN', $this->JENIS_KELAMIN])
@@ -77,6 +77,7 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'PERIOD', $this->PERIOD])
             ->andFilterWhere(['like', 'TINGKATAN', $this->TINGKATAN])
             ->andFilterWhere(['like', 'PKWT', $this->PKWT])
+            ->andFilterWhere(['like', 'JABATAN_SR_GROUP', $this->JABATAN_SR_GROUP])
             ->andFilterWhere(['like', 'AKHIR_BULAN', $this->AKHIR_BULAN]);
 
 return $dataProvider;

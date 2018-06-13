@@ -51,6 +51,15 @@ $columns = [
         'vAlign' => 'middle'
     ],
     [
+        'attribute' => 'TANGGAL',
+        'value' => function($model){
+            return date('Y-m-d', strtotime($model->TANGGAL));
+        },
+        'width' => '100px',
+        'hAlign' => 'center',
+        'vAlign' => 'middle'
+    ],
+    [
         'attribute' => 'NIK',
         'width' => '80px',
         'hAlign' => 'center',
@@ -59,6 +68,17 @@ $columns = [
     [
         'attribute' => 'NAMA_KARYAWAN',
         'width' => '180px',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle'
+    ],
+    [
+        'attribute' => 'JABATAN_SR_GROUP',
+        'value' => function($model){
+            return substr($model->JABATAN_SR_GROUP, strpos($model->JABATAN_SR_GROUP, "-") + 1);
+        },
+        'filter' => $jabatan_arr,
+        'label' => 'Jabatan',
+        'width' => '150px',
         //'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
@@ -84,8 +104,11 @@ $columns = [
     ],
     [
         'attribute' => 'PKWT',
+        'value' => function($model){
+            return substr($model->PKWT, strpos($model->PKWT, "-") + 1);
+        },
         'width' => '130px',
-        //'hAlign' => 'center',
+        'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
     [

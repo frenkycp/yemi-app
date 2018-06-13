@@ -18,7 +18,7 @@ class MpInOutSearch extends MpInOut
 public function rules()
 {
 return [
-[['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TANGGAL', 'KONTRAK_START', 'KONTRAK_END', 'TINGKATAN', 'AKHIR_BULAN'], 'safe'],
+[['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TANGGAL', 'KONTRAK_START', 'KONTRAK_END', 'TINGKATAN', 'AKHIR_BULAN', 'JABATAN_SR_GROUP'], 'safe'],
             [['KONTRAK_KE', 'SKILL', 'JUMLAH'], 'integer'],
 ];
 }
@@ -66,6 +66,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'MP_ID', $this->MP_ID])
             ->andFilterWhere(['like', 'NIK', $this->NIK])
+            ->andFilterWhere(['like', 'JABATAN_SR_GROUP', $this->JABATAN_SR_GROUP])
             ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])
             ->andFilterWhere(['like', 'JENIS_KELAMIN', $this->JENIS_KELAMIN])
             ->andFilterWhere(['like', 'STATUS_KARYAWAN', $this->STATUS_KARYAWAN])

@@ -12,7 +12,7 @@ use app\models\SernoMaster;
  */
 class SernoOutput extends BaseSernoOutput
 {
-    public $description, $week_no, $cust_desc, $plan_actual, $part_full_desc, $line, $balance, $total_cntr, $max_week, $min_week, $tahun, $is_minus, $stock_qty;
+    public $description, $week_no, $cust_desc, $plan_actual, $part_full_desc, $line, $balance, $total_cntr, $max_week, $min_week, $tahun, $is_minus, $stock_qty, $total_delay;
 
     public function behaviors()
     {
@@ -83,5 +83,10 @@ class SernoOutput extends BaseSernoOutput
     public function getItemM3()
     {
         return $this->hasOne(ItemM3::className(), ['item' => 'gmc'])->one();
+    }
+
+    public function getSernoInput()
+    {
+        return $this->hasMany(SernoInput::className(), ['plan' => 'pk']);
     }
 }
