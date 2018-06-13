@@ -3,6 +3,7 @@
 namespace app\controllers;
 use yii\web\Controller;
 use app\models\MesinNgFreq04;
+use app\models\MesinNgFreq;
 
 /**
  * summary
@@ -26,35 +27,79 @@ class MntNgSummaryController extends Controller
     	$category_arr = $this->getCategories();
     	$period_arr = $this->getWeeklyPeriod($today_month, $today_year);
     	
-    	$data_ng = MesinNgFreq04::find()
+    	$data_ng_arr = MesinNgFreq04::find()
     	->select([
     		'periode_kerusakan' => 'periode_kerusakan',
     		'area' => 'area',
+            'week_no' => 'week_no',
     		'total_freq' => 'SUM(freq_kerusakan)',
     		'total_lama_perbaikan' => 'SUM(lama_perbaikan_menit)'
     	])
         ->where([
             'periode_kerusakan' => date('Ym')
         ])
-    	->groupBy('periode_kerusakan, area')
-    	->orderBy('periode_kerusakan, area')
+    	->groupBy('periode_kerusakan, week_no, area')
+    	->orderBy('periode_kerusakan, week_no, area')
     	->all();
 
-    	foreach ($category_arr as $category) {
+    	foreach ($category_arr as $area) {
     		$tmp_data = [];
 
-    		foreach ($period_arr as $period) {
-    			$tmp_period = $period;
-                $x_axis_name = date('M Y') . ' Week ' . $period;
-    			$tmp_total = 0;
+    		foreach ($period_arr as $week_no) {
+    			$tmp_period = $week_no;
+                $x_axis_name = date('M Y') . ' Week ' . $week_no;
+    			$tmp_total_perbaikan = 0;
+
+                foreach ($data_ng_arr as $data_ng) {
+                    if ($week_no == $data_ng->week_no && $area == $data_ng->area) {
+                        $tmp_total_perbaikan += (int)$data_ng->total_lama_perbaikan;
+                    }
+                }
     			
     			if (!in_array($x_axis_name, $categories)) {
 					$categories[] = $x_axis_name;
 				}
-				$tmp_data[] = 15;
+
+                $detail_data = MesinNgFreq::find()
+                ->where([
+                    'periode_kerusakan' => date('Ym'),
+                    'area' => $area,
+                    'week_no' => $week_no
+                ])
+                ->orderBy('lama_perbaikan DESC')
+                ->all();
+
+                $remark = '<table class="table table-bordered table-striped table-hover">';
+                $remark .= '
+                <tr>
+                    <th>Tanggal</th>
+                    <th style="text-align: center;">ID Mesin</th>
+                    <th>Nama Mesin</th>
+                    <th>Catatan Perbaikan</th>
+                    <th style="text-align: center;">Lama Perbaikan (menit)</th>
+                </tr>
+                ';
+
+                foreach ($detail_data as $detail) {
+                    $remark .= '
+                    <tr>
+                        <td style="text-align: center;">' . $detail->mesin_id . '</td>
+                        <td>' . $detail->mesin_nama . '</td>
+                        <td>' . $detail->repair_note . '</td>
+                        <td style="text-align: center;">' . $detail->lama_perbaikan . '</td>
+                    </tr>
+                    ';
+                }
+
+                $remark .= '</table>';
+
+				$tmp_data[] = [
+                    'y' => $tmp_total_perbaikan,
+                    'remark' => $remark,
+                ];
     		}
     		$data[] = [
-    			'name' => $category,
+    			'name' => $area,
     			'data' => $tmp_data
     		];
     	}

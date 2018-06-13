@@ -62,12 +62,13 @@ echo Highcharts::widget([
 	        'title' => [
 	            'text' => 'Date',
 	        ],
-	        'min' => 1,
+	        'min' => 0,
 	        'max' => 31,
 	        'tickInterval' => 1
 	    ],
 
 	    'tooltip' => [
+	    	'enabled' => false,
 	        'valueSuffix' => $value_suffix
 	    ],
 

@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
 
-$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 function weekOfMonth($date) {
     // estract date parts

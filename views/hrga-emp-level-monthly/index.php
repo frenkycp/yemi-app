@@ -7,7 +7,7 @@ use yii\helpers\Url;
 
 //$this->title = Yii::t('app', 'Employee Data Monthly');
 $this->title = [
-    'page_title' => 'Manpower Planning by Status  (要員計画・雇用形態別)',
+    'page_title' => 'Manpower Planning by Status  <span>(要員計画・雇用形態別)</span>',
     'tab_title' => 'Manpower Planning by Status',
     'breadcrumbs_title' => 'Manpower Planning by Status'
 ];
@@ -16,7 +16,7 @@ $color = 'ForestGreen';
 
 date_default_timezone_set('Asia/Jakarta');
 
-$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {

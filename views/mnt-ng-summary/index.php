@@ -46,7 +46,9 @@ echo '<pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 'modules/exporting',
-                'themes/grid-light'
+                //'themes/sand-signica',
+                'themes/grid-light',
+                //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
@@ -67,7 +69,7 @@ echo '<pre>';*/
                 'yAxis' => [
                     'min' => 0,
                     'title' => [
-                        'text' => 'Total NG'
+                        'text' => 'Lama Perbaikan (menit)'
                     ],
                     'stackLabels' => [
                         'enabled' => true,
@@ -95,8 +97,11 @@ echo '<pre>';*/
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
-                                //'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                'click' => new JsExpression('
+                                    function(){
+                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                    }
+                                '),
                             ]
                         ]
                     ]
@@ -104,6 +109,12 @@ echo '<pre>';*/
                 'series' => $data
             ],
         ]);
+        yii\bootstrap\Modal::begin([
+            'id' =>'modal',
+            'header' => '<h3>Detail Information</h3>',
+            'size' => 'modal-lg',
+        ]);
+        yii\bootstrap\Modal::end();
         ?>
     </div>
 </div>

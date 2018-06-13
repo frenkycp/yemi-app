@@ -5,7 +5,7 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'HRGA Employee by Jabatan';
+$this->title = 'Manpower Planning by Position';
 $this->params['breadcrumbs'][] = $this->title;
 $color = 'ForestGreen';
 

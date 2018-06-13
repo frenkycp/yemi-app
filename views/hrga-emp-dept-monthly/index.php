@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = [
-    'page_title' => 'Manpower Planning by Department (要員計画・部門別)',
+    'page_title' => 'Manpower Planning by Department <span>(要員計画・部門別)</span>',
     'tab_title' => 'Manpower Planning by Department',
     'breadcrumbs_title' => 'Manpower Planning by Department'
 ];
@@ -15,7 +15,7 @@ $color = 'ForestGreen';
 
 date_default_timezone_set('Asia/Jakarta');
 
-$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {
