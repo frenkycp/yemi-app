@@ -32,6 +32,7 @@ use Yii;
  * @property string $PKWT
  * @property string $GRADE
  * @property string $JABATAN_SR_GROUP
+ * @property string $JABATAN_SR
  * @property string $aliasModel
  */
 abstract class MpInOut extends \yii\db\ActiveRecord
@@ -62,7 +63,7 @@ abstract class MpInOut extends \yii\db\ActiveRecord
     {
         return [
             [['MP_ID'], 'required'],
-            [['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT', 'GRADE', 'JABATAN_SR_GROUP'], 'string'],
+            [['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT', 'GRADE', 'JABATAN_SR_GROUP', 'JABATAN_SR'], 'string'],
             [['KONTRAK_KE', 'SKILL', 'JUMLAH', 'LAMA_KONTRAK'], 'integer'],
             [['TANGGAL', 'KONTRAK_START', 'KONTRAK_END'], 'safe'],
             [['MP_ID'], 'unique']
@@ -98,6 +99,7 @@ abstract class MpInOut extends \yii\db\ActiveRecord
             'PKWT' => 'Pkwt',
             'GRADE' => 'Grade',
             'JABATAN_SR_GROUP' => 'Jabatan  Sr  Group',
+            'JABATAN_SR' => 'Jabatan  Sr',
         ];
     }
 

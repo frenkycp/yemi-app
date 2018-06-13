@@ -65,20 +65,42 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 			<th>IMR</th>
 		</tr>'
 		;
-		foreach ($result as $value) {
+		if (count($result) > 0) {
+			foreach ($result as $value) {
+				$data .= '
+				<tr>
+					<td>' . $value['MACHINE'] . '</td>
+					<td>' . $value['ITEM'] . '</td>
+					<td>' . $value['ITEM_DESC'] . '</td>
+					<td>' . $value['UM'] . '</td>
+					<td>' . $value['ONHAND'] . '</td>
+					<td>' . $value['PO'] . '</td>
+					<td>' . $value['IMR'] . '</td>
+				</tr>
+				';
+			}
+		} else {
 			$data .= '
 			<tr>
-				<td>' . $value['MACHINE'] . '</td>
-				<td>' . $value['ITEM'] . '</td>
-				<td>' . $value['ITEM_DESC'] . '</td>
-				<td>' . $value['UM'] . '</td>
-				<td>' . $value['ONHAND'] . '</td>
-				<td>' . $value['PO'] . '</td>
-				<td>' . $value['IMR'] . '</td>
+				<td colspan="7">No Sparepart Data</td>
 			</tr>
 			';
 		}
+		
 		$data .= '</table>';
 		return $data;
+	}
+
+	public function actionUpdate($urutan)
+	{
+		$model = $this->findModel($urutan);
+
+		if ($model->load($_POST) && $model->save()) {
+			return $this->redirect(Url::previous());
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+			]);
+		}
 	}
 }

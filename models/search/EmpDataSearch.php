@@ -18,7 +18,7 @@ class EmpDataSearch extends EmpData
 public function rules()
 {
 return [
-[['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TANGGAL', 'KONTRAK_START', 'KONTRAK_END', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT', 'JABATAN_SR_GROUP'], 'safe'],
+[['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TANGGAL', 'KONTRAK_START', 'KONTRAK_END', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT', 'JABATAN_SR_GROUP', 'JABATAN_SR'], 'safe'],
             [['KONTRAK_KE', 'SKILL', 'JUMLAH'], 'integer'],
 ];
 }
@@ -78,6 +78,7 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'TINGKATAN', $this->TINGKATAN])
             ->andFilterWhere(['like', 'PKWT', $this->PKWT])
             ->andFilterWhere(['like', 'JABATAN_SR_GROUP', $this->JABATAN_SR_GROUP])
+            ->andFilterWhere(['like', 'JABATAN_SR', $this->JABATAN_SR])
             ->andFilterWhere(['like', 'AKHIR_BULAN', $this->AKHIR_BULAN]);
 
 return $dataProvider;

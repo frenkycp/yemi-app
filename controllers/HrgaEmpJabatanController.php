@@ -37,6 +37,19 @@ class HrgaEmpJabatanController extends Controller
 			'09-GM&DIRECTOR'
     	];
 
+    	$japanesse_arr = [
+    		'（役職無し・契約）',
+    		'（役職無し・正）',
+    		'（サブリーダー）',
+    		'（リーダー）',
+    		'（フォアマン・チーフ）',
+    		'（シニアフォアマン・副課長）',
+    		'（課長）',
+    		'（副部長）',
+    		'（部長）',
+    		'（部長・取締役）',
+    	];
+
     	$emp_data = MpInOut::find()
 		->select([
 			'JABATAN_SR_GROUP' => 'JABATAN_SR_GROUP',
@@ -48,8 +61,8 @@ class HrgaEmpJabatanController extends Controller
 		->groupBy('JABATAN_SR_GROUP')
 		->all();
 
-		foreach ($jabatan_arr as $jabatan) {
-			$categories[] = substr($jabatan, strpos($jabatan, "-") + 1);
+		foreach ($jabatan_arr as $key => $jabatan) {
+			$categories[] = substr($jabatan, strpos($jabatan, "-") + 1) . $japanesse_arr[$key];
 			$total_qty = 0;
 			foreach ($emp_data as $emp) {
 				if ($jabatan == $emp->JABATAN_SR_GROUP) {

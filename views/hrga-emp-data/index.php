@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 /**
@@ -77,8 +78,16 @@ $columns = [
             return substr($model->JABATAN_SR_GROUP, strpos($model->JABATAN_SR_GROUP, "-") + 1);
         },
         'filter' => $jabatan_arr,
-        'label' => 'Jabatan',
+        'label' => 'Grup Jabatan SR',
         'width' => '150px',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle'
+    ],
+    [
+        'attribute' => 'JABATAN_SR',
+        'label' => 'Jabatan SR',
+        'width' => '150px',
+        'filter' => ArrayHelper::map(app\models\EmpData::find()->select('DISTINCT(JABATAN_SR)')->where('JABATAN_SR IS NOT NULL')->all(), 'JABATAN_SR', 'JABATAN_SR'),
         //'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
