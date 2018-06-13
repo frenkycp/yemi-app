@@ -5,8 +5,12 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = 'Manpower Planning by Position';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Manpower Structure by Position <span>(役職別の社員構成）</span>',
+    'tab_title' => 'Manpower Structure by Position',
+    'breadcrumbs_title' => 'Manpower Structure by Position'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
 $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
