@@ -25,7 +25,8 @@ class HrgaEmpDataController extends Controller
 	    $searchModel  = new EmpDataSearch;
 
 	    $jabatan_arr = [
-    		'01-NON POSITION' => 'NON POSITION',
+    		'01-NON POSITION-KONTRAK' => 'NON POSITION KONTRAK',
+    		'01-NON POSITION-TETAP' => 'NON POSITION TETAP',
     		'02-SUBLEADER' => 'SUBLEADER',
 			'03-LEADER' => 'LEADER',
 			'04-FOREMAN/CHIEF' => 'FOREMAN/CHIEF',

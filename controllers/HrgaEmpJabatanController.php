@@ -16,7 +16,7 @@ class HrgaEmpJabatanController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
     public function actionIndex()
     {
     	$title = '';
@@ -25,7 +25,8 @@ class HrgaEmpJabatanController extends Controller
     	$categories = [];
 
     	$jabatan_arr = [
-    		'01-NON POSITION',
+    		'01-NON POSITION-KONTRAK',
+    		'01-NON POSITION-TETAP',
     		'02-SUBLEADER',
 			'03-LEADER',
 			'04-FOREMAN/CHIEF',
