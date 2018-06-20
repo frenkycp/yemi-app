@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use app\models\MpInOut;
+use yii\helpers\Url;
 
 class HrgaEmpGradeController extends Controller
 {
@@ -65,7 +66,10 @@ class HrgaEmpGradeController extends Controller
 						}
 					}
 				}
-				$tmp_data[] = $tmp_qty;
+				$tmp_data[] = [
+					'y' => $tmp_qty,
+					'url' => Url::to(['hrga-emp-data/index', 'tanggal' => date('Y-m-d'), 'grade' => $grade, 'jk' => $jk]),
+				];
 			}
 			$data[] = [
 				'name' => $jk == 'L' ? 'Male' : 'Female',

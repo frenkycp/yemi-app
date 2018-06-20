@@ -47,7 +47,10 @@ $columns = [
 ],*/
     [
         'attribute' => 'PERIOD',
-        'width' => '80px',
+        'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width:100px;',
+        ],
         'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
@@ -57,19 +60,37 @@ $columns = [
             return date('Y-m-d', strtotime($model->TANGGAL));
         },
         'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width:120px;',
+        ],
         'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
     [
         'attribute' => 'NIK',
         'width' => '80px',
+        'contentOptions' => [
+            'style' => 'min-width:80px;',
+        ],
         'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
     [
         'attribute' => 'NAMA_KARYAWAN',
         'width' => '180px',
+        'contentOptions' => [
+            'style' => 'min-width:150px;',
+        ],
         //'hAlign' => 'center',
+        'vAlign' => 'middle'
+    ],
+    [
+        'attribute' => 'GRADE',
+        //'width' => '50px',
+        'contentOptions' => [
+            'style' => 'min-width:60px;',
+        ],
+        'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
     [
@@ -80,6 +101,9 @@ $columns = [
         'filter' => $jabatan_arr,
         'label' => 'Grup Jabatan SR',
         'width' => '150px',
+        'contentOptions' => [
+            'style' => 'min-width:150px;',
+        ],
         //'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
@@ -87,6 +111,9 @@ $columns = [
         'attribute' => 'JABATAN_SR',
         'label' => 'Jabatan SR',
         'width' => '150px',
+        'contentOptions' => [
+            'style' => 'min-width:150px;',
+        ],
         'filter' => ArrayHelper::map(app\models\EmpData::find()->select('DISTINCT(JABATAN_SR)')->where('JABATAN_SR IS NOT NULL')->all(), 'JABATAN_SR', 'JABATAN_SR'),
         //'hAlign' => 'center',
         'vAlign' => 'middle'
@@ -94,14 +121,20 @@ $columns = [
     [
         'attribute' => 'JENIS_KELAMIN',
         'encodeLabel' => false,
-        'label' => 'Jenis</br>Kelamin',
+        'label' => 'JK',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '50px'
+        'width' => '50px',
+        'contentOptions' => [
+            'style' => 'min-width:60px;',
+        ],
     ],
     [
         'attribute' => 'DEPARTEMEN',
         'width' => '180px',
+        'contentOptions' => [
+            'style' => 'min-width:180px;',
+        ],
         //'hAlign' => 'center',
         'vAlign' => 'middle'
     ],
@@ -117,6 +150,9 @@ $columns = [
             return substr($model->PKWT, strpos($model->PKWT, "-") + 1);
         },
         'width' => '130px',
+        'contentOptions' => [
+            'style' => 'min-width:100px;',
+        ],
         'hAlign' => 'center',
         'vAlign' => 'middle'
     ],

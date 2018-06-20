@@ -63,6 +63,14 @@ class HrgaEmpDataController extends Controller
 	    	$searchModel->DEPARTEMEN = \Yii::$app->request->get('department');
 	    }
 
+	    if (\Yii::$app->request->get('grade') !== null) {
+	    	$searchModel->GRADE = \Yii::$app->request->get('grade');
+	    }
+
+	    if (\Yii::$app->request->get('jk') !== null) {
+	    	$searchModel->JENIS_KELAMIN = \Yii::$app->request->get('jk');
+	    }
+
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

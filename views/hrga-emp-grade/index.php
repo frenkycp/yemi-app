@@ -70,6 +70,7 @@ $this->registerJs($script, View::POS_HEAD );
                 ],
                 'xAxis' => [
                     [
+                        'crosshair' => true,
                         'categories' => $categories,
                         'reversed' => false,
                         'labels' => [
@@ -77,6 +78,7 @@ $this->registerJs($script, View::POS_HEAD );
                         ]
                     ],
                     [ // mirror axis on right side
+                        'crosshair' => true,
                         'opposite' => true,
                         'reversed' => false,
                         'categories' => $categories,
@@ -95,7 +97,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'labels' => [
                             'formatter' => new JsExpression("function () { return Math.abs(this.value) + '' }")
                         ],
-                        'max' => 450
+                        'max' => 450,
                     ],
                     [
                         'title' => [
@@ -104,7 +106,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'labels' => [
                             'formatter' => new JsExpression("function () { return Math.abs(this.value) + '' }")
                         ],
-                        'max' => 450
+                        'max' => 450,
                     ]
                 ],
                 'tooltip' => [
@@ -115,7 +117,14 @@ $this->registerJs($script, View::POS_HEAD );
                 ],
                 'plotOptions' => [
                     'series' => [
-                        'stacking' => 'normal'
+                        'stacking' => 'normal',
+                        'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                            ]
+                        ]
                     ]
                 ],
                 'series' => $data,
