@@ -72,9 +72,9 @@ class MntNgSummaryController extends Controller
                 $remark = '<table class="table table-bordered table-striped table-hover">';
                 $remark .= '
                 <tr>
-                    <th>Tanggal</th>
+                    <th style="width:100px;">Tanggal</th>
                     <th style="text-align: center;">ID Mesin</th>
-                    <th>Nama Mesin</th>
+                    <th style="width:170px;">Nama Mesin</th>
                     <th>Catatan Perbaikan</th>
                     <th style="text-align: center;">Lama Perbaikan (menit)</th>
                 </tr>
@@ -83,6 +83,7 @@ class MntNgSummaryController extends Controller
                 foreach ($detail_data as $detail) {
                     $remark .= '
                     <tr>
+                        <td>' . $detail->tgl_kerusakan . '</td>
                         <td style="text-align: center;">' . $detail->mesin_id . '</td>
                         <td>' . $detail->mesin_nama . '</td>
                         <td>' . $detail->repair_note . '</td>
