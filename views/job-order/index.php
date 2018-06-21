@@ -69,6 +69,12 @@ $gridColumns = [
         'vAlign' => 'middle',
         'width'=>'100px',
     ],
+    [
+        'attribute' => 'LINE',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width'=>'50px',
+    ],
     //'LINE',
     //'NIK',
     [
@@ -102,6 +108,12 @@ $gridColumns = [
         'width'=>'200px',
     ],
     'DESTINATION',
+    [
+        'attribute' => 'COMMIT_QTY',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width'=>'100px',
+    ],
     /*'USER_ID',*/
     /*'USER_DESC',*/
     /*'STAGE',*/

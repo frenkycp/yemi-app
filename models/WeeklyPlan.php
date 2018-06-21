@@ -61,7 +61,7 @@ class WeeklyPlan extends BaseWeeklyPlan
         $actualQty = $this->getActualQty();
         $presentase = 0;
         if ($planQty > 0) {
-            $presentase = round(($actualQty / $planQty) * 100, 1);
+            $presentase = round(($actualQty / $planQty) * 100, 2);
         }
         
         return $presentase . '%';
@@ -73,7 +73,7 @@ class WeeklyPlan extends BaseWeeklyPlan
         $actualQty = $this->actual_export;
         $presentase = 0;
         if ($planQty > 0) {
-            $presentase = round(($actualQty / $planQty) * 100, 1);
+            $presentase = round(($actualQty / $planQty) * 100, 2);
         }
         return $presentase . '%';
     }
