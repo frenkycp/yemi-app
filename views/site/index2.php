@@ -60,21 +60,22 @@ $this->title = 'Centered Information System';
                     <div class="panel-heading text-center">Finish Goods Monitoring<br/>完成品モニタリング</div>
                     
                     <div class="list-group">
-                        <?= Html::a('Finish Goods Stock (完成品在庫)', ['/job-order-report/index'], [
+                        <?= Html::a('Finish Goods Stock (完成品在庫)', ['/finish/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                         <div class="list-group-item">
                             <p>Weekly Shipping (週次出荷)</p>
                             <ol>
-                                <li><?= Html::a('By Container (コンテナー別)', ['/serno-output/report']); ?></li>
-                                <li><?= Html::a('Plan vs Actual (計画対実績)', ['/serno-output/index']); ?></li>
+                                <li><?= Html::a('Shipping Container Chart', ['/serno-output/report']); ?></li>
+                                <li><?= Html::a('Shipping Container Data', ['/serno-output/index']); ?></li>
+                                <li><?= Html::a('Shipping Summary', ['/weekly-plan/index']); ?></li>
                             </ol>
                         </div>
                         <div class="list-group-item">
                             <p>Monthly Production(月次生産）</p>
                             <ol>
                                 <li>
-                                    <?= Html::a('Plan vs Actual (計画対実績)', ['/weekly-plan/index']); ?>
+                                    <?= Html::a('Monthly Production Data', ['/yemi-internal/index']); ?>
                                 </li>
                             </ol>
                         </div>
