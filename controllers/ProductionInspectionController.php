@@ -13,23 +13,39 @@ use dmstr\bootstrap\Tabs;
 */
 class ProductionInspectionController extends \app\controllers\base\ProductionInspectionController
 {
-	public function actionIndex()
-{
-    $searchModel  = new ProductionInspectionSearch;
-    $searchModel->proddate = date('Y-m-d');
-    if (\Yii::$app->request->get('proddate') !== null) {
-    	$searchModel->proddate = \Yii::$app->request->get('proddate');
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
     }
-    $dataProvider = $searchModel->search($_GET);
+    
+	public function actionIndex()
+	{
+	    $searchModel  = new ProductionInspectionSearch;
+	    $searchModel->proddate = date('Y-m-d');
 
-	Tabs::clearLocalStorage();
+	    if (\Yii::$app->request->get('prod_date') !== null) {
+	    	$searchModel->proddate = \Yii::$app->request->get('prod_date');
+	    }
 
-	Url::remember();
-	\Yii::$app->session['__crudReturnUrl'] = null;
+	    if (\Yii::$app->request->get('proddate') !== null) {
+	    	$searchModel->proddate = \Yii::$app->request->get('proddate');
+	    }
 
-	return $this->render('index', [
-	'dataProvider' => $dataProvider,
-	    'searchModel' => $searchModel,
-	]);
+	    if (\Yii::$app->request->get('status') !== null) {
+	    	$searchModel->status = \Yii::$app->request->get('status');
+	    }
+
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('index', [
+		'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
 	}
 }

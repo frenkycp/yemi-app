@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoInput extends BaseSernoInput
 {
-    public $etd_ship, $destination;
+    public $etd_ship, $destination, $week_no, $total;
 
     public function behaviors()
     {

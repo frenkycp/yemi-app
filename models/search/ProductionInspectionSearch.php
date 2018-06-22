@@ -12,6 +12,7 @@ use app\models\SernoInput;
 */
 class ProductionInspectionSearch extends SernoInput
 {
+    public $status;
 /**
 * @inheritdoc
 */
@@ -94,10 +95,16 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'sernum', $this->sernum])
             ->andFilterWhere(['like', 'qa_ng', $this->qa_ng])
             ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date])
-            ->andFilterWhere(['like', 'qa_ok', $this->qa_ok])
+            //->andFilterWhere(['like', 'qa_ok', $this->qa_ok])
             ->andFilterWhere(['like', 'qa_ok_date', $this->qa_ok_date])
             ->andFilterWhere(['like', 'plan', $this->plan])
             ->andFilterWhere(['like', 'ship', $this->ship]);
+
+        if ($params['status'] == 'OK') {
+             $query->andFilterWhere(['qa_ok' => 'OK']);
+        } else {
+            $query->andFilterWhere(['qa_ok' => '']);
+        }
 
 return $dataProvider;
 }

@@ -7,16 +7,16 @@ use yii\helpers\Url;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
-    'page_title' => 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>',
-    'tab_title' => 'Shipping Chart',
-    'breadcrumbs_title' => 'Shipping Chart'
+    'page_title' => 'Production Inspection Chart</span>',
+    'tab_title' => 'Production Inspection Chart',
+    'breadcrumbs_title' => 'Production Inspection Chart'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 //$color = 'DarkSlateBlue';
 $color = 'rgba(72,61,139,0.6)';
 
-$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -45,7 +45,7 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 
 ?>
-<u><h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5></u>
+
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php
@@ -75,7 +75,7 @@ $this->registerJs($script, View::POS_HEAD );
                 echo '<div class="tab-pane" id="tab_1_' . $j .'">';
             }
 
-            $sernoFg = app\models\SernoOutput::find()
+            /*$sernoFg = app\models\SernoOutput::find()
             ->select(['etd, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(ship,4) as week_no'])
             ->where([
                 'WEEK(ship,4)' => $j,
@@ -84,69 +84,64 @@ $this->registerJs($script, View::POS_HEAD );
             ->andWhere(['<>', 'stc', 'ADVANCE'])
             //->andWhere(['<>', 'stc', 'NOSO'])
             ->groupBy('etd')
+            ->all();*/
+
+            $sernoFg = app\models\ProductionInspection::find()
+            ->select([
+                'proddate' => 'proddate',
+                'qa_ok' => 'qa_ok',
+                'total' => 'COUNT(qa_ok)'
+            ])
+            ->where([
+                'week_no' => $j,
+                'LEFT(proddate,4)' => date('Y'),
+            ])
+            ->groupBy('proddate, qa_ok')
             ->all();
-            $data_close = [];
-            $data_open = [];
-            $data_ng = [];
-            $data_delay = [];
-            $categories = [];
-            $delay_num_arr = [];
+
+            $tmp_period = [];
 
             foreach ($sernoFg as $value) {
-                $vms_date = $value->vms;
-                /*$delay_data_arr = app\models\SernoInput::find()
-                ->joinWith('sernoOutput')
-                ->where([
-                    //'WEEK(ship,4)' => $j,
-                    //'LEFT(id,4)' => date('Y'),
-                    'tb_serno_output.etd' => $value->etd
-                ])
-                ->andWhere(['<>', 'stc', 'ADVANCE'])
-                //->andWhere(['<>', 'stc', 'NOSO'])
-                ->andWhere('tb_serno_input.proddate>tb_serno_output.etd')
-                ->all();*/
+                if (!in_array($value->proddate, $tmp_period)) {
+                    $tmp_period[] = $value->proddate;
+                }
+            }
 
-                $total_delay = 0;
-                $remark = count($delay_data_arr) . '<br/>';
-                $remark .= '<table>';
-                /*foreach ($delay_data_arr as $delay_data) {
-                    $total_delay++;
-                    
-                }*/
-                $remark .= '</table>';
+            $data_close = [];
+            $data_open = [];
 
-                //$total_delay = 500;
-                $total_close = $value->output - ($value->ng + $total_delay);
-                $presentase_ng = round(($value->ng/$value->qty)*100);
-                $presentase_close = floor(($total_close/$value->qty)*100);
-                $presentase_delay = ceil(($total_delay / $value->qty)*100);
-                $presentase_open = (int)(100 - ($presentase_close + $presentase_ng + $presentase_delay));
-                //$data_close[] = (int)$presentase;
+            foreach ($tmp_period as $value) {
+                $tmp_total_open = 0;
+                $tmp_total_close = 0;
+                foreach ($sernoFg as $value2) {
+                    if ($value2->proddate == $value) {
+                        if ($value2->qa_ok == 'OK') {
+                            $tmp_total_close += $value2->total;
+                        } else {
+                            $tmp_total_open += $value2->total;
+                        }
+                    }
+                }
+                $total_qty = $tmp_total_open + $tmp_total_close;
+                $presentase_close = 0;
+                $presentase_open = 0;
+                if ($total_qty > 0) {
+                    $presentase_close = round(($tmp_total_close / $total_qty) * 100);
+                    $presentase_open = 100 - $presentase_close;
+                }
+                
                 $data_close[] = [
                     'y' => (int)($presentase_close),
-                    'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
-                    'qty' => $total_close,
+                    'url' => Url::to(['/production-inspection/index', 'prod_date' => $value, 'status' => 'OK']),
+                    'qty' => $tmp_total_close,
                 ];
-                $data_ng[] = [
-                    'y' => (int)$presentase_ng,
-                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
-                    'qty' => $value->ng,
-                ];
-                 $data_delay[] = [
-                    'y' => (int)$presentase_delay,
-                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
-                    'qty' => $total_delay,
-                    'remark' => $remark
-                ];
-                //$data_open[] = (int)(100 - $presentase_close);
                 $data_open[] = [
                     'y' => $presentase_open,
-                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
-                    'qty' => $value->qty - $value->output,
+                    'url' => Url::to(['/production-inspection/index', 'prod_date' => $value, 'status' => 'NG']),
+                    'qty' => $tmp_total_open,
                 ];
-                //$categories[] = $value->etd;
-                $categories[] = date('Y-m-d', strtotime($value->etd));
             }
+
             echo Highcharts::widget([
             'scripts' => [
                 'modules/exporting',
@@ -171,7 +166,7 @@ $this->registerJs($script, View::POS_HEAD );
                     'type' => 'category'
                 ],
                 'xAxis' => [
-                    'categories' => $categories,
+                    'categories' => $tmp_period,
                     'labels' => [
                         'formatter' => new JsExpression('function(){ return \'<a href="container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
                     ],
@@ -228,22 +223,6 @@ $this->registerJs($script, View::POS_HEAD );
                             ]
                         ]
                     ],
-                    
-                    [
-                        'name' => 'NG',
-                        'data' => $data_ng,
-                        'color' => 'pink',
-                        'dataLabels' => [
-                            'enabled' => false,
-                        ],
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                            ]
-                        ]
-                    ],
                     [
                         'name' => 'Completed',
                         'data' => $data_close,
@@ -264,30 +243,6 @@ $this->registerJs($script, View::POS_HEAD );
                             ]
                         ]
                     ],
-                    /*[
-                        'name' => 'Delay',
-                        'data' => $data_delay,
-                        'color' => 'rgba(255, 255, 0, 0.6)',
-                        'dataLabels' => [
-                            'enabled' => true,
-                            'color' => 'red',
-                            'format' => '{point.percentage}%',
-                            'style' => [
-                                'textOutline' => '0px'
-                            ],
-                        ],
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('
-                                    function(){
-                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                    }
-                                '),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                            ]
-                        ]
-                    ],*/
                 ]
             ],
         ]);
