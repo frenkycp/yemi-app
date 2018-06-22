@@ -36,7 +36,7 @@ $grid_columns = [
         'class' => '\kartik\grid\SerialColumn',
         'width' => '30px',
     ], */
-    /* [
+    [
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -56,7 +56,7 @@ $grid_columns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ], */
+    ],
     [
         'attribute' => 'urutan',
         'label' => 'Ticket<br/>No',

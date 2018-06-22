@@ -38,67 +38,71 @@ use yii\helpers\StringHelper;
         <?php $this->beginBlock('main'); ?>
 
         <p>
-            
-
-<!-- attribute location -->
-			<?= $form->field($model, 'location')->textInput() ?>
-
-<!-- attribute area -->
-			<?= $form->field($model, 'area')->textInput() ?>
 
 <!-- attribute mesin_id -->
-			<?= $form->field($model, 'mesin_id')->textInput() ?>
+            <?= $form->field($model, 'mesin_id')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
 
 <!-- attribute mesin_nama -->
-			<?= $form->field($model, 'mesin_nama')->textInput() ?>
-
-<!-- attribute mesin_no -->
-			<?= $form->field($model, 'mesin_no')->textInput() ?>
-
-<!-- attribute mesin_bagian -->
-			<?= $form->field($model, 'mesin_bagian')->textInput() ?>
-
-<!-- attribute mesin_bagian_ket -->
-			<?= $form->field($model, 'mesin_bagian_ket')->textInput() ?>
-
-<!-- attribute mesin_status -->
-			<?= $form->field($model, 'mesin_status')->textInput() ?>
-
-<!-- attribute mesin_catatan -->
-			<?= $form->field($model, 'mesin_catatan')->textInput() ?>
-
-<!-- attribute mesin_periode -->
-			<?= $form->field($model, 'mesin_periode')->textInput() ?>
-
-<!-- attribute user_id -->
-			<?= $form->field($model, 'user_id')->textInput() ?>
-
-<!-- attribute user_desc -->
-			<?= $form->field($model, 'user_desc')->textInput() ?>
-
-<!-- attribute repair_user_id -->
-			<?= $form->field($model, 'repair_user_id')->textInput() ?>
-
-<!-- attribute repair_user_desc -->
-			<?= $form->field($model, 'repair_user_desc')->textInput() ?>
-
-<!-- attribute repair_status -->
-			<?= $form->field($model, 'repair_status')->textInput() ?>
-
-<!-- attribute repair_pic -->
-			<?= $form->field($model, 'repair_pic')->textInput() ?>
-
+            <?= $form->field($model, 'mesin_nama')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+            
 <!-- attribute repair_note -->
-			<?= $form->field($model, 'repair_note')->textInput() ?>
-
-<!-- attribute mesin_last_update -->
-			<?= $form->field($model, 'mesin_last_update')->textInput() ?>
+            <?= $form->field($model, 'repair_note')->textInput() ?>
 
 <!-- attribute repair_plan -->
-			<?= $form->field($model, 'repair_plan')->textInput() ?>
+            <?= $form->field($model, 'repair_plan')->widget(\yii\jui\DatePicker::class, [
+                'dateFormat' => 'yyyy-MM-dd',
+                'options' => [
+                    'class' => 'form-control'
+                ]
+            ]) ?>
+
+<!-- attribute location -->
+			<?= $form->field($model, 'location')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute area -->
+			<?= $form->field($model, 'area')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute mesin_no -->
+			<?= $form->field($model, 'mesin_no')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute mesin_bagian -->
+			<?= $form->field($model, 'mesin_bagian')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute mesin_bagian_ket -->
+			<?= $form->field($model, 'mesin_bagian_ket')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute mesin_status -->
+			<?= $form->field($model, 'mesin_status')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute mesin_catatan -->
+			<?= $form->field($model, 'mesin_catatan')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute mesin_periode -->
+			<?= $form->field($model, 'mesin_periode')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute user_id -->
+			<?= $form->field($model, 'user_id')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute user_desc -->
+			<?= $form->field($model, 'user_desc')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute repair_user_id -->
+			<?= $form->field($model, 'repair_user_id')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute repair_user_desc -->
+			<?= $form->field($model, 'repair_user_desc')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute repair_status -->
+			<?= $form->field($model, 'repair_status')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute repair_pic -->
+			<?= $form->field($model, 'repair_pic')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute mesin_last_update -->
+			<?= $form->field($model, 'mesin_last_update')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
 
 <!-- attribute repair_aktual -->
-			<?= $form->field($model, 'repair_aktual')->textInput() ?>
+			<?= $form->field($model, 'repair_aktual')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
         </p>
         <?php $this->endBlock(); ?>
         

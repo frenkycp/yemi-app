@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoInput extends BaseSernoInput
 {
+    public $etd_ship, $destination;
 
     public function behaviors()
     {
@@ -40,5 +41,16 @@ class SernoInput extends BaseSernoInput
     public function getSernoOutput()
     {
         return $this->hasOne(SernoOutput::className(), ['pk' => 'plan']);
+    }
+
+    public function getSernoMaster()
+    {
+        return $this->hasOne(SernoMaster::className(), ['gmc' => 'gmc']);
+    }
+
+    public function getPartName()
+    {
+        $sernoMaster = SernoMaster::find()->where(['gmc' => $this->gmc])->one();
+        return $sernoMaster->model . ' // ' . $sernoMaster->color . ' // ' . $sernoMaster->dest;
     }
 }
