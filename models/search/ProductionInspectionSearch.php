@@ -101,9 +101,9 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'ship', $this->ship]);
 
         if ($params['status'] == 'OK') {
-             $query->andFilterWhere(['qa_ok' => 'OK']);
-        } else {
-            $query->andFilterWhere(['qa_ok' => '']);
+            $query->andFilterWhere(['qa_ok' => 'OK']);
+        } else if ($params['status'] == 'NG') {
+            $query->andFilterWhere(['!=', 'qa_ok', 'OK']);
         }
 
 return $dataProvider;
