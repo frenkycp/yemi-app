@@ -81,6 +81,12 @@ if(isset($_GET['dst']))
     $main_link = ['container-progress', 'etd' => $_GET['etd']];
 }
 
+$progress = [
+    round(($monthly_total_plan / $monthly_total_plan) * 100, 2),
+    round(($monthly_progress_plan / $monthly_total_plan) * 100, 2),
+    round(($monthly_progress_output / $monthly_total_plan) * 100, 2),
+];
+
 $gridColumns = [
     /*[
         'class' => '\kartik\grid\SerialColumn',
@@ -302,6 +308,37 @@ $gridColumns = [
             ]
             );
             ?>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="progress-group">
+                    <span class="progress-text">VMS Total Plan <?= date('M\' Y') ?></span>
+                    <span class="progress-number"><b><?= number_format($monthly_total_plan) ?></b>/<?= number_format($monthly_total_plan) ?></span>
+
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-green" style="width: <?= $progress[0] ?>%"><?= $progress[0] ?>%</div>
+                    </div>
+                  </div>
+                  <!-- /.progress-group -->
+                  <div class="progress-group">
+                    <span class="progress-text">VMS Total Plan (<?= date('01 M Y') ?> - <?= date('d M Y') ?>)</span>
+                    <span class="progress-number"><b><?= number_format($monthly_progress_plan) ?></b>/<?= number_format($monthly_total_plan) ?></span>
+
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-aqua<?= $progress[1] != 100 ? ' progress-bar-striped active' : '' ?>" style="width: <?= $progress[1] ?>%"><?= $progress[1] ?>%</div>
+                    </div>
+                  </div>
+                  <!-- /.progress-group -->
+                  <div class="progress-group">
+                    <span class="progress-text">Total Output <?= date('M\' Y') ?></span>
+                    <span class="progress-number"><b><?= number_format($monthly_progress_output) ?></b>/<?= number_format($monthly_total_plan) ?></span>
+
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-purple<?= $progress[2] != 100 ? ' progress-bar-striped active' : '' ?>" style="width: <?= $progress[2] ?>%"><?= $progress[2] ?>%</div>
+                    </div>
+                  </div>
         </div>
     </div>
 

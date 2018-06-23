@@ -42,10 +42,24 @@ class YemiInternalController extends SernoOutputController
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
+		$vms_data = SernoOutput::find()
+		->select([
+			'monthly_total_plan' => 'SUM(qty)',
+			'monthly_progress_plan' => 'SUM(CASE WHEN vms<=\'2018-06-23\' THEN qty ELSE 0 END)',
+			'monthly_progress_output' => 'SUM(CASE WHEN vms<=\'2018-06-23\' THEN output ELSE 0 END)',
+		])
+		->where([
+			'LEFT(vms, 7)' => date('Y-m')
+		])
+		->one();
+
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
-		    'line_arr' => $line_arr
+		    'line_arr' => $line_arr,
+		    'monthly_total_plan' => $vms_data->monthly_total_plan,
+		    'monthly_progress_plan' => $vms_data->monthly_progress_plan,
+		    'monthly_progress_output' => $vms_data->monthly_progress_output,
 		]);
     }
 
