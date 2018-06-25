@@ -121,7 +121,7 @@ $this->title = 'Centered Information System';
     		</div>
             <div class="col-md-4 col-md-offset-1">
                 <div class="panel panel-primary">
-                    <div class="panel-heading text-center">Finish Good Inspection<br/></div>
+                    <div class="panel-heading text-center">Finish Good Inspection<br/>( 完成品出荷の管理検査)<br/></div>
                     <div class="list-group">
                         <?= Html::a('Inspection Chart', ['/production-inspection-chart/index'], [
                             'class' => 'list-group-item'
