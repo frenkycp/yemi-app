@@ -87,7 +87,60 @@ class ProductionInspectionController extends \app\controllers\base\ProductionIns
 		} else {
 			$data .= '
 			<tr>
-				<td colspan="3">No Sparepart Data</td>
+				<td colspan="3">No Serno Data</td>
+			</tr>
+			';
+		}
+
+		$data .= '</table>';
+		return $data;
+	}
+
+	public function actionGetNgDetail($proddate, $plan)
+	{
+		$data = '<table class="table table-bordered table-striped table-hover">';
+		$data .= 
+		'<tr>
+			<th style="text-align: center;">GMC</th>
+			<th>Description</th>
+			<th style="text-align: center;">Serial Number</th>
+			<th style="text-align: center;">Remark Date</th>
+			<th>NG Remark</th>
+		</tr>'
+		;
+		$result = SernoInput::find()
+		->joinWith('sernoMaster')
+		->select([
+			'gmc' => 'tb_serno_input.gmc',
+			'sernum' => 'sernum',
+			'destination' => 'CONCAT(tb_serno_master.model, \' // \', tb_serno_master.color, \' // \', tb_serno_master.dest)',
+			'qa_ng' => 'qa_ng',
+			'qa_ng_date' => 'qa_ng_date'
+		])
+		->where([
+			'proddate' => $proddate,
+			'plan' => $plan,
+		])
+		->andWhere(['<>', 'qa_ng', ''])
+		->orderBy('gmc ASC, sernum ASC')
+		->all();
+
+		if (count($result) > 0) {
+			foreach ($result as $value) {
+				$data .= '
+				<tr>
+					<td style="text-align: center;">' . $value['gmc'] . '</td>
+					<td>' . $value['destination'] . '</td>
+					<td style="text-align: center;">' . $value['sernum'] . '</td>
+					<td style="text-align: center;">' . $value['qa_ng_date'] . '</td>
+					<td>' . $value['qa_ng'] . '</td>
+				</tr>
+				';
+			}
+		} else {
+			$data .= '
+			<tr>
+				<td colspan="5">No NG Data</td>
 			</tr>
 			';
 		}

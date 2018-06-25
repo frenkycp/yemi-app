@@ -27,6 +27,10 @@ $this->registerJs("$(function() {
      e.preventDefault();
      $('#modal').modal('show').find('.modal-body').load($(this).attr('href'));
    });
+   $('.ngModal').click(function(e) {
+     e.preventDefault();
+     $('#modal-ng').modal('show').find('.modal-body').load($(this).attr('href'));
+   });
 });");
 
 $columns = [
@@ -106,6 +110,39 @@ $columns = [
         'width' => '150px',
     ],
     [
+        'attribute' => 'qa_ng',
+        'label' => 'NG',
+        'value' => function($model){
+            $ng_data = app\models\SernoInput::find()
+            ->where([
+                'plan' => $model->plan,
+                'proddate' => $model->proddate,
+            ])
+            ->andWhere(['<>', 'qa_ng', ''])
+            ->all();
+
+            $url = ['get-ng-detail',
+                'proddate' => $model->proddate,
+                'plan' => $model->plan
+            ];
+
+            $options = [
+                'class' => 'btn btn-warning btn-xs ngModal',
+                'data-pjax' => '0',
+            ];
+
+            $link = Html::a(count($ng_data) . ' pcs', $url, $options);
+
+            if (count($ng_data) > 0) {
+                return $link;
+            }
+            return '';
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
         'attribute' => 'qa_ok',
         'label' => 'Inspection',
         'hAlign' => 'center',
@@ -173,7 +210,7 @@ $columns = [
             'panel' => [
                 'type' => 'info',
                 //'heading' => '<i class="glyphicon glyphicon-book"></i>  Job Orders Data Table',
-                'footer' => false,
+                //'footer' => false,
                 //'before' => false,
                 'after' => false,
             ],
@@ -198,8 +235,14 @@ $columns = [
         <?php
             yii\bootstrap\Modal::begin([
                 'id' =>'modal',
-                'header' => '<h3>Machine Spare Parts</h3>',
+                'header' => '<h3>Product Detail</h3>',
                 //'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal-ng',
+                'header' => '<h3>NG Detail</h3>',
+                'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();
         ?>

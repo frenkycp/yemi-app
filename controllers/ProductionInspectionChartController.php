@@ -5,6 +5,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\ProductionInspection;
 use app\models\SernoCalendar;
+use app\models\SernoInput;
 
 class ProductionInspectionChartController extends Controller
 {
@@ -43,9 +44,9 @@ class ProductionInspectionChartController extends Controller
 			$end_week = $min_max_week->max_week;
 		}
 
-		/*$sernoFg = ProductionInspection::find()
+		$sernoFg = ProductionInspection::find()
         ->select([
-        	'week_no' => 'week_no',
+        	'week_no' => 'WEEK(proddate, 4)',
             'proddate' => 'proddate',
             'qa_ok' => 'qa_ok',
             'total' => 'COUNT(qa_ok)'
@@ -54,12 +55,22 @@ class ProductionInspectionChartController extends Controller
             'LEFT(proddate,4)' => date('Y'),
         ])
         ->groupBy('week_no, proddate, qa_ok')
-        ->all();*/
+        ->orderBy('week_no ASC, proddate ASC')
+        ->all();
 
         $data = [];
 
 		for ($i = $start_week; $i <= $end_week; $i++) {
-			
+			foreach ($sernoFg as $value) {
+                if ($i == $value->week_no) {
+                    $data[$i][] = [
+                        'proddate' => $value->proddate,
+                        'qa_ok' => $value->qa_ok,
+                        'total' => $value->total,
+                    ];
+                }
+                
+            }
 		}
 
 		return $this->render('index', [
@@ -67,7 +78,8 @@ class ProductionInspectionChartController extends Controller
 			'subtitle' => $subtitle,
 			'weekToday' => $weekToday,
         	'startWeek' => $start_week,
-        	'endWeek' => $end_week
+        	'endWeek' => $end_week,
+            'data' => $data,
 		]);
 	}
 }

@@ -20,7 +20,7 @@ public function rules()
 {
 return [
 [['num', 'flo', 'palletnum', 'adv'], 'integer'],
-            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng', 'qa_ng_date', 'qa_ok_date', 'plan', 'ship', 'etd_ship'], 'safe'],
+            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng_date', 'qa_ok_date', 'plan', 'ship', 'etd_ship'], 'safe'],
 ];
 }
 
@@ -98,7 +98,7 @@ $query->andFilterWhere([
             //->andFilterWhere(['like', 'qa_ok', $this->qa_ok])
             ->andFilterWhere(['like', 'qa_ok_date', $this->qa_ok_date])
             ->andFilterWhere(['like', 'plan', $this->plan])
-            ->andFilterWhere(['like', 'ship', $this->ship]);
+            ->andFilterWhere(['like', 'tb_serno_output.ship', $this->etd_ship]);
 
         if ($params['status'] == 'OK') {
             $query->andFilterWhere(['qa_ok' => 'OK']);

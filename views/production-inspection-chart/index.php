@@ -43,7 +43,9 @@ $script = <<< JS
     }
 JS;
 $this->registerJs($script, View::POS_HEAD );
-
+/*echo '<pre>';
+print_r($data);
+echo '</pre>';*/
 ?>
 
 <div class="nav-tabs-custom">
@@ -86,7 +88,7 @@ $this->registerJs($script, View::POS_HEAD );
             ->groupBy('etd')
             ->all();*/
 
-            $sernoFg = app\models\ProductionInspection::find()
+            /*$sernoFg = app\models\ProductionInspection::find()
             ->select([
                 'proddate' => 'proddate',
                 'qa_ok' => 'qa_ok',
@@ -97,13 +99,15 @@ $this->registerJs($script, View::POS_HEAD );
                 'LEFT(proddate,4)' => date('Y'),
             ])
             ->groupBy('proddate, qa_ok')
-            ->all();
+            ->all();*/
+
+            $sernoFg = $data[$j];
 
             $tmp_period = [];
 
             foreach ($sernoFg as $value) {
-                if (!in_array($value->proddate, $tmp_period)) {
-                    $tmp_period[] = $value->proddate;
+                if (!in_array($value['proddate'], $tmp_period)) {
+                    $tmp_period[] = $value['proddate'];
                 }
             }
 
@@ -114,11 +118,11 @@ $this->registerJs($script, View::POS_HEAD );
                 $tmp_total_open = 0;
                 $tmp_total_close = 0;
                 foreach ($sernoFg as $value2) {
-                    if ($value2->proddate == $value) {
-                        if ($value2->qa_ok == 'OK') {
-                            $tmp_total_close += $value2->total;
+                    if ($value2['proddate'] == $value) {
+                        if ($value2['qa_ok'] == 'OK') {
+                            $tmp_total_close += $value2['total'];
                         } else {
-                            $tmp_total_open += $value2->total;
+                            $tmp_total_open += $value2['total'];
                         }
                     }
                 }
@@ -180,7 +184,7 @@ $this->registerJs($script, View::POS_HEAD );
                 ],
                 'tooltip' => [
                     'enabled' => true,
-                    'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " pcs"; }'),
+                    'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " rows"; }'),
                 ],
                 'plotOptions' => [
                     'column' => [
