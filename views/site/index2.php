@@ -87,6 +87,9 @@ $this->title = 'Centered Information System';
     		<div class="col-md-3 col-md-offset-4 text-center">
     			<i class="fa fa-fw fa-arrow-up fa-5x text-primary"></i>
     		</div>
+            <div class="col-md-4 col-md-offset-1 text-center">
+                <i class="fa fa-fw fa-arrow-up fa-5x text-primary"></i>
+            </div>
     	</div>
     	<br/>
     	<div class="row">
@@ -116,6 +119,19 @@ $this->title = 'Centered Information System';
                     </div>
                 </div>
     		</div>
+            <div class="col-md-4 col-md-offset-1">
+                <div class="panel panel-primary">
+                    <div class="panel-heading text-center">Finish Good Inspection<br/></div>
+                    <div class="list-group">
+                        <?= Html::a('Inspection Chart', ['/production-inspection-chart/index'], [
+                            'class' => 'list-group-item'
+                        ]); ?>
+                        <?= Html::a('Inspection Data', ['/production-inspection/index'], [
+                            'class' => 'list-group-item'
+                        ]); ?>
+                    </div>
+                </div>
+            </div>
     	</div>
     </div>
 </div>
