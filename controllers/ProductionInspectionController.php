@@ -25,10 +25,6 @@ class ProductionInspectionController extends \app\controllers\base\ProductionIns
 	    $searchModel  = new ProductionInspectionSearch;
 	    $searchModel->proddate = date('Y-m-d');
 
-	    if (\Yii::$app->request->get('prod_date') !== null) {
-	    	$searchModel->proddate = \Yii::$app->request->get('prod_date');
-	    }
-
 	    if (\Yii::$app->request->get('proddate') !== null) {
 	    	$searchModel->proddate = \Yii::$app->request->get('proddate');
 	    }
@@ -122,6 +118,7 @@ class ProductionInspectionController extends \app\controllers\base\ProductionIns
 			'plan' => $plan,
 		])
 		->andWhere(['<>', 'qa_ng', ''])
+		->andWhere(['<>', 'flo', 0])
 		->orderBy('gmc ASC, sernum ASC')
 		->all();
 

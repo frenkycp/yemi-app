@@ -46,15 +46,16 @@ class ProductionInspectionChartController extends Controller
 
 		$sernoFg = ProductionInspection::find()
         ->select([
-        	'week_no' => 'WEEK(proddate, 4)',
+        	'week_no' => 'week_no',
             'proddate' => 'proddate',
             'qa_ok' => 'qa_ok',
+            'plan' => 'plan',
             'total' => 'COUNT(qa_ok)'
         ])
         ->where([
             'LEFT(proddate,4)' => date('Y'),
         ])
-        ->groupBy('week_no, proddate, qa_ok')
+        ->groupBy('week_no, proddate, plan, qa_ok')
         ->orderBy('week_no ASC, proddate ASC')
         ->all();
 
@@ -67,6 +68,7 @@ class ProductionInspectionChartController extends Controller
                         'proddate' => $value->proddate,
                         'qa_ok' => $value->qa_ok,
                         'total' => $value->total,
+                        'plan' => $value->plan
                     ];
                 }
                 

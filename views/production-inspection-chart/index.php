@@ -111,6 +111,10 @@ echo '</pre>';*/
                 }
             }
 
+            /*echo '<pre>';
+            print_r($sernoFg);
+            echo '</pre>';*/
+
             $data_close = [];
             $data_open = [];
 
@@ -136,12 +140,12 @@ echo '</pre>';*/
                 
                 $data_close[] = [
                     'y' => (int)($presentase_close),
-                    'url' => Url::to(['/production-inspection/index', 'prod_date' => $value, 'status' => 'OK']),
+                    'url' => Url::to(['/production-inspection/index', 'proddate' => $value, 'status' => 'OK']),
                     'qty' => $tmp_total_close,
                 ];
                 $data_open[] = [
                     'y' => $presentase_open,
-                    'url' => Url::to(['/production-inspection/index', 'prod_date' => $value, 'status' => 'NG']),
+                    'url' => Url::to(['/production-inspection/index', 'proddate' => $value, 'status' => 'NG']),
                     'qty' => $tmp_total_open,
                 ];
             }
@@ -184,7 +188,7 @@ echo '</pre>';*/
                 ],
                 'tooltip' => [
                     'enabled' => true,
-                    'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " rows"; }'),
+                    'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " lot"; }'),
                 ],
                 'plotOptions' => [
                     'column' => [
