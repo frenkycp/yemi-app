@@ -22,10 +22,17 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+$this->registerJs("$(function() {
+   $('.popupModal').click(function(e) {
+     e.preventDefault();
+     $('#modal').modal('show').find('.modal-body').load($(this).attr('href'));
+   });
+});");
+
 $columns = [
-    /*[
+    [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => $actionColumnTemplateString,
+        'template' => '{view_serno}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -34,6 +41,17 @@ $columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            },
+            'view_serno' => function ($url, $model, $key) {
+                $url = ['get-product-serno',
+                    'proddate' => $model->proddate,
+                    'plan' => $model->plan
+                ];
+                $options = [
+                    'class' => 'popupModal',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-info-sign"></span>', $url, $options);
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -43,7 +61,7 @@ $columns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ],*/
+    ],
     [
         'attribute' => 'proddate',
         'label' => 'Prod. Date',
@@ -93,13 +111,6 @@ $columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
-    /*'num',
-    'pk',
-    'gmc',
-    'line',
-    'proddate',
-    'sernum',
-    'flo',*/
 ];
 ?>
 <div class="giiant-crud serno-input-index">
@@ -162,9 +173,9 @@ $columns = [
             'panel' => [
                 'type' => 'info',
                 //'heading' => '<i class="glyphicon glyphicon-book"></i>  Job Orders Data Table',
-                //'footer' => false,
+                'footer' => false,
                 //'before' => false,
-                //'after' => false,
+                'after' => false,
             ],
             'pager' => [
                 'class' => yii\widgets\LinkPager::className(),
@@ -184,6 +195,14 @@ $columns = [
             ],
             
         ]); ?>
+        <?php
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal',
+                'header' => '<h3>Machine Spare Parts</h3>',
+                //'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+        ?>
     </div>
 
 </div>

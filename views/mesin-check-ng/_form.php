@@ -44,6 +44,9 @@ use yii\helpers\StringHelper;
 
 <!-- attribute mesin_nama -->
             <?= $form->field($model, 'mesin_nama')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
+
+<!-- attribute mesin_catatan -->
+            <?= $form->field($model, 'mesin_catatan')->textInput()->label('Parts Remarks') ?>
             
 <!-- attribute repair_note -->
             <?= $form->field($model, 'repair_note')->textInput() ?>
@@ -73,9 +76,6 @@ use yii\helpers\StringHelper;
 
 <!-- attribute mesin_status -->
 			<?= $form->field($model, 'mesin_status')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
-
-<!-- attribute mesin_catatan -->
-			<?= $form->field($model, 'mesin_catatan')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>
 
 <!-- attribute mesin_periode -->
 			<?= $form->field($model, 'mesin_periode')->textInput(['readonly' => Yii::$app->user->identity->username == 'admin' ? false : true]) ?>

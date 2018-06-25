@@ -315,7 +315,7 @@ $gridColumns = [
         <div class="col-md-6">
             <div class="progress-group">
                     <span class="progress-text">VMS Total Plan <?= date('M\' Y') ?></span>
-                    <span class="progress-number"><b><?= number_format($monthly_total_plan) ?></b>/<?= number_format($monthly_total_plan) ?></span>
+                    <span class="progress-number"><b><?= number_format($monthly_total_plan) ?></b>/<?= number_format($monthly_total_plan) ?> <a href="<?= Url::to(['yemi-internal/index', 'vms' => date('Y-m')]) ?>"><i class="fa fa-fw fa-info-circle"></i></a></span>
 
                     <div class="progress">
                       <div class="progress-bar progress-bar-green" style="width: <?= $progress[0] ?>%"><?= $progress[0] ?>%</div>
@@ -324,7 +324,7 @@ $gridColumns = [
                   <!-- /.progress-group -->
                   <div class="progress-group">
                     <span class="progress-text">VMS Total Plan (<?= date('01 M Y') ?> - <?= date('d M Y') ?>)</span>
-                    <span class="progress-number"><b><?= number_format($monthly_progress_plan) ?></b>/<?= number_format($monthly_total_plan) ?></span>
+                    <span class="progress-number"><b><?= number_format($monthly_progress_plan) ?></b>/<?= number_format($monthly_total_plan) ?> <a href="<?= Url::to(['yemi-internal/index', 'monthly' => 1]) ?>"><i class="fa fa-fw fa-info-circle"></i></a></span>
 
                     <div class="progress">
                       <div class="progress-bar progress-bar-aqua<?= $progress[1] != 100 ? ' progress-bar-striped active' : '' ?>" style="width: <?= $progress[1] ?>%"><?= $progress[1] ?>%</div>
@@ -333,7 +333,7 @@ $gridColumns = [
                   <!-- /.progress-group -->
                   <div class="progress-group">
                     <span class="progress-text">Total Output <?= date('M\' Y') ?></span>
-                    <span class="progress-number"><b><?= number_format($monthly_progress_output) ?></b>/<?= number_format($monthly_total_plan) ?></span>
+                    <span class="progress-number"><b><?= number_format($monthly_progress_output) ?></b>/<?= number_format($monthly_total_plan) ?> <a href="<?= Url::to(['yemi-internal/index', 'monthly' => 1]) ?>"><i class="fa fa-fw fa-info-circle"></i></a></span>
 
                     <div class="progress">
                       <div class="progress-bar progress-bar-purple<?= $progress[2] != 100 ? ' progress-bar-striped active' : '' ?>" style="width: <?= $progress[2] ?>%"><?= $progress[2] ?>%</div>

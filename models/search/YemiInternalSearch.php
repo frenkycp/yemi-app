@@ -110,7 +110,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'stc', $this->stc])
-            ->andFilterWhere(['like', 'vms', $this->vms])
+            //->andFilterWhere(['like', 'vms', $this->vms])
             ->andFilterWhere(['like', 'etd', $this->etd])
             ->andFilterWhere(['like', 'tb_serno_master.model', $this->description])
             ->andFilterWhere(['like', 'category', $this->category])
@@ -120,6 +120,12 @@ $query->andFilterWhere([
         if ($this->is_minus == 1) {
             $query->andFilterWhere(['<>', '(qty - output)', 0]);
         }
+
+        if ($params['monthly'] == 1) {
+            $query->andFilterWhere(['>=', 'vms', date('Y-m-01')])
+            ->andFilterWhere(['<=', 'vms', date('Y-m-d')]);
+        }
+        $query->andFilterWhere(['like', 'vms', $this->vms]);
 
 return $dataProvider;
 }

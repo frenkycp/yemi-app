@@ -12,9 +12,6 @@ use Yii;
  * @property integer $num
  * @property string $pk
  * @property string $gmc
- * @property string $model
- * @property string $color
- * @property string $dest
  * @property string $line
  * @property string $proddate
  * @property string $sernum
@@ -24,10 +21,9 @@ use Yii;
  * @property string $qa_ng_date
  * @property string $qa_ok
  * @property string $qa_ok_date
- * @property string $fg_invoice
- * @property string $fg_invoice_date
- * @property string $fg_invoice_ship
- * @property string $fg_storage
+ * @property string $plan
+ * @property integer $adv
+ * @property string $ship
  * @property string $aliasModel
  */
 abstract class SernoInput extends \yii\db\ActiveRecord
@@ -43,6 +39,13 @@ abstract class SernoInput extends \yii\db\ActiveRecord
         return 'tb_serno_input';
     }
 
+    /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb()
+    {
+        return Yii::$app->get('db_mis7');
+    }
 
     /**
      * @inheritdoc
@@ -51,17 +54,16 @@ abstract class SernoInput extends \yii\db\ActiveRecord
     {
         return [
             [['num', 'pk', 'gmc', 'line', 'proddate', 'sernum'], 'required'],
-            [['num', 'flo', 'palletnum'], 'integer'],
+            [['num', 'flo', 'palletnum', 'adv'], 'integer'],
             [['qa_ng'], 'string'],
             [['pk'], 'string', 'max' => 40],
             [['gmc'], 'string', 'max' => 11],
-            [['model'], 'string', 'max' => 50],
-            [['color', 'qa_ok'], 'string', 'max' => 2],
-            [['dest', 'fg_storage'], 'string', 'max' => 3],
             [['line'], 'string', 'max' => 15],
-            [['proddate', 'qa_ng_date', 'qa_ok_date', 'fg_invoice', 'fg_invoice_date'], 'string', 'max' => 10],
-            [['sernum'], 'string', 'max' => 20],
-            [['fg_invoice_ship'], 'string', 'max' => 30]
+            [['proddate', 'qa_ng_date', 'qa_ok_date'], 'string', 'max' => 10],
+            [['sernum', 'ship'], 'string', 'max' => 20],
+            [['qa_ok'], 'string', 'max' => 2],
+            [['plan'], 'string', 'max' => 35],
+            [['pk'], 'unique']
         ];
     }
 
@@ -74,9 +76,6 @@ abstract class SernoInput extends \yii\db\ActiveRecord
             'num' => 'Num',
             'pk' => 'Pk',
             'gmc' => 'Gmc',
-            'model' => 'Model',
-            'color' => 'Color',
-            'dest' => 'Dest',
             'line' => 'Line',
             'proddate' => 'Proddate',
             'sernum' => 'Sernum',
@@ -86,10 +85,9 @@ abstract class SernoInput extends \yii\db\ActiveRecord
             'qa_ng_date' => 'Qa Ng Date',
             'qa_ok' => 'Qa Ok',
             'qa_ok_date' => 'Qa Ok Date',
-            'fg_invoice' => 'Fg Invoice',
-            'fg_invoice_date' => 'Fg Invoice Date',
-            'fg_invoice_ship' => 'Fg Invoice Ship',
-            'fg_storage' => 'Fg Storage',
+            'plan' => 'Plan',
+            'adv' => 'Adv',
+            'ship' => 'Ship',
         ];
     }
 

@@ -54,7 +54,7 @@ class SernoOutputController extends base\SernoOutputController
     	->where(['<>', 'stc', 'ADVANCE'])
     	//->andWhere(['<>', 'stc', 'NOSO'])
     	->andWhere(['LEFT(id,4)' => date('Y')])
-    	->andWhere(['<>', 'ship', '9999-12-31'])
+    	//->andWhere(['<>', 'ship', '9999-12-31'])
     	->groupBy('tahun')
     	->one();
 

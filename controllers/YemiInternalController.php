@@ -29,10 +29,43 @@ class YemiInternalController extends SernoOutputController
 
 	    $line_arr = ArrayHelper::map(SernoMaster::find()->select('distinct(line)')->where(['<>', 'line', ''])->orderBy('line ASC')->all(), 'line', 'line');
 
-    	$searchModel->vms = date('Y-m-d');
-    	if(\Yii::$app->request->get('vms') !== null)
+	    $searchModel->vms = date('Y-m-d');
+	    if(\Yii::$app->request->get('vms') !== null)
+	    {
+	    	
+	    }
+	    if(\Yii::$app->request->get('monthly') !== null)
+		{
+			unset($searchModel->vms);
+		}
+
+
+    	/*if(\Yii::$app->request->get('vms') === null)
     	{
-    		$searchModel->vms = \Yii::$app->request->get('vms');
+    		$searchModel->vms = date('Y-m-d');
+    		if(\Yii::$app->request->get('monthly') !== null)
+    		{
+    			unset($searchModel->vms);
+    		}
+    	} else {
+    		if(!(\Yii::$app->request->get('monthly') !== null))
+    		{
+
+    		}
+    	}*/
+
+    	if(!(\Yii::$app->request->get('monthly') !== null) && !(\Yii::$app->request->get('vms') !== null))
+    	{
+	    	if(\Yii::$app->request->get('vms') !== null)
+	    	{
+	    		$searchModel->vms = \Yii::$app->request->get('vms');
+	    	}
+    	} else {
+    		
+    		if(\Yii::$app->request->get('vms') !== null)
+	    	{
+	    		$searchModel->vms = \Yii::$app->request->get('vms');
+	    	}
     	}
 	    
 	    $dataProvider = $searchModel->search($_GET);
