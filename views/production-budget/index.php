@@ -4,9 +4,10 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Product Budget/Forecast/Actual',
+    'page_title' => 'Production Budget/Forecast/Actual',
     'tab_title' => 'Production Budget/Forecast/Actual',
     'breadcrumbs_title' => 'Production Budget/Forecast/Actual'
 ];
@@ -35,9 +36,50 @@ echo '</pre>';*/
 
 ?>
 
+
+<?php $form = ActiveForm::begin([
+    'id' => 'form_index',
+    'layout' => 'horizontal',
+    'enableClientValidation' => true,
+    'errorSummaryCssClass' => 'error-summary alert alert-danger',
+    'fieldConfig' => [
+             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+             'horizontalCssClasses' => [
+                 'label' => 'col-sm-5',
+                 #'offset' => 'col-sm-offset-4',
+                 'wrapper' => 'col-sm-6',
+                 'error' => '',
+                 'hint' => '',
+             ],
+         ],
+    ]
+    );
+    ?>
+
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'budget_type')->dropDownList(
+                [
+                    'PRODUCT' => 'PRODUCT',
+                    'KD_PART' => 'KD_PART'
+                ]
+            ); ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'qty_or_amount')->dropDownList(
+                [
+                    'QTY' => ' By QTY',
+                    'AMOUNT' => 'By AMOUNT'
+                ]
+            ); ?>
+        </div>
+        <button type="submit" class="btn btn-default">Update Chart</button>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">FISCAL YEAR <?= $fiscal; ?> (By Qty)</h3>
+        <h3 class="box-title"></h3>
     </div>
     <div class="box-body">
         <?php
@@ -51,7 +93,6 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 450
                 ],
                 'credits' => [
                     'enabled' => false
@@ -69,9 +110,9 @@ echo '</pre>';*/
                     'allowDecimals' => false,
                     'min' => 0,
                     //'max' => 160000,
-                    'tickInterval' => 20000,
+                    //'tickInterval' => 1000000,
                     'title' => [
-                        'text' => 'QTY'
+                        'text' => $model->qty_or_amount
                     ]
                 ],
                 'legend' => [

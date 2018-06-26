@@ -1,18 +1,15 @@
 <?php
-
 namespace app\controllers;
 
 use yii\web\Controller;
 use app\models\SalesBudgetTbl;
+use app\models\Budget;
 use yii\web\JsExpression;
 use DateTime;
 
-/**
- * summary
- */
-class ProductionSalesAmountController extends Controller
+class ProductionBudgetController extends Controller
 {
-    public function behaviors()
+	public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
@@ -20,7 +17,7 @@ class ProductionSalesAmountController extends Controller
     
     public function actionIndex()
     {
-        $title = '';
+    	$title = '';
         $subtitle = '';
         $categories = [];
         $prod_category_arr = ['BUDGET', 'FORECAST', 'ACTUAL'];
@@ -28,7 +25,14 @@ class ProductionSalesAmountController extends Controller
         $prod_period_arr = [];
         $prod_bu_arr = [];
 
-        $model = new SalesBudgetTbl();
+        $model = new Budget();
+        $model->budget_type = 'PRODUCT';
+		$model->qty_or_amount = 'QTY';
+        
+    	if ($model->load($_POST))
+		{
+
+		}
 
         $tmp_fy = SalesBudgetTbl::find()
         ->where(['PERIOD' => date('Ym')])
@@ -39,7 +43,7 @@ class ProductionSalesAmountController extends Controller
         $prod_sales_arr = SalesBudgetTbl::find()
         ->where([
             'FISCAL' => $tmp_fy->FISCAL,
-            'TYPE' => 'PRODUCT'
+            'TYPE' => $model->budget_type
         ])
         ->all();
 
@@ -67,7 +71,11 @@ class ProductionSalesAmountController extends Controller
                     $tmp_qty = 0;
                     foreach ($prod_sales_arr as $prod_sales) {
                         if ($prod_sales->PERIOD == $prod_period && $prod_sales->CATEGORY == $prod_category && $prod_sales->BU == $prod_bu) {
-                            $tmp_qty += $prod_sales->AMOUNT;
+                        	if ($model->qty_or_amount == 'QTY') {
+                        		$tmp_qty += $prod_sales->QTY;
+                        	} else {
+                        		$tmp_qty += $prod_sales->AMOUNT;
+                        	}
                         }
                     }
                     $tmp_data[] = (int)$tmp_qty;

@@ -29,13 +29,18 @@ class ProductionSalesQtyController extends Controller
         $prod_bu_arr = [];
 
     	$tmp_fy = SalesBudgetTbl::find()
-        ->where(['PERIOD' => date('Ym')])
+        ->where([
+            'PERIOD' => date('Ym'),
+        ])
         ->one();
 
     	$series = [];
 
     	$prod_sales_arr = SalesBudgetTbl::find()
-        ->where(['FISCAL' => $tmp_fy->FISCAL])
+        ->where([
+            'FISCAL' => $tmp_fy->FISCAL,
+            'TYPE' => 'PRODUCT'
+        ])
         ->all();
 
     	foreach ($prod_sales_arr as $value) {

@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SalesBudgetTbl extends BaseSalesBudgetTbl
 {
+    public $qty_or_amount, $budget_type;
 
     public function behaviors()
     {
