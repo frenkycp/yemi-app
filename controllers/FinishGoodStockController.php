@@ -32,7 +32,7 @@ class FinishGoodStockController extends Controller
     	->where(['>', 'output', 0])
     	->andWhere(['>=', 'etd', date('Y-m-d')])
     	->andWhere(['!=', 'stc', 'ADVANCE'])
-        ->andWhere(['!=', 'stc', 'NOSO'])
+        //->andWhere(['!=', 'stc', 'NOSO'])
     	->groupBy('dst')
     	->orderBy('stock_qty DESC')
     	->all();
