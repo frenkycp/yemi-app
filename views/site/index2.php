@@ -126,10 +126,10 @@ $this->title = 'Centered Information System';
                 <div class="panel panel-primary">
                     <div class="panel-heading text-center">Finish Good Inspection<br/>( 完成品出荷の管理検査)<br/></div>
                     <div class="list-group">
-                        <?= Html::a('Inspection Chart', ['/production-inspection-chart/index'], [
+                        <?= Html::a('Weekly Final Inspection chart (週次出荷管理検査)', ['/production-inspection-chart/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Inspection Data', ['/production-inspection/index'], [
+                        <?= Html::a('Final Inspection Data (出荷管理検査データ)', ['/production-inspection/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                     </div>
