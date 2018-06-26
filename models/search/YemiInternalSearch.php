@@ -123,7 +123,7 @@ $query->andFilterWhere([
 
         if ($params['monthly'] == 1) {
             $query->andFilterWhere(['>=', 'vms', date('Y-m-01')])
-            ->andFilterWhere(['<=', 'vms', date('Y-m-d')]);
+            ->andFilterWhere(['<', 'vms', date('Y-m-d')]);
         }
         $query->andFilterWhere(['like', 'vms', $this->vms]);
 
