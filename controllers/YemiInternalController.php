@@ -74,12 +74,14 @@ class YemiInternalController extends SernoOutputController
 
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
+		$date_today = date('Y-m-d');
 
 		$vms_data = SernoOutput::find()
 		->select([
 			'monthly_total_plan' => 'SUM(qty)',
-			'monthly_progress_plan' => 'SUM(CASE WHEN vms<=\'2018-06-23\' THEN qty ELSE 0 END)',
-			'monthly_progress_output' => 'SUM(CASE WHEN vms<=\'2018-06-23\' THEN output ELSE 0 END)',
+			'monthly_progress_plan' => 'SUM(CASE WHEN vms<\'' . $date_today .'\' THEN qty ELSE 0 END)',
+			'monthly_progress_output' => 'SUM(CASE WHEN vms<\'' . $date_today .'\' THEN output ELSE 0 END)',
+			'monthly_progress_delay' => 'SUM(CASE WHEN vms<\'' . $date_today .'\' AND output <> qty THEN output ELSE 0 END)',
 		])
 		->where([
 			'LEFT(vms, 7)' => date('Y-m')
@@ -93,6 +95,7 @@ class YemiInternalController extends SernoOutputController
 		    'monthly_total_plan' => $vms_data->monthly_total_plan,
 		    'monthly_progress_plan' => $vms_data->monthly_progress_plan,
 		    'monthly_progress_output' => $vms_data->monthly_progress_output,
+		    'monthly_progress_delay' => $vms_data->monthly_progress_delay,
 		]);
     }
 

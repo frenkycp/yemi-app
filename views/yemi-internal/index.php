@@ -85,6 +85,7 @@ $progress = [
     round(($monthly_total_plan / $monthly_total_plan) * 100, 2),
     round(($monthly_progress_plan / $monthly_total_plan) * 100, 2),
     round(($monthly_progress_output / $monthly_total_plan) * 100, 2),
+    round(($monthly_progress_delay / $monthly_progress_plan) * 100),
 ];
 
 $gridColumns = [
@@ -323,7 +324,7 @@ $gridColumns = [
                   </div>
                   <!-- /.progress-group -->
                   <div class="progress-group">
-                    <span class="progress-text">VMS Total Plan (<?= date('01 M Y') ?> - <?= date('d M Y') ?>)</span>
+                    <span class="progress-text">VMS Total Plan (<?= date('01 M Y') ?> - <?= date('d M Y', strtotime("-1 days")) ?>)</span>
                     <span class="progress-number"><b><?= number_format($monthly_progress_plan) ?></b>/<?= number_format($monthly_total_plan) ?> <a href="<?= Url::to(['yemi-internal/index', 'monthly' => 1]) ?>"><i class="fa fa-fw fa-info-circle"></i></a></span>
 
                     <div class="progress">
@@ -337,6 +338,15 @@ $gridColumns = [
 
                     <div class="progress">
                       <div class="progress-bar progress-bar-purple<?= $progress[2] != 100 ? ' progress-bar-striped active' : '' ?>" style="width: <?= $progress[2] ?>%"><?= $progress[2] ?>%</div>
+                    </div>
+                  </div>
+                  <!-- /.progress-group -->
+                  <div class="progress-group">
+                    <span class="progress-text">Total Delay (<?= date('01 M Y') ?> - <?= date('d M Y', strtotime("-1 days")) ?>)</span>
+                    <span class="progress-number"><b><?= number_format($monthly_progress_delay) ?></b>/<?= number_format($monthly_progress_plan) ?></span>
+
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-red<?= $progress[3] != 100 ? ' progress-bar-striped active' : '' ?>" style="width: <?= $progress[3] ?>%"><?= $progress[3] ?>%</div>
                     </div>
                   </div>
         </div>
