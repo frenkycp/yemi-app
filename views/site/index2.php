@@ -60,6 +60,9 @@ $this->title = 'Centered Information System';
                     <div class="panel-heading text-center">Finish Goods Monitoring<br/>完成品モニタリング</div>
                     
                     <div class="list-group">
+                        <?= Html::a('Production Budget/Forecast/Actual', ['/production-budget/index'], [
+                            'class' => 'list-group-item'
+                        ]); ?>
                         <?= Html::a('Finish Goods Stock (完成品在庫)', ['/finish-good-stock/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
