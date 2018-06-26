@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use yii\web\View;
 
 /**
 * @var yii\web\View $this
@@ -21,6 +22,13 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+
+/*$script = <<< JS
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();   
+    });
+JS;
+$this->registerJs($script, View::POS_HEAD );*/
 
 function weekOfMonth($date) {
     // estract date parts
@@ -203,6 +211,9 @@ $columns = [
         'format' => ['decimal',0],
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'contentOptions' => [
+            'class' => 'info'
+        ],
     ],
     [
         'attribute' => 'actual_export',
@@ -215,6 +226,9 @@ $columns = [
         'format' => ['decimal',0],
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'contentOptions' => [
+            'class' => 'info'
+        ],
     ],
     [
         'attribute' => 'balance_export',
@@ -227,10 +241,20 @@ $columns = [
         'format' => ['decimal',0],
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'contentOptions' => [
+            'class' => 'info'
+        ],
     ],
     [
         'attribute' => 'percentage_export',
-        'value' => 'weekPercentageExport',
+        //'value' => 'weekPercentageExport',
+        'value' => function($model){
+            if ($model->remark != null) {
+                return '<abbr class="text-danger" title="' . $model->remark . '">' . $model->getWeekPercentageExport() . '</abbr>';
+            }
+            return $model->getWeekPercentageExport();
+        },
+        'format' => 'raw',
         'label' => 'Completion<br/>Export',
         'encodeLabel' => false,
         'hAlign' => 'center',
@@ -240,6 +264,9 @@ $columns = [
         //'enableSorting' => false,
         //'filter' => false,
         'mergeHeader' => true,
+        'contentOptions' => [
+            'class' => 'info'
+        ],
     ],
 ];
 
