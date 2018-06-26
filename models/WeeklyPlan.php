@@ -41,6 +41,40 @@ class WeeklyPlan extends BaseWeeklyPlan
         //$ret['week_end'] = date("Y-m-d", strtotime($year.'W'.str_pad($week, 2, 0, STR_PAD_LEFT).' +6 days'));
         return $ret;
     }
+
+    public function getDelayQty()
+    {
+        $data_arr = SernoInput::find()
+        ->joinWith('sernoOutput')
+        ->select([
+            'total' => 'COUNT(*)'
+        ])
+        ->where([
+            'WEEK(tb_serno_output.ship,4)' => $this->week,
+        ])
+        ->andWhere('tb_serno_input.proddate > tb_serno_output.ship')
+        ->one();
+
+        return $data_arr->total;
+    }
+
+    public function getDelayPercentage()
+    {
+        $percentage = 0;
+        if ($this->plan_qty > 0) {
+            $percentage = round(($this->getDelayQty() / $this->plan_qty) * 100, 2);
+        }
+        return $percentage . '%';
+    }
+
+    public function getOnTimeCompletion()
+    {
+        $percentage = 0;
+        if ($this->plan_qty > 0) {
+            $percentage = round((($this->getActualQty() - $this->getDelayQty()) / $this->plan_qty) * 100, 2);
+        }
+        return $percentage . '%';
+    }
     
     public function getActualQty()
     {

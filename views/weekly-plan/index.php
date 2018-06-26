@@ -201,6 +201,31 @@ $columns = [
         'mergeHeader' => true,
     ],
     [
+        'attribute' => 'delayQty',
+        'label' => 'Delay<br/>Qty',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'pageSummary' => true,
+        'format' => ['decimal',0],
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+        'contentOptions' => [
+            'class' => 'danger'
+        ],
+    ],
+    [
+        'attribute' => 'onTimeCompletion',
+        'hAlign' => 'center',
+        'label' => 'On-Time<br/>Completion',
+        'encodeLabel' => false,
+        //'pageSummary' => true,
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+        'contentOptions' => [
+            'class' => 'danger'
+        ],
+    ],
+    [
         'attribute' => 'plan_export',
         'label' => 'Plan<br/>Export',
         'encodeLabel' => false,
