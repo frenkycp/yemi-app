@@ -6,6 +6,7 @@ use app\models\search\MesinCheckNgSearch;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 
@@ -89,6 +90,20 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 		
 		$data .= '</table>';
 		return $data;
+	}
+
+	public function actionGetImagePreview($urutan)
+	{
+		//return \Yii::$app->urlManager->createUrl('uploads/NG_MNT/' . $urutan . '.jpg');
+		$src = \Yii::$app->request->BaseUrl . '/uploads/NG_MNT/' . $urutan . '.jpg';
+		$src = \Yii::$app->basePath. '\uploads\NG_MNT\\' . $urutan . '.jpg';
+		$src = Html::img('@web/uploads/NG_MNT/' . $urutan . '.jpg', ['width' => '100%']);
+		//return $src;
+		return Html::img('@web/uploads/NG_MNT/' . $urutan . '.jpg', ['width' => '100%']);
+		if (@getimagesize($src)) {
+			return Html::img('@web/uploads/NG_MNT/' . $urutan . '.jpg', ['width' => '100%']);
+		}
+		return 'No Image Found...';
 	}
 
 	public function actionUpdate($urutan)
