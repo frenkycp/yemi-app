@@ -27,6 +27,10 @@ $this->registerJs("$(function() {
      e.preventDefault();
      $('#modal').modal('show').find('.modal-body').load($(this).attr('href'));
    });
+   $('.imageModal').click(function(e) {
+     e.preventDefault();
+     $('#image-modal').modal('show').find('.modal-body').load($(this).attr('href'));
+   });
 });");
 
 //date_default_timezone_set('Asia/Jakarta');
@@ -60,6 +64,10 @@ $grid_columns = [
     [
         'attribute' => 'urutan',
         'label' => 'Ticket<br/>No',
+        'value' => function($model){
+            return Html::a($model->urutan, ['get-image-preview', 'urutan' => $model->urutan], ['class' => 'imageModal', 'data-pjax' => '0',]);
+        },
+        'format' => 'raw',
         'vAlign' => 'middle',
         'encodeLabel' => false,
         'width' => '50px',
@@ -300,6 +308,13 @@ $grid_columns = [
                 'id' =>'modal',
                 'header' => '<h3>Machine Spare Parts</h3>',
                 'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+
+            yii\bootstrap\Modal::begin([
+                'id' =>'image-modal',
+                'header' => '<h3>NG Image</h3>',
+                //'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();
         ?>

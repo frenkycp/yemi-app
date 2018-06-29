@@ -73,7 +73,7 @@ echo '</pre>';*/
                 'yAxis' => [
                     'min' => 0,
                     'title' => [
-                        'text' => 'Total fruit consumption'
+                        'text' => 'Total Employee'
                     ],
                     'stackLabels' => [
                         'enabled' => true,
@@ -93,11 +93,31 @@ echo '</pre>';*/
                                 'fontWeight' => '0'
                             ],
                         ]
+                    ],
+                    'series' => [
+                        'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression('
+                                    function(){
+                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                    }
+                                '),
+                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                            ]
+                        ]
                     ]
                 ],
                 'series' => $data
             ],
         ]);
+        yii\bootstrap\Modal::begin([
+            'id' =>'modal',
+            'header' => '<h3>Detail Information</h3>',
+            'size' => 'modal-lg',
+        ]);
+        yii\bootstrap\Modal::end();
         ?>
+
     </div>
 </div>
