@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Production Budget/Forecast/Actual',
+    'page_title' => 'Production Budget/Forecast/Actual <span class="japanesse text-green">(生産予算・見込み・実績)</span>',
     'tab_title' => 'Production Budget/Forecast/Actual',
     'breadcrumbs_title' => 'Production Budget/Forecast/Actual'
 ];

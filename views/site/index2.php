@@ -60,8 +60,9 @@ $this->title = 'Centered Information System';
                     <div class="panel-heading text-center">Finish Goods Monitoring<br/>完成品モニタリング</div>
                     
                     <div class="list-group">
-                        <?= Html::a('Production Budget/Forecast/Actual', ['/production-budget/index'], [
-                            'class' => 'list-group-item'
+                        <?= Html::a('Production Budget/Forecast/Actual (生産予算・見込み・実績)', ['/production-budget/index'], [
+                            'class' => 'list-group-item',
+                            'style' => 'font-size: 13px;'
                         ]); ?>
                         <?= Html::a('Finish Goods Stock (完成品在庫)', ['/finish-good-stock/index'], [
                             'class' => 'list-group-item'
@@ -69,16 +70,16 @@ $this->title = 'Centered Information System';
                         <div class="list-group-item">
                             <p>Weekly Shipping (週次出荷)</p>
                             <ol>
-                                <li><?= Html::a('Shipping Container Chart', ['/serno-output/report']); ?></li>
-                                <li><?= Html::a('Shipping Container Data', ['/serno-output/index']); ?></li>
-                                <li><?= Html::a('Shipping Summary', ['/weekly-plan/index']); ?></li>
+                                <li><?= Html::a('Shipping Container Chart 週次出荷（コンテナー別）', ['/serno-output/report']); ?></li>
+                                <li><?= Html::a('Shipping Container Data (出荷コンテナーデータ）', ['/serno-output/index']); ?></li>
+                                <li><?= Html::a('Shipping Summary 週次出荷（計画対実績）', ['/weekly-plan/index']); ?></li>
                             </ol>
                         </div>
                         <div class="list-group-item">
                             <p>Monthly Production(月次生産）</p>
                             <ol>
                                 <li>
-                                    <?= Html::a('Monthly Production Data', ['/yemi-internal/index']); ?>
+                                    <?= Html::a('Monthly Production Data (月次生産計画)', ['/yemi-internal/index']); ?>
                                 </li>
                             </ol>
                         </div>
