@@ -18,15 +18,22 @@ $this->title = 'Centered Information System';
 
     <div class="body-content">
     	<div class="row">
-    		<div class="col-md-3">
+    		<div class="col-md-4">
                 <div class="panel panel-primary">
                     <div class="panel-heading text-center">Material Monitoring<br/>材料モニタリング</div>
-                    <div class="panel-body" style="height: 200px;"></div>
+                    <div class="list-group">
+                        <?= Html::a('Weekly MilkRun Parts （週次ミルクラン部品納入）', ['/parts-milk-run-weekly/index'], [
+                            'class' => 'list-group-item'
+                        ]); ?>
+                        <?= Html::a('Weekly JIT Parts （週次JIT部品納入)', ['#'], [
+                            'class' => 'list-group-item disabled'
+                        ]); ?>
+                        <?= Html::a('Weekly Picking Status (週次ピッキング状況)', ['#'], [
+                            'class' => 'list-group-item disabled'
+                        ]); ?>
+                    </div>
                 </div>
     		</div>
-            <div class="col-md-1">
-                <i class="fa fa-fw fa-arrow-right fa-5x text-primary"></i>
-            </div>
     		<div class="col-md-3">
                 <div class="panel panel-primary">
                     <div class="panel-heading text-center">WIP Monitoring<br/>生産工程モニタリング</div>
@@ -69,17 +76,17 @@ $this->title = 'Centered Information System';
                         ]); ?>
                         <div class="list-group-item">
                             <p>Weekly Shipping (週次出荷)</p>
-                            <ol>
-                                <li><?= Html::a('Shipping Container Chart 週次出荷（コンテナー別）', ['/serno-output/report']); ?></li>
-                                <li><?= Html::a('Shipping Container Data (出荷コンテナーデータ）', ['/serno-output/index']); ?></li>
-                                <li><?= Html::a('Shipping Summary 週次出荷（計画対実績）', ['/weekly-plan/index']); ?></li>
+                            <ol class="list-unstyled">
+                                <li><?= Html::a('1. Shipping Container Chart 週次出荷（コンテナー別）', ['/serno-output/report']); ?></li>
+                                <li><?= Html::a('2. Shipping Container Data (出荷コンテナーデータ）', ['/serno-output/index']); ?></li>
+                                <li><?= Html::a('3. Shipping Summary 週次出荷（計画対実績）', ['/weekly-plan/index']); ?></li>
                             </ol>
                         </div>
                         <div class="list-group-item">
                             <p>Monthly Production(月次生産）</p>
-                            <ol>
+                            <ol class="list-unstyled">
                                 <li>
-                                    <?= Html::a('Monthly Production Data (月次生産計画)', ['/yemi-internal/index']); ?>
+                                    <?= Html::a('1. Monthly Production Data (月次生産計画)', ['/yemi-internal/index']); ?>
                                 </li>
                             </ol>
                         </div>
@@ -103,21 +110,25 @@ $this->title = 'Centered Information System';
                     <div class="list-group">
                         <div class="list-group-item">
                             <p>ManPower Planning (要員計画）</p>
-                            <ol>
-                                <li><?= Html::a('By Status (雇用形態別）', ['/hrga-emp-level-monthly/index']); ?></li>
-                                <li><?= Html::a('By Department (部門別）', ['/hrga-emp-dept-monthly/index']); ?></li>
-                                <li><?= Html::a('By Grade (等級別）', ['/hrga-emp-grade/index']); ?></li>
-                                <li><?= Html::a('By Position (役職別)', ['/hrga-emp-jabatan/index']); ?></li>
+                            <ol class="list-unstyled">
+                                <li><?= Html::a('1. By Status (雇用形態別）', ['/hrga-emp-level-monthly/index']); ?></li>
+                                <li><?= Html::a('2. By Department (部門別）', ['/hrga-emp-dept-monthly/index']); ?></li>
+                                <li><?= Html::a('3. By Grade (等級別）', ['/hrga-emp-grade/index']); ?></li>
+                                <li><?= Html::a('4. By Position (役職別)', ['/hrga-emp-jabatan/index']); ?></li>
                                 <li>
-                                    <p class="text-red">Attendance report (勤怠管理)</p>
+                                    <span class="text-red">5. Attendance report (勤怠管理)</span>
+                                </li>
+                                <li><?= Html::a('6. Weekly Overtime (週次残業管理）', ['/hrga-spl-report-daily/index']); ?></li>
+                                <li>
+                                    <span class="text-red">7. Weekly MP Contract Intake <br/>(週次契約要員採用)</span>
                                 </li>
                             </ol>
                         </div>
                         <div class="list-group-item">
                             <p>Maintenance (保全)</p>
-                            <ol>
-                                <li><?= Html::a('Corrective Weekly (週次修繕)', ['/ng-report/index']); ?></li>
-                                <li><?= Html::a('Preventive Weekly (週次予防保全)', ['/masterplan-report/index']); ?></li>
+                            <ol class="list-unstyled">
+                                <li><?= Html::a('1. Corrective Weekly (週次修繕)', ['/ng-report/index']); ?></li>
+                                <li><?= Html::a('2. Preventive Weekly (週次予防保全)', ['/masterplan-report/index']); ?></li>
                             </ol>
                         </div>
                     </div>
