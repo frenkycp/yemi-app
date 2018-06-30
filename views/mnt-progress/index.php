@@ -92,8 +92,6 @@ echo Highcharts::widget([
                         		$("#modal").modal("show").find(".modal-body").html(this.options.remark);
                         	}
                 		'),
-                        //'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                        //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                     ]
                 ]
             ]
