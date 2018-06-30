@@ -25,8 +25,8 @@ $this->title = 'Centered Information System';
                         <?= Html::a('Weekly MilkRun Parts （週次ミルクラン部品納入）', ['/parts-milk-run-weekly/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Weekly JIT Parts （週次JIT部品納入)', ['#'], [
-                            'class' => 'list-group-item disabled'
+                        <?= Html::a('Weekly JIT Parts （週次JIT部品納入)', ['/parts-jit-weekly/index'], [
+                            'class' => 'list-group-item'
                         ]); ?>
                         <?= Html::a('Weekly Picking Status (週次ピッキング状況)', ['#'], [
                             'class' => 'list-group-item disabled'
