@@ -5,20 +5,20 @@ use yii\web\Controller;
 use app\models\BookingShipTrackView;
 use app\models\BookingShipTrack02;
 
-class PartsMilkRunWeeklyController extends Controller
+class PartsJitWeeklyController extends Controller
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
-
+    }*/
+    
     public function actionIndex()
     {
     	$title = '';
     	$subtitle = '';
     	$data = [];
-    	$trans_method = 'MRS';
+    	$trans_method = 'DDS';
 
     	$global_condition = [
 			'YEAR' => date('Y'),
@@ -28,9 +28,9 @@ class PartsMilkRunWeeklyController extends Controller
     	$week_arr = $this->getWeekArr($global_condition);
     	$today = new \DateTime(date('Y-m-d'));
 		$this_week = $today->format("W");
-		if (!in_array($this_week, $week_arr)) {
-			$this_week = end($week_arr);
-		}
+        if (!in_array($this_week, $week_arr)) {
+            $this_week = end($week_arr);
+        }
     	
     	$booking_data_arr = BookingShipTrackView::find()
     	->where($global_condition)
