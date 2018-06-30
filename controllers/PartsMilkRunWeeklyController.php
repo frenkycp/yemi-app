@@ -15,6 +15,7 @@ class PartsMilkRunWeeklyController extends Controller
 
     public function actionIndex()
     {
+        date_default_timezone_set('Asia/Jakarta');
     	$title = '';
     	$subtitle = '';
     	$data = [];

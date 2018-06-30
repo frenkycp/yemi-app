@@ -28,8 +28,8 @@ $this->title = 'Centered Information System';
                         <?= Html::a('Weekly JIT Parts （週次JIT部品納入)', ['/parts-jit-weekly/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Weekly Picking Status (週次ピッキング状況)', ['#'], [
-                            'class' => 'list-group-item disabled'
+                        <?= Html::a('Weekly Picking Status (週次ピッキング状況)', ['parts-picking-status/index'], [
+                            'class' => 'list-group-item'
                         ]); ?>
                     </div>
                 </div>
