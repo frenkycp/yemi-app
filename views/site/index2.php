@@ -127,7 +127,7 @@ $this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, s
                                     <span class="text-red">5. Attendance report (勤怠管理)</span>
                                 </li>-->
                                 <li><?= Html::a('5. Weekly Overtime (週次残業管理）', ['/hrga-spl-report-daily/index']); ?></li>
-                                <li><?= Html::a('6. Weekly MP Contract Intake (週次契約要員採用)', ['/hrga-spl-report-daily/index']); ?></li>
+                                <li><?= Html::a('6. Weekly MP Contract Intake (週次契約要員採用)', ['/hrga-manpower-intake/index']); ?></li>
                             </ol>
                         </div>
                         <div class="list-group-item">
