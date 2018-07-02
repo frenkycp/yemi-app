@@ -6,6 +6,12 @@ use app\models\MpInOutView02;
 
 class HrgaManpowerIntakeController extends Controller
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
     public function actionIndex()
     {
     	date_default_timezone_set('Asia/Jakarta');
