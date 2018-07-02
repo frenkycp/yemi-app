@@ -77,6 +77,9 @@ class PartsPickingStatusController extends Controller
     					'data' => $tmp_data_open,
     					'color' => 'rgba(200, 200, 200, 0.4)',
     					'showInLegend' => false,
+    					'dataLabels' => [
+    						'enabled' => false
+    					]
     				],
     				[
     					'name' => 'DEPARTURE',

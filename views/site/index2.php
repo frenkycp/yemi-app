@@ -6,6 +6,8 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 
 $this->title = 'Centered Information System';
+
+$this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 ?>
 <div class="site-index">
 
@@ -19,31 +21,31 @@ $this->title = 'Centered Information System';
     <div class="body-content">
     	<div class="row">
     		<div class="col-md-4">
-                <div class="panel panel-primary">
+                <div class="panel panel-success">
                     <div class="panel-heading text-center">Material Monitoring<br/>材料モニタリング</div>
                     <div class="list-group">
-                        <?= Html::a('Weekly MilkRun Parts （週次ミルクラン部品納入）', ['/parts-milk-run-weekly/index'], [
+                        <?= Html::a('Weekly MilkRun Parts （<span class="japanesse-word">週次ミルクラン部品納入）</span>', ['/parts-milk-run-weekly/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Weekly JIT Parts （週次JIT部品納入)', ['/parts-jit-weekly/index'], [
+                        <?= Html::a('Weekly JIT Parts <span class="japanesse-word">（週次JIT部品納入)</span>', ['/parts-jit-weekly/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Weekly Picking Status (週次ピッキング状況)', ['parts-picking-status/index'], [
+                        <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['parts-picking-status/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                     </div>
                 </div>
     		</div>
     		<div class="col-md-3">
-                <div class="panel panel-primary">
-                    <div class="panel-heading text-center">WIP Monitoring<br/>生産工程モニタリング</div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">WIP Monitoring <span class="text-red">(準備中)</span><br/>生産工程モニタリング</div>
                     <div class="list-group">
-                        <span class="list-group-item list-group-item-danger">PCB</span>
-                        <span class="list-group-item list-group-item-danger">WW</span>
-                        <span class="list-group-item list-group-item-danger">PAINTING</span>
-                        <span class="list-group-item list-group-item-danger">INJECTION</span>
-                        <span class="list-group-item list-group-item-danger">SPU</span>
-                        <span class="list-group-item list-group-item-danger">SUBASSY</span>
+                        <div class="list-group-item disabled">PCB <span class="japanesse-word">基板組立（準備中）</span></div>
+                        <div class="list-group-item disabled">WW <span class="japanesse-word">木工（準備中）</span></div>
+                        <div class="list-group-item disabled">PAINT <span class="japanesse-word">塗装（準備中）</span></div>
+                        <div class="list-group-item disabled">INJECTION　<span class="japanesse-word">プラ成形（準備中）</span></div>
+                        <div class="list-group-item disabled">SPU <span class="japanesse-word">スピーカー組立（準備中）</span></div>
+                        <div class="list-group-item disabled">SUBASSY <span class="japanesse-word">サブ組立（準備中）</span></div>
                         <?= ''; Html::a('PCB', ['#'], [
                             'class' => 'list-group-item list-group-item-danger'
                         ]); ?>
@@ -69,7 +71,7 @@ $this->title = 'Centered Information System';
     			<i class="fa fa-fw fa-arrow-right fa-3x text-primary"></i>
     		</div>
     		<div class="col-md-4">
-                <div class="panel panel-primary">
+                <div class="panel panel-success">
                     <div class="panel-heading text-center">Finish Goods Monitoring<br/>完成品モニタリング</div>
                     
                     <div class="list-group">
@@ -85,7 +87,7 @@ $this->title = 'Centered Information System';
                             <ol class="list-unstyled">
                                 <li><?= Html::a('1. Shipping Container Chart 週次出荷（コンテナー別）', ['/serno-output/report']); ?></li>
                                 <li><?= Html::a('2. Shipping Container Data (出荷コンテナーデータ）', ['/serno-output/index']); ?></li>
-                                <li><?= Html::a('3. Shipping Summary 週次出荷（計画対実績）', ['/weekly-plan/index']); ?></li>
+                                <li><?= Html::a('3. Shipping Summary 週次出荷表 (計画対実績)', ['/weekly-plan/index']); ?></li>
                             </ol>
                         </div>
                         <div class="list-group-item">
@@ -111,7 +113,7 @@ $this->title = 'Centered Information System';
     	<br/>
     	<div class="row">
     		<div class="col-md-3 col-md-offset-4">
-                <div class="panel panel-primary">
+                <div class="panel panel-success">
                     <div class="panel-heading text-center">Production Support Monitoring<br/>生産支援モニタリング</div>
                     <div class="list-group">
                         <div class="list-group-item">
@@ -121,13 +123,11 @@ $this->title = 'Centered Information System';
                                 <li><?= Html::a('2. By Department (部門別）', ['/hrga-emp-dept-monthly/index']); ?></li>
                                 <li><?= Html::a('3. By Grade (等級別）', ['/hrga-emp-grade/index']); ?></li>
                                 <li><?= Html::a('4. By Position (役職別)', ['/hrga-emp-jabatan/index']); ?></li>
-                                <li>
+                                <!--<li>
                                     <span class="text-red">5. Attendance report (勤怠管理)</span>
-                                </li>
-                                <li><?= Html::a('6. Weekly Overtime (週次残業管理）', ['/hrga-spl-report-daily/index']); ?></li>
-                                <li>
-                                    <span class="text-red">7. Weekly MP Contract Intake <br/>(週次契約要員採用)</span>
-                                </li>
+                                </li>-->
+                                <li><?= Html::a('5. Weekly Overtime (週次残業管理）', ['/hrga-spl-report-daily/index']); ?></li>
+                                <li><?= Html::a('6. Weekly MP Contract Intake (週次契約要員採用)', ['/hrga-spl-report-daily/index']); ?></li>
                             </ol>
                         </div>
                         <div class="list-group-item">
@@ -141,7 +141,7 @@ $this->title = 'Centered Information System';
                 </div>
     		</div>
             <div class="col-md-4 col-md-offset-1">
-                <div class="panel panel-primary">
+                <div class="panel panel-success">
                     <div class="panel-heading text-center">Finish Good Inspection<br/>( 完成品出荷の管理検査)<br/></div>
                     <div class="list-group">
                         <?= Html::a('Weekly Final Inspection chart (週次出荷管理検査)', ['/production-inspection-chart/index'], [

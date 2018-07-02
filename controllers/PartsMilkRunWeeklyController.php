@@ -58,11 +58,11 @@ class PartsMilkRunWeeklyController extends Controller
     				}
     				$tmp_data_open[] = [
     					'y' => $open_percentage == 0 ? null : $open_percentage,
-    					'remark' => $this->getRemark('BO_QTY > 0', $booking_data->DATE, $trans_method, $booking_data->STAT_ID)
+    					'remark' => $this->getRemark('BO_QTY > 0', $booking_data->DATE, $trans_method, 0)
     				];
     				$tmp_data_close[] = [
     					'y' => $close_percentage == 0 ? null : $close_percentage,
-    					'remark' => $this->getRemark('BO_QTY = 0', $booking_data->DATE, $trans_method, $booking_data->STAT_ID)
+    					'remark' => $this->getRemark('BO_QTY = 0', $booking_data->DATE, $trans_method, 0)
     				];
     			}
     		}
@@ -115,7 +115,7 @@ class PartsMilkRunWeeklyController extends Controller
     	$data_arr = BookingShipTrack02::find()
     	->where([
     		'TRANS_MTHD' => $trans_method,
-    		'STAT_ID' => $stat_id
+    		//'STAT_ID' => $stat_id
     	])
     	->andWhere($bo_status)
     	->andWhere(['like', 'CONVERT(VARCHAR(10),PICKUP_ACTUAL,120)', $date])
@@ -135,6 +135,7 @@ class PartsMilkRunWeeklyController extends Controller
 			<th class="text-center">Order Qty</th>
 			<th class="text-center">Rcv Qty</th>
 			<th class="text-center">BO Qty</th>
+            <th>Status</th>
 		</tr>'
 		;
 
@@ -151,6 +152,7 @@ class PartsMilkRunWeeklyController extends Controller
 					<td class="text-center">' . $value['ORDER_QTY'] . '</td>
 					<td class="text-center">' . $value['RCV_QTY'] . '</td>
 					<td class="text-center">' . abs($value['BO_QTY']) . '</td>
+                    <td class="text-center">' . $value['STAT_ID_DESC'] . '</td>
 				</tr>
 				';
 		}

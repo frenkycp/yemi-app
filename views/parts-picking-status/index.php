@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Weekly Picking Status <span class="japanesse text-green">(週次ピッキング状況)</span>',
+    'page_title' => 'Weekly Picking Status <span class="japanesse text-green">(週次ピッキング状況)</span> - Handover based',
     'tab_title' => 'Weekly Picking Status',
     'breadcrumbs_title' => 'Weekly Picking Status'
 ];
@@ -45,7 +45,7 @@ echo '</pre>';*/
              'horizontalCssClasses' => [
                  'label' => 'col-sm-5',
                  #'offset' => 'col-sm-offset-4',
-                 'wrapper' => 'col-sm-6',
+                 'wrapper' => 'col-sm-7',
                  'error' => '',
                  'hint' => '',
              ],
@@ -98,6 +98,7 @@ echo '</pre>';*/
                 'options' => [
                     'chart' => [
                         'type' => 'column',
+                        'height' => 350,
                     ],
                     'credits' => [
                         'enabled' =>false
@@ -169,3 +170,14 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+<h4 class="text-center bg-navy" style="padding: 5px;">
+    <span>CREATED</span>
+    <i class="fa fa-fw fa-long-arrow-right"></i>
+    <span>CONFIRMED</span>
+    <i class="fa fa-fw fa-long-arrow-right"></i>
+    <span>STARTED</span>
+    <i class="fa fa-fw fa-long-arrow-right"></i>
+    <span>COMPLETED</span>
+    <i class="fa fa-fw fa-long-arrow-right"></i>
+    <span class="text-green">HAND OVER</span>
+</h4>

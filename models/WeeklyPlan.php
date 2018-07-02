@@ -52,7 +52,7 @@ class WeeklyPlan extends BaseWeeklyPlan
         ->where([
             'WEEK(tb_serno_output.ship,4)' => $this->week,
         ])
-        ->andWhere('tb_serno_input.proddate > tb_serno_output.ship')
+        ->andWhere('tb_serno_input.proddate > tb_serno_output.etd')
         ->one();
 
         return $data_arr->total;

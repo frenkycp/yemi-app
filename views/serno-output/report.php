@@ -7,7 +7,7 @@ use yii\helpers\Url;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
-    'page_title' => 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>',
+    'page_title' => 'Weekly Shipping Chart <span class="text-green">(週次出荷コンテナー別)</span> - ETD YEMI based',
     'tab_title' => 'Shipping Chart',
     'breadcrumbs_title' => 'Shipping Chart'
 ];

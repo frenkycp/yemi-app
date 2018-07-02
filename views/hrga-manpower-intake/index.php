@@ -13,9 +13,9 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'Weekly JIT Parts  <span class="text-green">（週次JIT部品納入)</span> - ETD Supplier based',
-    'tab_title' => 'Weekly JIT Parts',
-    'breadcrumbs_title' => 'Weekly JIT Parts'
+    'page_title' => 'Weekly MP Contract Intake  <span class="text-green">(週次契約要員採用)',
+    'tab_title' => 'Weekly MP Contract Intake',
+    'breadcrumbs_title' => 'Weekly MP Contract Intake'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
@@ -65,6 +65,9 @@ echo '</pre>';*/
             {
                 echo '<div class="tab-pane" id="tab_1_' . $key .'">';
             }
+            /*echo '<pre>';
+            print_r($value[0]['data']);
+            echo '</pre>';*/
 
             echo Highcharts::widget([
                 'scripts' => [
@@ -85,49 +88,30 @@ echo '</pre>';*/
                         'text' => ''
                     ],
                     'xAxis' => [
-                        'type' => 'category',
                         'categories' => $value[0]['category'],
+
                     ],
                     'yAxis' => [
                         'min' => 0,
                         'title' => [
-                            'text' => 'Total Completion'
+                            'text' => 'Total Manpower'
                         ],
+                        'tickInterval' => 1,
                         //'gridLineWidth' => 0,
                     ],
                     'tooltip' => [
-                        'enabled' => false,
+                        'enabled' => true,
                         //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " pcs"; }'),
                     ],
                     'plotOptions' => [
                         'column' => [
-                            'stacking' => 'normal',
+                            'pointPadding' => 0.2,
+                            'borderWidth' => 0,
                             'dataLabels' => [
-                                'enabled' => true,
-                                'format' => '{point.percentage:.2f}%',
-                                'color' => 'black',
-                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                                'style' => [
-                                    //'fontSize' => '14px',
-                                    'textOutline' => '0px',
-                                    'fontWeight' => '0'
-                                ],
-                            ],
-                            //'borderWidth' => 1,
-                            //'borderColor' => $color,
-                        ],
-                        'series' => [
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression('
-                                        function(){
-                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                        }
-                                    '),
-                                ]
+                                'enabled' => true
                             ]
-                        ]
+                        ],
+
                     ],
                     'series' => $value[0]['data']
                 ],

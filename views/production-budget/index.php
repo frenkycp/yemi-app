@@ -47,7 +47,7 @@ echo '</pre>';*/
              'horizontalCssClasses' => [
                  'label' => 'col-sm-5',
                  #'offset' => 'col-sm-offset-4',
-                 'wrapper' => 'col-sm-6',
+                 'wrapper' => 'col-sm-7',
                  'error' => '',
                  'hint' => '',
              ],
@@ -57,10 +57,10 @@ echo '</pre>';*/
     ?>
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?= $form->field($model, 'budget_type')->dropDownList(
                 [
-                    'PRODUCT' => 'PRODUCT',
+                    'PRODUCT' => 'FINAL_PRODUCT',
                     'KD_PART' => 'KD_PART'
                 ]
             ); ?>

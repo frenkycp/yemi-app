@@ -23,7 +23,7 @@ class Budget extends Model
     public function attributeLabels()
     {
         return [
-            'budget_type' => 'Budget Type',
+            'budget_type' => 'Product Type',
             'qty_or_amount' => 'Filter',
         ];
     }
