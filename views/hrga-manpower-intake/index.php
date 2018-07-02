@@ -111,6 +111,18 @@ echo '</pre>';*/
                                 'enabled' => true
                             ]
                         ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression('
+                                        function(){
+                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                        }
+                                    '),
+                                ]
+                            ]
+                        ]
 
                     ],
                     'series' => $value[0]['data']

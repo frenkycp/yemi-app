@@ -5,11 +5,16 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'NG Progress Report');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Weekly Corrective <span class="text-green">(週次修繕)',
+    'tab_title' => 'Weekly Corrective',
+    'breadcrumbs_title' => 'Weekly Corrective'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
 date_default_timezone_set('Asia/Jakarta');
+$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {

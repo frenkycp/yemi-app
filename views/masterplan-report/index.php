@@ -5,10 +5,16 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Machine Master Plan');
-$this->params['breadcrumbs'][] = $this->title;
+
+$this->title = [
+    'page_title' => 'Weekly Preventive <span class="text-green">(週次予防保全)',
+    'tab_title' => 'Weekly Preventive',
+    'breadcrumbs_title' => 'Weekly Preventive'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
+$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {

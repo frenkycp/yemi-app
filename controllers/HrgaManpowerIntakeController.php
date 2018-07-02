@@ -33,6 +33,10 @@ class HrgaManpowerIntakeController extends Controller
 		->orderBy('PERIOD ASC, WEEK ASC, TANGGAL ASC')
 		->all();
 
+		$data_arr = MpInOutView02::find()
+        ->where($global_conditions)
+		->orderBy('DEPARTEMEN ASC, SECTION ASC, SUB_SECTION ASC, NAMA_KARYAWAN ASC')
+		->all();
 
     	foreach ($week_arr as $week_no) {
     		$tgl_arr = [];
@@ -41,7 +45,8 @@ class HrgaManpowerIntakeController extends Controller
     			if ($manpower_intake->WEEK == $week_no) {
     				$tgl_arr[] = date('Y-m-d', strtotime($manpower_intake->TANGGAL)) . '';
     				$tmp_data_arr[] = [
-    					'y' => (int)$manpower_intake->total
+    					'y' => (int)$manpower_intake->total,
+    					'remark' => $this->getRemarks($data_arr, $global_conditions, $manpower_intake->TANGGAL)
     				];
     				/*$tmp_data_arr[] = 10;*/
     			}
@@ -65,6 +70,42 @@ class HrgaManpowerIntakeController extends Controller
     		'data' => $data,
     		'this_week' => $this_week
     	]);
+    }
+
+    public function getRemarks($data_arr, $global_conditions, $date)
+    {
+    	
+
+    	$data = '<table class="table table-bordered table-striped table-hover">';
+		$data .= 
+		'<tr>
+			<th>DEPARTEMEN</th>
+			<th>SECTION</th>
+			<th>SUB SECTION</th>
+			<th class="text-center">NIK</th>
+			<th>NAMA KARYAWAN</th>
+			<th class="text-center">KONTRAK KE</th>
+		</tr>'
+		;
+
+		foreach ($data_arr as $value) {
+			if ($value->TANGGAL == $date) {
+				$data .= '
+				<tr>
+					<td>' . $value['DEPARTEMEN'] . '</td>
+					<td>' . $value['SECTION'] . '</td>
+					<td>' . $value['SUB_SECTION'] . '</td>
+					<td class="text-center">' . $value['NIK'] . '</td>
+					<td>' . $value['NAMA_KARYAWAN'] . '</td>
+					<td class="text-center">' . $value['KONTRAK_KE'] . '</td>
+				</tr>
+				';
+			}
+			
+		}
+
+		$data .= '</table>';
+		return $data;
     }
 
     public function getWeekPeriodArr($global_conditions, $max_tab)

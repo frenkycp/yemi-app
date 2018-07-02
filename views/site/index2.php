@@ -133,8 +133,8 @@ $this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, s
                         <div class="list-group-item">
                             <p>Maintenance (保全)</p>
                             <ol class="list-unstyled">
-                                <li><?= Html::a('1. Corrective Weekly (週次修繕)', ['/ng-report/index']); ?></li>
-                                <li><?= Html::a('2. Preventive Weekly (週次予防保全)', ['/masterplan-report/index']); ?></li>
+                                <li><?= Html::a('1. Weekly Corrective (週次修繕)', ['/ng-report/index']); ?></li>
+                                <li><?= Html::a('2. Weekly Preventive (週次予防保全)', ['/masterplan-report/index']); ?></li>
                             </ol>
                         </div>
                     </div>

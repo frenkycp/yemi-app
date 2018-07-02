@@ -98,7 +98,7 @@ echo '</pre>';*/
                 'options' => [
                     'chart' => [
                         'type' => 'column',
-                        'height' => 350,
+                        'height' => 330,
                     ],
                     'credits' => [
                         'enabled' =>false
@@ -171,9 +171,9 @@ echo '</pre>';*/
     </div>
 </div>
 <h4 class="text-center bg-navy" style="padding: 5px;">
-    <span>CREATED</span>
+    <span>DRAFT</span>
     <i class="fa fa-fw fa-long-arrow-right"></i>
-    <span>CONFIRMED</span>
+    <span>CONFIRM</span>
     <i class="fa fa-fw fa-long-arrow-right"></i>
     <span>STARTED</span>
     <i class="fa fa-fw fa-long-arrow-right"></i>
