@@ -82,10 +82,10 @@ if(isset($_GET['dst']))
 }
 
 $progress = [
-    round(($monthly_total_plan / $monthly_total_plan) * 100, 2),
-    round(($monthly_progress_plan / $monthly_total_plan) * 100, 2),
-    round(($monthly_progress_output / $monthly_total_plan) * 100, 2),
-    round(($monthly_progress_delay / $monthly_progress_plan) * 100),
+    $monthly_total_plan == 0 ? 0 : round(($monthly_total_plan / $monthly_total_plan) * 100, 2),
+    $monthly_total_plan == 0 ? 0 : round(($monthly_progress_plan / $monthly_total_plan) * 100, 2),
+    $monthly_total_plan == 0 ? 0 : round(($monthly_progress_output / $monthly_total_plan) * 100, 2),
+    $monthly_progress_plan == 0 ? 0 : round(($monthly_progress_delay / $monthly_progress_plan) * 100),
 ];
 
 $gridColumns = [

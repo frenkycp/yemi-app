@@ -38,29 +38,35 @@ $this->title = 'Centered Information System';
                 <div class="panel panel-primary">
                     <div class="panel-heading text-center">WIP Monitoring<br/>生産工程モニタリング</div>
                     <div class="list-group">
-                        <?= Html::a('PCB', ['/job-order-report/index'], [
-                            'class' => 'list-group-item'
+                        <span class="list-group-item list-group-item-danger">PCB</span>
+                        <span class="list-group-item list-group-item-danger">WW</span>
+                        <span class="list-group-item list-group-item-danger">PAINTING</span>
+                        <span class="list-group-item list-group-item-danger">INJECTION</span>
+                        <span class="list-group-item list-group-item-danger">SPU</span>
+                        <span class="list-group-item list-group-item-danger">SUBASSY</span>
+                        <?= ''; Html::a('PCB', ['#'], [
+                            'class' => 'list-group-item list-group-item-danger'
                         ]); ?>
-                        <?= Html::a('WW', ['#'], [
-                            'class' => 'list-group-item disabled'
+                        <?= ''; Html::a('WW', ['#'], [
+                            'class' => 'list-group-item list-group-item-danger'
                         ]); ?>
-                        <?= Html::a('PAINT', ['#'], [
-                            'class' => 'list-group-item disabled'
+                        <?= ''; Html::a('PAINT', ['#'], [
+                            'class' => 'list-group-item list-group-item-danger'
                         ]); ?>
-                        <?= Html::a('INJECTION', ['#'], [
-                            'class' => 'list-group-item disabled'
+                        <?= ''; Html::a('INJECTION', ['#'], [
+                            'class' => 'list-group-item list-group-item-danger'
                         ]); ?>
-                        <?= Html::a('SPU', ['#'], [
-                            'class' => 'list-group-item disabled'
+                        <?= ''; Html::a('SPU', ['#'], [
+                            'class' => 'list-group-item list-group-item-danger'
                         ]); ?>
-                        <?= Html::a('SUBASSY', ['#'], [
-                            'class' => 'list-group-item disabled'
+                        <?= ''; Html::a('SUBASSY', ['#'], [
+                            'class' => 'list-group-item list-group-item-danger'
                         ]); ?>
                     </div>
                 </div>
     		</div>
-    		<div class="col-md-1">
-    			<i class="fa fa-fw fa-arrow-right fa-5x text-primary"></i>
+    		<div class="col-md-1 text-center">
+    			<i class="fa fa-fw fa-arrow-right fa-3x text-primary"></i>
     		</div>
     		<div class="col-md-4">
                 <div class="panel panel-primary">
@@ -96,10 +102,10 @@ $this->title = 'Centered Information System';
         </div>
     	<div class="row">
     		<div class="col-md-3 col-md-offset-4 text-center">
-    			<i class="fa fa-fw fa-arrow-up fa-5x text-primary"></i>
+    			<i class="fa fa-fw fa-arrow-up fa-3x text-primary"></i>
     		</div>
             <div class="col-md-4 col-md-offset-1 text-center">
-                <i class="fa fa-fw fa-arrow-up fa-5x text-primary"></i>
+                <i class="fa fa-fw fa-arrow-up fa-3x text-primary"></i>
             </div>
     	</div>
     	<br/>
