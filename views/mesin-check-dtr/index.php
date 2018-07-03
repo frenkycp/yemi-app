@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\MesinCheckDtrSearch $searchModel
 */
 
-$this->title = Yii::t('app', 'Master Plan Data List');
+$this->title = Yii::t('app', 'Preventive Data');
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
