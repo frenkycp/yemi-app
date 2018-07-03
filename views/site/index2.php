@@ -5,7 +5,12 @@ use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Centered Information System';
+$this->title = 'YEMI Production Monitoring Cockpit (製造コックピット)';
+$this->title = [
+    'page_title' => 'YEMI Production Monitoring Cockpit <span class="japanesse-word">(製造コックピット)',
+    'tab_title' => 'YEMI Production Monitoring Cockpit',
+    'breadcrumbs_title' => 'YEMI Production Monitoring Cockpit'
+];
 
 $this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 ?>
