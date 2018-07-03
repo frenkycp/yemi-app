@@ -125,35 +125,35 @@ class PartsJitWeeklyController extends Controller
     	$data = '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
 		'<tr>
-			<th class="text-center">Booking ID</th>
-			<th>User Description</th>
-			<th class="text-center">Pickup Actual</th>
-			<th>Shipper</th>
-			<th>PIC Description</th>
-			<th class="text-center">Item</th>
-			<th>Item Description</th>
-			<th class="text-center">Order Qty</th>
-			<th class="text-center">Rcv Qty</th>
-			<th class="text-center">BO Qty</th>
+            <th class="text-center">Booking ID</th>
+            <th>User Description</th>
+            <th class="text-center">Pickup Actual</th>
+            <th class="text-center" style="width:80px;">YEMI Arrival</th>
+            <th>Shipper</th>
+            <th class="text-center">Item</th>
+            <th>Item Description</th>
+            <th class="text-center">Order Qty</th>
+            <th class="text-center">Rcv Qty</th>
+            <th class="text-center">BO Qty</th>
             <th>Status</th>
-		</tr>'
+        </tr>'
 		;
 
 		foreach ($data_arr as $value) {
 			$data .= '
 				<tr>
-					<td class="text-center">' . $value['BOOKING_ID'] . '</td>
-					<td>' . $value['USER_DESC'] . '</td>
-					<td class="text-center">' . $value['PICKUP_ACTUAL'] . '</td>
-					<td>' . $value['SHIPPER'] . '</td>
-					<td>' . $value['PIC_DESC'] . '</td>
-					<td class="text-center">' . $value['ITEM'] . '</td>
-					<td>' . $value['ITEM_DESC'] . '</td>
-					<td class="text-center">' . $value['ORDER_QTY'] . '</td>
-					<td class="text-center">' . $value['RCV_QTY'] . '</td>
-					<td class="text-center">' . abs($value['BO_QTY']) . '</td>
+                    <td class="text-center">' . $value['BOOKING_ID'] . '</td>
+                    <td>' . $value['USER_DESC'] . '</td>
+                    <td class="text-center">' . $value['PICKUP_ACTUAL'] . '</td>
+                    <td class="text-center">' . date('Y-m-d', strtotime($value['YEMI_ARRIVAL'])) . '</td>
+                    <td>' . $value['SHIPPER'] . '</td>
+                    <td class="text-center">' . $value['ITEM'] . '</td>
+                    <td>' . $value['ITEM_DESC'] . '</td>
+                    <td class="text-center">' . $value['ORDER_QTY'] . '</td>
+                    <td class="text-center">' . $value['RCV_QTY'] . '</td>
+                    <td class="text-center">' . abs($value['BO_QTY']) . '</td>
                     <td class="text-center">' . $value['STAT_ID_DESC'] . '</td>
-				</tr>
+                </tr>
 				';
 		}
 

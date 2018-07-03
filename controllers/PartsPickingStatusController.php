@@ -120,6 +120,8 @@ class PartsPickingStatusController extends Controller
 			<th class="text-center">Plan Qty</th>
 			<th class="text-center">Part Count</th>
 			<th class="text-center">Man Power</th>
+            <th class="text-center" style="width:90px;">Start Date</th>
+            <th class="text-center" style="width:90px;">Completed Date</th>
 			<th class="text-center">Confirm</th>
 		</tr>'
 		;
@@ -134,6 +136,8 @@ class PartsPickingStatusController extends Controller
 					<td class="text-center">' . $value['plan_qty'] . '</td>
 					<td class="text-center">' . $value['part_count'] . '</td>
 					<td class="text-center">' . $value['man_power'] . '</td>
+                    <td class="text-center">' . date('Y-m-d H:i:s', strtotime($value['start_date'])) . '</td>
+                    <td class="text-center">' . date('Y-m-d H:i:s', strtotime($value['completed_date'])) . '</td>
 					<td class="text-center">' . $value['stage_desc'] . '</td>
 				</tr>
 				';

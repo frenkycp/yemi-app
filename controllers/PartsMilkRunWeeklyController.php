@@ -128,8 +128,8 @@ class PartsMilkRunWeeklyController extends Controller
 			<th class="text-center">Booking ID</th>
 			<th>User Description</th>
 			<th class="text-center">Pickup Actual</th>
+            <th class="text-center" style="width:80px;">YEMI Arrival</th>
 			<th>Shipper</th>
-			<th>PIC Description</th>
 			<th class="text-center">Item</th>
 			<th>Item Description</th>
 			<th class="text-center">Order Qty</th>
@@ -145,8 +145,8 @@ class PartsMilkRunWeeklyController extends Controller
 					<td class="text-center">' . $value['BOOKING_ID'] . '</td>
 					<td>' . $value['USER_DESC'] . '</td>
 					<td class="text-center">' . $value['PICKUP_ACTUAL'] . '</td>
+                    <td class="text-center">' . date('Y-m-d', strtotime($value['YEMI_ARRIVAL'])) . '</td>
 					<td>' . $value['SHIPPER'] . '</td>
-					<td>' . $value['PIC_DESC'] . '</td>
 					<td class="text-center">' . $value['ITEM'] . '</td>
 					<td>' . $value['ITEM_DESC'] . '</td>
 					<td class="text-center">' . $value['ORDER_QTY'] . '</td>
