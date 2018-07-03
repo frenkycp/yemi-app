@@ -123,6 +123,7 @@ class PartsPickingStatusController extends Controller
             <th class="text-center" style="width:90px;">Start Date</th>
             <th class="text-center" style="width:90px;">Completed Date</th>
 			<th class="text-center">Confirm</th>
+            <th class="text-center">PTS Note</th>
 		</tr>'
 		;
 
@@ -139,6 +140,7 @@ class PartsPickingStatusController extends Controller
                     <td class="text-center">' . date('Y-m-d H:i:s', strtotime($value['start_date'])) . '</td>
                     <td class="text-center">' . date('Y-m-d H:i:s', strtotime($value['completed_date'])) . '</td>
 					<td class="text-center">' . $value['stage_desc'] . '</td>
+                    <td>' . $value['pts_note'] . '</td>
 				</tr>
 				';
 		}
