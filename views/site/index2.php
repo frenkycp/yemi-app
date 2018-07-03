@@ -38,7 +38,7 @@ $this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, s
     		</div>
     		<div class="col-md-3">
                 <div class="panel panel-success">
-                    <div class="panel-heading text-center">WIP Monitoring <span class="text-red">(準備中)</span><br/><span class="japanesse-word">生産工程モニタリング</span></div>
+                    <div class="panel-heading text-center">WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/><span class="japanesse-word">生産工程モニタリング</span></div>
                     <div class="list-group">
                         <div class="list-group-item disabled">PCB <span class="japanesse-word">基板組立（準備中）</span></div>
                         <div class="list-group-item disabled">WW <span class="japanesse-word">木工（準備中）</span></div>
@@ -66,53 +66,10 @@ $this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, s
                         ]); ?>
                     </div>
                 </div>
-    		</div>
-    		<div class="col-md-1 text-center">
-    			<i class="fa fa-fw fa-arrow-right fa-3x text-primary"></i>
-    		</div>
-    		<div class="col-md-4">
-                <div class="panel panel-success">
-                    <div class="panel-heading text-center">Finish Goods Monitoring<br/><span class="japanesse-word">完成品モニタリング</span></div>
-                    
-                    <div class="list-group">
-                        <?= Html::a('Production Budget/Forecast/Actual <span class="japanesse-word">(生産予算・見込み・実績)</span>', ['/production-budget/index'], [
-                            'class' => 'list-group-item',
-                            'style' => 'font-size: 13px;'
-                        ]); ?>
-                        <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock/index'], [
-                            'class' => 'list-group-item'
-                        ]); ?>
-                        <div class="list-group-item">
-                            <p>Weekly Shipping <span class="japanesse-word">(週次出荷)</span></p>
-                            <ol class="list-unstyled">
-                                <li><?= Html::a('1. Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span>', ['/serno-output/report']); ?></li>
-                                <li><?= Html::a('2. Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?></li>
-                                <li><?= Html::a('3. Shipping Summary <span class="japanesse-word">週次出荷表 (計画対実績)</span>', ['/weekly-plan/index']); ?></li>
-                            </ol>
-                        </div>
-                        <div class="list-group-item">
-                            <p>Monthly Production <span class="japanesse-word">(月次生産）</span></p>
-                            <ol class="list-unstyled">
-                                <li>
-                                    <?= Html::a('1. Monthly Production Data <span class="japanesse-word">(月次生産計画)</span>', ['/yemi-internal/index']); ?>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
+                <div class="text-center">
+                    <i class="fa fa-fw fa-arrow-up fa-3x text-primary"></i>
                 </div>
-    	   </div>
-        </div>
-    	<div class="row">
-    		<div class="col-md-3 col-md-offset-4 text-center">
-    			<i class="fa fa-fw fa-arrow-up fa-3x text-primary"></i>
-    		</div>
-            <div class="col-md-4 col-md-offset-1 text-center">
-                <i class="fa fa-fw fa-arrow-up fa-3x text-primary"></i>
-            </div>
-    	</div>
-    	<br/>
-    	<div class="row">
-    		<div class="col-md-3 col-md-offset-4">
+                <br/>
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Production Support Monitoring<br/><span class="japanesse-word">生産支援モニタリング</span></div>
                     <div class="list-group">
@@ -139,10 +96,50 @@ $this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, s
                         </div>
                     </div>
                 </div>
+                
     		</div>
-            <div class="col-md-4 col-md-offset-1">
+    		<div class="col-md-1 text-center">
+    			<i class="fa fa-fw fa-arrow-right fa-3x text-primary"></i>
+    		</div>
+    		<div class="col-md-4">
                 <div class="panel panel-success">
-                    <div class="panel-heading text-center">Finish Good Inspection<br/>( 完成品出荷の管理検査)<br/></div>
+                    <div class="panel-heading text-center">Finish Goods Monitoring<br/><span class="japanesse-word">完成品モニタリング</span></div>
+                    
+                    <div class="list-group">
+                        <?= Html::a('Production Budget/Forecast/Actual <span class="japanesse-word">(生産予算・見込み・実績)</span>', ['/production-budget/index'], [
+                            'class' => 'list-group-item',
+                            'style' => 'font-size: 13px;'
+                        ]); ?>
+                        <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock/index'], [
+                            'class' => 'list-group-item'
+                        ]); ?>
+                        <div class="list-group-item">
+                            <p>Weekly Shipping <span class="japanesse-word">(週次出荷)</span></p>
+                            <ol class="list-unstyled">
+                                <li><?= Html::a('1. Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span>', ['/serno-output/report']); ?></li>
+                                <li><?= Html::a('2. Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?></li>
+                                <li><?= Html::a('3. Shipping Summary <span class="japanesse-word">週次出荷表 (計画対実績)</span>', ['/weekly-plan/index']); ?></li>
+                            </ol>
+                        </div>
+                        <?= Html::a('Monthly Shipping Container <span class="japanesse-word">(月次コンテナー出荷)</span>', ['/production-container-daily-report/index'], [
+                            'class' => 'list-group-item'
+                        ]); ?>
+                        <div class="list-group-item">
+                            <p>Monthly Production <span class="japanesse-word">(月次生産）</span></p>
+                            <ol class="list-unstyled">
+                                <li>
+                                    <?= Html::a('1. Monthly Production Data <span class="japanesse-word">(月次生産計画)</span>', ['/yemi-internal/index']); ?>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <i class="fa fa-fw fa-arrow-up fa-3x text-primary"></i>
+                </div>
+                <br/>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Finish Good Inspection<br/><span class="japanesse-word">( 完成品出荷の管理検査)</span><br/></div>
                     <div class="list-group">
                         <?= Html::a('Weekly Final Inspection chart <span class="japanesse-word">(週次出荷管理検査)</span>', ['/production-inspection-chart/index'], [
                             'class' => 'list-group-item'
@@ -152,7 +149,15 @@ $this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, s
                         ]); ?>
                     </div>
                 </div>
-            </div>
-    	</div>
+                <hr>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Production Engineering<br/></div>
+                    <div class="list-group">
+                        <a class="list-group-item" href="http://172.17.144.2/workflow/newmodel.php">New Model Development <span class="japanesse-word">（新製品開発日程）</span></a>
+                    </div>
+                </div>
+    	   </div>
+        </div>
+    	<br/>
     </div>
 </div>

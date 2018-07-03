@@ -43,7 +43,7 @@ $this->registerJs($script, View::POS_HEAD );
 	<div class="box-header with-border">
 		<h3 class="box-title"><?= date('d F Y', strtotime(Yii::$app->request->get('etd'))) . ' (' . $containerStr . ')'; ?></h3>
 		<div class="pull-right box-tools">
-			<?= Html::a('Back',  Url::to(['report']), ['class' => 'btn btn-warning btn-sm']) ?>
+			<?= '';Html::a('Back',  Url::previous(), ['class' => 'btn btn-warning btn-sm']) ?>
 		</div>
 	</div>
 	<div class="box-body no-padding">

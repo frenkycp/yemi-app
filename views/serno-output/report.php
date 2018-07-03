@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 //$color = 'DarkSlateBlue';
 $color = 'rgba(72,61,139,0.6)';
 
-$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
