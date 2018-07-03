@@ -12,7 +12,7 @@ use yii\web\View;
 * @var app\models\search\MenuSearch $searchModel
 */
 
-$this->title = 'Maintenance Progress';
+$this->title = 'Corrective Progress';
 $this->params['breadcrumbs'][] = $this->title;
 date_default_timezone_set('Asia/Jakarta');
 

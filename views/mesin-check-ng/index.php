@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\MesinCheckNgSearch $searchModel
 */
 
-$this->title = Yii::t('app', 'Machine Check Data');
+$this->title = Yii::t('app', 'Corrective Data');
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {

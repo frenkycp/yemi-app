@@ -40,7 +40,7 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 
-$startDate = date('Y-m-01');
+$startDate = date('Y-06-01');
 $endDate = date('Y-m-t');
 $startWeek = app\models\SernoCalendar::find()->where(['ship' => $startDate])->one()->week_ship;
 $endWeek = app\models\SernoCalendar::find()->where(['ship' => $endDate])->one()->week_ship;
