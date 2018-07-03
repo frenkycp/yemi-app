@@ -12,8 +12,16 @@ $this->title = [
     'breadcrumbs_title' => 'YEMI Production Monitoring Cockpit'
 ];
 
-$this->registerCss(".japanesse-word { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    .japanesse-word { 
+        font-family: 'MS PGothic', Osaka, Arial, sans-serif; 
+    }
+    .content-header {
+        text-align: center;
+    }
+");
 ?>
+<hr>
 <div class="site-index">
 
     <div class="jumbotron" style="display: none;">

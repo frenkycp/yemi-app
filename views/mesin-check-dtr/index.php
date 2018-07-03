@@ -10,8 +10,14 @@ use kartik\grid\GridView;
     * @var app\models\search\MesinCheckDtrSearch $searchModel
 */
 
-$this->title = Yii::t('app', 'Preventive Data');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Preventive Data <span class="text-green">(予防データ)',
+    'tab_title' => 'Preventive Data',
+    'breadcrumbs_title' => 'Preventive Data'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
