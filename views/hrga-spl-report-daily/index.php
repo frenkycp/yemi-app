@@ -4,9 +4,14 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
-$this->title = Yii::t('app', 'SPL Report');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Weekly Overtime <span class="japanesse text-green">(週次残業管理）</span>',
+    'tab_title' => 'Weekly Overtime',
+    'breadcrumbs_title' => 'Weekly Overtime'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
 date_default_timezone_set('Asia/Jakarta');
@@ -41,6 +46,40 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data);
 echo '</pre>';*/
 ?>
+<?php $form = ActiveForm::begin([
+    'id' => 'form_index',
+    'layout' => 'horizontal',
+    'enableClientValidation' => true,
+    'errorSummaryCssClass' => 'error-summary alert alert-danger',
+    'fieldConfig' => [
+             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+             'horizontalCssClasses' => [
+                 //'label' => 'col-sm-2',
+                 #'offset' => 'col-sm-offset-4',
+                 'wrapper' => 'col-sm-7',
+                 'error' => '',
+                 'hint' => '',
+             ],
+         ],
+    ]
+    );
+    ?>
+
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'year')->dropDownList(
+                $year_arr
+            ); ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'month')->dropDownList(
+                $month_arr
+            ); ?>
+        </div>
+        <button type="submit" class="btn btn-default">Update Chart</button>
+    </div>
+
+<?php ActiveForm::end(); ?>
 <div class="box box-success">
     <div class="box-header with-border">
         <h3 class="box-title">Chart View</h3>
@@ -56,7 +95,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 500,
+                    'height' => 350,
                 ],
                 'credits' => [
                     'enabled' =>false
