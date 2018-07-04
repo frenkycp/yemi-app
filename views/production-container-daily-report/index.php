@@ -33,7 +33,7 @@ $this->registerJs($script, View::POS_HEAD );
 /*echo '<pre>';
 print_r($data);
 echo '</pre>';*/
-
+echo Yii::$app->request->baseUrl;
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -72,62 +72,69 @@ echo '</pre>';*/
     
 
     <?php ActiveForm::end(); ?>
-
-<?php
-echo Highcharts::widget([
-    'scripts' => [
-        'modules/exporting',
-        'themes/sand-signika',
-    ],
-    'options' => [
-        'chart' => [
-            'type' => 'column',
-        ],
-        'credits' => [
-            'enabled' => false
-        ],
-        'title' => [
-            'text' => $title
-        ],
-        'subtitle' => [
-            'text' => $subtitle
-        ],
-        'xAxis' => [
-            'type' => 'category',
-            'categories' => $category,
-            'title' => [
-                'text' => 'Date (Tanggal)'
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Total Container : <?= $total_container; ?></h3>
+    </div>
+    <div class="box-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                'modules/exporting',
+                'themes/sand-signika',
             ],
-            'labels' => [
-                'formatter' => new JsExpression('function(){ return \'<a href="serno-output/container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
-            ],
-        ],
-        'yAxis' => [
-            'title' => [
-                'text' => 'Container Completion'
-            ],
-            'stackLabels' => [
-                //'enabled' => true,
-                //'formatter' => new JsExpression('function(){ return this.qty + "aa"; }'),
-            ]
-        ],
-        'tooltip' => [
-            'enabled' => false
-        ],
-        'plotOptions' => [
-            'column' => [
-                'stacking' => 'normal',
-                'dataLabels' => [
-                    'enabled' => true,
-                    'style' => [
-                        'textOutline' => '0px',
-                        'fontWeight' => '0'
-                    ],
-                    'format' => '{point.qty}/{point.total_qty}',
-                    'color' => 'black',
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
                 ],
+                'credits' => [
+                    'enabled' => false
+                ],
+                'title' => [
+                    'text' => $title
+                ],
+                'subtitle' => [
+                    'text' => $subtitle
+                ],
+                'xAxis' => [
+                    'type' => 'category',
+                    'categories' => $category,
+                    'title' => [
+                        'text' => 'Date'
+                    ],
+                    'labels' => [
+                        'formatter' => new JsExpression('function(){ return \'<a href="' . Yii::$app->request->baseUrl . '/serno-output/container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
+                    ],
+                ],
+                'yAxis' => [
+                    'title' => [
+                        'text' => 'Container Completion'
+                    ],
+                    'stackLabels' => [
+                        //'enabled' => true,
+                        //'formatter' => new JsExpression('function(){ return this.qty + "aa"; }'),
+                    ]
+                ],
+                'tooltip' => [
+                    'enabled' => false
+                ],
+                'plotOptions' => [
+                    'column' => [
+                        'stacking' => 'normal',
+                        'dataLabels' => [
+                            'enabled' => true,
+                            'style' => [
+                                'textOutline' => '0px',
+                                'fontWeight' => '0'
+                            ],
+                            'format' => '{point.qty}/{point.total_qty}',
+                            'color' => 'black',
+                        ],
+                    ],
+                ],
+                'series' => $data
             ],
-        ],
-        'series' => $data
-    ],
-]);
+        ]);
+        ?>
+    </div>
+</div>

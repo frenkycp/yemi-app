@@ -75,11 +75,14 @@ class ProductionContainerDailyReportController extends Controller
 
     	$presentase_open_arr = [];
     	$presentase_close_arr = [];
+        $total_container = 0;
+
     	foreach ($data as $key => $value) {
     		$category[] = $key;
     		$data_open = $value['total_open'];
     		$data_close = $value['total_close'];
     		$data_total = $data_open + $data_close;
+            $total_container += $data_total;
 
     		$presentase_open = 0;
     		$presentase_close = 0;
@@ -124,7 +127,8 @@ class ProductionContainerDailyReportController extends Controller
     		'title' => $title,
     		'subtitle' => $subtitle,
     		'month_arr' => $month_arr,
-    		'year_arr' => $year_arr
+    		'year_arr' => $year_arr,
+            'total_container' => $total_container
     	]);
     }
 }

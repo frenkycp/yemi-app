@@ -8,6 +8,7 @@ use yii\web\HttpException;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
+use app\models\MesinCheckNg;
 
 class NgReportController extends Controller
 {
