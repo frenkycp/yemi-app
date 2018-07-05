@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Weekly Overtime <span class="japanesse text-green">(週次残業管理）</span>',
-    'tab_title' => 'Weekly Overtime',
-    'breadcrumbs_title' => 'Weekly Overtime'
+    'page_title' => 'Monthly Overtime Control <span class="japanesse text-green">(月次残業管理)</span>',
+    'tab_title' => 'Monthly Overtime Control',
+    'breadcrumbs_title' => 'Monthly Overtime Control'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -82,11 +82,111 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">Total Employee</a></li>
-        <li><a href="#tab_2" data-toggle="tab">Total Hour</a></li>
+        <li class="active"><a href="#tab_1" data-toggle="tab">Total Hour</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Total Employee</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
+            <?php
+            $progress_bar = 'progress-bar-success';
+            $progress_bar2 = 'progress-bar-info';
+            /*if ($budget_progress > 75) {
+                $progress_bar = 'progress-bar-warning';
+            }
+            if ($budget_progress > 100) {
+                $progress_bar = 'progress-bar-danger';
+            }*/
+            ?>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>Production : <?= $prod_total_jam_lembur . ' / ' . $overtime_budget; ?> hours</p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active <?= $progress_bar; ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?= $budget_progress; ?>%; min-width: 1em"><?= $budget_progress; ?>%</div>
+                    </div>
+                    <hr>
+                    <p>Others : <?= $others_total_jam_lembur . ' / ' . $overtime_budget2; ?> hours</p>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped active <?= $progress_bar2; ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?= $budget_progress2; ?>%; min-width: 1em"><?= $budget_progress2; ?>%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    'modules/exporting',
+                    'themes/grid-light',
+                    //'themes/sand-signika',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                        'height' => 300,
+                    ],
+                    'credits' => [
+                        'enabled' =>false
+                    ],
+                    'title' => [
+                        'text' => $title
+                    ],
+                    'subtitle' => [
+                        'text' => $subtitle
+                    ],
+                    'xAxis' => [
+                        'categories' => $category
+                    ],
+                    'yAxis' => [
+                        'min' => 0,
+                        'title' => [
+                            'text' => 'Total Hour'
+                        ],
+                        'stackLabels' => [
+                            'enabled' => true,
+                            'style' => [
+                                'fontWeight' => 'bold',
+                                //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            ]
+                        ]
+                    ],
+                    'plotOptions' => [
+                        'column' => [
+                            'stacking' => 'normal',
+                            'dataLabels' => [
+                                'enabled' => false,
+                                'style' => [
+                                    'textOutline' => '0px',
+                                    'fontWeight' => '0'
+                                ],
+                            ]
+                        ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression('
+                                        function(){
+                                            $("#modal2").modal("show").find(".modal-body").html(this.options.remark);
+                                        }
+                                    '),
+                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                ]
+                            ]
+                        ]
+                    ],
+                    'series' => $data2
+                ],
+            ]);
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal2',
+                'header' => '<h3>Detail Information</h3>',
+                'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+            ?>
+            
+        </div>
+        
+        <div class="tab-pane" id="tab_2">
             <?php
             echo Highcharts::widget([
                 'scripts' => [
@@ -159,80 +259,6 @@ echo '</pre>';*/
             ]);
             yii\bootstrap\Modal::end();
         ?>
-        </div>
-        <div class="tab-pane" id="tab_2">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    'modules/exporting',
-                    'themes/grid-light',
-                    //'themes/sand-signika',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'column',
-                        'height' => 350,
-                    ],
-                    'credits' => [
-                        'enabled' =>false
-                    ],
-                    'title' => [
-                        'text' => $title
-                    ],
-                    'subtitle' => [
-                        'text' => $subtitle
-                    ],
-                    'xAxis' => [
-                        'categories' => $category
-                    ],
-                    'yAxis' => [
-                        'min' => 0,
-                        'title' => [
-                            'text' => 'Total Hour'
-                        ],
-                        'stackLabels' => [
-                            'enabled' => true,
-                            'style' => [
-                                'fontWeight' => 'bold',
-                                //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                            ]
-                        ]
-                    ],
-                    'plotOptions' => [
-                        'column' => [
-                            'stacking' => 'normal',
-                            'dataLabels' => [
-                                'enabled' => false,
-                                'style' => [
-                                    'textOutline' => '0px',
-                                    'fontWeight' => '0'
-                                ],
-                            ]
-                        ],
-                        'series' => [
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression('
-                                        function(){
-                                            $("#modal2").modal("show").find(".modal-body").html(this.options.remark);
-                                        }
-                                    '),
-                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                                ]
-                            ]
-                        ]
-                    ],
-                    'series' => $data2
-                ],
-            ]);
-            yii\bootstrap\Modal::begin([
-                'id' =>'modal2',
-                'header' => '<h3>Detail Information</h3>',
-                'size' => 'modal-lg',
-            ]);
-            yii\bootstrap\Modal::end();
-            ?>
         </div>
     </div>
 </div>

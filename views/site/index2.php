@@ -96,7 +96,7 @@ $this->registerCss("
                                 <!--<li>
                                     <span class="text-red">5. Attendance report (勤怠管理)</span>
                                 </li>-->
-                                <li><?= Html::a('5. Weekly Overtime <span class="japanesse-word">(週次残業管理）</span>', ['/hrga-spl-report-daily/index']); ?></li>
+                                <li><?= Html::a('5. Monthly Overtime Control <br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="japanesse-word">(月次残業管理)</span>', ['/hrga-spl-report-daily/index']); ?></li>
                                 <li><?= Html::a('6. Weekly MP Contract Intake<br/><span class="japanesse-word">&nbsp;&nbsp;&nbsp;&nbsp;(週次契約要員採用)</span>', ['/hrga-manpower-intake/index']); ?></li>
                             </ol>
                         </div>

@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\SplView;
 use app\models\PlanReceivingPeriod;
+use app\models\SplOvertimeBudget;
 
 /**
  * summary
@@ -79,6 +80,8 @@ class HrgaSplReportDailyController extends Controller
             }
         }
 
+        $prod_total_jam_lembur = 0;
+        $others_total_jam_lembur = 0;
         foreach ($cc_group_arr as $cc_group) {
             $tmp_data = [];
             $tmp_data2 = [];
@@ -87,13 +90,17 @@ class HrgaSplReportDailyController extends Controller
                 
                 foreach ($spl_data as $value) {
                     if ($tgl_lembur == $value->TGL_LEMBUR && $cc_group == $value->CC_GROUP) {
-                        
+                        if ($value->CC_GROUP == 'PRODUCTION') {
+                            $prod_total_jam_lembur += $value->total_lembur;
+                        } else {
+                            $others_total_jam_lembur += $value->total_lembur;
+                        }
                         $tmp_data[] = [
                             'y' => (int)$value->JUMLAH,
                             'remark' => $this->getDetailEmpRemark($tgl_lembur, $cc_group)
                         ];
                         $tmp_data2[] = [
-                            'y' => (int)$value->total_lembur,
+                            'y' => (float)$value->total_lembur,
                             'remark' => $this->getDetailEmpRemark($tgl_lembur, $cc_group)
                         ];
                         $is_found = true;
@@ -121,6 +128,9 @@ class HrgaSplReportDailyController extends Controller
             $category_arr[$key] = date('d-M-Y', strtotime($value));
         }
 
+        $overtime_budget = $this->getOvertimeBudget($model->year . $model->month, 1);
+        $overtime_budget2 = $this->getOvertimeBudget($model->year . $model->month, 2);
+
     	return $this->render('index', [
             'model' => $model,
     		'title' => $title,
@@ -129,8 +139,27 @@ class HrgaSplReportDailyController extends Controller
     		'data' => $data,
             'data2' => $data2,
             'year_arr' => $year_arr,
-            'month_arr' => $month_arr
+            'month_arr' => $month_arr,
+            'prod_total_jam_lembur' => $prod_total_jam_lembur,
+            'others_total_jam_lembur' => $others_total_jam_lembur,
+            'overtime_budget' => $overtime_budget,
+            'overtime_budget2' => $overtime_budget2,
+            //'budget_progress' => 120,
+            'budget_progress' => $overtime_budget == 0 ? 0 : round((($prod_total_jam_lembur / $overtime_budget) * 100), 2),
+            'budget_progress2' => $overtime_budget2 == 0 ? 0 : round((($others_total_jam_lembur / $overtime_budget2) * 100), 2)
     	]);
+    }
+
+    public function getOvertimeBudget($period, $category_id)
+    {
+        $data = SplOvertimeBudget::find()
+        ->where([
+            'period' => $period,
+            'category_id' => $category_id
+        ])
+        ->one();
+
+        return $data->overtime_budget != null ? $data->overtime_budget : 0;
     }
 
     public function getDetailEmpRemark($tgl_lembur, $cc_group)
@@ -148,6 +177,7 @@ class HrgaSplReportDailyController extends Controller
             <th style="width:100px; text-align: center;">NIK</th>
             <th>Nama</th>
             <th>Section</th>
+            <th>Lembur (Jam)</th>
         </tr>
         ';
         $i = 1;
@@ -159,6 +189,7 @@ class HrgaSplReportDailyController extends Controller
                     <td style="text-align: center;">' . $detail->NIK . '</td>
                     <td>' . $detail->NAMA_KARYAWAN . '</td>
                     <td>' . $detail->CC_DESC . '</td>
+                    <td>' . $detail->NILAI_LEMBUR_PLAN . '</td>
                 </tr>
                 ';
                 $i++;
