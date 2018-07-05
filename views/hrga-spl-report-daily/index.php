@@ -80,83 +80,159 @@ echo '</pre>';*/
     </div>
 
 <?php ActiveForm::end(); ?>
-<div class="box box-success">
-    <div class="box-header with-border">
-        <h3 class="box-title">Chart View</h3>
-    </div>
-    <div class="box-body no-padding">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                'modules/exporting',
-                'themes/grid-light',
-                //'themes/sand-signika',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'column',
-                    'height' => 350,
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_1" data-toggle="tab">Total Employee</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Total Hour</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    'modules/exporting',
+                    'themes/grid-light',
+                    //'themes/sand-signika',
                 ],
-                'credits' => [
-                    'enabled' =>false
-                ],
-                'title' => [
-                    'text' => $title
-                ],
-                'subtitle' => [
-                    'text' => $subtitle
-                ],
-                'xAxis' => [
-                    'categories' => $category
-                ],
-                'yAxis' => [
-                    'min' => 0,
-                    'title' => [
-                        'text' => 'Total Employee'
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                        'height' => 350,
                     ],
-                    'stackLabels' => [
-                        'enabled' => true,
-                        'style' => [
-                            'fontWeight' => 'bold',
-                            //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                        ]
-                    ]
-                ],
-                'plotOptions' => [
-                    'column' => [
-                        'stacking' => 'normal',
-                        'dataLabels' => [
+                    'credits' => [
+                        'enabled' =>false
+                    ],
+                    'title' => [
+                        'text' => $title
+                    ],
+                    'subtitle' => [
+                        'text' => $subtitle
+                    ],
+                    'xAxis' => [
+                        'categories' => $category
+                    ],
+                    'yAxis' => [
+                        'min' => 0,
+                        'title' => [
+                            'text' => 'Total Employee'
+                        ],
+                        'stackLabels' => [
                             'enabled' => true,
                             'style' => [
-                                'textOutline' => '0px',
-                                'fontWeight' => '0'
-                            ],
-                        ]
-                    ],
-                    'series' => [
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('
-                                    function(){
-                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                    }
-                                '),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                'fontWeight' => 'bold',
+                                //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
                             ]
                         ]
-                    ]
+                    ],
+                    'plotOptions' => [
+                        'column' => [
+                            'stacking' => 'normal',
+                            'dataLabels' => [
+                                'enabled' => false,
+                                'style' => [
+                                    'textOutline' => '0px',
+                                    'fontWeight' => '0'
+                                ],
+                            ]
+                        ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression('
+                                        function(){
+                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                        }
+                                    '),
+                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                ]
+                            ]
+                        ]
+                    ],
+                    'series' => $data
                 ],
-                'series' => $data
-            ],
-        ]);
-        yii\bootstrap\Modal::begin([
-            'id' =>'modal',
-            'header' => '<h3>Detail Information</h3>',
-            'size' => 'modal-lg',
-        ]);
-        yii\bootstrap\Modal::end();
+            ]);
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal',
+                'header' => '<h3>Detail Information</h3>',
+                'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
         ?>
-
+        </div>
+        <div class="tab-pane" id="tab_2">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    'modules/exporting',
+                    'themes/grid-light',
+                    //'themes/sand-signika',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                        'height' => 350,
+                    ],
+                    'credits' => [
+                        'enabled' =>false
+                    ],
+                    'title' => [
+                        'text' => $title
+                    ],
+                    'subtitle' => [
+                        'text' => $subtitle
+                    ],
+                    'xAxis' => [
+                        'categories' => $category
+                    ],
+                    'yAxis' => [
+                        'min' => 0,
+                        'title' => [
+                            'text' => 'Total Hour'
+                        ],
+                        'stackLabels' => [
+                            'enabled' => true,
+                            'style' => [
+                                'fontWeight' => 'bold',
+                                //color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                            ]
+                        ]
+                    ],
+                    'plotOptions' => [
+                        'column' => [
+                            'stacking' => 'normal',
+                            'dataLabels' => [
+                                'enabled' => false,
+                                'style' => [
+                                    'textOutline' => '0px',
+                                    'fontWeight' => '0'
+                                ],
+                            ]
+                        ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression('
+                                        function(){
+                                            $("#modal2").modal("show").find(".modal-body").html(this.options.remark);
+                                        }
+                                    '),
+                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                ]
+                            ]
+                        ]
+                    ],
+                    'series' => $data2
+                ],
+            ]);
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal2',
+                'header' => '<h3>Detail Information</h3>',
+                'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+            ?>
+        </div>
     </div>
 </div>
