@@ -16,17 +16,11 @@ $color = 'ForestGreen';
 
 date_default_timezone_set('Asia/Jakarta');
 
-$this->registerCss(".tab-content > .tab-pane,
-.pill-content > .pill-pane {
-    display: block;     
-    height: 0;          
-    overflow-y: hidden; 
-}
-
-.tab-content > .active,
-.pill-content > .active {
-    height: auto;       
-} ");
+$this->registerCss("
+    .japanesse {
+        font-family: 'MS PGothic', Osaka, Arial, sans-serif;
+    }
+");
 
 $script = <<< JS
     window.onload = setupRefresh;
@@ -82,8 +76,8 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">Total Hour</a></li>
-        <li><a href="#tab_2" data-toggle="tab">Total Employee</a></li>
+        <li class="active"><a href="#tab_1" data-toggle="tab">Total Hour <span class="japanesse">(時間)</span></a></li>
+        <li><a href="#tab_2" data-toggle="tab">Total Employee <span class="japanesse">(人員)</span></a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
@@ -97,14 +91,14 @@ echo '</pre>';*/
                 $progress_bar = 'progress-bar-danger';
             }*/
             ?>
-            <div class="panel panel-default">
+            <div class="panel panel-info">
                 <div class="panel-body">
-                    <p>Production : <?= $prod_total_jam_lembur . ' / ' . $overtime_budget; ?> hours</p>
+                    <p>Production <span class="japanesse">(生産課)</span>  - Actual/Target <span class="japanesse">(実績/目標)</span> : <?= '<b>' . $prod_total_jam_lembur . '</b> / ' . $overtime_budget; ?> hours</p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active <?= $progress_bar; ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?= $budget_progress; ?>%; min-width: 1em"><?= $budget_progress; ?>%</div>
                     </div>
                     <hr>
-                    <p>Others : <?= $others_total_jam_lembur . ' / ' . $overtime_budget2; ?> hours</p>
+                    <p>Office & Others <span class="japanesse">(事務所とその他)</span> - Actual/Target <span class="japanesse">(実績/目標)</span> : <?= '<b>' . $others_total_jam_lembur . '</b> / ' . $overtime_budget2; ?> hours</p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active <?= $progress_bar2; ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?= $budget_progress2; ?>%; min-width: 1em"><?= $budget_progress2; ?>%</div>
                     </div>
@@ -133,7 +127,10 @@ echo '</pre>';*/
                         'text' => $subtitle
                     ],
                     'xAxis' => [
-                        'categories' => $category
+                        'categories' => $category,
+                        'title' => [
+                            'text' => 'Date'
+                        ],
                     ],
                     'yAxis' => [
                         'min' => 0,

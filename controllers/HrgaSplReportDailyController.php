@@ -36,7 +36,7 @@ class HrgaSplReportDailyController extends Controller
         }
 
         $min_year = SplView::find()->select([
-            'min_year' => 'FORMAT(TGL_LEMBUR, \'yyyy\')'
+            'min_year' => 'MIN(FORMAT(TGL_LEMBUR, \'yyyy\'))'
         ])->one();
 
         $year_now = date('Y');
@@ -125,7 +125,7 @@ class HrgaSplReportDailyController extends Controller
         }
 
         foreach ($category_arr as $key => $value) {
-            $category_arr[$key] = date('d-M-Y', strtotime($value));
+            $category_arr[$key] = date('j', strtotime($value));
         }
 
         $overtime_budget = $this->getOvertimeBudget($model->year . $model->month, 1);
@@ -177,7 +177,8 @@ class HrgaSplReportDailyController extends Controller
             <th style="width:100px; text-align: center;">NIK</th>
             <th>Nama</th>
             <th>Section</th>
-            <th>Lembur (Jam)</th>
+            <th class="text-center">Plan Lembur<br/>(Jam)</th>
+            <th class="text-center">Aktual Lembur<br/>(Jam)</th>
         </tr>
         ';
         $i = 1;
@@ -189,7 +190,8 @@ class HrgaSplReportDailyController extends Controller
                     <td style="text-align: center;">' . $detail->NIK . '</td>
                     <td>' . $detail->NAMA_KARYAWAN . '</td>
                     <td>' . $detail->CC_DESC . '</td>
-                    <td>' . $detail->NILAI_LEMBUR_PLAN . '</td>
+                    <td class="text-center">' . $detail->NILAI_LEMBUR_PLAN . '</td>
+                    <td class="text-center">' . $detail->NILAI_LEMBUR_ACTUAL . '</td>
                 </tr>
                 ';
                 $i++;

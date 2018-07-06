@@ -3,15 +3,15 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\SplView as BaseSplView;
+use \app\models\base\VisualPickingList as BaseVisualPickingList;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.SPL_VIEW".
+ * This is the model class for table "db_owner.visual_picking_list".
  */
-class SplView extends BaseSplView
+class VisualPickingList extends BaseVisualPickingList
 {
-    public $JUMLAH, $total_lembur, $min_year;
+
     public function behaviors()
     {
         return ArrayHelper::merge(
@@ -28,17 +28,6 @@ class SplView extends BaseSplView
             parent::rules(),
             [
                 # custom validation rules
-            ]
-        );
-    }
-
-    public function attributeLabels()
-    {
-        return ArrayHelper::merge(
-            parent::attributeLabels(),
-            [
-                'NIK' => 'NIK',
-                'CC_GROUP' => 'Departemen',
             ]
         );
     }

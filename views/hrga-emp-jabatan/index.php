@@ -6,7 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = [
-    'page_title' => 'Manpower Structure by Position <span>(役職別の社員構成）</span>',
+    'page_title' => 'Manpower Structure by Position <span class="text-green japanesse">(役職別の社員構成）</span>',
     'tab_title' => 'Manpower Structure by Position',
     'breadcrumbs_title' => 'Manpower Structure by Position'
 ];

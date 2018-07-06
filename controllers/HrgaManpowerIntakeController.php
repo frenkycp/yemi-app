@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use app\models\MpInOutView02;
+use app\models\PlanReceivingPeriod;
 
 class HrgaManpowerIntakeController extends Controller
 {
@@ -16,27 +17,46 @@ class HrgaManpowerIntakeController extends Controller
     {
     	date_default_timezone_set('Asia/Jakarta');
     	$data = [];
-    	$max_tab = 10;
-    	$global_conditions = [
-    		'TAHUN' => date('Y')
-    	];
-    	$week_arr = $this->getWeekPeriodArr($global_conditions, $max_tab);
-    	$today = new \DateTime(date('Y-m-d'));
-		$this_week = $today->format("W");
-        if (!in_array($this_week, $week_arr)) {
-            $this_week = end($week_arr);
+        $category = [];
+    	
+        $year_arr = [];
+        $month_arr = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
         }
+
+        $min_year = MpInOutView02::find()->select([
+            'min_year' => 'MIN(TAHUN)'
+        ])->one();
+
+        $year_now = date('Y');
+        $star_year = $min_year->min_year;
+        for ($year = $star_year; $year <= $year_now; $year++) {
+            $year_arr[$year] = $year;
+        }
+
+        $model = new PlanReceivingPeriod();
+        $model->month = date('m');
+        //$model->month = '06';
+        $model->year = date('Y');
+        if ($model->load($_POST))
+        {
+
+        }
+
+        $global_conditions = [
+            'PERIOD' => $model->year . $model->month
+        ];
+
         $manpower_intake_arr = MpInOutView02::find()
         ->select([
-        	'TAHUN' => 'TAHUN',
-        	'PERIOD' => 'PERIOD',
-        	'WEEK' => 'WEEK',
         	'TANGGAL' => 'TANGGAL',
         	'total' => 'SUM(COUNT)'
         ])
 		->where($global_conditions)
-		->groupBy('TAHUN, PERIOD, WEEK, TANGGAL')
-		->orderBy('PERIOD ASC, WEEK ASC, TANGGAL ASC')
+		->groupBy('TANGGAL')
+		->orderBy('TANGGAL ASC')
 		->all();
 
 		$data_arr = MpInOutView02::find()
@@ -44,37 +64,31 @@ class HrgaManpowerIntakeController extends Controller
 		->orderBy('DEPARTEMEN ASC, SECTION ASC, SUB_SECTION ASC, NAMA_KARYAWAN ASC')
 		->all();
 
-    	foreach ($week_arr as $week_no) {
-    		$tgl_arr = [];
-    		$tmp_data_arr = [];
-    		foreach ($manpower_intake_arr as $manpower_intake) {
-    			if ($manpower_intake->WEEK == $week_no) {
-    				$tgl_arr[] = date('Y-m-d', strtotime($manpower_intake->TANGGAL)) . '';
-    				$tmp_data_arr[] = [
-    					'y' => (int)$manpower_intake->total,
-    					'remark' => $this->getRemarks($data_arr, $global_conditions, $manpower_intake->TANGGAL)
-    				];
-    				/*$tmp_data_arr[] = 10;*/
-    			}
-    		}
+        $tmp_data = [];
+        foreach ($manpower_intake_arr as $manpower_intake) {
+            $tgl = date('Y-m-d', strtotime($manpower_intake->TANGGAL));
+            $category[] = $tgl;
+            $tmp_data[] = [
+                'y' => (int)$manpower_intake->total,
+                'remark' => $this->getRemarks($data_arr, $global_conditions, $manpower_intake->TANGGAL)
+            ];
+        }
 
-    		$data[$week_no][] = [
-    			'category' => $tgl_arr,
-    			'data' => [
-    				[
-    					'name' => 'MANPOWER',
-    					'data' => $tmp_data_arr,
-    					'showInLegend' => false,
-    					'color' => 'rgba(72,61,139,0.6)'
-    				]
-    				
-    			]
-    		];
-    	}
+        $data = [
+            [
+                'name' => 'MANPOWER',
+                'data' => $tmp_data,
+                'showInLegend' => false,
+                'color' => 'rgba(72,61,139,0.6)'
+            ]
+        ];
 
     	return $this->render('index', [
+            'model' => $model,
     		'data' => $data,
-    		'this_week' => $this_week
+            'category' => $category,
+            'year_arr' => $year_arr,
+            'month_arr' => $month_arr
     	]);
     }
 
@@ -85,6 +99,7 @@ class HrgaManpowerIntakeController extends Controller
     	$data = '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
 		'<tr>
+            <th>No</th>
 			<th>DEPARTEMEN</th>
 			<th>SECTION</th>
 			<th>SUB SECTION</th>
@@ -93,11 +108,13 @@ class HrgaManpowerIntakeController extends Controller
 			<th class="text-center">KONTRAK KE</th>
 		</tr>'
 		;
-
+        
+        $i = 1;
 		foreach ($data_arr as $value) {
 			if ($value->TANGGAL == $date) {
 				$data .= '
 				<tr>
+                    <td>' . $i . '</td>
 					<td>' . $value['DEPARTEMEN'] . '</td>
 					<td>' . $value['SECTION'] . '</td>
 					<td>' . $value['SUB_SECTION'] . '</td>
@@ -106,6 +123,7 @@ class HrgaManpowerIntakeController extends Controller
 					<td class="text-center">' . $value['KONTRAK_KE'] . '</td>
 				</tr>
 				';
+                $i++;
 			}
 			
 		}
