@@ -43,18 +43,18 @@ $this->registerJs("$(function() {
 
 $grid_columns = [
     [
-	    'class' => 'yii\grid\ActionColumn',
+        'class' => 'yii\grid\ActionColumn',
         //'template' => "{check_sheet} {history}",
-	    'template' => "{check_sheet} {update}",
-	    'buttons' => [
-	        'view' => function ($url, $model, $key) {
-	            $options = [
-	                'title' => Yii::t('cruds', 'View'),
-	                'aria-label' => Yii::t('cruds', 'View'),
-	                'data-pjax' => '0',
-	            ];
-	            return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-	        },
+        'template' => "{check_sheet}",
+        'buttons' => [
+            'view' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'View'),
+                    'aria-label' => Yii::t('cruds', 'View'),
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            },
             'check_sheet' => function ($url, $model, $key) {
                 $options = [
                     'title' => 'View Check Sheet',
@@ -71,16 +71,16 @@ $grid_columns = [
                 $url = ['get-history', 'mesin_id' => $model->mesin_id, 'mesin_periode' => $model->mesin_periode];
                 return Html::a('<span class="glyphicon glyphicon-time"></span>', $url, $options);
             },
-	    ],
-	    'urlCreator' => function($action, $model, $key, $index) {
-	        // using the column name as key, not mapping to 'id' like the standard generator
-	        $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
-	        $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
-	        return Url::toRoute($params);
-	    },
-	    'contentOptions' => ['nowrap'=>'nowrap']
-	],
-	[
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
+    ],
+    [
         'attribute' => 'mesin_id',
         'label' => 'Machine ID',
         'vAlign' => 'middle',
@@ -125,17 +125,18 @@ $grid_columns = [
         //'format' => ['date', 'php:d-M-Y']
     ],
     [
-        'attribute' => 'mesin_last_update',
-        'label' => 'Last Update',
+        'attribute' => 'count_close',
+        'label' => 'Status',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '20%',
         'value' => function($model){
-            return $model->mesin_last_update == null ? '-' : date('d-M-Y', strtotime($model->mesin_last_update));
+            return $model->count_close == 0 ? 'OPEN' : 'CLOSE';
         },
-        //'format' => ['date', 'php:d-M-Y H:i:s'],
-        //'width' => '120px',
-    ],
+        'filter' => [
+            0 => 'OPEN',
+            1 => 'CLOSE'
+        ],
+    ]
 ];
 ?>
 <div class="giiant-crud mesin-check-dtr-index">

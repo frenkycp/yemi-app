@@ -4,6 +4,7 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
 
 $this->title = [
@@ -45,78 +46,92 @@ $endDate = date('Y-m-t');
 $startWeek = app\models\SernoCalendar::find()->where(['ship' => $startDate])->one()->week_ship;
 $endWeek = app\models\SernoCalendar::find()->where(['ship' => $endDate])->one()->week_ship;
 $date_today = date('Y-m-d');
-$weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->one()->week_ship;
+//$weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->one()->week_ship;
+$today = new \DateTime(date('Y-m-d'));
+$weekToday = $today->format("W");
+
+$week_is_found = false;
+$tmp_week;
+foreach ($data as $key => $value) {
+    if ($key == $weekToday) {
+        $week_is_found = true;
+    }
+    $tmp_week = $key;
+}
+
+if (!$week_is_found) {
+    $weekToday = $tmp_week;
+}
 
 /*echo '<pre>';
 print_r($data);
 echo '</pre>';*/
 
 ?>
+<?php $form = ActiveForm::begin([
+    'id' => 'form_index',
+    'layout' => 'horizontal',
+    'enableClientValidation' => true,
+    'errorSummaryCssClass' => 'error-summary alert alert-danger',
+    'fieldConfig' => [
+             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+             'horizontalCssClasses' => [
+                 //'label' => 'col-sm-2',
+                 #'offset' => 'col-sm-offset-4',
+                 'wrapper' => 'col-sm-7',
+                 'error' => '',
+                 'hint' => '',
+             ],
+         ],
+    ]
+    );
+    ?>
 
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'year')->dropDownList(
+                $year_arr
+            ); ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'month')->dropDownList(
+                $month_arr
+            ); ?>
+        </div>
+        <button type="submit" class="btn btn-default">Update Chart</button>
+    </div>
+    
+
+<?php ActiveForm::end(); ?>
 <u><h5>Last Updated : <?= date('d-M-Y H:i:s') ?></h5></u>
 <div class="nav-tabs-custom">
 	<ul class="nav nav-tabs">
         <?php
         $color = 'MediumAquamarine';
-        for($i = $startWeek; $i <= $endWeek; $i++)
-        {
-            if($i == $weekToday)
+        foreach ($data as $key => $value) {
+            if($key == $weekToday)
             {
-                echo '<li class="active"><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
+                echo '<li class="active"><a href="#tab_1_' . $key . '" data-toggle="tab">Week ' . $key . '</a></li>';
             }
             else
             {
-                echo '<li><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
+                echo '<li><a href="#tab_1_' . $key . '" data-toggle="tab">Week ' . $key . '</a></li>';
             }
         }
         ?>
     </ul>
     <div class="tab-content">
         <?php
-        for($j = $startWeek; $j <= $endWeek; $j++)
-        {
-            if($j == $weekToday)
+        foreach ($data as $key => $value) {
+            if($key == $weekToday)
             {
-                echo '<div class="tab-pane active" id="tab_1_' . $j .'">';
+                echo '<div class="tab-pane active" id="tab_1_' . $key .'">';
             }
             else
             {
-                echo '<div class="tab-pane" id="tab_1_' . $j .'">';
+                echo '<div class="tab-pane" id="tab_1_' . $key .'">';
             }
-            $ngProgress = app\models\MesinCheckDtr::find()->select(['CONVERT(date, [db_owner].[MESIN_CHECK_DTR].[master_plan_maintenance]) as tgl, DATEPART(wk, master_plan_maintenance) as week_no, SUM(CASE WHEN master_plan_maintenance IS NOT NULL THEN 1 ELSE 0 END) as total_data, SUM(CASE WHEN mesin_last_update IS NOT NULL THEN 1 ELSE 0 END) as total_close'])
-            ->where(['DATEPART(wk, [db_owner].[MESIN_CHECK_DTR].[master_plan_maintenance])' => $j])
-            ->groupBy('CONVERT(date, [db_owner].[MESIN_CHECK_DTR].[master_plan_maintenance]), DATEPART(wk, [db_owner].[MESIN_CHECK_DTR].[master_plan_maintenance])')->all();
-            $dataClose = [];
-            $dataOpen = [];
-            $dataOther = [];
-            $dataName = [];
-
-            foreach ($ngProgress as $value) {
-            	$total_data = $value->total_data;
-            	$total_close = $value->total_close;
-                $total_open = $total_data - $total_close;
-                $presentase = floor(($total_close/$total_data)*100);
-
-                $dataOpen[] = [
-                    'y' => (int)(100 - $presentase),
-                    'url' => Url::to(['mesin-check-dtr/index',
-                        'master_plan_maintenance' => $value->tgl,
-                        'status' => 0
-                    ]),
-                    'qty' => $total_open,
-                ];
-
-                $dataClose[] = [
-                    'y' => (int)($presentase),
-                    'url' => Url::to(['mesin-check-dtr/index',
-                        'master_plan_maintenance' => $value->tgl,
-                        'status' => 1
-                    ]),
-                    'qty' => $total_close,
-                ];
-                
-                $dataName[] = date('Y-m-d', strtotime($value->tgl));
-            }
+            
             echo Highcharts::widget([
             'scripts' => [
                 'modules/exporting',
@@ -135,13 +150,13 @@ echo '</pre>';*/
                     'text' => 'Master Plan'
                 ],
                 'subtitle' => [
-                    'text' => 'Week ' . $j
+                    'text' => 'Week ' . $key
                 ],
                 'xAxis' => [
                     'type' => 'category'
                 ],
                 'xAxis' => [
-                    'categories' => $dataName,
+                    'categories' => $value['category'],
                     'labels' => [
                         'formatter' => new JsExpression('function(){ return \'<a href="container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
                     ],
@@ -161,15 +176,17 @@ echo '</pre>';*/
                         'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
+                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
                             'color' => 'black',
                             //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                             'style' => [
                                 'fontSize' => '14px',
-                                'fontWeight' => '0'
+                                'fontWeight' => '0',
+                                'textOutline' => '0px'
                             ],
                         ],
-                        'borderWidth' => 2,
-                        'borderColor' => $color,
+                        //'borderWidth' => 2,
+                        //'borderColor' => $color,
                     ],
                     'series' => [
                         'cursor' => 'pointer',
@@ -181,7 +198,8 @@ echo '</pre>';*/
                         ]
                     ]
                 ],
-                'series' => [
+                'series' => $value['data']
+                /*'series' => [
                     [
                         'name' => 'Outstanding',
                         'data' => $dataOpen,
@@ -209,7 +227,7 @@ echo '</pre>';*/
                             ],
                         ]
                     ]
-                ]
+                ]*/
             ],
         ]);
             echo '</div>';

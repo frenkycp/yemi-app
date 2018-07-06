@@ -198,6 +198,8 @@ class HrgaSplReportDailyController extends Controller
             }
         }
 
+        $remark .= '</table>';
+
         return $remark;
     }
 }
