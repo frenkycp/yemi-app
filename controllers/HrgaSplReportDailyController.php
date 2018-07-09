@@ -64,6 +64,7 @@ class HrgaSplReportDailyController extends Controller
         ])
         ->where('NIK IS NOT NULL')
         ->andWhere('CC_GROUP IS NOT NULL')
+        ->andWhere('NILAI_LEMBUR_ACTUAL IS NOT NULL')
         ->andWhere([
             'FORMAT(TGL_LEMBUR, \'yyyy-MM\')' => $period
         ])
@@ -167,6 +168,7 @@ class HrgaSplReportDailyController extends Controller
         $detail_data = $spl_data = SplView::find()
         ->where('NIK IS NOT NULL')
         ->andWhere(['TGL_LEMBUR' => $tgl_lembur, 'CC_GROUP' => $cc_group])
+        ->andWhere('NILAI_LEMBUR_ACTUAL IS NOT NULL')
         ->orderBy('CC_GROUP ASC, CC_DESC ASC, NIK ASC')
         ->all();
         $remark = '<h4>' . $cc_group . ' on ' . date('d M\' Y', strtotime($tgl_lembur)) .'</h4>';
