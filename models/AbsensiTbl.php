@@ -31,4 +31,15 @@ class AbsensiTbl extends BaseAbsensiTbl
             ]
         );
     }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(
+            parent::attributeLabels(),
+            [
+                'date' => 'Tanggal',
+                'NIK' => 'NIK',
+            ]
+        );
+    }
 }

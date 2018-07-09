@@ -128,17 +128,20 @@ class PartsPickingStatusController extends Controller
 		;
 
 		foreach ($data_arr as $value) {
+            $req_date = $value['req_date'] == null ? '-' : date('Y-m-d', strtotime($value['req_date']));
+            $start_date = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
+            $completed_date = $value['completed_date'] == null ? '-' : date('Y-m-d', strtotime($value['completed_date']));
 			$data .= '
 				<tr>
 					<td class="text-center">' . $value['set_list_no'] . '</td>
 					<td class="text-center">' . $value['parent'] . '</td>
 					<td>' . $value['parent_desc'] . '</td>
-					<td class="text-center">' . date('Y-m-d', strtotime($value['req_date'])) . '</td>
+					<td class="text-center">' . $req_date . '</td>
 					<td class="text-center">' . $value['plan_qty'] . '</td>
 					<td class="text-center">' . $value['part_count'] . '</td>
 					<td class="text-center">' . $value['man_power'] . '</td>
-                    <td class="text-center">' . date('Y-m-d H:i:s', strtotime($value['start_date'])) . '</td>
-                    <td class="text-center">' . date('Y-m-d H:i:s', strtotime($value['completed_date'])) . '</td>
+                    <td class="text-center">' . $start_date . '</td>
+                    <td class="text-center">' . $completed_date . '</td>
 					<td class="text-center">' . $value['stage_desc'] . '</td>
                     <td>' . $value['pts_note'] . '</td>
 				</tr>

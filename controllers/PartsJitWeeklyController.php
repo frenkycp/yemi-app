@@ -140,12 +140,13 @@ class PartsJitWeeklyController extends Controller
 		;
 
 		foreach ($data_arr as $value) {
+            $yemi_arrival_date = $value['YEMI_ARRIVAL'] == null ? '-' : date('Y-m-d', strtotime($value['YEMI_ARRIVAL']));
 			$data .= '
 				<tr>
                     <td class="text-center">' . $value['BOOKING_ID'] . '</td>
                     <td>' . $value['USER_DESC'] . '</td>
                     <td class="text-center">' . $value['PICKUP_ACTUAL'] . '</td>
-                    <td class="text-center">' . date('Y-m-d', strtotime($value['YEMI_ARRIVAL'])) . '</td>
+                    <td class="text-center">' . $yemi_arrival_date . '</td>
                     <td>' . $value['SHIPPER'] . '</td>
                     <td class="text-center">' . $value['ITEM'] . '</td>
                     <td>' . $value['ITEM_DESC'] . '</td>

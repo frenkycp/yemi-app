@@ -5,7 +5,7 @@
 namespace app\controllers\base;
 
 use app\models\AbsensiTbl;
-    use app\models\search\AbsensiTblSearch;
+    use app\models\search\HrgaAttendanceDataSearch;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
@@ -13,9 +13,9 @@ use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 
 /**
-* AbsensiTblController implements the CRUD actions for AbsensiTbl model.
+* HrgaAttendanceDataController implements the CRUD actions for AbsensiTbl model.
 */
-class AbsensiTblController extends Controller
+class HrgaAttendanceDataController extends Controller
 {
 
 
@@ -32,7 +32,7 @@ public $enableCsrfValidation = false;
 */
 public function actionIndex()
 {
-    $searchModel  = new AbsensiTblSearch;
+    $searchModel  = new HrgaAttendanceDataSearch;
     $dataProvider = $searchModel->search($_GET);
 
 Tabs::clearLocalStorage();

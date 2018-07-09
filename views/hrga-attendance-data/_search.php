@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 /**
 * @var yii\web\View $this
-* @var app\models\search\AbsensiTblSearch $model
+* @var app\models\search\HrgaAttendanceDataSearch $model
 * @var yii\widgets\ActiveForm $form
 */
 ?>
