@@ -60,7 +60,7 @@ class HrgaSplReportDailyController extends Controller
             'TGL_LEMBUR' => 'TGL_LEMBUR',
             'CC_GROUP' => 'CC_GROUP',
             'JUMLAH' => 'COUNT(NIK)',
-            'total_lembur' => 'SUM(NILAI_LEMBUR_PLAN)'
+            'total_lembur' => 'SUM(NILAI_LEMBUR_ACTUAL)'
         ])
         ->where('NIK IS NOT NULL')
         ->andWhere('CC_GROUP IS NOT NULL')
