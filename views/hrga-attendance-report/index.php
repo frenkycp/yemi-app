@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Attendance Report <span class="japanesse text-green"></span>',
-    'tab_title' => 'Attendance Report',
-    'breadcrumbs_title' => 'Attendance Report'
+    'page_title' => 'Daily Attendance Control <span class="japanesse text-green">(日常勤怠管理)</span>',
+    'tab_title' => 'Daily Attendance Control',
+    'breadcrumbs_title' => 'Daily Attendance Control'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
