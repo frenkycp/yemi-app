@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Monthly Shipping Container <span class="japanesse text-green">(月次コンテナー出荷)</span>',
-    'tab_title' => 'Monthly Shipping Container',
-    'breadcrumbs_title' => 'Monthly Shipping Container'
+    'page_title' => 'Attendance Report <span class="japanesse text-green"></span>',
+    'tab_title' => 'Attendance Report',
+    'breadcrumbs_title' => 'Attendance Report'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -28,10 +28,10 @@ $script = <<< JS
        window.location = location.href;
     }
 JS;
-$this->registerJs($script, View::POS_HEAD );
+//$this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($data);
+print_r($category);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
@@ -73,9 +73,6 @@ echo '</pre>';*/
 
     <?php ActiveForm::end(); ?>
 <div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">Total Container : <?= $total_container; ?></h3>
-    </div>
     <div class="box-body">
         <?php
         echo Highcharts::widget([
@@ -108,33 +105,55 @@ echo '</pre>';*/
                 ],
                 'yAxis' => [
                     'title' => [
-                        'text' => 'Container Completion'
+                        'text' => 'Attendance Percentage (%)'
                     ],
                     'stackLabels' => [
-                        //'enabled' => true,
-                        //'formatter' => new JsExpression('function(){ return this.qty + "aa"; }'),
+                        'enabled' => true,
+                        'formatter' => new JsExpression('function(){ return this.y; }'),
                     ]
                 ],
                 'tooltip' => [
-                    'enabled' => false
+                    'enabled' => true,
+                    'pointFormat' => '{series.name}: <b>{point.y}%</b> ({point.qty} employees)<br/>',
+                    'headerFormat' => null//'{point.key}-{point.year_month}<br/>'
                 ],
                 'plotOptions' => [
                     'column' => [
                         'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
+                            //'format' => '{point.percentage:.2f}%',
                             'style' => [
                                 'textOutline' => '0px',
                                 'fontWeight' => '0'
                             ],
-                            'format' => '{point.qty}/{point.total_qty}',
+                            //'format' => '{point.qty}/{point.total_qty}',
                             'color' => 'black',
                         ],
                     ],
+                    'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression('
+                                        function(){
+                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                        }
+                                    '),
+                                ]
+                            ]
+                        ]
                 ],
                 'series' => $data
             ],
         ]);
+
+        yii\bootstrap\Modal::begin([
+            'id' =>'modal',
+            'header' => '<h3>Detail Information</h3>',
+            'size' => 'modal-lg',
+        ]);
+        yii\bootstrap\Modal::end();
         ?>
     </div>
 </div>
