@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class AbsensiTbl extends BaseAbsensiTbl
 {
-    public $min_year, $total_kehadiran, $total_karyawan;
+    public $min_year, $total_kehadiran, $total_karyawan, $total_cuti;
 
     public function behaviors()
     {

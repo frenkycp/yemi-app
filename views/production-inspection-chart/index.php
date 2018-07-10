@@ -77,30 +77,6 @@ echo '</pre>';*/
                 echo '<div class="tab-pane" id="tab_1_' . $j .'">';
             }
 
-            /*$sernoFg = app\models\SernoOutput::find()
-            ->select(['etd, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(ship,4) as week_no'])
-            ->where([
-                'WEEK(ship,4)' => $j,
-                'LEFT(id,4)' => date('Y'),
-            ])
-            ->andWhere(['<>', 'stc', 'ADVANCE'])
-            //->andWhere(['<>', 'stc', 'NOSO'])
-            ->groupBy('etd')
-            ->all();*/
-
-            /*$sernoFg = app\models\ProductionInspection::find()
-            ->select([
-                'proddate' => 'proddate',
-                'qa_ok' => 'qa_ok',
-                'total' => 'COUNT(qa_ok)'
-            ])
-            ->where([
-                'week_no' => $j,
-                'LEFT(proddate,4)' => date('Y'),
-            ])
-            ->groupBy('proddate, qa_ok')
-            ->all();*/
-
             $sernoFg = $data[$j];
 
             $tmp_period = [];

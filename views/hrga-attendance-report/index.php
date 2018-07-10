@@ -22,13 +22,13 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 300000); // milliseconds
+      setTimeout("refreshPage();", 600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
 JS;
-//$this->registerJs($script, View::POS_HEAD );
+$this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
 print_r($category);

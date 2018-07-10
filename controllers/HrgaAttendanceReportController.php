@@ -4,9 +4,13 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\PlanReceivingPeriod;
 use app\models\AbsensiTbl;
+use yii\web\JsExpression;
 
 class HrgaAttendanceReportController extends Controller
 {
+	public $category_masuk = ['SHIFT-01', 'SHIFT-02', 'SHIFT-03', 'PULANG TIDAK ABSEN', 'PULANG CEPAT', 'DATANG TERLAMBAT'];
+	public $category_cuti = ['CUTI', 'CUTI KHUSUS', 'CUTI KHUSUS IJIN'];
+	
 	public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
@@ -21,6 +25,7 @@ class HrgaAttendanceReportController extends Controller
     	$category = [];
     	$year_arr = [];
 		$month_arr = [];
+		
 
 		for ($month = 1; $month <= 12; $month++) {
             $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
@@ -49,53 +54,72 @@ class HrgaAttendanceReportController extends Controller
 		->select([
 			'DATE' => 'DATE',
 			'total_karyawan' => 'SUM(TOTAL_KARYAWAN)',
-			'total_kehadiran' => 'SUM(KEHADIRAN)'
+			'total_kehadiran' => 'SUM(CASE WHEN CATEGORY=\'SHIFT-01\' OR CATEGORY=\'SHIFT-02\' OR CATEGORY=\'SHIFT-03\' OR CATEGORY=\'PULANG TIDAK ABSEN\' OR CATEGORY=\'PULANG CEPAT\' OR CATEGORY=\'DATANG TERLAMBAT\' THEN 1 ELSE 0 END)',
+			'total_cuti' => 'SUM(CASE WHEN CATEGORY=\'CUTI\' OR CATEGORY=\'CUTI KHUSUS\' OR CATEGORY=\'CUTI KHUSUS IJIN\' THEN 1 ELSE 0 END)'
 		])
 		->where([
-			//'PERIOD' => $model->year . $model->month
 			'PERIOD' => $period
 		])
 		->groupBy('DATE')
 		->orderBy('DATE')
 		->all();
 
-		$tmp_data_open = [];
-		$tmp_data_close = [];
+		$tmp_data_absen = [];
+		$tmp_data_hadir = [];
+		$tmp_data_cuti = [];
 		foreach ($attendance_report_arr as $attendance_report) {
-			$presentase_close = 0;
+
+			$presentase_hadir = 0;
+			$presentase_cuti = 0;
 			if ($attendance_report->total_karyawan > 0) {
-				$presentase_close = floor((($attendance_report->total_kehadiran / $attendance_report->total_karyawan) * 100));
+				$presentase_hadir = floor((($attendance_report->total_kehadiran / $attendance_report->total_karyawan) * 100));
+				$presentase_cuti = round((($attendance_report->total_cuti / $attendance_report->total_karyawan) * 100));
 			}
+
 			$category[] = date('j', strtotime($attendance_report->DATE));
-			$presentase_open = 100 - $presentase_close;
-			$tmp_data_open[] = [
-				'y' => $presentase_open,
+			$presentase_absent = 100 - ($presentase_hadir + $presentase_cuti);
+			$tmp_data_absen[] = [
+				'y' => $presentase_absent == 0 ? null : $presentase_absent,
 				'remark' => $this->getRemark($attendance_report->DATE, 0),
-				'qty' => $attendance_report->total_karyawan - $attendance_report->total_kehadiran,
+				'qty' => $attendance_report->total_karyawan - ($attendance_report->total_kehadiran + $attendance_report->total_cuti),
 				'year_month' => date('M Y', strtotime($period)),
 			];
-			$tmp_data_close[] = [
-				'y' => $presentase_close,
+			$tmp_data_cuti[] = [
+				'y' => $presentase_cuti == 0 ? null : $presentase_cuti,
+				'remark' => $this->getRemark($attendance_report->DATE, 2),
+				'qty' => $attendance_report->total_cuti,
+				'year_month' => date('M Y', strtotime($period)),
+			];
+			$tmp_data_hadir[] = [
+				'y' => $presentase_hadir == 0 ? null : $presentase_hadir,
 				'remark' => $this->getRemark($attendance_report->DATE, 1),
 				'qty' => $attendance_report->total_kehadiran,
 				'year_month' => date('M Y', strtotime($period)),
 			];
+			
 			
 		}
 
 		$data = [
     		[
     			'name' => 'ABSENT',
-    			'data' => $tmp_data_open,
+    			'data' => $tmp_data_absen,
     			'dataLabels' => [
     				'enabled' => false
     			],
     			'color' => 'rgba(200, 200, 200, 0.4)',
     			'showInLegend' => false,
-    		],[
+    		],
+    		[
+    			'name' => 'ON LEAVE',
+    			'data' => $tmp_data_cuti,
+    			'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+    			'showInLegend' => false,
+    		],
+    		[
     			'name' => 'PRESENT',
-    			'data' => $tmp_data_close,
-    			'color' => 'rgba(72,61,139,0.6)',
+    			'data' => $tmp_data_hadir,
+    			'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
     			'showInLegend' => false,
     		]
     	];
@@ -111,11 +135,11 @@ class HrgaAttendanceReportController extends Controller
     	]);
     }
 
-    public function getRemark($date, $kehadiran)
+    public function getRemark($date, $category)
     {
+    	
     	$attendance_report_arr = AbsensiTbl::find()->where([
 			'DATE' => $date,
-			'KEHADIRAN' => $kehadiran
 		])
 		->orderBy('SECTION, NIK')
 		->all();
@@ -123,6 +147,7 @@ class HrgaAttendanceReportController extends Controller
 		$data = '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
 		'<tr>
+			<th class="text-center">NO</th>
 			<th class="text-center">NIK</th>
 			<th>Nama Karyawan</th>
 			<th class="text-center">Section</th>
@@ -133,18 +158,53 @@ class HrgaAttendanceReportController extends Controller
 		</tr>'
 		;
 
+		if ($category == 1) {
+			$filter_arr = $this->category_masuk;
+		} elseif ($category == 2) {
+			$filter_arr = $this->category_cuti;
+		} else {
+			$tmp = AbsensiTbl::find()->select('DISTINCT(CATEGORY)')->where([
+				'DATE' => $date,
+			])->all();
+
+			$tmp_arr = [];
+			$arr_merge = array_merge($this->category_masuk, $this->category_cuti);
+			foreach ($tmp as $value) {
+				if (!in_array($value->CATEGORY, $arr_merge)) {
+					$tmp_arr[] = $value->CATEGORY;
+				}
+			}
+			$filter_arr = $tmp_arr;
+		}
+
+		$i = 1;
 		foreach ($attendance_report_arr as $attendance_report) {
-			$data .= '
-				<tr>
-					<td class="text-center">' . $attendance_report['NIK'] . '</td>
-					<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
-					<td class="text-center">' . $attendance_report['SECTION'] . '</td>
-                    <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
-					<td class="text-center">' . $attendance_report['BONUS'] . '</td>
-					<td class="text-center">' . $attendance_report['DISIPLIN'] . '</td>
-					<td class="text-center">' . $attendance_report['DAY_STAT'] . '</td>
-				</tr>
-			';
+			if (in_array($attendance_report->CATEGORY, $filter_arr)) {
+
+				$bonus = '<i class="fa fa-fw fa-close text-red"></i>';
+				if ($attendance_report['BONUS'] == 1) {
+					$bonus = '<i class="fa fa-fw fa-check text-green"></i>';
+				}
+
+				$disiplin = '<i class="fa fa-fw fa-close text-red"></i>';
+				if ($attendance_report['DISIPLIN'] == 1) {
+					$disiplin = '<i class="fa fa-fw fa-check text-green"></i>';
+				}
+				$data .= '
+					<tr>
+						<td class="text-center">' . $i . '</td>
+						<td class="text-center">' . $attendance_report['NIK'] . '</td>
+						<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
+						<td class="text-center">' . $attendance_report['SECTION'] . '</td>
+	                    <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
+						<td class="text-center">' . $bonus . '</td>
+						<td class="text-center">' . $disiplin . '</td>
+						<td class="text-center">' . $attendance_report['DAY_STAT'] . '</td>
+					</tr>
+				';
+				$i++;
+			}
+			
 		}
 
 		$data .= '</table>';
