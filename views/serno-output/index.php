@@ -182,6 +182,13 @@ $gridColumns = [
         'format' => ['decimal',0]
     ],
     [
+        'attribute' => 'cntr',
+        'label' => 'Container No',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '50px',
+    ],
+    /*[
         'attribute' => 'ng',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -190,7 +197,7 @@ $gridColumns = [
         'pageSummary' => true,
         'format' => ['decimal',0]
     ],
-    /*[
+    [
         'attribute' => 'category',
         'hAlign' => 'center',
         'vAlign' => 'middle',
