@@ -179,12 +179,22 @@ class HrgaSplReportDailyController extends Controller
             <th style="width:100px; text-align: center;">NIK</th>
             <th>Nama</th>
             <th>Section</th>
+            <th class="text-center">Check In</th>
+            <th class="text-center">Check Out</th>
             <th class="text-center">Plan Lembur<br/>(Jam)</th>
             <th class="text-center">Aktual Lembur<br/>(Jam)</th>
         </tr>
         ';
         $i = 1;
         foreach ($detail_data as $detail) {
+            $start_lembur = '-';
+            if ($detail->START_LEMBUR_ACTUAL !== null) {
+                $start_lembur = date('H:i', strtotime($detail->START_LEMBUR_ACTUAL));
+            }
+            $end_lembur = '-';
+            if ($detail->END_LEMBUR_ACTUAL !== null) {
+                $end_lembur = date('H:i', strtotime($detail->END_LEMBUR_ACTUAL));
+            }
             if ($tgl_lembur == $detail->TGL_LEMBUR && $cc_group == $detail->CC_GROUP) {
                 $remark .= '
                 <tr>
@@ -192,6 +202,8 @@ class HrgaSplReportDailyController extends Controller
                     <td style="text-align: center;">' . $detail->NIK . '</td>
                     <td>' . $detail->NAMA_KARYAWAN . '</td>
                     <td>' . $detail->CC_DESC . '</td>
+                    <td class="text-center">' . $start_lembur . '</td>
+                    <td class="text-center">' . $end_lembur . '</td>
                     <td class="text-center">' . $detail->NILAI_LEMBUR_PLAN . '</td>
                     <td class="text-center">' . $detail->NILAI_LEMBUR_ACTUAL . '</td>
                 </tr>

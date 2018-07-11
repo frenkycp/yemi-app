@@ -93,12 +93,12 @@ echo '</pre>';*/
             ?>
             <div class="panel panel-info">
                 <div class="panel-body">
-                    <p>Production <span class="japanesse">(生産課)</span>  - Actual/Target <span class="japanesse">(実績/目標)</span> : <?= '<b>' . $prod_total_jam_lembur . '</b> / ' . $overtime_budget; ?> hours</p>
+                    <p>Production <span class="japanesse">(生産課)</span>  - Actual/Budget <span class="japanesse">(実績/予算)</span> : <?= '<b>' . $prod_total_jam_lembur . '</b> / ' . $overtime_budget; ?> hours</p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active <?= $progress_bar; ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?= $budget_progress; ?>%; min-width: 1em"><?= $budget_progress; ?>%</div>
                     </div>
                     <hr>
-                    <p>Office & Others <span class="japanesse">(事務所とその他)</span> - Actual/Target <span class="japanesse">(実績/目標)</span> : <?= '<b>' . $others_total_jam_lembur . '</b> / ' . $overtime_budget2; ?> hours</p>
+                    <p>Office & Others <span class="japanesse">(事務所とその他)</span> - Actual/Budget <span class="japanesse">(実績/予算)</span> : <?= '<b>' . $others_total_jam_lembur . '</b> / ' . $overtime_budget2; ?> hours</p>
                     <div class="progress">
                         <div class="progress-bar progress-bar-striped active <?= $progress_bar2; ?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?= $budget_progress2; ?>%; min-width: 1em"><?= $budget_progress2; ?>%</div>
                     </div>

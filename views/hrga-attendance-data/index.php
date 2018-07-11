@@ -42,7 +42,8 @@ $gridColumns = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap']
+        'contentOptions' => ['nowrap'=>'nowrap'],
+        'hidden' => Yii::$app->user->identity->role->id == 1 ? false : true,
     ],
     [
         'attribute' => 'PERIOD',
@@ -74,15 +75,27 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
-        'attribute' => 'DIRECT_INDIRECT',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'KEHADIRAN',
+        'attribute' => 'CATEGORY',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+    ],
+    [
+        'attribute' => 'KEHADIRAN',
+        'value' => function($model){
+            if ($model->KEHADIRAN == 0) {
+                return '<i class="fa fa-fw fa-close text-red"></i>';
+            }
+            return '<i class="fa fa-fw fa-check text-green"></i>';
+        },
+        'format' => 'raw',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'filter' => [
+            0 => 'Absen',
+            1 => 'Hadir',
+        ],
     ],
     [
         'attribute' => 'BONUS',
