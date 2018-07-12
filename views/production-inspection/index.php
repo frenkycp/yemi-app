@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Final Inspection Data <span>(出荷管理検査データ)</span>',
-    'tab_title' => 'Final Inspection Data (出荷管理検査データ)',
-    'breadcrumbs_title' => 'Final Inspection Data (出荷管理検査データ)'
+    'page_title' => 'Final Inspection Data <span class="japanesse text-green">(出荷管理検査データ)</span>',
+    'tab_title' => 'Final Inspection Data',
+    'breadcrumbs_title' => 'Final Inspection Data'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -26,7 +26,7 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
-$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerJs("$(function() {
    $('.popupModal').click(function(e) {

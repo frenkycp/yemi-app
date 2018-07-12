@@ -51,80 +51,38 @@ echo '</pre>';*/
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php
-        for($i = $startWeek; $i <= $endWeek; $i++)
-        {
-            if($i == $weekToday)
+        foreach ($data as $key => $value) {
+            if($key == $weekToday)
             {
-                echo '<li class="active"><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
+                echo '<li class="active"><a href="#tab_1_' . $key . '" data-toggle="tab">Week ' . $key . '</a></li>';
             }
             else
             {
-                echo '<li><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
+                echo '<li><a href="#tab_1_' . $key . '" data-toggle="tab">Week ' . $key . '</a></li>';
             }
         }
         ?>
     </ul>
     <div class="tab-content">
         <?php
-        for($j = $startWeek; $j <= $endWeek; $j++)
-        {
-            if($j == $weekToday)
+        foreach ($data as $key => $value) {
+            if($key == $weekToday)
             {
-                echo '<div class="tab-pane active" id="tab_1_' . $j .'">';
+                echo '<div class="tab-pane active" id="tab_1_' . $key .'">';
             }
             else
             {
-                echo '<div class="tab-pane" id="tab_1_' . $j .'">';
+                echo '<div class="tab-pane" id="tab_1_' . $key .'">';
             }
-
-            $sernoFg = $data[$j];
+            $sernoFg = $data[$key];
+            $category = $sernoFg['category'];
+            $data_series = $sernoFg['data'];
 
             $tmp_period = [];
 
-            foreach ($sernoFg as $value) {
-                if (!in_array($value['proddate'], $tmp_period)) {
-                    $tmp_period[] = $value['proddate'];
-                }
-            }
-
             /*echo '<pre>';
-            print_r($sernoFg);
+            print_r($data_series);
             echo '</pre>';*/
-
-            $data_close = [];
-            $data_open = [];
-
-            foreach ($tmp_period as $value) {
-                $tmp_total_open = 0;
-                $tmp_total_close = 0;
-                foreach ($sernoFg as $value2) {
-                    if ($value2['proddate'] == $value) {
-                        if ($value2['qa_ok'] == 'OK') {
-                            $tmp_total_close += $value2['total'];
-                        } else {
-                            $tmp_total_open += $value2['total'];
-                        }
-                    }
-                }
-                $total_qty = $tmp_total_open + $tmp_total_close;
-                $presentase_close = 0;
-                $presentase_open = 0;
-                if ($total_qty > 0) {
-                    $presentase_close = round(($tmp_total_close / $total_qty) * 100);
-                    $presentase_open = 100 - $presentase_close;
-                }
-                
-                $data_close[] = [
-                    'y' => (int)($presentase_close),
-                    'url' => Url::to(['/production-inspection/index', 'proddate' => $value, 'status' => 'OK']),
-                    'qty' => $tmp_total_close,
-                ];
-                $data_open[] = [
-                    'y' => $presentase_open,
-                    'url' => Url::to(['/production-inspection/index', 'proddate' => $value, 'status' => 'NG']),
-                    'qty' => $tmp_total_open,
-                ];
-            }
 
             echo Highcharts::widget([
             'scripts' => [
@@ -141,16 +99,16 @@ echo '</pre>';*/
                     'enabled' =>false
                 ],
                 'title' => [
-                    'text' => 'Weekly Report'
+                    'text' => null
                 ],
                 'subtitle' => [
-                    'text' => 'Week ' . $j
+                    'text' => null
                 ],
                 'xAxis' => [
                     'type' => 'category'
                 ],
                 'xAxis' => [
-                    'categories' => $tmp_period,
+                    'categories' => $category,
                     'labels' => [
                         'formatter' => new JsExpression('function(){ return \'<a href="container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
                     ],
@@ -158,13 +116,13 @@ echo '</pre>';*/
                 'yAxis' => [
                     'min' => 0,
                     'title' => [
-                        'text' => 'Total Completion'
+                        'text' => 'Total Completion (%)'
                     ],
                     'gridLineWidth' => 0,
                 ],
                 'tooltip' => [
                     'enabled' => true,
-                    'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " lot"; }'),
+                    /*'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " lot"; }'),*/
                 ],
                 'plotOptions' => [
                     'column' => [
@@ -177,57 +135,14 @@ echo '</pre>';*/
                                 'fontWeight' => '0'
                             ],
                         ],
-                        'borderWidth' => 1,
-                        'borderColor' => $color,
+                        //'borderWidth' => 1,
+                        //'borderColor' => $color,
                     ],
                     'series' => [
                         
                     ]
                 ],
-                'series' => [
-                    [
-                        'name' => 'Outstanding',
-                        'data' => $data_open,
-                        'color' => 'FloralWhite',
-                        'dataLabels' => [
-                            'enabled' => true,
-                            'color' => 'black',
-                            'format' => '{point.percentage:.0f}% ({point.qty})',
-                            'style' => [
-                                'textOutline' => '0px'
-                            ],
-                            'allowOverlap' => true,
-                        ],
-                        'showInLegend' => false,
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                            ]
-                        ]
-                    ],
-                    [
-                        'name' => 'Completed',
-                        'data' => $data_close,
-                        'color' => $color,
-                        'dataLabels' => [
-                            'enabled' => true,
-                            'color' => 'black',
-                            'format' => '{point.percentage:.0f}% ({point.qty})',
-                            'style' => [
-                                'textOutline' => '0px'
-                            ],
-                        ],
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                            ]
-                        ]
-                    ],
-                ]
+                'series' => $data_series
             ],
         ]);
             echo '</div>';

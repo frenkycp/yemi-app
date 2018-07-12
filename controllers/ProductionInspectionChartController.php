@@ -6,6 +6,7 @@ use yii\web\Controller;
 use app\models\ProductionInspection;
 use app\models\SernoCalendar;
 use app\models\SernoInput;
+use app\models\InspectionReportViewPercentage;
 
 class ProductionInspectionChartController extends Controller
 {
@@ -17,70 +18,78 @@ class ProductionInspectionChartController extends Controller
     
 	public function actionIndex()
 	{
+        date_default_timezone_set('Asia/Jakarta');
+
 		$title = '';
 		$subtitle = '';
 		$data = [];
-
-		date_default_timezone_set('Asia/Jakarta');
-
-    	$min_max_week = ProductionInspection::find()
-    	->select([
-    		'tahun' => 'LEFT(proddate,4)',
-    		'min_week' => 'MIN(week_no)',
-    		'max_week' => 'MAX(week_no)'
-    	])
-    	->where(['LEFT(proddate,4)' => date('Y')])
-    	->groupBy('tahun')
-    	->one();
-
-    	$weekToday = SernoCalendar::find()->where(['ship' => date('Y-m-d')])->one()->week_ship;
-
-		$start_week = 1;
-		$end_week = 52;
-
-		if(count($min_max_week) > 0)
-		{
-			$start_week = $min_max_week->min_week;
-			$end_week = $min_max_week->max_week;
-		}
-
-		$sernoFg = ProductionInspection::find()
-        ->select([
-        	'week_no' => 'week_no',
-            'proddate' => 'proddate',
-            'qa_ok' => 'qa_ok',
-            'plan' => 'plan',
-            'total' => 'COUNT(qa_ok)'
-        ])
-        ->where([
-            'LEFT(proddate,4)' => date('Y'),
-        ])
-        ->groupBy('week_no, proddate, plan, qa_ok')
-        ->orderBy('week_no ASC, proddate ASC')
+		
+        $period = date('Ym');
+        $inspection_report_arr = InspectionReportViewPercentage::find()
+        //->where([
+            //'periode' => $period
+        //])
+        ->orderBy('week_no, proddate')
         ->all();
 
-        $data = [];
+        $tmp_data = [];
+        foreach ($inspection_report_arr as $inspection_report) {
+            $week_no = $inspection_report->week_no;
+            $proddate = $inspection_report->proddate;
+            $tmp_data[$week_no][$proddate]['open'] = $inspection_report->open_percentage;
+            $tmp_data[$week_no][$proddate]['ok'] = $inspection_report->ok_percentage;
+            $tmp_data[$week_no][$proddate]['ng'] = $inspection_report->ng_percentage;
+            $tmp_data[$week_no][$proddate]['total_open'] = $inspection_report->total_no_check;
+            $tmp_data[$week_no][$proddate]['total_ok'] = $inspection_report->total_ok;
+            $tmp_data[$week_no][$proddate]['total_ng'] = $inspection_report->total_ng;
+        }
 
-		for ($i = $start_week; $i <= $end_week; $i++) {
-			foreach ($sernoFg as $value) {
-                if ($i == $value->week_no) {
-                    $data[$i][] = [
-                        'proddate' => $value->proddate,
-                        'qa_ok' => $value->qa_ok,
-                        'total' => $value->total,
-                        'plan' => $value->plan
-                    ];
-                }
-                
+        foreach ($tmp_data as $key => $value) {
+            $tmp_category = [];
+            $open_percentage_arr = [];
+            $ng_percentage_arr = [];
+            $ok_percentage_arr = [];
+            foreach ($value as $key2 => $value2) {
+                $tmp_category[] = $key2;
+                $open_percentage_arr[] = [
+                    'y' => (float)$value2['open']
+                ];
+                $ng_percentage_arr[] = [
+                    'y' => (float)$value2['ng']
+                ];
+                $ok_percentage_arr[] = [
+                    'y' => (float)$value2['ok']
+                ];
             }
-		}
+            $data[$key] = [
+                'category' => $tmp_category,
+                'data' => [
+                    [
+                        'name' => 'OPEN',
+                        'data' => $open_percentage_arr,
+                        'color' => 'rgba(10, 10, 10, 0.2)',
+                    ],
+                    [
+                        'name' => 'NG',
+                        'data' => $ng_percentage_arr,
+                        'color' => 'rgba(255, 0, 0, 0.4)',
+                    ],
+                    [
+                        'name' => 'OK',
+                        'data' => $ok_percentage_arr,
+                        'color' => 'rgba(0, 255, 0, 0.4)',
+                    ],
+                ],
+            ];
+        }
+
+        $today = new \DateTime(date('Y-m-d'));
+        $weekToday = $today->format("W");
 
 		return $this->render('index', [
 			'title' => $title,
 			'subtitle' => $subtitle,
 			'weekToday' => $weekToday,
-        	'startWeek' => $start_week,
-        	'endWeek' => $end_week,
             'data' => $data,
 		]);
 	}

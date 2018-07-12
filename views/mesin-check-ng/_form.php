@@ -51,6 +51,9 @@ use yii\helpers\StringHelper;
 <!-- attribute repair_note -->
             <?= $form->field($model, 'repair_note')->textInput() ?>
 
+            <!-- attribute repair_note -->
+            <?= $form->field($model, 'color_stat')->textInput() ?>
+
 <!-- attribute repair_plan -->
             <?= $form->field($model, 'repair_plan')->widget(\yii\jui\DatePicker::class, [
                 'dateFormat' => 'yyyy-MM-dd',
