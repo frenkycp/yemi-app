@@ -24,7 +24,12 @@ $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
 } else {
 Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
+    if (Yii::$app->user->identity->role->id == 1) {
+        $actionColumnTemplateString = "{update} {delete} {change_color}";
+    } else {
+        $actionColumnTemplateString = "{update} {change_color}";
+    }
+    
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
@@ -57,7 +62,14 @@ $grid_columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            }
+            }, 'change_color' => function($url, $model, $key){
+                $url = ['change-color', 'urutan' => $model->urutan];
+                $options = [
+                    'title' => 'Change Machine Status',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-refresh"></span>', $url, $options);
+            },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator
@@ -291,6 +303,15 @@ $grid_columns = [
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'rowOptions' => function($model){
+                if ($model->repair_status == 'O') {
+                    if ($model->color_stat == 1) {
+                        return ['class' => 'warning'];
+                    } else {
+                        return ['class' => 'danger'];
+                    }
+                }
+            },
             //'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 

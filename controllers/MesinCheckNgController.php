@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
+use app\models\MesinCheckNgDtr;
 
 /**
 * This is the class for controller "MesinCheckNgController".
@@ -117,5 +118,33 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 				'model' => $model,
 			]);
 		}
+	}
+
+	public function actionChangeColor($urutan)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($urutan);
+
+		if ($model->color_stat == 1) {
+			$model->color_stat = 0;
+		} else {
+			$model->color_stat = 1;
+		}
+
+		if (!$model->save()) {
+			return json_encode($model->errors);
+		} else {
+			$detail = new MesinCheckNgDtr();
+			$detail->urutan = $urutan;
+			$detail->color_stat = $model->color_stat;
+			$detail->stat_last_update = date('Y-m-d H:i:s');
+			if ($detail->save()) {
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($detail->errors);
+			}
+			
+		}
+
 	}
 }

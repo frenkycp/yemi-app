@@ -125,10 +125,10 @@ $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->on
                     'enabled' =>false
                 ],
                 'title' => [
-                    'text' => 'NG Completion'
+                    'text' => null
                 ],
                 'subtitle' => [
-                    'text' => 'Week ' . $j
+                    'text' => null
                 ],
                 'xAxis' => [
                     'type' => 'category'

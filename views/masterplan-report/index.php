@@ -147,10 +147,10 @@ echo '</pre>';*/
                     'enabled' =>false
                 ],
                 'title' => [
-                    'text' => 'Master Plan'
+                    'text' => null
                 ],
                 'subtitle' => [
-                    'text' => 'Week ' . $key
+                    'text' => null
                 ],
                 'xAxis' => [
                     'type' => 'category'

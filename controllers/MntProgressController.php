@@ -5,6 +5,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\MesinCheckNg;
 use yii\helpers\Url;
+use app\models\MesinCheckNgDtr;
 
 class MntProgressController extends Controller
 {
@@ -31,7 +32,7 @@ class MntProgressController extends Controller
 		$value_suffix = ' ' . date('F Y');
 
 		foreach ($tmp_data as $value) {
-			$data_categories[] = $value->mesin_nama;
+			$data_categories[] = $value->mesin_nama . ' (' . $value->urutan . ')';
 			$start_date = date('j', strtotime($value->mesin_last_update));
 			if ((int)date('n', strtotime($value->mesin_last_update)) < (int)date('n')) {
 				$start_date = 0;
@@ -42,12 +43,10 @@ class MntProgressController extends Controller
 				$end_date = date('j', strtotime($value->repair_aktual));
 			}
 
-			$status = $value->repair_status == 'C' ? 'CLOSED' : 'OPEN';
-
-			if ($value->repair_status == 'O') {
-				$color = 'rgba(255, 0, 0, 0.3)';
+			if ($value->color_stat == 1) {
+				$color = 'rgba(255, 153, 0, 0.3)';
 			}else {
-				$color = 'rgba(0, 255, 0, 0.3)';
+				$color = 'rgba(255, 0, 0, 0.3)';
 			}
 
 			$repair_plan = $value->repair_plan == null ? '-' : date('d M Y', strtotime($value->repair_plan));
@@ -56,11 +55,6 @@ class MntProgressController extends Controller
 			<div class="row">
 				<div class="col-md-3"><b>Machine Name</b></div>
 				<div class="col-md-9">: ' . $value->mesin_nama . '</div>
-			</div>
-			<hr/>
-			<div class="row">
-				<div class="col-md-3"><b>Status</b></div>
-				<div class="col-md-9">: ' . $status . '</div>
 			</div>
 			<hr/>
 			<div class="row">
@@ -74,15 +68,13 @@ class MntProgressController extends Controller
 			</div>
 			<hr/>
 			<div class="row">
-				<div class="col-md-3"><b>NG Remark</b></div>
+				<div class="col-md-3"><b>Remark</b></div>
 				<div class="col-md-9">: ' . $value->mesin_catatan . '</div>
 			</div>
 			<hr/>
-			<div class="row">
-				<div class="col-md-3"><b>Repair Note</b></div>
-				<div class="col-md-9">: ' . $value->repair_note . '</div>
-			</div>
 			';
+
+			$remark .= $this->getDetailHdr($value->urutan);
 			
 			$data_date[] = [
 				'low' => (int)$start_date,
@@ -99,5 +91,58 @@ class MntProgressController extends Controller
 			'subtitle' => $subtitle,
 			'value_suffix' => $value_suffix
 		]);
+	}
+
+	public function getDetailHdr($urutan)
+	{
+		$detail_arr = MesinCheckNgDtr::find()
+		->where([
+			'urutan' => $urutan
+		])
+		->orderBy('stat_last_update ASC')
+		->all();
+
+		$data = '<table class="table table-bordered table-striped table-hover">';
+		$data .= 
+		'<tr class="info">
+			<th class="text-center">No</th>
+			<th class="text-center">Last Update</th>
+			<th class="text-center">Status</th>
+		</tr>'
+		;
+
+		if (count($detail_arr) > 0) {
+			$i = 1;
+			foreach ($detail_arr as $value) {
+
+				if ($value->color_stat == 1) {
+					$status = 'Mesin Masih Bisa Dioperasikan';
+					$row_class = 'warning';
+				} else {
+					$status = 'Mesin Stop';
+					$row_class = 'danger';
+				}
+				$data .= '
+					<tr class="' . $row_class . '">
+						<td class="text-center">' . $i . '</td>
+						<td class="text-center">' . date('Y-m-d H:i:s', strtotime($value->stat_last_update)) . '</td>
+						<td class="text-center">' . $status . '</td>
+					</tr>
+				';
+				$i++;
+			}
+		} else {
+			$data .= '
+				<tr class="' . $row_class . '">
+					<td colspan=3>There is no detail data.</td>
+				</tr>
+			';
+		}
+
+		
+
+		$data .= '</table>';
+
+		return $data;
 	}
 }

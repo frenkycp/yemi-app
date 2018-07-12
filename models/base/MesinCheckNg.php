@@ -30,6 +30,7 @@ use Yii;
  * @property string $repair_status
  * @property string $repair_pic
  * @property string $repair_note
+ * @property integer $color_stat
  * @property string $aliasModel
  */
 abstract class MesinCheckNg extends \yii\db\ActiveRecord
@@ -60,7 +61,8 @@ abstract class MesinCheckNg extends \yii\db\ActiveRecord
     {
         return [
             [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'repair_user_id', 'repair_user_desc', 'repair_status', 'repair_pic', 'repair_note'], 'string'],
-            [['mesin_last_update', 'repair_plan', 'repair_aktual'], 'safe']
+            [['mesin_last_update', 'repair_plan', 'repair_aktual'], 'safe'],
+            [['color_stat'], 'integer']
         ];
     }
 
@@ -91,6 +93,7 @@ abstract class MesinCheckNg extends \yii\db\ActiveRecord
             'repair_status' => 'Repair Status',
             'repair_pic' => 'Repair Pic',
             'repair_note' => 'Repair Note',
+            'color_stat' => 'Color Stat',
         ];
     }
 
