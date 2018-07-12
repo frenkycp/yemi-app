@@ -44,9 +44,9 @@ class MntProgressController extends Controller
 			}
 
 			if ($value->color_stat == 1) {
-				$color = 'rgba(255, 153, 0, 0.3)';
+				$color = 'rgba(255, 153, 0, 0.8)';
 			}else {
-				$color = 'rgba(255, 0, 0, 0.3)';
+				$color = 'rgba(255, 0, 0, 0.8)';
 			}
 
 			$repair_plan = $value->repair_plan == null ? '-' : date('d M Y', strtotime($value->repair_plan));
@@ -116,10 +116,10 @@ class MntProgressController extends Controller
 			foreach ($detail_arr as $value) {
 
 				if ($value->color_stat == 1) {
-					$status = 'Mesin Masih Bisa Dioperasikan';
+					$status = 'Masih Dioperasikan';
 					$row_class = 'warning';
 				} else {
-					$status = 'Mesin Stop';
+					$status = 'Stop';
 					$row_class = 'danger';
 				}
 				$data .= '
