@@ -77,6 +77,7 @@ echo '</pre>';*/
             }
         }
         ?>
+        <li class="pull-right" style="display: <?= Yii::$app->user->identity->role->name == 'Picking List Editor' ? '' : 'none'; ?>"><?= Html::a('<i class="fa fa-gear"></i>', ['visual-picking-list/index']); ?></li>
     </ul>
     <div class="tab-content">
         <?php
