@@ -19,8 +19,12 @@ public function rules()
 {
 return [
 [['urutan'], 'integer'],
-            [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'mesin_last_update', 'repair_plan', 'repair_aktual', 'repair_user_id', 'repair_user_desc', 'repair_status', 'repair_pic', 'repair_note', 'closing_day_total'], 'safe'],
+            [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'mesin_last_update', 'repair_plan', 'repair_aktual', 'repair_user_id', 'repair_user_desc', 'repair_status', 'repair_pic', 'repair_note'], 'safe'],
 ];
+/*return [
+[['urutan'], 'integer'],
+            [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'mesin_last_update', 'repair_plan', 'repair_aktual', 'repair_user_id', 'repair_user_desc', 'repair_status', 'repair_pic', 'repair_note', 'closing_day_total'], 'safe'],
+];*/
 }
 
 /**
@@ -80,12 +84,12 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'repair_pic', $this->repair_pic])
             ->andFilterWhere(['like', 'repair_note', $this->repair_note]);
 
-            if (strpos($this->closing_day_total, '>') !== false) {
+            /*if (strpos($this->closing_day_total, '>') !== false) {
                   $day = str_replace('>', '', $this->closing_day_total);
                   $query->andFilterWhere(['>', 'DATEDIFF(d, mesin_last_update, ISNULL(repair_aktual,GETDATE()))', $day]);
             }else {
                   $query->andFilterWhere(['DATEDIFF(d, mesin_last_update, ISNULL(repair_aktual,GETDATE()))' => $this->closing_day_total]);
-            }
+            }*/
 
 return $dataProvider;
 }

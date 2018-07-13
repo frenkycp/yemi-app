@@ -40,12 +40,18 @@ class MesinCheckNg extends BaseMesinCheckNg
 
     public function getClosingDayTotal()
     {
-        $start_date = new \DateTime(date('Y-m-d', strtotime($this->mesin_last_update)));
-        $end_date = new \DateTime(date('Y-m-d'));
+        $start_date = new \DateTime($this->mesin_last_update);
+        $end_date = new \DateTime(date('Y-m-d H:i:s'));
         if ($this->repair_aktual !== null) {
-            $end_date = new \DateTime(date('Y-m-d', strtotime($this->repair_aktual)));
+            $end_date = new \DateTime($this->repair_aktual);
         }
 
-        return $start_date->diff($end_date)->format("%d");
+        $diff = $start_date->diff($end_date);
+
+        $minutes = $diff->days * 24 * 60;
+        $minutes += $diff->h * 60;
+        $minutes += $diff->i;
+
+        return $minutes;
     }
 }
