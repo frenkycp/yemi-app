@@ -222,7 +222,8 @@ $grid_columns = [
     ],
     [
         'attribute' => 'closing_day_total',
-        'label' => 'Days',
+        'label' => 'Total Time<br/>(minutes)',
+        'encodeLabel' => false,
         'vAlign' => 'middle',
         'value' => 'closingDayTotal',
         'hAlign' => 'center',
