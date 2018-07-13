@@ -122,7 +122,7 @@ $this->registerCss("
                     <div class="panel-heading text-center">Finish Goods Monitoring<br/><span class="japanesse-word">完成品モニタリング</span></div>
                     
                     <div class="list-group">
-                        <?= Html::a('Production Budget/Forecast/Actual <span class="japanesse-word">(生産予算・見込み・実績)</span>', ['/production-budget/index'], [
+                        <?= Html::a('Sales Budget/Forecast/Actual <span class="japanesse-word">(売上予算・見込み・実績)</span>', ['/production-budget/index'], [
                             'class' => 'list-group-item',
                             'style' => 'font-size: 13px;'
                         ]); ?>
