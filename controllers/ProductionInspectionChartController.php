@@ -7,6 +7,7 @@ use app\models\ProductionInspection;
 use app\models\SernoCalendar;
 use app\models\SernoInput;
 use app\models\InspectionReportViewPercentage;
+use yii\web\JsExpression;
 
 class ProductionInspectionChartController extends Controller
 {
@@ -52,13 +53,16 @@ class ProductionInspectionChartController extends Controller
             foreach ($value as $key2 => $value2) {
                 $tmp_category[] = $key2;
                 $open_percentage_arr[] = [
-                    'y' => (float)$value2['open']
+                    'y' => $value2['open'] == 0 ? null : (float)$value2['open'],
+                    'qty' => $value2['total_open']
                 ];
                 $ng_percentage_arr[] = [
-                    'y' => (float)$value2['ng']
+                    'y' => $value2['ng'] == 0 ? null : (float)$value2['ng'],
+                    'qty' => $value2['total_ng']
                 ];
                 $ok_percentage_arr[] = [
-                    'y' => (float)$value2['ok']
+                    'y' => (float)$value2['ok'],
+                    'qty' => $value2['total_ok']
                 ];
             }
             $data[$key] = [
@@ -68,6 +72,9 @@ class ProductionInspectionChartController extends Controller
                         'name' => 'OPEN',
                         'data' => $open_percentage_arr,
                         'color' => 'rgba(10, 10, 10, 0.2)',
+                        'dataLabels' => [
+                            'enabled' => false
+                        ]
                     ],
                     [
                         'name' => 'NG',
@@ -77,7 +84,8 @@ class ProductionInspectionChartController extends Controller
                     [
                         'name' => 'OK',
                         'data' => $ok_percentage_arr,
-                        'color' => 'rgba(0, 255, 0, 0.4)',
+                        //'color' => 'rgba(0, 255, 0, 0.4)',
+                        'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
                     ],
                 ],
             ];

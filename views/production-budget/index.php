@@ -60,6 +60,7 @@ echo '</pre>';*/
         <div class="col-md-4">
             <?= $form->field($model, 'budget_type')->dropDownList(
                 [
+                    'ALL' => 'ALL',
                     'PRODUCT' => 'FINAL_PRODUCT',
                     'KD_PART' => 'KD_PART'
                 ]

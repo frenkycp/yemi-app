@@ -122,6 +122,8 @@ echo '</pre>';*/
                 ],
                 'tooltip' => [
                     'enabled' => true,
+                    'headerFormat' => '<span style="font-size: 10px">{point.key}</span><br/>',
+                    'pointFormat' => '<span style="color:{point.color}">☼</span> {series.name}: <b>{point.y}%</b><br/>Qty : <b>{point.qty}</b> pcs'
                     /*'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " lot"; }'),*/
                 ],
                 'plotOptions' => [

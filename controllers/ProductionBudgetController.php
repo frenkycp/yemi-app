@@ -26,7 +26,7 @@ class ProductionBudgetController extends Controller
         $prod_bu_arr = [];
 
         $model = new Budget();
-        $model->budget_type = 'PRODUCT';
+        $model->budget_type = 'ALL';
 		$model->qty_or_amount = 'QTY';
         
     	if ($model->load($_POST))
@@ -43,9 +43,18 @@ class ProductionBudgetController extends Controller
         $prod_sales_arr = SalesBudgetTbl::find()
         ->where([
             'FISCAL' => $tmp_fy->FISCAL,
-            'TYPE' => $model->budget_type
         ])
         ->all();
+
+        if ($model->budget_type !== 'ALL') {
+            $prod_sales_arr = SalesBudgetTbl::find()
+            ->where([
+                'FISCAL' => $tmp_fy->FISCAL,
+                'TYPE' => $model->budget_type
+            ])
+            ->all();
+        }
+        
 
         foreach ($prod_sales_arr as $value) {
             /*if (!in_array($value->CATEGORY, $prod_category_arr)) {
