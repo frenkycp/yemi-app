@@ -7,6 +7,9 @@ use app\models\SalesBudgetCompare;
 use app\models\Budget;
 use yii\web\JsExpression;
 use DateTime;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use dmstr\bootstrap\Tabs;
 
 class ProductionBudgetController extends Controller
 {
@@ -58,12 +61,6 @@ class ProductionBudgetController extends Controller
         
 
         foreach ($prod_sales_arr as $value) {
-            /*if (!in_array($value->CATEGORY, $prod_category_arr)) {
-                $prod_category_arr[] = $value->CATEGORY;
-            }
-            if (!in_array($value->MODEL, $prod_model_arr)) {
-                $prod_model_arr[] = $value->MODEL;
-            }*/
             if (!in_array($value->PERIOD, $prod_period_arr)) {
                 $prod_period_arr[] = $value->PERIOD;
             }
@@ -170,10 +167,11 @@ class ProductionBudgetController extends Controller
         ->all();
 
         foreach ($data_arr as $value) {
+            $link = Html::a($value->MODEL, ['group-model-detail', 'period' => $period, 'bu' => $bu, 'product_type' => $product_type, 'product_model' => $value->MODEL, 'filter_by' => $filter_by]);
             if ($filter_by == 'QTY') {
                 $data .= '
                     <tr>
-                        <td class="text-center">' . $value->MODEL .'</td>
+                        <td class="text-center">' . $link .'</td>
                         <td class="text-center">' . number_format($value->total_qty_budget) .'</td>
                         <td class="text-center">' . number_format($value->total_qty_actual) .'</td>
                         <td class="text-center">' . number_format($value->balance_qty) .'</td>
@@ -182,7 +180,7 @@ class ProductionBudgetController extends Controller
             } else {
                 $data .= '
                     <tr>
-                        <td class="text-center">' . $value->MODEL .'</td>
+                        <td class="text-center">' . $link .'</td>
                         <td class="text-center">' . number_format($value->total_amount_budget) .'</td>
                         <td class="text-center">' . number_format($value->total_amount_actual) .'</td>
                         <td class="text-center">' . number_format($value->balance_amount) .'</td>
@@ -192,56 +190,25 @@ class ProductionBudgetController extends Controller
             
         }
 
-        /*$data_arr = SalesBudgetDtrTbl::find()
-        ->select([
-            'MODEL' => 'MODEL',
-            'total_qty_budget' => 'SUM(CASE WHEN CATEGORY=\'BUDGET\' THEN QTY ELSE 0 END)',
-            'total_qty_actual' => 'SUM(CASE WHEN CATEGORY=\'ACTUAL\' THEN QTY ELSE 0 END)',
-            'total_qty_forecast' => 'SUM(CASE WHEN CATEGORY=\'FORECAST\' THEN QTY ELSE 0 END)',
-            'total_amount_budget' => 'SUM(CASE WHEN CATEGORY=\'BUDGET\' THEN AMOUNT ELSE 0 END)',
-            'total_amount_actual' => 'SUM(CASE WHEN CATEGORY=\'ACTUAL\' THEN AMOUNT ELSE 0 END)',
-            'total_amount_forecast' => 'SUM(CASE WHEN CATEGORY=\'FORECAST\' THEN AMOUNT ELSE 0 END)'
-        ])
-        ->where($condition)
-        ->groupBy('model')
-        ->all();
-
-        $budget_total_qty = 0;
-        $actual_total_qty = 0;
-        $budget_total_amount = 0;
-        $actual_total_amount = 0;
-
-        foreach ($data_arr as $value) {
-            $budget_qty = $value->total_qty_budget;
-            $budget_amount = $value->total_amount_budget;
-            $actual_qty = $value->total_qty_actual;// == 0 ? $value->total_qty_actual : $value->total_qty_forecast;
-            $actual_amount = $value->total_amount_actual;// == 0 ? $value->total_amount_actual : $value->total_amount_forecast;
-
-            $budget_total_qty += $budget_qty;
-            $actual_total_qty += $actual_qty;
-            $budget_total_amount += $budget_amount;
-            $actual_total_amount += $actual_amount;
-
-            $data .= '
-                <tr>
-                    <td class="text-center">' . $value->MODEL .'</td>
-                    <td class="text-center">' . $budget_qty .'</td>
-                    <td class="text-center">' . $actual_qty .'</td>
-                    <td class="text-center">' . number_format($budget_amount, 2) .'</td>
-                    <td class="text-center">' . number_format($actual_amount, 2) .'</td>
-                </tr>
-            ';
-        }*/
-
-        /*$data .= '<tr class="success">
-            <td>Total</td>
-            <td class="text-center">' . $total_qty . '</td>
-            <td class="text-center">' . number_format($total_amount, 2) . '</td>
-        </tr>';*/
-
         $data .= '</table>';
 
         return $data;
         //return $period . ' | ' . $product_type . ' | ' . $filter_by . ' | ' . $category . ' | ' . $bu . ' | ' . $total_qty;
+    }
+
+    public function actionGroupModelDetail($period, $bu, $product_type, $product_model, $filter_by)
+    {
+        $searchModel  = new HrgaSplDataSearch;
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('group-model-detail', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
     }
 }
