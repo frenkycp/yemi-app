@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $message string */
 /* @var $exception Exception */
 
-$this->title = $name;
+$this->title = strpos($name, '403') !== false ? 'Akses Ditolak' : $name;
 ?>
 <!-- Main content -->
 <section class="content">
@@ -16,20 +16,23 @@ $this->title = $name;
         <h2 class="headline text-info"><i class="fa fa-warning text-yellow"></i></h2>
 
         <div class="error-content">
-            <h3><?= $name ?></h3>
+            <h3><?= strpos($name, '403') !== false ? 'Akses Ditolak' : $name ?></h3>
 
             <p>
-                <?= nl2br(Html::encode($message)) ?>
+                <?= strpos($name, '403') !== false ? 'Anda tidak mempunyai hak untuk mengakses halaman ini.' : nl2br(Html::encode($message)) ?>
             </p>
 
             <p>
-                The above error occurred while the Web server was processing your request.
-                Please contact us if you think this is a server error. Thank you.
-                Meanwhile, you may <a href='<?= Yii::$app->homeUrl ?>'>return to dashboard</a> or try using the search
-                form.
+                <?php
+                if (strpos($name, '403') !== false) {
+                    echo 'Silahkan hubungi administrator jika menurut anda ini adalah kesalahan server. Terima Kasih. Anda bisa mengakses <a href="' . Yii::$app->homeUrl . '">link ini</a> untuk kembali ke halaman utama.';
+                } else {
+                    echo 'The above error occurred while the Web server was processing your request. Please contact us if you think this is a server error. Thank you. Meanwhile, you may <a href="' . Yii::$app->homeUrl . '">return to dashboard</a>.';
+                }
+                ?>
             </p>
 
-            <form class='search-form'>
+            <form class='search-form' style="display: none;">
                 <div class='input-group'>
                     <input type="text" name="search" class='form-control' placeholder="Search"/>
 
