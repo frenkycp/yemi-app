@@ -122,11 +122,29 @@ echo '</pre>';*/
                 'plotOptions' => [
                     'column' => [
                         'stacking' => 'normal'
+                    ],
+                    'series' => [
+                        'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression('
+                                    function(){
+                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                    }
+                                '),
+                            ]
+                        ]
                     ]
                 ],
                 'series' => $series
             ],
         ]);
+        yii\bootstrap\Modal::begin([
+            'id' =>'modal',
+            'header' => '<h3>Detail Information</h3>',
+            //'size' => 'modal-lg',
+        ]);
+        yii\bootstrap\Modal::end();
         ?>
     </div>
 </div>

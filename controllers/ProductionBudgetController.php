@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use app\models\SalesBudgetTbl;
+use app\models\SalesBudgetCompare;
 use app\models\Budget;
 use yii\web\JsExpression;
 use DateTime;
@@ -87,7 +88,10 @@ class ProductionBudgetController extends Controller
                         	}
                         }
                     }
-                    $tmp_data[] = (int)$tmp_qty;
+                    $tmp_data[] = [
+                        'y' => round($tmp_qty, 2),
+                        'remark' => $this->getRemark($prod_period, $model->budget_type, $model->qty_or_amount, $prod_category, $prod_bu)
+                    ];
                 }
                 $series[] = [
                     'name' => $prod_category . ' - ' . $prod_bu,
@@ -112,5 +116,132 @@ class ProductionBudgetController extends Controller
             'series' => $series,
             'fiscal' => $tmp_fy->FISCAL,
         ]);
+    }
+
+    public function getRemark($period, $product_type, $filter_by, $category, $bu)
+    {
+        $condition = [
+            'PERIOD' => $period,
+            //'CATEGORY' => $category,
+            'BU' => $bu
+        ];
+
+        if (!$product_type == 'ALL') {
+            $condition[] = [
+                'TYPE' => $product_type
+            ];
+        }
+
+        $data = '<table class="table table-bordered table-striped table-hover">';
+
+        if ($filter_by == 'QTY') {
+            $data .= 
+            '<tr class="info">
+                <th class="text-center">Model</th>
+                <th class="text-center">Qty Budet</th>
+                <th class="text-center">Qty Aktual</th>
+                <th class="text-center">Qty Balance</th>
+            </tr>';
+            $orderBy = 'balance_qty';
+        } else {
+            $data .= 
+            '<tr class="info">
+                <th class="text-center">Model</th>
+                <th class="text-center">Amount Budget</th>
+                <th class="text-center">Amount Aktual</th>
+                <th class="text-center">Amount Balance</th>
+            </tr>';
+            $orderBy = 'balance_amount';
+        }
+
+        $data_arr = SalesBudgetCompare::find()
+        ->select([
+            'MODEL' => 'MODEL',
+            'total_qty_budget' => 'SUM(QTY_BGT)',
+            'total_qty_actual' => 'SUM(QTY_ACT_FOR)',
+            'balance_qty' => 'SUM(QTY_BALANCE)',
+            'total_amount_budget' => 'SUM(AMOUNT_BGT)',
+            'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)',
+            'balance_amount' => 'SUM(AMOUNT_BALANCE)'
+        ])
+        ->where($condition)
+        ->groupBy('model')
+        ->orderBy($orderBy)
+        ->all();
+
+        foreach ($data_arr as $value) {
+            if ($filter_by == 'QTY') {
+                $data .= '
+                    <tr>
+                        <td class="text-center">' . $value->MODEL .'</td>
+                        <td class="text-center">' . number_format($value->total_qty_budget) .'</td>
+                        <td class="text-center">' . number_format($value->total_qty_actual) .'</td>
+                        <td class="text-center">' . number_format($value->balance_qty) .'</td>
+                    </tr>
+                ';
+            } else {
+                $data .= '
+                    <tr>
+                        <td class="text-center">' . $value->MODEL .'</td>
+                        <td class="text-center">' . number_format($value->total_amount_budget) .'</td>
+                        <td class="text-center">' . number_format($value->total_amount_actual) .'</td>
+                        <td class="text-center">' . number_format($value->balance_amount) .'</td>
+                    </tr>
+                ';
+            }
+            
+        }
+
+        /*$data_arr = SalesBudgetDtrTbl::find()
+        ->select([
+            'MODEL' => 'MODEL',
+            'total_qty_budget' => 'SUM(CASE WHEN CATEGORY=\'BUDGET\' THEN QTY ELSE 0 END)',
+            'total_qty_actual' => 'SUM(CASE WHEN CATEGORY=\'ACTUAL\' THEN QTY ELSE 0 END)',
+            'total_qty_forecast' => 'SUM(CASE WHEN CATEGORY=\'FORECAST\' THEN QTY ELSE 0 END)',
+            'total_amount_budget' => 'SUM(CASE WHEN CATEGORY=\'BUDGET\' THEN AMOUNT ELSE 0 END)',
+            'total_amount_actual' => 'SUM(CASE WHEN CATEGORY=\'ACTUAL\' THEN AMOUNT ELSE 0 END)',
+            'total_amount_forecast' => 'SUM(CASE WHEN CATEGORY=\'FORECAST\' THEN AMOUNT ELSE 0 END)'
+        ])
+        ->where($condition)
+        ->groupBy('model')
+        ->all();
+
+        $budget_total_qty = 0;
+        $actual_total_qty = 0;
+        $budget_total_amount = 0;
+        $actual_total_amount = 0;
+
+        foreach ($data_arr as $value) {
+            $budget_qty = $value->total_qty_budget;
+            $budget_amount = $value->total_amount_budget;
+            $actual_qty = $value->total_qty_actual;// == 0 ? $value->total_qty_actual : $value->total_qty_forecast;
+            $actual_amount = $value->total_amount_actual;// == 0 ? $value->total_amount_actual : $value->total_amount_forecast;
+
+            $budget_total_qty += $budget_qty;
+            $actual_total_qty += $actual_qty;
+            $budget_total_amount += $budget_amount;
+            $actual_total_amount += $actual_amount;
+
+            $data .= '
+                <tr>
+                    <td class="text-center">' . $value->MODEL .'</td>
+                    <td class="text-center">' . $budget_qty .'</td>
+                    <td class="text-center">' . $actual_qty .'</td>
+                    <td class="text-center">' . number_format($budget_amount, 2) .'</td>
+                    <td class="text-center">' . number_format($actual_amount, 2) .'</td>
+                </tr>
+            ';
+        }*/
+
+        /*$data .= '<tr class="success">
+            <td>Total</td>
+            <td class="text-center">' . $total_qty . '</td>
+            <td class="text-center">' . number_format($total_amount, 2) . '</td>
+        </tr>';*/
+
+        $data .= '</table>';
+
+        return $data;
+        //return $period . ' | ' . $product_type . ' | ' . $filter_by . ' | ' . $category . ' | ' . $bu . ' | ' . $total_qty;
     }
 }
