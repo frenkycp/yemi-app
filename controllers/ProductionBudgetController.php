@@ -10,6 +10,7 @@ use DateTime;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
+use app\models\search\GroupModelDetailSearch;
 
 class ProductionBudgetController extends Controller
 {
@@ -134,8 +135,9 @@ class ProductionBudgetController extends Controller
         if ($filter_by == 'QTY') {
             $data .= 
             '<tr class="info">
+                <th class="text-center">Periode</th>
                 <th class="text-center">Model</th>
-                <th class="text-center">Qty Budet</th>
+                <th class="text-center">Qty Budget</th>
                 <th class="text-center">Qty Aktual</th>
                 <th class="text-center">Qty Balance</th>
             </tr>';
@@ -143,6 +145,7 @@ class ProductionBudgetController extends Controller
         } else {
             $data .= 
             '<tr class="info">
+                <th class="text-center">Periode</th>
                 <th class="text-center">Model</th>
                 <th class="text-center">Amount Budget</th>
                 <th class="text-center">Amount Aktual</th>
@@ -153,6 +156,7 @@ class ProductionBudgetController extends Controller
 
         $data_arr = SalesBudgetCompare::find()
         ->select([
+            'PERIOD' => 'PERIOD',
             'MODEL' => 'MODEL',
             'total_qty_budget' => 'SUM(QTY_BGT)',
             'total_qty_actual' => 'SUM(QTY_ACT_FOR)',
@@ -162,15 +166,16 @@ class ProductionBudgetController extends Controller
             'balance_amount' => 'SUM(AMOUNT_BALANCE)'
         ])
         ->where($condition)
-        ->groupBy('model')
+        ->groupBy('PERIOD, MODEL')
         ->orderBy($orderBy)
         ->all();
 
         foreach ($data_arr as $value) {
-            $link = Html::a($value->MODEL, ['group-model-detail', 'period' => $period, 'bu' => $bu, 'product_type' => $product_type, 'product_model' => $value->MODEL, 'filter_by' => $filter_by]);
+            $link = Html::a($value->MODEL, ['group-model-detail', 'period' => $period, 'bu' => $bu, 'product_type' => $product_type, 'product_model' => $value->MODEL, 'filter_by' => $filter_by], ['target' => '_blank']);
             if ($filter_by == 'QTY') {
                 $data .= '
                     <tr>
+                        <td class="text-center">' . $value->PERIOD .'</td>
                         <td class="text-center">' . $link .'</td>
                         <td class="text-center">' . number_format($value->total_qty_budget) .'</td>
                         <td class="text-center">' . number_format($value->total_qty_actual) .'</td>
@@ -180,6 +185,7 @@ class ProductionBudgetController extends Controller
             } else {
                 $data .= '
                     <tr>
+                        <td class="text-center">' . $value->PERIOD .'</td>
                         <td class="text-center">' . $link .'</td>
                         <td class="text-center">' . number_format($value->total_amount_budget) .'</td>
                         <td class="text-center">' . number_format($value->total_amount_actual) .'</td>
@@ -198,7 +204,15 @@ class ProductionBudgetController extends Controller
 
     public function actionGroupModelDetail($period, $bu, $product_type, $product_model, $filter_by)
     {
-        $searchModel  = new HrgaSplDataSearch;
+        $searchModel  = new GroupModelDetailSearch;
+        $searchModel->PERIOD = $period;
+        $searchModel->BU = $bu;
+        if ($product_type !== 'ALL') {
+            $searchModel->TYPE = $product_type;
+        }
+        
+        $searchModel->MODEL = $product_model;
+
         $dataProvider = $searchModel->search($_GET);
 
         Tabs::clearLocalStorage();

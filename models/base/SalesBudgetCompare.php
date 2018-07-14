@@ -72,7 +72,7 @@ abstract class SalesBudgetCompare extends \yii\db\ActiveRecord
             'DESC' => 'Desc',
             'NO' => 'No',
             'MODEL' => 'Model',
-            'MODEL_GROUP' => 'Model  Group',
+            'MODEL_GROUP' => 'Product',
             'BU' => 'Bu',
             'TYPE' => 'Type',
             'FISCAL' => 'Fiscal',
