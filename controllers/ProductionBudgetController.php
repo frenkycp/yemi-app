@@ -51,27 +51,6 @@ class ProductionBudgetController extends Controller
         ])
         ->all();
 
-        if ($model->budget_type !== 'ALL') {
-            $prod_sales_arr = SalesBudgetTbl::find()
-            ->where([
-                'FISCAL' => $tmp_fy->FISCAL,
-                'TYPE' => $model->budget_type
-            ])
-            ->all();
-        }
-        
-
-        foreach ($prod_sales_arr as $value) {
-            if (!in_array($value->PERIOD, $prod_period_arr)) {
-                $prod_period_arr[] = $value->PERIOD;
-            }
-            if (!in_array($value->BU, $prod_bu_arr)) {
-                $prod_bu_arr[] = $value->BU;
-            }
-        }
-
-        $color_index = 0;
-
         $sales_data_compare = SalesBudgetCompare::find()
         ->select([
             'FISCAL' => 'FISCAL',
@@ -85,8 +64,42 @@ class ProductionBudgetController extends Controller
         ->groupBy('FISCAL')
         ->one();
 
+        if ($model->budget_type !== 'ALL') {
+            $prod_sales_arr = SalesBudgetTbl::find()
+            ->where([
+                'FISCAL' => $tmp_fy->FISCAL,
+                'TYPE' => $model->budget_type
+            ])
+            ->all();
+
+            $sales_data_compare = SalesBudgetCompare::find()
+            ->select([
+                'FISCAL' => 'FISCAL',
+                'total_amount_budget' => 'SUM(AMOUNT_BGT)',
+                'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)'
+            ])
+            ->where([
+                'FISCAL' => $tmp_fy->FISCAL,
+                'TYPE' => $model->budget_type
+                //'FISCAL' => $this->getPeriodFiscal(date('Ym'))
+            ])
+            ->groupBy('FISCAL')
+            ->one();
+        }
+
         $budget_grandtotal_amount = $sales_data_compare->total_amount_budget;
         $actual_grandtotal_amount = $sales_data_compare->total_amount_actual;
+        
+        foreach ($prod_sales_arr as $value) {
+            if (!in_array($value->PERIOD, $prod_period_arr)) {
+                $prod_period_arr[] = $value->PERIOD;
+            }
+            if (!in_array($value->BU, $prod_bu_arr)) {
+                $prod_bu_arr[] = $value->BU;
+            }
+        }
+
+        $color_index = 0;
 
         foreach ($prod_bu_arr as $prod_bu) {
             foreach ($prod_category_arr as $prod_category) {
