@@ -137,9 +137,9 @@ class ProductionBudgetController extends Controller
             '<tr class="info">
                 <th class="text-center">Periode</th>
                 <th class="text-center">Model</th>
-                <th class="text-center">Qty Budget</th>
-                <th class="text-center">Qty Aktual</th>
-                <th class="text-center">Qty Balance</th>
+                <th class="text-center">Qty Budget<br/>(予算)</th>
+                <th class="text-center">Qty Act/Forecast<br/>(見込み/実績)</th>
+                <th class="text-center">Qty Balance<br/>(対予算)</th>
             </tr>';
             $orderBy = 'balance_qty';
         } else {

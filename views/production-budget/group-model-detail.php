@@ -91,7 +91,7 @@ $gridColumns = [
             return number_format($model->QTY_BGT);
         },
         'encodeLabel' => false,
-        'label' => 'Budget<br/>Qty',
+        'label' => 'Qty Budget<br/>(予算)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'QTY' ? false : true,
@@ -104,7 +104,7 @@ $gridColumns = [
             return number_format($model->QTY_ACT_FOR);
         },
         'encodeLabel' => false,
-        'label' => 'Actual<br/>Qty',
+        'label' => 'Qty Act/Forecast<br/>(見込み/実績)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'QTY' ? false : true,
@@ -117,7 +117,7 @@ $gridColumns = [
             return number_format($model->QTY_BALANCE);
         },
         'encodeLabel' => false,
-        'label' => 'Balance<br/>Qty',
+        'label' => 'Qty Balance<br/>(対予算)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'QTY' ? false : true,

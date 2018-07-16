@@ -113,7 +113,7 @@ echo '</pre>';*/
                     //'max' => 160000,
                     //'tickInterval' => 1000000,
                     'title' => [
-                        'text' => $model->qty_or_amount
+                        'text' => $model->qty_or_amount == 'AMOUNT' ? $model->qty_or_amount . ' (USD)' : $model->qty_or_amount
                     ]
                 ],
                 'legend' => [
