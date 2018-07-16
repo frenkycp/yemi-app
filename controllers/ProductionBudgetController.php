@@ -72,6 +72,22 @@ class ProductionBudgetController extends Controller
 
         $color_index = 0;
 
+        $sales_data_compare = SalesBudgetCompare::find()
+        ->select([
+            'FISCAL' => 'FISCAL',
+            'total_amount_budget' => 'SUM(AMOUNT_BGT)',
+            'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)'
+        ])
+        ->where([
+            'FISCAL' => $tmp_fy->FISCAL
+            //'FISCAL' => $this->getPeriodFiscal(date('Ym'))
+        ])
+        ->groupBy('FISCAL')
+        ->one();
+
+        $budget_grandtotal_amount = $sales_data_compare->total_amount_budget;
+        $actual_grandtotal_amount = $sales_data_compare->total_amount_actual;
+
         foreach ($prod_bu_arr as $prod_bu) {
             foreach ($prod_category_arr as $prod_category) {
                 $tmp_data = [];
@@ -113,7 +129,21 @@ class ProductionBudgetController extends Controller
             'categories' => $categories,
             'series' => $series,
             'fiscal' => $tmp_fy->FISCAL,
+            'budget_grandtotal_amount' => $budget_grandtotal_amount,
+            'actual_grandtotal_amount' => $actual_grandtotal_amount,
+            'fiscal' => $tmp_fy->FISCAL
         ]);
+    }
+
+    public function getPeriodFiscal($period)
+    {
+        $data = SalesBudgetTbl::find()
+        ->where([
+            'PERIOD' => $period
+        ])
+        ->one();
+
+        return $data->FISCAL;
     }
 
     public function getRemark($period, $product_type, $filter_by, $category, $bu)

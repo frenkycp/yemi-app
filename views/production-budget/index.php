@@ -22,7 +22,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 300000); // milliseconds
+      setTimeout("refreshPage();", 600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -78,6 +78,64 @@ echo '</pre>';*/
     </div>
 
     <?php ActiveForm::end(); ?>
+    <div class="panel panel-default">
+        <div class="panel-heading">Budget Summary FY<?= $fiscal ?></div>
+        <div class="panel-body">
+            <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        //'modules/exporting',
+                        //'themes/grid-light',
+                        //'themes/sand-signika',
+                        //'themes/dark-unica',
+                    ],
+                    'options' => [
+                        'chart' => [
+                            'type' => 'bar',
+                            'height' => 150
+                        ],
+                        'title' => null,
+                        'xAxis' => [
+                            'categories' => ['Budget', 'Actual-Forecast'],
+                            'title' => [
+                                'text' => null
+                            ]
+                        ],
+                        'yAxis' => [
+                            'min' => 0,
+                            'title' => [
+                                'text' => 'AMOUNT (USD)',
+                                'align' => 'high'
+                            ],
+                        ],
+                        'plotOptions' => [
+                            'bar' => [
+                                'dataLabels' => [
+                                    'enabled' => true,
+                                    //'format' => 'USD {y}'
+                                ]
+                            ]
+                        ],
+                        'legend' => [
+                            'enabled' => false
+                        ],
+                        'credits' => [
+                            'enabled' => false
+                        ],
+                        'tooltip' => [
+                            'enabled' => false
+                        ],
+                        'series' => [
+                            [
+                                'name' => 'Year 1800',
+                                'data' => [round($budget_grandtotal_amount, 2), round($actual_grandtotal_amount, 2)]
+                            ]
+                        ],
+                    ]
+                ]);
+            ?>
+        </div>
+    </div>
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title"></h3>
