@@ -14,7 +14,7 @@ $this->title = [
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("span .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -68,24 +68,24 @@ echo '</pre>';*/
     ?>
 
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <?= $form->field($model, 'budget_type')->dropDownList(
                 [
-                    'ALL' => 'ALL',
-                    'PRODUCT' => 'FINAL_PRODUCT',
-                    'KD_PART' => 'KD_PART'
+                    'ALL' => 'ALL （全て）',
+                    'PRODUCT' => 'FINAL_PRODUCT  （完成品）',
+                    'KD_PART' => 'KD_PARTS （ＫＤパーツ）'
                 ]
             ); ?>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <?= $form->field($model, 'qty_or_amount')->dropDownList(
                 [
-                    'QTY' => ' By QTY',
-                    'AMOUNT' => 'By AMOUNT'
+                    'QTY' => 'By Qty （数量）',
+                    'AMOUNT' => 'By Amount （金額）'
                 ]
             ); ?>
         </div>
-        <button type="submit" class="btn btn-default">Update Chart</button>
+        <button type="submit" class="btn btn-success">Update Chart <span class="japanesse">(更新)</span></button>
     </div>
 
     <?php ActiveForm::end(); ?>

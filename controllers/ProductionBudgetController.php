@@ -166,7 +166,7 @@ class ProductionBudgetController extends Controller
         if ($model->qty_or_amount == 'AMOUNT') {
             $series[] = [
                 'type' => 'spline',
-                'name' => 'BUDGET AMOUNT',
+                'name' => 'Budget Amount (予算金額)',
                 'data' => $tmp_data_amount_budget,
                 'yAxis' => 1,
                 'color' => new JsExpression('Highcharts.getOptions().colors[7]'),
@@ -179,13 +179,13 @@ class ProductionBudgetController extends Controller
 
             $series[] = [
                 'type' => 'spline',
-                'name' => 'ACTUAL AMOUNT',
+                'name' => 'Actual Amount (見込/実績金額)',
                 'data' => $tmp_data_amount_actual,
                 'yAxis' => 2,
                 'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
                 'marker' => [
                     'lineWidth' => 1,
-                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[5]'),
+                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[4]'),
                     'fillColor' => 'white'
                 ]
             ];
@@ -250,9 +250,9 @@ class ProductionBudgetController extends Controller
                 <th class="text-center">No</th>
                 <th class="text-center">Periode</th>
                 <th class="text-center">Model</th>
-                <th class="text-center">Qty Budget<br/>(予算)</th>
-                <th class="text-center">Qty Act/Forecast<br/>(見込み/実績)</th>
-                <th class="text-center">Qty Balance<br/>(対予算)</th>
+                <th class="text-center">Budget Qty<br/>(予算数量)</th>
+                <th class="text-center">Act/Forecast Qty<br/>(見込み/実績)</th>
+                <th class="text-center">Balance Qty<br/>(対予算)</th>
             </tr>';
             $orderBy = 'balance_qty';
         } else {
@@ -261,9 +261,9 @@ class ProductionBudgetController extends Controller
                 <th class="text-center">No</th>
                 <th class="text-center">Periode</th>
                 <th class="text-center">Model</th>
-                <th class="text-center">Amount Budget<br/>(予算)</th>
-                <th class="text-center">Amount Act/Forecast<br/>(見込み/実績)</th>
-                <th class="text-center">Amount Balance<br/>(対予算)</th>
+                <th class="text-center">Budget Amount<br/>(予算金額)</th>
+                <th class="text-center">Act/Forecast Amount<br/>(見込み/実績)</th>
+                <th class="text-center">Balance Amount<br/>(対予算)</th>
             </tr>';
             $orderBy = 'balance_amount';
         }

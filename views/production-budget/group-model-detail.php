@@ -91,7 +91,7 @@ $gridColumns = [
             return number_format($model->QTY_BGT);
         },
         'encodeLabel' => false,
-        'label' => 'Qty Budget<br/>(予算)',
+        'label' => 'Budget Qty<br/>(予算数量)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'QTY' ? false : true,
@@ -104,7 +104,7 @@ $gridColumns = [
             return number_format($model->QTY_ACT_FOR);
         },
         'encodeLabel' => false,
-        'label' => 'Qty Act/Forecast<br/>(見込み/実績)',
+        'label' => 'Act/Forecast Qty<br/>(見込み/実績)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'QTY' ? false : true,
@@ -117,7 +117,7 @@ $gridColumns = [
             return number_format($model->QTY_BALANCE);
         },
         'encodeLabel' => false,
-        'label' => 'Qty Balance<br/>(対予算)',
+        'label' => 'Balance Qty<br/>(対予算)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'QTY' ? false : true,
@@ -130,7 +130,7 @@ $gridColumns = [
             return number_format($model->AMOUNT_BGT);
         },
         'encodeLabel' => false,
-        'label' => 'Amount Budget<br/>(予算)',
+        'label' => 'Budget Amount<br/>(予算金額)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'AMOUNT' ? false : true,
@@ -143,7 +143,7 @@ $gridColumns = [
             return number_format($model->AMOUNT_ACT_FOR);
         },
         'encodeLabel' => false,
-        'label' => 'Actual Act/Forecast<br/>(見込み/実績)',
+        'label' => 'Act/Forecast Actual<br/>(見込み/実績)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'AMOUNT' ? false : true,
@@ -156,7 +156,7 @@ $gridColumns = [
             return number_format($model->AMOUNT_BALANCE);
         },
         'encodeLabel' => false,
-        'label' => 'Amount Balance<br/>(対予算)',
+        'label' => 'Balance Amount<br/>(対予算)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'AMOUNT' ? false : true,
