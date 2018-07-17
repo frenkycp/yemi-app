@@ -18,7 +18,7 @@ $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, san
 
 date_default_timezone_set('Asia/Jakarta');
 
-$script = <<< JS
+/*$script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
@@ -28,10 +28,21 @@ $script = <<< JS
        window.location = location.href;
     }
 JS;
-$this->registerJs($script, View::POS_HEAD );
+
+$script = <<< JS
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout("refreshPage();", 600000); // milliseconds
+    }
+    function refreshPage() {
+       $("#form_index").submit();
+    }
+JS;
+$this->registerJs($script, View::POS_HEAD );*/
 
 /*echo '<pre>';
-print_r($series);
+print_r($tmp_data_amount_budget);
 echo '</pre>';*/
 
 ?>
@@ -166,32 +177,43 @@ echo '</pre>';*/
                     'categories' => $categories
                 ],
                 'yAxis' => [
-                    'allowDecimals' => false,
-                    'min' => 0,
-                    //'max' => 160000,
-                    //'tickInterval' => 1000000,
-                    'title' => [
-                        'text' => $model->qty_or_amount == 'AMOUNT' ? $model->qty_or_amount . ' (USD)' : $model->qty_or_amount
-                    ]
+                    [
+                        'allowDecimals' => false,
+                        'min' => 0,
+                        'title' => [
+                            'text' => $model->qty_or_amount == 'AMOUNT' ? $model->qty_or_amount . ' (USD)' : $model->qty_or_amount
+                        ]
+                    ],
+                    [
+                        'allowDecimals' => false,
+                        'min' => 0,
+                        'title' => [
+                            'text' => $model->qty_or_amount == 'AMOUNT' ? $model->qty_or_amount . ' (USD)' : null
+                        ],
+                        'opposite' => true
+                    ],
+                    [
+                        'allowDecimals' => false,
+                        'min' => 0,
+                        'title' => [
+                            'text' => null
+                        ],
+                        'opposite' => true,
+                        'labels' => [
+                            'enabled' => false
+                        ]
+                    ],
+                    
                 ],
                 'legend' => [
-                    'enabled' => false,
+                    'enabled' => true,
                 ],
                 'plotOptions' => [
                     'column' => [
                         'stacking' => 'normal'
                     ],
                     'series' => [
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('
-                                    function(){
-                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                    }
-                                '),
-                            ]
-                        ]
+                        
                     ]
                 ],
                 'series' => $series
@@ -200,7 +222,7 @@ echo '</pre>';*/
         yii\bootstrap\Modal::begin([
             'id' =>'modal',
             'header' => '<h3>Detail Information</h3>',
-            //'size' => 'modal-lg',
+            'size' => 'modal-lg',
         ]);
         yii\bootstrap\Modal::end();
         ?>

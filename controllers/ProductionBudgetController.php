@@ -54,15 +54,17 @@ class ProductionBudgetController extends Controller
         $sales_data_compare = SalesBudgetCompare::find()
         ->select([
             'FISCAL' => 'FISCAL',
+            'PERIOD' => 'PERIOD',
             'total_amount_budget' => 'SUM(AMOUNT_BGT)',
             'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)'
         ])
         ->where([
-            'FISCAL' => $tmp_fy->FISCAL
+            'FISCAL' => $tmp_fy->FISCAL,
             //'FISCAL' => $this->getPeriodFiscal(date('Ym'))
         ])
-        ->groupBy('FISCAL')
-        ->one();
+        ->groupBy('FISCAL, PERIOD')
+        ->orderBy('PERIOD')
+        ->all();
 
         if ($model->budget_type !== 'ALL') {
             $prod_sales_arr = SalesBudgetTbl::find()
@@ -75,6 +77,7 @@ class ProductionBudgetController extends Controller
             $sales_data_compare = SalesBudgetCompare::find()
             ->select([
                 'FISCAL' => 'FISCAL',
+                'PERIOD' => 'PERIOD',
                 'total_amount_budget' => 'SUM(AMOUNT_BGT)',
                 'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)'
             ])
@@ -83,12 +86,28 @@ class ProductionBudgetController extends Controller
                 'TYPE' => $model->budget_type
                 //'FISCAL' => $this->getPeriodFiscal(date('Ym'))
             ])
-            ->groupBy('FISCAL')
-            ->one();
+            ->groupBy('FISCAL, PERIOD')
+            ->orderBy('PERIOD')
+            ->all();
         }
 
-        $budget_grandtotal_amount = $sales_data_compare->total_amount_budget;
-        $actual_grandtotal_amount = $sales_data_compare->total_amount_actual;
+        $budget_grandtotal_amount = 0;
+        $actual_grandtotal_amount = 0;
+
+        $tmp_data_amount_budget = [];
+        $tmp_data_amount_actual = [];
+        foreach ($sales_data_compare as $value) {
+            $budget_grandtotal_amount += $value->total_amount_budget;
+            $actual_grandtotal_amount += $value->total_amount_actual;
+            $tmp_data_amount_budget[] = [
+                'y' => round($budget_grandtotal_amount),
+                'remark' => ''
+            ];
+            $tmp_data_amount_actual[] = [
+                'y' => round($actual_grandtotal_amount),
+                'remark' => ''
+            ];
+        }
         
         foreach ($prod_sales_arr as $value) {
             if (!in_array($value->PERIOD, $prod_period_arr)) {
@@ -104,8 +123,10 @@ class ProductionBudgetController extends Controller
         foreach ($prod_bu_arr as $prod_bu) {
             foreach ($prod_category_arr as $prod_category) {
                 $tmp_data = [];
+                $sp_line_data = [];
                 foreach ($prod_period_arr as $prod_period) {
                     $tmp_qty = 0;
+
                     foreach ($prod_sales_arr as $prod_sales) {
                         if ($prod_sales->PERIOD == $prod_period && $prod_sales->CATEGORY == $prod_category && $prod_sales->BU == $prod_bu) {
                         	if ($model->qty_or_amount == 'QTY') {
@@ -116,19 +137,61 @@ class ProductionBudgetController extends Controller
                         }
                     }
                     $tmp_data[] = [
-                        'y' => round($tmp_qty, 2),
-                        'remark' => $this->getRemark($prod_period, $model->budget_type, $model->qty_or_amount, $prod_category, $prod_bu)
+                        'y' => round($tmp_qty),
+                        'remark' => $this->getRemark($prod_period, $model->budget_type, $model->qty_or_amount, $prod_bu)
                     ];
                 }
                 $series[] = [
+                    'type' => 'column',
                     'name' => $prod_category . ' - ' . $prod_bu,
                     'data' => $tmp_data,
                     'stack' => $prod_category,
                     'color' => new JsExpression('Highcharts.getOptions().colors[' . $color_index . ']'),
+                    'showInLegend' => false,
+                    'cursor' => 'pointer',
+                    'point' => [
+                        'events' => [
+                            'click' => new JsExpression('
+                                function(){
+                                    $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                }
+                            '),
+                        ]
+                    ]
                 ];
             }
             $color_index++;
         }
+
+        if ($model->qty_or_amount == 'AMOUNT') {
+            $series[] = [
+                'type' => 'spline',
+                'name' => 'BUDGET AMOUNT',
+                'data' => $tmp_data_amount_budget,
+                'yAxis' => 1,
+                'color' => new JsExpression('Highcharts.getOptions().colors[7]'),
+                'marker' => [
+                    'lineWidth' => 1,
+                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[5]'),
+                    'fillColor' => 'white'
+                ]
+            ];
+
+            $series[] = [
+                'type' => 'spline',
+                'name' => 'ACTUAL AMOUNT',
+                'data' => $tmp_data_amount_actual,
+                'yAxis' => 2,
+                'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
+                'marker' => [
+                    'lineWidth' => 1,
+                    'lineColor' => new JsExpression('Highcharts.getOptions().colors[5]'),
+                    'fillColor' => 'white'
+                ]
+            ];
+        }
+
+        
 
         foreach ($prod_period_arr as $value) {
             $date = DateTime::createFromFormat('Ym', $value);
@@ -144,7 +207,8 @@ class ProductionBudgetController extends Controller
             'fiscal' => $tmp_fy->FISCAL,
             'budget_grandtotal_amount' => $budget_grandtotal_amount,
             'actual_grandtotal_amount' => $actual_grandtotal_amount,
-            'fiscal' => $tmp_fy->FISCAL
+            'fiscal' => $tmp_fy->FISCAL,
+            'tmp_data_amount_budget' => $tmp_data_amount_budget
         ]);
     }
 
@@ -159,13 +223,18 @@ class ProductionBudgetController extends Controller
         return $data->FISCAL;
     }
 
-    public function getRemark($period, $product_type, $filter_by, $category, $bu)
+    public function getRemark($period, $product_type, $filter_by, $bu)
     {
         $condition = [
             'PERIOD' => $period,
-            //'CATEGORY' => $category,
             'BU' => $bu
         ];
+
+        if ($bu == 'ALL') {
+            $condition = [
+                'PERIOD' => $period
+            ];
+        }
 
         if (!$product_type == 'ALL') {
             $condition[] = [
@@ -178,6 +247,7 @@ class ProductionBudgetController extends Controller
         if ($filter_by == 'QTY') {
             $data .= 
             '<tr class="info">
+                <th class="text-center">No</th>
                 <th class="text-center">Periode</th>
                 <th class="text-center">Model</th>
                 <th class="text-center">Qty Budget<br/>(予算)</th>
@@ -188,6 +258,7 @@ class ProductionBudgetController extends Controller
         } else {
             $data .= 
             '<tr class="info">
+                <th class="text-center">No</th>
                 <th class="text-center">Periode</th>
                 <th class="text-center">Model</th>
                 <th class="text-center">Amount Budget</th>
@@ -213,11 +284,13 @@ class ProductionBudgetController extends Controller
         ->orderBy($orderBy)
         ->all();
 
+        $i = 1;
         foreach ($data_arr as $value) {
             $link = Html::a($value->MODEL, ['group-model-detail', 'period' => $period, 'bu' => $bu, 'product_type' => $product_type, 'product_model' => $value->MODEL, 'filter_by' => $filter_by], ['target' => '_blank']);
             if ($filter_by == 'QTY') {
                 $data .= '
                     <tr>
+                        <td class="text-center">' . $i .'</td>
                         <td class="text-center">' . $value->PERIOD .'</td>
                         <td class="text-center">' . $link .'</td>
                         <td class="text-center">' . number_format($value->total_qty_budget) .'</td>
@@ -228,6 +301,7 @@ class ProductionBudgetController extends Controller
             } else {
                 $data .= '
                     <tr>
+                        <td class="text-center">' . $i .'</td>
                         <td class="text-center">' . $value->PERIOD .'</td>
                         <td class="text-center">' . $link .'</td>
                         <td class="text-center">' . number_format($value->total_amount_budget) .'</td>
@@ -236,7 +310,7 @@ class ProductionBudgetController extends Controller
                     </tr>
                 ';
             }
-            
+            $i++;
         }
 
         $data .= '</table>';
