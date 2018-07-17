@@ -78,7 +78,7 @@ echo '</pre>';*/
     </div>
 
     <?php ActiveForm::end(); ?>
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="display: none;">
         <div class="panel-heading">Budget Summary FY<?= $fiscal ?></div>
         <div class="panel-body">
             <?php
