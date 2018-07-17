@@ -78,6 +78,12 @@ $gridColumns = [
         //'hAlign' => 'center'
     ],
     [
+        'attribute' => 'analyst_desc',
+        'label' => 'Location',
+        'vAlign' => 'middle',
+        'hAlign' => 'center'
+    ],
+    [
         'attribute' => 'req_date',
         'value' => function($model){
         	return $model->req_date == null ? '-' : date('Y-m-d', strtotime($model->req_date));

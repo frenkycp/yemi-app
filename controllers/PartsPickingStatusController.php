@@ -129,8 +129,8 @@ class PartsPickingStatusController extends Controller
 
 		foreach ($data_arr as $value) {
             $req_date = $value['req_date'] == null ? '-' : date('Y-m-d', strtotime($value['req_date']));
-            $start_date = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
-            $completed_date = $value['completed_date'] == null ? '-' : date('Y-m-d', strtotime($value['completed_date']));
+            $start_date = $value['start_date'] == null ? '-' : date('Y-m-d H:i:s', strtotime($value['start_date']));
+            $completed_date = $value['completed_date'] == null ? '-' : date('Y-m-d H:i:s', strtotime($value['completed_date']));
 			$data .= '
 				<tr>
 					<td class="text-center">' . $value['set_list_no'] . '</td>
