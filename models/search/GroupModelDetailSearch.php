@@ -59,11 +59,13 @@ $query = SalesBudgetCompare::find()
 
 if ($_GET['filter_by'] == 'QTY') {
     $default_order = [
-        'QTY_BALANCE' => SORT_ASC
+        'QTY_BALANCE' => SORT_ASC,
+        'MODEL_GROUP' => SORT_ASC
     ];
 } elseif ($_GET['filter_by'] == 'AMOUNT') {
     $default_order = [
-        'AMOUNT_BALANCE' => SORT_ASC
+        'AMOUNT_BALANCE' => SORT_ASC,
+        'MODEL_GROUP' => SORT_ASC
     ];
 }
 

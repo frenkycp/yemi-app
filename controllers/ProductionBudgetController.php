@@ -261,9 +261,9 @@ class ProductionBudgetController extends Controller
                 <th class="text-center">No</th>
                 <th class="text-center">Periode</th>
                 <th class="text-center">Model</th>
-                <th class="text-center">Amount Budget</th>
-                <th class="text-center">Amount Aktual</th>
-                <th class="text-center">Amount Balance</th>
+                <th class="text-center">Amount Budget<br/>(予算)</th>
+                <th class="text-center">Amount Act/Forecast<br/>(見込み/実績)</th>
+                <th class="text-center">Amount Balance<br/>(対予算)</th>
             </tr>';
             $orderBy = 'balance_amount';
         }

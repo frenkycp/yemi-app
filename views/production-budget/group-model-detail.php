@@ -130,7 +130,7 @@ $gridColumns = [
             return number_format($model->AMOUNT_BGT);
         },
         'encodeLabel' => false,
-        'label' => 'Budget<br/>Amount',
+        'label' => 'Amount Budget<br/>(予算)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'AMOUNT' ? false : true,
@@ -143,7 +143,7 @@ $gridColumns = [
             return number_format($model->AMOUNT_ACT_FOR);
         },
         'encodeLabel' => false,
-        'label' => 'Actual<br/>Amount',
+        'label' => 'Actual Act/Forecast<br/>(見込み/実績)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'AMOUNT' ? false : true,
@@ -156,7 +156,7 @@ $gridColumns = [
             return number_format($model->AMOUNT_BALANCE);
         },
         'encodeLabel' => false,
-        'label' => 'Balance<br/>Amount',
+        'label' => 'Amount Balance<br/>(対予算)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => $_GET['filter_by'] == 'AMOUNT' ? false : true,
