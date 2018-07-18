@@ -41,7 +41,9 @@ class PlanReceivingSearch extends PlanReceiving
      */
     public function search($params)
     {
-        $query = PlanReceiving::find();
+        $query = PlanReceiving::find()->where([
+            'flag' => 1
+        ]);
 
         // add conditions that should always apply here
 

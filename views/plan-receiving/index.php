@@ -77,7 +77,7 @@ $columns = [
 ?>
 <div class="plan-receiving-index">
 
-    <p>
+    <p style="display: none;">
         <?= Html::a('Create Plan Receiving', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 

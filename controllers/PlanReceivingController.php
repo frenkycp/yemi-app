@@ -113,7 +113,15 @@ class PlanReceivingController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->flag = 0;
+
+        if ($model->save()) {
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
+        }else {
+            return json_encode($model->errors());
+        }
 
         return $this->redirect(['index']);
     }
