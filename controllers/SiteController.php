@@ -129,6 +129,7 @@ class SiteController extends Controller
 
             $client_ip = new CisClientIpAddress();
             $client_ip->ip_address = Yii::$app->request->userIP;
+            $client_ip->login_as = Yii::$app->user->identity->name;
 
             if (!$client_ip->save()) {
                 return json_encode($client_ip->errors);
