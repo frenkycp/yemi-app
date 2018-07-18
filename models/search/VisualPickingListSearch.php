@@ -58,7 +58,7 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'seq_no' => $this->seq_no,
-            'req_date' => $this->req_date,
+            //'req_date' => $this->req_date,
             'req_date_original' => $this->req_date_original,
             'plan_qty' => $this->plan_qty,
             'part_count' => $this->part_count,
@@ -66,8 +66,8 @@ $query->andFilterWhere([
             'man_power' => $this->man_power,
             'create_date' => $this->create_date,
             'confirm_date' => $this->confirm_date,
-            'start_date' => $this->start_date,
-            'completed_date' => $this->completed_date,
+            //'start_date' => $this->start_date,
+            //'completed_date' => $this->completed_date,
             'hand_over_date' => $this->hand_over_date,
             'priority' => $this->priority,
             'stage_id' => $this->stage_id,
@@ -87,6 +87,9 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'set_list_no', $this->set_list_no])
             ->andFilterWhere(['like', 'parent', $this->parent])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),req_date,120)', $this->req_date])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),start_date,120)', $this->start_date])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),completed_date,120)', $this->completed_date])
             ->andFilterWhere(['like', 'parent_desc', $this->parent_desc])
             ->andFilterWhere(['like', 'parent_um', $this->parent_um])
             ->andFilterWhere(['like', 'analyst', $this->analyst])

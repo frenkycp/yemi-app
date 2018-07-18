@@ -66,7 +66,7 @@ echo '</pre>';*/
                 $month_arr
             ); ?>
         </div>
-        <button type="submit" class="btn btn-default">Update Chart</button>
+        <?= Yii::$app->params['update_chart_btn']; ?>
     </div>
 
     

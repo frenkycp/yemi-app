@@ -58,7 +58,7 @@ echo '</pre>';*/
     <div class="col-md-3">
         <?= $form->field($model, 'location')->dropDownList($dropdown_loc); ?>
     </div>
-    <button type="submit" class="btn btn-default">Update Chart</button>
+    <?= Yii::$app->params['update_chart_btn']; ?>
 </div>
 
 <?php ActiveForm::end(); ?>

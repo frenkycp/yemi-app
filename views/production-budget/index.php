@@ -14,7 +14,7 @@ $this->title = [
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("span .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -85,7 +85,7 @@ echo '</pre>';*/
                 ]
             ); ?>
         </div>
-        <button type="submit" class="btn btn-success">Update Chart <span class="japanesse">(更新)</span></button>
+        <?= Yii::$app->params['update_chart_btn']; ?>
     </div>
 
     <?php ActiveForm::end(); ?>
