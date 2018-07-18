@@ -74,6 +74,7 @@ $this->params['breadcrumbs'][] = 'View';
     'attributes' => [
             'ip_address',
         'login_datetime',
+        'status',
     ],
     ]); ?>
 

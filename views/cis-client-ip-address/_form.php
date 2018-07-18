@@ -45,6 +45,9 @@ use yii\helpers\StringHelper;
 
 <!-- attribute login_datetime -->
 			<?= $form->field($model, 'login_datetime')->textInput() ?>
+
+<!-- attribute status -->
+			<?= $form->field($model, 'status')->textInput() ?>
         </p>
         <?php $this->endBlock(); ?>
         

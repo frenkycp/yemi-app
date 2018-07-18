@@ -106,6 +106,7 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
         ],
 			'ip_address',
 			'login_datetime',
+			'status',
         ],
         ]); ?>
     </div>
