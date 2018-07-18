@@ -13,6 +13,7 @@ use yii\web\Controller;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use yii\web\UploadedFile;
+use app\models\CisClientIpAddress;
 
 class SiteController extends Controller
 {
@@ -125,6 +126,13 @@ class SiteController extends Controller
             $user = Yii::$app->user->identity;
             $user->last_login = new Expression("NOW()");
             $user->save();
+
+            $client_ip = new CisClientIpAddress();
+            $client_ip->ip_address = Yii::$app->request->userIP;
+
+            if (!$client_ip->save()) {
+                return json_encode($client_ip->errors);
+            }
 
             return $this->goBack();
         }
