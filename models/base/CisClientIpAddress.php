@@ -12,6 +12,7 @@ use Yii;
  * @property integer $id
  * @property string $ip_address
  * @property string $login_datetime
+ * @property string $login_as
  * @property integer $status
  * @property string $aliasModel
  */
@@ -42,7 +43,7 @@ abstract class CisClientIpAddress extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ip_address'], 'string'],
+            [['ip_address', 'login_as'], 'string'],
             [['login_datetime'], 'safe'],
             [['status'], 'integer']
         ];
@@ -57,6 +58,7 @@ abstract class CisClientIpAddress extends \yii\db\ActiveRecord
             'id' => 'ID',
             'ip_address' => 'Ip Address',
             'login_datetime' => 'Login Datetime',
+            'login_as' => 'Login As',
             'status' => 'Status',
         ];
     }

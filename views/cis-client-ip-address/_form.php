@@ -43,6 +43,9 @@ use yii\helpers\StringHelper;
 <!-- attribute ip_address -->
 			<?= $form->field($model, 'ip_address')->textInput() ?>
 
+<!-- attribute login_as -->
+			<?= $form->field($model, 'login_as')->textInput() ?>
+
 <!-- attribute login_datetime -->
 			<?= $form->field($model, 'login_datetime')->textInput() ?>
 

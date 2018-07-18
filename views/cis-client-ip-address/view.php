@@ -73,6 +73,7 @@ $this->params['breadcrumbs'][] = 'View';
     'model' => $model,
     'attributes' => [
             'ip_address',
+        'login_as',
         'login_datetime',
         'status',
     ],

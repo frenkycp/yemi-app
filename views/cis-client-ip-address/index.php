@@ -105,6 +105,7 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
             'contentOptions' => ['nowrap'=>'nowrap']
         ],
 			'ip_address',
+			'login_as',
 			'login_datetime',
 			'status',
         ],

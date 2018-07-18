@@ -23,6 +23,8 @@ use yii\widgets\ActiveForm;
 
 		<?= $form->field($model, 'login_datetime') ?>
 
+		<?= $form->field($model, 'login_as') ?>
+
 		<?= $form->field($model, 'status') ?>
 
     <div class="form-group">
