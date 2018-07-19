@@ -25,6 +25,8 @@ use Yii;
  * @property double $AMOUNT_ACT_FOR
  * @property double $QTY_BALANCE
  * @property double $AMOUNT_BALANCE
+ * @property double $QTY_CUR
+ * @property double $AMOUNT_CUR
  * @property string $aliasModel
  */
 abstract class SalesBudgetCompare extends \yii\db\ActiveRecord
@@ -56,7 +58,7 @@ abstract class SalesBudgetCompare extends \yii\db\ActiveRecord
         return [
             [['ITEM_INDEX', 'ITEM'], 'required'],
             [['ITEM_INDEX', 'ITEM', 'DESC', 'NO', 'MODEL', 'MODEL_GROUP', 'BU', 'TYPE', 'FISCAL', 'PERIOD'], 'string'],
-            [['QTY_BGT', 'AMOUNT_BGT', 'QTY_ACT_FOR', 'AMOUNT_ACT_FOR', 'QTY_BALANCE', 'AMOUNT_BALANCE'], 'number'],
+            [['QTY_BGT', 'AMOUNT_BGT', 'QTY_ACT_FOR', 'AMOUNT_ACT_FOR', 'QTY_BALANCE', 'AMOUNT_BALANCE', 'QTY_CUR', 'AMOUNT_CUR'], 'number'],
             [['ITEM_INDEX'], 'unique']
         ];
     }
@@ -72,7 +74,7 @@ abstract class SalesBudgetCompare extends \yii\db\ActiveRecord
             'DESC' => 'Desc',
             'NO' => 'No',
             'MODEL' => 'Model',
-            'MODEL_GROUP' => 'Product',
+            'MODEL_GROUP' => 'Model  Group',
             'BU' => 'Bu',
             'TYPE' => 'Type',
             'FISCAL' => 'Fiscal',
@@ -83,6 +85,8 @@ abstract class SalesBudgetCompare extends \yii\db\ActiveRecord
             'AMOUNT_ACT_FOR' => 'Amount  Act  For',
             'QTY_BALANCE' => 'Qty  Balance',
             'AMOUNT_BALANCE' => 'Amount  Balance',
+            'QTY_CUR' => 'Qty  Cur',
+            'AMOUNT_CUR' => 'Amount  Cur',
         ];
     }
 

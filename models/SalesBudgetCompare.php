@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SalesBudgetCompare extends BaseSalesBudgetCompare
 {
-    public $total_qty_actual, $total_amount_actual, $total_qty_budget, $total_amount_budget, $total_qty_forecast, $total_amount_forecast, $balance_qty, $balance_amount;
+    public $total_qty_actual, $total_amount_actual, $total_qty_budget, $total_amount_budget, $total_qty_forecast, $total_amount_forecast, $balance_qty, $balance_amount, $total_amount_current;
 
     public function behaviors()
     {

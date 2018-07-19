@@ -51,21 +51,6 @@ class ProductionBudgetController extends Controller
         ])
         ->all();
 
-        $sales_data_compare = SalesBudgetCompare::find()
-        ->select([
-            'FISCAL' => 'FISCAL',
-            'PERIOD' => 'PERIOD',
-            'total_amount_budget' => 'SUM(AMOUNT_BGT)',
-            'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)'
-        ])
-        ->where([
-            'FISCAL' => $tmp_fy->FISCAL,
-            //'FISCAL' => $this->getPeriodFiscal(date('Ym'))
-        ])
-        ->groupBy('FISCAL, PERIOD')
-        ->orderBy('PERIOD')
-        ->all();
-
         if ($model->budget_type !== 'ALL') {
             $prod_sales_arr = SalesBudgetTbl::find()
             ->where([
@@ -73,40 +58,6 @@ class ProductionBudgetController extends Controller
                 'TYPE' => $model->budget_type
             ])
             ->all();
-
-            $sales_data_compare = SalesBudgetCompare::find()
-            ->select([
-                'FISCAL' => 'FISCAL',
-                'PERIOD' => 'PERIOD',
-                'total_amount_budget' => 'SUM(AMOUNT_BGT)',
-                'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)'
-            ])
-            ->where([
-                'FISCAL' => $tmp_fy->FISCAL,
-                'TYPE' => $model->budget_type
-                //'FISCAL' => $this->getPeriodFiscal(date('Ym'))
-            ])
-            ->groupBy('FISCAL, PERIOD')
-            ->orderBy('PERIOD')
-            ->all();
-        }
-
-        $budget_grandtotal_amount = 0;
-        $actual_grandtotal_amount = 0;
-
-        $tmp_data_amount_budget = [];
-        $tmp_data_amount_actual = [];
-        foreach ($sales_data_compare as $value) {
-            $budget_grandtotal_amount += $value->total_amount_budget;
-            $actual_grandtotal_amount += $value->total_amount_actual;
-            $tmp_data_amount_budget[] = [
-                'y' => round($budget_grandtotal_amount),
-                'remark' => ''
-            ];
-            $tmp_data_amount_actual[] = [
-                'y' => round($actual_grandtotal_amount),
-                'remark' => ''
-            ];
         }
         
         foreach ($prod_sales_arr as $value) {
@@ -191,8 +142,6 @@ class ProductionBudgetController extends Controller
             ];
         }
 
-        
-
         foreach ($prod_period_arr as $value) {
             $date = DateTime::createFromFormat('Ym', $value);
             $categories[] = date_format($date, 'M\' Y');
@@ -205,10 +154,7 @@ class ProductionBudgetController extends Controller
             'categories' => $categories,
             'series' => $series,
             'fiscal' => $tmp_fy->FISCAL,
-            'budget_grandtotal_amount' => $budget_grandtotal_amount,
-            'actual_grandtotal_amount' => $actual_grandtotal_amount,
             'fiscal' => $tmp_fy->FISCAL,
-            'tmp_data_amount_budget' => $tmp_data_amount_budget
         ]);
     }
 

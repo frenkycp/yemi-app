@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id'], 'integer'],
-            [['ip_address', 'login_datetime'], 'safe'],
+            [['ip_address', 'login_datetime', 'login_as'], 'safe'],
 ];
 }
 
@@ -60,7 +60,8 @@ $query->andFilterWhere([
             'login_datetime' => $this->login_datetime,
         ]);
 
-        $query->andFilterWhere(['like', 'ip_address', $this->ip_address]);
+        $query->andFilterWhere(['like', 'ip_address', $this->ip_address])
+        ->andFilterWhere(['like', 'login_as', $this->login_as]);
 
 return $dataProvider;
 }

@@ -31,4 +31,17 @@ class CisClientIpAddress extends BaseCisClientIpAddress
             ]
         );
     }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(
+            parent::attributeLabels(),
+            [
+                'ip_address' => 'IP Address',
+                'login_datetime' => 'Login Datetime',
+                'login_as' => 'Login As',
+                'status' => 'Status',
+            ]
+        );
+    }
 }

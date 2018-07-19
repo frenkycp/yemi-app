@@ -127,13 +127,17 @@ class SiteController extends Controller
             $user->last_login = new Expression("NOW()");
             $user->save();
 
-            $client_ip = new CisClientIpAddress();
-            $client_ip->ip_address = Yii::$app->request->userIP;
-            $client_ip->login_as = Yii::$app->user->identity->name;
+            if (Yii::$app->request->userIP !== '::1') {
+                $client_ip = new CisClientIpAddress();
+                $client_ip->ip_address = Yii::$app->request->userIP;
+                $client_ip->login_as = Yii::$app->user->identity->name;
 
-            if (!$client_ip->save()) {
-                return json_encode($client_ip->errors);
+                if (!$client_ip->save()) {
+                    return json_encode($client_ip->errors);
+                }
             }
+
+            
 
             return $this->goBack();
         }
