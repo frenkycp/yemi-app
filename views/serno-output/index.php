@@ -203,13 +203,13 @@ $gridColumns = [
         'vAlign' => 'middle',
         'width' => '100px',
         'filter' => ['MACHINE' => 'MACHINE', 'MAN' => 'MAN', 'MATERIAL' => 'MATERIAL', 'METHOD' => 'METHOD']
-    ],
+    ],*/
     [
         'attribute' => 'remark',
         'vAlign' => 'middle',
         'mergeHeader' => true,
         'width' => '170px',
-    ],*/
+    ],
     
 ];
 ?>

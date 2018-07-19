@@ -43,7 +43,7 @@ public function search($params)
 {
 //$query = SernoOutputModel::find();
 $query = SernoOutputModel::find()
-->select('tb_serno_output.id, dst, tb_serno_output.gmc, SUM( qty ) AS qty, SUM( output ) AS output, stc, vms, etd, ship, cntr')
+->select('tb_serno_output.id, dst, tb_serno_output.gmc, SUM( qty ) AS qty, SUM( output ) AS output, stc, vms, etd, ship, cntr, MAX(remark) AS remark')
 ->where(['<>', 'stc', 'ADVANCE'])
 //->andWhere(['<>', 'stc', 'NOSO'])
 ->groupBy('uniq');
