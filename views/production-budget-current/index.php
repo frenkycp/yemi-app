@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Sales Budget/Forecast/Actual <span class="japanesse text-green">(売上予算・見込み・実績)</span>',
-    'tab_title' => 'Sales Budget/Forecast/Actual',
-    'breadcrumbs_title' => 'Sales Budget/Forecast/Actual'
+    'page_title' => 'CURRENT SALES PROGRESS <span class="japanesse text-green">(今月の売上進捗状況)</span>',
+    'tab_title' => 'CURRENT SALES PROGRESS',
+    'breadcrumbs_title' => 'CURRENT SALES PROGRESS'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
