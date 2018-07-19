@@ -45,7 +45,9 @@ echo '</pre>';*/
                     'credits' => [
                         'enabled' => false
                     ],
-                    'title' => null,
+                    'title' => [
+                        'text' => date('M\' Y')
+                    ],
                     'xAxis' => [
                         'categories' => $categories,
                     ],
@@ -74,6 +76,29 @@ echo '</pre>';*/
             ?>
         </div>
         <div class="tab-pane" id="tab_2">
+            <div class="row" style="display: none;">
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Budget Amount
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Forecast Amount
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            Current Amount
+                        </div>
+                    </div>
+                </div>
+            </div>
             <?php
             echo Highcharts::widget([
                 'scripts' => [
@@ -85,25 +110,28 @@ echo '</pre>';*/
                 'options' => [
                     'chart' => [
                         'type' => 'column',
-                        'height' => 450,
+                        'height' => 400,
                     ],
                     'credits' => [
                         'enabled' => false
                     ],
                     'title' => [
-                        'text' => null
+                        'text' => date('M\' Y')
                     ],
                     'subtitle' => [
                         'text' => null
                     ],
                     'xAxis' => [
-                        'categories' => [$period]
+                        'categories' => [$period],
                     ],
                     'yAxis' => [
                         'allowDecimals' => false,
                         'min' => 0,
                         'title' => [
                             'text' => 'AMOUNT (USD)'
+                        ],
+                        'stackLabels' => [
+                            'enabled' => true,
                         ]
                     ],
                     'legend' => [
