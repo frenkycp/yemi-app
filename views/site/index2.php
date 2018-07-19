@@ -126,7 +126,7 @@ $this->registerCss("
                             'class' => 'list-group-item',
                             'style' => 'font-size: 13px;'
                         ]); ?>
-                        <?= Html::a('Current Sales Progress <span class="japanesse-word">(今月の売上進捗状況)</span>', ['/production-budget-current/index'], [
+                        <?= Html::a('Current Sales Progress <span class="japanesse-word">(今月の売上実績)</span>', ['/production-budget-current/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                         <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock/index'], [

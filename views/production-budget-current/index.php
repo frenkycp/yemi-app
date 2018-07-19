@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'CURRENT SALES PROGRESS <span class="japanesse text-green">(今月の売上進捗状況)</span>',
+    'page_title' => 'CURRENT SALES PROGRESS <span class="japanesse text-green">(今月の売上実績)</span>',
     'tab_title' => 'CURRENT SALES PROGRESS',
     'breadcrumbs_title' => 'CURRENT SALES PROGRESS'
 ];
