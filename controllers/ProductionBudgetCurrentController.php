@@ -16,7 +16,7 @@ class ProductionBudgetCurrentController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 		$period = date('Ym');
@@ -133,8 +133,8 @@ class ProductionBudgetCurrentController extends Controller
             <th class="text-center">Periode</th>
             <th class="text-center">Model</th>
             <th class="text-center">Budget Amount<br/>(予算金額)</th>
-            <th class="text-center">Act/Forecast Amount<br/>(見込み/実績)</th>
-            <th class="text-center">Current Amount<br/>(現時点金額)</th>
+            <th class="text-center">Forecast Amount<br/>(見込み)</th>
+            <th class="text-center">Current Amount<br/>(実績金額)</th>
             <th class="text-center">TO BUDGET<br/>(対予算）</th>
             <th class="text-center">TO BUDGET (%)<br/>(対予算）</th>
         </tr>';
