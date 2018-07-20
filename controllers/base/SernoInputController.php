@@ -33,6 +33,12 @@ public $enableCsrfValidation = false;
 public function actionIndex()
 {
     $searchModel  = new SernoInputSearch;
+    if (\Yii::$app->request->get('status') !== null) {
+    	$searchModel->status = \Yii::$app->request->get('status');
+    }
+    if (\Yii::$app->request->get('proddate') !== null) {
+    	$searchModel->proddate = \Yii::$app->request->get('proddate');
+    }
     $dataProvider = $searchModel->search($_GET);
 
 Tabs::clearLocalStorage();

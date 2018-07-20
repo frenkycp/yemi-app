@@ -7,16 +7,16 @@ use yii\helpers\Url;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
-    'page_title' => 'Production Inspection Chart <span>(週次出荷管理検査)</span>',
-    'tab_title' => 'Weekly Final Inspection chart (週次出荷管理検査)',
-    'breadcrumbs_title' => 'Weekly Final Inspection chart (週次出荷管理検査)'
+    'page_title' => 'Production Inspection Chart <span class="japanesse text-green">(週次出荷管理検査)</span>',
+    'tab_title' => 'Production Inspection Chart',
+    'breadcrumbs_title' => 'Production Inspection Chart'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 //$color = 'DarkSlateBlue';
 $color = 'rgba(72,61,139,0.6)';
 
-$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -141,7 +141,16 @@ echo '</pre>';*/
                         //'borderColor' => $color,
                     ],
                     'series' => [
-                        
+                        /*'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression('
+                                    function(){
+                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                    }
+                                '),
+                            ]
+                        ]*/
                     ]
                 ],
                 'series' => $data_series
@@ -152,7 +161,7 @@ echo '</pre>';*/
         yii\bootstrap\Modal::begin([
             'id' =>'modal',
             'header' => '<h3>Detail Information</h3>',
-            //'size' => 'modal-lg',
+            'size' => 'modal-lg',
         ]);
         yii\bootstrap\Modal::end();
         ?>

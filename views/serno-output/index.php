@@ -23,8 +23,14 @@ if(isset($_GET['index_type']))
     }
 }
 
-$this->title = Yii::t('app', 'Shipping Data');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Shipping Container Data <span class="japanesse text-green">(出荷コンテナーデータ）</span>',
+    'tab_title' => 'Shipping Container Data',
+    'breadcrumbs_title' => 'Shipping Container Data chart'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {
@@ -38,7 +44,7 @@ $this->registerCss(".tab-content > .tab-pane,
     height: auto;       
 } ");
 
-$script = <<< JS
+/*$script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
@@ -48,7 +54,7 @@ $script = <<< JS
        window.location = location.href;
     }
 JS;
-$this->registerJs($script, View::POS_HEAD );
+$this->registerJs($script, View::POS_HEAD );*/
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);

@@ -3,8 +3,6 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use app\models\ProductionInspection;
-use app\models\SernoCalendar;
 use app\models\SernoInput;
 use app\models\InspectionReportViewPercentage;
 use yii\web\JsExpression;
@@ -54,15 +52,18 @@ class ProductionInspectionChartController extends Controller
                 $tmp_category[] = $key2;
                 $open_percentage_arr[] = [
                     'y' => $value2['open'] == 0 ? null : (float)$value2['open'],
-                    'qty' => $value2['total_open']
+                    'qty' => $value2['total_open'],
+                    //'remark' => $this->getRemark($key2, 'OPEN')
                 ];
                 $ng_percentage_arr[] = [
                     'y' => $value2['ng'] == 0 ? null : (float)$value2['ng'],
-                    'qty' => $value2['total_ng']
+                    'qty' => $value2['total_ng'],
+                    //'remark' => $this->getRemark($key2, 'NG')
                 ];
                 $ok_percentage_arr[] = [
                     'y' => (float)$value2['ok'],
-                    'qty' => $value2['total_ok']
+                    'qty' => $value2['total_ok'],
+                    //'remark' => $this->getRemark($key2, 'OK')
                 ];
             }
             $data[$key] = [
@@ -101,4 +102,46 @@ class ProductionInspectionChartController extends Controller
             'data' => $data,
 		]);
 	}
+
+    public function getRemark($tgl)
+    {
+
+        $serno_input_arr = SernoInput::find()
+        ->where([
+            'proddate' => $tgl
+        ])
+        ->all();
+
+        $data = '<table class="table table-bordered table-striped table-hover">';
+        $data .= 
+        '<tr class="info">
+            <th class="text-center">No</th>
+            <th class="text-center">Prod. Date</th>
+            <th class="text-center">GMC</th>
+            <th class="text-center">Serial No</th>
+            <th class="text-center">NG Date</th>
+            <th class="text-center">NG</th>
+            <th class="text-center">OK Date</th>
+        </tr>';
+
+        $i = 1;
+        foreach ($serno_input_arr as $serno_input) {
+            $data .= '
+                <tr>
+                    <td class="text-center">' . $i .'</td>
+                    <td class="text-center">' . $serno_input->proddate .'</td>
+                    <td class="text-center">' . $serno_input->gmc .'</td>
+                    <td class="text-center">' . $serno_input->sernum .'</td>
+                    <td class="text-center">' . $serno_input->qa_ng_date .'</td>
+                    <td class="text-center">' . $serno_input->qa_ng .'</td>
+                    <td class="text-center">' . $serno_input->qa_ok_date .'</td>
+                </tr>
+            ';
+            $i++;
+        }
+
+        $data .= '</table>';
+
+        return $data;
+    }
 }

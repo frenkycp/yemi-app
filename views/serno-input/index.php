@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /**
 * @var yii\web\View $this
@@ -10,8 +10,14 @@ use yii\grid\GridView;
     * @var app\models\search\SernoInputSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Serno Inputs');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Final Inspection Data <span class="japanesse text-green">(出荷管理検査データ)</span>',
+    'tab_title' => 'Final Inspection Data',
+    'breadcrumbs_title' => 'Final Inspection Data'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
@@ -21,6 +27,132 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
     $actionColumnTemplateString = "{view} {update} {delete}";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+
+$grid_columns = [
+    [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => $actionColumnTemplateString,
+        'buttons' => [
+            'view' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'View'),
+                    'aria-label' => Yii::t('cruds', 'View'),
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            }
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
+    ],
+    [
+        'attribute' => 'proddate',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'line',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'gmc',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'sernum',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'qa_ng',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'qa_ng_date',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'status',
+        'label' => 'Status',
+        'width' => '90px',
+        'value' => function($model){
+            $val = '';
+            if ($model->qa_ng == '' && $model->qa_ok == '') {
+                $val = 'OPEN';
+            } elseif ($model->qa_ng == '' && $model->qa_ok == 'OK') {
+                $val = 'OK';
+            } elseif ($model->qa_ng != '') {
+                $val = 'NG';
+            }
+            return $val;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            'OK' => 'OK',
+            'NG' => 'NG'
+        ],
+    ],
+    /*[
+        'attribute' => 'qa_ok_date',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],*/
+    [
+        'attribute' => 'pdf_file',
+        'label' => 'PDF File',
+        'value' => function($model){
+            $filename = str_replace('-', '', $model->qa_ng_date) . $model->gmc . '.pdf';
+            $link = Html::a($filename, Yii::$app->request->hostInfo . '/172.17.144.6:99/qa/' . $filename);
+            return $model->qa_ng != '' ? $link : '';
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+];
 ?>
 <div class="giiant-crud serno-input-index">
 
@@ -31,115 +163,36 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <h1>
-        <?= Yii::t('models', 'Serno Inputs') ?>
-        <small>
-            List
-        </small>
-    </h1>
-    <div class="clearfix crud-navigation">
-        <div class="pull-left">
-            <?= Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
-
-        <div class="pull-right">
-
-                                                                                
-            <?= 
-            \yii\bootstrap\ButtonDropdown::widget(
-            [
-            'id' => 'giiant-relations',
-            'encodeLabel' => false,
-            'label' => '<span class="glyphicon glyphicon-paperclip"></span> ' . 'Relations',
-            'dropdown' => [
-            'options' => [
-            'class' => 'dropdown-menu-right'
-            ],
-            'encodeLabels' => false,
-            'items' => [
-            [
-                'url' => ['serno-output/index'],
-                'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ' . Yii::t('models', 'Serno Output'),
-            ],
-                                [
-                'url' => ['serno-master/index'],
-                'label' => '<i class="glyphicon glyphicon-arrow-left"></i> ' . Yii::t('models', 'Serno Master'),
-            ],
-                    
-]
-            ],
-            'options' => [
-            'class' => 'btn-default'
-            ]
-            ]
-            );
-            ?>
-        </div>
-    </div>
-
-    <hr />
-
     <div class="table-responsive">
         <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'pager' => [
-        'class' => yii\widgets\LinkPager::className(),
-        'firstPageLabel' => 'First',
-        'lastPageLabel' => 'Last',
-        ],
-                    'filterModel' => $searchModel,
-                'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
-        'headerRowOptions' => ['class'=>'x'],
-        'columns' => [
-                [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => $actionColumnTemplateString,
-            'buttons' => [
-                'view' => function ($url, $model, $key) {
-                    $options = [
-                        'title' => Yii::t('cruds', 'View'),
-                        'aria-label' => Yii::t('cruds', 'View'),
-                        'data-pjax' => '0',
-                    ];
-                    return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-                }
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => $grid_columns,
+            'hover' => true,
+            //'condensed' => true,
+            'striped' => true,
+            //'floatHeader'=>true,
+            //'floatHeaderOptions'=>['scrollingTop'=>'50'],
+            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            //'pjax' => true, // pjax is set to always true for this demo
+            'toolbar' =>  [
+                /*['content' => 
+                    Html::a('View Chart', ['/mnt-progress/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'View Chart')])
+                ],*/
+                '{export}',
+                '{toggleData}',
             ],
-            'urlCreator' => function($action, $model, $key, $index) {
-                // using the column name as key, not mapping to 'id' like the standard generator
-                $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
-                $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
-                return Url::toRoute($params);
-            },
-            'contentOptions' => ['nowrap'=>'nowrap']
-        ],
-			'num',
-			'pk',
-			'gmc',
-			'line',
-			'proddate',
-			'sernum',
-			'flo',
-			/*'palletnum',*/
-			/*'adv',*/
-			/*'qa_ng:ntext',*/
-			/*'qa_ng_date',*/
-			/*'qa_ok_date',*/
-			/*'ship',*/
-			/*'qa_ok',*/
-			/*// generated by schmunk42\giiant\generators\crud\providers\core\RelationProvider::columnFormat
-			[
-			    'class' => yii\grid\DataColumn::className(),
-			    'attribute' => 'plan',
-			    'value' => function ($model) {
-			        if ($rel = $model->plan0) {
-			            return Html::a($rel->pk, ['serno-output/view', 'pk' => $rel->pk,], ['data-pjax' => 0]);
-			        } else {
-			            return '';
-			        }
-			    },
-			    'format' => 'raw',
-			],*/
-        ],
+            // set export properties
+            'export' => [
+                'fontAwesome' => true
+            ],
+            'panel' => [
+                'type' => GridView::TYPE_PRIMARY,
+                'heading' => $heading,
+                //'footer' => false,
+            ],
         ]); ?>
     </div>
 

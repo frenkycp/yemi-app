@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoInput extends BaseSernoInput
 {
-    public $etd_ship, $destination, $week_no, $total;
+    public $etd_ship, $destination, $week_no, $total, $status, $pdf_file;
 
     public function behaviors()
     {
@@ -30,6 +30,30 @@ class SernoInput extends BaseSernoInput
              [
                   # custom validation rules
              ]
+        );
+    }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(
+            parent::attributeLabels(),
+            [
+                'num' => 'Num',
+                'pk' => 'Pk',
+                'gmc' => 'GMC',
+                'line' => 'Line',
+                'proddate' => 'Prod. Date',
+                'sernum' => 'Serial No.',
+                'flo' => 'Flo',
+                'palletnum' => 'Palletnum',
+                'qa_ng' => 'NG Remark',
+                'qa_ng_date' => 'NG Date',
+                'qa_ok' => 'Status OK',
+                'qa_ok_date' => 'OK Date',
+                'plan' => 'Plan',
+                'adv' => 'Adv',
+                'ship' => 'Ship',
+            ]
         );
     }
 
