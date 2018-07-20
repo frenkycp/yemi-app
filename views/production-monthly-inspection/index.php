@@ -4,10 +4,11 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
-    'page_title' => 'Production Monthly Inspection <span class="japanesse text-green">(週次出荷管理検査)</span>',
+    'page_title' => 'Production Monthly Inspection <span class="japanesse text-green"></span>',
     'tab_title' => 'Production Monthly Inspection',
     'breadcrumbs_title' => 'Production Monthly Inspection'
 ];
@@ -47,48 +48,96 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data);
 echo '</pre>';*/
 ?>
-<?php
-echo Highcharts::widget([
-    'scripts' => [
-        'modules/exporting',
-        'themes/sand-signika',
-    ],
-    'options' => [
-        'chart' => [
-            'type' => 'column',
-        ],
-        'credits' => [
-            'enabled' =>false
-        ],
-        'title' => [
-            'text' => null
-        ],
-        'subtitle' => [
-            'text' => null
-        ],
-        'xAxis' => [
-            'type' => 'category',
-            'categories' => $categories,
-        ],
-        'plotOptions' => [
-            'series' => [
-                'cursor' => 'pointer',
-                'point' => [
-                    'events' => [
-                        'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                        /*'click' => new JsExpression('
-                            function(){
-                                $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                            }
-                        '),*/
+<?php $form = ActiveForm::begin([
+    'id' => 'form_index',
+    'layout' => 'horizontal',
+    'enableClientValidation' => true,
+    'errorSummaryCssClass' => 'error-summary alert alert-danger',
+    'fieldConfig' => [
+             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+             'horizontalCssClasses' => [
+                 //'label' => 'col-sm-2',
+                 #'offset' => 'col-sm-offset-4',
+                 'wrapper' => 'col-sm-7',
+                 'error' => '',
+                 'hint' => '',
+             ],
+         ],
+    ]
+    );
+    ?>
+
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'year')->dropDownList(
+                $year_arr
+            ); ?>
+        </div>
+        <div class="col-md-3">
+            <?= $form->field($model, 'month')->dropDownList(
+                $month_arr
+            ); ?>
+        </div>
+        <?= Yii::$app->params['update_chart_btn']; ?>
+    </div>
+
+<?php ActiveForm::end(); ?>
+<div class="box box-info">
+    <div class="box-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                'modules/exporting',
+                'themes/sand-signika',
+                //'themes/grid-light',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
+                ],
+                'credits' => [
+                    'enabled' =>false
+                ],
+                'title' => [
+                    'text' => null
+                ],
+                'subtitle' => [
+                    'text' => null
+                ],
+                'xAxis' => [
+                    'type' => 'category',
+                    'categories' => $categories,
+                ],
+                'plotOptions' => [
+                    'series' => [
+                        'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                /*'click' => new JsExpression('
+                                    function(){
+                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                    }
+                                '),*/
+                            ]
+                        ],
+                        'dataLabels' => [
+                            'enabled' => true
+                        ],
                     ]
-                ]
-            ]
-        ],
-        'series' => $data
-    ],
-]);
-?>
+                ],
+                'yAxis' => [
+                    'title' => [
+                        'text' => 'Qty'
+                    ],
+                ],
+                'series' => $data
+            ],
+        ]);
+        ?>
+    </div>
+</div>
+
 <?php
 yii\bootstrap\Modal::begin([
     'id' =>'modal',

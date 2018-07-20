@@ -5,6 +5,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\InspectionReportView;
 use app\models\SernoInput;
+use app\models\PlanReceivingPeriod;
 use yii\helpers\Url;
 
 /**
@@ -14,8 +15,35 @@ class ProductionMonthlyInspectionController extends Controller
 {
     public function actionIndex()
     {
-    	$periode = date('Ym');
+    	
     	$categories = [];
+
+    	$year_arr = [];
+        $month_arr = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
+        }
+
+        $min_year = InspectionReportView::find()->select([
+            'periode' => 'MIN(LEFT(periode, 4))'
+        ])->one();
+
+        $year_now = date('Y');
+        $star_year = $min_year->periode;
+        for ($year = $star_year; $year <= $year_now; $year++) {
+            $year_arr[$year] = $year;
+        }
+
+        $model = new PlanReceivingPeriod();
+        $model->month = date('m');
+        $model->year = date('Y');
+        if ($model->load($_POST))
+        {
+
+        }
+
+        $periode = $model->year . $model->month;
 
     	$inspection_data_arr = InspectionReportView::find()
     	->where([
@@ -39,13 +67,18 @@ class ProductionMonthlyInspectionController extends Controller
     	$data = [
     		[
     			'name' => 'NG Product',
-    			'data' => $tmp_data
+    			'data' => $tmp_data,
+    			'color' => 'rgba(255, 0, 0, 0.5)'
     		]
     	];
 
     	return $this->render('index', [
     		'data' => $data,
-    		'categories' => $categories
+    		'categories' => $categories,
+    		'model' => $model,
+    		'year_arr' => $year_arr,
+    		'month_arr' => $month_arr,
+    		''
     	]);
     }
 

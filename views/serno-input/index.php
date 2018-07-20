@@ -29,7 +29,7 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $grid_columns = [
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -49,7 +49,7 @@ $grid_columns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ],
+    ],*/
     [
         'attribute' => 'proddate',
         'hAlign' => 'center',
@@ -178,9 +178,9 @@ $grid_columns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
-                /*['content' => 
-                    Html::a('View Chart', ['/mnt-progress/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'View Chart')])
-                ],*/
+                /**/['content' => 
+                    Html::a('View Chart', ['/production-monthly-inspection/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'View Chart')])
+                ],
                 '{export}',
                 '{toggleData}',
             ],

@@ -93,7 +93,7 @@ $columns = [
         ],
         'width' => '150px',
     ],
-    [
+    /*[
         'attribute' => 'partName',
         'label' => 'Description',
         'vAlign' => 'middle',
@@ -114,22 +114,22 @@ $columns = [
             'style' => 'text-align: center; min-width: 75px;'
         ],
         'width' => '150px',
-    ],
+    ],*/
     [
         'attribute' => 'qa_ng',
         'label' => 'NG',
         'value' => function($model){
             $ng_data = app\models\SernoInput::find()
             ->where([
-                'plan' => $model->plan,
                 'proddate' => $model->proddate,
+                'gmc' => $model->gmc
             ])
             ->andWhere(['<>', 'qa_ng', ''])
             ->all();
 
             $url = ['get-ng-detail',
                 'proddate' => $model->proddate,
-                'plan' => $model->plan
+                'gmc' => $model->gmc
             ];
 
             $options = [
