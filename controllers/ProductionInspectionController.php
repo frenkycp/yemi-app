@@ -46,36 +46,31 @@ class ProductionInspectionController extends \app\controllers\base\ProductionIns
 		]);
 	}
 
-	public function actionGetProductSerno($proddate, $plan)
+	public function actionGetProductSerno($flo)
 	{
 		$data = '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
 		'<tr>
-			<th style="text-align: center;">GMC</th>
-			<th>Description</th>
 			<th style="text-align: center;">Serial Number</th>
 		</tr>'
 		;
 		$result = SernoInput::find()
-		->joinWith('sernoMaster')
-		->select([
+		//->joinWith('sernoMaster')
+		/*->select([
 			'gmc' => 'tb_serno_input.gmc',
 			'sernum' => 'sernum',
 			'destination' => 'CONCAT(tb_serno_master.model, \' // \', tb_serno_master.color, \' // \', tb_serno_master.dest)'
-		])
+		])*/
 		->where([
-			'proddate' => $proddate,
-			'plan' => $plan
+			'flo' => $flo
 		])
-		->orderBy('gmc ASC, sernum ASC')
+		->orderBy('sernum ASC')
 		->all();
 
 		if (count($result) > 0) {
 			foreach ($result as $value) {
 				$data .= '
 				<tr>
-					<td style="text-align: center;">' . $value['gmc'] . '</td>
-					<td>' . $value['destination'] . '</td>
 					<td style="text-align: center;">' . $value['sernum'] . '</td>
 				</tr>
 				';
@@ -83,7 +78,7 @@ class ProductionInspectionController extends \app\controllers\base\ProductionIns
 		} else {
 			$data .= '
 			<tr>
-				<td colspan="3">No Serno Data</td>
+				<td colspan="1">No Serno Data</td>
 			</tr>
 			';
 		}

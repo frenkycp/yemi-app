@@ -40,7 +40,7 @@ $this->registerJs("$(function() {
 });");
 
 $columns = [
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         'template' => '{view_serno}',
         'buttons' => [
@@ -54,8 +54,8 @@ $columns = [
             },
             'view_serno' => function ($url, $model, $key) {
                 $url = ['get-product-serno',
-                    'proddate' => $model->proddate,
-                    'plan' => $model->plan
+                    'ng_date' => $model->qa_ng_date,
+                    'gmc' => $model->gmc
                 ];
                 $options = [
                     'class' => 'popupModal',
@@ -71,7 +71,7 @@ $columns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ],
+    ],*/
     [
         'attribute' => 'proddate',
         'label' => 'Prod. Date',
@@ -79,9 +79,26 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px;'
+            'style' => 'text-align: center;'
         ],
-        'width' => '150px',
+        'width' => '120px',
+    ],
+    [
+        'attribute' => 'line',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+    ],
+    [
+        'attribute' => 'flo',
+        'label' => 'FLO No.',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+        'width' => '120px',
     ],
     [
         'attribute' => 'gmc',
@@ -91,7 +108,73 @@ $columns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px;'
         ],
-        'width' => '150px',
+        'width' => '120px',
+    ],
+    [
+        'attribute' => 'total',
+        'label' => 'Qty',
+        'value' => function($model){
+            $url = ['get-product-serno',
+                'flo' => $model->flo,
+            ];
+            $options = [
+                'class' => 'popupModal btn btn-primary btn-xs',
+                'data-pjax' => '0',
+            ];
+            return Html::a($model->total, $url, $options);
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+        'format' => 'raw',
+    ],
+    [
+        'attribute' => 'status',
+        'label' => 'Status',
+        'width' => '90px',
+        'value' => function($model){
+            $val = '';
+            $btn_class = '';
+            if ($model->qa_ng == '' && $model->qa_ok == '') {
+                $val = 'OPEN';
+                $btn_class = 'btn btn-xs btn-warning';
+            } elseif ($model->qa_ng == '' && $model->qa_ok == 'OK') {
+                $val = 'OK';
+                $btn_class = 'btn btn-xs btn-success';
+            } elseif ($model->qa_ng != '') {
+                $val = 'NG';
+                $btn_class = 'btn btn-xs btn-danger';
+            }
+            return '<span class="' . $btn_class . '">' . $val . '</span>';
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            'OK' => 'OK',
+            'NG' => 'NG'
+        ],
+    ],
+    [
+        'attribute' => 'qa_ng',
+        'vAlign' => 'middle',
+        'label' => 'NG Remark'
+    ],
+    [
+        'attribute' => 'pdf_file',
+        'label' => 'PDF File',
+        'value' => function($model){
+            $filename = str_replace('-', '', $model->qa_ng_date) . $model->gmc . '.pdf';
+            $link = Html::a($filename, 'http://172.17.144.6:99/qa/' . $filename, ['target' => '_blank']);
+            return $model->qa_ng != '' ? $link : '';
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     /*[
         'attribute' => 'partName',
@@ -114,7 +197,7 @@ $columns = [
             'style' => 'text-align: center; min-width: 75px;'
         ],
         'width' => '150px',
-    ],*/
+    ],
     [
         'attribute' => 'qa_ng',
         'label' => 'NG',
@@ -147,13 +230,13 @@ $columns = [
         'format' => 'raw',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-    ],
-    [
+    ],*/
+    /*[
         'attribute' => 'qa_ok',
         'label' => 'Inspection',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-    ],
+    ],*/
 ];
 ?>
 <div class="giiant-crud serno-input-index">
@@ -241,7 +324,7 @@ $columns = [
         <?php
             yii\bootstrap\Modal::begin([
                 'id' =>'modal',
-                'header' => '<h3>Product Detail</h3>',
+                'header' => '<h3>Detail Info</h3>',
                 //'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();

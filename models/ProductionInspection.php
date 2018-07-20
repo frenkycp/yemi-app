@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ProductionInspection extends BaseProductionInspection
 {
-    public $min_week, $max_week, $total;
+    public $min_week, $max_week, $total, $total_ng, $status;
 
     public function behaviors()
     {

@@ -20,7 +20,7 @@ public function rules()
 {
 return [
 [['num', 'flo', 'palletnum', 'adv'], 'integer'],
-            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng_date', 'qa_ok_date', 'plan', 'ship', 'etd_ship'], 'safe'],
+            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng_date', 'qa_ok_date', 'plan', 'ship', 'etd_ship', 'status'], 'safe'],
 ];
 }
 
@@ -43,11 +43,22 @@ return Model::scenarios();
 public function search($params)
 {
 $query = SernoInput::find()
-->joinWith('sernoOutput')
-->joinWith('sernoMaster')
-->where(['<>', 'stc', 'ADVANCE'])
-->andWhere(['<>', 'flo', 0])
-->groupBy('proddate, plan');
+->select([
+    'proddate' => 'proddate',
+    'flo' => 'flo',
+    'gmc' => 'gmc',
+    'qa_ng' => 'qa_ng',
+    'qa_ng_date' => 'qa_ng_date',
+    'qa_ok' => 'qa_ok',
+    'qa_ok_date' => 'qa_ok_date',
+    'line' => 'line',
+    'total' => 'COUNT(gmc)',
+])
+//->joinWith('sernoOutput')
+//->joinWith('sernoMaster')
+//->where(['<>', 'stc', 'ADVANCE'])
+//->andWhere(['<>', 'flo', 0])
+->groupBy('flo');
 
 $dataProvider = new ActiveDataProvider([
     'query' => $query,
@@ -56,20 +67,20 @@ $dataProvider = new ActiveDataProvider([
         'attributes' => [
             'proddate',
             //'gmc',
-            'etd_ship' => [
+            /*'etd_ship' => [
                 'asc'=>['tb_serno_output.ship'=>SORT_ASC],
                 'desc'=>['tb_serno_output.ship'=>SORT_DESC],
             ],
             'destination' => [
                 'asc'=>['tb_serno_output.dst'=>SORT_ASC],
                 'desc'=>['tb_serno_output.dst'=>SORT_DESC],
-            ],
+            ],*/
         ],
         'defaultOrder' => [
             //'proddate' => SORT_DESC,
             //'gmc' => SORT_ASC,
-            'etd_ship' => SORT_ASC,
-            'destination' => SORT_ASC,
+            //'etd_ship' => SORT_ASC,
+            //'destination' => SORT_ASC,
         ]
     ],
 ]);
@@ -94,17 +105,25 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'line', $this->line])
             ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
-            ->andFilterWhere(['like', 'qa_ng', $this->qa_ng])
+            //->andFilterWhere(['like', 'qa_ng', $this->qa_ng])
             ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date])
             //->andFilterWhere(['like', 'qa_ok', $this->qa_ok])
             ->andFilterWhere(['like', 'qa_ok_date', $this->qa_ok_date])
             ->andFilterWhere(['like', 'plan', $this->plan])
             ->andFilterWhere(['like', 'tb_serno_output.ship', $this->etd_ship]);
 
-        if ($params['status'] == 'OK') {
-            $query->andFilterWhere(['qa_ok' => 'OK']);
-        } else if ($params['status'] == 'NG') {
-            $query->andFilterWhere(['!=', 'qa_ok', 'OK']);
+        if ($this->status == 'OK') {
+            $query->andWhere([
+                'qa_ng' => '',
+                'qa_ok' => 'OK'
+            ]);
+        } else if ($this->status == 'NG') {
+            $query->andWhere(['<>', 'qa_ng', '']);
+        } elseif ($this->status == 'OPEN') {
+            $query->andFilterWhere([
+                'qa_ng' => '',
+                'qa_ok' => ''
+            ]);
         }
 
 return $dataProvider;
