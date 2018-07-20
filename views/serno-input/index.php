@@ -141,7 +141,7 @@ $grid_columns = [
         'label' => 'PDF File',
         'value' => function($model){
             $filename = str_replace('-', '', $model->qa_ng_date) . $model->gmc . '.pdf';
-            $link = Html::a($filename, Yii::$app->request->hostInfo . '/qa/' . $filename);
+            $link = Html::a($filename, 'http://172.17.144.6:99/qa/' . $filename);
             return $model->qa_ng != '' ? $link : '';
         },
         'format' => 'raw',
