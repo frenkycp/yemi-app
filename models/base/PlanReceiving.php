@@ -5,6 +5,7 @@
 namespace app\models\base;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the base-model class for table "plan_receiving".
@@ -16,7 +17,14 @@ use Yii;
  * @property integer $qty
  * @property string $receiving_date
  * @property string $month_periode
+ * @property string $container_no
+ * @property string $created_date
+ * @property string $last_modified_date
+ * @property integer $last_modified_by
+ * @property string $deleted_date
+ * @property integer $deleted_by
  * @property integer $flag
+ * @property integer $created_by
  * @property string $aliasModel
  */
 abstract class PlanReceiving extends \yii\db\ActiveRecord
@@ -43,13 +51,26 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => BlameableBehavior::className(),
+                'updatedByAttribute' => false,
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            [['qty', 'flag'], 'integer'],
-            [['receiving_date'], 'safe'],
+            [['qty', 'last_modified_by', 'deleted_by', 'flag'], 'integer'],
+            [['receiving_date', 'created_date', 'last_modified_date', 'deleted_date'], 'safe'],
             [['vendor_name', 'vehicle'], 'string', 'max' => 50],
-            [['item_type'], 'string', 'max' => 20],
+            [['item_type', 'container_no'], 'string', 'max' => 20],
             [['month_periode'], 'string', 'max' => 7]
         ];
     }
@@ -67,6 +88,13 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
             'qty' => 'Qty',
             'receiving_date' => 'Receiving Date',
             'month_periode' => 'Month Periode',
+            'container_no' => 'Container No',
+            'created_date' => 'Created Date',
+            'created_by' => 'Created By',
+            'last_modified_date' => 'Last Modified Date',
+            'last_modified_by' => 'Last Modified By',
+            'deleted_date' => 'Deleted Date',
+            'deleted_by' => 'Deleted By',
             'flag' => 'Flag',
         ];
     }

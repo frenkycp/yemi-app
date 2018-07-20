@@ -22,6 +22,8 @@ $unit_list = ArrayHelper::map(ItemUnit::find()->orderBy('name ASC')->all(), 'nam
 
     <?= $form->field($model, 'vendor_name')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'container_no')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'vehicle')->dropDownList($vehicle_list, ['prompt' => 'Select Vehicle...']) ?>
 
     <?= $form->field($model, 'item_type')->dropDownList($unit_list, ['prompt' => 'Select Unit...']) ?>

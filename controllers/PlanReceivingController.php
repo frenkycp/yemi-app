@@ -60,10 +60,13 @@ class PlanReceivingController extends Controller
      */
     public function actionCreate()
     {
+        date_default_timezone_set('Asia/Jakarta');
         $model = new PlanReceiving();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->month_periode = date('Ym', strtotime($model->receiving_date));
+            $model->created_date = date('Y-m-d H:i:s');
+            $model->created_by = Yii::$app->user->identity->id;
             if ($model->save()) {
                 //return $this->redirect(['view', 'id' => $model->id]);
                 return $this->redirect(['index']);
@@ -87,10 +90,13 @@ class PlanReceivingController extends Controller
      */
     public function actionUpdate($id)
     {
+        date_default_timezone_set('Asia/Jakarta');
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->month_periode = date('Ym', strtotime($model->receiving_date));
+            $model->last_modified_date = date('Y-m-d H:i:s');
+            $model->last_modified_by = Yii::$app->user->identity->id;
             if ($model->save()) {
                 //return $this->redirect(['view', 'id' => $model->id]);
                 return $this->redirect(['index']);
@@ -113,8 +119,11 @@ class PlanReceivingController extends Controller
      */
     public function actionDelete($id)
     {
+        date_default_timezone_set('Asia/Jakarta');
         $model = $this->findModel($id);
         $model->flag = 0;
+        $model->deleted_date = date('Y-m-d H:i:s');
+        $model->deleted_by = Yii::$app->user->identity->id;
 
         if ($model->save()) {
             //return $this->redirect(['view', 'id' => $model->id]);

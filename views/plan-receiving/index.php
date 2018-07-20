@@ -57,20 +57,29 @@ $columns = [
         'vAlign' => 'middle',
     ],
     [
+        'attribute' => 'container_no',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'vehicle',
         'vAlign' => 'middle',
+        'hAlign' => 'center',
     ],
     [
         'attribute' => 'item_type',
         'vAlign' => 'middle',
+        'hAlign' => 'center',
     ],
     [
         'attribute' => 'qty',
         'vAlign' => 'middle',
+        'hAlign' => 'center',
     ],
     [
         'attribute' => 'receiving_date',
         'vAlign' => 'middle',
+        'hAlign' => 'center',
     ],
 ];
 
