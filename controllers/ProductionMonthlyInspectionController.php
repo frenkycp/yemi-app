@@ -59,7 +59,7 @@ class ProductionMonthlyInspectionController extends Controller
     		
     		$tmp_data[] = [
     			'y' => (int)$inspection_data->total_ng,
-    			'url' => Url::to(['serno-input/index', 'proddate' => $inspection_data->proddate, 'status' => 'NG']),
+    			'url' => Url::to(['production-inspection/index', 'proddate' => $inspection_data->proddate, 'status' => 'NG']),
     			//'remark' => $this->getNgDataRemark($inspection_data->proddate)
     		];
     	}

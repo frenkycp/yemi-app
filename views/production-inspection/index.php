@@ -111,6 +111,11 @@ $columns = [
         'width' => '120px',
     ],
     [
+        'attribute' => 'partName',
+        'label' => 'Description',
+        'vAlign' => 'middle',
+    ],
+    [
         'attribute' => 'total',
         'label' => 'Qty',
         'value' => function($model){
@@ -310,6 +315,9 @@ $columns = [
             ],
             'columns' => $columns,
             'toolbar' => [
+                ['content' => 
+                    Html::a('View Chart', ['/production-monthly-inspection/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'View Chart')])
+                ],
                 '{export}',
                 '{toggleData}',
                 //$fullExportMenu,
