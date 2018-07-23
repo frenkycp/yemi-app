@@ -126,7 +126,7 @@ $this->registerCss("
                             'class' => 'list-group-item',
                             'style' => 'font-size: 13px;'
                         ]); ?>
-                        <?= Html::a('Current Sales Progress <span class="japanesse-word">(今月の売上実績)</span>', ['/production-budget-current/index'], [
+                        <?= Html::a('Current Sales Progres (Proforma Invoice Based)<br/><span class="japanesse-word">(今月の売上実績)</span>', ['/production-budget-current/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                         <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock/index'], [
@@ -160,7 +160,7 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Finish Good Inspection<br/><span class="japanesse-word">( 完成品出荷の管理検査)</span><br/></div>
                     <div class="list-group">
-                        <?= Html::a('Weekly Final Inspection chart <span class="japanesse-word">(週次出荷管理検査)</span>', ['/production-monthly-inspection/index'], [
+                        <?= Html::a('Monthly Production Inspection Chart <span class="japanesse-word">(月次出荷管理検査)</span>', ['/production-monthly-inspection/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                         <?= Html::a('Final Inspection Data <span class="japanesse-word">(出荷管理検査データ)</span>', ['/production-inspection/index'], [

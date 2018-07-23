@@ -8,9 +8,9 @@ use yii\bootstrap\ActiveForm;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
-    'page_title' => 'Production Monthly Inspection <span class="japanesse text-green"></span>',
-    'tab_title' => 'Production Monthly Inspection',
-    'breadcrumbs_title' => 'Production Monthly Inspection'
+    'page_title' => 'Monthly Production Inspection Chart <span class="japanesse text-green">(月次出荷管理検査)</span>',
+    'tab_title' => 'Monthly Production Inspection Chart',
+    'breadcrumbs_title' => 'Monthly Production Inspection Chart'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');

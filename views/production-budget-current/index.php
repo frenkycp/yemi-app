@@ -7,11 +7,11 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'CURRENT SALES PROGRESS <span class="japanesse text-green">(今月の売上実績)</span>',
-    'tab_title' => 'CURRENT SALES PROGRESS',
-    'breadcrumbs_title' => 'CURRENT SALES PROGRESS'
+    'page_title' => 'Current Sales Progres (Proforma Invoice Based) <span class="japanesse text-green">今月売上実績 (プロフォーマインボイス基準)</span>',
+    'tab_title' => 'Current Sales Progres (Proforma Invoice Based)',
+    'breadcrumbs_title' => 'Current Sales Progres (Proforma Invoice Based)'
 ];
-$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
@@ -23,6 +23,7 @@ print_r($tmp_data_amount_budget);
 echo '</pre>';*/
 
 ?>
+<h4>Last Update : <?= date('d M Y H:i:s', strtotime($current_last_update)) ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab">Business Unit  (BU別)</a></li>

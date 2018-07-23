@@ -119,14 +119,14 @@ $columns = [
         'attribute' => 'total',
         'label' => 'Qty',
         'value' => function($model){
-            $url = ['get-product-serno',
+            /*$url = ['get-product-serno',
                 'flo' => $model->flo,
             ];
             $options = [
                 'class' => 'popupModal btn btn-primary btn-xs',
                 'data-pjax' => '0',
-            ];
-            return Html::a($model->total, $url, $options);
+            ];*/
+            return '<span><b>' . $model->total . '</b></span>';
         },
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -150,6 +150,14 @@ $columns = [
                 $val = 'NG';
                 $btn_class = 'btn btn-xs btn-danger';
             }
+            $url = ['get-product-serno',
+                'flo' => $model->flo,
+            ];
+            $options = [
+                'class' => 'popupModal ' . $btn_class,
+                'data-pjax' => '0',
+            ];
+            return Html::a($val, $url, $options);
             return '<span class="' . $btn_class . '">' . $val . '</span>';
         },
         'format' => 'raw',
@@ -170,8 +178,20 @@ $columns = [
         'label' => 'PDF File',
         'value' => function($model){
             $filename = str_replace('-', '', $model->qa_ng_date) . $model->gmc . '.pdf';
+            $path = \Yii::$app->basePath . '\\..\\mis7\\qa\\' . $filename;
             $link = Html::a($filename, 'http://172.17.144.6:99/qa/' . $filename, ['target' => '_blank']);
-            return $model->qa_ng != '' ? $link : '';
+
+            if ($model->qa_ng != '') {
+                if (file_exists($path)) {
+                    return $link;
+                } else {
+                    return "File not found...";
+                }
+            } else {
+                return '';
+            }
+            
+            //return $model->qa_ng != '' ? $link : '';
         },
         'format' => 'raw',
         'hAlign' => 'center',
@@ -259,6 +279,7 @@ $columns = [
             List
         </small>
     </h1>-->
+
     <div class="clearfix crud-navigation" style="display: none;">
         <div class="pull-left">
             <?= Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']) ?>

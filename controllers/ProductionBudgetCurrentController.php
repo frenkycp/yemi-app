@@ -116,8 +116,19 @@ class ProductionBudgetCurrentController extends Controller
 			'data' => $data,
 			'data2'=> $data2,
 			'period' => $period,
-			'categories' => $categories
+			'categories' => $categories,
+			'current_last_update' => $this->getCurrentLastUpdate()
 		]);
+	}
+
+	public function getCurrentLastUpdate()
+	{
+		$tmp_data = SalesBudgetCompare::find()
+		->select('DISTINCT(CUR_LAST_UPDATE)')
+		->where('CUR_LAST_UPDATE IS NOT NULL')
+		->one();
+
+		return $tmp_data->CUR_LAST_UPDATE;
 	}
 
 	public function getRemark($period, $bu)
