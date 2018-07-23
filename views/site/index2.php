@@ -160,7 +160,7 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Finish Good Inspection<br/><span class="japanesse-word">( 完成品出荷の管理検査)</span><br/></div>
                     <div class="list-group">
-                        <?= Html::a('Monthly Production Inspection Chart <span class="japanesse-word">(月次出荷管理検査)</span>', ['/production-monthly-inspection/index'], [
+                        <?= Html::a('Monthly Production Inspection Chart<br/><span class="japanesse-word">(月次出荷管理検査)</span>', ['/production-monthly-inspection/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                         <?= Html::a('Final Inspection Data <span class="japanesse-word">(出荷管理検査データ)</span>', ['/production-inspection/index'], [

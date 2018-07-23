@@ -98,7 +98,7 @@ $columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
-        'width' => '120px',
+        'width' => '110px',
     ],
     [
         'attribute' => 'gmc',
@@ -108,7 +108,7 @@ $columns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px;'
         ],
-        'width' => '120px',
+        'width' => '100px',
     ],
     [
         'attribute' => 'partName',
@@ -130,24 +130,24 @@ $columns = [
         },
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px',
+        'width' => '50px',
         'format' => 'raw',
     ],
     [
         'attribute' => 'status',
         'label' => 'Status',
-        'width' => '90px',
+        'width' => '110px',
         'value' => function($model){
             $val = '';
             $btn_class = '';
             if ($model->qa_ng == '' && $model->qa_ok == '') {
-                $val = 'OPEN';
+                $val = 'Open';
                 $btn_class = 'btn btn-xs btn-warning';
             } elseif ($model->qa_ng == '' && $model->qa_ok == 'OK') {
                 $val = 'OK';
                 $btn_class = 'btn btn-xs btn-success';
             } elseif ($model->qa_ng != '') {
-                $val = 'NG';
+                $val = 'Lot Out';
                 $btn_class = 'btn btn-xs btn-danger';
             }
             $url = ['get-product-serno',
@@ -165,8 +165,15 @@ $columns = [
         'vAlign' => 'middle',
         'filter' => [
             'OK' => 'OK',
-            'NG' => 'NG'
+            'NG' => 'Lot Out'
         ],
+    ],
+    [
+        'attribute' => 'qa_ng_date',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'label' => 'NG Remark',
+        'width' => '120px',
     ],
     [
         'attribute' => 'qa_ng',

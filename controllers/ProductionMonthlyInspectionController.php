@@ -13,6 +13,12 @@ use yii\helpers\Url;
  */
 class ProductionMonthlyInspectionController extends Controller
 {
+    public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
     public function actionIndex()
     {
     	
@@ -66,7 +72,7 @@ class ProductionMonthlyInspectionController extends Controller
 
     	$data = [
     		[
-    			'name' => 'NG Product',
+    			'name' => 'Lot Out',
     			'data' => $tmp_data,
     			'color' => 'rgba(255, 0, 0, 0.5)'
     		]
