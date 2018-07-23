@@ -23,7 +23,7 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $gridColumns = [
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -43,6 +43,13 @@ $gridColumns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
+    ],*/
+    [
+        'class' => 'kartik\grid\SerialColumn',
+        'contentOptions' => ['class' => 'kartik-sheet-style'],
+        'width' => '36px',
+        'header' => '',
+        'headerOptions' => ['class' => 'kartik-sheet-style']
     ],
     [
         'attribute' => 'ip_address',
