@@ -117,9 +117,30 @@ $gridColumns = [
         'width' => '70px'
     ],
     [
+        'attribute' => 'manpower_desc',
+        'value' => function($model){
+            $str = '';
+            $str .= $model->id_01_desc;
+            $str .= $model->id_02_desc != null ? ', ' . $model->id_02_desc : '';
+            $str .= $model->id_03_desc != null ? ', ' . $model->id_03_desc : '';
+            $str .= $model->id_04_desc != null ? ', ' . $model->id_04_desc : '';
+            $str .= $model->id_05_desc != null ? ', ' . $model->id_05_desc : '';
+            $str .= $model->id_06_desc != null ? ', ' . $model->id_06_desc : '';
+            $str .= $model->id_07_desc != null ? ', ' . $model->id_07_desc : '';
+            $str .= $model->id_08_desc != null ? ', ' . $model->id_08_desc : '';
+            $str .= $model->id_09_desc != null ? ', ' . $model->id_09_desc : '';
+            $str .= $model->id_10_desc != null ? ', ' . $model->id_10_desc : '';
+            return $str;
+        },
+        'encodeLabel' => false,
+        'label' => 'Man Power<br/>Description',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'start_date',
         'value' => function($model){
-        	return $model->start_date == null ? '-' : date('Y-m-d', strtotime($model->start_date));
+        	return $model->start_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->start_date));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center'
@@ -129,7 +150,7 @@ $gridColumns = [
         'encodeLabel' => false,
         'label' => 'Completed<br/>Date',
         'value' => function($model){
-        	return $model->completed_date == null ? '-' : date('Y-m-d', strtotime($model->completed_date));
+        	return $model->completed_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->completed_date));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center'

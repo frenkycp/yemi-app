@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class VisualPickingList extends BaseVisualPickingList
 {
+    public $manpower_desc;
 
     public function behaviors()
     {
