@@ -172,13 +172,13 @@ $columns = [
         'attribute' => 'qa_ng_date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'label' => 'NG Remark',
+        'label' => 'Lot Out Date',
         'width' => '120px',
     ],
     [
         'attribute' => 'qa_ng',
         'vAlign' => 'middle',
-        'label' => 'NG Remark'
+        'label' => 'Lot Out Remark'
     ],
     [
         'attribute' => 'pdf_file',
