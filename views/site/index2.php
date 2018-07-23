@@ -163,7 +163,7 @@ $this->registerCss("
                         <?= Html::a('Weekly Final Inspection chart <span class="japanesse-word">(週次出荷管理検査)</span>', ['/production-monthly-inspection/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Final Inspection Data <span class="japanesse-word">(出荷管理検査データ)</span>', ['/serno-input/index'], [
+                        <?= Html::a('Final Inspection Data <span class="japanesse-word">(出荷管理検査データ)</span>', ['/production-inspection/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                     </div>
