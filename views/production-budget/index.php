@@ -91,7 +91,7 @@ echo '</pre>';*/
     
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">Last Update : <?= $last_update; ?></h3>
+        <h3 class="box-title">Last Updated : <?= $last_update; ?></h3>
     </div>
     <div class="box-body">
         <?php

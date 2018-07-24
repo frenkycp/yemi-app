@@ -23,7 +23,7 @@ print_r($tmp_data_amount_budget);
 echo '</pre>';*/
 
 ?>
-<h4>Last Update : <?= date('d M Y H:i:s', strtotime($current_last_update)) ?></h4>
+<h4>Last Updated : <?= date('d M Y H:i:s', strtotime($current_last_update)) ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab">Business Unit  (BU別)</a></li>
