@@ -7,11 +7,10 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Sales Budget/Forecast/Actual <span class="japanesse text-green">(売上予算・見込み・実績)</span>',
+    'page_title' => 'Sales Budget/Forecast/Actual <span class="japanesse text-green">(売上予算・見込み・実績)</span> Monthly Period Based <span class="japanesse text-green">(月次決算基準)</span>',
     'tab_title' => 'Sales Budget/Forecast/Actual',
     'breadcrumbs_title' => 'Sales Budget/Forecast/Actual'
 ];
-$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
