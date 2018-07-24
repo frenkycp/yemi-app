@@ -17,6 +17,9 @@ use Yii;
  * @property string $PERIOD
  * @property double $QTY
  * @property double $AMOUNT
+ * @property string $BU
+ * @property string $TYPE
+ * @property string $LAST_UPDATE
  * @property string $aliasModel
  */
 abstract class SalesBudgetTbl extends \yii\db\ActiveRecord
@@ -46,8 +49,9 @@ abstract class SalesBudgetTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['CATEGORY', 'FISCAL', 'NO', 'MODEL', 'PERIOD'], 'string'],
-            [['QTY', 'AMOUNT'], 'number']
+            [['CATEGORY', 'FISCAL', 'NO', 'MODEL', 'PERIOD', 'BU', 'TYPE'], 'string'],
+            [['QTY', 'AMOUNT'], 'number'],
+            [['LAST_UPDATE'], 'safe']
         ];
     }
 
@@ -65,6 +69,9 @@ abstract class SalesBudgetTbl extends \yii\db\ActiveRecord
             'PERIOD' => 'Period',
             'QTY' => 'Qty',
             'AMOUNT' => 'Amount',
+            'BU' => 'Bu',
+            'TYPE' => 'Type',
+            'LAST_UPDATE' => 'Last  Update',
         ];
     }
 

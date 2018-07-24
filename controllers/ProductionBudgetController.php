@@ -208,7 +208,8 @@ class ProductionBudgetController extends Controller
             'budget_grandtotal_amount' => $budget_grandtotal_amount,
             'actual_grandtotal_amount' => $actual_grandtotal_amount,
             'fiscal' => $tmp_fy->FISCAL,
-            'tmp_data_amount_budget' => $tmp_data_amount_budget
+            'tmp_data_amount_budget' => $tmp_data_amount_budget,
+            'last_update' => date('d M\' Y', strtotime($tmp_fy->LAST_UPDATE))
         ]);
     }
 
