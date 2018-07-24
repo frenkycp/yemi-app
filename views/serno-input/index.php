@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Final Inspection Data <span class="japanesse text-green">(出荷管理検査データ)</span>',
-    'tab_title' => 'Final Inspection Data',
-    'breadcrumbs_title' => 'Final Inspection Data'
+    'page_title' => 'Production Serial Number',
+    'tab_title' => 'Production Serial Number',
+    'breadcrumbs_title' => 'Production Serial Number'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -50,8 +50,18 @@ $grid_columns = [
         },
         'contentOptions' => ['nowrap'=>'nowrap']
     ],*/
+    
     [
         'attribute' => 'proddate',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'flo',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -80,6 +90,7 @@ $grid_columns = [
     ],
     [
         'attribute' => 'sernum',
+        'label' => 'Serial Number',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -87,7 +98,7 @@ $grid_columns = [
             'style' => 'text-align: center;'
         ],
     ],
-    [
+    /**/[
         'attribute' => 'qa_ng',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -135,7 +146,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
-    ],*/
+    ],
     [
         'attribute' => 'pdf_file',
         'label' => 'PDF File',
@@ -151,7 +162,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
-    ],
+    ],*/
 ];
 ?>
 <div class="giiant-crud serno-input-index">

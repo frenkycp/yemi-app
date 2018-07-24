@@ -42,12 +42,27 @@ return Model::scenarios();
 public function search($params)
 {
 $query = SernoInput::find();
+$this->load($params);
+/*$query1 = (new \yii\db\Query())
+    ->select("*")
+    ->from('tb_serno_input')
+    ->where('proddate LIKE \'' . $this->proddate . '\'');
+
+$query2 = (new \yii\db\Query())
+    ->select("*")
+    ->from('tb_serno_input_backup')
+    ->where('proddate LIKE \'' . $this->proddate . '\'');
+
+$query1->union($query2, false);//false is UNION, true is UNION ALL
+$sql = $query1->createCommand()->getRawSql();
+//$sql .= ' LIMIT 100';
+$query = SernoInput::findBySql($sql);*/
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
 ]);
 
-$this->load($params);
+
 
 if (!$this->validate()) {
 // uncomment the following line if you do not want to any records when validation fails
@@ -65,7 +80,7 @@ $query->andFilterWhere([
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'gmc', $this->gmc])
             ->andFilterWhere(['like', 'line', $this->line])
-            ->andFilterWhere(['like', 'proddate', $this->proddate])
+            //->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
             //->andFilterWhere(['like', 'qa_ng', $this->qa_ng])
             ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date])
