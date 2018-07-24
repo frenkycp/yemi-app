@@ -13,11 +13,11 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'Weekly MilkRun Parts  <span class="text-green">（週次ミルクラン部品納入）</span> - ETD Jakarta based',
+    'page_title' => 'Weekly MilkRun Parts  <span class="text-green">（週次ミルクラン部品納入）</span> - ETD Jakarta based <span class="text-green">(ジャカルタ出荷日の基準)</span>',
     'tab_title' => 'Weekly MilkRun Parts',
     'breadcrumbs_title' => 'Weekly MilkRun Parts'
 ];
-$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("

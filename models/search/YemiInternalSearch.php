@@ -17,9 +17,13 @@ class YemiInternalSearch extends SernoOutputModel
 */
 public function rules()
 {
-return [
+/*return [
 [['pk', 'stc', 'dst', 'gmc', 'etd', 'category', 'description', 'line', 'vms'], 'safe'],
             [['id', 'num', 'adv', 'cntr', 'is_minus', 'qty', 'output'], 'integer'],
+];*/
+return [
+[['pk', 'stc', 'dst', 'gmc', 'etd', 'category', 'description', 'line', 'vms'], 'safe'],
+            [['id', 'num', 'adv', 'cntr', 'is_minus'], 'integer'],
 ];
 }
 

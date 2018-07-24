@@ -13,7 +13,7 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'Weekly JIT Parts  <span class="text-green">（週次JIT部品納入)</span> - ETD Supplier based',
+    'page_title' => 'Weekly JIT Parts <span class="text-green">（週次JIT部品納入)</span> - ETD Supplier based <span class="text-green">(ベンダー出荷日の基準)</span>',
     'tab_title' => 'Weekly JIT Parts',
     'breadcrumbs_title' => 'Weekly JIT Parts'
 ];

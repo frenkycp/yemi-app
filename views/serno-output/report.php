@@ -7,11 +7,11 @@ use yii\helpers\Url;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
-    'page_title' => 'Weekly Shipping Chart <span class="text-green">(週次出荷コンテナー別)</span> - ETD YEMI based',
+    'page_title' => 'Weekly Shipping Chart <span class="text-green">(週次出荷コンテナー別)</span> - ETD YEMI based <span class="text-green">(工場出荷日の基準)</span>',
     'tab_title' => 'Shipping Chart',
     'breadcrumbs_title' => 'Shipping Chart'
 ];
-$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 //$color = 'DarkSlateBlue';
 $color = 'rgba(72,61,139,0.6)';
