@@ -176,13 +176,7 @@ $gridColumns = [
             'style' => 'min-width: 170px;'
         ],
     ],
-    /*[
-        'attribute' => 'dst',
-        'vAlign' => 'middle',
-        'width' => '90px',
-        //'mergeHeader' => true,
-        //'hAlign' => 'center'
-    ],*/
+    
     [
         'attribute' => 'qty',
         'hAlign' => 'center',
@@ -216,7 +210,7 @@ $gridColumns = [
         'pageSummary' => true,
         'format' => ['decimal',0]
     ],
-    [
+    /*[
         'attribute' => 'ng',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -224,7 +218,7 @@ $gridColumns = [
         //'mergeHeader' => true,
         'pageSummary' => true,
         'format' => ['decimal',0]
-    ],
+    ],*/
     [
         'attribute' => 'vms',
         'label' => 'VMS Date',
@@ -242,7 +236,17 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
         //'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'dst',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        //'mergeHeader' => true,
+        //'hAlign' => 'center'
     ],
     [
         'attribute' => 'category',
