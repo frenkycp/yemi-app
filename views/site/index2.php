@@ -88,26 +88,39 @@ $this->registerCss("
                     <div class="list-group">
                         <div class="list-group-item">
                             <p>ManPower Planning <span class="japanesse-word">(要員計画）</span></p>
-                            <ol class="list-unstyled">
-                                <li><?= Html::a('1. By Status <span class="japanesse-word">(雇用形態別）</span>', ['/hrga-emp-level-monthly/index']); ?></li>
-                                <li><?= Html::a('2. By Department <span class="japanesse-word">(部門別）</span>', ['/hrga-emp-dept-monthly/index']); ?></li>
-                                <li><?= Html::a('3. By Grade <span class="japanesse-word">(等級別）</span>', ['/hrga-emp-grade/index']); ?></li>
-                                <li><?= Html::a('4. By Position <span class="japanesse-word">(役職別)</span>', ['/hrga-emp-jabatan/index']); ?></li>
+                            <ol>
                                 <!--<li>
                                     <span class="text-red">5. Attendance report (勤怠管理)</span>
                                 </li>-->
-                                <li><?= Html::a('5. Monthly Overtime Control <br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="japanesse-word">(月次残業管理)</span>', ['/hrga-spl-report-daily/index']); ?></li>
-                                <li><?= Html::a('6. Monthly MP Contract Intake<br/>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="japanesse-word">(月次契約要員採用)</span>', ['/hrga-manpower-intake/index']); ?></li>
-                                <li><?= Html::a('7. Daily Attendance Control<br/>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="japanesse-word">(日常勤怠管理)</span>', ['/hrga-attendance-report/index']); ?></li>
+                                <li><?= Html::a('Monthly MP Contract Intake<br/>
+                                    <span class="japanesse-word">(月次契約要員採用)</span>', ['/hrga-manpower-intake/index']); ?>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="list-group-item">
+                            <p>ManPower Database <span class="japanesse-word"></span></p>
+                            <ol>
+                                <li><?= Html::a('By Status <span class="japanesse-word">(雇用形態別）</span>', ['/hrga-emp-level-monthly/index']); ?></li>
+                                <li><?= Html::a('By Department <span class="japanesse-word">(部門別）</span>', ['/hrga-emp-dept-monthly/index']); ?></li>
+                                <li><?= Html::a('By Grade <span class="japanesse-word">(等級別）</span>', ['/hrga-emp-grade/index']); ?></li>
+                                <li><?= Html::a('By Position <span class="japanesse-word">(役職別)</span>', ['/hrga-emp-jabatan/index']); ?></li>
+                            </ol>
+                        </div>
+                        <div class="list-group-item">
+                            <p>ManPower Attendance <span class="japanesse-word"></span></p>
+                            <ol>
+                                <li><?= Html::a('Daily Attendance Control<br/>
+                                    <span class="japanesse-word">(日常勤怠管理)</span>', ['/hrga-attendance-report/index']); ?>
+                                </li>
+                                <li><?= Html::a('Monthly Overtime Control <br/><span class="japanesse-word">(月次残業管理)</span>', ['/hrga-spl-report-daily/index']); ?>
+                                </li>
                             </ol>
                         </div>
                         <div class="list-group-item">
                             <p>Maintenance <span class="japanesse-word">(保全)</span></p>
-                            <ol class="list-unstyled">
-                                <li><?= Html::a('1. Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
-                                <li><?= Html::a('2. Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
+                            <ol>
+                                <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
+                                <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
                             </ol>
                         </div>
                     </div>
