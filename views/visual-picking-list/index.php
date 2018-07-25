@@ -81,7 +81,10 @@ $gridColumns = [
         'attribute' => 'analyst_desc',
         'label' => 'Location',
         'vAlign' => 'middle',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'req_date',
@@ -90,7 +93,10 @@ $gridColumns = [
         },
         'label' => 'Req. Date',
         'vAlign' => 'middle',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'plan_qty',
@@ -143,7 +149,10 @@ $gridColumns = [
         	return $model->start_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->start_date));
         },
         'vAlign' => 'middle',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'completed_date',
@@ -153,7 +162,23 @@ $gridColumns = [
         	return $model->completed_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->completed_date));
         },
         'vAlign' => 'middle',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+    ],
+    [
+        'attribute' => 'hand_over_date',
+        'encodeLabel' => false,
+        'label' => 'Hand Over<br/>Date',
+        'value' => function($model){
+            return $model->hand_over_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->hand_over_date));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'stage_desc',
