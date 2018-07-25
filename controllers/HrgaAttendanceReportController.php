@@ -9,7 +9,7 @@ use yii\web\JsExpression;
 class HrgaAttendanceReportController extends Controller
 {
 	public $category_masuk = ['SHIFT-01', 'SHIFT-02', 'SHIFT-03', 'PULANG TIDAK ABSEN', 'PULANG CEPAT', 'DATANG TERLAMBAT', 'DINAS'];
-	public $category_cuti = ['CUTI', 'CUTI KHUSUS', 'CUTI KHUSUS IJIN'];
+	public $category_cuti = ['CUTI', 'CUTI KHUSUS', 'CUTI KHUSUS IJIN', 'KELUARGA MENINGGAL', 'MELAHIRKAN', 'KEGUGURAN', 'MENIKAH', 'MENGHITANKAN', 'ISTRI KEGUGURAN/MELAHIRKAN'];
 	
 	public function behaviors()
     {
@@ -55,7 +55,8 @@ class HrgaAttendanceReportController extends Controller
 			'DATE' => 'DATE',
 			'total_karyawan' => 'SUM(TOTAL_KARYAWAN)',
 			'total_kehadiran' => 'SUM(CASE WHEN CATEGORY=\'SHIFT-01\' OR CATEGORY=\'SHIFT-02\' OR CATEGORY=\'SHIFT-03\' OR CATEGORY=\'PULANG TIDAK ABSEN\' OR CATEGORY=\'PULANG CEPAT\' OR CATEGORY=\'DATANG TERLAMBAT\' THEN 1 ELSE 0 END)',
-			'total_cuti' => 'SUM(CASE WHEN CATEGORY=\'CUTI\' OR CATEGORY=\'CUTI KHUSUS\' OR CATEGORY=\'CUTI KHUSUS IJIN\' THEN 1 ELSE 0 END)'
+			'total_cuti' => 'SUM(CASE WHEN CATEGORY IN (\'CUTI\', \'CUTI KHUSUS\', \'KELUARGA MENINGGAL\', \'MELAHIRKAN\', \'KEGUGURAN\', \'MENIKAH\', \'MENGHITANKAN\', \'ISTRI KEGUGURAN/MELAHIRKAN\', \'CUTI KHUSUS IJIN\') THEN 1 ELSE 0 END)'
+			//'total_cuti' => 'SUM(CASE WHEN CATEGORY=\'CUTI\' OR CATEGORY=\'CUTI KHUSUS\' OR CATEGORY=\'KELUARGA MENINGGAL\' OR CATEGORY=\'CUTI KHUSUS IJIN\' THEN 1 ELSE 0 END)'
 		])
 		->where([
 			'PERIOD' => $period
