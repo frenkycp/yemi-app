@@ -21,10 +21,11 @@ $fieldOptions2 = [
 
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>Welcome to CIS</b></a>
+        
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
+        <img style="margin-right: auto; margin-left: auto; display: block; width: 100%;" src="<?= Yii::getAlias('@web') ?>/welcome.png"><br/>
         <p class="login-box-msg">Sign in to start your session</p>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
