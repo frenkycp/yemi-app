@@ -14,7 +14,7 @@ $this->title = [
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -72,11 +72,11 @@ echo '</pre>';*/
     
 
     <?php ActiveForm::end(); ?>
-    <h4>Total Container : <?= $total_container; ?></h4>
+    <h4>Total Container <span class="japanesse">(コンテナー総本数）</span> : <?= $total_container; ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">By Export Date</a></li>
-        <li class=""><a href="#tab_2" data-toggle="tab">By Port</a></li>
+        <li class="active"><a href="#tab_1" data-toggle="tab">By Export Date <span class="japanesse">（工場出荷日別）</span></a></li>
+        <li class=""><a href="#tab_2" data-toggle="tab">By Port <span class="japanesse">(出荷先港別）</span></a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
@@ -187,7 +187,7 @@ echo '</pre>';*/
                                 'format' => '{point.y}'
                             ]
                         ],
-                        'series' => [
+                        /*'series' => [
                             'cursor' => 'pointer',
                             'point' => [
                                 'events' => [
@@ -196,10 +196,9 @@ echo '</pre>';*/
                                             $("#modal").modal("show").find(".modal-body").html(this.options.remark);
                                         }
                                     '),
-                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                                 ]
                             ]
-                        ]
+                        ]*/
                     ],
                     'series' => [
                         [
