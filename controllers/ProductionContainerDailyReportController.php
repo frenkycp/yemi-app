@@ -120,10 +120,36 @@ class ProductionContainerDailyReportController extends Controller
     		]
     	];
 
+        $serno_output_arr = SernoOutput::find()
+        ->where([
+            'LEFT(etd, 7)' => $model->year . '-' . $model->month
+        ])
+        ->groupBy('dst, cntr')
+        ->orderBy('dst, cntr')
+        ->all();
+
+        $tmp_data2 = [];
+        foreach ($serno_output_arr as $serno_output) {
+            if (!isset($tmp_data2[$serno_output->dst]['total_container'])) {
+                $tmp_data2[$serno_output->dst]['total_container'] = 0;
+            }
+            $tmp_data2[$serno_output->dst]['total_container']++;
+        }
+
+        $category2 = [];
+        $final_data2 = [];
+        arsort($tmp_data2);
+        foreach ($tmp_data2 as $key => $value) {
+            $category2[] = $key;
+            $final_data2[] = (int)$value['total_container'];
+        }
+
     	return $this->render('index', [
     		'model' => $model,
     		'data' => $final_data,
+            'data2' => $final_data2,
     		'category' => $category,
+            'category2' => $category2,
     		'title' => $title,
     		'subtitle' => $subtitle,
     		'month_arr' => $month_arr,

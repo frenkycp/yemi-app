@@ -31,7 +31,7 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($data);
+print_r($data2);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
@@ -72,69 +72,152 @@ echo '</pre>';*/
     
 
     <?php ActiveForm::end(); ?>
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">Total Container : <?= $total_container; ?></h3>
-    </div>
-    <div class="box-body">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                'modules/exporting',
-                'themes/sand-signika',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'column',
+    <h4>Total Container : <?= $total_container; ?></h4>
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_1" data-toggle="tab">By ETD</a></li>
+        <li class=""><a href="#tab_2" data-toggle="tab">By Port</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    'modules/exporting',
+                    'themes/sand-signika',
                 ],
-                'credits' => [
-                    'enabled' => false
-                ],
-                'title' => [
-                    'text' => $title
-                ],
-                'subtitle' => [
-                    'text' => $subtitle
-                ],
-                'xAxis' => [
-                    'type' => 'category',
-                    'categories' => $category,
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                    ],
+                    'credits' => [
+                        'enabled' => false
+                    ],
                     'title' => [
-                        'text' => 'Date'
+                        'text' => $title
                     ],
-                    'labels' => [
-                        'formatter' => new JsExpression('function(){ return \'<a href="' . Yii::$app->request->baseUrl . '/serno-output/container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
+                    'subtitle' => [
+                        'text' => $subtitle
                     ],
-                ],
-                'yAxis' => [
-                    'title' => [
-                        'text' => 'Container Completion'
-                    ],
-                    'stackLabels' => [
-                        //'enabled' => true,
-                        //'formatter' => new JsExpression('function(){ return this.qty + "aa"; }'),
-                    ]
-                ],
-                'tooltip' => [
-                    'enabled' => false
-                ],
-                'plotOptions' => [
-                    'column' => [
-                        'stacking' => 'normal',
-                        'dataLabels' => [
-                            'enabled' => true,
-                            'style' => [
-                                'textOutline' => '0px',
-                                'fontWeight' => '0'
-                            ],
-                            'format' => '{point.qty}/{point.total_qty}',
-                            'color' => 'black',
+                    'xAxis' => [
+                        'type' => 'category',
+                        'categories' => $category,
+                        'title' => [
+                            'text' => 'Date'
+                        ],
+                        'labels' => [
+                            'formatter' => new JsExpression('function(){ return \'<a href="' . Yii::$app->request->baseUrl . '/serno-output/container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
                         ],
                     ],
+                    'yAxis' => [
+                        'title' => [
+                            'text' => 'Container Completion'
+                        ],
+                        'stackLabels' => [
+                            //'enabled' => true,
+                            //'formatter' => new JsExpression('function(){ return this.qty + "aa"; }'),
+                        ]
+                    ],
+                    'tooltip' => [
+                        'enabled' => false
+                    ],
+                    'plotOptions' => [
+                        'column' => [
+                            'stacking' => 'normal',
+                            'dataLabels' => [
+                                'enabled' => true,
+                                'style' => [
+                                    'textOutline' => '0px',
+                                    'fontWeight' => '0'
+                                ],
+                                'format' => '{point.qty}/{point.total_qty}',
+                                'color' => 'black',
+                            ],
+                        ],
+                    ],
+                    'series' => $data
                 ],
-                'series' => $data
-            ],
-        ]);
-        ?>
+            ]);
+            ?>
+        </div>
+        <div class="tab-pane" id="tab_2">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    //'themes/grid-light',
+                    //'themes/sand-signika',
+                    //'themes/dark-unica',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'bar',
+                        'height' => 600
+                    ],
+                    'credits' => [
+                        'enabled' => false
+                    ],
+                    'title' => [
+                        'text' => null
+                    ],
+                    'subtitle' => [
+                        'text' => null
+                    ],
+                    'legend' => [
+                        'enabled' => false
+                    ],
+                    'xAxis' => [
+                        'categories' => $category2
+                    ],
+                    'yAxis' => [
+                        'min' => 0,
+                        'allowDecimals' => false,
+                        'title' => [
+                            'text' => 'Qty',
+                            'align' => 'high'
+                        ],
+                        'labels' => [
+                            'overflow' => 'justify'
+                        ]
+                    ],
+                    'plotOptions' => [
+                        'bar' => [
+                            'dataLabels' => [
+                                'enabled' => true,
+                                'format' => '{point.y}'
+                            ]
+                        ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression('
+                                        function(){
+                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                        }
+                                    '),
+                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                ]
+                            ]
+                        ]
+                    ],
+                    'series' => [
+                        [
+                            'name' => 'Shipping Stock',
+                            'data' => $data2,
+                            'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+                        ]
+                    ]
+                ],
+            ]);
+
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal',
+                'header' => '<h3>Detail Information</h3>',
+                //'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+            ?>
+        </div>
     </div>
 </div>
