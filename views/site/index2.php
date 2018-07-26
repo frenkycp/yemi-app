@@ -87,7 +87,7 @@ $this->registerCss("
                     <div class="panel-heading text-center">Production Support Monitoring<br/><span class="japanesse-word">生産支援モニタリング</span></div>
                     <div class="list-group">
                         <div class="list-group-item">
-                            <p>Plan Maintenance <span class="japanesse-word">(工場保全管理)</span></p>
+                            <p>Plant Maintenance <span class="japanesse-word">(工場保全管理)</span></p>
                             <ol>
                                 <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
                                 <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
