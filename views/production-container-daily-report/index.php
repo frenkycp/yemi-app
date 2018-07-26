@@ -75,7 +75,7 @@ echo '</pre>';*/
     <h4>Total Container : <?= $total_container; ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">By ETD</a></li>
+        <li class="active"><a href="#tab_1" data-toggle="tab">By Export Date</a></li>
         <li class=""><a href="#tab_2" data-toggle="tab">By Port</a></li>
     </ul>
     <div class="tab-content">
