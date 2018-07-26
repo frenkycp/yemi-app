@@ -29,87 +29,105 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 ?>
 
-<h4>Last Update : <?= date('d M Y H:i:s') ?></h4>
+
+
+<div class="panel panel-info">
+	<div class="panel-heading">
+		<h3 class="panel-title">Last Update : <?= date('d M Y H:i:s') ?></h3>
+	</div>
+	<div class="panel-body">
+		<?php
+		$month = date('M');
+		echo Highcharts::widget([
+			'scripts' => [
+				'highcharts-more',
+		        'modules/exporting',
+		        'themes/sand-signika',
+		        //'themes/grid-light',
+		    ],
+		    'options' => [
+		    	'chart' => [
+		    		'type' => 'columnrange',
+		    		'inverted' => true,
+		    		'height' => 420,
+		    	],
+		    	'title' => [
+			        'text' => $title
+			    ],
+			    'credits' => [
+			    	'enabled' => false
+			    ],
+			    'subtitle' => [
+			        'text' => $subtitle
+			    ],
+			    'xAxis' => [
+			        'categories' => $data_categories,
+			        'maxPadding' => 0.05
+			    ],
+
+			    'yAxis' => [
+			        'title' => [
+			            'text' => 'Date',
+			        ],
+			        'min' => 0,
+			        'max' => 31,
+			        'tickInterval' => 1
+			    ],
+
+			    'tooltip' => [
+			    	'enabled' => false,
+			        'valueSuffix' => $value_suffix
+			    ],
+
+			    'plotOptions' => [
+			        'columnrange' => [
+			            'dataLabels' => [
+			                'enabled' => true,
+			                'format' => '{y}',
+			                'style' => [
+		                        'fontSize' => '14px',
+		                        'fontWeight' => '10'
+		                    ],
+			            ]
+			        ],
+			        'series' => [
+		                'cursor' => 'pointer',
+		                'point' => [
+		                    'events' => [
+		                        'click' => new JsExpression('
+		                        	function(){
+		                        		$("#modal").modal("show").find(".modal-body").html(this.options.remark);
+		                        	}
+		                		'),
+		                    ]
+		                ]
+		            ]
+			    ],
+
+			    'legend' => [
+			        'enabled' => false
+			    ],
+
+			    'series' => [
+			    	[
+				        'name' => 'Repair Progress',
+				        'data' => $data_date
+				    ]
+				]
+		    ],
+		    
+		]);
+		?>
+		<hr>
+		<div class="text-center">
+			<span><i class="fa fa-circle" style="color: rgba(255, 0, 0, 0.8);"></i> Stop</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<span><i class="fa fa-circle" style="color: rgba(255, 153, 0, 0.8);"></i> Running</span>
+		</div>
+		
+	</div>
+</div>
 
 <?php
-$month = date('M');
-echo Highcharts::widget([
-	'scripts' => [
-		'highcharts-more',
-        'modules/exporting',
-        'themes/sand-signika',
-        //'themes/grid-light',
-    ],
-    'options' => [
-    	'chart' => [
-    		'type' => 'columnrange',
-    		'inverted' => true,
-    		'height' => 450,
-    	],
-    	'title' => [
-	        'text' => $title
-	    ],
-
-	    'subtitle' => [
-	        'text' => $subtitle
-	    ],
-	    'xAxis' => [
-	        'categories' => $data_categories,
-	        'maxPadding' => 0.05
-	    ],
-
-	    'yAxis' => [
-	        'title' => [
-	            'text' => 'Date',
-	        ],
-	        'min' => 0,
-	        'max' => 31,
-	        'tickInterval' => 1
-	    ],
-
-	    'tooltip' => [
-	    	'enabled' => false,
-	        'valueSuffix' => $value_suffix
-	    ],
-
-	    'plotOptions' => [
-	        'columnrange' => [
-	            'dataLabels' => [
-	                'enabled' => true,
-	                'format' => '{y}',
-	                'style' => [
-                        'fontSize' => '14px',
-                        'fontWeight' => '10'
-                    ],
-	            ]
-	        ],
-	        'series' => [
-                'cursor' => 'pointer',
-                'point' => [
-                    'events' => [
-                        'click' => new JsExpression('
-                        	function(){
-                        		$("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                        	}
-                		'),
-                    ]
-                ]
-            ]
-	    ],
-
-	    'legend' => [
-	        'enabled' => false
-	    ],
-
-	    'series' => [
-	    	[
-		        'name' => 'Repair Progress',
-		        'data' => $data_date
-		    ]
-		]
-    ],
-    
-]);
 
 yii\bootstrap\Modal::begin([
     'id' =>'modal',

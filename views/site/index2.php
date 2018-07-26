@@ -87,7 +87,7 @@ $this->registerCss("
                     <div class="panel-heading text-center">Production Support Monitoring<br/><span class="japanesse-word">生産支援モニタリング</span></div>
                     <div class="list-group">
                         <div class="list-group-item">
-                            <p>Maintenance <span class="japanesse-word">(保全)</span></p>
+                            <p>Plan Maintenance <span class="japanesse-word">(工場保全管理)</span></p>
                             <ol>
                                 <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
                                 <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
@@ -118,7 +118,7 @@ $this->registerCss("
                         </div>
                         
                         <div class="list-group-item">
-                            <p>Manpower Database <span class="japanesse-word">(社員データー)</span></p>
+                            <p>Manpower Database <span class="japanesse-word">(社員構成)</span></p>
                             <ol>
                                 <li><?= Html::a('By Status <span class="japanesse-word">(雇用形態別）</span>', ['/hrga-emp-level-monthly/index']); ?></li>
                                 <li><?= Html::a('By Department <span class="japanesse-word">(部門別）</span>', ['/hrga-emp-dept-monthly/index']); ?></li>
