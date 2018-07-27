@@ -15,10 +15,12 @@ use Yii;
  * @property string $total_data
  * @property string $total_no_check
  * @property string $total_ok
- * @property string $total_ng
+ * @property string $total_lot_out
+ * @property string $total_repair
  * @property string $open_percentage
  * @property string $ok_percentage
- * @property string $ng_percentage
+ * @property string $lot_out_percentage
+ * @property string $repair_percentage
  * @property string $aliasModel
  */
 abstract class InspectionReportViewPercentage extends \yii\db\ActiveRecord
@@ -50,7 +52,7 @@ abstract class InspectionReportViewPercentage extends \yii\db\ActiveRecord
         return [
             [['week_no', 'total_data'], 'integer'],
             [['proddate'], 'required'],
-            [['total_no_check', 'total_ok', 'total_ng', 'open_percentage', 'ok_percentage', 'ng_percentage'], 'number'],
+            [['total_no_check', 'total_ok', 'total_lot_out', 'total_repair', 'open_percentage', 'ok_percentage', 'lot_out_percentage', 'repair_percentage'], 'number'],
             [['periode'], 'string', 'max' => 6],
             [['proddate'], 'string', 'max' => 10]
         ];
@@ -68,10 +70,12 @@ abstract class InspectionReportViewPercentage extends \yii\db\ActiveRecord
             'total_data' => 'Total Data',
             'total_no_check' => 'Total No Check',
             'total_ok' => 'Total Ok',
-            'total_ng' => 'Total Ng',
+            'total_lot_out' => 'Total Lot Out',
+            'total_repair' => 'Total Repair',
             'open_percentage' => 'Open Percentage',
             'ok_percentage' => 'Ok Percentage',
-            'ng_percentage' => 'Ng Percentage',
+            'lot_out_percentage' => 'Lot Out Percentage',
+            'repair_percentage' => 'Repair Percentage',
         ];
     }
 

@@ -14,15 +14,17 @@ use Yii;
  * @property string $gmc
  * @property string $line
  * @property string $proddate
+ * @property string $waktu
  * @property string $sernum
  * @property integer $flo
  * @property integer $palletnum
- * @property string $qa_ng
- * @property string $qa_ng_date
- * @property string $qa_ok
- * @property string $qa_ok_date
  * @property string $plan
  * @property integer $adv
+ * @property string $qa_ok
+ * @property string $qa_ok_date
+ * @property string $qa_ng
+ * @property string $qa_ng_date
+ * @property integer $qa_result
  * @property string $ship
  * @property string $aliasModel
  */
@@ -53,16 +55,17 @@ abstract class SernoInput extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['num', 'pk', 'gmc', 'line', 'proddate', 'sernum'], 'required'],
-            [['num', 'flo', 'palletnum', 'adv'], 'integer'],
+            [['num', 'pk', 'gmc', 'line', 'proddate', 'waktu', 'sernum'], 'required'],
+            [['num', 'flo', 'palletnum', 'adv', 'qa_result'], 'integer'],
+            [['waktu'], 'safe'],
             [['qa_ng'], 'string'],
             [['pk'], 'string', 'max' => 40],
             [['gmc'], 'string', 'max' => 11],
             [['line'], 'string', 'max' => 15],
-            [['proddate', 'qa_ng_date', 'qa_ok_date'], 'string', 'max' => 10],
+            [['proddate', 'qa_ok_date', 'qa_ng_date'], 'string', 'max' => 10],
             [['sernum', 'ship'], 'string', 'max' => 20],
-            [['qa_ok'], 'string', 'max' => 2],
             [['plan'], 'string', 'max' => 35],
+            [['qa_ok'], 'string', 'max' => 2],
             [['pk'], 'unique']
         ];
     }
@@ -78,15 +81,17 @@ abstract class SernoInput extends \yii\db\ActiveRecord
             'gmc' => 'Gmc',
             'line' => 'Line',
             'proddate' => 'Proddate',
+            'waktu' => 'Waktu',
             'sernum' => 'Sernum',
             'flo' => 'Flo',
             'palletnum' => 'Palletnum',
-            'qa_ng' => 'Qa Ng',
-            'qa_ng_date' => 'Qa Ng Date',
-            'qa_ok' => 'Qa Ok',
-            'qa_ok_date' => 'Qa Ok Date',
             'plan' => 'Plan',
             'adv' => 'Adv',
+            'qa_ok' => 'Qa Ok',
+            'qa_ok_date' => 'Qa Ok Date',
+            'qa_ng' => 'Qa Ng',
+            'qa_ng_date' => 'Qa Ng Date',
+            'qa_result' => 'Qa Result',
             'ship' => 'Ship',
         ];
     }

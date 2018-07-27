@@ -142,13 +142,18 @@ $columns = [
             $btn_class = '';
             if ($model->qa_ng == '' && $model->qa_ok == '') {
                 $val = 'Open';
-                $btn_class = 'btn btn-xs btn-warning';
+                $btn_class = 'btn btn-xs btn-info';
             } elseif ($model->qa_ng == '' && $model->qa_ok == 'OK') {
                 $val = 'OK';
                 $btn_class = 'btn btn-xs btn-success';
             } elseif ($model->qa_ng != '') {
-                $val = 'Lot Out';
-                $btn_class = 'btn btn-xs btn-danger';
+                if ($model->qa_result == 2) {
+                    $val = 'Repair';
+                    $btn_class = 'btn btn-xs btn-warning';
+                } else {
+                    $val = 'Lot Out';
+                    $btn_class = 'btn btn-xs btn-danger';
+                }
             }
             $url = ['get-product-serno',
                 'flo' => $model->flo,
@@ -165,7 +170,8 @@ $columns = [
         'vAlign' => 'middle',
         'filter' => [
             'OK' => 'OK',
-            'NG' => 'Lot Out'
+            'LOT OUT' => 'Lot Out',
+            'REPAIR' => 'Repair'
         ],
     ],
     [

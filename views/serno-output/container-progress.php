@@ -5,8 +5,14 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
-$this->title = Yii::t('app', 'Container Report');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Daily Container by Port <span class="text-green">(港別の出荷コンテナー)</span>',
+    'tab_title' => 'Shipping Chart',
+    'breadcrumbs_title' => 'Shipping Chart'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 $color = 'CadetBlue';
 $font_color = 'black';

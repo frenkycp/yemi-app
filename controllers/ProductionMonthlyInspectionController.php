@@ -55,19 +55,23 @@ class ProductionMonthlyInspectionController extends Controller
     	->where([
     		'periode' => $periode
     	])
-    	->andWhere(['>', 'total_ng', 0])
+    	->andWhere('total_lot_out > 0 OR total_repair > 0')
     	->orderBy('proddate')
     	->all();
 
     	$tmp_data = [];
+        $tmp_data2 = [];
     	foreach ($inspection_data_arr as $inspection_data) {
     		$categories[] = $inspection_data->proddate;
     		
     		$tmp_data[] = [
-    			'y' => (int)$inspection_data->total_ng,
-    			'url' => Url::to(['production-inspection/index', 'proddate' => $inspection_data->proddate, 'status' => 'NG']),
-    			//'remark' => $this->getNgDataRemark($inspection_data->proddate)
+    			'y' => $inspection_data->total_lot_out == 0 ? null : (int)$inspection_data->total_lot_out,
+    			'url' => Url::to(['production-inspection/index', 'proddate' => $inspection_data->proddate, 'status' => 'LOT OUT'])
     		];
+            $tmp_data2[] = [
+                'y' => $inspection_data->total_repair == 0 ? null : (int)$inspection_data->total_repair,
+                'url' => Url::to(['production-inspection/index', 'proddate' => $inspection_data->proddate, 'status' => 'REPAIR'])
+            ];
     	}
 
     	$data = [
@@ -75,7 +79,12 @@ class ProductionMonthlyInspectionController extends Controller
     			'name' => 'Lot Out',
     			'data' => $tmp_data,
     			'color' => 'rgba(255, 0, 0, 0.5)'
-    		]
+    		],
+            [
+                'name' => 'Repair',
+                'data' => $tmp_data2,
+                'color' => 'rgba(255, 100, 0, 0.5)'
+            ]
     	];
 
     	return $this->render('index', [

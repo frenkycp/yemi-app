@@ -17,6 +17,7 @@ use Yii;
  * @property string $proddate
  * @property string $ship
  * @property string $qa_ok
+ * @property integer $qa_result
  * @property string $aliasModel
  */
 abstract class ProductionInspection extends \yii\db\ActiveRecord
@@ -48,7 +49,7 @@ abstract class ProductionInspection extends \yii\db\ActiveRecord
         return [
             [['gmc', 'proddate'], 'required'],
             [['dst'], 'string'],
-            [['week_no'], 'integer'],
+            [['week_no', 'qa_result'], 'integer'],
             [['ship'], 'safe'],
             [['plan'], 'string', 'max' => 35],
             [['gmc'], 'string', 'max' => 11],
@@ -72,6 +73,7 @@ abstract class ProductionInspection extends \yii\db\ActiveRecord
             'proddate' => 'Proddate',
             'ship' => 'Ship',
             'qa_ok' => 'Qa Ok',
+            'qa_result' => 'Qa Result',
         ];
     }
 

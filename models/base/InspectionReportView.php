@@ -12,9 +12,11 @@ use Yii;
  * @property string $periode
  * @property integer $week_no
  * @property string $proddate
+ * @property string $total_data
  * @property string $total_no_check
  * @property string $total_ok
- * @property string $total_ng
+ * @property string $total_lot_out
+ * @property string $total_repair
  * @property string $aliasModel
  */
 abstract class InspectionReportView extends \yii\db\ActiveRecord
@@ -44,10 +46,10 @@ abstract class InspectionReportView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['week_no'], 'integer'],
+            [['week_no', 'total_data'], 'integer'],
             [['proddate'], 'required'],
-            [['total_no_check', 'total_ok', 'total_ng'], 'number'],
-            [['periode'], 'string', 'max' => 7],
+            [['total_no_check', 'total_ok', 'total_lot_out', 'total_repair'], 'number'],
+            [['periode'], 'string', 'max' => 6],
             [['proddate'], 'string', 'max' => 10]
         ];
     }
@@ -61,9 +63,11 @@ abstract class InspectionReportView extends \yii\db\ActiveRecord
             'periode' => 'Periode',
             'week_no' => 'Week No',
             'proddate' => 'Proddate',
+            'total_data' => 'Total Data',
             'total_no_check' => 'Total No Check',
             'total_ok' => 'Total Ok',
-            'total_ng' => 'Total Ng',
+            'total_lot_out' => 'Total Lot Out',
+            'total_repair' => 'Total Repair',
         ];
     }
 

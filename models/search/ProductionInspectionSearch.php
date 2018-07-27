@@ -52,7 +52,11 @@ $query = SernoInput::find()
     'qa_ok' => 'qa_ok',
     'qa_ok_date' => 'qa_ok_date',
     'line' => 'line',
+    'qa_result' => 'qa_result',
     'total' => 'COUNT(gmc)',
+])
+->where([
+    '<>', 'flo', 0
 ])
 //->joinWith('sernoOutput')
 //->joinWith('sernoMaster')
@@ -117,9 +121,11 @@ $query->andFilterWhere([
                 'qa_ng' => '',
                 'qa_ok' => 'OK'
             ]);
-        } else if ($this->status == 'NG') {
-            $query->andWhere(['<>', 'qa_ng', '']);
-        } elseif ($this->status == 'OPEN') {
+        } else if ($this->status == 'LOT OUT') {
+            $query->andWhere(['<>', 'qa_ng', ''])->andWhere(['<>', 'qa_result', 2]);
+        } else if ($this->status == 'REPAIR') {
+            $query->andWhere(['<>', 'qa_ng', ''])->andWhere(['qa_result' => 2]);
+        }  elseif ($this->status == 'OPEN') {
             $query->andFilterWhere([
                 'qa_ng' => '',
                 'qa_ok' => ''
