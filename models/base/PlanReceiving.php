@@ -68,6 +68,7 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
     {
         return [
             [['qty', 'last_modified_by', 'deleted_by', 'flag'], 'integer'],
+            [['receiving_date'], 'required'],
             [['receiving_date', 'created_date', 'last_modified_date', 'deleted_date'], 'safe'],
             [['vendor_name', 'vehicle'], 'string', 'max' => 50],
             [['item_type', 'container_no'], 'string', 'max' => 20],
