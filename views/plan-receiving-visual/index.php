@@ -5,6 +5,8 @@ use yii\grid\GridView;
 use app\models\PlanReceiving;
 use yii\bootstrap\ActiveForm;
 use yii\web\View;
+use miloschuman\highcharts\Highcharts;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\PlanReceivingSearch */
@@ -28,6 +30,18 @@ $(function () {
     $("[data-toggle='popover']").popover(); 
 });
 SCRIPT;
+
+$script = <<< JS
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout("refreshPage();", 300000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+JS;
+$this->registerJs($script, View::POS_HEAD );
 // Register tooltip/popover initialization javascript
 $this->registerJs($js);
 
@@ -78,11 +92,116 @@ $this->registerJs($js);
         </div>
     </div>
 
-    
-
     <?php ActiveForm::end(); ?>
-    
-    <div class="box box-info">
+
+    <div class="nav-tabs-custom">
+        <ul class="nav nav-tabs">
+            <?php
+            foreach ($data as $week_no => $value) {
+                if($week_no == $week_today)
+                {
+                    echo '<li class="active"><a href="#tab_1_' . $week_no . '" data-toggle="tab">Week ' . $week_no . '</a></li>';
+                }
+                else
+                {
+                    echo '<li><a href="#tab_1_' . $week_no . '" data-toggle="tab">Week ' . $week_no . '</a></li>';
+                }
+            }
+            ?>
+        </ul>
+        <div class="tab-content">
+            <?php
+            foreach ($data as $week_no => $value) {
+                if($week_no == $week_today)
+                {
+                    echo '<div class="tab-pane active" id="tab_1_' . $week_no .'">';
+                }
+                else
+                {
+                    echo '<div class="tab-pane" id="tab_1_' . $week_no .'">';
+                }
+
+                echo Highcharts::widget([
+                    'scripts' => [
+                        'modules/exporting',
+                        'themes/grid-light',
+                        //'themes/sand-signika',
+                    ],
+                    'options' => [
+                        'chart' => [
+                            'type' => 'column',
+                            //'height' => 300,
+                        ],
+                        'credits' => [
+                            'enabled' =>false
+                        ],
+                        'title' => [
+                            'text' => null
+                        ],
+                        'subtitle' => [
+                            'text' => null
+                        ],
+                        'xAxis' => [
+                            'categories' => $value['category'],
+                            'title' => [
+                                'text' => 'Date'
+                            ],
+                        ],
+                        'yAxis' => [
+                            'min' => 0,
+                            'allowDecimals' => false,
+                            //'minorTickInterval' => 1,
+                            'title' => [
+                                'text' => 'Total Qty'
+                            ],
+                            'stackLabels' => [
+                                'enabled' => true,
+                                'style' => [
+                                    'fontWeight' => 'bold',
+                                ]
+                            ]
+                        ],
+                        'plotOptions' => [
+                            'column' => [
+                                'dataLabels' => [
+                                    'enabled' => true,
+                                    'style' => [
+                                        'textOutline' => '0px',
+                                        'fontWeight' => '0'
+                                    ],
+                                ]
+                            ],
+                            'series' => [
+                                'cursor' => 'pointer',
+                                'point' => [
+                                    'events' => [
+                                        'click' => new JsExpression('
+                                            function(){
+                                                $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                            }
+                                        '),
+                                        //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'series' => $value['data']
+                    ],
+                ]);
+
+                echo '</div>';
+            }
+            yii\bootstrap\Modal::begin([
+                'id' =>'modal',
+                'header' => '<h3>Detail Information</h3>',
+                //'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+            ?>
+        </div>
+    </div>
+
+    <div class="box box-info" style="display: none;">
         <div class="box-header with-border">
             <h3 class="box-title"><?= date('F Y', strtotime($model->year . '-' . $model->month)); ?></h3>
         </div>

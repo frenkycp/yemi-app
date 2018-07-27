@@ -19,5 +19,5 @@ use app\models\base\PlanReceiving as BasePlanReceiving;
  */
 class PlanReceiving extends BasePlanReceiving
 {
-    public $total_qty, $min_year;
+    public $total_qty, $min_year, $total_container, $total_truck, $total_wb, $week_no;
 }
