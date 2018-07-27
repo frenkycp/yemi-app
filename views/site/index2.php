@@ -175,27 +175,22 @@ $this->registerCss("
                             </ol>
                         </div>
                         <div class="list-group-item">
+                            <p>Shipping Control <span class="japanesse-word">(出荷管理)</span></p>
                             <ol style="padding-left: 2em">
                                 <li>
                                     <?= Html::a('Monthly Shipping Container <span class="japanesse-word">(月次コンテナー出荷)</span>', ['/production-container-daily-report/index']); ?>
                                 </li>
-                                <li><?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span>', ['/serno-output/report']); ?>
+                                <li>
+                                    <?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span>', ['/serno-output/report']); ?>
                                 </li>
-                                <li><?= Html::a('Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?>
+                                <li>
+                                    <?= Html::a('Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?>
                                 </li>
-                                <li><?= Html::a('Shipping Summary <span class="japanesse-word">週次出荷表 (計画対実績)</span>', ['/weekly-plan/index']); ?>
+                                <li>
+                                    <?= Html::a('Shipping Summary <span class="japanesse-word">週次出荷表 (計画対実績)</span>', ['/weekly-plan/index']); ?>
                                 </li>
                             </ol>
                         </div>
-                        <div class="list-group-item">
-                            <p>Weekly Shipping <span class="japanesse-word">(週次出荷)</span></p>
-                            <ol style="padding-left: 2em">
-                                <li><?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span>', ['/serno-output/report']); ?></li>
-                                <li><?= Html::a('Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?></li>
-                                <li><?= Html::a('Shipping Summary <span class="japanesse-word">週次出荷表 (計画対実績)</span>', ['/weekly-plan/index']); ?></li>
-                            </ol>
-                        </div>
-                        
                         <div class="list-group-item">
                             <p>Monthly Production <span class="japanesse-word">(月次生産）</span></p>
                             <ol style="padding-left: 2em">
