@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['num', 'flo', 'palletnum', 'adv'], 'integer'],
-            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng', 'qa_ng_date', 'qa_ok', 'qa_ok_date', 'plan', 'ship', 'status'], 'safe'],
+            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'ship', 'status'], 'safe'],
 ];
 }
 
@@ -80,7 +80,7 @@ $query->andFilterWhere([
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'gmc', $this->gmc])
             ->andFilterWhere(['like', 'line', $this->line])
-            //->andFilterWhere(['like', 'proddate', $this->proddate])
+            ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
             //->andFilterWhere(['like', 'qa_ng', $this->qa_ng])
             ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date])
@@ -94,8 +94,10 @@ $query->andFilterWhere([
                 'qa_ng' => '',
                 'qa_ok' => 'OK'
             ]);
-        } else if ($this->status == 'NG') {
-            $query->andWhere(['<>', 'qa_ng', '']);
+        } else if ($this->status == 'LOT OUT') {
+            $query->andWhere(['<>', 'qa_ng', ''])->andWhere(['<>', 'qa_result', 2]);
+        } else if ($this->status == 'REPAIR') {
+            $query->andWhere(['<>', 'qa_ng', ''])->andWhere(['qa_result' => 2]);
         } elseif ($this->status == 'OPEN') {
             $query->andFilterWhere([
                 'qa_ng' => '',

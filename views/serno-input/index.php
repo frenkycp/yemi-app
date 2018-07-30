@@ -98,7 +98,41 @@ $grid_columns = [
             'style' => 'text-align: center;'
         ],
     ],
-    /**/[
+    [
+        'attribute' => 'sernoOutput.vms',
+        'label' => 'VMS Date',
+        'value' => function($model){
+            if ($model->plan == '') {
+                return 'Maedoshi ' . $model->adv;
+            } else {
+                return $model->sernoOutput->vms;
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width:100px;'
+        ],
+    ],
+    [
+        'attribute' => 'sernoOutput.etd',
+        'label' => 'ETD YEMI',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width:100px;'
+        ],
+    ],
+    [
+        'attribute' => 'sernoOutput.dst',
+        'label' => 'Port',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width:100px;'
+        ],
+    ],
+    [
         'attribute' => 'qa_ng',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -109,6 +143,7 @@ $grid_columns = [
     ],
     [
         'attribute' => 'qa_ng_date',
+        'label' => 'Inspection Date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -123,11 +158,19 @@ $grid_columns = [
         'value' => function($model){
             $val = '';
             if ($model->qa_ng == '' && $model->qa_ok == '') {
-                $val = 'OPEN';
+                $val = 'Open';
+                $btn_class = 'btn btn-xs btn-info';
             } elseif ($model->qa_ng == '' && $model->qa_ok == 'OK') {
                 $val = 'OK';
+                $btn_class = 'btn btn-xs btn-success';
             } elseif ($model->qa_ng != '') {
-                $val = 'NG';
+                if ($model->qa_result == 2) {
+                    $val = 'Repair';
+                    $btn_class = 'btn btn-xs btn-warning';
+                } else {
+                    $val = 'Lot Out';
+                    $btn_class = 'btn btn-xs btn-danger';
+                }
             }
             return $val;
         },
@@ -135,7 +178,8 @@ $grid_columns = [
         'vAlign' => 'middle',
         'filter' => [
             'OK' => 'OK',
-            'NG' => 'NG'
+            'LOT OUT' => 'Lot Out',
+            'REPAIR' => 'Repair'
         ],
     ],
     /*[
