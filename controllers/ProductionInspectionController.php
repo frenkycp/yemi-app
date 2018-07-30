@@ -46,32 +46,73 @@ class ProductionInspectionController extends \app\controllers\base\ProductionIns
 		]);
 	}
 
-	public function actionGetProductSerno($flo)
+	public function actionGetProductSerno($flo, $status)
 	{
 		$data = '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
 		'<tr>
 			<th style="text-align: center;">Serial Number</th>
+			<th style="text-align: center;">NG Status</th>
 		</tr>'
 		;
-		$result = SernoInput::find()
-		//->joinWith('sernoMaster')
-		/*->select([
-			'gmc' => 'tb_serno_input.gmc',
-			'sernum' => 'sernum',
-			'destination' => 'CONCAT(tb_serno_master.model, \' // \', tb_serno_master.color, \' // \', tb_serno_master.dest)'
-		])*/
-		->where([
-			'flo' => $flo
-		])
-		->orderBy('sernum ASC')
-		->all();
+
+		if ($status == 'Open') {
+			$condition = [
+				'qa_ng' => '',
+				'qa_ok' => ''
+			];
+		} elseif ($status == 'OK') {
+			$condition = [
+				'qa_ng' => '',
+				'qa_ok' => 'OK'
+			];
+		} elseif ($status == 'Repair') {
+			$condition = 'qa_ng != \'\' AND qa_result = 2';
+		} elseif ($status == 'Lot Out') {
+			$condition = 'qa_ng != \'\' AND qa_result = 2';
+		}
+
+		if ($status == 'Repair') {
+			$result = SernoInput::find()
+			//->joinWith('sernoMaster')
+			/*->select([
+				'gmc' => 'tb_serno_input.gmc',
+				'sernum' => 'sernum',
+				'destination' => 'CONCAT(tb_serno_master.model, \' // \', tb_serno_master.color, \' // \', tb_serno_master.dest)'
+			])*/
+			->where([
+				'flo' => $flo
+			])
+			->andWhere('qa_ng != \'\' AND qa_result = 2')
+			->orderBy('sernum ASC')
+			->all();
+		} else {
+			$result = SernoInput::find()
+			//->joinWith('sernoMaster')
+			/*->select([
+				'gmc' => 'tb_serno_input.gmc',
+				'sernum' => 'sernum',
+				'destination' => 'CONCAT(tb_serno_master.model, \' // \', tb_serno_master.color, \' // \', tb_serno_master.dest)'
+			])*/
+			->where([
+				'flo' => $flo
+			])
+			->orderBy('sernum ASC')
+			->all();
+		}
 
 		if (count($result) > 0) {
 			foreach ($result as $value) {
+				$ng_status = '';
+				$class = '';
+				if ($value->qa_result != 0) {
+					$ng_status = '<b>Not Good</b>';
+					$class = 'danger';
+				}
 				$data .= '
-				<tr>
+				<tr class="' . $class . '">
 					<td style="text-align: center;">' . $value['sernum'] . '</td>
+					<td style="text-align: center;">' . $ng_status . '</td>
 				</tr>
 				';
 			}

@@ -114,6 +114,9 @@ $columns = [
         'attribute' => 'partName',
         'label' => 'Description',
         'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width: 150px;'
+        ],
     ],
     [
         'attribute' => 'total',
@@ -157,6 +160,7 @@ $columns = [
             }
             $url = ['get-product-serno',
                 'flo' => $model->flo,
+                'status' => $val
             ];
             $options = [
                 'class' => 'popupModal ' . $btn_class,
@@ -178,7 +182,7 @@ $columns = [
         'attribute' => 'qa_ng_date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'label' => 'Lot Out Date',
+        'label' => 'Inspection Date',
         'width' => '120px',
     ],
     [

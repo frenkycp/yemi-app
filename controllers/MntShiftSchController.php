@@ -62,23 +62,10 @@ class MntShiftSchController extends \app\controllers\base\MntShiftSchController
 		$model = $this->findModel($id);
 
 		if ($model->load($_POST)) {
-			$to_find = MntShiftSch::find()
-			->where(['shift_emp_id' => $model->shift_emp_id, 'shift_date' => $model->shift_date])
-			->one();
-			if ($to_find !== null) {
-				\Yii::$app->session->addFlash("danger", "The user has been added to that date.");
-				return $this->render('update', [
-					'model' => $model,
-				]);
+			if ($model->save()) {
+				return $this->redirect(Url::previous());
 			} else {
-				$period = date('Ym', strtotime($model->shift_date));
-				$model->period = $period;
-
-				if ($model->save()) {
-					return $this->redirect(Url::previous());
-				} else {
-					return json_encode($model->error());
-				}
+				return json_encode($model->error());
 			}
 		} else {
 			return $this->render('update', [
