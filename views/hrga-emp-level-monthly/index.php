@@ -46,6 +46,8 @@ $this->registerJs($script, View::POS_HEAD );
 ?>
 
 <?php $form = ActiveForm::begin([
+    'method' => 'get',
+    'action' => Url::to(['index']),
     'id' => 'form_index',
     'layout' => 'horizontal',
     'enableClientValidation' => true,

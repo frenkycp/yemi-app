@@ -46,7 +46,7 @@ class HrgaEmpLevelMonthlyController extends Controller
         $model = new PlanReceivingPeriod();
         $model->month = date('m');
         $model->year = date('Y');
-        if ($model->load($_POST))
+        if ($model->load($_GET))
         {
 
         }

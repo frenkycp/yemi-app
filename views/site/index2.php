@@ -172,6 +172,9 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock/index']); ?>
                                 </li>
+                                <li>
+                                    <?= Html::a('Final Product Traceablity <span class="japanesse-word">（完成品トレーサビリティ）</span>', ['/serno-input/index']); ?>
+                                </li>
                             </ol>
                         </div>
                         <div class="list-group-item">

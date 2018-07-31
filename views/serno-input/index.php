@@ -233,9 +233,9 @@ $grid_columns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
-                /**/['content' => 
+                /*['content' => 
                     Html::a('View Chart', ['/production-monthly-inspection/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'View Chart')])
-                ],
+                ],*/
                 '{export}',
                 '{toggleData}',
             ],
