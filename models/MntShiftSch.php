@@ -51,4 +51,9 @@ class MntShiftSch extends BaseMntShiftSch
     {
         return $this->hasOne(MntShiftEmp::className(), ['id' => 'shift_emp_id']);
     }
+
+    public function getMntShiftCode()
+    {
+        return $this->hasOne(MntShiftCode::className(), ['id' => 'shift_code']);
+    }
 }

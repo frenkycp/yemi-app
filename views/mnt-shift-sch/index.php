@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 /**
@@ -46,17 +47,19 @@ $grid_column = [
     ],
     [
         'attribute' => 'period',
+        'label' => 'Periode',
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
     [
         'attribute' => 'shift_date',
+        'label' => 'Tanggal',
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
     [
         'attribute' => 'emp_name',
-        'label' => 'Employee Name',
+        'label' => 'Nama Karyawan',
         'value' => 'mntShiftEmp.name',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -65,20 +68,9 @@ $grid_column = [
         'attribute' => 'shift_code',
         'label' => 'Shift',
         'value' => function($model){
-            $shift = '-';
-            if ($model->shift_code == 1) {
-                $shift = 'Morning Shift';
-            } elseif ($model->shift_code == 2) {
-                $shift = 'Day Shift';
-            } elseif ($model->shift_code == 3) {
-                $shift = 'Night Shift';
-            } elseif ($model->shift_code == 4) {
-                $shift = 'Day Off';
-            } elseif ($model->shift_code == 5) {
-                $shift = 'Absent';
-            }
-            return $shift;
+            return $model->mntShiftCode->shift_desc;
         },
+        'filter' => ArrayHelper::map(app\models\mntShiftCode::find()->where(['flag' => 1])->all(), 'id', 'shift_desc'),
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],

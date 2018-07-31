@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use \dmstr\bootstrap\Tabs;
-use yii\helpers\StringHelper;
+use yii\helpers\ArrayHelper;
 use yii\jui\DatePicker;
 
 /**
@@ -42,17 +42,10 @@ use yii\jui\DatePicker;
             
 
 <!-- attribute shift_emp_id -->
-			<?= $form->field($model, 'shift_emp_id')->dropDownList(\yii\helpers\ArrayHelper::map(app\models\MntShiftEmp::find()->orderBy('name')->all(), 'id', 'name'),
-    ['prompt' => 'Select'])->label('Employee Name') ?>
+			<?= $form->field($model, 'shift_emp_id')->dropDownList(\yii\helpers\ArrayHelper::map(app\models\MntShiftEmp::find()->orderBy('name')->all(), 'id', 'name'))->label('Nama Karyawan') ?>
 
 <!-- attribute shift_code -->
-			<?= $form->field($model, 'shift_code')->dropDownList([
-                1 => 'Morning Shift',
-                2 => 'Day Shift',
-                3 => 'Night Shift',
-                4 => 'Day Off',
-                5 => 'Absent',
-            ], ['prompt' => 'Select'])->label('Shift') ?>
+			<?= $form->field($model, 'shift_code')->dropDownList(ArrayHelper::map(app\models\MntShiftCode::find()->where(['flag' => 1])->all(), 'id', 'shift_desc'))->label('Shift') ?>
 
 <!-- attribute shift_date -->
             <?= $form->field($model, 'shift_date')->widget(DatePicker::className(), [
@@ -60,7 +53,7 @@ use yii\jui\DatePicker;
                     'options' => [
                         'class' => 'form-control'
                     ]
-            ]) ?>
+            ])->label('Tanggal') ?>
         </p>
         <?php $this->endBlock(); ?>
         
