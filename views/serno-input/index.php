@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Production Serial Number',
-    'tab_title' => 'Production Serial Number',
-    'breadcrumbs_title' => 'Production Serial Number'
+    'page_title' => 'Trace Final Product by Serial Number <span class="japanesse text-green">(製造番号の完成品トレーサビリティ）</span>',
+    'tab_title' => 'Trace Final Product by Serial Number',
+    'breadcrumbs_title' => 'Trace Final Product by Serial Number'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
