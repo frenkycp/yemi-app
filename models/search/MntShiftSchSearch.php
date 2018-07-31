@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id', 'shift_emp_id'], 'integer'],
-            [['period', 'shift_date', 'shift_code', 'emp_name'], 'safe'],
+            [['period', 'shift_date', 'shift_code', 'emp_name', 'nik'], 'safe'],
 ];
 }
 
@@ -46,6 +46,18 @@ $query = MntShiftSch::find()
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+	'attributes' => [
+		'period',
+		'shift_date',
+		'nik'
+	],
+	'defaultOrder' => [
+        'period' => SORT_ASC,
+        'shift_date' => SORT_ASC,
+        'nik' => SORT_ASC
+    ]
+]
 ]);
 
 $this->load($params);
@@ -64,6 +76,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'period', $this->period])
         	->andFilterWhere(['like', 'name', $this->emp_name])
+        	->andFilterWhere(['like', 'nik', $this->nik])
             ->andFilterWhere(['like', 'shift_code', $this->shift_code]);
 
 return $dataProvider;

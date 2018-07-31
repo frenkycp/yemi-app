@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MntShiftSch extends BaseMntShiftSch
 {
-    public $emp_name;
+    public $emp_name, $nik;
 
     public function behaviors()
     {

@@ -46,22 +46,35 @@ $grid_column = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],
     [
+        'class' => 'kartik\grid\SerialColumn',
+    ],
+    [
         'attribute' => 'period',
         'label' => 'Periode',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'width' => '150px'
     ],
     [
         'attribute' => 'shift_date',
         'label' => 'Tanggal',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'width' => '150px'
+    ],
+    [
+        'attribute' => 'nik',
+        'value' => 'mntShiftEmp.nik',
+        'label' => 'NIK',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '150px'
     ],
     [
         'attribute' => 'emp_name',
         'label' => 'Nama Karyawan',
         'value' => 'mntShiftEmp.name',
-        'hAlign' => 'center',
+        //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
     [

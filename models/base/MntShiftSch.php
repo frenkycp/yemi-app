@@ -45,7 +45,7 @@ abstract class MntShiftSch extends \yii\db\ActiveRecord
         return [
             [['shift_emp_id'], 'integer'],
             [['period', 'shift_code'], 'string'],
-            [['shift_date'], 'safe']
+            [['shift_date'], 'required']
         ];
     }
 
