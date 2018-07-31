@@ -47,9 +47,9 @@ class PlanReceivingVisualController extends Controller
 		->select([
 			'week_no' => 'WEEK(receiving_date, 4)',
 			'receiving_date' => 'receiving_date',
-			'total_container' => 'SUM(CASE WHEN vehicle=\'Container\' THEN 1 ELSE 0 END)',
-			'total_truck' => 'SUM(CASE WHEN vehicle=\'Truck\' THEN 1 ELSE 0 END)',
-			'total_wb' => 'SUM(CASE WHEN vehicle=\'WB\' THEN 1 ELSE 0 END)'
+			'total_container' => 'SUM(CASE WHEN vehicle=\'Container\' THEN qty ELSE 0 END)',
+			'total_truck' => 'SUM(CASE WHEN vehicle=\'Truck\' THEN qty ELSE 0 END)',
+			'total_wb' => 'SUM(CASE WHEN vehicle=\'WB\' THEN qty ELSE 0 END)'
 		])
 		->where([
 			'month_periode' => $model->year . $model->month
@@ -68,7 +68,14 @@ class PlanReceivingVisualController extends Controller
 		}
 
 		$data = [];
+		$week_today = date('W');
+		$week_no_arr = [];
+		$week_found = false;
 		foreach ($tmp_data as $week_no => $plan_receiving) {
+			$week_no_arr[] = $week_no;
+			if ($week_no == $week_today) {
+				$week_found = true;
+			}
 			$tmp_category = [];
 			$total_container_arr = [];
 			$total_truck_arr = [];
@@ -107,6 +114,10 @@ class PlanReceivingVisualController extends Controller
 			];
 		}
 
+		if (!$week_found) {
+			$week_today = $week_no_arr[0];
+		}
+
 		/*echo '<pre>';
 		print_r($data);
 		echo '</pre>';*/
@@ -114,7 +125,7 @@ class PlanReceivingVisualController extends Controller
 		return $this->render('index',[
 			'model' => $model,
 			'data' => $data,
-			'week_today' => 30,
+			'week_today' => $week_today,
 			'year_arr' => $year_arr,
 			'month_arr' => $month_arr
 		]);

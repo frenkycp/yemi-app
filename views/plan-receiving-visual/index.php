@@ -77,8 +77,7 @@ $this->registerJs($js);
     <div class="row">
         <div class="col-md-3">
             <?= $form->field($model, 'year')->dropDownList(
-                $year_arr,
-                ['prompt' => 'Select']
+                $year_arr
             ); ?>
         </div>
         <div class="col-md-3">
@@ -96,6 +95,11 @@ $this->registerJs($js);
 
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
+            <?php
+            if (count($data) == 0) {
+                echo '<div class="well"><h3>There is no data...</h3></div>';
+            }
+            ?>
             <?php
             foreach ($data as $week_no => $value) {
                 if($week_no == $week_today)

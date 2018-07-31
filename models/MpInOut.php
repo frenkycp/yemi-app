@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MpInOut extends BaseMpInOut
 {
-    public $total_emp, $category;
+    public $total_emp, $category, $min_year, $max_year;
 
     public function behaviors()
     {

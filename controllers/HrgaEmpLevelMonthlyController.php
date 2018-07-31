@@ -5,6 +5,7 @@ use yii\web\Controller;
 use app\models\MpInOut;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+use app\models\PlanReceivingPeriod;
 
 class HrgaEmpLevelMonthlyController extends Controller
 {
@@ -16,7 +17,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 
 	public function actionIndex()
 	{
-		$title = '2018';
+		
 		$subtitle = '';
 		$data = [];
 		$category_arr = [];
@@ -24,14 +25,44 @@ class HrgaEmpLevelMonthlyController extends Controller
 
 		$menu = 1;
 
+		$year_arr = [];
+        $month_arr = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
+        }
+
+        $min_max_year = MpInOut::find()->select([
+            'min_year' => 'MIN(LEFT(PERIOD, 4))',
+            'max_year' => 'MAX(LEFT(PERIOD, 4))',
+        ])->one();
+
+        $max_year = $min_max_year->max_year;
+        $star_year = $min_max_year->min_year;
+        for ($year = $star_year; $year <= $max_year; $year++) {
+            $year_arr[$year] = $year;
+        }
+
+        $model = new PlanReceivingPeriod();
+        $model->month = date('m');
+        $model->year = date('Y');
+        if ($model->load($_POST))
+        {
+
+        }
+
+		$curr_year = $model->year;
+		//$curr_year = 2019;
+		$title = $curr_year;
+
 		$name_arr = $this->getDataName($menu);
-		$emp_data = $this->getEmployeeData($menu);
+		$emp_data = $this->getEmployeeData($menu, $curr_year);
 		$today_period = date('Ym');
 
 		$period_arr = MpInOut::find()
 		->select('DISTINCT(PERIOD)')
 		->where([
-			'LEFT(PERIOD,4)' => date('Y')
+			'LEFT(PERIOD,4)' => $curr_year
 		])
 		->all();
 		$this_period_qty = 0;
@@ -114,6 +145,9 @@ class HrgaEmpLevelMonthlyController extends Controller
 		}
 
 		return $this->render('index', [
+			'model' => $model,
+			'month_arr' => $month_arr,
+			'year_arr' => $year_arr,
 			'title' => $title,
 			'subtitle' => $subtitle,
 			'data' => $data,
@@ -148,7 +182,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 		return $category_arr;
 	}
 
-	public function getEmployeeData($menu)
+	public function getEmployeeData($menu, $year)
 	{
 		if ($menu == 1) {
 			$emp_data = MpInOut::find()
@@ -159,7 +193,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 			])
 			->where([
 				'AKHIR_BULAN' => 'end_of_month',
-				'LEFT(PERIOD,4)' => date('Y')
+				'LEFT(PERIOD,4)' => $year
 			])
 			->groupBy('PERIOD, PKWT')
 			->orderBy('PERIOD, PKWT')
@@ -173,7 +207,7 @@ class HrgaEmpLevelMonthlyController extends Controller
 			])
 			->where([
 				'AKHIR_BULAN' => 'end_of_month',
-				'LEFT(PERIOD,4)' => date('Y')
+				'LEFT(PERIOD,4)' => $year
 			])
 			->groupBy('PERIOD, DEPARTEMEN')
 			->orderBy('PERIOD, DEPARTEMEN')

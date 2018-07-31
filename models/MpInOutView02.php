@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MpInOutView02 extends BaseMpInOutView02
 {
-    public $total, $min_year;
+    public $total, $min_year, $max_year;
 
     public function behaviors()
     {

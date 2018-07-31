@@ -27,10 +27,11 @@ class HrgaManpowerIntakeController extends Controller
         }
 
         $min_year = MpInOutView02::find()->select([
-            'min_year' => 'MIN(TAHUN)'
+            'min_year' => 'MIN(TAHUN)',
+            'max_year' => 'MAX(TAHUN)'
         ])->one();
 
-        $year_now = date('Y');
+        $year_now = $min_year->max_year;
         $star_year = $min_year->min_year;
         for ($year = $star_year; $year <= $year_now; $year++) {
             $year_arr[$year] = $year;

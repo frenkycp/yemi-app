@@ -4,6 +4,7 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
 //$this->title = Yii::t('app', 'Employee Data Monthly');
 $this->title = [
@@ -43,23 +44,43 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 
 ?>
-<?php
-/*echo '<pre>';
-print_r($section);
-echo '</pre>';
 
-echo '<pre>';
-print_r($category);
-echo '</pre>';
+<?php $form = ActiveForm::begin([
+    'id' => 'form_index',
+    'layout' => 'horizontal',
+    'enableClientValidation' => true,
+    'errorSummaryCssClass' => 'error-summary alert alert-danger',
+    'fieldConfig' => [
+             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+             'horizontalCssClasses' => [
+                 //'label' => 'col-sm-2',
+                 #'offset' => 'col-sm-offset-4',
+                 'wrapper' => 'col-sm-7',
+                 'error' => '',
+                 'hint' => '',
+             ],
+         ],
+    ]
+    );
+    ?>
 
-echo '<pre>';
-print_r($data);
-echo '</pre>';*/
-?>
-<div class="box box-success">
-    <div class="box-header with-border">
-        <h3 class="box-title">Chart View</h3>
+    <div class="row">
+        <div class="col-md-3">
+            <?= $form->field($model, 'year')->dropDownList(
+                $year_arr
+            ); ?>
+        </div>
+        <div class="col-md-3" style="display: none;">
+            <?= $form->field($model, 'month')->dropDownList(
+                $month_arr
+            ); ?>
+        </div>
+        <?= Yii::$app->params['update_chart_btn']; ?>
     </div>
+
+<?php ActiveForm::end(); ?>
+
+<div class="box box-success">
     <div class="box-body no-padding">
         <?php
         echo Highcharts::widget([

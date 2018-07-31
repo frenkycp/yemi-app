@@ -37,86 +37,91 @@ $this->registerJs($script, View::POS_HEAD );
 	</div>
 	<div class="panel-body">
 		<?php
-		$month = date('M');
-		echo Highcharts::widget([
-			'scripts' => [
-				'highcharts-more',
-		        'modules/exporting',
-		        'themes/sand-signika',
-		        //'themes/grid-light',
-		    ],
-		    'options' => [
-		    	'chart' => [
-		    		'type' => 'columnrange',
-		    		'inverted' => true,
-		    		'height' => 420,
-		    	],
-		    	'title' => [
-			        'text' => $title
+		if (count($data_date) == 0) {
+			echo 'All progress completed...';
+		} else {
+			$month = date('M');
+			echo Highcharts::widget([
+				'scripts' => [
+					'highcharts-more',
+			        'modules/exporting',
+			        'themes/sand-signika',
+			        //'themes/grid-light',
 			    ],
-			    'credits' => [
-			    	'enabled' => false
-			    ],
-			    'subtitle' => [
-			        'text' => $subtitle
-			    ],
-			    'xAxis' => [
-			        'categories' => $data_categories,
-			        'maxPadding' => 0.05
-			    ],
+			    'options' => [
+			    	'chart' => [
+			    		'type' => 'columnrange',
+			    		'inverted' => true,
+			    		'height' => 420,
+			    	],
+			    	'title' => [
+				        'text' => $title
+				    ],
+				    'credits' => [
+				    	'enabled' => false
+				    ],
+				    'subtitle' => [
+				        'text' => $subtitle
+				    ],
+				    'xAxis' => [
+				        'categories' => $data_categories,
+				        'maxPadding' => 0.05
+				    ],
 
-			    'yAxis' => [
-			        'title' => [
-			            'text' => 'Date',
-			        ],
-			        'min' => 0,
-			        'max' => 31,
-			        'tickInterval' => 1
-			    ],
+				    'yAxis' => [
+				        'title' => [
+				            'text' => 'Date',
+				        ],
+				        'min' => 0,
+				        'max' => 31,
+				        'tickInterval' => 1
+				    ],
 
-			    'tooltip' => [
-			    	'enabled' => false,
-			        'valueSuffix' => $value_suffix
-			    ],
+				    'tooltip' => [
+				    	'enabled' => false,
+				        'valueSuffix' => $value_suffix
+				    ],
 
-			    'plotOptions' => [
-			        'columnrange' => [
-			            'dataLabels' => [
-			                'enabled' => true,
-			                'format' => '{y}',
-			                'style' => [
-		                        'fontSize' => '14px',
-		                        'fontWeight' => '10'
-		                    ],
+				    'plotOptions' => [
+				        'columnrange' => [
+				            'dataLabels' => [
+				                'enabled' => true,
+				                'format' => '{y}',
+				                'style' => [
+			                        'fontSize' => '14px',
+			                        'fontWeight' => '10'
+			                    ],
+				            ]
+				        ],
+				        'series' => [
+			                'cursor' => 'pointer',
+			                'point' => [
+			                    'events' => [
+			                        'click' => new JsExpression('
+			                        	function(){
+			                        		$("#modal").modal("show").find(".modal-body").html(this.options.remark);
+			                        	}
+			                		'),
+			                    ]
+			                ]
 			            ]
-			        ],
-			        'series' => [
-		                'cursor' => 'pointer',
-		                'point' => [
-		                    'events' => [
-		                        'click' => new JsExpression('
-		                        	function(){
-		                        		$("#modal").modal("show").find(".modal-body").html(this.options.remark);
-		                        	}
-		                		'),
-		                    ]
-		                ]
-		            ]
-			    ],
+				    ],
 
-			    'legend' => [
-			        'enabled' => false
-			    ],
+				    'legend' => [
+				        'enabled' => false
+				    ],
 
-			    'series' => [
-			    	[
-				        'name' => 'Repair Progress',
-				        'data' => $data_date
-				    ]
-				]
-		    ],
-		    
-		]);
+				    'series' => [
+				    	[
+					        'name' => 'Repair Progress',
+					        'data' => $data_date
+					    ]
+					]
+			    ],
+			    
+			]);
+		}
+		
 		?>
 		<hr>
 		<div class="text-center">
