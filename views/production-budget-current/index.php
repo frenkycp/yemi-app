@@ -47,7 +47,7 @@ echo '</pre>';*/
                         'enabled' => false
                     ],
                     'title' => [
-                        'text' => date('M\' Y')
+                        'text' => date('M\' Y', strtotime($period . '01'))
                     ],
                     'xAxis' => [
                         'categories' => $categories,
@@ -117,7 +117,7 @@ echo '</pre>';*/
                         'enabled' => false
                     ],
                     'title' => [
-                        'text' => date('M\' Y')
+                        'text' => date('M\' Y', strtotime($period . '01'))
                     ],
                     'subtitle' => [
                         'text' => null

@@ -19,7 +19,7 @@ class ProductionBudgetCurrentController extends Controller
 
 	public function actionIndex()
 	{
-		$period = date('Ym');
+		//$period = date('Ym');
 		$compare_data_arr = SalesBudgetCompare::find()
 		->select([
 			'PERIOD' => 'PERIOD',
@@ -28,9 +28,7 @@ class ProductionBudgetCurrentController extends Controller
 			'total_amount_forecast' => 'SUM(AMOUNT_ACT_FOR)',
 			'total_amount_current' => 'SUM(AMOUNT_CUR)'
 		])
-		->where([
-			'PERIOD' => $period
-		])
+		->where('CUR_LAST_UPDATE IS NOT NULL')
 		->groupBy('PERIOD, BU')
 		->orderBy('BU')
 		->all();
@@ -42,6 +40,7 @@ class ProductionBudgetCurrentController extends Controller
 		$data2 = [];
 		$color_index = 0;
 		foreach ($compare_data_arr as $compare_data) {
+			$period = $compare_data->PERIOD;
 			$categories[] = $compare_data->BU;
 			$tmp_data_budget[] = [
 				'y' => round($compare_data->total_amount_budget),
@@ -134,7 +133,6 @@ class ProductionBudgetCurrentController extends Controller
 	public function getRemark($period, $bu)
     {
         $condition = [
-            'PERIOD' => $period,
             'BU' => $bu
         ];
 
@@ -161,6 +159,7 @@ class ProductionBudgetCurrentController extends Controller
             'balance_amount' => 'SUM(AMOUNT_CUR) - SUM(AMOUNT_BGT)'
         ])
         ->where($condition)
+        ->andWhere('CUR_LAST_UPDATE IS NOT NULL')
         ->groupBy('PERIOD, BU, MODEL')
         ->orderBy('balance_amount')
         ->all();
