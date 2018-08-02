@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use kartik\form\ActiveForm;
+use kartik\file\FileInput;
 
 /**
 * @var yii\web\View $this
@@ -92,6 +94,18 @@ $grid_columns = [
         'hAlign' => 'center'
     ],
     [
+        'class' => 'kartik\grid\ExpandRowColumn',
+        'width' => '50px',
+        'value' => function ($model, $key, $index, $column) {
+            return GridView::ROW_COLLAPSED;
+        },
+        'detail' => function ($model, $key, $index, $column) {
+            return Yii::$app->controller->renderPartial('_expand-row-details', ['model' => $model]);
+        },
+        'headerOptions' => ['class' => 'kartik-sheet-style'],
+        'expandOneOnly' => true
+    ],
+    [
         'attribute' => 'location',
         'vAlign' => 'middle',
         //'width' => '100px',
@@ -101,7 +115,7 @@ $grid_columns = [
     [
         'attribute' => 'area',
         'vAlign' => 'middle',
-        //'width' => '150px',
+        'width' => '150px',
         //'hAlign' => 'center'
     ],
     [
@@ -123,14 +137,14 @@ $grid_columns = [
         'label' => 'Machine ID',
         'vAlign' => 'middle',
         'hiddenFromExport' => true,
-        //'width' => '100px',
+        'width' => '100px',
         'hAlign' => 'center'
     ],
     [
         'attribute' => 'mesin_nama',
         'label' => 'Machine Name',
         'vAlign' => 'middle',
-        'width' => '100px',
+        'width' => '160px',
         //'hAlign' => 'center'
     ],
     [
@@ -146,6 +160,7 @@ $grid_columns = [
         'filter' => false,
         'vAlign' => 'middle',
         'width' => '100px',
+        'hidden' => true,
         //'hAlign' => 'center'
     ],
     [
@@ -162,6 +177,7 @@ $grid_columns = [
         'label' => 'Parts Remarks',
         'filter' => false,
         'vAlign' => 'middle',
+        'hidden' => true,
         //'width' => '150px',
         //'hAlign' => 'center'
     ],
@@ -178,6 +194,7 @@ $grid_columns = [
         'label' => 'Repair Note',
         'filter' => false,
         'vAlign' => 'middle',
+        'hidden' => true,
         //'width' => '150px',
         //'hAlign' => 'center'
     ],
@@ -345,6 +362,7 @@ $grid_columns = [
                 //'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();
+
         ?>
     </div>
 

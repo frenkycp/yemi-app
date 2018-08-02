@@ -4,7 +4,7 @@
  * @copyright  Copyright &copy; Kartik Visweswaran, Krajee.com, 2015 - 2018
  * @package    yii2-widgets
  * @subpackage yii2-widget-activeform
- * @version    1.4.9
+ * @version    1.5.0
  */
 
 namespace kartik\form;
@@ -187,8 +187,8 @@ class ActiveForm extends YiiActiveForm
     public function getFormLayoutStyle()
     {
         $config = $this->formConfig;
-        $span = $config['labelSpan'];
-        $size = $config['deviceSize'];
+        $span = isset($config['labelSpan']) ? $config['labelSpan'] : ActiveField::NOT_SET;
+        $size = isset($config['deviceSize']) ? $config['deviceSize'] : ActiveField::NOT_SET;
         $labelCss = $inputCss = $offsetCss = ActiveField::NOT_SET;
         $iSpan = intval($span);
         if ($span != ActiveField::NOT_SET && $iSpan > 0) {

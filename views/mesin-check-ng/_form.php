@@ -46,7 +46,7 @@ use yii\helpers\StringHelper;
             <?= $form->field($model, 'mesin_nama')->textInput(['readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
 
 <!-- attribute mesin_catatan -->
-            <?= $form->field($model, 'mesin_catatan')->textInput()->label('Parts Remarks') ?>
+            <?= $form->field($model, 'mesin_catatan')->textArea(['rows' => 5, 'style' => 'resize: none;'])->label('Parts Remarks') ?>
             
 <!-- attribute repair_note -->
             <?= $form->field($model, 'repair_note')->textInput() ?>

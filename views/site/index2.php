@@ -60,6 +60,9 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['parts-picking-status/index']); ?>
                                 </li>
+                                <li class="text-red">
+                                    <?= '<p>Monthly Monitoring Uncountable Parts<br/><span class="japanesse-word">(不定材の受払い管理) ― 準備中</span></p>' ?>
+                                </li>
                             </ol>
                         </div>
                         
