@@ -49,7 +49,7 @@ use yii\helpers\StringHelper;
             <?= $form->field($model, 'mesin_catatan')->textArea(['rows' => 5, 'style' => 'resize: none;'])->label('Parts Remarks') ?>
             
 <!-- attribute repair_note -->
-            <?= $form->field($model, 'repair_note')->textInput() ?>
+            <?= $form->field($model, 'repair_note')->textArea(['rows' => 5, 'style' => 'resize: none;']) ?>
 
             <!-- attribute color_stat -->
             <?= ''; //$form->field($model, 'color_stat')->textInput() ?>
