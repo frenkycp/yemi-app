@@ -194,12 +194,18 @@ $columns = [
         'attribute' => 'pdf_file',
         'label' => 'PDF File',
         'value' => function($model){
-            $filename = str_replace('-', '', $model->qa_ng_date) . $model->gmc . '.pdf';
-            $path = \Yii::$app->basePath . '\\..\\mis7\\qa\\' . $filename;
-            $link = Html::a($filename, 'http://172.17.144.6:99/qa/' . $filename, ['target' => '_blank']);
 
             if ($model->qa_ng != '') {
+                if ($model->qa_result == 2) {
+                    $filename = str_replace('-', '', $model->qa_ng_date) . $model->flo . '.pdf';
+                } else {
+                    $filename = str_replace('-', '', $model->qa_ng_date) . $model->gmc . '.pdf';
+                }
+                $path = \Yii::$app->basePath . '\\..\\mis7\\qa\\' . $filename;
+                $link = Html::a($filename, 'http://172.17.144.6:99/qa/' . $filename, ['target' => '_blank']);
+                
                 if (file_exists($path)) {
+                    
                     return $link;
                 } else {
                     return "File not found...";
