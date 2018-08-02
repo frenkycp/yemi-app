@@ -46,21 +46,30 @@ use yii\helpers\StringHelper;
             <?= $form->field($model, 'mesin_nama')->textInput(['readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
 
 <!-- attribute mesin_catatan -->
-            <?= $form->field($model, 'mesin_catatan')->textArea(['rows' => 5, 'style' => 'resize: none;'])->label('Parts Remarks') ?>
+            <?= $form->field($model, 'mesin_catatan')->textArea([
+                'rows' => 5,
+                'style' => 'resize: none;',
+                'readonly' => Yii::$app->user->identity->role->id == 1 || Yii::$app->user->identity->role->id == 8 ? false : true
+            ])->label('Parts Remarks') ?>
             
 <!-- attribute repair_note -->
-            <?= $form->field($model, 'repair_note')->textArea(['rows' => 5, 'style' => 'resize: none;']) ?>
+            <?= $form->field($model, 'repair_note')->textArea([
+                'rows' => 5,
+                'style' => 'resize: none;',
+                'readonly' => Yii::$app->user->identity->role->id == 1 || Yii::$app->user->identity->role->id == 8 ? false : true
+            ]) ?>
 
             <!-- attribute color_stat -->
             <?= ''; //$form->field($model, 'color_stat')->textInput() ?>
 
 <!-- attribute repair_plan -->
-            <?= $form->field($model, 'repair_plan')->widget(\yii\jui\DatePicker::class, [
+            <?= Yii::$app->user->identity->role->id == 1 || Yii::$app->user->identity->role->id == 8 ? $form->field($model, 'repair_plan')->widget(\yii\jui\DatePicker::class, [
                 'dateFormat' => 'yyyy-MM-dd',
                 'options' => [
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'readonly' => Yii::$app->user->identity->role->id == 1 || Yii::$app->user->identity->role->id == 8 ? false : true
                 ]
-            ]) ?>
+            ]) : $form->field($model, 'repair_plan')->textInput(['readonly' => true]) ?>
 
             <?= $form->field($model, 'prepare_time')->textInput(['type' => 'number'])->label('Prepare Time (minutes)') ?>
             <?= $form->field($model, 'repair_time')->textInput(['type' => 'number'])->label('Repair Time (minutes)') ?>
