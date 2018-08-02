@@ -340,7 +340,7 @@ $gridColumns = [
                   </div>
                   <!-- /.progress-group -->
                   <div class="progress-group">
-                    <span class="progress-text">VMS Total Plan (<?= date('01 M Y') ?> - <?= date('d M Y', strtotime("-1 days")) ?>)</span>
+                    <span class="progress-text">VMS Total Plan <?= date('M\' Y') ?></span>
                     <span class="progress-number"><b><?= number_format($monthly_progress_plan) ?></b>/<?= number_format($monthly_total_plan) ?> <a href="<?= Url::to(['yemi-internal/index', 'monthly' => 1]) ?>"><i class="fa fa-fw fa-info-circle"></i></a></span>
 
                     <div class="progress">
@@ -358,7 +358,7 @@ $gridColumns = [
                   </div>
                   <!-- /.progress-group -->
                   <div class="progress-group">
-                    <span class="progress-text">Total Delay (<?= date('01 M Y') ?> - <?= date('d M Y', strtotime("-1 days")) ?>)</span>
+                    <span class="progress-text">Total Delay <?= date('M\' Y') ?></span>
                     <span class="progress-number"><b><?= number_format($monthly_progress_delay) ?></b>/<?= number_format($monthly_progress_plan) ?></span>
 
                     <div class="progress">

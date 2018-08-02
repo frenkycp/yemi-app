@@ -79,9 +79,9 @@ class YemiInternalController extends SernoOutputController
 		$vms_data = SernoOutput::find()
 		->select([
 			'monthly_total_plan' => 'SUM(qty)',
-			'monthly_progress_plan' => 'SUM(CASE WHEN vms<\'' . $date_today .'\' THEN qty ELSE 0 END)',
-			'monthly_progress_output' => 'SUM(CASE WHEN vms<\'' . $date_today .'\' THEN output ELSE 0 END)',
-			'monthly_progress_delay' => 'SUM(CASE WHEN vms<\'' . $date_today .'\' AND output <> qty THEN output ELSE 0 END)',
+			'monthly_progress_plan' => 'SUM(CASE WHEN vms<\'' . $date_today .'\' OR vms=\'' . $date_today .'\' THEN qty ELSE 0 END)',
+			'monthly_progress_output' => 'SUM(CASE WHEN vms<\'' . $date_today .'\' OR vms=\'' . $date_today .'\' THEN output ELSE 0 END)',
+			'monthly_progress_delay' => 'SUM(CASE WHEN (vms<\'' . $date_today .'\' OR vms=\'' . $date_today .'\') AND output <> qty THEN output ELSE 0 END)',
 		])
 		->where([
 			'LEFT(vms, 7)' => date('Y-m')
