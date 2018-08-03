@@ -16,8 +16,12 @@ use yii\behaviors\BlameableBehavior;
  * @property string $item_type
  * @property integer $qty
  * @property string $receiving_date
+ * @property string $eta_yemi_date
+ * @property string $unloading_date
+ * @property string $completed_date
  * @property string $month_periode
  * @property string $container_no
+ * @property integer $urgent_status
  * @property string $created_date
  * @property string $last_modified_date
  * @property integer $last_modified_by
@@ -67,9 +71,9 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['qty', 'last_modified_by', 'deleted_by', 'flag'], 'integer'],
+            [['qty', 'urgent_status', 'last_modified_by', 'deleted_by', 'flag'], 'integer'],
             [['receiving_date'], 'required'],
-            [['receiving_date', 'created_date', 'last_modified_date', 'deleted_date'], 'safe'],
+            [['receiving_date', 'eta_yemi_date', 'unloading_date', 'completed_date', 'created_date', 'last_modified_date', 'deleted_date'], 'safe'],
             [['vendor_name', 'vehicle'], 'string', 'max' => 50],
             [['item_type', 'container_no'], 'string', 'max' => 20],
             [['month_periode'], 'string', 'max' => 7]
@@ -88,8 +92,12 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
             'item_type' => 'Item Type',
             'qty' => 'Qty',
             'receiving_date' => 'Receiving Date',
+            'eta_yemi_date' => 'Eta Yemi Date',
+            'unloading_date' => 'Unloading Date',
+            'completed_date' => 'Completed Date',
             'month_periode' => 'Month Periode',
             'container_no' => 'Container No',
+            'urgent_status' => 'Urgent Status',
             'created_date' => 'Created Date',
             'created_by' => 'Created By',
             'last_modified_date' => 'Last Modified Date',

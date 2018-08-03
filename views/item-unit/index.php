@@ -3,13 +3,14 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
-use app\models\PlanReceiving;
 
-/* @var $this yii\web\View */
-/* @var $searchModel app\models\search\PlanReceivingSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/**
+* @var yii\web\View $this
+* @var yii\data\ActiveDataProvider $dataProvider
+    * @var app\models\search\ItemUnitSearch $searchModel
+*/
 
-$this->title = 'Plan Receiving';
+$this->title = Yii::t('models', 'Item Type');
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -17,13 +18,11 @@ $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
 } else {
 Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
+    $actionColumnTemplateString = "{update}";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
-$columns = [
-    //['class' => 'yii\grid\SerialColumn'],
-
+$grid_column = [
     [
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
@@ -46,91 +45,27 @@ $columns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],
     [
-        'attribute' => 'month_periode',
-        'label' => 'Periode',
+        'attribute' => 'name',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px'
-    ],
-    [
-        'attribute' => 'vendor_name',
-        'vAlign' => 'middle',
-    ],
-    [
-        'attribute' => 'container_no',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'qty',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'width' => '70px'
-    ],
-    [
-        'attribute' => 'vehicle',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'item_type',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'urgent_status',
-        'value' => function($model){
-            $urgency = 'NORMAL';
-            $label_class = 'label label-success';
-            if ($model->urgent_status == 1) {
-                $urgency = 'URGENT';
-                $label_class = 'label label-danger';
-            }
-            return '<span class="' . $label_class . '">' . $urgency . '</span>';
-        },
-        'format' => 'raw',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filter' => [
-            0 => 'NORMAL',
-            1 => 'URGENT'
-        ],
-    ],
-    [
-        'attribute' => 'receiving_date',
-        'label' => 'Plan Date',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'eta_yemi_date',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'unloading_date',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'completed_date',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
+        'width' => '120px',
     ],
 ];
-
 ?>
-<div class="plan-receiving-index">
+<div class="giiant-crud item-unit-index">
 
-    <p style="display: none;">
-        <?= Html::a('Create Plan Receiving', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
+//             echo $this->render('_search', ['model' =>$searchModel]);
+        ?>
+
+    
+    <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'columns' => $columns,
+            'columns' => $grid_column,
             'hover' => true,
             //'condensed' => true,
             'striped' => true,
@@ -153,8 +88,14 @@ $columns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => 'Plan Receiving',
+                'heading' => 'Data List',
             ],
         ]); ?>
     </div>
+
 </div>
+
+
+<?php \yii\widgets\Pjax::end() ?>
+
+

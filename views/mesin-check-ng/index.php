@@ -152,7 +152,8 @@ $grid_columns = [
         'label' => 'Seq',
         'vAlign' => 'middle',
         'width' => '50px',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'hidden' => true
     ],
     [
         'attribute' => 'mesin_bagian',
@@ -225,6 +226,9 @@ $grid_columns = [
         },
         //'format' => ['date', 'php:d-M-Y H:i:s'],
         'width' => '120px',
+        'contentOptions' => [
+            'style' => 'min-width: 120px;'
+        ],
         'hAlign' => 'center'
     ],
     [
@@ -235,7 +239,58 @@ $grid_columns = [
         },
         //'format' => ['date', 'php:d-M-Y H:i:s'],
         'width' => '120px',
+        'contentOptions' => [
+            'style' => 'min-width: 120px;'
+        ],
         'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'prepare_time',
+        'label' => 'Prepare<br/>Time<br/>(minutes)',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+        'contentOptions' => [
+            'style' => 'min-width: 60px;'
+        ],
+        'hidden' => true,
+    ],
+    [
+        'attribute' => 'repair_time',
+        'label' => 'Repair<br/>Time<br/>(minutes)',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+        'contentOptions' => [
+            'style' => 'min-width: 60px;'
+        ],
+        'hidden' => true,
+    ],
+    [
+        'attribute' => 'spare_part_time',
+        'label' => 'Sparepart<br/>Time<br/>(minutes)',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+        'contentOptions' => [
+            'style' => 'min-width: 60px;'
+        ],
+        'hidden' => true,
+    ],
+    [
+        'attribute' => 'install_time',
+        'label' => 'Install<br/>Time<br/>(minutes)',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+        'contentOptions' => [
+            'style' => 'min-width: 60px;'
+        ],
+        'hidden' => true,
     ],
     [
         'attribute' => 'closing_day_total',
@@ -244,10 +299,12 @@ $grid_columns = [
         'vAlign' => 'middle',
         'value' => 'closingDayTotal',
         'hAlign' => 'center',
+        'mergeHeader' => true,
         'contentOptions' => [
             'style' => 'min-width: 60px;'
         ],
     ],
+
     [
         'attribute' => 'repair_plan',
         'label' => 'Repair Plan',
@@ -255,6 +312,9 @@ $grid_columns = [
         'format' => ['date', 'php:d-M-Y'],
         'width' => '120px',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 120px;'
+        ],
         //'hidden' => true
     ],
 ]

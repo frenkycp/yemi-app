@@ -73,7 +73,7 @@ use yii\helpers\StringHelper;
 
             <?= $form->field($model, 'prepare_time')->textInput(['type' => 'number'])->label('Prepare Time (minutes)') ?>
             <?= $form->field($model, 'repair_time')->textInput(['type' => 'number'])->label('Repair Time (minutes)') ?>
-            <?= $form->field($model, 'spare_part_time')->textInput(['type' => 'number'])->label('Spare Part Time (minutes)') ?>
+            <?= $form->field($model, 'spare_part_time')->textInput(['type' => 'number'])->label('Sparepart Time (minutes)') ?>
             <?= $form->field($model, 'install_time')->textInput(['type' => 'number'])->label('Install Time (minutes)') ?>
 
 <!-- attribute location -->

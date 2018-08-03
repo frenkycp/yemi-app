@@ -10,20 +10,24 @@ use Yii;
  * This is the base-model class for table "tb_serno_output".
  *
  * @property string $pk
+ * @property string $uniq
  * @property integer $id
  * @property string $stc
  * @property string $dst
+ * @property string $so
  * @property integer $num
  * @property string $gmc
  * @property integer $qty
  * @property integer $output
  * @property integer $adv
+ * @property string $vms
  * @property string $etd
  * @property string $ship
  * @property integer $cntr
  * @property integer $ng
  * @property string $category
  * @property string $remark
+ * @property integer $back_order
  * @property string $aliasModel
  */
 abstract class SernoOutput extends \yii\db\ActiveRecord
@@ -54,12 +58,12 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     {
         return [
             [['pk'], 'required'],
-            [['id', 'num', 'qty', 'output', 'adv', 'cntr', 'ng'], 'integer'],
+            [['id', 'num', 'qty', 'output', 'adv', 'cntr', 'ng', 'back_order'], 'integer'],
             [['dst'], 'string'],
-            [['etd', 'ship'], 'safe'],
+            [['vms', 'etd', 'ship'], 'safe'],
             [['pk'], 'string', 'max' => 35],
-            [['stc'], 'string', 'max' => 6],
-            [['gmc'], 'string', 'max' => 7],
+            [['uniq'], 'string', 'max' => 25],
+            [['stc', 'so', 'gmc'], 'string', 'max' => 7],
             [['category'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 50],
             [['pk'], 'unique']
@@ -73,20 +77,24 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     {
         return [
             'pk' => 'Pk',
+            'uniq' => 'Uniq',
             'id' => 'ID',
             'stc' => 'Stc',
             'dst' => 'Dst',
+            'so' => 'So',
             'num' => 'Num',
             'gmc' => 'Gmc',
             'qty' => 'Qty',
             'output' => 'Output',
             'adv' => 'Adv',
+            'vms' => 'Vms',
             'etd' => 'Etd',
             'ship' => 'Ship',
             'cntr' => 'Cntr',
             'ng' => 'Ng',
             'category' => 'Category',
             'remark' => 'Remark',
+            'back_order' => 'Back Order',
         ];
     }
 

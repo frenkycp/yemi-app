@@ -27,6 +27,7 @@ class ItemUnit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name'], 'required'],
             [['flag'], 'integer'],
             [['name'], 'string', 'max' => 20],
         ];
