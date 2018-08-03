@@ -76,7 +76,7 @@ $this->registerJs($script, View::POS_HEAD );
             }
 
             $sernoFg = app\models\SernoOutput::find()
-            ->select(['etd, SUM(qty) as qty, SUM(output) as output, SUM(ng) as ng, WEEK(ship,4) as week_no'])
+            ->select(['etd, SUM(qty) as qty, SUM(output) as output, WEEK(ship,4) as week_no'])
             ->where([
                 'WEEK(ship,4)' => $j,
                 'LEFT(id,4)' => date('Y'),
@@ -116,8 +116,8 @@ $this->registerJs($script, View::POS_HEAD );
                 $remark .= '</table>';
 
                 //$total_delay = 500;
-                $total_close = $value->output - ($value->ng + $total_delay);
-                $presentase_ng = round(($value->ng/$value->qty)*100);
+                $total_close = $value->output - (0 + $total_delay);
+                $presentase_ng = round((0/$value->qty)*100);
                 $presentase_close = floor(($total_close/$value->qty)*100);
                 $presentase_delay = ceil(($total_delay / $value->qty)*100);
                 $presentase_open = (int)(100 - ($presentase_close + $presentase_ng + $presentase_delay));
@@ -130,7 +130,7 @@ $this->registerJs($script, View::POS_HEAD );
                 $data_ng[] = [
                     'y' => (int)$presentase_ng,
                     'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
-                    'qty' => $value->ng,
+                    'qty' => 0,
                 ];
                  $data_delay[] = [
                     'y' => (int)$presentase_delay,
@@ -229,7 +229,7 @@ $this->registerJs($script, View::POS_HEAD );
                         ]
                     ],
                     
-                    [
+                    /*[
                         'name' => 'NG',
                         'data' => $data_ng,
                         'color' => 'pink',
@@ -243,7 +243,7 @@ $this->registerJs($script, View::POS_HEAD );
                                 //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                             ]
                         ]
-                    ],
+                    ],*/
                     [
                         'name' => 'Completed',
                         'data' => $data_close,
