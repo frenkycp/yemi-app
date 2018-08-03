@@ -75,6 +75,9 @@ $gridColumns = [
         'attribute' => 'parent_desc',
         'label' => 'Parent Desc',
         'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width: 200px;'
+        ],
         //'hAlign' => 'center'
     ],
     [
@@ -127,58 +130,65 @@ $gridColumns = [
         'value' => function($model){
             $str = '';
             $str .= $model->id_01_desc;
-            $str .= $model->id_02_desc != null ? ', ' . $model->id_02_desc : '';
-            $str .= $model->id_03_desc != null ? ', ' . $model->id_03_desc : '';
-            $str .= $model->id_04_desc != null ? ', ' . $model->id_04_desc : '';
-            $str .= $model->id_05_desc != null ? ', ' . $model->id_05_desc : '';
-            $str .= $model->id_06_desc != null ? ', ' . $model->id_06_desc : '';
-            $str .= $model->id_07_desc != null ? ', ' . $model->id_07_desc : '';
-            $str .= $model->id_08_desc != null ? ', ' . $model->id_08_desc : '';
-            $str .= $model->id_09_desc != null ? ', ' . $model->id_09_desc : '';
-            $str .= $model->id_10_desc != null ? ', ' . $model->id_10_desc : '';
+            $str .= $model->id_02_desc != null ? ',<br/>' . $model->id_02_desc : '';
+            $str .= $model->id_03_desc != null ? ',<br/>' . $model->id_03_desc : '';
+            $str .= $model->id_04_desc != null ? ',<br/>' . $model->id_04_desc : '';
+            $str .= $model->id_05_desc != null ? ',<br/>' . $model->id_05_desc : '';
+            $str .= $model->id_06_desc != null ? ',<br/>' . $model->id_06_desc : '';
+            $str .= $model->id_07_desc != null ? ',<br/>' . $model->id_07_desc : '';
+            $str .= $model->id_08_desc != null ? ',<br/>' . $model->id_08_desc : '';
+            $str .= $model->id_09_desc != null ? ',<br/>' . $model->id_09_desc : '';
+            $str .= $model->id_10_desc != null ? ',<br/>' . $model->id_10_desc : '';
             return $str;
         },
         'encodeLabel' => false,
         'label' => 'Man Power<br/>Description',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 200px;'
+        ],
+        'format' => 'raw'
     ],
     [
         'attribute' => 'start_date',
         'value' => function($model){
-        	return $model->start_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->start_date));
+        	return $model->start_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->start_date)) . '<br/>by<br/>' . $model->start_user_desc;
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'contentOptions' => [
-            'style' => 'min-width: 100px;'
+            'style' => 'min-width: 200px;'
         ],
+        'format' => 'raw'
     ],
     [
         'attribute' => 'completed_date',
         'encodeLabel' => false,
         'label' => 'Completed<br/>Date',
         'value' => function($model){
-        	return $model->completed_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->completed_date));
+        	return $model->completed_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->completed_date)) . '<br/>by<br/>' . $model->completed_user_desc;
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'contentOptions' => [
-            'style' => 'min-width: 100px;'
+            'style' => 'min-width: 200px;'
         ],
+        'format' => 'raw'
     ],
     [
         'attribute' => 'hand_over_date',
         'encodeLabel' => false,
         'label' => 'Hand Over<br/>Date',
         'value' => function($model){
-            return $model->hand_over_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->hand_over_date));
+            return $model->hand_over_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->hand_over_date)) . '<br/>by<br/>' . $model->hand_over_user_desc;
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'contentOptions' => [
-            'style' => 'min-width: 100px;'
+            'style' => 'min-width: 200px;'
         ],
+        'format' => 'raw'
     ],
     [
         'attribute' => 'stage_desc',
