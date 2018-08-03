@@ -139,6 +139,16 @@ $gridColumns = [
             $str .= $model->id_08_desc != null ? ',<br/>' . $model->id_08_desc : '';
             $str .= $model->id_09_desc != null ? ',<br/>' . $model->id_09_desc : '';
             $str .= $model->id_10_desc != null ? ',<br/>' . $model->id_10_desc : '';
+            $str .= $model->id_11_desc != null ? ',<br/>' . $model->id_02_desc : '';
+            $str .= $model->id_12_desc != null ? ',<br/>' . $model->id_03_desc : '';
+            $str .= $model->id_13_desc != null ? ',<br/>' . $model->id_04_desc : '';
+            $str .= $model->id_14_desc != null ? ',<br/>' . $model->id_05_desc : '';
+            $str .= $model->id_15_desc != null ? ',<br/>' . $model->id_06_desc : '';
+            $str .= $model->id_16_desc != null ? ',<br/>' . $model->id_07_desc : '';
+            $str .= $model->id_17_desc != null ? ',<br/>' . $model->id_08_desc : '';
+            $str .= $model->id_18_desc != null ? ',<br/>' . $model->id_09_desc : '';
+            $str .= $model->id_19_desc != null ? ',<br/>' . $model->id_10_desc : '';
+            $str .= $model->id_20_desc != null ? ',<br/>' . $model->id_10_desc : '';
             return $str;
         },
         'encodeLabel' => false,

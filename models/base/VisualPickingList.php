@@ -92,6 +92,26 @@ use Yii;
  * @property string $closing_date
  * @property string $back_up_period
  * @property string $back_up
+ * @property string $id_11
+ * @property string $id_11_desc
+ * @property string $id_12
+ * @property string $id_12_desc
+ * @property string $id_13
+ * @property string $id_13_desc
+ * @property string $id_14
+ * @property string $id_14_desc
+ * @property string $id_15
+ * @property string $id_15_desc
+ * @property string $id_16
+ * @property string $id_16_desc
+ * @property string $id_17
+ * @property string $id_17_desc
+ * @property string $id_18
+ * @property string $id_18_desc
+ * @property string $id_19
+ * @property string $id_19_desc
+ * @property string $id_20
+ * @property string $id_20_desc
  * @property string $aliasModel
  */
 abstract class VisualPickingList extends \yii\db\ActiveRecord
@@ -121,7 +141,7 @@ abstract class VisualPickingList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['set_list_no', 'parent', 'parent_desc', 'parent_um', 'analyst', 'analyst_desc', 'create_user_id', 'create_user_desc', 'confirm_user_id', 'confirm_user_desc', 'start_user_id', 'start_user_desc', 'completed_user_id', 'completed_user_desc', 'hand_over_user_id', 'hand_over_user_desc', 'stage_desc', 'condition_desc', 'stat', 'catatan', 'pts_stat', 'set_list_type', 'id_01', 'id_01_desc', 'id_02', 'id_02_desc', 'id_03', 'id_03_desc', 'id_04', 'id_04_desc', 'id_05', 'id_05_desc', 'id_06', 'id_06_desc', 'id_07', 'id_07_desc', 'id_08', 'id_08_desc', 'id_09', 'id_09_desc', 'id_10', 'id_10_desc', 'id_update', 'id_update_desc', 'sudah_cetak', 'id_prioty', 'id_prioty_desc', 'id_hc', 'id_hc_desc', 'id_hc_stat', 'id_hc_open', 'id_hc_open_desc', 'id_hc_open_stat', 'pts_note', 'show', 'back_up_period', 'back_up'], 'string'],
+            [['set_list_no', 'parent', 'parent_desc', 'parent_um', 'analyst', 'analyst_desc', 'create_user_id', 'create_user_desc', 'confirm_user_id', 'confirm_user_desc', 'start_user_id', 'start_user_desc', 'completed_user_id', 'completed_user_desc', 'hand_over_user_id', 'hand_over_user_desc', 'stage_desc', 'condition_desc', 'stat', 'catatan', 'pts_stat', 'set_list_type', 'id_01', 'id_01_desc', 'id_02', 'id_02_desc', 'id_03', 'id_03_desc', 'id_04', 'id_04_desc', 'id_05', 'id_05_desc', 'id_06', 'id_06_desc', 'id_07', 'id_07_desc', 'id_08', 'id_08_desc', 'id_09', 'id_09_desc', 'id_10', 'id_10_desc', 'id_update', 'id_update_desc', 'sudah_cetak', 'id_prioty', 'id_prioty_desc', 'id_hc', 'id_hc_desc', 'id_hc_stat', 'id_hc_open', 'id_hc_open_desc', 'id_hc_open_stat', 'pts_note', 'show', 'back_up_period', 'back_up', 'id_11', 'id_11_desc', 'id_12', 'id_12_desc', 'id_13', 'id_13_desc', 'id_14', 'id_14_desc', 'id_15', 'id_15_desc', 'id_16', 'id_16_desc', 'id_17', 'id_17_desc', 'id_18', 'id_18_desc', 'id_19', 'id_19_desc', 'id_20', 'id_20_desc'], 'string'],
             [['req_date', 'req_date_original', 'create_date', 'confirm_date', 'start_date', 'completed_date', 'hand_over_date', 'id_update_date', 'id_prioty_date', 'id_hc_date', 'id_hc_open_date', 'closing_date'], 'safe'],
             [['plan_qty', 'progress_pct', 'pick_lt'], 'number'],
             [['part_count', 'part_count_fix', 'man_power', 'priority', 'stage_id', 'pts_part', 'delay_days', 'slip_count', 'slip_open', 'slip_close'], 'integer']
@@ -217,6 +237,26 @@ abstract class VisualPickingList extends \yii\db\ActiveRecord
             'closing_date' => 'Closing Date',
             'back_up_period' => 'Back Up Period',
             'back_up' => 'Back Up',
+            'id_11' => 'Id 11',
+            'id_11_desc' => 'Id 11 Desc',
+            'id_12' => 'Id 12',
+            'id_12_desc' => 'Id 12 Desc',
+            'id_13' => 'Id 13',
+            'id_13_desc' => 'Id 13 Desc',
+            'id_14' => 'Id 14',
+            'id_14_desc' => 'Id 14 Desc',
+            'id_15' => 'Id 15',
+            'id_15_desc' => 'Id 15 Desc',
+            'id_16' => 'Id 16',
+            'id_16_desc' => 'Id 16 Desc',
+            'id_17' => 'Id 17',
+            'id_17_desc' => 'Id 17 Desc',
+            'id_18' => 'Id 18',
+            'id_18_desc' => 'Id 18 Desc',
+            'id_19' => 'Id 19',
+            'id_19_desc' => 'Id 19 Desc',
+            'id_20' => 'Id 20',
+            'id_20_desc' => 'Id 20 Desc',
         ];
     }
 
