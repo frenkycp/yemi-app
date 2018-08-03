@@ -254,6 +254,7 @@ class ProductionBudgetController extends Controller
                 <th class="text-center">Budget Qty<br/>(予算数量)</th>
                 <th class="text-center">Act/Forecast Qty<br/>(見込み/実績)</th>
                 <th class="text-center">Balance Qty<br/>(対予算)</th>
+                <th class="text-center">Balance Qty<br/>(対予算)</th>
             </tr>';
             $orderBy = 'balance_qty';
         } else {
@@ -264,6 +265,7 @@ class ProductionBudgetController extends Controller
                 <th class="text-center">Model</th>
                 <th class="text-center">Budget Amount<br/>(予算金額)</th>
                 <th class="text-center">Act/Forecast Amount<br/>(見込み/実績)</th>
+                <th class="text-center">Balance Amount<br/>(対予算)</th>
                 <th class="text-center">Balance Amount<br/>(対予算)</th>
             </tr>';
             $orderBy = 'balance_amount';
@@ -288,7 +290,11 @@ class ProductionBudgetController extends Controller
         $i = 1;
         foreach ($data_arr as $value) {
             $link = Html::a($value->MODEL, ['group-model-detail', 'period' => $period, 'bu' => $bu, 'product_type' => $product_type, 'product_model' => $value->MODEL, 'filter_by' => $filter_by], ['target' => '_blank']);
+            $percentage = 0;
             if ($filter_by == 'QTY') {
+                if ($value->total_qty_budget != 0) {
+                    $percentage = round(($value->total_qty_actual / $value->total_qty_budget) * 100);
+                }
                 $data .= '
                     <tr>
                         <td class="text-center">' . $i .'</td>
@@ -297,9 +303,13 @@ class ProductionBudgetController extends Controller
                         <td class="text-center">' . number_format($value->total_qty_budget) .'</td>
                         <td class="text-center">' . number_format($value->total_qty_actual) .'</td>
                         <td class="text-center">' . number_format($value->balance_qty) .'</td>
+                        <td class="text-center">' . $percentage .'%</td>
                     </tr>
                 ';
             } else {
+                if ($value->total_amount_budget != 0) {
+                    $percentage = round(($value->total_amount_actual / $value->total_amount_budget) * 100);
+                }
                 $data .= '
                     <tr>
                         <td class="text-center">' . $i .'</td>
@@ -308,6 +318,7 @@ class ProductionBudgetController extends Controller
                         <td class="text-center">' . number_format($value->total_amount_budget) .'</td>
                         <td class="text-center">' . number_format($value->total_amount_actual) .'</td>
                         <td class="text-center">' . number_format($value->balance_amount) .'</td>
+                        <td class="text-center">' . $percentage .'%</td>
                     </tr>
                 ';
             }
