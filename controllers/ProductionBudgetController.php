@@ -137,7 +137,7 @@ class ProductionBudgetController extends Controller
                         }
                     }
                     $tmp_data[] = [
-                        'y' => round($tmp_qty),
+                        'y' => $tmp_qty == 0 ? null : round($tmp_qty),
                         'remark' => $this->getRemark($prod_period, $model->budget_type, $model->qty_or_amount, $prod_bu)
                     ];
                 }

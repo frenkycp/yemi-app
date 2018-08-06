@@ -17,6 +17,13 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
 
 date_default_timezone_set('Asia/Jakarta');
 
+$script = <<< JS
+    function myFunction(){
+        alert("OK");
+    }
+JS;
+$this->registerJs($script, View::POS_HEAD );
+
 /*$script = <<< JS
     window.onload = setupRefresh;
 
@@ -116,7 +123,7 @@ echo '</pre>';*/
                     'text' => $subtitle
                 ],
                 'xAxis' => [
-                    'categories' => $categories
+                    'categories' => $categories,
                 ],
                 'yAxis' => [
                     [
@@ -124,6 +131,18 @@ echo '</pre>';*/
                         'min' => 0,
                         'title' => [
                             'text' => $model->qty_or_amount == 'AMOUNT' ? $model->qty_or_amount . ' (USD)' : $model->qty_or_amount
+                        ],
+                        'stackLabels' => [
+                            'enabled' => true,
+                            'rotation' => -90,
+                            'style' => [
+                                'textOutline' => '0px',
+                                'fontWeight' => '0',
+                                'fontSize' => '10px',
+                            ],
+                            'allowOverlap' => true,
+                            'x' => 3,
+                            'y' => -30
                         ]
                     ],
                     [
@@ -143,9 +162,15 @@ echo '</pre>';*/
                         'opposite' => true,
                         'labels' => [
                             'enabled' => false
-                        ]
+                        ],
                     ],
-                    
+                    /*'stackLabels' => [
+                        'enabled' => true,
+                        'rotation' => -90,
+                        'style' => [
+                            'textOutline' => '0px',
+                        ],
+                    ]*/
                 ],
                 'legend' => [
                     'enabled' => true,
