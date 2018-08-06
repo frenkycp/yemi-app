@@ -64,6 +64,12 @@ $gridColumns = [
         //'width'=>'100px',
     ],
     [
+        'attribute' => 'login_as_id',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        //'width'=>'100px',
+    ],
+    [
         'attribute' => 'login_as',
         'hAlign' => 'center',
         'vAlign' => 'middle',

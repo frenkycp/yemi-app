@@ -127,15 +127,18 @@ class SiteController extends Controller
             $user->last_login = new Expression("NOW()");
             $user->save();
 
-            if (Yii::$app->request->userIP !== '::1') {
+            $ip = $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']);
+
+            //if ($ip != '::1') {
                 $client_ip = new CisClientIpAddress();
-                $client_ip->ip_address = Yii::$app->request->userIP;
+                $client_ip->ip_address = $ip;
                 $client_ip->login_as = Yii::$app->user->identity->name;
+                $client_ip->login_as_id = Yii::$app->user->identity->id;
 
                 if (!$client_ip->save()) {
                     return json_encode($client_ip->errors);
                 }
-            }
+            //}
 
             
 
