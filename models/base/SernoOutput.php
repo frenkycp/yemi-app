@@ -58,7 +58,7 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     {
         return [
             [['pk'], 'required'],
-            [['id', 'num', 'qty', 'output', 'adv', 'cntr', 'ng', 'back_order'], 'integer'],
+            [['id', 'num', 'qty', 'output', 'adv', 'cntr', 'back_order'], 'integer'],
             [['dst'], 'string'],
             [['vms', 'etd', 'ship'], 'safe'],
             [['pk'], 'string', 'max' => 35],
@@ -91,7 +91,7 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'etd' => 'Etd',
             'ship' => 'Ship',
             'cntr' => 'Cntr',
-            'ng' => 'Ng',
+            //'ng' => 'Ng',
             'category' => 'Category',
             'remark' => 'Remark',
             'back_order' => 'Back Order',

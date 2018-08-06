@@ -45,7 +45,7 @@ class SernoOutput extends BaseSernoOutput
             'qty' => 'Plan',
             'output' => 'Actual',
             'adv' => 'Adv',
-            'ng' => 'NG',
+            //'ng' => 'NG',
             'etd' => 'Etd',
             'cntr' => 'Cntr',
             'cust_desc' => 'Customer Description',

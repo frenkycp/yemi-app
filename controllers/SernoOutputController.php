@@ -53,21 +53,21 @@ class SernoOutputController extends base\SernoOutputController
     	])
     	->where(['<>', 'stc', 'ADVANCE'])
     	//->andWhere(['<>', 'stc', 'NOSO'])
-    	->andWhere(['LEFT(id,4)' => date('Y')])
+    	//->andWhere(['LEFT(id,4)' => date('Y')])
     	//->andWhere(['<>', 'ship', '9999-12-31'])
     	->groupBy('tahun')
     	->one();
 
     	$weekToday = SernoCalendar::find()->where(['etd' => date('Y-m-d')])->one()->week_ship;
 
-		$start_week = 1;
-		$end_week = 52;
+        $start_week = 1;
+        $end_week = 52;
 
-		if(count($min_max_week) > 0)
-		{
-			$start_week = $min_max_week->min_week;
-			$end_week = $min_max_week->max_week;
-		}
+        if(count($min_max_week) > 0)
+        {
+            $start_week = $min_max_week->max_week - 12;
+            $end_week = $min_max_week->max_week;
+        }
 
         return $this->render('report',[
         	'weekToday' => $weekToday,
