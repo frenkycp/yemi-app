@@ -17,8 +17,8 @@ use yii\behaviors\BlameableBehavior;
  * @property integer $qty
  * @property string $receiving_date
  * @property string $eta_yemi_date
- * @property string $unloading_date
- * @property string $completed_date
+ * @property string $unloading_time
+ * @property string $completed_time
  * @property string $month_periode
  * @property string $container_no
  * @property integer $urgent_status
@@ -73,7 +73,7 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
         return [
             [['qty', 'urgent_status', 'last_modified_by', 'deleted_by', 'flag'], 'integer'],
             [['receiving_date'], 'required'],
-            [['receiving_date', 'eta_yemi_date', 'unloading_date', 'completed_date', 'created_date', 'last_modified_date', 'deleted_date'], 'safe'],
+            [['receiving_date', 'eta_yemi_date', 'unloading_time', 'completed_time', 'created_date', 'last_modified_date', 'deleted_date'], 'safe'],
             [['vendor_name', 'vehicle'], 'string', 'max' => 50],
             [['item_type', 'container_no'], 'string', 'max' => 20],
             [['month_periode'], 'string', 'max' => 7]
@@ -93,8 +93,8 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
             'qty' => 'Qty',
             'receiving_date' => 'Receiving Date',
             'eta_yemi_date' => 'Eta Yemi Date',
-            'unloading_date' => 'Unloading Date',
-            'completed_date' => 'Completed Date',
+            'unloading_time' => 'Unloading Time',
+            'completed_time' => 'Completed Time',
             'month_periode' => 'Month Periode',
             'container_no' => 'Container No',
             'urgent_status' => 'Urgent Status',

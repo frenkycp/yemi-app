@@ -8,6 +8,7 @@ use app\models\search\PlanReceivingSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
 
 /**
  * PlanReceivingController implements the CRUD actions for PlanReceiving model.
@@ -33,6 +34,34 @@ class PlanReceivingController extends Controller
         }
         
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // validate if there is a editable input saved via AJAX
+        if (Yii::$app->request->post('hasEditable')) {
+            // instantiate your book model for saving
+            $receiving_id = Yii::$app->request->post('editableKey');
+            $model = PlanReceiving::findOne(['id' => $receiving_id]);
+
+            // store a default json response as desired by editable
+            $out = Json::encode(['output'=>'', 'message'=>'']);
+
+            $posted = current($_POST['PlanReceiving']);
+            $post = ['PlanReceiving' => $posted];
+
+            if ($model->load($post)) {
+                // can save model or do something before saving model
+                $model->save();
+                $output = '';
+
+                if (isset($posted['unloading_time'])) {
+                    $output = $model->unloading_time;
+                }
+
+                $out = Json::encode(['output'=>$output, 'message'=>'']);
+            }
+            // return ajax json encoded response and exit
+            echo $out;
+            return;
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

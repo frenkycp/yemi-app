@@ -30,8 +30,8 @@ $columns = [
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
-                    'title' => Yii::t('cruds', 'View'),
-                    'aria-label' => Yii::t('cruds', 'View'),
+                    'title' => 'View',
+                    'aria-label' => 'View',
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
@@ -56,11 +56,7 @@ $columns = [
         'attribute' => 'vendor_name',
         'vAlign' => 'middle',
     ],
-    [
-        'attribute' => 'container_no',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
+    
     [
         'attribute' => 'qty',
         'vAlign' => 'middle',
@@ -76,6 +72,66 @@ $columns = [
         'attribute' => 'item_type',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+    ],
+    
+    [
+        'attribute' => 'receiving_date',
+        'label' => 'Plan Date',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'class'=>'kartik\grid\EditableColumn',
+        'attribute' => 'eta_yemi_date',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'editableOptions'=> [
+            'inputType'=>\kartik\editable\Editable::INPUT_DATE,
+            'options' => [
+                'pluginOptions' => [
+                    'autoclose'=>true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ],
+        ]
+    ],
+    [
+        'class'=>'kartik\grid\EditableColumn',
+        'attribute' => 'unloading_time',
+        'encodeLabel' => false,
+        'label' => 'Unloading<br/>Time',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'editableOptions'=> [
+            'inputType'=>\kartik\editable\Editable::INPUT_TIME,
+            'options' => [
+                'pluginOptions' => [
+                    'showSeconds' => true,
+                    'showMeridian' => false,
+                    'minuteStep' => 1,
+                    'secondStep' => 5,
+                ]
+            ]
+        ]
+    ],
+    [
+        'class'=>'kartik\grid\EditableColumn',
+        'attribute' => 'completed_time',
+        'encodeLabel' => false,
+        'label' => 'Completed<br/>Time',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'editableOptions'=> [
+            'inputType'=>\kartik\editable\Editable::INPUT_TIME,
+            'options' => [
+                'pluginOptions' => [
+                    'showSeconds' => true,
+                    'showMeridian' => false,
+                    'minuteStep' => 1,
+                    'secondStep' => 5,
+                ]
+            ]
+        ]
     ],
     [
         'attribute' => 'urgent_status',
@@ -97,23 +153,7 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'receiving_date',
-        'label' => 'Plan Date',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'eta_yemi_date',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'unloading_date',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'completed_date',
+        'attribute' => 'container_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
     ],
@@ -142,7 +182,7 @@ $columns = [
             //'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 
-                    Html::a('New', ['create'], ['data-pjax' => 0, 'class' => 'btn btn-success', 'title' => Yii::t('kvgrid', 'Visual Plan Receiving')])
+                    Html::a('New', ['create'], ['data-pjax' => 0, 'class' => 'btn btn-success', 'title' => 'Visual Plan Receiving'])
                 ],
                 '{export}',
                 '{toggleData}',

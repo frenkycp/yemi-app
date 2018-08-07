@@ -33,7 +33,10 @@
         "phpoffice/phpspreadsheet": "^1.2",
         "mikehaertl/php-pdftk": "^0.4.4",
         "yiisoft/yii2-jui": "^2.0",
-        "kartik-v/yii2-widget-activeform": "@dev"
+        "kartik-v/yii2-widget-activeform": "@dev",
+        "kartik-v/yii2-widget-timepicker": "*",
+        "kartik-v/yii2-editable": "*",
+        "kartik-v/yii2-widget-datepicker": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
