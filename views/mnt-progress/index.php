@@ -12,8 +12,14 @@ use yii\web\View;
 * @var app\models\search\MenuSearch $searchModel
 */
 
-$this->title = 'Corrective Progress';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'CORRECTIVE PROGRESS <span class="text-green japanesse">(修復の進捗状況)',
+    'tab_title' => 'CORRECTIVE PROGRESS',
+    'breadcrumbs_title' => 'CORRECTIVE PROGRESS'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+
 date_default_timezone_set('Asia/Jakarta');
 
 $script = <<< JS

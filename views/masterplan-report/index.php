@@ -8,14 +8,14 @@ use yii\bootstrap\ActiveForm;
 
 
 $this->title = [
-    'page_title' => 'Weekly Preventive <span class="text-green">(週次予防保全)',
+    'page_title' => 'Weekly Preventive <span class="text-green japanesse">(週次予防保全)</span>',
     'tab_title' => 'Weekly Preventive',
     'breadcrumbs_title' => 'Weekly Preventive'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
-$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {
