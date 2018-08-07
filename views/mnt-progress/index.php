@@ -131,8 +131,8 @@ $this->registerJs($script, View::POS_HEAD );
 		?>
 		<hr>
 		<div class="text-center">
-			<span><i class="fa fa-circle" style="color: rgba(255, 0, 0, 0.8);"></i> Stop</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<span><i class="fa fa-circle" style="color: rgba(255, 153, 0, 0.8);"></i> Running</span>
+			<span><i class="fa fa-square" style="color: rgba(255, 0, 0, 0.8);"></i> Stop</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<span><i class="fa fa-square" style="color: rgba(255, 153, 0, 0.8);"></i> Running</span>
 		</div>
 		
 	</div>
