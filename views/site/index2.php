@@ -71,7 +71,7 @@ $this->registerCss("
     		</div>
     		<div class="col-md-3">
                 <div class="panel panel-success">
-                    <div class="panel-heading text-center">WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/><span class="japanesse-word">生産工程モニタリング</span></div>
+                    <div class="panel-heading text-center">E-Kanban WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/>E-<span class="japanesse-word">かんばん・生産工程モニタリング</span></div>
                     <div class="list-group">
                         <div class="list-group-item disabled">PCB <span class="japanesse-word">基板組立（準備中）</span></div>
                         <div class="list-group-item disabled">WW <span class="japanesse-word">木工（準備中）</span></div>
