@@ -152,6 +152,7 @@ class HrgaAttendanceReportController extends Controller
 			<th class="text-center">NIK</th>
 			<th>Nama Karyawan</th>
 			<th class="text-center">Section</th>
+			<th class="text-center">Shift</th>
 			<th class="text-center">Keterangan</th>
             <th class="text-center">Bonus</th>
             <th class="text-center">Disiplin</th>
@@ -197,6 +198,7 @@ class HrgaAttendanceReportController extends Controller
 						<td class="text-center">' . $attendance_report['NIK'] . '</td>
 						<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
 						<td class="text-center">' . $attendance_report['SECTION'] . '</td>
+						<td class="text-center">' . $attendance_report['SHIFT'] . '</td>
 	                    <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
 						<td class="text-center">' . $bonus . '</td>
 						<td class="text-center">' . $disiplin . '</td>

@@ -27,6 +27,9 @@ use Yii;
  * @property integer $KEHADIRAN
  * @property integer $BONUS
  * @property integer $DISIPLIN
+ * @property string $CHECK_IN
+ * @property string $CHECK_OUT
+ * @property string $SHIFT
  * @property string $aliasModel
  */
 abstract class AbsensiTbl extends \yii\db\ActiveRecord
@@ -57,9 +60,9 @@ abstract class AbsensiTbl extends \yii\db\ActiveRecord
     {
         return [
             [['NIK_DATE_ID'], 'required'],
-            [['NIK_DATE_ID', 'NO', 'NIK', 'CC_ID', 'SECTION', 'DIRECT_INDIRECT', 'NAMA_KARYAWAN', 'PERIOD', 'NOTE', 'DAY_STAT', 'CATEGORY'], 'string'],
+            [['NIK_DATE_ID', 'NO', 'NIK', 'CC_ID', 'SECTION', 'DIRECT_INDIRECT', 'NAMA_KARYAWAN', 'PERIOD', 'NOTE', 'DAY_STAT', 'CATEGORY', 'SHIFT'], 'string'],
             [['YEAR', 'WEEK', 'TOTAL_KARYAWAN', 'KEHADIRAN', 'BONUS', 'DISIPLIN'], 'integer'],
-            [['DATE'], 'safe'],
+            [['DATE', 'CHECK_IN', 'CHECK_OUT'], 'safe'],
             [['NIK_DATE_ID'], 'unique']
         ];
     }
@@ -88,6 +91,9 @@ abstract class AbsensiTbl extends \yii\db\ActiveRecord
             'KEHADIRAN' => 'Kehadiran',
             'BONUS' => 'Bonus',
             'DISIPLIN' => 'Disiplin',
+            'CHECK_IN' => 'Check  In',
+            'CHECK_OUT' => 'Check  Out',
+            'SHIFT' => 'Shift',
         ];
     }
 
