@@ -33,13 +33,13 @@ foreach ($data as $key => $value) {
 }*/
 
 $this->title = [
-    'page_title' => 'Monthly Production Schedule (月次生産計画)',
+    'page_title' => 'Monthly Production Schedule <span class="japanesse">(月次生産計画)</span>',
     'tab_title' => 'Monthly Production Schedule',
     'breadcrumbs_title' => 'Monthly Production Schedule'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss("h1 { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .pill-pane {

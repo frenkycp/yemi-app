@@ -12,9 +12,9 @@ use Yii;
  * @property string $pk
  * @property string $uniq
  * @property integer $id
+ * @property integer $so
  * @property string $stc
  * @property string $dst
- * @property string $so
  * @property integer $num
  * @property string $gmc
  * @property integer $qty
@@ -24,7 +24,6 @@ use Yii;
  * @property string $etd
  * @property string $ship
  * @property integer $cntr
- * @property integer $ng
  * @property string $category
  * @property string $remark
  * @property integer $back_order
@@ -58,12 +57,12 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     {
         return [
             [['pk'], 'required'],
-            [['id', 'num', 'qty', 'output', 'adv', 'cntr', 'back_order'], 'integer'],
+            [['id', 'so', 'num', 'qty', 'output', 'adv', 'cntr', 'back_order'], 'integer'],
             [['dst'], 'string'],
             [['vms', 'etd', 'ship'], 'safe'],
             [['pk'], 'string', 'max' => 35],
             [['uniq'], 'string', 'max' => 25],
-            [['stc', 'so', 'gmc'], 'string', 'max' => 7],
+            [['stc', 'gmc'], 'string', 'max' => 7],
             [['category'], 'string', 'max' => 10],
             [['remark'], 'string', 'max' => 50],
             [['pk'], 'unique']
@@ -79,9 +78,9 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'pk' => 'Pk',
             'uniq' => 'Uniq',
             'id' => 'ID',
+            'so' => 'So',
             'stc' => 'Stc',
             'dst' => 'Dst',
-            'so' => 'So',
             'num' => 'Num',
             'gmc' => 'Gmc',
             'qty' => 'Qty',
@@ -91,7 +90,6 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'etd' => 'Etd',
             'ship' => 'Ship',
             'cntr' => 'Cntr',
-            //'ng' => 'Ng',
             'category' => 'Category',
             'remark' => 'Remark',
             'back_order' => 'Back Order',
