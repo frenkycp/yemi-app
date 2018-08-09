@@ -121,15 +121,9 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-
-            //log last login column
-            $user = Yii::$app->user->identity;
-            $user->last_login = new Expression("NOW()");
-            $user->save();
-
             $ip = $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']);
 
-            //if ($ip != '::1') {
+            if ($ip != '::1') {
                 $client_ip = new CisClientIpAddress();
                 $client_ip->ip_address = $ip;
                 $client_ip->login_as = Yii::$app->user->identity->name;
@@ -138,9 +132,11 @@ class SiteController extends Controller
                 if (!$client_ip->save()) {
                     return json_encode($client_ip->errors);
                 }
-            //}
-
-            
+            }
+            //log last login column
+            /*$user = Yii::$app->user->identity;
+            $user->last_login = new Expression("NOW()");
+            $user->save();*/
 
             return $this->goBack();
         }
