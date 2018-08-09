@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use app\models\MinimumStockView02;
 
 /**
 * This is the class for controller "MntMinimumStockController".
@@ -22,8 +23,13 @@ class MntMinimumStockController extends \app\controllers\base\MntMinimumStockCon
 		//$src = \Yii::$app->request->BaseUrl . '/uploads/NG_MNT/' . $urutan . '.jpg';
 		//$src = \Yii::$app->basePath. '\uploads\NG_MNT\\' . $urutan . '.jpg';
 		$src = Html::img('http://wsus:81/product_image/' . $urutan . '.jpg', ['width' => '100%']);
+		$tmp_item = MinimumStockView02::find()
+		->where([
+			'ITEM' => $urutan
+		])
+		->one();
 		//return $src;
-		return '<div class="text-center"><span><b>' . $urutan . '</b></span><hr>' . Html::img('http://wsus:81/product_image/' . $urutan . '.jpg',
+		return '<div class="text-center"><span><b>' . $tmp_item->ITEM_EQ_DESC_01 . '</b></span><br/>' . Html::img('http://wsus:81/product_image/' . $urutan . '.jpg',
 			[
 				'width' => '100%',
 				'alt' => $urutan . '.jpg not found.'

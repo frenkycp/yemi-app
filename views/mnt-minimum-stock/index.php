@@ -174,7 +174,7 @@ $this->registerJs("$(function() {
 
         yii\bootstrap\Modal::begin([
             'id' =>'image-modal',
-            'header' => '<h3>NG Image</h3>',
+            //'header' => '',
             //'size' => 'modal-lg',
         ]);
         yii\bootstrap\Modal::end();
