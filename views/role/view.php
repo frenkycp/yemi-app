@@ -86,7 +86,7 @@ $this->params['breadcrumbs'][] = 'View';
 </div></div><?php Pjax::begin(['id'=>'pjax-RoleMenuses', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-RoleMenuses ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 <?= '<div class="table-responsive">' . \yii\grid\GridView::widget([
     'layout' => '{summary}{pager}<br/>{items}{pager}',
-    'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $model->getRoleMenuses(), 'pagination' => ['pageSize' => 20, 'pageParam'=>'page-rolemenuses']]),
+    'dataProvider' => new \yii\data\ActiveDataProvider(['query' => $model->getRoleMenus(), 'pagination' => ['pageSize' => 20, 'pageParam'=>'page-rolemenuses']]),
     'pager'        => [
         'class'          => yii\widgets\LinkPager::className(),
         'firstPageLabel' => 'First',
@@ -186,7 +186,7 @@ $this->params['breadcrumbs'][] = 'View';
     'active'  => true,
 ],[
     'content' => $this->blocks['RoleMenuses'],
-    'label'   => '<small>Role Menuses <span class="badge badge-default">'.count($model->getRoleMenuses()->asArray()->all()).'</span></small>',
+    'label'   => '<small>Role Menuses <span class="badge badge-default">'.count($model->getRoleMenus()->asArray()->all()).'</span></small>',
     'active'  => false,
 ],[
     'content' => $this->blocks['Users'],

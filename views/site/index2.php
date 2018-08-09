@@ -111,6 +111,7 @@ $this->registerCss("
                             <ol style="padding-left: 2em">
                                 <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
                                 <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
+                                <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
                             </ol>
                         </div>
 
