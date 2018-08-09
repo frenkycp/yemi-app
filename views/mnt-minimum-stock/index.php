@@ -10,8 +10,14 @@ use kartik\grid\GridView;
     * @var app\models\search\MntMinimumStockSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Data Sparepart Maintenance');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Data Sparepart Maintenance <span class="text-green japanesse"></span>',
+    'tab_title' => 'Data Sparepart Maintenance',
+    'breadcrumbs_title' => 'Data Sparepart Maintenance'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);

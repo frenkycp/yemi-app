@@ -13,13 +13,13 @@ use kartik\file\FileInput;
 */
 
 $this->title = [
-    'page_title' => 'Corrective Data <span class="text-green">(修繕データ)',
+    'page_title' => 'Corrective Data <span class="text-green japanesse">(修繕データ)</span>',
     'tab_title' => 'Corrective Data',
     'breadcrumbs_title' => 'Corrective Data'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
