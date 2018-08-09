@@ -224,7 +224,7 @@ $this->registerCss("
                     </div>
                 </div>
                 <hr>
-                <div class="panel panel-success">
+                <div class="panel panel-success" style="display: <?= in_array(Yii::$app->user->identity->role->id, [15]) ? 'none' : ''; ?>;">
                     <div class="panel-heading text-center">Production Engineering<br/></div>
                     <div class="list-group">
                         <a class="list-group-item" href="http://172.17.144.2/workflow/newmodel.php">New Model Development <span class="japanesse-word">（新製品開発日程）</span></a>
