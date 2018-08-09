@@ -26,6 +26,10 @@ $grid_column = [
     [
         'attribute' => 'ITEM',
         'label' => 'Kode Item',
+        /*'value' => function($model){
+            return Html::a($model->ITEM, ['get-image-preview', 'urutan' => $model->ITEM], ['class' => 'imageModal', 'data-pjax' => '0',]);
+        },
+        'format' => 'raw',*/
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -33,6 +37,26 @@ $grid_column = [
             'style' => 'text-align: center;'
         ],
         'width' => '120px',
+    ],
+    [
+        'attribute' => 'ITEM',
+        'label' => 'Foto',
+        'value' => function($model){
+            return Html::a(Html::img('http://wsus:81/product_image/' . $model->ITEM . '.jpg', [
+                'width' => '20px',
+                'height' => '20px',
+                'alt' => '-'
+            ]), ['get-image-preview', 'urutan' => $model->ITEM], ['class' => 'imageModal', 'data-pjax' => '0',]);
+            /*return Html::img('http://wsus:81/product_image/' . $model->ITEM . '.jpg', [
+                'width' => '20px',
+                'height' => '20px',
+                'alt' => ''
+            ]);*/
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '50px',
     ],
     [
         'attribute' => 'ITEM_EQ_DESC_01',
@@ -98,22 +122,17 @@ $grid_column = [
             'style' => 'text-align: center;'
         ],
     ],
-    
-    /*'PIC_DESC',*/
-    /*'DEP',*/
-    /*'DEP_DESC',*/
-    /*'HIGH_RISK',*/
-    /*'CATEGORY',*/
-    /*'USER_ID',*/
-    /*'USER_DESC',*/
-    /*'MACHINE',*/
-    /*'MACHINE_NAME',*/
-    /*'MIN_STOCK_QTY',*/
-    /*'LAST_UPDATE',*/
 ];
+
+$this->registerJs("$(function() {
+   $('.imageModal').click(function(e) {
+     e.preventDefault();
+     $('#image-modal').modal('show').find('.modal-body').load($(this).attr('href'));
+   });
+});");
 ?>
 
-<?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
+<?php //\yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
 <div class="giiant-crud minimum-stock-index">
     <div class="table-responsive">
@@ -130,7 +149,7 @@ $grid_column = [
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            'pjax' => true, // pjax is set to always true for this demo
+            //'pjax' => false, // pjax is set to always true for this demo
             'toolbar' =>  [
                 /*['content' => 
                     Html::a('View Chart', $main_link, ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Show View Chart')])
@@ -145,12 +164,20 @@ $grid_column = [
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
             ],
-        ]); ?>
+        ]); 
+
+        yii\bootstrap\Modal::begin([
+            'id' =>'image-modal',
+            'header' => '<h3>NG Image</h3>',
+            //'size' => 'modal-lg',
+        ]);
+        yii\bootstrap\Modal::end();
+        ?>
     </div>
 
 </div>
 
 
-<?php \yii\widgets\Pjax::end() ?>
+<?php //\yii\widgets\Pjax::end() ?>
 
 
