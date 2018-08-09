@@ -27,7 +27,7 @@ abstract class CisClientIpAddress extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.CIS_CLIENT_IP_ADDRESS';
+        return 'cis_client_ip_address';
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class CisClientIpAddress extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('db_sql_server');
+        return Yii::$app->get('db');
     }
 
     /**
