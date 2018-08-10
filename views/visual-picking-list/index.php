@@ -130,25 +130,25 @@ $gridColumns = [
         'value' => function($model){
             $str = '';
             $str .= $model->id_01_desc;
-            $str .= $model->id_02_desc != null ? ',<br/>' . $model->id_02_desc : '';
-            $str .= $model->id_03_desc != null ? ',<br/>' . $model->id_03_desc : '';
-            $str .= $model->id_04_desc != null ? ',<br/>' . $model->id_04_desc : '';
-            $str .= $model->id_05_desc != null ? ',<br/>' . $model->id_05_desc : '';
-            $str .= $model->id_06_desc != null ? ',<br/>' . $model->id_06_desc : '';
-            $str .= $model->id_07_desc != null ? ',<br/>' . $model->id_07_desc : '';
-            $str .= $model->id_08_desc != null ? ',<br/>' . $model->id_08_desc : '';
-            $str .= $model->id_09_desc != null ? ',<br/>' . $model->id_09_desc : '';
-            $str .= $model->id_10_desc != null ? ',<br/>' . $model->id_10_desc : '';
-            $str .= $model->id_11_desc != null ? ',<br/>' . $model->id_02_desc : '';
-            $str .= $model->id_12_desc != null ? ',<br/>' . $model->id_03_desc : '';
-            $str .= $model->id_13_desc != null ? ',<br/>' . $model->id_04_desc : '';
-            $str .= $model->id_14_desc != null ? ',<br/>' . $model->id_05_desc : '';
-            $str .= $model->id_15_desc != null ? ',<br/>' . $model->id_06_desc : '';
-            $str .= $model->id_16_desc != null ? ',<br/>' . $model->id_07_desc : '';
-            $str .= $model->id_17_desc != null ? ',<br/>' . $model->id_08_desc : '';
-            $str .= $model->id_18_desc != null ? ',<br/>' . $model->id_09_desc : '';
-            $str .= $model->id_19_desc != null ? ',<br/>' . $model->id_10_desc : '';
-            $str .= $model->id_20_desc != null ? ',<br/>' . $model->id_10_desc : '';
+            $str .= $model->id_02_desc != null ? ', ' . $model->id_02_desc : '';
+            $str .= $model->id_03_desc != null ? ', ' . $model->id_03_desc : '';
+            $str .= $model->id_04_desc != null ? ', ' . $model->id_04_desc : '';
+            $str .= $model->id_05_desc != null ? ', ' . $model->id_05_desc : '';
+            $str .= $model->id_06_desc != null ? ', ' . $model->id_06_desc : '';
+            $str .= $model->id_07_desc != null ? ', ' . $model->id_07_desc : '';
+            $str .= $model->id_08_desc != null ? ', ' . $model->id_08_desc : '';
+            $str .= $model->id_09_desc != null ? ', ' . $model->id_09_desc : '';
+            $str .= $model->id_10_desc != null ? ', ' . $model->id_10_desc : '';
+            $str .= $model->id_11_desc != null ? ', ' . $model->id_02_desc : '';
+            $str .= $model->id_12_desc != null ? ', ' . $model->id_03_desc : '';
+            $str .= $model->id_13_desc != null ? ', ' . $model->id_04_desc : '';
+            $str .= $model->id_14_desc != null ? ', ' . $model->id_05_desc : '';
+            $str .= $model->id_15_desc != null ? ', ' . $model->id_06_desc : '';
+            $str .= $model->id_16_desc != null ? ', ' . $model->id_07_desc : '';
+            $str .= $model->id_17_desc != null ? ', ' . $model->id_08_desc : '';
+            $str .= $model->id_18_desc != null ? ', ' . $model->id_09_desc : '';
+            $str .= $model->id_19_desc != null ? ', ' . $model->id_10_desc : '';
+            $str .= $model->id_20_desc != null ? ', ' . $model->id_10_desc : '';
             return $str;
         },
         'encodeLabel' => false,
@@ -163,12 +163,12 @@ $gridColumns = [
     [
         'attribute' => 'start_date',
         'value' => function($model){
-        	return $model->start_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->start_date)) . '<br/>by<br/>' . $model->start_user_desc;
+        	return $model->start_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->start_date));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'contentOptions' => [
-            'style' => 'min-width: 200px;'
+            'style' => 'min-width: 100px;'
         ],
         'format' => 'raw'
     ],
@@ -177,12 +177,12 @@ $gridColumns = [
         'encodeLabel' => false,
         'label' => 'Completed<br/>Date',
         'value' => function($model){
-        	return $model->completed_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->completed_date)) . '<br/>by<br/>' . $model->completed_user_desc;
+        	return $model->completed_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->completed_date));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'contentOptions' => [
-            'style' => 'min-width: 200px;'
+            'style' => 'min-width: 100px;'
         ],
         'format' => 'raw'
     ],
@@ -191,14 +191,20 @@ $gridColumns = [
         'encodeLabel' => false,
         'label' => 'Hand Over<br/>Date',
         'value' => function($model){
-            return $model->hand_over_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->hand_over_date)) . '<br/>by<br/>' . $model->hand_over_user_desc;
+            return $model->hand_over_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->hand_over_date));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'contentOptions' => [
-            'style' => 'min-width: 200px;'
+            'style' => 'min-width: 100px;'
         ],
         'format' => 'raw'
+    ],
+    [
+        'attribute' => 'start_user_desc',
+        'label' => 'PIC',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
     ],
     [
         'attribute' => 'stage_desc',
