@@ -59,6 +59,7 @@ $this->registerJs($script, View::POS_HEAD );
 	            'scripts' => [
 	                'modules/exporting',
 	                'themes/sand-signika',
+	                //'themes/grid-light',
 	            ],
 	            'options' => [
 	                'chart' => [
@@ -95,7 +96,7 @@ $this->registerJs($script, View::POS_HEAD );
 	                            'enabled' => true,
 	                            //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
 	                            'style' => [
-	                                'fontSize' => '14px',
+	                                //'fontSize' => '14px',
 	                                'fontWeight' => '0'
 	                            ],
 	                        ],
@@ -134,7 +135,7 @@ $this->registerJs($script, View::POS_HEAD );
 	                        'dataLabels' => [
 	                            'enabled' => true,
 	                            'color' => $font_color,
-	                            'format' => '{point.percentage:.0f}%',
+	                            'format' => '{point.percentage:.0f}%<br/>({point.qty})',
 	                            'style' => [
 	                                'textOutline' => '0px'
 	                            ],

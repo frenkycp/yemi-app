@@ -87,12 +87,12 @@ class SernoOutputController extends base\SernoOutputController
 			$close_percentage = (int)floor(($value->output / $value->qty) * 100);
 			$open_percentage = (int)(100 - $close_percentage);
 			$dataOpen[] = [
-				'y' => $open_percentage,
+				'y' => $open_percentage > 0 ? $open_percentage : null,
 				'qty' => $value->balance,
 				'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd, 'dst' => $value->dst, 'back_order' => $value->back_order]),
 			];
             $dataClose[] = [
-				'y' => $close_percentage,
+				'y' => $close_percentage > 0 ? $close_percentage : null,
 				'qty' => $value->output,
 				'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd, 'dst' => $value->dst, 'back_order' => $value->back_order]),
 			];

@@ -56,7 +56,7 @@ if(isset($params['index_type']))
     }
     elseif($params['index_type'] == 2)
     {
-        $query = $query->andWhere('output=qty')->andWhere(['etd' => $params['etd']]);
+        $query = $query->andWhere('output=qty OR output > 0')->andWhere(['etd' => $params['etd']]);
     }
     elseif($params['index_type'] == 3)
     {
