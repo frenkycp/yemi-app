@@ -13,7 +13,7 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'CORRECTIVE PROGRESS <span class="text-green japanesse">(修復の進捗状況)',
+    'page_title' => 'CORRECTIVE PROGRESS <span class="text-green japanesse">(修理中設備の進捗)',
     'tab_title' => 'CORRECTIVE PROGRESS',
     'breadcrumbs_title' => 'CORRECTIVE PROGRESS'
 ];

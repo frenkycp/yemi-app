@@ -127,6 +127,7 @@ echo '</pre>';*/
                     ],
                     'series' => [
                         'cursor' => 'pointer',
+                        'maxPointWidth' => 70,
                         'point' => [
                             'events' => [
                                 'click' => new JsExpression('
