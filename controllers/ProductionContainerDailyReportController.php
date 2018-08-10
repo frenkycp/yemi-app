@@ -53,8 +53,9 @@ class ProductionContainerDailyReportController extends Controller
     		'total_output' => 'SUM(output)'
     	])
     	->where([
-    		'LEFT(etd, 7)' => $model->year . '-' . $model->month
+    		'LEFT(etd, 7)' => $model->year . '-' . $model->month,
     	])
+        ->andWhere(['<>', 'back_order', 2])
     	->groupBy('etd, cntr')
     	->orderBy('etd, cntr')
     	->all();

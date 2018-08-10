@@ -9,15 +9,16 @@ use Yii;
 /**
  * This is the base-model class for table "container_view".
  *
- * @property integer $id
  * @property string $etd
  * @property integer $week_no
+ * @property string $dst
  * @property string $qty
  * @property string $output
  * @property string $balance
  * @property string $stc
  * @property string $customer_desc
  * @property string $total_cntr
+ * @property integer $back_order
  * @property string $aliasModel
  */
 abstract class ContainerView extends \yii\db\ActiveRecord
@@ -47,10 +48,12 @@ abstract class ContainerView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'week_no', 'total_cntr'], 'integer'],
+            [['etd', 'dst', 'stc'], 'required'],
             [['etd'], 'safe'],
+            [['week_no', 'total_cntr', 'back_order'], 'integer'],
             [['qty', 'output', 'balance'], 'number'],
-            [['stc'], 'string', 'max' => 6],
+            [['dst'], 'string', 'max' => 50],
+            [['stc'], 'string', 'max' => 7],
             [['customer_desc'], 'string', 'max' => 100]
         ];
     }
@@ -61,15 +64,16 @@ abstract class ContainerView extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'etd' => 'Etd',
             'week_no' => 'Week No',
+            'dst' => 'Dst',
             'qty' => 'Qty',
             'output' => 'Output',
             'balance' => 'Balance',
             'stc' => 'Stc',
             'customer_desc' => 'Customer Desc',
             'total_cntr' => 'Total Cntr',
+            'back_order' => 'Back Order',
         ];
     }
 

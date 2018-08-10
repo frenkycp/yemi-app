@@ -67,6 +67,15 @@ if(isset($params['index_type']))
     {
         $query = $query->andWhere(['dst' => $params['dst']]);
     }
+    if(isset($params['back_order']))
+    {
+        if ($params['back_order'] == 2) {
+            $query = $query->andWhere(['back_order' => 2]);
+        } else {
+            $query = $query->andWhere(['<>', 'back_order', 2]);
+        }
+        
+    }
 }
 
 $query->joinWith('sernoMaster');
