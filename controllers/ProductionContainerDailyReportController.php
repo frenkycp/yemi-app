@@ -7,6 +7,7 @@ use app\models\SernoOutput;
 use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
 use app\models\PlanReceivingPeriod;
+use yii\helpers\Html;
 
 class ProductionContainerDailyReportController extends Controller
 {
@@ -92,15 +93,19 @@ class ProductionContainerDailyReportController extends Controller
     			$presentase_close = round((($data_close / $data_total) * 100), 2);
     		}
 
+            $remark = $this->getRemark($key);
+
     		$presentase_open_arr[] = [
     			'y' => $presentase_open,
     			'qty' => $data_open,
-    			'total_qty' => $data_total
+    			'total_qty' => $data_total,
+                'remark' => $remark,
     		];
     		$presentase_close_arr[] = [
     			'y' => $presentase_close,
     			'qty' => $data_close,
-    			'total_qty' => $data_total
+    			'total_qty' => $data_total,
+                'remark' => $remark,
     		];
     	}
 
@@ -157,5 +162,56 @@ class ProductionContainerDailyReportController extends Controller
     		'year_arr' => $year_arr,
             'total_container' => $total_container
     	]);
+    }
+
+    public function getRemark($etd)
+    {
+        $data = '<table class="table table-bordered table-hover">';
+        $data .= 
+        '<tr class="info">
+            <th class="text-center">No.</th>
+            <th class="text-center">Container ID</th>
+            <th class="text-center">SO Number</th>
+            <th>Port</th>
+            <th class="text-center">Invoice Num.</th>
+            <th class="text-center">Container Num.</th>
+            <th class="text-center">M3</th>
+            <th class="text-center">Evidence File</th>
+        </tr>';
+
+        $serno_output_arr = SernoOutput::find()
+        ->where([
+            'etd' => $etd
+        ])
+        ->groupBy('cntr')
+        ->orderBy('cntr')
+        ->all();
+
+        $no = 1;
+
+        foreach ($serno_output_arr as $serno_output) {
+            $filename = $serno_output['cntr'] . '.pdf';
+            $path = \Yii::$app->basePath . '\\..\\mis7\\fg\\' . $filename;
+            $link = '-';
+            if (file_exists($path)) {
+                $link = Html::a($filename, 'http://172.17.144.6:99/fg/' . $filename, ['target' => '_blank']);
+            }
+            $data .= '
+                <tr class="' . $class . '">
+                    <td class="text-center">' . $no . '</td>
+                    <td class="text-center">' . $serno_output['cntr'] . '</td>
+                    <td class="text-center">' . $serno_output['so'] . '</td>
+                    <td>' . $serno_output['dst'] . '</td>
+                    <td class="text-center">' . $serno_output['invo'] . '</td>
+                    <td class="text-center">' . $serno_output['cont'] . '</td>
+                    <td class="text-center">' . $serno_output['m3'] . '</td>
+                    <td class="text-center">' . $link . '</td>
+                </tr>
+            ';
+            $no++;
+        }
+
+        $data .= '</table>';
+        return $data;
     }
 }

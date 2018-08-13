@@ -134,6 +134,18 @@ echo '</pre>';*/
                                 'color' => 'black',
                             ],
                         ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression('
+                                        function(){
+                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                        }
+                                    '),
+                                ]
+                            ]
+                        ]
                     ],
                     'series' => $data
                 ],
@@ -187,18 +199,7 @@ echo '</pre>';*/
                                 'format' => '{point.y}'
                             ]
                         ],
-                        /*'series' => [
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression('
-                                        function(){
-                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                        }
-                                    '),
-                                ]
-                            ]
-                        ]*/
+                        
                     ],
                     'series' => [
                         [
@@ -209,14 +210,15 @@ echo '</pre>';*/
                     ]
                 ],
             ]);
-
-            yii\bootstrap\Modal::begin([
-                'id' =>'modal',
-                'header' => '<h3>Detail Information</h3>',
-                //'size' => 'modal-lg',
-            ]);
-            yii\bootstrap\Modal::end();
             ?>
         </div>
     </div>
 </div>
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>
