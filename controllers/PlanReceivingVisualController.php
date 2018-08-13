@@ -160,6 +160,7 @@ class PlanReceivingVisualController extends Controller
         	'receiving_date' => $receiving_date,
         	'vehicle' => $vehicle
         ])
+        ->orderBy('vendor_name, item_type')
         ->all();
 
         foreach ($plan_receiving_arr as $plan_receiving) {

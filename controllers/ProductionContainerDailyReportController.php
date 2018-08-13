@@ -181,8 +181,9 @@ class ProductionContainerDailyReportController extends Controller
 
         $serno_output_arr = SernoOutput::find()
         ->where([
-            'etd' => $etd
+            'etd' => $etd,
         ])
+        ->andWhere('back_order <> 2')
         ->groupBy('cntr')
         ->orderBy('cntr')
         ->all();
