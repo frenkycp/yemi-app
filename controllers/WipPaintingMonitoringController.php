@@ -168,6 +168,31 @@ class WipPaintingMonitoringController extends Controller
 
     public function getRemarks($due_date, $loc, $stage)
     {
+        switch ($stage) {
+            case '00-ORDER':
+                $status = 'ORDERED';
+                break;
+
+            case '01-CREATED':
+                $status = 'CREATED';
+                break;
+
+            case '02-STARTED':
+                $status = 'STARTED';
+                break;
+
+            case '03-COMPLETED':
+                $status = 'COMPLETED';
+                break;
+
+            case '04-HAND OVER':
+                $status = 'HANDOVER';
+                break;
+            
+            default:
+                // code...
+                break;
+        };
     	$wip_painting_data_arr = WipPlanActualReport::find()
     	->where([
     		'due_date' => $due_date,
@@ -187,10 +212,12 @@ class WipPaintingMonitoringController extends Controller
 	    	->all();
     	}
 
-    	$data = '<table class="table table-bordered table-hover">';
+        $data = '<h4>' . $status . '</h4>';
+    	$data .= '<table class="table table-bordered table-hover">';
     	$data .= 
 		'<tr class="info">
 			<th class="text-center">Location</th>
+            <th class="text-center">Slip No.</th>
 			<th>Model</th>
 			<th class="text-center">Parent</th>
 			<th>Parent Description</th>
@@ -208,6 +235,7 @@ class WipPaintingMonitoringController extends Controller
 			$data .= '
 				<tr class="' . $class . '">
 					<td class="text-center">' . $value['child_analyst_desc'] . '</td>
+                    <td class="text-center">' . $value['slip_id'] . '</td>
 					<td>' . $value['model_group'] . '</td>
 					<td class="text-center">' . $value['parent'] . '</td>
 					<td>' . $value['parent_desc'] . '</td>

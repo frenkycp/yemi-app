@@ -19,23 +19,6 @@ class WipPaintingStockMonitoringController extends Controller
         return \app\models\Action::getAccess($this->id);
     }
 
-    public function actionAjaxExample()
-    {
-    	Yii::$app->response->format = Response::FORMAT_JSON;
-	    $post = Yii:: $app->request->post();
-	    $data = [];
-	    if (Yii::$app->request->isAjax) {
-	        $nilai1= explode(":", $data['nilai1']);
-    		$nilai2= explode(":", $data['nilai2']);
-    		$nilai1= $nilai1[0];
-    		$nilai2= $nilai1[1];
-	        $data = (int)$nilai1 * (int)$nilai2;
-	        
-	        
-	        return $data;
-	    }
-    }
-
     public function actionIndex()
     {
     	$wip_stock_view = WipStock02::find()->all();
