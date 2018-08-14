@@ -82,7 +82,7 @@ $this->registerCss("
                         <?= Html::a('Kanban Monitor （かんばんモニター）', ['wip-painting-monitoring/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Kanban Process-Flow Monitor<br/>（かんばん工程流れモニター）', ['#'], [
+                        <?= Html::a('Kanban Process-Flow Monitor<br/>（かんばん工程流れモニター）', ['wip-flow-process-monitoring/index'], [
                             'class' => 'list-group-item disabled'
                         ]); ?>
                         <?= Html::a('Stock WIP Monitor （仕掛在庫モニター）', ['wip-painting-stock-monitoring/index'], [

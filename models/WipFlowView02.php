@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WipFlowView02 extends BaseWipFlowView02
 {
+    public $start_date, $end_date;
 
     public function behaviors()
     {
