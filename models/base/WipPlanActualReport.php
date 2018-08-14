@@ -32,6 +32,7 @@ use Yii;
  * @property string $source_date
  * @property string $upload_id
  * @property string $period_line
+ * @property integer $session_id
  * @property string $aliasModel
  */
 abstract class WipPlanActualReport extends \yii\db\ActiveRecord
@@ -62,7 +63,7 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
     {
         return [
             [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line'], 'string'],
-            [['week'], 'integer'],
+            [['week', 'session_id'], 'integer'],
             [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'source_date'], 'safe'],
             [['summary_qty'], 'number']
         ];
@@ -97,6 +98,7 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
             'source_date' => 'Source Date',
             'upload_id' => 'Upload ID',
             'period_line' => 'Period Line',
+            'session_id' => 'Session ID',
         ];
     }
 

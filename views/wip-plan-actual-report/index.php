@@ -86,6 +86,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'upload_id',
@@ -93,12 +97,32 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'slip_id',
+        'label' => 'Slip No.',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'session_id',
+        'label' => 'Session No.',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'period_line',
@@ -106,6 +130,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'child_analyst',
@@ -164,6 +192,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'source_date',
@@ -174,6 +206,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
 ]
 ?>

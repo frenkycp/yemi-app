@@ -27,7 +27,7 @@ class WipPaintingStockMonitoringController extends Controller
     	foreach ($wip_stock_view as $value) {
     		$limit = $value->limit_qty * 1.2;
     		$data[$value->child_analyst_desc] = [
-    			'stage' => $value->stage,
+    			//'stage' => $value->stage,
     			'onhand_qty' => $value->onhand_qty,
     			'limit_qty' => $limit,
     			'plot_green' => [

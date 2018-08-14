@@ -8,9 +8,9 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Kanban Process-Flow Monitor <span class="japanesse text-green">（かんばん工程流れモニター）</span>',
-    'tab_title' => 'Kanban Process-Flow Monitor',
-    'breadcrumbs_title' => 'Kanban Process-Flow Monitor'
+    'page_title' => 'Stock WIP Monitor <span class="japanesse text-green">（仕掛在庫モニター）</span>',
+    'tab_title' => 'Stock WIP Monitor',
+    'breadcrumbs_title' => 'Stock WIP Monitor'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -60,241 +60,9 @@ print_r($data_painting);
 echo '</pre>';*/
 ?>
 
-<div class="box box-primary" style="display: none;">
-	<div class="box-header"></div>
-	<div class="box-body">
-		<div class="col-sm-4">
-			<?php
-			echo Highcharts::widget([
-				'scripts' => [
-	                //'modules/exporting',
-	                'highcharts-more',
-	                'modules/solid-gauge',
-	                //'themes/sand-signika',
-	                //'themes/grid-light',
-	            ],
-	            'options' => [
-	            	'chart' => [
-	                    'type' => 'solidgauge',
-	                    'height' => $height,
-	                ],
-	                'title' => null,
-	                'pane' => [
-				        'center' => ['50%', '85%'],
-				        'size' => '140%',
-				        'startAngle' => -90,
-				        'endAngle' => 90,
-				        'background' => [
-				            'backgroundColor' => '#EEE',
-				            'innerRadius' => '60%',
-				            'outerRadius' => '100%',
-				            'shape' => 'arc'
-				        ]
-				    ],
-				    'tooltip' => [
-				        'enabled' => false
-				    ],
-				    'credits' => [
-				    	'enabled' => false
-				    ],
-				    'yAxis' => [
-			        	'stops' => $stops_arr,
-				        'lineWidth' => 0,
-				        'minorTickInterval' => 0.001,
-				        'tickAmount' => 0,
-				        'title' => [
-				            'y' => $title_y,
-				            'text' => 'PAINTING'
-				        ],
-				        'labels' => [
-				            'y' => 16
-				        ],
-				        'min' => 0,
-				        'max' => 300,
-				        //'tickInterval' => (300 / 1000)
-				    ],
-				    'plotOptions' => [
-				        'solidgauge' => [
-				            'dataLabels' => [
-				                'y' => 5,
-				                'borderWidth' => 0,
-				                'useHTML' => true
-				            ]
-				        ]
-				    ],
-				    'series' => [
-				    	[
-					        'name' => 'Speed',
-					        'data' => [100],
-					        'dataLabels' => [
-					            'format' => '<div style="text-align:center"><span style="font-size:25px;color:black">{y}</span><br/><span style="font-size:12px;color:silver">pcs</span></div>'
-					        ],
-					        'tooltip' => [
-					            'valueSuffix' => ' km/h'
-					        ]
-					    ]
-					]
-	            ],
-			]);
-			?>
-		</div>
-		<div class="col-sm-4">
-			<?php
-			echo Highcharts::widget([
-				'scripts' => [
-	                //'modules/exporting',
-	                'highcharts-more',
-	                'modules/solid-gauge',
-	                //'themes/sand-signika',
-	                'themes/grid-light',
-	            ],
-	            'options' => [
-	            	'chart' => [
-	                    'type' => 'solidgauge',
-	                    'height' => $height,
-	                ],
-	                'title' => null,
-	                'pane' => [
-				        'center' => ['50%', '85%'],
-				        'size' => '140%',
-				        'startAngle' => -90,
-				        'endAngle' => 90,
-				        'background' => [
-				            'backgroundColor' => '#EEE',
-				            'innerRadius' => '60%',
-				            'outerRadius' => '100%',
-				            'shape' => 'arc'
-				        ]
-				    ],
-				    'tooltip' => [
-				        'enabled' => false
-				    ],
-				    'credits' => [
-				    	'enabled' => false
-				    ],
-				    'yAxis' => [
-			        	'stops' => $stops_arr,
-				        'lineWidth' => 0,
-				        'minorTickInterval' => null,
-				        'tickAmount' => 2,
-				        'title' => [
-				            'y' => $title_y,
-				            'text' => 'CABINET ASSY'
-				        ],
-				        'labels' => [
-				            'y' => 16
-				        ],
-				        'min' => 0,
-				        'max' => 200,
-				    ],
-				    'plotOptions' => [
-				        'solidgauge' => [
-				            'dataLabels' => [
-				                'y' => 5,
-				                'borderWidth' => 0,
-				                'useHTML' => true
-				            ]
-				        ]
-				    ],
-				    'series' => [
-				    	[
-					        'name' => 'Speed',
-					        'data' => [180],
-					        'dataLabels' => [
-					            'format' => '<div style="text-align:center"><span style="font-size:25px;color:black">{y}</span><br/><span style="font-size:12px;color:silver">pcs</span></div>'
-					        ],
-					        'tooltip' => [
-					            'valueSuffix' => ' km/h'
-					        ]
-					    ]
-					]
-	            ],
-			]);
-			?>
-		</div>
-		<div class="col-sm-4">
-			<?php
-			echo Highcharts::widget([
-				'scripts' => [
-	                //'modules/exporting',
-	                'highcharts-more',
-	                'modules/solid-gauge',
-	                //'themes/sand-signika',
-	                //'themes/grid-light',
-	            ],
-	            'options' => [
-	            	'chart' => [
-	                    'type' => 'solidgauge',
-	                    'height' => $height,
-	                ],
-	                'title' => null,
-	                'pane' => [
-				        'center' => ['50%', '85%'],
-				        'size' => '140%',
-				        'startAngle' => -90,
-				        'endAngle' => 90,
-				        'background' => [
-				            'backgroundColor' => '#EEE',
-				            'innerRadius' => '60%',
-				            'outerRadius' => '100%',
-				            'shape' => 'arc'
-				        ]
-				    ],
-				    'tooltip' => [
-				        'enabled' => false
-				    ],
-				    'credits' => [
-				    	'enabled' => false
-				    ],
-				    'yAxis' => [
-			        	'stops' => $stops_arr,
-				        'lineWidth' => 0,
-				        'minorTickInterval' => null,
-				        'tickAmount' => 2,
-				        'title' => [
-				            'y' => $title_y,
-				            'text' => 'FINAL ASSY'
-				        ],
-				        'labels' => [
-				            'y' => 16
-				        ],
-				        'min' => 0,
-				        'max' => 200,
-				    ],
-				    'plotOptions' => [
-				        'solidgauge' => [
-				            'dataLabels' => [
-				                'y' => 5,
-				                'borderWidth' => 0,
-				                'useHTML' => true
-				            ]
-				        ]
-				    ],
-				    'series' => [
-				    	[
-					        'name' => 'Speed',
-					        'data' => [210],
-					        'dataLabels' => [
-					            'format' => '<div style="text-align:center"><span style="font-size:25px;color:black">{y}</span><br/><span style="font-size:12px;color:silver">pcs</span></div>'
-					        ],
-					        'tooltip' => [
-					            'valueSuffix' => ' km/h'
-					        ]
-					    ]
-					]
-	            ],
-			]);
-			?>
-		</div>
-		
-	</div>
-</div>
-<div class="box box-primary">
-	<div class="box-header"></div>
-	<div class="box-body">
-		<?php
+<?php
 		foreach ($data as $key => $value) {
-			echo '<div class="col-sm-4">';
+			echo '<div class="col-sm-2">';
 			echo Highcharts::widget([
 				'scripts' => [
 	                //'modules/exporting',
@@ -311,10 +79,13 @@ echo '</pre>';*/
 				        'plotBackgroundImage' => null,
 				        'plotBorderWidth' => 0,
 				        'plotShadow' => false,
-				        'height' => 400,
+				        'height' => 200,
 	                ],
 	                'title' => [
-				        'text' => $key
+				        'text' => $key,
+				        'style' => [
+				        	'fontSize' => '12px'
+				        ]
 				    ],
 				    'credits' => [
 				    	'enabled' => false
@@ -373,7 +144,7 @@ echo '</pre>';*/
 				            'rotation' => 'auto'
 				        ],
 				        'title' => [
-				            'text' => 'pcs'
+				            //'text' => 'pcs'
 				        ],
 				        'plotBands' => [
 				        	[
@@ -407,5 +178,3 @@ echo '</pre>';*/
 			echo '</div>';
 		}
 		?>
-	</div>
-</div>

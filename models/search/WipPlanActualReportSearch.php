@@ -18,7 +18,7 @@ class WipPlanActualReportSearch extends WipPlanActualReport
 	public function rules()
 	{
 		return [
-		    [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line'], 'string'],
+		    [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'session_id'], 'string'],
 		    [['week'], 'integer'],
 		    [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'source_date'], 'safe'],
 		    [['summary_qty'], 'number']
@@ -59,7 +59,8 @@ class WipPlanActualReportSearch extends WipPlanActualReport
 
 		$query->andFilterWhere([
             'week' => $this->week,
-            'summary_qty' => $this->summary_qty
+            'summary_qty' => $this->summary_qty,
+            'session_id' => $this->session_id
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])
