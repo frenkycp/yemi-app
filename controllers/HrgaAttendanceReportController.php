@@ -54,7 +54,7 @@ class HrgaAttendanceReportController extends Controller
 		->select([
 			'DATE' => 'DATE',
 			'total_karyawan' => 'SUM(TOTAL_KARYAWAN)',
-			'total_kehadiran' => 'SUM(CASE WHEN CATEGORY=\'SHIFT-01\' OR CATEGORY=\'SHIFT-02\' OR CATEGORY=\'SHIFT-03\' OR CATEGORY=\'PULANG TIDAK ABSEN\' OR CATEGORY=\'PULANG CEPAT\' OR CATEGORY=\'DATANG TERLAMBAT\' THEN 1 ELSE 0 END)',
+			'total_kehadiran' => 'SUM(CASE WHEN CATEGORY IN (\'SHIFT-01\', \'SHIFT-02\', \'SHIFT-03\', \'PULANG TIDAK ABSEN\', \'PULANG CEPAT\', \'DATANG TERLAMBAT\', \'DINAS\') THEN 1 ELSE 0 END)',
 			'total_cuti' => 'SUM(CASE WHEN CATEGORY IN (\'CUTI\', \'CUTI KHUSUS\', \'KELUARGA MENINGGAL\', \'MELAHIRKAN\', \'KEGUGURAN\', \'MENIKAH\', \'MENGHITANKAN\', \'ISTRI KEGUGURAN/MELAHIRKAN\', \'CUTI KHUSUS IJIN\') THEN 1 ELSE 0 END)'
 			//'total_cuti' => 'SUM(CASE WHEN CATEGORY=\'CUTI\' OR CATEGORY=\'CUTI KHUSUS\' OR CATEGORY=\'KELUARGA MENINGGAL\' OR CATEGORY=\'CUTI KHUSUS IJIN\' THEN 1 ELSE 0 END)'
 		])
@@ -145,21 +145,6 @@ class HrgaAttendanceReportController extends Controller
 		->orderBy('SECTION, NIK')
 		->all();
 
-		$data = '<table class="table table-bordered table-striped table-hover">';
-		$data .= 
-		'<tr>
-			<th class="text-center">NO</th>
-			<th class="text-center">NIK</th>
-			<th>Nama Karyawan</th>
-			<th class="text-center">Section</th>
-			<th class="text-center">Shift</th>
-			<th class="text-center">Keterangan</th>
-            <th class="text-center">Bonus</th>
-            <th class="text-center">Disiplin</th>
-            <th class="text-center" style="width: 100px;">Hari Kerja/<br/>Libur</th>
-		</tr>'
-		;
-
 		if ($category == 1) {
 			$filter_arr = $this->category_masuk;
 		} elseif ($category == 2) {
@@ -178,6 +163,41 @@ class HrgaAttendanceReportController extends Controller
 			}
 			$filter_arr = $tmp_arr;
 		}
+
+		$total_shift_arr = AbsensiTbl::find()
+		->select([
+			'SHIFT',
+			'total_karyawan' => 'COUNT(NIK)'
+		])
+		->where([
+			'DATE' => $date,
+			'CATEGORY' => $filter_arr
+		])
+		->groupBy('SHIFT')
+		->orderBy('SHIFT')
+		->all();
+
+		$data = '';
+
+		foreach ($total_shift_arr as $total_shift) {
+			$shift_name = $total_shift->SHIFT != '' ? $total_shift->SHIFT : '[?]';
+			$data .= '<p>Total Shift ' . $shift_name . ' : ' . $total_shift->total_karyawan . '</p>';
+		}
+
+		$data .= '<table class="table table-bordered table-striped table-hover">';
+		$data .= 
+		'<tr>
+			<th class="text-center">NO</th>
+			<th class="text-center">NIK</th>
+			<th>Nama Karyawan</th>
+			<th class="text-center">Section</th>
+			<th class="text-center">Shift</th>
+			<th class="text-center">Keterangan</th>
+            <th class="text-center">Bonus</th>
+            <th class="text-center">Disiplin</th>
+            <th class="text-center" style="width: 100px;">Hari Kerja/<br/>Libur</th>
+		</tr>'
+		;
 
 		$i = 1;
 		foreach ($attendance_report_arr as $attendance_report) {
