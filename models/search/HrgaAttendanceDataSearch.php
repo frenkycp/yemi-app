@@ -18,7 +18,7 @@ class HrgaAttendanceDataSearch extends AbsensiTbl
 public function rules()
 {
 return [
-[['NIK_DATE_ID', 'NO', 'NIK', 'CC_ID', 'SECTION', 'DIRECT_INDIRECT', 'NAMA_KARYAWAN', 'PERIOD', 'DATE', 'NOTE', 'DAY_STAT', 'CATEGORY'], 'safe'],
+[['NIK_DATE_ID', 'NO', 'NIK', 'CC_ID', 'SECTION', 'DIRECT_INDIRECT', 'NAMA_KARYAWAN', 'PERIOD', 'DATE', 'NOTE', 'DAY_STAT', 'CATEGORY', 'SHIFT'], 'safe'],
             [['YEAR', 'WEEK', 'TOTAL_KARYAWAN', 'KEHADIRAN', 'BONUS', 'DISIPLIN'], 'integer'],
 ];
 }
@@ -63,6 +63,7 @@ $query->andFilterWhere([
             'KEHADIRAN' => $this->KEHADIRAN,
             'BONUS' => $this->BONUS,
             'DISIPLIN' => $this->DISIPLIN,
+            'SHIFT' => $this->SHIFT
         ]);
 
         $query->andFilterWhere(['like', 'NIK_DATE_ID', $this->NIK_DATE_ID])

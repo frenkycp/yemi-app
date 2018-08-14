@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 /**
 * @var yii\web\View $this
@@ -73,6 +74,12 @@ $gridColumns = [
         'attribute' => 'SECTION',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'SHIFT',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => ArrayHelper::map(app\models\AbsensiTbl::find()->select('DISTINCT(SHIFT)')->orderBy('SHIFT')->all(), 'SHIFT', 'SHIFT'),
     ],
     [
         'attribute' => 'CATEGORY',

@@ -28,6 +28,8 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+date_default_timezone_set('Asia/Jakarta');
+
 $grid_columns = [
     /*[
         'class' => 'kartik\grid\ActionColumn',
@@ -103,7 +105,7 @@ $grid_columns = [
         'label' => 'VMS Date',
         'value' => function($model){
             if ($model->plan == '') {
-                return 'Maedoshi ' . $model->adv;
+                return 'Maedaoshi ' . $model->adv;
             } else {
                 return $model->sernoOutput->vms;
             }
@@ -245,7 +247,7 @@ $grid_columns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => $heading,
+                'heading' => 'Last Update : ' . date('d-M-Y H:i') . ' WIB',
                 //'footer' => false,
             ],
         ]); ?>
