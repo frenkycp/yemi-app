@@ -73,29 +73,23 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">E-Kanban WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/>E-<span class="japanesse-word">かんばん・生産工程モニタリング</span></div>
                     <div class="list-group">
-                        <div class="list-group-item disabled">PCB <span class="japanesse-word">基板組立（準備中）</span></div>
-                        <div class="list-group-item disabled">WW <span class="japanesse-word">木工（準備中）</span></div>
-                        <div class="list-group-item disabled">PAINT <span class="japanesse-word">塗装（準備中）</span></div>
-                        <div class="list-group-item disabled">INJECTION　<span class="japanesse-word">プラ成形（準備中）</span></div>
-                        <div class="list-group-item disabled">SPU <span class="japanesse-word">スピーカー組立（準備中）</span></div>
-                        <div class="list-group-item disabled">SUBASSY <span class="japanesse-word">サブ組立（準備中）</span></div>
-                        <?= ''; Html::a('PCB', ['#'], [
-                            'class' => 'list-group-item list-group-item-danger'
+                        <div style="display: none;" class="list-group-item disabled">PCB <span class="japanesse-word">基板組立（準備中）</span></div>
+                        <div style="display: none;" class="list-group-item disabled">WW <span class="japanesse-word">木工（準備中）</span></div>
+                        <div style="display: none;" class="list-group-item disabled">PAINT <span class="japanesse-word">塗装（準備中）</span></div>
+                        <div style="display: none;" class="list-group-item disabled">INJECTION　<span class="japanesse-word">プラ成形（準備中）</span></div>
+                        <div style="display: none;" class="list-group-item disabled">SPU <span class="japanesse-word">スピーカー組立（準備中）</span></div>
+                        <div style="display: none;" class="list-group-item disabled">SUBASSY <span class="japanesse-word">サブ組立（準備中）</span></div>
+                        <?= Html::a('Kanban Monitor （かんばんモニター）', ['wip-painting-monitoring/index'], [
+                            'class' => 'list-group-item'
                         ]); ?>
-                        <?= ''; Html::a('WW', ['#'], [
-                            'class' => 'list-group-item list-group-item-danger'
+                        <?= Html::a('Kanban Process-Flow Monitor<br/>（かんばん工程流れモニター）', ['#'], [
+                            'class' => 'list-group-item disabled'
                         ]); ?>
-                        <?= ''; Html::a('PAINT', ['#'], [
-                            'class' => 'list-group-item list-group-item-danger'
+                        <?= Html::a('Stock WIP Monitor （仕掛在庫モニター）', ['wip-painting-stock-monitoring/index'], [
+                            'class' => 'list-group-item'
                         ]); ?>
-                        <?= ''; Html::a('INJECTION', ['#'], [
-                            'class' => 'list-group-item list-group-item-danger'
-                        ]); ?>
-                        <?= ''; Html::a('SPU', ['#'], [
-                            'class' => 'list-group-item list-group-item-danger'
-                        ]); ?>
-                        <?= ''; Html::a('SUBASSY', ['#'], [
-                            'class' => 'list-group-item list-group-item-danger'
+                        <?= Html::a('WIP Data Record  （仕掛りデーター）', ['wip-plan-actual-report/index'], [
+                            'class' => 'list-group-item'
                         ]); ?>
                     </div>
                 </div>

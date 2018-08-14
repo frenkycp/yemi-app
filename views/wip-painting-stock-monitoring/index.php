@@ -8,9 +8,9 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'WIP (Painting) Stock Monitoring <span class="japanesse"></span>',
-    'tab_title' => 'WIP (Painting) Stock Monitoring',
-    'breadcrumbs_title' => 'WIP (Painting) Stock Monitoring'
+    'page_title' => 'Kanban Process-Flow Monitor <span class="japanesse text-green">（かんばん工程流れモニター）</span>',
+    'tab_title' => 'Kanban Process-Flow Monitor',
+    'breadcrumbs_title' => 'Kanban Process-Flow Monitor'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -30,18 +30,18 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
 SCRIPT
 ; 
 $this->registerJs($js, View::POS_END);
-
+*/
 $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 5000); // milliseconds
+      setTimeout("refreshPage();", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
 JS;
-$this->registerJs($script, View::POS_HEAD );*/
+$this->registerJs($script, View::POS_HEAD );
 
 $data_painting = $data['PAINTING'];
 $data_cab_assy = $data['CAB ASSY'];

@@ -13,9 +13,9 @@ use kartik\file\FileInput;
 */
 
 $this->title = [
-    'page_title' => 'WIP Plan Actual Data <span class="text-green japanesse"></span>',
-    'tab_title' => 'WIP Plan Actual Data',
-    'breadcrumbs_title' => 'WIP Plan Actual Data'
+    'page_title' => 'WIP Data Record <span class="text-green japanesse">（仕掛りデーター）</span>',
+    'tab_title' => 'WIP Data Record',
+    'breadcrumbs_title' => 'WIP Data Record'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
