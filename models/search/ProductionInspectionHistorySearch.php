@@ -45,6 +45,21 @@ $query = SernoInput::find()->groupBy('qa_ng')->where([
     '<>', 'qa_ng', ''
 ]);
 
+/*$query1 = (new \yii\db\Query())
+    ->select("*")
+    ->from('tb_serno_input')
+    ->where('proddate LIKE \'' . $this->proddate . '\'');
+
+$query2 = (new \yii\db\Query())
+    ->select("*")
+    ->from('tb_serno_input_backup')
+    ->where('proddate LIKE \'' . $this->proddate . '\'');
+
+$query1->union($query2, false);//false is UNION, true is UNION ALL
+$sql = $query1->createCommand()->getRawSql();
+//$sql .= ' LIMIT 100';
+$query = SernoInput::findBySql($sql);*/
+
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
 ]);
