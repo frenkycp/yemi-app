@@ -10,6 +10,7 @@ $this->title = 'Sign In';
 
 $fieldOptions1 = [
     'options' => ['class' => 'form-group has-feedback'],
+    'inputOptions' => ['autofocus' => 'autofocus'],
     'inputTemplate' => "{input}<span class='glyphicon glyphicon-envelope form-control-feedback'></span>"
 ];
 
