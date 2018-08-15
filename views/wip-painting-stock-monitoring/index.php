@@ -35,7 +35,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 60000); // milliseconds
+      setTimeout("refreshPage();", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -59,10 +59,11 @@ $stops_arr = [
 print_r($data_painting);
 echo '</pre>';*/
 ?>
-
-<?php
+<div class="box box-primary">
+	<div class="box-header with-border">
+		<?php
 		foreach ($data as $key => $value) {
-			echo '<div class="col-sm-2">';
+			echo '<div class="col-sm-2" style="margin-top: 10px;">';
 			echo Highcharts::widget([
 				'scripts' => [
 	                //'modules/exporting',
@@ -79,13 +80,14 @@ echo '</pre>';*/
 				        'plotBackgroundImage' => null,
 				        'plotBorderWidth' => 0,
 				        'plotShadow' => false,
-				        'height' => 200,
+				        'height' => 160,
 	                ],
 	                'title' => [
 				        'text' => $key,
 				        'style' => [
 				        	'fontSize' => '12px'
-				        ]
+				        ],
+				        'margin' => 0
 				    ],
 				    'credits' => [
 				    	'enabled' => false
@@ -141,7 +143,10 @@ echo '</pre>';*/
 				        'tickColor' => '#666',
 				        'labels' => [
 				            'step' => 2,
-				            'rotation' => 'auto'
+				            'rotation' => 'auto',
+				            'style' => [
+				            	'fontSize' => '10px'
+				            ]
 				        ],
 				        'title' => [
 				            //'text' => 'pcs'
@@ -178,3 +183,5 @@ echo '</pre>';*/
 			echo '</div>';
 		}
 		?>
+	</div>
+</div>
