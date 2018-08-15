@@ -56,7 +56,56 @@ $columns = [
     ],
     [
         'attribute' => 'qa_ng',
+        'value' => function($model){
+            return strtoupper($model->qa_ng);
+        },
         'vAlign' => 'middle',
+        'label' => 'Lot Out Remark'
+    ],
+    [
+        'attribute' => 'status',
+        'label' => 'Status',
+        'width' => '110px',
+        'value' => function($model){
+            $val = '';
+            $btn_class = '';
+            if ($model->qa_ng == '' && $model->qa_ok == '') {
+                $val = 'Open';
+                $btn_class = 'btn btn-xs btn-default';
+            } elseif ($model->qa_ng == '' && $model->qa_ok == 'OK') {
+                $val = 'OK';
+                $btn_class = 'btn btn-xs btn-success';
+            } elseif ($model->qa_ng != '') {
+                if ($model->qa_result == 2) {
+                    $val = 'Repair';
+                    $btn_class = 'btn btn-xs btn-warning';
+                } else {
+                    $val = 'Lot Out';
+                    $btn_class = 'btn btn-xs btn-danger';
+                    if ($model->qa_result == 1) {
+                        $btn_class = 'btn btn-xs btn-info';
+                    }
+                }
+            }
+            $url = ['get-product-serno',
+                'flo' => $model->flo,
+                'status' => $val
+            ];
+            $options = [
+                'class' => 'popupModal ' . $btn_class,
+                'data-pjax' => '0',
+            ];
+            //return Html::a($val, $url, $options);
+            return '<span class="' . $btn_class . '">' . $val . '</span>';
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            'OK' => 'OK',
+            'LOT OUT' => 'Lot Out',
+            'REPAIR' => 'Repair'
+        ],
     ],
     [
         'attribute' => 'pdf_file',
@@ -107,6 +156,7 @@ $columns = [
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             //'filterModel' => $searchModel,
+            'pjax' => true,
             'hover' => true,
             'panel' => [
                 'type' => 'info',

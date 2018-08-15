@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 /**
 * @var yii\web\View $this
@@ -10,7 +11,7 @@ use kartik\grid\GridView;
     * @var app\models\search\HrgaSplDataSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Spl Hdrs');
+$this->title = Yii::t('models', 'Overtime Data');
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -31,12 +32,20 @@ $grid_columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width'=>'120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'NIK',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        //'width'=>'100px',
+        'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'NAMA_KARYAWAN',
@@ -46,8 +55,9 @@ $grid_columns = [
     ],
     [
         'attribute' => 'CC_GROUP',
-        'hAlign' => 'center',
+        //'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\SplView::find()->select('DISTINCT(CC_GROUP)')->where('CC_GROUP <> \'\'')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP')
         //'width'=>'100px',
     ],
     [
@@ -67,6 +77,12 @@ $grid_columns = [
         'vAlign' => 'middle',
         'mergeHeader' => true,
         //'width'=>'100px',
+    ],
+    [
+        'attribute' => 'KETERANGAN',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
     ],
 ];
 ?>
