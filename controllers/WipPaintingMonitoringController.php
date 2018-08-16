@@ -43,8 +43,8 @@ class WipPaintingMonitoringController extends Controller
     		'week',
     		'due_date',
     		'total_plan' => 'SUM(summary_qty)',
-    		'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' THEN summary_qty ELSE 0 END)',
-    		'total_created' => 'SUM(CASE WHEN stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
+    		'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
+    		//'total_created' => 'SUM(CASE WHEN stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
     		'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN summary_qty ELSE 0 END)',
     		'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN summary_qty ELSE 0 END)',
     		'total_handover' => 'SUM(CASE WHEN stage=\'04-HAND OVER\' THEN summary_qty ELSE 0 END)'
@@ -62,8 +62,8 @@ class WipPaintingMonitoringController extends Controller
 	    		'week',
 	    		'due_date',
 	    		'total_plan' => 'SUM(summary_qty)',
-	    		'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' THEN summary_qty ELSE 0 END)',
-	    		'total_created' => 'SUM(CASE WHEN stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
+	    		'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
+	    		//'total_created' => 'SUM(CASE WHEN stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
 	    		'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN summary_qty ELSE 0 END)',
 	    		'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN summary_qty ELSE 0 END)',
 	    		'total_handover' => 'SUM(CASE WHEN stage=\'04-HAND OVER\' THEN summary_qty ELSE 0 END)'
@@ -84,7 +84,7 @@ class WipPaintingMonitoringController extends Controller
     		$tmp_data[$wip_painting_data->week]['category'][] = date('Y-m-d', strtotime($wip_painting_data->due_date));
 
     		$order_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_order / $wip_painting_data->total_plan) * 100);
-    		$created_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_created / $wip_painting_data->total_plan) * 100);
+    		//$created_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_created / $wip_painting_data->total_plan) * 100);
     		$started_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_started / $wip_painting_data->total_plan) * 100);
     		$completed_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_completed / $wip_painting_data->total_plan) * 100);
     		$handover_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_handover / $wip_painting_data->total_plan) * 100);
@@ -93,10 +93,10 @@ class WipPaintingMonitoringController extends Controller
     			'y' => $order_percentage == 0 ? null : $order_percentage,
     			'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '00-ORDER')
     		];
-    		$tmp_data[$wip_painting_data->week]['created_percentage'][] = [
+    		/*$tmp_data[$wip_painting_data->week]['created_percentage'][] = [
     			'y' => $created_percentage == 0 ? null : $created_percentage,
     			'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '01-CREATED')
-    		];
+    		];*/
     		$tmp_data[$wip_painting_data->week]['started_percentage'][] = [
     			'y' => $started_percentage == 0 ? null : $started_percentage,
     			'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '02-STARTED')
@@ -130,11 +130,11 @@ class WipPaintingMonitoringController extends Controller
 						'data' => $value['order_percentage'],
 						'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
 					],
-					[
+					/*[
 						'name' => 'CREATED',
 						'data' => $value['created_percentage'],
 						'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
-					],
+					],*/
 					[
 						'name' => 'STARTED',
 						'data' => $value['started_percentage'],
@@ -173,9 +173,9 @@ class WipPaintingMonitoringController extends Controller
                 $status = 'ORDERED';
                 break;
 
-            case '01-CREATED':
-                $status = 'CREATED';
-                break;
+            /*case '01-CREATED':
+                $status = 'ORDERED';
+                break;*/
 
             case '02-STARTED':
                 $status = 'STARTED';
@@ -193,6 +193,11 @@ class WipPaintingMonitoringController extends Controller
                 // code...
                 break;
         };
+
+        if ($stage == '00-ORDER') {
+            $stage = ['00-ORDER', '01-CREATED'];
+        }
+
     	$wip_painting_data_arr = WipPlanActualReport::find()
     	->where([
     		'due_date' => $due_date,
