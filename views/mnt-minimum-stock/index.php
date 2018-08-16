@@ -70,6 +70,16 @@ $grid_column = [
         'vAlign' => 'middle',
     ],
     [
+        'attribute' => 'RACK',
+        'label' => 'Rak',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'MACHINE',
         'label' => 'ID Mesin',
         'hAlign' => 'center',

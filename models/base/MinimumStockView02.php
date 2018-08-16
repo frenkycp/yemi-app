@@ -28,6 +28,7 @@ use Yii;
  * @property string $MACHINE
  * @property string $MACHINE_NAME
  * @property double $ONHAND
+ * @property string $RACK
  * @property string $aliasModel
  */
 abstract class MinimumStockView02 extends \yii\db\ActiveRecord
@@ -57,7 +58,7 @@ abstract class MinimumStockView02 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['LOC_ITEM', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'MACHINE', 'MACHINE_NAME'], 'string'],
+            [['LOC_ITEM', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'MACHINE', 'MACHINE_NAME', 'RACK'], 'string'],
             [['LOC', 'ONHAND'], 'required'],
             [['MIN_STOCK_QTY', 'ONHAND'], 'number'],
             [['LAST_UPDATE'], 'safe']
@@ -89,6 +90,7 @@ abstract class MinimumStockView02 extends \yii\db\ActiveRecord
             'MACHINE' => 'Machine',
             'MACHINE_NAME' => 'Machine  Name',
             'ONHAND' => 'Onhand',
+            'RACK' => 'Rack',
         ];
     }
 
