@@ -45,7 +45,7 @@ $grid_column = [
         'width' => '120px',
     ],
     [
-        'attribute' => 'ITEM',
+        'attribute' => 'image',
         'label' => 'Foto',
         'value' => function($model){
             return Html::a(Html::img('http://wsus:81/product_image/' . $model->ITEM . '.jpg', [

@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MinimumStockView02 extends BaseMinimumStockView02
 {
+    public $image;
 
     public function behaviors()
     {
