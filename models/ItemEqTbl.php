@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\ItrnHisTbl as BaseItrnHisTbl;
+use \app\models\base\ItemEqTbl as BaseItemEqTbl;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.ITRN_HIS_TBL".
+ * This is the model class for table "db_owner.ITEM_EQ_TBL".
  */
-class ItrnHisTbl extends BaseItrnHisTbl
+class ItemEqTbl extends BaseItemEqTbl
 {
-    public $item_desc;
 
     public function behaviors()
     {
@@ -31,10 +30,5 @@ class ItrnHisTbl extends BaseItrnHisTbl
                 # custom validation rules
             ]
         );
-    }
-
-    public function getItemEqTbl()
-    {
-        return $this->hasOne(ItemEqTbl::className(), ['ITEM_EQ' => 'ITEM_EQ']);
     }
 }

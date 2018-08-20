@@ -33,6 +33,11 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'item_desc',
+        'value' => 'itemEqTbl.ITEM_EQ_DESC_01',
+        'vAlign' => 'middle',
+    ],
+    [
         'attribute' => 'FROM_LOC',
         'hAlign' => 'center',
         'vAlign' => 'middle',
