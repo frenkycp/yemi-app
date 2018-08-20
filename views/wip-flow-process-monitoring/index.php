@@ -37,7 +37,7 @@ echo '</pre>'; */
 echo Highcharts::widget([
 	'scripts' => [
 		'highcharts-more',
-		'modules/exporting',
+		//'modules/exporting',
 		'modules/xrange',
         'themes/grid',
 
@@ -47,7 +47,7 @@ echo Highcharts::widget([
             'type' => 'xrange',
         ],
         'title' => [
-	        'text' => 'Highcharts X-range'
+	        'text' => null
 	    ],
 	    'credits' => [
 	    	'enabled' => false

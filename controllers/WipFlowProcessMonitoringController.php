@@ -53,10 +53,10 @@ class WipFlowProcessMonitoringController extends Controller
 
     	$data = [
     		[
-	    		'name' => 'Project 1',
+	    		'name' => 'WIP',
 		        // pointPadding => 0,
 		        // groupPadding => 0,
-		        'borderColor' => 'gray',
+		        'borderColor' => 'white',
 		        'pointWidth' => 20,
 		        'data' => $tmp_data,
 		        'dataLabels' => [
