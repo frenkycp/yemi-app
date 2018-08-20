@@ -69,7 +69,7 @@ $totPlanExport = 0;
 
 $data = $dataProvider->getModels();
 foreach ($data as $key => $value) {
-    $totActual = $totActual + $value['actualQty'];
+    $totActual = $totActual + $value['actual_qty'];
     $totPlan = $totPlan + $value['plan_qty'];
     $totActualExport += $value['actual_export'];
     $totPlanExport += $value['plan_export'];
@@ -158,7 +158,6 @@ $columns = [
     ],
     [
         'attribute' => 'plan_qty',
-        'value' => 'planQty',
         'hAlign' => 'center',
         'enableSorting' => false,
         'filter' => false,
@@ -169,7 +168,6 @@ $columns = [
     ],
     [
         'attribute' => 'actual_qty',
-        'value' => 'actualQty',
         'hAlign' => 'center',
         'enableSorting' => false,
         'filter' => false,
@@ -180,7 +178,6 @@ $columns = [
     ],
     [
         'attribute' => 'balance_qty',
-        'value' => 'balanceQty',
         'hAlign' => 'center',
         'enableSorting' => false,
         'filter' => false,
@@ -201,7 +198,7 @@ $columns = [
         //'filter' => false,
         'mergeHeader' => true,
     ],
-    [
+    /**/[
         'attribute' => 'delayQty',
         'label' => 'Delay<br/>Qty',
         'encodeLabel' => false,
@@ -300,7 +297,7 @@ $columns = [
 <div class="giiant-crud weekly-plan-index">
 
     <?php
-             echo $this->render('_search', ['model' =>$searchModel]);
+            //echo $this->render('_search', ['model' =>$searchModel]);
         ?>
 
     
@@ -347,7 +344,7 @@ $columns = [
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            //'filterModel' => $searchModel,
+            'filterModel' => $searchModel,
             'columns' => $columns,
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],

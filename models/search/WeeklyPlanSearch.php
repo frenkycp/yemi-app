@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\WeeklyPlan;
+use app\models\WeeklySummaryView;
 
 /**
-* WeeklyPlanSearch represents the model behind the search form about `app\models\WeeklyPlan`.
+* WeeklyPlanSearch represents the model behind the search form about `app\models\WeeklySummaryView`.
 */
-class WeeklyPlanSearch extends WeeklyPlan
+class WeeklyPlanSearch extends WeeklySummaryView
 {
 /**
 * @inheritdoc
@@ -18,7 +18,7 @@ class WeeklyPlanSearch extends WeeklyPlan
 public function rules()
 {
 return [
-[['id', 'week', 'plan_qty', 'actual_qty', 'balance_qty', 'flag'], 'integer'],
+[['week', 'plan_qty', 'actual_qty', 'balance_qty', 'flag'], 'integer'],
             [['category', 'period'], 'safe'],
 ];
 }
@@ -41,7 +41,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = WeeklyPlan::find();
+$query = WeeklySummaryView::find();
 
 $dataProvider = new ActiveDataProvider([
     'query' => $query,
@@ -61,7 +61,6 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'id' => $this->id,
             'week' => $this->week,
             'plan_qty' => $this->plan_qty,
             'actual_qty' => $this->actual_qty,
