@@ -61,8 +61,9 @@ class WeeklyPlan extends BaseWeeklyPlan
     public function getDelayPercentage()
     {
         $percentage = 0;
-        if ($this->plan_qty > 0) {
-            $percentage = round(($this->getDelayQty() / $this->plan_qty) * 100, 2);
+        $plan_qty = $this->getPlanQty();
+        if ($plan_qty > 0) {
+            $percentage = round(($this->getDelayQty() / $plan_qty) * 100, 2);
         }
         return $percentage . '%';
     }
@@ -70,10 +71,17 @@ class WeeklyPlan extends BaseWeeklyPlan
     public function getOnTimeCompletion()
     {
         $percentage = 0;
-        if ($this->plan_qty > 0) {
-            $percentage = round((($this->getActualQty() - $this->getDelayQty()) / $this->plan_qty) * 100, 2);
+        $plan_qty = $this->getPlanQty();
+        if ($plan_qty > 0) {
+            $percentage = round((($this->getActualQty() - $this->getDelayQty()) / $plan_qty) * 100, 2);
         }
         return $percentage . '%';
+    }
+
+    public function getPlanQty()
+    {
+        $outputWeek = SernoOutputViewWeek::find()->where(['id' => $this->period, 'week_no' => $this->week])->one();
+        return $outputWeek != NULL ? $outputWeek->qty : 0;
     }
     
     public function getActualQty()
@@ -84,14 +92,14 @@ class WeeklyPlan extends BaseWeeklyPlan
     
     public function getBalanceQty()
     {
-        $planQty = $this->plan_qty;
+        $planQty = $this->getPlanQty();
         $actualQty = $this->getActualQty();
         return $actualQty - $planQty;
     }
     
     public function getWeekPercentage()
     {
-        $planQty = $this->plan_qty;
+        $planQty = $this->getPlanQty();
         $actualQty = $this->getActualQty();
         $presentase = 0;
         if ($planQty > 0) {

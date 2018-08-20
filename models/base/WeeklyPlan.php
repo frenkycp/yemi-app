@@ -16,6 +16,10 @@ use Yii;
  * @property integer $plan_qty
  * @property integer $actual_qty
  * @property integer $balance_qty
+ * @property integer $plan_export
+ * @property integer $actual_export
+ * @property integer $balance_export
+ * @property string $remark
  * @property integer $flag
  * @property string $aliasModel
  */
@@ -46,7 +50,8 @@ abstract class WeeklyPlan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['week', 'plan_qty', 'actual_qty', 'balance_qty', 'flag'], 'integer'],
+            [['week', 'plan_qty', 'actual_qty', 'balance_qty', 'plan_export', 'actual_export', 'balance_export', 'flag'], 'integer'],
+            [['remark'], 'string'],
             [['category'], 'string', 'max' => 20],
             [['period'], 'string', 'max' => 6]
         ];
@@ -65,6 +70,10 @@ abstract class WeeklyPlan extends \yii\db\ActiveRecord
             'plan_qty' => 'Plan Qty',
             'actual_qty' => 'Actual Qty',
             'balance_qty' => 'Balance Qty',
+            'plan_export' => 'Plan Export',
+            'actual_export' => 'Actual Export',
+            'balance_export' => 'Balance Export',
+            'remark' => 'Remark',
             'flag' => 'Flag',
         ];
     }

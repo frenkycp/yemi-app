@@ -158,6 +158,7 @@ $columns = [
     ],
     [
         'attribute' => 'plan_qty',
+        'value' => 'planQty',
         'hAlign' => 'center',
         'enableSorting' => false,
         'filter' => false,
@@ -299,7 +300,7 @@ $columns = [
 <div class="giiant-crud weekly-plan-index">
 
     <?php
-//             echo $this->render('_search', ['model' =>$searchModel]);
+             echo $this->render('_search', ['model' =>$searchModel]);
         ?>
 
     
@@ -346,7 +347,7 @@ $columns = [
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => $columns,
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
