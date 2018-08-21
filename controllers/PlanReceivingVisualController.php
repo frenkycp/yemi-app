@@ -52,7 +52,8 @@ class PlanReceivingVisualController extends Controller
 			'total_wb' => 'SUM(CASE WHEN vehicle=\'WB\' THEN qty ELSE 0 END)'
 		])
 		->where([
-			'month_periode' => $model->year . $model->month
+			'month_periode' => $model->year . $model->month,
+			'flag' => 1
 		])
 		->groupBy('week_no, receiving_date')
 		->orderBy('week_no, receiving_date')
@@ -158,7 +159,8 @@ class PlanReceivingVisualController extends Controller
         $plan_receiving_arr = PlanReceiving::find()
         ->where([
         	'receiving_date' => $receiving_date,
-        	'vehicle' => $vehicle
+        	'vehicle' => $vehicle,
+        	'flag' => 1
         ])
         ->orderBy('vendor_name, item_type')
         ->all();

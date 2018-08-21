@@ -99,7 +99,7 @@ $dataProvider = new ActiveDataProvider([
             ],
         ],
         'defaultOrder' => [
-            'cust_desc' => SORT_ASC,
+            //'cust_desc' => SORT_ASC,
             'gmc' => SORT_ASC,
         ]
     ],
