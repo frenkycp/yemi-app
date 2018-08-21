@@ -140,7 +140,7 @@ $this->registerJs($script, View::POS_HEAD );
                 ];
                 //$data_open[] = (int)(100 - $presentase_close);
                 $data_open[] = [
-                    'y' => $presentase_open,
+                    'y' => $presentase_open > 0 ? $presentase_open : null,
                     'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
                     'qty' => $value->qty - $value->output,
                 ];
@@ -251,7 +251,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'dataLabels' => [
                             'enabled' => true,
                             'color' => 'black',
-                            'format' => '{point.percentage:.0f}% ({point.qty})',
+                            'format' => '{point.percentage:.0f}%',
                             'style' => [
                                 'textOutline' => '0px'
                             ],
