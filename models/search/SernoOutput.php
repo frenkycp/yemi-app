@@ -100,6 +100,7 @@ $dataProvider = new ActiveDataProvider([
         ],
         'defaultOrder' => [
             'cust_desc' => SORT_ASC,
+            'gmc' => SORT_ASC,
         ]
     ],
 ]);
