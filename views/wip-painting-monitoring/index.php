@@ -29,6 +29,8 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 
+date_default_timezone_set('Asia/Jakarta');
+
 /*echo '<pre>';
 print_r($data);
 echo '</pre>';*/
@@ -69,7 +71,7 @@ echo '</pre>';*/
     </div>
 
 <?php ActiveForm::end(); ?>
-
+<p><b>Last Update : <?= date('d M Y H:i'); ?></b></p>
 <div class="nav-tabs-custom">
 	<ul class="nav nav-tabs">
 		<?php

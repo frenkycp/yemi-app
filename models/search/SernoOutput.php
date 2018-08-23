@@ -18,7 +18,7 @@ class SernoOutput extends SernoOutputModel
 public function rules()
 {
 return [
-[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms'], 'safe'],
+[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst'], 'safe'],
             [['id', 'num', 'qty', 'output', 'adv', 'cntr'], 'integer'],
 ];
 }

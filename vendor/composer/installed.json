@@ -1854,33 +1854,33 @@
     },
     {
         "name": "kartik-v/yii2-krajee-base",
-        "version": "v1.8.9",
-        "version_normalized": "1.8.9.0",
+        "version": "v1.9.2",
+        "version_normalized": "1.9.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-krajee-base.git",
-            "reference": "0cafe6376780cedcd00f52c9d82b172d5851f6b0"
+            "reference": "2c007b06602d4af59c7d3e708921d539bc81bc40"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/0cafe6376780cedcd00f52c9d82b172d5851f6b0",
-            "reference": "0cafe6376780cedcd00f52c9d82b172d5851f6b0",
+            "url": "https://api.github.com/repos/kartik-v/yii2-krajee-base/zipball/2c007b06602d4af59c7d3e708921d539bc81bc40",
+            "reference": "2c007b06602d4af59c7d3e708921d539bc81bc40",
             "shasum": ""
         },
         "require": {
             "yiisoft/yii2-bootstrap": "@dev"
         },
-        "time": "2017-09-29T06:18:14+00:00",
+        "time": "2018-08-20T18:10:23+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.8.x-dev"
+                "dev-master": "1.9.x-dev"
             }
         },
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "kartik\\base\\": ""
+                "kartik\\base\\": "src"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -2278,23 +2278,23 @@
     },
     {
         "name": "kartik-v/yii2-widget-select2",
-        "version": "v2.1.1",
-        "version_normalized": "2.1.1.0",
+        "version": "v2.1.2",
+        "version_normalized": "2.1.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/kartik-v/yii2-widget-select2.git",
-            "reference": "baaa8f8b8bbaed1ed0aea56fb0564c5ab340d7d3"
+            "reference": "c109c0f153def3be9f7a874dbaf5c951e5a62e73"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/baaa8f8b8bbaed1ed0aea56fb0564c5ab340d7d3",
-            "reference": "baaa8f8b8bbaed1ed0aea56fb0564c5ab340d7d3",
+            "url": "https://api.github.com/repos/kartik-v/yii2-widget-select2/zipball/c109c0f153def3be9f7a874dbaf5c951e5a62e73",
+            "reference": "c109c0f153def3be9f7a874dbaf5c951e5a62e73",
             "shasum": ""
         },
         "require": {
-            "kartik-v/yii2-krajee-base": "~1.7"
+            "kartik-v/yii2-krajee-base": "~1.9"
         },
-        "time": "2017-11-25T06:02:18+00:00",
+        "time": "2018-08-17T07:47:43+00:00",
         "type": "yii2-extension",
         "extra": {
             "branch-alias": {
@@ -2304,7 +2304,7 @@
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "kartik\\select2\\": ""
+                "kartik\\select2\\": "src"
             }
         },
         "notification-url": "https://packagist.org/downloads/",

@@ -207,7 +207,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         ),
         'kartik\\select2\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-select2',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-select2/src',
         ),
         'kartik\\popover\\' => 
         array (
@@ -267,7 +267,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         ),
         'kartik\\base\\' => 
         array (
-            0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base',
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-krajee-base/src',
         ),
         'dosamigos\\chartjs\\' => 
         array (

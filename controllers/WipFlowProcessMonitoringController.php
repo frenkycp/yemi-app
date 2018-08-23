@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\WipFlowView02;
 use yii\web\JsExpression;
+use app\models\FlowProcessFilterModel;
 
 class WipFlowProcessMonitoringController extends Controller
 {
@@ -16,6 +17,7 @@ class WipFlowProcessMonitoringController extends Controller
     
     public function actionIndex()
     {
+		$model = new FlowProcessFilterModel();
     	$categories = [];
     	$wip_data_arr = WipFlowView02::find()
     	->select([
@@ -28,7 +30,44 @@ class WipFlowProcessMonitoringController extends Controller
     		'act_qty' => 'SUM(act_qty)'
     	])
     	->groupBy('period, child_analyst, child_analyst_desc')
-    	->all();
+		->all();
+		
+		if ($model->load($_GET)) {
+			if($model->model != null){
+				$wip_data_arr = WipFlowView02::find()
+				->select([
+					'period',
+					'child_analyst',
+					'child_analyst_desc',
+					'start_date' => 'MIN(due_date)',
+					'end_date' => 'MAX(due_date)',
+					'plan_qty' => 'SUM(plan_qty)',
+					'act_qty' => 'SUM(act_qty)'
+				])
+				->where([
+					'model_group' => $model->model
+				])
+				->groupBy('period, child_analyst, child_analyst_desc')
+				->all();
+			}
+			if($model->gmc != null){
+				$wip_data_arr = WipFlowView02::find()
+				->select([
+					'period',
+					'child_analyst',
+					'child_analyst_desc',
+					'start_date' => 'MIN(due_date)',
+					'end_date' => 'MAX(due_date)',
+					'plan_qty' => 'SUM(plan_qty)',
+					'act_qty' => 'SUM(act_qty)'
+				])
+				->where([
+					'parent' => $model->gmc
+				])
+				->groupBy('period, child_analyst, child_analyst_desc')
+				->all();
+			}
+		}
 
     	$tmp_data = [];
     	$index = 0;
@@ -60,14 +99,20 @@ class WipFlowProcessMonitoringController extends Controller
 		        'pointWidth' => 20,
 		        'data' => $tmp_data,
 		        'dataLabels' => [
-		            'enabled' => true
+					'enabled' => true,
+					'style' => [
+						'textOutline' => '0px',
+						'fontWeight' => '0'
+					],
+					'formatter' => new JsExpression('function(){ return Math.round(this.point.partialFill * 100) + \'%\'; }'),
 		        ]
 	    	]
     	];
 
     	return $this->render('index', [
     		'categories' => $categories,
-    		'data' => $data,
+			'data' => $data,
+			'model' => $model
     	]);
     }
 }
