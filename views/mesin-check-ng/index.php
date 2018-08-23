@@ -32,8 +32,8 @@ $actionColumnTemplateString = "{update} {delete} {change_color}";
     } else {
         $actionColumnTemplateString = "{update} {change_color}";
     }
-    
-}*/
+ */   
+}
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $this->registerJs("$(function() {
