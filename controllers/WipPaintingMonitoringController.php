@@ -130,7 +130,7 @@ class WipPaintingMonitoringController extends Controller
 				'category' => $value['category'],
 				'data' => [
 					[
-						'name' => 'ORDERED',
+						'name' => 'ORDERED （受注）',
 						'data' => $value['order_percentage'],
 						'color' => 'rgba(240, 240, 240, 0.7)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
@@ -141,19 +141,19 @@ class WipPaintingMonitoringController extends Controller
 						'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
 					],*/
 					[
-						'name' => 'STARTED',
+						'name' => 'STARTED （加工開始）',
 						'data' => $value['started_percentage'],
 						'color' => 'rgba(240, 240, 0, 0.7)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 					],
 					[
-						'name' => 'COMPLETED',
+						'name' => 'COMPLETED （加工上がり）',
 						'data' => $value['completed_percentage'],
 						'color' => 'rgba(0, 150, 255, 0.7)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
 					],
 					[
-						'name' => 'HANDOVER',
+						'name' => 'HANDOVER （後工程に引渡し）',
 						'data' => $value['handover_percentage'],
 						'color' => 'rgba(0, 240, 0, 0.7)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
