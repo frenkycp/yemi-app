@@ -156,6 +156,9 @@ echo '</pre>';*/
                         ],
                         'series' => [
                             'cursor' => 'pointer',
+                            'dataLabels' => [
+                                'allowOverlap' => true
+                            ],
                             'point' => [
                                 'events' => [
                                     'click' => new JsExpression('

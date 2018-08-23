@@ -91,7 +91,8 @@ class WipPaintingMonitoringController extends Controller
 
     		$tmp_data[$wip_painting_data->week]['order_percentage'][] = [
     			'y' => $order_percentage == 0 ? null : $order_percentage,
-    			'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '00-ORDER')
+				'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '00-ORDER'),
+				//'color' => 'rgba(240, 240, 240, 0.7)',
     		];
     		/*$tmp_data[$wip_painting_data->week]['created_percentage'][] = [
     			'y' => $created_percentage == 0 ? null : $created_percentage,
@@ -99,15 +100,18 @@ class WipPaintingMonitoringController extends Controller
     		];*/
     		$tmp_data[$wip_painting_data->week]['started_percentage'][] = [
     			'y' => $started_percentage == 0 ? null : $started_percentage,
-    			'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '02-STARTED')
+				'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '02-STARTED'),
+				//'color' => 'rgba(240, 240, 0, 0.7)',
     		];
     		$tmp_data[$wip_painting_data->week]['completed_percentage'][] = [
     			'y' => $completed_percentage == 0 ? null : $completed_percentage,
-    			'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '03-COMPLETED')
+				'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '03-COMPLETED'),
+				//'color' => 'rgba(0, 150, 255, 0.7)',
     		];
     		$tmp_data[$wip_painting_data->week]['handover_percentage'][] = [
     			'y' => $handover_percentage <= 0 ? null : $handover_percentage,
-    			'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '04-HAND OVER')
+				'remark' => $this->getRemarks($wip_painting_data->due_date, $model->loc, '04-HAND OVER'),
+				//'color' => 'rgba(0, 240, 0, 0.7)',
     		];
 
     		$week_arr[] = $wip_painting_data->week;
@@ -128,7 +132,8 @@ class WipPaintingMonitoringController extends Controller
 					[
 						'name' => 'ORDERED',
 						'data' => $value['order_percentage'],
-						'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+						'color' => 'rgba(240, 240, 240, 0.7)',
+						//'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
 					],
 					/*[
 						'name' => 'CREATED',
@@ -138,17 +143,20 @@ class WipPaintingMonitoringController extends Controller
 					[
 						'name' => 'STARTED',
 						'data' => $value['started_percentage'],
-						'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+						'color' => 'rgba(240, 240, 0, 0.7)',
+						//'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 					],
 					[
 						'name' => 'COMPLETED',
 						'data' => $value['completed_percentage'],
-						'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
+						'color' => 'rgba(0, 150, 255, 0.7)',
+						//'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
 					],
 					[
 						'name' => 'HANDOVER',
 						'data' => $value['handover_percentage'],
-						'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+						'color' => 'rgba(0, 240, 0, 0.7)',
+						//'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
 					]
 				]
 			];
