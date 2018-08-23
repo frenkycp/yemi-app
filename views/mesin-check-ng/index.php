@@ -26,13 +26,14 @@ $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
 } else {
 Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    if (Yii::$app->user->identity->role->id == 1) {
+$actionColumnTemplateString = "{update} {delete} {change_color}";    
+/*if (Yii::$app->user->identity->role->id == 1) {
         $actionColumnTemplateString = "{update} {delete} {change_color}";
     } else {
         $actionColumnTemplateString = "{update} {change_color}";
     }
     
-}
+}*/
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $this->registerJs("$(function() {
