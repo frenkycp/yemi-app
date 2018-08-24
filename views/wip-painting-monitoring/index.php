@@ -106,8 +106,8 @@ echo '</pre>';*/
             echo Highcharts::widget([
                 'scripts' => [
                     'modules/exporting',
-                    //'themes/sand-signika',
-                    'themes/grid-light',
+                    'themes/sand-signika',
+                    //'themes/grid-light',
                 ],
                 'options' => [
                     'chart' => [
@@ -135,14 +135,14 @@ echo '</pre>';*/
                     ],
                     'tooltip' => [
                         'enabled' => true,
-                        'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%"; }'),
+                        'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " pcs"; }'),
                     ],
                     'plotOptions' => [
                         'column' => [
                             'stacking' => 'normal',
                             'dataLabels' => [
                                 'enabled' => true,
-                                'format' => '{point.percentage:.0f}%',
+                                'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
                                 'color' => 'black',
                                 //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                                 'style' => [
