@@ -232,31 +232,33 @@ class WipPaintingMonitoringController extends Controller
 			<th class="text-center">Location</th>
             <th class="text-center">Slip No.</th>
 			<th>Model</th>
-			<th class="text-center">Parent</th>
-			<th>Parent Description</th>
 			<th class="text-center">Child</th>
 			<th>Child Description</th>
 			<th class="text-center">Qty</th>
-			<th class="text-center">Start Date</th>
-			<th class="text-center">End Date</th>
+            <th class="text-center" style="min-width: 100px;">Start Plan</th>
+            <th class="text-center" style="min-width: 100px;">End Plan</th>
+			<th class="text-center" style="min-width: 100px;">Start Actual</th>
+			<th class="text-center" style="min-width: 100px;">End Actual</th>
 		</tr>';
 
 		foreach ($wip_painting_data_arr as $value) {
-			$start_date = $value['start_job'] == null ? '-' : $value['start_job'];
-			$end_date = $value['end_job'] == null ? '-' : $value['end_job'];
+            $start_plan = $value['start_job'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
+            $end_plan = $value['end_job'] == null ? '-' : date('Y-m-d', strtotime($value['due_date']));
+			$start_actual = $value['start_job'] == null ? '-' : $value['start_job'];
+			$end_actual = $value['end_job'] == null ? '-' : $value['end_job'];
 			$class = $value['summary_qty'] < 0 ? 'danger' : '';
 			$data .= '
 				<tr class="' . $class . '">
 					<td class="text-center">' . $value['child_analyst_desc'] . '</td>
                     <td class="text-center">' . $value['slip_id'] . '</td>
 					<td>' . $value['model_group'] . '</td>
-					<td class="text-center">' . $value['parent'] . '</td>
-					<td>' . $value['parent_desc'] . '</td>
 					<td class="text-center">' . $value['child'] . '</td>
 					<td>' . $value['child_desc'] . '</td>
 					<td class="text-center">' . $value['summary_qty'] . '</td>
-					<td class="text-center">' . $start_date . '</td>
-					<td class="text-center">' . $end_date . '</td>
+                    <td class="text-center">' . $start_plan . '</td>
+                    <td class="text-center">' . $end_plan . '</td>
+					<td class="text-center">' . $start_actual . '</td>
+					<td class="text-center">' . $end_actual . '</td>
 				</tr>
 			';
 		}
