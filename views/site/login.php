@@ -21,8 +21,8 @@ $fieldOptions2 = [
 ?>
 
 <div class="login-box">
-    <div class="login-logo">
-        <img style="margin-right: auto; margin-left: auto; display: block; width: 80%;" src="<?= Yii::getAlias('@web') ?>/welcome.png">
+    <div class="login-logo" style="margin-bottom: 0px;">
+        <img style="margin-right: auto; margin-left: auto; display: block; width: 100%;" src="<?= Yii::getAlias('@web') ?>/welcome.png">
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
