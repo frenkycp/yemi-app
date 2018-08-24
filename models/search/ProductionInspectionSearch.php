@@ -126,7 +126,7 @@ $query->andFilterWhere([
         } else if ($this->status == 'REPAIR') {
             $query->andWhere(['<>', 'qa_ng', ''])->andWhere(['qa_result' => 2]);
         }  elseif ($this->status == 'OPEN') {
-            $query->andFilterWhere([
+            $query->andWhere([
                 'qa_ng' => '',
                 'qa_ok' => ''
             ]);

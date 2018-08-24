@@ -176,6 +176,7 @@ $columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filter' => [
+            'OPEN' => 'OPEN',
             'OK' => 'OK',
             'LOT OUT' => 'Lot Out',
             'REPAIR' => 'Repair'

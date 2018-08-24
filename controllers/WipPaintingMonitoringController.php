@@ -246,8 +246,8 @@ class WipPaintingMonitoringController extends Controller
 		</tr>';
 
 		foreach ($wip_painting_data_arr as $value) {
-            $start_plan = $value['start_job'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
-            $end_plan = $value['end_job'] == null ? '-' : date('Y-m-d', strtotime($value['due_date']));
+            $start_plan = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
+            $end_plan = $value['due_date'] == null ? '-' : date('Y-m-d', strtotime($value['due_date']));
 			$start_actual = $value['start_job'] == null ? '-' : $value['start_job'];
 			$end_actual = $value['end_job'] == null ? '-' : $value['end_job'];
 			$data .= '
