@@ -187,7 +187,7 @@ $grid_columns = [
         'attribute' => 'start_date',
         'label' => 'Start Date',
         'value' => function($model){
-            return $model->start_date == null ? '-' : date('d-M-y', strtotime($model->start_date));
+            return $model->start_date == null ? '-' : date('Y-m-d', strtotime($model->start_date));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -201,7 +201,7 @@ $grid_columns = [
         'attribute' => 'source_date',
         'label' => 'FA Start',
         'value' => function($model){
-            return $model->source_date == null ? '-' : date('d-M-y', strtotime($model->source_date));
+            return $model->source_date == null ? '-' : date('Y-m-d', strtotime($model->source_date));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
