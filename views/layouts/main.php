@@ -32,7 +32,7 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
     </script>
     <?php $this->head() ?>
 </head>
-<body class="hold-transition <?= \dmstr\helpers\AdminLteHelper::skinClass(); ?> sidebar-mini sidebar-collapse">
+<body class="hold-transition <?= \dmstr\helpers\AdminLteHelper::skinClass(); ?> sidebar-mini">
 <?php $this->beginBody() ?>
 <div class="wrapper">
 

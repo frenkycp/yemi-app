@@ -14,9 +14,9 @@ use yii\helpers\Html;
         echo '<meta name="viewport" content="width=1000;" />';
     }
     ?>
-    <?= Html::a('<span class="logo-mini">APP</span><span class="logo-lg">' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
+    <?= Html::a('<span class="logo-mini">MITA</span><span class="logo-lg"><img style="width: 180px; padding-top: 4px;" src="' . Yii::getAlias('@web') . '/welcome.png"></span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
-    <nav class="navbar navbar-static-top" role="navigation">
+    <nav class="navbar navbar-static-top" style="text-align: center;" role="navigation">
 
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -288,5 +288,11 @@ use yii\helpers\Html;
                 </li>
             </ul>
         </div>
+        <!--<div style="overflow: auto;">
+            <img style="width: 190px; padding-top: 2px;" src="<?= Yii::getAlias('@web') ?>/welcome.png">
+        </div>
+        <div style="float: left;">
+            <img style="width: 180px; padding-top: 4px;" src="<?= Yii::getAlias('@web') ?>/welcome.png">
+        </div>-->
     </nav>
 </header>
