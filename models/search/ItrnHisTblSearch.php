@@ -58,7 +58,7 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'ITRN_SEQ' => $this->ITRN_SEQ,
-            'POST_DATE' => $this->POST_DATE,
+            //'POST_DATE' => $this->POST_DATE,
             'POST_QTY_IN' => $this->POST_QTY_IN,
             'POST_QTY_OUT' => $this->POST_QTY_OUT,
             'RCV_ID' => $this->RCV_ID,
@@ -69,6 +69,7 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'LOC', $this->LOC])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),POST_DATE,120)', $this->POST_DATE])
             ->andFilterWhere(['like', 'FROM_LOC', $this->FROM_LOC])
             ->andFilterWhere(['like', 'TO_LOC', $this->TO_LOC])
             ->andFilterWhere(['like', 'ITEM_EQ', $this->ITEM_EQ])

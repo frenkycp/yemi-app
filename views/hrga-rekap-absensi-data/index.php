@@ -69,26 +69,31 @@ $gridColumns = [
         'attribute' => 'ALPHA',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'IJIN',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'SAKIT',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'CUTI',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'CUTI_KHUSUS',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'CUTI_KHUSUS_IJIN',
@@ -96,6 +101,7 @@ $gridColumns = [
         'label' => 'Cuti Khusus<br/>Ijin',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'DISIPLIN',
@@ -114,7 +120,7 @@ $gridColumns = [
         ],
         'hiddenFromExport' => true
     ],
-    [
+    /*[
         'attribute' => 'DISIPLIN',
         'value' => function($model){
             if ($model->DISIPLIN == 0) {
@@ -126,7 +132,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'hidden' => true
-    ],
+    ],*/
     
     //'NIK_DATE_ID',
     //'NO',

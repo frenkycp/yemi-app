@@ -62,15 +62,15 @@ if (!$this->validate()) {
 return $dataProvider;
 }
 
-/*$query->andFilterWhere([
-            'YEAR' => $this->YEAR,
-            'WEEK' => $this->WEEK,
-            'DATE' => $this->DATE,
-            'TOTAL_KARYAWAN' => $this->TOTAL_KARYAWAN,
-            'KEHADIRAN' => $this->KEHADIRAN,
-            'BONUS' => $this->BONUS,
+/**/$query->andFilterWhere([
+            //'YEAR' => $this->YEAR,
+            //'WEEK' => $this->WEEK,
+            //'DATE' => $this->DATE,
+            //'TOTAL_KARYAWAN' => $this->TOTAL_KARYAWAN,
+            //'KEHADIRAN' => $this->KEHADIRAN,
+            //'BONUS' => $this->BONUS,
             'DISIPLIN' => $this->DISIPLIN,
-        ]);*/
+        ]);
 
         $query->andFilterWhere(['like', 'PERIOD', $this->PERIOD])
             ->andFilterWhere(['like', 'NIK', $this->NIK])
