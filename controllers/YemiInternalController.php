@@ -9,7 +9,7 @@ use dmstr\bootstrap\Tabs;
 use app\models\search\YemiInternalSearch;
 use app\models\SernoMaster;
 use app\models\SernoOutput;
-use app\controllers\base\SernoOutputController;
+use app\controllers\SernoOutputController;
 
 /**
  * summary
