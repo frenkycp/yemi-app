@@ -73,16 +73,16 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">E-Kanban WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/>E-<span class="japanesse-word">かんばん・生産工程モニタリング</span></div>
                     <div class="list-group">
-                        <?= Html::a('Kanban Monitor （かんばんモニター）', ['wip-painting-monitoring/index'], [
+                        <?= Html::a('Kanban Monitor<br/>（かんばんモニター）', ['wip-painting-monitoring/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                         <?= Html::a('Kanban Process-Flow Monitor<br/>（かんばん工程流れモニター）', ['wip-flow-process-monitoring/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Stock WIP Monitor （仕掛在庫モニター）', ['wip-painting-stock-monitoring/index'], [
+                        <?= Html::a('Stock WIP Monitor<br/>（仕掛在庫モニター）', ['wip-painting-stock-monitoring/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('WIP Data Record  （仕掛りデーター）', ['wip-plan-actual-report/index'], [
+                        <?= Html::a('WIP Data Record<br/>（仕掛りデーター）', ['wip-plan-actual-report/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                     </div>

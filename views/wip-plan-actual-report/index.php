@@ -115,7 +115,8 @@ $grid_columns = [
     ],
     [
         'attribute' => 'session_id',
-        'label' => 'Session No.',
+        'label' => 'Session<br/>No.',
+        'encodeLabel' => false,
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
@@ -149,6 +150,9 @@ $grid_columns = [
         'attribute' => 'model_group',
         'label' => 'Model',
         'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'child',
@@ -192,6 +196,9 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center;'
@@ -206,10 +213,33 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
+    ],
+    [
+        'attribute' => 'created_user_desc',
+        'label' => 'Created By',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'start_job_user_desc',
+        'label' => 'Started By',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'end_job_user_desc',
+        'label' => 'Completed By',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'hand_over_job_user_desc',
+        'label' => 'Hand Overed By',
+        'vAlign' => 'middle',
     ],
 ]
 ?>
@@ -268,6 +298,7 @@ $grid_columns = [
             'filterModel' => $searchModel,
             'columns' => $grid_columns,
             'hover' => true,
+            'responsive' => true,
             //'condensed' => true,
             'striped' => true,
             //'floatHeader'=>true,
