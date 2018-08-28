@@ -85,7 +85,8 @@ class WipFlowProcessMonitoringController extends Controller
     			'x' => new JsExpression('Date.UTC(' . json_encode($start_date_split[0]) . ', ' . json_encode($start_date_split[1] - 1) . ', ' . json_encode($start_date_split[2]) . ')'),
     			'x2' => new JsExpression('Date.UTC(' . json_encode($end_date_split[0]) . ', ' . json_encode($end_date_split[1] - 1) . ', ' . json_encode($end_date_split[2]) .')'),
     			'y' => $index,
-    			'partialFill' => $presentase
+    			'partialFill' => $presentase,
+    			'color' => 'white'
     		];
     		$index++;
     	}
@@ -95,8 +96,11 @@ class WipFlowProcessMonitoringController extends Controller
 	    		'name' => 'WIP',
 		        // pointPadding => 0,
 		        // groupPadding => 0,
-		        'borderColor' => 'white',
+		        'borderColor' => 'rgba(72,61,139,0.6)',
 		        'pointWidth' => 20,
+		        'partialFill' => [
+		        	'fill' => 'rgba(72,61,139,0.6)'
+		        ],
 		        'data' => $tmp_data,
 		        'dataLabels' => [
 					'enabled' => true,

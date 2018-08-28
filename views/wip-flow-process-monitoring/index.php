@@ -75,11 +75,14 @@ echo Highcharts::widget([
 		//'modules/exporting',
 		'modules/xrange',
         'themes/grid',
+        //'themes/sand-signika',
+
 
 	],
 	'options' => [
 		'chart' => [
             'type' => 'xrange',
+            'height' => 450
         ],
         'title' => [
 	        'text' => null
