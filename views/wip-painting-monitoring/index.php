@@ -36,7 +36,9 @@ print_r($data);
 echo '</pre>';*/
 ?>
 
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get'
+]); ?>
 
 	<div class="row">
 		<div class="col-sm-2">

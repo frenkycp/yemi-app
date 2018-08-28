@@ -35,7 +35,7 @@ class WipPaintingMonitoringController extends Controller
     	$model = new WipFilterModel();
     	$model->month = date('m');
 		$model->year = date('Y');
-    	if ($model->load($_POST)) {
+    	if ($model->load($_GET)) {
     		$period = $model->year . $model->month;
     	}
     	$wip_painting_data_arr = WipPlanActualReport::find()
