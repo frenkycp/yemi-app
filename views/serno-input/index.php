@@ -81,6 +81,7 @@ $grid_columns = [
             'style' => 'text-align: center;'
         ],
     ],
+    
     [
         'attribute' => 'gmc',
         'hAlign' => 'center',
@@ -101,7 +102,7 @@ $grid_columns = [
         ],
     ],
     [
-        'attribute' => 'sernoOutput.vms',
+        'attribute' => 'vms',
         'label' => 'VMS Date',
         'value' => function($model){
             if ($model->plan == '') {
@@ -117,7 +118,8 @@ $grid_columns = [
         ],
     ],
     [
-        'attribute' => 'sernoOutput.etd',
+        'attribute' => 'etd_ship',
+        'value' => 'sernoOutput.etd',
         'label' => 'ETD YEMI',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -126,31 +128,13 @@ $grid_columns = [
         ],
     ],
     [
-        'attribute' => 'sernoOutput.dst',
+        'attribute' => 'port',
+        'value' => 'sernoOutput.dst',
         'label' => 'Port',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'contentOptions' => [
             'style' => 'min-width:100px;'
-        ],
-    ],
-    [
-        'attribute' => 'qa_ng',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center;'
-        ],
-    ],
-    [
-        'attribute' => 'qa_ng_date',
-        'label' => 'Inspection Date',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -184,6 +168,64 @@ $grid_columns = [
             'REPAIR' => 'Repair'
         ],
     ],
+    [
+        'attribute' => 'invoice',
+        'value' => 'sernoOutput.invo',
+        'label' => 'Invoice',
+        'vAlign' => 'middle',
+        'width' => '80px',
+        'contentOptions' => [
+            'style' => 'min-width: 120px;'
+        ],
+    ],
+    [
+        'attribute' => 'so',
+        'value' => 'sernoOutput.so',
+        'label' => 'SO',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '80px',
+        'contentOptions' => [
+            'style' => 'min-width: 120px;'
+        ],
+    ],
+    [
+        'attribute' => 'pdf_file',
+        'label' => 'Evidence File',
+        'value' => function($model){
+            $filename = $model->sernoOutput->cntr . '.pdf';
+            $path = \Yii::$app->basePath . '\\..\\mis7\\fg\\' . $filename;
+            $link = '-';
+            if (file_exists($path)) {
+                $link = Html::a($filename, 'http://172.17.144.6:99/fg/' . $filename, ['target' => '_blank']);
+            }
+            return $link;
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'qa_ng',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'qa_ng_date',
+        'label' => 'Inspection Date',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    
     /*[
         'attribute' => 'qa_ok_date',
         'hAlign' => 'center',
@@ -211,25 +253,42 @@ $grid_columns = [
     ],*/
 ];
 ?>
+<div class="box box-default collapsed-box">
+    <div class="box-header with-border">
+        <h3 class="box-title">Search Form</h3>
+        <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+            </button>
+        </div>
+    </div>
+    <div class="box-body">
+        <?php
+        echo $this->render('_search', ['model' =>$searchModel]);
+        ?>
+    </div>
+</div>
 <div class="giiant-crud serno-input-index">
 
     <?php
 //             echo $this->render('_search', ['model' =>$searchModel]);
         ?>
 
-    
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
     <div class="table-responsive">
-        <?= GridView::widget([
+        <?= !\Yii::$app->request->get() ? '' : GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => $grid_columns,
             'hover' => true,
             //'condensed' => true,
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
+            'pager' => [
+                    'firstPageLabel'=>'First',   // Set the label for the "first" page button
+                    'lastPageLabel'=>'Last',    // Set the label for the "last" page button
+            ],
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],

@@ -91,7 +91,7 @@ $columns = [
         'mergeHeader' => true,
     ],
     [
-        'attribute' => 'evidence_fi;e',
+        'attribute' => 'evidence_file',
         'label' => 'Evidence File',
         'value' => function($model){
             $filename = $model->cntr . '.pdf';

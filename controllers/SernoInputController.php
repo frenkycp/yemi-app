@@ -19,24 +19,41 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 	*/
 	public function actionIndex()
 	{
-	    $searchModel  = new SernoInputSearch;
-	    if (\Yii::$app->request->get('status') !== null) {
-	    	$searchModel->status = \Yii::$app->request->get('status');
-	    }
-	    $searchModel->proddate = date('Y-m-d');
-	    if (\Yii::$app->request->get('proddate') !== null) {
-	    	$searchModel->proddate = \Yii::$app->request->get('proddate');
-	    }
-	    $dataProvider = $searchModel->search($_GET);
+		if (\Yii::$app->request->get()) {
+			$searchModel  = new SernoInputSearch;
+		    if (\Yii::$app->request->get('status') !== null) {
+		    	$searchModel->status = \Yii::$app->request->get('status');
+		    }
+		    $searchModel->proddate = date('Y-m-d');
+		    if (\Yii::$app->request->get('proddate') !== null) {
+		    	$searchModel->proddate = \Yii::$app->request->get('proddate');
+		    }
+		    $dataProvider = $searchModel->search($_GET);
 
-		Tabs::clearLocalStorage();
+			Tabs::clearLocalStorage();
 
-		Url::remember();
-		\Yii::$app->session['__crudReturnUrl'] = null;
+			Url::remember();
+			\Yii::$app->session['__crudReturnUrl'] = null;
 
-		return $this->render('index', [
-		'dataProvider' => $dataProvider,
-		    'searchModel' => $searchModel,
-		]);
+			return $this->render('index', [
+			'dataProvider' => $dataProvider,
+			    'searchModel' => $searchModel,
+			]);
+		} else {
+			$searchModel  = new SernoInputSearch;
+		    $searchModel->plan = '-';
+		    $dataProvider = $searchModel->search($_GET);
+
+			Tabs::clearLocalStorage();
+
+			Url::remember();
+			\Yii::$app->session['__crudReturnUrl'] = null;
+
+			return $this->render('index', [
+			'dataProvider' => $dataProvider,
+			    'searchModel' => $searchModel,
+			]);
+		}
+	    
 	}
 }

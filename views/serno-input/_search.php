@@ -16,40 +16,57 @@ use yii\widgets\ActiveForm;
     'action' => ['index'],
     'method' => 'get',
     ]); ?>
+    <div class="row">
+    	
+    	<div class="col-sm-4">
+    		<div class="panel panel-primary">
+    			<div class="panel-body">
+    				<?= $form->field($model, 'flo') ?>
 
-    		<?= $form->field($model, 'num') ?>
+		    		<?= $form->field($model, 'sernum') ?>
 
-		<?= $form->field($model, 'pk') ?>
+		    		<?= $form->field($model, 'invoice') ?>
 
-		<?= $form->field($model, 'gmc') ?>
+		    		<?= $form->field($model, 'so') ?>
+    			</div>
+    		</div>
+    	</div>
 
-		<?= $form->field($model, 'line') ?>
+    	<div class="col-sm-4">
+    		<div class="panel panel-primary">
+    			<div class="panel-body">
+    				<?= $form->field($model, 'port') ?>
 
-		<?= $form->field($model, 'proddate') ?>
+					<?= $form->field($model, 'status')->dropDownList([
+			            'OK' => 'OK',
+			            'LOT OUT' => 'Lot Out',
+			            'REPAIR' => 'Repair'
+			        ], ['prompt'=>'Select...']) ?>
 
-		<?php // echo $form->field($model, 'sernum') ?>
+					<?= $form->field($model, 'line') ?>
 
-		<?php // echo $form->field($model, 'flo') ?>
+					<?= $form->field($model, 'gmc') ?>
+    			</div>
+    		</div>
+    	</div>
 
-		<?php // echo $form->field($model, 'palletnum') ?>
+    	<div class="col-sm-4">
+			<div class="panel panel-primary">
+				<div class="panel-body">
+					<?= $form->field($model, 'proddate') ?>
 
-		<?php // echo $form->field($model, 'qa_ng') ?>
+		    		<?= $form->field($model, 'etd_ship') ?>
 
-		<?php // echo $form->field($model, 'qa_ng_date') ?>
+		    		<?= $form->field($model, 'vms')->label('VMS Date') ?>
+				</div>
+    		</div>
+    	</div>
 
-		<?php // echo $form->field($model, 'qa_ok') ?>
-
-		<?php // echo $form->field($model, 'qa_ok_date') ?>
-
-		<?php // echo $form->field($model, 'plan') ?>
-
-		<?php // echo $form->field($model, 'adv') ?>
-
-		<?php // echo $form->field($model, 'ship') ?>
-
+    </div>
+		
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= ''; //Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

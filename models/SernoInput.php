@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoInput extends BaseSernoInput
 {
-    public $etd_ship, $destination, $week_no, $total, $status, $pdf_file, $total_ng;
+    public $etd_ship, $destination, $week_no, $total, $status, $pdf_file, $total_ng, $invoice, $vms, $port, $so;
 
     public function behaviors()
     {
@@ -44,7 +44,7 @@ class SernoInput extends BaseSernoInput
                 'line' => 'Line',
                 'proddate' => 'Prod. Date',
                 'sernum' => 'Serial No.',
-                'flo' => 'Flo',
+                'flo' => 'FLO No.',
                 'palletnum' => 'Palletnum',
                 'qa_ng' => 'NG Remark',
                 'qa_ng_date' => 'NG Date',
@@ -53,6 +53,9 @@ class SernoInput extends BaseSernoInput
                 'plan' => 'Plan',
                 'adv' => 'Adv',
                 'ship' => 'Ship',
+                'vms' => 'VMS',
+                'etd_ship' => 'ETD',
+                'so' => 'Sales Order',
             ]
         );
     }
