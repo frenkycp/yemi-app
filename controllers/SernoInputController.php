@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use app\models\SernoInput;
+use app\models\SernoOutput;
 
 /**
 * This is the class for controller "SernoInputController".
@@ -20,11 +21,26 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 	*/
 	public function actionIndex()
 	{
-		$data_gmc_arr = SernoInput::find()->select('gmc')->distinct()->orderBy('gmc')->all();
 		$data_gmc = [];
+		$data_flo = [];
+		$data_invoice = [];
+
+		$data_gmc_arr = SernoInput::find()->select('gmc')->distinct()->orderBy('gmc')->all();
+		$data_flo_arr = SernoInput::find()->select('distinct(flo)')->where('flo <> 0')->orderBy('flo')->all();
+		$data_invoice_arr = SernoOutput::find()->select('distinct(invo)')->where('invo <> \'\'')->orderBy('invo')->all();
+		
 		foreach ($data_gmc_arr as $key => $value) {
 			$data_gmc[] = $value->gmc;
 		}
+
+		foreach ($data_flo_arr as $key => $value) {
+			$data_flo[] = $value->flo;
+		}
+
+		foreach ($data_invoice_arr as $key => $value) {
+			$data_invoice[] = $value->invo;
+		}
+
 		if (\Yii::$app->request->get()) {
 			$searchModel  = new SernoInputSearch;
 		    if (\Yii::$app->request->get('status') !== null) {
@@ -44,7 +60,9 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 			return $this->render('index', [
 				'dataProvider' => $dataProvider,
 			    'searchModel' => $searchModel,
-			    'data_gmc' => $data_gmc
+			    'data_gmc' => $data_gmc,
+			    'data_flo' => $data_flo,
+			    'data_invoice' => $data_invoice,
 			]);
 		} else {
 			$searchModel  = new SernoInputSearch;
@@ -59,7 +77,9 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 			return $this->render('index', [
 				'dataProvider' => $dataProvider,
 			    'searchModel' => $searchModel,
-			    'data_gmc' => $data_gmc
+			    'data_gmc' => $data_gmc,
+			    'data_flo' => $data_flo,
+			    'data_invoice' => $data_invoice,
 			]);
 		}
 	    

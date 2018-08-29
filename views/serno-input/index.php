@@ -274,7 +274,12 @@ $grid_columns = [
     </div>
     <div class="box-body">
         <?php
-        echo $this->render('_search', ['model' =>$searchModel, 'data_gmc' => $data_gmc]);
+        echo $this->render('_search', [
+            'model' =>$searchModel,
+            'data_gmc' => $data_gmc,
+            'data_flo' => $data_flo,
+            'data_invoice' => $data_invoice,
+        ]);
         ?>
     </div>
 </div>

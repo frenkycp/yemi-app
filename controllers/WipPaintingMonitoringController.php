@@ -214,7 +214,7 @@ class WipPaintingMonitoringController extends Controller
     	->where([
     		'due_date' => $due_date,
     		'stage' => $stage,
-            'urut' => '02'
+            //'urut' => '02'
     	])
     	->orderBy('child_analyst_desc, model_group, parent, child')
     	->all();
