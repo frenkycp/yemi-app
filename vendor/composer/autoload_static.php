@@ -51,6 +51,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         ),
         'k' => 
         array (
+            'kartik\\typeahead\\' => 17,
             'kartik\\time\\' => 12,
             'kartik\\sortable\\' => 16,
             'kartik\\select2\\' => 15,
@@ -196,6 +197,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         'mikehaertl\\pdftk\\' => 
         array (
             0 => __DIR__ . '/..' . '/mikehaertl/php-pdftk/src',
+        ),
+        'kartik\\typeahead\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-typeahead/src',
         ),
         'kartik\\time\\' => 
         array (

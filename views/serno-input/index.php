@@ -61,6 +61,9 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'flo',
@@ -81,7 +84,6 @@ $grid_columns = [
             'style' => 'text-align: center;'
         ],
     ],
-    
     [
         'attribute' => 'gmc',
         'hAlign' => 'center',
@@ -89,6 +91,15 @@ $grid_columns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'description',
+        'value' => 'partName',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width: 150px;'
         ],
     ],
     [
@@ -253,7 +264,7 @@ $grid_columns = [
     ],*/
 ];
 ?>
-<div class="box box-default collapsed-box">
+<div class="box box-success box-solid">
     <div class="box-header with-border">
         <h3 class="box-title">Search Form</h3>
         <div class="box-tools pull-right">
@@ -263,7 +274,7 @@ $grid_columns = [
     </div>
     <div class="box-body">
         <?php
-        echo $this->render('_search', ['model' =>$searchModel]);
+        echo $this->render('_search', ['model' =>$searchModel, 'data_gmc' => $data_gmc]);
         ?>
     </div>
 </div>

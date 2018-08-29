@@ -78,9 +78,9 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
-            ->andFilterWhere(['like', 'gmc', $this->gmc])
+            ->andFilterWhere(['like', 'tb_serno_input.gmc', $this->gmc])
             ->andFilterWhere(['like', 'line', $this->line])
-            ->andFilterWhere(['like', 'tb_serno_output.port', $this->port])
+            ->andFilterWhere(['like', 'tb_serno_output.dst', $this->port])
             ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
             //->andFilterWhere(['like', 'qa_ng', $this->qa_ng])

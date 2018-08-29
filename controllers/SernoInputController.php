@@ -7,6 +7,7 @@ use yii\web\HttpException;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
+use app\models\SernoInput;
 
 /**
 * This is the class for controller "SernoInputController".
@@ -19,6 +20,11 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 	*/
 	public function actionIndex()
 	{
+		$data_gmc_arr = SernoInput::find()->select('gmc')->distinct()->orderBy('gmc')->all();
+		$data_gmc = [];
+		foreach ($data_gmc_arr as $key => $value) {
+			$data_gmc[] = $value->gmc;
+		}
 		if (\Yii::$app->request->get()) {
 			$searchModel  = new SernoInputSearch;
 		    if (\Yii::$app->request->get('status') !== null) {
@@ -36,8 +42,9 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 			\Yii::$app->session['__crudReturnUrl'] = null;
 
 			return $this->render('index', [
-			'dataProvider' => $dataProvider,
+				'dataProvider' => $dataProvider,
 			    'searchModel' => $searchModel,
+			    'data_gmc' => $data_gmc
 			]);
 		} else {
 			$searchModel  = new SernoInputSearch;
@@ -50,8 +57,9 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 			\Yii::$app->session['__crudReturnUrl'] = null;
 
 			return $this->render('index', [
-			'dataProvider' => $dataProvider,
+				'dataProvider' => $dataProvider,
 			    'searchModel' => $searchModel,
+			    'data_gmc' => $data_gmc
 			]);
 		}
 	    
