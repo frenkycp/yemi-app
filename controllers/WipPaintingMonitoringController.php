@@ -145,7 +145,7 @@ class WipPaintingMonitoringController extends Controller
 						'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
 					],*/
 					[
-						'name' => 'STARTED （加工開始）',
+						'name' => 'STARTED （加工中）',
 						'data' => $value['started_percentage'],
 						'color' => 'rgba(240, 240, 0, 0.7)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
@@ -213,7 +213,8 @@ class WipPaintingMonitoringController extends Controller
     	$wip_painting_data_arr = WipPlanActualReport::find()
     	->where([
     		'due_date' => $due_date,
-    		'stage' => $stage
+    		'stage' => $stage,
+            'urut' => '02'
     	])
     	->orderBy('child_analyst_desc, model_group, parent, child')
     	->all();

@@ -8,7 +8,7 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Stock WIP Monitor <span class="japanesse text-green">（仕掛在庫モニター）</span>',
+    'page_title' => 'Stock WIP Monitor <span class="japanesse text-green">（仕掛在庫モニター）</span> - Started + Completed qty <span class="japanesse text-green">(加工中 +完成台数)</span>',
     'tab_title' => 'Stock WIP Monitor',
     'breadcrumbs_title' => 'Stock WIP Monitor'
 ];

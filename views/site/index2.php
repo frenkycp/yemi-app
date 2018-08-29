@@ -20,7 +20,7 @@ $this->registerCss("
         text-align: center;
     }
     ol {
-        font-size: 13px;
+        font-size: 12px;
     }
     .panel-heading {
         font-weight: bold;
@@ -39,15 +39,15 @@ $this->registerCss("
 
     <div class="body-content">
     	<div class="row">
-    		<div class="col-md-4">
+    		<div class="col-sm-3">
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Material Monitoring<br/><span class="japanesse-word">材料モニタリング</span></div>
                     <div class="list-group">
                         <div class="list-group-item">
                             <p>Vendor to YEMI <span class="japanesse-word">(ベンダー⇒YEMI)</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Weekly MilkRun Parts（<span class="japanesse-word">週次ミルクラン部品納入）</span>', ['/parts-milk-run-weekly/index']); ?>
+                                    <?= Html::a('Weekly MilkRun Parts<br/><span class="japanesse-word">(週次ミルクラン部品納入）</span>', ['/parts-milk-run-weekly/index']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('Weekly JIT Parts <span class="japanesse-word">（週次JIT部品納入)</span>', ['/parts-jit-weekly/index']); ?>
@@ -55,10 +55,10 @@ $this->registerCss("
                             </ol>
                         </div>
                         <div class="list-group-item">
-                            <p>YEMI WH to Production <span class="japanesse-word">(YEMI 部品倉庫⇒生産職場)</span></p>
-                            <ol style="padding-left: 2em">
+                            <p>YEMI WH to Production<br/><span class="japanesse-word">(YEMI 部品倉庫⇒生産職場)</span></p>
+                            <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['parts-picking-status/index']); ?>
+                                    <?= Html::a('Weekly Picking Status<br/><span class="japanesse-word">(週次ピッキング状況)</span>', ['parts-picking-status/index']); ?>
                                 </li>
                                 <li class="text-red">
                                     <?= '<p>Monthly Monitoring Uncountable Parts<br/><span class="japanesse-word">(不定材の受払い管理) ― 準備中</span></p>' ?>
@@ -69,17 +69,17 @@ $this->registerCss("
                     </div>
                 </div>
     		</div>
-    		<div class="col-md-3">
+    		<div class="col-sm-4">
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">E-Kanban WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/>E-<span class="japanesse-word">かんばん・生産工程モニタリング</span></div>
-                    <div class="list-group">
-                        <?= Html::a('Kanban Monitor<br/>（かんばんモニター）', ['wip-painting-monitoring/index'], [
+                    <div class="list-group" style="text-align: center;">
+                        <?= Html::a('Kanban Monitor （かんばんモニター）<br/>- Completion Target Based (完成目標基準）', ['wip-painting-monitoring/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                         <?= Html::a('Kanban Process-Flow Monitor<br/>（かんばん工程流れモニター）', ['wip-flow-process-monitoring/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
-                        <?= Html::a('Stock WIP Monitor<br/>（仕掛在庫モニター）', ['wip-painting-stock-monitoring/index'], [
+                        <?= Html::a('Stock WIP Monitor （仕掛在庫モニター）<br/>- Started + Completed qty (加工中 +完成台数)', ['wip-painting-stock-monitoring/index'], [
                             'class' => 'list-group-item'
                         ]); ?>
                         <?= Html::a('WIP Data Record<br/>（仕掛りデーター）', ['wip-plan-actual-report/index'], [
@@ -96,7 +96,7 @@ $this->registerCss("
                     <div class="list-group">
                         <div class="list-group-item">
                             <p>Plant Maintenance <span class="japanesse-word">(工場保全管理)</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
                                 <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
                                 <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
@@ -105,7 +105,7 @@ $this->registerCss("
 
                         <div class="list-group-item">
                             <p>Manpower Attendance <span class="japanesse-word">(勤怠管理)</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <li><?= Html::a('Daily Attendance Control<br/>
                                     <span class="japanesse-word">(日常勤怠管理)</span>', ['/hrga-attendance-report/index']); ?>
                                 </li>
@@ -116,7 +116,7 @@ $this->registerCss("
                         
                         <div class="list-group-item">
                             <p>Manpower Planning <span class="japanesse-word">(要員計画）</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <!--<li>
                                     <span class="text-red">5. Attendance report (勤怠管理)</span>
                                 </li>-->
@@ -128,7 +128,7 @@ $this->registerCss("
                         
                         <div class="list-group-item">
                             <p>Manpower Database <span class="japanesse-word">(社員構成)</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <li><?= Html::a('By Status <span class="japanesse-word">(雇用形態別）</span>', ['/hrga-emp-level-monthly/index']); ?></li>
                                 <li><?= Html::a('By Department <span class="japanesse-word">(部門別）</span>', ['/hrga-emp-dept-monthly/index']); ?></li>
                                 <li><?= Html::a('By Grade <span class="japanesse-word">(等級別）</span>', ['/hrga-emp-grade/index']); ?></li>
@@ -139,17 +139,17 @@ $this->registerCss("
                 </div>
                 
     		</div>
-    		<div class="col-md-1 text-center">
+    		<div class="col-sm-1 text-center">
     			<i class="fa fa-fw fa-arrow-right fa-3x text-primary"></i>
     		</div>
-    		<div class="col-md-4">
+    		<div class="col-sm-4">
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Finish Goods Monitoring<br/><span class="japanesse-word">完成品モニタリング</span></div>
                     
                     <div class="list-group">
                         <div class="list-group-item">
                             <p>Sales Control <span class="japanesse-word">(売上管理)</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <li>
                                     <?= Html::a('Sales Budget/Forecast/Actual<br/><span class="japanesse-word">(売上予算・見込み・実績)</span>', ['/production-budget/index']); ?>
                                 </li>
@@ -160,18 +160,18 @@ $this->registerCss("
                         </div>
                         <div class="list-group-item">
                             <p>WH FG Control <span class="japanesse-word">(完成品倉庫管理)</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <li>
                                     <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock/index']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Finish Goods Traceablity <span class="japanesse-word">（完成品トレーサビリティ）</span>', ['/serno-input/index']); ?>
+                                    <?= Html::a('Final Product Tracer <span class="japanesse-word">(完成品トレーサ）</span>', ['/serno-input/index']); ?>
                                 </li>
                             </ol>
                         </div>
                         <div class="list-group-item">
                             <p>Shipping Control <span class="japanesse-word">(出荷管理)</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <li>
                                     <?= Html::a('Monthly Shipping Container <span class="japanesse-word">(月次コンテナー出荷)</span>', ['/production-container-daily-report/index']); ?>
                                 </li>
@@ -188,7 +188,7 @@ $this->registerCss("
                         </div>
                         <div class="list-group-item">
                             <p>Monthly Production <span class="japanesse-word">(月次生産）</span></p>
-                            <ol style="padding-left: 2em">
+                            <ol style="padding-left: 1em">
                                 <li>
                                     <?= Html::a('Monthly Production Data <span class="japanesse-word">(月次生産計画)</span>', ['/yemi-internal/index']); ?>
                                 </li>

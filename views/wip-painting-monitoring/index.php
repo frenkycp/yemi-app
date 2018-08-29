@@ -9,7 +9,7 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Kanban Monitor <span class="japanesse text-green">（かんばんモニター）</span>',
+    'page_title' => 'Kanban Monitor <span class="japanesse text-green">（かんばんモニター）</span> - Completion Target Based <span class="japanesse text-green">(完成目標基準）</span>',
     'tab_title' => 'Kanban Monitor',
     'breadcrumbs_title' => 'Kanban Monitor'
 ];
