@@ -235,8 +235,8 @@ class WipPaintingMonitoringController extends Controller
 		'<tr class="info">
 			<th class="text-center">Location</th>
             <th class="text-center">Slip No.</th>
+            <th class="text-center">Line</th>
 			<th>Model</th>
-			<th class="text-center">Child</th>
 			<th>Child Description</th>
 			<th class="text-center">Qty</th>
             <th class="text-center" style="min-width: 100px;">Start Plan</th>
@@ -254,8 +254,8 @@ class WipPaintingMonitoringController extends Controller
 				<tr>
 					<td class="text-center">' . $value['child_analyst_desc'] . '</td>
                     <td class="text-center">' . $value['slip_id'] . '</td>
+                    <td class="text-center">' . $value['period_line'] . '</td>
 					<td>' . $value['model_group'] . '</td>
-					<td class="text-center">' . $value['child'] . '</td>
 					<td>' . $value['child_desc'] . '</td>
 					<td class="text-center">' . $value['summary_qty'] . '</td>
                     <td class="text-center">' . $start_plan . '</td>
