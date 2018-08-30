@@ -14,6 +14,9 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use yii\web\UploadedFile;
 use app\models\CisClientIpAddress;
+use app\models\Karyawan;
+use app\models\RekapAbsensiView;
+use app\models\AbsensiTbl;
 
 class SiteController extends Controller
 {
@@ -38,12 +41,48 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionGetDisiplinDetail($nik, $period)
+    {
+        $abensi_data_arr = AbsensiTbl::find()->where([
+            'NIK' => $nik,
+            'PERIOD' => $period,
+            'DISIPLIN' => 0
+        ])->all();
+
+        $data = '<table class="table table-bordered table-striped table-hover">';
+        $data .= 
+        '<thead><tr>
+            <th style="text-align: center;">Tanggal</th>
+            <th>Keterangan</th>
+        </tr></thead>'
+        ;
+        $data .= '<tbody>';
+        foreach ($abensi_data_arr as $key => $value) {
+            $data .= '
+            <tr>
+                <td style="text-align: center;">' . date('l, d M\' Y', strtotime($value['DATE'])) . '</td>
+                <td>' . $value['CATEGORY'] . '</td>
+            </tr>
+            ';
+        }
+        $data .= '</tbody>';
+        $data .= '</table>';
+        return $data;
+    }
+
     public function actionIndex()
     {
-        //return $this->render('index');
-        /*if (\Yii::$app->user->identity->username == 'yemi') {
-            return $this->redirect(['weekly-plan/index']);
-        }*/
+        if (\Yii::$app->user->identity->role->name == 'YEMI') {
+            $nik = \Yii::$app->user->identity->name;
+            $model_karyawan = Karyawan::find()->where([
+                'NIK' => $nik
+            ])->one();
+            $model_rekap_absensi = RekapAbsensiView::find()->where(['NIK' => $nik])->orderBy('PERIOD')->all();
+            return $this->render('index_nik', [
+                'model_karyawan' => $model_karyawan,
+                'model_rekap_absensi' => $model_rekap_absensi,
+            ]);
+        }
         return $this->render('index2');
     }
 
