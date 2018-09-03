@@ -136,7 +136,7 @@ class WipPaintingMonitoringController extends Controller
 					[
 						'name' => 'ORDERED （受注）',
 						'data' => $value['order_percentage'],
-						'color' => 'rgba(240, 240, 240, 0.7)',
+						'color' => 'rgba(255, 255, 255, 0.5)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
 					],
 					/*[
@@ -147,19 +147,19 @@ class WipPaintingMonitoringController extends Controller
 					[
 						'name' => 'STARTED （加工中）',
 						'data' => $value['started_percentage'],
-						'color' => 'rgba(240, 240, 0, 0.7)',
+						'color' => 'rgba(240, 240, 0, 0.5)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 					],
 					[
 						'name' => 'COMPLETED （加工上がり）',
 						'data' => $value['completed_percentage'],
-						'color' => 'rgba(0, 150, 255, 0.7)',
+						'color' => 'rgba(0, 150, 255, 0.5)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
 					],
 					[
 						'name' => 'HANDOVER （後工程に引渡し）',
 						'data' => $value['handover_percentage'],
-						'color' => 'rgba(0, 240, 0, 0.7)',
+						'color' => 'rgba(0, 240, 0, 0.5)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
 					]
 				]
@@ -233,24 +233,26 @@ class WipPaintingMonitoringController extends Controller
         $data = '<h4>' . $status . '</h4>';
     	$data .= '<table class="table table-bordered table-hover">';
     	$data .= 
-		'<tr class="info">
+		'<thead style="font-size: 10px;"><tr class="info">
 			<th class="text-center">Location</th>
             <th class="text-center">Slip No.</th>
             <th class="text-center">Line</th>
 			<th>Model</th>
 			<th>Child Description</th>
 			<th class="text-center">Qty</th>
+            <th class="text-center" style="min-width: 80px;">FA Start</th>
             <th class="text-center" style="min-width: 100px;">Start Plan</th>
             <th class="text-center" style="min-width: 100px;">End Plan</th>
 			<th class="text-center" style="min-width: 100px;">Start Actual</th>
 			<th class="text-center" style="min-width: 100px;">End Actual</th>
-		</tr>';
-
+		</tr></thead>';
+        $data .= '<tbody style="font-size: 10px;">';
 		foreach ($wip_painting_data_arr as $value) {
             $start_plan = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
             $end_plan = $value['due_date'] == null ? '-' : date('Y-m-d', strtotime($value['due_date']));
 			$start_actual = $value['start_job'] == null ? '-' : $value['start_job'];
 			$end_actual = $value['end_job'] == null ? '-' : $value['end_job'];
+            $fa_start = $value['source_date'] == null ? '-' : date('Y-m-d', strtotime($value['source_date']));
 			$data .= '
 				<tr>
 					<td class="text-center">' . $value['child_analyst_desc'] . '</td>
@@ -259,6 +261,7 @@ class WipPaintingMonitoringController extends Controller
 					<td>' . $value['model_group'] . '</td>
 					<td>' . $value['child_desc'] . '</td>
 					<td class="text-center">' . $value['summary_qty'] . '</td>
+                    <td class="text-center">' . $fa_start . '</td>
                     <td class="text-center">' . $start_plan . '</td>
                     <td class="text-center">' . $end_plan . '</td>
 					<td class="text-center text-green">' . $start_actual . '</td>
@@ -266,6 +269,7 @@ class WipPaintingMonitoringController extends Controller
 				</tr>
 			';
 		}
+        $data .= '</tbody>';
 
 		$data .= '</table>';
 		return $data;
