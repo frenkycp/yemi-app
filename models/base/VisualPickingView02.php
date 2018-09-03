@@ -18,6 +18,9 @@ use Yii;
  * @property integer $slip_count
  * @property integer $slip_open
  * @property integer $slip_close
+ * @property integer $total_ordered
+ * @property integer $total_started
+ * @property integer $total_completed
  * @property string $aliasModel
  */
 abstract class VisualPickingView02 extends \yii\db\ActiveRecord
@@ -48,7 +51,7 @@ abstract class VisualPickingView02 extends \yii\db\ActiveRecord
     {
         return [
             [['year', 'period', 'analyst', 'analyst_desc'], 'string'],
-            [['week', 'slip_count', 'slip_open', 'slip_close'], 'integer'],
+            [['week', 'slip_count', 'slip_open', 'slip_close', 'total_ordered', 'total_started', 'total_completed'], 'integer'],
             [['req_date'], 'safe']
         ];
     }
@@ -68,6 +71,9 @@ abstract class VisualPickingView02 extends \yii\db\ActiveRecord
             'slip_count' => 'Slip Count',
             'slip_open' => 'Slip Open',
             'slip_close' => 'Slip Close',
+            'total_ordered' => 'Total Ordered',
+            'total_started' => 'Total Started',
+            'total_completed' => 'Total Completed',
         ];
     }
 

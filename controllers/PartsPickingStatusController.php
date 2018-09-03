@@ -19,6 +19,7 @@ class PartsPickingStatusController extends Controller
     public function actionIndex()
     {
     	date_default_timezone_set('Asia/Jakarta');
+        set_time_limit(500);
     	$data = [];
     	$model = new PickingLocation();
     	$model->location = 'WF01';
@@ -44,34 +45,72 @@ class PartsPickingStatusController extends Controller
     		$tmp_category = [];
     		$tmp_data_open = [];
     		$tmp_data_close = [];
+
+            $tmp_data_ordered = [];
+            $tmp_data_started = [];
+            $tmp_data_completed = [];
+            $tmp_data_handover = [];
     		foreach ($visual_picking_arr as $visual_picking) {
     			if ($week_no == $visual_picking->week) {
     				$tmp_category[] = date('Y-m-d', strtotime($visual_picking->req_date));
 
     				$open_qty = $visual_picking->slip_open;
     				$close_qty = $visual_picking->slip_close;
+
+                    $ordered_qty = $visual_picking->total_ordered;
+                    $started_qty = $visual_picking->total_started;
+                    $completed_qty = $visual_picking->total_completed;
+                    $handover_qty = $visual_picking->slip_close;
     				$total_qty = $visual_picking->slip_count;
 
     				$open_percentage = 0;
     				$close_percentage = 0;
+
+                    $ordered_percentage = 0;
+                    $started_percentage = 0;
+                    $completed_percentage = 0;
+                    $handover_percentage = 0;
     				if ($total_qty > 0) {
     					$open_percentage = round((($open_qty / $total_qty) * 100), 2);
     					$close_percentage = round((($close_qty / $total_qty) * 100), 2);
+
+                        $ordered_percentage = round((($ordered_qty / $total_qty) * 100), 2);
+                        $started_percentage = round((($started_qty / $total_qty) * 100), 2);
+                        $completed_percentage = round((($completed_qty / $total_qty) * 100), 2);
+                        $handover_percentage = round((($handover_qty / $total_qty) * 100), 2);
     				}
 
-    				$tmp_data_open[] = [
+    				/*$tmp_data_open[] = [
     					'y' => $open_percentage == 0 ? null : $open_percentage,
     					'remark' => $this->getRemark($visual_picking->req_date, $visual_picking->analyst, 1)
     				];
     				$tmp_data_close[] = [
     					'y' => $close_percentage == 0 ? null : $close_percentage,
     					'remark' => $this->getRemark($visual_picking->req_date, $visual_picking->analyst, 0)
-    				];
+    				];*/
+
+                    $tmp_data_ordered[] = [
+                        'y' => $ordered_percentage == 0 ? null : $ordered_percentage,
+                        'remark' => $this->getRemark($visual_picking->req_date, $visual_picking->analyst, [1, 2], 'O')
+                    ];
+                    $tmp_data_started[] = [
+                        'y' => $started_percentage == 0 ? null : $started_percentage,
+                        'remark' => $this->getRemark($visual_picking->req_date, $visual_picking->analyst, 3, 'O')
+                    ];
+                    $tmp_data_completed[] = [
+                        'y' => $completed_percentage == 0 ? null : $completed_percentage,
+                        'remark' => $this->getRemark($visual_picking->req_date, $visual_picking->analyst, [4, 5], 'O')
+                    ];
+                    $tmp_data_handover[] = [
+                        'y' => $handover_percentage == 0 ? null : $handover_percentage,
+                        'remark' => $this->getRemark($visual_picking->req_date, $visual_picking->analyst, 5, 'C')
+                    ];
+
     			}
     		}
     		$data[$week_no][] = [
     			'category' => $tmp_category,
-    			'data' => [
+    			/*'data' => [
     				[
     					'name' => 'OUTSTANDING',
     					'data' => $tmp_data_open,
@@ -87,7 +126,29 @@ class PartsPickingStatusController extends Controller
     					'color' => 'rgba(0, 200, 0, 0.4)',
     					'showInLegend' => false,
     				],
-    			]
+    			]*/
+                'data' => [
+                    [
+                        'name' => 'ORDERED （受注）',
+                        'data' => $tmp_data_ordered,
+                        'color' => 'rgba(255, 255, 255, 0.5)',
+                    ],
+                    [
+                        'name' => 'STARTED （加工中）',
+                        'data' => $tmp_data_started,
+                        'color' => 'rgba(240, 240, 0, 0.5)',
+                    ],
+                    [
+                        'name' => 'COMPLETED （加工上がり）',
+                        'data' => $tmp_data_completed,
+                        'color' => 'rgba(0, 150, 255, 0.5)',
+                    ],
+                    [
+                        'name' => 'HANDOVER （後工程に引渡し）',
+                        'data' => $tmp_data_handover,
+                        'color' => 'rgba(0, 240, 0, 0.5)',
+                    ],
+                ],
     		];
     	}
 
@@ -99,13 +160,14 @@ class PartsPickingStatusController extends Controller
     	]);
     }
 
-    public function getRemark($req_date, $analyst, $slip_open)
+    public function getRemark($req_date, $analyst, $stage_id, $stat)
     {
     	$data_arr = VisualPickingView::find()
     	->where([
     		'req_date' => $req_date,
     		'analyst' => $analyst,
-    		'slip_open' => $slip_open
+            'stage_id' => $stage_id,
+            'stat' => $stat,
     	])
     	->orderBy('set_list_no ASC')
     	->all();

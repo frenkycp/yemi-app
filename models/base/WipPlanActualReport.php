@@ -38,6 +38,7 @@ use Yii;
  * @property string $end_job_user_desc
  * @property string $hand_over_job_user_desc
  * @property string $urut
+ * @property double $bom_level
  * @property string $aliasModel
  */
 abstract class WipPlanActualReport extends \yii\db\ActiveRecord
@@ -70,7 +71,7 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
             [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'created_user_desc', 'start_job_user_desc', 'end_job_user_desc', 'hand_over_job_user_desc', 'urut'], 'string'],
             [['week', 'session_id'], 'integer'],
             [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'source_date'], 'safe'],
-            [['summary_qty'], 'number']
+            [['summary_qty', 'bom_level'], 'number']
         ];
     }
 
@@ -109,6 +110,7 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
             'end_job_user_desc' => 'End Job User Desc',
             'hand_over_job_user_desc' => 'Hand Over Job User Desc',
             'urut' => 'Urut',
+            'bom_level' => 'Bom Level',
         ];
     }
 

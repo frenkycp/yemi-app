@@ -14,6 +14,7 @@ use Yii;
  * @property string $USER_DOC_RCV
  * @property string $USER_DESC_DOC_RCV
  * @property string $TGL_LEMBUR
+ * @property string $PERIOD
  * @property string $JENIS_LEMBUR
  * @property string $CC_ID
  * @property string $CC_GROUP
@@ -42,6 +43,8 @@ use Yii;
  * @property string $URAIAN_LEMBUR
  * @property string $STAT_DTR
  * @property string $PAY
+ * @property string $SPL_GROUP
+ * @property string $KETERANGAN
  * @property string $aliasModel
  */
 abstract class SplView extends \yii\db\ActiveRecord
@@ -71,8 +74,8 @@ abstract class SplView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['SPL_HDR_ID', 'SPL_BARCODE', 'TGL_LEMBUR'], 'required'],
-            [['SPL_HDR_ID', 'SPL_BARCODE', 'USER_DOC_RCV', 'USER_DESC_DOC_RCV', 'JENIS_LEMBUR', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'USER_ID', 'USER_DESC', 'URAIAN_UMUM', 'STAT', 'SPL_DTR_ID', 'ID_NIK_AND_DATE', 'NO', 'NIK', 'NAMA_KARYAWAN', 'DIRECT_INDIRECT', 'GRADE', 'KODE_LEMBUR', 'URAIAN_LEMBUR', 'STAT_DTR', 'PAY'], 'string'],
+            [['SPL_HDR_ID', 'SPL_BARCODE', 'TGL_LEMBUR', 'KETERANGAN'], 'required'],
+            [['SPL_HDR_ID', 'SPL_BARCODE', 'USER_DOC_RCV', 'USER_DESC_DOC_RCV', 'PERIOD', 'JENIS_LEMBUR', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'USER_ID', 'USER_DESC', 'URAIAN_UMUM', 'STAT', 'SPL_DTR_ID', 'ID_NIK_AND_DATE', 'NO', 'NIK', 'NAMA_KARYAWAN', 'DIRECT_INDIRECT', 'GRADE', 'KODE_LEMBUR', 'URAIAN_LEMBUR', 'STAT_DTR', 'PAY', 'SPL_GROUP', 'KETERANGAN'], 'string'],
             [['TGL_LEMBUR', 'USER_LAST_UPDATE', 'DOC_RCV_DATE', 'DOC_VALIDATION_DATE', 'START_LEMBUR_PLAN', 'END_LEMBUR_PLAN', 'START_LEMBUR_ACTUAL', 'END_LEMBUR_ACTUAL'], 'safe'],
             [['NILAI_LEMBUR_PLAN', 'NILAI_LEMBUR_ACTUAL'], 'number']
         ];
@@ -89,6 +92,7 @@ abstract class SplView extends \yii\db\ActiveRecord
             'USER_DOC_RCV' => 'User  Doc  Rcv',
             'USER_DESC_DOC_RCV' => 'User  Desc  Doc  Rcv',
             'TGL_LEMBUR' => 'Tgl  Lembur',
+            'PERIOD' => 'Period',
             'JENIS_LEMBUR' => 'Jenis  Lembur',
             'CC_ID' => 'Cc  ID',
             'CC_GROUP' => 'Cc  Group',
@@ -117,6 +121,8 @@ abstract class SplView extends \yii\db\ActiveRecord
             'URAIAN_LEMBUR' => 'Uraian  Lembur',
             'STAT_DTR' => 'Stat  Dtr',
             'PAY' => 'Pay',
+            'SPL_GROUP' => 'Spl  Group',
+            'KETERANGAN' => 'Keterangan',
         ];
     }
 

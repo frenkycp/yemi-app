@@ -171,10 +171,8 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
-<h4 class="text-center bg-navy" style="padding: 5px;">
-    <span>DRAFT</span>
-    <i class="fa fa-fw fa-long-arrow-right"></i>
-    <span>CONFIRM</span>
+<h4 class="text-center bg-navy" style="padding: 5px; display: none;">
+    <span>ORDERED</span>
     <i class="fa fa-fw fa-long-arrow-right"></i>
     <span>STARTED</span>
     <i class="fa fa-fw fa-long-arrow-right"></i>
