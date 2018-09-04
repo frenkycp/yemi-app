@@ -83,7 +83,7 @@ $query->andFilterWhere([
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'tb_serno_input.gmc', $this->gmc])
             ->andFilterWhere(['like', 'tb_serno_master.model', $this->speaker_model])
-            ->andFilterWhere(['like', 'line', $this->line])
+            ->andFilterWhere(['like', 'tb_serno_input.line', $this->line])
             ->andFilterWhere(['like', 'tb_serno_output.dst', $this->port])
             ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
