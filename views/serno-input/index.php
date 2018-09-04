@@ -94,7 +94,8 @@ $grid_columns = [
         ],
     ],
     [
-        'attribute' => 'description',
+        'attribute' => 'speaker_model',
+        'label' => 'Description',
         'value' => 'partName',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -308,7 +309,7 @@ $grid_columns = [
             'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            //'pjax' => true, // pjax is set to always true for this demo
+            'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 /*['content' => 
                     Html::a('View Chart', ['/production-monthly-inspection/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'View Chart')])

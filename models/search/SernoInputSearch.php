@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['num', 'flo', 'palletnum', 'adv'], 'integer'],
-            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'ship', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'so'], 'safe'],
+            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'ship', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'speaker_model', 'so'], 'safe'],
 ];
 }
 
@@ -41,7 +41,10 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = SernoInput::find()->joinWith('sernoOutput');
+$query = SernoInput::find()
+->joinWith('sernoOutput')
+->joinWith('sernoMaster')
+->where('flo <> 0');
 $this->load($params);
 /*$query1 = (new \yii\db\Query())
     ->select("*")
@@ -79,6 +82,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'tb_serno_input.gmc', $this->gmc])
+            ->andFilterWhere(['like', 'tb_serno_master.model', $this->speaker_model])
             ->andFilterWhere(['like', 'line', $this->line])
             ->andFilterWhere(['like', 'tb_serno_output.dst', $this->port])
             ->andFilterWhere(['like', 'proddate', $this->proddate])

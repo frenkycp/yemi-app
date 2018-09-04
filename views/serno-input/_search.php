@@ -71,19 +71,16 @@ echo '</pre>';*/
     	<div class="col-sm-3">
     		<div class="panel panel-primary">
     			<div class="panel-body">
+                    <?= $form->field($model, 'speaker_model')->textInput(['placeholder' => 'Input Model'])->label('Model') ?>
+
                     <?= $form->field($model, 'gmc')->widget(TypeaheadBasic::classname(), [
                         'data' => $data_gmc,
-                        'options' => ['placeholder' => 'Input GMC ...'],
+                        'options' => ['placeholder' => 'Input GMC'],
                         'pluginOptions' => ['highlight'=>true],
                     ]); ?>
 
                     <?= $form->field($model, 'sernum')->textInput(['placeholder' => 'Input Serial Number'])->label('Serial Number') ?>
 
-    				<?= $form->field($model, 'flo')->widget(TypeaheadBasic::classname(), [
-                        'data' => $data_flo,
-                        'options' => ['placeholder' => 'Input FLO ...'],
-                        'pluginOptions' => ['highlight'=>true],
-                    ])->label('FLO Number'); ?>
     			</div>
     		</div>
     	</div>
@@ -91,15 +88,21 @@ echo '</pre>';*/
     	<div class="col-sm-3">
     		<div class="panel panel-primary">
     			<div class="panel-body">
-    				<?= $form->field($model, 'port')->dropDownList(ArrayHelper::map(app\models\SernoOutput::find()->orderBy('dst')->all(), 'dst', 'dst'), [
-                        'prompt' => 'Select port ...'
-                    ]) ?>
+                    <?= $form->field($model, 'flo')->widget(TypeaheadBasic::classname(), [
+                        'data' => $data_flo,
+                        'options' => ['placeholder' => 'Input FLO ...'],
+                        'pluginOptions' => ['highlight'=>true],
+                    ])->label('FLO Number'); ?>
 
                     <?= $form->field($model, 'invoice')->widget(TypeaheadBasic::classname(), [
                         'data' => $data_invoice,
                         'options' => ['placeholder' => 'Input Invoice ...'],
                         'pluginOptions' => ['highlight'=>true],
                     ]); ?>
+
+    				<?= $form->field($model, 'port')->dropDownList(ArrayHelper::map(app\models\SernoOutput::find()->orderBy('dst')->all(), 'dst', 'dst'), [
+                        'prompt' => 'Select port ...'
+                    ]) ?>
     			</div>
     		</div>
     	</div>
