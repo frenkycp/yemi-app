@@ -13,11 +13,12 @@
 namespace PhpCsFixer\Fixer\Whitespace;
 
 use PhpCsFixer\AbstractFixer;
+use PhpCsFixer\ConfigurationException\InvalidConfigurationException;
 use PhpCsFixer\Fixer\ConfigurationDefinitionFixerInterface;
 use PhpCsFixer\Fixer\WhitespacesAwareFixerInterface;
+use PhpCsFixer\FixerConfiguration\AllowedValueSubset;
 use PhpCsFixer\FixerConfiguration\FixerConfigurationResolverRootless;
 use PhpCsFixer\FixerConfiguration\FixerOptionBuilder;
-use PhpCsFixer\FixerConfiguration\FixerOptionValidatorGenerator;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
 use PhpCsFixer\Preg;
@@ -307,16 +308,22 @@ switch($a) {
      */
     protected function createConfigurationDefinition()
     {
+        $that = $this;
+
         return new FixerConfigurationResolverRootless('tokens', [
             (new FixerOptionBuilder('tokens', 'List of tokens to fix.'))
                 ->setAllowedTypes(['array'])
-                ->setAllowedValues([
-                    (new FixerOptionValidatorGenerator())->allowedValueIsSubsetOf(self::$availableTokens),
-                ])
-                ->setNormalizer(static function (Options $options, $tokens) {
+                ->setAllowedValues([new AllowedValueSubset(self::$availableTokens)])
+                ->setNormalizer(static function (Options $options, $tokens) use ($that) {
                     foreach ($tokens as &$token) {
                         if ('useTrait' === $token) {
-                            @trigger_error('Token "useTrait" is deprecated and will be removed in 3.0, use "use_trait" instead.', E_USER_DEPRECATED);
+                            $message = "Token \"useTrait\" in option \"tokens\" for rule \"{$that->getName()}\" is deprecated and will be removed in 3.0, use \"use_trait\" instead.";
+
+                            if (getenv('PHP_CS_FIXER_FUTURE_MODE')) {
+                                throw new InvalidConfigurationException("{$message} This check was performed as `PHP_CS_FIXER_FUTURE_MODE` env var is set.");
+                            }
+
+                            @trigger_error($message, E_USER_DEPRECATED);
                             $token = 'use_trait';
 
                             break;
@@ -327,7 +334,7 @@ switch($a) {
                 })
                 ->setDefault(['extra'])
                 ->getOption(),
-        ]);
+        ], $this->getName());
     }
 
     private function fixByToken(Token $token, $index)
@@ -370,11 +377,13 @@ switch($a) {
 
     private function removeMultipleBlankLines($index)
     {
+        $expected = $this->tokens[$index - 1]->isGivenKind(T_OPEN_TAG) && 1 === Preg::match('/\R$/', $this->tokens[$index - 1]->getContent()) ? 1 : 2;
+
         $parts = Preg::split('/(.*\R)/', $this->tokens[$index]->getContent(), -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
         $count = \count($parts);
 
-        if ($count > 2) {
-            $this->tokens[$index] = new Token([T_WHITESPACE, $parts[0].$parts[1].rtrim($parts[$count - 1], "\r\n")]);
+        if ($count > $expected) {
+            $this->tokens[$index] = new Token([T_WHITESPACE, implode('', \array_slice($parts, 0, $expected)).rtrim($parts[$count - 1], "\r\n")]);
         }
     }
 
@@ -421,7 +430,7 @@ switch($a) {
     private function removeEmptyLinesAfterLineWithTokenAt($index)
     {
         // find the line break
-        $tokenCount = count($this->tokens);
+        $tokenCount = \count($this->tokens);
         for ($end = $index; $end < $tokenCount; ++$end) {
             if (
                 $this->tokens[$end]->equals('}')
@@ -444,7 +453,7 @@ switch($a) {
             }
 
             $pos = strrpos($content, "\n");
-            if ($pos + 2 <= strlen($content)) { // preserve indenting where possible
+            if ($pos + 2 <= \strlen($content)) { // preserve indenting where possible
                 $newContent = $ending.substr($content, $pos + 1);
             } else {
                 $newContent = $ending;

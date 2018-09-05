@@ -31,7 +31,7 @@ final class SelfAccessorFixer extends AbstractFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Inside class or interface element "self" should be preferred to the class name itself.',
+            'Inside class or interface element `self` should be preferred to the class name itself.',
             [
                 new CodeSample(
                     '<?php
@@ -114,12 +114,8 @@ class Sample
 
             $token = $tokens[$i];
 
-            if (
-                // skip anonymous classes
-                ($token->isGivenKind(T_CLASS) && $tokensAnalyzer->isAnonymousClass($i)) ||
-                // skip lambda functions (PHP < 5.4 compatibility)
-                ($token->isGivenKind(T_FUNCTION) && $tokensAnalyzer->isLambda($i))
-            ) {
+            // skip anonymous classes
+            if ($token->isGivenKind(T_CLASS) && $tokensAnalyzer->isAnonymousClass($i)) {
                 $i = $tokens->getNextTokenOfKind($i, ['{']);
                 $i = $tokens->findBlockEnd(Tokens::BLOCK_TYPE_CURLY_BRACE, $i);
 

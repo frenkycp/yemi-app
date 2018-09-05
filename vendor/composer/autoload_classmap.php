@@ -61,8 +61,6 @@ return array(
     'PhpCsFixer\\Tests\\Test\\AbstractIntegrationCaseFactory' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/AbstractIntegrationCaseFactory.php',
     'PhpCsFixer\\Tests\\Test\\AbstractIntegrationTestCase' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/AbstractIntegrationTestCase.php',
     'PhpCsFixer\\Tests\\Test\\Assert\\AssertTokensTrait' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/Assert/AssertTokensTrait.php',
-    'PhpCsFixer\\Tests\\Test\\Constraint\\SameStringsConstraintForV5' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/Constraint/SameStringsConstraintForV5.php',
-    'PhpCsFixer\\Tests\\Test\\Constraint\\SameStringsConstraintForV7' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/Constraint/SameStringsConstraintForV7.php',
     'PhpCsFixer\\Tests\\Test\\IntegrationCase' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCase.php',
     'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactory' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactory.php',
     'PhpCsFixer\\Tests\\Test\\IntegrationCaseFactoryInterface' => $vendorDir . '/friendsofphp/php-cs-fixer/tests/Test/IntegrationCaseFactoryInterface.php',

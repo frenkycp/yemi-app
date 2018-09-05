@@ -1,12 +1,13 @@
 <?php
 use yii\helpers\Html;
+use app\models\SplView;
 
 /* @var $this yii\web\View */
 
 $this->title = 'Dashboard';
 
 $this->registerJs("$(function() {
-   $('.popup_disiplin').click(function(e) {
+   $('.popup_btn').click(function(e) {
      e.preventDefault();
      $('#modal').modal('show').find('.modal-body').load($(this).attr('href'));
    });
@@ -25,7 +26,7 @@ $this->registerJs("$(function() {
 
                 <ul class="list-group list-group-unbordered">
                     <li class="list-group-item">
-                        <b>Sisa Cuti</b> <a class="pull-right">0</a>
+                        <b>Sisa Cuti</b> <a class="pull-right">?</a>
                     </li>
                 </ul>
             </div>
@@ -60,11 +61,10 @@ $this->registerJs("$(function() {
     <div class="col-md-9">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#absensi" data-toggle="tab">Absensi</a></li>
-                <li class=""><a href="#lembur" data-toggle="tab">Lembur</a></li>
+                <li class="active"><a href="#absensi" data-toggle="tab">Absensi & Lembur</a></li>
             </ul>
             <div class="tab-content">
-                <div class="active tab-pane" id="absensi">
+                <div class="active tab-pane table-responsive" id="absensi">
                     <table class="table table-striped table-hover">
                         <thead>
                             <tr>
@@ -74,50 +74,88 @@ $this->registerJs("$(function() {
                                 <th style="text-align: center;">Sakit</th>
                                 <th style="text-align: center;">Cuti</th>
                                 <th style="text-align: center;">Disiplin</th>
+                                <th style="text-align: center;">Lembur (jam)</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             foreach ($model_rekap_absensi as $value) {
+                                $data_lembur = SplView::find()
+                                ->select([
+                                    'PERIOD',
+                                    'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+                                ])
+                                ->where([
+                                    'NIK' => $value->NIK,
+                                    'PERIOD' => $value->PERIOD
+                                ])
+                                ->groupBy('PERIOD')
+                                ->one();
                                 $disiplin_icon = '<i class="fa fa-thumbs-up text-green"></i>';
                                 if ($value->DISIPLIN == 0) {
-                                    $disiplin_icon = Html::a('<i class="fa fa-thumbs-down text-red"></i>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD], ['class' => 'popup_disiplin']);
+                                    $disiplin_icon = Html::a('<i class="fa fa-thumbs-down text-red"></i>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
                                 }
 
-                                $bg_alpha = 'bg-green';
+                                $bg_alpha = '';
                                 if ($value->ALPHA > 0) {
-                                    $bg_alpha = 'bg-red';
+                                    $bg_alpha = 'badge bg-yellow';
                                 }
 
-                                $bg_ijin = 'bg-green';
+                                $bg_ijin = '';
                                 if ($value->IJIN > 0) {
-                                    $bg_ijin = 'bg-red';
+                                    $bg_ijin = 'badge bg-yellow';
                                 }
 
-                                $bg_sakit = 'bg-green';
+                                $bg_sakit = '';
                                 if ($value->SAKIT > 0) {
-                                    $bg_sakit = 'bg-red';
+                                    $bg_sakit = 'badge bg-yellow';
                                 }
 
-                                $bg_cuti = 'bg-green';
+                                $bg_cuti = '';
                                 if ($value->CUTI > 0) {
-                                    $bg_cuti = 'bg-yellow';
+                                    $bg_cuti = 'badge bg-yellow';
+                                }
+
+                                $total_lembur = $data_lembur->NILAI_LEMBUR_ACTUAL !== null ? $data_lembur->NILAI_LEMBUR_ACTUAL : '-';
+
+                                if ($total_lembur != '-') {
+                                    $total_lembur = Html::a('<span class="badge bg-green">' . $data_lembur->NILAI_LEMBUR_ACTUAL . '</span>', ['get-lembur-detail','nik'=>$value->NIK, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
+                                }
+
+                                $alpha_val = '-';
+                                if ($value->ALPHA > 0) {
+                                    $alpha_val = Html::a('<span class="badge bg-yellow">' . $value->ALPHA . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'category' => 'ALPHA'], ['class' => 'popup_btn']);
+                                }
+
+                                $ijin_val = '-';
+                                if ($value->IJIN > 0) {
+                                    $ijin_val = Html::a('<span class="badge bg-yellow">' . $value->IJIN . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'category' => 'IJIN'], ['class' => 'popup_btn']);
+                                }
+
+                                $sakit_val = '-';
+                                if ($value->SAKIT) {
+                                    $sakit_val = Html::a('<span class="badge bg-yellow">' . $value->SAKIT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'category' => 'SAKIT'], ['class' => 'popup_btn']);
+                                }
+
+                                $cuti_val = '-';
+                                if ($value->CUTI > 0) {
+                                    $cuti_val = Html::a('<span class="badge bg-yellow">' . $value->CUTI . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'category' => 'CUTI'], ['class' => 'popup_btn']);
                                 }
                                 
                                 echo '<tr>';
                                 echo '<td style="text-align: center;">' . $value->PERIOD . '</td>';
-                                echo '<td style="text-align: center;">' . '<span class="badge ' . $bg_alpha . '">' . $value->ALPHA . '</span>' . '</td>';
-                                echo '<td style="text-align: center;">' . '<span class="badge ' . $bg_ijin . '">' . $value->IJIN . '</span>' . '</td>';
-                                echo '<td style="text-align: center;">' . '<span class="badge ' . $bg_sakit . '">' . $value->SAKIT . '</span>' . '</td>';
-                                echo '<td style="text-align: center;">' . '<span class="badge ' . $bg_cuti . '">' . $value->CUTI . '</span>' . '</td>';
+                                echo '<td style="text-align: center;">' . $alpha_val . '</td>';
+                                echo '<td style="text-align: center;">' . $ijin_val . '</td>';
+                                echo '<td style="text-align: center;">' . $sakit_val . '</td>';
+                                echo '<td style="text-align: center;">' . $cuti_val . '</td>';
                                 echo '<td style="text-align: center;">' . $disiplin_icon . '</td>';
+                                echo '<td style="text-align: center;">' . $total_lembur . '</td>';
                                 echo '</tr>';
                             }
                             ?>
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane" id="lembur"></div>
             </div>
         </div>
     </div>
@@ -126,7 +164,7 @@ $this->registerJs("$(function() {
     yii\bootstrap\Modal::begin([
         'id' =>'modal',
         'header' => '<h3>Detail Info</h3>',
-        //'size' => 'modal-lg',
+        'size' => 'modal-lg',
     ]);
     yii\bootstrap\Modal::end();
 ?>

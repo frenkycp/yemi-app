@@ -39,10 +39,8 @@ final class WarningsDetector
 
     public function detectOldMajor()
     {
-        /*
-         * @TODO 3.0 to be activated with new MAJOR release
-         * $this->warnings[] = 'You are running PHP CS Fixer v2, which is not maintained anymore. Please update to v3.';
-         */
+        // @TODO 3.0 to be activated with new MAJOR release
+        // $this->warnings[] = 'You are running PHP CS Fixer v2, which is not maintained anymore. Please update to v3.';
     }
 
     public function detectOldVendor()
@@ -59,19 +57,12 @@ final class WarningsDetector
         }
     }
 
-    public function detectXdebug()
-    {
-        if (extension_loaded('xdebug')) {
-            $this->warnings[] = 'You are running PHP CS Fixer with xdebug enabled. This has a major impact on runtime performance.';
-        }
-    }
-
     /**
      * @return string[]
      */
     public function getWarnings()
     {
-        if (!count($this->warnings)) {
+        if (!\count($this->warnings)) {
             return [];
         }
 

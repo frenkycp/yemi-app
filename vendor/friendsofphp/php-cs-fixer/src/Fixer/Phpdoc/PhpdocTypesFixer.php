@@ -59,7 +59,7 @@ final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer
     public function getDefinition()
     {
         return new FixerDefinition(
-            'The correct case must be used for standard PHP types in phpdoc.',
+            'The correct case must be used for standard PHP types in PHPDoc.',
             [
                 new CodeSample(
                     '<?php
@@ -94,7 +94,7 @@ final class PhpdocTypesFixer extends AbstractPhpdocTypesFixer
     {
         $lower = strtolower($type);
 
-        if (in_array($lower, self::$types, true)) {
+        if (\in_array($lower, self::$types, true)) {
             return $lower;
         }
 

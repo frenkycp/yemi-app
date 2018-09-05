@@ -66,9 +66,9 @@ $grid_columns = [
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
             }, 'change_color' => function($url, $model, $key){
-                $url = ['change-color', 'urutan' => $model->urutan];
+                $url = ['mesin-check-ng-dtr/create', 'urutan' => $model->urutan];
                 $options = [
-                    'title' => 'Change Machine Status',
+                    'title' => 'Update Machine Status',
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-refresh"></span>', $url, $options);
@@ -420,7 +420,7 @@ $grid_columns = [
             yii\bootstrap\Modal::begin([
                 'id' =>'image-modal',
                 'header' => '<h3>NG Image</h3>',
-                //'size' => 'modal-lg',
+                'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();
 

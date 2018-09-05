@@ -73,11 +73,21 @@ class SomeClass
     /**
      * {@inheritdoc}
      */
+    public function getPriority()
+    {
+        // should run after PhpdocToReturnTypeFixer
+        // should run before NoSuperfluousPhpdocTagsFixer
+        return 7;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(T_FUNCTION) && (
-            count((new NamespacesAnalyzer())->getDeclarations($tokens)) ||
-            count((new NamespaceUsesAnalyzer())->getDeclarationsFromTokens($tokens))
+            \count((new NamespacesAnalyzer())->getDeclarations($tokens)) ||
+            \count((new NamespaceUsesAnalyzer())->getDeclarationsFromTokens($tokens))
         );
     }
 
@@ -121,7 +131,7 @@ class SomeClass
      */
     private function fixFunctionReturnType(Tokens $tokens, $index)
     {
-        if (PHP_VERSION_ID < 70000) {
+        if (\PHP_VERSION_ID < 70000) {
             return;
         }
 

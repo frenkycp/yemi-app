@@ -91,12 +91,28 @@ $this->registerJs($script, View::POS_HEAD );
 				    'plotOptions' => [
 				        'columnrange' => [
 				            'dataLabels' => [
+				            	'color' => 'black',
+				            	//'xHigh' => -40,
+				            	//'xLow' => 40,
+				            	'inside' => true,
 				                'enabled' => true,
-				                'format' => '{y}',
+				                'useHTML' => true,
+				                //'format' => '{y}',
 				                'style' => [
-			                        'fontSize' => '14px',
+			                        'fontSize' => '10px',
 			                        'fontWeight' => '10'
 			                    ],
+			                    'formatter' => new JsExpression('
+			                    	function(){
+			                    		if (new Date().setHours(0, 0, 0, 0) !== new Date(this.y).setHours(0, 0, 0, 0)) {
+				                    		if (this.y === this.point.low){
+				                    			return this.point.catatan;
+				                    		}
+			                    		} else {
+			                    			return \'\';
+			                    		}
+			                    	}
+		                    	'),
 				            ]
 				        ],
 				        'series' => [
@@ -143,7 +159,7 @@ $this->registerJs($script, View::POS_HEAD );
 yii\bootstrap\Modal::begin([
     'id' =>'modal',
     'header' => '<h3>Detail Information</h3>',
-    //'size' => 'modal-lg',
+    'size' => 'modal-lg',
 ]);
 yii\bootstrap\Modal::end();
 

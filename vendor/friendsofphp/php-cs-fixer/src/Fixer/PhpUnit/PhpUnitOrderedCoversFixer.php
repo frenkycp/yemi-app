@@ -13,7 +13,6 @@
 namespace PhpCsFixer\Fixer\PhpUnit;
 
 use PhpCsFixer\AbstractFixer;
-use PhpCsFixer\DocBlock\Annotation;
 use PhpCsFixer\DocBlock\DocBlock;
 use PhpCsFixer\FixerDefinition\CodeSample;
 use PhpCsFixer\FixerDefinition\FixerDefinition;
@@ -101,7 +100,7 @@ final class MyTest extends \PHPUnit_Framework_TestCase
                 );
             }
 
-            $tokens[$index] = new Token([T_DOC_COMMENT, implode($lines)]);
+            $tokens[$index] = new Token([T_DOC_COMMENT, implode('', $lines)]);
         }
     }
 }

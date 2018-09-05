@@ -1,11 +1,32 @@
 Change Log: `yii2-widget-activeform`
 ====================================
 
-## Version 1.5.0
+## Version 1.5.2
 
 **Date**: _under development_
 
+- Add Bootstrap button default CSS and icon prefix parsing.
+- (enh #102): Enhance size modifier detection and input feedback icons.
+- (bug #101): Correct `addClass` assignment for HTML5 inputs.
+- (enh #100): Control ActiveField addons highlight for success & error states.
+- (enh #99): Correct ActiveField wrapper templates when `skipFormLayout` is set to `true`.
+
+## Version 1.5.1
+
+**Date**: 16-Aug-2018
+
+- (bug #98): Correct ActiveForm css variables init.
+
+## Version 1.5.0
+
+**Date**: 16-Aug-2018
+
+- Implement AddonTrait.
+- (enh #95): Add Bootstrap 4.x Support.
+- (bug #94): Add missing comma in activeform css.
+- Reorganize source code in `src` directory.
 - (enh #91, #92): Correct validation for getting form layout style.
+- Set krajee base dependency to v1.9.x.
 
 ## Version 1.4.9
 

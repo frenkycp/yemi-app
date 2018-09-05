@@ -13,6 +13,8 @@ use Yii;
  * @property integer $urutan
  * @property integer $color_stat
  * @property string $stat_last_update
+ * @property integer $down_time
+ * @property string $stat_description
  * @property string $aliasModel
  */
 abstract class MesinCheckNgDtr extends \yii\db\ActiveRecord
@@ -42,8 +44,9 @@ abstract class MesinCheckNgDtr extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['urutan', 'color_stat'], 'integer'],
-            [['stat_last_update'], 'safe']
+            [['urutan', 'color_stat', 'down_time'], 'integer'],
+            [['stat_last_update'], 'safe'],
+            [['stat_description'], 'string']
         ];
     }
 
@@ -57,6 +60,8 @@ abstract class MesinCheckNgDtr extends \yii\db\ActiveRecord
             'urutan' => 'Urutan',
             'color_stat' => 'Color Stat',
             'stat_last_update' => 'Stat Last Update',
+            'down_time' => 'Down Time',
+            'stat_description' => 'Stat Description',
         ];
     }
 

@@ -15,13 +15,6 @@ $finder = PhpCsFixer\Finder::create()
     ->in(__DIR__)
 ;
 
-if (PHP_VERSION_ID < 70000) {
-    $finder
-        ->notPath('tests/Test/Constraint/SameStringsConstraintForV7.php')
-        ->notPath('tests/Test/Constraint/XmlMatchesXsdConstraintForV7.php')
-    ;
-}
-
 $config = PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
@@ -46,9 +39,12 @@ $config = PhpCsFixer\Config::create()
         'header_comment' => ['header' => $header],
         'heredoc_to_nowdoc' => true,
         'list_syntax' => ['syntax' => 'long'],
+        'logical_operators' => true,
+        'method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
         'method_chaining_indentation' => true,
-        'method_argument_space' => ['ensure_fully_multiline' => true],
         'multiline_comment_opening_closing' => true,
+        'no_alternative_syntax' => true,
+        'no_binary_string' => true,
         'no_extra_blank_lines' => ['tokens' => ['break', 'continue', 'extra', 'return', 'throw', 'use', 'parenthesis_brace_block', 'square_brace_block', 'curly_brace_block']],
         'no_null_property_initialization' => true,
         'no_short_echo_tag' => true,
@@ -56,25 +52,30 @@ $config = PhpCsFixer\Config::create()
         'no_unneeded_curly_braces' => true,
         'no_unneeded_final_method' => true,
         'no_unreachable_default_argument_value' => true,
+        'no_unset_on_property' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,
         'ordered_class_elements' => true,
         'ordered_imports' => true,
+        'php_unit_internal_class' => true,
+        'php_unit_method_casing' => true,
         'php_unit_ordered_covers' => true,
         'php_unit_set_up_tear_down_visibility' => true,
         'php_unit_strict' => true,
         'php_unit_test_annotation' => true,
+        'php_unit_test_case_static_method_calls' => ['call_type' => 'this'],
         'php_unit_test_class_requires_covers' => true,
         'phpdoc_add_missing_param_annotation' => true,
         'phpdoc_order' => true,
+        'phpdoc_trim_consecutive_blank_line_separation' => true,
         'phpdoc_types_order' => true,
+        'return_assignment' => true,
         'semicolon_after_instruction' => true,
         'single_line_comment_style' => true,
         'strict_comparison' => true,
         'strict_param' => true,
         'string_line_ending' => true,
         'yoda_style' => true,
-        'no_alternative_syntax' => true,
     ])
     ->setFinder($finder)
 ;

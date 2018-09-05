@@ -48,7 +48,7 @@ final class CommentToPhpdocFixer extends AbstractFixer implements WhitespacesAwa
      */
     public function getPriority()
     {
-        // Should be run before PhpdocToCommentFixer
+        // Should be run before all other PHPDoc fixers
         return 26;
     }
 
@@ -58,10 +58,10 @@ final class CommentToPhpdocFixer extends AbstractFixer implements WhitespacesAwa
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Comments with annotation should be docblock.',
-            [new CodeSample("<?php /* @var bool \$isFoo */\n")],
+            'Comments with annotation should be docblock when used on structural elements.',
+            [new CodeSample("<?php /* header */ \$x = true; /* @var bool \$isFoo */ \$isFoo = true;\n")],
             null,
-            "Risky as new docblocks might began mean more, e.g. Doctrine's entity might have a new column in database"
+            'Risky as new docblocks might mean more, e.g. a Doctrine entity might have a new column in database'
         );
     }
 
@@ -72,10 +72,18 @@ final class CommentToPhpdocFixer extends AbstractFixer implements WhitespacesAwa
     {
         $commentsAnalyzer = new CommentsAnalyzer();
 
-        for ($index = 0, $limit = count($tokens); $index < $limit; ++$index) {
+        for ($index = 0, $limit = \count($tokens); $index < $limit; ++$index) {
             $token = $tokens[$index];
 
             if (!$token->isGivenKind(T_COMMENT)) {
+                continue;
+            }
+
+            if ($commentsAnalyzer->isHeaderComment($tokens, $index)) {
+                continue;
+            }
+
+            if (!$commentsAnalyzer->isBeforeStructuralElement($tokens, $index)) {
                 continue;
             }
 
@@ -112,7 +120,7 @@ final class CommentToPhpdocFixer extends AbstractFixer implements WhitespacesAwa
      */
     private function fixComment(Tokens $tokens, $indices)
     {
-        if (1 === count($indices)) {
+        if (1 === \count($indices)) {
             $this->fixCommentSingleLine($tokens, reset($indices));
         } else {
             $this->fixCommentMultiLine($tokens, $indices);

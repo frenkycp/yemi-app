@@ -31,4 +31,19 @@ class MesinCheckNgDtr extends BaseMesinCheckNgDtr
             ]
         );
     }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(
+            parent::attributeLabels(),
+            [
+                'SEQ' => 'ID',
+                'urutan' => 'Ticket No',
+                'color_stat' => 'Status',
+                'stat_last_update' => 'Last Update',
+                'down_time' => 'Down Time',
+                'stat_description' => 'Description',
+            ]
+        );
+    }
 }

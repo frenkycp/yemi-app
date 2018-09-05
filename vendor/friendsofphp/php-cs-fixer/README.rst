@@ -40,19 +40,19 @@ your system:
 
 .. code-block:: bash
 
-    $ wget http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer
+    $ wget https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -O php-cs-fixer
 
 or with specified version:
 
 .. code-block:: bash
 
-    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.11.1/php-cs-fixer.phar -O php-cs-fixer
+    $ wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.13.0/php-cs-fixer.phar -O php-cs-fixer
 
 or with curl:
 
 .. code-block:: bash
 
-    $ curl -L http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -o php-cs-fixer
+    $ curl -L https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar -o php-cs-fixer
 
 then:
 
@@ -81,13 +81,18 @@ Then make sure you have the global Composer binaries directory in your ``PATH``.
 Globally (homebrew)
 ~~~~~~~~~~~~~~~~~~~
 
-PHP-CS-Fixer is part of the homebrew-php project. Follow the installation
-instructions at https://github.com/homebrew/homebrew-php if you don't
-already have it.
+.. code-block:: bash
+
+    $ brew install php-cs-fixer
+
+Locally (PHIVE)
+~~~~~~~~~~~~~~~
+
+Install `PHIVE <https://phar.io>`_ and issue the following command:
 
 .. code-block:: bash
 
-    $ brew install homebrew/php/php-cs-fixer
+    $ phive install php-cs-fixer # use `--global` for global install
 
 Update
 ------
@@ -127,6 +132,13 @@ You can update ``php-cs-fixer`` through this command:
 .. code-block:: bash
 
     $ brew upgrade php-cs-fixer
+
+Locally (PHIVE)
+~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: bash
+
+    $ phive update php-cs-fixer
 
 Usage
 -----
@@ -263,7 +275,7 @@ Choose from the list of available rules:
 
 * **backtick_to_shell_exec**
 
-  Converts backtick operators to shell_exec calls.
+  Converts backtick operators to ``shell_exec`` calls.
 
 * **binary_operator_spaces** [@Symfony]
 
@@ -271,12 +283,15 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``align_double_arrow`` (``false``, ``null``, ``true``): (deprecated) Whether to apply,
-    remove or ignore double arrows alignment; defaults to ``false``
-  - ``align_equals`` (``false``, ``null``, ``true``): (deprecated) Whether to apply, remove
-    or ignore equals alignment; defaults to ``false``
+  - ``align_double_arrow`` (``false``, ``null``, ``true``): whether to apply, remove or
+    ignore double arrows alignment; defaults to ``false``. DEPRECATED: use
+    options ``operators`` and ``default`` instead
+  - ``align_equals`` (``false``, ``null``, ``true``): whether to apply, remove or ignore
+    equals alignment; defaults to ``false``. DEPRECATED: use options
+    ``operators`` and ``default`` instead
   - ``default`` (``'align'``, ``'align_single_space'``, ``'align_single_space_minimal'``,
-    ``'single_space'``, ``null``): default fix strategy; defaults to ``'single_space'``
+    ``'no_space'``, ``'single_space'``, ``null``): default fix strategy; defaults to
+    ``'single_space'``
   - ``operators`` (``array``): dictionary of ``binary operator`` => ``fix strategy``
     values that differ from the default strategy; defaults to ``[]``
 
@@ -300,9 +315,12 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``statements`` (``array``): list of statements which must be preceded by an
-    empty line; defaults to ``['break', 'continue', 'declare', 'return',
-    'throw', 'try']``
+  - ``statements`` (a subset of ``['break', 'case', 'continue', 'declare',
+    'default', 'die', 'do', 'exit', 'for', 'foreach', 'goto', 'if',
+    'include', 'include_once', 'require', 'require_once', 'return',
+    'switch', 'throw', 'try', 'while', 'yield']``): list of statements which
+    must be preceded by an empty line; defaults to ``['break', 'continue',
+    'declare', 'return', 'throw', 'try']``
 
 * **braces** [@PSR2, @Symfony]
 
@@ -340,8 +358,9 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``elements`` (``array``): list of classy elements; 'const', 'method',
-    'property'; defaults to ``['const', 'method', 'property']``
+  - ``elements`` (a subset of ``['const', 'method', 'property']``): list of classy
+    elements; 'const', 'method', 'property'; defaults to ``['const',
+    'method', 'property']``
 
 * **class_definition** [@PSR2, @Symfony]
 
@@ -350,12 +369,14 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``multiLineExtendsEachSingleLine`` (``bool``): whether definitions should be
-    multiline; defaults to ``false``
-  - ``singleItemSingleLine`` (``bool``): whether definitions should be single line
-    when including a single item; defaults to ``false``
-  - ``singleLine`` (``bool``): whether definitions should be single line; defaults
-    to ``false``
+  - ``multi_line_extends_each_single_line`` (``bool``): whether definitions should
+    be multiline; defaults to ``false``; DEPRECATED alias:
+    ``multiLineExtendsEachSingleLine``
+  - ``single_item_single_line`` (``bool``): whether definitions should be single
+    line when including a single item; defaults to ``false``; DEPRECATED alias:
+    ``singleItemSingleLine``
+  - ``single_line`` (``bool``): whether definitions should be single line; defaults
+    to ``false``; DEPRECATED alias: ``singleLine``
 
 * **class_keyword_remove**
 
@@ -369,11 +390,19 @@ Choose from the list of available rules:
 
   Calling ``unset`` on multiple items should be done in one call.
 
+* **combine_nested_dirname** [@PHP70Migration:risky, @PHP71Migration:risky]
+
+  Replace multiple nested calls of ``dirname`` by only one call with second
+  ``$level`` parameter. Requires PHP >= 7.0.
+
+  *Risky rule: risky when the function ``dirname`` is overridden.*
+
 * **comment_to_phpdoc**
 
-  Comments with annotation should be docblock.
+  Comments with annotation should be docblock when used on structural
+  elements.
 
-  *Risky rule: risky as new docblocks might began mean more, e.g. Doctrine's entity might have a new column in database.*
+  *Risky rule: risky as new docblocks might mean more, e.g. a Doctrine entity might have a new column in database.*
 
 * **compact_nullable_typehint**
 
@@ -392,7 +421,7 @@ Choose from the list of available rules:
 
   Class ``DateTimeImmutable`` should be used instead of ``DateTime``.
 
-  *Risky rule: risky when the code relies on modifying ``DateTime`` object or if any of the ``date_create*`` functions are overridden.*
+  *Risky rule: risky when the code relies on modifying ``DateTime`` objects or if any of the ``date_create*`` functions are overridden.*
 
 * **declare_equal_normalize** [@Symfony]
 
@@ -517,12 +546,13 @@ Choose from the list of available rules:
   - ``after_array_assignments_equals`` (``null``, ``bool``): whether to add, remove or
     ignore spaces after array assignment ``=`` operator; defaults to ``true``
   - ``around_argument_assignments`` (``bool``): whether to fix spaces around
-    argument assignment operator (deprecated, use
-    ``before_argument_assignments`` and ``after_argument_assignments`` options
-    instead); defaults to ``true``
+    argument assignment operator; defaults to ``true``. DEPRECATED: use options
+    ``before_argument_assignments`` and ``after_argument_assignments`` instead
   - ``around_array_assignments`` (``bool``): whether to fix spaces around array
-    assignment operators (deprecated, use ``before_array_assignments_*`` and
-    ``after_array_assignments_*`` options instead); defaults to ``true``
+    assignment operators; defaults to ``true``. DEPRECATED: use options
+    ``before_array_assignments_equals``, ``after_array_assignments_equals``,
+    ``before_array_assignments_colon`` and ``after_array_assignments_colon``
+    instead
   - ``around_commas`` (``bool``): whether to fix spaces around commas; defaults to
     ``true``
   - ``around_parentheses`` (``bool``): whether to fix spaces around parentheses;
@@ -565,9 +595,25 @@ Choose from the list of available rules:
 
 * **ereg_to_preg** [@Symfony:risky]
 
-  Replace deprecated ``ereg`` regular expression functions with preg.
+  Replace deprecated ``ereg`` regular expression functions with ``preg``.
 
   *Risky rule: risky if the ``ereg`` function is overridden.*
+
+* **error_suppression** [@Symfony:risky]
+
+  Error control operator should be added to deprecation notices and/or
+  removed from other cases.
+
+  *Risky rule: risky because adding/removing ``@`` might cause changes to code behaviour or if ``trigger_error`` function is overridden.*
+
+  Configuration options:
+
+  - ``mute_deprecation_error`` (``bool``): whether to add ``@`` in deprecation
+    notices; defaults to ``true``
+  - ``noise_remaining_usages`` (``bool``): whether to remove ``@`` in remaining
+    usages; defaults to ``false``
+  - ``noise_remaining_usages_exclude`` (``array``): list of global functions to
+    exclude from removing ``@``; defaults to ``[]``
 
 * **escape_implicit_backslashes**
 
@@ -608,6 +654,18 @@ Choose from the list of available rules:
     set in order to fix the class. (case insensitive); defaults to
     ``['@internal']``
 
+* **fopen_flag_order** [@Symfony:risky]
+
+  Order the flags in ``fopen`` calls, ``b`` and ``t`` must be last.
+
+  *Risky rule: risky when the function ``fopen`` is overridden.*
+
+* **fopen_flags** [@Symfony:risky]
+
+  The flags in ``fopen`` calls must contain ``b`` and must omit ``t``.
+
+  *Risky rule: risky when the function ``fopen`` is overridden.*
+
 * **full_opening_tag** [@PSR1, @PSR2, @Symfony]
 
   PHP code must use the long ``<?php`` tags or short-echo ``<?=`` tags and not
@@ -635,8 +693,9 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``functions`` (``array``): list of function names to fix; defaults to
-    ``['get_class', 'php_sapi_name', 'phpversion', 'pi']``
+  - ``functions`` (a subset of ``['get_called_class', 'get_class',
+    'php_sapi_name', 'phpversion', 'pi']``): list of function names to fix;
+    defaults to ``['get_class', 'php_sapi_name', 'phpversion', 'pi']``
 
 * **function_typehint_space** [@Symfony]
 
@@ -644,7 +703,7 @@ Choose from the list of available rules:
 
 * **general_phpdoc_annotation_remove**
 
-  Configured annotations should be omitted from phpdocs.
+  Configured annotations should be omitted from PHPDoc.
 
   Configuration options:
 
@@ -662,8 +721,8 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``commentType`` (``'comment'``, ``'PHPDoc'``): comment syntax type; defaults to
-    ``'comment'``
+  - ``comment_type`` (``'comment'``, ``'PHPDoc'``): comment syntax type; defaults to
+    ``'comment'``; DEPRECATED alias: ``commentType``
   - ``header`` (``string``): proper header content; required
   - ``location`` (``'after_declare_strict'``, ``'after_open'``): the location of the
     inserted header; defaults to ``'after_declare_strict'``
@@ -673,6 +732,13 @@ Choose from the list of available rules:
 * **heredoc_to_nowdoc**
 
   Convert ``heredoc`` to ``nowdoc`` where possible.
+
+* **implode_call** [@Symfony:risky]
+
+  Function ``implode`` must be called with 2 arguments in the documented
+  order.
+
+  *Risky rule: risky when the function ``implode`` is overridden.*
 
 * **include** [@Symfony]
 
@@ -701,8 +767,8 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``use_yoda_style`` (``bool``): (deprecated) Whether Yoda style conditions should
-    be used; defaults to ``true``
+  - ``use_yoda_style`` (``bool``): whether Yoda style conditions should be used;
+    defaults to ``true``. DEPRECATED: use ``yoda_style`` fixer instead
 
 * **line_ending** [@PSR2, @Symfony]
 
@@ -722,6 +788,12 @@ Choose from the list of available rules:
   - ``syntax`` (``'long'``, ``'short'``): whether to use the ``long`` or ``short`` ``list``
     syntax; defaults to ``'long'``
 
+* **logical_operators**
+
+  Use ``&&`` and ``||`` logical operators instead of ``and`` and ``or``.
+
+  *Risky rule: risky, because you must double-check if using and/or with lower precedence was intentional.*
+
 * **lowercase_cast** [@Symfony]
 
   Cast should be written in lower case.
@@ -734,9 +806,18 @@ Choose from the list of available rules:
 
   PHP keywords MUST be in lower case.
 
+* **lowercase_static_reference** [@Symfony]
+
+  Class static references ``self``, ``static`` and ``parent`` MUST be in lower
+  case.
+
 * **magic_constant_casing** [@Symfony]
 
   Magic constants should be referred to using the correct casing.
+
+* **magic_method_casing** [@Symfony]
+
+  Magic method definitions and calls must be using the correct casing.
 
 * **mb_str_functions**
 
@@ -755,9 +836,13 @@ Choose from the list of available rules:
   Configuration options:
 
   - ``ensure_fully_multiline`` (``bool``): ensure every argument of a multiline
-    argument list is on its own line; defaults to ``false``
+    argument list is on its own line; defaults to ``false``. DEPRECATED: use
+    option ``on_multiline`` instead
   - ``keep_multiple_spaces_after_comma`` (``bool``): whether keep multiple spaces
     after comma; defaults to ``false``
+  - ``on_multiline`` (``'ensure_fully_multiline'``, ``'ensure_single_line'``, ``'ignore'``):
+    defines how to handle function arguments lists that contain newlines;
+    defaults to ``'ignore'``
 
 * **method_chaining_indentation**
 
@@ -793,20 +878,44 @@ Choose from the list of available rules:
     multi-line whitespace or move the semicolon to the new line for chained
     calls; defaults to ``'no_multi_line'``
 
+* **native_constant_invocation** [@Symfony:risky]
+
+  Add leading ``\`` before constant invocation of internal constant to speed
+  up resolving. Constant name match is case-sensitive, except for ``null``,
+  ``false`` and ``true``.
+
+  *Risky rule: risky when any of the constants are namespaced or overridden.*
+
+  Configuration options:
+
+  - ``exclude`` (``array``): list of constants to ignore; defaults to ``['null',
+    'false', 'true']``
+  - ``fix_built_in`` (``bool``): whether to fix constants returned by
+    ``get_defined_constants``. User constants are not accounted in this list
+    and must be specified in the include one; defaults to ``true``
+  - ``include`` (``array``): list of additional constants to fix; defaults to ``[]``
+  - ``scope`` (``'all'``, ``'namespaced'``): only fix constant invocations that are made
+    within a namespace or fix all; defaults to ``'all'``
+
 * **native_function_casing** [@Symfony]
 
   Function defined by PHP should be called using the correct casing.
 
-* **native_function_invocation**
+* **native_function_invocation** [@Symfony:risky]
 
-  Add leading ``\`` before function invocation of internal function to speed
-  up resolving.
+  Add leading ``\`` before function invocation to speed up resolving.
 
   *Risky rule: risky when any of the functions are overridden.*
 
   Configuration options:
 
   - ``exclude`` (``array``): list of functions to ignore; defaults to ``[]``
+  - ``include`` (``array``): list of function names or sets to fix. Defined sets are
+    ``@internal`` (all native functions), ``@all`` (all global functions) and
+    ``@compiler_optimized`` (functions that are specially optimized by Zend);
+    defaults to ``['@internal']``
+  - ``scope`` (``'all'``, ``'namespaced'``): only fix function calls that are made
+    within a namespace or fix all; defaults to ``'all'``
 
 * **new_with_braces** [@Symfony]
 
@@ -818,9 +927,20 @@ Choose from the list of available rules:
 
   *Risky rule: risky when any of the alias functions are overridden.*
 
+  Configuration options:
+
+  - ``sets`` (a subset of ``['@internal', '@IMAP', '@mbreg', '@all']``): list of
+    sets to fix. Defined sets are ``@internal`` (native functions), ``@IMAP``
+    (IMAP functions), ``@mbreg`` (from ``ext-mbstring``) ``@all`` (all listed
+    sets); defaults to ``['@internal', '@IMAP']``
+
 * **no_alternative_syntax**
 
   Replace control structure alternative syntax to use braces.
+
+* **no_binary_string**
+
+  There should not be a binary flag before strings.
 
 * **no_blank_lines_after_class_opening** [@Symfony]
 
@@ -867,7 +987,10 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``tokens`` (``array``): list of tokens to fix; defaults to ``['extra']``
+  - ``tokens`` (a subset of ``['break', 'case', 'continue', 'curly_brace_block',
+    'default', 'extra', 'parenthesis_brace_block', 'return',
+    'square_brace_block', 'switch', 'throw', 'use', 'useTrait',
+    'use_trait']``): list of tokens to fix; defaults to ``['extra']``
 
 * **no_extra_consecutive_blank_lines**
 
@@ -876,7 +999,10 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``tokens`` (``array``): list of tokens to fix; defaults to ``['extra']``
+  - ``tokens`` (a subset of ``['break', 'case', 'continue', 'curly_brace_block',
+    'default', 'extra', 'parenthesis_brace_block', 'return',
+    'square_brace_block', 'switch', 'throw', 'use', 'useTrait',
+    'use_trait']``): list of tokens to fix; defaults to ``['extra']``
 
 * **no_homoglyph_names** [@Symfony:risky]
 
@@ -886,7 +1012,7 @@ Choose from the list of available rules:
 
 * **no_leading_import_slash** [@Symfony]
 
-  Remove leading slashes in use clauses.
+  Remove leading slashes in ``use`` clauses.
 
 * **no_leading_namespace_whitespace** [@Symfony]
 
@@ -943,8 +1069,9 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``positions`` (``array``): whether spacing should be fixed inside and/or outside
-    the offset braces; defaults to ``['inside', 'outside']``
+  - ``positions`` (a subset of ``['inside', 'outside']``): whether spacing should be
+    fixed inside and/or outside the offset braces; defaults to ``['inside',
+    'outside']``
 
 * **no_spaces_inside_parenthesis** [@PSR2, @Symfony]
 
@@ -954,6 +1081,11 @@ Choose from the list of available rules:
 * **no_superfluous_elseif**
 
   Replaces superfluous ``elseif`` with ``if``.
+
+* **no_superfluous_phpdoc_tags**
+
+  Removes ``@param`` and ``@return`` tags that don't provide any useful
+  information.
 
 * **no_trailing_comma_in_list_call** [@Symfony]
 
@@ -969,7 +1101,7 @@ Choose from the list of available rules:
 
 * **no_trailing_whitespace_in_comment** [@PSR2, @Symfony]
 
-  There MUST be no trailing spaces inside comments and phpdocs.
+  There MUST be no trailing spaces inside comment or PHPDoc.
 
 * **no_unneeded_control_parentheses** [@Symfony]
 
@@ -997,9 +1129,15 @@ Choose from the list of available rules:
 
   *Risky rule: modifies the signature of functions; therefore risky when using systems (such as some Symfony components) that rely on those (for example through reflection).*
 
+* **no_unset_on_property**
+
+  Properties should be set to ``null`` instead of using ``unset``.
+
+  *Risky rule: changing variables to ``null`` instead of unsetting them will mean they still show up when looping over class variables.*
+
 * **no_unused_imports** [@Symfony]
 
-  Unused use statements must be removed.
+  Unused ``use`` statements must be removed.
 
 * **no_useless_else**
 
@@ -1007,7 +1145,8 @@ Choose from the list of available rules:
 
 * **no_useless_return**
 
-  There should not be an empty return statement at the end of a function.
+  There should not be an empty ``return`` statement at the end of a
+  function.
 
 * **no_whitespace_before_comma_in_array** [@Symfony]
 
@@ -1053,49 +1192,63 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``order`` (``array``): list of strings defining order of elements; defaults to
-    ``['use_trait', 'constant_public', 'constant_protected',
-    'constant_private', 'property_public', 'property_protected',
-    'property_private', 'construct', 'destruct', 'magic', 'phpunit',
-    'method_public', 'method_protected', 'method_private']``
+  - ``order`` (a subset of ``['use_trait', 'public', 'protected', 'private',
+    'constant', 'constant_public', 'constant_protected',
+    'constant_private', 'property', 'property_static', 'property_public',
+    'property_protected', 'property_private', 'property_public_static',
+    'property_protected_static', 'property_private_static', 'method',
+    'method_static', 'method_public', 'method_protected', 'method_private',
+    'method_public_static', 'method_protected_static',
+    'method_private_static', 'construct', 'destruct', 'magic', 'phpunit']``):
+    list of strings defining order of elements; defaults to ``['use_trait',
+    'constant_public', 'constant_protected', 'constant_private',
+    'property_public', 'property_protected', 'property_private',
+    'construct', 'destruct', 'magic', 'phpunit', 'method_public',
+    'method_protected', 'method_private']``
   - ``sortAlgorithm`` (``'alpha'``, ``'none'``): how multiple occurrences of same type
     statements should be sorted; defaults to ``'none'``
 
 * **ordered_imports**
 
-  Ordering use statements.
+  Ordering ``use`` statements.
 
   Configuration options:
 
-  - ``importsOrder`` (``array``, ``null``): defines the order of import types; defaults
-    to ``null``
-  - ``sortAlgorithm`` (``'alpha'``, ``'length'``, ``'none'``): whether the statements should
-    be sorted alphabetically or by length, or not sorted; defaults to
-    ``'alpha'``
+  - ``imports_order`` (``array``, ``null``): defines the order of import types; defaults
+    to ``null``; DEPRECATED alias: ``importsOrder``
+  - ``sort_algorithm`` (``'alpha'``, ``'length'``, ``'none'``): whether the statements
+    should be sorted alphabetically or by length, or not sorted; defaults
+    to ``'alpha'``; DEPRECATED alias: ``sortAlgorithm``
 
 * **php_unit_construct** [@Symfony:risky]
 
-  PHPUnit assertion method calls like "->assertSame(true, $foo)" should be
-  written with dedicated method like "->assertTrue($foo)".
+  PHPUnit assertion method calls like ``->assertSame(true, $foo)`` should be
+  written with dedicated method like ``->assertTrue($foo)``.
 
   *Risky rule: fixer could be risky if one is overriding PHPUnit's native methods.*
 
   Configuration options:
 
-  - ``assertions`` (``array``): list of assertion methods to fix; defaults to
-    ``['assertEquals', 'assertSame', 'assertNotEquals', 'assertNotSame']``
+  - ``assertions`` (a subset of ``['assertSame', 'assertEquals',
+    'assertNotEquals', 'assertNotSame']``): list of assertion methods to fix;
+    defaults to ``['assertEquals', 'assertSame', 'assertNotEquals',
+    'assertNotSame']``
 
 * **php_unit_dedicate_assert** [@PHPUnit30Migration:risky, @PHPUnit32Migration:risky, @PHPUnit35Migration:risky, @PHPUnit43Migration:risky, @PHPUnit48Migration:risky, @PHPUnit50Migration:risky, @PHPUnit52Migration:risky, @PHPUnit54Migration:risky, @PHPUnit55Migration:risky, @PHPUnit56Migration:risky, @PHPUnit57Migration:risky, @PHPUnit60Migration:risky]
 
-  PHPUnit assertions like "assertInternalType", "assertFileExists", should
-  be used over "assertTrue".
+  PHPUnit assertions like ``assertInternalType``, ``assertFileExists``, should
+  be used over ``assertTrue``.
 
   *Risky rule: fixer could be risky if one is overriding PHPUnit's native methods.*
 
   Configuration options:
 
-  - ``functions`` (``null``): (deprecated, use ``target`` instead) List of assertions
-    to fix (overrides ``target``); defaults to ``null``
+  - ``functions`` (a subset of ``['array_key_exists', 'empty', 'file_exists',
+    'is_array', 'is_bool', 'is_callable', 'is_double', 'is_float',
+    'is_infinite', 'is_int', 'is_integer', 'is_long', 'is_nan', 'is_null',
+    'is_numeric', 'is_object', 'is_real', 'is_resource', 'is_scalar',
+    'is_string']``, ``null``): list of assertions to fix (overrides ``target``);
+    defaults to ``null``. DEPRECATED: use option ``target`` instead
   - ``target`` (``'3.0'``, ``'3.5'``, ``'5.0'``, ``'5.6'``, ``'newest'``): target version of
     PHPUnit; defaults to ``'5.0'``
 
@@ -1114,6 +1267,25 @@ Choose from the list of available rules:
 * **php_unit_fqcn_annotation** [@Symfony]
 
   PHPUnit annotations should be a FQCNs including a root namespace.
+
+* **php_unit_internal_class**
+
+  All PHPUnit test classes should be marked as internal.
+
+  Configuration options:
+
+  - ``types`` (a subset of ``['normal', 'final', 'abstract']``): what types of
+    classes to mark as internal; defaults to ``['normal', 'final']``
+
+* **php_unit_method_casing**
+
+  Enforce camel (or snake) case for PHPUnit test methods, following
+  configuration.
+
+  Configuration options:
+
+  - ``case`` (``'camel_case'``, ``'snake_case'``): apply camel or snake case to test
+    methods; defaults to ``'camel_case'``
 
 * **php_unit_mock** [@PHPUnit54Migration:risky, @PHPUnit55Migration:risky, @PHPUnit56Migration:risky, @PHPUnit57Migration:risky, @PHPUnit60Migration:risky]
 
@@ -1159,23 +1331,24 @@ Choose from the list of available rules:
 
 * **php_unit_set_up_tear_down_visibility**
 
-  Changes the visibility of the setUp and tearDown functions of phpunit to
-  protected, to match the PHPUnit TestCase.
+  Changes the visibility of the ``setUp()`` and ``tearDown()`` functions of
+  PHPUnit to ``protected``, to match the PHPUnit TestCase.
 
-  *Risky rule: this fixer may change functions named setUp or tearDown outside of PHPUnit tests, when a class is wrongly seen as a PHPUnit test.*
+  *Risky rule: this fixer may change functions named ``setUp()`` or ``tearDown()`` outside of PHPUnit tests, when a class is wrongly seen as a PHPUnit test.*
 
 * **php_unit_strict**
 
   PHPUnit methods like ``assertSame`` should be used instead of
   ``assertEquals``.
 
-  *Risky rule: risky when any of the functions are overridden.*
+  *Risky rule: risky when any of the functions are overridden or when testing object equality.*
 
   Configuration options:
 
-  - ``assertions`` (``array``): list of assertion methods to fix; defaults to
-    ``['assertAttributeEquals', 'assertAttributeNotEquals', 'assertEquals',
-    'assertNotEquals']``
+  - ``assertions`` (a subset of ``['assertAttributeEquals',
+    'assertAttributeNotEquals', 'assertEquals', 'assertNotEquals']``): list
+    of assertion methods to fix; defaults to ``['assertAttributeEquals',
+    'assertAttributeNotEquals', 'assertEquals', 'assertNotEquals']``
 
 * **php_unit_test_annotation**
 
@@ -1186,9 +1359,24 @@ Choose from the list of available rules:
   Configuration options:
 
   - ``case`` (``'camel'``, ``'snake'``): whether to camel or snake case when adding the
-    test prefix; defaults to ``'camel'``
+    test prefix; defaults to ``'camel'``. DEPRECATED: use
+    ``php_unit_method_casing`` fixer instead
   - ``style`` (``'annotation'``, ``'prefix'``): whether to use the @test annotation or
     not; defaults to ``'prefix'``
+
+* **php_unit_test_case_static_method_calls**
+
+  Calls to ``PHPUnit\Framework\TestCase`` static methods must all be of the
+  same type, either ``$this->``, ``self::`` or ``static::``.
+
+  *Risky rule: risky when PHPUnit methods are overridden or not accessible, or when project has PHPUnit incompatibilities.*
+
+  Configuration options:
+
+  - ``call_type`` (``'self'``, ``'static'``, ``'this'``): the call type to use for referring
+    to PHPUnit methods; defaults to ``'static'``
+  - ``methods`` (``array``): dictionary of ``method`` => ``call_type`` values that
+    differ from the default strategy; defaults to ``[]``
 
 * **php_unit_test_class_requires_covers**
 
@@ -1197,7 +1385,7 @@ Choose from the list of available rules:
 
 * **phpdoc_add_missing_param_annotation**
 
-  Phpdoc should contain @param for all params.
+  PHPDoc should contain ``@param`` for all params.
 
   Configuration options:
 
@@ -1206,16 +1394,19 @@ Choose from the list of available rules:
 
 * **phpdoc_align** [@Symfony]
 
-  All items of the given phpdoc tags must be aligned vertically.
+  All items of the given phpdoc tags must be either left-aligned or (by
+  default) aligned vertically.
 
   Configuration options:
 
-  - ``tags`` (``array``): the tags that should be aligned; defaults to ``['param',
-    'return', 'throws', 'type', 'var']``
+  - ``align`` (``'left'``, ``'vertical'``): align comments; defaults to ``'vertical'``
+  - ``tags`` (a subset of ``['param', 'property', 'return', 'throws', 'type',
+    'var', 'method']``): the tags that should be aligned; defaults to
+    ``['param', 'return', 'throws', 'type', 'var']``
 
 * **phpdoc_annotation_without_dot** [@Symfony]
 
-  Phpdocs annotation descriptions should not be a sentence.
+  PHPDoc annotation descriptions should not be a sentence.
 
 * **phpdoc_indent** [@Symfony]
 
@@ -1223,11 +1414,11 @@ Choose from the list of available rules:
 
 * **phpdoc_inline_tag** [@Symfony]
 
-  Fix phpdoc inline tags, make inheritdoc always inline.
+  Fix PHPDoc inline tags, make ``@inheritdoc`` always inline.
 
 * **phpdoc_no_access** [@Symfony]
 
-  @access annotations should be omitted from phpdocs.
+  ``@access`` annotations should be omitted from PHPDoc.
 
 * **phpdoc_no_alias_tag** [@Symfony]
 
@@ -1241,21 +1432,21 @@ Choose from the list of available rules:
 
 * **phpdoc_no_empty_return** [@Symfony]
 
-  @return void and @return null annotations should be omitted from
-  phpdocs.
+  ``@return void`` and ``@return null`` annotations should be omitted from
+  PHPDoc.
 
 * **phpdoc_no_package** [@Symfony]
 
-  @package and @subpackage annotations should be omitted from phpdocs.
+  ``@package`` and ``@subpackage`` annotations should be omitted from PHPDoc.
 
 * **phpdoc_no_useless_inheritdoc** [@Symfony]
 
-  Classy that does not inherit must not have inheritdoc tags.
+  Classy that does not inherit must not have ``@inheritdoc`` tags.
 
 * **phpdoc_order**
 
-  Annotations in phpdocs should be ordered so that param annotations come
-  first, then throws annotations, then return annotations.
+  Annotations in PHPDoc should be ordered so that ``@param`` annotations
+  come first, then ``@throws`` annotations, then ``@return`` annotations.
 
 * **phpdoc_return_self_reference** [@Symfony]
 
@@ -1274,33 +1465,55 @@ Choose from the list of available rules:
   Scalar types should always be written in the same form. ``int`` not
   ``integer``, ``bool`` not ``boolean``, ``float`` not ``real`` or ``double``.
 
+  Configuration options:
+
+  - ``types`` (a subset of ``['boolean', 'callback', 'double', 'integer', 'real',
+    'str']``): a map of types to fix; defaults to ``['boolean', 'double',
+    'integer', 'real', 'str']``
+
 * **phpdoc_separation** [@Symfony]
 
-  Annotations in phpdocs should be grouped together so that annotations of
+  Annotations in PHPDoc should be grouped together so that annotations of
   the same type immediately follow each other, and annotations of a
   different type are separated by a single blank line.
 
 * **phpdoc_single_line_var_spacing** [@Symfony]
 
-  Single line @var PHPDoc should have proper spacing.
+  Single line ``@var`` PHPDoc should have proper spacing.
 
 * **phpdoc_summary** [@Symfony]
 
-  Phpdocs summary should end in either a full stop, exclamation mark, or
+  PHPDoc summary should end in either a full stop, exclamation mark, or
   question mark.
 
 * **phpdoc_to_comment** [@Symfony]
 
   Docblocks should only be used on structural elements.
 
+* **phpdoc_to_return_type**
+
+  EXPERIMENTAL: Takes ``@return`` annotation of non-mixed types and adjusts
+  accordingly the function signature. Requires PHP >= 7.0.
+
+  *Risky rule: [1] This rule is EXPERIMENTAL and is not covered with backward compatibility promise. [2] ``@return`` annotation is mandatory for the fixer to make changes, signatures of methods without it (no docblock, inheritdocs) will not be fixed. [3] Manual actions are required if inherited signatures are not properly documented. [4] ``@inheritdocs`` support is under construction.*
+
+  Configuration options:
+
+  - ``scalar_types`` (``bool``): fix also scalar types; may have unexpected
+    behaviour due to PHP bad type coercion system; defaults to ``true``
+
 * **phpdoc_trim** [@Symfony]
 
-  Phpdocs should start and end with content, excluding the very first and
+  PHPDoc should start and end with content, excluding the very first and
   last line of the docblocks.
+
+* **phpdoc_trim_consecutive_blank_line_separation**
+
+  Removes extra blank lines after summary and after description in PHPDoc.
 
 * **phpdoc_types** [@Symfony]
 
-  The correct case must be used for standard PHP types in phpdoc.
+  The correct case must be used for standard PHP types in PHPDoc.
 
 * **phpdoc_types_order**
 
@@ -1316,7 +1529,7 @@ Choose from the list of available rules:
 
 * **phpdoc_var_without_name** [@Symfony]
 
-  @var and @type annotations should not contain the variable name.
+  ``@var`` and ``@type`` annotations should not contain the variable name.
 
 * **pow_to_exponentiation** [@PHP56Migration:risky, @PHP70Migration:risky, @PHP71Migration:risky]
 
@@ -1364,6 +1577,11 @@ Choose from the list of available rules:
     ones; defaults to ``['getrandmax' => 'mt_getrandmax', 'rand' =>
     'mt_rand', 'srand' => 'mt_srand']``
 
+* **return_assignment**
+
+  Local, dynamic and directly referenced variables should not be assigned
+  and directly returned by a function or method.
+
 * **return_type_declaration** [@Symfony]
 
   There should be one or no space before colon, and one space after it in
@@ -1376,7 +1594,7 @@ Choose from the list of available rules:
 
 * **self_accessor** [@Symfony:risky]
 
-  Inside class or interface element "self" should be preferred to the
+  Inside class or interface element ``self`` should be preferred to the
   class name itself.
 
   *Risky rule: risky when using dynamic calls like get_called_class() or late static binding.*
@@ -1385,14 +1603,22 @@ Choose from the list of available rules:
 
   Instructions must be terminated with a semicolon.
 
+* **set_type_to_cast** [@Symfony:risky]
+
+  Cast shall be used, not ``settype``.
+
+  *Risky rule: risky when the ``settype`` function is overridden or when used as the 2nd or 3rd expression in a ``for`` loop .*
+
 * **short_scalar_cast** [@Symfony]
 
   Cast ``(boolean)`` and ``(integer)`` should be written as ``(bool)`` and
-  ``(int)``, ``(double)`` and ``(real)`` as ``(float)``.
+  ``(int)``, ``(double)`` and ``(real)`` as ``(float)``, ``(binary)`` as
+  ``(string)``.
 
-* **silenced_deprecation_error** [@Symfony:risky]
+* **silenced_deprecation_error**
 
-  Ensures deprecation notices are silenced.
+  Ensures deprecation notices are silenced. DEPRECATED: use
+  ``error_suppression`` instead.
 
   *Risky rule: silencing of deprecation errors might cause changes to code behaviour.*
 
@@ -1416,8 +1642,8 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``elements`` (``array``): list of strings which element should be modified;
-    defaults to ``['const', 'property']``
+  - ``elements`` (a subset of ``['const', 'property']``): list of strings which
+    element should be modified; defaults to ``['const', 'property']``
 
 * **single_import_per_statement** [@PSR2, @Symfony]
 
@@ -1435,8 +1661,8 @@ Choose from the list of available rules:
 
   Configuration options:
 
-  - ``comment_types`` (``array``): list of comment types to fix; defaults to
-    ``['asterisk', 'hash']``
+  - ``comment_types`` (a subset of ``['asterisk', 'hash']``): list of comment types
+    to fix; defaults to ``['asterisk', 'hash']``
 
 * **single_quote** [@Symfony]
 
@@ -1519,14 +1745,15 @@ Choose from the list of available rules:
 
 * **visibility_required** [@PSR2, @Symfony, @PHP71Migration]
 
-  Visibility MUST be declared on all properties and methods; abstract and
-  final MUST be declared before the visibility; static MUST be declared
-  after the visibility.
+  Visibility MUST be declared on all properties and methods; ``abstract``
+  and ``final`` MUST be declared before the visibility; ``static`` MUST be
+  declared after the visibility.
 
   Configuration options:
 
-  - ``elements`` (``array``): the structural elements to fix (PHP >= 7.1 required
-    for ``const``); defaults to ``['property', 'method']``
+  - ``elements`` (a subset of ``['property', 'method', 'const']``): the structural
+    elements to fix (PHP >= 7.1 required for ``const``); defaults to
+    ``['property', 'method']``
 
 * **void_return** [@PHP71Migration:risky]
 
@@ -1547,6 +1774,8 @@ Choose from the list of available rules:
 
   Configuration options:
 
+  - ``always_move_variable`` (``bool``): whether variables should always be on non
+    assignable side when applying Yoda style; defaults to ``false``
   - ``equal`` (``bool``, ``null``): style for equal (``==``, ``!=``) statements; defaults to
     ``true``
   - ``identical`` (``bool``, ``null``): style for identical (``===``, ``!==``) statements;
@@ -1567,7 +1796,7 @@ Config file
 
 Instead of using command line options to customize the rule, you can save the
 project configuration in a ``.php_cs.dist`` file in the root directory of your project.
-The file must return an instance of `PhpCsFixer\\ConfigInterface <https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/v2.11.1/src/ConfigInterface.php>`_
+The file must return an instance of `PhpCsFixer\\ConfigInterface <https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/v2.13.0/src/ConfigInterface.php>`_
 which lets you configure the rules, the files and directories that
 need to be analyzed. You may also create ``.php_cs`` file, which is
 the local configuration that will be used instead of the project configuration. It
@@ -1678,9 +1907,11 @@ Then, add the following command to your CI:
 
 .. code-block:: bash
 
+    $ IFS='
+    $ '
     $ CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRTUXB "${COMMIT_RANGE}")
-    $ if ! echo "${CHANGED_FILES}" | grep -qE "^(\\.php_cs(\\.dist)?|composer\\.lock)$"; then IFS=$'\n' EXTRA_ARGS=('--path-mode=intersection' '--' ${CHANGED_FILES[@]}); fi
-    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no "${EXTRA_ARGS[@]}"
+    $ if ! echo "${CHANGED_FILES}" | grep -qE "^(\\.php_cs(\\.dist)?|composer\\.lock)$"; then EXTRA_ARGS=$(printf -- '--path-mode=intersection\n--\n%s' "${CHANGED_FILES}"); else EXTRA_ARGS=''; fi
+    $ vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no ${EXTRA_ARGS}
 
 Where ``$COMMIT_RANGE`` is your range of commits, eg ``$TRAVIS_COMMIT_RANGE`` or ``HEAD~..HEAD``.
 
@@ -1730,7 +1961,7 @@ scanned by the tool when run in the directory of your project. It is useful for
 projects that follow a well-known directory structures (like for Symfony
 projects for instance).
 
-.. _php-cs-fixer.phar: http://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
+.. _php-cs-fixer.phar: https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar
 .. _Atom:              https://github.com/Glavin001/atom-beautify
 .. _NetBeans:          http://plugins.netbeans.org/plugin/49042/php-cs-fixer
 .. _PhpStorm:          https://medium.com/@valeryan/how-to-configure-phpstorm-to-use-php-cs-fixer-1844991e521f

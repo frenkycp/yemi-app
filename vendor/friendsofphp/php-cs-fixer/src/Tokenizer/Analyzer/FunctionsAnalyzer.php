@@ -14,6 +14,7 @@ namespace PhpCsFixer\Tokenizer\Analyzer;
 
 use PhpCsFixer\Tokenizer\Analyzer\Analysis\ArgumentAnalysis;
 use PhpCsFixer\Tokenizer\Analyzer\Analysis\TypeAnalysis;
+use PhpCsFixer\Tokenizer\CT;
 use PhpCsFixer\Tokenizer\Tokens;
 
 /**
@@ -21,6 +22,29 @@ use PhpCsFixer\Tokenizer\Tokens;
  */
 final class FunctionsAnalyzer
 {
+    /**
+     * @param Tokens $tokens
+     * @param int    $index
+     *
+     * @return bool
+     */
+    public function isGlobalFunctionCall(Tokens $tokens, $index)
+    {
+        if (!$tokens[$index]->isGivenKind(T_STRING)) {
+            return false;
+        }
+
+        $prevIndex = $tokens->getPrevMeaningfulToken($index);
+        if ($tokens[$prevIndex]->isGivenKind(T_NS_SEPARATOR)) {
+            $prevIndex = $tokens->getPrevMeaningfulToken($prevIndex);
+        }
+
+        $nextIndex = $tokens->getNextMeaningfulToken($index);
+
+        return !$tokens[$prevIndex]->isGivenKind([T_DOUBLE_COLON, T_FUNCTION, CT::T_NAMESPACE_OPERATOR, T_NEW, T_OBJECT_OPERATOR, CT::T_RETURN_REF, T_STRING])
+            && $tokens[$nextIndex]->equals('(');
+    }
+
     /**
      * @param Tokens $tokens
      * @param int    $methodIndex

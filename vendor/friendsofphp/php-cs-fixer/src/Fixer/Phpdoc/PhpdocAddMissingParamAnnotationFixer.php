@@ -37,7 +37,7 @@ final class PhpdocAddMissingParamAnnotationFixer extends AbstractFunctionReferen
     public function getDefinition()
     {
         return new FixerDefinition(
-            'Phpdoc should contain @param for all params.',
+            'PHPDoc should contain `@param` for all params.',
             [
                 new CodeSample(
                     '<?php
@@ -80,8 +80,9 @@ function f9(string $foo, $bar, $baz) {}
      */
     public function getPriority()
     {
-        // must be run after PhpdocNoAliasTagFixer and before PhpdocAlignFixer
-        return -1;
+        // must be run after PhpdocNoAliasTagFixer
+        // must be run before PhpdocAlignFixer and PhpdocNoEmptyReturnFixer
+        return 10;
     }
 
     /**
@@ -161,7 +162,7 @@ function f9(string $foo, $bar, $baz) {}
                 }
             }
 
-            if (!count($arguments)) {
+            if (!\count($arguments)) {
                 continue;
             }
 
@@ -178,12 +179,12 @@ function f9(string $foo, $bar, $baz) {}
                 $lastParamLine = max($lastParamLine, $annotation->getEnd());
             }
 
-            if (!count($arguments)) {
+            if (!\count($arguments)) {
                 continue;
             }
 
             $lines = $doc->getLines();
-            $linesCount = count($lines);
+            $linesCount = \count($lines);
 
             Preg::match('/^(\s*).*$/', $lines[$linesCount - 1]->getContent(), $matches);
             $indent = $matches[1];

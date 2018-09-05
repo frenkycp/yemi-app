@@ -55,10 +55,10 @@ final class Cache implements CacheInterface
 
     public function set($file, $hash)
     {
-        if (!is_int($hash)) {
+        if (!\is_int($hash)) {
             throw new \InvalidArgumentException(sprintf(
                 'Value needs to be an integer, got "%s".',
-                is_object($hash) ? get_class($hash) : gettype($hash)
+                \is_object($hash) ? \get_class($hash) : \gettype($hash)
             ));
         }
 
@@ -79,7 +79,7 @@ final class Cache implements CacheInterface
             'hashes' => $this->hashes,
         ]);
 
-        if (false === $json) {
+        if (JSON_ERROR_NONE !== json_last_error()) {
             throw new \UnexpectedValueException(sprintf(
                 'Can not encode cache signature to JSON, error: "%s". If you have non-UTF8 chars in your signature, like in license for `header_comment`, consider enabling `ext-mbstring` or install `symfony/polyfill-mbstring`.',
                 json_last_error_msg()
@@ -103,7 +103,7 @@ final class Cache implements CacheInterface
         if (null === $data && JSON_ERROR_NONE !== json_last_error()) {
             throw new \InvalidArgumentException(sprintf(
                 'Value needs to be a valid JSON string, got "%s", error: "%s".',
-                is_object($json) ? get_class($json) : gettype($json),
+                \is_object($json) ? \get_class($json) : \gettype($json),
                 json_last_error_msg()
             ));
         }
@@ -117,7 +117,7 @@ final class Cache implements CacheInterface
 
         $missingKeys = array_diff_key(array_flip($requiredKeys), $data);
 
-        if (count($missingKeys)) {
+        if (\count($missingKeys)) {
             throw new \InvalidArgumentException(sprintf(
                 'JSON data is missing keys "%s"',
                 implode('", "', $missingKeys)

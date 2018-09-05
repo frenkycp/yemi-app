@@ -20,7 +20,7 @@ $this->registerCss("
         text-align: center;
     }
     ol {
-        font-size: 12px;
+        font-size: 13px;
     }
     .panel-heading {
         font-weight: bold;
@@ -39,7 +39,7 @@ $this->registerCss("
 
     <div class="body-content">
     	<div class="row">
-    		<div class="col-sm-3">
+    		<div class="col-sm-4">
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Material Monitoring<br/><span class="japanesse-word">材料モニタリング</span></div>
                     <div class="list-group">
@@ -47,7 +47,7 @@ $this->registerCss("
                             <p>Vendor to YEMI <span class="japanesse-word">(ベンダー⇒YEMI)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Weekly MilkRun Parts<br/><span class="japanesse-word">(週次ミルクラン部品納入）</span>', ['/parts-milk-run-weekly/index']); ?>
+                                    <?= Html::a('Weekly MilkRun Parts <span class="japanesse-word">(週次ミルクラン部品納入）</span>', ['/parts-milk-run-weekly/index']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('Weekly JIT Parts <span class="japanesse-word">（週次JIT部品納入)</span>', ['/parts-jit-weekly/index']); ?>
@@ -58,7 +58,7 @@ $this->registerCss("
                             <p>YEMI WH to Production<br/><span class="japanesse-word">(YEMI 部品倉庫⇒生産職場)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Weekly Picking Status<br/><span class="japanesse-word">(週次ピッキング状況)</span>', ['parts-picking-status/index']); ?>
+                                    <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['parts-picking-status/index']); ?>
                                 </li>
                                 <li class="text-red">
                                     <?= '<p>Monthly Monitoring Uncountable Parts<br/><span class="japanesse-word">(不定材の受払い管理) ― 準備中</span></p>' ?>
@@ -69,10 +69,10 @@ $this->registerCss("
                     </div>
                 </div>
     		</div>
-    		<div class="col-sm-4">
+    		<div class="col-sm-3">
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">E-Kanban WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/>E-<span class="japanesse-word">かんばん・生産工程モニタリング</span></div>
-                    <div class="list-group" style="text-align: center;">
+                    <div class="list-group">
                         <?= Html::a('Kanban Monitor （かんばんモニター）', ['wip-painting-monitoring/index'], [
                             'class' => 'list-group-item'
                         ]); ?>

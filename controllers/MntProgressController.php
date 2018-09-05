@@ -43,10 +43,23 @@ class MntProgressController extends Controller
 				$end_date = date('j', strtotime($value->repair_aktual));
 			}
 
-			if ($value->color_stat == 1) {
-				$color = 'rgba(255, 153, 0, 0.8)';
+			$color_no = 1;
+
+			$detail = MesinCheckNgDtr::find()
+			->where([
+				'urutan' => $value->urutan
+			])
+			->orderBy('stat_last_update DESC')
+			->one();
+
+			if ($detail->color_stat !== null) {
+				$color_no = $detail->color_stat;
+			}
+
+			if ($color_no == 1) {
+				$color = 'rgba(255, 153, 0, 0.6)';
 			}else {
-				$color = 'rgba(255, 0, 0, 0.8)';
+				$color = 'rgba(255, 0, 0, 0.6)';
 			}
 
 			$repair_plan = $value->repair_plan == null ? '-' : date('d M Y', strtotime($value->repair_plan));
@@ -81,7 +94,8 @@ class MntProgressController extends Controller
 				'high' => (int)$end_date,
 				'color' => $color,
 				'url' => Url::to(['/mesin-check-ng/index', 'ticket_no' => $value->urutan]),
-				'remark' => $remark
+				'remark' => $remark,
+				'catatan' => $this->getLastUpdate($value->urutan)
 			];
 		}
 		return $this->render('index', [
@@ -91,6 +105,22 @@ class MntProgressController extends Controller
 			'subtitle' => $subtitle,
 			'value_suffix' => $value_suffix
 		]);
+	}
+
+	public function getLastUpdate($urutan)
+	{
+		$detail = MesinCheckNgDtr::find()
+		->where([
+			'urutan' => $urutan
+		])
+		->orderBy('stat_last_update DESC')
+		->one();
+
+		if ($detail->urutan !== null) {
+			return $detail->stat_description;
+		}
+
+		return '';
 	}
 
 	public function getDetailHdr($urutan)
@@ -117,10 +147,10 @@ class MntProgressController extends Controller
 
 				if ($value->color_stat == 1) {
 					$status = 'Masih Dioperasikan';
-					$row_class = 'warning';
+					$row_class = 'text-green';
 				} else {
 					$status = 'Stop';
-					$row_class = 'danger';
+					$row_class = 'text-red';
 				}
 				$data .= '
 					<tr class="' . $row_class . '">

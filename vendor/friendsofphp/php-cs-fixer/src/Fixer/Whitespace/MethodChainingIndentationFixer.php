@@ -40,15 +40,6 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
     /**
      * {@inheritdoc}
      */
-    public function getPriority()
-    {
-        // must run after ArrayIndentationFixer
-        return -31;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isCandidate(Tokens $tokens)
     {
         return $tokens->isTokenKindFound(T_OBJECT_OPERATOR);
@@ -61,7 +52,7 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
     {
         $lineEnding = $this->whitespacesConfig->getLineEnding();
 
-        for ($index = 1, $count = count($tokens); $index < $count; ++$index) {
+        for ($index = 1, $count = \count($tokens); $index < $count; ++$index) {
             if (!$tokens[$index]->isGivenKind(T_OBJECT_OPERATOR)) {
                 continue;
             }
@@ -99,7 +90,11 @@ final class MethodChainingIndentationFixer extends AbstractFixer implements Whit
         $index = $tokens->getPrevMeaningfulToken($index);
         $indent = $this->whitespacesConfig->getIndent();
 
-        for ($i = $index - 1; $i >= 0; --$i) {
+        for ($i = $index; $i >= 0; --$i) {
+            if ($tokens[$i]->equals(')')) {
+                $i = $tokens->findBlockStart(Tokens::BLOCK_TYPE_PARENTHESIS_BRACE, $i);
+            }
+
             $currentIndent = $this->getIndentAt($tokens, $i);
             if (null === $currentIndent) {
                 continue;

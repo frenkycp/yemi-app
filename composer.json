@@ -37,7 +37,8 @@
         "kartik-v/yii2-widget-timepicker": "*",
         "kartik-v/yii2-editable": "*",
         "kartik-v/yii2-widget-datepicker": "@dev",
-        "kartik-v/yii2-widget-typeahead": "*"
+        "kartik-v/yii2-widget-typeahead": "*",
+        "kartik-v/yii2-widget-datetimepicker": "1.4.6"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
