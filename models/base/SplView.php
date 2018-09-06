@@ -45,6 +45,7 @@ use Yii;
  * @property string $PAY
  * @property string $SPL_GROUP
  * @property string $KETERANGAN
+ * @property string $DEPT_SECTION
  * @property string $aliasModel
  */
 abstract class SplView extends \yii\db\ActiveRecord
@@ -75,7 +76,7 @@ abstract class SplView extends \yii\db\ActiveRecord
     {
         return [
             [['SPL_HDR_ID', 'SPL_BARCODE', 'TGL_LEMBUR', 'KETERANGAN'], 'required'],
-            [['SPL_HDR_ID', 'SPL_BARCODE', 'USER_DOC_RCV', 'USER_DESC_DOC_RCV', 'PERIOD', 'JENIS_LEMBUR', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'USER_ID', 'USER_DESC', 'URAIAN_UMUM', 'STAT', 'SPL_DTR_ID', 'ID_NIK_AND_DATE', 'NO', 'NIK', 'NAMA_KARYAWAN', 'DIRECT_INDIRECT', 'GRADE', 'KODE_LEMBUR', 'URAIAN_LEMBUR', 'STAT_DTR', 'PAY', 'SPL_GROUP', 'KETERANGAN'], 'string'],
+            [['SPL_HDR_ID', 'SPL_BARCODE', 'USER_DOC_RCV', 'USER_DESC_DOC_RCV', 'PERIOD', 'JENIS_LEMBUR', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'USER_ID', 'USER_DESC', 'URAIAN_UMUM', 'STAT', 'SPL_DTR_ID', 'ID_NIK_AND_DATE', 'NO', 'NIK', 'NAMA_KARYAWAN', 'DIRECT_INDIRECT', 'GRADE', 'KODE_LEMBUR', 'URAIAN_LEMBUR', 'STAT_DTR', 'PAY', 'SPL_GROUP', 'KETERANGAN', 'DEPT_SECTION'], 'string'],
             [['TGL_LEMBUR', 'USER_LAST_UPDATE', 'DOC_RCV_DATE', 'DOC_VALIDATION_DATE', 'START_LEMBUR_PLAN', 'END_LEMBUR_PLAN', 'START_LEMBUR_ACTUAL', 'END_LEMBUR_ACTUAL'], 'safe'],
             [['NILAI_LEMBUR_PLAN', 'NILAI_LEMBUR_ACTUAL'], 'number']
         ];
@@ -123,6 +124,7 @@ abstract class SplView extends \yii\db\ActiveRecord
             'PAY' => 'Pay',
             'SPL_GROUP' => 'Spl  Group',
             'KETERANGAN' => 'Keterangan',
+            'DEPT_SECTION' => 'Dept  Section',
         ];
     }
 

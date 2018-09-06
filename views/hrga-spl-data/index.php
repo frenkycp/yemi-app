@@ -54,10 +54,10 @@ $grid_columns = [
         //'width'=>'100px',
     ],
     [
-        'attribute' => 'CC_GROUP',
+        'attribute' => 'DEPT_SECTION',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
-        'filter' => ArrayHelper::map(app\models\SplView::find()->select('DISTINCT(CC_GROUP)')->where('CC_GROUP <> \'\'')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP')
+        'filter' => ArrayHelper::map(app\models\SplView::find()->select('DISTINCT(DEPT_SECTION)')->where('DEPT_SECTION <> \'\'')->orderBy('DEPT_SECTION')->all(), 'DEPT_SECTION', 'DEPT_SECTION')
         //'width'=>'100px',
     ],
     [
