@@ -300,6 +300,9 @@ $gridColumns = [
             'pjax' => true, // pjax is set to always true for this demo
             'rowOptions' => function($model){
                 if ($model->etd_old !== '') {
+                    if ($model->etd_old < $model->etd) {
+                        return ['class' => 'text-red'];
+                    }
                     return ['class' => 'text-aqua'];
                 }
             },
