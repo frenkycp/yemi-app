@@ -216,6 +216,18 @@ $gridColumns = [
         'mergeHeader' => true,
         'width' => '170px',
     ],
+    [
+        'attribute' => 'etd_old',
+        'label' => 'ETD Before',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 120px;'
+        ],
+        //'mergeHeader' => true,
+    ],
     
 ];
 ?>
@@ -286,6 +298,11 @@ $gridColumns = [
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
+            'rowOptions' => function($model){
+                if ($model->etd_old !== '') {
+                    return ['class' => 'text-aqua'];
+                }
+            },
             'toolbar' =>  [
                 ['content' => 
                     Html::a('Back', $main_link, ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Show Weekly Report Chart')])

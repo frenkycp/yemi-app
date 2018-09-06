@@ -18,7 +18,7 @@ class SernoOutput extends SernoOutputModel
 public function rules()
 {
 return [
-[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst'], 'safe'],
+[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst', 'etd_old'], 'safe'],
             [['id', 'num', 'qty', 'output', 'adv', 'cntr'], 'integer'],
 ];
 }
@@ -43,7 +43,20 @@ public function search($params)
 {
 //$query = SernoOutputModel::find();
 $query = SernoOutputModel::find()
-->select('tb_serno_output.id, dst, tb_serno_output.gmc, SUM( qty ) AS qty, SUM( output ) AS output, stc, vms, etd, ship, cntr, MAX(remark) AS remark')
+->select([
+    'tb_serno_output.id',
+    'dst',
+    'tb_serno_output.gmc',
+    'qty' => 'SUM(qty)',
+    'output' => 'SUM(output)',
+    'stc',
+    'vms',
+    'etd',
+    'etd_old',
+    'ship',
+    'cntr',
+    'remark' => 'MAX(remark)'
+])
 ->where(['<>', 'stc', 'ADVANCE'])
 //->andWhere(['<>', 'stc', 'NOSO'])
 ->groupBy('uniq');
@@ -87,6 +100,7 @@ $dataProvider = new ActiveDataProvider([
         'attributes' => [
             'dst',
             'etd',
+            'etd_old',
             'gmc',
             'cntr',
             'cust_desc' => [
@@ -125,6 +139,7 @@ $query->andFilterWhere([
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'stc', $this->stc])
             ->andFilterWhere(['like', 'etd', $this->etd])
+            ->andFilterWhere(['like', 'etd_old', $this->etd_old])
             ->andFilterWhere(['like', 'tb_serno_master.model', $this->description])
             ->andFilterWhere(['like', 'category', $this->category])
             ->andFilterWhere(['like', 'dst', $this->dst])
