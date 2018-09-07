@@ -222,6 +222,23 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'end_job',
+        'label' => 'End Actual',
+        'value' => function($model){
+            return $model->end_job == null ? '-' : date('Y-m-d', strtotime($model->end_job));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'created_user_desc',
         'label' => 'Created By',
         'vAlign' => 'middle',
@@ -303,7 +320,7 @@ $grid_columns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 10px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => true, // pjax is set to always true for this demo
