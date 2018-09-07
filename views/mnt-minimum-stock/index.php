@@ -48,12 +48,12 @@ $grid_column = [
         'attribute' => 'image',
         'label' => 'Foto',
         'value' => function($model){
-            return Html::a(Html::img('http://wsus:81/product_image/' . $model->ITEM . '.jpg', [
+            return Html::a(Html::img('http://172.17.144.5:81/product_image/' . $model->ITEM . '.jpg', [
                 'width' => '20px',
                 'height' => '20px',
                 'alt' => '-'
             ]), ['get-image-preview', 'urutan' => $model->ITEM], ['class' => 'imageModal', 'data-pjax' => '0',]);
-            /*return Html::img('http://wsus:81/product_image/' . $model->ITEM . '.jpg', [
+            /*return Html::img('http://172.17.144.5:81/product_image/' . $model->ITEM . '.jpg', [
                 'width' => '20px',
                 'height' => '20px',
                 'alt' => ''
