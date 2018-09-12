@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'sqlsrv:Server=172.17.144.5\yemi_sqlexpress;Database=PCH',
+    'dsn' => 'sqlsrv:Server=WSUS\yemi_sqlexpress;Database=PCH',
     'username' => '200074',
     'password' => 'Fredy@yemi',
     //'dsn' => 'dblib:host=localhost;Database=TEST',
