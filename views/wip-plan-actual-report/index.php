@@ -90,6 +90,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
+        'pageSummary' => 'Total'
     ],
     [
         'attribute' => 'upload_id',
@@ -174,7 +175,8 @@ $grid_columns = [
         'label' => 'Qty',
         'vAlign' => 'middle',
         'width' => '70px',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'pageSummary' => true
     ],
     [
         'attribute' => 'stage',
@@ -328,6 +330,7 @@ $grid_columns = [
                 '{export}',
                 '{toggleData}',
             ],
+            'showPageSummary' => true,
             // set export properties
             'export' => [
                 'fontAwesome' => true

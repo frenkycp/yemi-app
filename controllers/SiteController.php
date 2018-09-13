@@ -135,7 +135,7 @@ class SiteController extends Controller
     public function actionIndex()
     {
         if (\Yii::$app->user->identity->role->name == 'YEMI') {
-            $nik = \Yii::$app->user->identity->name;
+            $nik = \Yii::$app->user->identity->username;
             $model_karyawan = Karyawan::find()->where([
                 'NIK' => $nik
             ])->one();
