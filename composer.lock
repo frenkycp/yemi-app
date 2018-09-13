@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "55783a087197c59b0ee262388a55aa53",
+    "content-hash": "d5a58380b2199e3f6292ef06de2efcc9",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -3295,7 +3295,7 @@
         },
         {
             "name": "schmunk42/yii2-giiant",
-            "version": "0.10.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmunk42/yii2-giiant.git",
@@ -4732,7 +4732,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "schmunk42/yii2-giiant": 0,
+        "schmunk42/yii2-giiant": 20,
         "kartik-v/yii2-widget-fileinput": 20,
         "kartik-v/yii2-grid": 20,
         "scotthuangzl/yii2-google-chart": 20,

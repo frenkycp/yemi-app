@@ -3468,8 +3468,8 @@
     },
     {
         "name": "schmunk42/yii2-giiant",
-        "version": "0.10.5",
-        "version_normalized": "0.10.5.0",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/schmunk42/yii2-giiant.git",
@@ -3506,7 +3506,7 @@
                 "bower-asset-library": "vendor/bower"
             }
         },
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "schmunk42\\giiant\\": "src"

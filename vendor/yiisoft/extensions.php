@@ -275,16 +275,6 @@ return array (
       '@dmstr/helpers' => $vendorDir . '/dmstr/yii2-helpers/src',
     ),
   ),
-  'schmunk42/yii2-giiant' => 
-  array (
-    'name' => 'schmunk42/yii2-giiant',
-    'version' => '0.10.5.0',
-    'alias' => 
-    array (
-      '@schmunk42/giiant' => $vendorDir . '/schmunk42/yii2-giiant/src',
-    ),
-    'bootstrap' => 'schmunk42\\giiant\\Bootstrap',
-  ),
   'kartik-v/yii2-krajee-base' => 
   array (
     'name' => 'kartik-v/yii2-krajee-base',
@@ -338,5 +328,15 @@ return array (
     array (
       '@kartik/file' => $vendorDir . '/kartik-v/yii2-widget-fileinput/src',
     ),
+  ),
+  'schmunk42/yii2-giiant' => 
+  array (
+    'name' => 'schmunk42/yii2-giiant',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@schmunk42/giiant' => $vendorDir . '/schmunk42/yii2-giiant/src',
+    ),
+    'bootstrap' => 'schmunk42\\giiant\\Bootstrap',
   ),
 );
