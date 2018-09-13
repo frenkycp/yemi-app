@@ -138,6 +138,15 @@ $grid_column = [
             'style' => 'text-align: center;'
         ],
     ],
+    [
+        'attribute' => 'POST_DATE',
+        'value' => function($model){
+            return date('Y-m-d', strtotime($model->POST_DATE));
+        },
+        'label' => 'Last Purchase Date',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
 ];
 
 $this->registerJs("$(function() {
