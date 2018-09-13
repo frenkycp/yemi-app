@@ -21,8 +21,42 @@ class PartsJitWeeklyController extends Controller
     	$data = [];
     	$trans_method = 'DDS';
 
+        $year_arr = [];
+        $month_arr = [];
+
+        $min_year = BookingShipTrackView::find()->select([
+            'YEAR' => 'MIN(YEAR)'
+        ])->one();
+
+        $year_now = date('Y');
+        $start_year = $min_year->YEAR;
+        for ($year = $start_year; $year <= $year_now; $year++) {
+            $year_arr[$year] = $year;
+        }
+
+        for ($month = 1; $month <= 12; $month++) {
+            $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
+        }
+
+        $period_model = new \yii\base\DynamicModel([
+            'year', 'month'
+        ]);
+
+        $period_model->addRule(['year','month'], 'required')
+        ->addRule(['year', 'month'], 'string');
+
+        $period_model->month = date('m');
+        $period_model->year = date('Y');
+
+        if($period_model->load(\Yii::$app->request->get())){
+            // do somenthing with model
+            //return $this->redirect(['view']);
+        }
+
+        $period = $period_model->year . $period_model->month;
+
     	$global_condition = [
-			'YEAR' => date('Y'),
+			'PERIOD' => $period,
     		'TRANS_MTHD' => $trans_method
 		];
 
@@ -89,7 +123,10 @@ class PartsJitWeeklyController extends Controller
     		'title' => $title,
     		'subtitle' => $subtitle,
     		'data' => $data,
-    		'this_week' => $this_week
+    		'this_week' => $this_week,
+            'period_model' => $period_model,
+            'year_arr' => $year_arr,
+            'month_arr' => $month_arr
     	]);
     }
 

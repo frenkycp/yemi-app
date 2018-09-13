@@ -106,37 +106,19 @@ $this->registerJs($script, View::POS_HEAD );
                 ->andWhere('tb_serno_input.proddate>tb_serno_output.etd')
                 ->all();*/
 
-                $total_delay = 0;
                 $remark = count($delay_data_arr) . '<br/>';
                 $remark .= '<table>';
-                /*foreach ($delay_data_arr as $delay_data) {
-                    $total_delay++;
-                    
-                }*/
                 $remark .= '</table>';
 
                 //$total_delay = 500;
                 $total_close = $value->output - (0 + $total_delay);
-                $presentase_ng = round((0/$value->qty)*100);
-                $presentase_close = floor(($total_close/$value->qty)*100);
-                $presentase_delay = ceil(($total_delay / $value->qty)*100);
-                $presentase_open = (int)(100 - ($presentase_close + $presentase_ng + $presentase_delay));
+                $presentase_close = round(($total_close/$value->qty)*100, 2);
+                $presentase_open = (int)(100 - $presentase_close);
                 //$data_close[] = (int)$presentase;
                 $data_close[] = [
                     'y' => (int)($presentase_close),
                     'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
                     'qty' => $total_close,
-                ];
-                $data_ng[] = [
-                    'y' => (int)$presentase_ng,
-                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
-                    'qty' => 0,
-                ];
-                 $data_delay[] = [
-                    'y' => (int)$presentase_delay,
-                    'url' => Url::to(['index', 'index_type' => 3, 'etd' => $value->etd]),
-                    'qty' => $total_delay,
-                    'remark' => $remark
                 ];
                 //$data_open[] = (int)(100 - $presentase_close);
                 $data_open[] = [
@@ -213,7 +195,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'dataLabels' => [
                             'enabled' => true,
                             'color' => 'black',
-                            'format' => '{point.percentage:.0f}% ({point.qty})',
+                            'format' => '{point.percentage:.2f}% ({point.qty})',
                             'style' => [
                                 'textOutline' => '0px'
                             ],
@@ -228,22 +210,6 @@ $this->registerJs($script, View::POS_HEAD );
                             ]
                         ]
                     ],
-                    
-                    /*[
-                        'name' => 'NG',
-                        'data' => $data_ng,
-                        'color' => 'pink',
-                        'dataLabels' => [
-                            'enabled' => false,
-                        ],
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                            ]
-                        ]
-                    ],*/
                     [
                         'name' => 'Completed',
                         'data' => $data_close,
@@ -251,7 +217,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'dataLabels' => [
                             'enabled' => true,
                             'color' => 'black',
-                            'format' => '{point.percentage:.0f}%',
+                            'format' => '{point.percentage:.2f}%',
                             'style' => [
                                 'textOutline' => '0px'
                             ],
@@ -264,30 +230,6 @@ $this->registerJs($script, View::POS_HEAD );
                             ]
                         ]
                     ],
-                    /*[
-                        'name' => 'Delay',
-                        'data' => $data_delay,
-                        'color' => 'rgba(255, 255, 0, 0.6)',
-                        'dataLabels' => [
-                            'enabled' => true,
-                            'color' => 'red',
-                            'format' => '{point.percentage}%',
-                            'style' => [
-                                'textOutline' => '0px'
-                            ],
-                        ],
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('
-                                    function(){
-                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                    }
-                                '),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                            ]
-                        ]
-                    ],*/
                 ]
             ],
         ]);

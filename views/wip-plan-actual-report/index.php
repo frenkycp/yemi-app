@@ -88,7 +88,7 @@ $grid_columns = [
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
         ],
         'pageSummary' => 'Total'
     ],
@@ -100,7 +100,7 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
         ],
     ],
     [
@@ -111,7 +111,7 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
         ],
     ],
     [
@@ -123,7 +123,7 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 50px; font-size:10px;'
         ],
     ],
     [
@@ -134,7 +134,7 @@ $grid_columns = [
         'width' => '80px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
         ],
     ],
     [
@@ -145,7 +145,11 @@ $grid_columns = [
         },
         'vAlign' => 'middle',
         'width' => '150px',
-        'filter' => $location_dropdown
+        'filter' => $location_dropdown,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 150px; font-size:10px;'
+        ],
     ],
     [
         'attribute' => 'model_group',
@@ -153,6 +157,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'contentOptions' => [
             'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 120px; font-size:10px;'
         ],
     ],
     [
@@ -162,12 +170,16 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
         ],
     ],
     [
         'attribute' => 'child_desc',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 170px; font-size:10px;'
+        ],
         //'hAlign' => 'center'
     ],
     [
@@ -188,6 +200,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filter' => $status_dropdown,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 130px; font-size:10px;'
+        ],
     ],
     [
         'attribute' => 'start_date',
@@ -269,49 +285,9 @@ $grid_columns = [
         ?>
 
     
-    <?php //\yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
+    <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <h1 style="display: none;">
-        <?= Yii::t('app', 'Mesin Check Ngs') ?>
-        <small>
-            List
-        </small>
-    </h1>
-    <div class="clearfix crud-navigation" style="display: none;">
-        <div class="pull-left">
-            <?= Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
-
-        <div class="pull-right">
-
-                        
-            <?= 
-            \yii\bootstrap\ButtonDropdown::widget(
-            [
-            'id' => 'giiant-relations',
-            'encodeLabel' => false,
-            'label' => '<span class="glyphicon glyphicon-paperclip"></span> ' . 'Relations',
-            'dropdown' => [
-            'options' => [
-            'class' => 'dropdown-menu-right'
-            ],
-            'encodeLabels' => false,
-            'items' => [
-
-]
-            ],
-            'options' => [
-            'class' => 'btn-default'
-            ]
-            ]
-            );
-            ?>
-        </div>
-    </div>
-
-    <!-- <hr /> -->
-
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -325,7 +301,7 @@ $grid_columns = [
             'containerOptions' => ['style' => 'overflow: auto; font-size: 10px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            //'pjax' => true, // pjax is set to always true for this demo
+            'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 '{export}',
                 '{toggleData}',
@@ -360,6 +336,6 @@ $grid_columns = [
 </div>
 
 
-<?php //\yii\widgets\Pjax::end() ?>
+<?php \yii\widgets\Pjax::end() ?>
 
 

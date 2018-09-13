@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use miloschuman\highcharts\Highcharts;
 use yii\web\JsExpression;
 use yii\web\View;
+use yii\bootstrap\ActiveForm;
 
 /**
 * @var yii\web\View $this
@@ -45,6 +46,35 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data);
 echo '</pre>';*/
 ?>
+
+<?php $form = ActiveForm::begin([
+    'method' => 'get'
+]); ?>
+
+    <div class="row">
+        <div class="col-md-2">
+            <?= $form->field($period_model, 'year')->dropDownList(
+                $year_arr,
+                [
+                    'onchange'=>'this.form.submit()'
+                ]
+            ) ?>
+        </div>
+        <div class="col-md-2">
+            <?= $form->field($period_model, 'month')->dropDownList(
+                $month_arr,
+                [
+                    'onchange'=>'this.form.submit()'
+                ]
+            ) ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <?= '';Html::submitButton('Update Chart', ['class' => 'btn btn-primary']) ?>
+    </div>
+
+<?php ActiveForm::end(); ?>
 
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
