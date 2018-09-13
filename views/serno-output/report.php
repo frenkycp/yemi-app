@@ -112,8 +112,10 @@ $this->registerJs($script, View::POS_HEAD );
 
                 //$total_delay = 500;
                 $total_close = $value->output - (0 + $total_delay);
-                $presentase_close = round(($total_close/$value->qty)*100, 2);
-                $presentase_open = (int)(100 - $presentase_close);
+                $total_open = $value->qty - $value->output;
+                $presentase_open = ceil(($total_open/$value->qty)*100);
+                $presentase_close = 100 - $presentase_open;
+                //$presentase_open = (int)(100 - $presentase_close);
                 //$data_close[] = (int)$presentase;
                 $data_close[] = [
                     'y' => (int)($presentase_close),
@@ -195,7 +197,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'dataLabels' => [
                             'enabled' => true,
                             'color' => 'black',
-                            'format' => '{point.percentage:.2f}% ({point.qty})',
+                            'format' => '{point.percentage:.0f}% ({point.qty})',
                             'style' => [
                                 'textOutline' => '0px'
                             ],
@@ -217,7 +219,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'dataLabels' => [
                             'enabled' => true,
                             'color' => 'black',
-                            'format' => '{point.percentage:.2f}%',
+                            'format' => '{point.percentage:.0f}%',
                             'style' => [
                                 'textOutline' => '0px'
                             ],
