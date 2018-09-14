@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoInput extends BaseSernoInput
 {
-    public $etd_ship, $destination, $week_no, $total, $status, $pdf_file, $total_ng, $invoice, $vms, $port, $so, $description, $speaker_model;
+    public $etd_ship, $destination, $week_no, $total, $status, $pdf_file, $total_ng, $invoice, $vms, $port, $so, $description, $speaker_model, $dst, $prod_output_qty, $in_transit_qty, $finish_goods_qty, $stock_qty;
 
     public function behaviors()
     {
@@ -79,5 +79,10 @@ class SernoInput extends BaseSernoInput
     {
         $sernoMaster = SernoMaster::find()->where(['gmc' => $this->gmc])->one();
         return $sernoMaster->model . ' // ' . $sernoMaster->color . ' // ' . $sernoMaster->dest;
+    }
+
+    public function getItemM3()
+    {
+        return $this->hasOne(ItemM3::className(), ['item' => 'gmc'])->one();
     }
 }
