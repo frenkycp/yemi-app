@@ -18,7 +18,7 @@ class MntMinimumStockSearch extends MinimumStockView02
 public function rules()
 {
 return [
-[['ID_ITEM_LOC', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'LAST_UPDATE', 'MACHINE', 'MACHINE_NAME', 'ONHAND', 'RACK'], 'safe'],
+[['ID_ITEM_LOC', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'LAST_UPDATE', 'MACHINE', 'MACHINE_NAME', 'ONHAND', 'RACK', 'POST_DATE'], 'safe'],
             [['MIN_STOCK_QTY'], 'number'],
 ];
 }
@@ -63,6 +63,7 @@ return $dataProvider;
 $query->andFilterWhere([
             'MIN_STOCK_QTY' => $this->MIN_STOCK_QTY,
             'LAST_UPDATE' => $this->LAST_UPDATE,
+            'POST_DATE' => $this->POST_DATE,
             'ONHAND' => $this->ONHAND,
             'RACK' => $this->RACK,
         ]);

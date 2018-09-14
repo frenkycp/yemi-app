@@ -20,10 +20,14 @@ $this->registerCss("
         text-align: center;
     }
     ol {
-        font-size: 13px;
+        font-size: 12px;
     }
     .panel-heading {
         font-weight: bold;
+        font-size: 13px;
+    }
+    .list-group-item {
+        font-size: 13px;
     }
 ");
 ?>
