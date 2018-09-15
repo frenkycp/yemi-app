@@ -171,7 +171,7 @@ $grid_column = [
     [
         'attribute' => 'POST_DATE',
         'value' => function($model){
-            return date('Y-m-d', strtotime($model->POST_DATE));
+            return $model->POST_DATE !== null ? date('Y-m-d', strtotime($model->POST_DATE)) : '-';
         },
         'label' => 'Last Purchase Date',
         'hAlign' => 'center',

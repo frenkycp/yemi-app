@@ -18,12 +18,7 @@ class MntMinimumStockSearch extends MinimumStockView03
 public function rules()
 {
 return [
-<<<<<<< HEAD
 [['ID_ITEM_LOC', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'LAST_UPDATE', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS'], 'safe']
-=======
-[['ID_ITEM_LOC', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'LAST_UPDATE', 'MACHINE', 'MACHINE_NAME', 'ONHAND', 'RACK', 'POST_DATE'], 'safe'],
-            [['MIN_STOCK_QTY'], 'number'],
->>>>>>> 677b4149db5ddcbfe0402d73cd41d2dd6e2b1adf
 ];
 }
 
@@ -48,18 +43,6 @@ public function search($params)
 
 $query = MinimumStockView03::find();
 
-/*if ($this->status == 1) {
-      $query = MinimumStockView03::find()->andWhere(['ONHAND' => 0]);
-} elseif ($this->status == 2) {
-      $query = MinimumStockView03::find()->andWhere('ONHAND > 0 AND ONHAND <= (1 * MIN_STOCK_QTY)');
-} elseif ($this->status == 3) {
-      $query = MinimumStockView03::find()->andWhere('ONHAND > (1 * MIN_STOCK_QTY) AND ONHAND <= (1.5 * MIN_STOCK_QTY)');
-}elseif ($this->status == 4) {
-      $query = MinimumStockView03::find()->andWhere('ONHAND > (1.5 * MIN_STOCK_QTY) AND ONHAND <= (2 * MIN_STOCK_QTY)');
-}elseif ($this->status == 5) {
-      $query = MinimumStockView03::find()->andWhere('ONHAND > 2');
-}*/
-
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
 'sort' => [
@@ -80,12 +63,8 @@ return $dataProvider;
 $query->andFilterWhere([
             //'MIN_STOCK_QTY' => $this->MIN_STOCK_QTY,
             'LAST_UPDATE' => $this->LAST_UPDATE,
-<<<<<<< HEAD
             'ONHAND_STATUS' => $this->ONHAND_STATUS,
-=======
             'POST_DATE' => $this->POST_DATE,
-            'ONHAND' => $this->ONHAND,
->>>>>>> 677b4149db5ddcbfe0402d73cd41d2dd6e2b1adf
             'RACK' => $this->RACK,
         ]);
 
