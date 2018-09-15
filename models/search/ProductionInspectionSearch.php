@@ -19,8 +19,8 @@ class ProductionInspectionSearch extends SernoInput
 public function rules()
 {
 return [
-[['num', 'flo', 'palletnum', 'adv'], 'integer'],
-            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng_date', 'qa_ok_date', 'plan', 'ship', 'etd_ship', 'status'], 'safe'],
+[['flo', 'adv'], 'integer'],
+            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng_date', 'qa_ok_date', 'plan', 'etd_ship', 'status'], 'safe'],
 ];
 }
 
@@ -98,9 +98,7 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'num' => $this->num,
             'flo' => $this->flo,
-            'palletnum' => $this->palletnum,
             'adv' => $this->adv,
         ]);
 
