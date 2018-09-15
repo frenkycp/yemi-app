@@ -53,11 +53,6 @@ $grid_column = [
                 'height' => '20px',
                 'alt' => '-'
             ]), ['get-image-preview', 'urutan' => $model->ITEM], ['class' => 'imageModal', 'data-pjax' => '0',]);
-            /*return Html::img('http://172.17.144.5:81/product_image/' . $model->ITEM . '.jpg', [
-                'width' => '20px',
-                'height' => '20px',
-                'alt' => ''
-            ]);*/
         },
         'format' => 'html',
         'hAlign' => 'center',
@@ -136,6 +131,41 @@ $grid_column = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'ONHAND_STATUS',
+        'label' => 'Status',
+        'value' => function($model){
+            $label_class = '';
+            if ($model->ONHAND_STATUS == 'MINUS') {
+                $label_class = 'label-info';
+            } elseif ($model->ONHAND_STATUS == 'HABIS') {
+                $label_class = 'label-danger';
+            } elseif ($model->ONHAND_STATUS == 'KRITIS') {
+                $label_class = 'label-danger';
+            } elseif ($model->ONHAND_STATUS == 'AWAS') {
+                $label_class = 'label-warning';
+            } elseif ($model->ONHAND_STATUS == 'AMAN') {
+                $label_class = 'label-success';
+            } elseif ($model->ONHAND_STATUS == 'OVERSTOCK') {
+                $label_class = 'label-warning';
+            }
+            return '<span class="label ' . $label_class . '">' . $model->ONHAND_STATUS . '</span>';
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width: 150px;'
+        ],
+        'filter' => [
+            'MINUS' => 'MINUS',
+            'HABIS' => 'HABIS',
+            'KRITIS' => 'KRITIS',
+            'AWAS' => 'AWAS',
+            'AMAN' => 'AMAN',
+            'OVERSTOCK' => 'OVERSTOCK',
         ],
     ],
     [

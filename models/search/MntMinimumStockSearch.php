@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\MinimumStockView02;
+use app\models\MinimumStockView03;
 
 /**
 * MntMinimumStockSearch represents the model behind the search form about `app\models\MinimumStock`.
 */
-class MntMinimumStockSearch extends MinimumStockView02
+class MntMinimumStockSearch extends MinimumStockView03
 {
 /**
 * @inheritdoc
@@ -18,8 +18,7 @@ class MntMinimumStockSearch extends MinimumStockView02
 public function rules()
 {
 return [
-[['ID_ITEM_LOC', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'LAST_UPDATE', 'MACHINE', 'MACHINE_NAME', 'ONHAND', 'RACK'], 'safe'],
-            [['MIN_STOCK_QTY'], 'number'],
+[['ID_ITEM_LOC', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'LAST_UPDATE', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS'], 'safe']
 ];
 }
 
@@ -41,7 +40,20 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = MinimumStockView02::find();
+
+$query = MinimumStockView03::find();
+
+/*if ($this->status == 1) {
+      $query = MinimumStockView03::find()->andWhere(['ONHAND' => 0]);
+} elseif ($this->status == 2) {
+      $query = MinimumStockView03::find()->andWhere('ONHAND > 0 AND ONHAND <= (1 * MIN_STOCK_QTY)');
+} elseif ($this->status == 3) {
+      $query = MinimumStockView03::find()->andWhere('ONHAND > (1 * MIN_STOCK_QTY) AND ONHAND <= (1.5 * MIN_STOCK_QTY)');
+}elseif ($this->status == 4) {
+      $query = MinimumStockView03::find()->andWhere('ONHAND > (1.5 * MIN_STOCK_QTY) AND ONHAND <= (2 * MIN_STOCK_QTY)');
+}elseif ($this->status == 5) {
+      $query = MinimumStockView03::find()->andWhere('ONHAND > 2');
+}*/
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -61,9 +73,9 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'MIN_STOCK_QTY' => $this->MIN_STOCK_QTY,
+            //'MIN_STOCK_QTY' => $this->MIN_STOCK_QTY,
             'LAST_UPDATE' => $this->LAST_UPDATE,
-            'ONHAND' => $this->ONHAND,
+            'ONHAND_STATUS' => $this->ONHAND_STATUS,
             'RACK' => $this->RACK,
         ]);
 
