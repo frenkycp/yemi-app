@@ -7,6 +7,7 @@ use app\models\search\ProductionMonthlyFullfillmentSearch;
 use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
 use app\models\SernoOutput;
+use app\models\SernoInput;
 
 class ProductionMonthlySummaryController extends Controller
 {
@@ -66,5 +67,21 @@ class ProductionMonthlySummaryController extends Controller
     		'categories' => $categories,
     		'series' => $series,
     	]);
+    }
+
+    public function getDelayQty($period)
+    {
+        $data_arr = SernoInput::find()
+        ->joinWith('sernoOutput')
+        ->select([
+            'total' => 'COUNT(*)'
+        ])
+        ->where([
+            'WEEK(tb_serno_output.ship,4)' => $this->week,
+        ])
+        ->andWhere('tb_serno_input.proddate > tb_serno_output.etd')
+        ->one();
+
+        return $data_arr->total;
     }
 }

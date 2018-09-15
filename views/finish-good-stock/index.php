@@ -59,13 +59,13 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                //'themes/grid-light',
-                'themes/sand-signika',
+                'themes/grid-light',
+                //'themes/sand-signika',
                 //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
-                    'type' => 'bar',
+                    'type' => 'column',
                     'height' => 500
                 ],
                 'credits' => [
@@ -78,27 +78,27 @@ echo '</pre>';*/
                     'text' => $subtitle
                 ],
                 'legend' => [
-                    'enabled' => false
+                    'enabled' => true
                 ],
                 'xAxis' => [
                     'categories' => $categories
                 ],
                 'yAxis' => [
                     'min' => 0,
-                    'title' => [
-                        'text' => 'Qty',
-                        'align' => 'high'
+                    
+                    'stackLabels' => [
+                        'enabled' => true
                     ],
-                    'labels' => [
-                        'overflow' => 'justify'
-                    ]
                 ],
                 'plotOptions' => [
-                    'bar' => [
+                    /*'bar' => [
                         'dataLabels' => [
-                            'enabled' => true,
+                            'enabled' => false,
                             'format' => '{point.y} pcs ({point.total_kubikasi} m3)'
                         ]
+                    ],*/
+                    'column' => [
+                        'stacking' => 'normal',
                     ],
                     'series' => [
                         'cursor' => 'pointer',
@@ -116,10 +116,20 @@ echo '</pre>';*/
                 ],
                 'series' => [
                     [
-                        'name' => 'Shipping Stock',
-                        'data' => $data,
+                        'name' => 'Finish Goods',
+                        'data' => $data[2],
+                        'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+                    ],
+                    [
+                        'name' => 'In Transit',
+                        'data' => $data[1],
+                        'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+                    ],
+                    [
+                        'name' => 'Production Output',
+                        'data' => $data[0],
                         'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
-                    ]
+                    ],
                 ]
             ],
         ]);
@@ -131,8 +141,9 @@ echo '</pre>';*/
         ]);
         yii\bootstrap\Modal::end();
         ?>
-        <hr>
-        <h4 class="text-light-blue"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></h4>
+        <div class="well well-sm">
+            <h4 class="text-light-blue"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></h4>
+        </div>
     </div>
     
 </div>
