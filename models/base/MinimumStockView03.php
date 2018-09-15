@@ -30,7 +30,8 @@ use Yii;
  * @property double $ONHAND
  * @property string $RACK
  * @property string $POST_DATE
- * @property string $ONHAND_STATUS
+ * @property integer $ONHAND_STATUS
+ * @property string $ONHAND_STATUS_DESC
  * @property string $aliasModel
  */
 abstract class MinimumStockView03 extends \yii\db\ActiveRecord
@@ -60,10 +61,11 @@ abstract class MinimumStockView03 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['LOC_ITEM', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS'], 'string'],
+            [['LOC_ITEM', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS_DESC'], 'string'],
             [['LOC', 'ONHAND'], 'required'],
             [['MIN_STOCK_QTY', 'ONHAND'], 'number'],
-            [['LAST_UPDATE', 'POST_DATE'], 'safe']
+            [['LAST_UPDATE', 'POST_DATE'], 'safe'],
+            [['ONHAND_STATUS'], 'integer']
         ];
     }
 
@@ -95,6 +97,7 @@ abstract class MinimumStockView03 extends \yii\db\ActiveRecord
             'RACK' => 'Rack',
             'POST_DATE' => 'Post  Date',
             'ONHAND_STATUS' => 'Onhand  Status',
+            'ONHAND_STATUS_DESC' => 'Onhand  Status  Desc',
         ];
     }
 

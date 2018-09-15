@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 /**
@@ -138,20 +139,14 @@ $grid_column = [
         'label' => 'Status',
         'value' => function($model){
             $label_class = '';
-            if ($model->ONHAND_STATUS == 'MINUS') {
-                $label_class = 'label-info';
-            } elseif ($model->ONHAND_STATUS == 'HABIS') {
+            if ($model->ONHAND_STATUS == 1) {
                 $label_class = 'label-danger';
-            } elseif ($model->ONHAND_STATUS == 'KRITIS') {
-                $label_class = 'label-danger';
-            } elseif ($model->ONHAND_STATUS == 'AWAS') {
+            } elseif ($model->ONHAND_STATUS == 2) {
                 $label_class = 'label-warning';
-            } elseif ($model->ONHAND_STATUS == 'AMAN') {
+            } elseif ($model->ONHAND_STATUS == 3) {
                 $label_class = 'label-success';
-            } elseif ($model->ONHAND_STATUS == 'OVERSTOCK') {
-                $label_class = 'label-warning';
             }
-            return '<span class="label ' . $label_class . '">' . $model->ONHAND_STATUS . '</span>';
+            return '<span class="label ' . $label_class . '">' . $model->ONHAND_STATUS_DESC . '</span>';
         },
         'format' => 'raw',
         'hAlign' => 'center',
@@ -159,14 +154,7 @@ $grid_column = [
         'contentOptions' => [
             'style' => 'min-width: 150px;'
         ],
-        'filter' => [
-            'MINUS' => 'MINUS',
-            'HABIS' => 'HABIS',
-            'KRITIS' => 'KRITIS',
-            'AWAS' => 'AWAS',
-            'AMAN' => 'AMAN',
-            'OVERSTOCK' => 'OVERSTOCK',
-        ],
+        'filter' => ArrayHelper::map(app\models\MinimumStockView03::find()->select('ONHAND_STATUS, ONHAND_STATUS_DESC')->groupBy('ONHAND_STATUS, ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all(), 'ONHAND_STATUS', 'ONHAND_STATUS_DESC'),
     ],
     [
         'attribute' => 'POST_DATE',
