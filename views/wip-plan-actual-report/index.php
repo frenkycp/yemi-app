@@ -195,7 +195,7 @@ $grid_columns = [
         'label' => 'Status',
         'value' => function($model){
             $status_arr = explode('-', $model->stage);
-            return $status_arr[1];
+            return $status_arr[1] == 'HAND OVER' ? 'PULLED BY NEXT' : $status_arr[1];
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',

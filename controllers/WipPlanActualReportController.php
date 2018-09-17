@@ -45,7 +45,7 @@ class WipPlanActualReportController extends Controller
 		$tmp_status = [];
 		foreach ($status_arr as $status) {
 			$splitted_stage = explode('-', $status->stage);
-			$tmp_status[$status->stage] = $splitted_stage[1];
+			$tmp_status[$status->stage] = $splitted_stage[1] == 'HAND OVER' ? 'PULLED BY NEXT' : $splitted_stage[1];
 		}
 
 		return $this->render('index', [

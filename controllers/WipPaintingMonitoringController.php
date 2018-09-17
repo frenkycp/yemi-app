@@ -157,7 +157,7 @@ class WipPaintingMonitoringController extends Controller
 						//'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
 					],
 					[
-						'name' => 'HANDOVER （後工程に引渡し）',
+						'name' => 'PULLED BY NEXT (後工程の引取り)',
 						'data' => $value['handover_percentage'],
 						'color' => 'rgba(0, 240, 0, 0.5)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
@@ -198,7 +198,7 @@ class WipPaintingMonitoringController extends Controller
                 break;
 
             case '04-HAND OVER':
-                $status = 'HANDOVER';
+                $status = 'PULLED BY NEXT';
                 break;
             
             default:
