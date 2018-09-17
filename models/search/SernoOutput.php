@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst', 'etd_old'], 'safe'],
-            [['id', 'num', 'qty', 'output', 'adv', 'cntr'], 'integer'],
+            [['id', 'num', 'adv', 'cntr', 'back_order'], 'integer'],
 ];
 }
 
@@ -55,6 +55,7 @@ $query = SernoOutputModel::find()
     'etd_old',
     'ship',
     'cntr',
+    'back_order',
     'remark' => 'MAX(remark)'
 ])
 ->where(['<>', 'stc', 'ADVANCE'])
@@ -80,7 +81,7 @@ if(isset($params['index_type']))
     {
         $query = $query->andWhere(['dst' => $params['dst']]);
     }
-    if(isset($params['back_order']))
+    /*if(isset($params['back_order']))
     {
         if ($params['back_order'] == 2) {
             $query = $query->andWhere(['back_order' => 2]);
@@ -88,7 +89,7 @@ if(isset($params['index_type']))
             $query = $query->andWhere(['<>', 'back_order', 2]);
         }
         
-    }
+    }*/
 }
 
 $query->joinWith('sernoMaster');
@@ -132,6 +133,7 @@ $query->andFilterWhere([
             'num' => $this->num,
             'qty' => $this->qty,
             'output' => $this->output,
+            'back_order' => $this->back_order,
             'adv' => $this->adv,
             'cntr' => $this->cntr,
         ]);

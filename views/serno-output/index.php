@@ -114,7 +114,7 @@ $gridColumns = [
         'value' => 'shipCustomer.customer_desc',
         'label' => 'Customer Description',
         'vAlign' => 'middle',
-        'mergeHeader' => true,
+        
         'hidden' => \Yii::$app->request->get('dst') !== null ? false : true,
     ],
     [
@@ -127,13 +127,13 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 120px;'
         ],
-        //'mergeHeader' => true,
+        //
     ],
     [
         'attribute' => 'dst',
         'vAlign' => 'middle',
         'width' => '150px',
-        //'mergeHeader' => true,
+        //
         'contentOptions' => [
             'style' => 'min-width: 120px;',
         ],
@@ -164,7 +164,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '60px',
-        'mergeHeader' => true,
+        
         'pageSummary' => true,
         'format' => ['decimal',0]
     ],
@@ -173,7 +173,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '60px',
-        'mergeHeader' => true,
+        
         'pageSummary' => true,
         'format' => ['decimal',0]
     ],
@@ -183,7 +183,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '60px',
-        'mergeHeader' => true,
+        
         'pageSummary' => true,
         'format' => ['decimal',0]
     ],
@@ -199,7 +199,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '60px',
-        'mergeHeader' => true,
+        
         'pageSummary' => true,
         'format' => ['decimal',0]
     ],
@@ -211,9 +211,27 @@ $gridColumns = [
         'filter' => ['MACHINE' => 'MACHINE', 'MAN' => 'MAN', 'MATERIAL' => 'MATERIAL', 'METHOD' => 'METHOD']
     ],*/
     [
+        'attribute' => 'back_order',
+        'label' => 'Priority',
+        'value' => function($model){
+            if ($model->back_order == 2) {
+                return '<span class="text-red"><b>Air Shipment</b></span>';
+            } else {
+                return '';
+            }
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '180px',
+        'filter' => [
+            2 => 'Air Shipment'
+        ]
+    ],
+    [
         'attribute' => 'remark',
         'vAlign' => 'middle',
-        'mergeHeader' => true,
+        
         'width' => '170px',
     ],
     [
@@ -226,7 +244,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 120px;'
         ],
-        //'mergeHeader' => true,
+        //
     ],
     
 ];
