@@ -18,8 +18,8 @@ class SernoInputSearch extends SernoInput
 public function rules()
 {
 return [
-[['num', 'flo', 'palletnum', 'adv'], 'integer'],
-            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'ship', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'speaker_model', 'so'], 'safe'],
+[['flo', 'adv'], 'integer'],
+            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'speaker_model', 'so'], 'safe'],
 ];
 }
 
@@ -74,9 +74,7 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'num' => $this->num,
             'flo' => $this->flo,
-            'palletnum' => $this->palletnum,
             'adv' => $this->adv,
         ]);
 
@@ -87,16 +85,13 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'tb_serno_output.dst', $this->port])
             ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
-            //->andFilterWhere(['like', 'qa_ng', $this->qa_ng])
             ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date])
-            //->andFilterWhere(['like', 'qa_ok', $this->qa_ok])
             ->andFilterWhere(['like', 'qa_ok_date', $this->qa_ok_date])
             ->andFilterWhere(['like', 'plan', $this->plan])
             ->andFilterWhere(['like', 'tb_serno_output.invo', $this->invoice])
             ->andFilterWhere(['like', 'tb_serno_output.etd', $this->etd_ship])
             ->andFilterWhere(['like', 'tb_serno_output.vms', $this->vms])
-            ->andFilterWhere(['like', 'tb_serno_output.so', $this->so])
-            ->andFilterWhere(['like', 'ship', $this->ship]);
+            ->andFilterWhere(['like', 'tb_serno_output.so', $this->so]);
 
         if ($this->status == 'OK') {
             $query->andWhere([

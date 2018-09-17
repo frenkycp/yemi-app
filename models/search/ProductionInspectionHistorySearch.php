@@ -18,8 +18,8 @@ class ProductionInspectionHistorySearch extends SernoInput
 public function rules()
 {
 return [
-[['num', 'flo', 'palletnum', 'adv', 'qa_result'], 'integer'],
-            [['pk', 'gmc', 'line', 'proddate', 'waktu', 'sernum', 'plan', 'qa_ok', 'qa_ok_date', 'qa_ng', 'qa_ng_date', 'ship'], 'safe'],
+[['flo', 'adv', 'qa_result'], 'integer'],
+            [['pk', 'gmc', 'line', 'proddate', 'waktu', 'sernum', 'plan', 'qa_ok', 'qa_ok_date', 'qa_ng', 'qa_ng_date'], 'safe'],
 ];
 }
 
@@ -73,10 +73,8 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'num' => $this->num,
             'waktu' => $this->waktu,
             'flo' => $this->flo,
-            'palletnum' => $this->palletnum,
             'adv' => $this->adv,
             'qa_result' => $this->qa_result,
         ]);
@@ -90,8 +88,7 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'qa_ok', $this->qa_ok])
             ->andFilterWhere(['like', 'qa_ok_date', $this->qa_ok_date])
             ->andFilterWhere(['like', 'qa_ng', $this->qa_ng])
-            ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date])
-            ->andFilterWhere(['like', 'ship', $this->ship]);
+            ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date]);
 
 return $dataProvider;
 }
