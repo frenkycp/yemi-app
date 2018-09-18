@@ -116,17 +116,17 @@ echo '</pre>';*/
                 ],
                 'series' => [
                     [
-                        'name' => 'Finish Goods',
+                        'name' => 'Finish Good WH  (完成品倉庫)',
                         'data' => $data[2],
                         'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
                     ],
                     [
-                        'name' => 'In Transit',
+                        'name' => 'InTransit Area (トランジットエリア）',
                         'data' => $data[1],
                         'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
                     ],
                     [
-                        'name' => 'Production Output',
+                        'name' => 'Production Floor (生産職場)',
                         'data' => $data[0],
                         'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
                     ],
