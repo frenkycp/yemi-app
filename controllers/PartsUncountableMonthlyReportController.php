@@ -19,19 +19,37 @@ class PartsUncountableMonthlyReportController extends Controller
 		$data = [];
 
 		$get_data_arr = UncountableView02::find()
-		//->where(['PERIOD' => '201804'])
+		->where(['>=', 'PERIOD', '201808'])
 		->orderBy('ITEM, POST_DATE')
 		->all();
 
 		foreach ($get_data_arr as $key => $value) {
 			$partno = $value->ITEM;
-			$post_date = date('Y-m-d', strtotime($value->POST_DATE));
+			$post_date = (strtotime("$value->POST_DATE +3 hours") * 1000);
+			//$post_date = $value->POST_DATE;
 			$ending_qty = $value->ENDING_QTY;
 			$wh_ending_qty = $value->WH_ENDING_QTY;
+			$deviasi = $value->DEVIASI_PERCENT;
+
+			$deviasi_color = 'rgba(0, 255, 0, 0.9)';
+			if ($value->DEVIASI_PERCENT >= 30) {
+				$deviasi_color = 'rgba(255, 0, 0, 0.9)';
+			}
 
 			$data[$partno]['categories'][] = $post_date;
-			$data[$partno]['data1'][] = (int)$ending_qty;
-			$data[$partno]['data2'][] = (int)$wh_ending_qty;
+			$data[$partno]['data1'][] = [
+				$post_date,
+				(int)$ending_qty
+			];
+			$data[$partno]['data2'][] = [
+				$post_date,
+				(int)$wh_ending_qty
+			];
+			$data[$partno]['deviasi'][] = [
+				'x' => $post_date,
+				'y' => (float)$deviasi,
+				'color' => $deviasi_color
+			];
 		}
 
 		return $this->render('index', [

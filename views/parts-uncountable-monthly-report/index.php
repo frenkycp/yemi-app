@@ -20,7 +20,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 300000); // milliseconds
+      setTimeout("refreshPage();", 18000000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -37,46 +37,98 @@ echo '</pre>';*/
 <?php
 foreach ($data as $key => $value) {
     echo '<div class="panel panel-primary">';
-    echo '<div class="panel panel-heading">';
-    echo $key;
-    echo '</div>';
-    echo '<div class="panel panel-body">';
-    echo Highcharts::widget([
-        'scripts' => [
-            'modules/exporting',
-            'themes/grid-light',
-        ],
-        'options' => [
-            'chart' => [
-                'type' => 'spline',
-                'height' => 300,
-            ],
-            'xAxis' => [
-                'type' => 'category',
-                'categories' => $value['categories']
-            ],
-            'plotOptions' => [
-                'spline' => [
-                    'marker' => [
-                        //'radius' => 4,
-                        'lineColor' => '#666666',
-                        'lineWidth' => 1
-                    ]
-                ]
-            ],
-            'series' => [
-                [
-                    'name' => 'ENDING QTY',
-                    'data' => $value['data1']
-                ],
-                [
-                    'name' => 'WH ENDING QTY',
-                    'data' => $value['data2']
-                ]
-            ],
-        ],
-    ]);
-    echo '</div>';
+        echo '<div class="panel panel-heading">';
+            echo $key;
+        echo '</div>';
+        echo '<div class="panel panel-body">';
+            echo '<div class="nav-tabs-custom">';
+                echo '<ul class="nav nav-tabs">';
+                    echo '<li class="active"><a href="#tab_1_' . $key . '" data-toggle="tab">Long</a></li>';
+                    echo '<li><a href="#tab_2_' . $key .'" data-toggle="tab">Short</a></li>';
+                echo '</ul>';
+                echo '<div class="tab-content">';
+                    echo '<div class="tab-pane active" id="tab_1_' . $key . '">';
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                'modules/exporting',
+                                'themes/grid-light',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    //'zoomType' => 'x',
+                                    'height' => 400,
+                                ],
+                                'title' => [
+                                    'text' => null,
+                                ],
+                                'credits' => [
+                                    'enabled' => false
+                                ],
+                                'xAxis' => [
+                                    'type' => 'datetime',
+                                    //'categories' => $value['categories']
+                                ],
+                                'tooltip' => [
+                                    'shared' => true,
+                                    'crosshairs' => true,
+                                    'xDateFormat' => '%Y-%m-%d'
+                                ],
+                                'series' => [
+                                    [
+                                        'name' => 'ENDING QTY',
+                                        'data' => $value['data1'],
+                                    ],
+                                    [
+                                        'name' => 'WH ENDING QTY',
+                                        'data' => $value['data2'],
+                                    ],
+                                    /*[
+                                        'name' => 'DEVIASI',
+                                        'data' => $value['deviasi']
+                                    ],*/
+                                ],
+                            ],
+                        ]);
+                    echo '</div>';
+                    echo '<div class="tab-pane" id="tab_2_' . $key .'">';
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                'modules/exporting',
+                                'themes/grid-light',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    'height' => 400,
+                                    'type' => 'column'
+                                ],
+                                'title' => [
+                                    'text' => null,
+                                ],
+                                'legend' => [
+                                    'enabled' => false
+                                ],
+                                'credits' => [
+                                    'enabled' => false
+                                ],
+                                'xAxis' => [
+                                    'type' => 'datetime',
+                                    //'categories' => $value['categories']
+                                ],
+                                'yAxis' => [
+                                    'title' => 'Percentage'
+                                ],
+                                'series' => [
+                                    [
+                                        'name' => 'DEVIASI',
+                                        'data' => $value['deviasi']
+                                    ],
+                                ],
+                            ],
+                        ]);
+                    echo '</div>';
+                echo '</div>';
+            echo '</div>';
+        echo '</div>';
     echo '</div>';
 }
 ?>

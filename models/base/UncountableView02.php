@@ -14,6 +14,8 @@ use Yii;
  * @property double $ENDING_QTY
  * @property double $WH_ENDING_QTY
  * @property string $PERIOD
+ * @property double $DEVIASI
+ * @property double $DEVIASI_PERCENT
  * @property string $aliasModel
  */
 abstract class UncountableView02 extends \yii\db\ActiveRecord
@@ -45,7 +47,7 @@ abstract class UncountableView02 extends \yii\db\ActiveRecord
         return [
             [['ITEM', 'PERIOD'], 'string'],
             [['POST_DATE'], 'safe'],
-            [['ENDING_QTY', 'WH_ENDING_QTY'], 'number']
+            [['ENDING_QTY', 'WH_ENDING_QTY', 'DEVIASI', 'DEVIASI_PERCENT'], 'number']
         ];
     }
 
@@ -60,6 +62,8 @@ abstract class UncountableView02 extends \yii\db\ActiveRecord
             'ENDING_QTY' => 'Ending  Qty',
             'WH_ENDING_QTY' => 'Wh  Ending  Qty',
             'PERIOD' => 'Period',
+            'DEVIASI' => 'Deviasi',
+            'DEVIASI_PERCENT' => 'Deviasi  Percent',
         ];
     }
 
