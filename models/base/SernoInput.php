@@ -9,7 +9,6 @@ use Yii;
 /**
  * This is the base-model class for table "tb_serno_input".
  *
- * @property integer $num
  * @property string $pk
  * @property string $gmc
  * @property string $line
@@ -17,7 +16,6 @@ use Yii;
  * @property string $waktu
  * @property string $sernum
  * @property integer $flo
- * @property integer $palletnum
  * @property string $plan
  * @property integer $adv
  * @property string $qa_ok
@@ -25,7 +23,7 @@ use Yii;
  * @property string $qa_ng
  * @property string $qa_ng_date
  * @property integer $qa_result
- * @property string $ship
+ * @property integer $loct
  * @property string $aliasModel
  */
 abstract class SernoInput extends \yii\db\ActiveRecord
@@ -55,17 +53,17 @@ abstract class SernoInput extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['num', 'pk', 'gmc', 'line', 'proddate', 'waktu', 'sernum'], 'required'],
-            [['num', 'flo', 'palletnum', 'adv', 'qa_result'], 'integer'],
+            [['pk', 'gmc', 'line', 'proddate', 'waktu', 'sernum'], 'required'],
             [['waktu'], 'safe'],
-            [['qa_ng'], 'string'],
+            [['flo', 'adv', 'qa_result', 'loct'], 'integer'],
             [['pk'], 'string', 'max' => 40],
             [['gmc'], 'string', 'max' => 11],
             [['line'], 'string', 'max' => 15],
             [['proddate', 'qa_ok_date', 'qa_ng_date'], 'string', 'max' => 10],
-            [['sernum', 'ship'], 'string', 'max' => 20],
+            [['sernum'], 'string', 'max' => 20],
             [['plan'], 'string', 'max' => 35],
             [['qa_ok'], 'string', 'max' => 2],
+            [['qa_ng'], 'string', 'max' => 255],
             [['pk'], 'unique']
         ];
     }
@@ -76,7 +74,6 @@ abstract class SernoInput extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'num' => 'Num',
             'pk' => 'Pk',
             'gmc' => 'Gmc',
             'line' => 'Line',
@@ -84,7 +81,6 @@ abstract class SernoInput extends \yii\db\ActiveRecord
             'waktu' => 'Waktu',
             'sernum' => 'Sernum',
             'flo' => 'Flo',
-            'palletnum' => 'Palletnum',
             'plan' => 'Plan',
             'adv' => 'Adv',
             'qa_ok' => 'Qa Ok',
@@ -92,7 +88,7 @@ abstract class SernoInput extends \yii\db\ActiveRecord
             'qa_ng' => 'Qa Ng',
             'qa_ng_date' => 'Qa Ng Date',
             'qa_result' => 'Qa Result',
-            'ship' => 'Ship',
+            'loct' => 'Loct',
         ];
     }
 

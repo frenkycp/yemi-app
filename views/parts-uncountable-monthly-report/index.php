@@ -36,6 +36,12 @@ echo '</pre>';*/
 
 <?php
 foreach ($data as $key => $value) {
+    echo '<div class="box-group" id="accordion">';
+        echo '<div class="panel box box-primary">';
+            echo '<div class="box-header with-border">';
+            echo '</div>';
+        echo '</div>';
+    echo '</div>';
     echo '<div class="panel panel-primary">';
         echo '<div class="panel panel-heading">';
             echo $key;
@@ -50,12 +56,12 @@ foreach ($data as $key => $value) {
                     echo '<div class="tab-pane active" id="tab_1_' . $key . '">';
                         echo Highcharts::widget([
                             'scripts' => [
-                                'modules/exporting',
+                                //'modules/exporting',
                                 'themes/grid-light',
                             ],
                             'options' => [
                                 'chart' => [
-                                    //'zoomType' => 'x',
+                                    'zoomType' => 'x',
                                     'height' => 400,
                                 ],
                                 'title' => [
@@ -93,13 +99,14 @@ foreach ($data as $key => $value) {
                     echo '<div class="tab-pane" id="tab_2_' . $key .'">';
                         echo Highcharts::widget([
                             'scripts' => [
-                                'modules/exporting',
+                                //'modules/exporting',
                                 'themes/grid-light',
                             ],
                             'options' => [
                                 'chart' => [
                                     'height' => 400,
-                                    'type' => 'column'
+                                    'type' => 'column',
+                                    'zoomType' => 'x',
                                 ],
                                 'title' => [
                                     'text' => null,

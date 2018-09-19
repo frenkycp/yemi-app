@@ -191,6 +191,26 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'loct',
+        'value' => function($model){
+            $location = '';
+            if ($model->loct == 0) {
+                $location = 'Production Floor';
+            } elseif ($model->loct == 1) {
+                $location = 'InTransit Area';
+            } elseif ($model->loct == 2) {
+                $location = 'Finish Good WH';
+            }
+            return $location;
+        },
+        'label' => 'Location',
+        'vAlign' => 'middle',
+        'width' => '80px',
+        'contentOptions' => [
+            'style' => 'min-width: 120px;'
+        ],
+    ],
+    [
         'attribute' => 'so',
         'value' => 'sernoOutput.so',
         'label' => 'SO',
@@ -217,6 +237,7 @@ $grid_columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'hiddenFromExport' => true,
     ],
     [
         'attribute' => 'qa_ng',
