@@ -177,6 +177,11 @@ echo '</pre>';*/
 									        ]
 									    ]
 								    ],
+								    'plotOptions' => [
+							            'gauge' => [
+							                'wrap' => false
+							            ]
+							        ],
 								    'series' => [
 								    	[
 									        'name' => 'Stock',
@@ -307,6 +312,11 @@ echo '</pre>';*/
 									        ]
 									    ]
 								    ],
+								    'plotOptions' => [
+							            'gauge' => [
+							                'wrap' => false
+							            ]
+							        ],
 								    'series' => [
 								    	[
 									        'name' => 'Stock',
@@ -437,6 +447,11 @@ echo '</pre>';*/
 									        ]
 									    ]
 								    ],
+								    'plotOptions' => [
+							            'gauge' => [
+							                'wrap' => false
+							            ]
+							        ],
 								    'series' => [
 								    	[
 									        'name' => 'Stock',
@@ -570,6 +585,11 @@ echo '</pre>';*/
 								        ]
 								    ]
 							    ],
+							    'plotOptions' => [
+						            'gauge' => [
+						                'wrap' => false
+						            ]
+						        ],
 							    'series' => [
 							    	[
 								        'name' => 'Stock',
