@@ -120,6 +120,14 @@ echo '</pre>';*/
                         'prompt' => 'Select line ...'
                     ]) ?>
 
+                    <?= $form->field($model, 'loct')->dropDownList([
+                        0 => 'Production Floor',
+                        1 => 'InTransit Area',
+                        2 => 'Finish Good WH'
+                    ], [
+                        'prompt' => 'Select Location ...'
+                    ]) ?>
+
                     <?= ''; //$form->field($model, 'so') ?>
                 </div>
             </div>

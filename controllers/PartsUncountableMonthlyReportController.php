@@ -19,7 +19,7 @@ class PartsUncountableMonthlyReportController extends Controller
 		$data = [];
 
 		$get_data_arr = UncountableView02::find()
-		->where(['>=', 'PERIOD', '201808'])
+		//->where(['>=', 'PERIOD', '201808'])
 		->orderBy('ITEM, POST_DATE')
 		->all();
 

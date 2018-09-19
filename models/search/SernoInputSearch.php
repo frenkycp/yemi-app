@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['flo', 'adv'], 'integer'],
-            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'speaker_model', 'so'], 'safe'],
+            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'speaker_model', 'so', 'loct'], 'safe'],
 ];
 }
 
@@ -76,6 +76,7 @@ return $dataProvider;
 $query->andFilterWhere([
             'flo' => $this->flo,
             'adv' => $this->adv,
+            'loct' => $this->loct,
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
