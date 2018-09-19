@@ -75,11 +75,11 @@ foreach ($data as $key => $value) {
                                 ],
                                 'series' => [
                                     [
-                                        'name' => 'ENDING QTY',
+                                        'name' => 'WH Stock by BOM　（在庫量ーBOM）',
                                         'data' => $value['data1'],
                                     ],
                                     [
-                                        'name' => 'WH ENDING QTY',
+                                        'name' => 'WH Stock by Actual  （在庫量ー現実）',
                                         'data' => $value['data2'],
                                     ],
                                     /*[
