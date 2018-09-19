@@ -35,13 +35,28 @@ echo '</pre>';*/
 ?>
 
 <?php
+/*echo '<div class="box-group" id="accordion">';
 foreach ($data as $key => $value) {
-    echo '<div class="box-group" id="accordion">';
-        echo '<div class="panel box box-primary">';
-            echo '<div class="box-header with-border">';
+    echo '<div class="panel box box-primary">';
+        echo '<div class="box-header with-border">';
+            echo '<h4 class="box-title">';
+                echo '<a data-toggle="collapse" data-parent="#accordion" href="#collapse' . $key .'">';
+                    echo $key;
+                echo '</a>';
+            echo '</h4>';
+        echo '</div>';
+        echo '<div id="collapse' . $key .'" class="panel-collapse collapse">';
+            echo '<div class="box-body">';
+                echo $key;
             echo '</div>';
         echo '</div>';
     echo '</div>';
+}
+echo '</div>';*/
+foreach ($data as $key => $value) {
+    
+        
+    
     echo '<div class="panel panel-primary">';
         echo '<div class="panel panel-heading">';
             echo $key;
@@ -105,14 +120,13 @@ foreach ($data as $key => $value) {
                             'options' => [
                                 'chart' => [
                                     'height' => 400,
-                                    'type' => 'column',
                                     'zoomType' => 'x',
                                 ],
                                 'title' => [
                                     'text' => null,
                                 ],
                                 'legend' => [
-                                    'enabled' => false
+                                    //'enabled' => false
                                 ],
                                 'credits' => [
                                     'enabled' => false
@@ -121,13 +135,26 @@ foreach ($data as $key => $value) {
                                     'type' => 'datetime',
                                     //'categories' => $value['categories']
                                 ],
+                                'tooltip' => [
+                                    'valueSuffix' => '%',
+                                ],
                                 'yAxis' => [
-                                    'title' => 'Percentage'
+                                    'title' => [
+                                        'enabled' => true,
+                                        'text' => 'Percentage',
+                                    ],
+                                    'plotLines' => [[
+                                        'value' => 0,
+                                        'color' =>  '#00FF00',
+                                        'width' => 2,
+                                        'zIndex' => 0,
+                                        'label' => ['text' => 'goal']
+                                    ]]
                                 ],
                                 'series' => [
                                     [
                                         'name' => 'DEVIASI',
-                                        'data' => $value['deviasi']
+                                        'data' => $value['deviasi'],
                                     ],
                                 ],
                             ],
