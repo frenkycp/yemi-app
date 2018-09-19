@@ -83,7 +83,7 @@ class ProductionMonthlyInspectionController extends Controller
             [
                 'name' => 'Repair',
                 'data' => $tmp_data2,
-                'color' => 'rgba(255, 100, 0, 0.5)'
+                'color' => 'rgba(0, 0, 255, 0.5)'
             ]
     	];
 

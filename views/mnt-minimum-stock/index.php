@@ -161,7 +161,20 @@ $grid_column = [
         'value' => function($model){
             return $model->POST_DATE !== null ? date('Y-m-d', strtotime($model->POST_DATE)) : '-';
         },
-        'label' => 'Last Purchase Date',
+        'label' => 'Last<br/>Purchase Date',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'UNIT_PRICE',
+        'label' => 'Last Price',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'CURR',
+        'label' => 'Currency',
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
