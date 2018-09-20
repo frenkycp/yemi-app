@@ -93,7 +93,31 @@ echo '<div class="box box-solid">';
                                                 'xDateFormat' => '%Y-%m-%d',
                                                 'valueSuffix' => ' ' . $value['uom'],
                                             ],
+                                            /**/'plotOptions' => [
+                                                'areaspline' => [
+                                                    'fillOpacity' => 0.2
+                                                ],
+                                            ],
                                             'series' => [
+                                                /*[
+                                                    'name' => 'Warning Area',
+                                                    'data' => $value['warning_area'],
+                                                    'type' => 'areaspline',
+                                                    'color' => '#FFFF00',
+                                                    'enableMouseTracking' => false,
+                                                    'showInLegend' => false,
+                                                    'lineWidth' => 0,
+                                                ],
+                                                [
+                                                    'name' => 'Danger Area',
+                                                    'data' => $value['danger_area'],
+                                                    'type' => 'areaspline',
+                                                    'color' => '#FF0000',
+                                                    'enableMouseTracking' => false,
+                                                    'showInLegend' => false,
+                                                    'lineWidth' => 0,
+                                                ],*/
+                                                
                                                 [
                                                     'name' => '(WH + WIP) Stock by MRP　（在庫量ーMRP）',
                                                     'data' => $value['data1'],
@@ -104,10 +128,7 @@ echo '<div class="box box-solid">';
                                                     'data' => $value['data2'],
                                                     'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
                                                 ],
-                                                /*[
-                                                    'name' => 'DEVIASI',
-                                                    'data' => $value['deviasi']
-                                                ],*/
+
                                             ],
                                         ],
                                     ]);

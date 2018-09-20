@@ -23,6 +23,15 @@ class PartsUncountableMonthlyReportController extends Controller
 		->orderBy('ITEM, POST_DATE')
 		->all();
 
+		$min_max_post_date = UncountableView02::find()
+		->select([
+			'MIN_DATE' => 'MIN(POST_DATE)',
+			'MAX_DATE' => 'MAX(POST_DATE)',
+		])
+		->one();
+
+		$item_arr = UncountableView02::find()->select('DISTINCT(ITEM)')->all();
+
 		$item_desc_arr = [
 			'Q825YL07000' => 'CLEARSHOT LIQUID FOR FUSION GUN',
 			'WT92881' => 'LINE-X ISOCYANATE SE-210 : BLACK',
@@ -32,11 +41,44 @@ class PartsUncountableMonthlyReportController extends Controller
 
 		$tmp_purch_limit = [
 			'201803' => [
-
+				3000, 5000
+			],
+			'201804' => [
+				4000, 6000
+			],
+			'201805' => [
+				3000, 5000
+			],
+			'201806' => [
+				4000, 6000
+			],
+			'201807' => [
+				3000, 5000
+			],
+			'201808' => [
+				4000, 6000
+			],
+			'201809' => [
+				3000, 5000
 			],
 		];
 
 		$panel_class = 'info';
+
+		/*$date_from = strtotime($min_max_post_date->MIN_DATE);
+		$date_to = strtotime($min_max_post_date->MAX_DATE);
+
+		foreach ($item_arr as $key => $item) {
+			for ($i = $date_from; $i <= $date_to; $i += 86400) { 
+				foreach ($get_data_arr as $key => $value) {
+					$partno = $value->ITEM;
+					if ($partno == $item) {
+						# code...
+					}
+				}
+			}
+		}*/
+		
 
 		foreach ($get_data_arr as $key => $value) {
 			if ($last_update === null) {
@@ -99,6 +141,14 @@ class PartsUncountableMonthlyReportController extends Controller
 				'x' => $post_date,
 				'y' => (float)$deviasi,
 				'color' => $deviasi_color
+			];
+			$data[$partno]['danger_area'][] = [
+				'x' => $post_date,
+				'y' => $tmp_purch_limit[$value->PERIOD][0]
+			];
+			$data[$partno]['warning_area'][] = [
+				'x' => $post_date,
+				'y' => $tmp_purch_limit[$value->PERIOD][1]
 			];
 		}
 

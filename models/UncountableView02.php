@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class UncountableView02 extends BaseUncountableView02
 {
+    public $MIN_DATE, $MAX_DATE;
 
     public function behaviors()
     {
