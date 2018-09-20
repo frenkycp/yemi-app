@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Monthly Monitoring Uncountable Parts <span class="japanesse text-green">(不定材の受払い管理) ― 準備中</span>',
-    'tab_title' => 'Monthly Monitoring Uncountable Parts',
-    'breadcrumbs_title' => 'Monthly Monitoring Uncountable Parts'
+    'page_title' => 'Budomari Material Monitor <span class="japanesse text-green">(材料歩留モニター）</span>',
+    'tab_title' => 'Budomari Material Monitor',
+    'breadcrumbs_title' => 'Budomari Material Monitor'
 ];
 
 $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");

@@ -65,7 +65,7 @@ $this->registerCss("
                                     <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['parts-picking-status/index']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Monthly Monitoring Uncountable Parts<br/><span class="japanesse-word">(不定材の受払い管理) ― 準備中</span>', ['parts-uncountable-monthly-report/index']); ?>
+                                    <?= Html::a('Budomari Material Monitor <span class="japanesse-word">(材料歩留モニター）</span>', ['parts-uncountable-monthly-report/index']); ?>
                                 </li>
                             </ol>
                         </div>
