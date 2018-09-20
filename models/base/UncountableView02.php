@@ -10,9 +10,12 @@ use Yii;
  * This is the base-model class for table "db_owner.UNCOUNTABLE_VIEW_02".
  *
  * @property string $ITEM
+ * @property string $ITEM_DESC
+ * @property string $UOM
  * @property string $POST_DATE
  * @property double $ENDING_QTY
  * @property double $WH_ENDING_QTY
+ * @property double $END_SAP_QTY
  * @property string $PERIOD
  * @property double $DEVIASI
  * @property double $DEVIASI_PERCENT
@@ -45,9 +48,9 @@ abstract class UncountableView02 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ITEM', 'PERIOD'], 'string'],
+            [['ITEM', 'ITEM_DESC', 'UOM', 'PERIOD'], 'string'],
             [['POST_DATE'], 'safe'],
-            [['ENDING_QTY', 'WH_ENDING_QTY', 'DEVIASI', 'DEVIASI_PERCENT'], 'number']
+            [['ENDING_QTY', 'WH_ENDING_QTY', 'END_SAP_QTY', 'DEVIASI', 'DEVIASI_PERCENT'], 'number']
         ];
     }
 
@@ -58,9 +61,12 @@ abstract class UncountableView02 extends \yii\db\ActiveRecord
     {
         return [
             'ITEM' => 'Item',
+            'ITEM_DESC' => 'Item  Desc',
+            'UOM' => 'Uom',
             'POST_DATE' => 'Post  Date',
             'ENDING_QTY' => 'Ending  Qty',
             'WH_ENDING_QTY' => 'Wh  Ending  Qty',
+            'END_SAP_QTY' => 'End  Sap  Qty',
             'PERIOD' => 'Period',
             'DEVIASI' => 'Deviasi',
             'DEVIASI_PERCENT' => 'Deviasi  Percent',

@@ -23,6 +23,15 @@ class PartsUncountableMonthlyReportController extends Controller
 		->orderBy('ITEM, POST_DATE')
 		->all();
 
+		$item_desc_arr = [
+			'Q825YL07000' => 'CLEARSHOT LIQUID FOR FUSION GUN',
+			'WT92881' => 'LINE-X ISOCYANATE SE-210 : BLACK',
+			'WU27851' => 'LINE-X RESIN SE-BK210 : BLACK',
+			'WY69990' => 'MDF T15 4X8 HUME CARB P2',
+		];
+
+		$panel_class = 'info';
+
 		foreach ($get_data_arr as $key => $value) {
 			$partno = $value->ITEM;
 			$post_date = (strtotime("$value->POST_DATE +3 hours") * 1000);
@@ -35,6 +44,22 @@ class PartsUncountableMonthlyReportController extends Controller
 			if ($value->DEVIASI_PERCENT >= 30) {
 				$deviasi_color = 'rgba(255, 0, 0, 0.9)';
 			}
+
+			if ($wh_ending_qty < 5000) {
+				//$panel_class = 'danger';
+			} elseif ($wh_ending_qty < 10000) {
+				//$panel_class = 'warning';
+			}
+
+			if (!isset($data[$partno]['item_desc'])) {
+				$data[$partno]['item_desc'] = $value->ITEM_DESC;
+			}
+
+			if (!isset($data[$partno]['uom'])) {
+				$data[$partno]['uom'] = $value->UOM;
+			}
+
+			$data[$partno]['panel_class'] = $panel_class;
 
 			$data[$partno]['categories'][] = $post_date;
 			$data[$partno]['data1'][] = [
