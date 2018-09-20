@@ -171,7 +171,7 @@ echo '<div class="box box-solid">';
                                                         'color' =>  '#FF0000',
                                                         'width' => 2,
                                                         'zIndex' => 0,
-                                                        'label' => ['text' => 'goal']
+                                                        'label' => ['text' => '']
                                                     ]
                                                 ],
                                                 'plotBands' => [
