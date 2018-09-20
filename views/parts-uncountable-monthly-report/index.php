@@ -86,6 +86,30 @@ echo '<div class="box box-solid">';
                                                     'enabled' => true,
                                                     'text' => $value['uom'],
                                                 ],
+                                                'plotBands' => [
+                                                    [
+                                                        'from' => 2900,
+                                                        'to' => 8700,
+                                                        'color' => "rgba(255,140,0, 0.2)",
+                                                        'label' => [
+                                                            'text' => 'Ready to Order (Sea)',
+                                                            'style' => [
+                                                                'color' => '#606060'
+                                                            ]
+                                                        ]
+                                                    ],
+                                                    [
+                                                        'from' => 0,
+                                                        'to' => 2900,
+                                                        'color' => "rgba(255, 0, 0, 0.2)",
+                                                        'label' => [
+                                                            'text' => 'Ready to Order (Air)',
+                                                            'style' => [
+                                                                'color' => '#606060'
+                                                            ]
+                                                        ]
+                                                    ],
+                                                ],
                                             ],
                                             'tooltip' => [
                                                 'shared' => true,
