@@ -19,6 +19,7 @@ use Yii;
  * @property string $PERIOD
  * @property double $DEVIASI
  * @property double $DEVIASI_PERCENT
+ * @property string $UPLOAD_DATE
  * @property string $aliasModel
  */
 abstract class UncountableView02 extends \yii\db\ActiveRecord
@@ -49,7 +50,7 @@ abstract class UncountableView02 extends \yii\db\ActiveRecord
     {
         return [
             [['ITEM', 'ITEM_DESC', 'UOM', 'PERIOD'], 'string'],
-            [['POST_DATE'], 'safe'],
+            [['POST_DATE', 'UPLOAD_DATE'], 'safe'],
             [['ENDING_QTY', 'WH_ENDING_QTY', 'END_SAP_QTY', 'DEVIASI', 'DEVIASI_PERCENT'], 'number']
         ];
     }
@@ -70,6 +71,7 @@ abstract class UncountableView02 extends \yii\db\ActiveRecord
             'PERIOD' => 'Period',
             'DEVIASI' => 'Deviasi',
             'DEVIASI_PERCENT' => 'Deviasi  Percent',
+            'UPLOAD_DATE' => 'Upload  Date',
         ];
     }
 

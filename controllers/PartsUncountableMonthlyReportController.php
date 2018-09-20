@@ -30,15 +30,40 @@ class PartsUncountableMonthlyReportController extends Controller
 			'WY69990' => 'MDF T15 4X8 HUME CARB P2',
 		];
 
+		$tmp_purch_limit = [
+			'201803' => [
+
+			],
+		];
+
 		$panel_class = 'info';
 
 		foreach ($get_data_arr as $key => $value) {
+			if ($last_update === null) {
+				$last_update = $value->UPLOAD_DATE;
+			}
 			$partno = $value->ITEM;
 			$post_date = (strtotime("$value->POST_DATE +3 hours") * 1000);
 			//$post_date = $value->POST_DATE;
 			$ending_qty = $value->ENDING_QTY;
 			$wh_ending_qty = $value->WH_ENDING_QTY;
 			$deviasi = $value->DEVIASI_PERCENT;
+
+			if (!isset($data[$partno]['min_deviasi'])) {
+				$data[$partno]['min_deviasi'] = $deviasi;
+			} else {
+				if ($deviasi < $data[$partno]['min_deviasi']) {
+					$data[$partno]['min_deviasi'] = $deviasi;
+				}
+			}
+
+			if (!isset($data[$partno]['max_deviasi'])) {
+				$data[$partno]['max_deviasi'] = $deviasi;
+			} else {
+				if ($deviasi > $data[$partno]['max_deviasi']) {
+					$data[$partno]['max_deviasi'] = $deviasi;
+				}
+			}
 
 			$deviasi_color = 'rgba(0, 255, 0, 0.9)';
 			if ($value->DEVIASI_PERCENT >= 30) {
@@ -79,6 +104,7 @@ class PartsUncountableMonthlyReportController extends Controller
 
 		return $this->render('index', [
 			'data' => $data,
+			'last_update' => $last_update
 		]);
 	}
 }

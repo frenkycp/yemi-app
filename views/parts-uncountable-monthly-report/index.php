@@ -36,9 +36,10 @@ echo '</pre>';*/
 
 <?php
 $height = 350;
+$short_plot_alpha = 0.2;
 echo '<div class="box box-solid">';
     echo '<div class="box-header with-border">';
-        //echo '<h3 class="box-title">Bodomari Monitoring</h3>';
+        echo '<h3 class="box-title">Data Last Update : ' . date('Y-m-d H:i') . '</h3>';
     echo '</div>';
     echo '<div class="box-body">';
         echo '<div class="box-group" id="accordion">';
@@ -143,13 +144,50 @@ echo '<div class="box box-solid">';
                                                     'enabled' => true,
                                                     'text' => 'Percentage',
                                                 ],
-                                                'plotLines' => [[
-                                                    'value' => 0,
-                                                    'color' =>  '#FF0000',
-                                                    'width' => 2,
-                                                    'zIndex' => 0,
-                                                    'label' => ['text' => 'goal']
-                                                ]]
+                                                'plotLines' => [
+                                                    [
+                                                        'value' => 0,
+                                                        'color' =>  '#FF0000',
+                                                        'width' => 2,
+                                                        'zIndex' => 0,
+                                                        'label' => ['text' => 'goal']
+                                                    ]
+                                                ],
+                                                'plotBands' => [
+                                                    [
+                                                        'from' => $value['min_deviasi'],
+                                                        'to' => 3,
+                                                        'color' => "rgba(0, 255, 0, $short_plot_alpha)",
+                                                        'label' => [
+                                                            'text' => 'Normal',
+                                                            'style' => [
+                                                                'color' => '#606060'
+                                                            ]
+                                                        ]
+                                                    ],
+                                                    [
+                                                        'from' => 3,
+                                                        'to' => 10,
+                                                        'color' => "rgba(255,140,0, $short_plot_alpha)",
+                                                        'label' => [
+                                                            'text' => 'Over MRP',
+                                                            'style' => [
+                                                                'color' => '#606060'
+                                                            ]
+                                                        ]
+                                                    ],
+                                                    [
+                                                        'from' => 10,
+                                                        'to' => $value['max_deviasi'],
+                                                        'color' => "rgba(255, 0, 0, $short_plot_alpha)",
+                                                        'label' => [
+                                                            'text' => 'Extreme Use',
+                                                            'style' => [
+                                                                'color' => '#606060'
+                                                            ]
+                                                        ]
+                                                    ],
+                                                ],
                                             ],
                                             'series' => [
                                                 [
