@@ -11,7 +11,7 @@ use yii\web\JsExpression;
 class HrgaSplYearlyReportController extends Controller
 {
 
-	public function behaviors()
+	/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
@@ -80,13 +80,13 @@ class HrgaSplYearlyReportController extends Controller
 		}
 
 		$data_final[] = [
-			'name' => 'Budget Summary',
+			'name' => 'Budget Accumulation',
 			'data' => $tmp_budget_data,
 			'type' => 'line',
 			'color' => new JsExpression("Highcharts.getOptions().colors[3]"),
 		];
 		$data_final[] = [
-			'name' => 'Actual Summary',
+			'name' => 'Actual Accumulation',
 			'data' => $tmp_actual_data,
 			'type' => 'line',
 			'color' => new JsExpression("Highcharts.getOptions().colors[5]"),
