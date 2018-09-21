@@ -51,7 +51,7 @@ echo '<div class="box box-solid">';
                     'to' => $limit[1],
                     'color' => "rgba(255,140,0, 0.2)",
                     'label' => [
-                        'text' => 'Ready to Order (Sea)',
+                        'text' => "Ready to Order (Sea) - " . number_format($limit[1]) . ' ' . $value['uom'] . ' (290 LB X 30 DAYS)',
                         'style' => [
                             'color' => '#606060'
                         ]
@@ -62,7 +62,7 @@ echo '<div class="box box-solid">';
                     'to' => $limit[0],
                     'color' => "rgba(255, 0, 0, 0.2)",
                     'label' => [
-                        'text' => 'Ready to Order (Air)',
+                        'text' => 'Ready to Order (Air) - ' . number_format($limit[0]) . ' ' . $value['uom'] . ' (290 LB X 10 DAYS)',
                         'style' => [
                             'color' => '#606060'
                         ]
@@ -77,7 +77,7 @@ echo '<div class="box box-solid">';
                         'to' => $limit[1],
                         'color' => "rgba(255,140,0, 0.2)",
                         'label' => [
-                            'text' => 'Ready to Order (Sea)',
+                            'text' => "Ready to Order (Sea) - " . number_format($limit[1]) . ' ' . $value['uom'] . ' (52 KG X 17 DAYS)',
                             'style' => [
                                 'color' => '#606060'
                             ]
@@ -92,9 +92,10 @@ echo '<div class="box box-solid">';
                         'to' => $limit[1],
                         'color' => "rgba(255,140,0, 0.2)",
                         'label' => [
-                            'text' => 'Ready to Order (Sea)',
+                            'text' => "Ready to Order (Sea) - " . number_format($limit[1]) . ' ' . $value['uom'] . ' (293 PCS X (83 / 4) DAYS)',
                             'style' => [
-                                'color' => '#606060'
+                                'color' => '#606060',
+                                'fontSize' => '10px',
                             ]
                         ]
                     ],
