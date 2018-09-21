@@ -44,6 +44,62 @@ echo '<div class="box box-solid">';
     echo '<div class="box-body">';
         echo '<div class="box-group" id="accordion">';
         foreach ($data as $key => $value) {
+            $limit = [(29 * 10), (29 * 30)];
+            $plotBands = [
+                [
+                    'from' => $limit[0],
+                    'to' => $limit[1],
+                    'color' => "rgba(255,140,0, 0.2)",
+                    'label' => [
+                        'text' => 'Ready to Order (Sea)',
+                        'style' => [
+                            'color' => '#606060'
+                        ]
+                    ]
+                ],
+                [
+                    'from' => 0,
+                    'to' => $limit[0],
+                    'color' => "rgba(255, 0, 0, 0.2)",
+                    'label' => [
+                        'text' => 'Ready to Order (Air)',
+                        'style' => [
+                            'color' => '#606060'
+                        ]
+                    ]
+                ],
+            ];
+            if ($key == 'V48870A') {
+                $limit = [0, (17 * 52)];
+                $plotBands = [
+                    [
+                        'from' => $limit[0],
+                        'to' => $limit[1],
+                        'color' => "rgba(255,140,0, 0.2)",
+                        'label' => [
+                            'text' => 'Ready to Order (Sea)',
+                            'style' => [
+                                'color' => '#606060'
+                            ]
+                        ]
+                    ],
+                ];
+            } elseif ($key == 'WY69990') {
+                $limit = [0, ((83 / 4) * 293)];
+                $plotBands = [
+                    [
+                        'from' => $limit[0],
+                        'to' => $limit[1],
+                        'color' => "rgba(255,140,0, 0.2)",
+                        'label' => [
+                            'text' => 'Ready to Order (Sea)',
+                            'style' => [
+                                'color' => '#606060'
+                            ]
+                        ]
+                    ],
+                ];
+            }
             echo '<div class="panel box box-' . $value['panel_class'] . '">';
                 echo '<div class="box-header with-border">';
                     echo '<h4 class="box-title">';
@@ -86,30 +142,7 @@ echo '<div class="box box-solid">';
                                                     'enabled' => true,
                                                     'text' => $value['uom'],
                                                 ],
-                                                'plotBands' => [
-                                                    [
-                                                        'from' => 2900,
-                                                        'to' => 8700,
-                                                        'color' => "rgba(255,140,0, 0.2)",
-                                                        'label' => [
-                                                            'text' => 'Ready to Order (Sea)',
-                                                            'style' => [
-                                                                'color' => '#606060'
-                                                            ]
-                                                        ]
-                                                    ],
-                                                    [
-                                                        'from' => 0,
-                                                        'to' => 2900,
-                                                        'color' => "rgba(255, 0, 0, 0.2)",
-                                                        'label' => [
-                                                            'text' => 'Ready to Order (Air)',
-                                                            'style' => [
-                                                                'color' => '#606060'
-                                                            ]
-                                                        ]
-                                                    ],
-                                                ],
+                                                'plotBands' => $plotBands,
                                             ],
                                             'tooltip' => [
                                                 'shared' => true,
