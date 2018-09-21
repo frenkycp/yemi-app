@@ -60,9 +60,9 @@ class HrgaSplYearlyReportController extends Controller
 
 		foreach ($data as $key => $value) {
 			if ($key == 1) {
-				$group = 'PRODUCTION';
+				$group = 'Production (生産系)';
 			} else {
-				$group = 'OFFICE';
+				$group = 'Office (事務系)';
 			}
 			foreach ($value as $key2 => $value2) {
 				$show_in_legend = true;
@@ -80,13 +80,13 @@ class HrgaSplYearlyReportController extends Controller
 		}
 
 		$data_final[] = [
-			'name' => 'Budget Accumulation',
+			'name' => 'Budget Accum (予算累計)',
 			'data' => $tmp_budget_data,
 			'type' => 'line',
 			'color' => new JsExpression("Highcharts.getOptions().colors[3]"),
 		];
 		$data_final[] = [
-			'name' => 'Actual Accumulation',
+			'name' => 'Forecast Accum (見込み累計)',
 			'data' => $tmp_actual_data,
 			'type' => 'line',
 			'color' => new JsExpression("Highcharts.getOptions().colors[5]"),
