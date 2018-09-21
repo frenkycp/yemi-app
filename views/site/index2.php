@@ -115,6 +115,8 @@ $this->registerCss("
                                 </li>
                                 <li><?= Html::a('Monthly Overtime Control <br/><span class="japanesse-word">(月次残業管理)</span>', ['/hrga-spl-report-daily/index']); ?>
                                 </li>
+                                <li><?= Html::a('Overtime Monthly Monitor <br/><span class="japanesse-word">（月次残業モニター)</span>', ['/hrga-spl-yearly-report/index']); ?>
+                                </li>
                             </ol>
                         </div>
                         

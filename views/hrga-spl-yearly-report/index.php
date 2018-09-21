@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'SPL Report Yearly <span class="japanesse text-green"></span>',
-    'tab_title' => 'SPL Report Yearly',
-    'breadcrumbs_title' => 'SPL Report Yearly'
+    'page_title' => 'Overtime Monthly Monitor <span class="japanesse text-green">（月次残業モニター)</span>',
+    'tab_title' => 'Overtime Monthly Monitor',
+    'breadcrumbs_title' => 'Overtime Monthly Monitor'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -49,7 +49,7 @@ echo '</pre>';*/
             'options' => [
             	'chart' => [
             		'type' => 'column',
-            		'height' => 500,
+            		'height' => 450,
             		//'zoomType' => 'x',
             	],
             	'xAxis' => [
