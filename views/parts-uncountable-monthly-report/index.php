@@ -44,7 +44,7 @@ echo '<div class="box box-solid">';
     echo '<div class="box-body">';
         echo '<div class="box-group" id="accordion">';
         foreach ($data as $key => $value) {
-            $limit = [(29 * 10), (29 * 30)];
+            $limit = [(290 * 10), (290 * 30)];
             $plotBands = [
                 [
                     'from' => $limit[0],
