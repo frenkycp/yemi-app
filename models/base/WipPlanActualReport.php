@@ -24,6 +24,7 @@ use Yii;
  * @property string $post_date
  * @property string $start_job
  * @property string $end_job
+ * @property string $hand_over_job
  * @property double $summary_qty
  * @property string $stage
  * @property string $problem
@@ -70,7 +71,7 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
         return [
             [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'created_user_desc', 'start_job_user_desc', 'end_job_user_desc', 'hand_over_job_user_desc', 'urut'], 'string'],
             [['week', 'session_id'], 'integer'],
-            [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'source_date'], 'safe'],
+            [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'hand_over_job', 'source_date'], 'safe'],
             [['summary_qty', 'bom_level'], 'number']
         ];
     }
@@ -96,6 +97,7 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
             'post_date' => 'Post Date',
             'start_job' => 'Start Job',
             'end_job' => 'End Job',
+            'hand_over_job' => 'Hand Over Job',
             'summary_qty' => 'Summary Qty',
             'stage' => 'Stage',
             'problem' => 'Problem',

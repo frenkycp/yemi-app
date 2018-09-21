@@ -244,7 +244,6 @@ class WipPaintingMonitoringController extends Controller
             <th class="text-center" style="min-width: 100px;">Start Plan</th>
             <th class="text-center" style="min-width: 100px;">End Plan</th>
 			<th class="text-center" style="min-width: 100px;">Start Actual</th>
-			<th class="text-center" style="min-width: 100px;">End Actual</th>
 		</tr></thead>';
         $data .= '<tbody style="font-size: 10px;">';
 		foreach ($wip_painting_data_arr as $value) {
@@ -252,7 +251,18 @@ class WipPaintingMonitoringController extends Controller
             $end_plan = $value['due_date'] == null ? '-' : date('Y-m-d', strtotime($value['due_date']));
 			$start_actual = $value['start_job'] == null ? '-' : $value['start_job'];
 			$end_actual = $value['end_job'] == null ? '-' : $value['end_job'];
+            $handover_actual = $value['hand_over_job'] == null ? '-' : $value['hand_over_job'];
             $fa_start = $value['source_date'] == null ? '-' : date('Y-m-d', strtotime($value['source_date']));
+
+            $start_actual = '-';
+            if ($stage == '02-STARTED') {
+                $start_actual = $value['start_job'] == null ? '-' : $value['start_job'];
+            } elseif ($stage == '03-COMPLETED') {
+                $start_actual = $value['end_job'] == null ? '-' : $value['end_job'];
+            } elseif ($stage == '04-HAND OVER') {
+                $start_actual = $value['hand_over_job'] == null ? '-' : $value['hand_over_job'];
+            }
+
 			$data .= '
 				<tr>
 					<td class="text-center">' . $value['child_analyst_desc'] . '</td>
@@ -265,7 +275,6 @@ class WipPaintingMonitoringController extends Controller
                     <td class="text-center">' . $start_plan . '</td>
                     <td class="text-center">' . $end_plan . '</td>
 					<td class="text-center text-green">' . $start_actual . '</td>
-					<td class="text-center text-green">' . $end_actual . '</td>
 				</tr>
 			';
 		}
