@@ -58,6 +58,8 @@ echo '</pre>';*/
             	'yAxis' => [
             		'stackLabels' => [
             			'enabled' => true,
+                        'rotation' => -90,
+                        'y' => -10
             		],
             		'title' => [
             			'text' => 'HOURS'
