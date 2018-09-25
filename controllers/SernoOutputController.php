@@ -27,6 +27,10 @@ class SernoOutputController extends base\SernoOutputController
 	    {
 	    	$searchModel->etd = \Yii::$app->request->get('etd');
 	    }
+        if(\Yii::$app->request->get('back_order') !== null)
+        {
+            $searchModel->back_order = \Yii::$app->request->get('back_order');
+        }
 	    
 	    $dataProvider = $searchModel->search($_GET);
 
@@ -36,7 +40,7 @@ class SernoOutputController extends base\SernoOutputController
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
 		return $this->render('index', [
-		'dataProvider' => $dataProvider,
+		  'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
 		]);
 	}
