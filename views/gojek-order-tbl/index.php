@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 /**
@@ -21,6 +22,8 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
     $actionColumnTemplateString = "{view} {update} {delete}";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+
+$tmp_location = ArrayHelper::map(app\models\WipPlanActualReport::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');
 
 $gridColumns = [
     /*[
@@ -63,22 +66,25 @@ $gridColumns = [
         'attribute' => 'from_loc',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => $tmp_location,
     ],
     [
         'attribute' => 'to_loc',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => $tmp_location,
     ],
     /*[
         'attribute' => 'source',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-    ],
+    ],*/
     [
         'attribute' => 'GOJEK_ID',
+        'label' => 'Driver NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-    ],*/
+    ],
     [
         'attribute' => 'GOJEK_DESC',
         'vAlign' => 'middle',

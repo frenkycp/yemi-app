@@ -36,6 +36,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
+        'pageSummary' => 'Total',
     ],
     [
         'attribute' => 'NIK',
@@ -61,10 +62,34 @@ $grid_columns = [
         //'width'=>'100px',
     ],
     [
+        'attribute' => 'START_LEMBUR_ACTUAL',
+        'label' => 'Masuk<br/>(Aktual)',
+        'encodeLabel' => false,
+        'value' => function($model){
+            return $model->START_LEMBUR_ACTUAL == null ? '-' : date('Y:m:d H:i:s', strtotime($model->START_LEMBUR_ACTUAL));
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width'=>'70px',
+        'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'END_LEMBUR_ACTUAL',
+        'label' => 'Keluar<br/>(Aktual)',
+        'encodeLabel' => false,
+        'value' => function($model){
+            return $model->END_LEMBUR_ACTUAL == null ? '-' : date('Y:m:d H:i:s', strtotime($model->END_LEMBUR_ACTUAL));
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width'=>'70px',
+        'mergeHeader' => true,
+    ],
+    [
         'attribute' => 'NILAI_LEMBUR_PLAN',
         'label' => 'Plan Lembur<br/>(Jam)',
-        'hAlign' => 'center',
         'encodeLabel' => false,
+        'hAlign' => 'center',
         'vAlign' => 'middle',
         'mergeHeader' => true,
         //'width'=>'100px',
@@ -76,6 +101,7 @@ $grid_columns = [
         'encodeLabel' => false,
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'pageSummary' => true,
         //'width'=>'100px',
     ],
     [
@@ -101,7 +127,7 @@ $grid_columns = [
             'filterModel' => $searchModel,
             'columns' => $grid_columns,
             'hover' => true,
-            //'condensed' => true,
+            'showPageSummary' => true,
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
