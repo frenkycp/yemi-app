@@ -10,9 +10,9 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Kanban Process-Flow Monitor <span class="japanesse text-green">（かんばん工程流れモニター）</span>',
-    'tab_title' => 'Kanban Process-Flow Monitor',
-    'breadcrumbs_title' => 'Kanban Process-Flow Monitor'
+    'page_title' => 'E-WIP Process-Flow Monitor <span class="japanesse text-green">（E-WIP 工程流れモニター）</span>',
+    'tab_title' => 'E-WIP Process-Flow Monitor',
+    'breadcrumbs_title' => 'E-WIP Process-Flow Monitor'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -82,7 +82,7 @@ echo Highcharts::widget([
 	'options' => [
 		'chart' => [
             'type' => 'xrange',
-            'height' => 450
+            'height' => 1000
         ],
         'title' => [
 	        'text' => null

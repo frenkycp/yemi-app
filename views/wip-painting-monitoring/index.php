@@ -9,9 +9,9 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Kanban Monitor <span class="japanesse text-green">（かんばんモニター）</span> - Completion Target Based <span class="japanesse text-green">(完成目標基準）</span>',
-    'tab_title' => 'Kanban Monitor',
-    'breadcrumbs_title' => 'Kanban Monitor'
+    'page_title' => 'E-WIP Monitor <span class="japanesse text-green">（E-WIP モニター）</span> - Completion Target Based <span class="japanesse text-green">(完成目標基準）</span>',
+    'tab_title' => 'E-WIP Monitor',
+    'breadcrumbs_title' => 'E-WIP Monitor'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
