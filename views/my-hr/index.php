@@ -4,7 +4,7 @@ use app\models\SplView;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Dashboard';
+$this->title = 'My HR';
 
 $this->registerJs("$(function() {
    $('.popup_btn').click(function(e) {

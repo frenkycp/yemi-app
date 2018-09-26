@@ -5,6 +5,8 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\Karyawan;
 use app\models\RekapAbsensiView;
+use app\models\SplView;
+use app\models\AbsensiTbl;
 
 class MyHrController extends Controller
 {
@@ -13,7 +15,7 @@ class MyHrController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 		$nik = \Yii::$app->user->identity->username;
