@@ -303,44 +303,6 @@ $columns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <h1 style="display: none;">
-        <?= Yii::t('app', 'Weekly Plans') ?>
-        <small>
-            List
-        </small>
-    </h1>
-    <div class="clearfix crud-navigation" style="display: none;">
-        <div class="pull-left">
-            <?= Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
-
-        <div class="pull-right">
-
-                        
-            <?= 
-            \yii\bootstrap\ButtonDropdown::widget(
-            [
-            'id' => 'giiant-relations',
-            'encodeLabel' => false,
-            'label' => '<span class="glyphicon glyphicon-paperclip"></span> ' . 'Relations',
-            'dropdown' => [
-            'options' => [
-            'class' => 'dropdown-menu-right'
-            ],
-            'encodeLabels' => false,
-            'items' => [
-
-]
-            ],
-            'options' => [
-            'class' => 'btn-default'
-            ]
-            ]
-            );
-            ?>
-        </div>
-    </div>
-
     <div class="table-responsive">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,

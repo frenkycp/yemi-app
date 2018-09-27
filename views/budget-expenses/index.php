@@ -41,19 +41,23 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                'themes/grid-light',
-                //'themes/sand-signika',
+                //'themes/grid-light',
+                'themes/sand-signika',
                 //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
                     'type' => 'column',
+                    'height' => 500
                 ],
                 'credits' => [
                     'enabled' => false
                 ],
                 'title' => [
                     'text' => null
+                ],
+                'legend' => [
+                    'enabled' => false,
                 ],
                 'xAxis' => [
                     'categories' => $categories,
