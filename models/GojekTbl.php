@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class GojekTbl extends BaseGojekTbl
 {
+    public $stat_open, $stat_close, $stat_total;
 
     public function behaviors()
     {
@@ -30,5 +31,10 @@ class GojekTbl extends BaseGojekTbl
                 # custom validation rules
             ]
         );
+    }
+
+    public function getGojekOrderTbl()
+    {
+        return $this->hasMany(GojekOrderTbl::className(), ['GOJEK_ID' => 'GOJEK_ID']);
     }
 }

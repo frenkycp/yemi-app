@@ -59,7 +59,7 @@ echo '</pre>';*/
             		'stackLabels' => [
             			'enabled' => true,
                         'rotation' => -90,
-                        'y' => -10
+                        'y' => -15
             		],
             		'title' => [
             			'text' => 'HOURS'
@@ -73,7 +73,14 @@ echo '</pre>';*/
             	],
             	'plotOptions' => [
             		'column' => [
-            			'stacking' => 'normal'
+            			'stacking' => 'normal',
+                        'events' => [
+                            'legendItemClick' => new JsExpression('
+                                function(){
+                                    return false;
+                                }
+                            '),
+                        ]
             		]
             	],
             	'series' => $data

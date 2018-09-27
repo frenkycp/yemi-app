@@ -22,16 +22,17 @@ class GojekOrderCompletionController extends Controller
 	{
 		$data = [];
 		$categories = [];
-		$order_data_arr = GojekOrderTbl::find()
+		$order_data_arr = GojekTbl::find()
+		->joinWith('gojekOrderTbl')
 		->select([
-			'GOJEK_ID',
-			'GOJEK_DESC',
+			'GOJEK_TBL.GOJEK_ID',
+			'GOJEK_TBL.GOJEK_DESC',
 			'stat_open' => 'SUM(CASE WHEN STAT = \'O\' THEN 1 ELSE 0 END)',
 			'stat_close' => 'SUM(CASE WHEN STAT = \'C\' THEN 1 ELSE 0 END)',
 			'stat_total' => 'COUNT(STAT)'
 		])
-		->groupBy('GOJEK_ID, GOJEK_DESC')
-		->orderBy('GOJEK_DESC')
+		->groupBy('GOJEK_TBL.GOJEK_ID, GOJEK_TBL.GOJEK_DESC')
+		->orderBy('GOJEK_TBL.GOJEK_DESC')
 		->all();
 
 		$tmp_data_open = [];
