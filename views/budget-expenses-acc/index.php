@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Budget Expenses <span class="japanesse text-green"></span>',
-    'tab_title' => 'Budget Expenses',
-    'breadcrumbs_title' => 'Budget Expenses'
+    'page_title' => 'Budget Expenses (Accounting) <span class="japanesse text-green"></span>',
+    'tab_title' => 'Budget Expenses (Accounting)',
+    'breadcrumbs_title' => 'Budget Expenses (Accounting)'
 ];
 $color = 'ForestGreen';
 
@@ -34,20 +34,7 @@ print_r($data);
 echo '</pre>';*/
 
 ?>
-<div class="row">
-    <div class="col-md-4">
-        <div class="form">
-            <?php $form = ActiveForm::begin([
-                'method' => 'get'
-            ]); ?>
-            <?= $form->field($model, 'dept')->dropDownList($dept_dropdown, [
-                'prompt' => 'Select a section ...',
-                'onchange'=>'this.form.submit()'
-            ])->label('Section') ?>
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
-</div>
+
 <div class="box box-primary">
     <div class="box-body">
         <?php
