@@ -33,26 +33,81 @@ class BudgetExpensesAccController extends Controller
 	        $dept_arr = [$model->dept];
 	    }
 
+	    $budget_data_arr = PoRcvBgtVsAct04::find()
+		->select([
+			'DEP_DESC',
+			'PERIOD',
+			'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
+			'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
+		])
+		->where([
+			'CONTROL' => 'Y'
+		])
+		->groupBy('PERIOD, DEP_DESC')
+		->all();
+
+		$remark_data_arr = PoRcvBgtVsAct04::find()
+		->where([
+			'CONTROL' => 'Y'
+		])
+		->orderBy('CONSUME_AMT DESC')
+		->all();
+
 		foreach ($dept_arr as $dept) {
 			foreach ($categories as $category) {
-				$budget_data = PoRcvBgtVsAct04::find()
-				->select([
-					'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
-					'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
-				])
-				->where([
-					'CONTROL' => 'Y',
-					'PERIOD' => $category,
-					'DEP_DESC' => $dept
-				])
-				->one();
-				$remark = $this->getRemark($dept, $category);
+				$budget = 0;
+				$consume = 0;
+				foreach ($budget_data_arr as $budget_data) {
+					if ($budget_data->DEP_DESC == $dept && $budget_data->PERIOD == $category) {
+						$budget = $budget_data->BUDGET_AMT;
+						$consume = $budget_data->CONSUME_AMT;
+					}
+				}
+
+				$remark = "<h4>$dept<small> ($category)</small></h4>";
+				$remark .= '<table class="table table-bordered table-striped table-hover">';
+				$remark .= 
+		        '<thead style="font-size: 12px;"><tr class="info">
+		            <th>ACCOUNT</th>
+		            <th class="text-center">BUDGET</th>
+		            <th class="text-center">CONSUME</th>
+		            <th class="text-center">BALANCE</th>
+		            <th class="text-center">BALANCE (%)</th>
+		        </tr></thead>';
+		        $remark .= '<tbody style="font-size: 12px;">';
+
+		        foreach ($remark_data_arr as $value) {
+					if ($value->DEP_DESC == $dept && $value->PERIOD == $category) {
+						$balance_percentage = 0;
+						if ($value->BUDGET_AMT > 0) {
+							$balance_percentage = round(($value->BALANCE_AMT / $value->BUDGET_AMT) * 100);
+						}
+
+						$consume_data = $value->CONSUME_AMT;
+						if ($consume_data > 0) {
+							$consume_data = Html::a($value->CONSUME_AMT, Url::to(['budget-expenses-acc-detail-data/index', 'budget_id' => "$value->BUDGET_ID"]));
+						}
+
+						$remark .= 
+				        '<tr>
+				            <td>' . $value->ACCOUNT_DESC . '</td>
+				            <td class="text-center">' . $value->BUDGET_AMT . '</td>
+				            <td class="text-center">' . $consume_data . '</td>
+				            <td class="text-center">' . $value->BALANCE_AMT . '</td>
+				            <td class="text-center">' . $balance_percentage . '</td>
+				        </tr>';
+					}
+				}
+
+				$remark .= '</tbody>';
+		        $remark .= '</table>';
+
 				$tmp_data[$dept]['BUDGET'][] = [
-					'y' => (int)$budget_data->BUDGET_AMT,
+					'y' => (int)$budget,
 					'remark' => $remark,
 				];
 				$tmp_data[$dept]['CONSUME'][] = [
-					'y' => (int)$budget_data->CONSUME_AMT,
+					'y' => (int)$consume,
 					'remark' => $remark,
 				];
 			}
