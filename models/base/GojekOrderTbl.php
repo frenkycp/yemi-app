@@ -27,6 +27,8 @@ use Yii;
  * @property string $STAT
  * @property string $DEPARTURE_NAMA_KARYAWAN
  * @property string $ARRIVAL_KARYAWAN
+ * @property double $LT
+ * @property double $quantity
  * @property string $aliasModel
  */
 abstract class GojekOrderTbl extends \yii\db\ActiveRecord
@@ -58,7 +60,7 @@ abstract class GojekOrderTbl extends \yii\db\ActiveRecord
         return [
             [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'DEPARTURE_NAMA_KARYAWAN', 'ARRIVAL_KARYAWAN'], 'string'],
             [['issued_date', 'daparture_date', 'arrival_date'], 'safe'],
-            [['GOJEK_VALUE'], 'number']
+            [['GOJEK_VALUE', 'LT', 'quantity'], 'number']
         ];
     }
 
@@ -86,6 +88,8 @@ abstract class GojekOrderTbl extends \yii\db\ActiveRecord
             'STAT' => 'Stat',
             'DEPARTURE_NAMA_KARYAWAN' => 'Departure  Nama  Karyawan',
             'ARRIVAL_KARYAWAN' => 'Arrival  Karyawan',
+            'LT' => 'Lt',
+            'quantity' => 'Quantity',
         ];
     }
 

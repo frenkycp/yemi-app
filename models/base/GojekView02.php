@@ -13,8 +13,9 @@ use Yii;
  * @property string $GOJEK_DESC
  * @property integer $JOB_COUNT
  * @property double $TIME_USED
+ * @property double $TIME_FREE
  * @property integer $TIME_LOAD
- * @property double $TIME_EFFICIENCY
+ * @property double $UTILITY
  * @property double $AVERAGE_ORDER_COMPLETION
  * @property string $ISSUE_PERIOD
  * @property string $ISSUE_DATE
@@ -51,7 +52,7 @@ abstract class GojekView02 extends \yii\db\ActiveRecord
         return [
             [['GOJEK_ID', 'GOJEK_DESC', 'ISSUE_PERIOD', 'ISSUE_DATE', 'STAT'], 'string'],
             [['JOB_COUNT', 'TIME_LOAD', 'DAY_COUNT'], 'integer'],
-            [['TIME_USED', 'TIME_EFFICIENCY', 'AVERAGE_ORDER_COMPLETION'], 'number'],
+            [['TIME_USED', 'TIME_FREE', 'UTILITY', 'AVERAGE_ORDER_COMPLETION'], 'number'],
             [['TIME_LOAD', 'DAY_COUNT'], 'required']
         ];
     }
@@ -66,8 +67,9 @@ abstract class GojekView02 extends \yii\db\ActiveRecord
             'GOJEK_DESC' => 'Gojek  Desc',
             'JOB_COUNT' => 'Job  Count',
             'TIME_USED' => 'Time  Used',
+            'TIME_FREE' => 'Time  Free',
             'TIME_LOAD' => 'Time  Load',
-            'TIME_EFFICIENCY' => 'Time  Efficiency',
+            'UTILITY' => 'Utility',
             'AVERAGE_ORDER_COMPLETION' => 'Average  Order  Completion',
             'ISSUE_PERIOD' => 'Issue  Period',
             'ISSUE_DATE' => 'Issue  Date',

@@ -97,6 +97,7 @@ class GojekOrderCompletionController extends Controller
             <th class="text-center">Slip No.</th>
             <th class="text-center">Item</th>
             <th>Item Description</th>
+            <th class="text-center">Qty</th>
             <th class="text-center">From</th>
             <th class="text-center">To</th>
             <th class="text-center">Issued</th>
@@ -114,6 +115,7 @@ class GojekOrderCompletionController extends Controller
 					<td class="text-center">' . $value->slip_id . '</td>
                     <td class="text-center">' . $value->item . '</td>
                     <td>' . $value->item_desc . '</td>
+                    <td class="text-center">' . $value->quantity . '</td>
                     <td class="text-center">' . $value->from_loc . '</td>
                     <td class="text-center">' . $value->to_loc . '</td>
                     <td class="text-center">' . $issued . '</td>

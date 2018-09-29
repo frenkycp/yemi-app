@@ -63,6 +63,13 @@ $gridColumns = [
         //'hAlign' => 'center',
     ],
     [
+        'attribute' => 'quantity',
+        'label' => 'Qty',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => $tmp_location,
+    ],
+    [
         'attribute' => 'from_loc',
         'vAlign' => 'middle',
         'hAlign' => 'center',
