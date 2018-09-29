@@ -3,15 +3,15 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\GojekTbl as BaseGojekTbl;
+use \app\models\base\DprGmcEffView as BaseDprGmcEffView;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.GOJEK_TBL".
+ * This is the model class for table "dpr_gmc_eff_view".
  */
-class GojekTbl extends BaseGojekTbl
+class DprGmcEffView extends BaseDprGmcEffView
 {
-    public $stat_open, $stat_close, $stat_total;
+    public $total_mp;
 
     public function behaviors()
     {
@@ -33,13 +33,8 @@ class GojekTbl extends BaseGojekTbl
         );
     }
 
-    public function getGojekOrderTbl()
+    public function getTotalMp()
     {
-        return $this->hasMany(GojekOrderTbl::className(), ['GOJEK_ID' => 'GOJEK_ID']);
-    }
-
-    public function getGojekView02()
-    {
-        return $this->hasMany(GojekView02::className(), ['GOJEK_ID' => 'GOJEK_ID']);
+        # code...
     }
 }
