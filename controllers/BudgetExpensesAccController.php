@@ -5,16 +5,17 @@ use yii\web\Controller;
 use yii\web\JsExpression;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use app\models\PoRcvBgtVsAct04;
 use app\models\PrReportView;
 
 class BudgetExpensesAccController extends Controller
 {
-	/*public function behaviors()
+	public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }*/
+    }
 	
 	public function actionIndex()
 	{
@@ -22,6 +23,15 @@ class BudgetExpensesAccController extends Controller
 		$tmp_data = [];
 		$categories = $this->getPeriodArr('201804', '201903');
 		$dept_arr = $this->getDeptArr();
+
+		$model = new \yii\base\DynamicModel([
+	        'dept'
+	    ]);
+	    $model->addRule('dept', 'string');
+
+	    if($model->load(\Yii::$app->request->get())){
+	        $dept_arr = [$model->dept];
+	    }
 
 		foreach ($dept_arr as $dept) {
 			foreach ($categories as $category) {
@@ -52,12 +62,17 @@ class BudgetExpensesAccController extends Controller
 		foreach ($tmp_data as $key => $value) {
 			foreach ($value as $key2 => $value2) {
 				$showInLegend = $key2 == 'BUDGET' ? false : true;
+				if (count($dept_arr) == 1) {
+					$color = new JsExpression('Highcharts.getOptions().colors[1]');
+				} else {
+					$color = new JsExpression('Highcharts.getOptions().colors[' . $color_index . ']');
+				}
 				$data[] = [
 					'name' => $key,
 					'stack' => $key2,
 					'data' => $value2,
 					'showInLegend' => $showInLegend,
-					'color' => new JsExpression('Highcharts.getOptions().colors[' . $color_index . ']'),
+					'color' => $color,
 				];
 			}
 			$color_index++;
@@ -65,7 +80,9 @@ class BudgetExpensesAccController extends Controller
 
 		return $this->render('index', [
 			'data' => $data,
-			'categories' => $categories
+			'categories' => $categories,
+			'model' => $model,
+			'dept_dropdown' => $this->getDeptArrHelper()
 		]);
 	}
 
@@ -77,6 +94,12 @@ class BudgetExpensesAccController extends Controller
 			$return_arr[] = $value->DEP_DESC;
 		}
 
+		return $return_arr;
+	}
+
+	public function getDeptArrHelper()
+	{
+		$return_arr = ArrayHelper::map(PoRcvBgtVsAct04::find()->select('DISTINCT(DEP_DESC)')->orderBy('DEP_DESC ASC')->all(), 'DEP_DESC', 'DEP_DESC');
 		return $return_arr;
 	}
 
@@ -128,7 +151,7 @@ class BudgetExpensesAccController extends Controller
 
 			$consume_data = $value->CONSUME_AMT;
 			if ($consume_data > 0) {
-				$consume_data = Html::a($value->CONSUME_AMT, Url::to(['pr-report-view/index', 'budget_id' => "$value->BUDGET_ID"]));
+				$consume_data = Html::a($value->CONSUME_AMT, Url::to(['budget-expenses-acc-detail-data/index', 'budget_id' => "$value->BUDGET_ID"]));
 			}
 
 			$data .= 

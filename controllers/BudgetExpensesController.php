@@ -118,6 +118,7 @@ class BudgetExpensesController extends Controller
 	public function getRemark($dept, $period)
 	{
 		$data = "<h4>$dept<small> ($period)</small></h4>";
+		$data .= 
 		$data .= '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
         '<thead style="font-size: 12px;"><tr class="info">
