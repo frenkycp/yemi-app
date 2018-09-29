@@ -109,7 +109,12 @@ echo '</pre>';*/
                                 //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                             ]
                         ]
-                    ]
+                    ],
+                    'column' => [
+                        'dataLabels' => [
+                            'enabled' => true
+                        ],
+                    ],
                 ],
                 'series' => $data,
             ],

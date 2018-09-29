@@ -32,9 +32,4 @@ class DprGmcEffView extends BaseDprGmcEffView
             ]
         );
     }
-
-    public function getTotalMp()
-    {
-        # code...
-    }
 }
