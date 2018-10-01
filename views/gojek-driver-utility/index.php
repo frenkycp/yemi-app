@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Driver Utility <span class="japanesse text-green"></span>',
-    'tab_title' => 'Driver Utility',
-    'breadcrumbs_title' => 'Driver Utility'
+    'page_title' => 'Material Handle Utilization <span class="japanesse text-green">(マテハン稼働率）</span>',
+    'tab_title' => 'Material Handle Utilization',
+    'breadcrumbs_title' => 'Material Handle Utilization'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -42,8 +42,8 @@ echo '</pre>';*/
     <div class="box-body">
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab_1" data-toggle="tab">Utility</a></li>
-                <li><a href="#tab_2" data-toggle="tab">Work Load</a></li>
+                <li class="active"><a href="#tab_1" data-toggle="tab">Utilization (稼働率）</a></li>
+                <li><a href="#tab_2" data-toggle="tab">Workload (作業負荷）</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1">
