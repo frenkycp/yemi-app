@@ -46,6 +46,7 @@ class FinishGoodStockController extends Controller
         $tmp_kubikasi_arr = SernoOutput::find()
         ->select([
             'gmc' => 'gmc',
+            'dst',
             'stock_qty' => 'SUM(output)'
         ])
         ->where(['>', 'output', 0])
