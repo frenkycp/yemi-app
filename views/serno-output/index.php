@@ -73,11 +73,11 @@ if(isset($_GET['dst']))
 }
 
 $gridColumns = [
-    [
+    /*[
         'class' => '\kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-    /*[
+    [
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -128,6 +128,16 @@ $gridColumns = [
             'style' => 'text-align: center; min-width: 120px;'
         ],
         //
+    ],
+    [
+        'attribute' => 'so',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 90px;'
+        ],
     ],
     [
         'attribute' => 'dst',

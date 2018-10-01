@@ -18,7 +18,7 @@ class SernoOutput extends SernoOutputModel
 public function rules()
 {
 return [
-[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst', 'etd_old'], 'safe'],
+[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst', 'etd_old', 'so'], 'safe'],
             [['id', 'num', 'adv', 'cntr', 'back_order'], 'integer'],
 ];
 }
@@ -45,6 +45,7 @@ public function search($params)
 $query = SernoOutputModel::find()
 ->select([
     'tb_serno_output.id',
+    'so',
     'dst',
     'tb_serno_output.gmc',
     'qty' => 'SUM(qty)',
@@ -131,6 +132,7 @@ return $dataProvider;
 $query->andFilterWhere([
             'tb_serno_output.id' => $this->id,
             'num' => $this->num,
+            'so' => $this->so,
             'qty' => $this->qty,
             'output' => $this->output,
             'back_order' => $this->back_order,
