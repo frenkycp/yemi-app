@@ -177,7 +177,7 @@ class HrgaAttendanceReportController extends Controller
 		->orderBy('SHIFT')
 		->all();
 
-		$data = '';
+		$data = '<p><b>Date : ' . date('Y-m-d', strtotime($date)) . '</b></p>';
 
 		foreach ($total_shift_arr as $total_shift) {
 			$shift_name = $total_shift->SHIFT != '' ? $total_shift->SHIFT : '[?]';
