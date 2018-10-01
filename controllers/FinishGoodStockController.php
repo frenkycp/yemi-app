@@ -39,20 +39,32 @@ class FinishGoodStockController extends Controller
         ->orderBy('stock_qty DESC')
         ->all();
 
-    	/*$stock_arr = SernoOutput::find()
-    	->select([
-    		'dst' => 'dst',
-    		'stock_qty' => 'SUM(output)'
-    	])
-    	->where(['>', 'output', 0])
-    	->andWhere(['>=', 'etd', date('Y-m-d')])
-    	->groupBy('dst')
-    	->orderBy('stock_qty DESC')
-    	->all();*/
-
         $grand_total = 0;
         $grand_total_kubikasi = 0;
         $tmp_data = [];
+
+        $tmp_kubikasi_arr = SernoOutput::find()
+        ->select([
+            'gmc' => 'gmc',
+            'stock_qty' => 'SUM(output)'
+        ])
+        ->where(['>', 'output', 0])
+        ->andWhere(['>=', 'etd', date('Y-m-d')])
+        ->groupBy('gmc')
+        ->all();
+
+        $detail_stock = SernoInput::find()
+        ->select([
+            'tb_serno_input.gmc',
+            'dst',
+            'loct',
+            'stock_qty' => 'COUNT(dst)'
+        ])
+        ->joinWith('sernoOutput')
+        ->where(['>=', 'etd', date('Y-m-d')])
+        ->groupBy('tb_serno_input.gmc, dst, loct')
+        ->orderBy('stock_qty DESC')
+        ->all();
 
     	foreach ($stock_arr as $stock_data) {
     		$x_categories[] = $stock_data->dst;
@@ -60,21 +72,12 @@ class FinishGoodStockController extends Controller
 
             $total_kubikasi = 0;
 
-            $dest_kubikasi_arr = SernoOutput::find()
-            ->select([
-                'gmc' => 'gmc',
-                'stock_qty' => 'SUM(output)'
-            ])
-            ->where(['>', 'output', 0])
-            ->andWhere(['>=', 'etd', date('Y-m-d')])
-            ->andWhere(['dst' => $stock_data->dst])
-            ->groupBy('gmc')
-            ->all();
-
-            foreach ($dest_kubikasi_arr as $value) {
-                $gmc = $value->gmc;
-                $m3 = (float)$value->getItemM3()->volume;
-                $total_kubikasi += (int)$value->stock_qty * $m3;
+            foreach ($tmp_kubikasi_arr as $value) {
+                if ($value->dst == $stock_data->dst) {
+                    $gmc = $value->gmc;
+                    $m3 = (float)$value->getItemM3()->volume;
+                    $total_kubikasi += (int)$value->stock_qty * $m3;
+                }
             }
 
             $grand_total_kubikasi += $total_kubikasi;
@@ -86,17 +89,17 @@ class FinishGoodStockController extends Controller
     		];
             $tmp_data[0][] = [
                 'y' => (int)$stock_data->prod_output_qty,
-                'remark' => $this->getRemarks($stock_data->dst, 0),
+                'remark' => $this->getRemarks($detail_stock, $stock_data->dst, 0),
                 'total_kubikasi' => round($total_kubikasi, 1),
             ];
             $tmp_data[1][] = [
                 'y' => (int)$stock_data->in_transit_qty,
-                'remark' => $this->getRemarks($stock_data->dst, 1),
+                'remark' => $this->getRemarks($detail_stock, $stock_data->dst, 1),
                 'total_kubikasi' => round($total_kubikasi, 1),
             ];
             $tmp_data[2][] = [
                 'y' => (int)$stock_data->finish_goods_qty,
-                'remark' => $this->getRemarks($stock_data->dst, 2),
+                'remark' => $this->getRemarks($detail_stock, $stock_data->dst, 2),
                 'total_kubikasi' => round($total_kubikasi, 1),
             ];
     	}
@@ -114,21 +117,8 @@ class FinishGoodStockController extends Controller
     	]);
     }
 
-    public function getRemarks($dst, $loct)
+    public function getRemarks($detail_stock, $dst, $loct)
     {
-        $detail_stock = SernoInput::find()
-        ->select([
-            'tb_serno_input.gmc',
-            'stock_qty' => 'COUNT(dst)'
-        ])
-        ->joinWith('sernoOutput')
-        ->where(['>=', 'etd', date('Y-m-d')])
-        ->andWhere(['dst' => $dst])
-        ->andWhere(['loct' => $loct])
-        ->groupBy('tb_serno_input.gmc')
-        ->orderBy('stock_qty DESC')
-        ->all();
-
         $remark = '<table class="table table-bordered table-striped table-hover">';
         $remark .= '
         <tr>
@@ -140,15 +130,15 @@ class FinishGoodStockController extends Controller
         ';
 
         foreach ($detail_stock as $detail) {
-
-            $remark .= '
-            <tr>
-                <td style="text-align: center;">' . $detail->gmc . '</td>
-                <td>' . $detail->getPartName() . '</td>
-                <td style="text-align: center;">' . $detail->stock_qty . '</td>
-                <td style="text-align: center;">' . round(($detail->stock_qty * $detail->getItemM3()->volume), 1) . '</td>
-            </tr>
-            ';
+            if ($detail->dst == $dst && $detail->loct == $loct) {
+                $remark .= '
+                <tr>
+                    <td style="text-align: center;">' . $detail->gmc . '</td>
+                    <td>' . $detail->getPartName() . '</td>
+                    <td style="text-align: center;">' . $detail->stock_qty . '</td>
+                    <td style="text-align: center;">' . round(($detail->stock_qty * $detail->getItemM3()->volume), 1) . '</td>
+                </tr>';
+            }
         }
 
         $remark .= '</table>';
