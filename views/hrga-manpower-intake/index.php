@@ -76,6 +76,9 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 
 <div class="panel panel-primary">
+    <div class="box-header with-border">
+        <h4 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h4>
+    </div>
     <div class="panel-body">
         <?php
         echo Highcharts::widget([

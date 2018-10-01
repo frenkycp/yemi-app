@@ -75,7 +75,7 @@ echo '</pre>';*/
     </div>
 
 <?php ActiveForm::end(); ?>
-
+<h4 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php

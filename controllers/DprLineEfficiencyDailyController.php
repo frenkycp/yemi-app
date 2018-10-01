@@ -86,7 +86,7 @@ class DprLineEfficiencyDailyController extends Controller
 
 	    $data[] = [
 	    	'name' => 'Line Efficiency',
-	    	'colorByPoint' => true,
+	    	//'colorByPoint' => true,
 	    	'data' => $tmp_data
 	    ];
 

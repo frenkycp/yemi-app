@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Budget Expenses By Goods Received <span class="japanesse text-green"></span>',
+    'page_title' => 'Budget Expenses By Goods Received <span class="japanesse text-green">(経費モニター部門別・YEMI着基準)</span>',
     'tab_title' => 'Budget Expenses By Goods Received',
     'breadcrumbs_title' => 'Budget Expenses By Goods Received'
 ];
@@ -51,6 +51,9 @@ echo '</pre>';*/
 </div>
 
 <div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h3>
+    </div>
     <div class="box-body">
         <?php
         echo Highcharts::widget([

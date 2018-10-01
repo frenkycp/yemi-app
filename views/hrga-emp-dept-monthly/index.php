@@ -57,7 +57,7 @@ echo '</pre>';*/
 ?>
 <div class="box box-success">
     <div class="box-header with-border">
-        <h3 class="box-title">Chart View</h3>
+        <h4 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h4>
     </div>
     <div class="box-body no-padding">
         <?php

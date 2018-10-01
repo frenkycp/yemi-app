@@ -12,7 +12,7 @@ $this->title = [
     'tab_title' => 'Stock WIP Monitor',
     'breadcrumbs_title' => 'Stock WIP Monitor'
 ];
-$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
@@ -59,6 +59,7 @@ $stops_arr = [
 print_r($data_painting);
 echo '</pre>';*/
 ?>
+<h5 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h5>
 <div class="nav-tabs-custom">
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="#tab_1" data-toggle="tab">LINE-X</a></li>

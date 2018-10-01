@@ -41,6 +41,9 @@ echo '<pre>';*/
 ?>
 
 <div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h3>
+    </div>
     <div class="box-body">
         <?php
         echo Highcharts::widget([

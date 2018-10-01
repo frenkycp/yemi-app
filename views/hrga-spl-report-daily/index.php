@@ -74,6 +74,7 @@ echo '</pre>';*/
     </div>
 
 <?php ActiveForm::end(); ?>
+<h5 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h5>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab">Total Hour <span class="japanesse">(時間)</span></a></li>

@@ -83,6 +83,9 @@ $this->registerJs($script, View::POS_HEAD );
 <?php ActiveForm::end(); ?>
 
 <div class="box box-success">
+    <div class="box-header with-border">
+        <h4 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h4>
+    </div>
     <div class="box-body no-padding">
         <?php
         echo Highcharts::widget([

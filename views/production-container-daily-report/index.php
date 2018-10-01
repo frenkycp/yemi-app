@@ -73,147 +73,155 @@ echo '</pre>';*/
 
     <?php ActiveForm::end(); ?>
     <h4>Total Container <span class="japanesse">(コンテナー総本数）</span> : <?= $total_container; ?></h4>
-<div class="nav-tabs-custom">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">By Export Date <span class="japanesse">（工場出荷日別）</span></a></li>
-        <li class=""><a href="#tab_2" data-toggle="tab">By Port <span class="japanesse">(出荷先港別）</span></a></li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab_1">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    'modules/exporting',
-                    'themes/sand-signika',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'column',
-                    ],
-                    'credits' => [
-                        'enabled' => false
-                    ],
-                    'title' => [
-                        'text' => $title
-                    ],
-                    'subtitle' => [
-                        'text' => $subtitle
-                    ],
-                    'xAxis' => [
-                        'type' => 'category',
-                        'categories' => $category,
-                        'title' => [
-                            'text' => 'Date'
-                        ],
-                        'labels' => [
-                            'formatter' => new JsExpression('function(){ return \'<a href="' . Yii::$app->request->baseUrl . '/serno-output/container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
-                        ],
-                    ],
-                    'yAxis' => [
-                        'title' => [
-                            'text' => 'Container Completion'
-                        ],
-                        'stackLabels' => [
-                            //'enabled' => true,
-                            //'formatter' => new JsExpression('function(){ return this.qty + "aa"; }'),
-                        ]
-                    ],
-                    'tooltip' => [
-                        'enabled' => false
-                    ],
-                    'plotOptions' => [
-                        'column' => [
-                            'stacking' => 'normal',
-                            'dataLabels' => [
-                                'enabled' => true,
-                                'style' => [
-                                    'textOutline' => '0px',
-                                    'fontWeight' => '0'
-                                ],
-                                'format' => '{point.qty}/{point.total_qty}',
-                                'color' => 'black',
-                            ],
-                        ],
-                        'series' => [
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression('
-                                        function(){
-                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                        }
-                                    '),
-                                ]
-                            ]
-                        ]
-                    ],
-                    'series' => $data
-                ],
-            ]);
-            ?>
+    <div class="box box-warning">
+        <div class="box-header with-border">
+            <h3 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h3>
         </div>
-        <div class="tab-pane" id="tab_2">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    //'themes/grid-light',
-                    //'themes/sand-signika',
-                    //'themes/dark-unica',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'bar',
-                        'height' => 600
-                    ],
-                    'credits' => [
-                        'enabled' => false
-                    ],
-                    'title' => [
-                        'text' => null
-                    ],
-                    'subtitle' => [
-                        'text' => null
-                    ],
-                    'legend' => [
-                        'enabled' => false
-                    ],
-                    'xAxis' => [
-                        'categories' => $category2
-                    ],
-                    'yAxis' => [
-                        'min' => 0,
-                        'allowDecimals' => false,
-                        'title' => [
-                            'text' => 'Qty',
-                            'align' => 'high'
-                        ],
-                        'labels' => [
-                            'overflow' => 'justify'
-                        ]
-                    ],
-                    'plotOptions' => [
-                        'bar' => [
-                            'dataLabels' => [
-                                'enabled' => true,
-                                'format' => '{point.y}'
-                            ]
-                        ],
-                        
-                    ],
-                    'series' => [
-                        [
-                            'name' => 'Shipping Stock',
-                            'data' => $data2,
-                            'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
-                        ]
-                    ]
-                ],
-            ]);
-            ?>
+        <div class="box-body">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#tab_1" data-toggle="tab">By Export Date <span class="japanesse">（工場出荷日別）</span></a></li>
+                    <li class=""><a href="#tab_2" data-toggle="tab">By Port <span class="japanesse">(出荷先港別）</span></a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab_1">
+                        <?php
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                'modules/exporting',
+                                'themes/sand-signika',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    'type' => 'column',
+                                ],
+                                'credits' => [
+                                    'enabled' => false
+                                ],
+                                'title' => [
+                                    'text' => $title
+                                ],
+                                'subtitle' => [
+                                    'text' => $subtitle
+                                ],
+                                'xAxis' => [
+                                    'type' => 'category',
+                                    'categories' => $category,
+                                    'title' => [
+                                        'text' => 'Date'
+                                    ],
+                                    'labels' => [
+                                        'formatter' => new JsExpression('function(){ return \'<a href="' . Yii::$app->request->baseUrl . '/serno-output/container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
+                                    ],
+                                ],
+                                'yAxis' => [
+                                    'title' => [
+                                        'text' => 'Container Completion'
+                                    ],
+                                    'stackLabels' => [
+                                        //'enabled' => true,
+                                        //'formatter' => new JsExpression('function(){ return this.qty + "aa"; }'),
+                                    ]
+                                ],
+                                'tooltip' => [
+                                    'enabled' => false
+                                ],
+                                'plotOptions' => [
+                                    'column' => [
+                                        'stacking' => 'normal',
+                                        'dataLabels' => [
+                                            'enabled' => true,
+                                            'style' => [
+                                                'textOutline' => '0px',
+                                                'fontWeight' => '0'
+                                            ],
+                                            'format' => '{point.qty}/{point.total_qty}',
+                                            'color' => 'black',
+                                        ],
+                                    ],
+                                    'series' => [
+                                        'cursor' => 'pointer',
+                                        'point' => [
+                                            'events' => [
+                                                'click' => new JsExpression('
+                                                    function(){
+                                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                                    }
+                                                '),
+                                            ]
+                                        ]
+                                    ]
+                                ],
+                                'series' => $data
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                    <div class="tab-pane" id="tab_2">
+                        <?php
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                //'modules/exporting',
+                                //'themes/grid-light',
+                                //'themes/sand-signika',
+                                //'themes/dark-unica',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    'type' => 'bar',
+                                    'height' => 600
+                                ],
+                                'credits' => [
+                                    'enabled' => false
+                                ],
+                                'title' => [
+                                    'text' => null
+                                ],
+                                'subtitle' => [
+                                    'text' => null
+                                ],
+                                'legend' => [
+                                    'enabled' => false
+                                ],
+                                'xAxis' => [
+                                    'categories' => $category2
+                                ],
+                                'yAxis' => [
+                                    'min' => 0,
+                                    'allowDecimals' => false,
+                                    'title' => [
+                                        'text' => 'Qty',
+                                        'align' => 'high'
+                                    ],
+                                    'labels' => [
+                                        'overflow' => 'justify'
+                                    ]
+                                ],
+                                'plotOptions' => [
+                                    'bar' => [
+                                        'dataLabels' => [
+                                            'enabled' => true,
+                                            'format' => '{point.y}'
+                                        ]
+                                    ],
+                                    
+                                ],
+                                'series' => [
+                                    [
+                                        'name' => 'Shipping Stock',
+                                        'data' => $data2,
+                                        'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+                                    ]
+                                ]
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+
 <?php
 yii\bootstrap\Modal::begin([
     'id' =>'modal',
