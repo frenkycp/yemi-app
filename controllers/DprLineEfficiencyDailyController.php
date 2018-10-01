@@ -5,6 +5,7 @@ use yii\web\Controller;
 use app\models\DprLineEfficiencyView02;
 use app\models\DprGmcEffView;
 use yii\helpers\Url;
+use yii\web\JsExpression;
 
 class DprLineEfficiencyDailyController extends Controller
 {
@@ -86,6 +87,7 @@ class DprLineEfficiencyDailyController extends Controller
 
 	    $data[] = [
 	    	'name' => 'Line Efficiency',
+	    	'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 	    	//'colorByPoint' => true,
 	    	'data' => $tmp_data
 	    ];
