@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class GojekOrderTbl extends BaseGojekOrderTbl
 {
-    public $stat_open, $stat_close, $stat_total;
+    public $stat_open, $stat_close, $stat_total, $model_group, $period_line;
 
     public function behaviors()
     {
@@ -55,5 +55,10 @@ class GojekOrderTbl extends BaseGojekOrderTbl
                 'STAT' => 'Status',
             ]
         );
+    }
+
+    public function getWipPlanActualReport()
+    {
+        return $this->hasOne(WipPlanActualReport::className(), ['slip_id' => 'slip_id']);
     }
 }

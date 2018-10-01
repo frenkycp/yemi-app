@@ -77,11 +77,13 @@ class GojekOrderCompletionController extends Controller
 
 	public function getRemark($GOJEK_ID, $GOJEK_DESC, $STAT)
 	{
-		$data_arr = GojekOrderTbl::find()->where([
+		$data_arr = GojekOrderTbl::find()
+		->joinWith('wipPlanActualReport')
+		->where([
 			'GOJEK_ID' => $GOJEK_ID,
 			'STAT' => $STAT
 		])
-		->orderBy('from_loc ASC, slip_id ASC')
+		->orderBy('model_group ASC, period_line ASC, from_loc ASC, slip_id ASC')
 		->all();
 
 		if ($STAT == 'O') {
@@ -95,6 +97,8 @@ class GojekOrderCompletionController extends Controller
 		$data .= 
 		'<thead style="font-size: 12px;"><tr class="info">
             <th class="text-center">Slip No.</th>
+            <th class="text-center">Model</th>
+            <th class="text-center">Line</th>
             <th class="text-center">Item</th>
             <th>Item Description</th>
             <th class="text-center">Qty</th>
@@ -104,15 +108,18 @@ class GojekOrderCompletionController extends Controller
             <th class="text-center">Departed</th>
             <th class="text-center">Arrived</th>
 		</tr></thead>';
-		$data .= '<tbody style="font-size: 10px;">';
+		$data .= '<tbody style="font-size: 12px;">';
 
 		foreach ($data_arr as $key => $value) {
+			$wip_report = $value->wipPlanActualReport;
 			$issued = $value->issued_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->issued_date));
 			$departed = $value->daparture_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->daparture_date));
 			$arrived = $value->arrival_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->arrival_date));
 			$data .= '
 				<tr>
 					<td class="text-center">' . $value->slip_id . '</td>
+					<td class="text-center">' . $value->wipPlanActualReport->model_group . '</td>
+					<td class="text-center">' . $value->wipPlanActualReport->period_line . '</td>
                     <td class="text-center">' . $value->item . '</td>
                     <td>' . $value->item_desc . '</td>
                     <td class="text-center">' . $value->quantity . '</td>

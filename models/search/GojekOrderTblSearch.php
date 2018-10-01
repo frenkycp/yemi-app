@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id'], 'integer'],
-            [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'issued_date', 'daparture_date', 'arrival_date', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT'], 'safe'],
+            [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'model_group', 'period_line'], 'safe'],
             [['GOJEK_VALUE'], 'number'],
 ];
 }
@@ -42,7 +42,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = GojekOrderTbl::find();
+$query = GojekOrderTbl::find()->joinWith('wipPlanActualReport');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -58,14 +58,16 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'id' => $this->id,
-            'issued_date' => $this->issued_date,
-            'daparture_date' => $this->daparture_date,
-            'arrival_date' => $this->arrival_date,
+            //'issued_date' => $this->issued_date,
+            //'daparture_date' => $this->daparture_date,
+            //'arrival_date' => $this->arrival_date,
             'GOJEK_VALUE' => $this->GOJEK_VALUE,
+            'WIP_PLAN_ACTUAL_REPORT.period_line' => $this->period_line,
         ]);
 
-        $query->andFilterWhere(['like', 'slip_id', $this->slip_id])
+        $query->andFilterWhere(['like', 'GOJEK_ORDER_TBL.slip_id', $this->slip_id])
             ->andFilterWhere(['like', 'item', $this->item])
+            ->andFilterWhere(['like', 'WIP_PLAN_ACTUAL_REPORT.model_group', $this->model_group])
             ->andFilterWhere(['like', 'item_desc', $this->item_desc])
             ->andFilterWhere(['like', 'from_loc', $this->from_loc])
             ->andFilterWhere(['like', 'to_loc', $this->to_loc])

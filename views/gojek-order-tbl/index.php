@@ -51,15 +51,53 @@ $gridColumns = [
         'attribute' => 'slip_id',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'model_group',
+        'label' => 'Model',
+        'value' => function($model){
+            return $model->wipPlanActualReport->model_group;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 90px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'period_line',
+        'label' => 'Line',
+        'value' => function($model){
+            return $model->wipPlanActualReport->period_line;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 60px; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'item',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'item_desc',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
         //'hAlign' => 'center',
     ],
     [
@@ -74,12 +112,20 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filter' => $tmp_location,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 130px;'
+        ],
     ],
     [
         'attribute' => 'to_loc',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filter' => $tmp_location,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 130px;'
+        ],
     ],
     /*[
         'attribute' => 'source',
@@ -91,10 +137,18 @@ $gridColumns = [
         'label' => 'Driver NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 70px; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'GOJEK_DESC',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
         //'hAlign' => 'center',
     ],
     [
@@ -116,6 +170,10 @@ $gridColumns = [
         ],
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'issued_date',
@@ -124,6 +182,10 @@ $gridColumns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'daparture_date',
@@ -132,6 +194,10 @@ $gridColumns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'arrival_date',
@@ -140,15 +206,11 @@ $gridColumns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
-    /*'GOJEK_DESC',*/
-    /*'NIK_REQUEST',*/
-    /*'NAMA_KARYAWAN',*/
-    /*'STAT',*/
-    /*'issued_date',*/
-    /*'daparture_date',*/
-    /*'arrival_date',*/
-    /*'GOJEK_VALUE',*/
 ];
 ?>
 <div class="giiant-crud gojek-order-tbl-index">
@@ -160,7 +222,7 @@ $gridColumns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -170,7 +232,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => false, // pjax is set to always true for this demo
