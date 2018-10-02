@@ -162,7 +162,7 @@ $grid_columns = [
         ],
         'hidden' => true,
     ],
-    [
+    /*[
         'attribute' => 'upload_id',
         'label' => 'VMS No',
         'vAlign' => 'middle',
@@ -172,7 +172,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'slip_id',
         'label' => 'Slip No.',
