@@ -139,7 +139,7 @@ $grid_columns = [
         'filter' => $location_dropdown,
         //'headerOptions' => ['class' => 'kartik-sheet-style'] 
     ],
-    [
+    /*[
         'attribute' => 'bom_level',
         'label' => 'BOM<br/>Level',
         'encodeLabel' => false,
@@ -150,7 +150,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'period',
         'vAlign' => 'middle',
@@ -239,6 +239,40 @@ $grid_columns = [
         'width' => '70px',
         'hAlign' => 'center'
     ],
+    [
+        'attribute' => 'source_date',
+        'label' => 'FA Start',
+        'value' => function($model){
+            return $model->source_date == null ? '-' : date('Y-m-d', strtotime($model->source_date));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'due_date',
+        'label' => 'Due Date',
+        'value' => function($model){
+            return $model->due_date == null ? '-' : date('Y-m-d', strtotime($model->due_date));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
     /*[
         'attribute' => 'stage',
         'label' => 'Status',
@@ -267,23 +301,7 @@ $grid_columns = [
             'style' => 'text-align: center;'
         ],
     ],
-    [
-        'attribute' => 'source_date',
-        'label' => 'FA Start',
-        'value' => function($model){
-            return $model->source_date == null ? '-' : date('Y-m-d', strtotime($model->source_date));
-        },
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'width' => '100px',
-        'contentOptions' => [
-            'style' => 'min-width: 100px;'
-        ],
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center;'
-        ],
-    ],
+    
     [
         'attribute' => 'created_user_desc',
         'label' => 'Created By',
