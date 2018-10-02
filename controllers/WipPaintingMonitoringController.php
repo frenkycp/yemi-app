@@ -240,10 +240,12 @@ class WipPaintingMonitoringController extends Controller
 			<th>Model</th>
 			<th>Child Description</th>
 			<th class="text-center">Qty</th>
-            <th class="text-center" style="min-width: 80px;">FA Start</th>
-            <th class="text-center" style="min-width: 100px;">Start Plan</th>
-            <th class="text-center" style="min-width: 100px;">End Plan</th>
-			<th class="text-center" style="min-width: 100px;">Start Actual</th>
+            <th class="text-center" style="min-width: 70px;">FA Start</th>
+            <th class="text-center" style="min-width: 70px;">Start Plan</th>
+            <th class="text-center" style="min-width: 70px;">End Plan</th>
+			<th class="text-center" style="min-width: 70px;">Start Actual</th>
+            <th class="text-center" style="min-width: 70px;">Complete Actual</th>
+            <th class="text-center" style="min-width: 70px;">Pulled By Next Actual</th>
 		</tr></thead>';
         $data .= '<tbody style="font-size: 10px;">';
 		foreach ($wip_painting_data_arr as $value) {
@@ -275,6 +277,8 @@ class WipPaintingMonitoringController extends Controller
                     <td class="text-center">' . $start_plan . '</td>
                     <td class="text-center">' . $end_plan . '</td>
 					<td class="text-center text-green">' . $start_actual . '</td>
+                    <td class="text-center text-green">' . $end_actual . '</td>
+                    <td class="text-center text-green">' . $handover_actual . '</td>
 				</tr>
 			';
 		}
