@@ -46,12 +46,12 @@ $grid_column = [
     ],
     [
         'attribute' => 'total_delay',
-        'label' => 'Back Order',
+        'label' => 'Back Order Qty',
         'value' => function($model){
             if ($model->total_delay == 0) {
                 return $model->total_delay;
             } else {
-                return Html::a("$model->total_delay", ['get-so-detail-data', 'period' => $model->id, 'line' => $model->line], ['class' => 'modal_detail btn btn-warning btn-xs', 'data-pjax' => '0',]);
+                return Html::a("$model->total_delay", ['get-so-detail-data', 'period' => $model->id, 'line' => $model->line], ['class' => 'modal_detail btn btn-warning btn-xs', 'data-pjax' => '0', 'title' => 'Click to show detail']);
             }
             
         },
