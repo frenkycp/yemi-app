@@ -46,6 +46,7 @@ class DprGmcEffDataController extends Controller
 			'tgl' => $proddate,
 			'line' => $line
 		])
+		->orderBy('status DESC, cek_in DESC')
 		->all();
 		$data = '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
