@@ -256,14 +256,14 @@ class WipPaintingMonitoringController extends Controller
             $handover_actual = $value['hand_over_job'] == null ? '-' : $value['hand_over_job'];
             $fa_start = $value['source_date'] == null ? '-' : date('Y-m-d', strtotime($value['source_date']));
 
-            $start_actual = '-';
+            /*$start_actual = '-';
             if ($stage == '02-STARTED') {
                 $start_actual = $value['start_job'] == null ? '-' : $value['start_job'];
             } elseif ($stage == '03-COMPLETED') {
                 $start_actual = $value['end_job'] == null ? '-' : $value['end_job'];
             } elseif ($stage == '04-HAND OVER') {
                 $start_actual = $value['hand_over_job'] == null ? '-' : $value['hand_over_job'];
-            }
+            }*/
 
 			$data .= '
 				<tr>
