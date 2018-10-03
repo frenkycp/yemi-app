@@ -56,10 +56,11 @@ class WipPaintingMonitoringController extends Controller
     	->orderBy('week, due_date')
     	->all();
 
+        $selected_column = [
+            'stage', 'due_date', 'start_date', 'source_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'period_line', 'model_group', 'child_desc', 'summary_qty'
+        ];
         $remark_data_arr = WipPlanActualReport::find()
-        ->select([
-            'stage', 'due_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'period_line', 'model_group', 'child_desc', 'summary_qty'
-        ])
+        ->select($selected_column)
         ->where([
             //'due_date' => $due_date,
             //'stage' => $stage,
@@ -89,9 +90,7 @@ class WipPaintingMonitoringController extends Controller
 	    	->all();
 
             $remark_data_arr = WipPlanActualReport::find()
-            ->select([
-                'stage', 'due_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'period_line', 'model_group', 'child_desc', 'summary_qty'
-            ])
+            ->select($selected_column)
             ->where([
                 //'due_date' => $due_date,
                 //'stage' => $stage,
