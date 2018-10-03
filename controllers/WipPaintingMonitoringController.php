@@ -57,6 +57,9 @@ class WipPaintingMonitoringController extends Controller
     	->all();
 
         $remark_data_arr = WipPlanActualReport::find()
+        ->select([
+            'stage', 'due_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'period_line', 'model_group', 'child_desc', 'summary_qty'
+        ])
         ->where([
             //'due_date' => $due_date,
             //'stage' => $stage,
@@ -86,6 +89,9 @@ class WipPaintingMonitoringController extends Controller
 	    	->all();
 
             $remark_data_arr = WipPlanActualReport::find()
+            ->select([
+                'stage', 'due_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'period_line', 'model_group', 'child_desc', 'summary_qty'
+            ])
             ->where([
                 //'due_date' => $due_date,
                 //'stage' => $stage,
@@ -227,26 +233,6 @@ class WipPaintingMonitoringController extends Controller
         if ($stage[0] == '00-ORDER') {
             $stage = ['00-ORDER', '01-CREATED'];
         }
-
-    	/*$remark_data_arr = WipPlanActualReport::find()
-    	->where([
-    		'due_date' => $due_date,
-    		'stage' => $stage,
-            //'urut' => '02'
-    	])
-    	->orderBy('child_analyst_desc, model_group, parent, child')
-    	->all();
-
-    	if ($loc != null) {
-    		$remark_data_arr = WipPlanActualReport::find()
-	    	->where([
-	    		'due_date' => $due_date,
-	    		'stage' => $stage,
-	    		'child_analyst_desc' => $loc
-	    	])
-	    	->orderBy('child_analyst_desc, model_group, parent, child')
-	    	->all();
-    	}*/
 
         $data = '<h4>' . $status . '</h4>';
     	$data .= '<table class="table table-bordered table-hover">';
