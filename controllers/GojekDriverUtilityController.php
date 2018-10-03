@@ -5,6 +5,7 @@ use yii\web\Controller;
 
 use app\models\GojekTbl;
 use app\models\GojekView02;
+use yii\helpers\ArrayHelper;
 
 class GojekDriverUtilityController extends Controller
 {
@@ -16,6 +17,7 @@ class GojekDriverUtilityController extends Controller
 	
 	public function actionIndex()
 	{
+		date_default_timezone_set('Asia/Jakarta');
 		$data = [];
 		$categories = $this->getCategoriesArr();
 		$driver_arr = $this->getDriverArr();
@@ -31,7 +33,8 @@ class GojekDriverUtilityController extends Controller
 			foreach ($categories as $category) {
 				$utility = 0;
 				$average_order_completion = 0;
-				$post_date = (strtotime("$category +3 hours") * 1000);
+				$tmp_category = date('Y-m-d H:i:s', strtotime("$category 00:00:00"));
+				$post_date = (strtotime("$tmp_category +10 hours") * 1000);
 				foreach ($view_data_arr as $view_data) {
 					
 					if ($view_data->GOJEK_DESC == $driver && $view_data->ISSUE_DATE == $category) {
@@ -68,10 +71,14 @@ class GojekDriverUtilityController extends Controller
 
 	public function getCategoriesArr()
 	{
-		$data_arr = GojekView02::find()->select('DISTINCT(ISSUE_DATE)')->orderBy('ISSUE_DATE')->all();
+		//$data_arr = GojekView02::find()->select('DISTINCT(ISSUE_DATE)')->orderBy('ISSUE_DATE')->all();
+		$data_arr = ArrayHelper::getColumn(
+			GojekView02::find()->select('DISTINCT(ISSUE_DATE)')->orderBy('ISSUE_DATE')->asArray()->all(),
+			'ISSUE_DATE'
+		);
 		$return_arr = [];
 		foreach ($data_arr as $key => $value) {
-			$return_arr[] = $value->ISSUE_DATE;
+			$return_arr[] = $value;
 		}
 		return $return_arr;
 	}
