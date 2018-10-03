@@ -57,7 +57,7 @@ echo '</pre>';*/
                         'options' => [
                             'chart' => [
                                 'zoomType' => 'x',
-                                'type' => 'line'
+                                'type' => 'spline'
                             ],
                             'credits' => [
                                 'enabled' =>false
@@ -105,7 +105,7 @@ echo '</pre>';*/
                         'options' => [
                             'chart' => [
                                 'zoomType' => 'x',
-                                'type' => 'line'
+                                'type' => 'spline'
                             ],
                             'credits' => [
                                 'enabled' =>false
