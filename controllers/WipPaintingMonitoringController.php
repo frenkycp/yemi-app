@@ -109,7 +109,7 @@ class WipPaintingMonitoringController extends Controller
 
     		$tmp_data[$wip_painting_data->week]['order_percentage'][] = [
     			'y' => $order_percentage == 0 ? null : $order_percentage,
-				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, '00-ORDER'),
+				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['00-ORDER']),
                 'qty' => $wip_painting_data->total_order
 				//'color' => 'rgba(240, 240, 240, 0.7)',
     		];
@@ -119,19 +119,19 @@ class WipPaintingMonitoringController extends Controller
     		];*/
     		$tmp_data[$wip_painting_data->week]['started_percentage'][] = [
     			'y' => $started_percentage == 0 ? null : $started_percentage,
-				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, '02-STARTED'),
+				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['02-STARTED']),
                 'qty' => $wip_painting_data->total_started
 				//'color' => 'rgba(240, 240, 0, 0.7)',
     		];
     		$tmp_data[$wip_painting_data->week]['completed_percentage'][] = [
     			'y' => $completed_percentage == 0 ? null : $completed_percentage,
-				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, '03-COMPLETED'),
+				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['03-COMPLETED']),
                 'qty' => $wip_painting_data->total_completed
 				//'color' => 'rgba(0, 150, 255, 0.7)',
     		];
     		$tmp_data[$wip_painting_data->week]['handover_percentage'][] = [
     			'y' => $handover_percentage <= 0 ? null : $handover_percentage,
-				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, '04-HAND OVER'),
+				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['04-HAND OVER']),
                 'qty' => $wip_painting_data->total_handover
 				//'color' => 'rgba(0, 240, 0, 0.7)',
     		];
@@ -224,7 +224,7 @@ class WipPaintingMonitoringController extends Controller
                 break;
         };
 
-        if ($stage == '00-ORDER') {
+        if ($stage[0] == '00-ORDER') {
             $stage = ['00-ORDER', '01-CREATED'];
         }
 
@@ -267,7 +267,7 @@ class WipPaintingMonitoringController extends Controller
 		</tr></thead>';
         $data .= '<tbody style="font-size: 10px;">';
 		foreach ($remark_data_arr as $value) {
-            if ($value['stage'] == $stage && $value['due_date'] == $due_date) {
+            if (in_array($value['stage'], $stage) && $value['due_date'] == $due_date) {
                 $start_plan = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
                 $end_plan = $value['due_date'] == null ? '-' : date('Y-m-d', strtotime($value['due_date']));
                 $start_actual = $value['start_job'] == null ? '-' : $value['start_job'];
