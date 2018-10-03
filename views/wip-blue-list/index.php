@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
 use kartik\form\ActiveForm;
-use kartik\file\FileInput;
+use kartik\touchspin\TouchSpin;
 
 /**
 * @var yii\web\View $this
@@ -132,7 +132,8 @@ $grid_columns = [
         },
     ],
     [
-        'attribute' => 'child_analyst_desc',
+        'attribute' => 'location',
+        'value' => 'wipHdr.child_analyst_desc',
         'label' => 'Location',
         'vAlign' => 'middle',
         'width' => '200px',
@@ -150,7 +151,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
-    ],*/
+    ],
     [
         'attribute' => 'period',
         'vAlign' => 'middle',
@@ -161,7 +162,7 @@ $grid_columns = [
             'style' => 'text-align: center;'
         ],
         'hidden' => true,
-    ],
+    ],*/
     /*[
         'attribute' => 'upload_id',
         'label' => 'VMS No',
@@ -181,7 +182,7 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
@@ -193,23 +194,24 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
-        'hidden' => true
+        //'hidden' => true
     ],
     [
         'attribute' => 'period_line',
-        'label' => 'line',
+        'label' => 'Line',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
-        'attribute' => 'model_group',
+        'attribute' => 'speaker_model',
+        'value' => 'wipHdr.model_group',
         'label' => 'Model',
         'vAlign' => 'middle',
         'width' => '120px',
@@ -224,20 +226,38 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
-        'attribute' => 'child_desc',
+        'attribute' => 'wipHdr.child_desc',
         'vAlign' => 'middle',
         //'hAlign' => 'center'
     ],
     [
-        'attribute' => 'summary_qty',
+        'attribute' => 'summaryQty',
         'label' => 'Qty',
         'vAlign' => 'middle',
         'width' => '70px',
         'hAlign' => 'center'
+    ],
+    [
+        'class'=>'kartik\grid\EditableColumn',
+        'attribute' => 'gojek_req_qty',
+        'label' => 'Request<br/>Qty',
+        'encodeLabel' => false,
+        'value' => function($model){
+            return $model->gojek_req_qty == null ? $model->summaryQty : $model->gojek_req_qty;
+        },
+        'width' => '70px',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'editableOptions'=> [
+            'inputType'=>\kartik\editable\Editable::INPUT_TEXT,
+            'options' => [
+                
+            ],
+        ]
     ],
     [
         'attribute' => 'source_date',
@@ -247,13 +267,12 @@ $grid_columns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '100px',
         'contentOptions' => [
-            'style' => 'min-width: 100px;'
+            'style' => 'min-width: 120px;'
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
@@ -264,13 +283,12 @@ $grid_columns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '100px',
         'contentOptions' => [
-            'style' => 'min-width: 100px;'
+            'style' => 'min-width: 120px;'
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     /*[
@@ -348,7 +366,7 @@ $grid_columns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo

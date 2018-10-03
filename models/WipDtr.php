@@ -3,15 +3,15 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\WipPlanActualReport as BaseWipPlanActualReport;
+use \app\models\base\WipDtr as BaseWipDtr;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.WIP_PLAN_ACTUAL_REPORT".
+ * This is the model class for table "db_owner.WIP_DTR".
  */
-class WipPlanActualReport extends BaseWipPlanActualReport
+class WipDtr extends BaseWipDtr
 {
-    public $total_plan, $total_order, $total_created, $total_started, $total_completed, $total_handover, $request_qty;
+    public $location, $speaker_model;
 
     public function behaviors()
     {
@@ -31,5 +31,15 @@ class WipPlanActualReport extends BaseWipPlanActualReport
                 # custom validation rules
             ]
         );
+    }
+
+    public function getWipHdr()
+    {
+        return $this->hasOne(WipHdr::className(), ['hdr_id_item' => 'hdr_id_item']);
+    }
+
+    public function getSummaryQty()
+    {
+        return $this->balance_by_day + $this->act_qty;
     }
 }

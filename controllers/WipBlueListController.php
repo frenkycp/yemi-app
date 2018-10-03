@@ -4,10 +4,12 @@ namespace app\controllers;
 use yii\web\Controller;
 use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
-use app\models\search\WipBlueListSearch;
+use app\models\search\WipBlueListSearch2;
 use app\models\WipPlanActualReport;
+use app\models\WipDtr;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
+use yii\helpers\Json;
 
 class WipBlueListController extends Controller
 {
@@ -29,7 +31,7 @@ class WipBlueListController extends Controller
 	*/
 	public function actionIndex()
 	{
-	    $searchModel  = new WipBlueListSearch;
+	    $searchModel  = new WipBlueListSearch2;
 	    //$searchModel->stage = '03-COMPLETED';
 	    $dataProvider = $searchModel->search($_GET);
 
@@ -38,7 +40,7 @@ class WipBlueListController extends Controller
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
-		$tmp_location = ArrayHelper::map(WipPlanActualReport::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');
+		$tmp_location = ArrayHelper::map(WipPlanActualReport::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');
 
 		$status_arr = WipPlanActualReport::find()->select('distinct(stage)')->orderBy('stage ASC')->all();
 
@@ -47,6 +49,33 @@ class WipBlueListController extends Controller
 			$splitted_stage = explode('-', $status->stage);
 			$tmp_status[$status->stage] = $splitted_stage[1];
 		}
+
+		// validate if there is a editable input saved via AJAX
+        /**/if (\Yii::$app->request->post('hasEditable')) {
+            $data_id = \Yii::$app->request->post('editableKey');
+            $model = WipDtr::findOne(['dtr_id' => $data_id]);
+
+            // store a default json response as desired by editable
+            $out = Json::encode(['output'=>'', 'message'=>'']);
+
+            $posted = current($_POST['WipDtr']);
+            $post = ['WipDtr' => $posted];
+
+            if ($model->load($post)) {
+                // can save model or do something before saving model
+                $model->save();
+                /*$output = '';
+
+                if (isset($posted['unloading_time'])) {
+                    $output = $model->unloading_time;
+                }*/
+
+                $out = Json::encode(['output'=>$model->gojek_req_qty, 'message'=>'']);
+            }
+            // return ajax json encoded response and exit
+            echo $out;
+            return;
+        }
 
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
