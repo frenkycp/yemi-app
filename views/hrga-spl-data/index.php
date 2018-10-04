@@ -66,7 +66,7 @@ $grid_columns = [
         'label' => 'Masuk<br/>(Aktual)',
         'encodeLabel' => false,
         'value' => function($model){
-            return $model->START_LEMBUR_ACTUAL == null ? '-' : date('Y:m:d H:i:s', strtotime($model->START_LEMBUR_ACTUAL));
+            return $model->START_LEMBUR_ACTUAL == null ? '-' : date('H:i:s', strtotime($model->START_LEMBUR_ACTUAL));
         },
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -78,7 +78,7 @@ $grid_columns = [
         'label' => 'Keluar<br/>(Aktual)',
         'encodeLabel' => false,
         'value' => function($model){
-            return $model->END_LEMBUR_ACTUAL == null ? '-' : date('Y:m:d H:i:s', strtotime($model->END_LEMBUR_ACTUAL));
+            return $model->END_LEMBUR_ACTUAL == null ? '-' : date('H:i:s', strtotime($model->END_LEMBUR_ACTUAL));
         },
         'hAlign' => 'center',
         'vAlign' => 'middle',
