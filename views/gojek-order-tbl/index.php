@@ -57,6 +57,17 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'session_no',
+        'value' => 'wipPlanActualReport.session_id',
+        'label' => 'Session No.',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'model_group',
         'label' => 'Model',
         'value' => function($model){
@@ -103,6 +114,9 @@ $gridColumns = [
     [
         'attribute' => 'quantity',
         'label' => 'Qty',
+        'value' => function($model){
+            return $model->quantity_original !== null ? $model->quantity . ' of ' . $model->quantity_original : $model->quantity;
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filter' => $tmp_location,
@@ -235,7 +249,11 @@ $gridColumns = [
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            //'pjax' => false, // pjax is set to always true for this demo
+            'rowOptions' => function($model){
+                if ($model->quantity_original !== null) {
+                    return ['class' => 'danger'];
+                }
+            },
             'toolbar' =>  [
                 '{export}',
                 '{toggleData}',

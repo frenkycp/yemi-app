@@ -97,6 +97,7 @@ class GojekOrderCompletionController extends Controller
 		$data .= 
 		'<thead style="font-size: 12px;"><tr class="info">
             <th class="text-center">Slip No.</th>
+            <th class="text-center">Session</th>
             <th class="text-center">Model</th>
             <th class="text-center">Line</th>
             <th class="text-center">Item</th>
@@ -111,23 +112,29 @@ class GojekOrderCompletionController extends Controller
 		$data .= '<tbody style="font-size: 12px;">';
 
 		foreach ($data_arr as $key => $value) {
-			$wip_report = $value->wipPlanActualReport;
 			$issued = $value->issued_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->issued_date));
 			$departed = $value->daparture_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->daparture_date));
 			$arrived = $value->arrival_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->arrival_date));
+			$row_class = '';
+			$qty = $value->quantity;
+			if ($value->quantity_original !== null) {
+				$row_class = 'danger';
+				$qty = $value->quantity . ' of ' . $value->quantity_original;
+			}
 			$data .= '
-				<tr>
+				<tr class="' . $row_class . '">
 					<td class="text-center">' . $value->slip_id . '</td>
+					<td class="text-center">' . $value->wipPlanActualReport->session_id . '</td>
 					<td class="text-center">' . $value->wipPlanActualReport->model_group . '</td>
 					<td class="text-center">' . $value->wipPlanActualReport->period_line . '</td>
                     <td class="text-center">' . $value->item . '</td>
                     <td>' . $value->item_desc . '</td>
-                    <td class="text-center">' . $value->quantity . '</td>
+                    <td class="text-center">' . $qty . '</td>
                     <td class="text-center">' . $value->from_loc . '</td>
                     <td class="text-center">' . $value->to_loc . '</td>
-                    <td class="text-center">' . $issued . '</td>
-                    <td class="text-center">' . $departed . '</td>
-                    <td class="text-center">' . $arrived . '</td>
+                    <td class="text-center" style="min-width: 90px;">' . $issued . '</td>
+                    <td class="text-center" style="min-width: 90px;">' . $departed . '</td>
+                    <td class="text-center" style="min-width: 90px;">' . $arrived . '</td>
 				</tr>
 			';
 		}

@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class GojekOrderTbl extends BaseGojekOrderTbl
 {
-    public $stat_open, $stat_close, $stat_total, $model_group, $period_line;
+    public $stat_open, $stat_close, $stat_total, $model_group, $period_line, $session_no;
 
     public function behaviors()
     {
