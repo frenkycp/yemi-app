@@ -85,7 +85,10 @@ return $dataProvider;
         $query->andFilterWhere([
             'slip_id' => $this->slip_id,
             'session_id' => $this->session_id,
-            'WIP_DTR.period_line' => $this->period_line
+            'WIP_DTR.period_line' => $this->period_line,
+            'WIP_DTR.child' => $this->child,
+            'source_date' => $this->source_date,
+            'due_date' => $this->due_date,
         ]);
 
         $query->andFilterWhere(['like', 'WIP_HDR.child_analyst_desc', $this->location])
