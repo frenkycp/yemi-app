@@ -116,8 +116,8 @@ class WipBlueListController extends Controller
 					':from_loc' => $wip_data->child_analyst_desc,
 					':to_loc' => $destination,
 					':source' => 'WIP',
-					//':requestor' => \Yii::$app->user->identity->username,
-					':requestor' => '150826',
+					':requestor' => \Yii::$app->user->identity->username,
+					//':requestor' => '150826',
 					':request_time' => $request_time,
 				];
 				// execute the sql command
