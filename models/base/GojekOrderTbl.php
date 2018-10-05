@@ -17,6 +17,7 @@ use Yii;
  * @property string $to_loc
  * @property string $source
  * @property string $issued_date
+ * @property string $request_date
  * @property string $daparture_date
  * @property string $arrival_date
  * @property string $GOJEK_ID
@@ -61,7 +62,7 @@ abstract class GojekOrderTbl extends \yii\db\ActiveRecord
     {
         return [
             [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'DEPARTURE_NAMA_KARYAWAN', 'ARRIVAL_KARYAWAN'], 'string'],
-            [['issued_date', 'daparture_date', 'arrival_date'], 'safe'],
+            [['issued_date', 'request_date', 'daparture_date', 'arrival_date'], 'safe'],
             [['GOJEK_VALUE', 'LT', 'quantity', 'quantity_original'], 'number'],
             [['session_id'], 'integer']
         ];
@@ -81,6 +82,7 @@ abstract class GojekOrderTbl extends \yii\db\ActiveRecord
             'to_loc' => 'To Loc',
             'source' => 'Source',
             'issued_date' => 'Issued Date',
+            'request_date' => 'Request Date',
             'daparture_date' => 'Daparture Date',
             'arrival_date' => 'Arrival Date',
             'GOJEK_ID' => 'Gojek  ID',

@@ -202,6 +202,19 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'request_date',
+        'label' => 'Request For',
+        'value' => function($model){
+            return $model->request_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->request_date));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'daparture_date',
         'value' => function($model){
             return $model->daparture_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->daparture_date));

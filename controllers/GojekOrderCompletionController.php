@@ -83,7 +83,7 @@ class GojekOrderCompletionController extends Controller
 			'GOJEK_ID' => $GOJEK_ID,
 			'STAT' => $STAT
 		])
-		->orderBy('model_group ASC, period_line ASC, from_loc ASC, slip_id ASC')
+		->orderBy('request_date ASC, model_group ASC, period_line ASC, from_loc ASC, slip_id ASC')
 		->all();
 
 		if ($STAT == 'O') {
@@ -105,13 +105,15 @@ class GojekOrderCompletionController extends Controller
             <th class="text-center">Qty</th>
             <th class="text-center">From</th>
             <th class="text-center">To</th>
+            <th class="text-center">Request For</th>
             <th class="text-center">Issued</th>
             <th class="text-center">Departed</th>
             <th class="text-center">Arrived</th>
 		</tr></thead>';
-		$data .= '<tbody style="font-size: 12px;">';
+		$data .= '<tbody style="font-size: 10px;">';
 
 		foreach ($data_arr as $key => $value) {
+			$request_for = $value->request_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->request_date));
 			$issued = $value->issued_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->issued_date));
 			$departed = $value->daparture_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->daparture_date));
 			$arrived = $value->arrival_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->arrival_date));
@@ -132,9 +134,10 @@ class GojekOrderCompletionController extends Controller
                     <td class="text-center">' . $qty . '</td>
                     <td class="text-center">' . $value->from_loc . '</td>
                     <td class="text-center">' . $value->to_loc . '</td>
-                    <td class="text-center" style="min-width: 90px;">' . $issued . '</td>
-                    <td class="text-center" style="min-width: 90px;">' . $departed . '</td>
-                    <td class="text-center" style="min-width: 90px;">' . $arrived . '</td>
+                    <td class="text-center" style="min-width: 65px;">' . $request_for . '</td>
+                    <td class="text-center" style="min-width: 65px;">' . $issued . '</td>
+                    <td class="text-center" style="min-width: 65px;">' . $departed . '</td>
+                    <td class="text-center" style="min-width: 65px;">' . $arrived . '</td>
 				</tr>
 			';
 		}
