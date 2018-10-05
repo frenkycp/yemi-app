@@ -93,6 +93,7 @@ class WipBlueListController extends Controller
 			$data_post = \Yii::$app->request->post();
 			$str_order = $data_post['value'];
 			$destination = $data_post['destination'];
+			$request_time = $data_post['request_time'];
 			$order_arr = explode(',', $str_order);
 			//$order_arr = ['0001981', '0001982'];
 
@@ -105,7 +106,7 @@ class WipBlueListController extends Controller
 				$wip_data = WipPlanActualReport::find()->where([
 					'slip_id' => $value
 				])->one();
-				$sql = "{CALL CALL_GOJEK(:slip_id, :item, :item_desc, :from_loc, :to_loc, :source, :requestor)}";
+				$sql = "{CALL CALL_GOJEK(:slip_id, :item, :item_desc, :from_loc, :to_loc, :source, :requestor, :request_time)}";
 				//$sql = "{CALL SPARE_PART_STOCK(:MACHINE)}";
 				// passing the params into to the sql query
 				$params = [
@@ -115,7 +116,9 @@ class WipBlueListController extends Controller
 					':from_loc' => $wip_data->child_analyst_desc,
 					':to_loc' => $destination,
 					':source' => 'WIP',
-					':requestor' => \Yii::$app->user->identity->username,
+					//':requestor' => \Yii::$app->user->identity->username,
+					':requestor' => '150826',
+					':request_time' => $request_time,
 				];
 				// execute the sql command
 				try {

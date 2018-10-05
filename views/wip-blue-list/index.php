@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use kartik\form\ActiveForm;
 use kartik\touchspin\TouchSpin;
+use kartik\datetime\DateTimePicker;
 
 /**
 * @var yii\web\View $this
@@ -20,6 +21,8 @@ $this->title = [
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+
+date_default_timezone_set('Asia/Jakarta');
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
@@ -38,40 +41,46 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 $this->registerJs("
     $(document).ready(function() {
         $('#order_btn').click(function(){
-            var keys = $('#grid').yiiGridView('getSelectedRows');
-            var strvalue = \"\";
-            var dest_value = $('#loc_to_select').val();
-            if(dest_value != ''){
-                $('input[name=\"selection[]\"]:checked').each(function() {
-                    if(strvalue!=\"\")
-                        strvalue = strvalue + \",\"+this.value;
-                    else
-                        strvalue = this.value;
-                });
-                $.post({
-                    url: '" . Url::to(['order']) . "',
-                    data: {
-                        keylist: keys,
-                        nama : 'Frenky',
-                        value : strvalue,
-                        destination : dest_value,
-                    },
-                    dataType: 'json',
-                    success: function(data) {
-                        if(data.success == false){
-                            alert(\"Can't create order. \" + data.message);
-                        } else {
-                            alert(data.message);
-                            location.href = location.href;
+            var request_time = $('#request_time').val();
+            if (confirm('Do you want to request order for ' + request_time + ' ?')) {
+                var keys = $('#grid').yiiGridView('getSelectedRows');
+                var strvalue = \"\";
+                var dest_value = $('#loc_to_select').val();
+                if(dest_value != ''){
+                    $('input[name=\"selection[]\"]:checked').each(function() {
+                        if(strvalue!=\"\")
+                            strvalue = strvalue + \",\"+this.value;
+                        else
+                            strvalue = this.value;
+                    });
+                    $.post({
+                        url: '" . Url::to(['order']) . "',
+                        data: {
+                            keylist: keys,
+                            nama : 'Frenky',
+                            value : strvalue,
+                            destination : dest_value,
+                            request_time: request_time
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            if(data.success == false){
+                                alert(\"Can't create order. \" + data.message);
+                            } else {
+                                alert(data.message);
+                                location.href = location.href;
+                            }
+                        },
+                        error: function (request, status, error) {
+                            alert(error);
                         }
-                    },
-                    error: function (request, status, error) {
-                        alert(error);
-                    }
-                });
+                    });
                 } else {
                     alert('Please select destination first!');
                 }
+            } else {
+                alert('Change the time at top-left of the table!');
+            }
         }); 
     });
 ");
@@ -380,6 +389,17 @@ $grid_columns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
+                'before' => '<div class="col-md-3"><label class="">Request For</label>' . DateTimePicker::widget([
+                    'name' => 'dp_1',
+                    'id' => 'request_time',
+                    'readonly' => true,
+                    'value' => date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' + 1 hour')),
+                    'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'format' => 'yyyy-mm-dd hh:ii:ss'
+                    ]
+                ]) . '</div>',
                 'after' => 'To Location : ' . Html::dropDownList('loc_to', null, $location_dropdown, [
                     'class' => 'btn btn-danger',
                     'id' => 'loc_to_select',
