@@ -30,7 +30,7 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($data);
+print_r($data_losstime);
 echo '</pre>';*/
 
 ?>
@@ -53,73 +53,142 @@ echo '</pre>';*/
     </div>
 </div>
 
-<div class="box box-primary">
-    <div class="box-body">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                //'modules/exporting',
-                //'themes/grid-light',
-                'themes/sand-signika',
-                //'themes/dark-unica',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'column',
-                ],
-                'credits' => [
-                    'enabled' => false
-                ],
-                'title' => [
-                    'text' => null
-                ],
-                'legend' => [
-                    'enabled' => false,
-                ],
-                'xAxis' => [
-                    'categories' => $categories,
-                ],
-                'yAxis' => [
-                    'title' => [
-                        'text' => 'Percentage (%)'
-                    ],
-                    'max' => 100,
-                ],
-                'tooltip' => [
-                    'valueSuffix' => '%',
-                ],
-                'plotOptions' => [
-                    /*'series' => [
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('
-                                    function(){
-                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                    }
-                                '),
-                            ]
-                        ]
-                    ],*/
-                    'series' => [
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                            ]
-                        ]
-                    ],
-                    'column' => [
-                        'dataLabels' => [
-                            'enabled' => true
+<!--<div class="box box-danger">
+    <div class="box-header with-border">
+        <h3 class="box-title">Last Update : <?= date('Y-m-d H:i:s') ?></h3>
+    </div>
+    <div class="box-body"> -->
+        <h4 class="box-title">Last Update : <?= date('Y-m-d H:i:s') ?></h4>
+        <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_1" data-toggle="tab">Line Efficiency</a></li>
+                <li><a href="#tab_2" data-toggle="tab">Lost Time</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                    <?php
+                    echo Highcharts::widget([
+                        'scripts' => [
+                            //'modules/exporting',
+                            'themes/grid-light',
+                            //'themes/sand-signika',
+                            //'themes/dark-unica',
                         ],
-                    ],
-                ],
-                'series' => $data,
-            ],
-        ]);
+                        'options' => [
+                            'chart' => [
+                                'type' => 'column',
+                            ],
+                            'credits' => [
+                                'enabled' => false
+                            ],
+                            'title' => [
+                                'text' => null
+                            ],
+                            'legend' => [
+                                'enabled' => false,
+                            ],
+                            'xAxis' => [
+                                'categories' => $categories,
+                            ],
+                            'yAxis' => [
+                                'title' => [
+                                    'text' => 'Percentage (%)'
+                                ],
+                                //'max' => 100,
+                            ],
+                            'tooltip' => [
+                                'valueSuffix' => '%',
+                            ],
+                            'plotOptions' => [
+                                /*'series' => [
+                                    'cursor' => 'pointer',
+                                    'point' => [
+                                        'events' => [
+                                            'click' => new JsExpression('
+                                                function(){
+                                                    $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                                }
+                                            '),
+                                        ]
+                                    ]
+                                ],*/
+                                'series' => [
+                                    'cursor' => 'pointer',
+                                    'point' => [
+                                        'events' => [
+                                            'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                            //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                        ]
+                                    ]
+                                ],
+                                'column' => [
+                                    'dataLabels' => [
+                                        'enabled' => true
+                                    ],
+                                ],
+                            ],
+                            'series' => $data,
+                        ],
+                    ]); ?>
+                </div>
+                <div class="tab-pane" id="tab_2">
+                    <?php
+                    echo Highcharts::widget([
+                        'scripts' => [
+                            //'modules/exporting',
+                            'themes/grid-light',
+                            //'themes/sand-signika',
+                            //'themes/dark-unica',
+                        ],
+                        'options' => [
+                            'chart' => [
+                                'type' => 'column',
+                            ],
+                            'credits' => [
+                                'enabled' => false
+                            ],
+                            'title' => [
+                                'text' => null
+                            ],
+                            'legend' => [
+                                'enabled' => false,
+                            ],
+                            'xAxis' => [
+                                'categories' => $categories,
+                            ],
+                            'yAxis' => [
+                                'title' => [
+                                    'text' => 'Minutes'
+                                ],
+                                //'max' => 100,
+                            ],
+                            'plotOptions' => [
+                                /**/'series' => [
+                                    'cursor' => 'pointer',
+                                    'point' => [
+                                        'events' => [
+                                            'click' => new JsExpression('
+                                                function(){
+                                                    $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                                }
+                                            '),
+                                        ]
+                                    ]
+                                ],
+                                'column' => [
+                                    'dataLabels' => [
+                                        'enabled' => true
+                                    ],
+                                ],
+                            ],
+                            'series' => $data_losstime,
+                        ],
+                    ]); ?>
+                </div>
+            </div>
+        </div>
 
+        <?php
         yii\bootstrap\Modal::begin([
             'id' =>'modal',
             'header' => '<h3>Detail Information</h3>',
@@ -127,5 +196,5 @@ echo '</pre>';*/
         ]);
         yii\bootstrap\Modal::end();
         ?>
-    </div>
-</div>
+    <!--</div>
+</div>-->

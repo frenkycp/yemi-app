@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\DprLineEfficiencyView02;
 use app\models\DprGmcEffView;
+use app\models\SernoLosstime;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 
@@ -18,6 +19,7 @@ class DprLineEfficiencyDailyController extends Controller
 	public function actionIndex()
 	{
 		$data = [];
+		$data_losstime = [];
 		$categories = $this->getLineArr();
 
 		$model = new \yii\base\DynamicModel([
@@ -37,41 +39,68 @@ class DprLineEfficiencyDailyController extends Controller
 	    ->where([
 	    	'proddate' => $model->proddate,
 	    ])
+	    ->asArray()
 	    ->all();
 
-	    $dpr_gmc = DprGmcEffView::find()
+	    $losstime_detail_arr = SernoLosstime::find()
 	    ->where([
 	    	'proddate' => $model->proddate,
 	    ])
-	    ->orderBy('efficiency DESC')
+	    ->andWhere(['<>', 'category', 'UNKNOWN'])
+	    ->orderBy('category, start_time')
+	    ->asArray()
 	    ->all();
+
+	    $losstime_arr = SernoLosstime::find()
+	    ->select([
+	    	'line',
+	    	'losstime' => 'ROUND(SUM(losstime), 2)'
+	    ])
+	    ->where([
+	    	'proddate' => $model->proddate,
+	    ])
+	    ->andWhere(['<>', 'category', 'UNKNOWN'])
+	    ->groupBy('line')
+	    ->asArray()
+	    ->all();
+
+	    $tmp_data_losstime = [];
 
 	    foreach ($categories as $key => $line) {
 		    $eff = 0;
 		    foreach ($eff_data_arr as $key2 => $value2) {
-		    	if ($value2->line == $line) {
-		    		$eff = $value2->efficiency;
+		    	if ($value2['line'] == $line) {
+		    		$eff = $value2['efficiency'];
+		    	}
+		    }
+
+		    $losstime_val = 0;
+		    foreach ($losstime_arr as $losstime) {
+		    	if ($losstime['line'] == $line) {
+		    		$losstime_val = $losstime['losstime'];
 		    	}
 		    }
 
 		    $remark = "<h4>LINE $line<small> ($model->proddate)</small></h4>";
-		    $remark .= '<table class="table">';
+		    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
 		    $remark .= '<tr>
-		    	<th class="text-center">GMC</th>
-		    	<th>Description</th>
-		    	<th class="text-center">Qty Time</th>
-		    	<th class="text-center">MP TIme</th>
-		    	<th class="text-center">Efficiency</th>
+		    	<th class="text-center">Start Time</th>
+		    	<th class="text-center">End Time</th>
+		    	<th class="text-center">Man Power</th>
+		    	<th class="text-center">Category</th>
+		    	<th class="text-center">Loss Time (min)</th>
+		    	<th>Remark</th>
 		    </tr>';
 
-		    foreach ($dpr_gmc as $value) {
-		    	if ($value->line == $line) {
+		    /**/foreach ($losstime_detail_arr as $value) {
+		    	if ($value['line'] == $line) {
 		    		$remark .= '<tr>
-			    		<td class="text-center">' . $value->gmc . '</td>
-			    		<td>' . $value->description . '</td>
-			    		<td class="text-center">' . $value->qty_time . '</td>
-			    		<td class="text-center">' . $value->mp_time . '</td>
-			    		<td class="text-center">' . $value->efficiency . '%</td>
+			    		<td class="text-center">' . $value['start_time'] . '</td>
+			    		<td class="text-center">' . $value['end_time'] . '</td>
+			    		<td class="text-center">' . $value['mp'] . '</td>
+			    		<td class="text-center">' . $value['category'] . '</td>
+			    		<td class="text-center">' . $value['losstime'] . '</td>
+			    		<td>' . $value['model'] . '</td>
 			    	</tr>';
 		    	}
 		    }
@@ -80,8 +109,14 @@ class DprLineEfficiencyDailyController extends Controller
 
 		    $tmp_data[] = [
 		    	'y' => round($eff, 2),
-		    	'remark' => $remark,
+		    	//'remark' => $remark,
 		    	'url' => Url::to(['dpr-gmc-eff-data/index', 'line' => $line, 'proddate' => $model->proddate])
+		    ];
+
+		    $tmp_data_losstime[] = [
+		    	'y' => round($losstime_val, 2),
+		    	'remark' => $remark,
+		    	//'url' => Url::to(['dpr-gmc-eff-data/index', 'line' => $line, 'proddate' => $model->proddate])
 		    ];
 	    }
 
@@ -92,8 +127,16 @@ class DprLineEfficiencyDailyController extends Controller
 	    	'data' => $tmp_data
 	    ];
 
+	    $data_losstime[] = [
+	    	'name' => 'Line Loss Time',
+	    	'color' => new JsExpression('Highcharts.getOptions().colors[5]'),
+	    	//'colorByPoint' => true,
+	    	'data' => $tmp_data_losstime
+	    ];
+
 		return $this->render('index', [
 			'data' => $data,
+			'data_losstime' => $data_losstime,
 			'model' => $model,
 			'categories' => $categories
 		]);

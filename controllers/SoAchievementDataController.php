@@ -26,6 +26,7 @@ class SoAchievementDataController extends \app\controllers\base\SoAchievementDat
 			<th class="text-center">Qty</th>
 			<th class="text-center">ETD</th>
 			<th class="text-center">SO Num</th>
+			<th>Remark</th>
 		</tr>'
 		;
 		$no = 1;
@@ -38,6 +39,7 @@ class SoAchievementDataController extends \app\controllers\base\SoAchievementDat
 				<td class="text-center">' . $value->qty . '</td>
 				<td class="text-center">' . $value->etd . '</td>
 				<td class="text-center">' . $value->so . '</td>
+				<td class="text-yellow">' . $value->remark . '</td>
 			</tr>
 			';
 			$no++;
