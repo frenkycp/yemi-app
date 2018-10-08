@@ -65,6 +65,8 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 
+date_default_timezone_set('Asia/Jakarta');
+
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
@@ -396,7 +398,7 @@ $gridColumns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => $heading
+                'heading' => 'Last Update : ' . date('Y-m-d H:i:s')
             ],
         ]); ?>
     </div>

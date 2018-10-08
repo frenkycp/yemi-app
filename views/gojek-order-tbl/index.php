@@ -14,6 +14,8 @@ use kartik\grid\GridView;
 $this->title = Yii::t('models', 'Order Data List');
 $this->params['breadcrumbs'][] = $this->title;
 
+date_default_timezone_set('Asia/Jakarta');
+
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
@@ -277,6 +279,7 @@ $gridColumns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
+                'heading' => 'Last Update : ' . date('Y-m-d H:i:s')
                 //'footer' => false,
             ],
         ]); ?>

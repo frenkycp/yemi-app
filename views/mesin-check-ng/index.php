@@ -26,7 +26,7 @@ $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
 } else {
 Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-$actionColumnTemplateString = "{update} {delete} {change_color}";    
+$actionColumnTemplateString = "{update} {upload} {delete} {change_color}";    
 /*if (Yii::$app->user->identity->role->id == 1) {
         $actionColumnTemplateString = "{update} {delete} {change_color}";
     } else {
@@ -72,6 +72,13 @@ $grid_columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-refresh"></span>', $url, $options);
+            }, 'upload' => function($url, $model, $key){
+                $url = ['upload-image', 'urutan' => $model->urutan];
+                $options = [
+                    'title' => 'Upload Image',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-cloud-upload"></span>', $url, $options);
             },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -92,7 +99,11 @@ $grid_columns = [
         'vAlign' => 'middle',
         'encodeLabel' => false,
         'width' => '50px',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'class' => 'kartik\grid\ExpandRowColumn',
@@ -109,15 +120,20 @@ $grid_columns = [
     [
         'attribute' => 'location',
         'vAlign' => 'middle',
-        //'width' => '100px',
         'hidden' => true,
-        //'hAlign' => 'center'
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'area',
         'vAlign' => 'middle',
         'width' => '150px',
-        //'hAlign' => 'center'
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'mesin_id',
@@ -125,7 +141,6 @@ $grid_columns = [
         'label' => 'Machine ID',
         'vAlign' => 'middle',
         'hidden' => true,
-        //'width' => '100px',
         'hAlign' => 'center'
     ],
     [
@@ -139,13 +154,21 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hiddenFromExport' => true,
         'width' => '100px',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'mesin_nama',
         'label' => 'Machine Name',
         'vAlign' => 'middle',
         'width' => '160px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
         //'hAlign' => 'center'
     ],
     [
@@ -189,6 +212,10 @@ $grid_columns = [
         'filter' => false,
         'vAlign' => 'middle',
         'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
         //'hAlign' => 'center'
     ],
     [
@@ -216,7 +243,11 @@ $grid_columns = [
             'O' => 'OPEN',
             'C' => 'CLOSED'
         ],
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'mesin_last_update',
@@ -230,7 +261,11 @@ $grid_columns = [
         'contentOptions' => [
             'style' => 'min-width: 120px;'
         ],
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'repair_aktual',
@@ -243,7 +278,11 @@ $grid_columns = [
         'contentOptions' => [
             'style' => 'min-width: 120px;'
         ],
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'prepare_time',
@@ -304,6 +343,10 @@ $grid_columns = [
         'contentOptions' => [
             'style' => 'min-width: 60px;'
         ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
 
     [
@@ -315,6 +358,10 @@ $grid_columns = [
         'hAlign' => 'center',
         'contentOptions' => [
             'style' => 'min-width: 120px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
         ],
         //'hidden' => true
     ],
@@ -379,7 +426,7 @@ $grid_columns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'rowOptions' => function($model){

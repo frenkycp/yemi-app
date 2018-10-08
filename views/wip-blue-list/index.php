@@ -412,7 +412,8 @@ $grid_columns = [
                 ]) . '&nbsp;&nbsp;<button class="btn btn-primary" id="order_btn">Order</button>',
                 'afterOptions' => [
                     'class'=>'kv-panel-after pull-right',
-                ]
+                ],
+                'heading' => 'Last Update : ' . date('Y-m-d H:i:s')
             ],
         ]); ?>
         <?php

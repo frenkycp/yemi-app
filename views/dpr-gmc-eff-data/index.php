@@ -22,6 +22,8 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+date_default_timezone_set('Asia/Jakarta');
+
 $this->registerJs("$(function() {
    $('.modal_mp').click(function(e) {
      e.preventDefault();
@@ -130,7 +132,7 @@ $gridColumns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => $heading,
+                'heading' => 'Last Update : ' . date('Y-m-d H:i:s')
                 //'footer' => false,
             ],
         ]); ?>

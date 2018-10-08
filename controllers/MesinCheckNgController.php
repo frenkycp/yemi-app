@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use app\models\MesinCheckNgDtr;
+use yii\web\UploadedFile;
 
 /**
 * This is the class for controller "MesinCheckNgController".
@@ -145,6 +146,33 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 			}
 			
 		}
+	}
 
+	public function actionUploadImage($urutan)
+	{
+		$model = new \yii\base\DynamicModel([
+        	'upload_file'
+	    ]);
+	    $model->addRule(['upload_file'], 'required')
+	    ->addRule(['upload_file'], 'file');
+
+	    if($model->load(\Yii::$app->request->post())){
+	        $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
+	        $new_filename = $urutan . '.' . $model->upload_file->extension;
+
+	        if ($model->validate()) {
+	        	if ($model->upload_file) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/NG_MNT/") . $new_filename;
+	        		if ($model->upload_file->saveAs($filePath)) {
+	                    return $this->redirect(Url::previous());
+	                }
+	        	}
+	        	
+	        }
+	    }
+	    return $this->render('upload_form', [
+	    	'model'=>$model,
+	    	'urutan' => $urutan,
+	    ]);
 	}
 }
