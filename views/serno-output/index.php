@@ -311,27 +311,29 @@ $gridColumns = [
         </div>
     </div>
 
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => $gridColumns,
-            'hover' => true,
+            //'hover' => true,
             'showPageSummary' => true,
             //'condensed' => true,
-            'striped' => true,
+            'striped' => false,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 13px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'rowOptions' => function($model){
                 if ($model->etd_old !== '') {
                     if ($model->etd_old > $model->etd) {
-                        return ['class' => 'text-red'];
+                        return ['class' => 'bg-danger'];
+                    } elseif ($model->etd_old < $model->etd) {
+                        return ['class' => 'bg-success'];
                     }
-                    return ['class' => 'text-aqua'];
+                    
                 }
             },
             'toolbar' =>  [
@@ -347,7 +349,6 @@ $gridColumns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => $heading
             ],
         ]); ?>
     </div>
