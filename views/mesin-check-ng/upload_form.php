@@ -7,14 +7,11 @@ $this->title = Yii::t('app', 'Corrective Upload Image');
 ?>
 
 <div class="panel panel-primary">
-	<div class="panel-heading">
-    	<h3 class="panel-title">Upload Form</h3>
-	</div>
 	<div class="panel-body">
 		<?php
 		$form = ActiveForm::begin([
 			'id' => 'MesinCheckNg',
-			'layout' => 'horizontal',
+			//'layout' => 'horizontal',
 			'enableClientValidation' => true,
 			'errorSummaryCssClass' => 'error-summary alert alert-danger',
 			'options' => ['enctype' => 'multipart/form-data'],
@@ -29,35 +26,78 @@ $this->title = Yii::t('app', 'Corrective Upload Image');
 				],
 			],
 		]);
-
-		echo $form->field($model, 'upload_file')->widget(\kartik\file\FileInput::className(), [
-            'options' => ['accept' => 'image/*'],
-            'pluginOptions' => [
-                'allowedFileExtensions' => ['jpg'],
-                //'maxFileSize' => 250,
-            ],
-        ]);
-        ?>
-
-        <div class="form-group">
-            <div class="col-sm-6 col-sm-offset-2">
-                <?= Html::img(["uploads/NG_MNT/" . $urutan . '.jpg'], ["width"=>"150px"]); ?>
-            </div>
-        </div>
+		?>
+		
+		<div class="row">
+			<div class="col-md-6">
+				<div class="box box-warning box-solid">
+					<div class="box-header with-border">
+						<h3 class="box-title">Image (Before)</h3>
+					</div>
+					<div class="box-body">
+						<?php
+						echo $form->field($model, 'upload_file_1')->widget(\kartik\file\FileInput::className(), [
+				            'options' => ['accept' => 'image/*'],
+				            'pluginOptions' => [
+				                'allowedFileExtensions' => ['jpg'],
+				                'showCaption' => false,
+						        'showRemove' => false,
+						        'showUpload' => false,
+						        'browseClass' => 'btn btn-primary btn-block',
+						        'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
+						        'browseLabel' =>  ' Select Photo'
+				            ],
+				        ])->label(false);
+				        ?>
+				        <!--<div class="form-group">
+							<?= ''; //Html::img(['uploads/NG_MNT/' . $urutan . '_1.jpg'], ["width"=>"150px"]); ?>
+				        </div>-->
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="box box-success box-solid">
+					<div class="box-header with-border">
+						<h3 class="box-title">Image (After)</h3>
+					</div>
+					<div class="box-body">
+						<?php
+						echo $form->field($model, 'upload_file_2')->widget(\kartik\file\FileInput::className(), [
+				            'options' => ['accept' => 'image/*'],
+				            'pluginOptions' => [
+				                'allowedFileExtensions' => ['jpg'],
+				                'showCaption' => false,
+						        'showRemove' => false,
+						        'showUpload' => false,
+						        'browseClass' => 'btn btn-primary btn-block',
+						        'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
+						        'browseLabel' =>  ' Select Photo'
+				            ],
+				        ])->label(false);
+				        ?>
+				        <!--<div class="form-group">
+			                <?= ''; //Html::img(['uploads/NG_MNT/' . $urutan . '_2.jpg'], ["width"=>"150px"]); ?>
+				        </div>-->
+					</div>
+				</div>
+			</div>
+		</div>
 
         <?php
 
 		echo $form->errorSummary($model);
-
-        echo Html::submitButton(
-        '<span class="glyphicon glyphicon-check"></span> Upload',
+		?>
+	</div>
+	<div class="panel-footer text-right">
+		<?php
+		echo Html::submitButton(
+        '<span class="glyphicon glyphicon-cloud-upload"></span> Upload',
         [
         'id' => 'save-' . $model->formName(),
         'class' => 'btn btn-success'
         ]
         );
-
-        ActiveForm::end();
 		?>
 	</div>
+	<?php ActiveForm::end(); ?>
 </div>

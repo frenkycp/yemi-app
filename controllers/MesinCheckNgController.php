@@ -97,6 +97,33 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 	public function actionGetImagePreview($urutan)
 	{
 		//return \Yii::$app->urlManager->createUrl('uploads/NG_MNT/' . $urutan . '.jpg');
+		$data = '
+		<div class="row">
+			<div class="col-md-6">
+				<div class="box box-success box-solid">
+					<div class="box-header with-border">
+						<h3 class="box-title">Before</h3>
+					</div>
+					<div class="box-body">
+						' . Html::img('@web/uploads/NG_MNT/' . $urutan . '_1.jpg', ['width' => '100%']) . '
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="box box-success box-solid">
+					<div class="box-header with-border">
+						<h3 class="box-title">After</h3>
+					</div>
+					<div class="box-body">
+						' . Html::img('@web/uploads/NG_MNT/' . $urutan . '_2.jpg', ['width' => '100%']) . '
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		'
+		;
+		return $data;
 		$src = \Yii::$app->request->BaseUrl . '/uploads/NG_MNT/' . $urutan . '.jpg';
 		$src = \Yii::$app->basePath. '\uploads\NG_MNT\\' . $urutan . '.jpg';
 		$src = Html::img('@web/uploads/NG_MNT/' . $urutan . '.jpg', ['width' => '100%']);
@@ -151,23 +178,30 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 	public function actionUploadImage($urutan)
 	{
 		$model = new \yii\base\DynamicModel([
-        	'upload_file'
+        	'upload_file_1', 'upload_file_2'
 	    ]);
-	    $model->addRule(['upload_file'], 'required')
-	    ->addRule(['upload_file'], 'file');
+	    $model->addRule(['upload_file_1', 'upload_file_2'], 'file');
 
 	    if($model->load(\Yii::$app->request->post())){
-	        $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
-	        $new_filename = $urutan . '.' . $model->upload_file->extension;
+	        $model->upload_file_1 = UploadedFile::getInstance($model, 'upload_file_1');
+	        $model->upload_file_2 = UploadedFile::getInstance($model, 'upload_file_2');
+	        $new_filename1 = $urutan . '_1.' . $model->upload_file_1->extension;
+	        $new_filename2 = $urutan . '_2.' . $model->upload_file_2->extension;
 
 	        if ($model->validate()) {
-	        	if ($model->upload_file) {
-	        		$filePath = \Yii::getAlias("@app/web/uploads/NG_MNT/") . $new_filename;
-	        		if ($model->upload_file->saveAs($filePath)) {
-	                    return $this->redirect(Url::previous());
+	        	if ($model->upload_file_1) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/NG_MNT/") . $new_filename1;
+	        		if ($model->upload_file_1->saveAs($filePath)) {
+	                    
 	                }
 	        	}
-	        	
+	        	if ($model->upload_file_2) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/NG_MNT/") . $new_filename2;
+	        		if ($model->upload_file_2->saveAs($filePath)) {
+	                    
+	                }
+	        	}
+	        	return $this->redirect(Url::previous());
 	        }
 	    }
 	    return $this->render('upload_form', [

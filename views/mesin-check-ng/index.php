@@ -92,9 +92,9 @@ $grid_columns = [
     [
         'attribute' => 'urutan',
         'label' => 'Ticket<br/>No',
-        /*'value' => function($model){
+        /**/'value' => function($model){
             return Html::a($model->urutan, ['get-image-preview', 'urutan' => $model->urutan], ['class' => 'imageModal', 'data-pjax' => '0',]);
-        },*/
+        },
         'format' => 'raw',
         'vAlign' => 'middle',
         'encodeLabel' => false,
