@@ -30,6 +30,7 @@ use Yii;
  * @property string $CHECK_IN
  * @property string $CHECK_OUT
  * @property string $SHIFT
+ * @property integer $CHECK_CLOCK
  * @property string $aliasModel
  */
 abstract class AbsensiTbl extends \yii\db\ActiveRecord
@@ -61,7 +62,7 @@ abstract class AbsensiTbl extends \yii\db\ActiveRecord
         return [
             [['NIK_DATE_ID'], 'required'],
             [['NIK_DATE_ID', 'NO', 'NIK', 'CC_ID', 'SECTION', 'DIRECT_INDIRECT', 'NAMA_KARYAWAN', 'PERIOD', 'NOTE', 'DAY_STAT', 'CATEGORY', 'SHIFT'], 'string'],
-            [['YEAR', 'WEEK', 'TOTAL_KARYAWAN', 'KEHADIRAN', 'BONUS', 'DISIPLIN'], 'integer'],
+            [['YEAR', 'WEEK', 'TOTAL_KARYAWAN', 'KEHADIRAN', 'BONUS', 'DISIPLIN', 'CHECK_CLOCK'], 'integer'],
             [['DATE', 'CHECK_IN', 'CHECK_OUT'], 'safe'],
             [['NIK_DATE_ID'], 'unique']
         ];
@@ -94,6 +95,7 @@ abstract class AbsensiTbl extends \yii\db\ActiveRecord
             'CHECK_IN' => 'Check  In',
             'CHECK_OUT' => 'Check  Out',
             'SHIFT' => 'Shift',
+            'CHECK_CLOCK' => 'Check  Clock',
         ];
     }
 

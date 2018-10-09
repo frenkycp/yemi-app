@@ -31,11 +31,11 @@ $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, san
 $this->registerJs("$(function() {
    $('.popupModal').click(function(e) {
      e.preventDefault();
-     $('#modal').modal('show').find('.modal-body').load($(this).attr('href'));
+     $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
    $('.ngModal').click(function(e) {
      e.preventDefault();
-     $('#modal-ng').modal('show').find('.modal-body').load($(this).attr('href'));
+     $('#modal-ng').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
 });");
 

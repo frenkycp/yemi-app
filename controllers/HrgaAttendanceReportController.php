@@ -186,13 +186,15 @@ class HrgaAttendanceReportController extends Controller
 
 		$data .= '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
-		'<tr>
+		'<tr style="font-size: 12px;">
 			<th class="text-center">NO</th>
 			<th class="text-center">NIK</th>
 			<th>Nama Karyawan</th>
 			<th class="text-center">Section</th>
 			<th class="text-center">Shift</th>
 			<th class="text-center">Keterangan</th>
+			<th class="text-center">Cek In</th>
+			<th class="text-center">Cek Out</th>
             <th class="text-center">Bonus</th>
             <th class="text-center">Disiplin</th>
             <th class="text-center" style="width: 100px;">Hari Kerja/<br/>Libur</th>
@@ -202,6 +204,9 @@ class HrgaAttendanceReportController extends Controller
 		$i = 1;
 		foreach ($attendance_report_arr as $attendance_report) {
 			if (in_array($attendance_report->CATEGORY, $filter_arr)) {
+
+				$check_in = $attendance_report['CHECK_IN'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_IN']));
+				$check_out = $attendance_report['CHECK_OUT'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_OUT']));
 
 				$bonus = '<i class="fa fa-fw fa-close text-red"></i>';
 				if ($attendance_report['BONUS'] == 1) {
@@ -213,13 +218,15 @@ class HrgaAttendanceReportController extends Controller
 					$disiplin = '<i class="fa fa-fw fa-check text-green"></i>';
 				}
 				$data .= '
-					<tr>
+					<tr style="font-size: 12px;">
 						<td class="text-center">' . $i . '</td>
 						<td class="text-center">' . $attendance_report['NIK'] . '</td>
 						<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
 						<td class="text-center">' . $attendance_report['SECTION'] . '</td>
 						<td class="text-center">' . $attendance_report['SHIFT'] . '</td>
 	                    <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
+	                    <td class="text-center">' . $check_in . '</td>
+	                    <td class="text-center">' . $check_out . '</td>
 						<td class="text-center">' . $bonus . '</td>
 						<td class="text-center">' . $disiplin . '</td>
 						<td class="text-center">' . $attendance_report['DAY_STAT'] . '</td>

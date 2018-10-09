@@ -10,19 +10,23 @@ use app\models\AbsensiTbl;
 
 class MyHrController extends Controller
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 
 	public function actionIndex()
 	{
-		$nik = \Yii::$app->user->identity->username;
+        $this->layout = 'my-hr';
+		$nik = \Yii::$app->request->get('nik');
         $model_karyawan = Karyawan::find()->where([
             'NIK' => $nik
         ])->one();
-        $model_rekap_absensi = RekapAbsensiView::find()->where(['NIK' => $nik])->orderBy('PERIOD')->all();
+        $model_rekap_absensi = RekapAbsensiView::find()->where([
+            'NIK' => $nik,
+            'YEAR' => date('Y')
+        ])->orderBy('PERIOD')->all();
 		return $this->render('index', [
 			'model_karyawan' => $model_karyawan,
             'model_rekap_absensi' => $model_rekap_absensi,

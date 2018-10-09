@@ -27,7 +27,7 @@ date_default_timezone_set('Asia/Jakarta');
 $this->registerJs("$(function() {
    $('.modal_detail').click(function(e) {
      e.preventDefault();
-     $('#modal').modal('show').find('.modal-body').load($(this).attr('href'));
+     $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
 });");
 

@@ -9,6 +9,7 @@ use Yii;
 /**
  * This is the base-model class for table "db_owner.REKAP_ABSENSI_VIEW".
  *
+ * @property string $YEAR
  * @property string $PERIOD
  * @property string $NIK
  * @property string $NAMA_KARYAWAN
@@ -51,7 +52,7 @@ abstract class RekapAbsensiView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['PERIOD', 'NIK', 'NAMA_KARYAWAN', 'SECTION'], 'string'],
+            [['YEAR', 'PERIOD', 'NIK', 'NAMA_KARYAWAN', 'SECTION'], 'string'],
             [['KEHADIRAN', 'TOTAL_KARYAWAN', 'ALPHA', 'IJIN', 'SAKIT', 'CUTI', 'CUTI_KHUSUS', 'CUTI_KHUSUS_IJIN', 'DISIPLIN'], 'integer'],
             [['DISIPLIN'], 'required']
         ];
@@ -63,6 +64,7 @@ abstract class RekapAbsensiView extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'YEAR' => 'Year',
             'PERIOD' => 'Period',
             'NIK' => 'Nik',
             'NAMA_KARYAWAN' => 'Nama  Karyawan',
