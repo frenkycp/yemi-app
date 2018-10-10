@@ -57,8 +57,9 @@ class WipPaintingMonitoringController extends Controller
     	->all();
 
         $selected_column = [
-            'stage', 'due_date', 'start_date', 'source_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'period_line', 'model_group', 'child_desc', 'summary_qty', 'parent'
+            'stage', 'due_date', 'start_date', 'source_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'model_group', 'child_desc', 'summary_qty', 'parent', 'session_id'
         ];
+
         $remark_data_arr = WipPlanActualReport::find()
         ->select($selected_column)
         ->where([
@@ -239,7 +240,7 @@ class WipPaintingMonitoringController extends Controller
 		'<thead style="font-size: 10px;"><tr class="info">
 			<th class="text-center">Location</th>
             <th class="text-center">Slip No.</th>
-            <th class="text-center">Line</th>
+            <th class="text-center">Session</th>
             <th class="text-center">GMC</th>
 			<th>Model</th>
 			<th>Child Description</th>
@@ -265,7 +266,7 @@ class WipPaintingMonitoringController extends Controller
                     <tr>
                         <td class="text-center">' . $value['child_analyst_desc'] . '</td>
                         <td class="text-center">' . $value['slip_id'] . '</td>
-                        <td class="text-center">' . $value['period_line'] . '</td>
+                        <td class="text-center">' . $value['session_id'] . '</td>
                         <td class="text-center">' . $value['parent'] . '</td>
                         <td>' . $value['model_group'] . '</td>
                         <td>' . $value['child_desc'] . '</td>
