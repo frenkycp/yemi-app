@@ -52,7 +52,7 @@ $profpic = 'profpic_02.png';
 
                         <h3 class="profile-username text-center" style="font-size: 16px; color: white;"><?= $model_karyawan->NAMA_KARYAWAN ?></h3>
 
-                        <p class="text-muted text-center" style="font-size: 13px; color: white;"><?= $model_karyawan->DEPARTEMEN . '<br/>(' . $model_karyawan->SECTION . ')' ?></p>
+                        <p class="text-muted text-center" style="font-size: 13px; color: white;"><?= $model_karyawan->SECTION; ?></p>
 
                         <ul class="list-group list-group-unbordered" style="display: none;">
                             <li class="list-group-item">
@@ -64,7 +64,7 @@ $profpic = 'profpic_02.png';
                 </div>
                 <div class="box box-primary box-solid">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Tentang Saya</h3>
+                        <h3 class="box-title">About Me</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -145,7 +145,7 @@ $profpic = 'profpic_02.png';
                                         $bg_cuti = 'badge bg-yellow';
                                     }
 
-                                    $total_lembur = $data_lembur->NILAI_LEMBUR_ACTUAL !== null ? $data_lembur->NILAI_LEMBUR_ACTUAL : '-';
+                                    $total_lembur = $data_lembur->NILAI_LEMBUR_ACTUAL !== null && $data_lembur->NILAI_LEMBUR_ACTUAL > 0 ? $data_lembur->NILAI_LEMBUR_ACTUAL : '-';
 
                                     if ($total_lembur != '-') {
                                         $total_lembur = Html::a('<span class="badge bg-green">' . $data_lembur->NILAI_LEMBUR_ACTUAL . '</span>', ['get-lembur-detail','nik'=>$value->NIK, 'period' => $value->PERIOD], ['class' => 'popup_btn']);

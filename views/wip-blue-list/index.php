@@ -44,6 +44,8 @@ $this->registerJs("
             var request_time = $('#request_time').val();
             if(request_time == ''){
                 alert('Please fill request time at the top left of the table before order!');
+                $(\"html, body\").animate({ scrollTop: 0 }, \"slow\");
+                return false;
             } else {
                 if (confirm('Do you want to request order for ' + request_time + ' ?')) {
                     var keys = $('#grid').yiiGridView('getSelectedRows');
@@ -398,7 +400,7 @@ $grid_columns = [
                     'name' => 'dp_1',
                     'id' => 'request_time',
                     'readonly' => true,
-                    'value' => date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:00') . ' + 1 hour')),
+                    //'value' => date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:00') . ' + 1 hour')),
                     'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
                     'pluginOptions' => [
                         'autoclose'=>true,
