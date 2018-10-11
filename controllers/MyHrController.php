@@ -26,7 +26,9 @@ class MyHrController extends Controller
         $model_rekap_absensi = RekapAbsensiView::find()->where([
             'NIK' => $nik,
             'YEAR' => date('Y')
-        ])->orderBy('PERIOD')->all();
+        ])
+        ->orderBy('PERIOD')
+        ->all();
 		return $this->render('index', [
 			'model_karyawan' => $model_karyawan,
             'model_rekap_absensi' => $model_rekap_absensi,
@@ -72,9 +74,9 @@ class MyHrController extends Controller
         return $data;
     }
 
-    public function actionGetDisiplinDetail($nik, $period, $category = 'DISIPLIN')
+    public function actionGetDisiplinDetail($nik, $period, $note = 'DISIPLIN')
     {
-        if ($category == 'DISIPLIN') {
+        if ($note == 'DISIPLIN') {
             $abensi_data_arr = AbsensiTbl::find()->where([
                 'NIK' => $nik,
                 'PERIOD' => $period,
@@ -83,19 +85,10 @@ class MyHrController extends Controller
             ->orderBy('DATE')
             ->all();
         } else {
-            /*if ($category == 'alpha') {
-                $category = 'ALPHA';
-            } elseif ($category == 'ijin') {
-                $category = 'IJIN';
-            } elseif ($category == 'sakit') {
-                $category = 'SAKIT';
-            } else {
-                $category = 'CUTI';
-            }*/
             $abensi_data_arr = AbsensiTbl::find()->where([
                 'NIK' => $nik,
                 'PERIOD' => $period,
-                'CATEGORY' => $category
+                'NOTE' => $note
             ])
             ->orderBy('DATE')
             ->all();
@@ -113,7 +106,7 @@ class MyHrController extends Controller
         foreach ($abensi_data_arr as $key => $value) {
             $data .= '
             <tr>
-                <td style="text-align: center;">' . date('l, d F Y', strtotime($value['DATE'])) . '</td>
+                <td style="text-align: center;">' . date('d M\' Y', strtotime($value['DATE'])) . '</td>
                 <td>' . $value['CATEGORY'] . '</td>
             </tr>
             ';

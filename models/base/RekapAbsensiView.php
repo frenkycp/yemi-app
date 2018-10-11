@@ -23,6 +23,8 @@ use Yii;
  * @property integer $CUTI_KHUSUS
  * @property integer $CUTI_KHUSUS_IJIN
  * @property integer $DISIPLIN
+ * @property integer $DATANG_TERLAMBAT
+ * @property integer $PULANG_CEPAT
  * @property string $aliasModel
  */
 abstract class RekapAbsensiView extends \yii\db\ActiveRecord
@@ -53,7 +55,7 @@ abstract class RekapAbsensiView extends \yii\db\ActiveRecord
     {
         return [
             [['YEAR', 'PERIOD', 'NIK', 'NAMA_KARYAWAN', 'SECTION'], 'string'],
-            [['KEHADIRAN', 'TOTAL_KARYAWAN', 'ALPHA', 'IJIN', 'SAKIT', 'CUTI', 'CUTI_KHUSUS', 'CUTI_KHUSUS_IJIN', 'DISIPLIN'], 'integer'],
+            [['KEHADIRAN', 'TOTAL_KARYAWAN', 'ALPHA', 'IJIN', 'SAKIT', 'CUTI', 'CUTI_KHUSUS', 'CUTI_KHUSUS_IJIN', 'DISIPLIN', 'DATANG_TERLAMBAT', 'PULANG_CEPAT'], 'integer'],
             [['DISIPLIN'], 'required']
         ];
     }
@@ -78,6 +80,8 @@ abstract class RekapAbsensiView extends \yii\db\ActiveRecord
             'CUTI_KHUSUS' => 'Cuti  Khusus',
             'CUTI_KHUSUS_IJIN' => 'Cuti  Khusus  Ijin',
             'DISIPLIN' => 'Disiplin',
+            'DATANG_TERLAMBAT' => 'Datang  Terlambat',
+            'PULANG_CEPAT' => 'Pulang  Cepat',
         ];
     }
 
