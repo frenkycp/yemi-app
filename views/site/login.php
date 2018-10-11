@@ -54,7 +54,7 @@ $fieldOptions2 = [
 
         <?php ActiveForm::end(); ?>
 
-        <div class="social-auth-links text-center">
+        <div class="social-auth-links text-center" style="display: none;">
             <p>- OR -</p>
             <?= Html::a('<i class="fa fa-user"></i> Open My HR Information Board', ['my-hr/index'], ['class' => 'btn btn-block btn-social btn-facebook', 'target' => '_blank']); ?>
             <!--<a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-group"></i> Open My HR Inforamtion Board</a>-->

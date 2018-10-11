@@ -97,12 +97,43 @@ $grid_columns = [
     [
         'attribute' => 'NILAI_LEMBUR_ACTUAL',
         'label' => 'Aktual Lembur<br/>(Jam)',
+        'value' => function($model){
+            if ($model->NILAI_LEMBUR_ACTUAL === null) {
+                return Html::img(['uploads/processing_01.gif'], ['height' => '35']);
+            } elseif ($model->NILAI_LEMBUR_ACTUAL == 0) {
+                return '<span class="text-red">Tidak Lembur</span>';
+            } else {
+                return $model->NILAI_LEMBUR_ACTUAL;
+            }
+        },
+        'format' => 'html',
         'hAlign' => 'center',
         'encodeLabel' => false,
         'vAlign' => 'middle',
         'mergeHeader' => true,
         'pageSummary' => true,
+        'hiddenFromExport' => true,
         //'width'=>'100px',
+    ],
+    [
+        'attribute' => 'NILAI_LEMBUR_ACTUAL_EXPORT',
+        'label' => 'Aktual Lembur<br/>(Jam)',
+        'value' => function($model){
+            if ($model->NILAI_LEMBUR_ACTUAL === null) {
+                return 'Processing';
+            } elseif ($model->NILAI_LEMBUR_ACTUAL == 0) {
+                return 'Tidak Lembur';
+            } else {
+                return $model->NILAI_LEMBUR_ACTUAL;
+            }
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+        'pageSummary' => true,
+        'hidden'=> true,
     ],
     [
         'attribute' => 'KETERANGAN',

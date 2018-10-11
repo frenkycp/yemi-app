@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SplView extends BaseSplView
 {
-    public $JUMLAH, $total_lembur, $min_year;
+    public $JUMLAH, $total_lembur, $min_year, $NILAI_LEMBUR_ACTUAL_EXPORT;
     public function behaviors()
     {
         return ArrayHelper::merge(
