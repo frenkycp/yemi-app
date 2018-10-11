@@ -137,7 +137,7 @@ class FinishGoodStockController extends Controller
                     <td style="text-align: center;">' . $detail->gmc . '</td>
                     <td>' . $detail->getPartName() . '</td>
                     <td style="text-align: center;">' . $detail->stock_qty . '</td>
-                    <td style="text-align: center;">' . round(($detail->stock_qty * $detail->getItemM3()->volume), 1) . '</td>
+                    <td style="text-align: center;">' . round(($detail->stock_qty * $detail->getItemM3()->volume), 2) . '</td>
                 </tr>';
             }
         }
