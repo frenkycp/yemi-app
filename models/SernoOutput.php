@@ -82,7 +82,7 @@ class SernoOutput extends BaseSernoOutput
 
     public function getItemM3()
     {
-        return $this->hasOne(ItemM3::className(), ['item' => 'gmc'])->one();
+        return $this->hasOne(ShipItemM3::className(), ['ITEM' => 'gmc'])->one();
     }
 
     public function getSernoInput()

@@ -76,7 +76,7 @@ class FinishGoodStockController extends Controller
             foreach ($tmp_kubikasi_arr as $value) {
                 if ($value->dst == $stock_data->dst) {
                     $gmc = $value->gmc;
-                    $m3 = (float)$value->getItemM3()->volume;
+                    $m3 = (float)$value->getItemM3()->VOLUME;
                     $total_kubikasi += (int)$value->stock_qty * $m3;
                 }
             }
@@ -137,7 +137,7 @@ class FinishGoodStockController extends Controller
                     <td style="text-align: center;">' . $detail->gmc . '</td>
                     <td>' . $detail->getPartName() . '</td>
                     <td style="text-align: center;">' . $detail->stock_qty . '</td>
-                    <td style="text-align: center;">' . round(($detail->stock_qty * $detail->getItemM3()->volume), 2) . '</td>
+                    <td style="text-align: center;">' . round(($detail->stock_qty * $detail->getItemM3()->VOLUME), 2) . '</td>
                 </tr>';
             }
         }

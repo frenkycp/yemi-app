@@ -188,7 +188,10 @@ $grid_columns = [
         'vAlign' => 'middle',
         'width' => '70px',
         'hAlign' => 'center',
-        'pageSummary' => true
+        'pageSummary' => true,
+        'contentOptions' => [
+            'style' => 'min-width: 80px;'
+        ],
     ],
     [
         'attribute' => 'stage',
@@ -219,7 +222,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size:10px;'
         ],
     ],
     [
@@ -236,7 +239,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size:10px;'
         ],
     ],
     [
@@ -253,7 +256,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size:10px;'
         ],
     ],
     [
