@@ -208,6 +208,10 @@ class HrgaAttendanceReportController extends Controller
 				$check_in = $attendance_report['CHECK_IN'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_IN']));
 				$check_out = $attendance_report['CHECK_OUT'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_OUT']));
 
+				if (date('Y-m-d') == date('Y-m-d', strtotime($attendance_report['DATE'])) && $check_out == $check_in) {
+					$check_out = '-';
+				}
+
 				$bonus = '<i class="fa fa-fw fa-close text-red"></i>';
 				if ($attendance_report['BONUS'] == 1) {
 					$bonus = '<i class="fa fa-fw fa-check text-green"></i>';
