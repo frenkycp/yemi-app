@@ -225,7 +225,7 @@ $grid_columns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'speaker_model',
         'value' => 'wipHdr.model_group',
         'label' => 'Model',
@@ -233,6 +233,35 @@ $grid_columns = [
         'width' => '120px',
         'contentOptions' => [
             'style' => 'min-width: 100px;'
+        ],
+    ],*/
+    [
+        'attribute' => 'gmc',
+        'value' => 'wipHdr.parent',
+        'label' => 'GMC',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '120px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'parent_desc',
+        'value' => 'wipHdr.parent_desc',
+        'label' => 'Model',
+        'vAlign' => 'middle',
+        'width' => '120px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
         ],
     ],
     [

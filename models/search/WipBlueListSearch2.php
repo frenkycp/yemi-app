@@ -19,7 +19,7 @@ public function rules()
 {
 return [
             [['dtr_id', 'hdr_id_item_due_date', 'hdr_id_item', 'hdr_id', 'upload_id', 'period', 'period_line', 'child', 'urut', 'slip_id', 'slip_id_barcode_label', 'stage', 'created_user_id', 'created_user_desc', 'start_job_user_id', 'start_job_user_desc', 'end_job_user_id', 'end_job_user_desc', 'hand_over_job_user_id', 'hand_over_job_user_desc', 'order_release_user_id', 'order_release_user_desc', 'start_cancel_job_user_id', 'start_cancel_job_user_desc', 'end_cancel_job_user_id', 'end_cancel_job_user_desc', 'stat', 'slip_id_reference', 'problem', 'fullfilment_stat', 'ipc_ok_ng', 'ipc_ok_ng_desc', 'ipc_in_id', 'ipc_in_id_user_desc', 'ipc_close_id', 'ipc_close_id_user_desc', 'calculated_close', 'recreate_close', 're_handover_close', 'repair_job_user_id', 'repair_job_user_desc', 'hand_over_cancel_job_user_id', 'hand_over_cancel_job_user_desc', 'note', 'completed_split_id', 'completed_split_desc'], 'string'],
-            [['start_date', 'due_date', 'post_date', 'created_date', 'start_job', 'end_job', 'hand_over_job', 'order_release_date', 'start_cancel_job', 'end_cancel_job', 'source_date', 'repair_job', 'hand_over_cancel_job', 'completed_split', 'location', 'speaker_model'], 'safe'],
+            [['start_date', 'due_date', 'post_date', 'created_date', 'start_job', 'end_job', 'hand_over_job', 'order_release_date', 'start_cancel_job', 'end_cancel_job', 'source_date', 'repair_job', 'hand_over_cancel_job', 'completed_split', 'location', 'speaker_model', 'gmc', 'parent_desc'], 'safe'],
             [['plan_qty', 'act_qty', 'balance_act_qty', 'balance_by_day', 'plan_acc_qty', 'act_acc_qty', 'balance_acc_qty', 'source_qty', 'ipc_in_qty', 'lt_ipc', 'lt_started', 'lt_completed', 'lt_handover', 'bom_level'], 'number'],
             [['session_id'], 'integer'],
         ];
@@ -89,9 +89,11 @@ return $dataProvider;
             'WIP_DTR.child' => $this->child,
             'source_date' => $this->source_date,
             'due_date' => $this->due_date,
+            'WIP_HDR.parent' => $this->gmc
         ]);
 
         $query->andFilterWhere(['like', 'WIP_HDR.child_analyst_desc', $this->location])
+        ->andFilterWhere(['like', 'WIP_HDR.parent_desc', $this->parent_desc])
         ->andFilterWhere(['like', 'WIP_HDR.model_group', $this->speaker_model]);
 
 return $dataProvider;

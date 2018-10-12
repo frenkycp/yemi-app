@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WipDtr extends BaseWipDtr
 {
-    public $location, $speaker_model;
+    public $location, $speaker_model, $gmc, $parent_desc;
 
     public function behaviors()
     {
