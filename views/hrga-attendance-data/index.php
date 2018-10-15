@@ -50,6 +50,10 @@ $gridColumns = [
         'attribute' => 'PERIOD',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'DATE',
@@ -58,34 +62,59 @@ $gridColumns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'NAMA_KARYAWAN',
         'vAlign' => 'middle',
         'width' => '200px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
         //'hAlign' => 'center',
     ],
     [
         'attribute' => 'SECTION',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 150px;'
+        ],
     ],
     [
         'attribute' => 'SHIFT',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filter' => ArrayHelper::map(app\models\AbsensiTbl::find()->select('DISTINCT(SHIFT)')->orderBy('SHIFT')->all(), 'SHIFT', 'SHIFT'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 70px;'
+        ],
     ],
     [
         'attribute' => 'CATEGORY',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'KEHADIRAN',
@@ -103,8 +132,30 @@ $gridColumns = [
             0 => 'Absen',
             1 => 'Hadir',
         ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
+        'attribute' => 'CHECK_IN',
+        'value' => function($model){
+            return $model->CHECK_IN == null ? '-' : date('Y-m-d H:i:s', strtotime($model->CHECK_IN));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+    ],
+    [
+        'attribute' => 'CHECK_OUT',
+        'value' => function($model){
+            return $model->CHECK_OUT == null || $model->CHECK_OUT == $model->CHECK_IN ? '-' : date('Y-m-d H:i:s', strtotime($model->CHECK_OUT));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+    ],
+    /*[
         'attribute' => 'BONUS',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -115,7 +166,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
-    ],
+    ],*/
     //'NIK_DATE_ID',
     //'NO',
     /*'PERIOD',*/
@@ -150,7 +201,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => false, // pjax is set to always true for this demo
