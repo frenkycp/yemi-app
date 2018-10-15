@@ -46,7 +46,8 @@ echo '</pre>';*/
 				$dropdown_loc,
 				[
 					'prompt'=>'Select Location...',
-					'onchange'=>'this.form.submit()'
+					'onchange'=>'this.form.submit()',
+                    'style' => 'font-size: 12px;'
 				]
 			) ?>
 		</div>
@@ -54,7 +55,8 @@ echo '</pre>';*/
 			<?= $form->field($model, 'year')->dropDownList(
 				$year_arr,
 				[
-					'onchange'=>'this.form.submit()'
+					'onchange'=>'this.form.submit()',
+                    'style' => 'font-size: 12px;'
 				]
 			) ?>
 		</div>
@@ -62,7 +64,8 @@ echo '</pre>';*/
 			<?= $form->field($model, 'month')->dropDownList(
 				$month_arr,
 				[
-					'onchange'=>'this.form.submit()'
+					'onchange'=>'this.form.submit()',
+                    'style' => 'font-size: 12px;'
 				]
 			) ?>
 		</div>
@@ -73,7 +76,7 @@ echo '</pre>';*/
     </div>
 
 <?php ActiveForm::end(); ?>
-<p><b>Last Update : <?= date('d M Y H:i'); ?></b></p>
+<p><b>Last Update : <?= date('Y-m-d H:i:s'); ?></b></p>
 <div class="nav-tabs-custom">
 	<ul class="nav nav-tabs">
 		<?php
@@ -163,11 +166,12 @@ echo '</pre>';*/
                             ],
                             'point' => [
                                 'events' => [
-                                    'click' => new JsExpression('
-                                        function(){
-                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                    'click' => new JsExpression("
+                                        function(e){
+                                            e.preventDefault();
+                                            $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
                                         }
-                                    '),
+                                    "),
                                 ]
                             ]
                         ]

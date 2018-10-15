@@ -6,6 +6,7 @@ use app\models\WipFilterModel;
 use app\models\WipPlanActualReport;
 use yii\web\JsExpression;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 class WipPaintingMonitoringController extends Controller
 {
@@ -56,20 +57,6 @@ class WipPaintingMonitoringController extends Controller
     	->orderBy('week, due_date')
     	->all();
 
-        $selected_column = [
-            'stage', 'due_date', 'start_date', 'source_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'model_group', 'child_desc', 'summary_qty', 'parent', 'session_id'
-        ];
-
-        $remark_data_arr = WipPlanActualReport::find()
-        ->select($selected_column)
-        ->where([
-            //'due_date' => $due_date,
-            //'stage' => $stage,
-            //'urut' => '02'
-        ])
-        ->orderBy('child_analyst_desc, model_group, parent, child')
-        ->asArray()->all();
-
     	if ($model->loc != null) {
     		$wip_painting_data_arr = WipPlanActualReport::find()
 	    	->select([
@@ -89,16 +76,6 @@ class WipPaintingMonitoringController extends Controller
 	    	->groupBy('week, due_date')
 	    	->orderBy('week, due_date')
 	    	->all();
-
-            $remark_data_arr = WipPlanActualReport::find()
-            ->select($selected_column)
-            ->where([
-                //'due_date' => $due_date,
-                //'stage' => $stage,
-                'child_analyst_desc' => $model->loc
-            ])
-            ->orderBy('child_analyst_desc, model_group, parent, child')
-            ->asArray()->all();
     	}
 
     	//$data = [];
@@ -115,31 +92,27 @@ class WipPaintingMonitoringController extends Controller
 
     		$tmp_data[$wip_painting_data->week]['order_percentage'][] = [
     			'y' => $order_percentage == 0 ? null : $order_percentage,
-				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['00-ORDER']),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '00-ORDER']),
+				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['00-ORDER']),
                 'qty' => $wip_painting_data->total_order
-				//'color' => 'rgba(240, 240, 240, 0.7)',
     		];
-    		/*$tmp_data[$wip_painting_data->week]['created_percentage'][] = [
-    			'y' => $created_percentage == 0 ? null : $created_percentage,
-    			'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, '01-CREATED')
-    		];*/
     		$tmp_data[$wip_painting_data->week]['started_percentage'][] = [
     			'y' => $started_percentage == 0 ? null : $started_percentage,
-				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['02-STARTED']),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '02-STARTED']),
+				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['02-STARTED']),
                 'qty' => $wip_painting_data->total_started
-				//'color' => 'rgba(240, 240, 0, 0.7)',
     		];
     		$tmp_data[$wip_painting_data->week]['completed_percentage'][] = [
     			'y' => $completed_percentage == 0 ? null : $completed_percentage,
-				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['03-COMPLETED']),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '03-COMPLETED']),
+				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['03-COMPLETED']),
                 'qty' => $wip_painting_data->total_completed
-				//'color' => 'rgba(0, 150, 255, 0.7)',
     		];
     		$tmp_data[$wip_painting_data->week]['handover_percentage'][] = [
     			'y' => $handover_percentage <= 0 ? null : $handover_percentage,
-				'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['04-HAND OVER']),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '04-HAND OVER']),
+				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['04-HAND OVER']),
                 'qty' => $wip_painting_data->total_handover
-				//'color' => 'rgba(0, 240, 0, 0.7)',
     		];
 
     		$week_arr[] = $wip_painting_data->week;
@@ -202,6 +175,111 @@ class WipPaintingMonitoringController extends Controller
     	]);
     }
 
+    public function actionGetRemark($due_date, $loc, $stage)
+    {
+        $stage_arr = [$stage];
+        switch ($stage) {
+            case '00-ORDER':
+                $status = 'ORDERED';
+                $stage_arr = ['00-ORDER', '01-CREATED'];
+                break;
+
+            /*case '01-CREATED':
+                $status = 'ORDERED';
+                break;*/
+
+            case '02-STARTED':
+                $status = 'STARTED';
+                break;
+
+            case '03-COMPLETED':
+                $status = 'COMPLETED';
+                break;
+
+            case '04-HAND OVER':
+                $status = 'PULLED BY NEXT';
+                break;
+            
+            default:
+                // code...
+                break;
+        };
+
+        $remark_data_arr = WipPlanActualReport::find()
+        ->select($selected_column)
+        ->where([
+            'due_date' => $due_date,
+            'stage' => $stage_arr,
+            //'urut' => '02'
+        ])
+        ->orderBy('child_analyst_desc, model_group, parent, child')
+        ->asArray()->all();
+
+        if ($loc != null) {
+             $remark_data_arr = WipPlanActualReport::find()
+            ->select($selected_column)
+            ->where([
+                'due_date' => $due_date,
+                'stage' => $stage_arr,
+                'child_analyst_desc' => $loc
+            ])
+            ->orderBy('child_analyst_desc, model_group, parent, child')
+            ->asArray()->all();
+        }
+
+        $data = '<h4>' . $status . ' <small>on ' . date('Y-m-d', strtotime($due_date)) . '</small></h4>';
+        $data .= '<table class="table table-bordered table-hover">';
+        $data .= 
+        '<thead style="font-size: 10px;"><tr class="info">
+            <th class="text-center">Location</th>
+            <th class="text-center">Slip No.</th>
+            <th class="text-center">Session</th>
+            <th class="text-center">GMC</th>
+            <th>Model</th>
+            <th>Child Description</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center" style="min-width: 70px;">FA Start</th>
+            <th class="text-center" style="min-width: 70px;">Start Plan</th>
+            <th class="text-center" style="min-width: 70px;">End Plan</th>
+            <th class="text-center" style="min-width: 70px;">Start Actual</th>
+            <th class="text-center" style="min-width: 70px;">Complete Actual</th>
+            <th class="text-center" style="min-width: 70px;">Pulled By Next Actual</th>
+        </tr></thead>';
+        $data .= '<tbody style="font-size: 9px;">';
+
+        foreach ($remark_data_arr as $value) {
+            $start_plan = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
+            $end_plan = $value['due_date'] == null ? '-' : date('Y-m-d', strtotime($value['due_date']));
+            $start_actual = $value['start_job'] == null ? '-' : $value['start_job'];
+            $end_actual = $value['end_job'] == null ? '-' : $value['end_job'];
+            $handover_actual = $value['hand_over_job'] == null ? '-' : $value['hand_over_job'];
+            $fa_start = $value['source_date'] == null ? '-' : date('Y-m-d', strtotime($value['source_date']));
+
+            $data .= '
+                <tr>
+                    <td class="text-center">' . $value['child_analyst_desc'] . '</td>
+                    <td class="text-center">' . $value['slip_id'] . '</td>
+                    <td class="text-center">' . $value['session_id'] . '</td>
+                    <td class="text-center">' . $value['parent'] . '</td>
+                    <td>' . $value['model_group'] . '</td>
+                    <td>' . $value['child_desc'] . '</td>
+                    <td class="text-center">' . (int)$value['summary_qty'] . '</td>
+                    <td class="text-center">' . $fa_start . '</td>
+                    <td class="text-center">' . $start_plan . '</td>
+                    <td class="text-center">' . $end_plan . '</td>
+                    <td class="text-center text-green">' . $start_actual . '</td>
+                    <td class="text-center text-green">' . $end_actual . '</td>
+                    <td class="text-center text-green">' . $handover_actual . '</td>
+                </tr>
+            ';
+            
+        }
+        $data .= '</tbody>';
+
+        $data .= '</table>';
+        return $data;
+    }
+
     public function getRemarks($remark_data_arr, $due_date, $loc, $stage)
     {
         switch ($stage) {
@@ -234,6 +312,32 @@ class WipPaintingMonitoringController extends Controller
             $stage = ['00-ORDER', '01-CREATED'];
         }
 
+        $selected_column = [
+            'stage', 'due_date', 'start_date', 'source_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'model_group', 'child_desc', 'summary_qty', 'parent', 'session_id'
+        ];
+
+        $remark_data_arr = WipPlanActualReport::find()
+        ->select($selected_column)
+        ->where([
+            //'due_date' => $due_date,
+            //'stage' => $stage,
+            //'urut' => '02'
+        ])
+        ->orderBy('child_analyst_desc, model_group, parent, child')
+        ->asArray()->all();
+
+        if ($loc != null) {
+             $remark_data_arr = WipPlanActualReport::find()
+            ->select($selected_column)
+            ->where([
+                //'due_date' => $due_date,
+                //'stage' => $stage,
+                'child_analyst_desc' => $loc
+            ])
+            ->orderBy('child_analyst_desc, model_group, parent, child')
+            ->asArray()->all();
+        }
+
         $data = '<h4>' . $status . '</h4>';
     	$data .= '<table class="table table-bordered table-hover">';
     	$data .= 
@@ -252,7 +356,7 @@ class WipPaintingMonitoringController extends Controller
             <th class="text-center" style="min-width: 70px;">Complete Actual</th>
             <th class="text-center" style="min-width: 70px;">Pulled By Next Actual</th>
 		</tr></thead>';
-        $data .= '<tbody style="font-size: 10px;">';
+        $data .= '<tbody style="font-size: 9px;">';
 		foreach ($remark_data_arr as $value) {
             if (in_array($value['stage'], $stage) && $value['due_date'] == $due_date) {
                 $start_plan = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
