@@ -104,12 +104,12 @@ echo '</pre>';*/
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
-                                'click' => new JsExpression('
-                                    function(){
-                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
                                     }
-                                '),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                "),
                             ]
                         ]
                     ]
