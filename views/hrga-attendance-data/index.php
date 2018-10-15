@@ -24,7 +24,7 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $gridColumns = [
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -45,7 +45,7 @@ $gridColumns = [
         },
         'contentOptions' => ['nowrap'=>'nowrap'],
         'hidden' => Yii::$app->user->identity->role->id == 1 ? false : true,
-    ],
+    ],*/
     [
         'attribute' => 'PERIOD',
         'vAlign' => 'middle',
