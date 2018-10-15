@@ -336,6 +336,22 @@ $grid_columns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
+    [
+        'attribute' => 'end_job',
+        'label' => 'Actual Complete',
+        'value' => function($model){
+            return $model->end_job == null ? '-' : date('Y-m-d H:i:s', strtotime($model->end_job));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 120px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
     /*[
         'attribute' => 'stage',
         'label' => 'Status',
