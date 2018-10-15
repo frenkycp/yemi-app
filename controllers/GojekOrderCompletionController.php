@@ -5,23 +5,86 @@ namespace app\controllers;
 use yii\web\Controller;
 use dmstr\bootstrap\Tabs;
 use yii\helpers\Url;
-use app\models\GojekOrderTbl;
+use app\models\GojekOrderView01;
 use app\models\GojekTbl;
+use app\models\GojekOrderTbl;
+use yii\helpers\ArrayHelper;
 
 class GojekOrderCompletionController extends Controller
 {
 
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 	
 	public function actionIndex()
 	{
 		$data = [];
 		$categories = [];
-		$order_data_arr = GojekTbl::find()
+
+		$driver_arr = ArrayHelper::getColumn(
+			GojekTbl::find()->orderBy('GOJEK_DESC')->asArray()->all(),
+			'GOJEK_ID'
+		);
+
+		$tmp_data = [];
+
+		foreach ($driver_arr as $value) {
+			$nik = $value;
+			$order_data_arr = GojekOrderView01::find()
+			->select([
+				'GOJEK_ID',
+				'GOJEK_DESC',
+				'issued_date',
+				'stat_open' => 'SUM(CASE WHEN STAT = \'O\' THEN 1 ELSE 0 END)',
+				'stat_close' => 'SUM(CASE WHEN STAT = \'C\' THEN 1 ELSE 0 END)',
+				'stat_total' => 'COUNT(STAT)'
+			])
+			->where([
+				'GOJEK_ID' => $nik,
+			])
+			->andWhere(['>=', 'issued_date', date('Y-m-d', strtotime(date('Y-m-d') . '-7 days'))])
+			->groupBy('GOJEK_ID, GOJEK_DESC, issued_date')
+			->orderBy('GOJEK_DESC, issued_date')
+			->asArray()
+			->all();
+
+			foreach ($order_data_arr as $order_data) {
+				$issued_date = (strtotime($order_data['issued_date'] . " +2 hours") * 1000);
+				$tmp_data[$nik]['open'][] = [
+					'x' => $issued_date,
+					'y' => $order_data['stat_open'] == 0 ? null : (int)$order_data['stat_open'],
+					'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'O']),
+				];
+				$tmp_data[$nik]['close'][] = [
+					'x' => $issued_date,
+					'y' => $order_data['stat_close'] == 0 ? null : (int)$order_data['stat_close'],
+					'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'C']),
+				];
+				$tmp_data[$nik]['nama'] = $order_data['GOJEK_DESC'];
+			}
+		}
+
+		$fix_data = [];
+		foreach ($tmp_data as $key => $value) {
+			$fix_data[$key]['data'] = [
+				[
+					'name' => 'OPEN',
+					'data' => $value['open'],
+					'color' => 'rgba(255, 0, 0, 0.6)'
+				],
+				[
+					'name' => 'CLOSE',
+					'data' => $value['close'],
+					'color' => 'rgba(0, 255, 0, 0.6)'
+				]
+			];
+			$fix_data[$key]['nama'] = $value['nama'];
+		}
+
+		/*$order_data_arr = GojekTbl::find()
 		->joinWith('gojekOrderTbl')
 		->select([
 			'GOJEK_TBL.GOJEK_ID',
@@ -65,22 +128,25 @@ class GojekOrderCompletionController extends Controller
 				'data' => $tmp_data_close,
 				'color' => 'rgba(0, 255, 0, 0.6)'
 			],
-		];
+		];*/
 
 		return $this->render('index', [
-			'data' => $data,
+			//'data' => $data,
 			'categories' => $categories,
 			'max_order' => $max_order,
+			'tmp_data' => $tmp_data,
+			'fix_data' => $fix_data,
 		]);
 	}
 
-	public function getRemark($GOJEK_ID, $GOJEK_DESC, $STAT)
+	public function actionGetRemark($ISSUED_DATE, $GOJEK_ID, $GOJEK_DESC, $STAT)
 	{
 		$data_arr = GojekOrderTbl::find()
 		->joinWith('wipPlanActualReport')
 		->where([
 			'GOJEK_ID' => $GOJEK_ID,
-			'STAT' => $STAT
+			'STAT' => $STAT,
+			'FORMAT(issued_date, \'yyyy-MM-dd\')' => $ISSUED_DATE
 		])
 		->orderBy('request_date ASC, model_group ASC, period_line ASC, from_loc ASC, slip_id ASC')
 		->all();
