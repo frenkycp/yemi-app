@@ -19,6 +19,7 @@ use Yii;
  * @property string $due_date
  * @property double $plan_qty
  * @property double $act_qty
+ * @property double $balance_qty
  * @property string $aliasModel
  */
 abstract class WipFlowView02 extends \yii\db\ActiveRecord
@@ -50,7 +51,7 @@ abstract class WipFlowView02 extends \yii\db\ActiveRecord
         return [
             [['period', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'period_line'], 'string'],
             [['due_date'], 'safe'],
-            [['plan_qty', 'act_qty'], 'number']
+            [['plan_qty', 'act_qty', 'balance_qty'], 'number']
         ];
     }
 
@@ -70,6 +71,7 @@ abstract class WipFlowView02 extends \yii\db\ActiveRecord
             'due_date' => 'Due Date',
             'plan_qty' => 'Plan Qty',
             'act_qty' => 'Act Qty',
+            'balance_qty' => 'Balance Qty',
         ];
     }
 

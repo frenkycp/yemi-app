@@ -100,7 +100,23 @@ echo Highcharts::widget([
 	        'categories' => $categories,
 	        'reversed' => true,
 	    ],
+	    'plotOptions' => [
+	    	'series' => [
+                'cursor' => 'pointer',
+                'point' => [
+                    'events' => [
+                        'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                    ]
+                ],
+            ]
+	    ],
 	    'series' => $data
 	],
 ]);
+yii\bootstrap\Modal::begin([
+            'id' =>'modal',
+            'header' => '<h3>Detail Information</h3>',
+            'size' => 'modal-lg',
+        ]);
+        yii\bootstrap\Modal::end();
 ?>

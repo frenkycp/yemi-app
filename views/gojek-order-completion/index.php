@@ -110,11 +110,6 @@ echo '</pre>';*/
                                         'cursor' => 'pointer',
                                         'point' => [
                                             'events' => [
-                                                /*'click' => new JsExpression('
-                                                    function(){
-                                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
-                                                    }
-                                                '),*/
                                                 'click' => new JsExpression("
                                                     function(e){
                                                         e.preventDefault();
