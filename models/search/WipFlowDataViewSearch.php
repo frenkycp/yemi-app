@@ -69,7 +69,8 @@ class WipFlowDataViewSearch extends WipFlowView02
 
 		$query->andFilterWhere([
             'child_analyst_desc' => $this->child_analyst_desc,
-            'parent' => $this->parent
+            'parent' => $this->parent,
+            'period' => $this->period
         ]);
 /**/
         $query->andFilterWhere(['like', 'model_group', $this->model_group])
