@@ -37,7 +37,7 @@ class ProductionInspectionDailyController extends Controller
 		foreach ($data_arr as $key => $value) {
 			$categories[] = $value->cntr . ' - ' . $value->dst;
 			$close_percentage = round(($value->total_ok / $value->total_plan) * 100, 2);
-			$open_percentage = 100 - $close_percentage;
+			$open_percentage = round((100 - $close_percentage), 2);
 
 			$tmp_data_close[] = [
 				'y' => $close_percentage == 0 ? null : (float)$close_percentage,
