@@ -31,4 +31,10 @@ class InspectionJudgementDataView extends BaseInspectionJudgementDataView
             ]
         );
     }
+
+    public function getPartName()
+    {
+        $sernoMaster = SernoMaster::find()->where(['gmc' => $this->gmc])->one();
+        return $sernoMaster->model . ' // ' . $sernoMaster->color . ' // ' . $sernoMaster->dest;
+    }
 }

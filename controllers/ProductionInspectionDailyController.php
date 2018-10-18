@@ -15,7 +15,7 @@ class ProductionInspectionDailyController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 		$categories = [];
@@ -134,6 +134,7 @@ class ProductionInspectionDailyController extends Controller
 				'dst' => $dst
 			])
 			->andWhere('total_ok <> total_plan')
+			->orderBy('gmc')
 			->all();
 		} else {
 			$data_arr = InspectionJudgementDataView::find()
@@ -143,6 +144,7 @@ class ProductionInspectionDailyController extends Controller
 				'dst' => $dst
 			])
 			->andWhere('total_ok = total_plan')
+			->orderBy('gmc')
 			->all();
 		}
 
@@ -151,6 +153,7 @@ class ProductionInspectionDailyController extends Controller
         $data .= 
         '<thead style=""><tr class="info">
             <th class="text-center">GMC</th>
+            <th class="text-center">Description</th>
             <th class="text-center">Plan</th>
             <th class="text-center">Output</th>
             <th class="text-center">OK</th>
@@ -162,6 +165,7 @@ class ProductionInspectionDailyController extends Controller
             $data .= '
                 <tr>
                     <td class="text-center">' . $value->gmc . '</td>
+                    <td class="text-center">' . $value->partName . '</td>
                     <td class="text-center">' . $value->total_plan . '</td>
                     <td class="text-center">' . $value->total_output . '</td>
                     <td class="text-center">' . $value->total_ok . '</td>
