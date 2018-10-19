@@ -11,7 +11,7 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Container Evidence Data <span class="japanesse text-green"></span>',
+    'page_title' => 'Container Evidence Data <span class="japanesse text-green">（コンテナー出荷時の写真）</span>',
     'tab_title' => 'Container Evidence Data',
     'breadcrumbs_title' => 'Container Evidence Data'
 ];
