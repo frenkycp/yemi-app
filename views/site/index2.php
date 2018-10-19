@@ -168,10 +168,13 @@ $this->registerCss("
                             <p>WH FG Control <span class="japanesse-word">(完成品倉庫管理)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock/index']); ?>
+                                    <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Final Product Tracer <span class="japanesse-word">(完成品トレーサ）</span>', ['/serno-input/index']); ?>
+                                    <?= Html::a('Finish Goods Tracer <span class="japanesse-word">(完成品トレーサ）</span>', ['/serno-input']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Shipping Container Evidence <span class="japanesse-word">(出荷時の状況写真)</span>', ['/production-container-evidence']); ?>
                                 </li>
                             </ol>
                         </div>
