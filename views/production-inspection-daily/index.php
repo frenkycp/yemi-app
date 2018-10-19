@@ -80,13 +80,16 @@ echo '</pre>';*/
                         'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
+                            'color' => 'black',
                             'style' => [
-                                //'fontSize' => '14px',
+                                'fontSize' => '14px',
+                                'textOutline' => '0px',
                                 'fontWeight' => '0'
                             ],
-                            //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
+                            'format' => '{point.percentage:.0f}%',
                         ],
-                        //'borderWidth' => 2,
+                        'borderWidth' => 1,
+                        'borderColor' => 'rgba(72,61,139,0.6)',
                     ],
                     'series' => [
                         'cursor' => 'pointer',

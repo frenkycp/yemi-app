@@ -57,12 +57,12 @@ class ProductionInspectionDailyController extends Controller
 			[
 				'name' => 'Outstanding',
 				'data' => $tmp_data_open,
-				'color' => 'rgba(255, 0, 0, 0.5)'
+				'color' => 'FloralWhite',
 			],
 			[
 				'name' => 'Completed',
 				'data' => $tmp_data_close,
-				'color' => 'rgba(0, 255, 0, 0.5)'
+				'color' => 'rgba(72,61,139,0.6)',
 			]
 		];
 
@@ -103,6 +103,7 @@ class ProductionInspectionDailyController extends Controller
             <th class="text-center">Plan</th>
             <th class="text-center">Output</th>
             <th class="text-center">OK</th>
+            
         </tr></thead>';
         $data .= '<tbody style="">';
 
@@ -114,6 +115,7 @@ class ProductionInspectionDailyController extends Controller
                     <td class="text-center">' . $value->total_plan . '</td>
                     <td class="text-center">' . $value->total_output . '</td>
                     <td class="text-center">' . $value->total_ok . '</td>
+                    
                 </tr>
             ';
         }
@@ -157,6 +159,7 @@ class ProductionInspectionDailyController extends Controller
             <th class="text-center">Plan</th>
             <th class="text-center">Output</th>
             <th class="text-center">OK</th>
+            <th class="text-center">Balance</th>
         </tr></thead>';
         $data .= '<tbody style="">';
 
@@ -169,6 +172,7 @@ class ProductionInspectionDailyController extends Controller
                     <td class="text-center">' . $value->total_plan . '</td>
                     <td class="text-center">' . $value->total_output . '</td>
                     <td class="text-center">' . $value->total_ok . '</td>
+                    <td class="text-center">' . ($value->total_ok - $value->total_plan) . '</td>
                 </tr>
             ';
         }

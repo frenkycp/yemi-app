@@ -10,7 +10,12 @@ use kartik\grid\GridView;
     * @var app\models\search\SoAchievementDataSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Sales Order Achievement');
+$this->title = [
+    'page_title' => 'Sales Order Achievement <span class="japanesse text-green">（受注処理状況）</span>',
+    'tab_title' => 'Sales Order Achievement',
+    'breadcrumbs_title' => 'Sales Order Achievement'
+];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 //$this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -21,6 +26,8 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
     $actionColumnTemplateString = "{view} {update} {delete}";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -41,14 +48,14 @@ $grid_column = [
     ],
     [
         'attribute' => 'monthly_total_plan',
-        'label' => 'Total Sales Order Qty',
+        'label' => 'Total Sales Order Qty （受注台数）',
         'format'=> ['decimal', 0],
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
     [
         'attribute' => 'total_delay',
-        'label' => 'Back Order Qty',
+        'label' => 'Back Order Qty （未処理台数)',
         'value' => function($model){
             if ($model->total_delay == 0) {
                 return $model->total_delay;
@@ -63,7 +70,7 @@ $grid_column = [
     ],
     [
         'attribute' => 'achievement',
-        'label' => 'Achievement',
+        'label' => 'Achievement （達成率）',
         'value' => function($model){
             $percentage = 0;
             if ($model->monthly_total_plan > 0) {
