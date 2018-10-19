@@ -68,7 +68,7 @@ $this->registerCss("
                                     <?= Html::a('Budomari Material Monitor <span class="japanesse-word">(材料歩留モニター）</span>', ['/parts-uncountable-monthly-report']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['/parts-uncountable-monthly-report']); ?>
+                                    <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['/parts-picking-pts']); ?>
                                 </li>
                             </ol>
                         </div>
