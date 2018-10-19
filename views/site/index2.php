@@ -62,13 +62,13 @@ $this->registerCss("
                             <p>YEMI WH to Production<br/><span class="japanesse-word">(YEMI 部品倉庫⇒生産職場)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['parts-picking-status']); ?>
+                                    <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['/parts-picking-status']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Budomari Material Monitor <span class="japanesse-word">(材料歩留モニター）</span>', ['parts-uncountable-monthly-report']); ?>
+                                    <?= Html::a('Budomari Material Monitor <span class="japanesse-word">(材料歩留モニター）</span>', ['/parts-uncountable-monthly-report']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['parts-uncountable-monthly-report']); ?>
+                                    <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['/parts-uncountable-monthly-report']); ?>
                                 </li>
                             </ol>
                         </div>
