@@ -199,7 +199,7 @@ $columns = [
         'mergeHeader' => true,
     ],
     /**/[
-        'attribute' => 'delayQty',
+        'attribute' => 'total_delay',
         'label' => 'Delay<br/>Qty',
         'encodeLabel' => false,
         'hAlign' => 'center',
@@ -212,9 +212,12 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'onTimeCompletion',
+        'attribute' => 'on_time_completion',
         'hAlign' => 'center',
         'label' => 'On-Time<br/>Completion',
+        'value' => function($model){
+            return $model->on_time_completion . '%';
+        },
         'encodeLabel' => false,
         //'pageSummary' => true,
         'vAlign' => 'middle',
@@ -303,7 +306,7 @@ $columns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,

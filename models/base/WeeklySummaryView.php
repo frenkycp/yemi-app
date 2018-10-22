@@ -9,12 +9,14 @@ use Yii;
 /**
  * This is the base-model class for table "weekly_summary_view".
  *
- * @property string $period
+ * @property integer $period
  * @property integer $week
  * @property string $category
  * @property string $plan_qty
  * @property string $actual_qty
  * @property string $balance_qty
+ * @property string $total_delay
+ * @property string $on_time_completion
  * @property integer $plan_export
  * @property integer $actual_export
  * @property integer $balance_export
@@ -49,10 +51,9 @@ abstract class WeeklySummaryView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['week', 'plan_export', 'actual_export', 'balance_export', 'flag'], 'integer'],
-            [['plan_qty', 'actual_qty', 'balance_qty'], 'number'],
+            [['period', 'week', 'plan_export', 'actual_export', 'balance_export', 'flag'], 'integer'],
+            [['plan_qty', 'actual_qty', 'balance_qty', 'total_delay', 'on_time_completion'], 'number'],
             [['remark'], 'string'],
-            [['period'], 'string', 'max' => 6],
             [['category'], 'string', 'max' => 20]
         ];
     }
@@ -69,6 +70,8 @@ abstract class WeeklySummaryView extends \yii\db\ActiveRecord
             'plan_qty' => 'Plan Qty',
             'actual_qty' => 'Actual Qty',
             'balance_qty' => 'Balance Qty',
+            'total_delay' => 'Total Delay',
+            'on_time_completion' => 'On Time Completion',
             'plan_export' => 'Plan Export',
             'actual_export' => 'Actual Export',
             'balance_export' => 'Balance Export',
