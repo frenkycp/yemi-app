@@ -251,7 +251,7 @@ $grid_columns = [
     ],
     [
         'attribute' => 'mesin_last_update',
-        'label' => 'Last Update',
+        'label' => 'Start Trouble',
         'vAlign' => 'middle',
         'value' => function($model){
             return $model->mesin_last_update == null ? '-' : date('d-M-Y H:i:s', strtotime($model->mesin_last_update));

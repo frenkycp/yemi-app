@@ -114,7 +114,10 @@ $gridColumns = [
         'value' => 'shipCustomer.customer_desc',
         'label' => 'Customer Description',
         'vAlign' => 'middle',
-        
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
         'hidden' => \Yii::$app->request->get('dst') !== null ? false : true,
     ],
     [
@@ -122,41 +125,36 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'pageSummary' => 'Total',
-        'width' => '120px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 120px;'
+            'style' => 'text-align: center; min-width: 90px; font-size: 12px;'
         ],
         //
     ],
     [
         'attribute' => 'so',
         'vAlign' => 'middle',
-        'width' => '90px',
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 90px;'
+            'style' => 'text-align: center; min-width: 70px; font-size: 12px;'
         ],
     ],
     [
         'attribute' => 'dst',
         'vAlign' => 'middle',
-        'width' => '150px',
-        //
-        'contentOptions' => [
-            'style' => 'min-width: 120px;',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 110px; font-size: 12px;'
         ],
-        //'hAlign' => 'center'
     ],
     [
         'attribute' => 'gmc',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '120px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
         ],
     ],
     [
@@ -164,9 +162,9 @@ $gridColumns = [
         'value' => 'sernoMaster.description',
         'label' => 'Description',
         'vAlign' => 'middle',
-        'width' => '170px',
-        'contentOptions' => [
-            'style' => 'min-width: 150px;',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 130px; font-size: 12px;'
         ],
     ],
     [
@@ -199,27 +197,15 @@ $gridColumns = [
     ],
     [
         'attribute' => 'cntr',
-        'label' => 'Container No',
+        'label' => 'Container<br/>No',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '50px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 50px; font-size: 12px;'
+        ],
     ],
-    /*[
-        'attribute' => 'ng',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '60px',
-        
-        'pageSummary' => true,
-        'format' => ['decimal',0]
-    ],
-    [
-        'attribute' => 'category',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '100px',
-        'filter' => ['MACHINE' => 'MACHINE', 'MAN' => 'MAN', 'MATERIAL' => 'MATERIAL', 'METHOD' => 'METHOD']
-    ],*/
     [
         'attribute' => 'back_order',
         'label' => 'Priority',
@@ -233,10 +219,13 @@ $gridColumns = [
         'format' => 'raw',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '180px',
         'filter' => [
             2 => 'Air Shipment'
-        ]
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'remark',
@@ -249,10 +238,9 @@ $gridColumns = [
         'label' => 'ETD Before',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '120px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 120px;'
+            'style' => 'text-align: center; min-width: 90px; font-size: 12px;'
         ],
         //
     ],
@@ -322,7 +310,7 @@ $gridColumns = [
             'striped' => false,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 13px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
