@@ -193,8 +193,16 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?>
                                 </li>
+                            </ol>
+                        </div>
+                        <div class="list-group-item">
+                            <p>Shipping Performance <span class="japanesse-word">(出荷パフォーマンス)</span></p>
+                            <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Shipping Summary <span class="japanesse-word">週次出荷表 (計画対実績)</span>', ['/weekly-plan/index']); ?>
+                                    <?= Html::a('Weekly Summary <span class="japanesse-word">週次出荷表 (計画対実績)</span>', ['/weekly-plan']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Monthly Summary <span class="japanesse-word">月次出荷表 (計画対実績)</span>', ['/so-achievement-data']); ?>
                                 </li>
                             </ol>
                         </div>
@@ -214,13 +222,18 @@ $this->registerCss("
                 <br/>
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Finish Good Inspection<br/><span class="japanesse-word">( 完成品出荷の管理検査)</span><br/></div>
-                    <div class="list-group">
-                        <?= Html::a('Monthly Production Inspection Chart<br/><span class="japanesse-word">(月次出荷管理検査)</span>', ['/production-monthly-inspection/index'], [
-                            'class' => 'list-group-item'
-                        ]); ?>
-                        <?= Html::a('Final Inspection Data <span class="japanesse-word">(出荷管理検査データ)</span>', ['/production-inspection/index'], [
-                            'class' => 'list-group-item'
-                        ]); ?>
+                    <div class="list-group-item">
+                        <ol style="padding-left: 1em">
+                            <li>
+                                <?= Html::a('Weekly Shipping Inspection Monitor</br><span class="japanesse-word">(週次出荷対応管理検査モニター)</span>', ['/production-inspection-daily']); ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Monthly Production Inspection Chart<br/><span class="japanesse-word">(月次出荷管理検査)</span>', ['/production-monthly-inspection']); ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Final Inspection Data <span class="japanesse-word">(出荷管理検査データ)</span>', ['/production-inspection']); ?>
+                            </li>
+                        </ol>
                     </div>
                 </div>
                 <hr>
