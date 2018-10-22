@@ -58,7 +58,7 @@ $this->registerJs($script, View::POS_HEAD );
 			    	'chart' => [
 			    		'type' => 'columnrange',
 			    		'inverted' => true,
-			    		'height' => 420,
+			    		'height' => 720,
 			    	],
 			    	'title' => [
 				        'text' => $title
