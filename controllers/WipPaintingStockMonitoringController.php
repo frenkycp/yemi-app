@@ -21,32 +21,125 @@ class WipPaintingStockMonitoringController extends Controller
 
     public function actionIndex()
     {
+        $green_limit = 80;
     	$wip_stock_view = WipStock02::find()->all();
+        $factory1_area_arr = ['WW PROCESS', 'VACUUM PRESS', 'CAB ASSY', 'PAINTING', 'HANDY LAMINATE', 'SUB ASSY', 'AVITECS'];
+        $factory2_area_arr = ['INJ SMALL', 'INJ LARGE', 'PCB AUTO INS.', 'SMT', 'ROM WRITING', 'PCB MANUAL INS.', 'SPEAKER PROJECT'];
+        $kd_area_arr = ['PCB PACKING', 'SPU PACKING'];
+        $category_area_arr = [
+            1 => 'factory1',
+            2 => 'factory2',
+            3 => 'kd',
+        ];
 
-    	$data = [];
+        $factory_title_arr = [
+            'WW PROCESS' => 'Wood Working　（木工）',
+        ];
+
+    	//$data = [];
     	foreach ($wip_stock_view as $value) {
-    		$limit = $value->limit_qty * 1.2;
-    		$data[$value->child_analyst_desc] = [
-    			//'stage' => $value->stage,
-    			'onhand_qty' => $value->onhand_qty,
-    			'limit_qty' => $limit,
-    			'plot_green' => [
-    				'from' => 0,
-    				'to' => $value->limit_qty * 0.8,
-    			],
-    			'plot_yellow' => [
-    				'from' => $value->limit_qty * 0.8,
-    				'to' => $value->limit_qty * 1,
-    			],
-    			'plot_red' => [
-    				'from' => $value->limit_qty,
-    				'to' => $limit,
-    			],
-    		];
+            if (in_array($value->child_analyst_desc, $factory1_area_arr)) {
+                $area = 'factory1';
+            } elseif (in_array($value->child_analyst_desc, $factory2_area_arr)) {
+                $area = 'factory2';
+            } elseif (in_array($value->child_analyst_desc, $kd_area_arr)) {
+                $area = 'kd';
+            } else {
+                $area = 'final_assy';
+            }
+            $categories[$area][] = $value->child_analyst_desc;
+
+            $fill_percentage = 0;
+            if ($value->limit_qty > 0) {
+                $fill_percentage = round((($value->onhand_qty / $value->limit_qty) * 100), 2);
+            }
+
+            $green_limit_qty = 0.8 * $value->limit_qty;
+
+            if ($fill_percentage <= $green_limit) {
+                $tmp_data[$area]['red'][] = [
+                    'y' => null,
+                    'qty' => 0,
+                ];
+                $tmp_data[$area]['green'][] = [
+                    'y' => $fill_percentage,
+                    'qty' => $value->onhand_qty,
+                ];
+                $tmp_data[$area]['white'][] = [
+                    'y' => 100 - $fill_percentage,
+                    'qty' => $value->limit_qty - $value->onhand_qty,
+                ];
+            } else {
+                $tmp_data[$area]['red'][] = [
+                    'y' => $fill_percentage - $green_limit,
+                    'qty' => $value->onhand_qty - $green_limit_qty,
+                ];
+                $tmp_data[$area]['green'][] = [
+                    'y' => $green_limit,
+                    'qty' => $green_limit_qty,
+                ];
+                if (fill_percentage < 100) {
+                    $tmp_data[$area]['white'][] = [
+                        'y' => 100 - $fill_percentage,
+                        'qty' => $value->limit_qty - $value->onhand_qty,
+                    ];
+                } else {
+                    $tmp_data[$area]['white'][] = [
+                        'y' => null,
+                        'qty' => 0,
+                    ];
+                }
+                
+            }
     	}
 
+        foreach ($category_area_arr as $key => $value) {
+            $data2[$value] = [
+                [
+                    'name' => 'Empty Qty',
+                    'data' => $tmp_data[$value]['white'],
+                    'color' => 'rgba(240, 240, 240, 0)',
+                    'showInLegend' => false
+                ],
+                [
+                    'name' => 'Over (more than 80% of Limit Qty)',
+                    'data' => $tmp_data[$value]['red'],
+                    'color' => 'rgba(255, 0, 0, 0.7)',
+                ],
+                [
+                    'name' => 'Normal (less than 80% of Limit Qty)',
+                    'data' => $tmp_data[$value]['green'],
+                    'color' => 'rgba(0, 255, 0, 0.7)',
+                ],
+            ];
+        }
+
+        /*$data2 = [
+            'factory1' => [
+                [
+                    'name' => 'Empty Qty',
+                    'data' => $tmp_data['factory1']['white'],
+                    'color' => 'rgba(240, 240, 240, 0)',
+                    'showInLegend' => false
+                ],
+                [
+                    'name' => 'Over (more than 80% of Limit Qty)',
+                    'data' => $tmp_data['factory1']['red'],
+                    'color' => 'rgba(255, 0, 0, 0.7)',
+                ],
+                [
+                    'name' => 'Normal (less than 80% of Limit Qty)',
+                    'data' => $tmp_data['factory1']['green'],
+                    'color' => 'rgba(0, 255, 0, 0.7)',
+                ],
+            ],
+        ];*/
+
     	return $this->render('index', [
-    		'data' => $data
+    		'data' => $data,
+            'data2' => $data2,
+            'categories' => $categories,
+            'category_area_arr' => $category_area_arr
     	]);
     }
 }
