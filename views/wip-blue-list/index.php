@@ -424,13 +424,25 @@ $grid_columns = [
             'hover' => true,
             'responsive' => true,
             //'condensed' => true,
-            'striped' => true,
+            'striped' => false,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
+            'rowOptions' => function($model){
+                $find_slip = app\models\GojekOrderTbl::find()
+                ->where([
+                    'slip_id' => $model->slip_id
+                ])
+                ->one();
+                if ($find_slip->slip_id == null) {
+                    return ['class' => ''];
+                } else {
+                    return ['class' => 'bg-success'];
+                }
+            },
             'toolbar' =>  [
                 '{export}',
                 '{toggleData}',
