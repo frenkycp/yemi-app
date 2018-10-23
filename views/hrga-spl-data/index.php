@@ -162,7 +162,7 @@ $grid_columns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => true, // pjax is set to always true for this demo

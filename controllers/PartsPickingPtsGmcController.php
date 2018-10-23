@@ -9,14 +9,14 @@ use yii\helpers\ArrayHelper;
 use app\models\SapPickingListPtsView;
 use app\models\SapPickingPtsDetailView;
 
-class PartsPickingPtsController extends Controller
+class PartsPickingPtsGmcController extends Controller
 {
 
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
     
     public function actionIndex()
     {

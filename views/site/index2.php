@@ -81,16 +81,16 @@ $this->registerCss("
                     <div class="panel-heading text-center">E-WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/>E-WIP<span class="japanesse-word"> 生産工程モニタリング</span></div>
                     <div class="list-group">
                         <?= Html::a('E-WIP Monitor （E-WIP モニター）', ['wip-painting-monitoring/index'], [
-                            'class' => 'list-group-item'
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                         <?= Html::a('E-WIP Process-Flow Monitor<br/>（E-WIP 工程流れモニター）', ['wip-flow-process-monitoring/index'], [
-                            'class' => 'list-group-item'
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                         <?= Html::a('Stock WIP Monitor（仕掛在庫モニター）', ['wip-painting-stock-monitoring/index'], [
-                            'class' => 'list-group-item'
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                         <?= Html::a('WIP Data Record（仕掛りデーター）', ['wip-plan-actual-report/index'], [
-                            'class' => 'list-group-item'
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                     </div>
                 </div>
