@@ -59,7 +59,7 @@ $this->registerCss("
                             </ol>
                         </div>
                         <div class="list-group-item">
-                            <p>YEMI WH to Production<br/><span class="japanesse-word">(YEMI 部品倉庫⇒生産職場)</span></p>
+                            <p>YEMI WH to Production <span class="japanesse-word">(YEMI 部品倉庫⇒生産職場)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
                                     <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['/parts-picking-status']); ?>
@@ -70,7 +70,7 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['/parts-picking-pts']); ?>
                                 </li><li>
-                                    <?= Html::a('Picking Trouble by Model GMC <span class="japanesse-word">(製品ＧＭＣ別のピッキング問題）</span>', ['/parts-picking-pts-gmc']); ?>
+                                    <?= Html::a('Picking Trouble by Model GMC<br/><span class="japanesse-word">(製品ＧＭＣ別のピッキング問題）</span>', ['/parts-picking-pts-gmc']); ?>
                                 </li>
                             </ol>
                         </div>
