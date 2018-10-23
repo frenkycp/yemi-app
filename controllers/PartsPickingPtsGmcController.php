@@ -59,7 +59,7 @@ class PartsPickingPtsGmcController extends Controller
 
     	$data = [
     		[
-    			'name' => 'Total PTS by Vendor',
+    			'name' => 'Picking Trouble by Model GMC',
     			'data' => $tmp_data
     		]
     	];

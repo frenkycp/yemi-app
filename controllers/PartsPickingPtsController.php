@@ -59,7 +59,7 @@ class PartsPickingPtsController extends Controller
 
     	$data = [
     		[
-    			'name' => 'Total PTS by Vendor',
+    			'name' => 'Picking Trouble by Vendor',
     			'data' => $tmp_data
     		]
     	];
