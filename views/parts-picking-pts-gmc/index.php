@@ -15,8 +15,8 @@ use yii\bootstrap\ActiveForm;
 
 $this->title = [
     'page_title' => 'Picking Trouble by Model GMC <span class="japanesse text-green">(製品ＧＭＣ別のピッキング問題）</span>',
-    'tab_title' => ' Picking Trouble by Model GMC',
-    'breadcrumbs_title' => ' Picking Trouble by Model GMC'
+    'tab_title' => 'Picking Trouble by Model GMC',
+    'breadcrumbs_title' => 'Picking Trouble by Model GMC'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
