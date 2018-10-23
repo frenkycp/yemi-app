@@ -69,6 +69,8 @@ $this->registerCss("
                                 </li>
                                 <li>
                                     <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['/parts-picking-pts']); ?>
+                                </li><li>
+                                    <?= Html::a('Picking Trouble by Model GMC <span class="japanesse-word">(製品ＧＭＣ別のピッキング問題）</span>', ['/parts-picking-pts-gmc']); ?>
                                 </li>
                             </ol>
                         </div>

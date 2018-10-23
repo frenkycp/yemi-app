@@ -14,9 +14,9 @@ use yii\bootstrap\ActiveForm;
 */
 
 $this->title = [
-    'page_title' => 'Picking Trouble by Vendor <span class="japanesse text-green">(ベンダー別のピッキング問題）</span>',
-    'tab_title' => ' Picking Trouble by Vendor',
-    'breadcrumbs_title' => ' Picking Trouble by Vendor'
+    'page_title' => 'Picking Trouble by Model GMC <span class="japanesse text-green">(製品ＧＭＣ別のピッキング問題）</span>',
+    'tab_title' => ' Picking Trouble by Model GMC',
+    'breadcrumbs_title' => ' Picking Trouble by Model GMC'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
@@ -51,7 +51,7 @@ echo $start_period . ' to ' . $end_period;*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     'layout' => 'horizontal',
-    'action' => Url::to(['parts-picking-pts/index']),
+    'action' => Url::to(['parts-picking-pts-gmc/index']),
 ]); ?>
 
 <div class="row">
@@ -96,6 +96,7 @@ echo $start_period . ' to ' . $end_period;*/
                     'title' => [
                         'text' => 'Qty'
                     ],
+                    'allowDecimals' => false,
                 ],
                 'plotOptions' => [
                     'series' => [

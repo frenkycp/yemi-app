@@ -20,14 +20,10 @@ class PartsPickingPtsController extends Controller
     
     public function actionIndex()
     {
-    	$model = new \yii\base\DynamicModel([
-	        'period'
-	    ]);
-	    $model->addRule(['period'], 'required');
 
 	    $period_category = 1;
-	    if($model->load(\Yii::$app->request->get())){
-	        $period_category = $model->period;
+	    if(\Yii::$app->request->get('period') !== null){
+	        $period_category = \Yii::$app->request->get('period');
 	    }
 
     	$categories = [];
@@ -48,7 +44,7 @@ class PartsPickingPtsController extends Controller
     	->andWhere(['<=', 'period', $end_period])
     	->groupBy('PUR_LOC_DESC')
     	->orderBy('total_count DESC')
-    	->limit(10)
+    	->limit(15)
         ->asArray()
     	->all();
 
@@ -70,7 +66,6 @@ class PartsPickingPtsController extends Controller
 
     	return $this->render('index', [
     		'data' => $data,
-    		'model' => $model,
     		'categories' => $categories,
     		'start_period' => $start_period,
     		'end_period' => $end_period,
@@ -92,21 +87,20 @@ class PartsPickingPtsController extends Controller
         ->where(['>=', 'period', $start_period])
         ->andWhere(['<=', 'period', $end_period])
         ->andWhere(['PUR_LOC_DESC' => $pur_loc_desc])
-        ->orderBy('parent, child')
+        ->orderBy('child DESC, parent')
         ->asArray()
         ->all();
 
-        $remark = '<h4>PTS by ' . $pur_loc_desc . ' <small>(' . $start_period . ' to ' . $end_period . ')</small></h4>';
+        $remark = '<h4>PTS by ' . $pur_loc_desc . ' <small>(' . date('F Y', strtotime($start_period . '01')) . ' to ' . date('F Y', strtotime($end_period . '01')) . ')</small></h4>';
         $remark .= '<table class="table table-bordered table-striped table-hover">';
         $remark .= '
         <tr style="font-size: 12px;">
             <th style="text-align: center;">No</th>
-            <th style="text-align: center;">GMC</th>
-            <th>Description</th>
             <th style="text-align: center;">Part No</th>
             <th>Part Description</th>
+            <th style="text-align: center;">Parent</th>
+            <th>Parent Description</th>
             <th style="text-align: center;">Division</th>
-            <th style="text-align: center;">PIC</th>
             <th style="text-align: center;">Request<br/>Date</th>
             <th style="text-align: center;">Request<br/>Qty</th>
         </tr>
@@ -118,13 +112,13 @@ class PartsPickingPtsController extends Controller
             $remark .= '
             <tr style="font-size: 12px;">
                 <td style="text-align: center;">' . $no . '</td>
-                <td style="text-align: center;">' . $value['parent'] . '</td>
-                <td>' . $value['parent_desc'] . '</td>
                 <td style="text-align: center;">' . $value['child'] . '</td>
                 <td>' . $value['child_desc'] . '</td>
+                <td style="text-align: center;">' . $value['parent'] . '</td>
+                <td>' . $value['parent_desc'] . '</td>
                 <td style="text-align: center;">' . $value['division'] . '</td>
-                <td style="text-align: center;">' . $value['pic_delivery'] . '</td>
-                <td style="text-align: center; min-width: 90px;">' . $value['req_qty'] . '</td>
+                <td style="text-align: center; min-width: 90px;">' . $req_date . '</td>
+                <td style="text-align: center; min-width: 90px;">' . (int)$value['req_qty'] . '</td>
             </tr>';
             $no++;
         }
