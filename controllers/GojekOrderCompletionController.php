@@ -29,10 +29,12 @@ class GojekOrderCompletionController extends Controller
 			'GOJEK_ID'
 		);
 
+		$driver_arr = GojekTbl::find()->orderBy('GOJEK_DESC')->all();
+
 		$tmp_data = [];
 
 		foreach ($driver_arr as $value) {
-			$nik = $value;
+			$nik = $value->GOJEK_ID;
 			$order_data_arr = GojekOrderView01::find()
 			->select([
 				'GOJEK_ID',
@@ -51,20 +53,27 @@ class GojekOrderCompletionController extends Controller
 			->asArray()
 			->all();
 
-			foreach ($order_data_arr as $order_data) {
-				$issued_date = (strtotime($order_data['issued_date'] . " +2 hours") * 1000);
-				$tmp_data[$nik]['open'][] = [
-					'x' => $issued_date,
-					'y' => $order_data['stat_open'] == 0 ? null : (int)$order_data['stat_open'],
-					'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'O']),
-				];
-				$tmp_data[$nik]['close'][] = [
-					'x' => $issued_date,
-					'y' => $order_data['stat_close'] == 0 ? null : (int)$order_data['stat_close'],
-					'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'C']),
-				];
-				$tmp_data[$nik]['nama'] = $order_data['GOJEK_DESC'];
+			if (count($order_data_arr) > 0) {
+				foreach ($order_data_arr as $order_data) {
+					$issued_date = (strtotime($order_data['issued_date'] . " +2 hours") * 1000);
+					$tmp_data[$nik]['open'][] = [
+						'x' => $issued_date,
+						'y' => $order_data['stat_open'] == 0 ? null : (int)$order_data['stat_open'],
+						'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'O']),
+					];
+					$tmp_data[$nik]['close'][] = [
+						'x' => $issued_date,
+						'y' => $order_data['stat_close'] == 0 ? null : (int)$order_data['stat_close'],
+						'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'C']),
+					];
+					$tmp_data[$nik]['nama'] = $order_data['GOJEK_DESC'];
+				}
+			} else {
+				$tmp_data[$nik]['open'] = null;
+				$tmp_data[$nik]['close'] = null;
+				$tmp_data[$nik]['nama'] = $value->GOJEK_DESC;
 			}
+			
 		}
 
 		$fix_data = [];
@@ -83,52 +92,6 @@ class GojekOrderCompletionController extends Controller
 			];
 			$fix_data[$key]['nama'] = $value['nama'];
 		}
-
-		/*$order_data_arr = GojekTbl::find()
-		->joinWith('gojekOrderTbl')
-		->select([
-			'GOJEK_TBL.GOJEK_ID',
-			'GOJEK_TBL.GOJEK_DESC',
-			'stat_open' => 'SUM(CASE WHEN STAT = \'O\' THEN 1 ELSE 0 END)',
-			'stat_close' => 'SUM(CASE WHEN STAT = \'C\' THEN 1 ELSE 0 END)',
-			'stat_total' => 'COUNT(STAT)'
-		])
-		->groupBy('GOJEK_TBL.GOJEK_ID, GOJEK_TBL.GOJEK_DESC')
-		->orderBy('GOJEK_TBL.GOJEK_DESC')
-		->all();
-
-		$tmp_data_open = [];
-		$tmp_data_close = [];
-
-		$max_order = 0;
-
-		foreach ($order_data_arr as $key => $value) {
-			if ($value->stat_total > $max_order) {
-				$max_order = $value->stat_total;
-			}
-			$categories[] = $value->GOJEK_DESC;
-			$tmp_data_open[] = [
-				'y' => (int)$value->stat_open == 0 ? null : (int)$value->stat_open,
-				'remark' => $this->getRemark($value->GOJEK_ID, $value->GOJEK_DESC, 'O'),
-			];
-			$tmp_data_close[] = [
-				'y' => (int)$value->stat_close == 0 ? null : (int)$value->stat_close,
-				'remark' => $this->getRemark($value->GOJEK_ID, $value->GOJEK_DESC, 'C'),
-			];
-		}
-
-		$data = [
-			[
-				'name' => 'OPEN',
-				'data' => $tmp_data_open,
-				'color' => 'rgba(255, 0, 0, 0.6)'
-			],
-			[
-				'name' => 'CLOSE',
-				'data' => $tmp_data_close,
-				'color' => 'rgba(0, 255, 0, 0.6)'
-			],
-		];*/
 
 		return $this->render('index', [
 			//'data' => $data,
