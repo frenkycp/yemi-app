@@ -21,6 +21,7 @@ class GojekOrderCompletionController extends Controller
 	
 	public function actionIndex()
 	{
+		date_default_timezone_set('Asia/Jakarta');
 		$data = [];
 		$categories = [];
 
