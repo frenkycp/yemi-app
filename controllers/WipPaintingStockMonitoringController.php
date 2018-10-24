@@ -22,7 +22,7 @@ class WipPaintingStockMonitoringController extends Controller
     public function actionIndex()
     {
         $green_limit = 80;
-    	$wip_stock_view = WipStock02::find()->all();
+    	$wip_stock_view = WipStock02::find()->orderBy('child_analyst_desc')->all();
         $factory1_area_arr = ['WW PROCESS', 'VACUUM PRESS', 'CAB ASSY', 'PAINTING', 'HANDY LAMINATE', 'SUB ASSY', 'AVITECS'];
         $factory2_area_arr = ['INJ SMALL', 'INJ LARGE', 'PCB AUTO INS.', 'SMT', 'ROM WRITING', 'PCB MANUAL INS.', 'SPEAKER PROJECT'];
         $kd_area_arr = ['PCB PACKING', 'SPU PACKING'];
@@ -34,6 +34,21 @@ class WipPaintingStockMonitoringController extends Controller
 
         $factory_title_arr = [
             'WW PROCESS' => 'Wood Working　（木工）',
+            'VACUUM PRESS' => 'VACUUM PRESS （真空貼り）',
+            'CAB ASSY' => 'CAB ASSY （箱組）',
+            'PAINTING' => 'PAINTING （塗装）',
+            'HANDY LAMINATE' => 'Hand Lamination （手貼り）',
+            'SUB ASSY' => 'SUB ASSY （サブ組）',
+            'AVITECS' => 'AVITECS （防音製品）',
+            'INJ SMALL' => 'INJECTION SMALL （小型成形）',
+            'INJ LARGE' => 'INJECTION LARGE　（大型成形）',
+            'PCB AUTO INS.' => 'PCB AUTO （自動挿入）',
+            'SMT' => 'SMT （実装）',
+            'ROM WRITING' => 'ROM WRITING (ROM書込)',
+            'PCB MANUAL INS.' => 'PCB MANUAL （手挿入)',
+            'SPEAKER PROJECT' => 'SPEAKER PROJECT  （スピーカー）',
+            'PCB PACKING' => 'PCB PACKING （基板ＫＤ）',
+            'SPU PACKING' => 'SPU PACKING  （スピーカーKD）'
         ];
 
     	//$data = [];
@@ -47,7 +62,7 @@ class WipPaintingStockMonitoringController extends Controller
             } else {
                 $area = 'final_assy';
             }
-            $categories[$area][] = $value->child_analyst_desc;
+            $categories[$area][] = $factory_title_arr[$value->child_analyst_desc];
 
             $fill_percentage = 0;
             if ($value->limit_qty > 0) {
@@ -102,12 +117,12 @@ class WipPaintingStockMonitoringController extends Controller
                     'showInLegend' => false
                 ],
                 [
-                    'name' => 'Over (more than 80% of Limit Qty)',
+                    'name' => 'Over (> 80% of Limit Qty)',
                     'data' => $tmp_data[$value]['red'],
                     'color' => 'rgba(255, 0, 0, 0.7)',
                 ],
                 [
-                    'name' => 'Normal (less than 80% of Limit Qty)',
+                    'name' => 'Normal (≤ 80% of Limit Qty)',
                     'data' => $tmp_data[$value]['green'],
                     'color' => 'rgba(0, 255, 0, 0.7)',
                 ],
