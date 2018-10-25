@@ -56,7 +56,7 @@ class GojekOrderCompletionController extends Controller
 
 			if (count($order_data_arr) > 0) {
 				foreach ($order_data_arr as $order_data) {
-					$issued_date = (strtotime($order_data['issued_date'] . " +2 hours") * 1000);
+					$issued_date = (strtotime($order_data['issued_date'] . " +7 hours") * 1000);
 					$tmp_data[$nik]['open'][] = [
 						'x' => $issued_date,
 						'y' => $order_data['stat_open'] == 0 ? null : (int)$order_data['stat_open'],
