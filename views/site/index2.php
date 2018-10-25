@@ -80,8 +80,16 @@ $this->registerCss("
     		</div>
     		<div class="col-sm-3">
                 <div class="panel panel-success">
-                    <div class="panel-heading text-center">E-WIP Monitoring <span class="text-red japanesse-word">(準備中)</span><br/>E-WIP<span class="japanesse-word"> 生産工程モニタリング</span></div>
+                    <div class="panel-heading text-center">E-WIP Monitoring<br/>E-WIP<span class="japanesse-word"> 生産工程モニタリング</span></div>
                     <div class="list-group">
+                        <div class="list-group-item">
+                            <p>Monthly Production <span class="japanesse-word">(月次生産）</span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('Monthly Production Data <span class="japanesse-word">(月次生産計画)</span>', ['/yemi-internal/index']); ?>
+                                </li>
+                            </ol>
+                        </div>
                         <?= Html::a('E-WIP Monitor （E-WIP モニター）', ['wip-painting-monitoring/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
@@ -205,14 +213,6 @@ $this->registerCss("
                                 </li>
                                 <li>
                                     <?= Html::a('Monthly Summary <span class="japanesse-word">月次出荷表 (計画対実績)</span>', ['/so-achievement-data']); ?>
-                                </li>
-                            </ol>
-                        </div>
-                        <div class="list-group-item">
-                            <p>Monthly Production <span class="japanesse-word">(月次生産）</span></p>
-                            <ol style="padding-left: 1em">
-                                <li>
-                                    <?= Html::a('Monthly Production Data <span class="japanesse-word">(月次生産計画)</span>', ['/yemi-internal/index']); ?>
                                 </li>
                             </ol>
                         </div>

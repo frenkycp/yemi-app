@@ -19,7 +19,7 @@ $this->registerCss('
     }
 ');
 
-$profpic = 'profpic_02.png';
+$profpic = "";
 /*if ($model_karyawan !== null && $model_karyawan->JENIS_KELAMIN == 'P') {
     $profpic = 'profile-picture-woman.png';
 }*/
@@ -48,7 +48,21 @@ $profpic = 'profpic_02.png';
             <div class="col-md-3">
                 <div class="box box-primary box-solid">
                     <div class="box-body box-profile">
-                        <?= Html::img(['uploads/' . $profpic], ["class"=>"profile-user-img img-responsive img-circle"]) ?>
+                        <?php
+                        $filename = $model_karyawan->NIK . '.jpg';
+                        $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
+                        if (file_exists($path)) {
+                            echo Html::img('@web/uploads/yemi_employee_img/' . $model_karyawan->NIK . '.jpg', [
+                                'class' => 'profile-user-img img-responsive img-circle',
+                                'style' => 'height: 120px; width: 120px;'
+                            ]);
+                        } else {
+                            echo Html::img('@web/uploads/profpic_02.png', [
+                                'class' => 'profile-user-img img-responsive img-circle',
+                                'style' => 'height: 120px; width: 120px;'
+                            ]);
+                        }
+                        ?>
 
                         <h3 class="profile-username text-center" style="font-size: 16px;"><?= $model_karyawan->NAMA_KARYAWAN ?></h3>
 
