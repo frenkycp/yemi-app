@@ -21,6 +21,11 @@ class HrgaEmpDeptMonthlyController extends Controller
 		$data = [];
 		$category_arr = [];
 		$name_arr = [];
+		$color_arr = [
+			'#BCD8C1', '#D6DBB2', '#E3D985', '#E57A44', '#422040',
+			'#D5C7BC', '#EDA4BD', '#4ADBC8', '#5CAB7D', '#EED5C2',
+			'#CA3CFF', '#899E8B', '#99C5B5', '#AFECE7', '#81F499'
+		];
 
 		$menu = 2;
 
@@ -34,6 +39,7 @@ class HrgaEmpDeptMonthlyController extends Controller
 		])
 		->all();
 
+		$color_index = 0;
 		foreach ($name_arr as $name) {
 			$tmp_data = [];
 			$split_name_arr = explode('-', $name, 2);
@@ -57,8 +63,10 @@ class HrgaEmpDeptMonthlyController extends Controller
 				'name' => $menu == 1 ? $split_name_arr[1] : $name,
 				'data' => $tmp_data,
 				'type' => 'column',
-				
+				'color' => $color_arr[$color_index],
 			];
+
+			$color_index++;
 		}
 
 		$working_days = [19, 20, 21, 21, 21, 17, 23, 22, 20, 23, 20, 18];
@@ -80,7 +88,7 @@ class HrgaEmpDeptMonthlyController extends Controller
 				(float)round(71618/18),
 			],
 			'type' => 'spline',
-			'color' => new JsExpression('Highcharts.getOptions().colors[12]'),
+			'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 			'yAxis' => 1,
 		];
 		/*$data[] = [

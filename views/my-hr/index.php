@@ -54,12 +54,12 @@ $profpic = "";
                         if (file_exists($path)) {
                             echo Html::img('@web/uploads/yemi_employee_img/' . $model_karyawan->NIK . '.jpg', [
                                 'class' => 'profile-user-img img-responsive img-circle',
-                                'style' => 'height: 120px; width: 120px;'
+                                'style' => 'object-fit: cover; height: 120px; width: 120px;'
                             ]);
                         } else {
                             echo Html::img('@web/uploads/profpic_02.png', [
                                 'class' => 'profile-user-img img-responsive img-circle',
-                                'style' => 'height: 120px; width: 120px;'
+                                'style' => 'object-fit: cover; height: 120px; width: 120px;'
                             ]);
                         }
                         ?>

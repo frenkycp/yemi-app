@@ -82,14 +82,9 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">E-WIP Monitoring<br/>E-WIP<span class="japanesse-word"> 生産工程モニタリング</span></div>
                     <div class="list-group">
-                        <div class="list-group-item">
-                            <p>Monthly Production <span class="japanesse-word">(月次生産）</span></p>
-                            <ol style="padding-left: 1em">
-                                <li>
-                                    <?= Html::a('Monthly Production Data <span class="japanesse-word">(月次生産計画)</span>', ['/yemi-internal/index']); ?>
-                                </li>
-                            </ol>
-                        </div>
+                        <?= Html::a('Monthly Production Data <span class="japanesse-word">(月次生産計画)</span>', ['/yemi-internal/index'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
                         <?= Html::a('E-WIP Monitor （E-WIP モニター）', ['wip-painting-monitoring/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
@@ -117,6 +112,7 @@ $this->registerCss("
                                 <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
                                 <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
                                 <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
+                                <li><?= Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
                             </ol>
                         </div>
 

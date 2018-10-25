@@ -17,18 +17,6 @@ date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
-$this->registerCss(".tab-content > .tab-pane,
-.pill-content > .pill-pane {
-    display: block;     
-    height: 0;          
-    overflow-y: hidden; 
-}
-
-.tab-content > .active,
-.pill-content > .active {
-    height: auto;       
-} ");
-
 $script = <<< JS
     window.onload = setupRefresh;
 
@@ -59,13 +47,13 @@ echo '</pre>';*/
     <div class="box-header with-border">
         <h4 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h4>
     </div>
-    <div class="box-body no-padding">
+    <div class="box-body">
         <?php
         echo Highcharts::widget([
             'scripts' => [
-                'modules/exporting',
-                // 'themes/grid-light',
-                'themes/sand-signika',
+                //'modules/exporting',
+                'themes/grid-light',
+                // 'themes/sand-signika',
             ],
             'options' => [
                 'chart' => [
