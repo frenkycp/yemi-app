@@ -5,6 +5,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\Karyawan;
 use app\models\RekapAbsensiView;
+use app\models\CutiRekapView02;
 use app\models\SplView;
 use app\models\AbsensiTbl;
 
@@ -29,9 +30,34 @@ class MyHrController extends Controller
         ])
         ->orderBy('PERIOD')
         ->all();
+
+        $rekap_cuti_arr = CutiRekapView02::find()
+        ->where([
+            'TAHUN' => date('Y'),
+            'NIK' => $nik
+        ])
+        ->all();
+
+        $using_cuti = 0;
+        $kuota_cuti = 0;
+        foreach ($rekap_cuti_arr as $rekap_cuti) {
+            if ($rekap_cuti->TYPE == '01-KUOTA') {
+                $kuota_cuti += $rekap_cuti->JUMLAH_CUTI;
+            } else {
+                $using_cuti += $rekap_cuti->JUMLAH_CUTI;
+            }
+        }
+        $sisa_cuti = $kuota_cuti + $using_cuti;
+        if ($sisa_cuti < 0) {
+            $sisa_cuti = 0;
+        }
+
 		return $this->render('index', [
 			'model_karyawan' => $model_karyawan,
             'model_rekap_absensi' => $model_rekap_absensi,
+            'using_cuti' => $using_cuti,
+            'kuota_cuti' => $kuota_cuti,
+            'sisa_cuti' => $sisa_cuti,
 		]);
 	}
 

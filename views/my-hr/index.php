@@ -46,17 +46,17 @@ $profpic = 'profpic_02.png';
     <div class="box-body">
         <div class="row" style="<?= $model_karyawan === null ? 'display: none;' : ''; ?>">
             <div class="col-md-3">
-                <div class="box box-primary bg-purple">
+                <div class="box box-primary box-solid">
                     <div class="box-body box-profile">
                         <?= Html::img(['uploads/' . $profpic], ["class"=>"profile-user-img img-responsive img-circle"]) ?>
 
-                        <h3 class="profile-username text-center" style="font-size: 16px; color: white;"><?= $model_karyawan->NAMA_KARYAWAN ?></h3>
+                        <h3 class="profile-username text-center" style="font-size: 16px;"><?= $model_karyawan->NAMA_KARYAWAN ?></h3>
 
-                        <p class="text-muted text-center" style="font-size: 14px; color: white;"><?= $model_karyawan->NIK; ?></p>
+                        <p class="text-muted text-center" style="font-size: 14px;"><?= $model_karyawan->NIK; ?></p>
 
-                        <ul class="list-group list-group-unbordered" style="display: none;">
+                        <ul class="list-group list-group-unbordered" style="">
                             <li class="list-group-item">
-                                <b>Sisa Cuti</b> <a class="pull-right">?</a>
+                                <b>Sisa Cuti</b> <a class="pull-right badge bg-red"><b><?= $sisa_cuti; ?></b> / <?= $kuota_cuti; ?></a>
                             </li>
                         </ul>
                     </div>
@@ -200,14 +200,14 @@ $profpic = 'profpic_02.png';
 
                                 echo '<tr class="info" style="font-weight: bold;">';
                                 echo '<td style="text-align: center;">Total :</td>';
-                                echo '<td style="text-align: center;">' . $total_alpa . '</td>';
-                                echo '<td style="text-align: center;">' . $total_ijin . '</td>';
-                                echo '<td style="text-align: center;">' . $total_sakit . '</td>';
-                                echo '<td style="text-align: center;">' . $total_dl . '</td>';
-                                echo '<td style="text-align: center;">' . $total_pc . '</td>';
-                                echo '<td style="text-align: center;">' . $total_cuti . '</td>';
+                                echo '<td style="text-align: center;"><span class="badge">' . $total_alpa . '</span></td>';
+                                echo '<td style="text-align: center;"><span class="badge">' . $total_ijin . '</span></td>';
+                                echo '<td style="text-align: center;"><span class="badge">' . $total_sakit . '</span></td>';
+                                echo '<td style="text-align: center;"><span class="badge">' . $total_dl . '</span></td>';
+                                echo '<td style="text-align: center;"><span class="badge">' . $total_pc . '</span></td>';
+                                echo '<td style="text-align: center;"><span class="badge">' . $total_cuti . '</span></td>';
                                 echo '<td style="text-align: center;"></td>';
-                                echo '<td style="text-align: center;">' . $grand_total_lembur . '</td>';
+                                echo '<td style="text-align: center;"><span class="badge">' . $grand_total_lembur . '</span></td>';
                                 echo '</tr>';
 
                                 ?>
