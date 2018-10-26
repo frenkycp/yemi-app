@@ -30,7 +30,9 @@ class BudgetExpensesController extends Controller
 	    $model->addRule('dept', 'string');
 
 	    if($model->load(\Yii::$app->request->get())){
-	        $dept_arr = [$model->dept];
+	        if ($model->dept != '') {
+	        	$dept_arr = [$model->dept];
+	        }
 	    }
 		
 		foreach ($dept_arr as $dept) {

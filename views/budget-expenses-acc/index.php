@@ -80,6 +80,11 @@ echo '</pre>';*/
                 'xAxis' => [
                     'categories' => $categories,
                 ],
+                'yAxis' => [
+                    'stackLabels' => [
+                        'enabled' => true,
+                    ],
+                ],
                 'plotOptions' => [
                     'column' => [
                         'stacking' => 'normal',
