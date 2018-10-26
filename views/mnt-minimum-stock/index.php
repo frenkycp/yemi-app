@@ -41,9 +41,8 @@ $grid_column = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
-        'width' => '120px',
     ],
     [
         'attribute' => 'image',
@@ -64,6 +63,10 @@ $grid_column = [
         'attribute' => 'ITEM_EQ_DESC_01',
         'label' => 'Deskripsi',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 120px;'
+        ],
     ],
     [
         'attribute' => 'RACK',
@@ -72,7 +75,7 @@ $grid_column = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
@@ -82,15 +85,18 @@ $grid_column = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 60px;'
         ],
-        'width' => '110px',
     ],
     [
         'attribute' => 'MACHINE_NAME',
         'label' => 'Nama Mesin',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'CATEGORY',
@@ -104,10 +110,9 @@ $grid_column = [
         'label' => 'UM',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '60px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 20px;'
         ],
     ],
     [
@@ -151,8 +156,9 @@ $grid_column = [
         'format' => 'raw',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'contentOptions' => [
-            'style' => 'min-width: 150px;'
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
         'filter' => ArrayHelper::map(app\models\MinimumStockView03::find()->select('ONHAND_STATUS, ONHAND_STATUS_DESC')->groupBy('ONHAND_STATUS, ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all(), 'ONHAND_STATUS', 'ONHAND_STATUS_DESC'),
     ],
@@ -169,6 +175,9 @@ $grid_column = [
     [
         'attribute' => 'UNIT_PRICE',
         'label' => 'Last Price',
+        'value' => function($model){
+            return number_format($model->UNIT_PRICE);
+        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
@@ -191,7 +200,7 @@ $this->registerJs("$(function() {
 <?php //\yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
 <div class="giiant-crud minimum-stock-index">
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -202,7 +211,7 @@ $this->registerJs("$(function() {
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => false, // pjax is set to always true for this demo

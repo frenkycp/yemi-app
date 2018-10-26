@@ -145,7 +145,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px;'
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
         ],
         'pageSummary' => 'Total',
         'hAlign' => 'center'
@@ -158,7 +158,7 @@ $gridColumns = [
         //'width' => '160px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 130px;'
+            'style' => 'text-align: center; min-width: 90px; font-size: 12px;'
         ],
         'filter' => $line_arr
     ],
@@ -174,10 +174,9 @@ $gridColumns = [
         'attribute' => 'gmc',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; min-width: 90px; font-size: 12px;'
         ],
     ],
     [
@@ -186,8 +185,9 @@ $gridColumns = [
         'label' => 'Description',
         'vAlign' => 'middle',
         //'width' => '180px',
-        'contentOptions' => [
-            'style' => 'min-width: 170px;'
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 150px; font-size: 12px;'
         ],
     ],
     
@@ -215,11 +215,14 @@ $gridColumns = [
         'label' => 'Minus',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '60px',
         'filter' => [
             1 => 'Minus',
         ],
-        'filterInputOptions' => ['class' => 'form-control', 'prompt' => 'All'],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'prompt' => 'All',
+            'style' => 'font-size: 12px; text-align: center; min-width: 80px;'
+        ],
         //'mergeHeader' => true,
         'pageSummary' => true,
         'format' => ['decimal',0]
@@ -237,9 +240,11 @@ $gridColumns = [
         'attribute' => 'vms',
         'label' => 'VMS Date',
         'vAlign' => 'middle',
-        //'format' => ['date', 'php:d-M-Y'],
-        'width' => '120px',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 90px; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'etd',
@@ -248,17 +253,17 @@ $gridColumns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
-        ],
-        'contentOptions' => [
-            'style' => 'min-width: 100px;'
+            'style' => 'text-align: center; min-width: 90px; font-size: 12px;'
         ],
         //'mergeHeader' => true,
     ],
     [
         'attribute' => 'dst',
         'vAlign' => 'middle',
-        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 100px; font-size: 12px;'
+        ],
         //'mergeHeader' => true,
         //'hAlign' => 'center'
     ],
@@ -266,8 +271,11 @@ $gridColumns = [
         'attribute' => 'category',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px',
-        'filter' => ['MACHINE' => 'MACHINE', 'MAN' => 'MAN', 'MATERIAL' => 'MATERIAL', 'METHOD' => 'METHOD']
+        'filter' => ['MACHINE' => 'MACHINE', 'MAN' => 'MAN', 'MATERIAL' => 'MATERIAL', 'METHOD' => 'METHOD'],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 100px; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'remark',
@@ -381,7 +389,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size:12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
