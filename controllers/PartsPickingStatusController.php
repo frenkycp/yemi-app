@@ -139,7 +139,7 @@ class PartsPickingStatusController extends Controller
                         'color' => 'rgba(240, 240, 0, 0.5)',
                     ],
                     [
-                        'name' => 'COMPLETED (ピッキング中)',
+                        'name' => 'COMPLETED (ピッキング完了)',
                         'data' => $tmp_data_completed,
                         'color' => 'rgba(0, 150, 255, 0.5)',
                     ],

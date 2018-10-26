@@ -9,6 +9,7 @@ use Yii;
 /**
  * This is the base-model class for table "dpr_line_efficiency_view_02".
  *
+ * @property integer $period
  * @property string $proddate
  * @property string $line
  * @property double $qty_time
@@ -43,6 +44,7 @@ abstract class DprLineEfficiencyView02 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['period'], 'integer'],
             [['proddate', 'line'], 'required'],
             [['qty_time', 'mp_time', 'efficiency'], 'number'],
             [['proddate'], 'string', 'max' => 10],
@@ -56,6 +58,7 @@ abstract class DprLineEfficiencyView02 extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'period' => 'Period',
             'proddate' => 'Proddate',
             'line' => 'Line',
             'qty_time' => 'Qty Time',
