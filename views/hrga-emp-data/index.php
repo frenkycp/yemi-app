@@ -47,51 +47,50 @@ $columns = [
 ],*/
     [
         'attribute' => 'PERIOD',
-        'width' => '100px',
-        'contentOptions' => [
-            'style' => 'min-width:100px;',
-        ],
         'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'TANGGAL',
         'value' => function($model){
             return date('Y-m-d', strtotime($model->TANGGAL));
         },
-        'width' => '100px',
-        'contentOptions' => [
-            'style' => 'min-width:120px;',
-        ],
         'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 90px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'NIK',
-        'width' => '80px',
-        'contentOptions' => [
-            'style' => 'min-width:80px;',
-        ],
         'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'NAMA_KARYAWAN',
-        'width' => '180px',
-        'contentOptions' => [
-            'style' => 'min-width:150px;',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width:120px; font-size: 12px;',
         ],
-        //'hAlign' => 'center',
-        'vAlign' => 'middle'
     ],
     [
         'attribute' => 'GRADE',
-        //'width' => '50px',
-        'contentOptions' => [
-            'style' => 'min-width:60px;',
-        ],
         'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 40px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'JABATAN_SR_GROUP',
@@ -100,23 +99,21 @@ $columns = [
         },
         'filter' => $jabatan_arr,
         'label' => 'Grup Jabatan SR',
-        'width' => '150px',
-        'contentOptions' => [
-            'style' => 'min-width:150px;',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width:120px; font-size: 12px; text-align: center;',
         ],
-        //'hAlign' => 'center',
-        'vAlign' => 'middle'
     ],
     [
         'attribute' => 'JABATAN_SR',
         'label' => 'Jabatan SR',
-        'width' => '150px',
-        'contentOptions' => [
-            'style' => 'min-width:150px;',
-        ],
         'filter' => ArrayHelper::map(app\models\EmpData::find()->select('DISTINCT(JABATAN_SR)')->where('JABATAN_SR IS NOT NULL')->all(), 'JABATAN_SR', 'JABATAN_SR'),
-        //'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 120px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'JENIS_KELAMIN',
@@ -124,63 +121,74 @@ $columns = [
         'label' => 'JK',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '50px',
-        'contentOptions' => [
-            'style' => 'min-width:60px;',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 40px; font-size: 12px; text-align: center;',
         ],
     ],
     [
         'attribute' => 'DEPARTEMEN',
-        'width' => '180px',
-        'contentOptions' => [
-            'style' => 'min-width:180px;',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 120px; font-size: 12px; text-align: center;',
         ],
-        //'hAlign' => 'center',
-        'vAlign' => 'middle'
     ],
     [
         'attribute' => 'SECTION',
         'width' => '100px',
-        //'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 100px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'PKWT',
         'value' => function($model){
             return substr($model->PKWT, strpos($model->PKWT, "-") + 1);
         },
-        'width' => '130px',
-        'contentOptions' => [
-            'style' => 'min-width:100px;',
-        ],
         'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'KONTRAK_KE',
         'label' => 'Kontrak</br>ke',
         'encodeLabel' => false,
-        'width' => '50px',
         'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 50px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'KONTRAK_START',
-        'width' => '100px',
         'value' => function($model){
             return $model->KONTRAK_START != null ? date('Y-m-d', strtotime($model->KONTRAK_START)) : '-';
         },
         'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+        ],
     ],
     [
         'attribute' => 'KONTRAK_END',
-        'width' => '100px',
         'value' => function($model){
             return $model->KONTRAK_END != null ? date('Y-m-d', strtotime($model->KONTRAK_END)) : '-';
         },
         'hAlign' => 'center',
-        'vAlign' => 'middle'
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 120px; font-size: 12px; text-align: center;',
+        ],
     ],
 ];
 ?>
@@ -193,45 +201,7 @@ $columns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <h1 style="display: none;">
-        <?= Yii::t('models', 'Mp In Outs') ?>
-        <small>
-            List
-        </small>
-    </h1>
-    <div class="clearfix crud-navigation" style="display: none;">
-        <div class="pull-left">
-            <?= Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
-
-        <div class="pull-right">
-
-                        
-            <?= 
-            \yii\bootstrap\ButtonDropdown::widget(
-            [
-            'id' => 'giiant-relations',
-            'encodeLabel' => false,
-            'label' => '<span class="glyphicon glyphicon-paperclip"></span> ' . 'Relations',
-            'dropdown' => [
-            'options' => [
-            'class' => 'dropdown-menu-right'
-            ],
-            'encodeLabels' => false,
-            'items' => [
-
-]
-            ],
-            'options' => [
-            'class' => 'btn-default'
-            ]
-            ]
-            );
-            ?>
-        </div>
-    </div>
-
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -241,7 +211,7 @@ $columns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => true, // pjax is set to always true for this demo
