@@ -16,7 +16,7 @@ class DprLosstimeCategoryController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 		$data = [];
@@ -79,7 +79,7 @@ class DprLosstimeCategoryController extends Controller
             <th class="text-center">Line</th>
             <th class="text-center">Start Time</th>
             <th class="text-center">End Time</th>
-            <th class="text-center">Lost Time</th>
+            <th class="text-center">Lost Time (min)</th>
         </tr></thead>';
         $data .= '<tbody>';
 
@@ -88,7 +88,7 @@ class DprLosstimeCategoryController extends Controller
         	'category' => $category,
         	'extract(year_month from proddate)' => $period
         ])
-        ->orderBy('proddate, line')
+        ->orderBy('losstime DESC')
         ->asArray()
         ->all();
 
@@ -100,7 +100,7 @@ class DprLosstimeCategoryController extends Controller
                     <td class="text-center">' . $value['line'] . '</td>
                     <td class="text-center">' . $value['start_time'] . '</td>
                     <td class="text-center">' . $value['end_time'] . '</td>
-                    <td class="text-center">' . $value['losstime'] . '</td>
+                    <td class="text-center">' . number_format($value['losstime'], 2) . '</td>
                 </tr>
             ';
             
