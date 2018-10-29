@@ -30,7 +30,7 @@ class PartsMilkRunWeeklyController extends Controller
 
         $year_now = date('Y');
         $start_year = $min_year->YEAR;
-        for ($year = $start_year; $year <= $year_now; $year++) {
+        for ($year = $start_year; $year <= ($year_now + 1); $year++) {
             $year_arr[$year] = $year;
         }
 
@@ -68,8 +68,15 @@ class PartsMilkRunWeeklyController extends Controller
 		}
     	
     	$booking_data_arr = BookingShipTrackView::find()
+    	->select([
+    		'WEEK',
+    		'DATE',
+    		'total_open' => 'SUM(CASE WHEN STAT_02 = \'O\' THEN ORDER_QTY ELSE 0 END)',
+    		'total_close' => 'SUM(CASE WHEN STAT_02 = \'C\' THEN ORDER_QTY ELSE 0 END)'
+    	])
     	->where($global_condition)
-    	->orderBy('WEEK ASC, DATE ASC')
+    	->groupBy('WEEK, DATE')
+    	->orderBy('DATE ASC')
     	->all();
 
     	foreach ($week_arr as $week_no) {
@@ -80,9 +87,9 @@ class PartsMilkRunWeeklyController extends Controller
     		foreach ($booking_data_arr as $booking_data) {
     			if ($week_no == $booking_data->WEEK) {
     				$tmp_category[] = $booking_data->DATE;
-    				$open_qty = $booking_data->BO_QTY;
-    				$close_qty = $booking_data->RCV_QTY;
-    				$order_qty = $booking_data->ORDER_QTY;
+    				$open_qty = $booking_data->total_open;
+    				$close_qty = $booking_data->total_close;
+    				$order_qty = $open_qty + $close_qty;
 
     				$open_percentage = 0;
     				$close_percentage = 0;
@@ -92,11 +99,13 @@ class PartsMilkRunWeeklyController extends Controller
     				}
     				$tmp_data_open[] = [
     					'y' => $open_percentage == 0 ? null : $open_percentage,
-    					'remark' => $this->getRemark('BO_QTY > 0', $booking_data->DATE, $trans_method, 0)
+    					//'y' => $open_qty == 0 ? null : $open_qty,
+    					'remark' => $this->getRemark('STAT_02 = \'O\'', $booking_data->DATE, $trans_method, 0)
     				];
     				$tmp_data_close[] = [
     					'y' => $close_percentage == 0 ? null : $close_percentage,
-    					'remark' => $this->getRemark('BO_QTY = 0', $booking_data->DATE, $trans_method, 0)
+    					//'y' => $close_qty == 0 ? null : $close_qty,
+    					'remark' => $this->getRemark('STAT_02 = \'C\'', $booking_data->DATE, $trans_method, 0)
     				];
     			}
     		}

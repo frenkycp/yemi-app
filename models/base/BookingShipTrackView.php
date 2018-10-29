@@ -12,11 +12,12 @@ use Yii;
  * @property string $YEAR
  * @property string $PERIOD
  * @property integer $WEEK
- * @property integer $STAT_ID
- * @property string $STAT_ID_DESC
+ * @property string $DATE
+ * @property string $TRANS_MTHD
  * @property double $ORDER_QTY
  * @property double $RCV_QTY
  * @property double $BO_QTY
+ * @property string $STAT_02
  * @property string $aliasModel
  */
 abstract class BookingShipTrackView extends \yii\db\ActiveRecord
@@ -46,10 +47,10 @@ abstract class BookingShipTrackView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['YEAR', 'PERIOD', 'STAT_ID_DESC'], 'string'],
-            [['WEEK', 'STAT_ID'], 'integer'],
-            [['STAT_ID', 'STAT_ID_DESC'], 'required'],
-            [['ORDER_QTY', 'RCV_QTY', 'BO_QTY'], 'number']
+            [['YEAR', 'PERIOD', 'DATE', 'TRANS_MTHD', 'STAT_02'], 'string'],
+            [['WEEK'], 'integer'],
+            [['ORDER_QTY', 'RCV_QTY', 'BO_QTY'], 'number'],
+            [['STAT_02'], 'required']
         ];
     }
 
@@ -62,11 +63,12 @@ abstract class BookingShipTrackView extends \yii\db\ActiveRecord
             'YEAR' => 'Year',
             'PERIOD' => 'Period',
             'WEEK' => 'Week',
-            'STAT_ID' => 'Stat  ID',
-            'STAT_ID_DESC' => 'Stat  Id  Desc',
+            'DATE' => 'Date',
+            'TRANS_MTHD' => 'Trans  Mthd',
             'ORDER_QTY' => 'Order  Qty',
             'RCV_QTY' => 'Rcv  Qty',
             'BO_QTY' => 'Bo  Qty',
+            'STAT_02' => 'Stat 02',
         ];
     }
 

@@ -42,6 +42,7 @@ use Yii;
  * @property integer $WEEK
  * @property string $DATE
  * @property string $TRANS_MTHD
+ * @property string $STAT_02
  * @property string $aliasModel
  */
 abstract class BookingShipTrack02 extends \yii\db\ActiveRecord
@@ -71,8 +72,8 @@ abstract class BookingShipTrack02 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['BOOKING_ID', 'USER_ID', 'USER_DESC', 'PUR_LOC', 'PICKUP_PLAN', 'STAT_ID', 'STAT_ID_DESC', 'SHIPPER', 'PIC_ID', 'PIC_DESC', 'CREATED_DATE'], 'required'],
-            [['BOOKING_ID', 'USER_ID', 'USER_DESC', 'PUR_LOC', 'STAT_ID_DESC', 'SHIPPER', 'NOTE', 'PIC_ID', 'PIC_DESC', 'BOOKING_ID_DTR', 'ITEM', 'ITEM_DESC', 'UM', 'STAT', 'PO_NO', 'DISCREPANCY', 'YEAR', 'PERIOD', 'DATE', 'TRANS_MTHD'], 'string'],
+            [['BOOKING_ID', 'USER_ID', 'USER_DESC', 'PUR_LOC', 'PICKUP_PLAN', 'PICKUP_ACTUAL', 'STAT_ID', 'STAT_ID_DESC', 'SHIPPER', 'PIC_ID', 'PIC_DESC', 'CREATED_DATE', 'STAT_02'], 'required'],
+            [['BOOKING_ID', 'USER_ID', 'USER_DESC', 'PUR_LOC', 'STAT_ID_DESC', 'SHIPPER', 'NOTE', 'PIC_ID', 'PIC_DESC', 'BOOKING_ID_DTR', 'ITEM', 'ITEM_DESC', 'UM', 'STAT', 'PO_NO', 'DISCREPANCY', 'YEAR', 'PERIOD', 'DATE', 'TRANS_MTHD', 'STAT_02'], 'string'],
             [['PICKUP_PLAN', 'PICKUP_ACTUAL', 'CREATED_DATE', 'YEMI_ARRIVAL'], 'safe'],
             [['STAT_ID', 'WEEK'], 'integer'],
             [['QTY', 'NET_WEIGHT', 'GROSS_WEIGHT', 'MEASUREMENT', 'ORDER_QTY', 'RCV_QTY', 'BO_QTY'], 'number']
@@ -118,6 +119,7 @@ abstract class BookingShipTrack02 extends \yii\db\ActiveRecord
             'WEEK' => 'Week',
             'DATE' => 'Date',
             'TRANS_MTHD' => 'Trans  Mthd',
+            'STAT_02' => 'Stat 02',
         ];
     }
 

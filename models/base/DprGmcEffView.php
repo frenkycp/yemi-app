@@ -9,6 +9,7 @@ use Yii;
 /**
  * This is the base-model class for table "dpr_gmc_eff_view".
  *
+ * @property integer $period
  * @property string $proddate
  * @property string $line
  * @property string $gmc
@@ -46,8 +47,8 @@ abstract class DprGmcEffView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['period', 'qty_product'], 'integer'],
             [['proddate', 'line', 'gmc'], 'required'],
-            [['qty_product'], 'integer'],
             [['qty_time', 'mp_time', 'efficiency'], 'number'],
             [['proddate'], 'string', 'max' => 10],
             [['line'], 'string', 'max' => 15],
@@ -62,6 +63,7 @@ abstract class DprGmcEffView extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'period' => 'Period',
             'proddate' => 'Proddate',
             'line' => 'Line',
             'gmc' => 'Gmc',
