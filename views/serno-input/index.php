@@ -313,7 +313,7 @@ $grid_columns = [
 
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <div class="table-responsive">
+    <div class="">
         <?= !\Yii::$app->request->get() ? '' : GridView::widget([
             'dataProvider' => $dataProvider,
             //'filterModel' => $searchModel,
@@ -327,7 +327,7 @@ $grid_columns = [
                     'firstPageLabel'=>'First',   // Set the label for the "first" page button
                     'lastPageLabel'=>'Last',    // Set the label for the "last" page button
             ],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo

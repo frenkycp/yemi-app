@@ -73,14 +73,18 @@ $gridColumns = [
         'attribute' => 'total_mp',
         'label' => 'List MP',
         'value' => function($model){
-            return Html::a('Detail', ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success', 'data-pjax' => '0',]);
+            return Html::a('Detail', ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
         },
         'format' => 'raw',
     ],
     [
         'attribute' => 'qty_product',
+        'value' => function($model){
+            return Html::a('<span class="badge bg-light-blue">' . $model->qty_product . '</span>', ['get-product-list', 'proddate' => $model->proddate, 'line' => $model->line, 'gmc' => $model->gmc], ['class' => 'modal_mp', 'data-pjax' => '0',]);
+        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'format' => 'raw',
         //'width'=>'100px',
     ],
     [
@@ -152,8 +156,8 @@ $gridColumns = [
 <?php
     yii\bootstrap\Modal::begin([
         'id' =>'modal',
-        'header' => '<h3>Manpower</h3>',
-        //'size' => 'modal-lg',
+        'header' => '<h3>Detail Information</h3>',
+        'size' => 'modal-lg',
     ]);
     yii\bootstrap\Modal::end();
 

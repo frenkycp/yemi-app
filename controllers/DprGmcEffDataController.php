@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
 use app\models\search\DprGmcEffDataSearch;
 use app\models\SernoMp;
+use app\models\SernoInput;
 use app\models\HakAkses;
 
 class DprGmcEffDataController extends Controller
@@ -97,5 +98,50 @@ class DprGmcEffDataController extends Controller
 		
 		$data .= '</table>';
 		return $data;
+	}
+
+	public function actionGetProductList($proddate, $line, $gmc)
+	{
+		$serno_input_arr = SernoInput::find()
+		->where([
+			'proddate' => $proddate,
+			'line' => $line,
+			'gmc' => $gmc,
+		])
+		->all();
+
+		$data = '<table class="table table-bordered table-hover">';
+        $data .= 
+        '<thead style=""><tr class="info">
+        	<th class="text-center">No.</th>
+            <th class="text-center">Line</th>
+            <th class="text-center">GMC</th>
+            <th class="text-center">Description</th>
+            <th class="text-center">Serial Num.</th>
+            <th class="text-center">End Time</th>
+            <th class="text-center">Working Time</th>
+            <th class="text-center">MP Time</th>
+        </tr></thead>';
+        $data .= '<tbody style="">';
+
+        $no = 1;
+		foreach ($serno_input_arr as $value) {
+			$data .= '
+                <tr>
+                	<td class="text-center">' . $no . '</td>
+                    <td class="text-center">' . $value->line . '</td>
+                    <td class="text-center">' . $value->gmc . '</td>
+                    <td class="text-center">' . $value->partName . '</td>
+                    <td class="text-center">' . $value->sernum . '</td>
+                    <td class="text-center">' . $value->waktu . '</td>
+                </tr>
+            ';
+            $no++;
+		}
+
+		$data .= '</tbody>';
+
+        $data .= '</table>';
+        return $data;
 	}
 }

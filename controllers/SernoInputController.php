@@ -15,6 +15,13 @@ use app\models\SernoOutput;
 */
 class SernoInputController extends \app\controllers\base\SernoInputController
 {
+
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
 	/**
 	* Lists all SernoInput models.
 	* @return mixed
