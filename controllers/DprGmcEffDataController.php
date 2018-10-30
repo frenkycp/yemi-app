@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
 use app\models\search\DprGmcEffDataSearch;
 use app\models\SernoMp;
+use app\models\HakAkses;
 
 class DprGmcEffDataController extends Controller
 {
@@ -36,7 +37,24 @@ class DprGmcEffDataController extends Controller
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
+		    'line_arr' => $this->getLineArray(),
 		]);
+	}
+
+	public function getLineArray()
+	{
+		$data_arr = HakAkses::find()
+		->where([
+			'level_akses' => '4'
+		])
+		->andWhere(['<>', 'hak_akses', 'MIS'])
+		->all();
+
+		foreach ($data_arr as $value) {
+			$line_arr[$value->hak_akses] = $value->hak_akses;
+		}
+
+		return $line_arr;
 	}
 
 	public function actionGetMpList($proddate = '', $line = '')

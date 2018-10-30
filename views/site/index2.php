@@ -97,25 +97,33 @@ $this->registerCss("
                         <?= Html::a('WIP Data Record（仕掛りデーター）', ['wip-plan-actual-report/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <div class="list-group-item">
-                            <p>E-WIP Performance <span class="japanesse-word">(E-WIPパフォーマンス)</span></p>
-                            <ol style="padding-left: 1em">
-                                <li>
-                                    <?= Html::a('FA Line Efficiency & Loss time<br/><span class="japanesse-word">(総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-daily']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('FA Line Efficiency & Loss time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('FA Loss time by Line<br/><span class="japanesse-word">（ライン別総組ロースタイム）</span>', ['/dpr-losstime-line']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('FA Loss time by Category<br/><span class="japanesse-word">（原因カテゴリー別総組ロースタイム）</span>', ['/dpr-losstime-category']); ?>
-                                </li>
-                            </ol>
-                        </div>
+
                     </div>
                 </div>
+                <div class="panel panel-success">
+                            <div class="panel-heading text-center">E-WIP Performance<br/><span class="japanesse-word"> (E-WIPパフォーマンス)</span></div>
+                            <div class="list-group">
+                                <div class="list-group-item">
+                                    <ol style="padding-left: 1em">
+                                        <li>
+                                            <?= Html::a('FA Line Efficiency & Loss time<br/><span class="japanesse-word">(総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-daily']); ?>
+                                        </li>
+                                        <li>
+                                            <?= Html::a('FA Line Efficiency & Loss time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
+                                        </li>
+                                        <li>
+                                            <?= Html::a('FA Loss time by Line<br/><span class="japanesse-word">（ライン別総組ロースタイム）</span>', ['/dpr-losstime-line']); ?>
+                                        </li>
+                                        <li>
+                                            <?= Html::a('FA Loss time by Category<br/><span class="japanesse-word">（原因カテゴリー別総組ロースタイム）</span>', ['/dpr-losstime-category']); ?>
+                                        </li>
+                                        <li>
+                                            <?= Html::a('GMC Efficiency Data <span class="japanesse-word">(GMC別能率データ）</span>', ['/dpr-gmc-eff-data']); ?>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
                 <div class="text-center">
                     <i class="fa fa-fw fa-arrow-up fa-3x text-primary"></i>
                 </div>

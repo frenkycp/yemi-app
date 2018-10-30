@@ -10,7 +10,11 @@ use kartik\grid\GridView;
     * @var app\models\search\CisClientIpAddressSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'GMC Efficiency Data');
+$this->title = [
+    'page_title' => 'GMC Efficiency Data <span class="japanesse text-green">(GMC別能率データ）</span>',
+    'tab_title' => 'GMC Efficiency Data',
+    'breadcrumbs_title' => 'GMC Efficiency Data'
+];
 //$this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -51,6 +55,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width'=>'120px',
+        'filter' => $line_arr,
     ],
     [
         'attribute' => 'gmc',
