@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'DPR Losstime by Category <span class="japanesse text-green"></span>',
-    'tab_title' => 'DPR Losstime by Category',
-    'breadcrumbs_title' => 'DPR Losstime by Category'
+    'page_title' => 'FA Loss time by Category <span class="japanesse text-green">（原因カテゴリー別総組ロースタイム）</span>',
+    'tab_title' => 'FA Loss time by Category',
+    'breadcrumbs_title' => 'FA Loss time by Category'
 ];
 $color = 'ForestGreen';
 

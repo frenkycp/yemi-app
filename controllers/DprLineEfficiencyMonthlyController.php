@@ -8,7 +8,6 @@ use app\models\SernoLosstime;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
-use app\models\DprGmcEffView03;
 
 /**
  * 
@@ -20,7 +19,7 @@ class DprLineEfficiencyMonthlyController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 		$line_arr = $this->getLineArr();

@@ -25,20 +25,20 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 		$data_flo = [];
 		$data_invoice = [];
 
-		$data_gmc_arr = SernoInput::find()->select('gmc')->distinct()->orderBy('gmc')->all();
-		$data_flo_arr = SernoInput::find()->select('distinct(flo)')->where('flo <> 0')->orderBy('flo')->all();
-		$data_invoice_arr = SernoOutput::find()->select('distinct(invo)')->where('invo <> \'\'')->orderBy('invo')->all();
+		$data_gmc_arr = SernoInput::find()->select('gmc')->distinct()->orderBy('gmc')->asArray()->all();
+		$data_flo_arr = SernoInput::find()->select('distinct(flo)')->where('flo <> 0')->orderBy('flo')->asArray()->all();
+		$data_invoice_arr = SernoOutput::find()->select('distinct(invo)')->where('invo <> \'\'')->orderBy('invo')->asArray()->all();
 		
 		foreach ($data_gmc_arr as $key => $value) {
-			$data_gmc[] = $value->gmc;
+			$data_gmc[] = $value['gmc'];
 		}
 
 		foreach ($data_flo_arr as $key => $value) {
-			$data_flo[] = $value->flo;
+			$data_flo[] = $value['flo'];
 		}
 
 		foreach ($data_invoice_arr as $key => $value) {
-			$data_invoice[] = $value->invo;
+			$data_invoice[] = $value['invo'];
 		}
 
 		if (\Yii::$app->request->get()) {
