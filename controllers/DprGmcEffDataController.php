@@ -134,6 +134,8 @@ class DprGmcEffDataController extends Controller
                     <td class="text-center">' . $value->partName . '</td>
                     <td class="text-center">' . $value->sernum . '</td>
                     <td class="text-center">' . $value->waktu . '</td>
+                    <td class="text-center">' . $value->wrk_time . '</td>
+                    <td class="text-center">' . $value->mp_time . '</td>
                 </tr>
             ';
             $no++;
