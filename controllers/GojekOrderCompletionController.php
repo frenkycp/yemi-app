@@ -25,11 +25,6 @@ class GojekOrderCompletionController extends Controller
 		$data = [];
 		$categories = [];
 
-		$driver_arr = ArrayHelper::getColumn(
-			GojekTbl::find()->orderBy('GOJEK_DESC')->asArray()->all(),
-			'GOJEK_ID'
-		);
-
 		$driver_arr = GojekTbl::find()->orderBy('GOJEK_DESC')->all();
 
 		$tmp_data = [];
@@ -74,7 +69,10 @@ class GojekOrderCompletionController extends Controller
 				$tmp_data[$nik]['close'] = null;
 				$tmp_data[$nik]['nama'] = $value->GOJEK_DESC;
 			}
-			
+			$tmp_data[$nik]['last_stage'] = $value->STAGE;
+			$tmp_data[$nik]['from_loc'] = $value->from_loc;
+			$tmp_data[$nik]['to_loc'] = $value->to_loc;
+			$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
 		}
 
 		$fix_data = [];
@@ -92,6 +90,10 @@ class GojekOrderCompletionController extends Controller
 				]
 			];
 			$fix_data[$key]['nama'] = $value['nama'];
+			$fix_data[$key]['last_stage'] = $value['last_stage'];
+			$fix_data[$key]['from_loc'] = $value['from_loc'];
+			$fix_data[$key]['to_loc'] = $value['to_loc'];
+			$fix_data[$key]['last_update'] = $value['last_update'];
 		}
 
 		return $this->render('index', [

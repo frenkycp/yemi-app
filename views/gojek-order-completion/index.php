@@ -43,14 +43,29 @@ echo '</pre>';*/
         <div class="box-group" id="accordion">
         <?php
         foreach ($fix_data as $key => $value) {
+            
+            if ($value['last_stage'] == 'DEPARTURE') {
+                $panel_class = ' box-warning';
+                $text_status = '<b><u>Departed</u></b> from <u>' . $value['from_loc'] . '</u> to <u>' . $value['to_loc'] . '</u> at <b>' . date('Y-m-d H:i', strtotime($value['last_update'])) . '</b>';
+            } elseif ($value['last_stage'] == 'ARRIVAL'){
+                $panel_class = ' box-success';
+                $text_status = '<b><u>Arrived</u></b> on <u>' . $value['to_loc'] . '</u> at <b>' . date('Y-m-d H:i', strtotime($value['last_update'])) . '</b>';
+            } else {
+                $panel_class = ' box-success';
+                $text_status = '<b><u>No Order</u></b>';
+            }
+            //$panel_class = ' box-primary';
             ?>
-            <div class="panel box box-primary box-solid">
+            <div class="panel box box-solid<?= $panel_class; ?>">
                 <div class="box-header with-border">
                     <h4 class="box-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key; ?>">
                             <?= $key . ' - ' . $value['nama']; ?>
                         </a>
                     </h4>
+                    <div class="pull-right" style="font-size: 12px;">
+                        <?= ($text_status); ?>
+                    </div>
                 </div>
                 <div id="collapse<?= $key; ?>" class="panel-collapse collapse<?= \Yii::$app->user->identity->username == $key ? ' in' : '' ?>">
                     <div class="box-body">

@@ -20,12 +20,24 @@ class GojekDriverUtilityController extends Controller
 		date_default_timezone_set('Asia/Jakarta');
 		$data = [];
 		$categories = $this->getCategoriesArr();
-		$driver_arr = $this->getDriverArr();
+		$driver_arr = GojekTbl::find()
+		->select('GOJEK_ID, GOJEK_DESC')
+		->groupBy('GOJEK_ID, GOJEK_DESC')
+		->orderBy('GOJEK_DESC')->all();
 
 		$view_data_arr = GojekView02::find()
 		->orderBy('ISSUE_DATE ASC')
 		->all();
 
+		if (\Yii::$app->request->get('driver_nik') !== null) {
+			$driver_arr = GojekTbl::find()
+			->select('GOJEK_ID, GOJEK_DESC')
+			->where([
+				'GOJEK_ID' => \Yii::$app->request->get('driver_nik')
+			])
+			->groupBy('GOJEK_ID, GOJEK_DESC')
+			->orderBy('GOJEK_DESC')->all();
+		}
 		
 		foreach ($driver_arr as $driver) {
 			$tmp_data = [];
@@ -37,7 +49,7 @@ class GojekDriverUtilityController extends Controller
 				$post_date = (strtotime("$tmp_category +10 hours") * 1000);
 				foreach ($view_data_arr as $view_data) {
 					
-					if ($view_data->GOJEK_DESC == $driver && $view_data->ISSUE_DATE == $category) {
+					if ($view_data->GOJEK_ID == $driver->GOJEK_ID && $view_data->ISSUE_DATE == $category) {
 						$utility = $view_data->UTILITY;
 						$average_order_completion = $view_data->AVERAGE_ORDER_COMPLETION;
 					}
@@ -53,11 +65,11 @@ class GojekDriverUtilityController extends Controller
 				];
 			}
 			$data[] = [
-				'name' => $driver,
+				'name' => $driver->GOJEK_DESC,
 				'data' => $tmp_data
 			];
 			$data2[] = [
-				'name' => $driver,
+				'name' => $driver->GOJEK_DESC,
 				'data' => $tmp_data2
 			];
 		}

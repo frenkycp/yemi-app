@@ -4,7 +4,9 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use kartik\select2\Select2;
 
 $this->title = [
     'page_title' => 'Material Handle Utilization <span class="japanesse text-green">(マテハン稼働率）</span>',
@@ -30,12 +32,41 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 
-/*echo '<pre>';
-print_r($data2);
-echo '</pre>';*/
-?>
+$driver_arr = \Yii::$app->request->get('driver_nik');
 
-<div class="box box-warning">
+/*echo '<pre>';
+print_r($driver_arr);
+echo '</pre>';*/
+
+?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['gojek-driver-utility/index']),
+]); ?>
+    <div class="form-group">
+        <?php
+        echo '<label class="control-label">Driver</label>';
+        echo Select2::widget([
+            'name' => 'driver_nik',
+            'value' => $driver_arr,
+            'data' => ArrayHelper::map(app\models\GojekTbl::find()->select('GOJEK_ID, GOJEK_DESC')->groupBy('GOJEK_ID, GOJEK_DESC')->orderBy('GOJEK_DESC')->all(), 'GOJEK_ID', 'GOJEK_DESC'),
+            'options' => [
+                'placeholder' => 'Select driver ...',
+                'multiple' => true
+            ],
+        ]);
+        ?>
+    </div>
+    <?php
+    echo Html::submitButton('Update Driver', [
+        'class' => 'btn btn-primary'
+    ]);
+    ?>
+
+<?php ActiveForm::end(); ?>
+<br>
+<div class="box box-warning box-solid">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h3>
     </div>
