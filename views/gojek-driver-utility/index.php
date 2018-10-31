@@ -66,7 +66,7 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 <br>
-<div class="box box-warning box-solid">
+<div class="box box-default box-solid">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h3>
     </div>

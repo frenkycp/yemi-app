@@ -37,21 +37,28 @@ echo '</pre>';*/
 ?>
 <div class="box box-solid">
     <div class="box-header with-border">
-        <h3 class="box-title">Last Update : <?= date('Y-m-d H:i'); ?></h3>
+        <h3 class="box-title">Last Update : <?= date('Y-m-d H:i:s'); ?></h3>
     </div>
     <div class="box-body">
         <div class="box-group" id="accordion">
         <?php
         foreach ($fix_data as $key => $value) {
-            
+            $last_update = date('Y-m-d H:i:s', strtotime($value['last_update']));
             if ($value['last_stage'] == 'DEPARTURE') {
-                $panel_class = ' box-warning';
-                $text_status = '<b><u>Departed</u></b> from <u>' . $value['from_loc'] . '</u> to <u>' . $value['to_loc'] . '</u> at <b>' . date('Y-m-d H:i', strtotime($value['last_update'])) . '</b>';
+                $panel_class = ' box-success';
+                $text_status = '<b><u>Departed</u></b> from <u>' . $value['from_loc'] . '</u> to <u>' . $value['to_loc'] . '</u> at <b>' . $last_update . '</b>';
             } elseif ($value['last_stage'] == 'ARRIVAL'){
-                $panel_class = ' box-success';
-                $text_status = '<b><u>Arrived</u></b> on <u>' . $value['to_loc'] . '</u> at <b>' . date('Y-m-d H:i', strtotime($value['last_update'])) . '</b>';
+                $panel_class = ' box-warning';
+                $text_status = '<b><u>Arrived</u></b> on <u>' . $value['to_loc'] . '</u> at <b>' . $last_update . '</b>';
+                $now = date('Y-m-d H:i:s');
+                $diff_time = strtotime($now) - strtotime($last_update);
+                $limit_minutes = 15;
+                if ($diff_time > ($limit_minutes * 60)) {
+                    $panel_class = ' box-danger';
+                    $text_status = '<b><u>Idling</u></b> > 15 minutes (Since <b>' . $last_update . '</b>)';
+                }
             } else {
-                $panel_class = ' box-success';
+                $panel_class = ' box-danger';
                 $text_status = '<b><u>No Order</u></b>';
             }
             //$panel_class = ' box-primary';
