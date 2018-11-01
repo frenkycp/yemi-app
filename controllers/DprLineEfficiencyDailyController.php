@@ -77,7 +77,7 @@ class DprLineEfficiencyDailyController extends Controller
 		    	}
 		    }
 
-		    $mp = 0;
+		    /*$mp = 0;
 
 		    $mp_data = SernoInput::find()
 		    ->where([
@@ -89,7 +89,7 @@ class DprLineEfficiencyDailyController extends Controller
 
 		    if ($mp_data->mp != null) {
 		    	$mp = $mp_data->mp;
-		    }
+		    }*/
 
 		    $losstime_val = 0;
 		    foreach ($losstime_arr as $losstime) {
@@ -124,25 +124,25 @@ class DprLineEfficiencyDailyController extends Controller
 
 		    $remark .= '</table>';
 
-		    $tmp_data2[] = [
+		    /*$tmp_data2[] = [
 		    	'y' => $mp,
 		    	'url' => Url::to(['dpr-gmc-eff-data/get-mp-list', 'proddate' => $model->proddate, 'line' => $line])
-		    ];
+		    ];*/
 
 		    $tmp_data[] = [
-		    	'y' => round($eff, 2),
+		    	'y' => round($eff, 1),
 		    	//'remark' => $remark,
 		    	'url' => Url::to(['dpr-gmc-eff-data/index', 'line' => $line, 'proddate' => $model->proddate])
 		    ];
 
 		    $tmp_data_losstime[] = [
-		    	'y' => round($losstime_val, 2),
+		    	'y' => round($losstime_val, 1),
 		    	'remark' => $remark,
 		    	//'url' => Url::to(['dpr-gmc-eff-data/index', 'line' => $line, 'proddate' => $model->proddate])
 		    ];
 	    }
 
-	    $data[] = [
+	    /*$data[] = [
 	    	'name' => 'Manpower',
 	    	'type' => 'line',
 	    	'yAxis' => 1,
@@ -159,13 +159,12 @@ class DprLineEfficiencyDailyController extends Controller
                     "),
                 ]
             ]
-	    ];
+	    ];*/
 
 	    $data[] = [
 	    	'name' => 'Line Efficiency',
 	    	'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 	    	'data' => $tmp_data,
-	    	'zIndex' => -1,
 	    	'cursor' => 'pointer',
             'point' => [
                 'events' => [

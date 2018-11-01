@@ -31,21 +31,19 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 $this->registerJs("$(function() {
    $('.popupModal').click(function(e) {
         e.preventDefault();
-        $('#modal').modal('show').find('.modal-body')
-        .load($(this).attr('href'));
+        $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
-   $('.popupHistory').click(function(e) {
+   $('.popup_machine_img').click(function(e) {
         e.preventDefault();
-        $('#history_modal').modal('show').find('.modal-body')
-        .load($(this).attr('href'));
+        $('#machine_info').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
 });");
 
 $grid_columns = [
     [
-        'class' => 'yii\grid\ActionColumn',
+        'class' => 'kartik\grid\ActionColumn',
         //'template' => "{check_sheet} {history}",
-        'template' => "{check_sheet}",
+        'template' => "{check_sheet} {upload_image}",
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -62,6 +60,23 @@ $grid_columns = [
                 ];
                 $url = ['get-check-sheet', 'mesin_id' => $model->mesin_id, 'mesin_periode' => $model->mesin_periode];
                 return Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, $options);
+            },
+            'upload_image' => function ($url, $model, $key) {
+                $options = [
+                    'title' => 'Upload Image',
+                    'style' => 'padding-left: 10px;'
+                ];
+                $url = ['upload-image', 'mesin_id' => $model->mesin_id];
+
+                $filename = $model->mesin_id . '.jpg';
+                $path = \Yii::$app->basePath . '\\web\\uploads\\MNT_MACHINE\\' . $filename;
+                if (file_exists($path)) {
+                    return null;
+                } else {
+                    return Html::a('<span class="glyphicon glyphicon-upload"></span>', $url, $options);
+                }
+                
+                
             },
             'history' => function ($url, $model, $key) {
                 $options = [
@@ -83,46 +98,91 @@ $grid_columns = [
     [
         'attribute' => 'mesin_id',
         'label' => 'Machine ID',
+        'value' => function($model){
+            $filename = $model->mesin_id . '.jpg';
+            $path = \Yii::$app->basePath . '\\web\\uploads\\MNT_MACHINE\\' . $filename;
+            if (file_exists($path)) {
+                return Html::a($model->mesin_id, ['get-image-preview', 'mesin_id' => $model->mesin_id, 'machine_desc' => $model->machine_desc], ['class' => 'popup_machine_img btn btn-info btn-xs', 'data-pjax' => '0',]);
+            } else {
+                return $model->mesin_id;
+            }
+        },
+        'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '10%',
+        'width' => '110px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
+    /*[
+        'attribute' => 'machine_img',
+        'label' => 'Image',
+        'value' => function($model){
+            return Html::a(Html::img('@web/upload/MNT_MACHINE/' . $model->mesin_id . '.jpg', [
+                'width' => '20px',
+                'height' => '20px',
+                'alt' => '-'
+            ]), ['get-image-preview', 'urutan' => $model->mesin_id], ['class' => 'imageModal', 'data-pjax' => '0',]);
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '50px',
+    ],*/
     [
         'attribute' => 'machine_desc',
         'label' => 'Description',
         'vAlign' => 'middle',
-        'width' => '20%',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
         //'hAlign' => 'center'
     ],
     [
         'attribute' => 'location',
         'vAlign' => 'middle',
-        'width' => '10%',
-        'hAlign' => 'center'
+        'hAlign' => 'center',
+        'filter' => $loc_arr,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'area',
         'vAlign' => 'middle',
-        'width' => '15%',
-        //'hAlign' => 'center'
+        'filter' => $area_arr,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'mesin_periode',
         'label' => 'Machine Period',
         'vAlign' => 'middle',
-        'width' => '10%',
-        //'hAlign' => 'center'
+        'width' => '100px',
+        'filter' => $machine_periode_arr,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'master_plan_maintenance',
         'label' => 'Master Plan',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '15%',
         'value' => function($model){
             return $model->master_plan_maintenance == null ? '-' : date('d-M-Y', strtotime($model->master_plan_maintenance));
         },
-        //'format' => ['date', 'php:d-M-Y']
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'count_close',
@@ -135,6 +195,10 @@ $grid_columns = [
         'filter' => [
             0 => 'OPEN',
             1 => 'CLOSE'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ]
 ];
@@ -198,7 +262,7 @@ $grid_columns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => false, // pjax is set to always true for this demo
@@ -229,9 +293,9 @@ $grid_columns = [
             yii\bootstrap\Modal::end();
 
             yii\bootstrap\Modal::begin([
-                'id' =>'history_modal',
-                'header' => '<h3>History</h3>',
-                'size' => 'modal-lg',
+                'id' =>'machine_info',
+                'header' => '<h3>Machine Image</h3>',
+                //'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();
         ?>

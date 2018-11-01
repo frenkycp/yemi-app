@@ -4,12 +4,15 @@ namespace app\controllers;
 
 use yii\web\HttpException;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use app\models\search\PreventiveDataSearch;
 use app\models\MesinCheckTbl;
-//use app\models\MasterplanHistory;
+use yii\web\UploadedFile;
 use yii\web\Controller;
+use app\models\MachineMpPlanViewMaster02;
 
 /**
 * This is the class for controller "MesinCheckDtrController".
@@ -17,11 +20,11 @@ use yii\web\Controller;
 class MntPreventiveDataController extends Controller
 {
 	
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 
 	public function actionIndex()
 	{
@@ -34,14 +37,23 @@ class MntPreventiveDataController extends Controller
 	    }
 	    $dataProvider = $searchModel->search($_GET);
 
+	    $machine_periode_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(mesin_periode)')->orderBy('mesin_periode ASC')->all(), 'mesin_periode', 'mesin_periode');
+
+	    $loc_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(location)')->where(['<>', 'location', ''])->orderBy('location ASC')->all(), 'location', 'location');
+
+	    $area_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(area)')->orderBy('area ASC')->all(), 'area', 'area');
+
 		Tabs::clearLocalStorage();
 
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
 		return $this->render('index', [
-		'dataProvider' => $dataProvider,
+			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
+		    'machine_periode_arr' => $machine_periode_arr,
+		    'loc_arr' => $loc_arr,
+		    'area_arr' => $area_arr,
 		]);
 	}
 
@@ -76,6 +88,46 @@ class MntPreventiveDataController extends Controller
 
 		$data .= '</table>';
 
+		return $data;
+	}
+
+	public function actionUploadImage($mesin_id)
+	{
+		$model = new \yii\base\DynamicModel([
+        	'upload_file'
+	    ]);
+	    $model->addRule(['upload_file'], 'file');
+
+	    if($model->load(\Yii::$app->request->post())){
+	        $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
+	        $new_filename = $mesin_id . '.' . $model->upload_file->extension;
+
+	        if ($model->validate()) {
+	        	if ($model->upload_file) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/MNT_MACHINE/") . $new_filename;
+	        		if ($model->upload_file->saveAs($filePath)) {
+	                    
+	                }
+	        	}
+	        	return $this->redirect(Url::previous());
+	        }
+	    }
+	    return $this->render('upload_form', [
+	    	'model'=>$model,
+	    	'mesin_id' => $mesin_id,
+	    ]);
+	}
+
+	public function actionGetImagePreview($mesin_id, $machine_desc)
+	{
+		$data = '<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>' . $mesin_id . '<br/><small>' . $machine_desc . '</small></h3>
+		</div>
+		<div class="modal-body">
+		';
+		$data .= Html::img('@web/uploads/MNT_MACHINE/' . $mesin_id . '.jpg', ['width' => '100%', 'class' => 'img-thumbnail']);
+		$data .= '</div>';
 		return $data;
 	}
 

@@ -67,10 +67,11 @@ echo '</pre>';*/
                 <div class="box-header with-border">
                     <h4 class="box-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key; ?>">
-                            <?= $key . ' - ' . $value['nama']; ?>
-                             | (<b><?= $value['todays_point']; ?></b> pts)
+                            <?= $key . ' - ' . $value['nama'] . ' | '; ?>
                         </a>
-
+                        <small style="color: white;">
+                            <b><?= $value['todays_point'] > 1 ? $value['todays_point'] . '</b> points' : $value['todays_point'] . '</b> point'; ?>
+                        </small>
                     </h4>
                     <div class="pull-right" style="font-size: 12px;">
                         <?= ($text_status); ?>

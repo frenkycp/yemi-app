@@ -91,19 +91,11 @@ echo '</pre>';*/
                                 'categories' => $categories,
                             ],
                             'tooltip' => [
-                                'shared' => true
+                                'valueSuffix' => '%'
                             ],
                             'yAxis' => [
-                                [
-                                    'title' => [
-                                        'text' => 'Percentage (%)'
-                                    ],
-                                ],
-                                [
-                                    'title' => [
-                                        'text' => 'Manpower'
-                                    ],
-                                    'opposite' => true
+                                'title' => [
+                                    'text' => 'Percentage (%)'
                                 ],
                                 //'max' => 100,
                             ],
