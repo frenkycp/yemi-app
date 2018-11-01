@@ -29,6 +29,17 @@ class GojekOrderCompletionController extends Controller
 
 		$tmp_data = [];
 
+		$driver_point_arr = ArrayHelper::map(GojekOrderTbl::find()
+		->select([
+			'GOJEK_ID',
+			'total_point' => 'COUNT(id)'
+		])
+		->where([
+			'CONVERT(date, arrival_date)' => date('Y-m-d')
+		])
+		->groupBy('GOJEK_ID')
+		->all(), 'GOJEK_ID', 'total_point');
+
 		foreach ($driver_arr as $value) {
 			$nik = $value->GOJEK_ID;
 			$order_data_arr = GojekOrderView01::find()
@@ -94,7 +105,7 @@ class GojekOrderCompletionController extends Controller
 			$fix_data[$key]['from_loc'] = $value['from_loc'];
 			$fix_data[$key]['to_loc'] = $value['to_loc'];
 			$fix_data[$key]['last_update'] = $value['last_update'];
-			$fix_data[$key]['todays_point'] = isset(end($value['close'])['y']) ? end($value['close'])['y'] : 0;
+			$fix_data[$key]['todays_point'] = isset($driver_point_arr[$key]) ? $driver_point_arr[$key] : 0;
 		}
 
 		return $this->render('index', [
