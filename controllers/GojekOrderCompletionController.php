@@ -43,7 +43,7 @@ class GojekOrderCompletionController extends Controller
 			->where([
 				'GOJEK_ID' => $nik,
 			])
-			->andWhere(['>=', 'issued_date', date('Y-m-d', strtotime(date('Y-m-d') . '-7 days'))])
+			->andWhere(['>=', 'issued_date', date('Y-m-d', strtotime(date('Y-m-d') . '-10 days'))])
 			->groupBy('GOJEK_ID, GOJEK_DESC, issued_date')
 			->orderBy('GOJEK_DESC, issued_date')
 			->asArray()
@@ -94,6 +94,7 @@ class GojekOrderCompletionController extends Controller
 			$fix_data[$key]['from_loc'] = $value['from_loc'];
 			$fix_data[$key]['to_loc'] = $value['to_loc'];
 			$fix_data[$key]['last_update'] = $value['last_update'];
+			$fix_data[$key]['todays_point'] = isset(end($value['close'])['y']) ? end($value['close'])['y'] : 0;
 		}
 
 		return $this->render('index', [

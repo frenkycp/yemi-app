@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Order Completion <span class="japanesse text-green"></span>',
-    'tab_title' => 'Order Completion',
-    'breadcrumbs_title' => 'Order Completion'
+    'page_title' => 'GO-WIP ACTIVITIES <span class="japanesse text-green">（社内物流活動状況）</span>',
+    'tab_title' => 'GO-WIP ACTIVITIES',
+    'breadcrumbs_title' => 'GO-WIP ACTIVITIES'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -68,7 +68,9 @@ echo '</pre>';*/
                     <h4 class="box-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key; ?>">
                             <?= $key . ' - ' . $value['nama']; ?>
+                             | (<b><?= $value['todays_point']; ?></b> pts)
                         </a>
+
                     </h4>
                     <div class="pull-right" style="font-size: 12px;">
                         <?= ($text_status); ?>

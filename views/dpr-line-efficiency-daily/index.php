@@ -90,14 +90,22 @@ echo '</pre>';*/
                             'xAxis' => [
                                 'categories' => $categories,
                             ],
+                            'tooltip' => [
+                                'shared' => true
+                            ],
                             'yAxis' => [
-                                'title' => [
-                                    'text' => 'Percentage (%)'
+                                [
+                                    'title' => [
+                                        'text' => 'Percentage (%)'
+                                    ],
+                                ],
+                                [
+                                    'title' => [
+                                        'text' => 'Manpower'
+                                    ],
+                                    'opposite' => true
                                 ],
                                 //'max' => 100,
-                            ],
-                            'tooltip' => [
-                                'valueSuffix' => '%',
                             ],
                             'plotOptions' => [
                                 /*'series' => [
@@ -112,15 +120,6 @@ echo '</pre>';*/
                                         ]
                                     ]
                                 ],*/
-                                'series' => [
-                                    'cursor' => 'pointer',
-                                    'point' => [
-                                        'events' => [
-                                            'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                            //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                                        ]
-                                    ]
-                                ],
                                 'column' => [
                                     'dataLabels' => [
                                         'enabled' => true

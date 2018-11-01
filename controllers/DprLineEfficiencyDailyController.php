@@ -5,7 +5,9 @@ use yii\web\Controller;
 use app\models\DprLineEfficiencyView02;
 use app\models\DprGmcEffView;
 use app\models\SernoLosstime;
+use app\models\SernoInput;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\web\JsExpression;
 
 class DprLineEfficiencyDailyController extends Controller
@@ -68,10 +70,25 @@ class DprLineEfficiencyDailyController extends Controller
 
 	    foreach ($categories as $key => $line) {
 		    $eff = 0;
+		    $proddate = null;
 		    foreach ($eff_data_arr as $key2 => $value2) {
 		    	if ($value2['line'] == $line) {
 		    		$eff = $value2['efficiency'];
 		    	}
+		    }
+
+		    $mp = 0;
+
+		    $mp_data = SernoInput::find()
+		    ->where([
+		    	'proddate' => $model->proddate,
+		    	'line' => $line,
+		    ])
+		    ->orderBy('waktu DESC')
+		    ->one();
+
+		    if ($mp_data->mp != null) {
+		    	$mp = $mp_data->mp;
 		    }
 
 		    $losstime_val = 0;
@@ -107,6 +124,11 @@ class DprLineEfficiencyDailyController extends Controller
 
 		    $remark .= '</table>';
 
+		    $tmp_data2[] = [
+		    	'y' => $mp,
+		    	'url' => Url::to(['dpr-gmc-eff-data/get-mp-list', 'proddate' => $model->proddate, 'line' => $line])
+		    ];
+
 		    $tmp_data[] = [
 		    	'y' => round($eff, 2),
 		    	//'remark' => $remark,
@@ -121,16 +143,41 @@ class DprLineEfficiencyDailyController extends Controller
 	    }
 
 	    $data[] = [
+	    	'name' => 'Manpower',
+	    	'type' => 'line',
+	    	'yAxis' => 1,
+	    	'data' => $tmp_data2,
+	    	'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
+            'cursor' => 'pointer',
+            'point' => [
+                'events' => [
+                    'click' => new JsExpression("
+                        function(e){
+                            e.preventDefault();
+                            $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                        }
+                    "),
+                ]
+            ]
+	    ];
+
+	    $data[] = [
 	    	'name' => 'Line Efficiency',
 	    	'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
-	    	//'colorByPoint' => true,
-	    	'data' => $tmp_data
+	    	'data' => $tmp_data,
+	    	'zIndex' => -1,
+	    	'cursor' => 'pointer',
+            'point' => [
+                'events' => [
+                    'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                ]
+            ]
 	    ];
 
 	    $data_losstime[] = [
 	    	'name' => 'Line Loss Time',
 	    	'color' => new JsExpression('Highcharts.getOptions().colors[5]'),
-	    	//'colorByPoint' => true,
 	    	'data' => $tmp_data_losstime
 	    ];
 

@@ -3,11 +3,13 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 use app\models\search\DprGmcEffDataSearch;
 use app\models\SernoMp;
 use app\models\SernoInput;
 use app\models\HakAkses;
+use app\models\Karyawan;
 
 class DprGmcEffDataController extends Controller
 {
@@ -63,7 +65,8 @@ class DprGmcEffDataController extends Controller
 		$mp_data_arr = SernoMp::find()
 		->where([
 			'tgl' => $proddate,
-			'line' => $line
+			'line' => $line,
+			'status' => 0
 		])
 		->orderBy('status DESC, cek_in DESC')
 		->all();
@@ -72,11 +75,15 @@ class DprGmcEffDataController extends Controller
 		'<tr>
 			<th class="text-center">No</th>
 			<th class="text-center">NIK</th>
+			<th>Name</th>
 			<th class="text-center">Check In</th>
 			<th class="text-center">Check Out</th>
 			<th class="text-center">Status</th>
 		</tr>'
 		;
+
+		$data_karyawan_arr = ArrayHelper::map(Karyawan::find()->all(), 'NIK', 'NAMA_KARYAWAN');
+
 		$no = 1;
 		foreach ($mp_data_arr as $value) {
 			if ($value->status == 0) {
@@ -88,6 +95,7 @@ class DprGmcEffDataController extends Controller
 			<tr>
 				<td class="text-center">' . $no . '</td>
 				<td class="text-center">' . $value->nik . '</td>
+				<td>' . $data_karyawan_arr[$value->nik] . '</td>
 				<td class="text-center">' . $value->cek_in . '</td>
 				<td class="text-center">' . $value->cek_out . '</td>
 				<td class="text-center">' . $status . '</td>
