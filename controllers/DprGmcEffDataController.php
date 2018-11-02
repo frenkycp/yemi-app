@@ -22,6 +22,7 @@ class DprGmcEffDataController extends Controller
 	public function actionIndex()
 	{
 		$searchModel  = new DprGmcEffDataSearch;
+		$searchModel->proddate = date('Y-m-d');
     	if(\Yii::$app->request->get('proddate') !== null)
 	    {
 	    	$searchModel->proddate = \Yii::$app->request->get('proddate');
@@ -129,13 +130,14 @@ class DprGmcEffDataController extends Controller
             <th class="text-center">End Time</th>
             <th class="text-center">Working Time</th>
             <th class="text-center">MP Time</th>
+            <th class="text-center">Qty Time</th>
         </tr></thead>';
         $data .= '<tbody style="">';
 
         $no = 1;
 		foreach ($serno_input_arr as $value) {
 			$data .= '
-                <tr>
+                <tr style="font-size: 12px;">
                 	<td class="text-center">' . $no . '</td>
                     <td class="text-center">' . $value->line . '</td>
                     <td class="text-center">' . $value->gmc . '</td>
@@ -144,6 +146,7 @@ class DprGmcEffDataController extends Controller
                     <td class="text-center">' . $value->waktu . '</td>
                     <td class="text-center">' . $value->wrk_time . '</td>
                     <td class="text-center">' . $value->mp_time . '</td>
+                    <td class="text-center">' . $value->qty_time . '</td>
                 </tr>
             ';
             $no++;

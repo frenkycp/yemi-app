@@ -5,6 +5,7 @@ use yii\web\Controller;
 use app\models\DprLineEfficiencyView02;
 use app\models\DprGmcEffView;
 use app\models\SernoLosstime;
+use app\models\HakAkses;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
@@ -14,11 +15,11 @@ use yii\web\JsExpression;
  */
 class DprLineEfficiencyMonthlyController extends Controller
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 
 	public function actionIndex()
 	{
@@ -42,10 +43,10 @@ class DprLineEfficiencyMonthlyController extends Controller
 
 		$period = $year . $month;
 
-		$line_dropdown = ArrayHelper::map(DprLineEfficiencyView02::find()
-		->select('DISTINCT(line)')
-		->orderBy('line')
-		->all(), 'line', 'line');
+		$line_dropdown = ArrayHelper::map($data_arr = HakAkses::find()
+		->where(['<>', 'hak_akses', 'MIS'])
+		->orderBy('hak_akses')
+		->all(), 'hak_akses', 'hak_akses');
 
 		$eff_data_arr = DprLineEfficiencyView02::find()
 	    ->where([
@@ -88,10 +89,11 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    $losstime_arr = SernoLosstime::find()
 	    ->select([
 	    	'proddate',
-	    	'losstime' => 'ROUND(SUM(losstime))'
+	    	'losstime' => 'ROUND(SUM(losstime), 2)',
 	    ])
 	    ->where([
-	    	'extract(year_month from proddate)' => $period
+	    	'extract(year_month from proddate)' => $period,
+	    	'line' => $line
 	    ])
 	    ->andWhere(['<>', 'category', 'UNKNOWN'])
 	    ->groupBy('proddate')
@@ -104,21 +106,49 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	$proddate = (strtotime($losstime['proddate'] . " +7 hours") * 1000);
 	    	$tmp_data_losstime[] = [
 	    		'x' => $proddate,
-	    		'y' => (float)$losstime['losstime']
+	    		'y' => (float)$losstime['losstime'],
+	    		'url' => Url::to(['get-losstime-detail', 'line' => $line, 'proddate' => $losstime['proddate']])
+	    	];
+	    }
+
+	    $losstime_category_arr = SernoLosstime::find()
+	    ->select([
+	    	'category',
+	    	'losstime' => 'ROUND(SUM(losstime), 2)',
+	    	'total_category' => 'COUNT(losstime)'
+	    ])
+	    ->where([
+	    	'extract(year_month from proddate)' => $period,
+	    	'line' => $line
+	    ])
+	    ->andWhere(['<>', 'category', 'UNKNOWN'])
+	    ->groupBy('category')
+	    ->orderBy('losstime DESC')
+	    ->all();
+
+	    foreach ($losstime_category_arr as $key => $value) {
+	    	$categories_losstime_category[] = $value->category;
+	    	$tmp_data_losstime_category[] = [
+	    		'y' => $value->losstime,
+	    		'qty' => $value->total_category,
+	    		'url' => Url::to(['get-losstime-category-detail', 'period' => $period, 'category' => $value->category, 'line' => $line])
 	    	];
 	    }
 
 	    $tmp_data = [];
 	    $categories = [];
+	    $max = 100;
 	    foreach ($eff_data_arr as $eff_data) {
 	    	$proddate = (strtotime($eff_data['proddate'] . " +7 hours") * 1000);
 	    	$categories[] = $eff_data['proddate'];
 	    	$tmp_data[] = [
 	    		'x' => $proddate,
 	    		'y' => (float)round($eff_data['efficiency']),
-		    	//'remark' => $remark,
 		    	'url' => Url::to(['dpr-gmc-eff-data/index', 'line' => $line, 'proddate' => $eff_data['proddate']])
 	    	];
+	    	if ($eff_data['efficiency'] > $max) {
+	    		$max = round(1.1 * $eff_data['efficiency']);
+	    	}
 	    }
 
 	    $data1[] = [
@@ -128,37 +158,142 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    ];
 
 	    $data2[] = [
-	    	'name' => 'Line Loss Time',
+	    	'name' => 'Loss Time by Line',
 	    	'data' => $tmp_data_losstime,
+	    	'color' => new JsExpression('Highcharts.getOptions().colors[5]'),
+	    ];
+
+	    $data3[] = [
+	    	'name' => 'Loss Time by Category',
+	    	'data' => $tmp_data_losstime_category,
 	    	'color' => new JsExpression('Highcharts.getOptions().colors[5]'),
 	    ];
 
 		return $this->render('index', [
 			'data1' => $data1,
 			'data2' => $data2,
+			'data3' => $data3,
 			'line' => $line,
 			'period' => $period,
 			'categories' => $categories,
+			'categories_losstime_category' => $categories_losstime_category,
 			'line_dropdown' => $line_dropdown,
 			'year' => $year,
 			'month' => $month,
 			'target_eff' => $target_eff,
+			'max' => $max,
 		]);
 	}
 
 	public function getLineArr()
 	{
-		$data_arr = DprLineEfficiencyView02::find()
-		->select('DISTINCT(line)')
-		->orderBy('line')
+		$data_arr = HakAkses::find()
+		->where(['<>', 'hak_akses', 'MIS'])
+		->orderBy('hak_akses')
 		->all();
 
 		$return_arr = [];
 
 		foreach ($data_arr as $key => $value) {
-			$return_arr[] = $value->line;
+			$return_arr[] = $value->hak_akses;
 		}
 
 		return $return_arr;
+	}
+
+	public function actionGetLosstimeDetail($line, $proddate)
+	{
+		$losstime_detail_arr = SernoLosstime::find()
+	    ->where([
+	    	'proddate' => $proddate,
+	    	'line' => $line
+	    ])
+	    ->andWhere(['<>', 'category', 'UNKNOWN'])
+	    ->orderBy('category, start_time')
+	    ->asArray()
+	    ->all();
+
+	    $remark = '<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>Line : ' . $line . '<small><br/>(' . $proddate . ')</small></h3>
+		</div>
+		<div class="modal-body">
+		';
+
+	    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
+	    $remark .= '<tr>
+	    	<th class="text-center">Start Time</th>
+	    	<th class="text-center">End Time</th>
+	    	<th class="text-center">Man Power</th>
+	    	<th class="text-center">Category</th>
+	    	<th class="text-center">Loss Time (min)</th>
+	    	<th>Remark</th>
+	    </tr>';
+
+	    foreach ($losstime_detail_arr as $value) {
+    		$remark .= '<tr>
+	    		<td class="text-center">' . $value['start_time'] . '</td>
+	    		<td class="text-center">' . $value['end_time'] . '</td>
+	    		<td class="text-center">' . $value['mp'] . '</td>
+	    		<td class="text-center">' . $value['category'] . '</td>
+	    		<td class="text-center">' . number_format($value['losstime'], 2) . '</td>
+	    		<td>' . $value['model'] . '</td>
+	    	</tr>';
+	    }
+
+	    $remark .= '</table>';
+	    $remark .= '</div>';
+
+	    return $remark;
+	}
+
+	public function actionGetLosstimeCategoryDetail($period, $category, $line)
+	{
+		$losstime_detail_arr = SernoLosstime::find()
+	    ->where([
+	    	'extract(year_month from proddate)' => $period,
+	    	'category' => $category,
+	    	'line' => $line
+	    ])
+	    ->orderBy('line, start_time')
+	    ->asArray()
+	    ->all();
+
+	    $remark = '<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>Category : ' . $category . '</h3>
+		</div>
+		<div class="modal-body">
+		';
+
+	    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
+	    $remark .= '<tr>
+	    	<th class="text-center">No.</th>
+	    	<th class="text-center">Start Time</th>
+	    	<th class="text-center">End Time</th>
+	    	<th class="text-center">Man Power</th>
+	    	<th class="text-center">Line</th>
+	    	<th class="text-center">Loss Time (min)</th>
+	    	<th>Remark</th>
+	    </tr>';
+
+	    $no = 1;
+	    foreach ($losstime_detail_arr as $value) {
+    		$remark .= '<tr>
+	    		<td class="text-center">' . $no . '</td>
+	    		<td class="text-center">' . $value['start_time'] . '</td>
+	    		<td class="text-center">' . $value['end_time'] . '</td>
+	    		<td class="text-center">' . $value['mp'] . '</td>
+	    		<td class="text-center">' . $value['line'] . '</td>
+	    		<td class="text-center">' . number_format($value['losstime'], 2) . '</td>
+	    		<td>' . $value['model'] . '</td>
+	    	</tr>';
+	    	$no++;
+	    }
+
+	    $remark .= '</table>';
+	    $remark .= '</div>';
+
+	    return $remark;
 	}
 }

@@ -175,7 +175,7 @@ echo '</pre>';*/
                                     'dataLabels' => [
                                         'enabled' => true
                                     ],
-                                    'maxPointWidth' => 50,
+                                    'maxPointWidth' => 100,
                                 ],
                             ],
                             'series' => $losstime_line_data_series,
@@ -234,7 +234,7 @@ echo '</pre>';*/
                                     'dataLabels' => [
                                         'enabled' => true
                                     ],
-                                    'maxPointWidth' => 50,
+                                    'maxPointWidth' => 100,
                                 ],
                             ],
                             'series' => $losstime_category_data_series,

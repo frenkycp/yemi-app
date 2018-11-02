@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoLosstime extends BaseSernoLosstime
 {
-    public $period;
+    public $period, $total_category;
 
     public function behaviors()
     {

@@ -6,17 +6,18 @@ use app\models\DprLineEfficiencyView02;
 use app\models\DprGmcEffView;
 use app\models\SernoLosstime;
 use app\models\SernoInput;
+use app\models\HakAkses;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 
 class DprLineEfficiencyDailyController extends Controller
 {
-	/*public function behaviors()
+	public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }*/
+    }
 	
 	public function actionIndex()
 	{
@@ -166,15 +167,15 @@ class DprLineEfficiencyDailyController extends Controller
 
 	public function getLineArr()
 	{
-		$data_arr = DprLineEfficiencyView02::find()
-		->select('DISTINCT(line)')
-		->orderBy('line')
+		$data_arr = HakAkses::find()
+		->where(['<>', 'hak_akses', 'MIS'])
+		->orderBy('hak_akses')
 		->all();
 
 		$return_arr = [];
 
 		foreach ($data_arr as $key => $value) {
-			$return_arr[] = $value->line;
+			$return_arr[] = $value->hak_akses;
 		}
 
 		return $return_arr;
