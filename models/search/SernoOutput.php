@@ -61,7 +61,7 @@ $query = SernoOutputModel::find()
 ])
 ->where(['<>', 'stc', 'ADVANCE'])
 //->andWhere(['<>', 'stc', 'NOSO'])
-->groupBy('uniq');
+->groupBy('uniq, so');
 
 if(isset($params['index_type']))
 {
