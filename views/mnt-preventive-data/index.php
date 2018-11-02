@@ -68,15 +68,15 @@ $grid_columns = [
                 ];
                 $url = ['upload-image', 'mesin_id' => $model->mesin_id];
 
-                $filename = $model->mesin_id . '.jpg';
+                /*$filename = $model->mesin_id . '.jpg';
                 $path = \Yii::$app->basePath . '\\web\\uploads\\MNT_MACHINE\\' . $filename;
                 if (file_exists($path)) {
                     return null;
                 } else {
                     return Html::a('<span class="glyphicon glyphicon-upload"></span>', $url, $options);
-                }
-                
-                
+                }*/
+
+                return Html::a('<span class="glyphicon glyphicon-upload"></span>', $url, $options);
             },
             'history' => function ($url, $model, $key) {
                 $options = [
