@@ -62,7 +62,8 @@ echo '</pre>';*/
         <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_1" data-toggle="tab">Line Efficiency</a></li>
-                <li><a href="#tab_2" data-toggle="tab">Lost Time</a></li>
+                <li><a href="#tab_2" data-toggle="tab">FA Loss time by Line <span class="japanesse">（ライン別総組ロースタイム）</span></a></li>
+                <li><a href="#tab_3" data-toggle="tab">FA Loss time by Category <span class="japanesse">（原因カテゴリー別総組ロースタイム）</span></a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1">
@@ -70,8 +71,8 @@ echo '</pre>';*/
                     echo Highcharts::widget([
                         'scripts' => [
                             //'modules/exporting',
-                            'themes/grid-light',
-                            //'themes/sand-signika',
+                            //'themes/grid-light',
+                            'themes/sand-signika',
                             //'themes/dark-unica',
                         ],
                         'options' => [
@@ -88,7 +89,7 @@ echo '</pre>';*/
                                 'enabled' => false,
                             ],
                             'xAxis' => [
-                                'categories' => $categories,
+                                'categories' => $eff_categories,
                             ],
                             'tooltip' => [
                                 'valueSuffix' => '%'
@@ -118,7 +119,7 @@ echo '</pre>';*/
                                     ],
                                 ],
                             ],
-                            'series' => $data,
+                            'series' => $eff_data_series,
                         ],
                     ]); ?>
                 </div>
@@ -127,7 +128,7 @@ echo '</pre>';*/
                     echo Highcharts::widget([
                         'scripts' => [
                             //'modules/exporting',
-                            'themes/grid-light',
+                            //'themes/grid-light',
                             //'themes/sand-signika',
                             //'themes/dark-unica',
                         ],
@@ -145,7 +146,7 @@ echo '</pre>';*/
                                 'enabled' => false,
                             ],
                             'xAxis' => [
-                                'categories' => $categories,
+                                'categories' => $losstime_line_categories,
                             ],
                             'yAxis' => [
                                 'title' => [
@@ -153,16 +154,20 @@ echo '</pre>';*/
                                 ],
                                 //'max' => 100,
                             ],
+                            'tooltip' => [
+                                'valueSuffix' => ' minutes'
+                            ],
                             'plotOptions' => [
                                 /**/'series' => [
                                     'cursor' => 'pointer',
                                     'point' => [
                                         'events' => [
-                                            'click' => new JsExpression('
-                                                function(){
-                                                    $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                            'click' => new JsExpression("
+                                                function(e){
+                                                    e.preventDefault();
+                                                    $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
                                                 }
-                                            '),
+                                            "),
                                         ]
                                     ]
                                 ],
@@ -170,9 +175,69 @@ echo '</pre>';*/
                                     'dataLabels' => [
                                         'enabled' => true
                                     ],
+                                    'maxPointWidth' => 50,
                                 ],
                             ],
-                            'series' => $data_losstime,
+                            'series' => $losstime_line_data_series,
+                        ],
+                    ]); ?>
+                </div>
+                <div class="tab-pane" id="tab_3">
+                    <?php
+                    echo Highcharts::widget([
+                        'scripts' => [
+                            //'modules/exporting',
+                            //'themes/grid-light',
+                            //'themes/sand-signika',
+                            //'themes/dark-unica',
+                        ],
+                        'options' => [
+                            'chart' => [
+                                'type' => 'column',
+                            ],
+                            'credits' => [
+                                'enabled' => false
+                            ],
+                            'title' => [
+                                'text' => null
+                            ],
+                            'legend' => [
+                                'enabled' => false,
+                            ],
+                            'xAxis' => [
+                                'categories' => $losstime_category_categories,
+                            ],
+                            'yAxis' => [
+                                'title' => [
+                                    'text' => 'Minutes'
+                                ],
+                                //'max' => 100,
+                            ],
+                            'tooltip' => [
+                                'valueSuffix' => ' minutes'
+                            ],
+                            'plotOptions' => [
+                                /**/'series' => [
+                                    'cursor' => 'pointer',
+                                    'point' => [
+                                        'events' => [
+                                            'click' => new JsExpression("
+                                                function(e){
+                                                    e.preventDefault();
+                                                    $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                                }
+                                            "),
+                                        ]
+                                    ]
+                                ],
+                                'column' => [
+                                    'dataLabels' => [
+                                        'enabled' => true
+                                    ],
+                                    'maxPointWidth' => 50,
+                                ],
+                            ],
+                            'series' => $losstime_category_data_series,
                         ],
                     ]); ?>
                 </div>

@@ -12,11 +12,11 @@ use yii\web\JsExpression;
 
 class DprLineEfficiencyDailyController extends Controller
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 	
 	public function actionIndex()
 	{
@@ -37,59 +37,59 @@ class DprLineEfficiencyDailyController extends Controller
 	    }
 
 	    $tmp_data = [];
-	    $eff_data_arr = DprLineEfficiencyView02::find()
+	    $eff_data_arr = SernoInput::find()
+	    ->select([
+	    	'line',
+	    	'qty_time' => 'ROUND(SUM(qty_time),2)',
+	    	'mp_time' => 'ROUND(SUM(mp_time),2)',
+	    ])
 	    ->where([
 	    	'proddate' => $model->proddate,
 	    ])
-	    ->asArray()
-	    ->all();
-
-	    $losstime_detail_arr = SernoLosstime::find()
-	    ->where([
-	    	'proddate' => $model->proddate,
-	    ])
-	    ->andWhere(['<>', 'category', 'UNKNOWN'])
-	    ->orderBy('category, start_time')
+	    ->groupBy('line')
 	    ->asArray()
 	    ->all();
 
 	    $losstime_arr = SernoLosstime::find()
 	    ->select([
 	    	'line',
+	    	'category',
 	    	'losstime' => 'ROUND(SUM(losstime), 2)'
 	    ])
 	    ->where([
 	    	'proddate' => $model->proddate,
 	    ])
 	    ->andWhere(['<>', 'category', 'UNKNOWN'])
-	    ->groupBy('line')
+	    ->groupBy('line, category')
 	    ->asArray()
 	    ->all();
 
-	    $tmp_data_losstime = [];
+
+	    foreach ($losstime_arr as $value) {
+	    	if (!isset($tmp_losstime_line[$value['line']])) {
+	    		$tmp_losstime_line[$value['line']] = 0;
+	    	}
+	    	if (!isset($tmp_losstime_category[$value['category']])) {
+	    		$tmp_losstime_category[$value['category']] = 0;
+	    	}
+	    	
+	    	$tmp_losstime_line[$value['line']] += $value['losstime'];
+	    	$tmp_losstime_category[$value['category']] += $value['losstime'];
+	    }
 
 	    foreach ($categories as $key => $line) {
 		    $eff = 0;
-		    $proddate = null;
 		    foreach ($eff_data_arr as $key2 => $value2) {
-		    	if ($value2['line'] == $line) {
-		    		$eff = $value2['efficiency'];
+		    	if ($value2['line'] == $line && $value2['mp_time'] > 0) {
+		    		$eff = round(($value2['qty_time'] / $value2['mp_time']) * 100, 2);
 		    	}
 		    }
 
-		    /*$mp = 0;
+		    $tmp_data_eff[$line] = $eff;
 
-		    $mp_data = SernoInput::find()
-		    ->where([
-		    	'proddate' => $model->proddate,
-		    	'line' => $line,
-		    ])
-		    ->orderBy('waktu DESC')
-		    ->one();
-
-		    if ($mp_data->mp != null) {
-		    	$mp = $mp_data->mp;
-		    }*/
+		    if (!isset($tmp_losstime_line[$line])) {
+		    	$tmp_losstime_line[$line] = 0;
+		    }
 
 		    $losstime_val = 0;
 		    foreach ($losstime_arr as $losstime) {
@@ -97,74 +97,39 @@ class DprLineEfficiencyDailyController extends Controller
 		    		$losstime_val = $losstime['losstime'];
 		    	}
 		    }
-
-		    $remark = "<h4>LINE $line<small> ($model->proddate)</small></h4>";
-		    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
-		    $remark .= '<tr>
-		    	<th class="text-center">Start Time</th>
-		    	<th class="text-center">End Time</th>
-		    	<th class="text-center">Man Power</th>
-		    	<th class="text-center">Category</th>
-		    	<th class="text-center">Loss Time (min)</th>
-		    	<th>Remark</th>
-		    </tr>';
-
-		    /**/foreach ($losstime_detail_arr as $value) {
-		    	if ($value['line'] == $line) {
-		    		$remark .= '<tr>
-			    		<td class="text-center">' . $value['start_time'] . '</td>
-			    		<td class="text-center">' . $value['end_time'] . '</td>
-			    		<td class="text-center">' . $value['mp'] . '</td>
-			    		<td class="text-center">' . $value['category'] . '</td>
-			    		<td class="text-center">' . $value['losstime'] . '</td>
-			    		<td>' . $value['model'] . '</td>
-			    	</tr>';
-		    	}
-		    }
-
-		    $remark .= '</table>';
-
-		    /*$tmp_data2[] = [
-		    	'y' => $mp,
-		    	'url' => Url::to(['dpr-gmc-eff-data/get-mp-list', 'proddate' => $model->proddate, 'line' => $line])
-		    ];*/
-
-		    $tmp_data[] = [
-		    	'y' => round($eff, 1),
-		    	//'remark' => $remark,
-		    	'url' => Url::to(['dpr-gmc-eff-data/index', 'line' => $line, 'proddate' => $model->proddate])
-		    ];
-
-		    $tmp_data_losstime[] = [
-		    	'y' => round($losstime_val, 1),
-		    	'remark' => $remark,
-		    	//'url' => Url::to(['dpr-gmc-eff-data/index', 'line' => $line, 'proddate' => $model->proddate])
-		    ];
 	    }
 
-	    /*$data[] = [
-	    	'name' => 'Manpower',
-	    	'type' => 'line',
-	    	'yAxis' => 1,
-	    	'data' => $tmp_data2,
-	    	'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
-            'cursor' => 'pointer',
-            'point' => [
-                'events' => [
-                    'click' => new JsExpression("
-                        function(e){
-                            e.preventDefault();
-                            $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                        }
-                    "),
-                ]
-            ]
-	    ];*/
+	    asort($tmp_data_eff);
+	    foreach ($tmp_data_eff as $key => $value) {
+	    	$eff_categories[] = $key;
+	    	$eff_final_data[] = [
+	    		'y' => $value,
+	    		'url' => Url::to(['dpr-gmc-eff-data/index', 'line' => $key, 'proddate' => $model->proddate])
+	    	];
+	    }
 
-	    $data[] = [
+	    arsort($tmp_losstime_line);
+	    foreach ($tmp_losstime_line as $key => $value) {
+	    	$losstime_line_categories[] = $key;
+	    	$losstime_line_final_data[] = [
+	    		'y' => $value,
+	    		'url' => Url::to(['get-losstime-detail', 'by' => 'line', 'proddate' => $model->proddate, 'category_name' => $key])
+	    	];
+	    }
+
+	    arsort($tmp_losstime_category);
+	    foreach ($tmp_losstime_category as $key => $value) {
+	    	$losstime_category_categories[] = $key;
+	    	$losstime_category_final_data[] = [
+	    		'y' => $value,
+	    		'url' => Url::to(['get-losstime-detail', 'by' => 'category', 'proddate' => $model->proddate, 'category_name' => $key])
+	    	];
+	    }
+
+	    $eff_data_series[] = [
 	    	'name' => 'Line Efficiency',
 	    	'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
-	    	'data' => $tmp_data,
+	    	'data' => $eff_final_data,
 	    	'cursor' => 'pointer',
             'point' => [
                 'events' => [
@@ -174,14 +139,25 @@ class DprLineEfficiencyDailyController extends Controller
             ]
 	    ];
 
-	    $data_losstime[] = [
-	    	'name' => 'Line Loss Time',
+	    $losstime_line_data_series[] = [
+	    	'name' => 'Loss Time by Line',
 	    	'color' => new JsExpression('Highcharts.getOptions().colors[5]'),
-	    	'data' => $tmp_data_losstime
+	    	'data' => $losstime_line_final_data
+	    ];
+
+	    $losstime_category_data_series[] = [
+	    	'name' => 'Loss Time by Category',
+	    	'color' => new JsExpression('Highcharts.getOptions().colors[5]'),
+	    	'data' => $losstime_category_final_data
 	    ];
 
 		return $this->render('index', [
-			'data' => $data,
+			'eff_data_series' => $eff_data_series,
+			'eff_categories' => $eff_categories,
+			'losstime_line_data_series' => $losstime_line_data_series,
+			'losstime_line_categories' => $losstime_line_categories,
+			'losstime_category_data_series' => $losstime_category_data_series,
+			'losstime_category_categories' => $losstime_category_categories,
 			'data_losstime' => $data_losstime,
 			'model' => $model,
 			'categories' => $categories
@@ -219,5 +195,94 @@ class DprLineEfficiencyDailyController extends Controller
 	    }
 
 	    return $return_arr;
+	}
+
+	public function actionGetLosstimeDetail($by, $proddate, $category_name)
+	{
+	    if ($by == 'line') {
+	    	$losstime_detail_arr = SernoLosstime::find()
+		    ->where([
+		    	'proddate' => $proddate,
+		    	'line' => $category_name
+		    ])
+		    ->andWhere(['<>', 'category', 'UNKNOWN'])
+		    ->orderBy('category, start_time')
+		    ->asArray()
+		    ->all();
+
+		    $remark = '<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3>Line : ' . $category_name . '<small> (' . $proddate . ')</small></h3>
+			</div>
+			<div class="modal-body">
+			';
+
+		    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
+		    $remark .= '<tr>
+		    	<th class="text-center">Start Time</th>
+		    	<th class="text-center">End Time</th>
+		    	<th class="text-center">Man Power</th>
+		    	<th class="text-center">Category</th>
+		    	<th class="text-center">Loss Time (min)</th>
+		    	<th>Remark</th>
+		    </tr>';
+
+		    foreach ($losstime_detail_arr as $value) {
+	    		$remark .= '<tr>
+		    		<td class="text-center">' . $value['start_time'] . '</td>
+		    		<td class="text-center">' . $value['end_time'] . '</td>
+		    		<td class="text-center">' . $value['mp'] . '</td>
+		    		<td class="text-center">' . $value['category'] . '</td>
+		    		<td class="text-center">' . number_format($value['losstime'], 2) . '</td>
+		    		<td>' . $value['model'] . '</td>
+		    	</tr>';
+		    }
+
+		    $remark .= '</table>';
+		    $remark .= '</div>';
+	    } else {
+	    	$losstime_detail_arr = SernoLosstime::find()
+		    ->where([
+		    	'proddate' => $proddate,
+		    	'category' => $category_name
+		    ])
+		    ->andWhere(['<>', 'category', 'UNKNOWN'])
+		    ->orderBy('line, start_time')
+		    ->asArray()
+		    ->all();
+
+		    $remark = '<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h3>Category : ' . $category_name . '<small> (' . $proddate . ')</small></h3>
+			</div>
+			<div class="modal-body">
+			';
+
+		    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
+		    $remark .= '<tr>
+		    	<th class="text-center">Start Time</th>
+		    	<th class="text-center">End Time</th>
+		    	<th class="text-center">Man Power</th>
+		    	<th class="text-center">Line</th>
+		    	<th class="text-center">Loss Time (min)</th>
+		    	<th>Remark</th>
+		    </tr>';
+
+		    foreach ($losstime_detail_arr as $value) {
+	    		$remark .= '<tr>
+		    		<td class="text-center">' . $value['start_time'] . '</td>
+		    		<td class="text-center">' . $value['end_time'] . '</td>
+		    		<td class="text-center">' . $value['mp'] . '</td>
+		    		<td class="text-center">' . $value['line'] . '</td>
+		    		<td class="text-center">' . number_format($value['losstime'], 2) . '</td>
+		    		<td>' . $value['model'] . '</td>
+		    	</tr>';
+		    }
+
+		    $remark .= '</table>';
+		    $remark .= '</div>';
+	    }
+
+	    return $remark;
 	}
 }
