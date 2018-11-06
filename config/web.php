@@ -90,6 +90,7 @@ $config = [
         'db_mis7' => require(__DIR__ . '/db_mis7.php'),
         'db_wsus' => require(__DIR__ . '/db_wsus.php'),
         'db_wh_app' => require(__DIR__ . '/db_wh_app.php'),
+        'db_sms' => require(__DIR__ . '/db_sms.php'),
     ],
     'params' => $params,
     'modules' => [
