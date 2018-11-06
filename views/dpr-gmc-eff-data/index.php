@@ -65,7 +65,8 @@ $gridColumns = [
         'width'=>'120px',
     ],
     [
-        'attribute' => 'description',
+        'attribute' => 'partName',
+        'label' => 'Description',
         'vAlign' => 'middle',
         //'width'=>'100px',
     ],
@@ -102,6 +103,13 @@ $gridColumns = [
     [
         'attribute' => 'efficiency',
         'label' => 'Efficiency (%)',
+        'value' => function($model){
+            $eff = 0;
+            if ($model->mp_time > 0) {
+                $eff = round(($model->qty_time / $model->mp_time) * 100, 2);
+            }
+            return $eff;
+        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],

@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\DprGmcEffView;
+use app\models\SernoInput;
 
 /**
 * AbsensiTblSearch represents the model behind the search form about `app\models\AbsensiTbl`.
 */
-class DprGmcEffDataSearch extends DprGmcEffView
+class DprGmcEffDataSearch extends SernoInput
 {
 /**
 * @inheritdoc
@@ -40,7 +40,15 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = DprGmcEffView::find();
+//$query = DprGmcEffView::find();
+$query = SernoInput::find()
+->select([
+    'proddate', 'line', 'gmc',
+    'qty_product' => 'COUNT(gmc)',
+    'qty_time' => 'ROUND(SUM(qty_time),2)',
+    'mp_time' => 'ROUND(SUM(mp_time),2)'
+])
+->groupBy('proddate, line, gmc');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,

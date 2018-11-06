@@ -302,6 +302,9 @@ echo '</pre>';*/
                                     ]
                                 ],
                                 'column' => [
+                                    'dataLabels' => [
+                                        'enabled' => true
+                                    ],
                                     'maxPointWidth' => 100,
                                 ],
                             ],
