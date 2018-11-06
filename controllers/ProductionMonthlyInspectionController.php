@@ -31,33 +31,49 @@ class ProductionMonthlyInspectionController extends Controller
             $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
         }
 
-        $min_year = InspectionReportView::find()->select([
-            'periode' => 'MIN(LEFT(periode, 4))'
-        ])->one();
-
         $year_now = date('Y');
-        $star_year = $min_year->periode;
-        for ($year = $star_year; $year <= $year_now; $year++) {
+        $start_year = 2018;
+        for ($year = $start_year; $year <= $year_now; $year++) {
             $year_arr[$year] = $year;
         }
 
         $model = new PlanReceivingPeriod();
         $model->month = date('m');
         $model->year = date('Y');
-        if ($model->load($_POST))
+        if ($model->load($_GET))
         {
 
         }
 
         $periode = $model->year . $model->month;
 
-    	$inspection_data_arr = InspectionReportView::find()
+    	/*$inspection_data_arr = InspectionReportView::find()
     	->where([
     		'periode' => $periode
     	])
     	->andWhere('total_lot_out > 0 OR total_repair > 0')
     	->orderBy('proddate')
-    	->all();
+    	->all();*/
+
+        $inspection_data_arr = SernoInput::find()
+        ->select([
+            'period' => 'extract(year_month from proddate)',
+            'week_no' => 'week(proddate, 4)',
+            'proddate',
+            'total_data' => 'COUNT(proddate)',
+            'total_no_check' => 'SUM((CASE WHEN ((qa_ng = \'\') and (qa_ok = \'\')) then 1 ELSE 0 END))',
+            'total_ok' => 'SUM((CASE WHEN ((qa_ng = \'\') and (qa_ok = \'OK\')) then 1 ELSE 0 END))',
+            'total_lot_out' => 'SUM((CASE WHEN ((qa_ng <> \'\') and (qa_result <> 2)) then 1 ELSE 0 END))',
+            'total_repair' => 'SUM((CASE WHEN ((qa_ng <> \'\') and (qa_result = 2)) then 1 ELSE 0 END))',
+        ])
+        ->where([
+            'extract(year_month from proddate)' => $periode
+        ])
+        ->groupBy('week_no, proddate')
+        ->having([
+
+        ])
+        ->all();
 
     	$tmp_data = [];
         $tmp_data2 = [];
@@ -75,16 +91,17 @@ class ProductionMonthlyInspectionController extends Controller
     	}
 
     	$data = [
+            [
+                'name' => 'Repair',
+                'data' => $tmp_data2,
+                'color' => 'rgba(0, 0, 255, 0.5)'
+            ],
     		[
     			'name' => 'Lot Out',
     			'data' => $tmp_data,
     			'color' => 'rgba(255, 0, 0, 0.5)'
     		],
-            [
-                'name' => 'Repair',
-                'data' => $tmp_data2,
-                'color' => 'rgba(0, 0, 255, 0.5)'
-            ]
+            
     	];
 
     	return $this->render('index', [

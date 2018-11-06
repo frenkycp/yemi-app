@@ -50,6 +50,8 @@ echo '</pre>';*/
 ?>
 <?php $form = ActiveForm::begin([
     'id' => 'form_index',
+    'method' => 'get',
+    'action' => Url::to(['production-monthly-inspection/index']),
     'layout' => 'horizontal',
     'enableClientValidation' => true,
     'errorSummaryCssClass' => 'error-summary alert alert-danger',
@@ -70,15 +72,19 @@ echo '</pre>';*/
     <div class="row">
         <div class="col-md-3">
             <?= $form->field($model, 'year')->dropDownList(
-                $year_arr
+                \Yii::$app->params['year_arr'], [
+                    'onchange'=>'this.form.submit()'
+                ]
             ); ?>
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'month')->dropDownList(
-                $month_arr
+                $month_arr, [
+                    'onchange'=>'this.form.submit()'
+                ]
             ); ?>
         </div>
-        <?= Yii::$app->params['update_chart_btn']; ?>
+        
     </div>
 
 <?php ActiveForm::end(); ?>
@@ -127,7 +133,10 @@ echo '</pre>';*/
                         'dataLabels' => [
                             'enabled' => true
                         ],
-                    ]
+                    ],
+                    'column' => [
+                        'stacking' => 'normal'
+                    ],
                 ],
                 'yAxis' => [
                     'title' => [

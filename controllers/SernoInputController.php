@@ -32,7 +32,7 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 		$data_flo = [];
 		$data_invoice = [];
 
-		$data_gmc_arr = SernoInput::find()->select('gmc')->distinct()->orderBy('gmc')->asArray()->all();
+		/*$data_gmc_arr = SernoInput::find()->select('gmc')->distinct()->orderBy('gmc')->asArray()->all();
 		$data_flo_arr = SernoInput::find()->select('distinct(flo)')->where('flo <> 0')->orderBy('flo')->asArray()->all();
 		$data_invoice_arr = SernoOutput::find()->select('distinct(invo)')->where('invo <> \'\'')->orderBy('invo')->asArray()->all();
 		
@@ -46,7 +46,7 @@ class SernoInputController extends \app\controllers\base\SernoInputController
 
 		foreach ($data_invoice_arr as $key => $value) {
 			$data_invoice[] = $value['invo'];
-		}
+		}*/
 
 		if (\Yii::$app->request->get()) {
 			$searchModel  = new SernoInputSearch;
