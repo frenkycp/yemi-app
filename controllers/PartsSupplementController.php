@@ -3,11 +3,48 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use yii\helpers\Url;
+use app\models\StoreItemWsus;
+use app\models\Karyawan;
 
 class PartsSupplementController extends Controller
 {
-	public function actionWhApproved($READY_STOCK = 0, $ITEM = 'ITEM-A', $ITEM_DESC = 'ITEM-A', $UM = 'PC', $OUT_QTY = 1, $TAG_SLIP = '000000', $SEQ_ID = 0, $SLIP_REF = '181102FA1-0001', $NO = '000', $LOC = 'WF01', $LOC_DESC = 'FINAL ASSY', $POST_DATE = '2018-11-06 15:30:00', $USER_ID = '150826', $USER_DESC = 'FRENKY CAHYA PURNAMA', $STATUS = 'SUPPLEMENT')
+	public function actionWhApproved($URL = '', $ITEM = 'ITEM-A', $OUT_QTY = 0, $SLIP_REF = '', $USER_ID = '', $LOC = '', $LOC_DESC = '')
 	{
+		date_default_timezone_set("Asia/Jakarta");
+		$TAG_SLIP = '000000';
+		$SEQ_ID = 0;
+		$NO = '000';
+		$STATUS = 'SUPPLEMENT';
+		$POST_DATE = date('Y-m-d H:i:s');
+
+		$item_data = StoreItemWsus::find()
+		->where([
+			'ITEM' => $ITEM
+		])
+		->one();
+
+		$ITEM_DESC = '';
+		$UM = 'PC';
+		if ($item_data->ITEM !== null) {
+			$ITEM_DESC = $item_data->ITEM_DESC;
+			$UM = $item_data->UM;
+		} else {
+			$ITEM_DESC = $ITEM;
+		}
+
+		$emp_data = Karyawan::find()
+		->where([
+			'NIK' => $USER_ID
+		])
+		->one();
+
+		$USER_DESC = $USER_ID;
+		if($emp_data->NIK !== null){
+			$USER_DESC = $emp_data->NAMA_KARYAWAN;
+		} else {
+			$USER_DESC = $USER_ID;
+		}
+
 		$response = 'WH Approved Successfull';
 		$params = [
 			':ITEM' => $ITEM,
@@ -32,6 +69,7 @@ class PartsSupplementController extends Controller
 		} catch (Exception $ex) {
 			return $ex->getMessage();
 		}
-		return $this->redirect(Url::previous());
+		return $this->redirect($URL);
+		//return $this->redirect(Url::previous());
 	}
 }
