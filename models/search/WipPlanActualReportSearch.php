@@ -20,7 +20,7 @@ class WipPlanActualReportSearch extends WipPlanActualReport
 		return [
 		    [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'session_id'], 'string'],
 		    [['week'], 'integer'],
-		    [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'source_date'], 'safe'],
+		    [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'hand_over_job', 'source_date'], 'safe'],
 		    [['summary_qty'], 'number']
 		];
 	}
@@ -78,6 +78,7 @@ class WipPlanActualReportSearch extends WipPlanActualReport
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),post_date,120)', $this->post_date])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),source_date,120)', $this->source_date])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),end_job,120)', $this->end_job])
+        ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),hand_over_job,120)', $this->hand_over_job])
         ->andFilterWhere(['like', 'stage', $this->stage])
         ->andFilterWhere(['like', 'problem', $this->problem])
         ->andFilterWhere(['like', 'slip_id_reference', $this->slip_id_reference])

@@ -244,9 +244,26 @@ $grid_columns = [
     ],
     [
         'attribute' => 'end_job',
-        'label' => 'End Actual',
+        'label' => 'Complete Actual',
         'value' => function($model){
             return $model->end_job == null ? '-' : date('Y-m-d', strtotime($model->end_job));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size:10px;'
+        ],
+    ],
+    [
+        'attribute' => 'hand_over_job',
+        'label' => 'Pulled by Next Actual',
+        'value' => function($model){
+            return $model->hand_over_job == null ? '-' : date('Y-m-d', strtotime($model->hand_over_job));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',

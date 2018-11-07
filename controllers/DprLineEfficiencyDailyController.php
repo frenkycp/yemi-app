@@ -65,7 +65,7 @@ class DprLineEfficiencyDailyController extends Controller
 	    ->asArray()
 	    ->all();
 
-
+	    $tmp_losstime_category = [];
 	    foreach ($losstime_arr as $value) {
 	    	if (!isset($tmp_losstime_line[$value['line']])) {
 	    		$tmp_losstime_line[$value['line']] = 0;
@@ -168,7 +168,8 @@ class DprLineEfficiencyDailyController extends Controller
 	public function getLineArr()
 	{
 		$data_arr = HakAkses::find()
-		->where(['<>', 'hak_akses', 'MIS'])
+		->where(['level_akses' => '4'])
+		->andWhere(['<>', 'hak_akses', 'MIS'])
 		->orderBy('hak_akses')
 		->all();
 
