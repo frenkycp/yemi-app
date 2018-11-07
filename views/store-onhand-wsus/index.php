@@ -21,6 +21,32 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
     $actionColumnTemplateString = "{view} {update} {delete}";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+
+$grid_columns = [
+    [
+        'attribute' => 'ITEM',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'ITEM_DESC',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'UM',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'ONHAND_QTY',
+        'value' => function($model){
+            return number_format($model->ONHAND_QTY);
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+];
 ?>
 <div class="giiant-crud store-onhand-wsus-index">
 
@@ -34,61 +60,29 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
     
     <div class="table-responsive">
         <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'pager' => [
-        'class' => yii\widgets\LinkPager::className(),
-        'firstPageLabel' => 'First',
-        'lastPageLabel' => 'Last',
-        ],
-                    'filterModel' => $searchModel,
-                'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
-        'headerRowOptions' => ['class'=>'x'],
-        'columns' => [
-                /*[
-            'class' => 'yii\grid\ActionColumn',
-            'template' => $actionColumnTemplateString,
-            'buttons' => [
-                'view' => function ($url, $model, $key) {
-                    $options = [
-                        'title' => Yii::t('cruds', 'View'),
-                        'aria-label' => Yii::t('cruds', 'View'),
-                        'data-pjax' => '0',
-                    ];
-                    return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-                }
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => $grid_columns,
+            'hover' => true,
+            'striped' => true,
+            //'floatHeader'=>true,
+            //'floatHeaderOptions'=>['scrollingTop'=>'50'],
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            //'pjax' => true, // pjax is set to always true for this demo
+            'toolbar' =>  [
+                '{export}',
+                '{toggleData}',
             ],
-            'urlCreator' => function($action, $model, $key, $index) {
-                // using the column name as key, not mapping to 'id' like the standard generator
-                $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
-                $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
-                return Url::toRoute($params);
-            },
-            'contentOptions' => ['nowrap'=>'nowrap']
-        ],*/
-            [
-                'attribute' => 'ITEM',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
+            // set export properties
+            'export' => [
+                'fontAwesome' => true
             ],
-            [
-                'attribute' => 'ITEM_DESC',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
+            'panel' => [
+                'type' => GridView::TYPE_PRIMARY,
+                //'footer' => false,
             ],
-            [
-                'attribute' => 'UM',
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-            ],
-            [
-                'attribute' => 'ONHAND_QTY',
-                'value' => function($model){
-                    return number_format($model->ONHAND_QTY);
-                },
-                'hAlign' => 'center',
-                'vAlign' => 'middle',
-            ],
-        ],
         ]); ?>
     </div>
 
