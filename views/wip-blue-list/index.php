@@ -34,7 +34,6 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
     } else {
         $actionColumnTemplateString = "{update} {change_color}";
     }
-    
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
@@ -132,7 +131,8 @@ $grid_columns = [
         'checkboxOptions' => function($model) {
             $find_slip = app\models\GojekOrderTbl::find()
             ->where([
-                'slip_id' => $model->slip_id
+                'slip_id' => $model->slip_id,
+                'source' => 'WIP'
             ])
             ->one();
             if ($find_slip->slip_id == null) {
@@ -415,13 +415,13 @@ $grid_columns = [
 
     <!-- <hr /> -->
 
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'id' => 'grid',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => $grid_columns,
-            'hover' => true,
+            'hover' => false,
             'responsive' => true,
             //'condensed' => true,
             'striped' => false,
