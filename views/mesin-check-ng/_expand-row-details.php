@@ -4,26 +4,26 @@ use yii\helpers\Html;
 ?>
 <div style="margin: 15px;">
 	<h4>Corrective Details <small><?= $model->mesin_nama . ' (' . $model->urutan . ')'; ?></small></h4>
-	<div class="box box-success box-solid" style="display: none;">
+	<div class="box box-success box-solid">
 		<div class="box-body">
 			<table class="table table-bordered table-striped">
 				<tr class="success">
 					<th>Part</th>
 					<th>Part Remark</th>
 					<th>Repair Note</th>
-					<th style="text-align: center;">Prepare Time</th>
+					<!--<th style="text-align: center;">Prepare Time</th>
 					<th style="text-align: center;">Repair Time</th>
 					<th style="text-align: center;">Sparepart Time</th>
-					<th style="text-align: center;">Install Time</th>
+					<th style="text-align: center;">Install Time</th>-->
 				</tr>
 				<tr class="info">
 					<td><?= $model->mesin_bagian; ?></td>
 					<td><?= $model->mesin_catatan; ?></td>
 					<td><?= $model->repair_note; ?></td>
-					<td style="text-align: center;"><?= $model->prepare_time == null ? '-' : $model->prepare_time; ?></td>
+					<!--<td style="text-align: center;"><?= $model->prepare_time == null ? '-' : $model->prepare_time; ?></td>
 					<td style="text-align: center;"><?= $model->repair_time == null ? '-' : $model->repair_time; ?></td>
 					<td style="text-align: center;"><?= $model->spare_part_time == null ? '-' : $model->spare_part_time; ?></td>
-					<td style="text-align: center;"><?= $model->install_time == null ? '-' : $model->install_time; ?></td>
+					<td style="text-align: center;"><?= $model->install_time == null ? '-' : $model->install_time; ?></td>-->
 				</tr>
 			</table>
 		</div>
