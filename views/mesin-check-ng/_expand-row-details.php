@@ -4,7 +4,7 @@ use yii\helpers\Html;
 ?>
 <div style="margin: 15px;">
 	<h4>Corrective Details <small><?= $model->mesin_nama . ' (' . $model->urutan . ')'; ?></small></h4>
-	<div class="box box-success box-solid">
+	<div class="box box-success box-solid" style="display: none;">
 		<div class="box-body">
 			<table class="table table-bordered table-striped">
 				<tr class="success">

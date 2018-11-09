@@ -21,18 +21,7 @@ class PartsMilkRunWeeklyController extends Controller
     	$data = [];
     	$trans_method = 'MRS';
 
-        $year_arr = [];
         $month_arr = [];
-
-        $min_year = BookingShipTrackView::find()->select([
-            'YEAR' => 'MIN(YEAR)'
-        ])->one();
-
-        $year_now = date('Y');
-        $start_year = $min_year->YEAR;
-        for ($year = $start_year; $year <= ($year_now + 1); $year++) {
-            $year_arr[$year] = $year;
-        }
 
         for ($month = 1; $month <= 12; $month++) {
             $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
@@ -134,7 +123,6 @@ class PartsMilkRunWeeklyController extends Controller
     		'data' => $data,
     		'this_week' => $this_week,
             'period_model' => $period_model,
-            'year_arr' => $year_arr,
             'month_arr' => $month_arr
     	]);
     }

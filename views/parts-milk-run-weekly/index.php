@@ -54,7 +54,7 @@ echo '</pre>';*/
     <div class="row">
         <div class="col-md-2">
             <?= $form->field($period_model, 'year')->dropDownList(
-                $year_arr,
+                \Yii::$app->params['year_arr'],
                 [
                     'onchange'=>'this.form.submit()'
                 ]
