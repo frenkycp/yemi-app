@@ -34,6 +34,7 @@ use Yii;
  * @property string $location
  * @property string $area
  * @property string $department_pic
+ * @property string $project
  * @property string $aliasModel
  */
 abstract class AssetTbl extends \yii\db\ActiveRecord
@@ -64,7 +65,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id'], 'required'],
-            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic'], 'string'],
+            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic', 'project'], 'string'],
             [['purchase_date', 'LAST_UPDATE'], 'safe'],
             [['report_type'], 'integer'],
             [['asset_id'], 'unique']
@@ -102,6 +103,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'location' => 'Location',
             'area' => 'Area',
             'department_pic' => 'Department Pic',
+            'project' => 'Project',
         ];
     }
 

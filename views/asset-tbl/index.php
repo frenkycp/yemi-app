@@ -126,6 +126,15 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px; min-width: 190px;'
         ],
     ],
+    [
+        'attribute' => 'project',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
 ];
 ?>
 <div class="giiant-crud asset-tbl-index">
