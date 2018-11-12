@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst', 'etd_old', 'so'], 'safe'],
-            [['id', 'num', 'adv', 'cntr', 'back_order'], 'integer'],
+            [['id', 'num', 'adv', 'cntr', 'back_order', 'week_no'], 'integer'],
 ];
 }
 
@@ -57,10 +57,10 @@ $query = SernoOutputModel::find()
     'ship',
     'cntr',
     'back_order',
-    'remark' => 'MAX(remark)'
+    'remark' => 'MAX(remark)',
+    'week_no' => 'week(ship, 4)'
 ])
 ->where(['<>', 'stc', 'ADVANCE'])
-//->andWhere(['<>', 'stc', 'NOSO'])
 ->groupBy('uniq, so');
 
 if(isset($params['index_type']))
@@ -138,6 +138,7 @@ $query->andFilterWhere([
             'back_order' => $this->back_order,
             'adv' => $this->adv,
             'cntr' => $this->cntr,
+            'week(ship, 4)' => $this->week_no,
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
