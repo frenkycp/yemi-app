@@ -18,7 +18,7 @@ class AssetTblSearch extends AssetTbl
 public function rules()
 {
 return [
-[['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'purchase_date', 'LAST_UPDATE', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic'], 'safe'],
+[['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'purchase_date', 'LAST_UPDATE', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic', 'project'], 'safe'],
             [['report_type'], 'integer'],
 ];
 }
@@ -63,6 +63,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'asset_id', $this->asset_id])
             ->andFilterWhere(['like', 'qr', $this->qr])
+            ->andFilterWhere(['like', 'project', $this->project])
             ->andFilterWhere(['like', 'ip_address', $this->ip_address])
             ->andFilterWhere(['like', 'computer_name', $this->computer_name])
             ->andFilterWhere(['like', 'jenis', $this->jenis])
