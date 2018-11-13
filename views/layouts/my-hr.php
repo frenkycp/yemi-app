@@ -29,11 +29,13 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
     ?></title>
     <?php $this->head() ?>
 </head>
+<body class="hold-transition skin-blue sidebar-mini">
 <?php $this->beginBody() ?>
     <section class="content">
         <?= $content ?>
     </section>
 
 <?php $this->endBody() ?>
+</body>
 </html>
 <?php $this->endPage() ?>

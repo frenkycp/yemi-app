@@ -23,28 +23,36 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+$this->registerJs("$(function() {
+   $('.popup_img').click(function(e) {
+        e.preventDefault();
+        $('#emp_photo').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+   });
+});");
+
 $columns = [
-        /*[
-    'class' => 'yii\grid\ActionColumn',
-    'template' => $actionColumnTemplateString,
-    'buttons' => [
-        'view' => function ($url, $model, $key) {
-            $options = [
-                'title' => Yii::t('cruds', 'View'),
-                'aria-label' => Yii::t('cruds', 'View'),
-                'data-pjax' => '0',
-            ];
-            return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-        }
+    [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => '{upload_image}',
+        'buttons' => [
+            'upload_image' => function ($url, $model, $key) {
+                $options = [
+                    'title' => 'Upload Image',
+                    //'style' => 'padding-left: 10px;'
+                ];
+                $url = ['upload-image', 'NIK' => $model->NIK, 'NAMA_KARYAWAN' => $model->NAMA_KARYAWAN];
+
+                return Html::a('<span class="glyphicon glyphicon-upload"></span>', $url, $options);
+            },
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
     ],
-    'urlCreator' => function($action, $model, $key, $index) {
-        // using the column name as key, not mapping to 'id' like the standard generator
-        $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
-        $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
-        return Url::toRoute($params);
-    },
-    'contentOptions' => ['nowrap'=>'nowrap']
-],*/
     [
         'attribute' => 'PERIOD',
         'hAlign' => 'center',
@@ -68,6 +76,16 @@ $columns = [
     ],
     [
         'attribute' => 'NIK',
+        'value' => function($model){
+            $filename = $model->NIK . '.jpg';
+            $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
+            if (file_exists($path)) {
+                return Html::a($model->NIK, ['get-image-preview', 'NIK' => $model->NIK, 'NAMA_KARYAWAN' => $model->NAMA_KARYAWAN], ['class' => 'popup_img btn btn-warning btn-xs', 'data-pjax' => '0',]);
+            } else {
+                return $model->NIK;
+            }
+        },
+        'format' => 'html',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -214,7 +232,7 @@ $columns = [
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            //'pjax' => true, // pjax is set to always true for this demo
+            'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 '{export}',
                 '{toggleData}',
@@ -228,7 +246,15 @@ $columns = [
                 'heading' => $heading,
                 //'footer' => false,
             ],
-        ]); ?>
+        ]); 
+
+        yii\bootstrap\Modal::begin([
+            'id' =>'emp_photo',
+            'header' => '<h3>Machine Image</h3>',
+            //'size' => 'modal-lg',
+        ]);
+        yii\bootstrap\Modal::end();
+        ?>
     </div>
 
 </div>

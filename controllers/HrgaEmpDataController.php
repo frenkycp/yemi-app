@@ -5,9 +5,10 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\search\EmpDataSearch;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
-
+use yii\web\UploadedFile;
 
 /**
  * summary
@@ -84,4 +85,46 @@ class HrgaEmpDataController extends Controller
 		    'jabatan_arr' => $jabatan_arr
 		]);
 	}
+
+	public function actionUploadImage($NIK, $NAMA_KARYAWAN)
+	{
+		$model = new \yii\base\DynamicModel([
+        	'upload_file'
+	    ]);
+	    $model->addRule(['upload_file'], 'file');
+
+	    if($model->load(\Yii::$app->request->post())){
+	        $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
+	        $new_filename = $NIK . '.' . $model->upload_file->extension;
+
+	        if ($model->validate()) {
+	        	if ($model->upload_file) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/yemi_employee_img/") . $new_filename;
+	        		if ($model->upload_file->saveAs($filePath)) {
+	                    
+	                }
+	        	}
+	        	return $this->redirect(Url::previous());
+	        }
+	    }
+	    return $this->render('upload_form', [
+	    	'model' => $model,
+	    	'NIK' => $NIK,
+	    	'NAMA_KARYAWAN' => $NAMA_KARYAWAN,
+	    ]);
+	}
+
+	public function actionGetImagePreview($NIK, $NAMA_KARYAWAN)
+	{
+		$data = '<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>' . $NIK . '<br/><small>' . $NAMA_KARYAWAN . '</small></h3>
+		</div>
+		<div class="modal-body">
+		';
+		$data .= Html::img('@web/uploads/yemi_employee_img/' . $NIK . '.jpg', ['width' => '100%', 'class' => 'img-thumbnail']);
+		$data .= '</div>';
+		return $data;
+	}
+
 }

@@ -32,15 +32,9 @@ $profpic = "";
 <div class="box box-info box-solid">
     <div class="box-header with-border">
         <h1 class="box-title" style="font-size: 32px; padding-left: 12px;">Papan Informasi</h1>
-        <div class="col-md-2 pull-right">
-            <form action="<?= \Yii::$app->request->baseUrl; ?>/my-hr/index" method="get" class="sidebar-form">
-                <div class="input-group">
-                    <input name="nik" autofocus class="form-control" placeholder="Input NIK here ...">
-                    <span class="input-group-btn">
-                        <button type='submit' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                    </span>
-                </div>
-            </form>
+        <div class="pull-right">
+            <?= Html::a('Change Password', ['change-password', 'nik' => $model_karyawan->NIK], ['class' => 'btn btn-warning']) ?>
+            <?= Html::a('Log Out', ['logout'], ['class' => 'btn btn-danger']) ?>
         </div>
     </div>
     <div class="box-body">

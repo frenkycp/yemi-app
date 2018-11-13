@@ -8,6 +8,7 @@ use app\models\RekapAbsensiView;
 use app\models\CutiRekapView02;
 use app\models\SplView;
 use app\models\AbsensiTbl;
+use yii\helpers\Url;
 
 class MyHrController extends Controller
 {
@@ -19,8 +20,13 @@ class MyHrController extends Controller
 
 	public function actionIndex()
 	{
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
         $this->layout = 'my-hr';
-		$nik = \Yii::$app->request->get('nik');
+		//$nik = \Yii::$app->request->get('nik');
+        $nik = $session['my_hr_user'];
         $model_karyawan = Karyawan::find()->where([
             'NIK' => $nik
         ])->one();
@@ -60,6 +66,91 @@ class MyHrController extends Controller
             'sisa_cuti' => $sisa_cuti,
 		]);
 	}
+
+    public function actionLogin()
+    {
+        $session = \Yii::$app->session;
+        if ($session->has('my_hr_user')) {
+            return $this->redirect(['index']);
+        }
+        $this->layout = "adminty\my-hr-login";
+
+        $model = new \yii\base\DynamicModel([
+            'username', 'password'
+        ]);
+        $model->addRule(['username', 'password'], 'required');
+
+        if($model->load(\Yii::$app->request->post())){
+            $karyawan = Karyawan::find()
+            ->where([
+                'NIK' => $model->username,
+                'PASSWORD' => $model->password,
+            ])
+            ->one();
+            if ($karyawan->NIK !== null) {
+                $session['my_hr_user'] = $model->username;
+                return $this->redirect(['index']);
+            }
+            $model->username = null;
+            $model->password = null;
+        }
+
+        return $this->render('login', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionLogout()
+    {
+        $session = \Yii::$app->session;
+        if ($session->has('my_hr_user')) {
+            $session->remove('my_hr_user');
+        }
+
+        return $this->redirect(['login']);
+    }
+
+    public function actionChangePassword($nik)
+    {
+        $this->layout = "adminty\my-hr-login";
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
+
+        $model = new \yii\base\DynamicModel([
+            'username', 'password1', 'password2'
+        ]);
+        $model->addRule(['username', 'password1', 'password2'], 'required');
+
+        $model->username = $nik;
+
+        if($model->load(\Yii::$app->request->post())){
+            if ($model->password1 != $model->password2) {
+                \Yii::$app->getSession()->setFlash('error', 'Password 1 and Password 2 is different...');
+                return $this->render('change-password', [
+                    'model' => $model,
+                ]);
+            } else {
+                $model_karyawan = Karyawan::find()
+                ->where([
+                    'NIK' => $model->username
+                ])
+                ->one();
+
+                $model_karyawan->PASSWORD = $model->password1;
+
+                if ($model_karyawan->save()) {
+                    return $this->redirect(['index']);
+                }
+
+            }
+        }
+
+        return $this->render('change-password', [
+            'model' => $model,
+        ]);
+    }
 
 	public function actionGetLemburDetail($nik, $period)
     {

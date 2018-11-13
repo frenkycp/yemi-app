@@ -339,4 +339,13 @@ return array (
     ),
     'bootstrap' => 'schmunk42\\giiant\\Bootstrap',
   ),
+  'vintage/yii2-tinify' => 
+  array (
+    'name' => 'vintage/yii2-tinify',
+    'version' => '2.1.0.0',
+    'alias' => 
+    array (
+      '@vintage/tinify' => $vendorDir . '/vintage/yii2-tinify/src',
+    ),
+  ),
 );

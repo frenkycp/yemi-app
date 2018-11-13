@@ -40,6 +40,7 @@ use Yii;
  * @property string $K2_START
  * @property string $K2_END
  * @property string $ACTIVE_STAT
+ * @property string $PASSWORD
  * @property string $aliasModel
  */
 abstract class Karyawan extends \yii\db\ActiveRecord
@@ -70,7 +71,7 @@ abstract class Karyawan extends \yii\db\ActiveRecord
     {
         return [
             [['NIK'], 'required'],
-            [['NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_PERKAWINAN', 'ALAMAT', 'ALAMAT_SEMENTARA', 'TELP', 'NPWP', 'KTP', 'BPJS_KESEHATAN', 'BPJS_KETENAGAKERJAAN', 'STATUS_KARYAWAN', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'JABATAN_SR', 'JABATAN_SR_GROUP', 'GRADE', 'DIRECT_INDIRECT', 'JENIS_PEKERJAAN', 'SERIKAT_PEKERJA', 'ACTIVE_STAT'], 'string'],
+            [['NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_PERKAWINAN', 'ALAMAT', 'ALAMAT_SEMENTARA', 'TELP', 'NPWP', 'KTP', 'BPJS_KESEHATAN', 'BPJS_KETENAGAKERJAAN', 'STATUS_KARYAWAN', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'JABATAN_SR', 'JABATAN_SR_GROUP', 'GRADE', 'DIRECT_INDIRECT', 'JENIS_PEKERJAAN', 'SERIKAT_PEKERJA', 'ACTIVE_STAT', 'PASSWORD'], 'string'],
             [['TGL_LAHIR', 'TGL_MASUK_YEMI', 'K1_START', 'K1_END', 'K2_START', 'K2_END'], 'safe'],
             [['SKILL', 'KONTRAK_KE'], 'integer'],
             [['NIK'], 'unique']
@@ -114,6 +115,7 @@ abstract class Karyawan extends \yii\db\ActiveRecord
             'K2_START' => 'K2  Start',
             'K2_END' => 'K2  End',
             'ACTIVE_STAT' => 'Active  Stat',
+            'PASSWORD' => 'Password',
         ];
     }
 
