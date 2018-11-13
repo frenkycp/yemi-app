@@ -123,7 +123,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 190px;'
+            'style' => 'font-size: 12px;'
         ],
     ],
     [
@@ -132,7 +132,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'font-size: 12px;'
         ],
     ],
 ];
