@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\HrgaAttendanceDataSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Data Rekap Absensi');
+$this->title = 'Data Rekap Absensi';
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -23,7 +23,7 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $gridColumns = [
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -44,26 +44,53 @@ $gridColumns = [
         },
         'contentOptions' => ['nowrap'=>'nowrap'],
         'hidden' => Yii::$app->user->identity->role->id == 1 ? false : true,
-    ],
+    ],*/
     [
         'attribute' => 'PERIOD',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'SECTION',
         'vAlign' => 'middle',
-        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'NAMA_KARYAWAN',
         'vAlign' => 'middle',
         'width' => '200px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'GRADE',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '70px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'ALPHA',
@@ -95,30 +122,35 @@ $gridColumns = [
         'hAlign' => 'center',
         'mergeHeader' => true,
     ],
-    [
+    /*[
         'attribute' => 'CUTI_KHUSUS_IJIN',
         'encodeLabel' => false,
         'label' => 'Cuti Khusus<br/>Ijin',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
-    ],
+    ],*/
     [
         'attribute' => 'DISIPLIN',
+        'label' => 'Tunjangan Disiplin',
         'value' => function($model){
             if ($model->DISIPLIN == 0) {
-                return '<i class="fa fa-thumbs-down text-red"></i>';
+                return '<span class="text-red">TIDAK DAPAT</span>';
             }
-            return '<i class="fa fa-thumbs-up text-green"></i>';
+            return '<span class="text-green">DAPAT</span>';
         },
         'format' => 'raw',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filter' => [
-            1 => 'DISIPLIN',
-            0 => 'TIDAK DISIPLIN'
+            1 => 'DAPAT',
+            0 => 'TIDAK DAPAT'
         ],
-        'hiddenFromExport' => true
+        //'hiddenFromExport' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     /*[
         'attribute' => 'DISIPLIN',
@@ -168,7 +200,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => false, // pjax is set to always true for this demo

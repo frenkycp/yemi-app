@@ -14,6 +14,7 @@ use Yii;
  * @property string $NIK
  * @property string $NAMA_KARYAWAN
  * @property string $SECTION
+ * @property string $GRADE
  * @property integer $KEHADIRAN
  * @property integer $TOTAL_KARYAWAN
  * @property integer $ALPHA
@@ -54,7 +55,7 @@ abstract class RekapAbsensiView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['YEAR', 'PERIOD', 'NIK', 'NAMA_KARYAWAN', 'SECTION'], 'string'],
+            [['YEAR', 'PERIOD', 'NIK', 'NAMA_KARYAWAN', 'SECTION', 'GRADE'], 'string'],
             [['KEHADIRAN', 'TOTAL_KARYAWAN', 'ALPHA', 'IJIN', 'SAKIT', 'CUTI', 'CUTI_KHUSUS', 'CUTI_KHUSUS_IJIN', 'DISIPLIN', 'DATANG_TERLAMBAT', 'PULANG_CEPAT'], 'integer'],
             [['DISIPLIN'], 'required']
         ];
@@ -71,6 +72,7 @@ abstract class RekapAbsensiView extends \yii\db\ActiveRecord
             'NIK' => 'Nik',
             'NAMA_KARYAWAN' => 'Nama  Karyawan',
             'SECTION' => 'Section',
+            'GRADE' => 'Grade',
             'KEHADIRAN' => 'Kehadiran',
             'TOTAL_KARYAWAN' => 'Total  Karyawan',
             'ALPHA' => 'Alpha',

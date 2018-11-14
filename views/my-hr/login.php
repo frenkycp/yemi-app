@@ -8,6 +8,11 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'Sign In';
 
+$fieldOptions1 = [
+    'options' => ['class' => 'form-group has-feedback'],
+    'inputOptions' => ['autofocus' => 'autofocus', 'class' => 'form-control'],
+    //'inputTemplate' => "{input}<span class='glyphicon glyphicon-envelope form-control-feedback'></span>"
+];
 ?>
 
 <section class="login-block">
@@ -29,7 +34,7 @@ $this->title = 'Sign In';
                             </div>
                         </div>
                         <?= $form
-                            ->field($model, 'username')
+                            ->field($model, 'username', $fieldOptions1)
                             ->label(false)
                             ->textInput(['placeholder' => 'Your NIK']) ?>
 

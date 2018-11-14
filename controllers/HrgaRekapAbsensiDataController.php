@@ -19,32 +19,35 @@ class HrgaRekapAbsensiDataController extends Controller
 {
 
 
-/**
-* @var boolean whether to enable CSRF validation for the actions in this controller.
-* CSRF validation is enabled only when both this property and [[Request::enableCsrfValidation]] are true.
-*/
-public $enableCsrfValidation = false;
+	/**
+	* @var boolean whether to enable CSRF validation for the actions in this controller.
+	* CSRF validation is enabled only when both this property and [[Request::enableCsrfValidation]] are true.
+	*/
+	public $enableCsrfValidation = false;
 
 
-/**
-* Lists all AbsensiTbl models.
-* @return mixed
-*/
-public function actionIndex()
-{
-    $searchModel  = new RekapAbsensiViewSearch;
-    $dataProvider = $searchModel->search($_GET);
+	/**
+	* Lists all AbsensiTbl models.
+	* @return mixed
+	*/
+	public function actionIndex()
+	{
+	    $searchModel  = new RekapAbsensiViewSearch;
+	    if ($searchModel->PERIOD === null) {
+	    	$searchModel->PERIOD = date('Ym');
+	    }
+	    $dataProvider = $searchModel->search($_GET);
 
-	Tabs::clearLocalStorage();
+		Tabs::clearLocalStorage();
 
-	Url::remember();
-	\Yii::$app->session['__crudReturnUrl'] = null;
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
 
-	return $this->render('index', [
-		'dataProvider' => $dataProvider,
-	    'searchModel' => $searchModel,
-	]);
-}
+		return $this->render('index', [
+			'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
+	}
 
 /**
 * Displays a single AbsensiTbl model.
