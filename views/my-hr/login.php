@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use dmstr\widgets\Alert;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -21,13 +22,23 @@ $fieldOptions1 = [
             <div class="col-sm-12">
                 <?php $form = ActiveForm::begin([
                     'id' => 'login-form', 
-                    'enableClientValidation' => false,
+                    'enableClientValidation' => true,
+                    'errorSummaryCssClass' => 'error-summary alert alert-danger',
                     'options' => [
                         'class' => 'md-float-material form-material'
                     ],
                 ]); ?>
+                <div style="margin: 20px auto 0 auto; max-width: 450px;">
+                    <?= Alert::widget() ?>
+                </div>
                 <div class="auth-box card">
                     <div class="card-block">
+                        <div class="text-center">
+                            <?= Html::img('@web/uploads/ICON/group_007.png', [
+                                'style' => 'width: 100px;'
+                            ]); ?>
+                        </div>
+                        <br/>
                         <div class="row m-b-20">
                             <div class="col-md-12">
                                 <h3 class="text-center">My HR Login</h3>

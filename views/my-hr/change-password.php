@@ -33,6 +33,12 @@ $fieldOptions1 = [
                 </div>
                 <div class="auth-box card">
                     <div class="card-block">
+                        <div class="text-center">
+                            <?= Html::img('@web/uploads/ICON/modify_password_003.png', [
+                                'style' => 'width: 80px;'
+                            ]); ?>
+                        </div>
+                        <br/>
                         <div class="row m-b-20">
                             <div class="col-md-12">
                                 <h3 class="text-center">Change Password</h3>

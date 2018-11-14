@@ -90,6 +90,8 @@ class MyHrController extends Controller
             if ($karyawan->NIK !== null) {
                 $session['my_hr_user'] = $model->username;
                 return $this->redirect(['index']);
+            } else {
+                \Yii::$app->getSession()->setFlash('error', 'Incorrect username or password...');
             }
             $model->username = null;
             $model->password = null;

@@ -42,6 +42,34 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionGeneratePasswordKaryawan()
+    {
+        set_time_limit(500);
+        $data_karyawan = Karyawan::find()->asArray()->all();
+        echo 'processing...';
+        foreach ($data_karyawan as $key => $value) {
+            $new_password = $this->randomPassword();
+            $nik = $value['NIK'];
+            $model = Karyawan::find()->where([
+                'NIK' => $nik
+            ])->one();
+            $model->PASSWORD = $new_password;
+            $model->save();
+        }
+        echo 'finished...';
+    }
+
+    public function randomPassword() {
+        $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
+        $pass = array(); //remember to declare $pass as an array
+        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        for ($i = 0; $i < 8; $i++) {
+            $n = rand(0, $alphaLength);
+            $pass[] = $alphabet[$n];
+        }
+        return implode($pass); //turn the array into a string
+    }
+
     public function actionGetLemburDetail($nik, $period)
     {
         $spl_data_arr = SplView::find()
