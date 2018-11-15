@@ -18,6 +18,11 @@ $tmp_data_subsection = Karyawan::find()->select('DISTINCT(SUB_SECTION)')->where(
 foreach ($tmp_data_subsection as $key => $value) {
     $sub_section_arr[] = $value['SUB_SECTION'];
 }
+
+$tmp_data_section = Karyawan::find()->select('DISTINCT(SECTION)')->where('SECTION IS NOT NULL')->orderBy('SECTION')->asArray()->all();
+foreach ($tmp_data_section as $key => $value) {
+    $section_arr[] = $value['SECTION'];
+}
 ?>
 
 <div class="karyawan-form">
@@ -57,7 +62,16 @@ foreach ($tmp_data_subsection as $key => $value) {
             <?= $form->field($model, 'DEPARTEMEN')->dropDownList(ArrayHelper::map(Karyawan::find()->select('DISTINCT(DEPARTEMEN)')->orderBy('DEPARTEMEN')->all(), 'DEPARTEMEN', 'DEPARTEMEN')) ?>
 
 <!-- attribute SECTION -->
-            <?= $form->field($model, 'SECTION')->dropDownList(ArrayHelper::map(Karyawan::find()->select('DISTINCT(SECTION)')->orderBy('SECTION')->all(), 'SECTION', 'SECTION')) ?>
+            <?= $form->field($model, 'SECTION')->widget(Typeahead::classname(), [
+                'options' => ['placeholder' => 'Input Section ...'],
+                'pluginOptions' => ['highlight'=>true],
+                'dataset' => [
+                    [
+                        'local' => $section_arr,
+                        'limit' => 10
+                    ]
+                ]
+            ]); ?>
 
 <!-- attribute SUB_SECTION -->
             <?= $form->field($model, 'SUB_SECTION')->widget(Typeahead::classname(), [
