@@ -6,6 +6,7 @@ use yii\bootstrap\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
 use app\models\Karyawan;
+use kartik\typeahead\Typeahead;
 
 /**
 * @var yii\web\View $this
@@ -13,6 +14,10 @@ use app\models\Karyawan;
 * @var yii\widgets\ActiveForm $form
 */
 
+$tmp_data_subsection = Karyawan::find()->select('DISTINCT(SUB_SECTION)')->where('SUB_SECTION IS NOT NULL')->orderBy('SUB_SECTION')->asArray()->all();
+foreach ($tmp_data_subsection as $key => $value) {
+    $sub_section_arr[] = $value['SUB_SECTION'];
+}
 ?>
 
 <div class="karyawan-form">
@@ -55,7 +60,16 @@ use app\models\Karyawan;
             <?= $form->field($model, 'SECTION')->dropDownList(ArrayHelper::map(Karyawan::find()->select('DISTINCT(SECTION)')->orderBy('SECTION')->all(), 'SECTION', 'SECTION')) ?>
 
 <!-- attribute SUB_SECTION -->
-            <?= $form->field($model, 'SUB_SECTION')->dropDownList(ArrayHelper::map(Karyawan::find()->select('DISTINCT(SUB_SECTION)')->orderBy('SUB_SECTION')->all(), 'SUB_SECTION', 'SUB_SECTION')) ?>
+            <?= $form->field($model, 'SUB_SECTION')->widget(Typeahead::classname(), [
+                'options' => ['placeholder' => 'Input Sub-Section ...'],
+                'pluginOptions' => ['highlight'=>true],
+                'dataset' => [
+                    [
+                        'local' => $sub_section_arr,
+                        'limit' => 10
+                    ]
+                ]
+            ]); ?>
 
 <!-- attribute JENIS_KELAMIN -->
 			<?= ''; //$form->field($model, 'JENIS_KELAMIN')->hiddenInput()->label(false) ?>
