@@ -8,6 +8,7 @@ use app\models\RekapAbsensiView;
 use app\models\CutiRekapView02;
 use app\models\SplView;
 use app\models\AbsensiTbl;
+use app\models\HrLoginLog;
 use yii\helpers\Url;
 
 class MyHrController extends Controller
@@ -69,6 +70,7 @@ class MyHrController extends Controller
 
     public function actionLogin()
     {
+        date_default_timezone_set('Asia/Jakarta');
         $session = \Yii::$app->session;
         if ($session->has('my_hr_user')) {
             return $this->redirect(['index']);
@@ -89,6 +91,26 @@ class MyHrController extends Controller
             ->one();
             if ($karyawan->NIK !== null) {
                 $session['my_hr_user'] = $model->username;
+                $hr_log = HrLoginLog::find()->where([
+                    'nik' => $karyawan->NIK,
+                    'login_date' => date('Y-m-d')
+                ])->one();
+                if ($hr_log->nik === null) {
+                    $hr_log = new HrLoginLog();
+                    $hr_log->id = date('Ymd') . $karyawan->NIK;
+                    $hr_log->nik = $karyawan->NIK;
+                    $hr_log->emp_name = $karyawan->NAMA_KARYAWAN;
+                    $hr_log->period = date('Ym');
+                    $hr_log->department = $karyawan->DEPARTEMEN;
+                    $hr_log->section = $karyawan->SECTION;
+                    $hr_log->sub_section = $karyawan->SUB_SECTION;
+                    $hr_log->login_date = date('Y-m-d');
+                    $hr_log->login_count = 0;
+                }
+                $hr_log->login_count++;
+                $hr_log->last_login = date('Y-m-d H:i:s');
+                $hr_log->save();
+
                 return $this->redirect(['index']);
             } else {
                 \Yii::$app->getSession()->setFlash('error', 'Incorrect username or password...');
