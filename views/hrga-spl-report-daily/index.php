@@ -42,6 +42,8 @@ echo '</pre>';*/
 ?>
 <?php $form = ActiveForm::begin([
     'id' => 'form_index',
+    'method' => 'get',
+    'action' => Url::to(['hrga-spl-report-daily/index']),
     'layout' => 'horizontal',
     'enableClientValidation' => true,
     'errorSummaryCssClass' => 'error-summary alert alert-danger',
@@ -62,15 +64,20 @@ echo '</pre>';*/
     <div class="row">
         <div class="col-md-3">
             <?= $form->field($model, 'year')->dropDownList(
-                $year_arr
+                $year_arr, [
+                    'class' => 'form-control',
+                    'onchange'=>'this.form.submit()'
+                ]
             ); ?>
         </div>
         <div class="col-md-3">
             <?= $form->field($model, 'month')->dropDownList(
-                $month_arr
+                $month_arr, [
+                    'class' => 'form-control',
+                    'onchange'=>'this.form.submit()'
+                ]
             ); ?>
         </div>
-        <?= Yii::$app->params['update_chart_btn']; ?>
     </div>
 
 <?php ActiveForm::end(); ?>
@@ -161,12 +168,12 @@ echo '</pre>';*/
                             'cursor' => 'pointer',
                             'point' => [
                                 'events' => [
-                                    'click' => new JsExpression('
-                                        function(){
-                                            $("#modal2").modal("show").find(".modal-body").html(this.options.remark);
+                                    'click' => new JsExpression("
+                                        function(e){
+                                            e.preventDefault();
+                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
                                         }
-                                    '),
-                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                    "),
                                 ]
                             ]
                         ]
@@ -174,12 +181,6 @@ echo '</pre>';*/
                     'series' => $data2
                 ],
             ]);
-            yii\bootstrap\Modal::begin([
-                'id' =>'modal2',
-                'header' => '<h3>Detail Information</h3>',
-                'size' => 'modal-lg',
-            ]);
-            yii\bootstrap\Modal::end();
             ?>
             
         </div>
@@ -237,12 +238,12 @@ echo '</pre>';*/
                             'cursor' => 'pointer',
                             'point' => [
                                 'events' => [
-                                    'click' => new JsExpression('
-                                        function(){
-                                            $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                    'click' => new JsExpression("
+                                        function(e){
+                                            e.preventDefault();
+                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
                                         }
-                                    '),
-                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                    "),
                                 ]
                             ]
                         ]
@@ -250,13 +251,16 @@ echo '</pre>';*/
                     'series' => $data
                 ],
             ]);
-            yii\bootstrap\Modal::begin([
+            
+        ?>
+        </div>
+    </div>
+</div>
+<?php
+yii\bootstrap\Modal::begin([
                 'id' =>'modal',
                 'header' => '<h3>Detail Information</h3>',
                 'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();
-        ?>
-        </div>
-    </div>
-</div>
+            ?>

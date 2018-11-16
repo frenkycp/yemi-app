@@ -3,6 +3,7 @@
 namespace app\controllers;
 use yii\web\Controller;
 use app\models\SplView;
+use yii\helpers\Url;
 use app\models\PlanReceivingPeriod;
 use app\models\SplOvertimeBudget;
 
@@ -48,7 +49,7 @@ class HrgaSplReportDailyController extends Controller
         $model = new PlanReceivingPeriod();
         $model->month = date('m');
         $model->year = date('Y');
-        if ($model->load($_POST))
+        if ($model->load($_GET))
         {
 
         }
@@ -98,11 +99,13 @@ class HrgaSplReportDailyController extends Controller
                         }
                         $tmp_data[] = [
                             'y' => (int)$value->JUMLAH,
-                            'remark' => $this->getDetailEmpRemark($tgl_lembur, $cc_group)
+                            'url' => Url::to(['get-remark', 'tgl_lembur' => $tgl_lembur, 'cc_group' => $cc_group])
+                            //'remark' => $this->getDetailEmpRemark($tgl_lembur, $cc_group)
                         ];
                         $tmp_data2[] = [
                             'y' => (float)$value->total_lembur,
-                            'remark' => $this->getDetailEmpRemark($tgl_lembur, $cc_group)
+                            'url' => Url::to(['get-remark', 'tgl_lembur' => $tgl_lembur, 'cc_group' => $cc_group])
+                            //'remark' => $this->getDetailEmpRemark($tgl_lembur, $cc_group)
                         ];
                         $is_found = true;
                     }
@@ -163,16 +166,23 @@ class HrgaSplReportDailyController extends Controller
         return $data->overtime_budget != null ? $data->overtime_budget : 0;
     }
 
-    public function getDetailEmpRemark($tgl_lembur, $cc_group)
+    public function actionGetRemark($tgl_lembur, $cc_group)
     {
-        $detail_data = $spl_data = SplView::find()
+        $detail_data = SplView::find()
         ->where('NIK IS NOT NULL')
         ->andWhere(['TGL_LEMBUR' => $tgl_lembur, 'CC_GROUP' => $cc_group])
         ->andWhere('NILAI_LEMBUR_ACTUAL IS NOT NULL')
         ->orderBy('CC_GROUP ASC, CC_DESC ASC, NIK ASC')
         ->all();
-        $remark = '<h4>' . $cc_group . ' on ' . date('d M\' Y', strtotime($tgl_lembur)) .'</h4>';
-        $remark .= '<table class="table table-bordered table-striped table-hover">';
+
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Department : ' . $cc_group . '<small> (' . date('Y-m-d', strtotime($tgl_lembur)) . ')' . count($detail_data) . '</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $remark .= '<table class="table table-bordered table-striped table-hover" style="font-size: 12px;">';
         $remark .= '
         <tr>
             <th style="text-align: center;">NO</th>
@@ -213,7 +223,9 @@ class HrgaSplReportDailyController extends Controller
         }
 
         $remark .= '</table>';
+        $remark .= '</div>';
 
         return $remark;
     }
+
 }
