@@ -173,7 +173,7 @@ class SiteController extends Controller
                 'model_rekap_absensi' => $model_rekap_absensi,
             ]);
         }*/
-        if (\Yii::$app->user->identity->role->name == ' Pallet Driver 1' || \Yii::$app->user->identity->role->name == ' Pallet Driver 2') {
+        if (\Yii::$app->user->identity->role->name == 'Pallet Driver 1' || \Yii::$app->user->identity->role->name == 'Pallet Driver 2') {
             return $this->render('index-pallet-driver');
         }
         return $this->render('index2');
