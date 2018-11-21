@@ -92,10 +92,15 @@ $grid_columns = [
     [
         'attribute' => 'urutan',
         'label' => 'Ticket<br/>No',
-        /*'value' => function($model){
-            return Html::a($model->urutan, ['get-image-preview', 'urutan' => $model->urutan], ['class' => 'imageModal', 'data-pjax' => '0',]);
+        'value' => function($model){
+            if ($model->repair_time === null) {
+                return '<span class="badge bg-red">' . $model->urutan . '</span>';
+            } else {
+                return $model->urutan;
+            }
+            
         },
-        'format' => 'raw',*/
+        'format' => 'raw',
         'vAlign' => 'middle',
         'encodeLabel' => false,
         'width' => '50px',

@@ -11,19 +11,19 @@ use yii\helpers\Html;
 					<th>Part</th>
 					<th>Part Remark</th>
 					<th>Repair Note</th>
-					<!--<th style="text-align: center;">Prepare Time</th>
+					<th style="text-align: center;">Prepare Time</th>
 					<th style="text-align: center;">Repair Time</th>
 					<th style="text-align: center;">Sparepart Time</th>
-					<th style="text-align: center;">Install Time</th>-->
+					<th style="text-align: center;">Install Time</th>
 				</tr>
 				<tr class="info">
 					<td><?= $model->mesin_bagian; ?></td>
 					<td><?= $model->mesin_catatan; ?></td>
 					<td><?= $model->repair_note; ?></td>
-					<!--<td style="text-align: center;"><?= $model->prepare_time == null ? '-' : $model->prepare_time; ?></td>
+					<td style="text-align: center;"><?= $model->prepare_time == null ? '-' : $model->prepare_time; ?></td>
 					<td style="text-align: center;"><?= $model->repair_time == null ? '-' : $model->repair_time; ?></td>
 					<td style="text-align: center;"><?= $model->spare_part_time == null ? '-' : $model->spare_part_time; ?></td>
-					<td style="text-align: center;"><?= $model->install_time == null ? '-' : $model->install_time; ?></td>-->
+					<td style="text-align: center;"><?= $model->install_time == null ? '-' : $model->install_time; ?>
 				</tr>
 			</table>
 		</div>
