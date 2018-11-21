@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 /**
@@ -50,6 +51,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px;',
+        'pageSummary' => 'Total',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -80,6 +82,28 @@ $gridColumns = [
         'attribute' => 'computer_name',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'cur',
+        'label' => 'Currency',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'price',
+        'label' => 'Price',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format'=>['decimal', 0],
+        'pageSummary' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -130,6 +154,7 @@ $gridColumns = [
         'attribute' => 'project',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('DISTINCT(project)')->where('project IS NOT NULL')->orderBy('project')->all(), 'project', 'project'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px;'
@@ -158,6 +183,7 @@ $gridColumns = [
                 'firstPageLabel' => 'First',
                 'lastPageLabel'  => 'Last'
             ],
+            'showPageSummary' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false

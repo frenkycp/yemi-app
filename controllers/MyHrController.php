@@ -10,6 +10,8 @@ use app\models\SplView;
 use app\models\AbsensiTbl;
 use app\models\HrLoginLog;
 use yii\helpers\Url;
+use app\models\search\HrComplaintSearch;
+use dmstr\bootstrap\Tabs;
 
 class MyHrController extends Controller
 {
@@ -67,6 +69,27 @@ class MyHrController extends Controller
             'sisa_cuti' => $sisa_cuti,
 		]);
 	}
+
+    /**
+    * Lists all HrComplaint models.
+    * @return mixed
+    */
+    public function actionIndexLaporan()
+    {
+        $this->layout = 'my-hr';
+        $searchModel  = new HrComplaintSearch;
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('index-laporan', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
 
     public function actionLogin()
     {
