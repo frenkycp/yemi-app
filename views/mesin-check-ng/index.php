@@ -93,8 +93,8 @@ $grid_columns = [
         'attribute' => 'urutan',
         'label' => 'Ticket<br/>No',
         'value' => function($model){
-            if ($model->repair_time === null) {
-                return '<span class="badge bg-red">' . $model->urutan . '</span>';
+            if ($model->repair_time != null && $model->repair_time != 0) {
+                return '<span class="badge bg-green">' . $model->urutan . '</span>';
             } else {
                 return $model->urutan;
             }
