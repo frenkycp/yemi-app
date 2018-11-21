@@ -4,9 +4,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = [
-    'page_title' => 'Pallet Transporter FA ' . $fa .'<span class="japanesse text-green"></span>',
-    'tab_title' => 'Pallet Transporter FA ' . $fa .'',
-    'breadcrumbs_title' => 'Pallet Transporter FA ' . $fa .''
+    'page_title' => 'Pallet Transporter Gedung ' . $fa .'<span class="japanesse text-green"></span>',
+    'tab_title' => 'Pallet Transporter Gedung ' . $fa .'',
+    'breadcrumbs_title' => 'Pallet Transporter Gedung ' . $fa .''
 ];
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
