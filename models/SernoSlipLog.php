@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoSlipLog extends BaseSernoSlipLog
 {
+    public $order_date, $period, $total_count;
 
     public function behaviors()
     {
