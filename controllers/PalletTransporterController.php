@@ -10,12 +10,12 @@ use app\models\Action;
 class PalletTransporterController extends Controller
 {
 
-	/*public function behaviors()
+	public function behaviors()
     {
         //NodeLogger::sendLog(Action::getAccess($this->id));
         //apply role_action table for privilege (doesn't apply to super admin)
         return Action::getAccess($this->id);
-    }*/
+    }
 
 	public function actionIndex()
 	{
