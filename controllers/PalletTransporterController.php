@@ -10,12 +10,12 @@ use app\models\Action;
 class PalletTransporterController extends Controller
 {
 
-	public function behaviors()
+	/*public function behaviors()
     {
         //NodeLogger::sendLog(Action::getAccess($this->id));
         //apply role_action table for privilege (doesn't apply to super admin)
         return Action::getAccess($this->id);
-    }
+    }*/
 
 	public function actionIndex()
 	{
@@ -64,6 +64,26 @@ class PalletTransporterController extends Controller
 			}
 			\Yii::$app->getSession()->setFlash('success', 'You picked up order from line ' . $line . '...');
 		}
+
+		return $this->redirect('index');
+	}
+
+	public function actionProcessArrival($line, $nik)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		
+		$log = SernoSlipLog::find()->where([
+			'line' => $line, 
+			'nik' => $nik
+		])
+		->andWhere('arrival_time IS NULL')
+		->one();
+
+		$log->arrival_time = date('H:i:s');
+		if (!$log->save()) {
+			print_r($log->errors);
+		}
+		\Yii::$app->getSession()->setFlash('info', 'You have finished order from line ' . $line . '...');
 
 		return $this->redirect('index');
 	}

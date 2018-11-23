@@ -2,6 +2,7 @@
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use app\models\SernoSlipLog;
 
 $this->title = [
     'page_title' => 'Pallet Transporter Gedung ' . $fa .'<span class="japanesse text-green"></span>',
@@ -35,14 +36,30 @@ echo '</pre>';*/
     foreach ($line_data as $key => $value) {
         $status = $value['status'];
         $line = $value['user'];
-        if ($status == 0) {
-            $btn_class = 'btn btn-success text-center btn-block disabled';
-            $link = '#';
-        } elseif ($status == 1) {
-            $btn_class = 'btn btn-danger text-center btn-block';
-            $link = ['pallet-transporter/process', 'line' => $line, 'current_status' => $status];
-        } else {
+        $nik = \Yii::$app->user->identity->username;
+
+        $log = SernoSlipLog::find()
+        ->where([
+            'line' => $line,
+            'nik' => $nik,
+        ])
+        ->andWHere('arrival_time IS NULL')
+        ->one();
+
+        if ($log !== null) {
             $btn_class = 'btn btn-warning text-center btn-block';
+            $link = ['pallet-transporter/process-arrival', 'line' => $line, 'nik' => $nik];
+            $line .= ' (Arrival)';
+        } else {
+            if ($status == 0) {
+                $btn_class = 'btn btn-success text-center btn-block disabled';
+                $link = '#';
+            } elseif ($status == 1) {
+                $btn_class = 'btn btn-danger text-center btn-block';
+                $link = ['pallet-transporter/process', 'line' => $line, 'current_status' => $status];
+            } else {
+                $btn_class = 'btn btn-warning text-center btn-block';
+            }
         }
 
         if ($fa == 1) {
@@ -50,6 +67,7 @@ echo '</pre>';*/
         } else {
             $col_class = 'col-md-3';
         }
+
         echo '<div class="row" style="padding-bottom: 10px;"><div class="col-md-12">';
         echo Html::a($line, $link, ['class' => $btn_class, 'style' => 'font-size: 20px; line-height: 40px;']);
         echo '</div></div>';
