@@ -103,7 +103,7 @@ echo '</pre>';*/
                                         'column' => [
                                             'stacking' => 'normal',
                                             'dataLabels' => [
-                                                'enabled' => true,
+                                                'enabled' => false,
                                                 //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                                                 'style' => [
                                                     'fontSize' => '14px',
