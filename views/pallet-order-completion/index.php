@@ -7,9 +7,9 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'GO-PALLET ACTIVITIES <span class="japanesse text-green"></span>',
-    'tab_title' => 'GO-PALLET ACTIVITIES',
-    'breadcrumbs_title' => 'GO-PALLET ACTIVITIES'
+    'page_title' => 'ORDER PROGRESS MONITOR <span class="japanesse text-green">(配達進捗モニター）</span>',
+    'tab_title' => 'ORDER PROGRESS MONITOR',
+    'breadcrumbs_title' => 'ORDER PROGRESS MONITOR'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

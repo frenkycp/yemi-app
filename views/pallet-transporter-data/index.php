@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Pallet Transporter Order Data <span class="japanesse text-green">（社内物流活動状況）</span>',
-    'tab_title' => 'Pallet Transporter Order Data',
-    'breadcrumbs_title' => 'Pallet Transporter Order Data'
+    'page_title' => 'TRANSPORT DATA <span class="japanesse text-green">(配達データー)</span>',
+    'tab_title' => 'TRANSPORT DATA',
+    'breadcrumbs_title' => 'TRANSPORT DATA'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';

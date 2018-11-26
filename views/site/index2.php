@@ -101,24 +101,58 @@ $this->registerCss("
                     </div>
                 </div>
                 <div class="panel panel-success">
-                            <div class="panel-heading text-center">E-WIP Performance<br/><span class="japanesse-word"> (E-WIPパフォーマンス)</span></div>
-                            <div class="list-group">
-                                <div class="list-group-item">
-                                    <ol style="padding-left: 1em">
-                                        <li>
-                                            <?= Html::a('GMC Efficiency Data <span class="japanesse-word">(GMC別能率データ）</span>', ['/dpr-gmc-eff-data']); ?>
-                                        </li>
-                                        <li>
-                                            <?= Html::a('FA Line Efficiency & Loss time<br/><span class="japanesse-word">(総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-daily']); ?>
-                                        </li>
-                                        <li>
-                                            <?= Html::a('FA Line Efficiency & Loss time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
-                                        </li>
-                                        
-                                    </ol>
-                                </div>
-                            </div>
+                    <div class="panel-heading text-center">E-WIP Performance<br/><span class="japanesse-word"> (E-WIPパフォーマンス)</span></div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('GMC Efficiency Data <span class="japanesse-word">(GMC別能率データ）</span>', ['/dpr-gmc-eff-data']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('FA Line Efficiency & Loss time<br/><span class="japanesse-word">(総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-daily']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('FA Line Efficiency & Loss time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
+                                </li>
+                                
+                            </ol>
                         </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">E-WIP TRANSPORT MANAGEMENT<br/><span class="japanesse-word">(E-WIP配達管理）</span></div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <p>GO-WIP Monitor <span class="japanesse-word">（仕掛り配達モニター）</span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('ORDER PROGRESS MONITOR<br/><span class="japanesse-word"> (配達進捗モニター）</span>', ['/gojek-order-completion']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('TRANSPORT UTILIZATION <span class="japanesse-word">(配達の稼働率）</span>', ['/gojek-driver-utility']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('TRANSPORT DATA <span class="japanesse-word">(配達データー)</span>', ['/gojek-order-tbl']); ?>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="list-group-item">
+                            <p>GO-PALLET Monitor <span class="japanesse-word">（完成品配達モニター）</span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('ORDER PROGRESS MONITOR<br/><span class="japanesse-word"> (配達進捗モニター）</span>', ['/pallet-order-completion']); ?>
+                                </li>
+                                <li>
+                                    TRANSPORT UTILIZATION <span class="japanesse-word">(配達の稼働率）</span>
+                                </li>
+                                <li>
+                                    <?= Html::a('TRANSPORT DATA <span class="japanesse-word">(配達データー)</span>', ['/pallet-transporter-data']); ?>
+                                </li>
+                            </ol>
+                        </div>
+                        
+                    </div>
+                </div>
                 <div class="text-center">
                     <i class="fa fa-fw fa-arrow-up fa-3x text-primary"></i>
                 </div>

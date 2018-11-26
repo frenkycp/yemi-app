@@ -11,8 +11,14 @@ use kartik\grid\GridView;
     * @var app\models\search\GojekOrderTblSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Order Data List');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'TRANSPORT DATA <span class="japanesse text-green">(配達データー)</span>',
+    'tab_title' => 'TRANSPORT DATA',
+    'breadcrumbs_title' => 'TRANSPORT DATA'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 

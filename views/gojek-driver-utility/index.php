@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Material Handle Utilization <span class="japanesse text-green">(マテハン稼働率）</span>',
-    'tab_title' => 'Material Handle Utilization',
-    'breadcrumbs_title' => 'Material Handle Utilization'
+    'page_title' => 'TRANSPORT UTILIZATION <span class="japanesse text-green">(配達の稼働率）</span>',
+    'tab_title' => 'TRANSPORT UTILIZATION',
+    'breadcrumbs_title' => 'TRANSPORT UTILIZATION'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
