@@ -43,9 +43,24 @@ echo '</pre>';*/
         <div class="box-group" id="accordion">
             <?php
             foreach ($data as $key => $value) {
-                
+                $driver_status = $value['driver_status'];
+                $text_status = 'New Driver';
+                $panel_class = ' box-success';
+                if ($driver_status == 1) {
+                    $text_status = '<b><u>Picked</u></b> order from Line <b>' . $value['order_from'] . '</b> at <b>' . $value['last_update'] . '</b>';
+                } elseif ($driver_status == 2) {
+                    $text_status = '<b><u>Finished</u></b> order from Line <b>' . $value['order_from'] . '</b> at <b>' . $value['last_update'] . '</b>';
+                    $panel_class = ' box-warning';
+                    $now = date('Y-m-d H:i:s');
+                    $diff_time = strtotime($now) - strtotime($value['last_update']);
+                    $limit_minutes = 15;
+                    if ($diff_time > ($limit_minutes * 60)) {
+                        $panel_class = ' box-danger';
+                        $text_status = '<b><u>Idling</u></b> > 15 minutes (Since <b>' . $value['last_update'] . '</b>)';
+                    }
+                }
                 ?>
-                <div class="panel box box-solid box-success">
+                <div class="panel box box-solid<?= $panel_class; ?>">
                     <div class="box-header with-border">
                         <h4 class="box-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key; ?>">
@@ -56,7 +71,7 @@ echo '</pre>';*/
                             </small>
                         </h4>
                         <div class="pull-right" style="font-size: 12px;">
-                            <?= ($text_status); ?>
+                            <?= $text_status; ?>
                         </div>
                     </div>
                     <div id="collapse<?= $key; ?>" class="panel-collapse collapse<?= \Yii::$app->user->identity->username == $key ? ' in' : '' ?>">

@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use app\models\User;
 use app\models\PalletPointView;
 use app\models\SernoSlipLog;
+use app\models\PalletDriver;
 
 class PalletOrderCompletionController extends Controller
 {
@@ -65,6 +66,19 @@ class PalletOrderCompletionController extends Controller
 
 		$data = [];
 		foreach ($tmp_data as $key => $value) {
+			$pallet_driver = PalletDriver::find()
+			->where([
+				'nik' => $key
+			])
+			->one();
+
+			$data[$key]['driver_status'] = 0;
+			if ($pallet_driver != null) {
+				$data[$key]['driver_status'] = $pallet_driver->driver_status;
+				$data[$key]['order_from'] = $pallet_driver->order_from;
+				$data[$key]['last_update'] = $pallet_driver->last_update;
+			}
+
 			$data[$key]['data'] = [
 				[
 					'name' => 'OPEN',
