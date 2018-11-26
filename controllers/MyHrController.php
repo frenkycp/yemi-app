@@ -11,6 +11,7 @@ use app\models\AbsensiTbl;
 use app\models\HrLoginLog;
 use yii\helpers\Url;
 use app\models\search\HrComplaintSearch;
+use app\models\HrComplaint;
 use dmstr\bootstrap\Tabs;
 
 class MyHrController extends Controller
@@ -76,6 +77,10 @@ class MyHrController extends Controller
     */
     public function actionIndexLaporan()
     {
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
         $this->layout = 'my-hr';
         $searchModel  = new HrComplaintSearch;
         $dataProvider = $searchModel->search($_GET);
@@ -89,6 +94,38 @@ class MyHrController extends Controller
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+    /**
+    * Creates a new HrComplaint model.
+    * If creation is successful, the browser will be redirected to the 'view' page.
+    * @return mixed
+    */
+    public function actionCreateLaporan()
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
+        $this->layout = 'my-hr';
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new HrComplaint;
+
+        try {
+            if ($model->load($_POST)) {
+                $model->period = date('Ym');
+                $model->input_datetime = date('Y-m-d H:i:s');
+                if ($model->save()) {
+                    return $this->redirect(['index-laporan']);
+                }
+            } elseif (!\Yii::$app->request->isPost) {
+                $model->load($_GET);
+            }
+        } catch (\Exception $e) {
+            $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+            $model->addError('_exception', $msg);
+        }
+        return $this->render('create-laporan', ['model' => $model]);
     }
 
     public function actionLogin()

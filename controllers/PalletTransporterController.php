@@ -6,6 +6,8 @@ use yii\web\Controller;
 use app\models\SernoSlip;
 use app\models\SernoSlipLog;
 use app\models\Action;
+use app\models\PalletDriver;
+use app\models\Karyawan;
 
 class PalletTransporterController extends Controller
 {
@@ -41,6 +43,8 @@ class PalletTransporterController extends Controller
 	public function actionProcess($line, $current_status)
 	{
 		date_default_timezone_set('Asia/Jakarta');
+		$nik = \Yii::$app->user->identity->username;
+
 		$line_data = SernoSlip::find()->where([
 			'user' => $line
 		])->one();
@@ -58,10 +62,35 @@ class PalletTransporterController extends Controller
 			->andWhere('end IS NULL')
 			->one();
 			$log->end = date('H:i:s');
-			$log->nik = \Yii::$app->user->identity->username;
+			$log->nik = $nik;
 			if (!$log->save()) {
 				print_r($log->errors);
 			}
+
+			$pallet_driver = PalletDriver::find()
+			->where([
+				'nik' => $nik
+			])
+			->one();
+
+			if ($pallet_driver == null) {
+				$pallet_driver = new PalletDriver();
+				$karyawan = Karyawan::find()
+				->where([
+					'NIK' => $nik
+				])
+				->one();
+				$pallet_driver->nik = $nik;
+				$pallet_driver->driver_name = $karyawan->NAMA_KARYAWAN;
+				$pallet_driver->order_from = $line;
+				$pallet_driver->todays_point = 0;
+			}
+			$pallet_driver->driver_status = 1;
+			$pallet_driver->last_update = date('Y-m-d H:i:s');
+			if (!$pallet_driver->save()) {
+				print_r($pallet_driver->errors);
+			}
+
 			\Yii::$app->getSession()->setFlash('success', 'You picked up order from line ' . $line . '...');
 		}
 
@@ -82,6 +111,21 @@ class PalletTransporterController extends Controller
 		$log->arrival_time = date('H:i:s');
 		if (!$log->save()) {
 			print_r($log->errors);
+		} else {
+			$pallet_driver = PalletDriver::find()
+			->where([
+				'nik' => $nik
+			])
+			->one();
+			if (date('Y-m-d', strtotime($pallet_driver->last_update)) != date('Y-m-d')) {
+				$pallet_driver->todays_point = 0;
+			}
+			$pallet_driver->todays_point++;
+			$pallet_driver->last_update = date('Y-m-d H:i:s');
+			$pallet_driver->driver_status = 2;
+			if (!$pallet_driver->save()) {
+				print_r($pallet_driver->errors);
+			}
 		}
 		\Yii::$app->getSession()->setFlash('info', 'You have finished order from line ' . $line . '...');
 
