@@ -53,7 +53,7 @@ echo '</pre>';*/
                     $panel_class = ' box-warning';
                     $now = date('Y-m-d H:i:s');
                     $diff_time = strtotime($now) - strtotime($value['last_update']);
-                    $limit_minutes = 15;
+                    $limit_minutes = 2;
                     if ($diff_time > ($limit_minutes * 60)) {
                         $panel_class = ' box-danger';
                         $text_status = '<b><u>Idling</u></b> > 15 minutes (Since <b>' . $value['last_update'] . '</b>)';
