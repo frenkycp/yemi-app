@@ -11,8 +11,14 @@ use kartik\grid\GridView;
     * @var app\models\search\AssetTblSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Assets Data Table');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Fixed  & MIS Assets Management <span class="text-green japanesse">(固定・MIS資産管理)</span>',
+    'tab_title' => 'Fixed  & MIS Assets Management',
+    'breadcrumbs_title' => 'Fixed  & MIS Assets Management'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
