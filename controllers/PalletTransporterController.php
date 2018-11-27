@@ -85,6 +85,14 @@ class PalletTransporterController extends Controller
 				$pallet_driver->order_from = $line;
 				$pallet_driver->todays_point = 0;
 			}
+
+			$today = new \DateTime(date('Y-m-d'));
+			$last_update = new \DateTime(date('Y-m-d', strtotime($pallet_driver->last_update)));
+
+			if (!($today == $last_update)) {
+				$pallet_driver->todays_point = 0;
+			}
+
 			$pallet_driver->driver_status = 1;
 			$pallet_driver->last_update = date('Y-m-d H:i:s');
 			if (!$pallet_driver->save()) {
@@ -117,9 +125,7 @@ class PalletTransporterController extends Controller
 				'nik' => $nik
 			])
 			->one();
-			if (date('Y-m-d', strtotime($pallet_driver->last_update)) != date('Y-m-d')) {
-				$pallet_driver->todays_point = 0;
-			}
+			
 			$pallet_driver->todays_point++;
 			$pallet_driver->last_update = date('Y-m-d H:i:s');
 			$pallet_driver->driver_status = 2;

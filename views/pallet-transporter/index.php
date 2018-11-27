@@ -46,6 +46,7 @@ echo '</pre>';*/
         ->andWHere('arrival_time IS NULL')
         ->one();
 
+        $data = [];
         if ($log !== null) {
             $btn_class = 'btn btn-warning text-center btn-block';
             $link = ['pallet-transporter/process-arrival', 'line' => $line, 'nik' => $nik];
@@ -57,6 +58,10 @@ echo '</pre>';*/
             } elseif ($status == 1) {
                 $btn_class = 'btn btn-danger text-center btn-block';
                 $link = ['pallet-transporter/process', 'line' => $line, 'current_status' => $status];
+                $data = [
+                'confirm' => 'Are you sure to pick order from Line ' . $line . ' ?',
+                'method' => 'post',
+            ];
             } else {
                 $btn_class = 'btn btn-warning text-center btn-block';
             }
@@ -69,7 +74,7 @@ echo '</pre>';*/
         }
 
         echo '<div class="row" style="padding-bottom: 10px;"><div class="col-md-12">';
-        echo Html::a($line, $link, ['class' => $btn_class, 'style' => 'font-size: 20px; line-height: 40px;']);
+        echo Html::a($line, $link, ['class' => $btn_class, 'style' => 'font-size: 20px; line-height: 40px;', 'data' => $data]);
         echo '</div></div>';
     }
     ?>
