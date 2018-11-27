@@ -51,6 +51,10 @@ echo '</pre>';*/
             $btn_class = 'btn btn-warning text-center btn-block';
             $link = ['pallet-transporter/process-arrival', 'line' => $line, 'nik' => $nik];
             $line .= ' (Arrival)';
+            $data = [
+                'confirm' => 'Are you sure to finish order from Line ' . $line . ' ?',
+                'method' => 'post',
+            ];
         } else {
             if ($status == 0) {
                 $btn_class = 'btn btn-success text-center btn-block disabled';
@@ -59,9 +63,9 @@ echo '</pre>';*/
                 $btn_class = 'btn btn-danger text-center btn-block';
                 $link = ['pallet-transporter/process', 'line' => $line, 'current_status' => $status];
                 $data = [
-                'confirm' => 'Are you sure to pick order from Line ' . $line . ' ?',
-                'method' => 'post',
-            ];
+                    'confirm' => 'Are you sure to pick order from Line ' . $line . ' ?',
+                    'method' => 'post',
+                ];
             } else {
                 $btn_class = 'btn btn-warning text-center btn-block';
             }

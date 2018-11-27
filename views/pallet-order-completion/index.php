@@ -56,7 +56,7 @@ echo '</pre>';*/
                     $limit_minutes = 2;
                     if ($diff_time > ($limit_minutes * 60)) {
                         $panel_class = ' box-danger';
-                        $text_status = '<b><u>Idling</u></b> > 15 minutes (Since <b>' . $value['last_update'] . '</b>)';
+                        $text_status = '<b><u>Idling</u></b> > ' . $limit_minutes . ' minutes (Since <b>' . $value['last_update'] . '</b>)';
                     }
                 }
                 ?>
