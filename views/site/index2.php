@@ -126,13 +126,13 @@ $this->registerCss("
                             <p>GO-WIP Monitor <span class="japanesse-word">（仕掛り配達モニター）</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('ORDER PROGRESS MONITOR<br/><span class="japanesse-word"> (配達進捗モニター）</span>', ['/gojek-order-completion']); ?>
+                                    <?= Html::a('Order Progress Monitor <span class="japanesse-word"> (配達進捗モニター）</span>', ['/gojek-order-completion']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('TRANSPORT UTILIZATION <span class="japanesse-word">(配達の稼働率）</span>', ['/gojek-driver-utility']); ?>
+                                    <?= Html::a('Transport Utilization <span class="japanesse-word">(配達の稼働率）</span>', ['/gojek-driver-utility']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('TRANSPORT DATA <span class="japanesse-word">(配達データー)</span>', ['/gojek-order-tbl']); ?>
+                                    <?= Html::a('Transport Data <span class="japanesse-word">(配達データー)</span>', ['/gojek-order-tbl']); ?>
                                 </li>
                             </ol>
                         </div>
@@ -140,13 +140,13 @@ $this->registerCss("
                             <p>GO-PALLET Monitor <span class="japanesse-word">（完成品配達モニター）</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('ORDER PROGRESS MONITOR<br/><span class="japanesse-word"> (配達進捗モニター）</span>', ['/pallet-order-completion']); ?>
+                                    <?= Html::a('Order Progress Monitor <span class="japanesse-word"> (配達進捗モニター）</span>', ['/pallet-order-completion']); ?>
                                 </li>
                                 <li>
-                                    TRANSPORT UTILIZATION <span class="japanesse-word">(配達の稼働率）</span>
+                                    Transport Utilization <span class="japanesse-word">(配達の稼働率）</span>
                                 </li>
                                 <li>
-                                    <?= Html::a('TRANSPORT DATA <span class="japanesse-word">(配達データー)</span>', ['/pallet-transporter-data']); ?>
+                                    <?= Html::a('Transport Data <span class="japanesse-word">(配達データー)</span>', ['/pallet-transporter-data']); ?>
                                 </li>
                             </ol>
                         </div>

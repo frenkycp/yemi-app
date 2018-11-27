@@ -5,9 +5,9 @@ use yii\helpers\Url;
 use app\models\SernoSlipLog;
 
 $this->title = [
-    'page_title' => 'Pallet Transporter Gedung ' . $fa .'<span class="japanesse text-green"></span>',
-    'tab_title' => 'Pallet Transporter Gedung ' . $fa .'',
-    'breadcrumbs_title' => 'Pallet Transporter Gedung ' . $fa .''
+    'page_title' => 'Pallet Transporter (Factory ' . $fa .') <span class="japanesse text-green"></span>',
+    'tab_title' => 'Pallet Transporter (Factory ' . $fa .')',
+    'breadcrumbs_title' => 'Pallet Transporter (Factory ' . $fa .')'
 ];
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");

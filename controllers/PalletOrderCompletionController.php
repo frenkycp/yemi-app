@@ -26,7 +26,7 @@ class PalletOrderCompletionController extends Controller
 		->where([
 			'role_id' => [19, 20]
 		])
-		->orderBy('name')
+		->orderBy('role_id, name')
 		->all();
 
 		$tmp_data = [];
@@ -62,6 +62,12 @@ class PalletOrderCompletionController extends Controller
 				$tmp_data[$nik]['nama'] = $value->name;
 			}
 			$tmp_data[$nik]['todays_point'] = $total_point;
+
+			if ($value->role_id == 19) {
+				$tmp_data[$nik]['factory'] = 1;
+			} elseif ($value->role_id == 20) {
+				$tmp_data[$nik]['factory'] = 2;
+			}
 		}
 
 		$data = [];
@@ -93,6 +99,7 @@ class PalletOrderCompletionController extends Controller
 			];
 			$data[$key]['nama'] = $value['nama'];
 			$data[$key]['todays_point'] = $value['todays_point'];
+			$data[$key]['factory'] = $value['factory'];
 		}
 
 		return $this->render('index', [
