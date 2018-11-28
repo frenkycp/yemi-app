@@ -18,7 +18,7 @@ class AssetTblSearch extends AssetTbl
 public function rules()
 {
 return [
-[['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'purchase_date', 'LAST_UPDATE', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic', 'project'], 'safe'],
+[['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'asset_category', 'purchase_date', 'LAST_UPDATE', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic', 'project'], 'safe'],
             [['report_type'], 'integer'],
 ];
 }
@@ -59,6 +59,7 @@ $query->andFilterWhere([
             'purchase_date' => $this->purchase_date,
             'report_type' => $this->report_type,
             'LAST_UPDATE' => $this->LAST_UPDATE,
+            'asset_category' => $this->asset_category,
         ]);
 
         $query->andFilterWhere(['like', 'asset_id', $this->asset_id])

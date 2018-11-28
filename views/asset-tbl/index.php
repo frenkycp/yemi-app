@@ -65,12 +65,35 @@ $gridColumns = [
     ],
     [
         'attribute' => 'asset_id',
-        'label' => 'Asset ID',
+        'label' => 'Mac/IMEI/Serial Number',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'fixed_asst_account',
+        'label' => 'Fix Asset<br/>Code',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'asset_category',
+        'label' => 'Fix Asset<br/>Category',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => $asset_category_arr,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 120px;'
         ],
     ],
     [
@@ -141,9 +164,20 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '90px;',
+        'hidden' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'project',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('DISTINCT(project)')->where('project IS NOT NULL')->orderBy('project')->all(), 'project', 'project'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 100px;'
         ],
     ],
     [
@@ -156,16 +190,8 @@ $gridColumns = [
             'style' => 'font-size: 12px;'
         ],
     ],
-    [
-        'attribute' => 'project',
-        //'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('DISTINCT(project)')->where('project IS NOT NULL')->orderBy('project')->all(), 'project', 'project'),
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
+    
+    
 ];
 ?>
 <div class="giiant-crud asset-tbl-index">

@@ -23,6 +23,7 @@ use Yii;
  * @property string $nik
  * @property string $NAMA_KARYAWAN
  * @property string $fixed_asst_account
+ * @property string $asset_category
  * @property string $purchase_date
  * @property integer $report_type
  * @property string $LAST_UPDATE
@@ -68,7 +69,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id'], 'required'],
-            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic', 'project', 'cur'], 'string'],
+            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic', 'project', 'cur'], 'string'],
             [['purchase_date', 'LAST_UPDATE'], 'safe'],
             [['report_type'], 'integer'],
             [['price', 'price_usd'], 'number'],
@@ -96,6 +97,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'nik' => 'Nik',
             'NAMA_KARYAWAN' => 'Nama  Karyawan',
             'fixed_asst_account' => 'Fixed Asst Account',
+            'asset_category' => 'Asset Category',
             'purchase_date' => 'Purchase Date',
             'report_type' => 'Report Type',
             'LAST_UPDATE' => 'Last  Update',

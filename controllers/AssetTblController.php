@@ -37,11 +37,14 @@ class AssetTblController extends \app\controllers\base\AssetTblController
 
 		$jenis_arr = ArrayHelper::map(AssetTbl::find()->select('DISTINCT(jenis)')->where('jenis IS NOT NULL')->orderBy('jenis ASC')->all(), 'jenis', 'jenis');
 
+		$asset_category_arr = ArrayHelper::map(AssetTbl::find()->select('DISTINCT(asset_category)')->where('asset_category IS NOT NULL')->orderBy('asset_category ASC')->all(), 'asset_category', 'asset_category');
+
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
 		    'department_arr' => $department_arr,
 		    'jenis_arr' => $jenis_arr,
+		    'asset_category_arr' => $asset_category_arr,
 		]);
 	}
 }
