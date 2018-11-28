@@ -91,6 +91,7 @@ $config = [
         'db_wsus' => require(__DIR__ . '/db_wsus.php'),
         'db_wh_app' => require(__DIR__ . '/db_wh_app.php'),
         'db_sms' => require(__DIR__ . '/db_sms.php'),
+        'db_supplement' => require(__DIR__ . '/db_supplement.php'),
     ],
     'params' => $params,
     'modules' => [

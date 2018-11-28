@@ -95,7 +95,11 @@ class PalletDriverUtilityController extends Controller
 	{
 		//$data_arr = GojekView02::find()->select('DISTINCT(ISSUE_DATE)')->orderBy('ISSUE_DATE')->all();
 		$data_arr = ArrayHelper::getColumn(
-			PalletUtilityView03::find()->select('DISTINCT(order_date)')->orderBy('order_date')->asArray()->all(),
+			PalletUtilityView03::find()->select('DISTINCT(order_date)')
+			->where(['>', 'order_date', date('Y-m-d', strtotime("-1 month"))])
+			->orderBy('order_date')
+			->asArray()
+			->all(),
 			'order_date'
 		);
 		$return_arr = [];

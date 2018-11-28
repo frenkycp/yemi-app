@@ -85,7 +85,11 @@ class GojekDriverUtilityController extends Controller
 	{
 		//$data_arr = GojekView02::find()->select('DISTINCT(ISSUE_DATE)')->orderBy('ISSUE_DATE')->all();
 		$data_arr = ArrayHelper::getColumn(
-			GojekView02::find()->select('DISTINCT(ISSUE_DATE)')->orderBy('ISSUE_DATE')->asArray()->all(),
+			GojekView02::find()->select('DISTINCT(ISSUE_DATE)')
+			->where(['>', 'ISSUE_DATE', date('Y-m-d', strtotime("-1 month"))])
+			->orderBy('ISSUE_DATE')
+			->asArray()
+			->all(),
 			'ISSUE_DATE'
 		);
 		$return_arr = [];
