@@ -143,7 +143,7 @@ $this->registerCss("
                                     <?= Html::a('Order Progress Monitor <span class="japanesse-word"> (配達進捗モニター）</span>', ['/pallet-order-completion']); ?>
                                 </li>
                                 <li>
-                                    Transport Utilization <span class="japanesse-word">(配達の稼働率）</span>
+                                    <?= Html::a('Transport Utilization <span class="japanesse-word">(配達の稼働率）</span>', ['/pallet-driver-utility']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('Transport Data <span class="japanesse-word">(配達データー)</span>', ['/pallet-transporter-data']); ?>

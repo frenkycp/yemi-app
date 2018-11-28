@@ -4,45 +4,43 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'TRANSPORT UTILIZATION <span class="japanesse text-green">(配達の稼働率）</span> | GO-WIP',
+    'page_title' => 'TRANSPORT UTILIZATION <span class="japanesse text-green">(配達の稼働率）</span> | GO-PALLET',
     'tab_title' => 'TRANSPORT UTILIZATION',
     'breadcrumbs_title' => 'TRANSPORT UTILIZATION'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
-$color = 'ForestGreen';
 
 $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
-$script = <<< JS
+$script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 600000); // milliseconds
+      setTimeout(\"refreshPage();\", 600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
-JS;
+";
 $this->registerJs($script, View::POS_HEAD );
 
 $driver_arr = \Yii::$app->request->get('driver_nik');
-
 /*echo '<pre>';
-print_r($driver_arr);
+print_r($data);
 echo '</pre>';*/
-
+//echo Yii::$app->request->baseUrl;
 ?>
+
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['gojek-driver-utility/index']),
+    'action' => Url::to(['pallet-driver-utility/index']),
 ]); ?>
     <div class="form-group">
         <?php
@@ -50,7 +48,7 @@ echo '</pre>';*/
         echo Select2::widget([
             'name' => 'driver_nik',
             'value' => $driver_arr,
-            'data' => ArrayHelper::map(app\models\GojekTbl::find()->select('GOJEK_ID, GOJEK_DESC')->groupBy('GOJEK_ID, GOJEK_DESC')->orderBy('GOJEK_DESC')->all(), 'GOJEK_ID', 'GOJEK_DESC'),
+            'data' => $driver_dropdown_arr,
             'options' => [
                 'placeholder' => 'Select driver ...',
                 'multiple' => true
