@@ -164,6 +164,81 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'standart_time',
+        'label' => 'ST',
+        'value' => function($model){
+            $mesin_id = $model->mesin_id;
+            $mesin_periode = $model->mesin_periode;
+            $preventive_data = app\models\MesinCheckDtr::find()
+            ->where([
+                'mesin_id' => $mesin_id,
+                'mesin_periode' => $mesin_periode,
+            ])
+            ->one();
+            if ($preventive_data->standart_time != null) {
+                return $preventive_data->standart_time;
+            }
+            return 0;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '60px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'manpower',
+        'label' => 'MP',
+        'value' => function($model){
+            $mesin_id = $model->mesin_id;
+            $mesin_periode = $model->mesin_periode;
+            $preventive_data = app\models\MesinCheckDtr::find()
+            ->where([
+                'mesin_id' => $mesin_id,
+                'mesin_periode' => $mesin_periode,
+            ])
+            ->one();
+            if ($preventive_data->manpower != null) {
+                return $preventive_data->manpower;
+            }
+            return 0;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '60px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'pic',
+        'label' => 'PIC',
+        'value' => function($model){
+            $mesin_id = $model->mesin_id;
+            $mesin_periode = $model->mesin_periode;
+            $preventive_data = app\models\MesinCheckDtr::find()
+            ->where([
+                'mesin_id' => $mesin_id,
+                'mesin_periode' => $mesin_periode,
+            ])
+            ->one();
+            if ($preventive_data->pic != null AND $preventive_data->pic != '') {
+                return $preventive_data->pic;
+            }
+            return '-';
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'master_plan_maintenance',
         'label' => 'Master Plan',
         'vAlign' => 'middle',

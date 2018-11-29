@@ -140,6 +140,30 @@ $grid_column = [
         ],
     ],
     [
+        'attribute' => 'PO',
+        'encodeLabel' => false,
+        'label' => 'PO<br/>Qty',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'IMR',
+        'encodeLabel' => false,
+        'label' => 'IMR<br/>Qty',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'ONHAND_STATUS',
         'label' => 'Status',
         'value' => function($model){

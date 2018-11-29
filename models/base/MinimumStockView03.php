@@ -28,6 +28,8 @@ use Yii;
  * @property string $MACHINE
  * @property string $MACHINE_NAME
  * @property double $ONHAND
+ * @property double $PO
+ * @property double $IMR
  * @property string $RACK
  * @property string $POST_DATE
  * @property integer $ONHAND_STATUS
@@ -64,8 +66,8 @@ abstract class MinimumStockView03 extends \yii\db\ActiveRecord
     {
         return [
             [['LOC_ITEM', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS_DESC', 'CURR'], 'string'],
-            [['LOC', 'ONHAND'], 'required'],
-            [['MIN_STOCK_QTY', 'ONHAND', 'UNIT_PRICE'], 'number'],
+            [['LOC', 'ONHAND', 'PO', 'IMR'], 'required'],
+            [['MIN_STOCK_QTY', 'ONHAND', 'PO', 'IMR', 'UNIT_PRICE'], 'number'],
             [['LAST_UPDATE', 'POST_DATE'], 'safe'],
             [['ONHAND_STATUS'], 'integer']
         ];
@@ -96,6 +98,8 @@ abstract class MinimumStockView03 extends \yii\db\ActiveRecord
             'MACHINE' => 'Machine',
             'MACHINE_NAME' => 'Machine  Name',
             'ONHAND' => 'Onhand',
+            'PO' => 'Po',
+            'IMR' => 'Imr',
             'RACK' => 'Rack',
             'POST_DATE' => 'Post  Date',
             'ONHAND_STATUS' => 'Onhand  Status',
