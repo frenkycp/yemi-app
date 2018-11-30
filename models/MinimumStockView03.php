@@ -11,7 +11,8 @@ use yii\helpers\ArrayHelper;
  */
 class MinimumStockView03 extends BaseMinimumStockView03
 {
-
+    public $budget;
+    
     public function behaviors()
     {
         return ArrayHelper::merge(

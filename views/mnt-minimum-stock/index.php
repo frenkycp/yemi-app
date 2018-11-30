@@ -118,7 +118,7 @@ $grid_column = [
     [
         'attribute' => 'MIN_STOCK_QTY',
         'encodeLabel' => false,
-        'label' => 'Minimum<br/>Qty',
+        'label' => 'Min<br/>Qty',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '80px',
@@ -208,6 +208,43 @@ $grid_column = [
     [
         'attribute' => 'CURR',
         'label' => 'Currency',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'budget',
+        'label' => 'Expenses/<br/>Fix Asset',
+        'encodeLabel' => false,
+        'value' => function($model)
+        {
+            $price = $model->UNIT_PRICE;
+            if ($price == 0 || $model->CURR == null) {
+                return '-';
+            } else {
+                $budget_rate = app\models\AccountBudgetRate::find()
+                ->where(['<', 'START_DATE', date('Y-m-d 00:00:00')])
+                ->andWhere(['>', 'END_DATE', date('Y-m-d 00:00:00')])
+                ->andWhere(['CURR' => $model->CURR])
+                ->one();
+
+                if ($budget_rate == null) {
+                    $budget_rate = app\models\AccountBudgetRate::find()
+                    ->where(['CURR' => $model->CURR])
+                    ->orderBy('START_DATE DESC')
+                    ->one();
+                }
+
+                $rate = $budget_rate->RATE;
+                $usd_price = round($price / $rate);
+
+                if ($usd_price <= 1000) {
+                    return 'Expenses';
+                } else {
+                    return 'Fixed Asset';
+                }
+                return $usd_price;
+            }
+        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
