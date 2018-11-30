@@ -5,6 +5,7 @@ use app\models\SplView;
 /* @var $this yii\web\View */
 
 $this->title = 'My HR';
+$this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJs("$(function() {
    $('.popup_btn').click(function(e) {
@@ -24,21 +25,8 @@ $profpic = "";
     $profpic = 'profile-picture-woman.png';
 }*/
 ?>
-<div class="row">
-    
-</div>
 
-
-<div class="box box-info box-solid">
-    <div class="box-header with-border">
-        <h1 class="box-title" style="font-size: 32px; padding-left: 12px;">Papan Informasi</h1>
-        <div class="pull-right">
-            <?= Html::a('Change Password', ['change-password', 'nik' => $model_karyawan->NIK], ['class' => 'btn btn-warning']) ?>
-            <?= Html::a('Log Out', ['logout'], ['class' => 'btn btn-danger']) ?>
-        </div>
-    </div>
-    <div class="box-body">
-        <div class="row" style="<?= $model_karyawan === null ? 'display: none;' : ''; ?>">
+<div class="row" style="<?= $model_karyawan === null ? 'display: none;' : ''; ?>">
             <div class="col-md-3">
                 <div class="box box-primary box-solid">
                     <div class="box-body box-profile">
@@ -64,7 +52,7 @@ $profpic = "";
 
                         <ul class="list-group list-group-unbordered" style="">
                             <li class="list-group-item">
-                                <b>Sisa Cuti</b> <a class="pull-right badge bg-red"><b><?= $sisa_cuti; ?></b> / <?= $kuota_cuti; ?></a>
+                                <b>Personal Leave</b> <a class="pull-right badge bg-red"><b><?= $sisa_cuti; ?></b> / <?= $kuota_cuti; ?></a>
                             </li>
                         </ul>
                     </div>
@@ -72,11 +60,11 @@ $profpic = "";
                 </div>
                 <div class="box box-primary box-solid">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Tentang Saya</h3>
+                        <h3 class="box-title">About Me</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <strong><i class="fa fa-map-marker margin-r-5"></i> Departemen</strong>
+                        <strong><i class="fa fa-map-marker margin-r-5"></i> Department</strong>
 
                         <p class="text-muted"><?= $model_karyawan->DEPARTEMEN; ?></p>
 
@@ -94,13 +82,13 @@ $profpic = "";
 
                         <br\>
 
-                        <strong><i class="fa fa-fw fa-calendar"></i> Tanggal Bergabung</strong>
+                        <strong><i class="fa fa-fw fa-calendar"></i> Join Date</strong>
 
                         <p class="text-muted"><?= $model_karyawan->TGL_MASUK_YEMI !== null ? date('d F Y', strtotime($model_karyawan->TGL_MASUK_YEMI)) : '-'; ?></p>
 
                         <br\>
 
-                        <strong><i class="fa fa-fw fa-star"></i> Tingkatan</strong>
+                        <strong><i class="fa fa-fw fa-star"></i> Grade</strong>
 
                         <p class="text-muted"><?= $model_karyawan->GRADE !== null ? $model_karyawan->GRADE : '-'; ?></p>
 
@@ -111,21 +99,21 @@ $profpic = "";
             <div class="col-md-9">
                 <div class="box box-primary box-solid">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Absensi & Lembur</h1>
+                        <h3 class="box-title">Attendance and Overtime</h1>
                     </div>
                     <div class="box-body">
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th style="text-align: center; width: 100px;">Period</th>
-                                    <th style="text-align: center; width: 100px;">Alpha</th>
-                                    <th style="text-align: center; width: 100px;">Ijin</th>
-                                    <th style="text-align: center; width: 100px;">Sakit</th>
-                                    <th style="text-align: center; width: 100px;">Datang Terlambat</th>
-                                    <th style="text-align: center; width: 100px;">Pulang Cepat</th>
-                                    <th style="text-align: center; width: 100px;">Cuti</th>
-                                    <th style="text-align: center; width: 100px;">Disiplin</th>
-                                    <th style="text-align: center; width: 100px;">Lembur (jam)</th>
+                                    <th style="text-align: center; width: 100px;">Absent</th>
+                                    <th style="text-align: center; width: 100px;">Permit</th>
+                                    <th style="text-align: center; width: 100px;">Sick</th>
+                                    <th style="text-align: center; width: 100px;">Come Late</th>
+                                    <th style="text-align: center; width: 100px;">Home Early</th>
+                                    <th style="text-align: center; width: 100px;">Personal Leave</th>
+                                    <th style="text-align: center; width: 100px;">Disciplinary<br/>Allowance</th>
+                                    <th style="text-align: center; width: 100px;">Overtime (hour)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -225,9 +213,6 @@ $profpic = "";
                 </div>
             </div>
         </div>
-        <h4 style="<?= $model_karyawan !== null ? 'display: none;' : ''; ?>">Please insert registered NIK ...</h4>
-    </div>
-</div>
 
 
 <?php

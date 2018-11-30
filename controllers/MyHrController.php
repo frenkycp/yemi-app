@@ -81,8 +81,10 @@ class MyHrController extends Controller
         if (!$session->has('my_hr_user')) {
             return $this->redirect(['login']);
         }
+        $nik = $session['my_hr_user'];
         $this->layout = 'my-hr';
         $searchModel  = new HrComplaintSearch;
+        $searchModel->nik = $nik;
         $dataProvider = $searchModel->search($_GET);
 
         Tabs::clearLocalStorage();
@@ -107,12 +109,22 @@ class MyHrController extends Controller
         if (!$session->has('my_hr_user')) {
             return $this->redirect(['login']);
         }
+        $nik = $session['my_hr_user'];
         $this->layout = 'my-hr';
         date_default_timezone_set('Asia/Jakarta');
         $model = new HrComplaint;
 
         try {
             if ($model->load($_POST)) {
+                $karyawan = Karyawan::find()
+                ->where(['NIK' => $nik])
+                ->one();
+
+                $model->nik = '' . $nik;
+                $model->emp_name = $karyawan->NAMA_KARYAWAN;
+                $model->department = $karyawan->DEPARTEMEN;
+                $model->section = $karyawan->SECTION;
+                $model->sub_section = $karyawan->SUB_SECTION;
                 $model->period = date('Ym');
                 $model->input_datetime = date('Y-m-d H:i:s');
                 if ($model->save()) {
@@ -151,6 +163,7 @@ class MyHrController extends Controller
             ->one();
             if ($karyawan->NIK !== null) {
                 $session['my_hr_user'] = $model->username;
+                $session['my_hr_name'] = $karyawan->NAMA_KARYAWAN;
                 $hr_log = HrLoginLog::find()->where([
                     'nik' => $karyawan->NIK,
                     'login_date' => date('Y-m-d')
