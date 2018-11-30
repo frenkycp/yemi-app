@@ -61,6 +61,9 @@ echo '</pre>';*/
                 $link = '#';
             } elseif ($status == 1) {
                 $btn_class = 'btn btn-danger text-center btn-block';
+                if ($driver_status == 1) {
+                    $btn_class .= ' disabled';
+                }
                 $link = ['pallet-transporter/process', 'line' => $line, 'current_status' => $status];
                 $data = [
                     'confirm' => 'Are you sure to pick order from Line ' . $line . ' ?',

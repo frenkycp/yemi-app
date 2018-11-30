@@ -21,7 +21,7 @@ class PalletTransporterController extends Controller
 
 	public function actionIndex()
 	{
-		
+		$nik = \Yii::$app->user->identity->username;
 		if (\Yii::$app->user->identity->role->name == 'Pallet Driver 1') {
 			$fa = 1;
 		} else {
@@ -34,9 +34,22 @@ class PalletTransporterController extends Controller
 		->orderBy('status DESC, user ASC')
 		->asArray()
 		->all();
+
+		$pallet_driver = PalletDriver::find()
+		->where([
+			'nik' => $nik
+		])
+		->one();
+
+		$driver_status = 2;
+		if ($pallet_driver->driver_status != null) {
+			$driver_status = $pallet_driver->driver_status;
+		}
+
 		return $this->render('index',[
 			'line_data' => $line_data,
-			'fa' => $fa
+			'fa' => $fa,
+			'driver_status' => $driver_status
 		]);
 	}
 
