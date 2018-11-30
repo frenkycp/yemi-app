@@ -150,6 +150,15 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'stc',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 70px; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'dst',
         'vAlign' => 'middle',
         'filterInputOptions' => [
