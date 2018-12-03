@@ -23,7 +23,7 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $gridColumns = [
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         'template' => $actionColumnTemplateString,
         'buttons' => [
@@ -43,34 +43,57 @@ $gridColumns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ],
+    ],*/
     [
         'attribute' => 'input_datetime',
-        'label' => 'Waktu Laporan',
+        'label' => 'Input Datetime',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'width' => '130px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'status',
+        'value' => function($model){
+            if ($model->status == 0) {
+                return '<span class="label label-danger">OPEN</span>';
+            } elseif($model->status == 1) {
+                return '<span class="label label-success">CLOSED</span>';
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'html',
+        'width' => '120px;',
+        'filter' => [
+            0 => 'OPEN',
+            1 => 'CLOSED'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
         ],
     ],
     [
         'attribute' => 'remark',
-        'label' => 'Isi Laporan',
+        'label' => 'Report Value',
         'vAlign' => 'middle',
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'font-size: 12px;'
         ],
     ],
     [
-        'attribute' => 'respons',
-        'label' => 'Respon',
+        'attribute' => 'response',
+        'label' => 'Response Value',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'font-size: 12px;'
         ],
     ],
 ]
@@ -89,10 +112,10 @@ $gridColumns = [
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => $gridColumns,
-            //'hover' => true,
+            'hover' => true,
             //'showPageSummary' => true,
             //'condensed' => true,
-            'striped' => false,
+            'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false

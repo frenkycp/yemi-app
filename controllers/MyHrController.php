@@ -85,6 +85,7 @@ class MyHrController extends Controller
         $this->layout = 'my-hr';
         $searchModel  = new HrComplaintSearch;
         $searchModel->nik = $nik;
+        $_GET['hr_sort'] = 'hr_sort';
         $dataProvider = $searchModel->search($_GET);
 
         Tabs::clearLocalStorage();
@@ -262,20 +263,21 @@ class MyHrController extends Controller
         $data = '<table class="table table-bordered table-striped table-hover">';
         $data .= 
         '<thead><tr>
-            <th style="text-align: center;">No. SPL</th>
-            <th style="text-align: center;">Hari Kerja/Libur</th>
-            <th style="text-align: center;">Tanggal</th>
-            <th style="text-align: center;">Plan Lembur</th>
-            <th style="text-align: center;">Aktual Lembur</th>
-            <th>Alasan Lembur</th>
+            <th style="text-align: center;">SPL Num.</th>
+            <th style="text-align: center;">Workday/Holiday</th>
+            <th style="text-align: center;">Date</th>
+            <th style="text-align: center;">Overtime Plan</th>
+            <th style="text-align: center;">Overtime Actual</th>
+            <th>Reason</th>
         </tr></thead>'
         ;
         $data .= '<tbody>';
         foreach ($spl_data_arr as $key => $value) {
+            $hari_kerja = $value->JENIS_LEMBUR == 'HARI KERJA' ? 'WORKDAY' : 'HOLIDAY';
             $data .= '
             <tr>
                 <td style="text-align: center;">' . $value->SPL_HDR_ID . '</td>
-                <td style="text-align: center;">' . $value->JENIS_LEMBUR . '</td>
+                <td style="text-align: center;">' . $hari_kerja . '</td>
                 <td style="text-align: center;">' . date('l, d M\' Y', strtotime($value->TGL_LEMBUR)) . '</td>
                 <td style="text-align: center;">' . date('H:i', strtotime($value->END_LEMBUR_PLAN)) . ' (' . $value->NILAI_LEMBUR_PLAN . ' jam)</td>
                 <td style="text-align: center;">' . date('H:i', strtotime($value->END_LEMBUR_ACTUAL)) . ' (' . $value->NILAI_LEMBUR_ACTUAL . ' jam)</td>
@@ -312,16 +314,26 @@ class MyHrController extends Controller
         $data = '<table class="table table-bordered table-striped table-hover">';
         $data .= 
         '<thead><tr>
-            <th style="text-align: center;">Tanggal</th>
-            <th>Keterangan</th>
+            <th style="text-align: center;">Date</th>
+            <th>Description</th>
         </tr></thead>'
         ;
         $data .= '<tbody>';
         foreach ($abensi_data_arr as $key => $value) {
+            $keterangan = '-';
+            if ($value['CATEGORY'] == 'SAKIT') {
+                $keterangan = 'SICK';
+            } elseif ($value['CATEGORY'] == 'IJIN') {
+                $keterangan = 'PERMIT';
+            } elseif ($value['CATEGORY'] == 'ALPHA') {
+                $keterangan = 'ABSENT';
+            } elseif ($value['CATEGORY'] == 'CUTI') {
+                $keterangan = 'ON LEAVE';
+            }
             $data .= '
             <tr>
                 <td style="text-align: center;">' . date('d M\' Y', strtotime($value['DATE'])) . '</td>
-                <td>' . $value['CATEGORY'] . '</td>
+                <td>' . $keterangan . '</td>
             </tr>
             ';
         }

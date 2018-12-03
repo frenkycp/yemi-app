@@ -25,7 +25,7 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 $grid_columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => $actionColumnTemplateString,
+        'template' => '{add-response}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -34,7 +34,14 @@ $grid_columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            }
+            }, 'add-response' => function($url, $model, $key){
+                $url = ['add-response', 'id' => $model->id];
+                $options = [
+                    'title' => 'Add Response',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="fa fa-reply"></span>', $url, $options);
+            },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator
@@ -59,6 +66,7 @@ $grid_columns = [
         'label' => 'Input Date',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'width' => '80px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -95,9 +103,9 @@ $grid_columns = [
     [
         'attribute' => 'status',
         'value' => function($model){
-            if ($model->status == 1) {
+            if ($model->status == 0) {
                 return '<span class="label label-danger">OPEN</span>';
-            } else {
+            } elseif($model->status == 1) {
                 return '<span class="label label-success">CLOSED</span>';
             }
         },
@@ -106,8 +114,8 @@ $grid_columns = [
         'format' => 'html',
         'width' => '120px;',
         'filter' => [
-            1 => 'OPEN',
-            2 => 'CLOSED'
+            0 => 'OPEN',
+            1 => 'CLOSED'
         ],
         'filterInputOptions' => [
             'class' => 'form-control',

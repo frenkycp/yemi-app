@@ -19,7 +19,8 @@ use Yii;
  * @property string $sub_section
  * @property string $remark
  * @property string $remark_category
- * @property string $respons
+ * @property string $response
+ * @property string $response_datetime
  * @property integer $status
  * @property string $aliasModel
  */
@@ -50,8 +51,8 @@ abstract class HrComplaint extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'respons'], 'string'],
-            [['input_datetime'], 'safe'],
+            [['period', 'nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'response'], 'string'],
+            [['input_datetime', 'response_datetime'], 'safe'],
             [['status'], 'integer']
         ];
     }
@@ -72,7 +73,8 @@ abstract class HrComplaint extends \yii\db\ActiveRecord
             'sub_section' => 'Sub Section',
             'remark' => 'Remark',
             'remark_category' => 'Remark Category',
-            'respons' => 'Respons',
+            'response' => 'Response',
+            'response_datetime' => 'Response Datetime',
             'status' => 'Status',
         ];
     }

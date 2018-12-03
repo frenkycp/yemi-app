@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id', 'status'], 'integer'],
-            [['period', 'input_datetime', 'nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'respons'], 'safe'],
+            [['period', 'input_datetime', 'nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'response'], 'safe'],
 ];
 }
 
@@ -44,7 +44,13 @@ public function search($params)
 $query = HrComplaint::find();
 
 $dataProvider = new ActiveDataProvider([
-'query' => $query,
+    'query' => $query,
+    'sort' => [
+        'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'input_datetime' => isset($params['hr_sort']) ? SORT_DESC : SORT_ASC,
+        ]
+    ],
 ]);
 
 $this->load($params);
@@ -69,7 +75,7 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'sub_section', $this->sub_section])
             ->andFilterWhere(['like', 'remark', $this->remark])
             ->andFilterWhere(['like', 'remark_category', $this->remark_category])
-            ->andFilterWhere(['like', 'respons', $this->respons]);
+            ->andFilterWhere(['like', 'response', $this->response]);
 
 return $dataProvider;
 }
