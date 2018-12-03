@@ -9,12 +9,19 @@ use yii\web\JsExpression;
 
 class SmtDailyUtilityReportController extends Controller
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
 	public function actionIndex()
 	{
 		$utility_data_arr = WipEffDailyUtilView::find()
-		->where([
-			'period' => date('Ym')
-		])
+		//->where([
+			//'period' => date('Ym')
+		//])
+		->where(['>', 'post_date', ''])
 		->asArray()
 		->all();
 
