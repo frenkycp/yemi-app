@@ -9,6 +9,13 @@ use yii\helpers\Url;
 */
 class HrComplaintController extends \app\controllers\base\HrComplaintController
 {
+
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
 	public function actionAddResponse($id)
 	{
 		date_default_timezone_set('Asia/Jakarta');
