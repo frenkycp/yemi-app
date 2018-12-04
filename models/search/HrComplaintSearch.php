@@ -42,14 +42,21 @@ return Model::scenarios();
 public function search($params)
 {
 $query = HrComplaint::find();
+$defaultOrder = [
+    'status' => SORT_ASC,
+    'input_datetime' => SORT_ASC,
+];
+if (isset($params['hr_sort'])) {
+    $defaultOrder = [
+        'input_datetime' => SORT_DESC,
+    ];
+    
+};
 
 $dataProvider = new ActiveDataProvider([
     'query' => $query,
     'sort' => [
-        'defaultOrder' => [
-            //'cust_desc' => SORT_ASC,
-            'input_datetime' => isset($params['hr_sort']) ? SORT_DESC : SORT_ASC,
-        ]
+        'defaultOrder' => $defaultOrder
     ],
 ]);
 

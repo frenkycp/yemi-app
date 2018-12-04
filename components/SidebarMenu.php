@@ -6,18 +6,32 @@ use yii\bootstrap\Widget;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Menu;
+use app\models\HrComplaint;
 
 class SidebarMenu extends Widget
 {
     public static function getMenu($roleId, $parentId=NULL){
         $output = [];
         foreach(Menu::find()->where(["parent_id"=>$parentId])->orderBy('order ASC')->all() as $menu){
+
             $obj = [
                 "label" => $menu->name,
                 "icon" => $menu->icon,
                 "url" => SidebarMenu::getUrl($menu),
                 "visible" => SidebarMenu::roleHasAccess($roleId, $menu->id),
             ];
+            if ($menu->controller == 'hr-complaint') {
+                $total_waiting = HrComplaint::find()
+                ->where(['status' => 0])
+                ->count();
+                $obj = [
+                    "label" => $menu->name,
+                    "icon" => $menu->icon,
+                    "url" => SidebarMenu::getUrl($menu),
+                    "visible" => SidebarMenu::roleHasAccess($roleId, $menu->id),
+                    'template' => '<a href="{url}">{icon} {label}<span class="pull-right-container"><small class="label pull-right bg-yellow">' . $total_waiting . '</small></span></a>',
+                ];
+            }
 
             if(count($menu->menus) != 0){
                 $obj["items"] = SidebarMenu::getMenu($roleId, $menu->id);

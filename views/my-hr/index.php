@@ -92,6 +92,12 @@ $profpic = "";
 
                         <p class="text-muted"><?= $model_karyawan->GRADE !== null ? $model_karyawan->GRADE : '-'; ?></p>
 
+                        <br\>
+
+                        <strong><i class="fa fa-fw fa-star"></i> Marriage Status</strong>
+
+                        <p class="text-muted"><?= $model_karyawan->STATUS_PERKAWINAN !== null ? $model_karyawan->STATUS_PERKAWINAN : '-'; ?></p>
+
                     </div>
                     <!-- /.box-body -->
                 </div>
