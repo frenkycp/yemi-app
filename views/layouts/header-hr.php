@@ -82,10 +82,10 @@ $model_karyawan = Karyawan::find()->where([
                 <!-- Menu Footer-->
                 <li class="user-footer bg-purple-active color-pallete">
                   <div class="pull-left">
-                    <a href="#" class="btn btn-warning btn-flat"><i class="fa fa-key"></i>&nbsp;&nbsp;Password</a>
+                    <?= Html::a('<i class="fa fa-key"></i>&nbsp;&nbsp;Password', ['change-password', 'nik' => $nik], ['class' => 'btn btn-flat btn-warning']) ?>
                   </div>
                   <div class="pull-right">
-                    <a href="#" class="btn btn-flat btn-danger"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Sign out</a>
+                    <?= Html::a('<i class="fa fa-power-off"></i>&nbsp;&nbsp;Sign out', ['logout'], ['class' => 'btn btn-flat btn-danger']) ?>
                   </div>
                 </li>
               </ul>

@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id', 'status'], 'integer'],
-            [['period', 'input_datetime', 'nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'response'], 'safe'],
+            [['period', 'input_datetime', 'response_datetime','nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'response'], 'safe'],
 ];
 }
 
@@ -63,11 +63,12 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'id' => $this->id,
-            'input_datetime' => $this->input_datetime,
             'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),input_datetime,120)', $this->input_datetime])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),response_datetime,120)', $this->response_datetime])
             ->andFilterWhere(['like', 'nik', $this->nik])
             ->andFilterWhere(['like', 'emp_name', $this->emp_name])
             ->andFilterWhere(['like', 'department', $this->department])

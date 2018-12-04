@@ -104,9 +104,9 @@ $grid_columns = [
         'attribute' => 'status',
         'value' => function($model){
             if ($model->status == 0) {
-                return '<span class="label label-danger">OPEN</span>';
+                return '<span class="label label-warning">WAITING</span>';
             } elseif($model->status == 1) {
-                return '<span class="label label-success">CLOSED</span>';
+                return '<span class="label label-success">ANSWERED</span>';
             }
         },
         'hAlign' => 'center',
@@ -114,8 +114,8 @@ $grid_columns = [
         'format' => 'html',
         'width' => '120px;',
         'filter' => [
-            0 => 'OPEN',
-            1 => 'CLOSED'
+            0 => 'WAITING',
+            1 => 'ANSWERED'
         ],
         'filterInputOptions' => [
             'class' => 'form-control',

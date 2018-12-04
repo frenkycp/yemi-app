@@ -55,31 +55,10 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    [
-        'attribute' => 'status',
-        'value' => function($model){
-            if ($model->status == 0) {
-                return '<span class="label label-danger">OPEN</span>';
-            } elseif($model->status == 1) {
-                return '<span class="label label-success">CLOSED</span>';
-            }
-        },
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'format' => 'html',
-        'width' => '120px;',
-        'filter' => [
-            0 => 'OPEN',
-            1 => 'CLOSED'
-        ],
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
+    
     [
         'attribute' => 'remark',
-        'label' => 'Report Value',
+        'label' => 'User Report',
         'vAlign' => 'middle',
         'format' => 'ntext',
         'filterInputOptions' => [
@@ -89,8 +68,41 @@ $gridColumns = [
     ],
     [
         'attribute' => 'response',
-        'label' => 'Response Value',
+        'label' => 'Answer',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'response_datetime',
+        'label' => 'Answer Datetime',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '130px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'status',
+        'value' => function($model){
+            if ($model->status == 0) {
+                return '<span class="label label-warning">WAITING</span>';
+            } elseif($model->status == 1) {
+                return '<span class="label label-success">ANSWERED</span>';
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'html',
+        'width' => '120px;',
+        'filter' => [
+            0 => 'WAITING',
+            1 => 'ANSWERED'
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px;'

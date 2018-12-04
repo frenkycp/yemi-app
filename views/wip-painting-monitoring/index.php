@@ -144,7 +144,7 @@ echo '</pre>';*/
                     ],
                     'plotOptions' => [
                         'column' => [
-                            'stacking' => 'normal',
+                            'stacking' => 'percent',
                             'dataLabels' => [
                                 'enabled' => true,
                                 'format' => '{point.percentage:.0f}% ({point.qty:.0f})',

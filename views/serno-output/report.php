@@ -149,7 +149,7 @@ $this->registerJs($script, View::POS_HEAD );
                     'text' => 'Weekly Report'
                 ],
                 'subtitle' => [
-                    'text' => 'Week ' . $j
+                    'text' => null
                 ],
                 'xAxis' => [
                     'type' => 'category'
@@ -173,7 +173,7 @@ $this->registerJs($script, View::POS_HEAD );
                 ],
                 'plotOptions' => [
                     'column' => [
-                        'stacking' => 'normal',
+                        'stacking' => 'percent',
                         'dataLabels' => [
                             'enabled' => true,
                             //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
@@ -182,12 +182,9 @@ $this->registerJs($script, View::POS_HEAD );
                                 'fontWeight' => '0'
                             ],
                         ],
-                        'borderWidth' => 1,
-                        'borderColor' => $color,
+                        //'borderWidth' => 1,
+                        //'borderColor' => $color,
                     ],
-                    'series' => [
-                        
-                    ]
                 ],
                 'series' => [
                     [
