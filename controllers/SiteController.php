@@ -175,6 +175,8 @@ class SiteController extends Controller
         }*/
         if (\Yii::$app->user->identity->role->name == 'Pallet Driver 1' || \Yii::$app->user->identity->role->name == 'Pallet Driver 2') {
             return $this->render('index-pallet-driver');
+        } elseif (\Yii::$app->user->identity->role->name == 'RFID Gate Admin') {
+            return $this->render('index-gate-admin');
         }
         return $this->render('index2');
     }
