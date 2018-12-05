@@ -62,7 +62,7 @@ $this->registerCss("
                             <p>YEMI WH to Production <span class="japanesse-word">(YEMI 部品倉庫⇒生産職場)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['/parts-picking-status']); ?>
+                                    <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['/parts-picking-status']); ?> <span class="text-red"><b>*IoT</b></span>
                                 </li>
                                 <li>
                                     <?= Html::a('Budomari Material Monitor <span class="japanesse-word">(材料歩留モニター）</span>', ['/parts-uncountable-monthly-report']); ?>
@@ -137,7 +137,7 @@ $this->registerCss("
                             </ol>
                         </div>
                         <div class="list-group-item">
-                            <p>GO-PALLET Monitor <span class="japanesse-word">（完成品配達モニター）</span> <span class="text-red"><b>*IOT</b></span></p>
+                            <p>GO-PALLET Monitor <span class="japanesse-word">（完成品配達モニター）</span> <span class="text-red"><b>*IoT</b></span></p>
                             <ol style="padding-left: 1em">
                                 <li>
                                     <?= Html::a('Order Progress Monitor <span class="japanesse-word"> (配達進捗モニター）</span>', ['/pallet-order-completion']); ?>
@@ -231,7 +231,7 @@ $this->registerCss("
                             <p>WH FG Control <span class="japanesse-word">(完成品倉庫管理)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock']); ?> <span class="text-red"><b>*IOT</b></span>
+                                    <?= Html::a('Finish Goods Stock <span class="japanesse-word">(完成品在庫)</span>', ['/finish-good-stock']); ?> <span class="text-red"><b>*IoT</b></span>
                                 </li>
                                 <li>
                                     <?= Html::a('Finish Goods Tracer <span class="japanesse-word">(完成品トレーサ）</span>', ['/serno-input']); ?>
@@ -248,10 +248,10 @@ $this->registerCss("
                                     <?= Html::a('Monthly Shipping Container <span class="japanesse-word">(月次コンテナー出荷)</span>', ['/production-container-daily-report/index']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span> - IN', ['/serno-output/report']); ?> <span class="text-red"><b>*IOT</b></span>
+                                    <?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span> - IN', ['/serno-output/report']); ?> <span class="text-red"><b>*IoT</b></span>
                                 </li>
                                 <li>
-                                    <?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span> - OUT', ['/weekly-shipping-out/index']); ?> <span class="text-red"><b>*IOT</b></span>
+                                    <?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span> - OUT', ['/weekly-shipping-out/index']); ?> <span class="text-red"><b>*IoT</b></span>
                                 </li>
                                 <li>
                                     <?= Html::a('Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?>
