@@ -248,7 +248,10 @@ $this->registerCss("
                                     <?= Html::a('Monthly Shipping Container <span class="japanesse-word">(月次コンテナー出荷)</span>', ['/production-container-daily-report/index']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span>', ['/serno-output/report']); ?>
+                                    <?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span> - IN', ['/serno-output/report']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Shipping Container Chart <span class="japanesse-word">週次出荷（コンテナー別）</span> - OUT', ['/weekly-shipping-out/index']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?>

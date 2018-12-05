@@ -101,9 +101,9 @@ echo '</pre>';*/
                     ],
                     'xAxis' => [
                         'categories' => $value['categories'],
-                        'labels' => [
+                        /*'labels' => [
                             'formatter' => new JsExpression('function(){ return \'<a href="container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
-                        ],
+                        ],*/
                     ],
                     'yAxis' => [
                         'min' => 0,
@@ -131,10 +131,17 @@ echo '</pre>';*/
                             //'borderColor' => $color,
                         ],
                         'series' => [
+                            'showInLegend' => false,
                             'cursor' => 'pointer',
                             'point' => [
                                 'events' => [
-                                    'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                    'click' => new JsExpression("
+                                        function(e){
+                                            e.preventDefault();
+                                            $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                        }
+                                    "),
+                                    //'click' => new JsExpression('function(){ location.href = this.options.url; }'),
                                     //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                                 ]
                             ]
@@ -148,7 +155,7 @@ echo '</pre>';*/
         yii\bootstrap\Modal::begin([
             'id' =>'modal',
             'header' => '<h3>Detail Information</h3>',
-            //'size' => 'modal-lg',
+            'size' => 'modal-lg',
         ]);
         yii\bootstrap\Modal::end();
         ?>
