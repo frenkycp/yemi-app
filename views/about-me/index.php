@@ -5,9 +5,9 @@ use yii\helpers\Url;
 use yii\web\View;
 
 $this->title = [
-    'page_title' => 'Site Map <span class="japanesse text-green"></span>',
-    'tab_title' => 'About Me',
-    'breadcrumbs_title' => 'About Me'
+    'page_title' => 'Data Flow & Site Timeline <span class="japanesse text-green"></span>',
+    'tab_title' => 'Data Flow & Site Timeline',
+    'breadcrumbs_title' => 'Data Flow & Site Timeline'
 ];
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
@@ -44,8 +44,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">My HR</a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Employee self service information
             </div>
         </div>
     </li>
@@ -68,8 +67,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">SMT Utility & Loss Time</a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Real time monitoring SMT performance ( Utilization & Losstime)  based on line output
             </div>
         </div>
     </li>
@@ -83,8 +81,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">GO-PALLET Monitor <span class="japanesse">（完成品配達モニター）</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Monitoring efficency of transporter finish good from production to Warehouse Finish Good
             </div>
         </div>
     </li>
@@ -104,8 +101,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Material Monitoring <span class="japanesse">（材料モニタリング）</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Material picking status for production plan
             </div>
         </div>
     </li>
@@ -124,8 +120,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">E-WIP Performance <span class="japanesse">(E-WIPパフォーマンス)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Monitoring Production line efficency and lost time
             </div>
         </div>
     </li>
@@ -138,8 +133,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">GO-WIP Monitor <span class="japanesse">（仕掛り配達モニター）</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Transporter performance monitoring
             </div>
         </div>
     </li>
@@ -158,8 +152,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">E-WIP Monitoring <span class="japanesse">（E-WIP 生産工程モニタリング）</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                E-WIP Status monitoring
             </div>
         </div>
     </li>
@@ -172,8 +165,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Manpower Attendance <span class="japanesse">(勤怠管理)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Real time displaying attendance employes
             </div>
         </div>
     </li>
@@ -186,8 +178,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Sales Control <span class="japanesse">(売上管理)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Monitoring expense base on budget and actual
             </div>
         </div>
     </li>
@@ -206,8 +197,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Manpower Database <span class="japanesse">(社員構成)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Manpower category by Status, Department, Grade and Position
             </div>
         </div>
     </li>
@@ -220,8 +210,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Manpower Planning <span class="japanesse">(要員計画）</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Man power planning base on sales
             </div>
         </div>
     </li>
@@ -234,8 +223,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">WH FG Control <span class="japanesse">(完成品倉庫管理)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Monitoring finish good stock according in and out goods
             </div>
         </div>
     </li>
@@ -254,8 +242,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Plant Maintenance <span class="japanesse">(工場保全管理)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Maintenance activity based on preventive and corrective
             </div>
         </div>
     </li>
@@ -268,8 +255,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Finish Good Inspection <span class="japanesse">(完成品出荷の管理検査)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Information from QA inspection
             </div>
         </div>
     </li>
@@ -288,8 +274,7 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Shipping Performance <span class="japanesse">(出荷パフォーマンス)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                Information shipping based on shipping plan vs actual output
             </div>
         </div>
     </li>
@@ -302,14 +287,24 @@ date_default_timezone_set('Asia/Jakarta');
             <h3 class="timeline-header"><a href="#">Shipping Control <span class="japanesse">(出荷管理)</span></a></h3>
 
             <div class="timeline-body">
-                ...
-                Content goes here
+                To Control production  appropiate shipping plan
             </div>
         </div>
     </li>
 
     <li class="time-label">
-        <i class="fa fa-clock-o bg-gray"></i>
+        <span class="bg-purple">
+            Apr. 2018
+        </span>
+    </li>
+
+    <li>
+        <i class="fa fa-star bg-maroon"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2018-04-24</span>
+
+            <h3 class="timeline-header"><a href="#">MITA Initial Release <span class="japanesse"></span></a></h3>
+        </div>
     </li>
     <!--<li class="time-label">
         <span class="bg-purple">
