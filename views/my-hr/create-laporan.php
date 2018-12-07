@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\web\View;
 
 /**
 * @var yii\web\View $this
@@ -11,6 +12,13 @@ use yii\widgets\ActiveForm;
 $this->title = 'Form Input Pesan';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Hr Complaints'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$script = <<< JS
+    $(document).on('beforeSubmit', 'form', function(event) {
+        $(this).find('[type=submit]').attr('disabled', true).addClass('disabled');
+    });
+JS;
+$this->registerJs($script, View::POS_HEAD);
 ?>
 <div class="giiant-crud hr-complaint-create">
     <div class="panel panel-primary">
@@ -44,8 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= Html::submitButton('Submit',
             [
-            'id' => 'save-' . $model->formName(),
-            'class' => 'btn btn-success'
+                'id' => 'save-' . $model->formName(),
+                'class' => 'btn btn-success',
             ]
             );
             ?>
