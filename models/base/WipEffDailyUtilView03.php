@@ -7,21 +7,22 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.WIP_EFF_DAILY_UTIL_VIEW".
+ * This is the base-model class for table "db_owner.WIP_EFF_DAILY_UTIL_VIEW_03".
  *
  * @property string $child_analyst
  * @property string $child_analyst_desc
- * @property string $LINE
  * @property string $period
  * @property string $post_date
+ * @property string $LINE
  * @property double $lt_gross
  * @property double $lt_nett
+ * @property integer $SHIFT_TIME
  * @property double $lt_std
- * @property double $utility_gross
- * @property double $utility_nett
+ * @property double $Working_Ratio
+ * @property double $Operation_Ratio
  * @property string $aliasModel
  */
-abstract class WipEffDailyUtilView extends \yii\db\ActiveRecord
+abstract class WipEffDailyUtilView03 extends \yii\db\ActiveRecord
 {
 
 
@@ -31,7 +32,7 @@ abstract class WipEffDailyUtilView extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.WIP_EFF_DAILY_UTIL_VIEW';
+        return 'db_owner.WIP_EFF_DAILY_UTIL_VIEW_03';
     }
 
     /**
@@ -48,9 +49,10 @@ abstract class WipEffDailyUtilView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['child_analyst', 'child_analyst_desc', 'LINE', 'period'], 'string'],
+            [['child_analyst', 'child_analyst_desc', 'period', 'LINE'], 'string'],
             [['post_date'], 'safe'],
-            [['lt_gross', 'lt_nett', 'lt_std', 'utility_gross', 'utility_nett'], 'number']
+            [['lt_gross', 'lt_nett', 'lt_std', 'Working_Ratio', 'Operation_Ratio'], 'number'],
+            [['SHIFT_TIME'], 'integer']
         ];
     }
 
@@ -62,14 +64,15 @@ abstract class WipEffDailyUtilView extends \yii\db\ActiveRecord
         return [
             'child_analyst' => 'Child Analyst',
             'child_analyst_desc' => 'Child Analyst Desc',
-            'LINE' => 'Line',
             'period' => 'Period',
             'post_date' => 'Post Date',
+            'LINE' => 'Line',
             'lt_gross' => 'Lt Gross',
             'lt_nett' => 'Lt Nett',
+            'SHIFT_TIME' => 'Shift  Time',
             'lt_std' => 'Lt Std',
-            'utility_gross' => 'Utility Gross',
-            'utility_nett' => 'Utility Nett',
+            'Working_Ratio' => 'Working  Ratio',
+            'Operation_Ratio' => 'Operation  Ratio',
         ];
     }
 

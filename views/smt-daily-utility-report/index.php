@@ -8,9 +8,9 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'SMT Utility Report <span class="japanesse text-green"></span>',
-    'tab_title' => 'SMT Utility Report',
-    'breadcrumbs_title' => 'SMT Utility Report'
+    'page_title' => 'SMT Performance <span class="japanesse text-green"></span>',
+    'tab_title' => 'SMT Performance',
+    'breadcrumbs_title' => 'SMT Performance'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -31,15 +31,56 @@ $this->registerJs($script, View::POS_HEAD );
 date_default_timezone_set('Asia/Jakarta');
 
 /*echo '<pre>';
-print_r($data2);
+print_r($losstime_category);
 echo '</pre>';*/
 ?>
+
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['smt-daily-utility-report/index']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-2">
+        <?= Html::label('Year'); ?>
+        <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+    <div class="col-md-2">
+        <?= Html::label('Month'); ?>
+        <?= Html::dropDownList('month', $month, [
+            '01' => 'Jan',
+            '02' => 'Feb',
+            '03' => 'Mar',
+            '04' => 'Apr',
+            '05' => 'May',
+            '06' => 'Jun',
+            '07' => 'Jul',
+            '08' => 'Aug',
+            '09' => 'Sep',
+            '10' => 'Oct',
+            '11' => 'Nov',
+            '12' => 'Dec',
+        ], [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+</div>
+<br/>
+
+<?php ActiveForm::end(); ?>
+
 <h4 class="box-title">Last Update : <?= date('Y-m-d H:i:s') ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">SMT Utility</a></li>
-        <li><a href="#tab_2" data-toggle="tab">SMT Loss time by Line <span class="japanesse"></span></a></li>
-        <li><a href="#tab_3" data-toggle="tab">SMT Loss time by Category <span class="japanesse"></span></a></li>
+        <li class="active"><a href="#tab_1" data-toggle="tab">Working Ratio</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Operation Ratio <span class="japanesse"></span></a></li>
+        <li><a href="#tab_3" data-toggle="tab">SMT Loss time by Line <span class="japanesse"></span></a></li>
+        <li><a href="#tab_4" data-toggle="tab">SMT Loss time by Category <span class="japanesse"></span></a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
@@ -72,7 +113,7 @@ echo '</pre>';*/
                         //'max' => 100,
                     ],
                     'tooltip' => [
-                        'shared' => true,
+                        //'shared' => true,
                         'crosshairs' => true,
                         'xDateFormat' => '%Y-%m-%d',
                         'valueSuffix' => '%',
@@ -100,11 +141,73 @@ echo '</pre>';*/
                             ]
                         ]
                     ],
-                    'series' => $data,
+                    'series' => $data['working_ratio'],
                 ],
             ]); ?>
         </div>
         <div class="tab-pane" id="tab_2">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    'themes/grid-light',
+                    //'themes/sand-signika',
+                    //'themes/dark-unica',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'line',
+                    ],
+                    'credits' => [
+                        'enabled' => false
+                    ],
+                    'title' => [
+                        'text' => null,
+                    ],  
+                    'xAxis' => [
+                        'type' => 'datetime',
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'text' => 'Percentage (%)'
+                        ],
+                        'min' => 0,
+                        //'max' => 100,
+                    ],
+                    'tooltip' => [
+                        //'shared' => true,
+                        'crosshairs' => true,
+                        'xDateFormat' => '%Y-%m-%d',
+                        'valueSuffix' => '%',
+                    ],
+                    'plotOptions' => [
+                        'line' => [
+                            'dataLabels' => [
+                                'enabled' => true
+                            ],
+                        ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'dataLabels' => [
+                                'allowOverlap' => true
+                            ],
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression("
+                                        function(e){
+                                            e.preventDefault();
+                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                        }
+                                    "),
+                                ]
+                            ]
+                        ]
+                    ],
+                    'series' => $data['operation_ratio'],
+                ],
+            ]); ?>
+        </div>
+        <div class="tab-pane" id="tab_3">
             <?php
             echo Highcharts::widget([
                 'scripts' => [
@@ -150,12 +253,12 @@ echo '</pre>';*/
                             ],
                         ],
                         'series' => [
-                            //'cursor' => 'pointer',
+                            'cursor' => 'pointer',
                             'dataLabels' => [
                                 //'allowOverlap' => true
                                 'enabled' => true
                             ],
-                            /*'point' => [
+                            /**/'point' => [
                                 'events' => [
                                     'click' => new JsExpression("
                                         function(e){
@@ -164,14 +267,78 @@ echo '</pre>';*/
                                         }
                                     "),
                                 ]
-                            ]*/
+                            ]
                         ]
                     ],
                     'series' => $data2,
                 ],
             ]); ?>
         </div>
-        <div class="tab-pane" id="tab_3"></div>
+        <div class="tab-pane" id="tab_4">
+            <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/grid-light',
+                'themes/sand-signika',
+                //'themes/dark-unica',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
+                ],
+                'credits' => [
+                    'enabled' => false
+                ],
+                'title' => [
+                    'text' => null
+                ],
+                'subtitle' => [
+                    'text' => null
+                ],
+                'legend' => [
+                    'enabled' => false
+                ],
+                'xAxis' => [
+                    'type' => 'category',
+                    //'categories' => $categories
+                ],
+                'yAxis' => [
+                    'min' => 0,
+                    'title' => [
+                        'text' => 'Total in Minute'
+                    ],
+                ],
+                'tooltip' => [
+                    'headerFormat' => '<span style="font-size:11px">{series.name}</span><br>',
+                    'pointFormat' => '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.0f} min</b><br/>'
+                ],
+                'plotOptions' => [
+                    /**/'column' => [
+                        'dataLabels' => [
+                            'enabled' => true,
+                            //'format' => '{point.y} pcs ({point.total_kubikasi} m3)'
+                        ]
+                    ],
+                    'series' => [
+                        /*'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ]*/
+                    ]
+                ],
+                'series' => $data_losstime_category,
+            ],
+        ]);
+        ?>
+        </div>
     </div>
 </div>
 

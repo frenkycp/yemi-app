@@ -109,12 +109,17 @@ $this->registerCss("
                                     <?= Html::a('GMC Efficiency Data <span class="japanesse-word">(GMC別能率データ）</span>', ['/dpr-gmc-eff-data']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('FA Line Efficiency & Loss time<br/><span class="japanesse-word">(総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-daily']); ?>
+                                    <?= Html::a('FA Line Efficiency & Loss Time<br/><span class="japanesse-word">(総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-daily']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('FA Line Efficiency & Loss time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
+                                    <?= Html::a('FA Line Efficiency & Loss Time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
                                 </li>
-                                
+                                <li>
+                                    <?= Html::a('SMT Performance Data <span class="japanesse-word"></span>', ['/smt-performance-data']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('SMT Utility & Loss Time Monthly <span class="japanesse-word"></span>', ['/smt-daily-utility-report']); ?>
+                                </li>
                             </ol>
                         </div>
                     </div>
@@ -123,7 +128,7 @@ $this->registerCss("
                     <div class="panel-heading text-center">E-WIP TRANSPORT MANAGEMENT<br/><span class="japanesse-word">(E-WIP配達管理）</span></div>
                     <div class="list-group">
                         <div class="list-group-item">
-                            <p>GO-WIP Monitor <span class="japanesse-word">（仕掛り配達モニター）</span></p>
+                            <p>GO-WIP Monitor <span class="japanesse-word">（仕掛り配達モニター）</span> <span class="text-red"><b>*IoT</b></span></p>
                             <ol style="padding-left: 1em">
                                 <li>
                                     <?= Html::a('Order Progress Monitor <span class="japanesse-word"> (配達進捗モニター）</span>', ['/gojek-order-completion']); ?>
