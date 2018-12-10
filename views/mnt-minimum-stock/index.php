@@ -164,15 +164,15 @@ $grid_column = [
         ],
     ],
     [
-        'attribute' => 'ONHAND_STATUS',
+        'attribute' => 'ONHAND_STATUS_DESC',
         'label' => 'Status',
         'value' => function($model){
             $label_class = '';
             if ($model->ONHAND_STATUS == 1) {
                 $label_class = 'label-danger';
-            } elseif ($model->ONHAND_STATUS == 2) {
+            } elseif ($model->ONHAND_STATUS == 2 || $model->ONHAND_STATUS == 3) {
                 $label_class = 'label-warning';
-            } elseif ($model->ONHAND_STATUS == 3) {
+            } elseif ($model->ONHAND_STATUS == 4) {
                 $label_class = 'label-success';
             }
             return '<span class="label ' . $label_class . '">' . $model->ONHAND_STATUS_DESC . '</span>';
@@ -184,7 +184,7 @@ $grid_column = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
-        'filter' => ArrayHelper::map(app\models\MinimumStockView03::find()->select('ONHAND_STATUS, ONHAND_STATUS_DESC')->groupBy('ONHAND_STATUS, ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all(), 'ONHAND_STATUS', 'ONHAND_STATUS_DESC'),
+        'filter' => ArrayHelper::map(app\models\MinimumStockView03::find()->select('ONHAND_STATUS_DESC')->groupBy('ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all(), 'ONHAND_STATUS_DESC', 'ONHAND_STATUS_DESC'),
     ],
     [
         'attribute' => 'POST_DATE',
