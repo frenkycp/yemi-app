@@ -8,9 +8,9 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'SMT Performance <span class="japanesse text-green"></span>',
-    'tab_title' => 'SMT Performance',
-    'breadcrumbs_title' => 'SMT Performance'
+    'page_title' => 'SMT Utility & Loss Time Management <span class="japanesse text-green">( SMT稼働率・ロスタイム管理）</span>',
+    'tab_title' => 'SMT Utility & Loss Time Management',
+    'breadcrumbs_title' => 'SMT Utility & Loss Time Management'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -77,10 +77,10 @@ echo '</pre>';*/
 <h4 class="box-title">Last Update : <?= date('Y-m-d H:i:s') ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">Working Ratio</a></li>
-        <li><a href="#tab_2" data-toggle="tab">Operation Ratio <span class="japanesse"></span></a></li>
-        <li><a href="#tab_3" data-toggle="tab">SMT Loss time by Line <span class="japanesse"></span></a></li>
-        <li><a href="#tab_4" data-toggle="tab">SMT Loss time by Category <span class="japanesse"></span></a></li>
+        <li class="active"><a href="#tab_1" data-toggle="tab">Working Ratio <span class="japanesse">（稼働率）</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Operation Ratio <span class="japanesse">（操業率）</span></a></li>
+        <li><a href="#tab_3" data-toggle="tab">Loss time by Line <span class="japanesse">（ライン別ロスタイム)</span></a></li>
+        <li><a href="#tab_4" data-toggle="tab">Loss time by Category <span class="japanesse">(カテゴリー別ロスタイム)</span></a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
