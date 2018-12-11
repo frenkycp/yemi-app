@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 /**
@@ -233,6 +234,7 @@ $grid_columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px',
+        'filter' => ArrayHelper::map(app\models\MesinCheckDtr::find()->select('DISTINCT(pic)')->where('pic IS NOT NULL')->andWhere('pic != \'\'')->orderBy('pic')->all(), 'pic', 'pic'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px; text-align: center;'

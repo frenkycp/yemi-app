@@ -18,7 +18,7 @@ class PreventiveDataSearch extends MachineMpPlanViewMaster02
 public function rules()
 {
 return [
-[['master_id', 'mesin_id', 'machine_desc', 'location', 'area', 'mesin_periode', 'user_id', 'user_desc', 'master_plan_maintenance'], 'safe'],
+[['master_id', 'mesin_id', 'machine_desc', 'location', 'area', 'mesin_periode', 'user_id', 'user_desc', 'master_plan_maintenance', 'pic'], 'safe'],
             [['count_list', 'count_close'], 'integer'],
 ];
 }
@@ -64,6 +64,7 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'count_close' => $this->count_close,
+            'pic' => $this->pic,
         ]);
 
         $query->andFilterWhere(['like', 'master_id', $this->master_id])
