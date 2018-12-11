@@ -92,6 +92,41 @@ $gridColumns = [
             'style' => 'font-size: 12px;'
         ],
     ],
+    [
+        'attribute' => 'cuti',
+        'value' => function($model){
+            $rekap_cuti_arr = app\models\CutiRekapView02::find()
+            ->where([
+                'TAHUN' => date('Y'),
+                'NIK' => $model->NIK,
+            ])
+            ->all();
+
+            $using_cuti = 0;
+            $kuota_cuti = 0;
+            foreach ($rekap_cuti_arr as $rekap_cuti) {
+                if ($rekap_cuti->TYPE == '01-KUOTA') {
+                    $kuota_cuti += $rekap_cuti->JUMLAH_CUTI;
+                } else {
+                    $using_cuti += $rekap_cuti->JUMLAH_CUTI;
+                }
+            }
+            $sisa_cuti = $kuota_cuti + $using_cuti;
+            if ($sisa_cuti < 0) {
+                $sisa_cuti = 0;
+            }
+
+            return '<span class="badge bg-light-blue">' . $sisa_cuti . '/' . $kuota_cuti . '</span>';
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'format' => 'html',
+        'filter' => $sub_section_dropdown,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
     /*'JENIS_KELAMIN',
     'STATUS_PERKAWINAN',
     'ALAMAT',

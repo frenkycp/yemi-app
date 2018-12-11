@@ -11,7 +11,8 @@ use yii\helpers\ArrayHelper;
  */
 class Karyawan extends BaseKaryawan
 {
-
+    public $cuti;
+    
     public function behaviors()
     {
         return ArrayHelper::merge(
