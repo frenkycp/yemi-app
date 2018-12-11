@@ -46,7 +46,8 @@ $startWeek = app\models\SernoCalendar::find()->where(['ship' => $startDate])->on
 $endWeek = app\models\SernoCalendar::find()->where(['ship' => $endDate])->one()->week_ship;
 $date_today = date('Y-m-d');
 $weekToday = app\models\SernoCalendar::find()->where(['etd' => $date_today])->one()->week_ship;
-
+$startWeek = 42;
+$endWeek = 52;
 ?>
 
 <u><h5>Last Updated : <?= date('d-M-Y H:i:s') ?></h5></u>
