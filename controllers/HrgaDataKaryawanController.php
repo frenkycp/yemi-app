@@ -4,10 +4,12 @@ namespace app\controllers;
 
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use dmstr\bootstrap\Tabs;
 
 use app\models\Karyawan;
 use app\models\search\HrgaDataKaryawanSearch;
+use yii\web\UploadedFile;
 
 /**
 * This is the class for controller "HrgaDataKaryawanController".
@@ -46,6 +48,47 @@ class HrgaDataKaryawanController extends \app\controllers\base\HrgaDataKaryawanC
 		    'section_dropdown' => $section_dropdown,
 		    'sub_section_dropdown' => $sub_section_dropdown,
 		]);
+	}
+
+	public function actionUploadImage($NIK, $NAMA_KARYAWAN)
+	{
+		$model = new \yii\base\DynamicModel([
+        	'upload_file'
+	    ]);
+	    $model->addRule(['upload_file'], 'file');
+
+	    if($model->load(\Yii::$app->request->post())){
+	        $model->upload_file = UploadedFile::getInstance($model, 'upload_file');
+	        $new_filename = $NIK . '.' . $model->upload_file->extension;
+
+	        if ($model->validate()) {
+	        	if ($model->upload_file) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/yemi_employee_img/") . $new_filename;
+	        		if ($model->upload_file->saveAs($filePath)) {
+	                    
+	                }
+	        	}
+	        	return $this->redirect(Url::previous());
+	        }
+	    }
+	    return $this->render('upload_form', [
+	    	'model' => $model,
+	    	'NIK' => $NIK,
+	    	'NAMA_KARYAWAN' => $NAMA_KARYAWAN,
+	    ]);
+	}
+
+	public function actionGetImagePreview($NIK, $NAMA_KARYAWAN)
+	{
+		$data = '<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>' . $NIK . '<br/><small>' . $NAMA_KARYAWAN . '</small></h3>
+		</div>
+		<div class="modal-body">
+		';
+		$data .= Html::img('@web/uploads/yemi_employee_img/' . $NIK . '.jpg', ['width' => '100%', 'class' => 'img-thumbnail']);
+		$data .= '</div>';
+		return $data;
 	}
 
 }

@@ -22,10 +22,17 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+$this->registerJs("$(function() {
+   $('.popup_img').click(function(e) {
+        e.preventDefault();
+        $('#emp_photo').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+   });
+});");
+
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}',
+        'template' => '{update} {upload_image}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -34,7 +41,16 @@ $gridColumns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            }
+            },
+            'upload_image' => function ($url, $model, $key) {
+                $options = [
+                    'title' => 'Upload Image',
+                    'style' => 'padding-left: 10px;'
+                ];
+                $url = ['upload-image', 'NIK' => $model->NIK, 'NAMA_KARYAWAN' => $model->NAMA_KARYAWAN];
+
+                return Html::a('<span class="glyphicon glyphicon-upload"></span>', $url, $options);
+            },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator
@@ -47,8 +63,18 @@ $gridColumns = [
     [
         'attribute' => 'NIK',
         'label' => 'NIK',
+        'value' => function($model){
+            $filename = $model->NIK . '.jpg';
+            $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
+            if (file_exists($path)) {
+                return Html::a($model->NIK, ['get-image-preview', 'NIK' => $model->NIK, 'NAMA_KARYAWAN' => $model->NAMA_KARYAWAN], ['class' => 'popup_img btn btn-warning btn-xs', 'data-pjax' => '0',]);
+            } else {
+                return $model->NIK;
+            }
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'format' => 'html',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -191,6 +217,14 @@ $gridColumns = [
     </div>
 
 </div>
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'emp_photo',
+    'header' => '<h3>Machine Image</h3>',
+    //'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>
 
 
 <?php \yii\widgets\Pjax::end() ?>
