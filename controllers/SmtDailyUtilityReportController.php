@@ -16,11 +16,17 @@ class SmtDailyUtilityReportController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
+
+    public function getDaysArray($year, $month)
+    {
+    	# code...
+    }
     
 	public function actionIndex()
 	{
 		$year = date('Y');
 		$month = date('m');
+		$line_arr = ['01', '02'];
 
 		if (\Yii::$app->request->get('year') !== null) {
 			$year = \Yii::$app->request->get('year');
@@ -41,20 +47,38 @@ class SmtDailyUtilityReportController extends Controller
 
 		$tmp_working_ratio = [];
 		$tmp_operation_ratio = [];
-		
-		foreach ($utility_data_arr as $key => $utility_data) {
-			$proddate = (strtotime($utility_data['post_date'] . " +7 hours") * 1000);
-			$tmp_working_ratio[$utility_data['LINE']][] = [
-	    		'x' => $proddate,
-	    		'y' => round((float)$utility_data['Working_Ratio'], 1),
-		    	'url' => Url::to(['get-remark', 'proddate' => $utility_data['post_date'], 'line' => $utility_data['LINE']])
-	    	];
-	    	$tmp_operation_ratio[$utility_data['LINE']][] = [
-	    		'x' => $proddate,
-	    		'y' => round((float)$utility_data['Operation_Ratio'], 1),
-		    	'url' => Url::to(['get-remark', 'proddate' => $utility_data['post_date'], 'line' => $utility_data['LINE']])
-	    	];
+
+		$begin = new \DateTime(date('Y-m-01'));
+		$end   = new \DateTime(date('Y-m-t'));
+
+		for($i = $begin; $i <= $end; $i->modify('+1 day')){
+			$proddate = (strtotime($i->format("Y-m-d") . " +7 hours") * 1000);
+			
+			foreach ($line_arr as $key => $line) {
+				$tmp_y1 = null;
+				$tmp_y2 = null;
+				foreach ($utility_data_arr as $key => $utility_data) {
+			   		if ($utility_data['post_date'] == $i->format("Y-m-d") && $utility_data['LINE'] == $line) {
+			   			$tmp_y1 = round((float)$utility_data['Working_Ratio'], 1);
+			   			$tmp_y2 = round((float)$utility_data['Operation_Ratio'], 1);
+			   		}
+				}
+				$tmp_working_ratio[$line][] = [
+		    		'x' => $proddate,
+		    		'y' => $tmp_y1,
+			    	'url' => Url::to(['get-remark', 'proddate' => $utility_data['post_date'], 'line' => $line])
+		    	];
+		    	$tmp_operation_ratio[$line][] = [
+		    		'x' => $proddate,
+		    		'y' => $tmp_y2,
+			    	'url' => Url::to(['get-remark', 'proddate' => $utility_data['post_date'], 'line' => $line])
+		    	];
+			}
+		   	
+			
 		}
+		
+		
 
 		$data = [
 			'working_ratio' => [
