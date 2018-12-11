@@ -115,10 +115,10 @@ $this->registerCss("
                                     <?= Html::a('FA Line Efficiency & Loss Time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT Performance Data <span class="japanesse-word"></span>', ['/smt-performance-data']); ?>
+                                    <?= Html::a('SMT Performance Data<br/><span class="japanesse-word">(SMT パフォーマンスデータ）</span>', ['/smt-performance-data']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT Utility & Loss Time Monthly <span class="japanesse-word"></span>', ['/smt-daily-utility-report']); ?>
+                                    <?= Html::a('SMT Utility & Loss Time Management<br/><span class="japanesse-word">( SMT稼働率・ロスタイム管理）</span>', ['/smt-daily-utility-report']); ?>
                                 </li>
                             </ol>
                         </div>
