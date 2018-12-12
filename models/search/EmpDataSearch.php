@@ -57,14 +57,16 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'KONTRAK_KE' => $this->KONTRAK_KE,
-            'KONTRAK_START' => $this->KONTRAK_START,
-            'KONTRAK_END' => $this->KONTRAK_END,
+            //'KONTRAK_START' => $this->KONTRAK_START,
+            //'KONTRAK_END' => $this->KONTRAK_END,
             'SKILL' => $this->SKILL,
             'JUMLAH' => $this->JUMLAH,
         ]);
 
         $query->andFilterWhere(['like', 'MP_ID', $this->MP_ID])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),TANGGAL,120)', $this->TANGGAL])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),KONTRAK_START,120)', $this->KONTRAK_START])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),KONTRAK_END,120)', $this->KONTRAK_END])
             ->andFilterWhere(['like', 'NIK', $this->NIK])
             ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])
             ->andFilterWhere(['like', 'GRADE', $this->GRADE])
