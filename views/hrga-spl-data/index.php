@@ -25,6 +25,17 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 
 $grid_columns = [
     [
+        'attribute' => 'SPL_HDR_ID',
+        'label' => 'No. SPL',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'TGL_LEMBUR',
         'value' => function($model){
             return date('Y-m-d', strtotime($model->TGL_LEMBUR));
