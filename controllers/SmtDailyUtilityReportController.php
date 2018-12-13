@@ -16,11 +16,6 @@ class SmtDailyUtilityReportController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-
-    public function getDaysArray($year, $month)
-    {
-    	# code...
-    }
     
 	public function actionIndex()
 	{

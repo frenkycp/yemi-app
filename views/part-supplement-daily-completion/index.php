@@ -92,8 +92,8 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                //'themes/sand-signika',
-                'themes/grid-light',
+                'themes/sand-signika',
+                //'themes/grid-light',
             ],
             'options' => [
                 'chart' => [
@@ -118,6 +118,7 @@ echo '</pre>';*/
                 ],
                 'tooltip' => [
                     'enabled' => true,
+                    'xDateFormat' => '%A, %b %e %Y',
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                 ],
                 'plotOptions' => [
@@ -137,20 +138,17 @@ echo '</pre>';*/
                         //'borderColor' => $color,
                     ],
                     'series' => [
-                        /*'cursor' => 'pointer',
-                        'dataLabels' => [
-                            'allowOverlap' => true
-                        ],
+                        'cursor' => 'pointer',
                         'point' => [
                             'events' => [
                                 'click' => new JsExpression("
                                     function(e){
                                         e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
                                     }
                                 "),
                             ]
-                        ]*/
+                        ]
                     ]
                 ],
                 'series' => $data
@@ -159,3 +157,11 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>
