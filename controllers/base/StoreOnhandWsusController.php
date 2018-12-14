@@ -32,7 +32,7 @@ public $enableCsrfValidation = false;
 */
 public function actionIndex()
 {
-	$this->layout = 'my-hr';
+	$this->layout = 'clean';
     $searchModel  = new StoreOnhandWsusSearch;
     $dataProvider = $searchModel->search($_GET);
 

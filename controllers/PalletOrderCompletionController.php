@@ -34,7 +34,9 @@ class PalletOrderCompletionController extends Controller
 			$nik = $value->username;
 			$data_arr = PalletPointView::find()->where([
 				'nik' => $nik
-			])->all();
+			])
+			->orderBy('order_date ASC')
+			->all();
 
 			$total_point = 0;
 
