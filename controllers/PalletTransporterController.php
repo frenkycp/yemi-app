@@ -75,6 +75,7 @@ class PalletTransporterController extends Controller
 			->andWhere('end IS NULL')
 			->one();
 			$log->end = date('H:i:s');
+			$log->departure_datetime = date('Y-m-d H:i:s');
 			$log->nik = $nik;
 			if (!$log->save()) {
 				print_r($log->errors);
@@ -130,6 +131,14 @@ class PalletTransporterController extends Controller
 		->one();
 
 		$log->arrival_time = date('H:i:s');
+		$log->arrival_datetime = date('Y-m-d H:i:s');
+
+		$date1 = new \DateTime($log->departure_datetime);
+		$date2 = new \DateTime($log->arrival_datetime);
+		$diffInSeconds = $date2->getTimestamp() - $date1->getTimestamp();
+
+		$log->completion_time = $diffInSeconds;
+
 		if (!$log->save()) {
 			print_r($log->errors);
 		} else {

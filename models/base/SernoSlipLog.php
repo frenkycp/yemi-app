@@ -15,6 +15,9 @@ use Yii;
  * @property string $end
  * @property string $arrival_time
  * @property string $nik
+ * @property string $departure_datetime
+ * @property string $arrival_datetime
+ * @property integer $completion_time
  * @property string $aliasModel
  */
 abstract class SernoSlipLog extends \yii\db\ActiveRecord
@@ -45,7 +48,8 @@ abstract class SernoSlipLog extends \yii\db\ActiveRecord
     {
         return [
             [['pk'], 'required'],
-            [['pk', 'start', 'end', 'arrival_time'], 'safe'],
+            [['pk', 'start', 'end', 'arrival_time', 'departure_datetime', 'arrival_datetime'], 'safe'],
+            [['completion_time'], 'integer'],
             [['line', 'nik'], 'string', 'max' => 255],
             [['pk'], 'unique']
         ];
@@ -63,6 +67,9 @@ abstract class SernoSlipLog extends \yii\db\ActiveRecord
             'end' => 'End',
             'arrival_time' => 'Arrival Time',
             'nik' => 'Nik',
+            'departure_datetime' => 'Departure Datetime',
+            'arrival_datetime' => 'Arrival Datetime',
+            'completion_time' => 'Completion Time',
         ];
     }
 
