@@ -85,6 +85,7 @@ class MyHrController extends Controller
         $this->layout = 'my-hr';
         $searchModel  = new HrComplaintSearch;
         $searchModel->nik = $nik;
+        $searchModel->category = 'HR';
         $_GET['hr_sort'] = 'hr_sort';
         $dataProvider = $searchModel->search($_GET);
 
@@ -128,6 +129,7 @@ class MyHrController extends Controller
                 $model->sub_section = $karyawan->SUB_SECTION;
                 $model->period = date('Ym');
                 $model->input_datetime = date('Y-m-d H:i:s');
+                $model->category = 'HR';
                 if ($model->save()) {
                     return $this->redirect(['index-laporan']);
                 }
