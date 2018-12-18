@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\HrComplaintSearch $searchModel
 */
 
-$this->title = 'Question & Answer (HR)';
+$this->title = 'Question & Answer (MIS)';
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {

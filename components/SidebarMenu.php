@@ -20,11 +20,28 @@ class SidebarMenu extends Widget
                 "url" => SidebarMenu::getUrl($menu),
                 "visible" => SidebarMenu::roleHasAccess($roleId, $menu->id),
             ];
+
             if ($menu->controller == 'hr-complaint' && $menu->action == 'index') {
                 $total_waiting = HrComplaint::find()
                 ->where([
                     'status' => 0,
                     'category' => 'HR',
+                ])
+                ->count();
+                $obj = [
+                    "label" => $menu->name,
+                    "icon" => $menu->icon,
+                    "url" => SidebarMenu::getUrl($menu),
+                    "visible" => SidebarMenu::roleHasAccess($roleId, $menu->id),
+                    'template' => '<a href="{url}">{icon} {label}<span class="pull-right-container"><small class="label pull-right bg-yellow">' . $total_waiting . '</small></span></a>',
+                ];
+            }
+
+            if ($menu->controller == 'mis-complaint' && $menu->action == 'index') {
+                $total_waiting = HrComplaint::find()
+                ->where([
+                    'status' => 0,
+                    'category' => 'MIS',
                 ])
                 ->count();
                 $obj = [

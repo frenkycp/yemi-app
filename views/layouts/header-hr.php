@@ -28,13 +28,13 @@ $model_karyawan = Karyawan::find()->where([
             </li>
             
             <li class="dropdown <?= \Yii::$app->controller->action->id == 'index-laporan' || \Yii::$app->controller->action->id == 'create-laporan' ? 'active' : ''; ?>">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Question & Answer <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li class="<?= $_GET['category'] == 'HR' ? 'active' : ''; ?>">
-                    <?= Html::a('to HR', ['index-laporan', 'category' => 'HR']) ?>
+                    <?= Html::a('with HR', ['index-laporan', 'category' => 'HR']) ?>
                 </li>
-                <li style="<?= $model_karyawan->JABATAN_SR == 'FOREMAN' || $model_karyawan->JABATAN_SR == 'SENIOR FOREMAN' ? '' : 'display: none;'; ?>" class="<?= $_GET['category'] == 'MIS' ? 'active' : ''; ?>">
-                    <?= Html::a('to MIS', ['index-laporan', 'category' => 'MIS']) ?>
+                <li style="<?= $model_karyawan->JABATAN_SR == 'FOREMAN' || $model_karyawan->JABATAN_SR == 'SENIOR FOREMAN' || $model_karyawan->JABATAN_SR == 'MANAGER' ? '' : 'display: none;'; ?>" class="<?= $_GET['category'] == 'MIS' ? 'active' : ''; ?>">
+                    <?= Html::a('with MIS', ['index-laporan', 'category' => 'MIS']) ?>
                 </li>
               </ul>
             </li>

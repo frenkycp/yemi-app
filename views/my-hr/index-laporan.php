@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\HrComplaintSearch $searchModel
 */
 
-$this->title = 'Report Table (' . $_GET['category'] . ')';
+$this->title = 'Question & Answer (with ' . $_GET['category'] . ')';
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -58,7 +58,7 @@ $gridColumns = [
     
     [
         'attribute' => 'remark',
-        'label' => 'User Report',
+        'label' => 'Question',
         'vAlign' => 'middle',
         'format' => 'ntext',
         'filterInputOptions' => [
