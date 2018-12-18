@@ -85,7 +85,7 @@ class MyHrController extends Controller
         $this->layout = 'my-hr';
         $searchModel  = new HrComplaintSearch;
         $searchModel->nik = $nik;
-        $searchModel->category = 'HR';
+        $searchModel->category = $_GET['category'];
         $_GET['hr_sort'] = 'hr_sort';
         $dataProvider = $searchModel->search($_GET);
 
@@ -115,6 +115,7 @@ class MyHrController extends Controller
         $this->layout = 'my-hr';
         date_default_timezone_set('Asia/Jakarta');
         $model = new HrComplaint;
+        $model->category = $_GET['category'];
 
         try {
             if ($model->load($_POST)) {
@@ -129,9 +130,9 @@ class MyHrController extends Controller
                 $model->sub_section = $karyawan->SUB_SECTION;
                 $model->period = date('Ym');
                 $model->input_datetime = date('Y-m-d H:i:s');
-                $model->category = 'HR';
+                //$model->category = 'HR';
                 if ($model->save()) {
-                    return $this->redirect(['index-laporan']);
+                    return $this->redirect(Url::previous());
                 }
             } elseif (!\Yii::$app->request->isPost) {
                 $model->load($_GET);

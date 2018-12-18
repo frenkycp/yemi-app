@@ -41,6 +41,7 @@ $this->registerJs($script, View::POS_HEAD);
             );
             ?>
 
+            <?= $form->field($model, 'category')->textInput(['readonly' => true])->label('To') ?>
             <?= $form->field($model, 'remark')->textarea(['rows' => 6, 'style' => 'resize: none;']) ?>
 
             <hr/>

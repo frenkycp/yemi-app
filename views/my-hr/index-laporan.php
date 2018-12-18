@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\HrComplaintSearch $searchModel
 */
 
-$this->title = 'Report Table';
+$this->title = 'Report Table (' . $_GET['category'] . ')';
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset($actionColumnTemplates)) {
@@ -136,7 +136,7 @@ $gridColumns = [
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 [
-                    'content' => Html::a('New Report', ['my-hr/create-laporan'], ['data-pjax' => 0, 'class' => 'btn btn-success pull-left'])
+                    'content' => Html::a('New Report', ['my-hr/create-laporan', 'category' => $_GET['category']], ['data-pjax' => 0, 'class' => 'btn btn-success pull-left'])
                 ],
                 [
                     'content' => Html::a('Back', ['my-hr/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning'])

@@ -26,8 +26,17 @@ $model_karyawan = Karyawan::find()->where([
             <li class="<?= \Yii::$app->controller->id == 'my-hr' && \Yii::$app->controller->action->id == 'index' ? 'active' : ''; ?>">
                 <?= Html::a('My Information', ['index']) ?>
             </li>
-            <li class="<?= \Yii::$app->controller->action->id == 'index-laporan' || \Yii::$app->controller->action->id == 'create-laporan' ? 'active' : ''; ?>">
-                <?= Html::a('Report', ['index-laporan']) ?>
+            
+            <li class="dropdown <?= \Yii::$app->controller->action->id == 'index-laporan' || \Yii::$app->controller->action->id == 'create-laporan' ? 'active' : ''; ?>">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Report <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li class="<?= $_GET['category'] == 'HR' ? 'active' : ''; ?>">
+                    <?= Html::a('to HR', ['index-laporan', 'category' => 'HR']) ?>
+                </li>
+                <li style="<?= $model_karyawan->JABATAN_SR == 'FOREMAN' || $model_karyawan->JABATAN_SR == 'SENIOR FOREMAN' ? '' : 'display: none;'; ?>" class="<?= $_GET['category'] == 'MIS' ? 'active' : ''; ?>">
+                    <?= Html::a('to MIS', ['index-laporan', 'category' => 'MIS']) ?>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
