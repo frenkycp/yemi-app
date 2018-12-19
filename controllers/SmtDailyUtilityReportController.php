@@ -61,12 +61,12 @@ class SmtDailyUtilityReportController extends Controller
 				$tmp_working_ratio[$line][] = [
 		    		'x' => $proddate,
 		    		'y' => $tmp_y1,
-			    	'url' => Url::to(['get-remark', 'proddate' => $utility_data['post_date'], 'line' => $line])
+			    	'url' => Url::to(['get-remark', 'proddate' => $i->format("Y-m-d"), 'line' => $line])
 		    	];
 		    	$tmp_operation_ratio[$line][] = [
 		    		'x' => $proddate,
 		    		'y' => $tmp_y2,
-			    	'url' => Url::to(['get-remark', 'proddate' => $utility_data['post_date'], 'line' => $line])
+			    	'url' => Url::to(['get-remark', 'proddate' => $i->format("Y-m-d"), 'line' => $line])
 		    	];
 			}
 		   	
