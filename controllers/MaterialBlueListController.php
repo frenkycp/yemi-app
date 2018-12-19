@@ -7,6 +7,9 @@ use app\models\WipPlanActualReport;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
+use yii\web\Response;
+use yii\helpers\Json;
+use app\models\VisualPickingList;
 /**
 * This is the class for controller "MaterialBlueListController".
 */
@@ -52,7 +55,7 @@ class MaterialBlueListController extends \app\controllers\base\MaterialBlueListC
 				$material_data = VisualPickingList::find()->where([
 					'set_list_no' => $value
 				])->one();
-				$sql = "{CALL CALL_GOJEK(:slip_id, :item, :item_desc, :from_loc, :to_loc, :source, :requestor, :request_time)}";
+				$sql = "{CALL CALL_GOJEK_WH(:slip_id, :item, :item_desc, :from_loc, :to_loc, :source, :requestor, :request_time)}";
 				//$sql = "{CALL SPARE_PART_STOCK(:MACHINE)}";
 				// passing the params into to the sql query
 				$params = [

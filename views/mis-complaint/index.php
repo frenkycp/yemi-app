@@ -122,9 +122,9 @@ $grid_columns = [
             'style' => 'font-size: 12px;'
         ],
     ],
-    /**/[
+    [
         'attribute' => 'remark',
-        'label' => 'Message',
+        'label' => 'Question',
         'vAlign' => 'middle',
         'format' => 'ntext',
         'filterInputOptions' => [
@@ -132,12 +132,16 @@ $grid_columns = [
             'style' => 'font-size: 12px;'
         ],
     ],
-    //'section',
-    //'sub_section',
-    /*'remark_category',*/
-    /*'respons:ntext',*/
-    /*'',*/
-    /*'status',*/
+    [
+        'attribute' => 'response',
+        'label' => 'Answer',
+        'vAlign' => 'middle',
+        'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
 ];
 ?>
 <div class="giiant-crud hr-complaint-index">
