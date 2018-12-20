@@ -25,7 +25,10 @@ class GojekOrderDepartureController extends Controller
 	    	$model->slip_id = null;
 
 	    	$order_data = GojekOrderTbl::find()
-	    	->where(['slip_id' => $slip_id])
+	    	->where([
+	    		'slip_id' => $slip_id,
+	    		'source' => 'WIP'
+	    	])
 	    	->one();
 
 	    	if ($order_data->daparture_date != null) {

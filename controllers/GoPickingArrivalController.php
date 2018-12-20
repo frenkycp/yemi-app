@@ -4,9 +4,9 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\GojekOrderTbl;
 
-class GojekOrderArrivalController extends Controller
+class GoPickingArrivalController extends Controller
 {
-	public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
@@ -27,7 +27,7 @@ class GojekOrderArrivalController extends Controller
 	    	$order_data = GojekOrderTbl::find()
 	    	->where([
 	    		'slip_id' => $slip_id,
-	    		'source' => 'WIP'
+	    		'source' => 'MAT'
 	    	])
 	    	->one();
 
@@ -38,7 +38,7 @@ class GojekOrderArrivalController extends Controller
 				]);
 	    	}
 
-	        $sql = "{CALL CALL_GOJEK_ARRIVAL(:slip_id, :dep_nik)}";
+	        $sql = "{CALL CALL_GOJEK_ARRIVAL_WH(:slip_id, :dep_nik)}";
 	        $params = [
 				':slip_id' => $slip_id,
 				':dep_nik' => \Yii::$app->user->identity->username,

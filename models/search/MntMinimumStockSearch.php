@@ -64,13 +64,14 @@ $query->andFilterWhere([
             //'MIN_STOCK_QTY' => $this->MIN_STOCK_QTY,
             'LAST_UPDATE' => $this->LAST_UPDATE,
             'ONHAND_STATUS' => $this->ONHAND_STATUS,
-            'ONHAND_STATUS_DESC' => $this->ONHAND_STATUS_DESC,
+            //'ONHAND_STATUS_DESC' => $this->ONHAND_STATUS_DESC,
             'POST_DATE' => $this->POST_DATE,
             'RACK' => $this->RACK,
         ]);
 
         $query->andFilterWhere(['like', 'ITEM', $this->ITEM])
             ->andFilterWhere(['like', 'ITEM_EQ_DESC_01', $this->ITEM_EQ_DESC_01])
+            ->andFilterWhere(['like', 'ONHAND_STATUS_DESC', $this->ONHAND_STATUS_DESC])
             ->andFilterWhere(['like', 'ITEM_EQ_UM', $this->ITEM_EQ_UM])
             ->andFilterWhere(['like', 'LOC', $this->LOC])
             ->andFilterWhere(['like', 'LOC_DESC', $this->LOC_DESC])

@@ -7,9 +7,9 @@ use app\models\GojekTbl;
 use app\models\GojekView02;
 use yii\helpers\ArrayHelper;
 
-class GojekDriverUtilityController extends Controller
+class GoPickingDriverUtilityController extends Controller
 {
-	public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
@@ -23,7 +23,7 @@ class GojekDriverUtilityController extends Controller
 		$driver_arr = GojekTbl::find()
 		->select('GOJEK_ID, GOJEK_DESC')
 		->where([
-			'<>', 'TERMINAL', 'Z'
+			'TERMINAL' => 'Z'
 		])
 		->groupBy('GOJEK_ID, GOJEK_DESC')
 		->orderBy('GOJEK_DESC')->all();
@@ -99,17 +99,6 @@ class GojekDriverUtilityController extends Controller
 		foreach ($data_arr as $key => $value) {
 			$return_arr[] = $value;
 		}
-		return $return_arr;
-	}
-
-	public function getDriverArr()
-	{
-		$driver_arr = GojekTbl::find()->select('GOJEK_ID, GOJEK_DESC')->groupBy('GOJEK_ID, GOJEK_DESC')->orderBy('GOJEK_DESC')->all();
-		$return_arr = [];
-		foreach ($driver_arr as $key => $value) {
-			$return_arr[] = $value->GOJEK_DESC;
-		}
-
 		return $return_arr;
 	}
 }

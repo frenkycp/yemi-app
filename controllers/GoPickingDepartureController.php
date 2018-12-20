@@ -4,9 +4,9 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\GojekOrderTbl;
 
-class GojekOrderArrivalController extends Controller
+class GoPickingDepartureController extends Controller
 {
-	public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
@@ -18,7 +18,7 @@ class GojekOrderArrivalController extends Controller
 	        'slip_id'
 	    ]);
 	    $model->addRule(['slip_id'], 'required')
-	    ->addRule('slip_id', 'string', ['max' => 10]);
+	    ->addRule('slip_id', 'string', ['max' => 20]);
 
 	    if($model->load(\Yii::$app->request->post())){
 	    	$slip_id = $model->slip_id;
@@ -27,18 +27,18 @@ class GojekOrderArrivalController extends Controller
 	    	$order_data = GojekOrderTbl::find()
 	    	->where([
 	    		'slip_id' => $slip_id,
-	    		'source' => 'WIP'
+	    		'source' => 'MAT'
 	    	])
 	    	->one();
 
-	    	if ($order_data->arrival_date != null) {
-	    		\Yii::$app->session->setFlash('warning', "Slip Number : $slip_id has been arrived at $order_data->arrival_date by $order_data->DEPARTURE_NAMA_KARYAWAN");
+	    	if ($order_data->daparture_date != null) {
+	    		\Yii::$app->session->setFlash('warning', "Slip Number : $slip_id has been departed at $order_data->daparture_date");
 	    		return $this->render('index', [
 					'model' => $model
 				]);
 	    	}
 
-	        $sql = "{CALL CALL_GOJEK_ARRIVAL(:slip_id, :dep_nik)}";
+	        $sql = "{CALL CALL_GOJEK_DEPARTURE_WH(:slip_id, :dep_nik)}";
 	        $params = [
 				':slip_id' => $slip_id,
 				':dep_nik' => \Yii::$app->user->identity->username,
@@ -46,7 +46,7 @@ class GojekOrderArrivalController extends Controller
 
 			try {
 			    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
-			    \Yii::$app->session->setFlash('success', "Slip Number : $slip_id has been arrived.");
+			    \Yii::$app->session->setFlash('success', "Slip Number : $slip_id has been departed.");
 			} catch (Exception $ex) {
 				\Yii::$app->session->setFlash('danger', "Error : $ex");
 			}

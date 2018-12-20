@@ -10,10 +10,10 @@ use app\models\GojekTbl;
 use app\models\GojekOrderTbl;
 use yii\helpers\ArrayHelper;
 
-class GojekOrderCompletionController extends Controller
+class GoPickingOrderCompletionController extends Controller
 {
 
-	public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
@@ -27,7 +27,7 @@ class GojekOrderCompletionController extends Controller
 
 		$driver_arr = GojekTbl::find()
 		->where([
-			'<>', 'TERMINAL', 'Z'
+			'TERMINAL' => 'Z'
 		])
 		->orderBy('GOJEK_DESC')
 		->all();
@@ -145,9 +145,6 @@ class GojekOrderCompletionController extends Controller
 		$data .= 
 		'<thead style="font-size: 12px;"><tr class="info">
             <th class="text-center">Slip No.</th>
-            <th class="text-center">Session</th>
-            <th class="text-center">Model</th>
-            <th class="text-center">Line</th>
             <th class="text-center">Item</th>
             <th>Item Description</th>
             <th class="text-center">Qty</th>
@@ -165,18 +162,10 @@ class GojekOrderCompletionController extends Controller
 			$issued = $value->issued_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->issued_date));
 			$departed = $value->daparture_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->daparture_date));
 			$arrived = $value->arrival_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->arrival_date));
-			$row_class = '';
 			$qty = $value->quantity;
-			if ($value->quantity_original !== null) {
-				$row_class = 'danger';
-				$qty = $value->quantity . ' of ' . $value->quantity_original;
-			}
 			$data .= '
-				<tr class="' . $row_class . '">
+				<tr>
 					<td class="text-center">' . $value->slip_id . '</td>
-					<td class="text-center">' . $value->wipPlanActualReport->session_id . '</td>
-					<td class="text-center">' . $value->wipPlanActualReport->model_group . '</td>
-					<td class="text-center">' . $value->wipPlanActualReport->period_line . '</td>
                     <td class="text-center">' . $value->item . '</td>
                     <td>' . $value->item_desc . '</td>
                     <td class="text-center">' . $qty . '</td>

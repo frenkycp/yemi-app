@@ -2,9 +2,9 @@
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Transporter Departure Control <span class="japanesse text-green"></span>',
-    'tab_title' => 'Transporter Departure Control',
-    'breadcrumbs_title' => 'Transporter Departure Control'
+    'page_title' => 'Transporter Departure Control (WIP) <span class="japanesse text-green"></span>',
+    'tab_title' => 'Transporter Departure Control (WIP)',
+    'breadcrumbs_title' => 'Transporter Departure Control (WIP)'
 ];
 
 $this->registerCss("

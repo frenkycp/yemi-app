@@ -5,17 +5,18 @@ namespace app\controllers;
 use dmstr\bootstrap\Tabs;
 use yii\helpers\Url;
 use app\models\search\GojekOrderTblSearch;
+use yii\web\Controller;
 
 /**
 * This is the class for controller "GojekOrderTblController".
 */
-class GojekOrderTblController extends \app\controllers\base\GojekOrderTblController
+class GoPickingOrderDataController extends Controller
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 
     /**
 	* Lists all GojekOrderTbl models.
@@ -24,7 +25,7 @@ class GojekOrderTblController extends \app\controllers\base\GojekOrderTblControl
 	public function actionIndex()
 	{
 	    $searchModel  = new GojekOrderTblSearch;
-	    $searchModel->source = 'WIP';
+	    $searchModel->source = 'MAT';
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
