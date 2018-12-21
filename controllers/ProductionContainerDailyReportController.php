@@ -34,7 +34,7 @@ class ProductionContainerDailyReportController extends Controller
 
         $year_now = date('Y');
         $star_year = $min_year->min_year;
-        for ($year = $star_year; $year <= $year_now; $year++) {
+        for ($year = $star_year; $year <= ($year_now + 1); $year++) {
             $year_arr[$year] = $year;
         }
 
