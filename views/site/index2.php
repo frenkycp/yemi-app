@@ -77,6 +77,14 @@ $this->registerCss("
                         
                     </div>
                 </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Part Supplement<br/><span class="japanesse-word"></span></div>
+                    <div class="list-group">
+                        <?= Html::a('Part Supplement Status Monitoring <span class="japanesse-word">(補充部品依頼のモニタリング）</span>', ['/part-supplement-daily-completion/index'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
+                    </div>
+                </div>
     		</div>
     		<div class="col-sm-3">
                 <div class="panel panel-success">
