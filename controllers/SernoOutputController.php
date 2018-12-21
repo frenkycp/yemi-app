@@ -69,7 +69,7 @@ class SernoOutputController extends base\SernoOutputController
 
         if(count($min_max_week) > 0)
         {
-            $start_week = $min_max_week->max_week - 12;
+            $start_week = $min_max_week->max_week - 11;
             $end_week = $min_max_week->max_week;
         }
 
