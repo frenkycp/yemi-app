@@ -63,7 +63,20 @@ $grid_columns = [
     ],
     [
         'attribute' => 'input_datetime',
-        'label' => 'Input Date',
+        'label' => 'Question<br/>Datetime',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'response_datetime',
+        'label' => 'Answered<br/>Datetime',
+        'encodeLabel' => false,
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
@@ -141,7 +154,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'font-size: 12px;'
         ],
-    ],
+    ]
 ];
 ?>
 <div class="giiant-crud hr-complaint-index">

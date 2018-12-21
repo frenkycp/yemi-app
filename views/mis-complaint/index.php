@@ -73,6 +73,18 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'response_datetime',
+        'label' => 'Answered<br/>Datetime',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'nik',
         'label' => 'NIK',
         'vAlign' => 'middle',

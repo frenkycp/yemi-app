@@ -44,7 +44,7 @@ public function search($params)
 $query = HrComplaint::find();
 $defaultOrder = [
     'status' => SORT_ASC,
-    'input_datetime' => SORT_ASC,
+    'input_datetime' => SORT_DESC,
 ];
 if (isset($params['hr_sort'])) {
     $defaultOrder = [
