@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['seq_no', 'part_count', 'man_power', 'priority', 'stage_id', 'pts_part', 'delay_days', 'slip_count', 'slip_open', 'slip_close'], 'integer'],
-            [['set_list_no', 'parent', 'parent_desc', 'parent_um', 'req_date', 'req_date_original', 'analyst', 'analyst_desc', 'create_date', 'create_user_id', 'create_user_desc', 'confirm_date', 'confirm_user_id', 'confirm_user_desc', 'start_date', 'start_user_id', 'start_user_desc', 'completed_user_id', 'completed_user_desc', 'hand_over_date', 'hand_over_user_id', 'hand_over_user_desc', 'stage_desc', 'condition_desc', 'stat', 'catatan', 'pts_stat', 'set_list_type', 'id_01', 'id_01_desc', 'id_02', 'id_02_desc', 'id_03', 'id_03_desc', 'id_04', 'id_04_desc', 'id_05', 'id_05_desc', 'id_06', 'id_06_desc', 'id_07', 'id_07_desc', 'id_08', 'id_08_desc', 'id_09', 'id_09_desc', 'id_10', 'id_10_desc', 'id_update', 'id_update_desc', 'id_update_date', 'sudah_cetak', 'id_prioty', 'id_prioty_desc', 'id_prioty_date', 'id_hc', 'id_hc_desc', 'id_hc_date', 'id_hc_stat', 'id_hc_open', 'id_hc_open_desc', 'id_hc_open_date', 'id_hc_open_stat', 'pts_note', 'show', 'closing_date', 'back_up_period', 'back_up', 'id_11', 'id_11_desc', 'id_12', 'id_12_desc', 'id_13', 'id_13_desc', 'id_14', 'id_14_desc', 'id_15', 'id_15_desc', 'id_16', 'id_16_desc', 'id_17', 'id_17_desc', 'id_18', 'id_18_desc', 'id_19', 'id_19_desc', 'id_20', 'id_20_desc'], 'safe'],
+            [['set_list_no', 'parent', 'parent_desc', 'parent_um', 'req_date', 'req_date_original', 'analyst', 'analyst_desc', 'create_date', 'create_user_id', 'create_user_desc', 'confirm_date', 'confirm_user_id', 'confirm_user_desc', 'start_date', 'start_user_id', 'start_user_desc', 'completed_user_id', 'completed_user_desc', 'hand_over_date', 'hand_over_user_id', 'hand_over_user_desc', 'stage_desc', 'condition_desc', 'stat', 'catatan', 'pts_stat', 'set_list_type', 'id_01', 'id_01_desc', 'id_02', 'id_02_desc', 'id_03', 'id_03_desc', 'id_04', 'id_04_desc', 'id_05', 'id_05_desc', 'id_06', 'id_06_desc', 'id_07', 'id_07_desc', 'id_08', 'id_08_desc', 'id_09', 'id_09_desc', 'id_10', 'id_10_desc', 'id_update', 'id_update_desc', 'id_update_date', 'sudah_cetak', 'id_prioty', 'id_prioty_desc', 'id_prioty_date', 'id_hc', 'id_hc_desc', 'id_hc_date', 'id_hc_stat', 'id_hc_open', 'id_hc_open_desc', 'id_hc_open_date', 'id_hc_open_stat', 'pts_note', 'show', 'closing_date', 'back_up_period', 'back_up', 'id_11', 'id_11_desc', 'id_12', 'id_12_desc', 'id_13', 'id_13_desc', 'id_14', 'id_14_desc', 'id_15', 'id_15_desc', 'id_16', 'id_16_desc', 'id_17', 'id_17_desc', 'id_18', 'id_18_desc', 'id_19', 'id_19_desc', 'id_20', 'id_20_desc', 'model'], 'safe'],
             [['progress_pct', 'pick_lt'], 'number'],
 ];
 }
@@ -58,7 +58,7 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'seq_no' => $this->seq_no,
-            'req_date' => $this->req_date,
+            //'req_date' => $this->req_date,
             'req_date_original' => $this->req_date_original,
             'plan_qty' => $this->plan_qty,
             'part_count' => $this->part_count,
@@ -84,6 +84,7 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'set_list_no', $this->set_list_no])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),req_date,120)', $this->req_date])
             ->andFilterWhere(['like', 'parent', $this->parent])
             ->andFilterWhere(['like', 'parent_desc', $this->parent_desc])
             ->andFilterWhere(['like', 'parent_um', $this->parent_um])
@@ -159,7 +160,8 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'id_19', $this->id_19])
             ->andFilterWhere(['like', 'id_19_desc', $this->id_19_desc])
             ->andFilterWhere(['like', 'id_20', $this->id_20])
-            ->andFilterWhere(['like', 'id_20_desc', $this->id_20_desc]);
+            ->andFilterWhere(['like', 'id_20_desc', $this->id_20_desc])
+            ->andFilterWhere(['like', 'model', $this->model]);
 
 return $dataProvider;
 }

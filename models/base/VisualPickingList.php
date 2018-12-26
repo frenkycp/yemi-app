@@ -7,7 +7,7 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.visual_picking_list".
+ * This is the base-model class for table "db_owner.VISUAL_PICKING_LIST".
  *
  * @property integer $seq_no
  * @property string $set_list_no
@@ -112,6 +112,7 @@ use Yii;
  * @property string $id_19_desc
  * @property string $id_20
  * @property string $id_20_desc
+ * @property string $model
  * @property string $aliasModel
  */
 abstract class VisualPickingList extends \yii\db\ActiveRecord
@@ -124,7 +125,7 @@ abstract class VisualPickingList extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.visual_picking_list';
+        return 'db_owner.VISUAL_PICKING_LIST';
     }
 
     /**
@@ -141,7 +142,7 @@ abstract class VisualPickingList extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['set_list_no', 'parent', 'parent_desc', 'parent_um', 'analyst', 'analyst_desc', 'create_user_id', 'create_user_desc', 'confirm_user_id', 'confirm_user_desc', 'start_user_id', 'start_user_desc', 'completed_user_id', 'completed_user_desc', 'hand_over_user_id', 'hand_over_user_desc', 'stage_desc', 'condition_desc', 'stat', 'catatan', 'pts_stat', 'set_list_type', 'id_01', 'id_01_desc', 'id_02', 'id_02_desc', 'id_03', 'id_03_desc', 'id_04', 'id_04_desc', 'id_05', 'id_05_desc', 'id_06', 'id_06_desc', 'id_07', 'id_07_desc', 'id_08', 'id_08_desc', 'id_09', 'id_09_desc', 'id_10', 'id_10_desc', 'id_update', 'id_update_desc', 'sudah_cetak', 'id_prioty', 'id_prioty_desc', 'id_hc', 'id_hc_desc', 'id_hc_stat', 'id_hc_open', 'id_hc_open_desc', 'id_hc_open_stat', 'pts_note', 'show', 'back_up_period', 'back_up', 'id_11', 'id_11_desc', 'id_12', 'id_12_desc', 'id_13', 'id_13_desc', 'id_14', 'id_14_desc', 'id_15', 'id_15_desc', 'id_16', 'id_16_desc', 'id_17', 'id_17_desc', 'id_18', 'id_18_desc', 'id_19', 'id_19_desc', 'id_20', 'id_20_desc'], 'string'],
+            [['set_list_no', 'parent', 'parent_desc', 'parent_um', 'analyst', 'analyst_desc', 'create_user_id', 'create_user_desc', 'confirm_user_id', 'confirm_user_desc', 'start_user_id', 'start_user_desc', 'completed_user_id', 'completed_user_desc', 'hand_over_user_id', 'hand_over_user_desc', 'stage_desc', 'condition_desc', 'stat', 'catatan', 'pts_stat', 'set_list_type', 'id_01', 'id_01_desc', 'id_02', 'id_02_desc', 'id_03', 'id_03_desc', 'id_04', 'id_04_desc', 'id_05', 'id_05_desc', 'id_06', 'id_06_desc', 'id_07', 'id_07_desc', 'id_08', 'id_08_desc', 'id_09', 'id_09_desc', 'id_10', 'id_10_desc', 'id_update', 'id_update_desc', 'sudah_cetak', 'id_prioty', 'id_prioty_desc', 'id_hc', 'id_hc_desc', 'id_hc_stat', 'id_hc_open', 'id_hc_open_desc', 'id_hc_open_stat', 'pts_note', 'show', 'back_up_period', 'back_up', 'id_11', 'id_11_desc', 'id_12', 'id_12_desc', 'id_13', 'id_13_desc', 'id_14', 'id_14_desc', 'id_15', 'id_15_desc', 'id_16', 'id_16_desc', 'id_17', 'id_17_desc', 'id_18', 'id_18_desc', 'id_19', 'id_19_desc', 'id_20', 'id_20_desc', 'model'], 'string'],
             [['req_date', 'req_date_original', 'create_date', 'confirm_date', 'start_date', 'completed_date', 'hand_over_date', 'id_update_date', 'id_prioty_date', 'id_hc_date', 'id_hc_open_date', 'closing_date'], 'safe'],
             [['plan_qty', 'progress_pct', 'pick_lt'], 'number'],
             [['part_count', 'part_count_fix', 'man_power', 'priority', 'stage_id', 'pts_part', 'delay_days', 'slip_count', 'slip_open', 'slip_close'], 'integer']
@@ -257,6 +258,7 @@ abstract class VisualPickingList extends \yii\db\ActiveRecord
             'id_19_desc' => 'Id 19 Desc',
             'id_20' => 'Id 20',
             'id_20_desc' => 'Id 20 Desc',
+            'model' => 'Model',
         ];
     }
 

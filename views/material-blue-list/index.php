@@ -15,6 +15,8 @@ use kartik\datetime\DateTimePicker;
 $this->title = Yii::t('models', 'Visual Picking Lists');
 $this->params['breadcrumbs'][] = $this->title;
 
+date_default_timezone_set('Asia/Jakarta');
+
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
@@ -58,6 +60,16 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'model',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '150px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'parent',
         'label' => 'Parent',
         'vAlign' => 'middle',
@@ -93,6 +105,19 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'req_date',
+        'label' => 'Request Date',
+        'value' => function($model){
+            return date('Y-m-d', strtotime($model->req_date));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'

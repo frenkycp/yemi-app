@@ -44,7 +44,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 		$period = $year . $month;
 
 		$line_dropdown = ArrayHelper::map($data_arr = HakAkses::find()
-		->where(['<>', 'hak_akses', 'MIS'])
+		->where(['level_akses' => '4'])
 		->orderBy('hak_akses')
 		->all(), 'hak_akses', 'hak_akses');
 
