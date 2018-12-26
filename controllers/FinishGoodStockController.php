@@ -28,7 +28,7 @@ class FinishGoodStockController extends Controller
         $stock_arr = SernoInput::find()
         ->select([
             'dst' => 'tb_serno_output.dst',
-            'prod_output_qty' => 'SUM(CASE WHEN loct = 0 THEN 1 ELSE 0 END)',
+            //'prod_output_qty' => 'SUM(CASE WHEN loct = 0 THEN 1 ELSE 0 END)',
             'in_transit_qty' => 'SUM(CASE WHEN loct = 1 THEN 1 ELSE 0 END)',
             'finish_goods_qty' => 'SUM(CASE WHEN loct = 2 THEN 1 ELSE 0 END)',
             'stock_qty' => 'COUNT(dst)'
@@ -71,10 +71,10 @@ class FinishGoodStockController extends Controller
 
             $grand_total_kubikasi += $total_kubikasi;
 
-            $tmp_data[0][] = [
+            /*$tmp_data[0][] = [
                 'y' => (int)$stock_data['prod_output_qty'],
                 'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 0]),
-            ];
+            ];*/
             $tmp_data[1][] = [
                 'y' => (int)$stock_data['in_transit_qty'],
                 'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1]),

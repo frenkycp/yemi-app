@@ -121,15 +121,15 @@ echo '</pre>';*/
                         'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
                     ],
                     [
-                        'name' => 'InTransit Area (トランジットエリア）',
+                        'name' => 'FA Output',
                         'data' => $data[1],
                         'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
                     ],
-                    [
+                    /*[
                         'name' => 'Production Floor (生産職場)',
                         'data' => $data[0],
                         'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
-                    ],
+                    ],*/
                 ]
             ],
         ]);
