@@ -43,7 +43,6 @@ $script = <<< JS
     }
 JS;
 $this->registerJs($script, View::POS_HEAD );
-
 ?>
 <u><h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5></u>
 <div class="nav-tabs-custom">
@@ -60,8 +59,8 @@ $this->registerJs($script, View::POS_HEAD );
                 echo '<li><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
             }
         }
-        if ($weekToday == 52) {
-            echo '<li><a href="#tab_1_1" data-toggle="tab">Week 2</a></li>';
+        if ((int)date('n') == 12 && date('j') > 20) {
+            echo '<li><a href="#tab_1_0" data-toggle="tab">Week 2</a></li>';
         }
         ?>
     </ul>
@@ -237,8 +236,8 @@ $this->registerJs($script, View::POS_HEAD );
         ]);
             echo '</div>';
         }
-        if ($weekToday == 52) {
-            echo '<div class="tab-pane" id="tab_1_1">';
+        if ((int)date('n') == 12 && date('j') > 20) {
+            echo '<div class="tab-pane" id="tab_1_0">';
             $sernoFg = app\models\SernoOutput::find()
             ->select(['etd, SUM(qty) as qty, SUM(output) as output, WEEK(ship,4) as week_no'])
             ->where([
