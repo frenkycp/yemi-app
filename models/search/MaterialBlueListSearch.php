@@ -46,6 +46,12 @@ $query = VisualPickingList::find()->where(['stage_id' => 4]);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+      'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'completed_date' => SORT_DESC,
+        ]
+],
 ]);
 
 $this->load($params);

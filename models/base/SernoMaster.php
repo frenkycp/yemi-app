@@ -15,6 +15,9 @@ use Yii;
  * @property string $dest
  * @property string $package
  * @property integer $pallet
+ * @property string $line
+ * @property double $st
+ * @property double $eff
  * @property string $aliasModel
  */
 abstract class SernoMaster extends \yii\db\ActiveRecord
@@ -44,13 +47,15 @@ abstract class SernoMaster extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gmc', 'model'], 'required'],
-            [['package'], 'string'],
+            [['gmc'], 'required'],
             [['pallet'], 'integer'],
+            [['st', 'eff'], 'number'],
             [['gmc'], 'string', 'max' => 11],
             [['model'], 'string', 'max' => 50],
             [['color'], 'string', 'max' => 2],
             [['dest'], 'string', 'max' => 3],
+            [['package'], 'string', 'max' => 255],
+            [['line'], 'string', 'max' => 30],
             [['gmc'], 'unique']
         ];
     }
@@ -67,6 +72,9 @@ abstract class SernoMaster extends \yii\db\ActiveRecord
             'dest' => 'Dest',
             'package' => 'Package',
             'pallet' => 'Pallet',
+            'line' => 'Line',
+            'st' => 'St',
+            'eff' => 'Eff',
         ];
     }
 
