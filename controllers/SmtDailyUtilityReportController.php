@@ -213,14 +213,14 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th class="text-center" style="min-width: 70px;">Shift</th>
 	    	<th class="text-center">Part No</th>
 	    	<th>Part Description</th>
-	    	<th class="text-center">Qty</th>
-	    	<th class="text-center">ST</th>
-	    	<th class="text-center">LT (Std)</th>
-	    	<th class="text-center">LT (Gross)</th>
-	    	<th class="text-center">LT (Nett)</th>
-	    	<th class="text-center">Loss Time</th>
-	    	<th class="text-center">Gross Util.<br/>(%)</th>
-	    	<th class="text-center">Nett Util.<br/>(%)</th>
+	    	<th class="text-center">Qty<br/>(A)</th>
+	    	<th class="text-center">ST<br/>(B)</th>
+	    	<th class="text-center">LT (Std)<br/>(C = A * B)</th>
+	    	<th class="text-center">LT (Gross)<br/>(D)</th>
+	    	<th class="text-center">Loss Time<br/>(E)</th>
+	    	<th class="text-center">LT (Nett)<br/>(F = D - E)</th>
+	    	<th class="text-center">Gross Util.<br/>(%)<br/>((C / D) * 100)</th>
+	    	<th class="text-center">Nett Util.<br/>(%)<br/>((C / F) * 100)</th>
 	    </tr>';
 
 	    $utility_data_arr = WipEffView::find()
@@ -241,8 +241,8 @@ class SmtDailyUtilityReportController extends Controller
 	    		<td class="text-center">' . $utility_data->std_all . '</td>
 	    		<td class="text-center">' . $utility_data->lt_std . '</td>
 	    		<td class="text-center">' . $utility_data->lt_gross . '</td>
-	    		<td class="text-center">' . $utility_data->lt_nett . '</td>
 	    		<td class="text-center">' . $utility_data->lt_loss . '</td>
+	    		<td class="text-center">' . $utility_data->lt_nett . '</td>
 	    		<td class="text-center"><span class="text-green"><b>' . round($utility_data->efisiensi_gross, 1) . '</b></td>
 	    		<td class="text-center"><span class="text-green"><b>' . round($utility_data->efisiensi, 1) . '</b></td>
 	    	</tr>';

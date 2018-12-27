@@ -56,7 +56,7 @@ class LinePerformanceVisualController extends Controller
 		$last_production_time = gmdate('H:i:s', ($currently_running->wrk_time * 60));
 
 		$master = $currently_running->sernoMaster;
-		$avg_eff = $master->eff;
+		$avg_eff = round($master->eff);
 		$currently_model = $master->model;
 		if ($master->color != '') {
 			$currently_model .= ' // ' . $master->color;
