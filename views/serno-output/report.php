@@ -135,7 +135,7 @@ $this->registerJs($script, View::POS_HEAD );
             }
             echo Highcharts::widget([
             'scripts' => [
-                'modules/exporting',
+                //'modules/exporting',
                 'themes/sand-signika',
             ],
             'options' => [

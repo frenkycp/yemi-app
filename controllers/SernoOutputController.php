@@ -59,6 +59,7 @@ class SernoOutputController extends base\SernoOutputController
     	//->andWhere(['<>', 'stc', 'NOSO'])
     	//->andWhere(['LEFT(id,4)' => date('Y')])
     	//->andWhere(['<>', 'ship', '9999-12-31'])
+        ->where(['LEFT(id,4)' => date('Y')])
     	->groupBy('tahun')
     	->one();
 
@@ -70,7 +71,14 @@ class SernoOutputController extends base\SernoOutputController
         if(count($min_max_week) > 0)
         {
             $start_week = $min_max_week->max_week - 11;
+            if ($start_week < 1) {
+                $start_week = 1;
+            }
             $end_week = $min_max_week->max_week;
+        }
+
+        if ($weekToday == null) {
+            $weekToday = $start_week;
         }
 
         return $this->render('report',[
