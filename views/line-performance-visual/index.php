@@ -26,7 +26,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 10000); // milliseconds
+      setTimeout("refreshPage();", 5000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -53,7 +53,7 @@ JS;
     }
 JS;*/
 
-//$this->registerJs($script, View::POS_HEAD );
+$this->registerJs($script, View::POS_HEAD );
 
 $avg_min = $avg_eff - 3;
 $avg_max = $avg_eff + 3;
@@ -122,10 +122,10 @@ if ($current_eff >= $avg_max) {
 	<div class="col-md-3">
 		<div class="box box-default box-solid text-center">
 			<div class="box-header with-border">
-				<h3 class="box-title">Total Production Time</h3>
+				<h3 class="box-title">Manpower</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 4em;"><?= $total_production_time; ?></span>
+				<span style="font-size: 4em;"><?= $mp; ?></span>
 			</div>
 		</div>
 	</div>
@@ -142,10 +142,10 @@ if ($current_eff >= $avg_max) {
 	<div class="col-md-3">
 		<div class="box box-default box-solid text-center">
 			<div class="box-header with-border">
-				<h3 class="box-title">Manpower</h3>
+				<h3 class="box-title">Total Production Time</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 4em;"><?= $mp; ?></span>
+				<span style="font-size: 4em;"><?= $total_production_time; ?></span>
 			</div>
 		</div>
 	</div>
