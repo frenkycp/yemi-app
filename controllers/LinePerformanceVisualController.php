@@ -57,7 +57,11 @@ class LinePerformanceVisualController extends Controller
 
 		$master = $currently_running->sernoMaster;
 		$avg_eff = round($master->eff);
-		$currently_model = $master->model;
+		$currently_model = '-';
+		if ($master->model != null) {
+			$currently_model = $master->model;
+		}
+		
 		if ($master->color != '') {
 			$currently_model .= ' // ' . $master->color;
 		}
@@ -66,6 +70,10 @@ class LinePerformanceVisualController extends Controller
 		}
 
 		$total_production_time = gmdate('H:i:s', ($total_production_time * 60));
+		$gmc = '-';
+		if ($master->gmc != null) {
+			$gmc = $master->gmc;
+		}
 
 		return $this->render('index', [
 			'data' => $data,
@@ -77,8 +85,8 @@ class LinePerformanceVisualController extends Controller
 			'current_eff' => $current_eff,
 			'avg_eff' => $avg_eff,
 			'line_dropdown' => $line_dropdown,
-			'gmc' => $master->gmc,
-			'mp' => $currently_running->mp,
+			'gmc' => $gmc,
+			'mp' => $currently_running->mp == null ? 0 : $currently_running->mp,
 		]);
 	}
 
