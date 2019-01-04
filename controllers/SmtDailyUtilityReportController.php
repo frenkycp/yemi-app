@@ -43,8 +43,8 @@ class SmtDailyUtilityReportController extends Controller
 		$tmp_working_ratio = [];
 		$tmp_operation_ratio = [];
 
-		$begin = new \DateTime(date('Y-m-01'));
-		$end   = new \DateTime(date('Y-m-t'));
+		$begin = new \DateTime(date('Y-m-d', strtotime($year . '-' . $month . '-01')));
+		$end   = new \DateTime(date('Y-m-t', strtotime($year . '-' . $month . '-01')));
 
 		for($i = $begin; $i <= $end; $i->modify('+1 day')){
 			$proddate = (strtotime($i->format("Y-m-d") . " +7 hours") * 1000);
@@ -212,7 +212,7 @@ class SmtDailyUtilityReportController extends Controller
 	    $remark .= '<tr style="font-size: 11px;">
 	    	<th class="text-center" style="min-width: 70px;">Shift</th>
 	    	<th class="text-center">Part No</th>
-	    	<th>Part Description</th>
+	    	<th style="width: 100px;">Part Description</th>
 	    	<th class="text-center">Qty<br/>(A)</th>
 	    	<th class="text-center">ST<br/>(B)</th>
 	    	<th class="text-center">LT (Std)<br/>(C = A * B)</th>

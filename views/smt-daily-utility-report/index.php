@@ -31,7 +31,7 @@ $this->registerJs($script, View::POS_HEAD );
 date_default_timezone_set('Asia/Jakarta');
 
 /*echo '<pre>';
-print_r($losstime_category);
+print_r($data);
 echo '</pre>';*/
 ?>
 
