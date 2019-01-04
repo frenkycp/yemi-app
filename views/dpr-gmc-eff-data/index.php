@@ -90,19 +90,24 @@ $gridColumns = [
     ],
     [
         'attribute' => 'qty_time',
+        'label' => 'Qty Time<br/>(A)',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         //'width'=>'100px',
     ],
     [
         'attribute' => 'mp_time',
+        'label' => 'MP Time<br/>(B)',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         //'width'=>'100px',
     ],
     [
         'attribute' => 'efficiency',
-        'label' => 'Efficiency (%)',
+        'encodeLabel' => false,
+        'label' => 'Efficiency (%)<br/>((A / B) * 100)',
         'value' => function($model){
             $eff = 0;
             if ($model->mp_time > 0) {

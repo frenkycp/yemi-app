@@ -120,7 +120,7 @@ class DprLineEfficiencyDailyController extends Controller
 
 	    arsort($tmp_losstime_category);
 	    foreach ($tmp_losstime_category as $key => $value) {
-	    	$losstime_category_categories[] = $key;
+	    	$losstime_category_categories[] = $key == 'CM' ? 'CHANGE MODEL' : $key;
 	    	$losstime_category_final_data[] = [
 	    		'y' => $value,
 	    		'url' => Url::to(['get-losstime-detail', 'by' => 'category', 'proddate' => $model->proddate, 'category_name' => $key])

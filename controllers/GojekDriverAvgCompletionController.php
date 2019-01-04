@@ -16,6 +16,18 @@ class GojekDriverAvgCompletionController extends Controller
 	{
 		$data = [];
 		$categories = [];
+		$year = date('Y');
+		$month = date('m');
+
+		if (\Yii::$app->request->get('year') != null) {
+            $year = \Yii::$app->request->get('year');
+        }
+
+        if (\Yii::$app->request->get('month') != null) {
+            $month = \Yii::$app->request->get('month');
+        }
+
+        $period = $year . $month;
 
 		$tmp_driver_arr = GojekTbl::find()
 		->where(['<>', 'TERMINAL', 'Z'])
@@ -27,6 +39,9 @@ class GojekDriverAvgCompletionController extends Controller
 			'GOJEK_ID',
 			'GOJEK_DESC',
 			'AVERAGE_ORDER_COMPLETION' => 'ROUND(AVG(AVERAGE_ORDER_COMPLETION),0)'
+		])
+		->where([
+			'ISSUE_PERIOD' => $period
 		])
 		->groupBy('GOJEK_ID, GOJEK_DESC')
 		->orderBy('GOJEK_DESC')
@@ -55,6 +70,8 @@ class GojekDriverAvgCompletionController extends Controller
 		return $this->render('index', [
 			'data' => $data,
 			'categories' => $categories,
+			'year' => $year,
+			'month' => $month,
 		]);
 	}
 }

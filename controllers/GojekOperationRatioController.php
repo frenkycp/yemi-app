@@ -16,6 +16,18 @@ class GojekOperationRatioController extends Controller
 		date_default_timezone_set('Asia/Jakarta');
 		$sql = "{CALL CREATE_GOJEK_ORDER}";
 		$result = \Yii::$app->db_sql_server->createCommand($sql, $params)->queryAll();
+		$year = date('Y');
+		$month = date('m');
+
+		if (\Yii::$app->request->get('year') != null) {
+            $year = \Yii::$app->request->get('year');
+        }
+
+        if (\Yii::$app->request->get('month') != null) {
+            $month = \Yii::$app->request->get('month');
+        }
+
+        $period = $year . $month;
 
 		$tmp_driver_arr = GojekTbl::find()
 		->where(['<>', 'TERMINAL', 'Z'])
@@ -29,7 +41,7 @@ class GojekOperationRatioController extends Controller
 			$order_report_arr = GojekOrderReport::find()
 			->where([
 				'NIK' => $nik,
-				'period' => '201812',
+				'period' => $period,
 				'source' => 'WIP'
 			])
 			->orderBy('post_date')
@@ -63,20 +75,22 @@ class GojekOperationRatioController extends Controller
 					'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 				],
 				[
-					'name' => 'Working Hour',
+					'name' => 'Delivery',
 					'data' => $value['workhour'],
 					'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
 				],
-				[
+				/*[
 					'name' => 'Break Time',
 					'data' => $value['break'],
 					'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
-				],
+				],*/
 			];
 		}
 
 		return $this->render('index', [
-			'data' => $data
+			'data' => $data,
+			'year' => $year,
+			'month' => $month,
 		]);
 	}
 }

@@ -74,7 +74,8 @@ $grid_column = [
     ],
     [
         'attribute' => 'qty_all',
-        'label' => 'Qty',
+        'label' => 'Qty<br/>(A)',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '70px;',
@@ -82,7 +83,8 @@ $grid_column = [
     ],
     [
         'attribute' => 'std_all',
-        'label' => 'ST',
+        'label' => 'ST<br/>(B)',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '70px;',
@@ -90,7 +92,8 @@ $grid_column = [
     ],
     [
         'attribute' => 'lt_std',
-        'label' => 'LT (Standart)',
+        'label' => 'LT (Standart)<br/>(C = A * B)',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '70px;',
@@ -98,7 +101,8 @@ $grid_column = [
     ],
     [
         'attribute' => 'lt_gross',
-        'label' => 'LT (Gross)',
+        'label' => 'LT (Gross)<br/>(D)',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '70px;',
@@ -106,7 +110,8 @@ $grid_column = [
     ],
     [
         'attribute' => 'lt_loss',
-        'label' => 'Loss Time',
+        'label' => 'Loss Time<br/>(E)',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '70px;',
@@ -114,7 +119,8 @@ $grid_column = [
     ],
     [
         'attribute' => 'lt_nett',
-        'label' => 'Loss Time',
+        'label' => 'LT (Nett)<br/>(F = D - E)',
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '70px;',

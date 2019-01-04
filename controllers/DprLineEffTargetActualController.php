@@ -105,6 +105,7 @@ class DprLineEffTargetActualController extends Controller
 	    ])
 	    ->all();
 
+	    $daily_tmp_data = [];
 	    foreach ($eff_data_arr2 as $value) {
 	    	$line = $value->line;
 	    	

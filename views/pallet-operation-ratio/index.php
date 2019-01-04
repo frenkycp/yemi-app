@@ -35,7 +35,47 @@ print_r($data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
-<div class="box box-solid">
+
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['pallet-operation-ratio/index']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-2">
+        <?= Html::label('Year'); ?>
+        <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+    <div class="col-md-2">
+        <?= Html::label('Month'); ?>
+        <?= Html::dropDownList('month', $month, [
+            '01' => 'Jan',
+            '02' => 'Feb',
+            '03' => 'Mar',
+            '04' => 'Apr',
+            '05' => 'May',
+            '06' => 'Jun',
+            '07' => 'Jul',
+            '08' => 'Aug',
+            '09' => 'Sep',
+            '10' => 'Oct',
+            '11' => 'Nov',
+            '12' => 'Dec',
+        ], [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+</div>
+<br/>
+
+<?php ActiveForm::end(); ?>
+
+<div class="box box-solid box-info">
     <div class="box-header with-border">
         <h3 class="box-title">Last Update : <?= date('Y-m-d H:i:s'); ?></h3>
     </div>

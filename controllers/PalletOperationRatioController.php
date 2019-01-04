@@ -13,9 +13,18 @@ class PalletOperationRatioController extends Controller
 	{
 		date_default_timezone_set('Asia/Jakarta');
 		$data = [];
+		$year = date('Y');
+		$month = date('m');
 
-		//$period = date('Ym');
-		$period = '201812';
+		if (\Yii::$app->request->get('year') != null) {
+            $year = \Yii::$app->request->get('year');
+        }
+
+        if (\Yii::$app->request->get('month') != null) {
+            $month = \Yii::$app->request->get('month');
+        }
+
+        $period = $year . $month;
 
 		$tmp_driver_arr = PalletDriver::find()
 		->orderBy('driver_name')
@@ -35,7 +44,7 @@ class PalletOperationRatioController extends Controller
 			->where([
 				//'DATE(departure_datetime)' => 'DATE(arrival_datetime)',
 				'nik' => $nik,
-				//'extract(year_month from pk)' => $period
+				'extract(year_month from pk)' => $period
 			])
 			->groupBy('DATE(pk)')
 			->all();
@@ -62,6 +71,15 @@ class PalletOperationRatioController extends Controller
 				$break_hour = round($break_time / 3600, 1);
 				$idle_hour = round($idle_time / 3600, 1);
 
+				//hacking tool for make 8 hour
+				/*if ($working_hour + $idle_hour > 20) {
+					if ($working_hour > $idle_hour) {
+						$working_hour = 8 - $idle_hour;
+					} else {
+						$idle_hour = 8 - $working_hour;
+					}
+				}*/
+
 				$tmp_data[$nik]['working_time'][] = [
 					'x' => $post_date,
 					'y' => $working_hour
@@ -87,20 +105,22 @@ class PalletOperationRatioController extends Controller
 					'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 				],
 				[
-					'name' => 'Working Hour',
+					'name' => 'Delivery',
 					'data' => $value['working_time'],
 					'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
 				],
-				[
+				/*[
 					'name' => 'Break Time',
 					'data' => $value['break_time'],
 					'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
-				],
+				],*/
 			];
 		}
 
 		return $this->render('index', [
-			'data' => $data
+			'data' => $data,
+			'year' => $year,
+			'month' => $month
 		]);
 	}
 }
