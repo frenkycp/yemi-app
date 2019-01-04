@@ -1,0 +1,96 @@
+<?php
+use miloschuman\highcharts\Highcharts;
+use yii\web\JsExpression;
+use yii\web\View;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use yii\bootstrap\ActiveForm;
+use kartik\select2\Select2;
+
+$this->title = [
+    'page_title' => 'One Job Completion Time (AVG) <span class="japanesse text-green"></span> | GO-WIP',
+    'tab_title' => 'One Job Completion Time (AVG)',
+    'breadcrumbs_title' => 'One Job Completion Time (AVG)'
+];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+$color = 'ForestGreen';
+
+$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+
+date_default_timezone_set('Asia/Jakarta');
+
+$script = <<< JS
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout("refreshPage();", 600000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+JS;
+$this->registerJs($script, View::POS_HEAD );
+
+?>
+<div class="box box-primary box-solid">
+	<div class="box-header with-border">
+		<h3 class="box-title">
+			<i class="fa fa-tag"></i>
+			 Last Update : <?= date('Y-m-d H:i'); ?>
+		</h3>
+	</div>
+	<div class="box-body">
+		<?php
+		echo Highcharts::widget([
+		    'scripts' => [
+		        //'modules/exporting',
+		        'themes/grid-light',
+		        //'themes/sand-signika',
+		        //'themes/dark-unica',
+		    ],
+		    'options' => [
+		        'chart' => [
+		            'type' => 'column',
+		        ],
+		        'title' => [
+		            'text' => null
+		        ],
+		        'subtitle' => [
+		            'text' => null
+		        ],
+		        'credits' => [
+		            'enabled' => false
+		        ],
+		        'legend' => [
+		            'enabled' => false
+		        ],
+		        'xAxis' => [
+		            'categories' => $categories
+		        ],
+		        'yAxis' => [
+		            'min' => 0,
+		            'allowDecimals' => false,
+		            'title' => [
+		                'text' => 'Minute',
+		                //'align' => 'high'
+		            ],
+		            'labels' => [
+		                'overflow' => 'justify'
+		            ]
+		        ],
+		        'plotOptions' => [
+		            'column' => [
+		                'dataLabels' => [
+		                    'enabled' => true,
+		                    'format' => '{point.y}'
+		                ]
+		            ],
+		            
+		        ],
+		        'series' => $data
+		    ],
+		]);
+		?>
+	</div>
+</div>

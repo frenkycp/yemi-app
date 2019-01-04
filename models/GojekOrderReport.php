@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\SernoSlipLog as BaseSernoSlipLog;
+use \app\models\base\GojekOrderReport as BaseGojekOrderReport;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "tb_serno_slip_log".
+ * This is the model class for table "db_owner.GOJEK_ORDER_REPORT".
  */
-class SernoSlipLog extends BaseSernoSlipLog
+class GojekOrderReport extends BaseGojekOrderReport
 {
-    public $order_date, $period, $total_count, $start_time, $end_time, $total_working;
 
     public function behaviors()
     {
