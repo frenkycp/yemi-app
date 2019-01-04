@@ -29,6 +29,10 @@ class MyHrController extends Controller
             return $this->redirect(['login']);
         }
         $this->layout = 'my-hr';
+        $this_year = date('Y');
+        if (\Yii::$app->request->get('year') != null) {
+            $this_year = \Yii::$app->request->get('year');
+        }
 		//$nik = \Yii::$app->request->get('nik');
         $nik = $session['my_hr_user'];
         $model_karyawan = Karyawan::find()->where([
@@ -36,14 +40,14 @@ class MyHrController extends Controller
         ])->one();
         $model_rekap_absensi = RekapAbsensiView::find()->where([
             'NIK' => $nik,
-            'YEAR' => date('Y')
+            'YEAR' => $this_year
         ])
         ->orderBy('PERIOD')
         ->all();
 
         $rekap_cuti_arr = CutiRekapView02::find()
         ->where([
-            'TAHUN' => date('Y'),
+            'TAHUN' => $this_year,
             'NIK' => $nik
         ])
         ->all();
@@ -68,6 +72,7 @@ class MyHrController extends Controller
             'using_cuti' => $using_cuti,
             'kuota_cuti' => $kuota_cuti,
             'sisa_cuti' => $sisa_cuti,
+            'year' => $this_year,
 		]);
 	}
 

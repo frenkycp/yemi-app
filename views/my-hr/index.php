@@ -1,6 +1,8 @@
 <?php
 use yii\helpers\Html;
 use app\models\SplView;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 
@@ -108,6 +110,24 @@ $profpic = "";
                         <h3 class="box-title">Attendance and Overtime</h1>
                     </div>
                     <div class="box-body">
+
+                        <?php $form = ActiveForm::begin([
+                            'method' => 'get',
+                            'layout' => 'horizontal',
+                            'action' => Url::to(['my-hr/index']),
+                        ]); ?>
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-10">
+                                <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
+                                    'class' => 'form-control',
+                                    'onchange'=>'this.form.submit()',
+                                ]); ?>
+                            </div>
+                        </div>
+
+                        <?php ActiveForm::end(); ?>
+                        <br/>
+
                         <table class="table table-bordered table-hover">
                             <thead>
                                 <tr>
