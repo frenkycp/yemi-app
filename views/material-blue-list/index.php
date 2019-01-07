@@ -90,6 +90,24 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'ANALYST',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'ANALYST_DESC',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'plan_qty',
         'vAlign' => 'middle',
         'hAlign' => 'center',
