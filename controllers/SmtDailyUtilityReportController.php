@@ -219,8 +219,8 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th class="text-center">LT (Gross)<br/>(D)</th>
 	    	<th class="text-center">Loss Time<br/>(E)</th>
 	    	<th class="text-center">LT (Nett)<br/>(F = D - E)</th>
-	    	<th class="text-center">Gross Util.<br/>(%)<br/>((C / D) * 100)</th>
-	    	<th class="text-center">Nett Util.<br/>(%)<br/>((C / F) * 100)</th>
+	    	<th class="text-center">Gross Util.<br/>(%)<br/>(C / D)</th>
+	    	<th class="text-center">Nett Util.<br/>(%)<br/>(C / F)</th>
 	    </tr>';
 
 	    $utility_data_arr = WipEffView::find()
