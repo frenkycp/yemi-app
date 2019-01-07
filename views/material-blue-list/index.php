@@ -90,7 +90,7 @@ $grid_columns = [
         ],
     ],
     [
-        'attribute' => 'ANALYST',
+        'attribute' => 'analyst',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -99,7 +99,7 @@ $grid_columns = [
         ],
     ],
     [
-        'attribute' => 'ANALYST_DESC',
+        'attribute' => 'analyst_desc',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
