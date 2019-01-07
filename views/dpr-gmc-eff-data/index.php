@@ -70,11 +70,20 @@ $gridColumns = [
         'vAlign' => 'middle',
         //'width'=>'100px',
     ],
-    [
+    /*[
         'attribute' => 'total_mp',
         'label' => 'List MP',
         'value' => function($model){
             return Html::a('Detail', ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
+        },
+        'format' => 'raw',
+    ],*/
+    [
+        'attribute' => 'mp',
+        'label' => 'Manpower',
+        'hAlign' => 'center',
+        'value' => function($model){
+            return Html::a($model->mp, ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
         },
         'format' => 'raw',
     ],
@@ -107,7 +116,7 @@ $gridColumns = [
     [
         'attribute' => 'efficiency',
         'encodeLabel' => false,
-        'label' => 'Efficiency (%)<br/>((A / B) * 100)',
+        'label' => 'Efficiency (%)<br/>(A / B)',
         'value' => function($model){
             $eff = 0;
             if ($model->mp_time > 0) {

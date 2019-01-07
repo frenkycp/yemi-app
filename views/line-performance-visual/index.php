@@ -58,18 +58,25 @@ $this->registerJs($script, View::POS_HEAD );
 $avg_min = $avg_eff - 3;
 $avg_max = $avg_eff + 3;
 
-if ($current_eff >= $avg_max) {
-	$text = '"BAGUS"';
+if ($gmc == '-') {
+	$text = '-';
 	$panel_class = 'success';
 } else {
-	if ($current_eff >= $avg_min) {
-		$text = '"RATA-RATA"';
-		$panel_class = 'warning';
+	if ($current_eff >= $avg_max) {
+		$text = '"BAGUS"';
+		$panel_class = 'success';
 	} else {
-		$text = '"TINGKATKAN EFISIENSI...!"';
-		$panel_class = 'danger';
+		if ($current_eff >= $avg_min) {
+			$text = '"MASUK"';
+			$panel_class = 'warning';
+		} else {
+			$text = '"AYO KAIZEN...!"';
+			$panel_class = 'danger';
+		}
 	}
 }
+
+
 ?>
 <hr>
 <div class="row">
@@ -161,7 +168,7 @@ if ($current_eff >= $avg_max) {
 	</div>
 </div>
 <div class="progress" style="height: 50px; background-color: #363636;">
-	<div class="progress-bar progress-bar-striped progress-bar-<?= $panel_class; ?> active" role="progressbar" aria-valuenow="<?= $current_eff; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $current_eff > 100 ? 100 : $current_eff; ?>%; padding: 15px; font-size: 35px; min-width: 3em;"><?= $current_eff; ?>%</div>
+	<div class="progress-bar progress-bar-striped progress-bar-<?= $panel_class; ?> active" role="progressbar" aria-valuenow="<?= $current_eff; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $current_eff > 100 ? 100 : $current_eff; ?>%; padding: 15px; font-size: 35px;"><?= $current_eff; ?>%</div>
 </div>
 <hr>
 <div class="text-center">

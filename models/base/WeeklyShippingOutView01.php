@@ -9,11 +9,18 @@ use Yii;
 /**
  * This is the base-model class for table "weekly_shipping_out_view_01".
  *
+ * @property string $year
  * @property integer $week_no
  * @property string $etd
  * @property string $ship
  * @property string $uniq
  * @property integer $so
+ * @property string $stc
+ * @property string $dst
+ * @property string $gmc
+ * @property integer $cntr
+ * @property string $remark
+ * @property string $etd_old
  * @property integer $plan_qty
  * @property string $actual_qty
  * @property string $aliasModel
@@ -45,10 +52,14 @@ abstract class WeeklyShippingOutView01 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['week_no', 'so', 'plan_qty', 'actual_qty'], 'integer'],
-            [['etd', 'ship', 'uniq'], 'required'],
+            [['week_no', 'so', 'cntr', 'plan_qty', 'actual_qty'], 'integer'],
+            [['etd', 'ship', 'uniq', 'stc', 'dst', 'gmc'], 'required'],
             [['etd', 'ship'], 'safe'],
-            [['uniq'], 'string', 'max' => 25]
+            [['year'], 'string', 'max' => 4],
+            [['uniq'], 'string', 'max' => 25],
+            [['stc', 'gmc'], 'string', 'max' => 7],
+            [['dst', 'remark'], 'string', 'max' => 50],
+            [['etd_old'], 'string', 'max' => 10]
         ];
     }
 
@@ -58,11 +69,18 @@ abstract class WeeklyShippingOutView01 extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'year' => 'Year',
             'week_no' => 'Week No',
             'etd' => 'Etd',
             'ship' => 'Ship',
             'uniq' => 'Uniq',
             'so' => 'So',
+            'stc' => 'Stc',
+            'dst' => 'Dst',
+            'gmc' => 'Gmc',
+            'cntr' => 'Cntr',
+            'remark' => 'Remark',
+            'etd_old' => 'Etd Old',
             'plan_qty' => 'Plan Qty',
             'actual_qty' => 'Actual Qty',
         ];

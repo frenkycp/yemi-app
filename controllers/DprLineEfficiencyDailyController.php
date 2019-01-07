@@ -230,11 +230,12 @@ class DprLineEfficiencyDailyController extends Controller
 		    </tr>';
 
 		    foreach ($losstime_detail_arr as $value) {
+		    	$losstime_category = $value['category'] == 'CM' ? 'CHANGE MODEL' : $value['category'];
 	    		$remark .= '<tr>
 		    		<td class="text-center">' . $value['start_time'] . '</td>
 		    		<td class="text-center">' . $value['end_time'] . '</td>
 		    		<td class="text-center">' . $value['mp'] . '</td>
-		    		<td class="text-center">' . $value['category'] . '</td>
+		    		<td class="text-center">' . $losstime_category . '</td>
 		    		<td class="text-center">' . number_format($value['losstime'], 2) . '</td>
 		    		<td>' . $value['model'] . '</td>
 		    	</tr>';
