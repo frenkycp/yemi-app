@@ -20,7 +20,7 @@ $this->registerCss("
 	.box-header .box-title{font-size: 20px;}
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em}
-	.body {background-color: #33383D;}
+	body {background-color: #33383D;}
 ");
 
 $script = <<< JS
