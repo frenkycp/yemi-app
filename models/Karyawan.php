@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class Karyawan extends BaseKaryawan
 {
-    public $cuti;
+    public $cuti, $kontrak_start, $kontrak_end;
     
     public function behaviors()
     {

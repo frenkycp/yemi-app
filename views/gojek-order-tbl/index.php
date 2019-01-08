@@ -56,6 +56,19 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],*/
     [
+        'attribute' => 'period',
+        'value' => function($model){
+            $period = date('Ym', strtotime($model->daparture_date));
+            return $period;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
         'attribute' => 'slip_id',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -196,6 +209,16 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'font-size: 12px;'
         ],
+    ],
+    [
+        'attribute' => 'LT',
+        'label' => 'LT (min)',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+        'hAlign' => 'center',
     ],
     [
         'attribute' => 'issued_date',

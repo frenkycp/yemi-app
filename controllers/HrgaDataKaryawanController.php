@@ -40,6 +40,7 @@ class HrgaDataKaryawanController extends \app\controllers\base\HrgaDataKaryawanC
 		$departemen_dropdown = ArrayHelper::map(Karyawan::find()->select('DISTINCT(DEPARTEMEN)')->where('DEPARTEMEN IS NOT NULL')->orderBy('DEPARTEMEN')->all(), 'DEPARTEMEN', 'DEPARTEMEN');
 		$section_dropdown = ArrayHelper::map(Karyawan::find()->select('DISTINCT(SECTION)')->where('SECTION IS NOT NULL')->orderBy('SECTION')->all(), 'SECTION', 'SECTION');
 		$sub_section_dropdown = ArrayHelper::map(Karyawan::find()->select('DISTINCT(SUB_SECTION)')->where('SUB_SECTION IS NOT NULL')->orderBy('SUB_SECTION')->all(), 'SUB_SECTION', 'SUB_SECTION');
+		$status_karyawan_dropdown = ArrayHelper::map(Karyawan::find()->select('DISTINCT(STATUS_KARYAWAN)')->orderBy('STATUS_KARYAWAN')->all(), 'STATUS_KARYAWAN', 'STATUS_KARYAWAN');
 
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
@@ -47,6 +48,7 @@ class HrgaDataKaryawanController extends \app\controllers\base\HrgaDataKaryawanC
 		    'departemen_dropdown' => $departemen_dropdown,
 		    'section_dropdown' => $section_dropdown,
 		    'sub_section_dropdown' => $sub_section_dropdown,
+		    'status_karyawan_dropdown' => $status_karyawan_dropdown,
 		]);
 	}
 

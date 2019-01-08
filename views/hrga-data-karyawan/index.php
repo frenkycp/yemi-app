@@ -153,6 +153,65 @@ $gridColumns = [
             'style' => 'font-size: 12px;'
         ],
     ],
+    [
+        'attribute' => 'STATUS_KARYAWAN',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => $status_karyawan_dropdown,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'KONTRAK_KE',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            1 => 1,
+            2 => 2
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'kontrak_start',
+        'value' => function($model){
+            $value = '-';
+            if ($model->KONTRAK_KE == 1) {
+                $value = date('Y-m-d', strtotime($model->K1_START));
+            } elseif ($model->KONTRAK_KE == 2) {
+                $value = date('Y-m-d', strtotime($model->K2_START));
+            }
+            return $value;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'kontrak_end',
+        'value' => function($model){
+            $value = '-';
+            if ($model->KONTRAK_KE == 1) {
+                $value = date('Y-m-d', strtotime($model->K1_END));
+            } elseif ($model->KONTRAK_KE == 2) {
+                $value = date('Y-m-d', strtotime($model->K2_END));
+            }
+            return $value;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
     /*'JENIS_KELAMIN',
     'STATUS_PERKAWINAN',
     'ALAMAT',
