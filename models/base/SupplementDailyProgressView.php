@@ -19,6 +19,8 @@ use Yii;
  * @property string $outstanding_qty
  * @property string $wh_rejected_qty
  * @property string $pulled_up_qty
+ * @property string $total_open
+ * @property string $total_close
  * @property string $aliasModel
  */
 abstract class SupplementDailyProgressView extends \yii\db\ActiveRecord
@@ -50,7 +52,7 @@ abstract class SupplementDailyProgressView extends \yii\db\ActiveRecord
         return [
             [['period'], 'integer'],
             [['date_spt'], 'safe'],
-            [['request_qty', 'pc_approved_qty', 'pc_rejected_qty', 'reject_history_qty', 'wh_approved_qty', 'outstanding_qty', 'wh_rejected_qty', 'pulled_up_qty'], 'number']
+            [['request_qty', 'pc_approved_qty', 'pc_rejected_qty', 'reject_history_qty', 'wh_approved_qty', 'outstanding_qty', 'wh_rejected_qty', 'pulled_up_qty', 'total_open', 'total_close'], 'number']
         ];
     }
 
@@ -70,6 +72,8 @@ abstract class SupplementDailyProgressView extends \yii\db\ActiveRecord
             'outstanding_qty' => 'Outstanding Qty',
             'wh_rejected_qty' => 'Wh Rejected Qty',
             'pulled_up_qty' => 'Pulled Up Qty',
+            'total_open' => 'Total Open',
+            'total_close' => 'Total Close',
         ];
     }
 

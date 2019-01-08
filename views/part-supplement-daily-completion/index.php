@@ -92,8 +92,8 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                'themes/sand-signika',
-                //'themes/grid-light',
+                //'themes/sand-signika',
+                'themes/grid-light',
             ],
             'options' => [
                 'chart' => [
@@ -116,6 +116,9 @@ echo '</pre>';*/
                     ],
                     //'gridLineWidth' => 0,
                 ],
+                'credits' => [
+                    'enabled' =>false
+                ],
                 'tooltip' => [
                     'enabled' => true,
                     'xDateFormat' => '%A, %b %e %Y',
@@ -125,9 +128,9 @@ echo '</pre>';*/
                     'column' => [
                         'stacking' => 'percent',
                         'dataLabels' => [
-                            'enabled' => false,
-                            'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
-                            'color' => 'black',
+                            'enabled' => true,
+                            //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
+                            //'color' => 'black',
                             //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                             /*'style' => [
                                 'textOutline' => '0px',
