@@ -68,13 +68,14 @@ $this->registerJs($script, View::POS_HEAD );
         ]); ?>
     </div>
 </div>
-<br/>
-
 <?php ActiveForm::end(); ?>
+
+<br/>
+<span style="font-weight: bold; font-size: 1.5em;">Last Update : <?= date('Y-m-d H:i:s'); ?></span>
 
 <div class="box box-solid box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">Last Update : <?= date('Y-m-d H:i:s'); ?></h3>
+        <h3 class="box-title">Daily Performance</h3>
     </div>
     <div class="box-body">
         <div class="box-group" id="accordion">
@@ -170,14 +171,94 @@ $this->registerJs($script, View::POS_HEAD );
             <?php
         }
 
-        yii\bootstrap\Modal::begin([
-            'id' =>'modal',
-            'header' => '<h3>Detail Information</h3>',
-            'size' => 'modal-lg',
-        ]);
-        yii\bootstrap\Modal::end();
-
         ?>
         </div>
     </div>
 </div>
+
+<div class="box box-solid box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">Monthly Performance</h3>
+    </div>
+    <div class="box-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/grid-light',
+                //'themes/sand-signika',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
+                ],
+                'credits' => [
+                    'enabled' =>false
+                ],
+                'title' => [
+                    'text' => null
+                ],
+                'xAxis' => [
+                    'categories' => $categories2,
+                    'offset' => 10,
+                ],
+                'yAxis' => [
+                    'title' => [
+                        'text' => 'HOUR'
+                    ],
+                    //'max' => $max_order,
+                    'minTickInterval' => 1,
+                    'stackLabels' => [
+                        'enabled' => true,
+                        'style' => [
+                            'color' => 'red'
+                        ],
+                    ],
+                ],
+                'tooltip' => [
+                    //'shared' => true,
+                    'crosshairs' => true,
+                    'xDateFormat' => '%Y-%m-%d',
+                ],
+                'plotOptions' => [
+                    'column' => [
+                        'stacking' => 'percent',
+                        'dataLabels' => [
+                            'enabled' => true,
+                            //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
+                            'style' => [
+                                //'fontSize' => '14px',
+                                'fontWeight' => '0'
+                            ],
+                        ],
+                        'borderWidth' => 1,
+                        //'borderColor' => $color,
+                    ],
+                    'series' => [
+                        /*'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ],*/
+                        'maxPointWidth' => 80,
+                    ]
+                ],
+                'series' => $data2
+            ],
+        ]); ?>
+    </div>
+</div>
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>

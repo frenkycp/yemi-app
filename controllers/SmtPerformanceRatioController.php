@@ -87,11 +87,64 @@ class SmtPerformanceRatioController extends Controller
 			];
 		}
 
+		$monthly_data_arr = WipEffViewRunPerDay2::find()
+		->select([
+			'period',
+			'machine_run_second_2' => 'SUM(machine_run_second_2)',
+			'total_iddle_second' => 'SUM(total_iddle_second)',
+			'machine_off' => 'SUM(machine_off)',
+		])
+		->where([
+			'LEFT(period, 4)' => $year
+		])
+		->groupBy('period')
+		->orderBy('period')
+		->all();
+
+		$tmp_data2 = [];
+		$categories2 = [];
+		$tmp_running = $tmp_idling = $tmp_off = [];
+		foreach ($monthly_data_arr as $key => $value) {
+			$categories2[] = $value->period;
+			$tmp_running[]= round($value->machine_run_second_2 / 3600, 1);
+			$tmp_idling[] = round($value->total_iddle_second / 3600, 1);
+			$tmp_off[] = round($value->machine_off / 3600, 1);
+		}
+
+		$data2 = [
+			[
+				'name' => 'Idle',
+				'data' => $tmp_idling,
+				'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+				//'cursor' => 'pointer',
+			],
+			[
+				'name' => 'Running',
+				'data' => $tmp_running,
+				'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+			],
+			[
+				'name' => 'Off',
+				'data' => $tmp_off,
+				'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
+			],
+		];
+
 		return $this->render('index', [
 			'data' => $data,
+			'data2' => $data2,
+			'categories2' => $categories2,
 			'year' => $year,
 			'month' => $month,
 		]);
 	}
-	
+
+	public function getMonthlyPerformanceData($year)
+	{
+		$data = [];
+
+		$data_arr = WipEffViewRunPerDay2::find()
+		->all();
+	}
+
 }
