@@ -315,26 +315,26 @@ class SmtDailyUtilityReportController extends Controller
 	    		$value->pick_up_error > 0 ? 'label label-danger' : '',
 	    		$value->other > 0 ? 'label label-danger' : ''
 	    	];
-	    	$remark .= '<tr style="font-size: 12px;">
+	    	$remark .= '<tr style="font-size: 11px;">
 	    		<td class="text-center" title="' . $value->child_desc_01 . '">' . $value->child_01 . '</td>
-	    		<td class="text-center"><span title="Break Time" class="' . $class[0] . '">' . round($value->break_time) . '</span></td>
-	    		<td class="text-center"><span title="Nozzle Maintenance" class="' . $class[1] . '">' . round($value->nozzle_maintenance) . '</span></td>
-	    		<td class="text-center"><span title="Change Schedule" class="' . $class[2] . '">' . round($value->change_schedule) . '</span></td>
-	    		<td class="text-center"><span title="Air Pressure Problem" class="' . $class[3] . '">' . round($value->air_pressure_problem) . '</span></td>
-	    		<td class="text-center"><span title="Power Failure" class="' . $class[4] . '">' . round($value->power_failure) . '</span></td>
-	    		<td class="text-center"><span title="Part Shortage" class="' . $class[5] . '">' . round($value->part_shortage) . '</span></td>
-	    		<td class="text-center"><span title="Set Up 1st Time Running TP" class="' . $class[6] . '">' . round($value->set_up_1st_time_running_tp) . '</span></td>
-	    		<td class="text-center"><span title="Part Arrangement DCN" class="' . $class[7] . '">' . round($value->part_arrangement_dcn) . '</span></td>
-	    		<td class="text-center"><span title="Meeting" class="' . $class[8] . '">' . round($value->meeting) . '</span></td>
-	    		<td class="text-center"><span title="Dandori" class="' . $class[9] . '">' . round($value->dandori) . '</span></td>
-	    		<td class="text-center"><span title="Program Error" class="' . $class[10] . '">' . round($value->porgram_error) . '</span></td>
-	    		<td class="text-center"><span title="MC Problem" class="' . $class[11] . '">' . round($value->m_c_problem) . '</span></td>
-	    		<td class="text-center"><span title="Feeder Problem" class="' . $class[12] . '">' . round($value->feeder_problem) . '</span></td>
-	    		<td class="text-center"><span title="Quality Problem" class="' . $class[13] . '">' . round($value->quality_problem) . '</span></td>
-	    		<td class="text-center"><span title="PCB Transfer Problem" class="' . $class[14] . '">' . round($value->pcb_transfer_problem) . '</span></td>
-	    		<td class="text-center"><span title="Profile Problem" class="' . $class[15] . '">' . round($value->profile_problem) . '</span></td>
-	    		<td class="text-center"><span title="Pick Up Error" class="' . $class[16] . '">' . round($value->pick_up_error) . '</span></td>
-	    		<td class="text-center"><span title="Other" class="' . $class[17] . '">' . round($value->other) . '</span></td>
+	    		<td class="text-center"><span title="Break Time" class="' . $class[0] . '">' . round($value->break_time, 1) . '</span></td>
+	    		<td class="text-center"><span title="Nozzle Maintenance" class="' . $class[1] . '">' . round($value->nozzle_maintenance, 1) . '</span></td>
+	    		<td class="text-center"><span title="Change Schedule" class="' . $class[2] . '">' . round($value->change_schedule, 1) . '</span></td>
+	    		<td class="text-center"><span title="Air Pressure Problem" class="' . $class[3] . '">' . round($value->air_pressure_problem, 1) . '</span></td>
+	    		<td class="text-center"><span title="Power Failure" class="' . $class[4] . '">' . round($value->power_failure, 1) . '</span></td>
+	    		<td class="text-center"><span title="Part Shortage" class="' . $class[5] . '">' . round($value->part_shortage, 1) . '</span></td>
+	    		<td class="text-center"><span title="Set Up 1st Time Running TP" class="' . $class[6] . '">' . round($value->set_up_1st_time_running_tp, 1) . '</span></td>
+	    		<td class="text-center"><span title="Part Arrangement DCN" class="' . $class[7] . '">' . round($value->part_arrangement_dcn, 1) . '</span></td>
+	    		<td class="text-center"><span title="Meeting" class="' . $class[8] . '">' . round($value->meeting, 1) . '</span></td>
+	    		<td class="text-center"><span title="Dandori" class="' . $class[9] . '">' . round($value->dandori, 1) . '</span></td>
+	    		<td class="text-center"><span title="Program Error" class="' . $class[10] . '">' . round($value->porgram_error, 1) . '</span></td>
+	    		<td class="text-center"><span title="MC Problem" class="' . $class[11] . '">' . round($value->m_c_problem, 1) . '</span></td>
+	    		<td class="text-center"><span title="Feeder Problem" class="' . $class[12] . '">' . round($value->feeder_problem, 1) . '</span></td>
+	    		<td class="text-center"><span title="Quality Problem" class="' . $class[13] . '">' . round($value->quality_problem, 1) . '</span></td>
+	    		<td class="text-center"><span title="PCB Transfer Problem" class="' . $class[14] . '">' . round($value->pcb_transfer_problem, 1) . '</span></td>
+	    		<td class="text-center"><span title="Profile Problem" class="' . $class[15] . '">' . round($value->profile_problem, 1) . '</span></td>
+	    		<td class="text-center"><span title="Pick Up Error" class="' . $class[16] . '">' . round($value->pick_up_error, 1) . '</span></td>
+	    		<td class="text-center"><span title="Other" class="' . $class[17] . '">' . round($value->other, 1) . '</span></td>
 	    	</tr>';
 	    }
 

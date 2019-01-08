@@ -31,6 +31,13 @@ class GoPickingDepartureController extends Controller
 	    	])
 	    	->one();
 
+	    	if ($order_data->id == null) {
+	    		\Yii::$app->session->setFlash('danger', "There is no order for Slip Number : $slip_id. Please order data first before departure...!");
+	    		return $this->render('index', [
+					'model' => $model
+				]);
+	    	}
+
 	    	if ($order_data->daparture_date != null) {
 	    		\Yii::$app->session->setFlash('warning', "Slip Number : $slip_id has been departed at $order_data->daparture_date");
 	    		return $this->render('index', [

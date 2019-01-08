@@ -5,6 +5,8 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\WipEffViewRunPerDay2;
 use yii\web\JsExpression;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 class SmtPerformanceRatioController extends Controller
 {
@@ -47,7 +49,16 @@ class SmtPerformanceRatioController extends Controller
 			];
 			$tmp_data[$line]['idle_time'][] = [
 				'x' => $post_date,
-				'y' => $idle_hour
+				'y' => $idle_hour,
+				'url' => Url::to(['smt-daily-utility-report/get-loss-time-line', 'proddate' => date('Y-m-d', strtotime($eff_data->post_date)), 'line' => $line]),
+				'events' => [
+                    'click' => new JsExpression("
+                        function(e){
+                            e.preventDefault();
+                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                        }
+                    "),
+                ]
 			];
 			$tmp_data[$line]['off_time'][] = [
 				'x' => $post_date,
@@ -61,6 +72,7 @@ class SmtPerformanceRatioController extends Controller
 					'name' => 'Idle',
 					'data' => $value['idle_time'],
 					'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+					'cursor' => 'pointer',
 				],
 				[
 					'name' => 'Running',
@@ -81,4 +93,5 @@ class SmtPerformanceRatioController extends Controller
 			'month' => $month,
 		]);
 	}
+	
 }
