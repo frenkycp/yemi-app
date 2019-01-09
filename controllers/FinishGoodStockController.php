@@ -84,19 +84,19 @@ class FinishGoodStockController extends Controller
             ];*/
             $tmp_data[0][] = [
                 'y' => (int)$stock_data['finish_goods_qty'],
-                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 2]),
+                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 2, 'qa_ok' => '']),
             ];
             $tmp_data[1][] = [
                 'y' => (int)$stock_data['finish_goods_ok_qty'],
-                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 2]),
+                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 2, 'qa_ok' => 'OK']),
             ];
             $tmp_data[2][] = [
                 'y' => (int)$stock_data['fa_output_qty'],
-                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1]),
+                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1, 'qa_ok' => '']),
             ];
             $tmp_data[3][] = [
                 'y' => (int)$stock_data['fa_output_ok_qty'],
-                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1]),
+                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1, 'qa_ok' => 'OK']),
             ];
     	}
 
@@ -113,7 +113,7 @@ class FinishGoodStockController extends Controller
     	]);
     }
 
-    public function actionGetRemark($dst, $loct)
+    public function actionGetRemark($dst, $loct, $qa_ok)
     {
         $detail_stock = SernoInput::find()
         ->select([
@@ -126,27 +126,50 @@ class FinishGoodStockController extends Controller
         ->where(['>=', 'etd', date('Y-m-d')])
         ->andWhere([
             'dst' => $dst,
-            'loct' => $loct
+            'loct' => $loct,
+            'qa_ok' => $qa_ok,
         ])
         ->groupBy('tb_serno_input.gmc, dst, loct')
         ->orderBy('stock_qty DESC')
         ->all();
 
-        switch ($loct) {
+        if ($loct == 1) {
+            if ($qa_ok == 'OK') {
+                $location = 'FA Output - OK';
+            } else {
+                $location = 'FA Output - No Judge';
+            }
+        } elseif ($loct == 2) {
+            if ($qa_ok == 'OK') {
+                $location = 'Finish Good WH  (完成品倉庫) - OK';
+            } else {
+                $location = 'Finish Good WH  (完成品倉庫) - No Judge';
+            }
+        }
+
+        /*switch ($loct) {
+            case 0:
+                $location = 'Finish Good WH  (完成品倉庫) - No Judge';
+                break;
+
             case 1:
-                $location = 'InTransit Area (トランジットエリア）';
+                $location = 'Finish Good WH  (完成品倉庫) - OK';
                 break;
 
             case 2:
-                $location = 'Finish Good WH  (完成品倉庫)';
+                $location = 'FA Output - No Judge';
+                break;
+
+            case 3:
+                $location = 'FA Output - OK';
                 break;
             
             default:
                 $location = 'Production Floor (生産職場)';
                 break;
-        }
+        }*/
 
-        $remark = '<h4>' . $location . ' <small>' . $dst . '</small></h4>';
+        $remark = '<h4>' . $location . ' <small>(' . $dst . ')</small></h4>';
         $remark .= '<table class="table table-bordered table-striped table-hover">';
         $remark .= '
         <tr>

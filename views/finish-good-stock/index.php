@@ -119,7 +119,7 @@ echo '</pre>';*/
                     [
                         'name' => 'Finish Good WH  (完成品倉庫) - OK',
                         'data' => $data[1],
-                        'color' => 'rgba(0, 0, 255, 1)',
+                        'color' => 'rgba(0, 0, 255, 0.7)',
                     ],
                     [
                         'name' => 'Finish Good WH  (完成品倉庫) - No Judge',
@@ -127,12 +127,12 @@ echo '</pre>';*/
                         'color' => 'rgba(0, 0, 200, 0.5)',
                     ],
                     [
-                        'name' => 'FA Output (OK)',
+                        'name' => 'FA Output - OK',
                         'data' => $data[3],
-                        'color' => 'rgba(0, 255, 0, 1)',
+                        'color' => 'rgba(0, 255, 0, 0.7)',
                     ],
                     [
-                        'name' => 'FA Output (No Judge)',
+                        'name' => 'FA Output - No Judge',
                         'data' => $data[2],
                         'color' => 'rgba(0, 200, 0, 0.5)',
                     ],
