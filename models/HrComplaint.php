@@ -27,7 +27,10 @@ class HrComplaint extends BaseHrComplaint
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                [['period', 'nik', 'emp_name', 'department', 'section', 'sub_section', 'remark_category', 'response', 'category'], 'string'],
+                [['input_datetime', 'response_datetime'], 'safe'],
+                [['status'], 'integer'],
+                [['remark'], 'required'],
             ]
         );
     }
