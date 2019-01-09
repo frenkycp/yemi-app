@@ -164,39 +164,34 @@ $this->registerJs("
                 if (confirm('Do you want to request order for ' + request_time + ' ?')) {
                     var keys = $('#grid').yiiGridView('getSelectedRows');
                     var strvalue = \"\";
-                    var dest_value = $('#loc_to_select').val();
-                    if(dest_value != ''){
-                        $('input[name=\"selection[]\"]:checked').each(function() {
-                            if(strvalue!=\"\")
-                                strvalue = strvalue + \",\"+this.value;
-                            else
-                                strvalue = this.value;
-                        });
-                        $.post({
-                            url: '" . Url::to(['order']) . "',
-                            data: {
-                                keylist: keys,
-                                nama : 'Frenky',
-                                value : strvalue,
-                                destination : dest_value,
-                                request_time: request_time
-                            },
-                            dataType: 'json',
-                            success: function(data) {
-                                if(data.success == false){
-                                    alert(\"Can't create order. \" + data.message);
-                                } else {
-                                    alert(data.message);
-                                    location.href = location.href;
-                                }
-                            },
-                            error: function (request, status, error) {
-                                alert(error);
+                    $('input[name=\"selection[]\"]:checked').each(function() {
+                        if(strvalue!=\"\")
+                            strvalue = strvalue + \",\"+this.value;
+                        else
+                            strvalue = this.value;
+                    });
+                    $.post({
+                        url: '" . Url::to(['order']) . "',
+                        data: {
+                            keylist: keys,
+                            nama : 'Frenky',
+                            value : strvalue,
+                            destination : \"\",
+                            request_time: request_time
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            if(data.success == false){
+                                alert(\"Can't create order. \" + data.message);
+                            } else {
+                                alert(data.message);
+                                location.href = location.href;
                             }
-                        });
-                    } else {
-                        alert('Please select destination first!');
-                    }
+                        },
+                        error: function (request, status, error) {
+                            alert(error);
+                        }
+                    });
                 } else {
                     alert('Change the time at top-left of the table!');
                 }
@@ -265,11 +260,7 @@ $this->registerJs("
                         'format' => 'yyyy-mm-dd hh:ii:ss'
                     ]
                 ]) . '</div>',
-                'after' => 'To Location : ' . Html::dropDownList('loc_to', null, $location_dropdown, [
-                    'class' => 'btn btn-danger',
-                    'id' => 'loc_to_select',
-                    'prompt' => 'Select Destination ...'
-                ]) . '&nbsp;&nbsp;<button class="btn btn-primary" id="order_btn">Order</button>',
+                'after' => '<button class="btn btn-primary" id="order_btn">Order</button>',
                 'afterOptions' => [
                     'class'=>'kv-panel-after pull-right',
                 ],

@@ -63,7 +63,7 @@ class MaterialBlueListController extends \app\controllers\base\MaterialBlueListC
 					':item' => $material_data->parent,
 					':item_desc' => $material_data->parent_desc,
 					':from_loc' => 'WAREHOUSE',
-					':to_loc' => $destination,
+					':to_loc' => '',
 					':source' => 'MAT',
 					':requestor' => \Yii::$app->user->identity->username,
 					//':requestor' => '150826',
