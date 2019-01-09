@@ -29,8 +29,11 @@ class FinishGoodStockController extends Controller
         ->select([
             'dst' => 'tb_serno_output.dst',
             //'prod_output_qty' => 'SUM(CASE WHEN loct = 0 THEN 1 ELSE 0 END)',
-            'in_transit_qty' => 'SUM(CASE WHEN loct = 1 THEN 1 ELSE 0 END)',
-            'finish_goods_qty' => 'SUM(CASE WHEN loct = 2 THEN 1 ELSE 0 END)',
+            //'in_transit_qty' => 'SUM(CASE WHEN loct = 1 THEN 1 ELSE 0 END)',
+            'fa_output_qty' => 'SUM(CASE WHEN loct = 1 AND qa_ok = \'\' THEN 1 ELSE 0 END)',
+            'fa_output_ok_qty' => 'SUM(CASE WHEN loct = 1 AND qa_ok = \'OK\' THEN 1 ELSE 0 END)',
+            'finish_goods_qty' => 'SUM(CASE WHEN loct = 2 AND qa_ok = \'\' THEN 1 ELSE 0 END)',
+            'finish_goods_ok_qty' => 'SUM(CASE WHEN loct = 2 AND qa_ok = \'OK\' THEN 1 ELSE 0 END)',
             'stock_qty' => 'COUNT(dst)'
         ])
         ->joinWith('sernoOutput')
@@ -75,13 +78,25 @@ class FinishGoodStockController extends Controller
                 'y' => (int)$stock_data['prod_output_qty'],
                 'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 0]),
             ];*/
-            $tmp_data[1][] = [
+            /*$tmp_data[1][] = [
                 'y' => (int)$stock_data['in_transit_qty'],
                 'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1]),
-            ];
-            $tmp_data[2][] = [
+            ];*/
+            $tmp_data[0][] = [
                 'y' => (int)$stock_data['finish_goods_qty'],
                 'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 2]),
+            ];
+            $tmp_data[1][] = [
+                'y' => (int)$stock_data['finish_goods_ok_qty'],
+                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 2]),
+            ];
+            $tmp_data[2][] = [
+                'y' => (int)$stock_data['fa_output_qty'],
+                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1]),
+            ];
+            $tmp_data[3][] = [
+                'y' => (int)$stock_data['fa_output_ok_qty'],
+                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1]),
             ];
     	}
 

@@ -59,8 +59,8 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                'themes/grid-light',
-                //'themes/sand-signika',
+                //'themes/grid-light',
+                'themes/sand-signika',
                 //'themes/dark-unica',
             ],
             'options' => [
@@ -115,16 +115,28 @@ echo '</pre>';*/
                     ]
                 ],
                 'series' => [
+                    
                     [
-                        'name' => 'Finish Good WH  (完成品倉庫)',
-                        'data' => $data[2],
-                        'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
-                    ],
-                    [
-                        'name' => 'FA Output',
+                        'name' => 'Finish Good WH  (完成品倉庫) - OK',
                         'data' => $data[1],
-                        'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+                        'color' => 'rgba(0, 0, 255, 1)',
                     ],
+                    [
+                        'name' => 'Finish Good WH  (完成品倉庫) - No Judge',
+                        'data' => $data[0],
+                        'color' => 'rgba(0, 0, 200, 0.5)',
+                    ],
+                    [
+                        'name' => 'FA Output (OK)',
+                        'data' => $data[3],
+                        'color' => 'rgba(0, 255, 0, 1)',
+                    ],
+                    [
+                        'name' => 'FA Output (No Judge)',
+                        'data' => $data[2],
+                        'color' => 'rgba(0, 200, 0, 0.5)',
+                    ],
+                    
                     /*[
                         'name' => 'Production Floor (生産職場)',
                         'data' => $data[0],
