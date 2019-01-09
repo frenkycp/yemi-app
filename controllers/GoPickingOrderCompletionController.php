@@ -145,6 +145,7 @@ class GoPickingOrderCompletionController extends Controller
 		$data .= 
 		'<thead style="font-size: 12px;"><tr class="info">
             <th class="text-center">Slip No.</th>
+            <th>Model</th>
             <th class="text-center">Item</th>
             <th>Item Description</th>
             <th class="text-center">Qty</th>
@@ -166,6 +167,7 @@ class GoPickingOrderCompletionController extends Controller
 			$data .= '
 				<tr>
 					<td class="text-center">' . $value->slip_id . '</td>
+					<td>' . $value->model . '</td>
                     <td class="text-center">' . $value->item . '</td>
                     <td>' . $value->item_desc . '</td>
                     <td class="text-center">' . $qty . '</td>
