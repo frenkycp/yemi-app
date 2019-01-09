@@ -128,6 +128,9 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('SMT Utility & Loss Time Management<br/><span class="japanesse-word">( SMT稼働率・ロスタイム管理）</span>', ['/smt-daily-utility-report']); ?>
                                 </li>
+                                <li>
+                                    <?= Html::a('SMT Performance Ratio<br/><span class="japanesse-word"></span>', ['/smt-performance-ratio']); ?>
+                                </li>
                             </ol>
                         </div>
                     </div>
