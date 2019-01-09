@@ -35,6 +35,7 @@ use Yii;
  * @property string $model
  * @property string $SequenceID
  * @property string $post_date
+ * @property string $vms_date
  * @property string $aliasModel
  */
 abstract class GojekOrderTbl extends \yii\db\ActiveRecord
@@ -65,7 +66,7 @@ abstract class GojekOrderTbl extends \yii\db\ActiveRecord
     {
         return [
             [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'DEPARTURE_NAMA_KARYAWAN', 'ARRIVAL_KARYAWAN', 'model', 'SequenceID'], 'string'],
-            [['issued_date', 'request_date', 'daparture_date', 'arrival_date', 'post_date'], 'safe'],
+            [['issued_date', 'request_date', 'daparture_date', 'arrival_date', 'post_date', 'vms_date'], 'safe'],
             [['GOJEK_VALUE', 'LT', 'quantity', 'quantity_original'], 'number'],
             [['session_id'], 'integer']
         ];
@@ -103,6 +104,7 @@ abstract class GojekOrderTbl extends \yii\db\ActiveRecord
             'model' => 'Model',
             'SequenceID' => 'Sequence ID',
             'post_date' => 'Post Date',
+            'vms_date' => 'Vms Date',
         ];
     }
 

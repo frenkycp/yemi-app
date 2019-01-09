@@ -93,6 +93,23 @@ $gridColumns = [
         'filter' => $tmp_location,
     ],
     [
+        'attribute' => 'vms_date',
+        'label' => 'VMS Date',
+        'value' => function($model){
+            $vmsdate = '-';
+            if ($model->vms_date) {
+                $vmsdate = date('Y-m-d', strtotime($model->vms_date));
+            }
+            return $vmsdate;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 100px;'
+        ],
+    ],
+    [
         'attribute' => 'from_loc',
         'vAlign' => 'middle',
         'hAlign' => 'center',

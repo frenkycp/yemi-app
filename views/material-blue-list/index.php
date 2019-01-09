@@ -130,7 +130,7 @@ $grid_columns = [
     ],
     [
         'attribute' => 'req_date',
-        'label' => 'Request Date',
+        'label' => 'VMS Date',
         'value' => function($model){
             return date('Y-m-d', strtotime($model->req_date));
         },

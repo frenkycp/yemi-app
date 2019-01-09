@@ -115,7 +115,7 @@ echo '</pre>';*/
                                 ],
                                 'xAxis' => [
                                     'type' => 'datetime',
-                                    'offset' => 10,
+                                    //'offset' => 10,
                                 ],
                                 'yAxis' => [
                                     'title' => [

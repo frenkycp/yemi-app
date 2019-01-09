@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id'], 'integer'],
-            [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'model_group', 'period_line', 'session_no', 'period'], 'safe'],
+            [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'model_group', 'period_line', 'session_no', 'period', 'vms_date'], 'safe'],
             [['GOJEK_VALUE'], 'number'],
 ];
 }
@@ -60,7 +60,7 @@ $query->andFilterWhere([
             'id' => $this->id,
             //'issued_date' => $this->issued_date,
             //'daparture_date' => $this->daparture_date,
-            //'arrival_date' => $this->arrival_date,
+            'vms_date' => $this->vms_date,
             'GOJEK_VALUE' => $this->GOJEK_VALUE,
             'WIP_PLAN_ACTUAL_REPORT.period_line' => $this->period_line,
             'WIP_PLAN_ACTUAL_REPORT.session_id' => $this->session_no,
