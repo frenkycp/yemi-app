@@ -96,9 +96,9 @@ class PalletTransporterController extends Controller
 				->one();
 				$pallet_driver->nik = $nik;
 				$pallet_driver->driver_name = $karyawan->NAMA_KARYAWAN;
-				$pallet_driver->order_from = $line;
 				$pallet_driver->todays_point = 0;
 			}
+			$pallet_driver->order_from = $line;
 
 			$today = new \DateTime(date('Y-m-d'));
 			$last_update = new \DateTime(date('Y-m-d', strtotime($pallet_driver->last_update)));
