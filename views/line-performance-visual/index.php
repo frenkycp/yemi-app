@@ -62,17 +62,21 @@ $avg_max = $avg_eff + 3;
 if ($gmc == '-') {
 	$text = '-';
 	$panel_class = 'success';
+	$text_class = 'text-green';
 } else {
 	if ($current_eff >= $avg_max) {
 		$text = '"BAGUS"';
 		$panel_class = 'success';
+		$text_class = 'text-green';
 	} else {
 		if ($current_eff >= $avg_min) {
 			$text = '"MASUK"';
 			$panel_class = 'warning';
+			$text_class = 'text-yellow';
 		} else {
 			$text = '"AYO KAIZEN...!"';
 			$panel_class = 'danger';
+			$text_class = 'text-danger';
 		}
 	}
 }
@@ -185,6 +189,6 @@ if ($gmc == '-') {
 </div>
 <hr>
 <div class="text-center">
-	<span style="font-size: 4em; font-weight: bold; color: white;"><?= $text; ?></span>
+	<span style="font-size: 4em; font-weight: bold; text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;" class="<?= $text_class; ?>"><?= $text; ?></span>
 </div>
 <hr>

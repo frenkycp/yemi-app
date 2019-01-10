@@ -98,7 +98,9 @@ $gridColumns = [
         'label' => 'Location',
         'value' => function($model){
             $string = '';
-            if ($model->loct == 2) {
+            if ($model->loct == 1) {
+                $string = 'FA Output';
+            } elseif ($model->loct == 2) {
                 $string = 'Finish Good WH';
             } elseif ($model->loct == 3) {
                 $string = 'Export';
@@ -106,6 +108,7 @@ $gridColumns = [
             return $string;
         },
         'filter' => [
+            1 => 'FA Output',
             2 => 'Finish Good WH',
             3 => 'Export',
         ],

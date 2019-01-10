@@ -16,10 +16,16 @@ class OutputLocationDataController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 		$searchModel  = new OutputLocationDataSearch;
+		$searchModel->proddate = date('Y-m-d');
+
+		if(\Yii::$app->request->get('proddate') !== null)
+	    {
+	    	$searchModel->proddate = \Yii::$app->request->get('proddate');
+	    }
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
