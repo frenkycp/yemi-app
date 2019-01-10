@@ -27,7 +27,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 10000); // milliseconds
+      setTimeout("refreshPage();", 5000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -79,7 +79,7 @@ if ($gmc == '-') {
 
 
 ?>
-<hr>
+
 <div class="row">
 	<div class="col-md-3">
 		<div class="box box-default box-solid text-center">
@@ -96,7 +96,7 @@ if ($gmc == '-') {
 		        <?= Html::dropDownList('line', \Yii::$app->request->get('line'), $line_dropdown, [
 		            'class' => 'form-control',
 		            'onchange'=>'this.form.submit()',
-		            'style' => 'height: 80px; padding: 3px 12px; font-size:4em;'
+		            'style' => 'height: 60px; padding: 3px 12px; font-size:3em;'
 		        ]); ?>
 
 		        <?php ActiveForm::end(); ?>
@@ -109,7 +109,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">GMC</h3>
 			</div>
 			<div class="box-body">
-				<span id="gmc" style="font-size: 4em;"><?= $gmc; ?></span>
+				<span id="gmc" style="font-size: 3em;"><?= $gmc; ?></span>
 			</div>
 		</div>
 	</div>
@@ -119,7 +119,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">Model</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 4em;"><?= $currently_model; ?></span>
+				<span style="font-size: 3em;"><?= $currently_model; ?></span>
 			</div>
 		</div>
 	</div>
@@ -133,7 +133,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">Manpower</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 4em;"><?= $mp; ?></span>
+				<span style="font-size: 3em;"><?= $mp; ?></span>
 			</div>
 		</div>
 	</div>
@@ -143,7 +143,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">Output Production Time</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 4em;"><?= $last_production_time; ?></span>
+				<span style="font-size: 3em;"><?= $last_production_time; ?></span>
 			</div>
 		</div>
 	</div>
@@ -153,17 +153,29 @@ if ($gmc == '-') {
 				<h3 class="box-title">Total Production Time</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 4em;"><?= $total_production_time; ?></span>
+				<span style="font-size: 3em;"><?= $total_production_time; ?></span>
 			</div>
 		</div>
 	</div>
 	<div class="col-md-3">
 		<div class="box box-default box-solid text-center">
 			<div class="box-header with-border">
+				<h3 class="box-title">Efficiency Total</h3>
+			</div>
+			<div class="box-body">
+				<span style="font-size: 3em;"><?= $total_eff . '%'; ?></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="box box-default box-solid text-center">
+			<div class="box-header with-border">
 				<h3 class="box-title">Efficiency Target</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 4em;"><?= $avg_eff . '%'; ?></span>
+				<span style="font-size: 3em;"><?= $avg_eff . '%'; ?></span>
 			</div>
 		</div>
 	</div>
@@ -173,6 +185,6 @@ if ($gmc == '-') {
 </div>
 <hr>
 <div class="text-center">
-	<span style="font-size: 5em; font-weight: bold; color: white;"><?= $text; ?></span>
+	<span style="font-size: 4em; font-weight: bold; color: white;"><?= $text; ?></span>
 </div>
 <hr>

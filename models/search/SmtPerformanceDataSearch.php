@@ -45,7 +45,16 @@ public function search($params)
 $query = WipEffView::find();
 
 $dataProvider = new ActiveDataProvider([
-'query' => $query,
+    'query' => $query,
+    'sort' => [
+        'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'post_date' => SORT_DESC,
+            'LINE' => SORT_ASC,
+            'SMT_SHIFT' => SORT_ASC,
+            'child_01' => SORT_ASC,
+        ]
+    ],
 ]);
 
 $this->load($params);

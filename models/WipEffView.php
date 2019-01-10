@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WipEffView extends BaseWipEffView
 {
+    public $gross_eff, $nett_eff;
 
     public function behaviors()
     {

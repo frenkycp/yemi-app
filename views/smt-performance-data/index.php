@@ -127,6 +127,38 @@ $grid_column = [
         'mergeHeader' => true,
     ],
     [
+        'attribute' => 'gross_eff',
+        'label' => 'Gross Eff. (%)<br/>(C / D)',
+        'encodeLabel' => false,
+        'value' => function($model){
+            $eff = 0;
+            if ($model->lt_gross > 0) {
+                $eff = round(($model->lt_std / $model->lt_gross) * 100, 1);
+            }
+            return $eff;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'nett_eff',
+        'label' => 'Nett Eff. (%)<br/>(C / F)',
+        'encodeLabel' => false,
+        'value' => function($model){
+            $eff = 0;
+            if ($model->lt_gross > 0) {
+                $eff = round(($model->lt_std / $model->lt_nett) * 100, 1);
+            }
+            return $eff;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+    ],
+    [
         'attribute' => 'start_date',
         'label' => 'Start',
         'hAlign' => 'center',

@@ -35,11 +35,14 @@ class LinePerformanceVisualController extends Controller
 			'line' => $line
 		])
 		->orderBy('waktu DESC')
-		->all();
+		->one();
 
 		$currently_running = null;
-		$total_production_time = 0;
-		$total_mp = 0;
+		if ($currently_running_arr->gmc != null) {
+			$currently_running = $currently_running_arr;
+		}
+		//$total_production_time = 0;
+		//$total_mp = 0;
 		foreach ($currently_running_arr as $value) {
 			if ($currently_running == null) {
 				$currently_running = $value;
@@ -69,11 +72,14 @@ class LinePerformanceVisualController extends Controller
 			$currently_model .= ' // ' . $master->dest;
 		}
 
-		$total_production_time = gmdate('H:i:s', ($total_production_time * 60));
+		//$total_production_time = gmdate('H:i:s', ($total_production_time * 60));
 		$gmc = '-';
 		if ($master->gmc != null) {
 			$gmc = $master->gmc;
 		}
+
+		$tmp_total = $this->getTotalEfficiency(date('Y-m-d'), $line, $gmc);
+		$total_production_time = gmdate('H:i:s', ($tmp_total[1] * 60));
 
 		return $this->render('index', [
 			'data' => $data,
@@ -87,22 +93,30 @@ class LinePerformanceVisualController extends Controller
 			'line_dropdown' => $line_dropdown,
 			'gmc' => $gmc,
 			'mp' => $currently_running->mp == null ? 0 : $currently_running->mp,
+			'total_eff' => $tmp_total[0],
 		]);
 	}
 
-	public function getAvgGmcEff($gmc)
+	public function getTotalEfficiency($proddate, $line, $gmc)
 	{
-		/**/$tmp_data = DprGmcEffView::find()
+		$tmp_eff = SernoInput::find()
 		->select([
-			'efficiency' => 'AVG(efficiency)'
+			'qty_time' => 'ROUND(SUM(qty_time),2)',
+    		'mp_time' => 'ROUND(SUM(mp_time),2)',
+    		'wrk_time' => 'ROUND(SUM(wrk_time),2)'
 		])
-		->where(['>', 'proddate', date('Y-m-d', strtotime(date('Y-m-d') . ' -1 month'))])
-		->andWhere(['<', 'proddate', date('Y-m-d')])
-		->andWhere(['gmc' => $gmc])
+		->where([
+			'proddate' => $proddate,
+			'line' => $line,
+			'gmc' => $gmc,
+		])
 		->one();
 
-		return round($tmp_data->efficiency);
-		///return 70;
+		$eff = 0;
+		if ($tmp_eff->mp_time > 0) {
+            $eff = round(($tmp_eff->qty_time / $tmp_eff->mp_time) * 100, 2);
+        }
+        return [$eff, $tmp_eff->wrk_time];
 	}
 
 	public function actionUpdateData()
