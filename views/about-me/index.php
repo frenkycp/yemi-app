@@ -29,6 +29,31 @@ date_default_timezone_set('Asia/Jakarta');
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
+            Jan. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-01-08</span>
+
+            <h3 class="timeline-header"><a href="#">GO-PICKING Monitor</a></h3>
+
+            <div class="timeline-body">
+                Monitoring efficency of material movements from Warehouse to Production
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+    <!-- /.timeline-label -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
             Dec. 2018
         </span>
     </li>

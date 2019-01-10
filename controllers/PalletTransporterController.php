@@ -151,6 +151,7 @@ class PalletTransporterController extends Controller
 			$pallet_driver->todays_point++;
 			$pallet_driver->last_update = date('Y-m-d H:i:s');
 			$pallet_driver->driver_status = 2;
+			$pallet_driver->order_from = $line;
 			if (!$pallet_driver->save()) {
 				print_r($pallet_driver->errors);
 			}

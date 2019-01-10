@@ -131,6 +131,19 @@ class MntPreventiveDataController extends Controller
 		return $data;
 	}
 
+	public function actionGetEvidencePreview($mesin_id, $machine_desc, $masterplan)
+	{
+		$data = '<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>' . $mesin_id . '<br/><small>' . $machine_desc . ' >>> Preventive on ' . $masterplan . '</small></h3>
+		</div>
+		<div class="modal-body">
+		';
+		$data .= Html::img('@web/uploads/MNT_PREVENTIVE/' . $mesin_id . '_' . $masterplan . '.jpg', ['width' => '100%', 'class' => 'img-thumbnail']);
+		$data .= '</div>';
+		return $data;
+	}
+
 	/*public function actionGetHistory($mesin_id, $mesin_periode)
 	{
 		$data = '<table class="table table-bordered table-striped table-hover">';

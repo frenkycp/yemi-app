@@ -38,6 +38,10 @@ $this->registerJs("$(function() {
         e.preventDefault();
         $('#machine_info').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
+   $('.popup_evidence').click(function(e) {
+        e.preventDefault();
+        $('#preventive_evidence').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+   });
 });");
 
 $grid_columns = [
@@ -259,8 +263,16 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'value' => function($model){
-            return $model->count_close == 0 ? 'OPEN' : 'CLOSE';
+            $status = $model->count_close == 0 ? 'OPEN' : 'CLOSE';
+            $filename = $model->mesin_id . '_' . $model->master_plan_maintenance . '.jpg';
+            $path = \Yii::$app->basePath . '\\web\\uploads\\MNT_PREVENTIVE\\' . $filename;
+            if (file_exists($path)) {
+                return Html::a($status, ['get-evidence-preview', 'mesin_id' => $model->mesin_id, 'machine_desc' => $model->machine_desc, 'masterplan' => $model->master_plan_maintenance], ['class' => 'popup_evidence btn btn-info btn-xs', 'data-pjax' => '0',]);
+            } else {
+                return $status;
+            }
         },
+        'format' => 'html',
         'filter' => [
             0 => 'OPEN',
             1 => 'CLOSE'
@@ -365,6 +377,13 @@ $grid_columns = [
                 'id' =>'machine_info',
                 'header' => '<h3>Machine Image</h3>',
                 //'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+
+            yii\bootstrap\Modal::begin([
+                'id' =>'preventive_evidence',
+                'header' => '<h3>Preventive Evidence</h3>',
+                'size' => 'modal-lg',
             ]);
             yii\bootstrap\Modal::end();
         ?>
