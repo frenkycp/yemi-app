@@ -5,6 +5,7 @@ use yii\web\Controller;
 use app\models\SernoInput;
 use app\models\HakAkses;
 use app\models\DprGmcEffView;
+use app\models\SernoMp;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -92,7 +93,7 @@ class LinePerformanceVisualController extends Controller
 			'avg_eff' => $avg_eff,
 			'line_dropdown' => $line_dropdown,
 			'gmc' => $gmc,
-			'mp' => $currently_running->mp == null ? 0 : $currently_running->mp,
+			'mp' => $this->getTotalMp(date('Y-m-d'), $line),
 			'total_eff' => $tmp_total[0],
 		]);
 	}
@@ -117,6 +118,19 @@ class LinePerformanceVisualController extends Controller
             $eff = round(($tmp_eff->qty_time / $tmp_eff->mp_time) * 100, 2);
         }
         return [$eff, $tmp_eff->wrk_time];
+	}
+
+	public function getTotalMp($proddate, $line)
+	{
+		$count = SernoMp::find()
+		->where([
+			'tgl' => $proddate,
+			'line' => $line,
+			'status' => 0,
+		])
+		->count();
+
+		return $count;
 	}
 
 	public function actionUpdateData()

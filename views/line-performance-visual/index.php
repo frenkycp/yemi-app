@@ -184,7 +184,7 @@ if ($gmc == '-') {
 		</div>
 	</div>
 </div>
-<div class="progress" style="height: 50px; background-color: #363636;">
+<div class="progress" style="height: 50px; background-color: #363636; outline: 2px solid white;">
 	<div class="progress-bar progress-bar-striped progress-bar-<?= $panel_class; ?> active" role="progressbar" aria-valuenow="<?= $current_eff; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $current_eff > 100 ? 100 : $current_eff; ?>%; padding: 15px; font-size: 35px;"><?= $current_eff; ?>%</div>
 </div>
 <hr>
