@@ -71,18 +71,21 @@ class SmtPerformanceRatioController extends Controller
 				[
 					'name' => 'Idle',
 					'data' => $value['idle_time'],
-					'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+					'color' => 'rgba(255, 0, 0, 0.6)',
+					//'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 					'cursor' => 'pointer',
 				],
 				[
 					'name' => 'Running',
+					'color' => 'rgba(0, 255, 0, 0.6)',
 					'data' => $value['working_time'],
-					'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+					//'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
 				],
 				[
 					'name' => 'Off',
+					'color' => 'rgba(0, 0, 255, 0.6)',
 					'data' => $value['off_time'],
-					'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
+					//'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
 				],
 			];
 		}
@@ -115,18 +118,21 @@ class SmtPerformanceRatioController extends Controller
 			[
 				'name' => 'Idle',
 				'data' => $tmp_idling,
-				'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+				'color' => 'rgba(255, 0, 0, 0.6)',
+				//'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 				//'cursor' => 'pointer',
 			],
 			[
 				'name' => 'Running',
 				'data' => $tmp_running,
-				'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+				'color' => 'rgba(0, 255, 0, 0.6)',
+				//'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
 			],
 			[
 				'name' => 'Off',
 				'data' => $tmp_off,
-				'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
+				'color' => 'rgba(0, 0, 255, 0.6)',
+				//'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
 			],
 		];
 

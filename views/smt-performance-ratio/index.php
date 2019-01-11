@@ -104,6 +104,7 @@ $this->registerJs($script, View::POS_HEAD );
                             'options' => [
                                 'chart' => [
                                     'type' => 'column',
+                                    'zoomType' => 'x',
                                 ],
                                 'credits' => [
                                     'enabled' =>false
@@ -138,9 +139,10 @@ $this->registerJs($script, View::POS_HEAD );
                                         'stacking' => 'percent',
                                         'dataLabels' => [
                                             'enabled' => true,
+                                            'format' => '{point.percentage:.0f}% ({point.y})',
                                             //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                                             'style' => [
-                                                //'fontSize' => '14px',
+                                                'fontSize' => '10px',
                                                 'fontWeight' => '0'
                                             ],
                                         ],
@@ -225,6 +227,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'stacking' => 'percent',
                         'dataLabels' => [
                             'enabled' => true,
+                            'format' => '{point.percentage:.0f}% ({point.y})',
                             //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                             'style' => [
                                 //'fontSize' => '14px',
