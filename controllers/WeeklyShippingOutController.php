@@ -31,6 +31,7 @@ class WeeklyShippingOutController extends Controller
     		'max_week' => 'MAX(WEEK(ship,4))'
     	])
     	->where(['<>', 'stc', 'ADVANCE'])
+        ->andWhere(['LEFT(id,4)' => date('Y')])
     	//->andWhere(['<>', 'stc', 'NOSO'])
     	//->andWhere(['LEFT(id,4)' => date('Y')])
     	//->andWhere(['<>', 'ship', '9999-12-31'])
@@ -45,6 +46,9 @@ class WeeklyShippingOutController extends Controller
         if(count($min_max_week) > 0)
         {
             $start_week = $min_max_week->max_week - 10;
+            if ($start_week < 1) {
+                $start_week = 1;
+            }
             $end_week = $min_max_week->max_week;
         }
 
@@ -76,6 +80,7 @@ class WeeklyShippingOutController extends Controller
             'actual_qty' => 'SUM(actual_qty)'
         ])
         ->where(['>=', 'week_no', $start_week])
+        ->andWhere(['year' => date('Y')])
         ->groupBy('week_no, etd')
         ->orderBy('week_no, etd')
         ->all();
