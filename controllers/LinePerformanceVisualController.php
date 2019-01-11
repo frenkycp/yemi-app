@@ -43,13 +43,13 @@ class LinePerformanceVisualController extends Controller
 		}
 		//$total_production_time = 0;
 		//$total_mp = 0;
-		foreach ($currently_running_arr as $value) {
+		/*foreach ($currently_running_arr as $value) {
 			if ($currently_running == null) {
 				$currently_running = $value;
 			}
 			$total_production_time += $value->wrk_time;
 			$total_mp = $value->mp;
-		}
+		}*/
 
 		$current_eff = 0;
 		if ($currently_running->mp_time > 0) {
