@@ -156,45 +156,52 @@ $this->registerJs("
     $(document).ready(function() {
         $('#order_btn').click(function(){
             var request_time = $('#request_time').val();
+            var dest_value = $('#loc_to_select').val();
             if(request_time == ''){
                 alert('Please fill request time at the top left of the table before order!');
                 $(\"html, body\").animate({ scrollTop: 0 }, \"slow\");
                 return false;
-            } else {
-                if (confirm('Do you want to request order for ' + request_time + ' ?')) {
-                    var keys = $('#grid').yiiGridView('getSelectedRows');
-                    var strvalue = \"\";
-                    $('input[name=\"selection[]\"]:checked').each(function() {
-                        if(strvalue!=\"\")
-                            strvalue = strvalue + \",\"+this.value;
-                        else
-                            strvalue = this.value;
-                    });
-                    $.post({
-                        url: '" . Url::to(['order']) . "',
-                        data: {
-                            keylist: keys,
-                            nama : 'Frenky',
-                            value : strvalue,
-                            destination : \"\",
-                            request_time: request_time
-                        },
-                        dataType: 'json',
-                        success: function(data) {
-                            if(data.success == false){
-                                alert(\"Can't create order. \" + data.message);
-                            } else {
-                                alert(data.message);
-                                location.href = location.href;
-                            }
-                        },
-                        error: function (request, status, error) {
-                            alert(error);
+            }
+            if(dest_value == ''){
+                alert('Please select destination first!');
+                return false;
+            }
+            if (confirm('Do you want to request order for ' + request_time + ' ?')) {
+                var keys = $('#grid').yiiGridView('getSelectedRows');
+                var strvalue = \"\";
+                
+                $('input[name=\"selection[]\"]:checked').each(function() {
+                    if(strvalue!=\"\")
+                        strvalue = strvalue + \",\"+this.value;
+                    else
+                        strvalue = this.value;
+                });
+                $.post({
+                    url: '" . Url::to(['order']) . "',
+                    data: {
+                        keylist: keys,
+                        nama : 'Frenky',
+                        value : strvalue,
+                        destination : dest_value,
+                        request_time: request_time
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data.success == false){
+                            alert(\"Can't create order. \" + data.message);
+                        } else {
+                            alert(data.message);
+                            location.href = location.href;
                         }
-                    });
-                } else {
-                    alert('Change the time at top-left of the table!');
-                }
+                    },
+                    error: function (request, status, error) {
+                        alert(error);
+                    }
+                });
+                
+            } else {
+                alert('Change the time at top-left of the table!');
+                $(\"html, body\").animate({ scrollTop: 0 }, \"slow\");
             }
             
         }); 
@@ -260,7 +267,14 @@ $this->registerJs("
                         'format' => 'yyyy-mm-dd hh:ii:ss'
                     ]
                 ]) . '</div>',
-                'after' => '<button class="btn btn-primary" id="order_btn">Order</button>',
+                'after' => 'WH Location : ' . Html::dropDownList('loc_to', null, [
+                    'FACTORY-1' => 'FACTORY-1',
+                    'FACTORY-2' => 'FACTORY-2'
+                ], [
+                    'class' => 'btn btn-danger',
+                    'id' => 'loc_to_select',
+                    'prompt' => 'Select WH Loaction ...'
+                ]) . '&nbsp;&nbsp;<button class="btn btn-primary" id="order_btn">Order</button>',
                 'afterOptions' => [
                     'class'=>'kv-panel-after pull-right',
                 ],
