@@ -25,6 +25,9 @@ class GojekDriverUtilityController extends Controller
 		->where([
 			'<>', 'TERMINAL', 'Z'
 		])
+		->andWhere([
+			'<>', 'TERMINAL', 'K'
+		])
 		->groupBy('GOJEK_ID, GOJEK_DESC')
 		->orderBy('GOJEK_DESC')->all();
 

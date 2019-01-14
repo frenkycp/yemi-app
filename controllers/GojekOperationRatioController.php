@@ -38,6 +38,7 @@ class GojekOperationRatioController extends Controller
 
 		$tmp_driver_arr = GojekTbl::find()
 		->where(['<>', 'TERMINAL', 'Z'])
+		->andWhere(['<>', 'TERMINAL', 'K'])
 		->orderBy('GOJEK_DESC')
 		->all();
 

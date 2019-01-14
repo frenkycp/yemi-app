@@ -23,7 +23,7 @@ class GoPickingDriverUtilityController extends Controller
 		$driver_arr = GojekTbl::find()
 		->select('GOJEK_ID, GOJEK_DESC')
 		->where([
-			'TERMINAL' => 'Z'
+			'TERMINAL' => ['Z', 'K']
 		])
 		->groupBy('GOJEK_ID, GOJEK_DESC')
 		->orderBy('GOJEK_DESC')->all();
