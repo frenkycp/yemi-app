@@ -67,7 +67,7 @@ echo '</pre>';*/
                 <div class="box-header with-border">
                     <h4 class="box-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key; ?>">
-                            <?= $key . ' - ' . $value['nama'] . ' | '; ?>
+                            <?= $key . ' - ' . $value['nama'] . ' <i>(' . $value['factory'] . ')</i> | '; ?>
                         </a>
                         <small style="color: white;">
                             <b><?= $value['todays_point'] > 1 ? $value['todays_point'] . '</b> points' : $value['todays_point'] . '</b> point'; ?>

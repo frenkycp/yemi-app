@@ -29,7 +29,7 @@ class GoPickingOrderCompletionController extends Controller
 		->where([
 			'TERMINAL' => ['Z', 'K']
 		])
-		->orderBy('GOJEK_DESC')
+		->orderBy('TERMINAL DESC, GOJEK_DESC ASC')
 		->all();
 
 		$tmp_data = [];
@@ -89,6 +89,13 @@ class GoPickingOrderCompletionController extends Controller
 			$tmp_data[$nik]['from_loc'] = $value->from_loc;
 			$tmp_data[$nik]['to_loc'] = $value->to_loc;
 			$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
+
+			if ($value->TERMINAL == 'Z') {
+				$factory = 'FACTORY-1';
+			} elseif ($value->TERMINAL == 'K') {
+				$factory = 'FACTORY-2';
+			}
+			$tmp_data[$nik]['factory'] = $factory;
 		}
 
 		$fix_data = [];
@@ -111,6 +118,7 @@ class GoPickingOrderCompletionController extends Controller
 			$fix_data[$key]['to_loc'] = $value['to_loc'];
 			$fix_data[$key]['last_update'] = $value['last_update'];
 			$fix_data[$key]['todays_point'] = isset($driver_point_arr[$key]) ? $driver_point_arr[$key] : 0;
+			$fix_data[$key]['factory'] = $value['factory'];
 		}
 
 		return $this->render('index', [
