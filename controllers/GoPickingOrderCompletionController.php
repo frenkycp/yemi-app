@@ -27,7 +27,7 @@ class GoPickingOrderCompletionController extends Controller
 
 		$driver_arr = GojekTbl::find()
 		->where([
-			'TERMINAL' => 'Z'
+			'TERMINAL' => ['Z', 'K']
 		])
 		->orderBy('GOJEK_DESC')
 		->all();

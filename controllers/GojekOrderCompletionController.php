@@ -29,6 +29,9 @@ class GojekOrderCompletionController extends Controller
 		->where([
 			'<>', 'TERMINAL', 'Z'
 		])
+		->andWhere([
+			'<>', 'TERMINAL', 'K'
+		])
 		->orderBy('GOJEK_DESC')
 		->all();
 
