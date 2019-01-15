@@ -117,6 +117,9 @@ $this->registerJs($script, View::POS_HEAD );
 		                'overflow' => 'justify'
 		            ]
 		        ],
+		        'tooltip' => [
+                    'valueSuffix' => ' minutes',
+                ],
 		        'plotOptions' => [
 		        	'series' => [
                         'cursor' => 'pointer',

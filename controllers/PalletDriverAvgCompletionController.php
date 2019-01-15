@@ -89,6 +89,7 @@ class PalletDriverAvgCompletionController extends Controller
 
 	    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">';
 	    $remark .= '<tr>
+	    	<th class="text-center">No.</th>
 	    	<th class="text-center">Post Date</th>
 	    	<th class="text-center">Order from Line</th>
 	    	<th class="text-center">Departure</th>
@@ -106,15 +107,18 @@ class PalletDriverAvgCompletionController extends Controller
 	    ->asArray()
 	    ->all();
 
+	    $no = 1;
 	    foreach ($data_arr as $value) {
 	    	$completion_time = round($value['completion_time'] / 60, 1);
     		$remark .= '<tr>
+    			<td class="text-center">' . $no . '</td>
 	    		<td class="text-center">' . date('Y-m-d', strtotime($value['pk'])) . '</td>
 	    		<td class="text-center">' . $value['line'] . '</td>
 	    		<td class="text-center">' . $value['departure_datetime'] . '</td>
 	    		<td class="text-center">' . $value['arrival_datetime'] . '</td>
 	    		<td class="text-center">' . $completion_time . '</td>
 	    	</tr>';
+	    	$no++;
 	    }
 
 	    $remark .= '</table>';

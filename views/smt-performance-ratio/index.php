@@ -133,6 +133,7 @@ $this->registerJs($script, View::POS_HEAD );
                                     //'shared' => true,
                                     'crosshairs' => true,
                                     'xDateFormat' => '%Y-%m-%d',
+                                    'valueSuffix' => ' minutes',
                                 ],
                                 'plotOptions' => [
                                     'column' => [
