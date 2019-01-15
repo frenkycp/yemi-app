@@ -131,7 +131,7 @@ class MntPreventiveDataController extends Controller
 		return $data;
 	}
 
-	public function actionGetEvidencePreview($mesin_id, $machine_desc, $masterplan)
+	public function actionGetEvidencePreview($mesin_id, $machine_desc, $masterplan, $mesin_periode)
 	{
 		$data = '<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -139,7 +139,7 @@ class MntPreventiveDataController extends Controller
 		</div>
 		<div class="modal-body">
 		';
-		$data .= Html::img('@web/uploads/MNT_PREVENTIVE/' . $mesin_id . '_' . $masterplan . '.jpg', ['width' => '100%', 'class' => 'img-thumbnail']);
+		$data .= Html::img('@web/uploads/MNT_PREVENTIVE/' . $mesin_id . '_' . $mesin_periode . '_' . $masterplan . '.jpg', ['width' => '100%', 'class' => 'img-thumbnail']);
 		$data .= '</div>';
 		return $data;
 	}

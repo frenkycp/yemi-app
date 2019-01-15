@@ -15,3 +15,8 @@ composer.phar
 .phpintel/index
 web/assets/
 .phpintel/
+web/uploads/MNT_MACHINE/
+web/uploads/NG_MNT/
+web/uploads/yemi_employee_img/
+nbproject/private/private.xml
+web/uploads/MNT_PREVENTIVE/
