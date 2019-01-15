@@ -1,4 +1,5 @@
 <?php
+
 namespace app\controllers;
 
 use yii\web\Controller;
@@ -8,7 +9,7 @@ use app\models\GojekTbl;
 use app\models\GojekOrderTbl;
 use yii\helpers\Url;
 
-class GojekDriverAvgCompletionController extends Controller
+class GoPickingDriverAvgCompletionController extends Controller
 {
 
 	public function behaviors()
@@ -35,8 +36,7 @@ class GojekDriverAvgCompletionController extends Controller
         $period = $year . $month;
 
 		$tmp_driver_arr = GojekTbl::find()
-		->where(['<>', 'TERMINAL', 'Z'])
-		->andWhere(['<>', 'TERMINAL', 'K'])
+		->where(['TERMINAL' => ['Z', 'K']])
 		->orderBy('GOJEK_DESC')
 		->all();
 
