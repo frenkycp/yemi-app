@@ -29,8 +29,11 @@ class RfidInputController extends Controller
 			}
 		}
 
+		$total_registered = SernoRfid::find()->count();
+
 		return $this->render('index', [
-			'model' => $model
+			'model' => $model,
+			'total_registered' => $total_registered
 		]);
 	}
 }

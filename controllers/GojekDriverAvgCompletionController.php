@@ -96,6 +96,7 @@ class GojekDriverAvgCompletionController extends Controller
 
 	    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">';
 	    $remark .= '<tr>
+	    	<th class="text-center">No.</th>
 	    	<th class="text-center">Post Date</th>
 	    	<th class="text-center">Slip Num.</th>
 	    	<th class="text-center">Part Num.</th>
@@ -108,14 +109,17 @@ class GojekDriverAvgCompletionController extends Controller
 	    $data_arr = GojekOrderTbl::find()
 	    ->where([
 	    	'GOJEK_ID' => $nik,
-	    	'FORMAT(daparture_date, \'yyyyMM\')' => $period
+	    	'FORMAT(daparture_date, \'yyyyMM\')' => $period,
 	    ])
+	    ->andWhere('LT IS NOT NULL')
 	    ->orderBy('LT DESC')
 	    ->asArray()
 	    ->all();
 
+	    $no = 1;
 	    foreach ($data_arr as $value) {
     		$remark .= '<tr>
+    			<td class="text-center">' . $no . '</td>
 	    		<td class="text-center">' . date('Y-m-d', strtotime($value['post_date'])) . '</td>
 	    		<td class="text-center">' . $value['slip_id'] . '</td>
 	    		<td class="text-center">' . $value['item'] . '</td>
@@ -124,6 +128,7 @@ class GojekDriverAvgCompletionController extends Controller
 	    		<td class="text-center">' . $value['to_loc'] . '</td>
 	    		<td class="text-center">' . $value['LT'] . '</td>
 	    	</tr>';
+	    	$no++;
 	    }
 
 	    $remark .= '</table>';

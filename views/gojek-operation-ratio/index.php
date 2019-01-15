@@ -134,12 +134,14 @@ echo '</pre>';*/
                                     //'shared' => true,
                                     'crosshairs' => true,
                                     'xDateFormat' => '%Y-%m-%d',
+                                    'valueSuffix' => ' hours',
                                 ],
                                 'plotOptions' => [
                                     'column' => [
                                         'stacking' => 'percent',
                                         'dataLabels' => [
                                             'enabled' => true,
+                                            'format' => '{point.percentage:.0f}% ({point.y})',
                                             //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                                             'style' => [
                                                 //'fontSize' => '14px',
