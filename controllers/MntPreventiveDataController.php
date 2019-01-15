@@ -139,7 +139,7 @@ class MntPreventiveDataController extends Controller
 		</div>
 		<div class="modal-body">
 		';
-		$data .= Html::img('@web/uploads/MNT_PREVENTIVE/' . $mesin_id . '_' . $mesin_periode . '_' . $masterplan . '.jpg', ['width' => '100%', 'class' => 'img-thumbnail']);
+		$data .= Html::img('@web/uploads/NG_MNT/' . $mesin_id . '_' . $mesin_periode . '_' . $masterplan . '.jpg', ['width' => '100%', 'class' => 'img-thumbnail']);
 		$data .= '</div>';
 		return $data;
 	}

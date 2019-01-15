@@ -265,7 +265,7 @@ $grid_columns = [
         'value' => function($model){
             $status = $model->count_close == 0 ? 'OPEN' : 'CLOSE';
             $filename = $model->mesin_id . '_' . $model->mesin_periode . '_' . $model->master_plan_maintenance . '.jpg';
-            $path = \Yii::$app->basePath . '\\web\\uploads\\MNT_PREVENTIVE\\' . $filename;
+            $path = \Yii::$app->basePath . '\\web\\uploads\\NG_MNT\\' . $filename;
             if (file_exists($path)) {
                 return Html::a($status, ['get-evidence-preview', 'mesin_id' => $model->mesin_id, 'machine_desc' => $model->machine_desc, 'masterplan' => $model->master_plan_maintenance, 'mesin_periode' => $model->mesin_periode], ['class' => 'popup_evidence btn btn-info btn-xs', 'data-pjax' => '0',]);
             } else {
