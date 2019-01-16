@@ -136,13 +136,17 @@ $this->registerJs($script, View::POS_HEAD );
             echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                'themes/sand-signika',
+                //'themes/sand-signika',
+                'themes/grid-light',
             ],
             'options' => [
                 'chart' => [
                     'type' => 'column',
                     'height' => 400,
-                    'width' => null
+                    'width' => null,
+                    /**/'style' => [
+                        'fontFamily' => 'sans-serif'
+                    ],
                 ],
                 'credits' => [
                     'enabled' =>false
@@ -180,7 +184,7 @@ $this->registerJs($script, View::POS_HEAD );
                             'enabled' => true,
                             //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                             'style' => [
-                                'fontSize' => '14px',
+                                //'fontSize' => '13px',
                                 'fontWeight' => '0'
                             ],
                         ],

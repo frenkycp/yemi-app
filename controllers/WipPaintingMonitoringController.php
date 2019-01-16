@@ -54,7 +54,7 @@ class WipPaintingMonitoringController extends Controller
     		'period' => $period
     	])
     	->groupBy('week, due_date')
-    	->orderBy('week, due_date')
+    	->orderBy('due_date, week')
     	->all();
 
     	if ($model->loc != null) {
@@ -74,7 +74,7 @@ class WipPaintingMonitoringController extends Controller
 	    		'child_analyst_desc' => $model->loc
 	    	])
 	    	->groupBy('week, due_date')
-	    	->orderBy('week, due_date')
+	    	->orderBy('due_date, week')
 	    	->all();
     	}
 
