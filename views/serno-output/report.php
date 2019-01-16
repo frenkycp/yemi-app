@@ -145,14 +145,14 @@ $this->registerJs($script, View::POS_HEAD );
                     'height' => 400,
                     'width' => null,
                     /**/'style' => [
-                        'fontFamily' => 'sans-serif'
+                        'fontFamily' => 'Source Sans Pro'
                     ],
                 ],
                 'credits' => [
                     'enabled' =>false
                 ],
                 'title' => [
-                    'text' => 'Weekly Report'
+                    'text' => null
                 ],
                 'subtitle' => [
                     'text' => null
@@ -184,7 +184,7 @@ $this->registerJs($script, View::POS_HEAD );
                             'enabled' => true,
                             //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                             'style' => [
-                                //'fontSize' => '13px',
+                                'fontSize' => '13px',
                                 'fontWeight' => '0'
                             ],
                         ],
