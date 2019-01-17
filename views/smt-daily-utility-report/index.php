@@ -14,7 +14,10 @@ $this->title = [
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .modal-lg { width: 1300px;}
+");
 
 $script = <<< JS
     window.onload = setupRefresh;
@@ -130,7 +133,8 @@ echo '</pre>';*/
                         'series' => [
                             'cursor' => 'pointer',
                             'dataLabels' => [
-                                'allowOverlap' => true
+                                'enabled' => true,
+                                //'allowOverlap' => true
                             ],
                             'point' => [
                                 'events' => [
@@ -195,7 +199,8 @@ echo '</pre>';*/
                         'series' => [
                             'cursor' => 'pointer',
                             'dataLabels' => [
-                                'allowOverlap' => true
+                                'enabled' => true,
+                                //'allowOverlap' => true
                             ],
                             'point' => [
                                 'events' => [

@@ -113,6 +113,14 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'section',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'status',
         'value' => function($model){
             if ($model->status == 0) {

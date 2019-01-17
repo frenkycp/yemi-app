@@ -7,6 +7,8 @@ use yii\helpers\Url;
 use app\models\WipEffDailyUtilView03;
 use yii\web\JsExpression;
 use app\models\WipEffView;
+use app\models\WipEff07;
+use app\models\WipEff02;
 use app\models\WipLosstimeCategoryView;
 
 class SmtDailyUtilityReportController extends Controller
@@ -33,13 +35,6 @@ class SmtDailyUtilityReportController extends Controller
 
 		$period = $year . $month;
 
-		$utility_data_arr = WipEffDailyUtilView03::find()
-		->where([
-			'period' => $period
-		])
-		->asArray()
-		->all();
-
 		$tmp_working_ratio = [];
 		$tmp_operation_ratio = [];
 
@@ -52,12 +47,20 @@ class SmtDailyUtilityReportController extends Controller
 			foreach ($line_arr as $key => $line) {
 				$tmp_y1 = null;
 				$tmp_y2 = null;
-				foreach ($utility_data_arr as $key => $utility_data) {
-			   		if ($utility_data['post_date'] == $i->format("Y-m-d") && $utility_data['LINE'] == $line) {
-			   			$tmp_y1 = round((float)$utility_data['Working_Ratio'], 1);
-			   			$tmp_y2 = round((float)$utility_data['Operation_Ratio'], 1);
-			   		}
+
+				$tmp_utility_data = WipEff07::find()
+				->where([
+					'period' => $period,
+					'post_date' => $i->format("Y-m-d"),
+					'LINE' => $line
+				])
+				->one();
+
+				if ($tmp_utility_data->period != null) {
+					$tmp_y1 = round((float)$tmp_utility_data->efisiensi_working_ratio, 1);
+					$tmp_y2 = round((float)$tmp_utility_data->utility_operating_ratio, 1);
 				}
+				
 				$tmp_working_ratio[$line][] = [
 		    		'x' => $proddate,
 		    		'y' => $tmp_y1,
@@ -73,8 +76,6 @@ class SmtDailyUtilityReportController extends Controller
 			
 		}
 		
-		
-
 		$data = [
 			'working_ratio' => [
 				[
@@ -207,7 +208,7 @@ class SmtDailyUtilityReportController extends Controller
 		</div>
 		<div class="modal-body">
 		';
-
+		
 	    $remark .= '<table class="table table-bordered table-striped table-hover">';
 	    $remark .= '<tr style="font-size: 11px;">
 	    	<th class="text-center" style="min-width: 70px;">Shift</th>
@@ -215,17 +216,18 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th style="width: 100px;">Part Description</th>
 	    	<th class="text-center">Qty<br/>(A)</th>
 	    	<th class="text-center">ST<br/>(B)</th>
-	    	<th class="text-center">LT (Std)<br/>(C = A * B)</th>
-	    	<th class="text-center">LT (Gross)<br/>(D)</th>
-	    	<th class="text-center">Loss Time<br/>(E)</th>
-	    	<th class="text-center">LT (Nett)<br/>(F = D - E)</th>
-	    	<th class="text-center">Gross Eff.<br/>(%)<br/>(C / D)</th>
-	    	<th class="text-center">Nett Eff.<br/>(%)<br/>(C / F)</th>
+	    	<th class="text-center">ST All<br/>(C = A * B)</th>
+	    	<th class="text-center">Lead Time<br/>(D)</th>
+	    	<th class="text-center">Loss Time<br/>(Planned)<br/>(E)</th>
+	    	<th class="text-center">Loss Time<br/>(Planned Out Section)<br/>(F)</th>
+	    	<th class="text-center">Loss Time<br/>(Total)<br/>(G)</th>
+	    	<th class="text-center"></th>
+	    	<th class="text-center"></th>
 	    </tr>';
 
-	    $utility_data_arr = WipEffView::find()
+	    $utility_data_arr = WipEff02::find()
 	    ->where([
-	    	'CONVERT(date, post_date)' => $proddate,
+	    	'post_date' => $proddate,
 	    	'LINE' => $line
 	    ])
 	    ->orderBy('SMT_SHIFT, LINE, child_01')
@@ -233,18 +235,22 @@ class SmtDailyUtilityReportController extends Controller
 
 	    $no = 1;
 	    foreach ($utility_data_arr as $key => $utility_data) {
+	    	$machine_util = round($utility_data->machine_run_std_second / $utility_data->machine_run_act_second * 100, 2);
+	    	$gross_min_plan = round($utility_data->machine_run_std_second / ($utility_data->machine_run_act_second - $utility_data->loss_planned) * 100, 2);
+
 	    	$remark .= '<tr style="font-size: 10px;">
 	    		<td class="text-center">' . $utility_data->SMT_SHIFT . '</td>
 	    		<td class="text-center">' . $utility_data->child_01 . '</td>
 	    		<td>' . $utility_data->child_desc_01 . '</td>
 	    		<td class="text-center">' . $utility_data->qty_all . '</td>
 	    		<td class="text-center">' . $utility_data->std_all . '</td>
-	    		<td class="text-center">' . $utility_data->lt_std . '</td>
-	    		<td class="text-center">' . $utility_data->lt_gross . '</td>
-	    		<td class="text-center">' . $utility_data->lt_loss . '</td>
-	    		<td class="text-center">' . $utility_data->lt_nett . '</td>
-	    		<td class="text-center"><span class="text-green"><b>' . round($utility_data->efisiensi_gross, 1) . '</b></td>
-	    		<td class="text-center"><span class="text-green"><b>' . round($utility_data->efisiensi, 1) . '</b></td>
+	    		<td class="text-center">' . round($utility_data->machine_run_std_second / 60, 2) . '</td>
+	    		<td class="text-center">' . round($utility_data->machine_run_act_second / 60, 2) . '</td>
+	    		<td class="text-center">' . $utility_data->loss_planned . '</td>
+	    		<td class="text-center">' . $utility_data->loss_planned_outsection . '</td>
+	    		<td class="text-center">' . $utility_data->total_lost . '</td>
+	    		<td class="text-center">' . $machine_util . '</td>
+	    		<td class="text-center">' . $gross_min_plan . '</td>
 	    	</tr>';
 	    	$no++;
 	    }
