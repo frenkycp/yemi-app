@@ -56,7 +56,7 @@ echo $start_period . ' to ' . $end_period;*/
 
 <div class="row">
     <div class="col-md-3">
-        <?= Html::dropDownList('period', \Yii::$app->request->get('period'), [
+        <?= Html::dropDownList('period', $period_category, [
             1 => 'First Half Fiscal Year',
             2 => 'Second Half Fiscal Year',
         ], [

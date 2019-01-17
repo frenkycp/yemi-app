@@ -124,6 +124,9 @@ echo '</pre>';*/
                     'chart' => [
                         'type' => 'column',
                         'height' => 300,
+                        'style' => [
+                            'fontFamily' => 'Source Sans Pro'
+                        ],
                     ],
                     'credits' => [
                         'enabled' =>false

@@ -81,11 +81,14 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 'modules/exporting',
-                'themes/sand-signika',
+                'themes/grid-light',
             ],
             'options' => [
                 'chart' => [
                     'type' => 'column',
+                    'style' => [
+                        'fontFamily' => 'Source Sans Pro'
+                    ],
                 ],
                 'credits' => [
                     'enabled' => false
@@ -122,7 +125,7 @@ echo '</pre>';*/
                 ],
                 'plotOptions' => [
                     'column' => [
-                        'stacking' => 'normal',
+                        'stacking' => 'percent',
                         'dataLabels' => [
                             'enabled' => true,
                             //'format' => '{point.percentage:.2f}%',

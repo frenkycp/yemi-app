@@ -56,6 +56,9 @@ echo '<pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
+                    'style' => [
+                        'fontFamily' => 'Source Sans Pro'
+                    ],
                 ],
                 'credits' => [
                     'enabled' =>false
@@ -88,7 +91,7 @@ echo '<pre>';*/
                         'dataLabels' => [
                             'enabled' => true,
                             'style' => [
-                                'textOutline' => '0px',
+                                //'textOutline' => '0px',
                                 'fontWeight' => '0'
                             ],
                             //'allowOverlap' => \Yii::$app->request->get('menu') !== null ? false : true,

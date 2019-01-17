@@ -127,6 +127,9 @@ echo '<div class="box box-solid">';
                                             'chart' => [
                                                 'zoomType' => 'x',
                                                 'height' => $height,
+                                                'style' => [
+                                                    'fontFamily' => 'Source Sans Pro'
+                                                ],
                                             ],
                                             'title' => [
                                                 'text' => null,

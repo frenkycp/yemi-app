@@ -57,14 +57,17 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                //'themes/grid-light',
-                'themes/sand-signika',
+                'themes/grid-light',
+                //'themes/sand-signika',
                 //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 500
+                    'height' => 500,
+                    'style' => [
+                        'fontFamily' => 'Source Sans Pro'
+                    ],
                 ],
                 'credits' => [
                     'enabled' => false
@@ -98,11 +101,12 @@ echo '</pre>';*/
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
-                                'click' => new JsExpression('
-                                    function(){
-                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
                                     }
-                                '),
+                                "),
                             ]
                         ]
                     ],

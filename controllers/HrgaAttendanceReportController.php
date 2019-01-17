@@ -118,13 +118,13 @@ class HrgaAttendanceReportController extends Controller
     		[
     			'name' => 'ON LEAVE',
     			'data' => $tmp_data_cuti,
-    			'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+    			'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
     			'showInLegend' => false,
     		],
     		[
     			'name' => 'PRESENT',
     			'data' => $tmp_data_hadir,
-    			'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+    			'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
     			'showInLegend' => false,
     		]
     	];

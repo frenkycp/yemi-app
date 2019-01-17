@@ -139,11 +139,14 @@ echo '</pre>';*/
             echo Highcharts::widget([
                 'scripts' => [
                     //'modules/exporting',
-                    'themes/sand-signika',
+                    'themes/grid-light',
                 ],
                 'options' => [
                     'chart' => [
                         'type' => 'column',
+                        'style' => [
+                            'fontFamily' => 'Source Sans Pro'
+                        ],
                     ],
                     'title' => [
                         'text' => null

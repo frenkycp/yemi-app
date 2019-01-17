@@ -61,13 +61,16 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                //'themes/grid-light',
-                'themes/sand-signika',
+                'themes/grid-light',
+                //'themes/sand-signika',
                 //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
                     'type' => 'column',
+                    'style' => [
+                        'fontFamily' => 'Source Sans Pro'
+                    ],
                 ],
                 'title' => [
                     'text' => null,
@@ -82,7 +85,7 @@ echo '</pre>';*/
                 ],
                 'plotOptions' => [
                     'series' => [
-                        'cursor' => 'pointer',
+                        //'cursor' => 'pointer',
                         'dataLabels' => [
                             'allowOverlap' => true,
                             'enabled' => true,

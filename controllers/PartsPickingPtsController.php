@@ -22,17 +22,22 @@ class PartsPickingPtsController extends Controller
     {
 
 	    $period_category = 1;
+        $year = date('Y');
+        if (date('n') < 4) {
+            $year--;
+            $period_category = 2;
+        }
 	    if(\Yii::$app->request->get('period') !== null){
 	        $period_category = \Yii::$app->request->get('period');
 	    }
 
     	$categories = [];
     	if ($period_category == 1) {
-    		$start_period = date('Y') . '04';
-    		$end_period = date('Y') . '09';
+    		$start_period = $year . '04';
+    		$end_period = $year . '09';
     	} else {
-    		$start_period = date('Y') . '10';
-    		$end_period = date('Y', strtotime(date('Y-m-d') . ' +1 year')) . '03';
+    		$start_period = $year . '10';
+    		$end_period = ($year + 1) . '03';
     	}
 
     	$pts_data_arr = SapPickingPtsDetailView::find()
@@ -53,7 +58,7 @@ class PartsPickingPtsController extends Controller
     		$categories[] = $pts_data['PUR_LOC_DESC'];
     		$tmp_data[] = [
                 'y' => (int)$pts_data['total_count'],
-                'url' => Url::to(['get-remark', 'period_category' => $period_category, 'pur_loc_desc' => $pts_data['PUR_LOC_DESC']]),
+                'url' => Url::to(['get-remark', 'start_period' => $start_period, 'end_period' => $end_period, 'pur_loc_desc' => $pts_data['PUR_LOC_DESC']]),
             ];
     	}
 
@@ -69,19 +74,12 @@ class PartsPickingPtsController extends Controller
     		'categories' => $categories,
     		'start_period' => $start_period,
     		'end_period' => $end_period,
+            'period_category' => $period_category,
     	]);
     }
 
-    public function actionGetRemark($period_category, $pur_loc_desc)
+    public function actionGetRemark($start_period, $end_period, $pur_loc_desc)
     {
-        if ($period_category == 1) {
-            $start_period = date('Y') . '04';
-            $end_period = date('Y') . '09';
-        } else {
-            $start_period = date('Y') . '10';
-            $end_period = date('Y', strtotime(date('Y-m-d') . ' +1 year')) . '03';
-        }
-
         $data_arr = SapPickingPtsDetailView::find()
         ->select('parent, parent_desc, child, child_desc, division, pic_delivery, req_date, req_qty')
         ->where(['>=', 'period', $start_period])

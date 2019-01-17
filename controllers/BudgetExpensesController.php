@@ -11,11 +11,11 @@ use app\models\PrReportView;
 
 class BudgetExpensesController extends Controller
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 	
 	public function actionIndex()
 	{
@@ -48,14 +48,15 @@ class BudgetExpensesController extends Controller
 					'DEP_DESC' => $dept
 				])
 				->one();
-				$remark = $this->getRemark($dept, $category);
+				$remark = '';
+				//$remark = $this->getRemark($dept, $category);
 				$tmp_data[$dept]['BUDGET'][] = [
 					'y' => (int)$budget_data->BUDGET_AMT,
-					'remark' => $remark,
+					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category])
 				];
 				$tmp_data[$dept]['CONSUME'][] = [
 					'y' => (int)$budget_data->CONSUME_AMT,
-					'remark' => $remark,
+					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category])
 				];
 			}
 		}
@@ -117,10 +118,14 @@ class BudgetExpensesController extends Controller
 		return $return_arr;
 	}
 
-	public function getRemark($dept, $period)
+	public function actionGetRemark($dept, $period)
 	{
-		$data = "<h4>$dept<small> ($period)</small></h4>";
-		$data .= 
+		$data = '<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>Driver : ' . $dept . '<small> (' . $period . ')</small></h3>
+		</div>
+		<div class="modal-body">
+		';
 		$data .= '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
         '<thead style="font-size: 12px;"><tr class="info">
@@ -164,6 +169,7 @@ class BudgetExpensesController extends Controller
 
 		$data .= '</tbody>';
         $data .= '</table>';
+        $data .= '</div>';
 
 		return $data;
 	}

@@ -131,7 +131,7 @@ class PartsPickingStatusController extends Controller
                     [
                         'name' => 'ORDERED （受注）',
                         'data' => $tmp_data_ordered,
-                        'color' => 'rgba(255, 255, 255, 0.5)',
+                        'color' => 'rgba(200, 200, 200, 0.5)',
                     ],
                     [
                         'name' => 'STARTED (ピッキング中)',

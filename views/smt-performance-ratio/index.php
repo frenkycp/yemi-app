@@ -98,13 +98,16 @@ $this->registerJs($script, View::POS_HEAD );
                         echo Highcharts::widget([
                             'scripts' => [
                                 //'modules/exporting',
-                                //'themes/grid-light',
+                                'themes/grid-light',
                                 //'themes/sand-signika',
                             ],
                             'options' => [
                                 'chart' => [
                                     'type' => 'column',
                                     'zoomType' => 'x',
+                                    'style' => [
+                                        'fontFamily' => 'Source Sans Pro'
+                                    ],
                                 ],
                                 'credits' => [
                                     'enabled' =>false

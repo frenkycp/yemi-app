@@ -51,14 +51,17 @@ $this->registerJs($script, View::POS_HEAD );
 				'scripts' => [
 					'highcharts-more',
 			        'modules/exporting',
-			        'themes/sand-signika',
-			        //'themes/grid-light',
+			        //'themes/sand-signika',
+			        'themes/grid-light',
 			    ],
 			    'options' => [
 			    	'chart' => [
 			    		'type' => 'columnrange',
 			    		'inverted' => true,
 			    		'height' => 720,
+			    		'style' => [
+                            'fontFamily' => 'Source Sans Pro'
+                        ],
 			    	],
 			    	'title' => [
 				        'text' => $title

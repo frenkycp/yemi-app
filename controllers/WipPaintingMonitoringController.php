@@ -133,7 +133,7 @@ class WipPaintingMonitoringController extends Controller
 					[
 						'name' => 'ORDERED （受注）',
 						'data' => $value['order_percentage'],
-						'color' => 'rgba(255, 255, 255, 0.5)',
+						'color' => 'rgba(200, 200, 200, 0.5)',
 						//'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
 					],
 					/*[

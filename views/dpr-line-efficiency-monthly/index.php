@@ -101,13 +101,16 @@ echo '</pre>';*/
                     echo Highcharts::widget([
                         'scripts' => [
                             //'modules/exporting',
-                            //'themes/grid-light',
-                            'themes/sand-signika',
+                            'themes/grid-light',
+                            //'themes/sand-signika',
                             //'themes/dark-unica',
                         ],
                         'options' => [
                             'chart' => [
                                 'type' => 'line',
+                                'style' => [
+                                    'fontFamily' => 'Source Sans Pro'
+                                ],
                             ],
                             'credits' => [
                                 'enabled' => false
@@ -192,6 +195,9 @@ echo '</pre>';*/
                         'options' => [
                             'chart' => [
                                 'type' => 'line',
+                                'style' => [
+                                    'fontFamily' => 'Source Sans Pro'
+                                ],
                             ],
                             'credits' => [
                                 'enabled' => false
@@ -263,6 +269,9 @@ echo '</pre>';*/
                         'options' => [
                             'chart' => [
                                 'type' => 'column',
+                                'style' => [
+                                    'fontFamily' => 'Source Sans Pro'
+                                ],
                             ],
                             'credits' => [
                                 'enabled' => false

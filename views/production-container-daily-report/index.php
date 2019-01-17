@@ -72,10 +72,10 @@ echo '</pre>';*/
     
 
     <?php ActiveForm::end(); ?>
-    <h4>Total Container <span class="japanesse">(コンテナー総本数）</span> : <?= $total_container; ?></h4>
+    <h4>Last Update : <?= date('Y-m-d H:i:s'); ?></h4>
     <div class="box box-warning">
         <div class="box-header with-border">
-            <h3 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h3>
+            <h3 class="box-title"><i class="fa fa-tag"></i> Total Container <span class="japanesse">(コンテナー総本数）</span> : <?= $total_container; ?></h3>
         </div>
         <div class="box-body">
             <div class="nav-tabs-custom">
@@ -89,11 +89,15 @@ echo '</pre>';*/
                         echo Highcharts::widget([
                             'scripts' => [
                                 'modules/exporting',
-                                'themes/sand-signika',
+                                'themes/grid-light',
+                                //'themes/sand-signika',
                             ],
                             'options' => [
                                 'chart' => [
                                     'type' => 'column',
+                                    'style' => [
+                                        'fontFamily' => 'Source Sans Pro'
+                                    ],
                                 ],
                                 'credits' => [
                                     'enabled' => false
@@ -162,9 +166,6 @@ echo '</pre>';*/
                         echo Highcharts::widget([
                             'scripts' => [
                                 //'modules/exporting',
-                                //'themes/grid-light',
-                                //'themes/sand-signika',
-                                //'themes/dark-unica',
                             ],
                             'options' => [
                                 'chart' => [

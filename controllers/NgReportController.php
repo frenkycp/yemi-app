@@ -67,7 +67,7 @@ class NgReportController extends Controller
 				[
 					'name' => 'OPEN',
 					'data' => $value['open'],
-					'color' => 'white',
+					'color' => 'rgba(200, 200, 200, 0.7)',
 				],
 				[
 					'name' => 'CLOSE',

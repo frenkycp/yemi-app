@@ -42,14 +42,17 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 //'modules/exporting',
-                'themes/sand-signika',
-                //'themes/grid-light',
+                //'themes/sand-signika',
+                'themes/grid-light',
             ],
             'options' => [
                 'chart' => [
                     'type' => 'column',
                     'height' => 450,
-                    'width' => null
+                    'width' => null,
+                    'style' => [
+                        'fontFamily' => 'Source Sans Pro'
+                    ],
                 ],
                 'credits' => [
                     'enabled' =>false

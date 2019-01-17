@@ -68,6 +68,7 @@ return $dataProvider;
         $query->andFilterWhere(['like', 'JENIS_LEMBUR', $this->JENIS_LEMBUR])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),TGL_LEMBUR,120)', $this->TGL_LEMBUR])
             ->andFilterWhere(['like', 'CC_GROUP', $this->CC_GROUP])
+            ->andFilterWhere(['like', 'SPL_HDR_ID', $this->SPL_HDR_ID])
             ->andFilterWhere(['like', 'DEPT_SECTION', $this->DEPT_SECTION])
             ->andFilterWhere(['like', 'NIK', $this->NIK])
             ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])

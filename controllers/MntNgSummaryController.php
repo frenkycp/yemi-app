@@ -38,6 +38,8 @@ class MntNgSummaryController extends Controller
         ->where([
             'periode_kerusakan' => date('Ym')
         ])
+        ->andWhere('area != \'\'')
+        ->andWhere('area IS NOT NULL')
     	->groupBy('periode_kerusakan, week_no, area')
     	->orderBy('periode_kerusakan, week_no, area')
     	->all();
