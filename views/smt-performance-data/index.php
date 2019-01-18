@@ -41,14 +41,10 @@ $this->registerJs("$(function() {
 $grid_column = [
     [
         'attribute' => 'post_date',
+        'value' => function($model){
+            return date('Y-m-d', strtotime($model->post_date));
+        },
         'label' => 'Date',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '100px;',
-    ],
-    [
-        'attribute' => 'SMT_SHIFT',
-        'label' => 'Shift',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px;',
@@ -58,6 +54,13 @@ $grid_column = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '70px;',
+    ],
+    [
+        'attribute' => 'SMT_SHIFT',
+        'label' => 'Shift',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px;',
     ],
     [
         'attribute' => 'child_01',
@@ -80,6 +83,7 @@ $grid_column = [
         'vAlign' => 'middle',
         'width' => '70px;',
         'mergeHeader' => true,
+        'format' => ['decimal', 0],
     ],
     [
         'attribute' => 'std_all',
@@ -91,88 +95,119 @@ $grid_column = [
         'mergeHeader' => true,
     ],
     [
-        'attribute' => 'lt_std',
-        'label' => 'LT (Standart)<br/>(C = A * B)',
-        'encodeLabel' => false,
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '70px;',
-        'mergeHeader' => true,
-    ],
-    [
-        'attribute' => 'lt_gross',
-        'label' => 'LT (Gross)<br/>(D)',
-        'encodeLabel' => false,
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '70px;',
-        'mergeHeader' => true,
-    ],
-    [
-        'attribute' => 'lt_loss',
-        'label' => 'Loss Time<br/>(E)',
-        'encodeLabel' => false,
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '70px;',
-        'mergeHeader' => true,
-    ],
-    [
-        'attribute' => 'lt_nett',
-        'label' => 'LT (Nett)<br/>(F = D - E)',
-        'encodeLabel' => false,
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '70px;',
-        'mergeHeader' => true,
-    ],
-    [
-        'attribute' => 'gross_eff',
-        'label' => 'Gross Eff. (%)<br/>(C / D)',
-        'encodeLabel' => false,
+        'attribute' => 'machine_run_std_second',
+        'label' => 'Total ST<br/>(C = A * B)',
         'value' => function($model){
-            $eff = 0;
-            if ($model->lt_gross > 0) {
-                $eff = round(($model->lt_std / $model->lt_gross) * 100, 1);
-            }
-            return $eff;
+            return round($model->machine_run_std_second / 60, 2);
         },
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '70px;',
-        'mergeHeader' => true,
-    ],
-    [
-        'attribute' => 'nett_eff',
-        'label' => 'Nett Eff. (%)<br/>(C / F)',
         'encodeLabel' => false,
-        'value' => function($model){
-            $eff = 0;
-            if ($model->lt_gross > 0) {
-                $eff = round(($model->lt_std / $model->lt_nett) * 100, 1);
-            }
-            return $eff;
-        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '70px;',
         'mergeHeader' => true,
+        'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'start_date',
-        'label' => 'Start',
+        'attribute' => 'machine_run_act_second',
+        'label' => 'Lead Time<br/>(D)',
+        'value' => function($model){
+            return round($model->machine_run_act_second / 60, 2);
+        },
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px;',
+        'width' => '70px;',
         'mergeHeader' => true,
+        'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'end_date',
-        'label' => 'End',
+        'attribute' => 'loss_planned',
+        'label' => 'Loss Time<br/>(Planned)<br/>(E)',
+        'value' => function($model){
+            return round($model->loss_planned / 60, 2);
+        },
+        'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px;',
+        'width' => '70px;',
         'mergeHeader' => true,
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'loss_planned_outsection',
+        'label' => 'Loss Time<br/>(Planned Out Section)<br/>(F)',
+        'value' => function($model){
+            return round($model->loss_planned_outsection / 60, 2);
+        },
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'total_lost',
+        'label' => 'Loss Time<br/>(Total)<br/>(G)',
+        'value' => function($model){
+            return round($model->total_lost / 60, 2);
+        },
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'machine_utilization',
+        'label' => 'Utilization(%)<br/>(C / D)',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'gross_minus_planned_loss',
+        'label' => 'Gross(%)<br/>(C / (D - E))',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'nett1_minus_planned_outsection_loss',
+        'label' => 'Nett 1(%)<br/>(C / (D - F))',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'nett2_minus_all_loss',
+        'label' => 'Nett 2(%)<br/>(C / (D - G))',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+        'format' => ['decimal', 2],
+    ],
+    [
+        'attribute' => 'efisiensi_working_ratio',
+        'label' => 'Working Ratio(%)<br/>((C / 0.8) / (D - F))',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '70px;',
+        'mergeHeader' => true,
+        'format' => ['decimal', 2],
     ],
 ];
 ?>

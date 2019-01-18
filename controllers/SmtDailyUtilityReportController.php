@@ -8,7 +8,7 @@ use app\models\WipEffDailyUtilView03;
 use yii\web\JsExpression;
 use app\models\WipEffView;
 use app\models\WipEff07;
-use app\models\WipEff02;
+use app\models\WipEff03;
 use app\models\WipLosstimeCategoryView;
 
 class SmtDailyUtilityReportController extends Controller
@@ -210,22 +210,25 @@ class SmtDailyUtilityReportController extends Controller
 		';
 		
 	    $remark .= '<table class="table table-bordered table-striped table-hover">';
-	    $remark .= '<tr style="font-size: 11px;">
+	    $remark .= '<tr style="font-size: 12px;">
 	    	<th class="text-center" style="min-width: 70px;">Shift</th>
 	    	<th class="text-center">Part No</th>
 	    	<th style="width: 100px;">Part Description</th>
 	    	<th class="text-center">Qty<br/>(A)</th>
 	    	<th class="text-center">ST<br/>(B)</th>
-	    	<th class="text-center">ST All<br/>(C = A * B)</th>
+	    	<th class="text-center">Total ST<br/>(C = A * B)</th>
 	    	<th class="text-center">Lead Time<br/>(D)</th>
 	    	<th class="text-center">Loss Time<br/>(Planned)<br/>(E)</th>
 	    	<th class="text-center">Loss Time<br/>(Planned Out Section)<br/>(F)</th>
 	    	<th class="text-center">Loss Time<br/>(Total)<br/>(G)</th>
-	    	<th class="text-center"></th>
-	    	<th class="text-center"></th>
+	    	<th class="text-center">Utilization(%)<br/>(C / D)</th>
+	    	<th class="text-center">Gross(%)<br/>(C / (D - E))</th>
+	    	<th class="text-center">Nett 1(%)<br/>(C / (D - F))</th>
+	    	<th class="text-center">Nett 2(%)<br/>(C / (D - G))</th>
+	    	<th class="text-center">Working Ratio(%)<br/>((C / 0.8) / (D - F)</th>
 	    </tr>';
 
-	    $utility_data_arr = WipEff02::find()
+	    $utility_data_arr = WipEff03::find()
 	    ->where([
 	    	'post_date' => $proddate,
 	    	'LINE' => $line
@@ -238,19 +241,22 @@ class SmtDailyUtilityReportController extends Controller
 	    	$machine_util = round($utility_data->machine_run_std_second / $utility_data->machine_run_act_second * 100, 2);
 	    	$gross_min_plan = round($utility_data->machine_run_std_second / ($utility_data->machine_run_act_second - $utility_data->loss_planned) * 100, 2);
 
-	    	$remark .= '<tr style="font-size: 10px;">
+	    	$remark .= '<tr style="font-size: 12px;">
 	    		<td class="text-center">' . $utility_data->SMT_SHIFT . '</td>
 	    		<td class="text-center">' . $utility_data->child_01 . '</td>
 	    		<td>' . $utility_data->child_desc_01 . '</td>
-	    		<td class="text-center">' . $utility_data->qty_all . '</td>
-	    		<td class="text-center">' . $utility_data->std_all . '</td>
-	    		<td class="text-center">' . round($utility_data->machine_run_std_second / 60, 2) . '</td>
-	    		<td class="text-center">' . round($utility_data->machine_run_act_second / 60, 2) . '</td>
-	    		<td class="text-center">' . $utility_data->loss_planned . '</td>
-	    		<td class="text-center">' . $utility_data->loss_planned_outsection . '</td>
-	    		<td class="text-center">' . $utility_data->total_lost . '</td>
-	    		<td class="text-center">' . $machine_util . '</td>
-	    		<td class="text-center">' . $gross_min_plan . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->qty_all, 0) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->std_all, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter(round($utility_data->machine_run_std_second / 60, 2), 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter(round($utility_data->machine_run_act_second / 60, 2), 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->loss_planned, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->loss_planned_outsection, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->total_lost, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->machine_utilization, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->gross_minus_planned_loss, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->nett1_minus_planned_outsection_loss, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->nett2_minus_all_loss, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->efisiensi_working_ratio, 2) . '</td>
 	    	</tr>';
 	    	$no++;
 	    }
@@ -259,6 +265,11 @@ class SmtDailyUtilityReportController extends Controller
 	    $remark .= '</div>';
 
 	    return $remark;
+	}
+
+	function thousandSeparatorFormatter($value, $coma)
+	{
+		return number_format($value, $coma);
 	}
 
 	public function actionGetLossTimeLine($proddate, $line)
