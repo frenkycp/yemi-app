@@ -51,9 +51,9 @@ echo '</pre>';*/
 				]
 			) ?>
 		</div>
-		<div class="col-sm-1">
+		<div class="col-sm-2">
 			<?= $form->field($model, 'year')->dropDownList(
-				$year_arr,
+				\Yii::$app->params['year_arr'],
 				[
 					'onchange'=>'this.form.submit()',
                     'style' => 'font-size: 12px;'
