@@ -48,44 +48,41 @@ echo '</pre>';*/
 ]); ?>
 
 <div class="row">
-	<div class="col-md-1">
-		<div class="row">
-			<div class="box box-default box-solid text-center">
-				<div class="box-header with-border">
-					<h3 class="box-title">Line</h3>
-				</div>
-				<div class="box-body">
-					<?= Html::dropDownList('line', $line, [
-				    	'01' => '01',
-				    	'02' => '02',
-				    ], [
-				        'class' => 'form-control',
-				        'onchange'=>'this.form.submit()',
-				        'style' => 'height: 40px; padding: 3px 12px; font-size:1.5em;'
-				    ]); ?>
-				</div>
+	<div class="col-md-4">
+		<div class="box box-default box-solid text-center">
+			<div class="box-header with-border">
+				<h3 class="box-title">LINE</h3>
+			</div>
+			<div class="box-body">
+				<?= Html::dropDownList('line', $line, [
+			    	'01' => '01',
+			    	'02' => '02',
+			    ], [
+			        'class' => 'form-control',
+			        'onchange'=>'this.form.submit()',
+			        'style' => 'height: 40px; padding: 3px 12px; font-size:1.5em;'
+			    ]); ?>
 			</div>
 		</div>
-		<br/>
-		<div class="row">
-			<div class="box box-default box-solid text-center">
-				<div class="box-header with-border">
-					<h3 class="box-title">Year</h3>
-				</div>
-				<div class="box-body">
-					<?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
-			            'class' => 'form-control',
-			            'onchange'=>'this.form.submit()',
-			            'style' => 'height: 40px; padding: 3px 12px; font-size:1.5em;'
-			        ]); ?>
-				</div>
+	</div>
+	<div class="col-md-4">
+		<div class="box box-default box-solid text-center">
+			<div class="box-header with-border">
+				<h3 class="box-title">YEAR</h3>
+			</div>
+			<div class="box-body">
+				<?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
+		            'class' => 'form-control',
+		            'onchange'=>'this.form.submit()',
+		            'style' => 'height: 40px; padding: 3px 12px; font-size:1.5em;'
+		        ]); ?>
 			</div>
 		</div>
-		<br/>
-		<div class="row">
-			<div class="box box-default box-solid text-center">
+	</div>
+	<div class="col-md-4">
+		<div class="box box-default box-solid text-center">
 				<div class="box-header with-border">
-					<h3 class="box-title">Year</h3>
+					<h3 class="box-title">MONTH</h3>
 				</div>
 				<div class="box-body">
 					<?= Html::dropDownList('month', $month, [
@@ -108,153 +105,145 @@ echo '</pre>';*/
 			        ]); ?>
 				</div>
 			</div>
-			
-		</div>
 	</div>
-	<div class="col-md-11">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="box box-default box-solid">
-					<!--<div class="box-header with-border">
-						<h3 class="box-title">Dandori Utilization</h3>
-					</div>-->
-					<div class="box-body">
-						<?php
-						echo Highcharts::widget([
-							'scripts' => [
-			                    //'modules/exporting',
-			                    //'themes/grid-light',
-			                    'themes/dark-unica',
-			                ],
-			                'options' => [
-			                    'chart' => [
-			                        'type' => 'line',
-			                        'style' => [
-			                            'fontFamily' => 'sans-serif',
-			                        ],
-			                        'height' => 290
-			                    ],
-			                    'credits' => [
-			                        'enabled' => false
-			                    ],
-			                    'title' => [
-			                        'text' => null,
-			                    ],  
-			                    'xAxis' => [
-			                        'type' => 'datetime',
-			                    ],
-			                    'yAxis' => [
-			                        [
-			                        	'title' => [
-				                            'text' => 'Dandori (%)'
-				                        ],
-				                        'gridLineDashStyle' => 'Dash',
-				                        'min' => 0,
-				                        //'max' => 100,
-				                        'plotLines' => [
-			                                [
-			                                    'value' => 10,
-			                                    'color' => '#ff009d',
-			                                    'width' => 3,
-			                                    'zIndex' => 0,
-			                                    'label' => ['text' => '']
-			                                ]
-			                            ],
-			                        ],
-			                        [
-			                        	'title' => [
-				                            'text' => 'Lot'
-				                        ],
-				                        'opposite' => true,
-				                        //'gridLineDashStyle' => 'Dash',
-				                        //'min' => 0,
-				                        //'max' => 100,
-				                        /*'plotLines' => [
-			                                [
-			                                    'value' => 10,
-			                                    'color' => '#ff009d',
-			                                    'width' => 3,
-			                                    'zIndex' => 0,
-			                                    'label' => ['text' => '']
-			                                ]
-			                            ],*/
-			                        ],
-			                    ],
-			                    'tooltip' => [
-			                        'shared' => true,
-			                        'crosshairs' => true,
-			                        'xDateFormat' => '%Y-%m-%d',
-			                        //'valueSuffix' => '%',
-			                    ],
-			                    'series' => $data,
-			                ],
-						]);
-						?>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="box box-default box-solid">
-					<div class="box-body">
-					<?php
-		            echo Highcharts::widget([
-		                'scripts' => [
-		                    //'modules/exporting',
-		                    //'themes/grid-light',
-		                    //'themes/sand-signika',
-		                ],
-		                'options' => [
-		                    'chart' => [
-		                        //'zoomType' => 'x',
-		                        'type' => 'spline',
-		                        'style' => [
-		                            'fontFamily' => 'sans-serif',
+</div>
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="box box-default box-solid">
+			<!--<div class="box-header with-border">
+				<h3 class="box-title">Dandori Utilization</h3>
+			</div>-->
+			<div class="box-body">
+				<?php
+				echo Highcharts::widget([
+					'scripts' => [
+	                    //'modules/exporting',
+	                    //'themes/grid-light',
+	                    'themes/dark-unica',
+	                ],
+	                'options' => [
+	                    'chart' => [
+	                        'type' => 'line',
+	                        'style' => [
+	                            'fontFamily' => 'sans-serif',
+	                        ],
+	                        'height' => 290
+	                    ],
+	                    'credits' => [
+	                        'enabled' => false
+	                    ],
+	                    'title' => [
+	                        'text' => null,
+	                    ],  
+	                    'xAxis' => [
+	                        'type' => 'datetime',
+	                    ],
+	                    'yAxis' => [
+	                        [
+	                        	'title' => [
+		                            'text' => 'Dandori (%)'
 		                        ],
-		                        'height' => 230
-		                    ],
-		                    'credits' => [
-		                        'enabled' =>false
-		                    ],
-		                    'title' => [
-		                        'text' => null
-		                    ],
-		                    /*'legend' => [
-		                        'layout' => 'vertical',
-		                        'align' => 'left',
-		                        'verticalAlign' => 'middle'
-		                    ],*/
-		                    'xAxis' => [
-		                        'type' => 'datetime',
-		                    ],
-		                    'yAxis' => [
-		                        'title' => [
-		                            'enabled' => true,
-		                            'text' => 'Minutes',
-		                        ],
+		                        'gridLineDashStyle' => 'Dash',
+		                        'min' => 0,
+		                        //'max' => 100,
 		                        'plotLines' => [
 	                                [
-	                                    'value' => 20,
+	                                    'value' => 10,
 	                                    'color' => '#ff009d',
 	                                    'width' => 3,
 	                                    'zIndex' => 0,
 	                                    'label' => ['text' => '']
 	                                ]
 	                            ],
-		                    ],
-		                    'tooltip' => [
-		                        //'shared' => true,
-		                        //'crosshairs' => true,
-		                        'xDateFormat' => '%Y-%m-%d',
-		                        //'valueSuffix' => '%',
-		                    ],
-		                    'series' => $data2
-		                ],
-		            ]);
-		            ?>
-					</div>
-				</div>
+	                        ],
+	                        [
+	                        	'title' => [
+		                            'text' => 'Lot'
+		                        ],
+		                        'opposite' => true,
+		                        //'gridLineDashStyle' => 'Dash',
+		                        //'min' => 0,
+		                        //'max' => 100,
+		                        /*'plotLines' => [
+	                                [
+	                                    'value' => 10,
+	                                    'color' => '#ff009d',
+	                                    'width' => 3,
+	                                    'zIndex' => 0,
+	                                    'label' => ['text' => '']
+	                                ]
+	                            ],*/
+	                        ],
+	                    ],
+	                    'tooltip' => [
+	                        'shared' => true,
+	                        'crosshairs' => true,
+	                        'xDateFormat' => '%Y-%m-%d',
+	                        //'valueSuffix' => '%',
+	                    ],
+	                    'series' => $data,
+	                ],
+				]);
+				?>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<div class="box box-default box-solid">
+			<div class="box-body">
+			<?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    //'themes/grid-light',
+                    //'themes/sand-signika',
+                ],
+                'options' => [
+                    'chart' => [
+                        //'zoomType' => 'x',
+                        'type' => 'spline',
+                        'style' => [
+                            'fontFamily' => 'sans-serif',
+                        ],
+                        'height' => 230
+                    ],
+                    'credits' => [
+                        'enabled' =>false
+                    ],
+                    'title' => [
+                        'text' => null
+                    ],
+                    'xAxis' => [
+                        'type' => 'datetime',
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'enabled' => true,
+                            'text' => 'Minutes',
+                        ],
+                        'plotLines' => [
+                            [
+                                'value' => 20,
+                                'color' => '#ff009d',
+                                'width' => 3,
+                                'zIndex' => 0,
+                                'label' => ['text' => '']
+                            ]
+                        ],
+                    ],
+                    'tooltip' => [
+                        //'shared' => true,
+                        //'crosshairs' => true,
+                        'xDateFormat' => '%Y-%m-%d',
+                        //'valueSuffix' => '%',
+                    ],
+                    'series' => $data2
+                ],
+            ]);
+            ?>
 			</div>
 		</div>
 	</div>

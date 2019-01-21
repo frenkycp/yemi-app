@@ -54,7 +54,7 @@ class SmtDandoriController extends Controller
             $total_gmc = $dandori_data->ITEM;
 
             if ($total_gmc != null) {
-                $lot_avg_time = round((($dandori_data->dandori_second / 60) / $total_gmc), 2);
+                $lot_avg_time = round((($dandori_data->dandori_second / 60) / $total_gmc));
             }
 
 	    	$tmp_data[] = [
@@ -103,7 +103,6 @@ class SmtDandoriController extends Controller
                     'style' => [
                         'fontSize' => '14px',
                     ]
-                    //'allowOverlap' => true
                 ],
                 'tooltip' => [
                     'valueSuffix' => '%'
@@ -114,8 +113,16 @@ class SmtDandoriController extends Controller
         $data2[] = [
             'name' => 'Dandori Time',
             'data' => $tmp_data3,
+            'dataLabels' => [
+                'enabled' => true,
+                'format' => '{y} min.',
+                'color' => 'white',
+                'style' => [
+                    'fontSize' => '13px',
+                ]
+            ],
             'tooltip' => [
-                'valueSuffix' => ' Lot'
+                'valueSuffix' => ' min'
             ],
             'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
         ];
