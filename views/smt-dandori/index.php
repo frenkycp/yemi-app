@@ -24,6 +24,19 @@ $this->registerCss("
 	body {background-color: #33383D;}
 ");
 
+$script = <<< JS
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout("refreshPage();", 60000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+JS;
+
+$this->registerJs($script, View::POS_HEAD );
+
 /*echo '<pre>';
 print_r($data);
 echo '</pre>';*/
@@ -46,7 +59,7 @@ echo '</pre>';*/
 		        ], [
 		            'class' => 'form-control',
 		            'onchange'=>'this.form.submit()',
-		            'style' => 'height: 60px; padding: 3px 12px; font-size:3em;'
+		            'style' => 'height: 50px; padding: 3px 12px; font-size:2em;'
 		        ]); ?>
 			</div>
 		</div>
@@ -60,7 +73,7 @@ echo '</pre>';*/
 		        <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
 		            'class' => 'form-control',
 		            'onchange'=>'this.form.submit()',
-		            'style' => 'height: 60px; padding: 3px 12px; font-size:3em;'
+		            'style' => 'height: 50px; padding: 3px 12px; font-size:2em;'
 		        ]); ?>
 			</div>
 		</div>
@@ -87,7 +100,7 @@ echo '</pre>';*/
 		        ], [
 		            'class' => 'form-control',
 		            'onchange'=>'this.form.submit()',
-		            'style' => 'height: 60px; padding: 3px 12px; font-size:3em;'
+		            'style' => 'height: 50px; padding: 3px 12px; font-size:2em;'
 		        ]); ?>
 			</div>
 		</div>
@@ -99,7 +112,7 @@ echo '</pre>';*/
 	<div class="col-md-12">
 		<div class="box box-default box-solid">
 			<div class="box-header with-border">
-				<h3 class="box-title">Dandori Utilization</h3>
+				<!--<h3 class="box-title">Dandori Utilization</h3>-->
 			</div>
 			<div class="box-body">
 				<?php
@@ -115,7 +128,7 @@ echo '</pre>';*/
 	                        'style' => [
 	                            'fontFamily' => 'sans-serif',
 	                        ],
-	                        'height' => 350
+	                        'height' => 400
 	                    ],
 	                    'credits' => [
 	                        'enabled' => false
@@ -164,7 +177,7 @@ echo '</pre>';*/
 	                        ],
 	                    ],
 	                    'tooltip' => [
-	                        //'shared' => true,
+	                        'shared' => true,
 	                        'crosshairs' => true,
 	                        'xDateFormat' => '%Y-%m-%d',
 	                        //'valueSuffix' => '%',

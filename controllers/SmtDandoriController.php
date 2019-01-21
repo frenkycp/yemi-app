@@ -70,8 +70,15 @@ class SmtDandoriController extends Controller
                 'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
                 'dataLabels' => [
                     'enabled' => true,
-                    'format' => '{y} items'
+                    'format' => '{y} items',
+                    'color' => 'white',
+                    'style' => [
+                        'fontSize' => '14px',
+                    ]
                     //'allowOverlap' => true
+                ],
+                'tooltip' => [
+                    'valueSuffix' => ' items'
                 ],
             ],
     		[
@@ -81,8 +88,15 @@ class SmtDandoriController extends Controller
                 'lineWidth' => 2,
                 'dataLabels' => [
                     'enabled' => true,
-                    'format' => '{y} %'
+                    'format' => '{y} %',
+                    'color' => 'white',
+                    'style' => [
+                        'fontSize' => '14px',
+                    ]
                     //'allowOverlap' => true
+                ],
+                'tooltip' => [
+                    'valueSuffix' => '%'
                 ],
     		],
     	];
