@@ -37,8 +37,10 @@ class SmtDandoriController extends Controller
 
 		$tmp_data = [];
         $tmp_data2 = [];
+        $tmp_data3 = [];
     	for($i = $begin; $i <= $end; $i->modify('+1 day')){
     		$proddate = (strtotime($i->format("Y-m-d") . " +7 hours") * 1000);
+            $lot_avg_time = null;
     		$dandori_data = WipEff03Dandori05::find()
 	    	->where([
 	    		'period' => $period,
@@ -51,6 +53,10 @@ class SmtDandoriController extends Controller
 	    	$dandori_pct = $dandori_data->dandori_pct;
             $total_gmc = $dandori_data->ITEM;
 
+            if ($total_gmc != null) {
+                $lot_avg_time = round((($dandori_data->dandori_second / 60) / $total_gmc), 2);
+            }
+
 	    	$tmp_data[] = [
 	    		'x' => $proddate,
 	    		'y' => $dandori_pct,
@@ -59,6 +65,10 @@ class SmtDandoriController extends Controller
                 'x' => $proddate,
                 'y' => $total_gmc,
             ];
+            $tmp_data3[] = [
+                'x' => $proddate,
+                'y' => $lot_avg_time,
+            ];
     	}
 
     	$data = [
@@ -66,11 +76,11 @@ class SmtDandoriController extends Controller
                 'name' => 'Total Lot',
                 'data' => $tmp_data2,
                 'yAxis' => 1,
-                 'type' => 'column',
+                'type' => 'column',
                 'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
                 'dataLabels' => [
                     'enabled' => true,
-                    'format' => '{y} items',
+                    'format' => '{y} Lot',
                     'color' => 'white',
                     'style' => [
                         'fontSize' => '14px',
@@ -78,17 +88,17 @@ class SmtDandoriController extends Controller
                     //'allowOverlap' => true
                 ],
                 'tooltip' => [
-                    'valueSuffix' => ' items'
+                    'valueSuffix' => ' Lot'
                 ],
             ],
     		[
-    			'name' => 'Dandori Utilization',
+    			'name' => 'Dandori (%)',
     			'data' => $tmp_data,
     			'color' => 'yellow',
                 'lineWidth' => 2,
                 'dataLabels' => [
                     'enabled' => true,
-                    'format' => '{y} %',
+                    'format' => '{y}%',
                     'color' => 'white',
                     'style' => [
                         'fontSize' => '14px',
@@ -101,8 +111,18 @@ class SmtDandoriController extends Controller
     		],
     	];
 
+        $data2[] = [
+            'name' => 'Dandori Time',
+            'data' => $tmp_data3,
+            'tooltip' => [
+                'valueSuffix' => ' Lot'
+            ],
+            'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+        ];
+
         return $this->render('index', [
         	'data' => $data,
+            'data2' => $data2,
         	'year' => $year,
         	'month' => $month,
         ]);

@@ -80,6 +80,11 @@ echo '</pre>';*/
         <h3 class="box-title">Last Update : <?= date('Y-m-d H:i:s'); ?></h3>
     </div>
     <div class="box-body">
+        <div class="row">
+            <div class="col-md-12">
+                
+            </div>
+        </div>
         <div class="box-group" id="accordion">
         <?php
         foreach ($data as $key => $value) {
