@@ -118,7 +118,7 @@ class SmtDandoriController extends Controller
     	];
 
         $data2[] = [
-            'name' => $line == '01' ? 'Dandori Time (Max. 25 minutes)' : 'Dandori Time (Max. 15 minutes)',
+            'name' => $line == '01' ? 'Dandori Time - Max. 25 minutes' : 'Dandori Time - Max. 15 minutes',
             'data' => $tmp_data3,
             'dataLabels' => [
                 'enabled' => true,
