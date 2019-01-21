@@ -51,7 +51,7 @@ echo '</pre>';*/
 	<div class="col-md-4">
 		<div class="box box-default box-solid text-center">
 			<div class="box-header with-border">
-				<h3 class="box-title">LINE</h3>
+				<h3 class="box-title">SMT LINE</h3>
 			</div>
 			<div class="box-body">
 				<?= Html::dropDownList('line', $line, [
@@ -226,7 +226,7 @@ echo '</pre>';*/
                         ],
                         'plotLines' => [
                             [
-                                'value' => 20,
+                                'value' => $target_max,
                                 'color' => '#ff009d',
                                 'width' => 3,
                                 'zIndex' => 0,

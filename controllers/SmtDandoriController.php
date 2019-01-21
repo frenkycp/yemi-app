@@ -16,6 +16,7 @@ class SmtDandoriController extends Controller
     	$today = date('Y-m-d');
     	$year = date('Y');
     	$month = date('m');
+        $target_max = 0;
     	
 
     	if (\Yii::$app->request->get('year') !== null) {
@@ -29,6 +30,12 @@ class SmtDandoriController extends Controller
 		if (\Yii::$app->request->get('line') !== null) {
 			$line = \Yii::$app->request->get('line');
 		}
+
+        if ($line == '01') {
+            $target_max = 25;
+        } elseif ($line == '02') {
+            $target_max = 15;
+        }
 
         $period = $year . $month;
 
@@ -92,7 +99,7 @@ class SmtDandoriController extends Controller
                 ],
             ],
     		[
-    			'name' => 'Dandori (%)',
+    			'name' => 'Dandori Ratio(%) - Target Max 10%',
     			'data' => $tmp_data,
     			'color' => 'yellow',
                 'lineWidth' => 2,
@@ -111,7 +118,7 @@ class SmtDandoriController extends Controller
     	];
 
         $data2[] = [
-            'name' => 'Dandori Time',
+            'name' => $line == '01' ? 'Dandori Time (Max. 25 minutes)' : 'Dandori Time (Max. 15 minutes)',
             'data' => $tmp_data3,
             'dataLabels' => [
                 'enabled' => true,
@@ -132,6 +139,8 @@ class SmtDandoriController extends Controller
             'data2' => $data2,
         	'year' => $year,
         	'month' => $month,
+            'target_max' => $target_max,
+            'line' => $line,
         ]);
     }
 }
