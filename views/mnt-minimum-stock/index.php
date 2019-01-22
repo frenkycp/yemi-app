@@ -128,6 +128,21 @@ $grid_column = [
         ],
     ],
     [
+        'attribute' => 'req_qty',
+        'encodeLabel' => false,
+        'label' => 'Req.<br/>Qty',
+        'value' => function($model){
+            return (2 * $model->MIN_STOCK_QTY);
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'ONHAND',
         'encodeLabel' => false,
         'label' => 'Onhand<br/>Qty',
