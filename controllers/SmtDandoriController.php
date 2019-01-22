@@ -99,7 +99,7 @@ class SmtDandoriController extends Controller
                 ],
             ],
     		[
-    			'name' => 'Dandori Ratio(%) - Target Max 10%',
+    			'name' => 'Dandori Ratio',
     			'data' => $tmp_data,
     			'color' => 'yellow',
                 'lineWidth' => 2,
@@ -118,7 +118,7 @@ class SmtDandoriController extends Controller
     	];
 
         $data2[] = [
-            'name' => $line == '01' ? 'Dandori Time - Max. 25 minutes' : 'Dandori Time - Max. 15 minutes',
+            'name' => 'Dandori Time',
             'data' => $tmp_data3,
             'dataLabels' => [
                 'enabled' => true,

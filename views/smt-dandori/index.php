@@ -111,81 +111,86 @@ echo '</pre>';*/
 <div class="row">
 	<div class="col-md-12">
 		<div class="box box-default box-solid">
-			<!--<div class="box-header with-border">
-				<h3 class="box-title">Dandori Utilization</h3>
-			</div>-->
+			<div class="box-header with-border">
+				<!--<h3 class="box-title">Dandori Utilization</h3>-->
+			</div>
 			<div class="box-body">
-				<?php
-				echo Highcharts::widget([
-					'scripts' => [
-	                    //'modules/exporting',
-	                    //'themes/grid-light',
-	                    'themes/dark-unica',
-	                ],
-	                'options' => [
-	                    'chart' => [
-	                        'type' => 'line',
-	                        'style' => [
-	                            'fontFamily' => 'sans-serif',
-	                        ],
-	                        'height' => 290
-	                    ],
-	                    'credits' => [
-	                        'enabled' => false
-	                    ],
-	                    'title' => [
-	                        'text' => null,
-	                    ],  
-	                    'xAxis' => [
-	                        'type' => 'datetime',
-	                    ],
-	                    'yAxis' => [
-	                        [
-	                        	'title' => [
-		                            'text' => 'Dandori (%)'
+				<div class="col-md-12">
+					<?php
+					echo Highcharts::widget([
+						'scripts' => [
+		                    //'modules/exporting',
+		                    //'themes/grid-light',
+		                    'themes/dark-unica',
+		                ],
+		                'options' => [
+		                    'chart' => [
+		                        'type' => 'line',
+		                        'style' => [
+		                            'fontFamily' => 'sans-serif',
 		                        ],
-		                        'gridLineDashStyle' => 'Dash',
-		                        'min' => 0,
-		                        //'max' => 100,
-		                        'plotLines' => [
-	                                [
-	                                    'value' => 10,
-	                                    'color' => '#ff009d',
-	                                    'width' => 3,
-	                                    'zIndex' => 0,
-	                                    'label' => ['text' => '']
-	                                ]
-	                            ],
-	                        ],
-	                        [
-	                        	'title' => [
-		                            'text' => 'Lot'
+		                        'height' => 290
+		                    ],
+		                    'credits' => [
+		                        'enabled' => false
+		                    ],
+		                    'title' => [
+		                        'text' => null,
+		                    ],
+		                    'legend' => [
+		                    	'labelFormat' => 'Dandori Ratio(%) - Target Max. 10%'
+		                    ],
+		                    'xAxis' => [
+		                        'type' => 'datetime',
+		                    ],
+		                    'yAxis' => [
+		                        [
+		                        	'title' => [
+			                            'text' => 'Dandori (%)'
+			                        ],
+			                        'gridLineDashStyle' => 'Dash',
+			                        'min' => 0,
+			                        //'max' => 100,
+			                        'plotLines' => [
+		                                [
+		                                    'value' => 10,
+		                                    'color' => 'yellow',
+		                                    'width' => 1,
+		                                    'zIndex' => 0,
+		                                    'label' => ['text' => '']
+		                                ]
+		                            ],
 		                        ],
-		                        'opposite' => true,
-		                        //'gridLineDashStyle' => 'Dash',
-		                        //'min' => 0,
-		                        //'max' => 100,
-		                        /*'plotLines' => [
-	                                [
-	                                    'value' => 10,
-	                                    'color' => '#ff009d',
-	                                    'width' => 3,
-	                                    'zIndex' => 0,
-	                                    'label' => ['text' => '']
-	                                ]
-	                            ],*/
-	                        ],
-	                    ],
-	                    'tooltip' => [
-	                        'shared' => true,
-	                        'crosshairs' => true,
-	                        'xDateFormat' => '%Y-%m-%d',
-	                        //'valueSuffix' => '%',
-	                    ],
-	                    'series' => $data,
-	                ],
-				]);
-				?>
+		                        [
+		                        	'title' => [
+			                            'text' => 'Lot'
+			                        ],
+			                        'opposite' => true,
+			                        //'gridLineDashStyle' => 'Dash',
+			                        //'min' => 0,
+			                        //'max' => 100,
+			                        /*'plotLines' => [
+		                                [
+		                                    'value' => 10,
+		                                    'color' => '#ff009d',
+		                                    'width' => 3,
+		                                    'zIndex' => 0,
+		                                    'label' => ['text' => '']
+		                                ]
+		                            ],*/
+		                        ],
+		                    ],
+		                    'tooltip' => [
+		                        'shared' => true,
+		                        'crosshairs' => true,
+		                        'xDateFormat' => '%Y-%m-%d',
+		                        //'valueSuffix' => '%',
+		                    ],
+		                    'series' => $data,
+		                ],
+					]);
+					?>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -194,56 +199,61 @@ echo '</pre>';*/
 	<div class="col-md-12">
 		<div class="box box-default box-solid">
 			<div class="box-body">
-			<?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    //'themes/grid-light',
-                    //'themes/sand-signika',
-                ],
-                'options' => [
-                    'chart' => [
-                        //'zoomType' => 'x',
-                        'type' => 'spline',
-                        'style' => [
-                            'fontFamily' => 'sans-serif',
-                        ],
-                        'height' => 230
-                    ],
-                    'credits' => [
-                        'enabled' =>false
-                    ],
-                    'title' => [
-                        'text' => null
-                    ],
-                    'xAxis' => [
-                        'type' => 'datetime',
-                    ],
-                    'yAxis' => [
-                        'title' => [
-                            'enabled' => true,
-                            'text' => 'Minutes',
-                        ],
-                        'plotLines' => [
-                            [
-                                'value' => $target_max,
-                                'color' => '#ff009d',
-                                'width' => 3,
-                                'zIndex' => 0,
-                                'label' => ['text' => '']
-                            ]
-                        ],
-                    ],
-                    'tooltip' => [
-                        //'shared' => true,
-                        //'crosshairs' => true,
-                        'xDateFormat' => '%Y-%m-%d',
-                        //'valueSuffix' => '%',
-                    ],
-                    'series' => $data2
-                ],
-            ]);
-            ?>
+				<div class="col-md-12">
+					<?php
+		            echo Highcharts::widget([
+		                'scripts' => [
+		                    //'modules/exporting',
+		                    //'themes/grid-light',
+		                    //'themes/sand-signika',
+		                ],
+		                'options' => [
+		                    'chart' => [
+		                        //'zoomType' => 'x',
+		                        'type' => 'spline',
+		                        'style' => [
+		                            'fontFamily' => 'sans-serif',
+		                        ],
+		                        'height' => 230
+		                    ],
+		                    'credits' => [
+		                        'enabled' =>false
+		                    ],
+		                    'title' => [
+		                        'text' => null
+		                    ],
+		                    'xAxis' => [
+		                        'type' => 'datetime',
+		                    ],
+		                    'legend' => [
+		                    	'labelFormat' => 'Dandori Time - Max.' . $target_max . 'min'
+		                    ],
+		                    'yAxis' => [
+		                        'title' => [
+		                            'enabled' => true,
+		                            'text' => 'Minutes',
+		                        ],
+		                        'plotLines' => [
+		                            [
+		                                'value' => $target_max,
+		                                'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+		                                'width' => 1,
+		                                'zIndex' => 0,
+		                                'label' => ['text' => '']
+		                            ]
+		                        ],
+		                    ],
+		                    'tooltip' => [
+		                        //'shared' => true,
+		                        //'crosshairs' => true,
+		                        'xDateFormat' => '%Y-%m-%d',
+		                        //'valueSuffix' => '%',
+		                    ],
+		                    'series' => $data2
+		                ],
+		            ]);
+		            ?>
+				</div>
 			</div>
 		</div>
 	</div>

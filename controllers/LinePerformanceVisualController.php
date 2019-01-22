@@ -133,17 +133,4 @@ class LinePerformanceVisualController extends Controller
 		return $count;
 	}
 
-	public function actionUpdateData()
-	{
-		if (Yii::$app->request->isAjax) {
-		    $data = Yii::$app->request->post();
-		    $gmc = explode(":", $data['gmc']);
-		    $gmc = $gmc[0];
-		    \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		    return [
-		        'search' => $search,
-		        'code' => 100,
-		    ];
-  		}
-	}
 }
