@@ -38,6 +38,7 @@ class PalletOperationRatioController extends Controller
 		->all();
 
 		$tmp_data = [];
+		$tmp_data2 = [];
 		foreach ($tmp_driver_arr as $key => $tmp_driver) {
 			$nik = $tmp_driver->nik;
 
@@ -49,13 +50,14 @@ class PalletOperationRatioController extends Controller
 				'total_working' => 'SUM(completion_time)'
 			])
 			->where([
-				//'DATE(departure_datetime)' => 'DATE(arrival_datetime)',
 				'nik' => $nik,
 				'extract(year_month from pk)' => $period
 			])
+			->andWhere('DATE(pk) = DATE(departure_datetime)')
 			->groupBy('DATE(pk)')
 			->all();
 
+			
 			foreach ($tmp_log_arr as $key => $tmp_log) {
 				$start_time = $tmp_log->start_time;
 				$post_date = (strtotime($tmp_log->order_date . " +7 hours") * 1000);
@@ -77,6 +79,16 @@ class PalletOperationRatioController extends Controller
 				$working_hour = round($working_time / 3600, 1);
 				$break_hour = round($break_time / 3600, 1);
 				$idle_hour = round($idle_time / 3600, 1);
+
+				if (!isset($tmp_data2[$post_date]['workhour'])) {
+					$tmp_data2[$post_date]['workhour'] = 0;
+				}
+				if (!isset($tmp_data2[$post_date]['idle'])) {
+					$tmp_data2[$post_date]['idle'] = 0;
+				}
+
+				$tmp_data2[$post_date]['workhour'] += (int)$working_time;
+				$tmp_data2[$post_date]['idle'] += (int)$idle_time;
 
 				//hacking tool for make 8 hour
 				/*if ($working_hour + $idle_hour > 20) {
@@ -103,11 +115,36 @@ class PalletOperationRatioController extends Controller
 			$tmp_data[$nik]['name'] = $tmp_driver->driver_name;
 		}
 
+		$tmp_data3 = [];
+		foreach ($tmp_data2 as $key => $value) {
+			$tmp_data3['workhour'][] = [
+				'x' => $key,
+				'y' => round(($value['workhour'] / 3600), 1)
+			];
+			$tmp_data3['idle'][] = [
+				'x' => $key,
+				'y' => round(($value['idle'] / 3600), 1)
+			];
+		}
+
+		$data2 = [
+			[
+				'name' => 'Iddle Time (Total)',
+				'data' => $tmp_data3['idle'],
+				'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+			],
+			[
+				'name' => 'Delivery (Total)',
+				'data' => $tmp_data3['workhour'],
+				'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+			],
+		];
+
 		foreach ($tmp_data as $key => $value) {
 			$data[$key]['nama'] = $value['name'];
 			$data[$key]['data'] = [
 				[
-					'name' => 'Idle Time',
+					'name' => 'Iddle Time',
 					'data' => $value['idle_time'],
 					'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 				],
@@ -126,6 +163,7 @@ class PalletOperationRatioController extends Controller
 
 		return $this->render('index', [
 			'data' => $data,
+			'data2' => $data2,
 			'year' => $year,
 			'month' => $month
 		]);

@@ -43,6 +43,7 @@ class GojekOperationRatioController extends Controller
 		->all();
 
 		$tmp_data1 = [];
+		$tmp_data2 = [];
 		foreach ($tmp_driver_arr as $tmp_driver) {
 			$nik = $tmp_driver->GOJEK_ID;
 			$name = $tmp_driver->GOJEK_DESC;
@@ -57,6 +58,16 @@ class GojekOperationRatioController extends Controller
 			foreach ($order_report_arr as $value) {
 				//$post_date = date('Y-m-d', strtotime($value->post_date));
 				$post_date = (strtotime($value->post_date . " +7 hours") * 1000);
+				if (!isset($tmp_data2[$post_date]['workhour'])) {
+					$tmp_data2[$post_date]['workhour'] = 0;
+				}
+				if (!isset($tmp_data2[$post_date]['idle'])) {
+					$tmp_data2[$post_date]['idle'] = 0;
+				}
+
+				$tmp_data2[$post_date]['workhour'] += $value->Duration;
+				$tmp_data2[$post_date]['idle'] += $value->iddle;
+
 				$tmp_data1[$nik]['workhour'][] = [
 					'x' => $post_date,
 					'y' => round($value->Duration / 3600, 1)
@@ -78,7 +89,7 @@ class GojekOperationRatioController extends Controller
 			$data[$key]['nama'] = $value['nama'];
 			$data[$key]['data'] = [
 				[
-					'name' => 'Idle Time',
+					'name' => 'Iddle Time',
 					'data' => $value['idle'],
 					'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 				],
@@ -95,8 +106,34 @@ class GojekOperationRatioController extends Controller
 			];
 		}
 
+		$data2 = [];
+		$tmp_data3 = [];
+		foreach ($tmp_data2 as $key => $value) {
+			$tmp_data3['workhour'][] = [
+				'x' => $key,
+				'y' => round(($value['workhour'] / 3600), 1)
+			];
+			$tmp_data3['idle'][] = [
+				'x' => $key,
+				'y' => round(($value['idle'] / 3600), 1)
+			];
+		}
+		$data2 = [
+			[
+				'name' => 'Iddle Time (Total)',
+				'data' => $tmp_data3['idle'],
+				'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+			],
+			[
+				'name' => 'Delivery (Total)',
+				'data' => $tmp_data3['workhour'],
+				'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+			],
+		];
+
 		return $this->render('index', [
 			'data' => $data,
+			'data2' => $data2,
 			'year' => $year,
 			'month' => $month,
 		]);

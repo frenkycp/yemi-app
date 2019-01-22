@@ -145,9 +145,9 @@ class PalletOrderCompletionController extends Controller
 			$data .= '
 				<tr>
 					<td class="text-center">' . $value->line . '</td>
-					<td class="text-center">' . $value->start . '</td>
-					<td class="text-center">' . $value->end . '</td>
-					<td class="text-center">' . $value->arrival_time . '</td>
+					<td class="text-center">' . $value->pk . '</td>
+					<td class="text-center">' . $value->departure_datetime . '</td>
+					<td class="text-center">' . $value->arrival_datetime . '</td>
 				</tr>
 			';
 		}
