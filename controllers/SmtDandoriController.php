@@ -99,7 +99,7 @@ class SmtDandoriController extends Controller
                 ],
             ],
     		[
-    			'name' => 'Dandori Ratio',
+    			'name' => 'Dandori Ratio(%) - Target Max. 10%',
     			'data' => $tmp_data,
     			'color' => 'yellow',
                 'lineWidth' => 2,
@@ -112,7 +112,7 @@ class SmtDandoriController extends Controller
                     ]
                 ],
                 'tooltip' => [
-                    'valueSuffix' => '%'
+                    'valueSuffix' => '%',
                 ],
     		],
     	];

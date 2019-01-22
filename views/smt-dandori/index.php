@@ -137,9 +137,6 @@ echo '</pre>';*/
 		                    'title' => [
 		                        'text' => null,
 		                    ],
-		                    'legend' => [
-		                    	'labelFormat' => 'Dandori Ratio(%) - Target Max. 10%'
-		                    ],
 		                    'xAxis' => [
 		                        'type' => 'datetime',
 		                    ],
@@ -226,7 +223,7 @@ echo '</pre>';*/
 		                        'type' => 'datetime',
 		                    ],
 		                    'legend' => [
-		                    	'labelFormat' => 'Dandori Time - Max.' . $target_max . 'min'
+		                    	'labelFormat' => 'Dandori Time - Target Max.' . $target_max . ' min'
 		                    ],
 		                    'yAxis' => [
 		                        'title' => [
