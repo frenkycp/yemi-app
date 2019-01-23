@@ -223,7 +223,7 @@ echo '</pre>';*/
 		                        'type' => 'datetime',
 		                    ],
 		                    'legend' => [
-		                    	'labelFormat' => 'Dandori Time - Target Max.' . $target_max . ' min'
+		                    	'labelFormat' => 'Dandori Time - Target Max. ' . $target_max . ' min'
 		                    ],
 		                    'yAxis' => [
 		                        'title' => [

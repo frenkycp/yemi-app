@@ -47,7 +47,7 @@ echo '</pre>';*/
         <?= Html::label('Year'); ?>
         <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
             'class' => 'form-control',
-            'onchange'=>'this.form.submit()'
+            //'onchange'=>'this.form.submit()'
         ]); ?>
     </div>
     <div class="col-md-2">

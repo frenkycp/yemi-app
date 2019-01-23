@@ -73,7 +73,9 @@ class PalletTransporterController extends Controller
 				'line' => $line
 			])
 			->andWhere('end IS NULL')
+			->orderBy('pk DESC')
 			->one();
+
 			$log->end = date('H:i:s');
 			$log->departure_datetime = date('Y-m-d H:i:s');
 			$log->nik = $nik;
@@ -128,6 +130,7 @@ class PalletTransporterController extends Controller
 			'nik' => $nik
 		])
 		->andWhere('arrival_time IS NULL')
+		->orderBy('pk DESC')
 		->one();
 
 		$log->arrival_time = date('H:i:s');

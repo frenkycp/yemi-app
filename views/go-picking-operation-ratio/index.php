@@ -39,7 +39,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['gojek-operation-ratio/index']),
+    'action' => Url::to(['go-picking-operation-ratio/index']),
 ]); ?>
 
 <div class="row">
@@ -47,7 +47,7 @@ echo '</pre>';*/
         <?= Html::label('Year'); ?>
         <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
             'class' => 'form-control',
-            'onchange'=>'this.form.submit()'
+            //'onchange'=>'this.form.submit()'
         ]); ?>
     </div>
     <div class="col-md-2">
@@ -75,9 +75,98 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">ALL DRIVERS</h3>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-12">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    'themes/grid-light',
+                    //'themes/sand-signika',
+                    //'themes/dark-unica'
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                        'width' => null,
+                        'style' => [
+                            'fontFamily' => 'sans-serif'
+                        ],
+                    ],
+                    'credits' => [
+                        'enabled' =>false
+                    ],
+                    'title' => [
+                        'text' => null
+                    ],
+                    'xAxis' => [
+                        'type' => 'datetime',
+                        //'offset' => 10,
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'text' => 'HOURS'
+                        ],
+                        //'max' => $max_order,
+                        'minTickInterval' => 1,
+                        'stackLabels' => [
+                            'enabled' => true,
+                            'style' => [
+                                'color' => 'red'
+                            ],
+                        ],
+                    ],
+                    'tooltip' => [
+                        //'shared' => true,
+                        'crosshairs' => true,
+                        'xDateFormat' => '%Y-%m-%d',
+                        'valueSuffix' => ' hours',
+                    ],
+                    'plotOptions' => [
+                        'column' => [
+                            'stacking' => 'percent',
+                            'dataLabels' => [
+                                'enabled' => true,
+                                'format' => '{point.percentage:.0f}% ({point.y})',
+                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
+                                'style' => [
+                                    //'fontSize' => '14px',
+                                    'fontWeight' => '0'
+                                ],
+                            ],
+                            'borderWidth' => 1,
+                            //'borderColor' => $color,
+                        ],
+                        'series' => [
+                            /*'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression("
+                                        function(e){
+                                            e.preventDefault();
+                                            $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                        }
+                                    "),
+                                ]
+                            ],*/
+                            'maxPointWidth' => 80,
+                        ]
+                    ],
+                    'series' => $data2
+                ],
+            ]); ?>
+        </div>
+    </div>
+</div>
+
 <div class="box box-solid box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">Last Update : <?= date('Y-m-d H:i:s'); ?></h3>
+        <!-- <h3 class="box-title">Last Update : <?= '' ; //date('Y-m-d H:i:s'); ?></h3> -->
+        <h3 class="box-title">EACH DRIVER</h3>
     </div>
     <div class="box-body">
         <div class="box-group" id="accordion">

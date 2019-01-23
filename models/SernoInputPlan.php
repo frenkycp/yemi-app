@@ -3,13 +3,13 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\PalletPointView as BasePalletPointView;
+use \app\models\base\SernoInputPlan as BaseSernoInputPlan;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "pallet_point_view".
+ * This is the model class for table "tb_serno_input_plan".
  */
-class PalletPointView extends BasePalletPointView
+class SernoInputPlan extends BaseSernoInputPlan
 {
 
     public function behaviors()

@@ -47,7 +47,7 @@ echo '</pre>';*/
         <?= Html::label('Year'); ?>
         <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
             'class' => 'form-control',
-            'onchange'=>'this.form.submit()'
+            //'onchange'=>'this.form.submit()'
         ]); ?>
     </div>
     <div class="col-md-2">
@@ -168,11 +168,6 @@ echo '</pre>';*/
         <h3 class="box-title">EACH DRIVER</h3>
     </div>
     <div class="box-body">
-        <div class="row">
-            <div class="col-md-12">
-
-            </div>
-        </div>
         <div class="box-group" id="accordion">
         <?php
         foreach ($data as $key => $value) {

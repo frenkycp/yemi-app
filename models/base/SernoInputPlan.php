@@ -7,14 +7,17 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "pallet_point_view".
+ * This is the base-model class for table "tb_serno_input_plan".
  *
- * @property string $nik
- * @property string $order_date
- * @property string $total_count
+ * @property string $pk
+ * @property integer $nik
+ * @property string $line
+ * @property string $gmc
+ * @property string $plan
+ * @property integer $qty
  * @property string $aliasModel
  */
-abstract class PalletPointView extends \yii\db\ActiveRecord
+abstract class SernoInputPlan extends \yii\db\ActiveRecord
 {
 
 
@@ -24,7 +27,7 @@ abstract class PalletPointView extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'pallet_point_view';
+        return 'tb_serno_input_plan';
     }
 
     /**
@@ -41,9 +44,11 @@ abstract class PalletPointView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_date'], 'safe'],
-            [['total_count'], 'integer'],
-            [['nik'], 'string', 'max' => 255]
+            [['pk', 'nik', 'line', 'gmc', 'plan', 'qty'], 'required'],
+            [['nik', 'qty'], 'integer'],
+            [['plan'], 'safe'],
+            [['pk', 'line', 'gmc'], 'string', 'max' => 255],
+            [['pk'], 'unique']
         ];
     }
 
@@ -53,9 +58,12 @@ abstract class PalletPointView extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'pk' => 'Pk',
             'nik' => 'Nik',
-            'order_date' => 'Order Date',
-            'total_count' => 'Total Count',
+            'line' => 'Line',
+            'gmc' => 'Gmc',
+            'plan' => 'Plan',
+            'qty' => 'Qty',
         ];
     }
 

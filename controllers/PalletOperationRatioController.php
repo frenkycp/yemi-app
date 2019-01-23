@@ -44,7 +44,7 @@ class PalletOperationRatioController extends Controller
 
 			$tmp_log_arr = SernoSlipLog::find()
 			->select([
-				'order_date' => 'DATE(pk)',
+				'order_date' => 'DATE(departure_datetime)',
 				'start_time' => 'MIN(departure_datetime)',
 				'end_time' => 'MAX(arrival_datetime)',
 				'total_working' => 'SUM(completion_time)'
@@ -53,8 +53,8 @@ class PalletOperationRatioController extends Controller
 				'nik' => $nik,
 				'extract(year_month from pk)' => $period
 			])
-			->andWhere('DATE(pk) = DATE(departure_datetime)')
-			->groupBy('DATE(pk)')
+			->andWhere('DATE(departure_datetime) = DATE(arrival_datetime)')
+			->groupBy('DATE(departure_datetime)')
 			->all();
 
 			
@@ -80,15 +80,15 @@ class PalletOperationRatioController extends Controller
 				$break_hour = round($break_time / 3600, 1);
 				$idle_hour = round($idle_time / 3600, 1);
 
-				if (!isset($tmp_data2[$post_date]['workhour'])) {
-					$tmp_data2[$post_date]['workhour'] = 0;
+				if (!isset($tmp_data2[$tmp_log->order_date]['workhour'])) {
+					$tmp_data2[$tmp_log->order_date]['workhour'] = 0;
 				}
-				if (!isset($tmp_data2[$post_date]['idle'])) {
-					$tmp_data2[$post_date]['idle'] = 0;
+				if (!isset($tmp_data2[$tmp_log->order_date]['idle'])) {
+					$tmp_data2[$tmp_log->order_date]['idle'] = 0;
 				}
 
-				$tmp_data2[$post_date]['workhour'] += (int)$working_time;
-				$tmp_data2[$post_date]['idle'] += (int)$idle_time;
+				$tmp_data2[$tmp_log->order_date]['workhour'] += (int)$working_time;
+				$tmp_data2[$tmp_log->order_date]['idle'] += (int)$idle_time;
 
 				//hacking tool for make 8 hour
 				/*if ($working_hour + $idle_hour > 20) {
@@ -117,12 +117,13 @@ class PalletOperationRatioController extends Controller
 
 		$tmp_data3 = [];
 		foreach ($tmp_data2 as $key => $value) {
+			$post_date = (strtotime($key . " +7 hours") * 1000);
 			$tmp_data3['workhour'][] = [
-				'x' => $key,
+				'x' => $post_date,
 				'y' => round(($value['workhour'] / 3600), 1)
 			];
 			$tmp_data3['idle'][] = [
-				'x' => $key,
+				'x' => $post_date,
 				'y' => round(($value['idle'] / 3600), 1)
 			];
 		}

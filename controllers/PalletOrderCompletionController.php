@@ -7,7 +7,6 @@ use dmstr\bootstrap\Tabs;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use app\models\User;
-use app\models\PalletPointView;
 use app\models\SernoSlipLog;
 use app\models\PalletDriver;
 
@@ -22,6 +21,19 @@ class PalletOrderCompletionController extends Controller
 
 	public function actionIndex()
 	{
+		$year = date('Y');
+		$month = date('m');
+
+		if (\Yii::$app->request->get('year') != null) {
+            $year = \Yii::$app->request->get('year');
+        }
+
+        if (\Yii::$app->request->get('month') != null) {
+            $month = \Yii::$app->request->get('month');
+        }
+
+        $period = $year . $month;
+
 		$driver_arr_data = User::find()
 		->where([
 			'role_id' => [19, 20]
@@ -32,13 +44,27 @@ class PalletOrderCompletionController extends Controller
 		$tmp_data = [];
 		foreach ($driver_arr_data as $key => $value) {
 			$nik = $value->username;
-			$data_arr = PalletPointView::find()->where([
-				'nik' => $nik
+
+			$data_arr = SernoSlipLog::find()
+			->select([
+				'nik',
+				'order_date' => 'DATE(pk)',
+				'total_open' => 'SUM((CASE WHEN ISNULL(arrival_time) THEN 1 ELSE 0 END))',
+				'total_close' => 'SUM((CASE WHEN arrival_time IS NOT NULL THEN 1 ELSE 0 END))',
 			])
-			->orderBy('order_date ASC')
+			->where([
+				'nik' => $nik,
+				'extract(year_month from pk)' => $period
+			])
+			->groupBy('nik, DATE(pk)')
 			->all();
 
-			$total_point = 0;
+			$total_point = SernoSlipLog::find()
+			->where([
+				'nik' => $nik,
+				'DATE(arrival_datetime)' => date('Y-m-d'),
+			])
+			->count();
 
 			if (count($data_arr) > 0) {
 				foreach ($data_arr as $key2 => $value2) {
@@ -54,9 +80,9 @@ class PalletOrderCompletionController extends Controller
 						'url' => Url::to(['get-remark', 'order_date' => $value2->order_date, 'nik' => $nik, 'status' => 'CLOSE']),
 					];
 					$tmp_data[$nik]['nama'] = $value->name;
-					if($value2->order_date == date('Y-m-d')){
+					/*if($value2->order_date == date('Y-m-d')){
 						$total_point = $value2->total_close;
-					}
+					}*/
 				}
 			} else {
 				$tmp_data[$nik]['open'] = null;
@@ -106,6 +132,8 @@ class PalletOrderCompletionController extends Controller
 
 		return $this->render('index', [
 			'data' => $data,
+			'year' => $year,
+			'month' => $month,
 		]);
 	}
 
