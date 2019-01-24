@@ -60,7 +60,8 @@ class PartsJitWeeklyController extends Controller
         ->select([
             'WEEK',
             'DATE',
-            'total_open' => 'SUM(CASE WHEN STAT_02 = \'O\' THEN ORDER_QTY ELSE 0 END)',
+            'total_open' => 'SUM(CASE WHEN STAT_02 = \'O\' AND STAT_ID NOT IN (3, 4) THEN ORDER_QTY ELSE 0 END)',
+            'total_open2' => 'SUM(CASE WHEN STAT_02 = \'O\' AND STAT_ID IN (3, 4) THEN ORDER_QTY ELSE 0 END)',
             'total_close' => 'SUM(CASE WHEN STAT_02 = \'C\' THEN ORDER_QTY ELSE 0 END)'
         ])
         ->where($global_condition)
@@ -72,46 +73,54 @@ class PartsJitWeeklyController extends Controller
     		$tmp_category = [];
     		$tmp_data = [];
     		$tmp_data_open = [];
+            $tmp_data_open2 = [];
     		$tmp_data_close = [];
     		foreach ($booking_data_arr as $booking_data) {
     			if ($week_no == $booking_data->WEEK) {
     				$tmp_category[] = $booking_data->DATE;
-    				$open_qty = $booking_data->total_open;
-                    $close_qty = $booking_data->total_close;
+    				$open_qty = (int)$booking_data->total_open;
+                    $open_qty2 = (int)$booking_data->total_open2;
+                    $close_qty = (int)$booking_data->total_close;
                     $order_qty = $open_qty + $close_qty;
 
-    				$open_percentage = 0;
-    				$close_percentage = 0;
-    				if ($order_qty > 0) {
-    					$open_percentage = round((($open_qty / $order_qty) * 100), 2);
-    					$close_percentage = round((($close_qty / $order_qty) * 100), 2);
-    				}
     				$tmp_data_open[] = [
-    					'y' => $open_percentage == 0 ? null : $open_percentage,
-    					'remark' => $this->getRemark('STAT_02 = \'O\'', $booking_data->DATE, $trans_method, 0)
-    				];
-    				$tmp_data_close[] = [
-    					'y' => $close_percentage == 0 ? null : $close_percentage,
-    					'remark' => $this->getRemark('STAT_02 = \'C\'', $booking_data->DATE, $trans_method, 0)
-    				];
+                        'y' => $open_qty == 0 ? null : $open_qty,
+                        //'y' => $open_qty == 0 ? null : $open_qty,
+                        'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID NOT IN (3, 4)', $booking_data->DATE, $trans_method, 0)
+                    ];
+                    $tmp_data_open2[] = [
+                        'y' => $open_qty2 == 0 ? null : $open_qty2,
+                        'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID IN (3, 4)', $booking_data->DATE, $trans_method, 0)
+                    ];
+                    $tmp_data_close[] = [
+                        'y' => $close_qty == 0 ? null : $close_qty,
+                        //'y' => $close_qty == 0 ? null : $close_qty,
+                        'remark' => $this->getRemark('STAT_02 = \'C\'', $booking_data->DATE, $trans_method, 0)
+                    ];
     			}
     		}
     		$data[$week_no][] = [
     			'category' => $tmp_category,
     			'data' => [
-    				[
-    					'name' => 'OUTSTANDING',
-    					'data' => $tmp_data_open,
-    					'color' => 'rgba(200, 200, 200, 0.4)',
-    					'showInLegend' => false,
-    				],
-    				[
-    					'name' => 'DEPARTURE',
-    					'data' => $tmp_data_close,
-    					'color' => 'rgba(0, 200, 0, 0.4)',
-    					'showInLegend' => false,
-    				],
-    			]
+                    [
+                        'name' => ' ',
+                        'data' => $tmp_data_open,
+                        'color' => 'rgba(200, 200, 200, 0.8)',
+                        'showInLegend' => false,
+                    ],
+                    [
+                        'name' => ' ',
+                        'data' => $tmp_data_open2,
+                        'color' => 'rgba(255, 200, 0, 0.8)',
+                        'showInLegend' => false,
+                    ],
+                    [
+                        'name' => ' ',
+                        'data' => $tmp_data_close,
+                        'color' => 'rgba(0, 200, 0, 0.8)',
+                        'showInLegend' => false,
+                    ],
+                ]
     		];
     	}
 

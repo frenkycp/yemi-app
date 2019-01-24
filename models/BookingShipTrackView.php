@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class BookingShipTrackView extends BaseBookingShipTrackView
 {
-    public $total, $total_open, $total_close;
+    public $total, $total_open, $total_close, $total_open2;
 
     public function behaviors()
     {

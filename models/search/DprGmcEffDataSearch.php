@@ -64,10 +64,12 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'proddate' => $this->proddate,
+            //'proddate' => $this->proddate,
             'line' => $this->line,
             'gmc' => $this->gmc,
         ]);
+
+$query->andFilterWhere(['like', 'proddate', $this->proddate]);
 
 /*$query->andFilterWhere(['like', 'NIK_DATE_ID', $this->NIK_DATE_ID])
             ->andFilterWhere(['like', 'NO', $this->NO])

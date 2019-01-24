@@ -111,6 +111,7 @@ echo '</pre>';*/
                 'options' => [
                     'chart' => [
                         'type' => 'column',
+                        'height' => 350,
                         'style' => [
                             'fontFamily' => 'Source Sans Pro'
                         ],
@@ -136,7 +137,8 @@ echo '</pre>';*/
                         //'gridLineWidth' => 0,
                     ],
                     'tooltip' => [
-                        'enabled' => false,
+                        'enabled' => true,
+                        'valueSuffix' => ' pcs'
                         //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " pcs"; }'),
                     ],
                     'plotOptions' => [
@@ -144,8 +146,9 @@ echo '</pre>';*/
                             'stacking' => 'percent',
                             'dataLabels' => [
                                 'enabled' => true,
-                                'format' => '{point.percentage:.2f}%',
+                                'format' => '{point.percentage:.1f}%',
                                 'color' => 'black',
+                                'allowOverlap' => true,
                                 //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                                 'style' => [
                                     //'fontSize' => '14px',

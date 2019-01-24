@@ -111,6 +111,7 @@ echo '</pre>';*/
                 'options' => [
                     'chart' => [
                         'type' => 'column',
+                        'height' => 350,
                         'style' => [
                             'fontFamily' => 'Source Sans Pro'
                         ],
@@ -136,7 +137,8 @@ echo '</pre>';*/
                         //'gridLineWidth' => 0,
                     ],
                     'tooltip' => [
-                        'enabled' => false,
+                        'enabled' => true,
+                        'valueSuffix' => ' pcs'
                         //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " pcs"; }'),
                     ],
                     'plotOptions' => [
