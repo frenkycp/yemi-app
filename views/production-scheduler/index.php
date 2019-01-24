@@ -1,0 +1,410 @@
+<?php
+
+use yii\helpers\Html;
+use yii\helpers\Url;
+use kartik\grid\GridView;
+use kartik\form\ActiveForm;
+use kartik\date\DatePicker;
+
+/**
+* @var yii\web\View $this
+* @var yii\data\ActiveDataProvider $dataProvider
+    * @var app\models\search\MesinCheckNgSearch $searchModel
+*/
+
+$this->title = [
+    'page_title' => 'Production Plan Scheduler <span class="text-green japanesse"></span>',
+    'tab_title' => 'Production Plan Scheduler',
+    'breadcrumbs_title' => 'Production Plan Scheduler'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+
+date_default_timezone_set('Asia/Jakarta');
+
+if (isset($actionColumnTemplates)) {
+$actionColumnTemplate = implode(' ', $actionColumnTemplates);
+    $actionColumnTemplateString = $actionColumnTemplate;
+} else {
+Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
+    if (Yii::$app->user->identity->role->id == 1) {
+        $actionColumnTemplateString = "{update} {delete} {change_color}";
+    } else {
+        $actionColumnTemplateString = "{update} {change_color}";
+    }
+}
+$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+
+$this->registerJs("
+    $(document).ready(function() {
+        $('#order_btn').click(function(){
+            var keys = $('#grid').yiiGridView('getSelectedRows');
+
+            var loc_val = $('#location_dropdown option:selected').val();
+            var loc_desc_val = $('#location_dropdown option:selected').text();
+            var line_val = $('#line option:selected').val();
+            var shift_val = $('#shift option:selected').val();
+            var group_val = $('#group option:selected').val();
+            var plan_date_val = $('#plan_date').val();
+            
+            if(loc_val == ''){
+                alert('Please select location first before order!');
+                return false;
+            }
+
+            if(keys.length > 10){
+                alert('Your plan contains ' + keys.length + ' slip number! (Max. 10 slip number)');
+                return false;
+            }
+
+            if(keys.length == 0){
+                alert('Please select minimal 1 slip number...!');
+                return false;
+            }
+
+            var tmp_no = '';
+            $('input[name=\"selection[]\"]:checked').each(function() {
+                if(tmp_no == ''){
+                    tmp_no = this.value
+                }
+                if(strvalue!=\"\")
+                    strvalue = strvalue + \",\"+this.value;
+                else
+                    strvalue = this.value;
+            });
+
+            if (confirm('Are you sure to continue?')) {
+                $.post({
+                    url: '" . Url::to(['create-plan']) . "',
+                    data: {
+                        keylist: keys,
+                        loc : loc_val,
+                        loc_desc : loc_desc_val,
+                        line : line_val,
+                        shift : shift_val,
+                        group : group_val,
+                        plan_date : plan_date_val
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data.success == false){
+                            alert(\"Can't create plan. \" + data.message);
+                        } else {
+                            alert(data.message);
+                            location.href = location.href;
+                        }
+                    },
+                    error: function (request, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+    });
+");
+
+//date_default_timezone_set('Asia/Jakarta');
+
+$grid_columns = [
+    [
+        'class' => 'yii\grid\CheckboxColumn',
+        'checkboxOptions' => function($model) {
+            return ['value' => $model->slip_id];
+        },
+    ],
+    [
+        'attribute' => 'model_group',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'parent',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'parent_desc',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'source_date',
+        'value' => function($model){
+            $source_date = '-';
+            if ($model->source_date != null) {
+                $source_date = date('Y-m-d', strtotime($model->source_date));
+            }
+            return $source_date;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'child',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'child_desc',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'period',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'start_date',
+        'value' => function($model){
+            $start_date = '-';
+            if ($model->start_date != null) {
+                $start_date = date('Y-m-d', strtotime($model->start_date));
+            }
+            return $start_date;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'slip_id',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'child_analyst',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;',
+            'readonly' => true,
+        ],
+    ],
+    [
+        'attribute' => 'child_analyst_desc',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;',
+            'readonly' => true,
+        ],
+    ],
+    [
+        'attribute' => 'act_qty',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'source_qty',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+];
+?>
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Input Form</h3>
+    </div>
+    <div class="box-body">
+
+        <?php $form = ActiveForm::begin([
+        'action' => ['index'],
+        'method' => 'get',
+        ]); ?>
+
+        <div class="row">
+            <div class="col-md-3">
+                <?= $form->field($searchModel, 'child_analyst')->dropDownList($location_dropdown, [
+                    'prompt' => 'Select Location ...',
+                    'onchange' => 'this.form.submit();',
+                    'id' => 'location_dropdown',
+                ])->label('Location'); ?>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    <label class="control-label" for="line">Line</label>
+                    <?= Html::dropDownList('line', null, [
+                        '01' => '01',
+                        '02' => '02',
+                    ], [
+                        'class' => 'form-control',
+                        'id' => 'line',
+                    ]) ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label" for="shift">Shift</label>
+                    <?= Html::dropDownList('shift', null, [
+                        '01-PAGI' => '01-PAGI',
+                        '02-SIANG' => '02-SIANG',
+                        '03-MALAM' => '03-MALAM',
+                    ], [
+                        'class' => 'form-control',
+                        'id' => 'shift',
+                    ]) ?>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    <label class="control-label" for="group">Group</label>
+                    <?= Html::dropDownList('group', null, [
+                        'A' => 'A',
+                        'B' => 'B',
+                    ], [
+                        'class' => 'form-control',
+                        'id' => 'group',
+                    ]) ?>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label" for="plan_date">Plan Date</label>
+                    <?= DatePicker::widget([
+                        'name' => 'plan_date',
+                        'id' => 'plan_date',
+                        'type' => DatePicker::TYPE_INPUT,
+                        'value' => date('Y-m-d'),
+                        'options' => ['placeholder' => 'Select plan date ...'],
+                        'pluginOptions' => [
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true
+                        ]
+                    ]); ?>
+                </div>
+            </div>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
+    </div>
+</div>
+
+<div class="giiant-crud mesin-check-ng-index">
+
+    <?php
+//             echo $this->render('_search', ['model' =>$searchModel]);
+        ?>
+
+    
+    <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
+
+    <!-- <hr /> -->
+
+    <div class="">
+        <?= GridView::widget([
+            'id' => 'grid',
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => $grid_columns,
+            'hover' => false,
+            'responsive' => true,
+            //'condensed' => true,
+            'striped' => false,
+            //'floatHeader'=>true,
+            //'floatHeaderOptions'=>['scrollingTop'=>'50'],
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'pjax' => true, // pjax is set to always true for this demo
+            'rowOptions' => function($model){
+                $find_slip = app\models\GojekOrderTbl::find()
+                ->where([
+                    'slip_id' => $model->slip_id
+                ])
+                ->one();
+                if ($find_slip->slip_id == null) {
+                    return ['class' => ''];
+                } else {
+                    return ['class' => 'bg-success'];
+                }
+            },
+            'toolbar' =>  [
+                '{export}',
+                '{toggleData}',
+            ],
+            // set export properties
+            'export' => [
+                'fontAwesome' => true
+            ],
+            'panel' => [
+                'type' => GridView::TYPE_PRIMARY,
+                'after' => '<button class="btn btn-primary" id="order_btn">Order</button>',
+                'afterOptions' => [
+                    'class'=>'kv-panel-after pull-right',
+                ],
+                //'heading' => 'Last Update : ' . date('Y-m-d H:i:s')
+            ],
+        ]); ?>
+        <?php
+            /*yii\bootstrap\Modal::begin([
+                'id' =>'modal',
+                'header' => '<h3>Machine Spare Parts</h3>',
+                'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end();
+
+            yii\bootstrap\Modal::begin([
+                'id' =>'image-modal',
+                'header' => '<h3>NG Image</h3>',
+                //'size' => 'modal-lg',
+            ]);
+            yii\bootstrap\Modal::end(); */
+
+        ?>
+    </div>
+
+</div>
+
+
+<?php \yii\widgets\Pjax::end() ?>
+
+

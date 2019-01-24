@@ -152,7 +152,7 @@ echo '</pre>';*/
 		                                [
 		                                    'value' => 10,
 		                                    'color' => 'yellow',
-		                                    'width' => 1,
+		                                    'width' => 2,
 		                                    'zIndex' => 0,
 		                                    'label' => ['text' => '']
 		                                ]
@@ -234,7 +234,7 @@ echo '</pre>';*/
 		                            [
 		                                'value' => $target_max,
 		                                'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
-		                                'width' => 1,
+		                                'width' => 1.5,
 		                                'zIndex' => 0,
 		                                'label' => ['text' => '']
 		                            ]
