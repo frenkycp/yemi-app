@@ -103,22 +103,22 @@ class PartsMilkRunWeeklyController extends Controller
     			'category' => $tmp_category,
     			'data' => [
     				[
-    					'name' => ' ',
+    					'name' => 'Prepared',
     					'data' => $tmp_data_open,
     					'color' => 'rgba(200, 200, 200, 0.8)',
-    					'showInLegend' => false,
+    					//'showInLegend' => false,
     				],
                     [
-                        'name' => ' ',
+                        'name' => 'Partially Departed & Received',
                         'data' => $tmp_data_open2,
                         'color' => 'rgba(255, 200, 0, 0.8)',
-                        'showInLegend' => false,
+                        //'showInLegend' => false,
                     ],
     				[
-    					'name' => ' ',
+    					'name' => 'Fully Departed & Received',
     					'data' => $tmp_data_close,
     					'color' => 'rgba(0, 200, 0, 0.8)',
-    					'showInLegend' => false,
+    					//'showInLegend' => false,
     				],
     			]
     		];
@@ -182,11 +182,15 @@ class PartsMilkRunWeeklyController extends Controller
 
 		foreach ($data_arr as $value) {
             $yemi_arrival_date = $value['YEMI_ARRIVAL'] == null ? '-' : date('Y-m-d', strtotime($value['YEMI_ARRIVAL']));
+            $pickup_actual = '-';
+            if (date('H:i:s', strtotime($value['PICKUP_ACTUAL'])) != '00:00:00') {
+                $pickup_actual = $value['PICKUP_ACTUAL'];
+            }
 			$data .= '
 				<tr>
 					<td class="text-center">' . $value['BOOKING_ID'] . '</td>
 					<td>' . $value['USER_DESC'] . '</td>
-					<td class="text-center">' . $value['PICKUP_ACTUAL'] . '</td>
+					<td class="text-center">' . $pickup_actual . '</td>
                     <td class="text-center">' . $yemi_arrival_date . '</td>
 					<td>' . $value['SHIPPER'] . '</td>
 					<td class="text-center">' . $value['ITEM'] . '</td>

@@ -64,21 +64,35 @@ $this->registerJs("
             }
 
             var tmp_no = '';
+            var is_multiple = false;
+            var strvalue = \"\";
             $('input[name=\"selection[]\"]:checked').each(function() {
+                var tmp_child = this.value.split('|');
                 if(tmp_no == ''){
-                    tmp_no = this.value
+                    tmp_no = tmp_child[1];
+                } else {
+                    if(tmp_no != tmp_child[1]){
+                        is_multiple = true;
+                    }
                 }
+
                 if(strvalue!=\"\")
-                    strvalue = strvalue + \",\"+this.value;
+                    strvalue = strvalue + \",\"+tmp_child[0];
                 else
-                    strvalue = this.value;
+                    strvalue = tmp_child[0];
             });
+            //alert(strvalue);
+            if(is_multiple == true){
+                alert('There is multiple item in your selection...! (1 lot 1 item)');
+                return false;
+            }
 
             if (confirm('Are you sure to continue?')) {
                 $.post({
                     url: '" . Url::to(['create-plan']) . "',
                     data: {
                         keylist: keys,
+                        value: strvalue,
                         loc : loc_val,
                         loc_desc : loc_desc_val,
                         line : line_val,
@@ -110,7 +124,7 @@ $grid_columns = [
     [
         'class' => 'yii\grid\CheckboxColumn',
         'checkboxOptions' => function($model) {
-            return ['value' => $model->slip_id];
+            return ['value' => $model->slip_id . '|' . $model->child];
         },
     ],
     [
