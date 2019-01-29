@@ -17,6 +17,12 @@ use app\models\search\ProductionSchedulerSearch;
 
 class ProductionSchedulerController extends Controller
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
     public function actionIndex()
     {
     	$searchModel  = new ProductionSchedulerSearch;
@@ -81,7 +87,7 @@ class ProductionSchedulerController extends Controller
 
 			/**/$sql = "{CALL WIP_RESERVATION_PLAN(:child_analyst, :child_analyst_desc, :LINE, :SMT_SHIFT, :KELOMPOK, :plan_date, :slip_id_01, :slip_id_02, :slip_id_03, :slip_id_04, :slip_id_05, :slip_id_06, :slip_id_07, :slip_id_08, :slip_id_09, :slip_id_10, :USER_ID)}";
 
-			$params[':USER_ID'] = '150826';
+			$params[':USER_ID'] = \Yii::$app->user->identity->username;
 
 			try {
 			    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->queryOne();
