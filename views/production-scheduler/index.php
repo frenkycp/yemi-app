@@ -88,6 +88,7 @@ $this->registerJs("
             }
 
             if (confirm('Are you sure to continue?')) {
+                $(this).attr('disabled', true).addClass('disabled');
                 $.post({
                     url: '" . Url::to(['create-plan']) . "',
                     data: {
@@ -106,11 +107,12 @@ $this->registerJs("
                             alert(\"Can't create plan. \" + data.message);
                         } else {
                             alert(data.message);
-                            location.href = location.href;
                         }
+                        location.href = location.href;
                     },
                     error: function (request, status, error) {
                         alert(error);
+                        location.href = location.href;
                     }
                 });
             }
@@ -142,7 +144,7 @@ $grid_columns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
     [
@@ -176,7 +178,7 @@ $grid_columns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
     [
@@ -194,7 +196,7 @@ $grid_columns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 60px;'
         ],
     ],
     [
@@ -210,7 +212,7 @@ $grid_columns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 85px;'
         ],
     ],
     [

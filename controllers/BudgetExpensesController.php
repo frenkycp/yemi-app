@@ -11,11 +11,11 @@ use app\models\PrReportView;
 
 class BudgetExpensesController extends Controller
 {
-	/*public function behaviors()
+	public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }*/
+    }
 	
 	public function actionIndex()
 	{
@@ -122,7 +122,7 @@ class BudgetExpensesController extends Controller
 	{
 		$data = '<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>Driver : ' . $dept . '<small> (' . $period . ')</small></h3>
+			<h3>Section : ' . $dept . '<small> (' . $period . ')</small></h3>
 		</div>
 		<div class="modal-body">
 		';

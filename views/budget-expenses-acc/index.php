@@ -105,7 +105,7 @@ echo '</pre>';*/
                             'events' => [
                                 'click' => new JsExpression('
                                     function(){
-                                        $("#modal").modal("show").find(".modal-body").html(this.options.remark);
+                                        $("#modal").modal("show").find(".modal-content").html(this.options.remark);
                                     }
                                 '),
                             ]

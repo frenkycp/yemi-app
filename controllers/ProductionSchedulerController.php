@@ -40,48 +40,58 @@ class ProductionSchedulerController extends Controller
     {
     	$response = [];
 		if (\Yii::$app->request->isAjax) {
-			\Yii::$app->response->format = Response::FORMAT_JSON;
-			$data_post = \Yii::$app->request->post();
-			$str_order = $data_post['value'];
-			$destination = $data_post['destination'];
-			$request_time = $data_post['request_time'];
-			$order_arr = explode(',', $str_order);
-			//$order_arr = ['0001981', '0001982'];
 
 			$response = [
 				'success' => true,
-				'message' => 'Order was created successfully',
+				'message' => 'Plan was created successfully...',
 			];
 
-			foreach ($order_arr as $key => $value) {
-				$wip_data = WipPlanActualReport::find()->where([
-					'slip_id' => $value
-				])->one();
-				$sql = "{CALL CALL_GOJEK(:slip_id, :item, :item_desc, :from_loc, :to_loc, :source, :requestor, :request_time)}";
-				//$sql = "{CALL SPARE_PART_STOCK(:MACHINE)}";
-				// passing the params into to the sql query
-				$params = [
-					':slip_id' => $value,
-					':item' => $wip_data->child,
-					':item_desc' => $wip_data->child_desc,
-					':from_loc' => $wip_data->child_analyst_desc,
-					':to_loc' => $destination,
-					':source' => 'WIP',
-					':requestor' => \Yii::$app->user->identity->username,
-					//':requestor' => '150826',
-					':request_time' => $request_time,
-				];
-				// execute the sql command
-				try {
-				    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
-				} catch (Exception $ex) {
-					$response = [
-						'success' => false,
-						'message' => 'Order failed. ' . $ex->getMessage(),
-					];
+			\Yii::$app->response->format = Response::FORMAT_JSON;
+			$data_post = \Yii::$app->request->post();
+			$slip_str_val = $data_post['value'];
+			$cb_arr_val = explode(',', $slip_str_val);
+			$loc = $data_post['loc'];
+			$loc_desc = $data_post['loc_desc'];
+			$line = $data_post['line'];
+			$shift = $data_post['shift'];
+			$group = $data_post['group'];
+			$plan_date = $data_post['plan_date'];
+
+			$params = [
+				':child_analyst' => $loc,
+				':child_analyst_desc' => $loc_desc,
+				':LINE' => $line,
+				':SMT_SHIFT' => $shift,
+				':KELOMPOK' => $group,
+				':plan_date' => $plan_date,
+			];
+
+			//$tmp_no = '';
+			for ($i = 0; $i < 10; $i++) {
+				$tmp = '';
+				if (isset($cb_arr_val[$i])) {
+					$tmp = $cb_arr_val[$i];
 				}
-				
-				
+				$no = str_pad(($i+1), 2, '0', STR_PAD_LEFT);
+				//$tmp_no .= ':slip_id_' . $no . ' => ' . $tmp . ' | ';
+				$params[':slip_id_' . $no] = $tmp;
+			}
+
+			//$response['message'] = $tmp_no;
+
+			/**/$sql = "{CALL WIP_RESERVATION_PLAN(:child_analyst, :child_analyst_desc, :LINE, :SMT_SHIFT, :KELOMPOK, :plan_date, :slip_id_01, :slip_id_02, :slip_id_03, :slip_id_04, :slip_id_05, :slip_id_06, :slip_id_07, :slip_id_08, :slip_id_09, :slip_id_10, :USER_ID)}";
+
+			$params[':USER_ID'] = '150826';
+
+			try {
+			    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->queryOne();
+			    $pesan_arr = explode('-', $result['HASIL']);
+			    $response['message'] = 'Lot number : ' . $pesan_arr[0] . ' was created successfully...';
+			} catch (Exception $ex) {
+				$response = [
+					'success' => false,
+					'message' => 'Create plan failed... ' . $ex->getMessage(),
+				];
 			}
 			
 			return $response;

@@ -66,7 +66,12 @@ class BudgetExpensesAccController extends Controller
 					}
 				}
 
-				$remark = "<h4>$dept<small> ($category)</small></h4>";
+				$remark = '<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h3>Section : ' . $dept . '<small> (' . $category . ')</small></h3>
+				</div>
+				<div class="modal-body">
+				';
 				$remark .= '<table class="table table-bordered table-striped table-hover">';
 				$remark .= 
 		        '<thead style="font-size: 12px;"><tr class="info">

@@ -45,8 +45,6 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
             ]
         ) ?>
     </div>
-    
-
 <?php $this->endBody() ?>
 </body>
 </html>
