@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 use app\models\PlanReceiving;
 
@@ -50,35 +51,66 @@ $columns = [
         'label' => 'Periode',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px'
+        //'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
     ],
     [
         'attribute' => 'vendor_name',
         'vAlign' => 'middle',
+        'pageSummary' => 'Total',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
     ],
     
     [
         'attribute' => 'qty',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '70px'
+        'width' => '70px',
+        'pageSummary' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'vehicle',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => ArrayHelper::map(app\models\Vehicle::find()->select('DISTINCT(name)')->where([
+            'flag' => 1
+        ])->orderBy('name')->all(), 'name', 'name'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
     ],
     [
         'attribute' => 'item_type',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => ArrayHelper::map(app\models\ItemUnit::find()->select('DISTINCT(name)')->where([
+            'flag' => 1
+        ])->orderBy('name')->all(), 'name', 'name'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
     ],
-    
     [
         'attribute' => 'receiving_date',
         'label' => 'Plan Date',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
     ],
     [
         'class'=>'kartik\grid\EditableColumn',
@@ -93,7 +125,7 @@ $columns = [
                     'format' => 'yyyy-mm-dd'
                 ]
             ],
-        ]
+        ],
     ],
     [
         'class'=>'kartik\grid\EditableColumn',
@@ -151,11 +183,75 @@ $columns = [
             0 => 'NORMAL',
             1 => 'URGENT'
         ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'container_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'created_date',
+        'label' => 'Created Date',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'created_by',
+        'label' => 'Created By',
+        'value' => function($model){
+            if ($model->created_by != null) {
+                $user = app\models\User::findIdentity($model->created_by);
+                return $user->name;
+            }
+            return '-';
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'last_modified_date',
+        'label' => 'Last Modified<br/>Date',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'last_modified_by',
+        'label' => 'Last Modified<br/>By',
+        'encodeLabel' => false,
+        'value' => function($model){
+            if ($model->last_modified_by != null) {
+                $user = app\models\User::findIdentity($model->last_modified_by);
+                return $user->name;
+            }
+            return '-';
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
 ];
 
@@ -172,11 +268,12 @@ $columns = [
             'filterModel' => $searchModel,
             'columns' => $columns,
             'hover' => true,
+            'showPageSummary' => true,
             //'condensed' => true,
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 11px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => true, // pjax is set to always true for this demo

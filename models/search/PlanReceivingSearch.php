@@ -18,7 +18,7 @@ class PlanReceivingSearch extends PlanReceiving
     public function rules()
     {
         return [
-            [['id', 'qty', 'flag'], 'integer'],
+            [['id', 'flag'], 'integer'],
             [['vendor_name', 'vehicle', 'item_type', 'receiving_date', 'month_periode', 'container_no', 'urgent_status'], 'safe'],
         ];
     }
