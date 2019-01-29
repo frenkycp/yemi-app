@@ -12,29 +12,35 @@ $this->title = [
 
 $this->registerCss("
 	.japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
 	.content-header {color: white;}
+    .box-body {background-color: #33383D;}
 	.box-title {font-weight: bold;}
 	.box-header .box-title, .control-label{font-size: 1.5em;}
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
+    body, .content-wrapper {background-color: #33383D;}
 
     #run-tbl{
-        border:1px solid #FFA726;
+        //border:1px solid #29B6F6;
+        border-top: 0;
     }
     #run-tbl > thead > tr > th{
-        border:1px solid #FFA726;
-        background-color: #FFB74D;
-        color: #E65100;
-        font-size: 20px;
+        border:1px solid #8b8c8d;
+        background-color: #858689;
+        color: white;
+        font-size: 3em;
+        border-bottom: 7px solid #ddd;
     }
     #run-tbl > tbody > tr > td{
-        border:1px solid #FFA726;
-        font-size: 3.5em;
-        background-color: #FFE0B2;
-        font-weight: bold;
-        color: #E65100;
+        //border:1px solid #29B6F6;
+        //font-size: 3.5em;
+        background-color: #B3E5FC;
+        font-weight: 1000;
+        color: #555;
+        vertical-align: middle;
     }
 ");
 
@@ -47,9 +53,22 @@ $script = <<< JS
     function refreshPage() {
        window.location = location.href;
     }
+    $(document).ready(function() {
+        var i = 0;
+        setInterval(function() {
+            i++;
+            if(i%2 == 0){
+                $("#run-text").css("background-color", "#00ff00");
+                //$("#run-text").css("color", "white");
+            } else {
+                $("#run-text").css("background-color", "yellow");
+                //$("#run-text").css("color", "#555");
+            }
+        }, 300);
+    });
 JS;
 
-$this->registerJs($script, View::POS_HEAD );
+$this->registerJs($script, View::POS_END);
 
 /*echo '<pre>';
 print_r($data);
@@ -64,7 +83,7 @@ echo '</pre>';*/
 
 <div class="row">
     <div class="col-md-4">
-        <div class="box box-primary box-solid">
+        <div class="box box-default box-solid">
             <div class="box-body">
                 <div class="form-group">
                     <?= Html::label('LOCATION', 'location', [
@@ -83,7 +102,7 @@ echo '</pre>';*/
         </div>
     </div>
     <div class="col-md-2">
-        <div class="box box-primary box-solid">
+        <div class="box box-default box-solid">
             <div class="box-body">
                 <div class="form-group">
                     <?= Html::label('LINE', 'line', [
@@ -108,6 +127,7 @@ echo '</pre>';*/
 <table class="table table-bordered" id="run-tbl">
     <thead>
         <tr>
+            <th style="text-align: center;">Lot Number</th>
             <th style="text-align: center;">Part Number</th>
             <th style="text-align: center;">Part Description</th>
             <th style="text-align: center;">Total Qty</th>
@@ -116,18 +136,28 @@ echo '</pre>';*/
     </thead>
     <tbody>
         <tr>
-            <td style="text-align: center;"><?= $running['part_no']; ?></td>
-            <td style="text-align: center;"><?= $running['part_desc']; ?></td>
-            <td style="text-align: center;"><?= $running['qty']; ?></td>
-            <td style="text-align: center;">RUNNING...</td>
+            <?php
+            if ($running['part_no'] != '-') {
+                echo '<td style="text-align: center; font-size: 4em; background-color: yellow;">' . $running['lot_no'] . '</td>';
+                echo '<td style="text-align: center; font-size: 4em; background-color: yellow;">' . $running['part_no'] . '</td>';
+                echo '<td style="text-align: center; font-size: 4em; background-color: yellow;">' . $running['part_desc'] . '</td>';
+                echo '<td style="text-align: center; font-size: 4em; background-color: yellow;">' . $running['qty'] . '</td>';
+                echo '<td id="run-text" style="text-align: center; font-size: 4em; background-color: yellow;">RUN</td>';
+            } else {
+                if (count($plan_data) == 0) {
+                    echo '<td colspan="5" style="background-color: white; font-size: 2em;">There is no unfinished plan...</td>';
+                }
+            }
+            ?>
         </tr>
         <tr>
             <?php
             foreach ($plan_data as $value) {
-                echo '<td style="text-align: center; background-color: white; font-size: 2em;">' . $value['part_no'] . '</td>';
-                echo '<td style="text-align: center; background-color: white; font-size: 2em;">' . $value['part_desc'] . '</td>';
-                echo '<td style="text-align: center; background-color: white; font-size: 2em;">' . $value['qty'] . '</td>';
-                echo '<td style="text-align: center; background-color: white; font-size: 2em;">' . $value['status'] . '</td>';
+                echo '<td style="text-align: center; background-color: white; font-size: 2.5em;">' . $value['lot_no'] . '</td>';
+                echo '<td style="text-align: center; background-color: white; font-size: 2.5em;">' . $value['part_no'] . '</td>';
+                echo '<td style="text-align: center; background-color: white; font-size: 2.5em;">' . $value['part_desc'] . '</td>';
+                echo '<td style="text-align: center; background-color: white; font-size: 2.5em;">' . $value['qty'] . '</td>';
+                echo '<td style="text-align: center; background-color: white; font-size: 2.5em; color: black;">' . $value['status'] . '</td>';
             }
             ?>
         </tr>
