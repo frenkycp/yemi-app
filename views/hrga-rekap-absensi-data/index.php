@@ -152,6 +152,27 @@ $gridColumns = [
             'style' => 'font-size: 12px;'
         ],
     ],
+    [
+        'attribute' => 'SHIFT2',
+        'label' => 'Shift II',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'SHIFT3',
+        'label' => 'Shift III',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'SHIFT4',
+        'label' => 'Shift IV',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+    ],
     /*[
         'attribute' => 'DISIPLIN',
         'value' => function($model){
@@ -165,20 +186,6 @@ $gridColumns = [
         'hAlign' => 'center',
         'hidden' => true
     ],*/
-    
-    //'NIK_DATE_ID',
-    //'NO',
-    /*'PERIOD',*/
-    /*'NOTE',*/
-    /*'DAY_STAT',*/
-    /*'CATEGORY',*/
-    /*'YEAR',*/
-    /*'WEEK',*/
-    /*'TOTAL_KARYAWAN',*/
-    /*'KEHADIRAN',*/
-    /*'BONUS',*/
-    /*'DISIPLIN',*/
-    /*'DATE',*/
 ];
 ?>
 <div class="giiant-crud absensi-tbl-index">
@@ -190,7 +197,7 @@ $gridColumns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
