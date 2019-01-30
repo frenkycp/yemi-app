@@ -189,9 +189,9 @@ abstract class WipEffTbl extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'lot_id' => 'Lot ID',
+            'lot_id' => 'Lot Number',
             'child_analyst' => 'Child Analyst',
-            'child_analyst_desc' => 'Child Analyst Desc',
+            'child_analyst_desc' => 'Location',
             'LINE' => 'Line',
             'SMT_SHIFT' => 'Smt  Shift',
             'KELOMPOK' => 'Kelompok',
@@ -245,9 +245,9 @@ abstract class WipEffTbl extends \yii\db\ActiveRecord
             'child_desc_10' => 'Child Desc 10',
             'act_qty_10' => 'Act Qty 10',
             'std_time_10' => 'Std Time 10',
-            'child_all' => 'Child All',
-            'child_desc_all' => 'Child Desc All',
-            'qty_all' => 'Qty All',
+            'child_all' => 'Part Number',
+            'child_desc_all' => 'Part Description',
+            'qty_all' => 'Total Qty',
             'std_all' => 'Std All',
             'lt_gross' => 'Lt Gross',
             'lt_loss' => 'Lt Loss',

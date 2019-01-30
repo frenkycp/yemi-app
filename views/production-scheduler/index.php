@@ -315,6 +315,8 @@ $grid_columns = [
                     <?= Html::dropDownList('group', null, [
                         'A' => 'A',
                         'B' => 'B',
+                        'C' => 'C',
+                        'D' => 'D',
                     ], [
                         'class' => 'form-control',
                         'id' => 'group',
