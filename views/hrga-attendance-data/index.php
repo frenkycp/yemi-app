@@ -100,7 +100,10 @@ $gridColumns = [
         'attribute' => 'SHIFT',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filter' => ArrayHelper::map(app\models\AbsensiTbl::find()->select('DISTINCT(SHIFT)')->orderBy('SHIFT')->all(), 'SHIFT', 'SHIFT'),
+        'filter' => ArrayHelper::map(app\models\AbsensiTbl::find()
+            ->select('DISTINCT(SHIFT)')
+            ->where(['<>', 'SHIFT', ''])
+            ->orderBy('SHIFT')->all(), 'SHIFT', 'SHIFT'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px; min-width: 70px;'
@@ -108,6 +111,12 @@ $gridColumns = [
     ],
     [
         'attribute' => 'CATEGORY',
+        'value' => function($model){
+            if (in_array($model->CATEGORY, ['SHIFT-01', 'SHIFT-02', 'SHIFT-03'])) {
+                return '-';
+            }
+            return $model->CATEGORY;
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',

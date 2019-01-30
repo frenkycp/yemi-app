@@ -138,29 +138,29 @@ echo '</pre>';*/
         <tr>
             <?php
             if ($running['part_no'] != '-') {
-                echo '<td style="text-align: center; font-size: 4em; background-color: yellow;">' . $running['lot_no'] . '</td>';
-                echo '<td style="text-align: center; font-size: 4em; background-color: yellow;">' . $running['part_no'] . '</td>';
-                echo '<td style="text-align: center; font-size: 4em; background-color: yellow;">' . $running['part_desc'] . '</td>';
-                echo '<td style="text-align: center; font-size: 4em; background-color: yellow;">' . $running['qty'] . '</td>';
-                echo '<td id="run-text" style="text-align: center; font-size: 4em; background-color: yellow;">RUN</td>';
+                echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['lot_no'] . '</td>';
+                echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['part_no'] . '</td>';
+                echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['part_desc'] . '</td>';
+                echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['qty'] . '</td>';
+                echo '<td id="run-text" style="text-align: center; font-size: 50px; background-color: yellow;">RUN</td>';
             } else {
                 if (count($plan_data) == 0) {
-                    echo '<td colspan="5" style="background-color: white; font-size: 2em;">There is no unfinished plan...</td>';
+                    echo '<td colspan="5" style="background-color: white; font-size: 40px;">There is no unfinished plan...</td>';
                 }
             }
             ?>
         </tr>
-        <tr>
-            <?php
-            foreach ($plan_data as $value) {
-                echo '<td style="text-align: center; background-color: white; font-size: 2.5em;">' . $value['lot_no'] . '</td>';
-                echo '<td style="text-align: center; background-color: white; font-size: 2.5em;">' . $value['part_no'] . '</td>';
-                echo '<td style="text-align: center; background-color: white; font-size: 2.5em;">' . $value['part_desc'] . '</td>';
-                echo '<td style="text-align: center; background-color: white; font-size: 2.5em;">' . $value['qty'] . '</td>';
-                echo '<td style="text-align: center; background-color: white; font-size: 2.5em; color: black;">' . $value['status'] . '</td>';
-            }
-            ?>
-        </tr>
+        <?php
+        foreach ($plan_data as $value) {
+            echo '<tr>';
+            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['lot_no'] . '</td>';
+            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_no'] . '</td>';
+            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_desc'] . '</td>';
+            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['qty'] . '</td>';
+            echo '<td style="text-align: center; background-color: white; font-size: 30px; color: black;">' . $value['status'] . '</td>';
+            echo '</tr>';
+        }
+        ?>
     </tbody>
 </table>
 
