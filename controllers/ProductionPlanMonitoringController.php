@@ -64,9 +64,9 @@ class ProductionPlanMonitoringController extends Controller
         ->where([
             'child_analyst' => $location,
             'line' => $line,
+            'plan_date' => $today
         ])
         ->andWhere(['<>', 'plan_run', 'R'])
-        ->andWhere(['or', ['plan_date' => $today], ['<', 'plan_date', $today]])
         ->orderBy('plan_run DESC')
         ->all();
 
