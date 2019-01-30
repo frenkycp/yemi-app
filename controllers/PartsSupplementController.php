@@ -11,6 +11,7 @@ class PartsSupplementController extends Controller
 {
 	public function actionWhApproved($URL = '', $ITEM = 'ITEM-A', $OUT_QTY = 0, $SLIP_REF = '', $USER_ID = '', $LOC = '', $LOC_DESC = '', $NOTE)
 	{
+		return $this->redirect($URL);
 		date_default_timezone_set("Asia/Jakarta");
 		$TAG_SLIP = '000000';
 		$SEQ_ID = 0;
@@ -63,11 +64,11 @@ class PartsSupplementController extends Controller
 		];
 		$sql = "{CALL MATERIAL_OUT_INTERFACE(:ITEM, :ITEM_DESC, :UM, :OUT_QTY, :TAG_SLIP, :SEQ_ID, :SLIP_REF, :NO, :LOC, :LOC_DESC, :POST_DATE, :USER_ID, :USER_DESC, :STATUS, :NOTE)}";
 
-		try {
+		/*try {
 		    $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
 		} catch (Exception $ex) {
 			return $ex->getMessage();
-		}
+		}*/
 		return $this->redirect($URL);
 		//return $this->redirect(Url::previous());
 	}
