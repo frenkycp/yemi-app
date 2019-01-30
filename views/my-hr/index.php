@@ -130,16 +130,19 @@ $profpic = "";
 
                         <table class="table table-bordered table-hover">
                             <thead>
-                                <tr>
-                                    <th style="text-align: center; width: 100px;">Period</th>
-                                    <th style="text-align: center; width: 100px;">Absent</th>
-                                    <th style="text-align: center; width: 100px;">Permit</th>
-                                    <th style="text-align: center; width: 100px;">Sick</th>
-                                    <th style="text-align: center; width: 100px;">Come Late</th>
-                                    <th style="text-align: center; width: 100px;">Home Early</th>
-                                    <th style="text-align: center; width: 100px;">Personal Leave</th>
-                                    <th style="text-align: center; width: 100px;">Disciplinary<br/>Allowance</th>
-                                    <th style="text-align: center; width: 100px;">Overtime (hour)</th>
+                                <tr style="font-size: 12px;">
+                                    <th style="text-align: center; vertical-align: middle; min-width: 90px;">Period</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Absent</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Permit</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Sick</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Come Late</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Home Early</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Personal Leave</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Disciplinary<br/>Allowance</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Overtime (hour)</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Total<br/>Shift II</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Total<br/>Shift III</th>
+                                    <th style="text-align: center; vertical-align: middle; width: 100px;">Total<br/>Shift IV</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -217,6 +220,9 @@ $profpic = "";
                                     echo '<td style="text-align: center;">' . $cuti_val . '</td>';
                                     echo '<td style="text-align: center;">' . $disiplin_icon . '</td>';
                                     echo '<td style="text-align: center;">' . $total_lembur . '</td>';
+                                    echo '<td style="text-align: center;">' . $value->SHIFT2 . '</td>';
+                                    echo '<td style="text-align: center;">' . $value->SHIFT3 . '</td>';
+                                    echo '<td style="text-align: center;">' . $value->SHIFT4 . '</td>';
                                     echo '</tr>';
                                 }
 
@@ -230,6 +236,9 @@ $profpic = "";
                                 echo '<td style="text-align: center;"><span class="badge">' . $total_cuti . '</span></td>';
                                 echo '<td style="text-align: center;"></td>';
                                 echo '<td style="text-align: center;"><span class="badge">' . $grand_total_lembur . '</span></td>';
+                                echo '<td style="text-align: center;"></td>';
+                                echo '<td style="text-align: center;"></td>';
+                                echo '<td style="text-align: center;"></td>';
                                 echo '</tr>';
 
                                 ?>
