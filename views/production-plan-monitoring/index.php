@@ -152,16 +152,16 @@ echo '</pre>';*/
         </tr>
         <?php
         foreach ($plan_data as $value) {
-            $status = '<span class="text-aqua" style="font-weight: bold;">' . $value['status'] . '</span>';
+            $status_class = '';
             if ($value['status'] == 'CLOSED') {
-                $status = '<span class="text-green" style="font-weight: bold;">' . $value['status'] . '</span>';
+                $status_class = 'text-green';
             }
             echo '<tr>';
-            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['lot_no'] . '</td>';
-            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_no'] . '</td>';
-            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_desc'] . '</td>';
-            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['qty'] . '</td>';
-            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $status . '</td>';
+            echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['lot_no'] . '</td>';
+            echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_no'] . '</td>';
+            echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_desc'] . '</td>';
+            echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['qty'] . '</td>';
+            echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['status'] . '</td>';
             echo '</tr>';
         }
         ?>
