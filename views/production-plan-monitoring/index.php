@@ -31,7 +31,7 @@ $this->registerCss("
         border:1px solid #8b8c8d;
         background-color: #858689;
         color: white;
-        font-size: 3em;
+        font-size: 30px;
         border-bottom: 7px solid #ddd;
     }
     #run-tbl > tbody > tr > td{
@@ -127,11 +127,11 @@ echo '</pre>';*/
 <table class="table table-bordered" id="run-tbl">
     <thead>
         <tr>
-            <th style="text-align: center;">Lot Number</th>
-            <th style="text-align: center;">Part Number</th>
-            <th style="text-align: center;">Part Description</th>
-            <th style="text-align: center;">Total Qty</th>
-            <th style="text-align: center;">Status</th>
+            <th style="text-align: center; vertical-align: middle;">Lot Number</th>
+            <th style="text-align: center; vertical-align: middle;">Part Number</th>
+            <th style="text-align: center; vertical-align: middle;">Part Description</th>
+            <th style="text-align: center; vertical-align: middle;">Total Qty</th>
+            <th style="text-align: center; vertical-align: middle;">Status</th>
         </tr>
     </thead>
     <tbody>
@@ -140,7 +140,7 @@ echo '</pre>';*/
             if ($running['part_no'] != '-') {
                 echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['lot_no'] . '</td>';
                 echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['part_no'] . '</td>';
-                echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['part_desc'] . '</td>';
+                echo '<td style="text-align: center; font-size: 45px; background-color: yellow;">' . $running['part_desc'] . '</td>';
                 echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['qty'] . '</td>';
                 echo '<td id="run-text" style="text-align: center; font-size: 50px; background-color: yellow;">RUN</td>';
             } else {
@@ -152,12 +152,16 @@ echo '</pre>';*/
         </tr>
         <?php
         foreach ($plan_data as $value) {
+            $status = '<span class="text-aqua" style="font-weight: bold;">' . $value['status'] . '</span>';
+            if ($value['status'] == 'CLOSED') {
+                $status = '<span class="text-green" style="font-weight: bold;">' . $value['status'] . '</span>';
+            }
             echo '<tr>';
             echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['lot_no'] . '</td>';
             echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_no'] . '</td>';
             echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_desc'] . '</td>';
             echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $value['qty'] . '</td>';
-            echo '<td style="text-align: center; background-color: white; font-size: 30px; color: black;">' . $value['status'] . '</td>';
+            echo '<td style="text-align: center; background-color: white; font-size: 30px;">' . $status . '</td>';
             echo '</tr>';
         }
         ?>

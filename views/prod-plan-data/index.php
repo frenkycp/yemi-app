@@ -108,9 +108,14 @@ $columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'filter' => [
+            '01-PAGI' => '01-PAGI',
+            '02-SIANG' => '02-SIANG',
+            '03-MALAM' => '03-MALAM',
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
         ],
     ],
     [
@@ -152,6 +157,7 @@ $columns = [
     [
         'attribute' => 'qty_all',
         'label' => 'Total Qty',
+        'mergeHeader' => true,
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
@@ -165,7 +171,7 @@ $columns = [
         'label' => 'status',
         'value' => function($model){
         	if ($model->plan_run == 'N') {
-        		return '<span class="badge bg-red">OPEN</span>';
+        		return '<span class="badge bg-aqua">OPEN</span>';
         	} elseif ($model->plan_run == 'R') {
         		return '<span class="badge bg-yellow">RUNNING</span>';
         	} else {
@@ -176,9 +182,14 @@ $columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '100px',
+        'filter' => [
+            'R' => 'RUNNING',
+            'N' => 'OPEN',
+            'E' => 'CLOSED',
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
         ],
     ],
 	/*'child_01',*/

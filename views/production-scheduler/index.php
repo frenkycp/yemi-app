@@ -284,7 +284,7 @@ $grid_columns = [
                     'id' => 'location_dropdown',
                 ])->label('Location'); ?>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-2">
                 <div class="form-group">
                     <label class="control-label" for="line">Line</label>
                     <?= Html::dropDownList('line', null, [

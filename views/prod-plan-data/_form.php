@@ -36,25 +36,55 @@ use kartik\date\DatePicker;
     ?>
     <div class="panel panel-primary">
     	<div class="panel-body">
-    		<?= $form->field($model, 'child_analyst_desc')->textInput(['readonly' => true]) ?>
-			<?= $form->field($model, 'lot_id')->textInput(['readonly' => true]) ?>
-			<?= $form->field($model, 'child_all')->textInput(['readonly' => true]) ?>
-			<?= $form->field($model, 'child_desc_all')->textInput(['readonly' => true]) ?>
-			<?= $form->field($model, 'qty_all')->textInput(['readonly' => true]) ?>
-    		<div class="form-group">
-                <label class="control-label" for="plan_date">Plan Date</label>
-                <?= DatePicker::widget([
-                    'name' => 'WipEffTbl[plan_date]',
-                    'id' => 'plan_date',
-                    'type' => DatePicker::TYPE_INPUT,
-                    'value' => date('Y-m-d'),
-                    'options' => ['placeholder' => 'Select plan date ...'],
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'todayHighlight' => true
-                    ]
-                ]); ?>
-            </div>
+    		<div class="row">
+    			<div class="col-md-6">
+    				<div class="panel panel-success" style="margin-bottom: 0px;">
+    					<div class="panel-body">
+    						<?= $form->field($model, 'child_analyst_desc')->textInput(['readonly' => true]) ?>
+							<?= $form->field($model, 'lot_id')->textInput(['readonly' => true]) ?>
+							<?= $form->field($model, 'child_all')->textInput(['readonly' => true]) ?>
+							<?= $form->field($model, 'child_desc_all')->textInput(['readonly' => true]) ?>
+							<?= $form->field($model, 'qty_all')->textInput(['readonly' => true]) ?>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="col-md-6">
+    				<div class="panel panel-success" style="margin-bottom: 0px;">
+    					<div class="panel-body">
+    						<div class="form-group">
+				                <label class="control-label" for="plan_date">Plan Date</label>
+				                <?= DatePicker::widget([
+				                    'name' => 'WipEffTbl[plan_date]',
+				                    'id' => 'plan_date',
+				                    'type' => DatePicker::TYPE_INPUT,
+				                    'value' => date('Y-m-d'),
+				                    'options' => ['placeholder' => 'Select plan date ...'],
+				                    'pluginOptions' => [
+				                        'format' => 'yyyy-mm-dd',
+				                        'todayHighlight' => true
+				                    ]
+				                ]); ?>
+				            </div>
+    						<?= $form->field($model, 'LINE')->dropDownList([
+    							'01' => '01',
+    							'02' => '02'
+    						])->label('Line'); ?>
+    						<?= $form->field($model, 'SMT_SHIFT')->dropDownList([
+    							'01-PAGI' => '01-PAGI',
+		                        '02-SIANG' => '02-SIANG',
+		                        '03-MALAM' => '03-MALAM',
+    						])->label('Shift'); ?>
+    						<?= $form->field($model, 'KELOMPOK')->dropDownList([
+    							'A' => 'A',
+		                        'B' => 'B',
+		                        'C' => 'C',
+		                        'D' => 'D',
+    						])->label('Group'); ?>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    		
     	</div>
     	<div class="panel-footer">
     		<?php echo $form->errorSummary($model); ?>
