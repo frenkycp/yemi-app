@@ -47,7 +47,10 @@ $query = SernoInput::find()
     'mp' => 'MAX(mp)',
     'qty_product' => 'COUNT(gmc)',
     'qty_time' => 'ROUND(SUM(qty_time),2)',
-    'mp_time' => 'ROUND(SUM(mp_time),2)'
+    'mp_time' => 'ROUND(SUM(mp_time),2)',
+    'mp_time_single' => 'mp_time',
+    'start_time' => 'MIN(waktu)',
+    'end_time' => 'MAX(waktu)',
 ])
 ->groupBy('proddate, line, gmc');
 

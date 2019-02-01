@@ -120,7 +120,14 @@ class DprLineEfficiencyDailyController extends Controller
 
 	    arsort($tmp_losstime_category);
 	    foreach ($tmp_losstime_category as $key => $value) {
-	    	$losstime_category_categories[] = $key == 'CM' ? 'CHANGE MODEL' : $key;
+	    	//$losstime_category_categories[] = $key == 'CM' ? 'CHANGE MODEL' : $key;
+	    	$name = $key;
+	    	if ($key == 'CM') {
+	    		$name = 'CHANGE MODEL';
+	    	} elseif ($key == 'CH') {
+	    		$name = 'CHOREI';
+	    	}
+	    	$losstime_category_categories[] = $name;
 	    	$losstime_category_final_data[] = [
 	    		'y' => $value,
 	    		'url' => Url::to(['get-losstime-detail', 'by' => 'category', 'proddate' => $model->proddate, 'category_name' => $key])
@@ -231,6 +238,9 @@ class DprLineEfficiencyDailyController extends Controller
 
 		    foreach ($losstime_detail_arr as $value) {
 		    	$losstime_category = $value['category'] == 'CM' ? 'CHANGE MODEL' : $value['category'];
+		    	if ($losstime_category == 'CH') {
+		    		$losstime_category = 'CHOREI';
+		    	}
 	    		$remark .= '<tr>
 		    		<td class="text-center">' . $value['start_time'] . '</td>
 		    		<td class="text-center">' . $value['end_time'] . '</td>

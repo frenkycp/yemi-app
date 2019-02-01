@@ -68,16 +68,9 @@ $gridColumns = [
         'attribute' => 'partName',
         'label' => 'Description',
         'vAlign' => 'middle',
+        'mergeHeader' => true,
         //'width'=>'100px',
     ],
-    /*[
-        'attribute' => 'total_mp',
-        'label' => 'List MP',
-        'value' => function($model){
-            return Html::a('Detail', ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
-        },
-        'format' => 'raw',
-    ],*/
     [
         'attribute' => 'mp',
         'label' => 'Manpower',
@@ -86,6 +79,7 @@ $gridColumns = [
             return Html::a($model->mp, ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
         },
         'format' => 'raw',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'qty_product',
@@ -95,7 +89,25 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'format' => 'raw',
+        'mergeHeader' => true,
         //'width'=>'100px',
+    ],
+    [
+        'attribute' => 'start_time',
+        /*'value' => function($model){
+            return $model->mp_time_single;
+            $start_time = date('H:i:s', strtotime(date($model->start_time) . ' -' . $model->mp_time_single . ' minutes'));
+            return $start_time;
+        },*/
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'end_time',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
     ],
     [
         'attribute' => 'qty_time',
@@ -103,6 +115,7 @@ $gridColumns = [
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'mergeHeader' => true,
         //'width'=>'100px',
     ],
     [
@@ -111,6 +124,7 @@ $gridColumns = [
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'mergeHeader' => true,
         //'width'=>'100px',
     ],
     [
@@ -126,6 +140,7 @@ $gridColumns = [
         },
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'mergeHeader' => true,
     ],
 ];
 ?>
