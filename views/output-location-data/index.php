@@ -48,6 +48,12 @@ $gridColumns = [
         'width' => '120px',
     ],
     [
+        'attribute' => 'sernoOutput.etd',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '120px',
+    ],
+    [
         'attribute' => 'flo',
         'hAlign' => 'center',
         'vAlign' => 'middle',
