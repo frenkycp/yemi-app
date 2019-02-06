@@ -48,10 +48,28 @@ echo '</pre>';*/
 ]); ?>
 
 <div class="row">
-	<div class="col-md-4">
+	<div class="col-md-3">
 		<div class="box box-default box-solid text-center">
 			<div class="box-header with-border">
-				<h3 class="box-title">SMT LINE</h3>
+				<h3 class="box-title">Location</h3>
+			</div>
+			<div class="box-body">
+				<?= Html::dropDownList('location', $location, [
+			    	'WM03' => 'SMT',
+			    	'WI02' => 'INJ LARGE',
+			    	'WI01' => 'INJ SMALL',
+			    ], [
+			        'class' => 'form-control',
+			        'onchange'=>'this.form.submit()',
+			        'style' => 'height: 40px; padding: 3px 12px; font-size:1.5em;'
+			    ]); ?>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-3">
+		<div class="box box-default box-solid text-center">
+			<div class="box-header with-border">
+				<h3 class="box-title">LINE</h3>
 			</div>
 			<div class="box-body">
 				<?= Html::dropDownList('line', $line, [
@@ -65,7 +83,7 @@ echo '</pre>';*/
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-3">
 		<div class="box box-default box-solid text-center">
 			<div class="box-header with-border">
 				<h3 class="box-title">YEAR</h3>
@@ -79,7 +97,7 @@ echo '</pre>';*/
 			</div>
 		</div>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-3">
 		<div class="box box-default box-solid text-center">
 				<div class="box-header with-border">
 					<h3 class="box-title">MONTH</h3>
@@ -226,7 +244,7 @@ echo '</pre>';*/
 		                    	'labelFormat' => 'Dandori Time - Target Max. ' . $target_max . ' min'
 		                    ],
 		                    'yAxis' => [
-		                        'title' => [
+	                        	'title' => [
 		                            'enabled' => true,
 		                            'text' => 'Minutes',
 		                        ],
@@ -239,7 +257,8 @@ echo '</pre>';*/
 		                                'label' => ['text' => '']
 		                            ]
 		                        ],
-		                    ],
+		                        'max' => $yaxis_max,
+	                        ],
 		                    'tooltip' => [
 		                        //'shared' => true,
 		                        //'crosshairs' => true,

@@ -12,6 +12,7 @@ class SmtDandoriController extends Controller
     {
     	$data = [];
     	$line = '01';
+        $location = 'WM03';
     	$this->layout = 'clean';
     	$today = date('Y-m-d');
     	$year = date('Y');
@@ -31,10 +32,23 @@ class SmtDandoriController extends Controller
 			$line = \Yii::$app->request->get('line');
 		}
 
+        if (\Yii::$app->request->get('location') !== null) {
+            $location = \Yii::$app->request->get('location');
+        }
+
+        $yaxis_max = 30;
         if ($line == '01') {
             $target_max = 25;
         } elseif ($line == '02') {
             $target_max = 15;
+        }
+
+        if ($location == 'WI02') {
+            $target_max = 100;
+            $yaxis_max = 100;
+        } elseif ($location == 'WI01') {
+            $target_max = 60;
+            $yaxis_max = 60;
         }
 
         $period = $year . $month;
@@ -50,6 +64,7 @@ class SmtDandoriController extends Controller
             $lot_avg_time = null;
     		$dandori_data = WipEff03Dandori05::find()
 	    	->where([
+                'child_analyst' => $location,
 	    		'period' => $period,
 	    		'LINE' => $line,
 	    		'CONVERT(date, post_date)' => $i->format("Y-m-d")
@@ -62,6 +77,9 @@ class SmtDandoriController extends Controller
 
             if ($total_gmc != null) {
                 $lot_avg_time = round((($dandori_data->dandori_second / 60) / $total_gmc));
+                if ($lot_avg_time > $yaxis_max) {
+                    $yaxis_max = $lot_avg_time;
+                }
             }
 
 	    	$tmp_data[] = [
@@ -117,21 +135,23 @@ class SmtDandoriController extends Controller
     		],
     	];
 
-        $data2[] = [
-            'name' => 'Dandori Time',
-            'data' => $tmp_data3,
-            'dataLabels' => [
-                'enabled' => true,
-                'format' => '{y} min.',
-                'color' => 'white',
-                'style' => [
-                    'fontSize' => '13px',
-                ]
-            ],
-            'tooltip' => [
-                'valueSuffix' => ' min'
-            ],
-            'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+        $data2 = [
+            [
+                'name' => 'Dandori Time',
+                'data' => $tmp_data3,
+                'dataLabels' => [
+                    'enabled' => true,
+                    'format' => '{y} min.',
+                    'color' => 'white',
+                    'style' => [
+                        'fontSize' => '13px',
+                    ]
+                ],
+                'tooltip' => [
+                    'valueSuffix' => ' min'
+                ],
+                'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+            ]
         ];
 
         return $this->render('index', [
@@ -141,6 +161,8 @@ class SmtDandoriController extends Controller
         	'month' => $month,
             'target_max' => $target_max,
             'line' => $line,
+            'location' => $location,
+            'yaxis_max' => $yaxis_max,
         ]);
     }
 }
