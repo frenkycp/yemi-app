@@ -13,13 +13,40 @@ use kartik\date\DatePicker;
 */
 
 $this->title = [
-    'page_title' => 'Production Plan Scheduler <span class="text-green japanesse"></span>',
+    'page_title' => '',
     'tab_title' => 'Production Plan Scheduler',
     'breadcrumbs_title' => 'Production Plan Scheduler'
 ];
-$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .navbar2 {
+        overflow: hidden;
+        //background-color: #333;
+        position: fixed;
+        top: 0;
+        width: 100%;
+    }
+    .main {
+        padding: 16px;
+        margin-top: 0px;
+        //height: 1500px; /* Used in this example to enable scrolling */
+    }
+    .float{
+        position:fixed;
+        z-index: 2;
+        width:80px;
+        height:60px;
+        top:135px;
+        right:33px;
+        background-color:#0C9;
+        color:#FFF;
+        //border-radius:50px;
+        text-align:center;
+        box-shadow: 2px 2px 3px #999;
+    }
+");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -38,6 +65,20 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 
 $this->registerJs("
     $(document).ready(function() {
+        function setTotalQty(){
+            var total_qty = 0;
+            $('input[name=\"selection[]\"]:checked').each(function() {
+                var tmp_qty = parseInt($(this).closest('tr').find('td:eq(12)').text());
+                total_qty += tmp_qty;
+            });
+            $('#total_qty').val(total_qty);
+        }
+        $('.select-on-check-all').change(function(){
+            setTotalQty();
+        });
+        $('.cb-column').change(function(){
+            setTotalQty();
+        });
         $('#order_btn').click(function(){
             var keys = $('#grid').yiiGridView('getSelectedRows');
 
@@ -126,7 +167,10 @@ $grid_columns = [
     [
         'class' => 'yii\grid\CheckboxColumn',
         'checkboxOptions' => function($model) {
-            return ['value' => $model->slip_id . '|' . $model->child];
+            return [
+                'value' => $model->slip_id . '|' . $model->child,
+                'class' => 'cb-column'
+            ];
         },
     ],
     [
@@ -267,7 +311,7 @@ $grid_columns = [
 ?>
 <div class="box box-primary">
     <div class="box-header with-border">
-        <h3 class="box-title">Input Form</h3>
+        <h3 class="box-title">Production Plan Scheduler</h3>
     </div>
     <div class="box-body">
 
@@ -339,6 +383,16 @@ $grid_columns = [
                     ]); ?>
                 </div>
             </div>
+            
+                <div class="form-group float">
+                    <label class="control-label" for="total_qty">Total</label>
+                    <?= Html::textInput('total_qty', '0', [
+                        'class' => 'form-control text-center',
+                        'readonly' => true,
+                        'id' => 'total_qty'
+                    ]); ?>
+                </div>
+            
         </div>
 
         <?php ActiveForm::end(); ?>
