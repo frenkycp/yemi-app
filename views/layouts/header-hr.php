@@ -38,6 +38,9 @@ $model_karyawan = Karyawan::find()->where([
                 </li>
               </ul>
             </li>
+            <li >
+                <?= Html::a('<i class="fa fa-share"></i> <span>Information Center</span>', '//172.17.144.2/hr/karyawan'); ?>
+            </li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->
