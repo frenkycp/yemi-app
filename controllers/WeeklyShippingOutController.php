@@ -6,6 +6,7 @@ use yii\web\Controller;
 use app\models\ContainerView;
 use app\models\SernoOutput;
 use app\models\SernoInput;
+use app\models\SernoMaster;
 use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
 use app\models\search\SernoOutput as SernoOutputSearch;
@@ -186,7 +187,7 @@ class WeeklyShippingOutController extends Controller
         $data = '<h4>' . $status . ' <small>on ' . date('Y-m-d', strtotime($etd)) . '</small></h4>';
         $data .= '<table class="table table-bordered table-hover">';
         $data .= 
-        '<thead style="font-size: 10px;"><tr class="info">
+        '<thead style="font-size: 12px;"><tr class="info">
             <th class="text-center">SO</th>
             <th class="text-center">STC</th>
             <th class="text-center">Destination</th>
@@ -197,10 +198,20 @@ class WeeklyShippingOutController extends Controller
             <th class="text-center" style="min-width: 60px;">Remark</th>
             <th class="text-center" style="min-width: 60px;">Etd Before</th>
         </tr></thead>';
-        $data .= '<tbody style="font-size: 9px;">';
+        $data .= '<tbody style="font-size: 12px;">';
 
         foreach ($serno_output_arr as $value) {
             $diff_qty = $value->actual_qty - $value->plan_qty;
+            $tmp_so = SernoMaster::find()
+            ->where([
+                'gmc' =>$value->gmc
+            ])
+            ->one();
+
+            $desc = '-';
+            if ($tmp_so->gmc != null) {
+                $desc = $tmp_so->model . ' // ' . $tmp_so->color . ' // ' . $tmp_so->dest;
+            }
             if ($status == 'OPEN') {
                 if ($diff_qty < 0) {
                     $data .= '
@@ -209,7 +220,7 @@ class WeeklyShippingOutController extends Controller
                             <td class="text-center">' . $value->stc . '</td>
                             <td class="text-center">' . $value->dst . '</td>
                             <td class="text-center">' . $value->gmc . '</td>
-                            <td>-</td>
+                            <td>' . $desc . '</td>
                             <td class="text-center">' . $diff_qty . '</td>
                             <td class="text-center">' . $value->cntr . '</td>
                             <td class="text-center text-red">' . $value->remark . '</td>
@@ -225,7 +236,7 @@ class WeeklyShippingOutController extends Controller
                             <td class="text-center">' . $value->stc . '</td>
                             <td class="text-center">' . $value->dst . '</td>
                             <td class="text-center">' . $value->gmc . '</td>
-                            <td>-</td>
+                            <td>' . $desc . '</td>
                             <td class="text-center">' . $value->actual_qty . '</td>
                             <td class="text-center">' . $value->cntr . '</td>
                             <td class="text-center text-red">' . $value->remark . '</td>

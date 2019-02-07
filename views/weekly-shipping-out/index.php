@@ -16,7 +16,10 @@ $color = new JsExpression('Highcharts.getOptions().colors[1]');
 //$color = 'DarkSlateBlue';
 //$color = 'rgba(72,61,139,0.6)';
 
-$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .modal-lg {width: 1200px;}
+");
 
 date_default_timezone_set('Asia/Jakarta');
 
