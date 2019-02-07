@@ -148,7 +148,8 @@ $profpic = "";
                     <tbody>
                         <?php
                         $total_alpa = $total_ijin = $total_sakit = $total_dl = $total_pc = $total_cuti = $grand_total_lembur = 0;
-                        foreach ($model_rekap_absensi as $value) {
+                        $grade = substr($model_karyawan->GRADE, 0, 1);
+                        foreach ($absensi_data as $value) {
                             $data_lembur = SplView::find()
                             ->select([
                                 'PERIOD',
@@ -161,9 +162,10 @@ $profpic = "";
                             ->groupBy('PERIOD')
                             ->one();
                             $disiplin_icon = '<i class="fa fa-circle-o text-green"></i>';
-                            if ($value->DISIPLIN == 0) {
+                            if ($value->NO_DISIPLIN > 0 || in_array($grade, ['L', 'M', 'D'])) {
                                 $disiplin_icon = Html::a('<i class="fa fa-close text-red"></i>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
                             }
+                            //$disiplin_icon = (int)$value->DISIPLIN;
 
                             $total_lembur = $data_lembur->NILAI_LEMBUR_ACTUAL !== null && $data_lembur->NILAI_LEMBUR_ACTUAL > 0 ? $data_lembur->NILAI_LEMBUR_ACTUAL : '-';
 
@@ -226,6 +228,11 @@ $profpic = "";
                             echo '</tr>';
                         }
 
+                        $lembur_str = '-';
+                        if ($grand_total_lembur > 0) {
+                            $lembur_str = $grand_total_lembur;
+                        }
+
                         echo '<tr class="info" style="font-weight: bold;">';
                         echo '<td style="text-align: center;">Total :</td>';
                         echo '<td style="text-align: center;"><span class="badge">' . $total_alpa . '</span></td>';
@@ -235,7 +242,7 @@ $profpic = "";
                         echo '<td style="text-align: center;"><span class="badge">' . $total_pc . '</span></td>';
                         echo '<td style="text-align: center;"><span class="badge">' . $total_cuti . '</span></td>';
                         echo '<td style="text-align: center;"></td>';
-                        echo '<td style="text-align: center;"><span class="badge">' . $grand_total_lembur . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="badge">' . $lembur_str . '</span></td>';
                         echo '<td style="text-align: center;"></td>';
                         echo '<td style="text-align: center;"></td>';
                         echo '<td style="text-align: center;"></td>';

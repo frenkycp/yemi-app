@@ -35,13 +35,41 @@ class MyHrController extends Controller
         }
 		//$nik = \Yii::$app->request->get('nik');
         $nik = $session['my_hr_user'];
+
         $model_karyawan = Karyawan::find()->where([
             'NIK' => $nik
         ])->one();
-        $model_rekap_absensi = RekapAbsensiView::find()->where([
+
+        /*$model_rekap_absensi = RekapAbsensiView::find()->where([
             'NIK' => $nik,
             'YEAR' => $this_year
         ])
+        ->orderBy('PERIOD')
+        ->all(); */
+
+        $absensi_data = AbsensiTbl::find()
+        ->select([
+            'PERIOD',
+            'NIK',
+            'NAMA_KARYAWAN',
+            'ALPHA' => 'SUM(CASE WHEN NOTE = \'A\' THEN 1 ELSE 0 END)',
+            'IJIN' => 'SUM(CASE WHEN NOTE = \'I\' THEN 1 ELSE 0 END)',
+            'SAKIT' => 'SUM(CASE WHEN NOTE = \'S\' THEN 1 ELSE 0 END)',
+            'CUTI' => 'SUM(CASE WHEN NOTE = \'C\' THEN 1 ELSE 0 END)',
+            'CUTI_KHUSUS' => 'SUM(CASE WHEN NOTE IN (\'CK\', \'CK1\', \'CK3\', \'CK5\', \'CK7\', \'CK10\', \'CK11\') THEN 1 ELSE 0 END)',
+            'NO_DISIPLIN' => 'SUM(CASE WHEN DISIPLIN = 0 AND CATEGORY != \'WAIT\' THEN 1 ELSE 0 END)',
+            'DATANG_TERLAMBAT' => 'SUM(CASE WHEN NOTE = \'DL\' THEN 1 ELSE 0 END)',
+            'PULANG_CEPAT' => 'SUM(CASE WHEN NOTE = \'PC\' THEN 1 ELSE 0 END)',
+            'SHIFT1' => 'SUM(CASE WHEN SHIFT = \'I\' THEN 1 ELSE 0 END)',
+            'SHIFT2' => 'SUM(CASE WHEN SHIFT = \'II\' THEN 1 ELSE 0 END)',
+            'SHIFT3' => 'SUM(CASE WHEN SHIFT = \'III\' THEN 1 ELSE 0 END)',
+            'SHIFT4' => 'SUM(CASE WHEN SHIFT = \'IV.1\' THEN 1 WHEN SHIFT = \'IV.2\' THEN 1 WHEN SHIFT = \'IV.3\' THEN 1 ELSE 0 END)'
+        ])
+        ->where([
+            'NIK' => $nik,
+            'YEAR' => $this_year
+        ])
+        ->groupBy('PERIOD, NIK, NAMA_KARYAWAN')
         ->orderBy('PERIOD')
         ->all();
 
@@ -67,8 +95,9 @@ class MyHrController extends Controller
         }
 
 		return $this->render('index', [
+            'absensi_data' => $absensi_data,
 			'model_karyawan' => $model_karyawan,
-            'model_rekap_absensi' => $model_rekap_absensi,
+            //'model_rekap_absensi' => $model_rekap_absensi,
             'using_cuti' => $using_cuti,
             'kuota_cuti' => $kuota_cuti,
             'sisa_cuti' => $sisa_cuti,
