@@ -11,7 +11,7 @@ class PartsSupplementController extends Controller
 {
 	public function actionWhApproved($URL = '', $ITEM = 'ITEM-A', $OUT_QTY = 0, $SLIP_REF = '', $USER_ID = '', $LOC = '', $LOC_DESC = '', $NOTE)
 	{
-		return $this->redirect($URL);
+		//return $this->redirect($URL);
 		date_default_timezone_set("Asia/Jakarta");
 		$TAG_SLIP = '000000';
 		$SEQ_ID = 0;
