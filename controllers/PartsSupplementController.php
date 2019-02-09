@@ -64,11 +64,11 @@ class PartsSupplementController extends Controller
 		];
 		$sql = "{CALL MATERIAL_OUT_INTERFACE(:ITEM, :ITEM_DESC, :UM, :OUT_QTY, :TAG_SLIP, :SEQ_ID, :SLIP_REF, :NO, :LOC, :LOC_DESC, :POST_DATE, :USER_ID, :USER_DESC, :STATUS, :NOTE)}";
 
-		/*try {
+		/**/try {
 		    $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
 		} catch (Exception $ex) {
 			return $ex->getMessage();
-		}*/
+		}
 		return $this->redirect($URL);
 		//return $this->redirect(Url::previous());
 	}
