@@ -20,6 +20,13 @@ date_default_timezone_set('Asia/Jakarta');
 
 $gridColumns = [
     [
+        'class' => 'kartik\grid\SerialColumn',
+        'contentOptions' => ['class' => 'kartik-sheet-style'],
+        'width' => '36px',
+        'header' => '',
+        'headerOptions' => ['class' => 'kartik-sheet-style']
+    ],
+    [
         'attribute' => 'PERIOD',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -42,6 +49,7 @@ $gridColumns = [
         'attribute' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'format' => 'html',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
@@ -75,6 +83,27 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
+    ],
+    [
+        'class' => 'kartik\grid\ActionColumn',
+        //'template' => "{check_sheet} {history}",
+        'template' => "{view_period}",
+        'buttons' => [
+            'view_period' => function ($url, $model, $key) {
+                $options = [
+                    'title' => 'View Monthly Overtime (in a year)',
+                ];
+                $url = ['/emp-overtime-monthly/index', 'year' => substr($model->PERIOD, 0, 4), 'nik' => $model->NIK];
+                return Html::a('<span class="glyphicon glyphicon-calendar"></span>', $url, $options);
+            },
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
     ],
 ];
 ?>

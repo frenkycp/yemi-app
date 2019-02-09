@@ -60,7 +60,7 @@ $dataProvider = new ActiveDataProvider([
 'query' => $query,
 'sort' => [
 	'defaultOrder' => [
-        'PERIOD' => SORT_DESC,
+        //'PERIOD' => SORT_DESC,
         'NILAI_LEMBUR_ACTUAL' => SORT_DESC
     ]
 ],
