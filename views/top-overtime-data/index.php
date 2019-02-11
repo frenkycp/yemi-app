@@ -81,6 +81,7 @@ $gridColumns = [
         'attribute' => 'GRADE',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => \Yii::$app->params['grade_arr'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'

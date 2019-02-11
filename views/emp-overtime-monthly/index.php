@@ -101,22 +101,24 @@ echo '</pre>';*/
                         'plotLines' => [
                             [
                                 'value' => 10,
-                                'color' => 'green',
+                                'color' => 'orange',
                                 'dashStyle' => 'shortdash',
                                 'width' => 2,
                                 'label' => [
-                                    'text' => 'NORMAL',
-                                    //'align' => 'left',
+                                    'text' => 'NORMAL (10)',
+                                    'align' => 'left',
                                 ],
+                                'zIndex' => 5
                             ], [
                                 'value' => 20,
                                 'color' => 'red',
                                 'dashStyle' => 'shortdash',
                                 'width' => 2,
                                 'label' => [
-                                    'text' => 'MAXIMUM',
-                                    //'align' => 'left',
+                                    'text' => 'MAXIMUM (20)',
+                                    'align' => 'left',
                                 ],
+                                'zIndex' => 5
                             ]
                         ]
                     ],
