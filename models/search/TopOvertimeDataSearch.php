@@ -46,6 +46,7 @@ public function search($params)
 $query = SplVIew::find()
 ->select([
 	'CC_GROUP',
+    'CC_DESC',
 	'PERIOD',
 	'NIK',
 	'NAMA_KARYAWAN',
@@ -53,7 +54,7 @@ $query = SplVIew::find()
 	'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
 ])
 ->where('NIK IS NOT NULL')
-->groupBy('CC_GROUP, PERIOD, NIK, NAMA_KARYAWAN, GRADE')
+->groupBy('CC_GROUP, CC_DESC, PERIOD, NIK, NAMA_KARYAWAN, GRADE')
 ->having('SUM(NILAI_LEMBUR_ACTUAL) > 0');
 
 $dataProvider = new ActiveDataProvider([
@@ -78,6 +79,7 @@ $query->andFilterWhere([
             'PERIOD' => $this->PERIOD,
             'NIK' => $this->NIK,
             'CC_GROUP' => $this->CC_GROUP,
+            'CC_DESC' => $this->CC_DESC,
             'GRADE' => $this->GRADE,
         ]);
 

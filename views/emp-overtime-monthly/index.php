@@ -97,6 +97,28 @@ echo '</pre>';*/
                             'text' => 'HOURS'
                         ],
                         'min' => 0,
+                        'max' => 100,
+                        'plotLines' => [
+                            [
+                                'value' => 10,
+                                'color' => 'green',
+                                'dashStyle' => 'shortdash',
+                                'width' => 2,
+                                'label' => [
+                                    'text' => 'NORMAL',
+                                    //'align' => 'left',
+                                ],
+                            ], [
+                                'value' => 20,
+                                'color' => 'red',
+                                'dashStyle' => 'shortdash',
+                                'width' => 2,
+                                'label' => [
+                                    'text' => 'MAXIMUM',
+                                    //'align' => 'left',
+                                ],
+                            ]
+                        ]
                     ],
                     'plotOptions' => [
                         'column' => [

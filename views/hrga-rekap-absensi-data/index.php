@@ -212,9 +212,6 @@ $gridColumns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             //'pjax' => false, // pjax is set to always true for this demo
             'toolbar' =>  [
-                ['content' => 
-                    Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success'])
-                ],
                 '{export}',
                 '{toggleData}',
             ],

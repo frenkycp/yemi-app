@@ -40,6 +40,18 @@ $gridColumns = [
         'label' => 'Department',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_GROUP')->groupBy('CC_GROUP')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'CC_DESC',
+        'label' => 'Section',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_DESC')->groupBy('CC_DESC')->orderBy('CC_DESC')->all(), 'CC_DESC', 'CC_DESC'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
