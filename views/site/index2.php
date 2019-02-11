@@ -70,7 +70,7 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['/parts-picking-pts']); ?>
                                 </li><li>
-                                    <?= Html::a('Picking Trouble by Model GMC<br/><span class="japanesse-word">(製品ＧＭＣ別のピッキング問題）</span>', ['/parts-picking-pts-gmc']); ?>
+                                    <?= Html::a('Picking Trouble by Model GMC <span class="japanesse-word">(製品ＧＭＣ別のピッキング問題）</span>', ['/parts-picking-pts-gmc']); ?>
                                 </li>
                             </ol>
                         </div>
@@ -189,12 +189,13 @@ $this->registerCss("
                         <div class="list-group-item">
                             <p>Manpower Attendance <span class="japanesse-word">(勤怠管理)</span></p>
                             <ol style="padding-left: 1em">
-                                <li><?= Html::a('Daily Attendance Control<br/>
-                                    <span class="japanesse-word">(日常勤怠管理)</span>', ['/hrga-attendance-report/index']); ?>
+                                <li><?= Html::a('Daily Attendance Control <span class="japanesse-word">(日常勤怠管理)</span>', ['/hrga-attendance-report/index']); ?>
                                 </li>
-                                <li><?= Html::a('Monthly Overtime Control <br/><span class="japanesse-word">(月次残業管理)</span>', ['/hrga-spl-report-daily/index']); ?>
+                                <li><?= Html::a('Monthly Overtime Control <span class="japanesse-word">(月次残業管理)</span>', ['/hrga-spl-report-daily/index']); ?>
                                 </li>
-                                <li><?= Html::a('Overtime Monthly Monitor <br/><span class="japanesse-word">（月次残業モニター)</span>', ['/hrga-spl-yearly-report/index']); ?>
+                                <li><?= Html::a('Overtime Monthly Monitor <span class="japanesse-word">（月次残業モニター)</span>', ['/hrga-spl-yearly-report/index']); ?>
+                                </li>
+                                <li><?= Html::a('OT Management <span class="japanesse-word">(残業管理)</span>', ['/top-overtime-data/index']); ?>
                                 </li>
                             </ol>
                         </div>
@@ -205,8 +206,7 @@ $this->registerCss("
                                 <!--<li>
                                     <span class="text-red">5. Attendance report (勤怠管理)</span>
                                 </li>-->
-                                <li><?= Html::a('Monthly MP Contract Intake<br/>
-                                    <span class="japanesse-word">(月次契約要員採用)</span>', ['/hrga-manpower-intake/index']); ?>
+                                <li><?= Html::a('Monthly MP Contract Intake <span class="japanesse-word">(月次契約要員採用)</span>', ['/hrga-manpower-intake/index']); ?>
                                 </li>
                             </ol>
                         </div>
@@ -236,10 +236,10 @@ $this->registerCss("
                             <p>Sales Control <span class="japanesse-word">(売上管理)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Sales Budget/Forecast/Actual<br/><span class="japanesse-word">(売上予算・見込み・実績)</span>', ['/production-budget/index']); ?>
+                                    <?= Html::a('Sales Budget/Forecast/Actual <span class="japanesse-word">(売上予算・見込み・実績)</span>', ['/production-budget/index']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Current Sales Progres (Proforma Invoice Based)<br/><span class="japanesse-word">(今月の売上実績)</span>', ['/production-budget-current/index']); ?>
+                                    <?= Html::a('Current Sales Progres (Proforma Invoice Based) <span class="japanesse-word">(今月の売上実績)</span>', ['/production-budget-current/index']); ?>
                                 </li>
                             </ol>
                         </div>
@@ -296,10 +296,10 @@ $this->registerCss("
                     <div class="list-group-item">
                         <ol style="padding-left: 1em">
                             <li>
-                                <?= Html::a('Weekly Shipping Inspection Monitor</br><span class="japanesse-word">(週次出荷対応管理検査モニター)</span>', ['/production-inspection-daily']); ?>
+                                <?= Html::a('Weekly Shipping Inspection Monitor <span class="japanesse-word">(週次出荷対応管理検査モニター)</span>', ['/production-inspection-daily']); ?>
                             </li>
                             <li>
-                                <?= Html::a('Monthly Production Inspection Chart<br/><span class="japanesse-word">(月次出荷管理検査)</span>', ['/production-monthly-inspection']); ?>
+                                <?= Html::a('Monthly Production Inspection Chart <span class="japanesse-word">(月次出荷管理検査)</span>', ['/production-monthly-inspection']); ?>
                             </li>
                             <li>
                                 <?= Html::a('Final Inspection Data <span class="japanesse-word">(出荷管理検査データ)</span>', ['/production-inspection']); ?>
