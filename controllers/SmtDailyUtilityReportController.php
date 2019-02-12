@@ -233,7 +233,8 @@ class SmtDailyUtilityReportController extends Controller
 	    $utility_data_arr = WipEff03::find()
 	    ->where([
 	    	'post_date' => $proddate,
-	    	'LINE' => $line
+	    	'LINE' => $line,
+	    	'child_analyst' => 'WM03'
 	    ])
 	    ->orderBy('SMT_SHIFT, LINE, child_01')
 	    ->all();
