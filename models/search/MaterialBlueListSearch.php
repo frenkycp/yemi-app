@@ -42,7 +42,11 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = VisualPickingList::find()->where(['stage_id' => 4]);
+$query = VisualPickingList::find()
+->where(['stage_id' => 4])
+->andWhere([
+      'analyst' => ['WF01', 'WS01']
+]);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
