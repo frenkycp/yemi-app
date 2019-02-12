@@ -73,49 +73,6 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'model',
-        //'label' => 'Slip Number',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '90px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'partName',
-        //'label' => 'Slip Number',
-        //'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'category',
-        //'label' => 'Slip Number',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '120px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'losstime',
-        //'label' => 'Slip Number',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '90px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
-        ],
-    ],
-    [
         'attribute' => 'start_time',
         //'label' => 'Slip Number',
         'hAlign' => 'center',
@@ -135,6 +92,61 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'losstime',
+        //'label' => 'Slip Number',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'category',
+        //'label' => 'Slip Number',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'model',
+        'label' => 'Change Model',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'hp',
+        'label' => 'Half Process',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'reason',
+        //'label' => 'Half Process',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 75px; font-size: 12px;'
         ],
     ],
 ];

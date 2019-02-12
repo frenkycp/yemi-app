@@ -314,7 +314,7 @@ $this->registerCss("
                         <a class="list-group-item" href="http://172.17.144.2/workflow/newmodel.php">New Model Development <span class="japanesse-word">（新製品開発日程）</span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" href="http://172.17.144.2">PRODUCTION ENGINEERING CONTROL DATA<br/><span class="japanesse-word">(技術管理データ)</span></a>
+                        <a class="list-group-item" href="http://172.17.144.2">PRODUCTION ENGINEERING CONTROL DATA <span class="japanesse-word">(技術管理データ)</span></a>
                     </div>
                 </div>
     	   </div>

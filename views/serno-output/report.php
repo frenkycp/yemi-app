@@ -4,6 +4,7 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
@@ -44,6 +45,44 @@ $script = <<< JS
 JS;
 $this->registerJs($script, View::POS_HEAD );
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['serno-output/report']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-2">
+        <?= Html::label('Year'); ?>
+        <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
+            'class' => 'form-control',
+            //'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+    <div class="col-md-2">
+        <?= Html::label('Month'); ?>
+        <?= Html::dropDownList('month', $month, [
+            '01' => 'Jan',
+            '02' => 'Feb',
+            '03' => 'Mar',
+            '04' => 'Apr',
+            '05' => 'May',
+            '06' => 'Jun',
+            '07' => 'Jul',
+            '08' => 'Aug',
+            '09' => 'Sep',
+            '10' => 'Oct',
+            '11' => 'Nov',
+            '12' => 'Dec',
+        ], [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+</div>
+<br/>
+
+<?php ActiveForm::end(); ?>
 <u><h5>Last Updated : <?= date('d-m-Y H:i:s') ?></h5></u>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">

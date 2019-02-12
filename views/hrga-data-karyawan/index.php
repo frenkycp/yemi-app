@@ -283,6 +283,12 @@ yii\bootstrap\Modal::begin([
     //'size' => 'modal-lg',
 ]);
 yii\bootstrap\Modal::end();
+
+yii\bootstrap\Modal::begin([
+    'id' =>'modal-resign',
+    'header' => '<h3>Resign Input Form</h3>',
+]);
+yii\bootstrap\Modal::end();
 ?>
 
 

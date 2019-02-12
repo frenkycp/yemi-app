@@ -18,7 +18,7 @@ class LineLosstimeDataSearch extends SernoLosstimeView
     public function rules()
     {
         return [
-            [['pk', 'line', 'proddate', 'start_time', 'end_time', 'category', 'model'], 'safe'],
+            [['pk', 'line', 'proddate', 'start_time', 'end_time', 'category', 'model', 'hp', 'reason'], 'safe'],
             [['mp'], 'integer'],
             [['losstime'], 'number'],
         ];
@@ -42,8 +42,15 @@ class LineLosstimeDataSearch extends SernoLosstimeView
      */
     public function search($params)
     {
-        $query = SernoLosstimeView::find()->where([
+        $query = SernoLosstimeView::find()
+        ->where([
             '<>', 'category', 'CH'
+        ])
+        ->andWhere([
+            '<>', 'category', 'CANCELED'
+        ])
+        ->andWhere([
+            '<>', 'model', 'STOPLINE'
         ]);
 
         $dataProvider = new ActiveDataProvider([
@@ -78,11 +85,13 @@ class LineLosstimeDataSearch extends SernoLosstimeView
             'end_time' => $this->end_time,
             'losstime' => $this->losstime,
             'line' => $this->line,
+            'hp' => $this->hp,
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'category', $this->category])
+            ->andFilterWhere(['like', 'reason', $this->reason])
             ->andFilterWhere(['like', 'model', $this->model]);
 
         return $dataProvider;

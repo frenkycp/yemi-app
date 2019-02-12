@@ -108,7 +108,7 @@ echo '</pre>';*/
                                     'text' => 'NORMAL (10)',
                                     'align' => 'left',
                                 ],
-                                'zIndex' => 5
+                                //'zIndex' => 5
                             ], [
                                 'value' => 20,
                                 'color' => 'red',
@@ -118,7 +118,7 @@ echo '</pre>';*/
                                     'text' => 'MAXIMUM (20)',
                                     'align' => 'left',
                                 ],
-                                'zIndex' => 5
+                                //'zIndex' => 5
                             ]
                         ]
                     ],
