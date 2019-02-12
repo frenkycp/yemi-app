@@ -53,7 +53,7 @@ echo '</pre>';*/
     </div>
     <div class="col-md-2">
         <?= Html::label('SECTION'); ?>
-        <?= Html::dropDownList('section', $section, ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'), [
+        <?= Html::dropDownList('section', $section, $section_arr, [
             'class' => 'form-control',
             'onchange'=>'this.form.submit()',
             'prompt' => 'Select a section...'
@@ -70,7 +70,7 @@ echo '</pre>';*/
     </div>
     <div class="box-body">
         <?php
-        if (isset($section)) {
+        if (isset($section) && $section != '') {
             echo Highcharts::widget([
                 'scripts' => [
                     //'modules/exporting',

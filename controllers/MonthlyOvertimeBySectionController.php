@@ -4,10 +4,12 @@ namespace app\controllers;
 use yii\web\Controller;
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
 
 use app\models\SplView;
 use app\models\Karyawan;
+use app\models\CostCenter;
 
 class MonthlyOvertimeBySectionController extends Controller
 {
@@ -29,29 +31,69 @@ class MonthlyOvertimeBySectionController extends Controller
 			$section = \Yii::$app->request->get('section');
 		}
 
-		$karyawan_arr = Karyawan::find()
-		->where([
-			'CC_ID' => $section
-		])
-		->asArray()
-		->all();
+		$section_arr = ArrayHelper::map(CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC');
+		$section_arr['ALL'] = '-- ALL SECTIONS --';
+		//asort($section_arr);
 
-		$overtime_data = SplView::find()
-		->select([
-			'PERIOD',
-			'NIK',
-			'NAMA_KARYAWAN',
-			'CC_ID',
-			'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
-		])
-		->where([
-			'LEFT(PERIOD, 4)' => $year,
-			'CC_ID' => $section
-		])
-		->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
-		->orderBy('NIK, PERIOD')
-		->asArray()
-		->all();
+		if ($section == 'ALL') {
+			$karyawan_arr = SplView::find()
+			->select([
+				'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_DESC'
+			])
+			->where([
+				'LEFT(PERIOD, 4)' => $year,
+			])
+			->andWhere('NIK IS NOT NULL')
+			->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
+			->asArray()
+			->all();
+
+			$overtime_data = SplView::find()
+			->select([
+				'PERIOD',
+				'NIK',
+				'NAMA_KARYAWAN',
+				'CC_ID',
+				'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+			])
+			->where([
+				'LEFT(PERIOD, 4)' => $year,
+			])
+			->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
+			->orderBy('NIK, PERIOD')
+			->asArray()
+			->all();
+		} else {
+			$karyawan_arr = SplView::find()
+			->select([
+				'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_DESC'
+			])
+			->where([
+				'CC_ID' => $section,
+				'LEFT(PERIOD, 4)' => $year,
+			])
+			->andWhere('NIK IS NOT NULL')
+			->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
+			->asArray()
+			->all();
+
+			$overtime_data = SplView::find()
+			->select([
+				'PERIOD',
+				'NIK',
+				'NAMA_KARYAWAN',
+				'CC_ID',
+				'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+			])
+			->where([
+				'LEFT(PERIOD, 4)' => $year,
+				'CC_ID' => $section
+			])
+			->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
+			->orderBy('NIK, PERIOD')
+			->asArray()
+			->all();
+		}
 
 		$categories = [];
 		for ($i = 1; $i <= 12; $i++) {
@@ -76,7 +118,7 @@ class MonthlyOvertimeBySectionController extends Controller
 				];
 			}
 			$data[] = [
-				'name' => $karyawan['NIK'] . ' - ' . $karyawan['NAMA_KARYAWAN'],
+				'name' => $karyawan['NIK'] . ' - ' . $karyawan['NAMA_KARYAWAN'] . ' (' . $karyawan['CC_DESC'] . ')',
 				'data' => $tmp_data,
 				'showInLegend' => false,
 				'lineWidth' => 0.8,
@@ -88,7 +130,8 @@ class MonthlyOvertimeBySectionController extends Controller
 			'data' => $data,
 			'year' => $year,
 			'section' => $section,
-			'categories' => $categories
+			'categories' => $categories,
+			'section_arr' => $section_arr
 		]);
     }
 
