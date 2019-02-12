@@ -52,7 +52,8 @@ class SmtDailyUtilityReportController extends Controller
 				->where([
 					'period' => $period,
 					'post_date' => $i->format("Y-m-d"),
-					'LINE' => $line
+					'LINE' => $line,
+					'child_analyst' => 'WM03'
 				])
 				->one();
 
@@ -105,7 +106,8 @@ class SmtDailyUtilityReportController extends Controller
 
 		$wip_eff_view = WipEffView::find()
 		->where([
-			'period' => $period
+			'period' => $period,
+			'child_analyst' => 'WM03'
 		])
 		->orderBy('post_date, line')
 		->all();
@@ -307,7 +309,8 @@ class SmtDailyUtilityReportController extends Controller
 	    $wip_eff_view = WipEffView::find()
 	    ->where([
 	    	'post_date' => $proddate,
-	    	'LINE' => $line
+	    	'LINE' => $line,
+	    	'child_analyst' => 'WM03'
 	    ])
 	    ->all();
 
