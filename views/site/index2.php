@@ -195,7 +195,9 @@ $this->registerCss("
                                 </li>
                                 <li><?= Html::a('Overtime Monthly Monitor <span class="japanesse-word">（月次残業モニター)</span>', ['/hrga-spl-yearly-report/index']); ?>
                                 </li>
-                                <li><?= Html::a('OT Management <span class="japanesse-word">(残業管理)</span>', ['/top-overtime-data/index']); ?>
+                                <li><?= Html::a('OT Management by NIK <span class="japanesse-word">(社員別残業管理）</span>', ['/top-overtime-data/index']); ?>
+                                </li>
+                                <li><?= Html::a('OT Management by Section <span class="japanesse-word">(部門別残業管理）</span>', ['/monthly-overtime-by-section/index']); ?>
                                 </li>
                             </ol>
                         </div>

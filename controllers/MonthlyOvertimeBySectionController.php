@@ -9,7 +9,7 @@ use yii\web\JsExpression;
 use app\models\SplView;
 use app\models\Karyawan;
 
-class EmpOvertimeMonthlyController extends Controller
+class MonthlyOvertimeBySectionController extends Controller
 {
 	public function behaviors()
     {
@@ -20,78 +20,75 @@ class EmpOvertimeMonthlyController extends Controller
     public function actionIndex()
     {
     	$year = date('Y');
-    	$data = [];
-    	$nik = '';
 
     	if (\Yii::$app->request->get('year') !== null) {
 			$year = \Yii::$app->request->get('year');
 		}
 
-		if (\Yii::$app->request->get('nik') !== null) {
-			$nik = \Yii::$app->request->get('nik');
+		if (\Yii::$app->request->get('section') !== null) {
+			$section = \Yii::$app->request->get('section');
 		}
 
-		$nama_karyawan = 'Please input registered NIK...';
-		$karyawan = Karyawan::find()
+		$karyawan_arr = Karyawan::find()
 		->where([
-			'NIK' => $nik
+			'CC_ID' => $section
 		])
-		->one();
-		if ($karyawan->NIK != null) {
-			$nama_karyawan = $karyawan->NAMA_KARYAWAN;
-		}
+		->asArray()
+		->all();
 
 		$overtime_data = SplView::find()
 		->select([
-			'NIK',
 			'PERIOD',
+			'NIK',
+			'NAMA_KARYAWAN',
+			'CC_ID',
 			'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
 		])
 		->where([
-			'NIK' => $nik,
-			'LEFT(PERIOD, 4)' => $year
+			'LEFT(PERIOD, 4)' => $year,
+			'CC_ID' => $section
 		])
-		->groupBy('NIK, PERIOD')
+		->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
+		->orderBy('NIK, PERIOD')
+		->asArray()
 		->all();
 
-		$tmp_data = [];
 		$categories = [];
-		$total_hour = 0;
 		for ($i = 1; $i <= 12; $i++) {
 			$bulan = str_pad($i, 2, '0', STR_PAD_LEFT);
 			$period = $year . $bulan;
-
 			$categories[] = $period;
-
-			$hour = 0;
-			foreach ($overtime_data as $key => $value) {
-				if ($value->PERIOD == $period) {
-					$hour = $value->NILAI_LEMBUR_ACTUAL;
-				}
-			}
-
-			$total_hour += $hour;
-
-			$tmp_data[] = [
-				'y' => round($hour, 2),
-				'url' => Url::to(['get-remark', 'nik' => $nik, 'nama_karyawan' => $nama_karyawan, 'period' => $period])
-			];
-			//$data[] = $period;
-
 		}
-
-		$data[] = [
-			'name' => 'Monthly Overtime Total',
-			'data' => $tmp_data
-		];
+		$data = [];
+		foreach ($karyawan_arr as $karyawan) {
+			$tmp_data = [];
+			foreach ($categories as $period_value) {
+				$hour = 0;
+				foreach ($overtime_data as $value) {
+					if ($value['NIK'] == $karyawan['NIK'] && $period_value == $value['PERIOD']) {
+						$hour = $value['NILAI_LEMBUR_ACTUAL'];
+						continue;
+					}
+				}
+				$tmp_data[] = [
+					'y' => round($hour, 2),
+					'url' => Url::to(['get-remark', 'nik' => $karyawan['NIK'], 'nama_karyawan' => $karyawan['NAMA_KARYAWAN'], 'period' => $period_value])
+				];
+			}
+			$data[] = [
+				'name' => $karyawan['NIK'] . ' - ' . $karyawan['NAMA_KARYAWAN'],
+				'data' => $tmp_data,
+				'showInLegend' => false,
+				'lineWidth' => 0.8,
+				'color' => new JsExpression('Highcharts.getOptions().colors[0]')
+			];
+		}
 
     	return $this->render('index', [
 			'data' => $data,
 			'year' => $year,
-			'nik' => $nik,
-			'nama_karyawan' => $nama_karyawan,
-			'categories' => $categories,
-			'total_hour' => $total_hour,
+			'section' => $section,
+			'categories' => $categories
 		]);
     }
 
