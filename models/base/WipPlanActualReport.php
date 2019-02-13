@@ -19,6 +19,7 @@ use Yii;
  * @property string $parent_desc
  * @property string $child
  * @property string $child_desc
+ * @property string $bun_02
  * @property string $start_date
  * @property string $due_date
  * @property string $post_date
@@ -41,6 +42,11 @@ use Yii;
  * @property string $urut
  * @property double $bom_level
  * @property double $gojek_req_qty
+ * @property string $delay_category
+ * @property string $delay_detail
+ * @property string $delay_userid
+ * @property string $delay_userid_desc
+ * @property string $delay_last_update
  * @property string $aliasModel
  */
 abstract class WipPlanActualReport extends \yii\db\ActiveRecord
@@ -70,9 +76,9 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'created_user_desc', 'start_job_user_desc', 'end_job_user_desc', 'hand_over_job_user_desc', 'urut'], 'string'],
+            [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'bun_02', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'created_user_desc', 'start_job_user_desc', 'end_job_user_desc', 'hand_over_job_user_desc', 'urut', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc'], 'string'],
             [['week', 'session_id'], 'integer'],
-            [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'hand_over_job', 'source_date'], 'safe'],
+            [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'hand_over_job', 'source_date', 'delay_last_update'], 'safe'],
             [['summary_qty', 'bom_level', 'gojek_req_qty'], 'number']
         ];
     }
@@ -93,6 +99,7 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
             'parent_desc' => 'Parent Desc',
             'child' => 'Child',
             'child_desc' => 'Child Desc',
+            'bun_02' => 'Bun 02',
             'start_date' => 'Start Date',
             'due_date' => 'Due Date',
             'post_date' => 'Post Date',
@@ -115,6 +122,11 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
             'urut' => 'Urut',
             'bom_level' => 'Bom Level',
             'gojek_req_qty' => 'Gojek Req Qty',
+            'delay_category' => 'Delay Category',
+            'delay_detail' => 'Delay Detail',
+            'delay_userid' => 'Delay Userid',
+            'delay_userid_desc' => 'Delay Userid Desc',
+            'delay_last_update' => 'Delay Last Update',
         ];
     }
 

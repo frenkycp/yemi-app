@@ -24,7 +24,21 @@ return [
     	'M2' => 'M2',
     	'M3' => 'M3',
     	'M4' => 'M4',
-    ]
+    ],
+    'wip_stage_arr' => [
+        '00-ORDER' => '00-ORDER',
+        '01-CREATED' => '01-CREATED',
+        '02-STARTED' => '02-STARTED',
+        '03-COMPLETED' => '03-COMPLETED',
+        '04-HAND OVER' => '04-HAND OVER'
+    ],
+    'delay_category_arr' => [
+        'MACHINE' => 'MACHINE',
+        'MAN' => 'MAN',
+        'MATERIAL' => 'MATERIAL',
+        'METHOD' => 'METHOD',
+        'QUALITY' => 'QUALITY',
+    ],
 ];
 
 function getYearArray()

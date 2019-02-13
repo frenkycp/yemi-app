@@ -20,7 +20,7 @@ class WipPlanActualReportSearch extends WipPlanActualReport
 		return [
 		    [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'session_id'], 'string'],
 		    [['week'], 'integer'],
-		    [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'hand_over_job', 'source_date'], 'safe'],
+		    [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'hand_over_job', 'source_date', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc', 'delay_last_update'], 'safe'],
 		    [['summary_qty'], 'number']
 		];
 	}
@@ -60,7 +60,8 @@ class WipPlanActualReportSearch extends WipPlanActualReport
 		$query->andFilterWhere([
             'week' => $this->week,
             'summary_qty' => $this->summary_qty,
-            'session_id' => $this->session_id
+            'session_id' => $this->session_id,
+            'delay_category' => $this->delay_category
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])
@@ -74,6 +75,7 @@ class WipPlanActualReportSearch extends WipPlanActualReport
         ->andFilterWhere(['like', 'child', $this->child])
         ->andFilterWhere(['like', 'child_desc', $this->child_desc])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),start_date,120)', $this->start_date])
+        ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),delay_last_update,120)', $this->delay_last_update])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),due_date,120)', $this->due_date])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),post_date,120)', $this->post_date])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),source_date,120)', $this->source_date])
@@ -83,6 +85,9 @@ class WipPlanActualReportSearch extends WipPlanActualReport
         ->andFilterWhere(['like', 'problem', $this->problem])
         ->andFilterWhere(['like', 'slip_id_reference', $this->slip_id_reference])
         ->andFilterWhere(['like', 'period_line', $this->period_line])
+        ->andFilterWhere(['like', 'delay_userid', $this->delay_userid])
+        ->andFilterWhere(['like', 'delay_userid_desc', $this->delay_userid_desc])
+        ->andFilterWhere(['like', 'delay_detail', $this->delay_detail])
         ->andFilterWhere(['like', 'fullfilment_stat', $this->fullfilment_stat]);
 
 		return $dataProvider;

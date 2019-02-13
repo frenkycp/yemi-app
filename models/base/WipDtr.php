@@ -85,6 +85,16 @@ use Yii;
  * @property string $completed_split_id
  * @property string $completed_split_desc
  * @property string $completed_split
+ * @property double $std_time
+ * @property double $std_time_x_act_qty
+ * @property string $lot_id
+ * @property string $reservation
+ * @property string $reservation_number
+ * @property string $delay_category
+ * @property string $delay_detail
+ * @property string $delay_userid
+ * @property string $delay_userid_desc
+ * @property string $delay_last_update
  * @property string $aliasModel
  */
 abstract class WipDtr extends \yii\db\ActiveRecord
@@ -115,9 +125,9 @@ abstract class WipDtr extends \yii\db\ActiveRecord
     {
         return [
             [['dtr_id'], 'required'],
-            [['dtr_id', 'hdr_id_item_due_date', 'hdr_id_item', 'hdr_id', 'upload_id', 'period', 'period_line', 'child', 'urut', 'slip_id', 'slip_id_barcode_label', 'stage', 'created_user_id', 'created_user_desc', 'start_job_user_id', 'start_job_user_desc', 'end_job_user_id', 'end_job_user_desc', 'hand_over_job_user_id', 'hand_over_job_user_desc', 'order_release_user_id', 'order_release_user_desc', 'start_cancel_job_user_id', 'start_cancel_job_user_desc', 'end_cancel_job_user_id', 'end_cancel_job_user_desc', 'stat', 'slip_id_reference', 'problem', 'fullfilment_stat', 'ipc_ok_ng', 'ipc_ok_ng_desc', 'ipc_in_id', 'ipc_in_id_user_desc', 'ipc_close_id', 'ipc_close_id_user_desc', 'calculated_close', 'recreate_close', 're_handover_close', 'repair_job_user_id', 'repair_job_user_desc', 'hand_over_cancel_job_user_id', 'hand_over_cancel_job_user_desc', 'note', 'completed_split_id', 'completed_split_desc'], 'string'],
-            [['start_date', 'due_date', 'post_date', 'created_date', 'start_job', 'end_job', 'hand_over_job', 'order_release_date', 'start_cancel_job', 'end_cancel_job', 'source_date', 'repair_job', 'hand_over_cancel_job', 'completed_split'], 'safe'],
-            [['plan_qty', 'act_qty', 'balance_act_qty', 'balance_by_day', 'plan_acc_qty', 'act_acc_qty', 'balance_acc_qty', 'source_qty', 'ipc_in_qty', 'lt_ipc', 'lt_started', 'lt_completed', 'lt_handover', 'bom_level', 'gojek_req_qty'], 'number'],
+            [['dtr_id', 'hdr_id_item_due_date', 'hdr_id_item', 'hdr_id', 'upload_id', 'period', 'period_line', 'child', 'urut', 'slip_id', 'slip_id_barcode_label', 'stage', 'created_user_id', 'created_user_desc', 'start_job_user_id', 'start_job_user_desc', 'end_job_user_id', 'end_job_user_desc', 'hand_over_job_user_id', 'hand_over_job_user_desc', 'order_release_user_id', 'order_release_user_desc', 'start_cancel_job_user_id', 'start_cancel_job_user_desc', 'end_cancel_job_user_id', 'end_cancel_job_user_desc', 'stat', 'slip_id_reference', 'problem', 'fullfilment_stat', 'ipc_ok_ng', 'ipc_ok_ng_desc', 'ipc_in_id', 'ipc_in_id_user_desc', 'ipc_close_id', 'ipc_close_id_user_desc', 'calculated_close', 'recreate_close', 're_handover_close', 'repair_job_user_id', 'repair_job_user_desc', 'hand_over_cancel_job_user_id', 'hand_over_cancel_job_user_desc', 'note', 'completed_split_id', 'completed_split_desc', 'lot_id', 'reservation', 'reservation_number', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc'], 'string'],
+            [['start_date', 'due_date', 'post_date', 'created_date', 'start_job', 'end_job', 'hand_over_job', 'order_release_date', 'start_cancel_job', 'end_cancel_job', 'source_date', 'repair_job', 'hand_over_cancel_job', 'completed_split', 'delay_last_update'], 'safe'],
+            [['plan_qty', 'act_qty', 'balance_act_qty', 'balance_by_day', 'plan_acc_qty', 'act_acc_qty', 'balance_acc_qty', 'source_qty', 'ipc_in_qty', 'lt_ipc', 'lt_started', 'lt_completed', 'lt_handover', 'bom_level', 'gojek_req_qty', 'std_time', 'std_time_x_act_qty'], 'number'],
             [['session_id'], 'integer'],
             [['dtr_id'], 'unique']
         ];
@@ -205,6 +215,16 @@ abstract class WipDtr extends \yii\db\ActiveRecord
             'completed_split_id' => 'Completed Split ID',
             'completed_split_desc' => 'Completed Split Desc',
             'completed_split' => 'Completed Split',
+            'std_time' => 'Std Time',
+            'std_time_x_act_qty' => 'Std Time X Act Qty',
+            'lot_id' => 'Lot ID',
+            'reservation' => 'Reservation',
+            'reservation_number' => 'Reservation Number',
+            'delay_category' => 'Delay Category',
+            'delay_detail' => 'Delay Detail',
+            'delay_userid' => 'Delay Userid',
+            'delay_userid_desc' => 'Delay Userid Desc',
+            'delay_last_update' => 'Delay Last Update',
         ];
     }
 

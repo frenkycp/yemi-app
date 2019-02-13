@@ -19,21 +19,9 @@ $this->title = [
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+date_default_timezone_set('Asia/Jakarta');
 
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    if (Yii::$app->user->identity->role->id == 1) {
-        $actionColumnTemplateString = "{update} {delete} {change_color}";
-    } else {
-        $actionColumnTemplateString = "{update} {change_color}";
-    }
-    
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 /*$this->registerJs("$(function() {
    $('.popupModal').click(function(e) {
@@ -52,25 +40,33 @@ $grid_columns = [
     /* [
         'class' => '\kartik\grid\SerialColumn',
         'width' => '30px',
-    ], 
+    ], */
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => $actionColumnTemplateString,
+        'template' => '{reason}',
         'buttons' => [
-            'view' => function ($url, $model, $key) {
+            'reason' => function($url, $model, $key){
+                if ($model->stage == '00-ORDER') {
+                    return null;
+                }
+                $wip_dtr = app\models\WipDtr::find()
+                ->where([
+                    'slip_id' => $model->slip_id
+                ])
+                ->one();
+                $url = ['reason',
+                    'dtr_id' => $wip_dtr->dtr_id,
+                    'location' => $model->child_analyst,
+                    'model_group' => $model->model_group,
+                    'child' => $model->child,
+                    'child_desc' => $model->child_desc,
+                    'qty' => $model->summary_qty,
+                ];
                 $options = [
-                    'title' => Yii::t('cruds', 'View'),
-                    'aria-label' => Yii::t('cruds', 'View'),
+                    'title' => 'Add Reason',
                     'data-pjax' => '0',
                 ];
-                return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            }, 'change_color' => function($url, $model, $key){
-                $url = ['change-color', 'urutan' => $model->urutan];
-                $options = [
-                    'title' => 'Change Machine Status',
-                    'data-pjax' => '0',
-                ];
-                return Html::a('<span class="glyphicon glyphicon-refresh"></span>', $url, $options);
+                return Html::a('<span class="fa fa-pencil"></span>', $url, $options);
             },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -80,7 +76,7 @@ $grid_columns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ],*/
+    ],
     [
         'attribute' => 'period',
         'vAlign' => 'middle',
@@ -88,7 +84,7 @@ $grid_columns = [
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
+            'style' => 'text-align: center; min-width: 70px; font-size:12px;'
         ],
         'pageSummary' => 'Total'
     ],
@@ -100,7 +96,7 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
+            'style' => 'text-align: center; min-width: 70px; font-size:12px;'
         ],
     ],
     [
@@ -111,7 +107,7 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
+            'style' => 'text-align: center; min-width: 70px; font-size:12px;'
         ],
     ],
     [
@@ -123,7 +119,7 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 50px; font-size:10px;'
+            'style' => 'text-align: center; min-width: 50px; font-size:12px;'
         ],
     ],
     [
@@ -134,7 +130,7 @@ $grid_columns = [
         'width' => '80px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
+            'style' => 'text-align: center; min-width: 70px; font-size:12px;'
         ],
     ],
     [
@@ -148,7 +144,7 @@ $grid_columns = [
         'filter' => $location_dropdown,
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 150px; font-size:10px;'
+            'style' => 'min-width: 150px; font-size:12px;'
         ],
     ],
     [
@@ -160,7 +156,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 120px; font-size:10px;'
+            'style' => 'min-width: 120px; font-size:12px;'
         ],
     ],
     [
@@ -170,7 +166,7 @@ $grid_columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 70px; font-size:10px;'
+            'style' => 'text-align: center; min-width: 70px; font-size:12px;'
         ],
     ],
     [
@@ -178,7 +174,7 @@ $grid_columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 170px; font-size:10px;'
+            'style' => 'min-width: 170px; font-size:12px;'
         ],
         //'hAlign' => 'center'
     ],
@@ -202,10 +198,10 @@ $grid_columns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filter' => $status_dropdown,
+        'filter' => \Yii::$app->params['wip_stage_arr'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 130px; font-size:10px;'
+            'style' => 'min-width: 130px; font-size:12px;'
         ],
     ],
     [
@@ -222,7 +218,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size:10px;'
+            'style' => 'text-align: center; font-size:12px;'
         ],
     ],
     [
@@ -239,7 +235,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size:10px;'
+            'style' => 'text-align: center; font-size:12px;'
         ],
     ],
     [
@@ -256,7 +252,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size:10px;'
+            'style' => 'text-align: center; font-size:12px;'
         ],
     ],
     [
@@ -273,7 +269,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size:10px;'
+            'style' => 'text-align: center; font-size:12px;'
         ],
     ],
     [
@@ -295,6 +291,36 @@ $grid_columns = [
         'attribute' => 'hand_over_job_user_desc',
         'label' => 'Hand Overed By',
         'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'delay_last_update',
+        'value' => function($model){
+            return $model->delay_last_update == null ? '-' : date('Y-m-d H:i:s', strtotime($model->delay_last_update));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'delay_userid',
+        'vAlign' => 'middle',
+        'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'delay_userid_desc',
+        'vAlign' => 'middle',
+        'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'delay_category',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => \Yii::$app->params['delay_category_arr']
+    ],
+    
+    [
+        'attribute' => 'delay_detail',
+        'vAlign' => 'middle',
+        'hAlign' => 'center'
     ],
 ]
 ?>
@@ -318,7 +344,7 @@ $grid_columns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 10px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
