@@ -348,6 +348,13 @@ $grid_columns = [
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
+            'rowOptions' => function($model){
+                if ($model->delay_last_update == null) {
+                    return ['class' => ''];
+                } else {
+                    return ['class' => 'danger'];
+                }
+            },
             'toolbar' =>  [
                 '{export}',
                 '{toggleData}',

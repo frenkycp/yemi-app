@@ -7,6 +7,7 @@ use dmstr\bootstrap\Tabs;
 use app\models\search\WipBlueListSearch2;
 use app\models\WipPlanActualReport;
 use app\models\WipDtr;
+use app\models\WipLocation;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\helpers\Json;
@@ -40,15 +41,15 @@ class WipBlueListController extends Controller
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
-		$tmp_location = ArrayHelper::map(WipPlanActualReport::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');
+		$tmp_location = ArrayHelper::map(WipLocation::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc');
 
-		$status_arr = WipPlanActualReport::find()->select('distinct(stage)')->orderBy('stage ASC')->all();
+		/*$status_arr = WipPlanActualReport::find()->select('distinct(stage)')->orderBy('stage ASC')->all();
 
 		$tmp_status = [];
 		foreach ($status_arr as $status) {
 			$splitted_stage = explode('-', $status->stage);
 			$tmp_status[$status->stage] = $splitted_stage[1];
-		}
+		}*/
 
 		// validate if there is a editable input saved via AJAX
         /**/if (\Yii::$app->request->post('hasEditable')) {
@@ -81,7 +82,7 @@ class WipBlueListController extends Controller
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
 		    'location_dropdown' => $tmp_location,
-		    'status_dropdown' => $tmp_status
+		    //'status_dropdown' => $tmp_status
 		]);
 	}
 

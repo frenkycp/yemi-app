@@ -50,7 +50,13 @@ $query = WipDtr::find()
 ]);
 
 $dataProvider = new ActiveDataProvider([
-'query' => $query,
+            'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    //'cust_desc' => SORT_ASC,
+                    'source_date' => SORT_DESC,
+                ]
+            ],
 ]);
 
 $this->load($params);

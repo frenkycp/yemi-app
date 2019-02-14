@@ -18,7 +18,6 @@ use Yii;
  * @property double $losstime
  * @property string $category
  * @property string $model
- * @property string $hp
  * @property string $reason
  * @property string $aliasModel
  */
@@ -53,7 +52,7 @@ abstract class SernoLosstimeView extends \yii\db\ActiveRecord
             [['mp'], 'integer'],
             [['start_time', 'end_time'], 'safe'],
             [['losstime'], 'number'],
-            [['pk', 'category', 'model', 'hp', 'reason'], 'string', 'max' => 255],
+            [['pk', 'category', 'model', 'reason'], 'string', 'max' => 255],
             [['line'], 'string', 'max' => 15],
             [['proddate'], 'string', 'max' => 10]
         ];
@@ -74,7 +73,6 @@ abstract class SernoLosstimeView extends \yii\db\ActiveRecord
             'losstime' => 'Losstime',
             'category' => 'Category',
             'model' => 'Model',
-            'hp' => 'Hp',
             'reason' => 'Reason',
         ];
     }
