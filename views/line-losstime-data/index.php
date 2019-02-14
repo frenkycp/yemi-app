@@ -62,6 +62,53 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'model',
+        'label' => 'Model',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'description',
+        'label' => 'Model Description',
+        'value' => function($model){
+            return $model->partName;
+        },
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '150px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'category',
+        //'label' => 'Slip Number',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'reason',
+        //'label' => 'Half Process',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        //'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'mp',
         'label' => 'Manpower',
         'hAlign' => 'center',
@@ -103,53 +150,6 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'category',
-        //'label' => 'Slip Number',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '90px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'model',
-        'label' => 'Change Model',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '90px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'description',
-        'label' => 'Model Description',
-        'value' => function($model){
-            return $model->partName;
-        },
-        //'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '150px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'reason',
-        //'label' => 'Half Process',
-        //'hAlign' => 'center',
-        'vAlign' => 'middle',
-        //'width' => '120px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'min-width: 75px; font-size: 12px;'
         ],
     ],
 ];

@@ -26,6 +26,12 @@ class HrgaRekapAbsensiDataController extends Controller
 	public $enableCsrfValidation = false;
 
 
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+
 	/**
 	* Lists all AbsensiTbl models.
 	* @return mixed
@@ -49,36 +55,36 @@ class HrgaRekapAbsensiDataController extends Controller
 		]);
 	}
 
-/**
-* Displays a single AbsensiTbl model.
-* @param string $NIK_DATE_ID
-*
-* @return mixed
-*/
-public function actionView($NIK_DATE_ID)
-{
-	\Yii::$app->session['__crudReturnUrl'] = Url::previous();
-	Url::remember();
-	Tabs::rememberActiveState();
+	/**
+	* Displays a single AbsensiTbl model.
+	* @param string $NIK_DATE_ID
+	*
+	* @return mixed
+	*/
+	public function actionView($NIK_DATE_ID)
+	{
+		\Yii::$app->session['__crudReturnUrl'] = Url::previous();
+		Url::remember();
+		Tabs::rememberActiveState();
 
-	return $this->render('view', [
-		'model' => $this->findModel($NIK_DATE_ID),
-	]);
-}
-
-/**
-* Finds the AbsensiTbl model based on its primary key value.
-* If the model is not found, a 404 HTTP exception will be thrown.
-* @param string $NIK_DATE_ID
-* @return AbsensiTbl the loaded model
-* @throws HttpException if the model cannot be found
-*/
-protected function findModel($NIK_DATE_ID)
-{
-	if (($model = AbsensiTbl::findOne($NIK_DATE_ID)) !== null) {
-		return $model;
-	} else {
-		throw new HttpException(404, 'The requested page does not exist.');
+		return $this->render('view', [
+			'model' => $this->findModel($NIK_DATE_ID),
+		]);
 	}
-}
+
+	/**
+	* Finds the AbsensiTbl model based on its primary key value.
+	* If the model is not found, a 404 HTTP exception will be thrown.
+	* @param string $NIK_DATE_ID
+	* @return AbsensiTbl the loaded model
+	* @throws HttpException if the model cannot be found
+	*/
+	protected function findModel($NIK_DATE_ID)
+	{
+		if (($model = AbsensiTbl::findOne($NIK_DATE_ID)) !== null) {
+			return $model;
+		} else {
+			throw new HttpException(404, 'The requested page does not exist.');
+		}
+	}
 }

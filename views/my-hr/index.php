@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $this->registerJs("$(function() {
    $('.popup_btn').click(function(e) {
      e.preventDefault();
-     $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+     $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
 });");
 
@@ -163,50 +163,50 @@ $profpic = "";
                             ->one();
                             $disiplin_icon = '<i class="fa fa-circle-o text-green"></i>';
                             if ($value->NO_DISIPLIN > 0 || in_array($grade, ['L', 'M', 'D'])) {
-                                $disiplin_icon = Html::a('<i class="fa fa-close text-red"></i>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
+                                $disiplin_icon = Html::a('<i class="fa fa-close text-red"></i>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
                             }
                             //$disiplin_icon = (int)$value->DISIPLIN;
 
                             $total_lembur = $data_lembur->NILAI_LEMBUR_ACTUAL !== null && $data_lembur->NILAI_LEMBUR_ACTUAL > 0 ? $data_lembur->NILAI_LEMBUR_ACTUAL : '-';
 
                             if ($total_lembur != '-') {
-                                $total_lembur = Html::a('<span class="badge bg-green">' . $data_lembur->NILAI_LEMBUR_ACTUAL . '</span>', ['get-lembur-detail','nik'=>$value->NIK, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
+                                $total_lembur = Html::a('<span class="badge bg-green">' . $data_lembur->NILAI_LEMBUR_ACTUAL . '</span>', ['get-lembur-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
                                 $grand_total_lembur += $data_lembur->NILAI_LEMBUR_ACTUAL;
                             }
 
                             $alpha_val = '-';
                             if ($value->ALPHA > 0) {
-                                $alpha_val = Html::a('<span class="badge bg-yellow">' . $value->ALPHA . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'note' => 'A'], ['class' => 'popup_btn']);
+                                $alpha_val = Html::a('<span class="badge bg-yellow">' . $value->ALPHA . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'A'], ['class' => 'popup_btn']);
                                 $total_alpa += $value->ALPHA;
                             }
 
                             $ijin_val = '-';
                             if ($value->IJIN > 0) {
-                                $ijin_val = Html::a('<span class="badge bg-yellow">' . $value->IJIN . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'note' => 'I'], ['class' => 'popup_btn']);
+                                $ijin_val = Html::a('<span class="badge bg-yellow">' . $value->IJIN . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'I'], ['class' => 'popup_btn']);
                                 $total_ijin += $value->IJIN;
                             }
 
                             $sakit_val = '-';
                             if ($value->SAKIT > 0) {
-                                $sakit_val = Html::a('<span class="badge bg-yellow">' . $value->SAKIT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'note' => 'S'], ['class' => 'popup_btn']);
+                                $sakit_val = Html::a('<span class="badge bg-yellow">' . $value->SAKIT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'S'], ['class' => 'popup_btn']);
                                 $total_sakit += $value->SAKIT;
                             }
 
                             $dl_val = '-';
                             if ($value->DATANG_TERLAMBAT > 0) {
-                                $dl_val = Html::a('<span class="badge bg-yellow">' . $value->DATANG_TERLAMBAT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'note' => 'DL'], ['class' => 'popup_btn']);
+                                $dl_val = Html::a('<span class="badge bg-yellow">' . $value->DATANG_TERLAMBAT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'DL'], ['class' => 'popup_btn']);
                                 $total_dl += $value->DATANG_TERLAMBAT;
                             }
 
                             $pc_val = '-';
                             if ($value->PULANG_CEPAT > 0) {
-                                $pc_val = Html::a('<span class="badge bg-yellow">' . $value->PULANG_CEPAT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'note' => 'PC'], ['class' => 'popup_btn']);
+                                $pc_val = Html::a('<span class="badge bg-yellow">' . $value->PULANG_CEPAT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'PC'], ['class' => 'popup_btn']);
                                 $total_pc += $value->PULANG_CEPAT;
                             }
 
                             $cuti_val = '-';
                             if ($value->CUTI > 0) {
-                                $cuti_val = Html::a('<span class="badge bg-yellow">' . $value->CUTI . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'period' => $value->PERIOD, 'note' => 'C'], ['class' => 'popup_btn']);
+                                $cuti_val = Html::a('<span class="badge bg-yellow">' . $value->CUTI . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'C'], ['class' => 'popup_btn']);
                                 $total_cuti += $value->CUTI;
                             }
 

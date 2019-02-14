@@ -22,6 +22,12 @@ class MyHrController extends Controller
         return \app\models\Action::getAccess($this->id);
     }*/
 
+    /**
+    * @var boolean whether to enable CSRF validation for the actions in this controller.
+    * CSRF validation is enabled only when both this property and [[Request::enableCsrfValidation]] are true.
+    */
+    public $enableCsrfValidation = false;
+
 	public function actionIndex()
 	{
         $session = \Yii::$app->session;
@@ -287,7 +293,7 @@ class MyHrController extends Controller
         ]);
     }
 
-	public function actionGetLemburDetail($nik, $period)
+	public function actionGetLemburDetail($nik, $nama_karyawan, $period)
     {
         $spl_data_arr = SplView::find()
         ->where([
@@ -297,7 +303,14 @@ class MyHrController extends Controller
         ->orderBy('TGL_LEMBUR')
         ->all();
 
-        $data = '<table class="table table-bordered table-striped table-hover">';
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $nik . ' - ' . $nama_karyawan . ' <small>(' . $period . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $data .= '<table class="table table-bordered table-striped table-hover">';
         $data .= 
         '<thead><tr>
             <th style="text-align: center;">SPL Num.</th>
@@ -327,7 +340,7 @@ class MyHrController extends Controller
         return $data;
     }
 
-    public function actionGetDisiplinDetail($nik, $period, $note = 'DISIPLIN')
+    public function actionGetDisiplinDetail($nik, $nama_karyawan, $period, $note = 'DISIPLIN')
     {
         if ($note == 'DISIPLIN') {
             $abensi_data_arr = AbsensiTbl::find()->where([
@@ -338,39 +351,77 @@ class MyHrController extends Controller
             ->orderBy('DATE')
             ->all();
         } else {
-            $abensi_data_arr = AbsensiTbl::find()->where([
-                'NIK' => $nik,
-                'PERIOD' => $period,
-                'NOTE' => $note
-            ])
-            ->orderBy('DATE')
-            ->all();
+            if ($note == 'CK') {
+                $abensi_data_arr = AbsensiTbl::find()->where([
+                    'NIK' => $nik,
+                    'PERIOD' => $period,
+                    'NOTE' => ['CK', 'CK1', 'CK3', 'CK5', 'CK7', 'CK10', 'CK11']
+                ])
+                ->orderBy('DATE')
+                ->all();
+            } else {
+                $abensi_data_arr = AbsensiTbl::find()->where([
+                    'NIK' => $nik,
+                    'PERIOD' => $period,
+                    'NOTE' => $note
+                ])
+                ->orderBy('DATE')
+                ->all();
+            }
+            
         }
         
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $nik . ' - ' . $nama_karyawan . ' <small>(' . $period . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
 
-        $data = '<table class="table table-bordered table-striped table-hover">';
+        $data .= '<table class="table table-bordered table-striped table-hover">';
         $data .= 
         '<thead><tr>
-            <th style="text-align: center;">Date</th>
-            <th>Description</th>
+            <th class="text-center">Date</th>
+            <th class="text-center">Description</th>
+            <th class="text-center">Check In</th>
+            <th class="text-center">Check Out</th>
         </tr></thead>'
         ;
         $data .= '<tbody>';
         foreach ($abensi_data_arr as $key => $value) {
             $keterangan = '-';
-            if ($value['CATEGORY'] == 'SAKIT') {
+            if ($value['NOTE'] == 'S') {
                 $keterangan = 'SICK';
-            } elseif ($value['CATEGORY'] == 'IJIN') {
+            } elseif ($value['NOTE'] == 'I') {
                 $keterangan = 'PERMIT';
-            } elseif ($value['CATEGORY'] == 'ALPHA') {
+            } elseif ($value['NOTE'] == 'A') {
                 $keterangan = 'ABSENT';
-            } elseif ($value['CATEGORY'] == 'CUTI') {
+            } elseif ($value['NOTE'] == 'C') {
                 $keterangan = 'ON LEAVE';
+            } elseif ($value['NOTE'] == 'DL') {
+                $keterangan = 'COME LATE';
+            } elseif ($value['NOTE'] == 'PC') {
+                $keterangan = 'GO HOME EARLY';
+            } else {
+                $keterangan = $value['CATEGORY'];
             }
+
+            $check_in = $value['CHECK_IN'];
+            $check_out = $value['CHECK_OUT'];
+
+            if ($check_in > $check_out) {
+                $tmp = $check_in;
+                $check_in = $check_out;
+                $check_out = $tmp;
+            }
+            $check_in = $value['CHECK_IN'] == null ? '-' : date('H:i:s', strtotime($check_in));
+            $check_out = $value['CHECK_OUT'] == null ? '-' : date('H:i:s', strtotime($check_out));
             $data .= '
             <tr>
-                <td style="text-align: center;">' . date('d M\' Y', strtotime($value['DATE'])) . '</td>
-                <td>' . $keterangan . '</td>
+                <td class="text-center">' . date('d M\' Y', strtotime($value['DATE'])) . '</td>
+                <td class="text-center">' . $keterangan . '</td>
+                <td class="text-center">' . $check_in . '</td>
+                <td class="text-center">' . $check_out . '</td>
             </tr>
             ';
         }

@@ -13,38 +13,14 @@ use kartik\grid\GridView;
 $this->title = 'Data Rekap Absensi';
 $this->params['breadcrumbs'][] = $this->title;
 
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+$this->registerJs("$(function() {
+   $('.popup_btn').click(function(e) {
+     e.preventDefault();
+     $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+   });
+});");
 
 $gridColumns = [
-    /*[
-        'class' => 'kartik\grid\ActionColumn',
-        'template' => $actionColumnTemplateString,
-        'buttons' => [
-            'view' => function ($url, $model, $key) {
-                $options = [
-                    'title' => Yii::t('cruds', 'View'),
-                    'aria-label' => Yii::t('cruds', 'View'),
-                    'data-pjax' => '0',
-                ];
-                return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            }
-        ],
-        'urlCreator' => function($action, $model, $key, $index) {
-            // using the column name as key, not mapping to 'id' like the standard generator
-            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
-            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
-            return Url::toRoute($params);
-        },
-        'contentOptions' => ['nowrap'=>'nowrap'],
-        'hidden' => Yii::$app->user->identity->role->id == 1 ? false : true,
-    ],*/
     [
         'attribute' => 'PERIOD',
         'vAlign' => 'middle',
@@ -94,42 +70,102 @@ $gridColumns = [
     ],
     [
         'attribute' => 'ALPHA',
+        'label' => 'A',
+        'value' => function($model){
+            if ($model->ALPHA == 0) {
+                return 0;
+            }
+            return Html::a('<span class="badge bg-yellow">' . $model->ALPHA . '</span>', ['my-hr/get-disiplin-detail','nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'period' => $model->PERIOD, 'note' => 'A'], ['class' => 'popup_btn']);
+        },
+        'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
     ],
     [
         'attribute' => 'IJIN',
+        'label' => 'I',
+        'value' => function($model){
+            if ($model->IJIN == 0) {
+                return 0;
+            }
+            return Html::a('<span class="badge bg-yellow">' . $model->IJIN . '</span>', ['my-hr/get-disiplin-detail','nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'period' => $model->PERIOD, 'note' => 'I'], ['class' => 'popup_btn']);
+        },
+        'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
     ],
     [
         'attribute' => 'SAKIT',
+        'label' => 'S',
+        'value' => function($model){
+            if ($model->SAKIT == 0) {
+                return 0;
+            }
+            return Html::a('<span class="badge bg-yellow">' . $model->SAKIT . '</span>', ['my-hr/get-disiplin-detail','nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'period' => $model->PERIOD, 'note' => 'S'], ['class' => 'popup_btn']);
+        },
+        'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
     ],
     [
         'attribute' => 'CUTI',
+        'label' => 'C',
+        'value' => function($model){
+            if ($model->CUTI == 0) {
+                return 0;
+            }
+            return Html::a('<span class="badge bg-yellow">' . $model->CUTI . '</span>', ['my-hr/get-disiplin-detail','nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'period' => $model->PERIOD, 'note' => 'C'], ['class' => 'popup_btn']);
+        },
+        'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
     ],
     [
         'attribute' => 'CUTI_KHUSUS',
+        'label' => 'CK',
+        'value' => function($model){
+            if ($model->CUTI_KHUSUS == 0) {
+                return 0;
+            }
+            return Html::a('<span class="badge bg-yellow">' . $model->CUTI_KHUSUS . '</span>', ['my-hr/get-disiplin-detail','nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'period' => $model->PERIOD, 'note' => 'CK'], ['class' => 'popup_btn']);
+        },
+        'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
     ],
-    /*[
-        'attribute' => 'CUTI_KHUSUS_IJIN',
-        'encodeLabel' => false,
-        'label' => 'Cuti Khusus<br/>Ijin',
+    [
+        'attribute' => 'DATANG_TERLAMBAT',
+        'label' => 'DL',
+        'value' => function($model){
+            if ($model->DATANG_TERLAMBAT == 0) {
+                return 0;
+            }
+            return Html::a('<span class="badge bg-yellow">' . $model->DATANG_TERLAMBAT . '</span>', ['my-hr/get-disiplin-detail','nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'period' => $model->PERIOD, 'note' => 'DL'], ['class' => 'popup_btn']);
+        },
+        'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
-    ],*/
+    ],
+    [
+        'attribute' => 'PULANG_CEPAT',
+        'label' => 'PC',
+        'value' => function($model){
+            if ($model->PULANG_CEPAT == 0) {
+                return 0;
+            }
+            return Html::a('<span class="badge bg-yellow">' . $model->PULANG_CEPAT . '</span>', ['my-hr/get-disiplin-detail','nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'period' => $model->PERIOD, 'note' => 'PC'], ['class' => 'popup_btn']);
+        },
+        'format' => 'html',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+    ],
     [
         'attribute' => 'DISIPLIN',
         'label' => 'Tunjangan Disiplin',
@@ -210,7 +246,7 @@ $gridColumns = [
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            //'pjax' => false, // pjax is set to always true for this demo
+            'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 '{export}',
                 '{toggleData}',
@@ -229,7 +265,13 @@ $gridColumns = [
 
 </div>
 
-
 <?php \yii\widgets\Pjax::end() ?>
 
-
+<?php
+    yii\bootstrap\Modal::begin([
+        'id' =>'modal',
+        'header' => '<h3>Detail Info</h3>',
+        'size' => 'modal-lg',
+    ]);
+    yii\bootstrap\Modal::end();
+?>
