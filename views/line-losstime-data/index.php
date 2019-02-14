@@ -110,7 +110,7 @@ $gridColumns = [
         //'label' => 'Slip Number',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '120px',
+        'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
@@ -128,11 +128,14 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'hp',
-        'label' => 'Half Process',
-        'hAlign' => 'center',
+        'attribute' => 'description',
+        'label' => 'Model Description',
+        'value' => function($model){
+            return $model->partName;
+        },
+        //'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '120px',
+        'width' => '150px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
@@ -143,7 +146,7 @@ $gridColumns = [
         //'label' => 'Half Process',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '120px',
+        //'width' => '120px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 75px; font-size: 12px;'

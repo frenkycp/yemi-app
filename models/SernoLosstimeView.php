@@ -37,6 +37,9 @@ class SernoLosstimeView extends BaseSernoLosstimeView
     public function getPartName()
     {
         $sernoMaster = SernoMaster::find()->where(['gmc' => $this->model])->one();
+        if ($sernoMaster->gmc == null) {
+            return '-';
+        }
         return $sernoMaster->model . ' // ' . $sernoMaster->color . ' // ' . $sernoMaster->dest;
     }
 }

@@ -48,10 +48,22 @@ class SernoOutputController extends base\SernoOutputController
     public function actionReport()
     {
     	date_default_timezone_set('Asia/Jakarta');
+        $year = date('Y');
+        $month = date('m');
+
+        if (\Yii::$app->request->get('year') != null) {
+            $year = \Yii::$app->request->get('year');
+        }
+
+        if (\Yii::$app->request->get('month') != null) {
+            $month = \Yii::$app->request->get('month');
+        }
+
+        $period = $year . $month;
 
     	$min_max_week = SernoOutput::find()
     	->select([
-    		'tahun' => 'LEFT(id,4)',
+    		'id',
     		'min_week' => 'MIN(WEEK(ship,4))',
     		'max_week' => 'MAX(WEEK(ship,4))'
     	])
@@ -59,8 +71,8 @@ class SernoOutputController extends base\SernoOutputController
     	//->andWhere(['<>', 'stc', 'NOSO'])
     	//->andWhere(['LEFT(id,4)' => date('Y')])
     	//->andWhere(['<>', 'ship', '9999-12-31'])
-        ->andWhere(['LEFT(id,4)' => date('Y')])
-    	->groupBy('tahun')
+        ->andWhere(['id' => $period])
+    	->groupBy('id')
     	->one();
 
     	$weekToday = SernoCalendar::find()->where(['etd' => date('Y-m-d')])->one()->week_ship;
@@ -84,7 +96,9 @@ class SernoOutputController extends base\SernoOutputController
         return $this->render('report',[
         	'weekToday' => $weekToday,
         	'startWeek' => $start_week,
-        	'endWeek' => $end_week
+        	'endWeek' => $end_week,
+            'year' => $year,
+            'month' => $month,
         ]);
     }
 
