@@ -98,7 +98,7 @@ return $dataProvider;
             'WIP_HDR.parent' => $this->gmc
         ]);
 
-        $query->andFilterWhere(['like', 'WIP_HDR.child_analyst_desc', $this->location])
+        $query->andFilterWhere(['like', 'WIP_HDR.child_analyst', $this->location])
         ->andFilterWhere(['like', 'WIP_HDR.parent_desc', $this->parent_desc])
         ->andFilterWhere(['like', 'WIP_HDR.model_group', $this->speaker_model]);
 

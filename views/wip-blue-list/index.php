@@ -127,7 +127,7 @@ $grid_columns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],*/
     [
-        'class' => 'yii\grid\CheckboxColumn',
+        'class' => 'kartik\grid\CheckboxColumn',
         'checkboxOptions' => function($model) {
             $find_slip = app\models\GojekOrderTbl::find()
             ->where([
