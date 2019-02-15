@@ -38,6 +38,14 @@ class GojekOrderArrivalController extends Controller
 	    			'slip_id' => $slip_id
 	    		])
 	    		->one();
+
+	    		if ($tmp_wip_data->slip_id == null) {
+	    			\Yii::$app->session->setFlash('danger', "Process Failed...! Slip number : <b>$slip_id</b> not found!");
+	    			return $this->render('index', [
+						'model' => $model
+					]);
+	    		}
+	    		
 	    		\Yii::$app->session->setFlash('danger', "Process Failed...! There is no order for slip number : <b>$slip_id</b> ! Please follow the procedure ! (Slip status : <b>$tmp_wip_data->stage</b>)");
 	    		return $this->render('index', [
 					'model' => $model

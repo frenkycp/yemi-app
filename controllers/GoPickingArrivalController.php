@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use app\models\GojekOrderTbl;
+use app\models\WipPlanActualReport;
 
 class GoPickingArrivalController extends Controller
 {
@@ -31,8 +32,19 @@ class GoPickingArrivalController extends Controller
 	    	])
 	    	->one();
 
-	    	if ($order_data->id == null) {
-	    		\Yii::$app->session->setFlash('danger', "There is no order for Slip Number : $slip_id. Please order data first before arrival...!");
+	    	if ($order_data->slip_id == null) {
+	    		$tmp_wip_data = WipPlanActualReport::find()
+	    		->where([
+	    			'slip_id' => $slip_id
+	    		])
+	    		->one();
+	    		if ($tmp_wip_data->slip_id == null) {
+	    			\Yii::$app->session->setFlash('danger', "Process Failed...! Slip number : <b>$slip_id</b> not found!");
+	    			return $this->render('index', [
+						'model' => $model
+					]);
+	    		}
+	    		\Yii::$app->session->setFlash('danger', "Process Failed...! There is no order for slip number : <b>$slip_id</b> ! Please follow the procedure ! (Slip status : <b>$tmp_wip_data->stage</b>)");
 	    		return $this->render('index', [
 					'model' => $model
 				]);
