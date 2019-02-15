@@ -12,7 +12,7 @@ use app\models\SernoMaster;
  */
 class SernoLosstimeView extends BaseSernoLosstimeView
 {
-    public $description;
+    public $description, $losstime_each;
 
     public function behaviors()
     {

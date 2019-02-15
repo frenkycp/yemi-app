@@ -142,8 +142,26 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'losstime_each',
+        'label' => 'Losstime',
+        'value' => function($model){
+            $losstime = 0;
+            if ($model->mp > 0) {
+                $losstime = $model->losstime / $model->mp;
+            }
+            return $losstime;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'losstime',
-        //'label' => 'Slip Number',
+        'label' => 'Losstime x MP',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '90px',
