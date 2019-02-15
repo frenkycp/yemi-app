@@ -244,6 +244,7 @@ class WipPaintingMonitoringController extends Controller
             <th class="text-center" style="min-width: 70px;">Start Actual</th>
             <th class="text-center" style="min-width: 70px;">Complete Actual</th>
             <th class="text-center" style="min-width: 70px;">Pulled By Next Actual</th>
+            <th class="text-center" style="min-width: 70px;">Delay Category</th>
         </tr></thead>';
         $data .= '<tbody style="font-size: 9px;">';
 
@@ -254,9 +255,13 @@ class WipPaintingMonitoringController extends Controller
             $end_actual = $value['end_job'] == null ? '-' : $value['end_job'];
             $handover_actual = $value['hand_over_job'] == null ? '-' : $value['hand_over_job'];
             $fa_start = $value['source_date'] == null ? '-' : date('Y-m-d', strtotime($value['source_date']));
+            $row_class = '';
+            if ($value['delay_last_update'] != null) {
+                $row_class = 'danger';
+            }
 
             $data .= '
-                <tr>
+                <tr class="' . $row_class . '">
                     <td class="text-center">' . $value['child_analyst_desc'] . '</td>
                     <td class="text-center">' . $value['slip_id'] . '</td>
                     <td class="text-center">' . $value['session_id'] . '</td>
@@ -270,6 +275,7 @@ class WipPaintingMonitoringController extends Controller
                     <td class="text-center text-green">' . $start_actual . '</td>
                     <td class="text-center text-green">' . $end_actual . '</td>
                     <td class="text-center text-green">' . $handover_actual . '</td>
+                    <td class="text-center text-red">' . $value['delay_category'] . '</td>
                 </tr>
             ';
             
