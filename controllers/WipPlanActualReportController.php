@@ -6,7 +6,7 @@ use yii\web\HttpException;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
-use app\models\search\WipPlanActualReportSearch;
+use app\models\search\WipHdrDtrSearch;
 use app\models\WipPlanActualReport;
 use app\models\WipDtr;
 use app\models\WipLocation;
@@ -32,7 +32,7 @@ class WipPlanActualReportController extends Controller
 	*/
 	public function actionIndex()
 	{
-	    $searchModel  = new WipPlanActualReportSearch;
+	    $searchModel  = new WipHdrDtrSearch;
 	    $searchModel->period = date('Ym');
 	    if(\Yii::$app->request->get('period') !== null)
 	    {

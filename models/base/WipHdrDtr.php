@@ -105,6 +105,15 @@ use Yii;
  * @property string $delay_userid
  * @property string $delay_userid_desc
  * @property string $delay_last_update
+ * @property double $ORDER_QTY
+ * @property double $COMMIT_QTY
+ * @property double $OUSTANDING_QTY
+ * @property double $CREATED_QTY
+ * @property double $STARTED_QTY
+ * @property double $COMPLETED_QTY
+ * @property double $HAND_OVER_QTY
+ * @property string $fa_lot_no
+ * @property double $fa_lot_qty
  * @property string $aliasModel
  */
 abstract class WipHdrDtr extends \yii\db\ActiveRecord
@@ -134,10 +143,10 @@ abstract class WipHdrDtr extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['dtr_id', 'hdr_id_item', 'hdr_id', 'upload_id', 'period', 'period_line', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'model_group', 'parent', 'parent_desc', 'urut', 'slip_id', 'stage', 'slip_id_barcode_label', 'created_user_id', 'created_user_desc', 'start_job_user_id', 'start_job_user_desc', 'end_job_user_id', 'end_job_user_desc', 'hand_over_job_user_id', 'hand_over_job_user_desc', 'order_release_user_id', 'order_release_user_desc', 'start_cancel_job_user_id', 'start_cancel_job_user_desc', 'end_cancel_job_user_id', 'end_cancel_job_user_desc', 'stat', 'slip_id_reference', 'problem', 'fullfilment_stat', 'ipc_ok_ng', 'ipc_in_id', 'ipc_ok_ng_desc', 'ipc_in_id_user_desc', 'ipc_close_id', 'ipc_close_id_user_desc', 'calculated_close', 'recreate_close', 'hdr_id_item_due_date', 're_handover_close', 'repair_job_user_id', 'repair_job_user_desc', 'hand_over_cancel_job_user_id', 'hand_over_cancel_job_user_desc', 'note', 'completed_split_id', 'completed_split_desc', 'reservation', 'reservation_number', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc'], 'string'],
+            [['dtr_id', 'hdr_id_item', 'hdr_id', 'upload_id', 'period', 'period_line', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'model_group', 'parent', 'parent_desc', 'urut', 'slip_id', 'stage', 'slip_id_barcode_label', 'created_user_id', 'created_user_desc', 'start_job_user_id', 'start_job_user_desc', 'end_job_user_id', 'end_job_user_desc', 'hand_over_job_user_id', 'hand_over_job_user_desc', 'order_release_user_id', 'order_release_user_desc', 'start_cancel_job_user_id', 'start_cancel_job_user_desc', 'end_cancel_job_user_id', 'end_cancel_job_user_desc', 'stat', 'slip_id_reference', 'problem', 'fullfilment_stat', 'ipc_ok_ng', 'ipc_in_id', 'ipc_ok_ng_desc', 'ipc_in_id_user_desc', 'ipc_close_id', 'ipc_close_id_user_desc', 'calculated_close', 'recreate_close', 'hdr_id_item_due_date', 're_handover_close', 'repair_job_user_id', 'repair_job_user_desc', 'hand_over_cancel_job_user_id', 'hand_over_cancel_job_user_desc', 'note', 'completed_split_id', 'completed_split_desc', 'reservation', 'reservation_number', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc', 'fa_lot_no'], 'string'],
             [['hdr_id_item'], 'required'],
             [['start_date', 'due_date', 'created_date', 'start_job', 'end_job', 'hand_over_job', 'source_date', 'order_release_date', 'start_cancel_job', 'end_cancel_job', 'post_date', 'repair_job', 'hand_over_cancel_job', 'completed_split', 'delay_last_update'], 'safe'],
-            [['plan_qty', 'act_qty', 'balance_by_day', 'plan_acc_qty', 'act_acc_qty', 'balance_acc_qty', 'plan_qty_hdr', 'act_qty_hdr', 'balance_qty_hdr', 'child_fx_lt', 'child_dts_lt', 'balance_act_qty', 'source_qty', 'ipc_in_qty', 'lt_ipc', 'lt_started', 'lt_completed', 'lt_handover', 'bom_level', 'gojek_req_qty', 'std_time', 'std_time_x_act_qty'], 'number'],
+            [['plan_qty', 'act_qty', 'balance_by_day', 'plan_acc_qty', 'act_acc_qty', 'balance_acc_qty', 'plan_qty_hdr', 'act_qty_hdr', 'balance_qty_hdr', 'child_fx_lt', 'child_dts_lt', 'balance_act_qty', 'source_qty', 'ipc_in_qty', 'lt_ipc', 'lt_started', 'lt_completed', 'lt_handover', 'bom_level', 'gojek_req_qty', 'std_time', 'std_time_x_act_qty', 'ORDER_QTY', 'COMMIT_QTY', 'OUSTANDING_QTY', 'CREATED_QTY', 'STARTED_QTY', 'COMPLETED_QTY', 'HAND_OVER_QTY', 'fa_lot_qty'], 'number'],
             [['session_id'], 'integer']
         ];
     }
@@ -244,6 +253,15 @@ abstract class WipHdrDtr extends \yii\db\ActiveRecord
             'delay_userid' => 'Delay Userid',
             'delay_userid_desc' => 'Delay Userid Desc',
             'delay_last_update' => 'Delay Last Update',
+            'ORDER_QTY' => 'O R D E R Q T Y',
+            'COMMIT_QTY' => 'C O M M I T Q T Y',
+            'OUSTANDING_QTY' => 'O U S T A N D I N G Q T Y',
+            'CREATED_QTY' => 'C R E A T E D Q T Y',
+            'STARTED_QTY' => 'S T A R T E D Q T Y',
+            'COMPLETED_QTY' => 'C O M P L E T E D Q T Y',
+            'HAND_OVER_QTY' => 'H A N D O V E R Q T Y',
+            'fa_lot_no' => 'Fa Lot No',
+            'fa_lot_qty' => 'Fa Lot Qty',
         ];
     }
 

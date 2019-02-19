@@ -39,14 +39,36 @@ $this->title = [
     ?>
 
     <div class="">
-
-<!-- attribute NIK -->
-			<?= $form->field($model, 'slip_id')->textInput(['readonly' => true])->label('Slip Number') ?>
-			<?= $form->field($model, 'model_group')->textInput(['readonly' => true])->label('Model') ?>
-			<?= $form->field($model, 'child')->textInput(['readonly' => true])->label('Part Number') ?>
-			<?= $form->field($model, 'child_desc')->textInput(['readonly' => true])->label('Part Description') ?>
-			<?= $form->field($model, 'summary_qty')->textInput(['type' => 'number', 'readonly' => true])->label('Total Qty') ?>
-			<?= $form->field($model, 'complete_qty')->textInput(['type' => 'number'])->label('Complete Qty') ?>
+        <div class="row">
+            <div class="col-md-6">
+                <?= $form->field($model, 'slip_id')->textInput(['readonly' => true])->label('Slip Number') ?>
+                <?= $form->field($model, 'model_group')->textInput(['readonly' => true])->label('Model') ?>
+                <?= $form->field($model, 'child')->textInput(['readonly' => true])->label('Part Number') ?>
+                <?= $form->field($model, 'child_desc')->textInput(['readonly' => true])->label('Part Description') ?>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'summary_qty')->textInput(['type' => 'number', 'readonly' => true])->label('Lot Qty') ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?= $form->field($model, 'complete_qty')->textInput(['type' => 'number'])->label('Complete Qty') ?>
+                    </div>
+                </div>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Reason (Fill if problem occured...)</h3>
+                    </div>
+                    <div class="panel-body">
+                        <?= $form->field($model, 'delay_category')->dropDownList(\Yii::$app->params['delay_category_arr'], ['prompt' => 'Select category...'])->label('Category') ?>
+                        <?= $form->field($model, 'delay_detail')->textInput()->label('Detail') ?>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+			
+			
         
         <hr/>
 

@@ -190,10 +190,21 @@ $grid_columns = [
         //'hAlign' => 'center'
     ],
     [
+        'attribute' => 'fa_lot_qty',
+        'label' => 'Lot Qty',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size:12px;'
+        ],
+    ],
+    [
         'attribute' => 'summary_qty',
-        'label' => 'Qty',
+        'label' => 'Minus',
         'value' => function($model){
-            return (int)$model->balance_by_day + (int)$model->act_qty;
+            $summ =  (int)$model->balance_by_day + (int)$model->act_qty;
+            return '-' . $summ;
         },
         'mergeHeader' => true,
         'vAlign' => 'middle',
@@ -205,6 +216,16 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'fa_lot_no',
+        'label' => 'Lot Number',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size:12px;'
+        ],
+    ],
+    /*[
         'attribute' => 'stage',
         'label' => 'Status',
         'value' => function($model){
@@ -219,7 +240,7 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'min-width: 130px; font-size:12px;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'start_date',
         'label' => 'Start Date',
@@ -365,11 +386,17 @@ $grid_columns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'rowOptions' => function($model){
-                if ($model->delay_last_update == null) {
-                    return ['class' => ''];
+                if (((int)$model->balance_by_day + (int)$model->act_qty) < $model->fa_lot_qty) {
+                    if ($model->delay_last_update == null) {
+                        return ['class' => 'warning'];
+                    } else {
+                        return ['class' => 'danger'];
+                    }
+                    
                 } else {
-                    return ['class' => 'danger'];
+                    return ['class' => ''];
                 }
+                
             },
             'toolbar' =>  [
                 '{export}',

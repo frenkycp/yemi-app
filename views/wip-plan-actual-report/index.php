@@ -60,7 +60,7 @@ $grid_columns = [
                     'model_group' => $model->model_group,
                     'child' => $model->child,
                     'child_desc' => $model->child_desc,
-                    'qty' => $model->summary_qty,
+                    'qty' => (int)$model->balance_by_day + (int)$model->act_qty,
                 ];
                 $options = [
                     'title' => 'Add Reason',
@@ -144,19 +144,16 @@ $grid_columns = [
         'filter' => $location_dropdown,
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 150px; font-size:12px;'
+            'style' => 'min-width: 100px; font-size:12px;'
         ],
     ],
     [
         'attribute' => 'model_group',
         'label' => 'Model',
         'vAlign' => 'middle',
-        'contentOptions' => [
-            'style' => 'min-width: 100px;'
-        ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 120px; font-size:12px;'
+            'style' => 'min-width: 90px; font-size:12px;'
         ],
     ],
     [
@@ -174,19 +171,50 @@ $grid_columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 170px; font-size:12px;'
+            'style' => 'min-width: 130px; font-size:12px;'
         ],
         //'hAlign' => 'center'
     ],
     [
+        'attribute' => 'fa_lot_qty',
+        'label' => 'Lot Qty',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 80px; font-size:12px; text-align:center;'
+        ],
+    ],
+    [
         'attribute' => 'summary_qty',
-        'label' => 'Qty',
+        'label' => 'Actual Qty',
+        'value' => function($model){
+            return (int)$model->balance_by_day + (int)$model->act_qty;
+        },
+        'mergeHeader' => true,
         'vAlign' => 'middle',
         'width' => '70px',
         'hAlign' => 'center',
         'pageSummary' => true,
-        'contentOptions' => [
-            'style' => 'min-width: 80px;'
+        'contentOptions' => function($model){
+            if ($model->stage == '01-CREATED' && $model->child_analyst == 'WF01') {
+                return [
+                    'style' => 'min-width: 80px; font-size:20px; text-align:center; font-weight: bold; color: red;'
+                ];
+            }
+            return [
+                'style' => 'min-width: 80px; font-size:12px; text-align:center;'
+            ];
+        },
+    ],
+    [
+        'attribute' => 'fa_lot_no',
+        'label' => 'Lot Number',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 80px; font-size:12px; text-align:center;'
         ],
     ],
     [
@@ -203,6 +231,16 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'min-width: 130px; font-size:12px;'
         ],
+        'contentOptions' => function($model){
+            if ($model->stage == '01-CREATED' && $model->child_analyst == 'WF01') {
+                return [
+                    'style' => 'font-size:20px; font-weight: bold; color: red;'
+                ];
+            }
+            return [
+                'style' => 'min-width: 80px; font-size:12px; text-align:center;'
+            ];
+        },
     ],
     [
         'attribute' => 'start_date',

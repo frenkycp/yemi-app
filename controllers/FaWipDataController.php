@@ -19,7 +19,7 @@ class FaWipDataController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
     function actionIndex()
     {
     	$searchModel  = new WipHdrDtrSearch;
@@ -90,13 +90,17 @@ class FaWipDataController extends Controller
     	try {
 			if ($model->load(\Yii::$app->request->post())) {
 				$handover_qty = $model->complete_qty;
+				$delay_category = $model->delay_category;
+				$delay_detail = $model->delay_detail;
 				$user_id = \Yii::$app->user->identity->username;
 				//$user_id = '150826';
-				$sql = "{CALL WIP_04_HAND_OVER_NOT_FULL_FA(:slip_id, :hand_over_qty, :USER_ID)}";
+				$sql = "{CALL WIP_04_HAND_OVER_NOT_FULL_FA(:slip_id, :hand_over_qty, :USER_ID, :delay_category, :delay_detail)}";
 				$params = [
 					':slip_id' => $model->slip_id,
 					':hand_over_qty' => $handover_qty,
-					':USER_ID' => $user_id
+					':USER_ID' => $user_id,
+					':delay_category' => $delay_category,
+					':delay_detail' => $delay_detail
 				];
 				try{
 					$result = \Yii::$app->db_sql_server->createCommand($sql, $params)->queryOne();
