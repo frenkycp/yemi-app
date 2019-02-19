@@ -36,6 +36,10 @@ use Yii;
  * @property string $ONHAND_STATUS_DESC
  * @property double $UNIT_PRICE
  * @property string $CURR
+ * @property string $NIP_RCV
+ * @property string $ACCOUNT
+ * @property integer $LT
+ * @property string $PR_COST_DEP
  * @property string $aliasModel
  */
 abstract class MinimumStockView03 extends \yii\db\ActiveRecord
@@ -65,11 +69,11 @@ abstract class MinimumStockView03 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['LOC_ITEM', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS_DESC', 'CURR'], 'string'],
+            [['LOC_ITEM', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS_DESC', 'CURR', 'NIP_RCV', 'ACCOUNT', 'PR_COST_DEP'], 'string'],
             [['LOC', 'ONHAND', 'PO', 'IMR'], 'required'],
             [['MIN_STOCK_QTY', 'ONHAND', 'PO', 'IMR', 'UNIT_PRICE'], 'number'],
             [['LAST_UPDATE', 'POST_DATE'], 'safe'],
-            [['ONHAND_STATUS'], 'integer']
+            [['ONHAND_STATUS', 'LT'], 'integer']
         ];
     }
 
@@ -79,33 +83,37 @@ abstract class MinimumStockView03 extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'LOC_ITEM' => 'Loc  Item',
-            'ITEM' => 'Item',
-            'ITEM_EQ_DESC_01' => 'Item  Eq  Desc 01',
-            'ITEM_EQ_UM' => 'Item  Eq  Um',
-            'LOC' => 'Loc',
-            'LOC_DESC' => 'Loc  Desc',
-            'MIN_STOCK_QTY' => 'Min  Stock  Qty',
-            'PIC' => 'Pic',
-            'PIC_DESC' => 'Pic  Desc',
-            'DEP' => 'Dep',
-            'DEP_DESC' => 'Dep  Desc',
-            'HIGH_RISK' => 'High  Risk',
-            'CATEGORY' => 'Category',
-            'USER_ID' => 'User  ID',
-            'USER_DESC' => 'User  Desc',
-            'LAST_UPDATE' => 'Last  Update',
-            'MACHINE' => 'Machine',
-            'MACHINE_NAME' => 'Machine  Name',
-            'ONHAND' => 'Onhand',
-            'PO' => 'Po',
-            'IMR' => 'Imr',
-            'RACK' => 'Rack',
-            'POST_DATE' => 'Post  Date',
-            'ONHAND_STATUS' => 'Onhand  Status',
-            'ONHAND_STATUS_DESC' => 'Onhand  Status  Desc',
-            'UNIT_PRICE' => 'Unit  Price',
-            'CURR' => 'Curr',
+            'LOC_ITEM' => 'L O C I T E M',
+            'ITEM' => 'I T E M',
+            'ITEM_EQ_DESC_01' => 'I T E M E Q D E S C 01',
+            'ITEM_EQ_UM' => 'I T E M E Q U M',
+            'LOC' => 'L O C',
+            'LOC_DESC' => 'L O C D E S C',
+            'MIN_STOCK_QTY' => 'M I N S T O C K Q T Y',
+            'PIC' => 'P I C',
+            'PIC_DESC' => 'P I C D E S C',
+            'DEP' => 'D E P',
+            'DEP_DESC' => 'D E P D E S C',
+            'HIGH_RISK' => 'H I G H R I S K',
+            'CATEGORY' => 'C A T E G O R Y',
+            'USER_ID' => 'U S E R I D',
+            'USER_DESC' => 'U S E R D E S C',
+            'LAST_UPDATE' => 'L A S T U P D A T E',
+            'MACHINE' => 'M A C H I N E',
+            'MACHINE_NAME' => 'M A C H I N E N A M E',
+            'ONHAND' => 'O N H A N D',
+            'PO' => 'P O',
+            'IMR' => 'I M R',
+            'RACK' => 'R A C K',
+            'POST_DATE' => 'P O S T D A T E',
+            'ONHAND_STATUS' => 'O N H A N D S T A T U S',
+            'ONHAND_STATUS_DESC' => 'O N H A N D S T A T U S D E S C',
+            'UNIT_PRICE' => 'U N I T P R I C E',
+            'CURR' => 'C U R R',
+            'NIP_RCV' => 'N I P R C V',
+            'ACCOUNT' => 'A C C O U N T',
+            'LT' => 'L T',
+            'PR_COST_DEP' => 'P R C O S T D E P',
         ];
     }
 

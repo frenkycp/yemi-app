@@ -20,16 +20,35 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
-
 $grid_column = [
+    [
+        'class' => 'kartik\grid\CheckboxColumn',
+        'checkboxOptions' => function($model) {
+            if ($model->NIP_RCV == null || $model->ACCOUNT == null || $model->LT == null || $model->PR_COST_DEP == null) {
+                return [
+                    'value' => $model->ITEM,
+                    'disabled' => true,
+                    'title' => 'Some data needed before ordered...!',
+                ];
+            }
+            /*$find_slip = app\models\GojekOrderTbl::find()
+            ->where([
+                'slip_id' => $model->slip_id,
+                'source' => 'WIP'
+            ])
+            ->one();
+            if ($find_slip->slip_id == null) {
+                return ['value' => $model->slip_id];
+            } else {
+                return [
+                    'value' => $model->slip_id,
+                    'disabled' => true,
+                    'title' => 'This item has been ordered by ' . $find_slip->NAMA_KARYAWAN . ' to ' . $find_slip->to_loc
+                ];
+            }*/
+            return ['value' => $model->ITEM];
+        },
+    ],
     [
         'attribute' => 'ITEM',
         'label' => 'Kode Item',
@@ -263,25 +282,97 @@ $grid_column = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
+    [
+        'attribute' => 'NIP_RCV',
+        //'label' => 'Currency',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'ACCOUNT',
+        //'label' => 'Currency',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'LT',
+        //'label' => 'Currency',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'PR_COST_DEP',
+        //'label' => 'Currency',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
 ];
 
-$this->registerJs("$(function() {
-   $('.imageModal').click(function(e) {
-     e.preventDefault();
-     $('#image-modal').modal('show').find('.modal-body').load($(this).attr('href'));
-   });
+$this->registerJs("$(document).ready(function() {
+    $('#order_btn').click(function(){
+        var keys = $('#grid').yiiGridView('getSelectedRows');
+        if(keys.length == 0){
+            alert('Please select minimal 1 item...!');
+            return false;
+        }
+        var strvalue = \"\";
+        var value_arr = [];
+        $('input[name=\"selection[]\"]:checked').each(function() {
+            var tmp_qty = parseInt($(this).closest('tr').find('td:eq(10)').text());
+            var tmp_niprcv = $(this).closest('tr').find('td:eq(19)').text();
+            var tmp_account = $(this).closest('tr').find('td:eq(20)').text();
+            var tmp_lt = $(this).closest('tr').find('td:eq(21)').text();
+            var tmp_cost_dep = $(this).closest('tr').find('td:eq(22)').text();
+            value_arr.push({item:this.value, req_qty:tmp_qty, nip_rcv:tmp_niprcv, account:tmp_account, lt:tmp_lt, cost_dep: tmp_cost_dep});
+            //alert(tmp_qty);
+            if(strvalue!=\"\")
+                strvalue = strvalue + \",\"+this.value;
+            else
+                strvalue = this.value;
+        });
+        $.post({
+            url: '" . Url::to(['order']) . "',
+            data: {
+                keylist: keys,
+                value : strvalue,
+                order_arr : JSON.stringify(value_arr)
+            },
+            dataType: 'json',
+            success: function(data) {
+                alert(data.message);
+                /*if(data.success == false){
+                    alert(\"Can't create order. \" + data.message);
+                } else {
+                    alert(data.message);
+                    location.href = location.href;
+                }*/
+            },
+            error: function (request, status, error) {
+                alert(error);
+            }
+        });
+    });
+    $('.imageModal').click(function(e) {
+        e.preventDefault();
+        $('#image-modal').modal('show').find('.modal-body').load($(this).attr('href'));
+    });
 });");
 ?>
 
-<?php //\yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
+<?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
 <div class="giiant-crud minimum-stock-index">
     <div class="">
         <?= GridView::widget([
+            'id' => 'grid',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => $grid_column,
             'hover' => true,
+            'pager' => [
+                'firstPageLabel' => 'First',
+                'lastPageLabel'  => 'Last'
+            ],
             //'showPageSummary' => true,
             //'condensed' => true,
             'striped' => true,
@@ -290,7 +381,7 @@ $this->registerJs("$(function() {
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            //'pjax' => false, // pjax is set to always true for this demo
+            'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 /*['content' => 
                     Html::a('View Chart', $main_link, ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Show View Chart')])
@@ -304,6 +395,10 @@ $this->registerJs("$(function() {
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
+                'after' => '<button class="btn btn-primary" id="order_btn">Order</button>',
+                'afterOptions' => [
+                    'class'=>'kv-panel-after pull-right',
+                ]
             ],
         ]); 
 
@@ -319,6 +414,6 @@ $this->registerJs("$(function() {
 </div>
 
 
-<?php //\yii\widgets\Pjax::end() ?>
+<?php \yii\widgets\Pjax::end() ?>
 
 

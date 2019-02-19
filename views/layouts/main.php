@@ -65,6 +65,17 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
 
 </div>
 
+<?php
+yii\bootstrap\Modal::begin([
+    'headerOptions' => ['id' => 'modalHeader'],
+    'id' => 'common-modal',
+    'size' => 'modal-lg',
+    'clientOptions' => ['backdrop' => 'static', 'keyboard' => true]
+]);
+echo "<div id='modalContent'></div>";
+yii\bootstrap\Modal::end();
+?>
+
 <?php $this->endBody() ?>
 </body>
 </html>

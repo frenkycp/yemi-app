@@ -11,13 +11,14 @@ use yii\helpers\ArrayHelper;
  */
 class WipHdrDtr extends BaseWipHdrDtr
 {
+    public $summary_qty, $complete_qty;
 
     public function behaviors()
     {
         return ArrayHelper::merge(
             parent::behaviors(),
             [
-                # custom behaviors
+                
             ]
         );
     }
@@ -27,7 +28,7 @@ class WipHdrDtr extends BaseWipHdrDtr
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                [['summary_qty', 'complete_qty'], 'number']
             ]
         );
     }

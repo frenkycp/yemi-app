@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\WipPlanActualReport;
+use app\models\WipHdrDtr;
 
 /**
 * CisClientIpAddressSearch represents the model behind the search form about `app\models\CisClientIpAddress`.
 */
-class WipPlanActualReportSearch extends WipPlanActualReport
+class WipHdrDtrSearch extends WipHdrDtr
 {
 	/**
 	* @inheritdoc
@@ -18,10 +18,10 @@ class WipPlanActualReportSearch extends WipPlanActualReport
 	public function rules()
 	{
 		return [
-		    [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'session_id'], 'string'],
-		    [['week'], 'integer'],
-		    [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'hand_over_job', 'source_date', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc', 'delay_last_update'], 'safe'],
-		    [['summary_qty'], 'number']
+		    [['dtr_id', 'hdr_id_item', 'hdr_id', 'upload_id', 'period', 'period_line', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'model_group', 'parent', 'parent_desc', 'urut', 'slip_id', 'stage', 'slip_id_barcode_label', 'created_user_id', 'created_user_desc', 'start_job_user_id', 'start_job_user_desc', 'end_job_user_id', 'end_job_user_desc', 'hand_over_job_user_id', 'hand_over_job_user_desc', 'order_release_user_id', 'order_release_user_desc', 'start_cancel_job_user_id', 'start_cancel_job_user_desc', 'end_cancel_job_user_id', 'end_cancel_job_user_desc', 'stat', 'slip_id_reference', 'problem', 'fullfilment_stat', 'ipc_ok_ng', 'ipc_in_id', 'ipc_ok_ng_desc', 'ipc_in_id_user_desc', 'ipc_close_id', 'ipc_close_id_user_desc', 'calculated_close', 'recreate_close', 'hdr_id_item_due_date', 're_handover_close', 'repair_job_user_id', 'repair_job_user_desc', 'hand_over_cancel_job_user_id', 'hand_over_cancel_job_user_desc', 'note', 'completed_split_id', 'completed_split_desc', 'reservation', 'reservation_number', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc'], 'string'],
+            [['start_date', 'due_date', 'created_date', 'start_job', 'end_job', 'hand_over_job', 'source_date', 'order_release_date', 'start_cancel_job', 'end_cancel_job', 'post_date', 'repair_job', 'hand_over_cancel_job', 'completed_split', 'delay_last_update'], 'safe'],
+            [['plan_qty', 'act_qty', 'balance_by_day', 'plan_acc_qty', 'act_acc_qty', 'balance_acc_qty', 'plan_qty_hdr', 'act_qty_hdr', 'balance_qty_hdr', 'child_fx_lt', 'child_dts_lt', 'balance_act_qty', 'source_qty', 'ipc_in_qty', 'lt_ipc', 'lt_started', 'lt_completed', 'lt_handover', 'bom_level', 'gojek_req_qty', 'std_time', 'std_time_x_act_qty'], 'number'],
+            [['session_id'], 'integer']
 		];
 	}
 
@@ -43,7 +43,7 @@ class WipPlanActualReportSearch extends WipPlanActualReport
 	*/
 	public function search($params)
 	{
-		$query = WipPlanActualReport::find();
+		$query = WipHdrDtr::find();
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,
@@ -66,8 +66,6 @@ class WipPlanActualReportSearch extends WipPlanActualReport
 		}
 
 		$query->andFilterWhere([
-            'week' => $this->week,
-            'summary_qty' => $this->summary_qty,
             'session_id' => $this->session_id,
             'delay_category' => $this->delay_category
         ]);

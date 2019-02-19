@@ -5,17 +5,19 @@ namespace app\controllers;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use app\models\MinimumStockView02;
+use yii\web\Response;
+use yii\helpers\Json;
 
 /**
 * This is the class for controller "MntMinimumStockController".
 */
 class MntMinimumStockController extends \app\controllers\base\MntMinimumStockController
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 
     public function actionGetImagePreview($urutan)
 	{
@@ -38,5 +40,44 @@ class MntMinimumStockController extends \app\controllers\base\MntMinimumStockCon
 			return Html::img('@web/uploads/NG_MNT/' . $urutan . '.jpg', ['width' => '100%']);
 		}
 		return 'No Image Found...';
+	}
+
+	public function actionOrder()
+	{
+		$response = [];
+		if (\Yii::$app->request->isAjax) {
+			$response = [
+				'success' => true,
+				'message' => 'Plan was created successfully...',
+			];
+
+			\Yii::$app->response->format = Response::FORMAT_JSON;
+			$data_post = \Yii::$app->request->post();
+			try{
+				$order_arr = json_decode($data_post['order_arr']);
+				$item_str = '';
+				$qty_str = '';
+				$nip_rcv_str = '';
+				$account_str = '';
+				$lt_str = '';
+				$cost_dep_str = '';
+				foreach ($order_arr as $value) {
+					$item_str .= $value->item . ',';
+					$qty_str .= $value->req_qty . ',';
+					$nip_rcv_str .= $value->nip_rcv . ',';
+					$account_str .= $value->account . ',';
+					$lt_str .= $value->lt . ',';
+					$cost_dep_str .= $value->cost_dep . ',';
+				}
+				$response['message'] = $item_str . "\n" . $qty_str. "\n" . $nip_rcv_str. "\n" . $account_str. "\n" . $lt_str. "\n" . $cost_dep_str;
+			} catch (Exception $ex) {
+				$response = [
+					'success' => false,
+					'message' => 'Create plan failed... ' . $ex->getMessage(),
+				];
+			}
+			
+		}
+		return $response;
 	}
 }
