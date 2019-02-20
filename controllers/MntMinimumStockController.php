@@ -13,11 +13,11 @@ use yii\helpers\Json;
 */
 class MntMinimumStockController extends \app\controllers\base\MntMinimumStockController
 {
-	/*public function behaviors()
+	public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }*/
+    }
 
     public function actionGetImagePreview($urutan)
 	{
@@ -53,27 +53,50 @@ class MntMinimumStockController extends \app\controllers\base\MntMinimumStockCon
 
 			\Yii::$app->response->format = Response::FORMAT_JSON;
 			$data_post = \Yii::$app->request->post();
+			$order_arr = json_decode($data_post['order_arr']);
+			$item_str = '';
+			$qty_str = '';
+			$nip_rcv_str = '';
+			$account_str = '';
+			$lt_str = '';
+			$cost_dep_str = '';
+			foreach ($order_arr as $value) {
+				$item_str .= $value->item . ',';
+				$qty_str .= $value->req_qty . ',';
+				$nip_rcv_str .= $value->nip_rcv . ',';
+				$account_str .= $value->account . ',';
+				$lt_str .= $value->lt . ',';
+				$cost_dep_str .= $value->cost_dep . ',';
+			}
+
+			$sql = "{CALL SPARE_PART_TO_PR(:item, :qty, :NIP_RCV, :ACCOUNT, :LT, :PR_COST_DEP, :USER_ID)}";
+			$params = [
+				':item' => $item_str,
+				':qty' => $qty_str,
+				':NIP_RCV' => $nip_rcv_str,
+				':ACCOUNT' => $account_str,
+				':LT' => $lt_str,
+				':PR_COST_DEP' => $cost_dep_str,
+				':USER_ID' => \Yii::$app->user->identity->username,
+			];
 			try{
-				$order_arr = json_decode($data_post['order_arr']);
-				$item_str = '';
-				$qty_str = '';
-				$nip_rcv_str = '';
-				$account_str = '';
-				$lt_str = '';
-				$cost_dep_str = '';
-				foreach ($order_arr as $value) {
-					$item_str .= $value->item . ',';
-					$qty_str .= $value->req_qty . ',';
-					$nip_rcv_str .= $value->nip_rcv . ',';
-					$account_str .= $value->account . ',';
-					$lt_str .= $value->lt . ',';
-					$cost_dep_str .= $value->cost_dep . ',';
+				$result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryOne();
+				if (strpos($result['hasil'], 'IMR') !== false) {
+					$response = [
+						'success' => true,
+						'message' => $result['hasil'],
+					];
+				} else {
+					$response = [
+						'success' => false,
+						'message' => $result['hasil'],
+					];
 				}
-				$response['message'] = $item_str . "\n" . $qty_str. "\n" . $nip_rcv_str. "\n" . $account_str. "\n" . $lt_str. "\n" . $cost_dep_str;
 			} catch (Exception $ex) {
+				$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
 				$response = [
 					'success' => false,
-					'message' => 'Create plan failed... ' . $ex->getMessage(),
+					'message' => $msg,
 				];
 			}
 			

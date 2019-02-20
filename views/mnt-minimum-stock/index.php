@@ -339,13 +339,13 @@ $this->registerJs("$(document).ready(function() {
             },
             dataType: 'json',
             success: function(data) {
-                alert(data.message);
-                /*if(data.success == false){
-                    alert(\"Can't create order. \" + data.message);
+                //alert(data.message);
+                if(data.success == false){
+                    alert(\"Can't create IMR. \" + data.message);
                 } else {
                     alert(data.message);
                     location.href = location.href;
-                }*/
+                }
             },
             error: function (request, status, error) {
                 alert(error);
