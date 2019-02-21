@@ -125,7 +125,7 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap'],
         'vAlign' => 'middle',
         'width' => '60px',
-        'hidden' => in_array(Yii::$app->user->identity->username, ['admin', 'prd']) ? false : true,
+        //'hidden' => in_array(Yii::$app->user->identity->username, ['admin', 'prd']) ? false : true,
     ],
     /*[
         'class' => 'kartik\grid\ExpandRowColumn',

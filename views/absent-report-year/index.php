@@ -33,10 +33,48 @@ $gridColumns = [
         'attribute' => 'YEAR',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '100px',
+        'width' => '120px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 14px;'
+        ],
+    ],
+    [
+        'attribute' => 'NIK',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '150px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 14px;'
+        ],
+    ],
+    [
+        'attribute' => 'NAMA_KARYAWAN',
+        'label' => 'Name',
+        'vAlign' => 'middle',
+        'width' => '300px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 14px;'
+        ],
+    ],
+    [
+        'attribute' => 'total',
+        'value' => function($model){
+            return Html::a('<span class="badge bg-yellow">' . $model->total . '</span>', ['get-disiplin-detail', 'nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'year' => $model->YEAR, 'note' => $model->NOTE], ['class' => 'popup_btn']);
+        },
+        'width' => '100px',
+        'format' => 'raw',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'SECTION',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 14px;'
         ],
     ],
     [
@@ -56,46 +94,10 @@ $gridColumns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 14px;'
         ],
     ],
-    [
-        'attribute' => 'SECTION',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'NIK',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'width' => '110px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'NAMA_KARYAWAN',
-        'label' => 'Name',
-        'vAlign' => 'middle',
-        'width' => '250px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'total',
-        'value' => function($model){
-            return Html::a('<span class="badge bg-yellow">' . $model->total . '</span>', ['get-disiplin-detail', 'nik'=>$model->NIK, 'nama_karyawan' => $model->NAMA_KARYAWAN, 'year' => $model->YEAR, 'note' => $model->NOTE], ['class' => 'popup_btn']);
-        },
-        'format' => 'raw',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
+    
 ];
 ?>
 
@@ -114,7 +116,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 14px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
