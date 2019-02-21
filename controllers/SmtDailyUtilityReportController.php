@@ -24,6 +24,13 @@ class SmtDailyUtilityReportController extends Controller
 		$year = date('Y');
 		$month = date('m');
 		$line_arr = ['01', '02'];
+		$loc = 'WM03';
+
+		$loc_dropdown = [
+			'WM03' => 'SMT',
+			'WI01' => 'INJ SMALL',
+			'WI02' => 'INJ LARGE',
+		];
 
 		if (\Yii::$app->request->get('year') !== null) {
 			$year = \Yii::$app->request->get('year');
@@ -31,6 +38,10 @@ class SmtDailyUtilityReportController extends Controller
 
 		if (\Yii::$app->request->get('month') !== null) {
 			$month = \Yii::$app->request->get('month');
+		}
+
+		if (\Yii::$app->request->get('loc') !== null) {
+			$loc = \Yii::$app->request->get('loc');
 		}
 
 		$period = $year . $month;
@@ -53,7 +64,7 @@ class SmtDailyUtilityReportController extends Controller
 					'period' => $period,
 					'post_date' => $i->format("Y-m-d"),
 					'LINE' => $line,
-					'child_analyst' => 'WM03'
+					'child_analyst' => $loc
 				])
 				->one();
 
@@ -65,12 +76,12 @@ class SmtDailyUtilityReportController extends Controller
 				$tmp_working_ratio[$line][] = [
 		    		'x' => $proddate,
 		    		'y' => $tmp_y1,
-			    	'url' => Url::to(['get-remark', 'proddate' => $i->format("Y-m-d"), 'line' => $line])
+			    	'url' => Url::to(['get-remark', 'proddate' => $i->format("Y-m-d"), 'line' => $line, 'loc' => $loc])
 		    	];
 		    	$tmp_operation_ratio[$line][] = [
 		    		'x' => $proddate,
 		    		'y' => $tmp_y2,
-			    	'url' => Url::to(['get-remark', 'proddate' => $i->format("Y-m-d"), 'line' => $line])
+			    	'url' => Url::to(['get-remark', 'proddate' => $i->format("Y-m-d"), 'line' => $line, 'loc' => $loc])
 		    	];
 			}
 		   	
@@ -107,7 +118,7 @@ class SmtDailyUtilityReportController extends Controller
 		$wip_eff_view = WipEffView::find()
 		->where([
 			'period' => $period,
-			'child_analyst' => 'WM03'
+			'child_analyst' => $loc
 		])
 		->orderBy('post_date, line')
 		->all();
@@ -199,10 +210,12 @@ class SmtDailyUtilityReportController extends Controller
 			'month' => $month,
 			'data_losstime_category' => $data_losstime_category,
 			'categories' => $categories,
+			'loc_dropdown' => $loc_dropdown,
+			'loc' => $loc,
 		]);
 	}
 
-	public function actionGetRemark($proddate, $line)
+	public function actionGetRemark($proddate, $line, $loc)
 	{
 		$remark = '<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -234,7 +247,7 @@ class SmtDailyUtilityReportController extends Controller
 	    ->where([
 	    	'post_date' => $proddate,
 	    	'LINE' => $line,
-	    	'child_analyst' => 'WM03'
+	    	'child_analyst' => $loc
 	    ])
 	    ->orderBy('SMT_SHIFT, LINE, child_01')
 	    ->all();

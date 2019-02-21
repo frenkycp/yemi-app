@@ -72,6 +72,13 @@ echo '</pre>';*/
             'onchange'=>'this.form.submit()'
         ]); ?>
     </div>
+    <div class="col-md-2">
+        <?= Html::label('Location'); ?>
+        <?= Html::dropDownList('loc', $loc, $loc_dropdown, [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
 </div>
 <br/>
 
@@ -257,7 +264,7 @@ echo '</pre>';*/
                         //'shared' => true,
                         //'crosshairs' => true,
                         'xDateFormat' => '%Y-%m-%d',
-                        'valueSuffix' => 'min',
+                        'valueSuffix' => ' min',
                     ],
                     'plotOptions' => [
                         'column' => [
