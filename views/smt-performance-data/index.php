@@ -47,33 +47,66 @@ $grid_column = [
         'label' => 'Date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px;',
+        'filterInputOptions' => [
+            'style' => 'font-size: 12px; text-align: center; min-width: 80px;',
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'child_analyst',
+        'label' => 'Location',
+        'value' => function($model){
+            return $model->child_analyst_desc;
+        },
+        'filter' => [
+            'WM03' => 'SMT',
+            'WI01' => 'INJ SMALL',
+            'WI02' => 'INJ LARGE',
+        ],
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'style' => 'font-size: 12px; text-align: center; min-width: 120px;',
+            'class' => 'form-control',
+        ],
     ],
     [
         'attribute' => 'LINE',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '70px;',
+        'filterInputOptions' => [
+            'style' => 'font-size: 12px; text-align: center; min-width: 50px;',
+            'class' => 'form-control',
+        ],
     ],
     [
         'attribute' => 'SMT_SHIFT',
         'label' => 'Shift',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px;',
+        'filterInputOptions' => [
+            'style' => 'font-size: 12px; text-align: center; min-width: 80px;',
+            'class' => 'form-control',
+        ],
     ],
     [
         'attribute' => 'child_01',
         'label' => 'Part Num.',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px;',
+        'filterInputOptions' => [
+            'style' => 'font-size: 12px; text-align: center; min-width: 70px;',
+            'class' => 'form-control',
+        ],
     ],
     [
         'attribute' => 'child_desc_01',
         'label' => 'Part Name',
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'contentOptions' => [
+            'style' => 'font-size: 12px; min-width: 170px;',
+        ],
     ],
     [
         'attribute' => 'qty_all',
