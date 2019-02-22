@@ -26,11 +26,11 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
 $this->registerJs("$(function() {
    $('.btn-complete').click(function(e) {
      e.preventDefault();
-     $('#modal').modal('show');
+     $('#common-modal').modal('show');
    });
    $('.btn-cancel').click(function(e) {
      e.preventDefault();
-     $('#modal').modal('show');
+     $('#common-modal').modal('show');
    });
 });");
 
@@ -423,12 +423,3 @@ $grid_columns = [
 
 
 <?php \yii\widgets\Pjax::end() ?>
-
-<?php
-yii\bootstrap\Modal::begin([
-    'id' =>'modal',
-    'header' => '<h3>Completion Form</h3>',
-    'size' => 'modal-lg',
-]);
-yii\bootstrap\Modal::end();
-?>

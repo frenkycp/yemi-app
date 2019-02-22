@@ -68,8 +68,6 @@ $this->title = [
             </div>
         </div>
 			
-			
-        
         <hr/>
 
         <?php echo $form->errorSummary($model); ?>

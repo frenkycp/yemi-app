@@ -16,6 +16,8 @@ use Yii;
  * @property string $to_loc
  * @property string $STAGE
  * @property string $LAST_UPDATE
+ * @property string $TERMINAL
+ * @property string $HADIR
  * @property string $aliasModel
  */
 abstract class GojekTbl extends \yii\db\ActiveRecord
@@ -46,7 +48,7 @@ abstract class GojekTbl extends \yii\db\ActiveRecord
     {
         return [
             [['GOJEK_ID'], 'required'],
-            [['GOJEK_ID', 'GOJEK_DESC', 'from_loc', 'to_loc', 'STAGE'], 'string'],
+            [['GOJEK_ID', 'GOJEK_DESC', 'from_loc', 'to_loc', 'STAGE', 'TERMINAL', 'HADIR'], 'string'],
             [['GOJEK_VALUE'], 'number'],
             [['LAST_UPDATE'], 'safe'],
             [['GOJEK_ID'], 'unique']
@@ -59,13 +61,15 @@ abstract class GojekTbl extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'GOJEK_ID' => 'Gojek  ID',
-            'GOJEK_DESC' => 'Gojek  Desc',
-            'GOJEK_VALUE' => 'Gojek  Value',
+            'GOJEK_ID' => 'G O J E K I D',
+            'GOJEK_DESC' => 'G O J E K D E S C',
+            'GOJEK_VALUE' => 'G O J E K V A L U E',
             'from_loc' => 'From Loc',
             'to_loc' => 'To Loc',
-            'STAGE' => 'Stage',
-            'LAST_UPDATE' => 'Last  Update',
+            'STAGE' => 'S T A G E',
+            'LAST_UPDATE' => 'L A S T U P D A T E',
+            'TERMINAL' => 'T E R M I N A L',
+            'HADIR' => 'H A D I R',
         ];
     }
 
