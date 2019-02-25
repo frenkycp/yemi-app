@@ -19,7 +19,7 @@ class WipHdrDtrSearch extends WipHdrDtr
 	{
 		return [
 		    [['dtr_id', 'hdr_id_item', 'hdr_id', 'upload_id', 'period', 'period_line', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'model_group', 'parent', 'parent_desc', 'urut', 'slip_id', 'stage', 'slip_id_barcode_label', 'created_user_id', 'created_user_desc', 'start_job_user_id', 'start_job_user_desc', 'end_job_user_id', 'end_job_user_desc', 'hand_over_job_user_id', 'hand_over_job_user_desc', 'order_release_user_id', 'order_release_user_desc', 'start_cancel_job_user_id', 'start_cancel_job_user_desc', 'end_cancel_job_user_id', 'end_cancel_job_user_desc', 'stat', 'slip_id_reference', 'problem', 'fullfilment_stat', 'ipc_ok_ng', 'ipc_in_id', 'ipc_ok_ng_desc', 'ipc_in_id_user_desc', 'ipc_close_id', 'ipc_close_id_user_desc', 'calculated_close', 'recreate_close', 'hdr_id_item_due_date', 're_handover_close', 'repair_job_user_id', 'repair_job_user_desc', 'hand_over_cancel_job_user_id', 'hand_over_cancel_job_user_desc', 'note', 'completed_split_id', 'completed_split_desc', 'reservation', 'reservation_number', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc'], 'string'],
-            [['start_date', 'due_date', 'created_date', 'start_job', 'end_job', 'hand_over_job', 'source_date', 'order_release_date', 'start_cancel_job', 'end_cancel_job', 'post_date', 'repair_job', 'hand_over_cancel_job', 'completed_split', 'delay_last_update', 'fa_lot_no', 'fa_lot_qty'], 'safe'],
+            [['start_date', 'due_date', 'created_date', 'start_job', 'end_job', 'hand_over_job', 'source_date', 'order_release_date', 'start_cancel_job', 'end_cancel_job', 'post_date', 'repair_job', 'hand_over_cancel_job', 'completed_split', 'delay_last_update', 'fa_lot_no', 'fa_lot_qty', 'LINE'], 'safe'],
             [['plan_qty', 'act_qty', 'balance_by_day', 'plan_acc_qty', 'act_acc_qty', 'balance_acc_qty', 'plan_qty_hdr', 'act_qty_hdr', 'balance_qty_hdr', 'child_fx_lt', 'child_dts_lt', 'balance_act_qty', 'source_qty', 'ipc_in_qty', 'lt_ipc', 'lt_started', 'lt_completed', 'lt_handover', 'bom_level', 'gojek_req_qty', 'std_time', 'std_time_x_act_qty'], 'number'],
             [['session_id'], 'integer']
 		];
@@ -70,6 +70,7 @@ class WipHdrDtrSearch extends WipHdrDtr
             'delay_category' => $this->delay_category,
             'fa_lot_no' => $this->fa_lot_no,
             'fa_lot_qty' => $this->fa_lot_qty,
+            'LINE' => $this->LINE,
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])
