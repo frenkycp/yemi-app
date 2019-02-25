@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\MntShiftSch;
 use yii\helpers\Url;
+use dmstr\bootstrap\Tabs;
+use app\models\search\MntShiftSchSearch;
 
 /**
 * This is the class for controller "MntShiftSchController".
@@ -21,6 +23,31 @@ class MntShiftSchController extends \app\controllers\base\MntShiftSchController
 	* If creation is successful, the browser will be redirected to the 'view' page.
 	* @return mixed
 	*/
+
+	/**
+	* Lists all MntShiftSch models.
+	* @return mixed
+	*/
+	public function actionIndex()
+	{
+	    $searchModel  = new MntShiftSchSearch;
+	    $searchModel->shift_date = date('Y-m-d');
+	    if (\Yii::$app->request->post('shift_date') != null) {
+	    	$searchModel->shift_date = \Yii::$app->request->post('shift_date');
+	    }
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('index', [
+			'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
+	}
+
 	public function actionCreate()
 	{
 		$model = new MntShiftSch;

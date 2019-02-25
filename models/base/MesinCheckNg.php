@@ -35,6 +35,7 @@ use Yii;
  * @property integer $repair_time
  * @property integer $spare_part_time
  * @property integer $install_time
+ * @property integer $down_time_stat
  * @property string $aliasModel
  */
 abstract class MesinCheckNg extends \yii\db\ActiveRecord
@@ -66,7 +67,7 @@ abstract class MesinCheckNg extends \yii\db\ActiveRecord
         return [
             [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'repair_user_id', 'repair_user_desc', 'repair_status', 'repair_pic', 'repair_note'], 'string'],
             [['mesin_last_update', 'repair_plan', 'repair_aktual'], 'safe'],
-            [['color_stat', 'prepare_time', 'repair_time', 'spare_part_time', 'install_time'], 'integer']
+            [['color_stat', 'prepare_time', 'repair_time', 'spare_part_time', 'install_time', 'down_time_stat'], 'integer']
         ];
     }
 
@@ -102,6 +103,7 @@ abstract class MesinCheckNg extends \yii\db\ActiveRecord
             'repair_time' => 'Repair Time',
             'spare_part_time' => 'Spare Part Time',
             'install_time' => 'Install Time',
+            'down_time_stat' => 'Down Time Stat',
         ];
     }
 

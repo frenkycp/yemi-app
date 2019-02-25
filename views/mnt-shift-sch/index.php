@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
+use yii\web\View;
 
 /**
 * @var yii\web\View $this
@@ -22,6 +23,18 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
     $actionColumnTemplateString = "{view} {update} {delete}";
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+
+$script = <<< JS
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout("refreshPage();", 600000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+JS;
+$this->registerJs($script, View::POS_HEAD );
 
 $grid_column = [
     [
@@ -43,7 +56,7 @@ $grid_column = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap']
+        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width:100px;']
     ],
     [
         'class' => 'kartik\grid\SerialColumn',
@@ -60,7 +73,11 @@ $grid_column = [
         'label' => 'Tanggal',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '150px'
+        'width' => '150px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
     ],
     [
         'attribute' => 'nik',

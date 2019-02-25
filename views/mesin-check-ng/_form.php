@@ -120,6 +120,12 @@ use yii\helpers\StringHelper;
 
 <!-- attribute repair_aktual -->
 			<?= $form->field($model, 'repair_aktual')->textInput(['readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
+
+            <?= $form->field($model, 'down_time_stat')->dropDownList([
+                0 => '???',
+                1 => 'Down Time',
+                2 => 'Non Down Time'
+            ])->label('Down Time Status'); ?>
         </p>
         <?php $this->endBlock(); ?>
         
