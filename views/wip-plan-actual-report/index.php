@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 use kartik\form\ActiveForm;
 use kartik\file\FileInput;
@@ -124,7 +125,7 @@ $grid_columns = [
     ],
     [
         'attribute' => 'period_line',
-        'label' => 'line',
+        'label' => 'VMS Line',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
@@ -145,6 +146,18 @@ $grid_columns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 100px; font-size:12px;'
+        ],
+    ],
+    [
+        'attribute' => 'LINE',
+        'label' => 'Prod. Line',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'filter' => ArrayHelper::map(app\models\HakAkses::find()->where(['level_akses' => '4'])->orderBy('hak_akses ASC')->all(), 'hak_akses', 'hak_akses'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 70px; font-size:12px;'
         ],
     ],
     [
