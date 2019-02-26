@@ -68,6 +68,29 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'DAY_STAT',
+        'label' => 'Hari Kerja/Libur',
+        'value' => function($model){
+            $day_stat = '-';
+            if ($model->DAY_STAT == 'L') {
+                $day_stat = 'HARI LIBUR';
+            } elseif ($model->DAY_STAT == 'HK') {
+                $day_stat = 'HARI KERJA';
+            }
+            return $day_stat;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            'HK' => 'HARI KERJA',
+            'L' => 'HARI LIBUR'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 110px;'
+        ],
+    ],
+    [
         'attribute' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -176,19 +199,6 @@ $gridColumns = [
         'hAlign' => 'center',
         'width' => '100px',
     ],*/
-    //'NIK_DATE_ID',
-    //'NO',
-    /*'PERIOD',*/
-    /*'NOTE',*/
-    /*'DAY_STAT',*/
-    /*'CATEGORY',*/
-    /*'YEAR',*/
-    /*'WEEK',*/
-    /*'TOTAL_KARYAWAN',*/
-    /*'KEHADIRAN',*/
-    /*'BONUS',*/
-    /*'DISIPLIN',*/
-    /*'DATE',*/
 ];
 ?>
 <div class="giiant-crud absensi-tbl-index">

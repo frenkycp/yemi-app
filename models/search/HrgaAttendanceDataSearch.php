@@ -63,7 +63,8 @@ $query->andFilterWhere([
             'KEHADIRAN' => $this->KEHADIRAN,
             'BONUS' => $this->BONUS,
             'DISIPLIN' => $this->DISIPLIN,
-            'SHIFT' => $this->SHIFT
+            'SHIFT' => $this->SHIFT,
+            'DAY_STAT' => $this->DAY_STAT
         ]);
 
         $query->andFilterWhere(['like', 'NIK_DATE_ID', $this->NIK_DATE_ID])
@@ -75,7 +76,6 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])
             ->andFilterWhere(['like', 'PERIOD', $this->PERIOD])
             ->andFilterWhere(['like', 'NOTE', $this->NOTE])
-            ->andFilterWhere(['like', 'DAY_STAT', $this->DAY_STAT])
             ->andFilterWhere(['like', 'CATEGORY', $this->CATEGORY]);
 
 return $dataProvider;
