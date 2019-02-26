@@ -206,7 +206,7 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'DSR_STAT',
         'label' => 'Status',
         'value' => function($model){
@@ -216,6 +216,18 @@ $gridColumns = [
                 return 'CLOSE';
             }
         },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+        'mergeHeader' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],*/
+    [
+        'attribute' => 'REFERENSI_NOTE',
+        'label' => 'Reference',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px',

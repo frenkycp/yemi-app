@@ -36,8 +36,12 @@ class WipPaintingMonitoringController extends Controller
     	$model = new WipFilterModel();
     	$model->month = date('m');
 		$model->year = date('Y');
+        $str_where = '';
     	if ($model->load($_GET)) {
     		$period = $model->year . $model->month;
+            if ($model->category == 1) {
+                $str_where = "delay_category IS NOT NULL AND delay_category != ''";
+            }
     	}
     	$wip_painting_data_arr = WipPlanActualReport::find()
     	->select([
@@ -53,6 +57,7 @@ class WipPaintingMonitoringController extends Controller
     	->where([
     		'period' => $period
     	])
+        ->andWhere($str_where)
     	->groupBy('week, due_date')
     	->orderBy('due_date, week')
     	->all();
@@ -73,6 +78,7 @@ class WipPaintingMonitoringController extends Controller
 	    		'period' => $period,
 	    		'child_analyst_desc' => $model->loc
 	    	])
+            ->andWhere($str_where)
 	    	->groupBy('week, due_date')
 	    	->orderBy('due_date, week')
 	    	->all();
@@ -92,25 +98,25 @@ class WipPaintingMonitoringController extends Controller
 
     		$tmp_data[$wip_painting_data->week]['order_percentage'][] = [
     			'y' => $order_percentage == 0 ? null : $order_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '00-ORDER']),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '00-ORDER', 'category' => $model->category]),
 				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['00-ORDER']),
                 'qty' => $wip_painting_data->total_order
     		];
     		$tmp_data[$wip_painting_data->week]['started_percentage'][] = [
     			'y' => $started_percentage == 0 ? null : $started_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '02-STARTED']),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '02-STARTED', 'category' => $model->category]),
 				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['02-STARTED']),
                 'qty' => $wip_painting_data->total_started
     		];
     		$tmp_data[$wip_painting_data->week]['completed_percentage'][] = [
     			'y' => $completed_percentage == 0 ? null : $completed_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '03-COMPLETED']),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '03-COMPLETED', 'category' => $model->category]),
 				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['03-COMPLETED']),
                 'qty' => $wip_painting_data->total_completed
     		];
     		$tmp_data[$wip_painting_data->week]['handover_percentage'][] = [
     			'y' => $handover_percentage <= 0 ? null : $handover_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '04-HAND OVER']),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '04-HAND OVER', 'category' => $model->category]),
 				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['04-HAND OVER']),
                 'qty' => $wip_painting_data->total_handover
     		];
@@ -175,7 +181,7 @@ class WipPaintingMonitoringController extends Controller
     	]);
     }
 
-    public function actionGetRemark($due_date, $loc, $stage)
+    public function actionGetRemark($due_date, $loc, $stage, $category)
     {
         $stage_arr = [$stage];
         switch ($stage) {
@@ -205,6 +211,11 @@ class WipPaintingMonitoringController extends Controller
                 break;
         };
 
+        $str_where = '';
+        if ($category == 1) {
+            $str_where = "delay_category IS NOT NULL AND delay_category != ''";
+        }
+
         $remark_data_arr = WipPlanActualReport::find()
         ->select($selected_column)
         ->where([
@@ -212,6 +223,7 @@ class WipPaintingMonitoringController extends Controller
             'stage' => $stage_arr,
             //'urut' => '02'
         ])
+        ->andWhere($str_where)
         ->orderBy('child_analyst_desc, model_group, parent, child')
         ->asArray()->all();
 
@@ -223,6 +235,7 @@ class WipPaintingMonitoringController extends Controller
                 'stage' => $stage_arr,
                 'child_analyst_desc' => $loc
             ])
+            ->andWhere($str_where)
             ->orderBy('child_analyst_desc, model_group, parent, child')
             ->asArray()->all();
         }
@@ -236,6 +249,7 @@ class WipPaintingMonitoringController extends Controller
             <th class="text-center">Session</th>
             <th class="text-center">GMC</th>
             <th>Model</th>
+            <th class="text-center">Child</th>
             <th>Child Description</th>
             <th class="text-center">Qty</th>
             <th class="text-center" style="min-width: 70px;">FA Start</th>
@@ -267,6 +281,7 @@ class WipPaintingMonitoringController extends Controller
                     <td class="text-center">' . $value['session_id'] . '</td>
                     <td class="text-center">' . $value['parent'] . '</td>
                     <td>' . $value['model_group'] . '</td>
+                    <td>' . $value['child'] . '</td>
                     <td>' . $value['child_desc'] . '</td>
                     <td class="text-center">' . (int)$value['summary_qty'] . '</td>
                     <td class="text-center">' . $fa_start . '</td>

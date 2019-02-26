@@ -72,6 +72,18 @@ echo '</pre>';*/
 				]
 			) ?>
 		</div>
+        <div class="col-sm-2">
+            <?= $form->field($model, 'category')->dropDownList(
+                [
+                    0 => 'All',
+                    1 => 'Lot Cut'
+                ],
+                [
+                    'onchange'=>'this.form.submit()',
+                    'style' => 'font-size: 12px;',
+                ]
+            ) ?>
+        </div>
 	</div>
 
     <div class="form-group">
