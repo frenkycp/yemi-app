@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
-    .modal-lg { width: 1100px;}
+    .modal-lg { width: 1200px;}
     ");
 
 $script = <<< JS
@@ -165,7 +165,7 @@ echo '</pre>';*/
                             'stacking' => 'percent',
                             'dataLabels' => [
                                 'enabled' => true,
-                                'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
+                                'format' => '{point.percentage:.2f}% ({point.qty:.0f})',
                                 'color' => 'black',
                                 //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                                 'style' => [

@@ -90,11 +90,11 @@ class WipPaintingMonitoringController extends Controller
     	foreach ($wip_painting_data_arr as $wip_painting_data) {
     		$tmp_data[$wip_painting_data->week]['category'][] = date('Y-m-d', strtotime($wip_painting_data->due_date));
 
-    		$order_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_order / $wip_painting_data->total_plan) * 100);
-    		//$created_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_created / $wip_painting_data->total_plan) * 100);
-    		$started_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_started / $wip_painting_data->total_plan) * 100);
-    		$completed_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_completed / $wip_painting_data->total_plan) * 100);
-    		$handover_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_handover / $wip_painting_data->total_plan) * 100);
+    		$order_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_order / $wip_painting_data->total_plan) * 100, 2);
+    		//$created_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_created / $wip_painting_data->total_plan) * 100, 2);
+    		$started_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_started / $wip_painting_data->total_plan) * 100, 2);
+    		$completed_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_completed / $wip_painting_data->total_plan) * 100, 2);
+    		$handover_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_handover / $wip_painting_data->total_plan) * 100, 2);
 
     		$tmp_data[$wip_painting_data->week]['order_percentage'][] = [
     			'y' => $order_percentage == 0 ? null : $order_percentage,
@@ -251,6 +251,7 @@ class WipPaintingMonitoringController extends Controller
             <th>Model</th>
             <th class="text-center">Child</th>
             <th>Child Description</th>
+            <th class="text-center">Lot Qty</th>
             <th class="text-center">Qty</th>
             <th class="text-center" style="min-width: 70px;">FA Start</th>
             <th class="text-center" style="min-width: 70px;">Start Plan</th>
@@ -259,8 +260,9 @@ class WipPaintingMonitoringController extends Controller
             <th class="text-center" style="min-width: 70px;">Complete Actual</th>
             <th class="text-center" style="min-width: 70px;">Pulled By Next Actual</th>
             <th class="text-center" style="min-width: 70px;">Delay Category</th>
+            <th class="" style="min-width: 70px;">Delay Remark</th>
         </tr></thead>';
-        $data .= '<tbody style="font-size: 9px;">';
+        $data .= '<tbody style="font-size: 10px;">';
 
         foreach ($remark_data_arr as $value) {
             $start_plan = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));
@@ -283,6 +285,7 @@ class WipPaintingMonitoringController extends Controller
                     <td>' . $value['model_group'] . '</td>
                     <td>' . $value['child'] . '</td>
                     <td>' . $value['child_desc'] . '</td>
+                    <td class="text-center">' . (int)$value['fa_lot_qty'] . '</td>
                     <td class="text-center">' . (int)$value['summary_qty'] . '</td>
                     <td class="text-center">' . $fa_start . '</td>
                     <td class="text-center">' . $start_plan . '</td>
@@ -291,6 +294,7 @@ class WipPaintingMonitoringController extends Controller
                     <td class="text-center text-green">' . $end_actual . '</td>
                     <td class="text-center text-green">' . $handover_actual . '</td>
                     <td class="text-center text-red">' . $value['delay_category'] . '</td>
+                    <td class="text-red">' . $value['delay_detail'] . '</td>
                 </tr>
             ';
             
@@ -334,7 +338,7 @@ class WipPaintingMonitoringController extends Controller
         }
 
         $selected_column = [
-            'stage', 'due_date', 'start_date', 'source_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'model_group', 'child_desc', 'summary_qty', 'parent', 'session_id'
+            'stage', 'due_date', 'start_date', 'source_date', 'start_job', 'end_job', 'hand_over_job', 'child_analyst_desc', 'slip_id', 'model_group', 'child_desc', 'summary_qty', 'fa_lot_qty', 'parent', 'session_id'
         ];
 
         $remark_data_arr = WipPlanActualReport::find()
@@ -377,7 +381,7 @@ class WipPaintingMonitoringController extends Controller
             <th class="text-center" style="min-width: 70px;">Complete Actual</th>
             <th class="text-center" style="min-width: 70px;">Pulled By Next Actual</th>
 		</tr></thead>';
-        $data .= '<tbody style="font-size: 9px;">';
+        $data .= '<tbody style="font-size: 10px;">';
 		foreach ($remark_data_arr as $value) {
             if (in_array($value['stage'], $stage) && $value['due_date'] == $due_date) {
                 $start_plan = $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date']));

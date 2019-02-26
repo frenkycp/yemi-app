@@ -47,6 +47,9 @@ use Yii;
  * @property string $delay_userid
  * @property string $delay_userid_desc
  * @property string $delay_last_update
+ * @property double $fa_lot_qty
+ * @property string $fa_lot_no
+ * @property string $LINE
  * @property string $aliasModel
  */
 abstract class WipPlanActualReport extends \yii\db\ActiveRecord
@@ -76,10 +79,10 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'bun_02', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'created_user_desc', 'start_job_user_desc', 'end_job_user_desc', 'hand_over_job_user_desc', 'urut', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc'], 'string'],
+            [['period', 'slip_id', 'child_analyst', 'child_analyst_desc', 'model_group', 'parent', 'parent_desc', 'child', 'child_desc', 'bun_02', 'stage', 'problem', 'slip_id_reference', 'fullfilment_stat', 'upload_id', 'period_line', 'created_user_desc', 'start_job_user_desc', 'end_job_user_desc', 'hand_over_job_user_desc', 'urut', 'delay_category', 'delay_detail', 'delay_userid', 'delay_userid_desc', 'fa_lot_no', 'LINE'], 'string'],
             [['week', 'session_id'], 'integer'],
             [['start_date', 'due_date', 'post_date', 'start_job', 'end_job', 'hand_over_job', 'source_date', 'delay_last_update'], 'safe'],
-            [['summary_qty', 'bom_level', 'gojek_req_qty'], 'number']
+            [['summary_qty', 'bom_level', 'gojek_req_qty', 'fa_lot_qty'], 'number']
         ];
     }
 
@@ -127,6 +130,9 @@ abstract class WipPlanActualReport extends \yii\db\ActiveRecord
             'delay_userid' => 'Delay Userid',
             'delay_userid_desc' => 'Delay Userid Desc',
             'delay_last_update' => 'Delay Last Update',
+            'fa_lot_qty' => 'Fa Lot Qty',
+            'fa_lot_no' => 'Fa Lot No',
+            'LINE' => 'L I N E',
         ];
     }
 

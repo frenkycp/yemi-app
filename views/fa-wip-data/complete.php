@@ -49,10 +49,10 @@ $this->title = [
             <div class="col-md-6">
                 <div class="row">
                     <div class="col-md-6">
-                        <?= $form->field($model, 'summary_qty')->textInput(['type' => 'number', 'readonly' => true])->label('Lot Qty') ?>
+                        <?= $form->field($model, 'fa_lot_qty')->textInput(['type' => 'number', 'readonly' => true])->label('Lot Qty') ?>
                     </div>
                     <div class="col-md-6">
-                        <?= $form->field($model, 'complete_qty')->textInput(['type' => 'number'])->label('Complete Qty') ?>
+                        <?= $form->field($model, 'act_qty')->textInput(['type' => 'number'])->label('Complete Qty') ?>
                     </div>
                 </div>
                 <div class="panel panel-danger">
