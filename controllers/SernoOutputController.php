@@ -77,19 +77,15 @@ class SernoOutputController extends base\SernoOutputController
 
     	$weekToday = SernoCalendar::find()->where(['etd' => date('Y-m-d')])->one()->week_ship;
 
-        $start_week = 1;
-        $end_week = 52;
-
+        $start_week = 0;
+        $end_week = 0;
         if(count($min_max_week) > 0)
         {
-            $start_week = $min_max_week->max_week - 11;
-            if ($start_week < 1) {
-                $start_week = 1;
-            }
+            $start_week = $min_max_week->min_week;
             $end_week = $min_max_week->max_week;
         }
 
-        if ($weekToday == null) {
+        if ($weekToday == null || $weekToday < $start_week || $weekToday > $end_week) {
             $weekToday = $start_week;
         }
 
@@ -99,6 +95,7 @@ class SernoOutputController extends base\SernoOutputController
         	'endWeek' => $end_week,
             'year' => $year,
             'month' => $month,
+            'period' => $period,
         ]);
     }
 
