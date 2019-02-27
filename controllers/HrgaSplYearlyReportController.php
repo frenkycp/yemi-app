@@ -24,28 +24,55 @@ class HrgaSplYearlyReportController extends Controller
 		$data_final = [];
 		$budget_sum_arr = [];
 		$actual_sum_arr = [];
+		$year = date('Y');
 
-		$spl_data_arr = SplViewActVsBgt03::find()->all();
+		if (\Yii::$app->request->get('year') !== null) {
+			$year = \Yii::$app->request->get('year');
+		}
 
-		foreach ($spl_data_arr as $key => $value) {
-			if (!in_array($value->PERIOD, $categories)) {
-				$categories[] = $value->PERIOD;
+		$spl_data_arr = SplViewActVsBgt03::find()
+		->where([
+			'LEFT(PERIOD, 4)' => $year
+		])
+		->orderBy('PERIOD, DIVISION')
+		->all();
+
+		for ($i = 1; $i <= 12; $i++) {
+			$period = $year . str_pad($i, 2, '0', STR_PAD_LEFT);
+			$categories[] = $period;
+
+			$tmp_sum_budget = 0;
+			$tmp_sum_actual = 0;
+			for ($j = 1; $j < 3; $j++) {
+				$budget = 0;
+				$actual = 0;
+				$spl_data = SplViewActVsBgt03::find()
+				->where([
+					'PERIOD' => $period,
+					'DIVISION' => $j
+				])
+				->one();
+
+				if ($spl_data->PERIOD != null) {
+					$budget = (double)$spl_data->BUDGET;
+					$actual = (double)$spl_data->ACTUAL;
+				}
+				/*foreach ($spl_data_arr as $value) {
+					if ($value->DIVISION == $j && $value->PERIOD == $period) {
+						$budget = (double)$value->BUDGET;
+						$actual = (double)$value->ACTUAL;
+					}
+				}*/
+				if ($budget == 0) {
+					$budget = null;
+				}
+				$data[$j]['BUDGET'][] = $budget;
+				$data[$j]['ACTUAL'][] = $actual == 0 ? $budget : $actual;
+				$tmp_sum_budget += $budget;
+				$tmp_sum_actual += $actual;
 			}
-
-			if (!isset($budget_sum_arr[$value->PERIOD])) {
-				$budget_sum_arr[$value->PERIOD] = $value->BUDGET;
-			} else {
-				$budget_sum_arr[$value->PERIOD] += $value->BUDGET;
-			}
-
-			if (!isset($actual_sum_arr[$value->PERIOD])) {
-				$actual_sum_arr[$value->PERIOD] = $value->ACTUAL;
-			} else {
-				$actual_sum_arr[$value->PERIOD] += $value->ACTUAL;
-			}
-
-			$data[$value->DIVISION]['BUDGET'][] = $value->BUDGET;
-			$data[$value->DIVISION]['ACTUAL'][] = $value->ACTUAL == 0 ? $value->BUDGET : $value->ACTUAL;
+			$budget_sum_arr[$period] = $tmp_sum_budget;
+			$actual_sum_arr[$period] = $tmp_sum_actual;
 		}
 
 		$tmp_budget_data = [];
@@ -93,8 +120,10 @@ class HrgaSplYearlyReportController extends Controller
 		];
 
 		return $this->render('index', [
-			'data' => $data_final,
-			'categories' => $categories
+			'data' => $data,
+			'data_final' => $data_final,
+			'categories' => $categories,
+			'year' => $year,
 		]);
 	}
 }

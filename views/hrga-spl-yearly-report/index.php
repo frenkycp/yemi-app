@@ -38,6 +38,26 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data);
 echo '</pre>';*/
 ?>
+
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['hrga-spl-yearly-report/index']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-2">
+        <?= Html::label('Year'); ?>
+        <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+</div>
+<br/>
+
+<?php ActiveForm::end(); ?>
+
 <div class="box box-primary">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h3>
@@ -86,7 +106,7 @@ echo '</pre>';*/
                         ]
             		]
             	],
-            	'series' => $data
+            	'series' => $data_final
             ],
         ]);
         ?>
