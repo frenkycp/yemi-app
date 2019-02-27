@@ -269,7 +269,11 @@ $grid_column = [
                 }
 
                 $rate = $budget_rate->RATE;
-                $usd_price = round($price / $rate);
+                $usd_price = 0;
+                if ($rate != 0) {
+                    $usd_price = round($price / $rate);
+                }
+                
 
                 if ($usd_price <= 1000) {
                     return 'Expenses';
