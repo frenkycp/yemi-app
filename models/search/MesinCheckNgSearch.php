@@ -18,8 +18,8 @@ class MesinCheckNgSearch extends MesinCheckNg
 public function rules()
 {
 return [
-[['urutan'], 'integer'],
-            [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'mesin_last_update', 'repair_plan', 'repair_aktual', 'repair_user_id', 'repair_user_desc', 'repair_status', 'repair_pic', 'repair_note', 'down_time_stat'], 'safe'],
+[['urutan', 'down_time', 'non_down_time'], 'integer'],
+            [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'mesin_last_update', 'repair_plan', 'repair_aktual', 'repair_user_id', 'repair_user_desc', 'repair_status', 'repair_pic', 'repair_note'], 'safe'],
 ];
 /*return [
 [['urutan'], 'integer'],
@@ -63,7 +63,8 @@ $query->andFilterWhere([
             'urutan' => $this->urutan,
             'repair_plan' => $this->repair_plan,
             'repair_aktual' => $this->repair_aktual,
-            'down_time_stat' => $this->down_time_stat,
+            'down_time' => $this->down_time,
+            'non_down_time' => $this->non_down_time,
         ]);
 
         $query->andFilterWhere(['like', 'location', $this->location])

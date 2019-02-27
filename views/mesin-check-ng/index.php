@@ -374,32 +374,22 @@ $grid_columns = [
         //'hidden' => true
     ],
     [
-        'attribute' => 'down_time_stat',
-        'label' => 'Down Time/<br/>Non Down Time',
-        'value' => function($model){
-            $downtime = '-';
-            if ($model->down_time_stat == 0) {
-                $downtime = '???';
-            } elseif ($model->down_time_stat == 1) {
-                $downtime = 'Down Time';
-            } elseif ($model->down_time_stat == 2) {
-                $downtime = 'Non Down Time';
-            }
-            return $downtime;
-        },
-        'encodeLabel' => false,
+        'attribute' => 'down_time',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filter' => [
-            0 => '???',
-            1 => 'Down Time',
-            2 => 'Non Down Time'
-        ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => 'font-size: 12px; text-align: center;'
         ],
-        //'hidden' => true
+    ],
+    [
+        'attribute' => 'non_down_time',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; text-align: center;'
+        ],
     ],
 ]
 ?>

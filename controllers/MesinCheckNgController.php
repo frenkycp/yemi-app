@@ -140,7 +140,12 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 		$model = $this->findModel($urutan);
 
 		if ($model->load($_POST) && $model->save()) {
-			return $this->redirect(Url::previous());
+			$model->non_down_time = (int)$model->getClosingDayTotal() - (int)$model->down_time;
+			if ($model->save()) {
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($model->errors);
+			}
 		} else {
 			return $this->render('update', [
 				'model' => $model,
