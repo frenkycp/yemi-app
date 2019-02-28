@@ -6,6 +6,7 @@ use yii\web\Controller;
 use dmstr\bootstrap\Tabs;
 use yii\helpers\Url;
 use app\models\SplViewActVsBgt03;
+use app\models\FiscalTbl;
 use yii\web\JsExpression;
 
 class HrgaSplYearlyReportController extends Controller
@@ -25,20 +26,41 @@ class HrgaSplYearlyReportController extends Controller
 		$budget_sum_arr = [];
 		$actual_sum_arr = [];
 		$year = date('Y');
+		$fiscal = FiscalTbl::find()
+		->select('FISCAL')
+		->where([
+			'PERIOD' => date('Ym')
+		])
+		->one()
+		->FISCAL;
+		if ($fiscal == null) {
+			$fiscal = FiscalTbl::find()
+			->select([
+				'FISCAL' => 'MAX(FISCAL)'
+			])
+			->one()
+			->FISCAL;
+		}
+
+		if (\Yii::$app->request->get('fiscal') !== null) {
+			$fiscal = \Yii::$app->request->get('fiscal');
+		}
 
 		if (\Yii::$app->request->get('year') !== null) {
 			$year = \Yii::$app->request->get('year');
 		}
 
-		$spl_data_arr = SplViewActVsBgt03::find()
+		$period_data_arr = FiscalTbl::find()
+		->select('PERIOD')
 		->where([
-			'LEFT(PERIOD, 4)' => $year
+			'FISCAL' => $fiscal
 		])
-		->orderBy('PERIOD, DIVISION')
+		->orderBy('PERIOD')
+		->asArray()
 		->all();
 
-		for ($i = 1; $i <= 12; $i++) {
-			$period = $year . str_pad($i, 2, '0', STR_PAD_LEFT);
+		foreach ($period_data_arr as $period_data) {
+			$period = $period_data['PERIOD'];
 			$categories[] = $period;
 
 			$tmp_sum_budget = 0;
@@ -73,6 +95,10 @@ class HrgaSplYearlyReportController extends Controller
 			}
 			$budget_sum_arr[$period] = $tmp_sum_budget;
 			$actual_sum_arr[$period] = $tmp_sum_actual;
+		}
+
+		for ($i = 1; $i <= 12; $i++) {
+			
 		}
 
 		$tmp_budget_data = [];
@@ -124,6 +150,7 @@ class HrgaSplYearlyReportController extends Controller
 			'data_final' => $data_final,
 			'categories' => $categories,
 			'year' => $year,
+			'fiscal' => $fiscal,
 		]);
 	}
 }
