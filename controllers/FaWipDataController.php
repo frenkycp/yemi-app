@@ -89,7 +89,7 @@ class FaWipDataController extends Controller
 
     	try {
 			if ($model->load(\Yii::$app->request->post())) {
-				$handover_qty = $model->complete_qty;
+				$handover_qty = $model->act_qty;
 				$delay_category = $model->delay_category;
 				$delay_detail = $model->delay_detail;
 				$user_id = \Yii::$app->user->identity->username;
