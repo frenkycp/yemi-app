@@ -23,12 +23,8 @@ class GojekDriverUtilityController extends Controller
 		$driver_arr = GojekTbl::find()
 		->select('GOJEK_ID, GOJEK_DESC')
 		->where([
-			'<>', 'TERMINAL', 'Z'
+			'SOURCE' => 'WIP'
 		])
-		->andWhere([
-			'<>', 'TERMINAL', 'K'
-		])
-		->groupBy('GOJEK_ID, GOJEK_DESC')
 		->orderBy('GOJEK_DESC')->all();
 
 		$view_data_arr = GojekView02::find()
@@ -41,7 +37,6 @@ class GojekDriverUtilityController extends Controller
 			->where([
 				'GOJEK_ID' => \Yii::$app->request->get('driver_nik')
 			])
-			->groupBy('GOJEK_ID, GOJEK_DESC')
 			->orderBy('GOJEK_DESC')->all();
 		}
 		
@@ -102,17 +97,6 @@ class GojekDriverUtilityController extends Controller
 		foreach ($data_arr as $key => $value) {
 			$return_arr[] = $value;
 		}
-		return $return_arr;
-	}
-
-	public function getDriverArr()
-	{
-		$driver_arr = GojekTbl::find()->select('GOJEK_ID, GOJEK_DESC')->groupBy('GOJEK_ID, GOJEK_DESC')->orderBy('GOJEK_DESC')->all();
-		$return_arr = [];
-		foreach ($driver_arr as $key => $value) {
-			$return_arr[] = $value->GOJEK_DESC;
-		}
-
 		return $return_arr;
 	}
 }

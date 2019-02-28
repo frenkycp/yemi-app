@@ -17,7 +17,9 @@ use Yii;
  * @property string $STAGE
  * @property string $LAST_UPDATE
  * @property string $TERMINAL
+ * @property string $TERMINAL_NAME
  * @property string $HADIR
+ * @property string $SOURCE
  * @property string $aliasModel
  */
 abstract class GojekTbl extends \yii\db\ActiveRecord
@@ -48,7 +50,7 @@ abstract class GojekTbl extends \yii\db\ActiveRecord
     {
         return [
             [['GOJEK_ID'], 'required'],
-            [['GOJEK_ID', 'GOJEK_DESC', 'from_loc', 'to_loc', 'STAGE', 'TERMINAL', 'HADIR'], 'string'],
+            [['GOJEK_ID', 'GOJEK_DESC', 'from_loc', 'to_loc', 'STAGE', 'TERMINAL', 'TERMINAL_NAME', 'HADIR', 'SOURCE'], 'string'],
             [['GOJEK_VALUE'], 'number'],
             [['LAST_UPDATE'], 'safe'],
             [['GOJEK_ID'], 'unique']
@@ -69,7 +71,9 @@ abstract class GojekTbl extends \yii\db\ActiveRecord
             'STAGE' => 'S T A G E',
             'LAST_UPDATE' => 'L A S T U P D A T E',
             'TERMINAL' => 'T E R M I N A L',
+            'TERMINAL_NAME' => 'T E R M I N A L N A M E',
             'HADIR' => 'H A D I R',
+            'SOURCE' => 'S O U R C E',
         ];
     }
 

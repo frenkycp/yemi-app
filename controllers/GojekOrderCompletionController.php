@@ -27,10 +27,7 @@ class GojekOrderCompletionController extends Controller
 
 		$driver_arr = GojekTbl::find()
 		->where([
-			'<>', 'TERMINAL', 'Z'
-		])
-		->andWhere([
-			'<>', 'TERMINAL', 'K'
+			'SOURCE' => 'WIP'
 		])
 		->orderBy('GOJEK_DESC')
 		->all();

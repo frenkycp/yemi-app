@@ -10,14 +10,8 @@ use app\models\GojekTbl;
 use app\models\GojekOrderTbl;
 use yii\helpers\ArrayHelper;
 
-class GoPickingOrderCompletionController extends Controller
+class GoMachineOrderCompletionController extends Controller
 {
-
-	/**/public function behaviors()
-    {
-        //apply role_action table for privilege (doesn't apply to super admin)
-        return \app\models\Action::getAccess($this->id);
-    }
 	
 	public function actionIndex()
 	{
@@ -27,9 +21,9 @@ class GoPickingOrderCompletionController extends Controller
 
 		$driver_arr = GojekTbl::find()
 		->where([
-			'SOURCE' => 'MAT'
+			'SOURCE' => 'MCH'
 		])
-		->orderBy('TERMINAL DESC, GOJEK_DESC ASC')
+		->orderBy('GOJEK_DESC')
 		->all();
 
 		$tmp_data = [];
@@ -89,13 +83,6 @@ class GoPickingOrderCompletionController extends Controller
 			$tmp_data[$nik]['from_loc'] = $value->from_loc;
 			$tmp_data[$nik]['to_loc'] = $value->to_loc;
 			$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
-
-			if ($value->TERMINAL == 'Z') {
-				$factory = 'FACTORY-1';
-			} elseif ($value->TERMINAL == 'K') {
-				$factory = 'FACTORY-2';
-			}
-			$tmp_data[$nik]['factory'] = $factory;
 		}
 
 		$fix_data = [];
@@ -118,7 +105,6 @@ class GoPickingOrderCompletionController extends Controller
 			$fix_data[$key]['to_loc'] = $value['to_loc'];
 			$fix_data[$key]['last_update'] = $value['last_update'];
 			$fix_data[$key]['todays_point'] = isset($driver_point_arr[$key]) ? $driver_point_arr[$key] : 0;
-			$fix_data[$key]['factory'] = $value['factory'];
 		}
 
 		return $this->render('index', [
@@ -153,16 +139,13 @@ class GoPickingOrderCompletionController extends Controller
 		$data .= 
 		'<thead style="font-size: 12px;"><tr class="info">
             <th class="text-center">Slip No.</th>
-            <th>Model</th>
-            <th class="text-center">Item</th>
-            <th>Item Description</th>
-            <th class="text-center">Qty</th>
-            <th class="text-center">From</th>
-            <th class="text-center">To</th>
-            <th class="text-center">Request For</th>
+            <th class="text-center">Location</th>
+            <th class="text-center">Machine ID</th>
+            <th>Machine Name</th>
+            <th class="text-center">Model</th>
             <th class="text-center">Issued</th>
-            <th class="text-center">Departed</th>
-            <th class="text-center">Arrived</th>
+            <th class="text-center">START</th>
+            <th class="text-center">END</th>
 		</tr></thead>';
 		$data .= '<tbody style="font-size: 10px;">';
 
@@ -171,17 +154,19 @@ class GoPickingOrderCompletionController extends Controller
 			$issued = $value->issued_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->issued_date));
 			$departed = $value->daparture_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->daparture_date));
 			$arrived = $value->arrival_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->arrival_date));
+			$row_class = '';
 			$qty = $value->quantity;
+			if ($value->quantity_original !== null) {
+				$row_class = 'danger';
+				$qty = $value->quantity . ' of ' . $value->quantity_original;
+			}
 			$data .= '
-				<tr>
+				<tr class="' . $row_class . '">
 					<td class="text-center">' . $value->slip_id . '</td>
-					<td>' . $value->model . '</td>
+					<td class="text-center">' . $value->to_loc . '</td>
                     <td class="text-center">' . $value->item . '</td>
                     <td>' . $value->item_desc . '</td>
-                    <td class="text-center">' . $qty . '</td>
-                    <td class="text-center">' . $value->from_loc . '</td>
-                    <td class="text-center">' . $value->to_loc . '</td>
-                    <td class="text-center" style="min-width: 65px;">' . $request_for . '</td>
+                    <td class="text-center">' . $value->model . '</td>
                     <td class="text-center" style="min-width: 65px;">' . $issued . '</td>
                     <td class="text-center" style="min-width: 65px;">' . $departed . '</td>
                     <td class="text-center" style="min-width: 65px;">' . $arrived . '</td>

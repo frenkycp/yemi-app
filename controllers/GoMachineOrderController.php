@@ -1,0 +1,27 @@
+<?php
+namespace app\controllers;
+
+use dmstr\bootstrap\Tabs;
+use yii\helpers\Url;
+use app\models\search\GoMachineOrderSearch;
+use yii\web\Controller;
+
+class GoMachineOrderController extends Controller
+{
+    public function actionIndex()
+    {
+    	$searchModel  = new GoMachineOrderSearch;
+	    $searchModel->source = 'MCH';
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('index', [
+			'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
+    }
+}

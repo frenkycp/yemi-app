@@ -35,8 +35,9 @@ class GojekDriverAvgCompletionController extends Controller
         $period = $year . $month;
 
 		$tmp_driver_arr = GojekTbl::find()
-		->where(['<>', 'TERMINAL', 'Z'])
-		->andWhere(['<>', 'TERMINAL', 'K'])
+		->where([
+			'SOURCE' => 'WIP'
+		])
 		->orderBy('GOJEK_DESC')
 		->all();
 
