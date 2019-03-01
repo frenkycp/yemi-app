@@ -71,6 +71,7 @@ class SmtPerformanceDataSearch extends WipEff03
             'LINE' => $this->LINE,
             'SMT_SHIFT' => $this->SMT_SHIFT,
             'child_01' => $this->child_01,
+            'child_analyst' => $this->child_analyst,
         ]);
         /*$query->andFilterWhere([
                     'YEAR' => $this->YEAR,
