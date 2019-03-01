@@ -10,6 +10,12 @@ use yii\helpers\Url;
 */
 class GoMachineController extends \app\controllers\base\GoMachineController
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
 	public function actionOrder($id)
 	{
 		$model = $this->findModel($id);

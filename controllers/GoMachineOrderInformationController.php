@@ -8,6 +8,12 @@ use yii\web\Controller;
 
 class GoMachineOrderInformationController extends Controller
 {
+    public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
     public function actionIndex()
     {
     	$model = GojekOrderTbl::find()
@@ -15,7 +21,7 @@ class GoMachineOrderInformationController extends Controller
     		'source' => 'MCH',
     		'STAT' => 'O'
     	])
-    	->orderBy('GOJEK_DESC')
+    	->orderBy('GOJEK_DESC, issued_date')
     	->all();
 
 		Tabs::clearLocalStorage();
