@@ -46,9 +46,11 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '120px',
+        'pageSummary' => 'Total',
     ],
     [
-        'attribute' => 'sernoOutput.etd',
+        'attribute' => 'etd_ship',
+        'value' => 'sernoOutput.etd',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '120px',
@@ -98,6 +100,7 @@ $gridColumns = [
         'attribute' => 'total',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'pageSummary' => true,
     ],
     [
         'attribute' => 'loct',
@@ -145,7 +148,7 @@ $gridColumns = [
             'columns' => $gridColumns,
             'hover' => true,
             'bordered' => true,
-            //'showPageSummary' => true,
+            'showPageSummary' => true,
             //'condensed' => true,
             'striped' => true,
             //'floatHeader'=>true,
@@ -155,8 +158,8 @@ $gridColumns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
-                //'{export}',
-                //'{toggleData}',
+                '{export}',
+                '{toggleData}',
             ],
             // set export properties
             'export' => [

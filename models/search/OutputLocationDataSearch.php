@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['flo', 'adv'], 'integer'],
-            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'so', 'loct', 'rfid_no'], 'safe'],
+            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'so', 'loct', 'speaker_model', 'rfid_no'], 'safe'],
 ];
 }
 
@@ -46,12 +46,14 @@ $query = SernoInput::find()
     'plan',
     'proddate',
     'tb_serno_input.flo',
-    'gmc',
+    'tb_serno_input.gmc',
     'total' => 'COUNT(sernum)',
     'loct',
     'loct_time'
 ])
 ->joinWith('sernoRfid')
+->joinWith('sernoMaster')
+->joinWith('sernoOutput')
 ->where('tb_serno_input.flo <> 0')
 ->groupBy('tb_serno_input.flo');
 $this->load($params);
@@ -82,8 +84,10 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
-            ->andFilterWhere(['like', 'gmc', $this->gmc])
+            ->andFilterWhere(['like', 'tb_serno_input.gmc', $this->gmc])
             ->andFilterWhere(['like', 'line', $this->line])
+            ->andFilterWhere(['like', 'tb_serno_output.etd', $this->etd_ship])
+            ->andFilterWhere(['like', 'model', $this->speaker_model])
             ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
             ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date])
