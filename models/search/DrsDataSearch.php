@@ -63,10 +63,13 @@ $query->andFilterWhere([
             'NG_QTY' => $this->NG_QTY,
             'LOT_QTY' => $this->LOT_QTY,
             'REASON_ID' => $this->REASON_ID,
+            'DRS_NO' => $this->DRS_NO,
         ]);
 
 $query->andFilterWhere(['like', 'CONVERT(VARCHAR(10),DRS_DATE,120)', $this->DRS_DATE])
       ->andFilterWhere(['like', 'REMARK', $this->REMARK])
+      ->andFilterWhere(['like', 'DEBIT_PUR_LOC_DESC', $this->DEBIT_PUR_LOC_DESC])
+      ->andFilterWhere(['like', 'DRS_PUR_LOC_DESC', $this->DRS_PUR_LOC_DESC])
       ->andFilterWhere(['like', 'ITEM_DESC', $this->ITEM_DESC]);
 
 /*$query->andFilterWhere([

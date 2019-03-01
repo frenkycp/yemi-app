@@ -24,6 +24,17 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
 
 $gridColumns = [
     [
+        'attribute' => 'DRS_NO',
+        'label' => 'DRS NO',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
+        ],
+    ],
+    [
         'attribute' => 'DRS_DATE',
         'label' => 'Date',
         'value' => function($model){
@@ -73,7 +84,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => 'font-size: 12px; min-width: 130px;'
         ],
     ],
     [
@@ -152,10 +163,9 @@ $gridColumns = [
         'encodeLabel' => false,
         'vAlign' => 'middle',
         'width' => '100px',
-        'mergeHeader' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => 'font-size: 12px; min-width: 130px;'
         ],
     ],
     /*[
@@ -195,6 +205,28 @@ $gridColumns = [
         ],
     ],*/
     [
+        'attribute' => 'DSR_STAT',
+        'label' => 'DRS Status',
+        'value' => function($model){
+            if ($model->DSR_STAT == 'O') {
+                return 'OPEN';
+            } else {
+                return 'CLOSE';
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+        'filter' => [
+            'O' => 'OPEN',
+            'C' => 'CLOSE'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'PIC_DELIVERY',
         'label' => 'Deliv. PIC',
         'hAlign' => 'center',
@@ -206,25 +238,6 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    /*[
-        'attribute' => 'DSR_STAT',
-        'label' => 'Status',
-        'value' => function($model){
-            if ($model->DSR_STAT == 'O') {
-                return 'OPEN';
-            } else {
-                return 'CLOSE';
-            }
-        },
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '100px',
-        'mergeHeader' => true,
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],*/
     [
         'attribute' => 'REFERENSI_NOTE',
         'label' => 'Reference',
@@ -286,10 +299,9 @@ $gridColumns = [
         'encodeLabel' => false,
         'vAlign' => 'middle',
         'width' => '100px',
-        'mergeHeader' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => 'font-size: 12px; min-width: 130px;'
         ],
     ],
     [
@@ -364,7 +376,7 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'DEBIT_STAT',
         'label' => 'Debit Status',
         'value' => function($model){
@@ -382,7 +394,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'DEBIT_DATE',
         'label' => 'Debit Date',
