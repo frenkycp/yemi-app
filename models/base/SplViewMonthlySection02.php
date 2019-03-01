@@ -12,6 +12,7 @@ use Yii;
  * @property string $PERIOD
  * @property string $CC_GROUP
  * @property string $CC_DESC
+ * @property integer $total_karyawan
  * @property double $lembur_total
  * @property double $lembur_min
  * @property double $lembur_max
@@ -46,6 +47,7 @@ abstract class SplViewMonthlySection02 extends \yii\db\ActiveRecord
     {
         return [
             [['PERIOD', 'CC_GROUP', 'CC_DESC'], 'string'],
+            [['total_karyawan'], 'integer'],
             [['lembur_total', 'lembur_min', 'lembur_max', 'lembur_avg'], 'number']
         ];
     }
@@ -59,6 +61,7 @@ abstract class SplViewMonthlySection02 extends \yii\db\ActiveRecord
             'PERIOD' => 'P E R I O D',
             'CC_GROUP' => 'C C G R O U P',
             'CC_DESC' => 'C C D E S C',
+            'total_karyawan' => 'Total Karyawan',
             'lembur_total' => 'Lembur Total',
             'lembur_min' => 'Lembur Min',
             'lembur_max' => 'Lembur Max',

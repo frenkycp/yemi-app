@@ -59,7 +59,32 @@ $gridColumns = [
     ],
     [
         'attribute' => 'lembur_total',
-        'label' => 'Overtime Total',
+        'label' => 'Overtime Total<br/>(A)',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'total_karyawan',
+        'label' => 'Emp. Total<br/>(B)',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'lembur_avg',
+        'label' => 'OT (AVG)<br/>(A / B)',
+        'encodeLabel' => false,
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
@@ -82,17 +107,6 @@ $gridColumns = [
     [
         'attribute' => 'lembur_max',
         'label' => 'OT (MAX)',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'mergeHeader' => true,
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
-        ],
-    ],
-    [
-        'attribute' => 'lembur_avg',
-        'label' => 'OT (AVG)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
