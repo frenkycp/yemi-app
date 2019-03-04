@@ -20,6 +20,7 @@ use Yii;
  * @property double $BALANCE_AMT
  * @property string $STATUS
  * @property string $CONTROL
+ * @property string $FILTER
  * @property string $aliasModel
  */
 abstract class AccountBudget extends \yii\db\ActiveRecord
@@ -50,7 +51,7 @@ abstract class AccountBudget extends \yii\db\ActiveRecord
     {
         return [
             [['BUDGET_ID'], 'required'],
-            [['BUDGET_ID', 'ACCOUNT', 'ACCOUNT_DESC', 'DEP', 'DEP_DESC', 'STATUS', 'CONTROL'], 'string'],
+            [['BUDGET_ID', 'ACCOUNT', 'ACCOUNT_DESC', 'DEP', 'DEP_DESC', 'STATUS', 'CONTROL', 'FILTER'], 'string'],
             [['PERIOD'], 'integer'],
             [['BUDGET_AMT', 'CONSUME_AMT', 'BALANCE_AMT'], 'number'],
             [['BUDGET_ID'], 'unique']
@@ -63,17 +64,18 @@ abstract class AccountBudget extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'BUDGET_ID' => 'Budget  ID',
-            'ACCOUNT' => 'Account',
-            'ACCOUNT_DESC' => 'Account  Desc',
-            'DEP' => 'Dep',
-            'DEP_DESC' => 'Dep  Desc',
-            'PERIOD' => 'Period',
-            'BUDGET_AMT' => 'Budget  Amt',
-            'CONSUME_AMT' => 'Consume  Amt',
-            'BALANCE_AMT' => 'Balance  Amt',
-            'STATUS' => 'Status',
-            'CONTROL' => 'Control',
+            'BUDGET_ID' => 'B U D G E T I D',
+            'ACCOUNT' => 'A C C O U N T',
+            'ACCOUNT_DESC' => 'A C C O U N T D E S C',
+            'DEP' => 'D E P',
+            'DEP_DESC' => 'D E P D E S C',
+            'PERIOD' => 'P E R I O D',
+            'BUDGET_AMT' => 'B U D G E T A M T',
+            'CONSUME_AMT' => 'C O N S U M E A M T',
+            'BALANCE_AMT' => 'B A L A N C E A M T',
+            'STATUS' => 'S T A T U S',
+            'CONTROL' => 'C O N T R O L',
+            'FILTER' => 'F I L T E R',
         ];
     }
 

@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use app\models\AccountBudget;
 use app\models\PrReportView;
+use app\models\FiscalTbl;
 
 class BudgetExpensesController extends Controller
 {
@@ -22,22 +23,72 @@ class BudgetExpensesController extends Controller
 		$data = [];
 		$tmp_data = [];
 		$dept_arr = $this->getDeptArr();
-		$categories = $this->getPeriodArr('201804', '201903');
 
 		$model = new \yii\base\DynamicModel([
-	        'dept'
+	        'dept', 'fiscal', 'budget_type'
 	    ]);
-	    $model->addRule('dept', 'string');
+	    $model->addRule(['dept', 'fiscal', 'budget_type'], 'string');
+
+	    $fiscal = FiscalTbl::find()
+		->select('FISCAL')
+		->where([
+			'PERIOD' => date('Ym')
+		])
+		->one()
+		->FISCAL;
+		if ($fiscal == null) {
+			$fiscal = FiscalTbl::find()
+			->select([
+				'FISCAL' => 'MAX(FISCAL)'
+			])
+			->one()
+			->FISCAL;
+		}
+		$model->fiscal = $fiscal;
 
 	    if($model->load(\Yii::$app->request->get())){
 	        if ($model->dept != '') {
 	        	$dept_arr = [$model->dept];
 	        }
+	        $fiscal = $model->fiscal;
 	    }
-		
+
+	    $categories = $this->getPeriodArr($fiscal);
+
+		$budget_data_arr = AccountBudget::find()
+		->select([
+			'PERIOD', 'DEP_DESC',
+			'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
+			'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
+		])
+		->where([
+			'CONTROL' => 'Y',
+			'PERIOD' => $categories
+		])
+		->groupBy('PERIOD, DEP_DESC')
+		->asArray()
+		->all();
+
+		if ($model->budget_type != null) {
+			$budget_data_arr = AccountBudget::find()
+			->select([
+				'PERIOD', 'DEP_DESC',
+				'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
+				'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
+			])
+			->where([
+				'CONTROL' => 'Y',
+				'PERIOD' => $categories,
+				'FILTER' => $model->budget_type
+			])
+			->groupBy('PERIOD, DEP_DESC')
+			->asArray()
+			->all();
+		}
+
 		foreach ($dept_arr as $dept) {
 			foreach ($categories as $category) {
-				$budget_data = AccountBudget::find()
+				/*$budget_data = AccountBudget::find()
 				->select([
 					'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
 					'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
@@ -47,17 +98,31 @@ class BudgetExpensesController extends Controller
 					'PERIOD' => $category,
 					'DEP_DESC' => $dept
 				])
-				->one();
-				$remark = '';
-				//$remark = $this->getRemark($dept, $category);
+				->one();*/
+				$budget = null;
+				$consume = null;
+				foreach ($budget_data_arr as $value) {
+					if ($value['PERIOD'] == $category && $value['DEP_DESC'] == $dept) {
+						$budget = (int)round($value['BUDGET_AMT']);
+						$consume = (int)round($value['CONSUME_AMT']);
+					}
+				}
 				$tmp_data[$dept]['BUDGET'][] = [
+					'y' => $budget,
+					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category, 'budget_type' => $model->budget_type])
+				];
+				$tmp_data[$dept]['CONSUME'][] = [
+					'y' => $consume,
+					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category, 'budget_type' => $model->budget_type])
+				];
+				/*$tmp_data[$dept]['BUDGET'][] = [
 					'y' => (int)$budget_data->BUDGET_AMT,
 					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category])
 				];
 				$tmp_data[$dept]['CONSUME'][] = [
 					'y' => (int)$budget_data->CONSUME_AMT,
 					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category])
-				];
+				];*/
 			}
 		}
 
@@ -101,24 +166,24 @@ class BudgetExpensesController extends Controller
 		return $return_arr;
 	}
 
-	public function getPeriodArr($min_period, $max_period)
+	public function getPeriodArr($fiscal)
 	{
-		$data_arr = AccountBudget::find()
-		->select('DISTINCT(PERIOD)')
-		->where(['>=', 'PERIOD', $min_period])
-		->andWhere(['<=', 'PERIOD', $max_period])
-		->orderBy('PERIOD ASC')
+		$tmp_fiscal = FiscalTbl::find()
+		->where([
+			'FISCAL' => $fiscal
+		])
+		->orderBy('PERIOD')
 		->all();
 
 		$return_arr = [];
-		foreach ($data_arr as $value) {
+		foreach ($tmp_fiscal as $value) {
 			$return_arr[] = $value->PERIOD;
 		}
 
 		return $return_arr;
 	}
 
-	public function actionGetRemark($dept, $period)
+	public function actionGetRemark($dept, $period, $budget_type)
 	{
 		$data = '<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -145,6 +210,18 @@ class BudgetExpensesController extends Controller
 		])
 		->orderBy('CONSUME_AMT DESC')
 		->all();
+
+		if ($budget_type != null) {
+			$data_arr = AccountBudget::find()
+			->where([
+				'DEP_DESC' => $dept,
+				'CONTROL' => 'Y',
+				'PERIOD' => $period,
+				'FILTER' => $budget_type
+			])
+			->orderBy('CONSUME_AMT DESC')
+			->all();
+		}
 
 		foreach ($data_arr as $value) {
 			$balance_percentage = 0;
