@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
-    .modal-lg { width: 1200px;}
+    .modal-lg { width: 1300px;}
     ");
 
 $script = <<< JS
