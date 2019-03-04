@@ -37,33 +37,9 @@ echo '</pre>';*/
         <div class="col-sm-3">
             <div class="panel panel-primary">
                 <div class="panel-body">
-                    
-                    <?= $form->field($model, 'vms')->widget(\yii\jui\DatePicker::class, [
-                        //'language' => 'ru',
-                        'dateFormat' => 'yyyy-MM-dd',
-                        'options' => [
-                            'class' => 'form-control',
-                            'placeholder' => 'e.g. ' . date('Y-m-d')
-                        ]
-                    ])->label('Prod. Plan Date (VMS)') ?>
-
-                    <?= $form->field($model, 'proddate')->widget(\yii\jui\DatePicker::class, [
-                        //'language' => 'ru',
-                        'dateFormat' => 'yyyy-MM-dd',
-                        'options' => [
-                            'class' => 'form-control',
-                            'placeholder' => 'e.g. ' . date('Y-m-d')
-                        ]
-                    ])->label('Prod. Actual Date'); ?>
-
-                    <?= $form->field($model, 'etd_ship')->widget(\yii\jui\DatePicker::class, [
-                        //'language' => 'ru',
-                        'dateFormat' => 'yyyy-MM-dd',
-                        'options' => [
-                            'class' => 'form-control',
-                            'placeholder' => 'e.g. ' . date('Y-m-d')
-                        ]
-                    ])->label('ETD YEMI'); ?>
+                    <?= $form->field($model, 'vms')->textInput(['placeholder' => 'e.g. ' . date('Y-m-d')])->label('Prod. Plan Date (VMS)') ?>
+                    <?= $form->field($model, 'proddate')->textInput(['placeholder' => 'e.g. ' . date('Y-m-d')])->label('Prod. Actual Date') ?>
+                    <?= $form->field($model, 'etd_ship')->textInput(['placeholder' => 'e.g. ' . date('Y-m-d')])->label('ETD YEMI') ?>
                 </div>
             </div>
         </div>
