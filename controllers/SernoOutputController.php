@@ -63,7 +63,7 @@ class SernoOutputController extends base\SernoOutputController
 
     	$min_max_week = SernoOutput::find()
     	->select([
-    		'id',
+    		'EXTRACT(YEAR_MONTH FROM etd)',
     		'min_week' => 'MIN(WEEK(ship,4))',
     		'max_week' => 'MAX(WEEK(ship,4))'
     	])
@@ -71,8 +71,8 @@ class SernoOutputController extends base\SernoOutputController
     	//->andWhere(['<>', 'stc', 'NOSO'])
     	//->andWhere(['LEFT(id,4)' => date('Y')])
     	//->andWhere(['<>', 'ship', '9999-12-31'])
-        ->andWhere(['id' => $period])
-    	->groupBy('id')
+        ->andWhere(['EXTRACT(YEAR_MONTH FROM etd)' => $period])
+    	->groupBy('EXTRACT(YEAR_MONTH FROM etd)')
     	->one();
 
     	$weekToday = SernoCalendar::find()->where(['etd' => date('Y-m-d')])->one()->week_ship;

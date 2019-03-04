@@ -128,7 +128,7 @@ $this->registerJs($script, View::POS_HEAD );
                 ->select(['etd, SUM(qty) as qty, SUM(output) as output, WEEK(ship,4) as week_no'])
                 ->where([
                     'WEEK(ship,4)' => $j,
-                    'id' => $period,
+                    'EXTRACT(YEAR_MONTH FROM etd)' => $period,
                 ])
                 ->andWhere(['<>', 'stc', 'ADVANCE'])
                 //->andWhere(['<>', 'stc', 'NOSO'])
