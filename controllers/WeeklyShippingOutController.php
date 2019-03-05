@@ -91,7 +91,7 @@ class WeeklyShippingOutController extends Controller
             $plan_qty = $shipping_data['plan_qty'];
             $actual_qty = $shipping_data['actual_qty'];
             if ($etd < date('Y-m-d')) {
-                $actual_qty = $plan_qty;
+                //$actual_qty = $plan_qty;
             }
             $week_no = $shipping_data['week_no'];
             $open_percentage = round((($plan_qty - $actual_qty) / $plan_qty) * 100);
