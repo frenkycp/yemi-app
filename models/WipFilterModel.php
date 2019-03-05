@@ -10,12 +10,12 @@ use yii\base\Model;
  */
 class WipFilterModel extends Model
 {
-    public $loc, $month, $year, $category;
+    public $loc, $month, $year, $category, $line;
 
     public function rules()
     {
         return [
-            [['loc'], 'string'],
+            [['loc', 'line'], 'string'],
             [['month', 'year', 'category'], 'number'],
         ];
     }

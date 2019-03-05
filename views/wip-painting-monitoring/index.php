@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 use yii\web\View;
 use miloschuman\highcharts\Highcharts;
@@ -81,6 +82,15 @@ echo '</pre>';*/
                 [
                     'onchange'=>'this.form.submit()',
                     'style' => 'font-size: 12px;',
+                ]
+            ) ?>
+        </div>
+        <div class="col-sm-2" style="<?= $model->loc != 'FINAL ASSY' ? 'display: none;' : ''; ?>">
+            <?= $form->field($model, 'line')->dropDownList(ArrayHelper::map(app\models\HakAkses::find()->where(['level_akses' => '4'])->orderBy('hak_akses')->all(), 'hak_akses', 'hak_akses'),
+                [
+                    'onchange'=>'this.form.submit()',
+                    'style' => 'font-size: 12px;',
+                    'prompt'=>'Select Line...',
                 ]
             ) ?>
         </div>

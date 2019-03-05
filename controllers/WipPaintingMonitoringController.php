@@ -36,11 +36,15 @@ class WipPaintingMonitoringController extends Controller
     	$model = new WipFilterModel();
     	$model->month = date('m');
 		$model->year = date('Y');
-        $str_where = '';
+        $str_where = $str_where2 = '';
     	if ($model->load($_GET)) {
     		$period = $model->year . $model->month;
             if ($model->category == 1) {
-                $str_where = "delay_category IS NOT NULL AND delay_category != ''";
+                $str_where .= "delay_category IS NOT NULL AND delay_category != ''";
+            }
+            if ($model->loc == 'FINAL ASSY' && $model->line != null) {
+                $line = $model->line;
+                $str_where2 = "LINE = '$line'";
             }
     	}
     	$wip_painting_data_arr = WipPlanActualReport::find()
@@ -58,6 +62,7 @@ class WipPaintingMonitoringController extends Controller
     		'period' => $period
     	])
         ->andWhere($str_where)
+        ->andWhere($str_where2)
     	->groupBy('week, due_date')
     	->orderBy('due_date, week')
     	->all();
@@ -79,6 +84,7 @@ class WipPaintingMonitoringController extends Controller
 	    		'child_analyst_desc' => $model->loc
 	    	])
             ->andWhere($str_where)
+            ->andWhere($str_where2)
 	    	->groupBy('week, due_date')
 	    	->orderBy('due_date, week')
 	    	->all();
@@ -98,25 +104,25 @@ class WipPaintingMonitoringController extends Controller
 
     		$tmp_data[$wip_painting_data->week]['order_percentage'][] = [
     			'y' => $order_percentage == 0 ? null : $order_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '00-ORDER', 'category' => $model->category]),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '00-ORDER', 'category' => $model->category, 'line' => $model->line]),
 				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['00-ORDER']),
                 'qty' => $wip_painting_data->total_order
     		];
     		$tmp_data[$wip_painting_data->week]['started_percentage'][] = [
     			'y' => $started_percentage == 0 ? null : $started_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '02-STARTED', 'category' => $model->category]),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '02-STARTED', 'category' => $model->category, 'line' => $model->line]),
 				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['02-STARTED']),
                 'qty' => $wip_painting_data->total_started
     		];
     		$tmp_data[$wip_painting_data->week]['completed_percentage'][] = [
     			'y' => $completed_percentage == 0 ? null : $completed_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '03-COMPLETED', 'category' => $model->category]),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '03-COMPLETED', 'category' => $model->category, 'line' => $model->line]),
 				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['03-COMPLETED']),
                 'qty' => $wip_painting_data->total_completed
     		];
     		$tmp_data[$wip_painting_data->week]['handover_percentage'][] = [
     			'y' => $handover_percentage <= 0 ? null : $handover_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '04-HAND OVER', 'category' => $model->category]),
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '04-HAND OVER', 'category' => $model->category, 'line' => $model->line]),
 				//'remark' => $this->getRemarks($remark_data_arr, $wip_painting_data->due_date, $model->loc, ['04-HAND OVER']),
                 'qty' => $wip_painting_data->total_handover
     		];
@@ -181,7 +187,7 @@ class WipPaintingMonitoringController extends Controller
     	]);
     }
 
-    public function actionGetRemark($due_date, $loc, $stage, $category)
+    public function actionGetRemark($due_date, $loc, $stage, $category, $line)
     {
         $stage_arr = [$stage];
         switch ($stage) {
@@ -215,6 +221,10 @@ class WipPaintingMonitoringController extends Controller
         if ($category == 1) {
             $str_where = "delay_category IS NOT NULL AND delay_category != ''";
         }
+        $str_where2 = '';
+        if ($loc == 'FINAL ASSY' && $line != null) {
+            $str_where2 = "LINE = '$line'";
+        }
 
         $remark_data_arr = WipPlanActualReport::find()
         ->select($selected_column)
@@ -224,6 +234,7 @@ class WipPaintingMonitoringController extends Controller
             //'urut' => '02'
         ])
         ->andWhere($str_where)
+        ->andWhere($str_where2)
         ->orderBy('child_analyst_desc, model_group, parent, child')
         ->asArray()->all();
 
@@ -236,6 +247,7 @@ class WipPaintingMonitoringController extends Controller
                 'child_analyst_desc' => $loc
             ])
             ->andWhere($str_where)
+            ->andWhere($str_where2)
             ->orderBy('child_analyst_desc, model_group, parent, child')
             ->asArray()->all();
         }
@@ -245,6 +257,7 @@ class WipPaintingMonitoringController extends Controller
         $data .= 
         '<thead style="font-size: 10px;"><tr class="info">
             <th class="text-center">Location</th>
+            <th class="text-center">Line</th>
             <th class="text-center">Slip No.</th>
             <th class="text-center">Session</th>
             <th class="text-center">GMC</th>
@@ -279,6 +292,7 @@ class WipPaintingMonitoringController extends Controller
             $data .= '
                 <tr class="' . $row_class . '">
                     <td class="text-center">' . $value['child_analyst_desc'] . '</td>
+                    <td class="text-center">' . $value['LINE'] . '</td>
                     <td class="text-center">' . $value['slip_id'] . '</td>
                     <td class="text-center">' . $value['session_id'] . '</td>
                     <td class="text-center">' . $value['parent'] . '</td>
