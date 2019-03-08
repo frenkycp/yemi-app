@@ -12,7 +12,7 @@ use kartik\datetime\DateTimePicker;
     * @var app\models\search\MaterialBlueListSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Visual Picking Lists');
+$this->title = Yii::t('models', 'Blue List');
 $this->params['breadcrumbs'][] = $this->title;
 
 date_default_timezone_set('Asia/Jakarta');
