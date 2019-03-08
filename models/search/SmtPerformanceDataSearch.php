@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\WipEff03;
+use app\models\WipEffNew03;
 
 /**
 * AbsensiTblSearch represents the model behind the search form about `app\models\AbsensiTbl`.
 */
-class SmtPerformanceDataSearch extends WipEff03
+class SmtPerformanceDataSearch extends WipEffNew03
 {
     /**
     * @inheritdoc
@@ -18,10 +18,9 @@ class SmtPerformanceDataSearch extends WipEff03
     public function rules()
     {
         return [
-            [['period', 'hari', 'child_analyst', 'child_analyst_desc', 'LINE', 'SMT_SHIFT', 'child_01', 'child_desc_01'], 'string'],
+            [['child_analyst', 'child_analyst_desc', 'period', 'LINE', 'SMT_SHIFT', 'child_all', 'child_desc_all'], 'string'],
             [['post_date'], 'safe'],
-            [['std_all', 'qty_all', 'machine_run_std_second', 'break_time_second', 'nozzle_maintenance_second', 'change_schedule_second', 'air_pressure_problem_second', 'power_failure_second', 'part_shortage_second', 'set_up_1st_time_running_tp_second', 'part_arrangement_dcn_second', 'meeting_second', 'dandori_second', 'porgram_error_second', 'm_c_problem_second', 'feeder_problem_second', 'quality_problem_second', 'pcb_transfer_problem_second', 'profile_problem_second', 'pick_up_error_second', 'other_second', 'loss_planned', 'loss_out_section', 'loss_in_section', 'loss_planned_outsection', 'total_lost', 'machine_utilization', 'gross_minus_planned_loss', 'nett1_minus_planned_outsection_loss', 'nett2_minus_all_loss', 'efisiensi_working_ratio'], 'number'],
-            [['machine_run_act_second'], 'integer']
+            [['qty_all', 'std_all', 'lt_std', 'lt_gross', 'planed_loss_minute', 'out_section_minute', 'dandori_minute', 'break_down_minute', 'operating_loss_minute', 'operating_ratio', 'working_ratio'], 'number']
         ];
     }
 
@@ -43,7 +42,7 @@ class SmtPerformanceDataSearch extends WipEff03
     */
     public function search($params)
     {
-        $query = WipEff03::find();
+        $query = WipEffNew03::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -53,7 +52,7 @@ class SmtPerformanceDataSearch extends WipEff03
                     'post_date' => SORT_DESC,
                     'LINE' => SORT_ASC,
                     'SMT_SHIFT' => SORT_ASC,
-                    'child_01' => SORT_ASC,
+                    'child_all' => SORT_ASC,
                 ]
             ],
         ]);
@@ -70,7 +69,7 @@ class SmtPerformanceDataSearch extends WipEff03
             'post_date' => $this->post_date,
             'LINE' => $this->LINE,
             'SMT_SHIFT' => $this->SMT_SHIFT,
-            'child_01' => $this->child_01,
+            'child_all' => $this->child_all,
             'child_analyst' => $this->child_analyst,
         ]);
         /*$query->andFilterWhere([

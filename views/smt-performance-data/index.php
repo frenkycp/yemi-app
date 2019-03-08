@@ -90,7 +90,7 @@ $grid_column = [
         ],
     ],
     [
-        'attribute' => 'child_01',
+        'attribute' => 'child_all',
         'label' => 'Part Num.',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -100,7 +100,7 @@ $grid_column = [
         ],
     ],
     [
-        'attribute' => 'child_desc_01',
+        'attribute' => 'child_desc_all',
         'label' => 'Part Name',
         'vAlign' => 'middle',
         'mergeHeader' => true,
@@ -128,11 +128,8 @@ $grid_column = [
         'mergeHeader' => true,
     ],
     [
-        'attribute' => 'machine_run_std_second',
+        'attribute' => 'lt_std',
         'label' => 'Total ST<br/>(C = A * B)',
-        'value' => function($model){
-            return round($model->machine_run_std_second / 60, 2);
-        },
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -141,11 +138,8 @@ $grid_column = [
         'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'machine_run_act_second',
+        'attribute' => 'lt_gross',
         'label' => 'Lead Time<br/>(D)',
-        'value' => function($model){
-            return round($model->machine_run_act_second / 60, 2);
-        },
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -154,11 +148,8 @@ $grid_column = [
         'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'loss_planned',
+        'attribute' => 'planed_loss_minute',
         'label' => 'Loss Time<br/>(Planned)<br/>(E)',
-        'value' => function($model){
-            return round($model->loss_planned / 60, 2);
-        },
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -167,11 +158,8 @@ $grid_column = [
         'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'loss_planned_outsection',
-        'label' => 'Loss Time<br/>(Planned Out Section)<br/>(F)',
-        'value' => function($model){
-            return round($model->loss_planned_outsection / 60, 2);
-        },
+        'attribute' => 'out_section_minute',
+        'label' => 'Loss Time<br/>(Out Section)<br/>(F)',
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -180,11 +168,8 @@ $grid_column = [
         'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'total_lost',
-        'label' => 'Loss Time<br/>(Total)<br/>(G)',
-        'value' => function($model){
-            return round($model->total_lost / 60, 2);
-        },
+        'attribute' => 'dandori_minute',
+        'label' => 'Dandori',
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -193,8 +178,8 @@ $grid_column = [
         'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'machine_utilization',
-        'label' => 'Utilization(%)<br/>(C / D)',
+        'attribute' => 'break_down_minute',
+        'label' => 'Break Down',
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -203,8 +188,8 @@ $grid_column = [
         'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'gross_minus_planned_loss',
-        'label' => 'Gross(%)<br/>(C / (D - E))',
+        'attribute' => 'operating_loss_minute',
+        'label' => 'Operating Loss',
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -213,8 +198,8 @@ $grid_column = [
         'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'nett1_minus_planned_outsection_loss',
-        'label' => 'Nett 1(%)<br/>(C / (D - F))',
+        'attribute' => 'operating_ratio',
+        'label' => 'Operating Ratio(%)<br/>((D-E-F) / 1440)',
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -223,18 +208,8 @@ $grid_column = [
         'format' => ['decimal', 2],
     ],
     [
-        'attribute' => 'nett2_minus_all_loss',
-        'label' => 'Nett 2(%)<br/>(C / (D - G))',
-        'encodeLabel' => false,
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '70px;',
-        'mergeHeader' => true,
-        'format' => ['decimal', 2],
-    ],
-    [
-        'attribute' => 'efisiensi_working_ratio',
-        'label' => 'Working Ratio(%)<br/>((C / 0.8) / (D - F))',
+        'attribute' => 'working_ratio',
+        'label' => 'Working Ratio(%)<br/>(C / (D-E-F))',
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',

@@ -7,8 +7,8 @@ use yii\helpers\Url;
 use app\models\WipEffDailyUtilView03;
 use yii\web\JsExpression;
 use app\models\WipEffView;
-use app\models\WipEff07;
-use app\models\WipEff03;
+use app\models\WipEffNew07;
+use app\models\WipEffNew03;
 use app\models\WipLosstimeCategoryView;
 
 class SmtDailyUtilityReportController extends Controller
@@ -59,7 +59,7 @@ class SmtDailyUtilityReportController extends Controller
 				$tmp_y1 = null;
 				$tmp_y2 = null;
 
-				$tmp_utility_data = WipEff07::find()
+				$tmp_utility_data = WipEffNew07::find()
 				->where([
 					'period' => $period,
 					'post_date' => $i->format("Y-m-d"),
@@ -69,8 +69,8 @@ class SmtDailyUtilityReportController extends Controller
 				->one();
 
 				if ($tmp_utility_data->period != null) {
-					$tmp_y1 = round((float)$tmp_utility_data->efisiensi_working_ratio, 1);
-					$tmp_y2 = round((float)$tmp_utility_data->utility_operating_ratio, 1);
+					$tmp_y1 = round((float)$tmp_utility_data->working_ratio, 1);
+					$tmp_y2 = round((float)$tmp_utility_data->operating_ratio, 1);
 				}
 				
 				$tmp_working_ratio[$line][] = [
@@ -182,6 +182,7 @@ class SmtDailyUtilityReportController extends Controller
 			'PCB Transfer Problem' => $wip_losstime_category->pcb_transfer_problem,
 			'Profile Problem' => $wip_losstime_category->profile_problem,
 			'Pick Up Error' => $wip_losstime_category->pick_up_error,
+			'Warming Up' => $wip_losstime_category->machine_warming_up,
 			'Other' => $wip_losstime_category->other
 		];
 
@@ -233,46 +234,42 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th class="text-center">ST<br/>(B)</th>
 	    	<th class="text-center">Total ST<br/>(C = A * B)</th>
 	    	<th class="text-center">Lead Time<br/>(D)</th>
-	    	<th class="text-center">Loss Time<br/>(Planned)<br/>(E)</th>
-	    	<th class="text-center">Loss Time<br/>(Planned Out Section)<br/>(F)</th>
-	    	<th class="text-center">Loss Time<br/>(Total)<br/>(G)</th>
-	    	<th class="text-center">Utilization(%)<br/>(C / D)</th>
-	    	<th class="text-center">Gross(%)<br/>(C / (D - E))</th>
-	    	<th class="text-center">Nett 1(%)<br/>(C / (D - F))</th>
-	    	<th class="text-center">Nett 2(%)<br/>(C / (D - G))</th>
-	    	<th class="text-center">Working Ratio(%)<br/>((C / 0.8) / (D - F)</th>
+	    	<th class="text-center">Loss Time<br/>(Planned Loss)<br/>(E)</th>
+	    	<th class="text-center">Loss Time<br/>(Out Section)<br/>(F)</th>
+	    	<th class="text-center">Dandori</th>
+	    	<th class="text-center">Break Down</th>
+	    	<th class="text-center">Operating Loss</th>
+	    	<th class="text-center">Operation Ratio(%)<br/>((D-E-F) / 1440)</th>
+	    	<th class="text-center">Working Ratio(%)<br/>(C / (D-E-F))</th>
 	    </tr>';
 
-	    $utility_data_arr = WipEff03::find()
+	    $utility_data_arr = WipEffNew03::find()
 	    ->where([
 	    	'post_date' => $proddate,
 	    	'LINE' => $line,
 	    	'child_analyst' => $loc
 	    ])
-	    ->orderBy('SMT_SHIFT, LINE, child_01')
+	    ->orderBy('SMT_SHIFT, LINE, child_all')
 	    ->all();
 
 	    $no = 1;
 	    foreach ($utility_data_arr as $key => $utility_data) {
-	    	$machine_util = round($utility_data->machine_run_std_second / $utility_data->machine_run_act_second * 100, 2);
-	    	$gross_min_plan = round($utility_data->machine_run_std_second / ($utility_data->machine_run_act_second - $utility_data->loss_planned) * 100, 2);
 
 	    	$remark .= '<tr style="font-size: 12px;">
 	    		<td class="text-center">' . $utility_data->SMT_SHIFT . '</td>
-	    		<td class="text-center">' . $utility_data->child_01 . '</td>
-	    		<td>' . $utility_data->child_desc_01 . '</td>
+	    		<td class="text-center">' . $utility_data->child_all . '</td>
+	    		<td>' . $utility_data->child_desc_all . '</td>
 	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->qty_all, 0) . '</td>
 	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->std_all, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter(round($utility_data->machine_run_std_second / 60, 2), 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter(round($utility_data->machine_run_act_second / 60, 2), 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->loss_planned, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->loss_planned_outsection, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->total_lost, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->machine_utilization, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->gross_minus_planned_loss, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->nett1_minus_planned_outsection_loss, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->nett2_minus_all_loss, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->efisiensi_working_ratio, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->lt_std, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->lt_gross, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->planed_loss_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->out_section_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->dandori_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->break_down_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->operating_loss_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->operating_ratio, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->working_ratio, 2) . '</td>
 	    	</tr>';
 	    	$no++;
 	    }
@@ -317,6 +314,7 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th class="text-center">PCB Trf.<br/>Problem</th>
 	    	<th class="text-center">Profile<br/>Problem</th>
 	    	<th class="text-center">Pick Up<br/>Error</th>
+	    	<th class="text-center">Warming Up</th>
 	    	<th class="text-center">Other</th>
 	    </tr>';
 
@@ -347,10 +345,11 @@ class SmtDailyUtilityReportController extends Controller
 	    		$value->pcb_transfer_problem > 0 ? 'label label-danger' : '',
 	    		$value->profile_problem > 0 ? 'label label-danger' : '',
 	    		$value->pick_up_error > 0 ? 'label label-danger' : '',
+	    		$value->machine_warming_up > 0 ? 'label label-danger' : '',
 	    		$value->other > 0 ? 'label label-danger' : ''
 	    	];
 	    	$remark .= '<tr style="font-size: 11px;">
-	    		<td class="text-center" title="' . $value->child_desc_01 . '">' . $value->child_01 . '</td>
+	    		<td class="text-center" title="' . $value->child_desc_all . '">' . $value->child_all . '</td>
 	    		<td class="text-center"><span title="Break Time" class="' . $class[0] . '">' . round($value->break_time, 1) . '</span></td>
 	    		<td class="text-center"><span title="Nozzle Maintenance" class="' . $class[1] . '">' . round($value->nozzle_maintenance, 1) . '</span></td>
 	    		<td class="text-center"><span title="Change Schedule" class="' . $class[2] . '">' . round($value->change_schedule, 1) . '</span></td>
@@ -368,7 +367,8 @@ class SmtDailyUtilityReportController extends Controller
 	    		<td class="text-center"><span title="PCB Transfer Problem" class="' . $class[14] . '">' . round($value->pcb_transfer_problem, 1) . '</span></td>
 	    		<td class="text-center"><span title="Profile Problem" class="' . $class[15] . '">' . round($value->profile_problem, 1) . '</span></td>
 	    		<td class="text-center"><span title="Pick Up Error" class="' . $class[16] . '">' . round($value->pick_up_error, 1) . '</span></td>
-	    		<td class="text-center"><span title="Other" class="' . $class[17] . '">' . round($value->other, 1) . '</span></td>
+	    		<td class="text-center"><span title="Pick Up Error" class="' . $class[17] . '">' . round($value->machine_warming_up, 1) . '</span></td>
+	    		<td class="text-center"><span title="Other" class="' . $class[18] . '">' . round($value->other, 1) . '</span></td>
 	    	</tr>';
 	    }
 

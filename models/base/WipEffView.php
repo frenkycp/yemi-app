@@ -111,6 +111,7 @@ use Yii;
  * @property double $profile_problem
  * @property double $pick_up_error
  * @property double $other
+ * @property double $machine_warming_up
  * @property double $efisiensi_gross
  * @property string $child_analyst
  * @property string $child_analyst_desc
@@ -143,9 +144,9 @@ abstract class WipEffView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lot_id'], 'required'],
+            [['lot_id', 'machine_warming_up'], 'required'],
             [['lot_id', 'LINE', 'SMT_SHIFT', 'KELOMPOK', 'slip_id_01', 'child_01', 'child_desc_01', 'slip_id_02', 'child_02', 'child_desc_02', 'slip_id_03', 'child_03', 'child_desc_03', 'slip_id_04', 'child_04', 'child_desc_04', 'slip_id_05', 'child_05', 'child_desc_05', 'slip_id_06', 'child_06', 'child_desc_06', 'slip_id_07', 'child_07', 'child_desc_07', 'slip_id_08', 'child_08', 'child_desc_08', 'slip_id_09', 'child_09', 'child_desc_09', 'slip_id_10', 'child_10', 'child_desc_10', 'period', 'child_analyst', 'child_analyst_desc'], 'string'],
-            [['act_qty_01', 'std_time_01', 'act_qty_02', 'std_time_02', 'act_qty_03', 'std_time_03', 'act_qty_04', 'std_time_04', 'act_qty_05', 'std_time_05', 'act_qty_06', 'std_time_06', 'act_qty_07', 'std_time_07', 'act_qty_08', 'std_time_08', 'act_qty_09', 'std_time_09', 'act_qty_10', 'std_time_10', 'qty_all', 'std_all', 'lt_gross', 'lt_loss', 'lt_nett', 'lt_std', 'efisiensi', 'long01', 'long02', 'long03', 'long04', 'long05', 'long06', 'long07', 'long08', 'long09', 'long10', 'long11', 'long12', 'long13', 'long14', 'long15', 'long16', 'long17', 'long18', 'long_total', 'break_time', 'nozzle_maintenance', 'change_schedule', 'air_pressure_problem', 'power_failure', 'part_shortage', 'set_up_1st_time_running_tp', 'part_arrangement_dcn', 'meeting', 'dandori', 'porgram_error', 'm_c_problem', 'feeder_problem', 'quality_problem', 'pcb_transfer_problem', 'profile_problem', 'pick_up_error', 'other', 'efisiensi_gross'], 'number'],
+            [['act_qty_01', 'std_time_01', 'act_qty_02', 'std_time_02', 'act_qty_03', 'std_time_03', 'act_qty_04', 'std_time_04', 'act_qty_05', 'std_time_05', 'act_qty_06', 'std_time_06', 'act_qty_07', 'std_time_07', 'act_qty_08', 'std_time_08', 'act_qty_09', 'std_time_09', 'act_qty_10', 'std_time_10', 'qty_all', 'std_all', 'lt_gross', 'lt_loss', 'lt_nett', 'lt_std', 'efisiensi', 'long01', 'long02', 'long03', 'long04', 'long05', 'long06', 'long07', 'long08', 'long09', 'long10', 'long11', 'long12', 'long13', 'long14', 'long15', 'long16', 'long17', 'long18', 'long_total', 'break_time', 'nozzle_maintenance', 'change_schedule', 'air_pressure_problem', 'power_failure', 'part_shortage', 'set_up_1st_time_running_tp', 'part_arrangement_dcn', 'meeting', 'dandori', 'porgram_error', 'm_c_problem', 'feeder_problem', 'quality_problem', 'pcb_transfer_problem', 'profile_problem', 'pick_up_error', 'other', 'machine_warming_up', 'efisiensi_gross'], 'number'],
             [['start_date', 'end_date', 'post_date'], 'safe']
         ];
     }
@@ -258,6 +259,7 @@ abstract class WipEffView extends \yii\db\ActiveRecord
             'profile_problem' => 'Profile Problem',
             'pick_up_error' => 'Pick Up Error',
             'other' => 'Other',
+            'machine_warming_up' => 'Machine Warming Up',
             'efisiensi_gross' => 'Efisiensi Gross',
             'child_analyst' => 'Child Analyst',
             'child_analyst_desc' => 'Child Analyst Desc',
