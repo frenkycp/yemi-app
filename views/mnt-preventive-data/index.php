@@ -112,21 +112,6 @@ $grid_columns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    /*[
-        'attribute' => 'machine_img',
-        'label' => 'Image',
-        'value' => function($model){
-            return Html::a(Html::img('@web/upload/MNT_MACHINE/' . $model->mesin_id . '.jpg', [
-                'width' => '20px',
-                'height' => '20px',
-                'alt' => '-'
-            ]), ['get-image-preview', 'urutan' => $model->mesin_id], ['class' => 'imageModal', 'data-pjax' => '0',]);
-        },
-        'format' => 'html',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'width' => '50px',
-    ],*/
     [
         'attribute' => 'machine_desc',
         'label' => 'Description',
@@ -248,21 +233,7 @@ $grid_columns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'value' => function($model){
-            $tmp_data = app\models\MachineMpPlanViewMaster02::find()
-            ->where([
-                'mesin_id' => $model->mesin_id,
-                'mesin_periode' => $model->mesin_periode
-            ])
-            ->andWhere(['<', 'master_plan_maintenance', $model->master_plan_maintenance])
-            ->orderBy('master_plan_maintenance DESC')
-            ->one();
-
-            $plan_date = date('d-M-Y', strtotime($model->master_plan_maintenance));
-            if ($tmp_data->master_plan_maintenance != null) {
-                $plan_date = date('d-M-Y', strtotime($tmp_data->master_plan_maintenance . ' + 1month'));
-            }
-
-            return $plan_date;
+            return $model->planDate;
         },
         'contentOptions' => [
             'style' => 'min-width: 100px;'
@@ -312,7 +283,26 @@ $grid_columns = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
-    ]
+    ],
+    [
+        'attribute' => 'date_status',
+        'label' => 'On-Time Status',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'value' => function($model){
+            if ($model->count_close == 0) {
+                return '-';
+            }
+            if ($model->master_plan_maintenance > date('Y-m-d', strtotime($model->planDate))) {
+                return 'OVER';
+            }
+            return 'ON-TIME';
+        },
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
+        ],
+    ],
 ];
 ?>
 <div class="giiant-crud mesin-check-dtr-index">
