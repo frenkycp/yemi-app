@@ -22,10 +22,20 @@ class MntNgSummaryController extends Controller
     	$subtitle = '';
     	$data = [];
     	$categories = [];
-        $today_month = date('n');
-        $today_year = date('Y');
+        $year = date('Y');
+        $month = date('m');
     	$category_arr = $this->getCategories();
-    	$period_arr = $this->getWeeklyPeriod($today_month, $today_year);
+
+        if (\Yii::$app->request->get('year') !== null) {
+            $year = \Yii::$app->request->get('year');
+        }
+
+        if (\Yii::$app->request->get('month') !== null) {
+            $month = \Yii::$app->request->get('month');
+        }
+
+        $period = $year . $month;
+    	$period_arr = $this->getWeeklyPeriod(intval($month), $year);
     	
     	$data_ng_arr = MesinNgFreq04::find()
     	->select([
@@ -36,7 +46,7 @@ class MntNgSummaryController extends Controller
     		'total_lama_perbaikan' => 'SUM(lama_perbaikan_menit)'
     	])
         ->where([
-            'periode_kerusakan' => date('Ym')
+            'periode_kerusakan' => $period
         ])
         ->andWhere('area != \'\'')
         ->andWhere('area IS NOT NULL')
@@ -64,7 +74,7 @@ class MntNgSummaryController extends Controller
 
                 $detail_data = MesinNgFreq::find()
                 ->where([
-                    'periode_kerusakan' => date('Ym'),
+                    'periode_kerusakan' => $period,
                     'area' => $area,
                     'week_no' => $week_no
                 ])
@@ -74,9 +84,9 @@ class MntNgSummaryController extends Controller
                 $remark = '<table class="table table-bordered table-striped table-hover">';
                 $remark .= '
                 <tr>
-                    <th style="width:100px;">Tanggal</th>
+                    <th style="width:100px; text-align: center;">Tanggal</th>
                     <th style="text-align: center;">ID Mesin</th>
-                    <th style="width:170px;">Nama Mesin</th>
+                    <th>Nama Mesin</th>
                     <th>Catatan Perbaikan</th>
                     <th style="text-align: center;">Lama Perbaikan (menit)</th>
                 </tr>
@@ -85,7 +95,7 @@ class MntNgSummaryController extends Controller
                 foreach ($detail_data as $detail) {
                     $remark .= '
                     <tr>
-                        <td>' . $detail->tgl_kerusakan . '</td>
+                        <td class="text-center">' . $detail->tgl_kerusakan . '</td>
                         <td style="text-align: center;">' . $detail->mesin_id . '</td>
                         <td>' . $detail->mesin_nama . '</td>
                         <td>' . $detail->repair_note . '</td>
@@ -112,7 +122,9 @@ class MntNgSummaryController extends Controller
     		'subtitle' => $subtitle,
     		'data' => $data,
     		'categories' => $categories,
-            'week_total' => $total_week
+            'week_total' => $total_week,
+            'year' => $year,
+            'month' => $month,
     	]);
     }
 

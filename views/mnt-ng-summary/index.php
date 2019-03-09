@@ -4,10 +4,19 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
-$this->title = Yii::t('app', 'NG Summary');
-$this->params['breadcrumbs'][] = $this->title;
-$color = 'ForestGreen';
+$this->title = [
+    'page_title' => 'Corrective Weekly Summary <span class="japanesse text-green"></span>',
+    'tab_title' => 'Corrective Weekly Summary',
+    'breadcrumbs_title' => 'Corrective Weekly Summary'
+];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+
+$this->registerCss("
+    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .modal-lg { width: 1200px;}
+");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -39,6 +48,45 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data);
 echo '<pre>';*/
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['mnt-ng-summary/index']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-2">
+        <?= Html::label('Year'); ?>
+        <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+    <div class="col-md-2">
+        <?= Html::label('Month'); ?>
+        <?= Html::dropDownList('month', $month, [
+            '01' => 'Jan',
+            '02' => 'Feb',
+            '03' => 'Mar',
+            '04' => 'Apr',
+            '05' => 'May',
+            '06' => 'Jun',
+            '07' => 'Jul',
+            '08' => 'Aug',
+            '09' => 'Sep',
+            '10' => 'Oct',
+            '11' => 'Nov',
+            '12' => 'Dec',
+        ], [
+            'class' => 'form-control',
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
+
+<br/>
 
 <div class="box box-info">
     <div class="box-header with-border">
@@ -50,7 +98,7 @@ echo '<pre>';*/
             'scripts' => [
                 'modules/exporting',
                 //'themes/sand-signica',
-                'themes/grid-light',
+                //'themes/grid-light',
                 //'themes/dark-unica',
             ],
             'options' => [
