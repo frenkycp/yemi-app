@@ -107,7 +107,6 @@ $grid_columns = [
         'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '110px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -245,16 +244,48 @@ $grid_columns = [
         ],
     ],
     [
-        'attribute' => 'master_plan_maintenance',
-        'label' => 'Master Plan',
+        'attribute' => 'plan_date',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'value' => function($model){
+            $tmp_data = app\models\MachineMpPlanViewMaster02::find()
+            ->where([
+                'mesin_id' => $model->mesin_id,
+                'mesin_periode' => $model->mesin_periode
+            ])
+            ->andWhere(['<', 'master_plan_maintenance', $model->master_plan_maintenance])
+            ->orderBy('master_plan_maintenance DESC')
+            ->one();
+
+            $plan_date = date('d-M-Y', strtotime($model->master_plan_maintenance));
+            if ($tmp_data->master_plan_maintenance != null) {
+                $plan_date = date('d-M-Y', strtotime($tmp_data->master_plan_maintenance . ' + 1month'));
+            }
+
+            return $plan_date;
+        },
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'master_plan_maintenance',
+        'label' => 'Actual Date',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'value' => function($model){
+            if ($model->count_close == 0) {
+                return '-';
+            }
             return $model->master_plan_maintenance == null ? '-' : date('d-M-Y', strtotime($model->master_plan_maintenance));
         },
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
         ],
     ],
     [

@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MachineMpPlanViewMaster02 extends BaseMachineMpPlanViewMaster02
 {
-    public $total_open, $total_close, $total_plan, $min_year, $machine_img, $standart_time, $manpower, $pic;
+    public $total_open, $total_close, $total_plan, $min_year, $machine_img, $standart_time, $manpower, $pic, $plan_date;
 
     public function behaviors()
     {
