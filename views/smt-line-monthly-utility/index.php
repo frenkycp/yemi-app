@@ -60,7 +60,7 @@ echo '</pre>';*/
         ]); ?>
     </div>
     <div class="col-md-2">
-        <?= Html::label('Location'); ?>
+        <?= Html::label('Data Type'); ?>
         <?= Html::dropDownList('type', $type, [
             1 => 'Line 1 V.S Line 2',
             2 => 'Total',
