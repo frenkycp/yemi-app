@@ -121,7 +121,7 @@ use yii\helpers\StringHelper;
 <!-- attribute repair_aktual -->
 			<?= $form->field($model, 'repair_aktual')->textInput(['readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
 
-            <?= $form->field($model, 'down_time')->textInput(['type' => 'number', 'readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
+            <?= $form->field($model, 'down_time')->textInput(['type' => 'number', 'readonly' => Yii::$app->user->identity->role->id == 1 || Yii::$app->user->identity->role->id == 8 || Yii::$app->user->identity->role->id == 13 ? false : true]) ?>
             
         </p>
         <?php $this->endBlock(); ?>
