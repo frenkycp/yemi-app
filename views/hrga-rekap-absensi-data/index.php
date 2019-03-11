@@ -10,7 +10,7 @@ use kartik\grid\GridView;
     * @var app\models\search\HrgaAttendanceDataSearch $searchModel
 */
 
-$this->title = 'Data Rekap Absensi';
+$this->title = 'Absent Report (MONTH)';
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJs("$(function() {

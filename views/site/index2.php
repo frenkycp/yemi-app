@@ -202,6 +202,12 @@ $this->registerCss("
                                 </li>
                                 <li><?= Html::a('OT Management by Section <span class="japanesse-word">(部門別残業管理）</span>', ['/monthly-overtime-by-section/index']); ?>
                                 </li>
+                                <li><?= Html::a('Monthly OT Average <span class="japanesse-word"></span>', ['/overtime-monthly-summary/index']); ?>
+                                </li>
+                                <li><?= Html::a('Absent Report by Month <span class="japanesse-word"></span>', ['/hrga-rekap-absensi-data/index']); ?>
+                                </li>
+                                <li><?= Html::a('Absent Report by Year <span class="japanesse-word"></span>', ['/absent-report-year/index']); ?>
+                                </li>
                             </ol>
                         </div>
                         
