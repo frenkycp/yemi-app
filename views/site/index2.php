@@ -126,7 +126,10 @@ $this->registerCss("
                                     <?= Html::a('SMT Performance Data<br/><span class="japanesse-word">(SMT パフォーマンスデータ）</span>', ['/smt-performance-data']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT Utility & Loss Time Management<br/><span class="japanesse-word">( SMT稼働率・ロスタイム管理）</span>', ['/smt-daily-utility-report']); ?>
+                                    <?= Html::a('SMT Utility & Loss Time Management<br/><span class="japanesse-word">( SMT稼働率・ロスタイム管理）</span> | Daily', ['/smt-daily-utility-report']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('SMT Utility & Loss Time Management<br/><span class="japanesse-word">( SMT稼働率・ロスタイム管理）</span> | Monthly', ['/smt-line-monthly-utility']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('SMT Performance Ratio<br/><span class="japanesse-word"></span>', ['/smt-performance-ratio']); ?>
