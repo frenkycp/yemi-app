@@ -29,6 +29,56 @@ date_default_timezone_set('Asia/Jakarta');
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
+            Mar. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-maroon"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-03-04</span>
+
+            <h3 class="timeline-header"><a href="#">Visitor System</a></h3>
+
+            <div class="timeline-body">
+                Monitoring people visit on Factory
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+    <!-- /.timeline-label -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Feb. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-orange"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-02-28</span>
+
+            <h3 class="timeline-header"><a href="#">GO-MACHINE Monitor</a></h3>
+
+            <div class="timeline-body">
+                Monitoring efficency of machine setting on Wood Working
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+    <!-- /.timeline-label -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
             Jan. 2019
         </span>
     </li>
