@@ -43,7 +43,8 @@ class WipHdrDtrSearch extends WipHdrDtr
 	*/
 	public function search($params)
 	{
-		$query = WipHdrDtr::find();
+		$query = WipHdrDtr::find()
+		->where('(act_qty - balance_by_day_2) <> 0');
 
 		$dataProvider = new ActiveDataProvider([
 			'query' => $query,
