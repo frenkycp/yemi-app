@@ -96,6 +96,27 @@ $gridColumns = [
         //'hAlign' => 'center',
     ],
     [
+        'attribute' => 'NIK_REQUEST',
+        'label' => 'Requestor NIK',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 70px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'NAMA_KARYAWAN',
+        'label' => 'Requestor Name',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+        //'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'STAT',
         'value' => function($model){
             if ($model->STAT == 'O') {
