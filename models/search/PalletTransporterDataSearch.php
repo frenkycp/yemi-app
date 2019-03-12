@@ -40,10 +40,11 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = SernoSlipLog::find()->where(['<>', 'line', 'MIS'])->orderBy('pk');
+$query = SernoSlipLog::find()->where(['<>', 'line', 'MIS'])->andWhere(['<>', 'nik', ''])->orderBy('pk');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => false
 ]);
 
 $this->load($params);
