@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\GojekOrderTbl;
+use app\models\GojekOrderView01;
 
 /**
-* GoMachineOrderSearch represents the model behind the search form about `app\models\GojekOrderTbl`.
+* GoMachineOrderSearch represents the model behind the search form about `app\models\GojekOrderView01`.
 */
-class GoMachineOrderSearch extends GojekOrderTbl
+class GoMachineOrderSearch extends GojekOrderView01
 {
 /**
 * @inheritdoc
@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id'], 'integer'],
-            [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'session_no', 'period', 'vms_date', 'issued_date', 'model'], 'safe'],
+            [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'session_no', 'period', 'vms_date', 'issued_date', 'issued_date_ori', 'daparture_date', 'arrival_date', 'model'], 'safe'],
             [['GOJEK_VALUE'], 'number'],
 ];
 }
@@ -42,7 +42,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = GojekOrderTbl::find();
+$query = GojekOrderView01::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -60,14 +60,17 @@ $query->andFilterWhere([
             'id' => $this->id,
             'vms_date' => $this->vms_date,
             'GOJEK_VALUE' => $this->GOJEK_VALUE,
-            'FORMAT(daparture_date, \'yyyyMM\')' => $this->period
+            'period' => $this->period
         ]);
 
         $query->andFilterWhere(['like', 'GOJEK_ORDER_TBL.slip_id', $this->slip_id])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),issued_date,120)', $this->issued_date])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),issued_date_ori,120)', $this->issued_date_ori])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),daparture_date,120)', $this->daparture_date])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),arrival_date,120)', $this->arrival_date])
             ->andFilterWhere(['like', 'item', $this->item])
             ->andFilterWhere(['like', 'model', $this->model])
-            ->andFilterWhere(['like', 'WIP_PLAN_ACTUAL_REPORT.model_group', $this->model_group])
+            //->andFilterWhere(['like', 'WIP_PLAN_ACTUAL_REPORT.model_group', $this->model_group])
             ->andFilterWhere(['like', 'item_desc', $this->item_desc])
             ->andFilterWhere(['like', 'from_loc', $this->from_loc])
             ->andFilterWhere(['like', 'to_loc', $this->to_loc])

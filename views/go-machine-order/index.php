@@ -141,10 +141,11 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'issued_date',
+        'attribute' => 'issued_date_ori',
         'value' => function($model){
-            return $model->issued_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->issued_date));
+            return $model->issued_date_ori == null ? '-' : date('Y-m-d H:i:s', strtotime($model->issued_date_ori));
         },
+        'label' => 'Issued Date',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '105px',
@@ -172,6 +173,15 @@ $gridColumns = [
             return $model->arrival_date == null ? '-' : date('Y-m-d H:i:s', strtotime($model->arrival_date));
         },
         'label' => 'END',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '105px',
+        'contentOptions' => [
+            'style' => 'min-width: 90px;'
+        ],
+    ],
+    [
+        'attribute' => 'total_minutes',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '105px',
