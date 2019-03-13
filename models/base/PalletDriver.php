@@ -15,6 +15,8 @@ use Yii;
  * @property string $last_update
  * @property integer $todays_point
  * @property integer $driver_status
+ * @property integer $driver_type
+ * @property integer $factory
  * @property string $aliasModel
  */
 abstract class PalletDriver extends \yii\db\ActiveRecord
@@ -46,7 +48,7 @@ abstract class PalletDriver extends \yii\db\ActiveRecord
         return [
             [['nik'], 'required'],
             [['last_update'], 'safe'],
-            [['todays_point', 'driver_status'], 'integer'],
+            [['todays_point', 'driver_status', 'driver_type', 'factory'], 'integer'],
             [['nik', 'order_from'], 'string', 'max' => 10],
             [['driver_name'], 'string', 'max' => 150],
             [['nik'], 'unique']
@@ -65,7 +67,19 @@ abstract class PalletDriver extends \yii\db\ActiveRecord
             'last_update' => 'Last Update',
             'todays_point' => 'Todays Point',
             'driver_status' => 'Driver Status',
+            'driver_type' => 'Driver Type',
+            'factory' => 'Factory',
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        return array_merge(parent::attributeHints(), [
+            'driver_type' => '1 = GOPALLET; 2 = GOSHOP',
+        ]);
     }
 
 

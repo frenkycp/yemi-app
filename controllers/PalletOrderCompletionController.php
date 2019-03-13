@@ -6,7 +6,8 @@ use yii\web\Controller;
 use dmstr\bootstrap\Tabs;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use app\models\User;
+//use app\models\User;
+//use app\models\PalletDriver;
 use app\models\SernoSlipLog;
 use app\models\PalletDriver;
 
@@ -34,16 +35,23 @@ class PalletOrderCompletionController extends Controller
 
         $period = $year . $month;
 
-		$driver_arr_data = User::find()
+		/*$driver_arr_data = User::find()
 		->where([
 			'role_id' => [19, 20]
 		])
 		->orderBy('role_id, name')
+		->all();*/
+
+		$driver_arr_data = PalletDriver::find()
+		->where([
+			'driver_type' => 1
+		])
+		->orderBy('driver_name')
 		->all();
 
 		$tmp_data = [];
 		foreach ($driver_arr_data as $key => $value) {
-			$nik = $value->username;
+			$nik = $value->nik;
 
 			$data_arr = SernoSlipLog::find()
 			->select([
@@ -63,6 +71,7 @@ class PalletOrderCompletionController extends Controller
 			->where([
 				'nik' => $nik,
 				'DATE(arrival_datetime)' => date('Y-m-d'),
+				'DATE(pk)' => date('Y-m-d'),
 			])
 			->count();
 
@@ -79,7 +88,7 @@ class PalletOrderCompletionController extends Controller
 						'y' => $value2->total_close == 0 ? null : (int)$value2->total_close,
 						'url' => Url::to(['get-remark', 'order_date' => $value2->order_date, 'nik' => $nik, 'status' => 'CLOSE']),
 					];
-					$tmp_data[$nik]['nama'] = $value->name;
+					$tmp_data[$nik]['nama'] = $value->driver_name;
 					/*if($value2->order_date == date('Y-m-d')){
 						$total_point = $value2->total_close;
 					}*/
@@ -87,13 +96,13 @@ class PalletOrderCompletionController extends Controller
 			} else {
 				$tmp_data[$nik]['open'] = null;
 				$tmp_data[$nik]['close'] = null;
-				$tmp_data[$nik]['nama'] = $value->name;
+				$tmp_data[$nik]['nama'] = $value->driver_name;
 			}
 			$tmp_data[$nik]['todays_point'] = $total_point;
 
-			if ($value->role_id == 19) {
+			if ($value->factory == 1) {
 				$tmp_data[$nik]['factory'] = 1;
-			} elseif ($value->role_id == 20) {
+			} elseif ($value->factory == 2) {
 				$tmp_data[$nik]['factory'] = 2;
 			}
 		}

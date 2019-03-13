@@ -14,6 +14,7 @@ use Yii;
  * @property integer $slip
  * @property integer $fa
  * @property integer $status
+ * @property integer $status2
  * @property string $aliasModel
  */
 abstract class SernoSlip extends \yii\db\ActiveRecord
@@ -44,7 +45,7 @@ abstract class SernoSlip extends \yii\db\ActiveRecord
     {
         return [
             [['user', 'id', 'slip'], 'required'],
-            [['slip', 'fa', 'status'], 'integer'],
+            [['slip', 'fa', 'status', 'status2'], 'integer'],
             [['user'], 'string', 'max' => 10],
             [['id'], 'string', 'max' => 2],
             [['user'], 'unique']
@@ -62,6 +63,7 @@ abstract class SernoSlip extends \yii\db\ActiveRecord
             'slip' => 'Slip',
             'fa' => 'Fa',
             'status' => 'Status',
+            'status2' => 'Status2',
         ];
     }
 

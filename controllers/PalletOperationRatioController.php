@@ -34,6 +34,9 @@ class PalletOperationRatioController extends Controller
         $period = $year . $month;
 
 		$tmp_driver_arr = PalletDriver::find()
+		->where([
+			'driver_type' => 1
+		])
 		->orderBy('driver_name')
 		->all();
 

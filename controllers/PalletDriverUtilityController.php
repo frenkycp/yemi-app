@@ -3,7 +3,8 @@ namespace app\controllers;
 
 use yii\web\Controller;
 
-use app\models\User;
+//use app\models\User;
+use app\models\PalletDriver;
 use app\models\PalletUtilityView03;
 use yii\helpers\ArrayHelper;
 
@@ -19,32 +20,45 @@ class PalletDriverUtilityController extends Controller
     public function actionIndex()
     {
     	$categories = $this->getCategoriesArr();
-    	$driver_data_arr = User::find()
+    	/*$driver_data_arr = User::find()
     	->select('username, name')
 		->where([
 			'role_id' => [19, 20]
 		])
 		->orderBy('name')
+		->all();*/
+
+		$driver_data_arr = PalletDriver::find()
+		->where([
+			'driver_type' => 1
+		])
+		->orderBy('driver_name')
 		->all();
 
-		$driver_dropdown_arr = ArrayHelper::map(User::find()->select('username, name')
+		$driver_dropdown_arr = ArrayHelper::map(PalletDriver::find()
 			->where([
-				'role_id' => [19, 20]
+				'driver_type' => 1
 			])
-			->orderBy('name')
-			->all(), 'username', 'name');
+			->orderBy('driver_name')
+			->all(), 'nik', 'driver_name');
 
 		$utility_data_arr = PalletUtilityView03::find()
 		->orderBy('order_date, nik')
 		->all();
 
 		if (\Yii::$app->request->get('driver_nik') !== null) {
-			$driver_data_arr = User::find()
+			/*$driver_data_arr = User::find()
 			->select('username, name')
 			->where([
 				'username' => \Yii::$app->request->get('driver_nik')
 			])
 			->orderBy('name')
+			->all();*/
+			$driver_data_arr = PalletDriver::find()
+			->where([
+				'nik' => \Yii::$app->request->get('driver_nik')
+			])
+			->orderBy('driver_name')
 			->all();
 		}
 
@@ -58,7 +72,7 @@ class PalletDriverUtilityController extends Controller
 				$utility = 0;
 				$avg_time = 0;
 				foreach ($utility_data_arr as $key => $utility_data) {
-					if ($utility_data->nik == $driver_data->username && $utility_data->order_date == $category) {
+					if ($utility_data->nik == $driver_data->nik && $utility_data->order_date == $category) {
 						$utility = round($utility_data->utilization);
 						$avg_time = $utility_data->avg_time;
 					}
@@ -74,11 +88,11 @@ class PalletDriverUtilityController extends Controller
 			}
 			
 			$data[] = [
-				'name' => $driver_data->name,
+				'name' => $driver_data->driver_name,
 				'data' => $tmp_data
 			];
 			$data2[] = [
-				'name' => $driver_data->name,
+				'name' => $driver_data->driver_name,
 				'data' => $tmp_data2
 			];
 		}
