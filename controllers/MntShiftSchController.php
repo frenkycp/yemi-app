@@ -48,6 +48,11 @@ class MntShiftSchController extends \app\controllers\base\MntShiftSchController
 		]);
 	}
 
+	public function actionAddMultiple()
+	{
+		
+	}
+
 	public function actionCreate()
 	{
 		$model = new MntShiftSch;

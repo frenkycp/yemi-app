@@ -151,6 +151,9 @@ $grid_column = [
         'encodeLabel' => false,
         'label' => 'Req.<br/>Qty',
         'value' => function($model){
+            if ($model->ONHAND_STATUS == 4) {
+                return '-';
+            }
             return (2 * $model->MIN_STOCK_QTY);
         },
         'hAlign' => 'center',
@@ -198,7 +201,7 @@ $grid_column = [
         ],
     ],
     [
-        'attribute' => 'ONHAND_STATUS_DESC',
+        'attribute' => 'ONHAND_STATUS',
         'label' => 'Status',
         'value' => function($model){
             $label_class = '';
@@ -218,7 +221,7 @@ $grid_column = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
-        'filter' => ArrayHelper::map(app\models\MinimumStockView03::find()->select('ONHAND_STATUS_DESC')->groupBy('ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all(), 'ONHAND_STATUS_DESC', 'ONHAND_STATUS_DESC'),
+        'filter' => ArrayHelper::map(app\models\MinimumStockView03::find()->select('ONHAND_STATUS, ONHAND_STATUS_DESC')->groupBy('ONHAND_STATUS, ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all(), 'ONHAND_STATUS', 'ONHAND_STATUS_DESC'),
     ],
     [
         'attribute' => 'POST_DATE',
