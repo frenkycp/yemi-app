@@ -220,6 +220,7 @@ echo '</pre>';*/
                                         'style' => [
                                             'color' => 'red'
                                         ],
+                                        'format' => '{total:.1f}',
                                     ],
                                 ],
                                 'tooltip' => [

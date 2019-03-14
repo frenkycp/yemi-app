@@ -31,4 +31,11 @@ class GojekDriverPresenceController extends \app\controllers\base\GojekDriverPre
     		'model' => $model
     	]);
 	}
+
+	public function actionResetValue()
+	{
+		$rows = GojekTbl::updateAll(['GOJEK_VALUE' => 0]);
+		\Yii::$app->getSession()->setFlash('success', 'Reset value succeeded...');
+		return $this->redirect(Url::previous());
+	}
 }

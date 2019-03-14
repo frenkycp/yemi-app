@@ -82,8 +82,12 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
-    /*'GOJEK_VALUE',*/
-    /*'LAST_UPDATE',*/
+    [
+        'attribute' => 'GOJEK_VALUE',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'label' => 'Driver Value',
+    ],
 ];
 ?>
 <div class="giiant-crud gojek-tbl-index">
@@ -110,6 +114,9 @@ $gridColumns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
+                ['content' => 
+                    Html::a('Reset Value', ['reset-value'], ['data-pjax' => 0, 'class' => 'btn btn-warning', 'title' => Yii::t('kvgrid', 'Reset Value Data'), 'data-confirm' => 'Are you sure to reset value data for all driver?'])
+                ],
                 '{export}',
                 '{toggleData}',
             ],
