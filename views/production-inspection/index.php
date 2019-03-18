@@ -119,6 +119,15 @@ $columns = [
         ],
     ],
     [
+        'attribute' => 'package',
+        //'label' => 'Description',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+    ],
+    [
         'attribute' => 'total',
         'label' => 'Qty',
         'value' => function($model){

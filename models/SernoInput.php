@@ -81,6 +81,16 @@ class SernoInput extends BaseSernoInput
         return $sernoMaster->model . ' // ' . $sernoMaster->color . ' // ' . $sernoMaster->dest;
     }
 
+    public function getPackage()
+    {
+        $sernoMaster = SernoMaster::find()->where(['gmc' => $this->gmc])->one();
+        $package = '-';
+        if ($sernoMaster->package != '') {
+            $package = $sernoMaster->package;
+        }
+        return $package;
+    }
+
     public function getItemM3()
     {
         return $this->hasOne(ShipItemM3::className(), ['ITEM' => 'gmc']);
