@@ -22,10 +22,17 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+$this->registerJs("$(function() {
+   $('.btn-order-item').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+});");
+
 $columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{order}',
+        'template' => '{order-item}',
         'buttons' => [
             'order' => function($url, $model, $key){
                 $url = ['order', 'id' => $model->id];
@@ -35,6 +42,19 @@ $columns = [
                     'data-confirm' => 'Are you sure to order this item ?'
                 ];
                 return Html::a('<span class="fa fa-cart-plus"></span>', $url, $options);
+            },
+            'order-item' => function($url, $model, $key){
+                $url = [
+                    'value' => Url::to(['order-item','id'=>$model->id]),
+                    'title' => 'GO-MACHINE Order Item',
+                    'class' => 'showModalButton'
+                ];
+                $options = [
+                    'title' => 'GO-MACHINE Order Item',
+                    'data-pjax' => '0',
+                    'id' => 'btn-order-item'
+                ];
+                return Html::button('<span class="fa fa-cart-plus"></span>', $url, $options);
             },
         ],
         'urlCreator' => function($action, $model, $key, $index) {

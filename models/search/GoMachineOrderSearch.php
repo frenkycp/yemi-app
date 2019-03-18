@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id'], 'integer'],
-            [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'session_no', 'period', 'vms_date', 'issued_date', 'issued_date_ori', 'daparture_date', 'arrival_date', 'model'], 'safe'],
+            [['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'GOJEK_ID', 'GOJEK_DESC', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'STAT', 'session_no', 'period', 'vms_date', 'issued_date', 'issued_date_ori', 'daparture_date', 'request_date', 'arrival_date', 'model'], 'safe'],
             [['GOJEK_VALUE'], 'number'],
 ];
 }
@@ -65,6 +65,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'GOJEK_ORDER_TBL.slip_id', $this->slip_id])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),issued_date,120)', $this->issued_date])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),request_date,120)', $this->request_date])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),issued_date_ori,120)', $this->issued_date_ori])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),daparture_date,120)', $this->daparture_date])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),arrival_date,120)', $this->arrival_date])

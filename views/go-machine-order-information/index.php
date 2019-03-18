@@ -19,6 +19,7 @@ $this->title = [
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
 	th, td {text-align: center; font-size: 16px;}
+	.text-center {vertical-align: middle;}
 	");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -46,6 +47,7 @@ $this->registerJs($script, View::POS_HEAD );
 					<th>Machine Name</th>
 					<th>Model</th>
 					<th>Driver Name</th>
+					<th>Request For</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -53,13 +55,18 @@ $this->registerJs($script, View::POS_HEAD );
 				foreach ($model as $value) {
 					$row_class = '';
 					if ($value->daparture_date != null) {
-						$row_class = 'success';
+						$row_class = 'success text-green';
+					}
+					$request_date = '-';
+					if ($value->request_date != null) {
+						$request_date = date('Y-m-d', strtotime($value->request_date)) . ' <b>' . date('H:i', strtotime($value->request_date)) . '</b>';
 					}
 					echo '<tr class="' . $row_class . '">
 						<td>' . $value->slip_id . '</td>
 						<td>' . $value->item . ' - ' . $value->item_desc . '</td>
 						<td>' . $value->model . '</td>
 						<td>' . $value->GOJEK_DESC . '</td>
+						<td>' . $request_date . '</td>
 					</tr>';
 				}
 				?>

@@ -39,7 +39,8 @@ class GoMachineOrderCompletionController extends Controller
 			'total_point' => 'COUNT(id)'
 		])
 		->where([
-			'CONVERT(date, arrival_date)' => date('Y-m-d')
+			'CONVERT(date, arrival_date)' => date('Y-m-d'),
+			'CONVERT(date, issued_date)' => date('Y-m-d')
 		])
 		->groupBy('GOJEK_ID')
 		->all(), 'GOJEK_ID', 'total_point');
@@ -149,14 +150,16 @@ class GoMachineOrderCompletionController extends Controller
             <th>Machine Name</th>
             <th class="text-center">Model</th>
             <th class="text-center">Issued</th>
+            <th class="text-center">Request For</th>
             <th class="text-center">START</th>
             <th class="text-center">END</th>
 		</tr></thead>';
-		$data .= '<tbody style="font-size: 10px;">';
+		$data .= '<tbody style="font-size: 12px;">';
 
 		foreach ($data_arr as $key => $value) {
 			$request_for = $value->request_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->request_date));
 			$issued = $value->issued_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->issued_date));
+			$request = $value->request_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->request_date));
 			$departed = $value->daparture_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->daparture_date));
 			$arrived = $value->arrival_date == null ? '-' : date('Y-m-d H:i:s', strtotime($value->arrival_date));
 			$row_class = '';
@@ -173,6 +176,7 @@ class GoMachineOrderCompletionController extends Controller
                     <td>' . $value->item_desc . '</td>
                     <td class="text-center">' . $value->model . '</td>
                     <td class="text-center" style="min-width: 65px;">' . $issued . '</td>
+                    <td class="text-center" style="min-width: 65px;">' . $request . '</td>
                     <td class="text-center" style="min-width: 65px;">' . $departed . '</td>
                     <td class="text-center" style="min-width: 65px;">' . $arrived . '</td>
 				</tr>
