@@ -26,6 +26,28 @@ $tmp_location = ArrayHelper::map(app\models\WipPlanActualReport::find()->select(
 
 $gridColumns = [
     [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => '{delete}',
+        'buttons' => [
+            'delete' => function ($url, $model, $key) {
+                $url = ['delete', 'slip_id' => $model->slip_id];
+                $options = [
+                    'title' => 'Delete',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to delete this item?'
+                ];
+                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
+            }
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
+    ],
+    [
         'attribute' => 'slip_id',
         'vAlign' => 'middle',
         'hAlign' => 'center',
