@@ -79,7 +79,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
         'width' => '120px',
     ],
@@ -96,7 +96,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
         'width' => '110px',
     ],
@@ -106,7 +106,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 75px;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
         'width' => '100px',
     ],
@@ -190,6 +190,36 @@ $columns = [
             'LOT OUT' => 'Lot Out',
             'REPAIR' => 'Repair'
         ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'loct',
+        'label' => 'Location',
+        'value' => function($model){
+            $string = '';
+            if ($model->loct == 1) {
+                $string = 'FA Output';
+            } elseif ($model->loct == 2) {
+                $string = 'Finish Good WH';
+            } elseif ($model->loct == 3) {
+                $string = 'Export';
+            }
+            return $string;
+        },
+        'filter' => [
+            1 => 'FA Output',
+            2 => 'Finish Good WH',
+            3 => 'Export',
+        ],
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'qa_ng_date',
@@ -197,6 +227,10 @@ $columns = [
         'vAlign' => 'middle',
         'label' => 'Inspection Date',
         'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'qa_ng',
@@ -237,7 +271,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center;'
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     /*[
@@ -356,10 +390,13 @@ $columns = [
     </div>
 
 
-    <div class="table-responsive">
+    <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'hover' => true,
             'panel' => [
                 'type' => 'info',

@@ -20,7 +20,7 @@ public function rules()
 {
 return [
 [['flo', 'adv'], 'integer'],
-            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng_date', 'qa_ok_date', 'plan', 'etd_ship', 'status'], 'safe'],
+            [['pk', 'gmc', 'line', 'proddate', 'sernum', 'qa_ng_date', 'qa_ok_date', 'plan', 'etd_ship', 'status', 'loct'], 'safe'],
 ];
 }
 
@@ -52,6 +52,7 @@ $query = SernoInput::find()
     'qa_ok' => 'qa_ok',
     'qa_ok_date' => 'qa_ok_date',
     'line' => 'line',
+    'loct',
     'qa_result' => 'MAX(qa_result)',
     'total' => 'COUNT(gmc)',
 ])
@@ -100,6 +101,7 @@ return $dataProvider;
 $query->andFilterWhere([
             'flo' => $this->flo,
             'adv' => $this->adv,
+            'loct' => $this->loct,
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
