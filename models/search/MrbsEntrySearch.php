@@ -41,10 +41,24 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = MrbsEntry::find();
+$query = MrbsEntry::find()->joinWith('room');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+      'attributes' => [
+            'start_time',
+            'room_name' => [
+                'asc'=>['mrbs_room.room_name'=>SORT_ASC],
+                'desc'=>['mrbs_room.room_name'=>SORT_DESC],
+            ],
+      ],
+      'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'room_name' => SORT_ASC,
+            'start_time' => SORT_ASC
+      ]
+],
 ]);
 
 $this->load($params);
@@ -56,7 +70,7 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'id' => $this->id,
+            //'id' => $this->id,
             'DATE(from_unixtime(start_time))' => $this->tgl_start,
             //'end_time' => $this->end_time,
             'entry_type' => $this->entry_type,

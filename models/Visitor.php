@@ -3,15 +3,15 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\MrbsEntry as BaseMrbsEntry;
+use \app\models\base\Visitor as BaseVisitor;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "mrbs_entry".
+ * This is the model class for table "tb_visitor".
  */
-class MrbsEntry extends BaseMrbsEntry
+class Visitor extends BaseVisitor
 {
-    public $tgl_start, $tgl_end, $pic_id, $pic_name, $total_member, $started_by, $room_name;
+    public $id_name;
 
     public function behaviors()
     {

@@ -6,6 +6,7 @@ use app\models\search\MrbsEntrySearch;
 use app\models\RoomTbl;
 use app\models\RoomEventTbl;
 use app\models\Karyawan;
+use app\models\Visitor;
 use yii\web\Controller;
 use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
@@ -21,6 +22,20 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 	*/
 	public function actionIndex()
 	{
+		$session = \Yii::$app->session;
+        if (!$session->has('mrbs_user')) {
+            return $this->redirect(['login']);
+        }
+        $room_tbl = RoomTbl::find()
+        ->where([
+        	'user_id' => $session['mrbs_user'],
+        	'room_status' => 'NOT AVAILABLE'
+        ])
+        ->one();
+        if ($room_tbl->room_id != null) {
+        	return $this->redirect(['edit-member', 'room_id' => $room_tbl->room_id, 'event_id' => $room_tbl->event_id]);
+        }
+        
 		$this->layout = 'mrbs/main';
 	    $searchModel  = new MrbsEntrySearch;
 	    if (\Yii::$app->request->get('tgl_start') == null) {
@@ -39,8 +54,71 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 		]);
 	}
 
+	public function actionLogin()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $session = \Yii::$app->session;
+        if ($session->has('mrbs_user')) {
+            return $this->redirect(['index']);
+        }
+        $this->layout = "adminty\my-hr-login";
+
+        $model = new \yii\base\DynamicModel([
+            'username', 'password'
+        ]);
+        $model->addRule(['username', 'password'], 'required');
+
+        if($model->load(\Yii::$app->request->post())){
+            $karyawan = Karyawan::find()
+            ->where([
+                'NIK' => $model->username,
+                'PASSWORD' => $model->password,
+            ])
+            ->one();
+            if ($karyawan->NIK !== null) {
+                $session['mrbs_user'] = $model->username;
+                $session['mrbs_name'] = $karyawan->NAMA_KARYAWAN;
+                $room_tbl = RoomTbl::find()
+                ->where([
+                	'user_id' => $model->username,
+                	'room_status' => 'NOT AVAILABLE'
+                ])
+                ->one();
+                if ($room_tbl->room_id != null) {
+                	return $this->redirect(['edit-member', 'room_id' => $room_tbl->room_id, 'event_id' => $room_tbl->event_id]);
+                }
+                return $this->redirect(['index']);
+            } else {
+                \Yii::$app->getSession()->setFlash('error', 'Incorrect username or password...');
+            }
+            $model->username = null;
+            $model->password = null;
+        }
+
+        return $this->render('login', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionLogout()
+    {
+        $session = \Yii::$app->session;
+        if ($session->has('mrbs_user')) {
+            $session->remove('mrbs_user');
+        }
+        if ($session->has('mrbs_name')) {
+            $session->remove('mrbs_name');
+        }
+
+        return $this->redirect(['login']);
+    }
+
 	public function actionStartMeeting($id)
 	{
+		$session = \Yii::$app->session;
+        if (!$session->has('mrbs_user')) {
+            return $this->redirect(['login']);
+        }
 		date_default_timezone_set('Asia/Jakarta');
 		$this->layout = 'mrbs/main';
 		$mrbs_entry = $this->findModel($id);
@@ -59,10 +137,13 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 			$room_tbl = new RoomTbl();
 		}
 		$room_tbl->room_id = $room_id;
+		$room_tbl->event_id = $id;
 		$room_tbl->room_desc = $room_desc;
 		$room_tbl->room_event = $room_event;
 		$room_tbl->room_status = 'NOT AVAILABLE';
 		$room_tbl->pic = $pic;
+		$room_tbl->user_id = $session['mrbs_user'];
+		$room_tbl->user_desc = $session['mrbs_name'];
 		$room_tbl->start_time = $start_time;
 		$room_tbl->end_time = $end_time;
 
@@ -76,26 +157,26 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 
 	public function actionEditMember($room_id, $event_id)
 	{
+		$session = \Yii::$app->session;
+        if (!$session->has('mrbs_user')) {
+            return $this->redirect(['login']);
+        }
 		date_default_timezone_set('Asia/Jakarta');
 		$this->layout = 'mrbs/main';
 		$model = new \yii\base\DynamicModel([
 		    'nik'
 		]);
-	    $model->addRule('nik', 'required')
-	        ->addRule('nik', 'string',['max'=>32]);
+	    $model->addRule('nik', 'string',['max'=>32]);
 
-        $total_member = RoomEventTbl::find()
-        ->where([
-        	'room_id' => $room_id,
-        	'event_id' => $event_id
-        ])
-        ->asArray()
-        ->all();
+        $room_tbl = RoomTbl::find()->where([
+			'room_id' => $room_id
+		])->one();
 
     	if($model->load(\Yii::$app->request->post())){
     		$room_event_tbl = RoomEventTbl::find()->where([
     			'nik' => $model->nik,
-    			'room_id' => $room_id
+    			'room_id' => $room_id,
+    			'event_id' => $event_id
     		])->one();
 
     		if ($room_event_tbl->seq != null) {
@@ -108,11 +189,8 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
     			if ($karyawan->NIK == null) {
     				\Yii::$app->session->setFlash("warning", 'NIK : ' . $model->nik . ' is not found...');
     			} else {
-    				$user_id = '150826';
-    				$user_desc = 'FRENKY CAHYA PURNAMA';
-    				$room_tbl = RoomTbl::find()->where([
-		    			'room_id' => $room_id
-		    		])->one();
+    				$user_id = $session['mrbs_user'];
+    				$user_desc = $session['mrbs_name'];
 
 		    		$new_member = new RoomEventTbl();
 		    		$new_member->event_id = $event_id;
@@ -142,11 +220,94 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 	        // do somenthing with model
 	        //return $this->redirect(['view']);
 	    }
-		
+
+		$total_member = RoomEventTbl::find()
+        ->where([
+        	'room_id' => $room_id,
+        	'event_id' => $event_id
+        ])
+        ->asArray()
+        ->all();
 		
 		return $this->render('edit-member', [
 			'model' => $model,
 			'total_member' => $total_member,
+			'room_tbl' => $room_tbl
 		]);
+	}
+
+	public function actionAddVisitor()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		if (\Yii::$app->request->post('pk') !== null) {
+			$pk = \Yii::$app->request->post('pk');
+			$room_id = \Yii::$app->request->post('room_id');
+			$room_desc = \Yii::$app->request->post('room_desc');
+			$event_id = \Yii::$app->request->post('event_id');
+			$start_time = date('Y-m-d H:i:s', \Yii::$app->request->post('start_time'));
+			$end_time = date('Y-m-d H:i:s', \Yii::$app->request->post('end_time'));
+
+			$visitor = Visitor::find()->where([
+				'pk' => $pk
+			])->one();
+
+			$room_event_tbl = RoomEventTbl::find()->where([
+    			'nik' => $visitor->visitor_id,
+    			'room_id' => $room_id,
+    			'event_id' => $event_id
+    		])->one();
+
+    		if ($room_event_tbl->seq != null) {
+    			\Yii::$app->session->setFlash("warning", 'Visitor : ' . $visitor->visitor_name . ' from ' . $visitor->visitor_comp . ' is already a member...');
+    		} else {
+    			$user_id = $session['mrbs_user'];
+				$user_desc = $session['mrbs_name'];
+
+	    		$new_member = new RoomEventTbl();
+	    		$new_member->event_id = $event_id;
+	    		$new_member->member_category = 2;
+	    		$new_member->company = $visitor->visitor_comp;
+	    		$new_member->room_id = $room_id;
+	    		$new_member->room_desc = $room_desc;
+	    		$new_member->room_event = $room_event;
+	    		$new_member->start_time = date('Y-m-d H:i:s', $start_time);
+	    		$new_member->end_time = date('Y-m-d H:i:s', $end_time);
+	    		$new_member->NIK = $visitor->visitor_id;
+	    		$new_member->NAMA_KARYAWAN = $visitor->visitor_name;
+	    		$new_member->user_id = $user_id;
+	    		$new_member->user_desc = $user_desc;
+	    		$new_member->last_update = date('Y-m-d H:i:s');
+
+	    		if ($new_member->save()) {
+	    			$visitor->meet = 1;
+	    			if (!$visitor->save()) {
+	    				return json_encode($visitor->errors());
+	    			}
+	    			\Yii::$app->session->setFlash("success", 'Visitor : ' . $visitor->visitor_name . ' from ' . $visitor->visitor_comp . ' has been added ...');
+	    		} else {
+	    			\Yii::$app->session->setFlash("danger", 'Failed : ' . json_encode($model->errors()));
+	    		}
+    		}
+
+		}
+
+		return $this->redirect(Url::to(['edit-member', 'room_id' => $room_id, 'event_id' => $event_id]));
+	}
+
+	public function actionFinishMeeting($room_id, $event_id)
+	{
+		$room_tbl = RoomTbl::find()
+		->where([
+			'room_id' => $room_id,
+			'event_id' => $event_id,
+		])
+		->one();
+
+		$room_tbl->room_status = 'AVAILABLE';
+		if (!$room_tbl->save()) {
+			return json_encode($room_tbl->errors());
+		}
+
+		return $this->redirect(Url::to(['index']));
 	}
 }
