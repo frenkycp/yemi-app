@@ -83,7 +83,7 @@ $gridColumns = [
         'filter' => ArrayHelper::map(app\models\MrbsRoom::find()->orderBy('sort_key')->all(), 'id', 'sort_key'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 110px;'
+            'style' => 'text-align: center; min-width: 110px;'
         ],
     ],
     [
@@ -93,7 +93,7 @@ $gridColumns = [
         //'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     /*[
@@ -168,16 +168,25 @@ $gridColumns = [
         'mergeHeader' => true,
         'value' => function($model){
             $started_by = '-';
-            $room_event_tbl = app\models\RoomEventTbl::find()
+
+            $room_tbl = app\models\RoomTbl::find()
             ->where([
                 'room_id' => $model->room_id,
                 'event_id' => $model->id,
-            ])
-            ->one();
-            if ($room_event_tbl->room_id != null) {
-                $started_by = $room_event_tbl->user_id . ' - ' . $room_event_tbl->user_desc;
-            }
+            ])->one();
+            if ($room_tbl->room_id != null) {
+                $started_by = $room_tbl->user_id . ' - ' . $room_tbl->user_desc;
+            } else {
+                $room_event_tbl = app\models\RoomEventTbl::find()
+                ->where([
+                    'room_id' => $model->room_id,
+                    'event_id' => $model->id,
+                ])->one();
 
+                if ($room_event_tbl->room_id != null) {
+                    $started_by = $room_event_tbl->user_id . ' - ' . $room_event_tbl->user_desc;
+                }
+            }
             return $started_by;
         },
         'filterInputOptions' => [
@@ -243,17 +252,17 @@ $gridColumns = [
                     'event_id' => $model->id
                 ])
                 ->count();
+                $room_tbl = app\models\RoomTbl::find()
+                ->where([
+                    'room_id' => $model->room_id,
+                    'event_id' => $model->id,
+                    'room_status' => 'NOT AVAILABLE'
+                ])
+                ->one();
+                if ($room_tbl->room_id != null) {
+                    return ['class' => 'warning'];
+                }
                 if ($total > 0) {
-                    $room_tbl = app\models\RoomTbl::find()
-                    ->where([
-                        'room_id' => $model->room_id,
-                        'event_id' => $model->id,
-                        'room_status' => 'NOT AVAILABLE'
-                    ])
-                    ->one();
-                    if ($room_tbl->room_id != null) {
-                        return ['class' => 'warning'];
-                    }
                     return ['class' => 'success'];
                 } else {
                     return ['class' => ''];
@@ -262,7 +271,7 @@ $gridColumns = [
             //'showPageSummary' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo

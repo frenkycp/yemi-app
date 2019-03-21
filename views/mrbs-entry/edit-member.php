@@ -191,8 +191,18 @@ $this->registerJs($script, View::POS_HEAD );
 
 <div class="row">
     <div class="col-md-12 col-sm-12">
-        <?= Html::a('FINISH', ['finish-meeting', 'room_id' => $room_tbl->room_id, 'event_id' => $room_tbl->event_id], [
-            'class' => 'btn btn-lg btn-success btn-block'
-        ]); ?>
+        <?php
+        $options = [
+            'class' => 'btn btn-lg btn-success btn-block',
+        ];
+        if ($total_member == null) {
+            $options = [
+                'class' => 'btn btn-lg btn-success btn-block',
+                'disabled' => 'disabled',
+                'onclick' => 'return false;'
+            ];
+        }
+        ?>
+        <?= Html::a('FINISH', ['finish-meeting', 'room_id' => $room_tbl->room_id, 'event_id' => $room_tbl->event_id], $options); ?>
     </div>
 </div>

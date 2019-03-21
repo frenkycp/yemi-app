@@ -135,6 +135,11 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 
 		if ($room_tbl->room_id == null) {
 			$room_tbl = new RoomTbl();
+		} else {
+			if ($room_tbl->room_status == 'NOT AVAILABLE') {
+				\Yii::$app->session->setFlash("warning", 'Failed to start. Room was used by another person ...');
+				return $this->redirect(Url::previous());
+			}
 		}
 		$room_tbl->room_id = $room_id;
 		$room_tbl->event_id = $id;
@@ -238,6 +243,10 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 
 	public function actionAddVisitor()
 	{
+		$session = \Yii::$app->session;
+        if (!$session->has('mrbs_user')) {
+            return $this->redirect(['login']);
+        }
 		date_default_timezone_set('Asia/Jakarta');
 		if (\Yii::$app->request->post('pk') !== null) {
 			$pk = \Yii::$app->request->post('pk');
@@ -296,6 +305,10 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 
 	public function actionFinishMeeting($room_id, $event_id)
 	{
+		$session = \Yii::$app->session;
+        if (!$session->has('mrbs_user')) {
+            return $this->redirect(['login']);
+        }
 		$room_tbl = RoomTbl::find()
 		->where([
 			'room_id' => $room_id,
