@@ -8,6 +8,7 @@ use app\models\SernoSlipLog;
 use app\models\Action;
 use app\models\PalletDriver;
 use app\models\Karyawan;
+use app\models\SernoInput;
 
 class PalletTransporterController extends Controller
 {
@@ -37,7 +38,7 @@ class PalletTransporterController extends Controller
 		$line_data = SernoSlip::find()->where([
 			'fa' => $fa
 		])
-		->andWhere(['<>', 'user', 'MIS'])
+		//->andWhere(['<>', 'user', 'MIS'])
 		->orderBy('status DESC, user ASC')
 		->asArray()
 		->all();
@@ -159,6 +160,17 @@ class PalletTransporterController extends Controller
 			if (!$pallet_driver->save()) {
 				print_r($pallet_driver->errors);
 			}
+
+			$condition = ['and',
+			    ['line' => $line],
+			    ['loct' => 0],
+			    ['loct_time' => $log->pk],
+			];
+
+			SernoInput::updateAll([
+				'loct' => 1,
+				'loct_time' => date('Y-m-d H:i:s'),
+			], $condition);
 		}
 		\Yii::$app->getSession()->setFlash('info', 'You have finished order from line ' . $line . '...');
 
