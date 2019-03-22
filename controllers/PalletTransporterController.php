@@ -38,7 +38,7 @@ class PalletTransporterController extends Controller
 		$line_data = SernoSlip::find()->where([
 			'fa' => $fa
 		])
-		//->andWhere(['<>', 'user', 'MIS'])
+		->andWhere(['<>', 'user', 'MIS'])
 		->orderBy('status DESC, user ASC')
 		->asArray()
 		->all();
