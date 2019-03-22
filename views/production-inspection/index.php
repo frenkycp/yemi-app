@@ -222,6 +222,24 @@ $columns = [
         ],
     ],
     [
+        'attribute' => 'loct_time',
+        'label' => 'Time',
+        'value' => function($model){
+            if ($model->loct_time == '0000-00-00 00:00:00') {
+                return '-';
+            } else {
+                return $model->loct_time;
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'qa_ng_date',
         'hAlign' => 'center',
         'vAlign' => 'middle',

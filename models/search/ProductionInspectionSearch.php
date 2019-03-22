@@ -53,6 +53,7 @@ $query = SernoInput::find()
     'qa_ok_date' => 'qa_ok_date',
     'line' => 'line',
     'loct',
+    'loct_time',
     'qa_result' => 'MAX(qa_result)',
     'total' => 'COUNT(gmc)',
 ])
