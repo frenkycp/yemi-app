@@ -197,6 +197,12 @@ echo '</pre>';*/
                 <td class="text-center">' . $value->handleby . '</td>
             </tr>';
         }
+
+        if (count($data) == 0) {
+            echo '<tr>
+            <td colspan="7">No Visitor Today</td>
+            </tr>';
+        }
         ?>
         
     </tbody>
