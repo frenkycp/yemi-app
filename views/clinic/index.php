@@ -109,7 +109,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box bg-purple">
             <div class="inner">
-                <h3><?= $available_beds; ?></h3>
+                <h3><?= $available_beds; ?>/3</h3>
                 <p>Beds Available</p>
             </div>
             <div class="icon">
@@ -124,9 +124,6 @@ echo '</pre>';*/
                 <h3>Doctor</h3>
                 <p>&nbsp;<?= $doctor_data['status']; ?></p>
             </div>
-            <div class="icon">
-                <i class="glyphicon glyphicon-heart-empty"></i>
-            </div>
             <a class="small-box-footer"></a>
         </div>
     </div>
@@ -135,9 +132,6 @@ echo '</pre>';*/
             <div class="inner">
                 <h3>Nurse</h3>
                 <p>&nbsp;<?= $nurse_data['status']; ?></p>
-            </div>
-            <div class="icon">
-                <i class="glyphicon glyphicon-heart-empty"></i>
             </div>
             <a class="small-box-footer"></a>
         </div>
@@ -151,9 +145,9 @@ echo '</pre>';*/
             <th>Name</th>
             <th>Department</th>
             <th>Category</th>
-            <th class="text-center">Input Time</th>
-            <th class="text-center">Rest Time</th>
+            <th class="text-center">Time</th>
             <th class="text-center">Handled By</th>
+            <th class="text-center">Monthly Visits</th>
         </tr>
     </thead>
     <tbody>
@@ -168,23 +162,22 @@ echo '</pre>';*/
             ->queryAll();*/
         
         foreach ($data as $key => $value) {
-            $time_array = [
-                '08.00 - 10.00',
-                '09.00 - 11.00',
-                '10.00 - 12.00',
-                '11.00 - 13.00',
-                '12.00 - 14.00',
-                '13.00 - 15.00',
-                '14.00 - 16.00',
-            ];
-            $random_time = rand(0, count($time_array) - 1);
             $random_visit = rand(1, 5);
+            $total_this_month = app\models\KlinikInput::find()
+            ->where([
+                'EXTRACT(year_month FROM pk)' => date('Ym'),
+                'nik' => $value->nik
+            ])
+            ->count();
             if ($value->opsi == 1) {
-                $category = 'MEDICAL CHECK UP';
-                $bed_rest_time = '-';
+                $category = 'CHECK UP';
+                $bed_rest_time = date('H:i', strtotime($value->pk));
 
-            } else {
+            } elseif ($value->opsi == 2) {
                 $category = 'BEDREST';
+                $bed_rest_time = date('H:i', strtotime($value->masuk)) . ' - ' . date('H:i', strtotime($value->keluar));
+            }else {
+                $category = 'LACTATION';
                 $bed_rest_time = date('H:i', strtotime($value->masuk)) . ' - ' . date('H:i', strtotime($value->keluar));
             }
             echo '<tr>
@@ -192,15 +185,15 @@ echo '</pre>';*/
                 <td>' . $value->nama . '</td>
                 <td>' . $value->dept . '</td>
                 <td>' . $category . '</td>
-                <td class="text-center">' . date('H:i', strtotime($value->pk)) . '</td>
                 <td class="text-center">' . $bed_rest_time . '</td>
-                <td class="text-center">' . $value->handleby . '</td>
+                <td class="text-center">' . strtoupper($value->handleby) . '</td>
+                <td class="text-center">' . $total_this_month . '</td>
             </tr>';
         }
 
         if (count($data) == 0) {
             echo '<tr>
-            <td colspan="7">No Visitor Today</td>
+            <td colspan="6">No Visitor Today</td>
             </tr>';
         }
         ?>

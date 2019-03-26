@@ -20,7 +20,7 @@ class ClinicController extends controller
 		->where([
 			'date(pk)' => date('Y-m-d')
 		])
-		->orderBy('pk DESC')
+		->orderBy('opsi DESC, pk DESC')
 		->limit(10)
 		->all();
 
@@ -40,6 +40,9 @@ class ClinicController extends controller
 		->where(['>', 'keluar', date('H:i:s')])
 		->andWhere([
 			'date(pk)' => date('Y-m-d')
+		])
+		->andWhere([
+			'opsi' => 2
 		])
 		->count();
 
