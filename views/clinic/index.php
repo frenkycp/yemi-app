@@ -32,13 +32,13 @@ $this->registerCss("
         border:1px solid #8b8c8d;
         background-color: #858689;
         color: white;
-        font-size: 30px;
+        font-size: 22px;
         border-bottom: 7px solid #ddd;
         vertical-align: middle;
     }
     #clinic-tbl > tbody > tr > td{
         //border:1px solid #29B6F6;
-        font-size: 20px;
+        font-size: 16px;
         background-color: #B3E5FC;
         font-weight: 1000;
         color: #555;

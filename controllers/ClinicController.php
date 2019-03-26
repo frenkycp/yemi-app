@@ -10,6 +10,7 @@ class ClinicController extends controller
 {
 	public function actionIndex()
 	{
+		date_default_timezone_set('Asia/Jakarta');
 		$this->layout = 'clean';
 		$available_beds = 3;
 		$doctor_status = 2;
@@ -20,7 +21,7 @@ class ClinicController extends controller
 			'date(pk)' => date('Y-m-d')
 		])
 		->orderBy('pk DESC')
-		->limit(15)
+		->limit(10)
 		->all();
 
 		$today_visitor = KlinikInput::find()
