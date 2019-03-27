@@ -217,6 +217,16 @@ $gridColumns = [
     ],
     [
         'attribute' => 'total_minutes',
+        'label' => 'Actual Time',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '105px',
+        'contentOptions' => [
+            'style' => 'min-width: 90px;'
+        ],
+    ],
+    [
+        'attribute' => 'normal_time',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '105px',
@@ -242,12 +252,17 @@ $gridColumns = [
             'columns' => $gridColumns,
             'hover' => true,
             //'condensed' => true,
-            'striped' => true,
+            'striped' => false,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'rowOptions' => function($model){
+                if ($model->total_minutes > $model->normal_time) {
+                    return ['class' => 'bg-danger'];
+                }
+            },
             'toolbar' =>  [
                 '{export}',
                 '{toggleData}',
