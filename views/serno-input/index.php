@@ -66,6 +66,18 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'waktu',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+    ],
+    [
         'attribute' => 'flo',
         'hAlign' => 'center',
         'vAlign' => 'middle',
