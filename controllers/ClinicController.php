@@ -21,7 +21,7 @@ class ClinicController extends controller
 			'date(pk)' => date('Y-m-d')
 		])
 		->orderBy('opsi DESC, pk DESC')
-		->limit(5)
+		//->limit(5)
 		->all();
 
 		$today_visitor = KlinikInput::find()

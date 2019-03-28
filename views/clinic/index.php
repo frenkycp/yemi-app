@@ -118,10 +118,10 @@ echo '</pre>';*/
             <a class="small-box-footer"></a>
         </div>
     </div>
-    <div class="col-lg-2 col-xs-6 col-md-3">
+    <div class="col-lg-2 col-lg-offset-2 col-md-offset-2 col-xs-6 col-md-3">
         <div class="small-box <?= $doctor_data['bg_color']; ?>">
             <div class="inner">
-                <h3>doctor</h3>
+                <h3>Dokter</h3>
                 <p>&nbsp;<?= $doctor_data['status']; ?></p>
             </div>
             <a class="small-box-footer"></a>
@@ -130,7 +130,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box <?= $nurse_data['bg_color']; ?>">
             <div class="inner">
-                <h3>Paramedis</h3>
+                <h3>Perawat</h3>
                 <p>&nbsp;<?= $nurse_data['status']; ?></p>
             </div>
             <a class="small-box-footer"></a>
@@ -147,6 +147,7 @@ echo '</pre>';*/
             <th>Kategori</th>
             <th class="text-center">Waktu</th>
             <th class="text-center">Kunjungan Bulan Ini</th>
+            <th class="text-center">Konfirmasi Manager</th>
         </tr>
     </thead>
     <tbody>
@@ -168,15 +169,34 @@ echo '</pre>';*/
                 'nik' => $value->nik
             ])
             ->count();
+
+            if ($value->confirm == 0) {
+                $konfirmasi = [
+                    'text' => 'BELUM',
+                    'class' => 'text-red'
+                ];
+            } else {
+                $konfirmasi = [
+                    'text' => 'SUDAH',
+                    'class' => 'text-green'
+                ];
+            }
+
+            if ($value->handleby == 'nurse') {
+                $handled_by = 'PERAWAT';
+            } else {
+                $handled_by = 'DOKTER';
+            }
+
             if ($value->opsi == 1) {
-                $category = 'CHECK UP';
+                $category = 'PERIKSA';
                 $bed_rest_time = date('H:i', strtotime($value->pk));
 
             } elseif ($value->opsi == 2) {
-                $category = 'BEDREST';
+                $category = 'ISTIRAHAT';
                 $bed_rest_time = date('H:i', strtotime($value->masuk)) . ' - ' . date('H:i', strtotime($value->keluar));
             }else {
-                $category = 'LACTATION';
+                $category = 'LAKTASI';
                 $bed_rest_time = date('H:i', strtotime($value->masuk)) . ' - ' . date('H:i', strtotime($value->keluar));
             }
             echo '<tr>
@@ -186,6 +206,7 @@ echo '</pre>';*/
                 <td>' . $category . '</td>
                 <td class="text-center">' . $bed_rest_time . '</td>
                 <td class="text-center">' . $total_this_month . '</td>
+                <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
             </tr>';
         }
 
