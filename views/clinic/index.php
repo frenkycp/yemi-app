@@ -86,7 +86,7 @@ echo '</pre>';*/
         <div class="small-box bg-purple">
             <div class="inner">
                 <h3><?= $today_visitor; ?></h3>
-                <p>Visitors Today</p>
+                <p>Pengunjung Hari Ini</p>
             </div>
             <div class="icon">
                 <i class="glyphicon glyphicon-user"></i>
@@ -98,7 +98,7 @@ echo '</pre>';*/
         <div class="small-box bg-purple">
             <div class="inner">
                 <h3><?= $monthly_visitor; ?></h3>
-                <p>Visitors This Month</p>
+                <p>Pengunjung Bulan Ini</p>
             </div>
             <div class="icon">
                 <i class="glyphicon glyphicon-calendar"></i>
@@ -110,7 +110,7 @@ echo '</pre>';*/
         <div class="small-box bg-purple">
             <div class="inner">
                 <h3><?= $available_beds; ?>/3</h3>
-                <p>Beds Available</p>
+                <p>Ruangan Tersedia</p>
             </div>
             <div class="icon">
                 <i class="glyphicon glyphicon-bed"></i>
@@ -121,7 +121,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box <?= $doctor_data['bg_color']; ?>">
             <div class="inner">
-                <h3>Doctor</h3>
+                <h3>doctor</h3>
                 <p>&nbsp;<?= $doctor_data['status']; ?></p>
             </div>
             <a class="small-box-footer"></a>
@@ -130,7 +130,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box <?= $nurse_data['bg_color']; ?>">
             <div class="inner">
-                <h3>Nurse</h3>
+                <h3>Paramedis</h3>
                 <p>&nbsp;<?= $nurse_data['status']; ?></p>
             </div>
             <a class="small-box-footer"></a>
@@ -142,12 +142,11 @@ echo '</pre>';*/
     <thead>
         <tr>
             <th class="text-center">NIK</th>
-            <th>Name</th>
-            <th>Department</th>
-            <th>Category</th>
-            <th class="text-center">Time</th>
-            <th class="text-center">Handled By</th>
-            <th class="text-center">Monthly Visits</th>
+            <th>Nama</th>
+            <th>Departemen</th>
+            <th>Kategori</th>
+            <th class="text-center">Waktu</th>
+            <th class="text-center">Kunjungan Bulan Ini</th>
         </tr>
     </thead>
     <tbody>
@@ -186,14 +185,13 @@ echo '</pre>';*/
                 <td>' . $value->dept . '</td>
                 <td>' . $category . '</td>
                 <td class="text-center">' . $bed_rest_time . '</td>
-                <td class="text-center">' . strtoupper($value->handleby) . '</td>
                 <td class="text-center">' . $total_this_month . '</td>
             </tr>';
         }
 
         if (count($data) == 0) {
             echo '<tr>
-            <td colspan="7">No Visitor Today</td>
+            <td colspan="6">No Visitor Today</td>
             </tr>';
         }
         ?>
