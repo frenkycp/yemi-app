@@ -193,7 +193,7 @@ echo '</pre>';*/
                 $bed_rest_time = date('H:i', strtotime($value->pk));
 
             } elseif ($value->opsi == 2) {
-                $category = 'ISTIRAHAT';
+                $category = 'ISTIRAHAT SAKIT';
                 $bed_rest_time = date('H:i', strtotime($value->masuk)) . ' - ' . date('H:i', strtotime($value->keluar));
             }else {
                 $category = 'LAKTASI';
