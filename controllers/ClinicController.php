@@ -13,15 +13,15 @@ class ClinicController extends controller
 		date_default_timezone_set('Asia/Jakarta');
 		$this->layout = 'clean';
 		$available_beds = 3;
-		$doctor_status = 2;
-		$nurse_status = 1;
+		$doctor_status = KlinikHandle::find()->where(['pk' => 'doctor'])->one()->status;
+		$nurse_status = KlinikHandle::find()->where(['pk' => 'nurse'])->one()->status;
 
 		$data = KlinikInput::find()
 		->where([
 			'date(pk)' => date('Y-m-d')
 		])
 		->orderBy('opsi DESC, pk DESC')
-		->limit(10)
+		->limit(5)
 		->all();
 
 		$today_visitor = KlinikInput::find()
@@ -53,24 +53,24 @@ class ClinicController extends controller
 
 		if ($doctor_status == 1) {
 			$doctor_data = [
-				'status' => 'AVAILABLE',
+				'status' => 'ADA',
 				'bg_color' => 'bg-green'
 			];
 		} else {
 			$doctor_data = [
-				'status' => 'NOT AVAILABLE',
+				'status' => 'TIDAK ADA',
 				'bg_color' => 'bg-orange'
 			];
 		}
 
 		if ($nurse_status == 1) {
 			$nurse_data = [
-				'status' => 'AVAILABLE',
+				'status' => 'ADA',
 				'bg_color' => 'bg-green'
 			];
 		} else {
 			$nurse_data = [
-				'status' => 'NOT AVAILABLE',
+				'status' => 'TIDAK ADA',
 				'bg_color' => 'bg-orange'
 			];
 		}
