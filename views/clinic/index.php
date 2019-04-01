@@ -212,7 +212,7 @@ echo '</pre>';*/
 
         if (count($data) == 0) {
             echo '<tr>
-            <td colspan="6">No Visitor Today</td>
+            <td colspan="7">No Visitor Today</td>
             </tr>';
         }
         ?>
