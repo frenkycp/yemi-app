@@ -4,7 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\SalesBudgetTbl;
 use app\models\SalesBudgetCompare;
-use app\models\Budget;
+use app\models\FiscalTbl;
 use yii\web\JsExpression;
 use DateTime;
 use yii\helpers\Html;
@@ -30,24 +30,41 @@ class ProductionBudgetController extends Controller
         $prod_period_arr = [];
         $prod_bu_arr = [];
 
-        $model = new Budget();
+        $model = new \yii\base\DynamicModel([
+            'qty_or_amount', 'fiscal', 'budget_type'
+        ]);
+        $model->addRule(['qty_or_amount', 'fiscal', 'budget_type'], 'string');
+
         $model->budget_type = 'ALL';
 		$model->qty_or_amount = 'QTY';
         
-    	if ($model->load($_POST))
+        $fiscal = FiscalTbl::find()
+        ->select('FISCAL')
+        ->where([
+            'PERIOD' => date('Ym')
+        ])
+        ->one()
+        ->FISCAL;
+        if ($fiscal == null) {
+            $fiscal = FiscalTbl::find()
+            ->select([
+                'FISCAL' => 'MAX(FISCAL)'
+            ])
+            ->one()
+            ->FISCAL;
+        }
+        $model->fiscal = $fiscal;
+
+    	if ($model->load($_GET))
 		{
-
+            $fiscal = $model->fiscal;
 		}
-
-        $tmp_fy = SalesBudgetTbl::find()
-        ->where(['PERIOD' => date('Ym')])
-        ->one();
 
         $series = [];
 
         $prod_sales_arr = SalesBudgetTbl::find()
         ->where([
-            'FISCAL' => $tmp_fy->FISCAL,
+            'FISCAL' => $fiscal,
         ])
         ->all();
 
@@ -59,7 +76,7 @@ class ProductionBudgetController extends Controller
             'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)'
         ])
         ->where([
-            'FISCAL' => $tmp_fy->FISCAL,
+            'FISCAL' => $fiscal,
             //'FISCAL' => $this->getPeriodFiscal(date('Ym'))
         ])
         ->groupBy('FISCAL, PERIOD')
@@ -69,7 +86,7 @@ class ProductionBudgetController extends Controller
         if ($model->budget_type !== 'ALL') {
             $prod_sales_arr = SalesBudgetTbl::find()
             ->where([
-                'FISCAL' => $tmp_fy->FISCAL,
+                'FISCAL' => $fiscal,
                 'TYPE' => $model->budget_type
             ])
             ->all();
@@ -82,7 +99,7 @@ class ProductionBudgetController extends Controller
                 'total_amount_actual' => 'SUM(AMOUNT_ACT_FOR)'
             ])
             ->where([
-                'FISCAL' => $tmp_fy->FISCAL,
+                'FISCAL' => $fiscal,
                 'TYPE' => $model->budget_type
                 //'FISCAL' => $this->getPeriodFiscal(date('Ym'))
             ])
@@ -204,10 +221,9 @@ class ProductionBudgetController extends Controller
             'subtitle' => $subtitle,
             'categories' => $categories,
             'series' => $series,
-            'fiscal' => $tmp_fy->FISCAL,
+            'fiscal' => $fiscal,
             'budget_grandtotal_amount' => $budget_grandtotal_amount,
             'actual_grandtotal_amount' => $actual_grandtotal_amount,
-            'fiscal' => $tmp_fy->FISCAL,
             'tmp_data_amount_budget' => $tmp_data_amount_budget,
             'last_update' => date('d M\' Y', strtotime($tmp_fy->LAST_UPDATE))
         ]);
