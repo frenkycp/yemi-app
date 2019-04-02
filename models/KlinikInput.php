@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class KlinikInput extends BaseKlinikInput
 {
+    public $input_date;
 
     public function behaviors()
     {
@@ -27,7 +28,27 @@ class KlinikInput extends BaseKlinikInput
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                [['nik', 'anamnesa', 'root_cause', 'diagnosa'], 'required'],
+            ]
+        );
+    }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(
+            parent::attributeLabels(),
+            [
+                'nik' => 'NIK',
+                'dept' => 'Departemen',
+                'opsi' => 'Keperluan',
+                'anamnesa' => 'Gejala',
+                'root_cause' => 'Penyebab',
+                'obat1' => 'Obat 1',
+                'obat2' => 'Obat 2',
+                'obat3' => 'Obat 3',
+                'obat4' => 'Obat 4',
+                'obat5' => 'Obat 5',
+                'handleby' => 'Paramedis'
             ]
         );
     }

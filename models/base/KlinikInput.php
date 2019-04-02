@@ -25,6 +25,7 @@ use Yii;
  * @property string $obat4
  * @property string $obat5
  * @property string $handleby
+ * @property integer $confirm
  * @property string $aliasModel
  */
 abstract class KlinikInput extends \yii\db\ActiveRecord
@@ -54,9 +55,9 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pk', 'nik', 'nama', 'dept', 'opsi', 'masuk', 'keluar', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'required'],
+            [['pk'], 'required'],
             [['pk', 'masuk', 'keluar'], 'safe'],
-            [['nik', 'opsi'], 'integer'],
+            [['nik', 'opsi', 'confirm'], 'integer'],
             [['nama', 'dept', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'string', 'max' => 255],
             [['pk'], 'unique']
         ];
@@ -84,6 +85,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'obat4' => 'Obat4',
             'obat5' => 'Obat5',
             'handleby' => 'Handleby',
+            'confirm' => 'Confirm',
         ];
     }
 
