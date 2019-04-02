@@ -55,79 +55,96 @@ class BudgetExpensesController extends Controller
 
 	    $categories = $this->getPeriodArr($fiscal);
 
-		$budget_data_arr = AccountBudget::find()
-		->select([
-			'PERIOD', 'DEP_DESC',
-			'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
-			'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
-		])
-		->where([
-			'CONTROL' => 'Y',
-			'PERIOD' => $categories
-		])
-		->groupBy('PERIOD, DEP_DESC')
-		->asArray()
-		->all();
-
-		if ($model->budget_type != null) {
-			$budget_data_arr = AccountBudget::find()
-			->select([
-				'PERIOD', 'DEP_DESC',
-				'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
-				'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
-			])
-			->where([
-				'CONTROL' => 'Y',
-				'PERIOD' => $categories,
-				'FILTER' => $model->budget_type
-			])
-			->groupBy('PERIOD, DEP_DESC')
-			->asArray()
-			->all();
-		}
-
-		foreach ($dept_arr as $dept) {
-			foreach ($categories as $category) {
-				/*$budget_data = AccountBudget::find()
+	    if ($model->dept != '') {
+	    	$department = $dept;
+	    	if ($model->budget_type != null) {
+				$budget_data_arr = AccountBudget::find()
 				->select([
+					'PERIOD', 'DEP_DESC',
 					'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
 					'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
 				])
 				->where([
 					'CONTROL' => 'Y',
-					'PERIOD' => $category,
-					'DEP_DESC' => $dept
+					'PERIOD' => $categories,
+					'FILTER' => $model->budget_type,
+					'DEP_DESC' => $dept_arr
 				])
-				->one();*/
-				$budget = null;
-				$consume = null;
-				foreach ($budget_data_arr as $value) {
-					if ($value['PERIOD'] == $category && $value['DEP_DESC'] == $dept) {
-						$budget = (int)round($value['BUDGET_AMT']);
-						$consume = (int)round($value['CONSUME_AMT']);
-					}
-				}
-				$tmp_data[$dept]['BUDGET'][] = [
-					'y' => $budget,
-					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category, 'budget_type' => $model->budget_type])
-				];
-				$tmp_data[$dept]['CONSUME'][] = [
-					'y' => $consume,
-					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category, 'budget_type' => $model->budget_type])
-				];
-				/*$tmp_data[$dept]['BUDGET'][] = [
-					'y' => (int)$budget_data->BUDGET_AMT,
-					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category])
-				];
-				$tmp_data[$dept]['CONSUME'][] = [
-					'y' => (int)$budget_data->CONSUME_AMT,
-					'url' => Url::to(['get-remark', 'dept' => $dept, 'period' => $category])
-				];*/
+				->groupBy('PERIOD, DEP_DESC')
+				->asArray()
+				->all();
+			} else {
+				$budget_data_arr = AccountBudget::find()
+				->select([
+					'PERIOD', 'DEP_DESC',
+					'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
+					'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
+				])
+				->where([
+					'CONTROL' => 'Y',
+					'PERIOD' => $categories,
+					'DEP_DESC' => $dept_arr
+				])
+				->groupBy('PERIOD, DEP_DESC')
+				->asArray()
+				->all();
 			}
+	    } else {
+	    	$department = 'ALL DEPARTMENT';
+	    	if ($model->budget_type != null) {
+				$budget_data_arr = AccountBudget::find()
+				->select([
+					'PERIOD',
+					'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
+					'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
+				])
+				->where([
+					'CONTROL' => 'Y',
+					'PERIOD' => $categories,
+					'FILTER' => $model->budget_type
+				])
+				->groupBy('PERIOD')
+				->asArray()
+				->all();
+			} else {
+				$budget_data_arr = AccountBudget::find()
+				->select([
+					'PERIOD',
+					'BUDGET_AMT' => 'SUM(BUDGET_AMT)',
+					'CONSUME_AMT' => 'SUM(CONSUME_AMT)'
+				])
+				->where([
+					'CONTROL' => 'Y',
+					'PERIOD' => $categories
+				])
+				->groupBy('PERIOD')
+				->asArray()
+				->all();
+			}
+	    }
+		
+		foreach ($categories as $category) {
+			$budget = null;
+			$consume = null;
+			foreach ($budget_data_arr as $value) {
+				if ($value['PERIOD'] == $category) {
+					$budget = (int)round($value['BUDGET_AMT']);
+					$consume = (int)round($value['CONSUME_AMT']);
+				}
+			}
+			$tmp_data[$department]['BUDGET'][] = [
+				'y' => $budget,
+				'url' => Url::to(['get-remark', 'dept' => $model->dept, 'period' => $category, 'budget_type' => $model->budget_type])
+			];
+			$tmp_data[$department]['CONSUME'][] = [
+				'y' => $consume,
+				'url' => Url::to(['get-remark', 'dept' => $model->dept, 'period' => $category, 'budget_type' => $model->budget_type])
+			];
 		}
 
-		$color_index = 0;
+		
 		foreach ($tmp_data as $key => $value) {
+			$color_index = 0;
 			foreach ($value as $key2 => $value2) {
 				$showInLegend = $key2 == 'BUDGET' ? false : true;
 				$data[] = [
@@ -137,8 +154,9 @@ class BudgetExpensesController extends Controller
 					'showInLegend' => $showInLegend,
 					'color' => new JsExpression('Highcharts.getOptions().colors[' . $color_index . ']'),
 				];
+				$color_index++;
 			}
-			$color_index++;
+			
 		}
 
 		return $this->render('index', [
@@ -183,18 +201,25 @@ class BudgetExpensesController extends Controller
 		return $return_arr;
 	}
 
-	public function actionGetRemark($dept, $period, $budget_type)
+	public function actionGetRemark($dept = null, $period, $budget_type = null)
 	{
+		if ($dept != null) {
+			$department = $dept;
+		} else {
+			$department = 'ALL DEPARTMENT';
+		}
 		$data = '<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>Section : ' . $dept . '<small> (' . $period . ')</small></h3>
+			<h3>Section : ' . $department . '<small> (' . $period . ')</small></h3>
 		</div>
 		<div class="modal-body">
 		';
 		$data .= '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
         '<thead style="font-size: 12px;"><tr class="info">
+        	<th>SECTION</th>
             <th>ACCOUNT</th>
+            <th>BUDGET</th>
             <th class="text-center">BUDGET</th>
             <th class="text-center">CONSUME</th>
             <th class="text-center">BALANCE</th>
@@ -202,27 +227,48 @@ class BudgetExpensesController extends Controller
         </tr></thead>';
         $data .= '<tbody style="font-size: 12px;">';
 
-        $data_arr = AccountBudget::find()
-		->where([
-			'DEP_DESC' => $dept,
-			'CONTROL' => 'Y',
-			'PERIOD' => $period
-		])
-		->orderBy('CONSUME_AMT DESC')
-		->all();
-
-		if ($budget_type != null) {
-			$data_arr = AccountBudget::find()
-			->where([
-				'DEP_DESC' => $dept,
-				'CONTROL' => 'Y',
-				'PERIOD' => $period,
-				'FILTER' => $budget_type
-			])
-			->orderBy('CONSUME_AMT DESC')
-			->all();
-		}
-
+        if ($dept != null) {
+        	if ($budget_type != null) {
+				$data_arr = AccountBudget::find()
+				->where([
+					'DEP_DESC' => $dept,
+					'CONTROL' => 'Y',
+					'PERIOD' => $period,
+					'FILTER' => $budget_type
+				])
+				->orderBy('DEP_DESC ASC')
+				->all();
+			} else {
+				$data_arr = AccountBudget::find()
+				->where([
+					'DEP_DESC' => $dept,
+					'CONTROL' => 'Y',
+					'PERIOD' => $period
+				])
+				->orderBy('DEP_DESC ASC')
+				->all();
+			}
+        } else {
+        	if ($budget_type != null) {
+				$data_arr = AccountBudget::find()
+				->where([
+					'CONTROL' => 'Y',
+					'PERIOD' => $period,
+					'FILTER' => $budget_type
+				])
+				->orderBy('DEP_DESC ASC')
+				->all();
+			} else {
+				$data_arr = AccountBudget::find()
+				->where([
+					'CONTROL' => 'Y',
+					'PERIOD' => $period
+				])
+				->orderBy('DEP_DESC ASC')
+				->all();
+			}
+        }
+        
 		foreach ($data_arr as $value) {
 			$balance_percentage = 0;
 			if ($value->BUDGET_AMT > 0) {
@@ -231,15 +277,17 @@ class BudgetExpensesController extends Controller
 
 			$consume_data = $value->CONSUME_AMT;
 			if ($consume_data > 0) {
-				$consume_data = Html::a($value->CONSUME_AMT, Url::to(['pr-report-view/index', 'budget_id' => "$value->BUDGET_ID"]));
+				$consume_data = Html::a(round($value->CONSUME_AMT), Url::to(['pr-report-view/index', 'budget_id' => "$value->BUDGET_ID"]));
 			}
 
 			$data .= 
 	        '<tr>
+	        	<td>' . $value->DEP_DESC . '</td>
 	            <td>' . $value->ACCOUNT_DESC . '</td>
-	            <td class="text-center">' . $value->BUDGET_AMT . '</td>
+	            <td>' . $value->FILTER . '</td>
+	            <td class="text-center">' . round($value->BUDGET_AMT) . '</td>
 	            <td class="text-center">' . $consume_data . '</td>
-	            <td class="text-center">' . $value->BALANCE_AMT . '</td>
+	            <td class="text-center">' . round($value->BALANCE_AMT) . '</td>
 	            <td class="text-center">' . $balance_percentage . '</td>
 	        </tr>';
 		}
