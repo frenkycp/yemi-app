@@ -4,6 +4,7 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
@@ -55,46 +56,40 @@ echo '</pre>';*/
 
 
 <?php $form = ActiveForm::begin([
-    'id' => 'form_index',
-    'layout' => 'horizontal',
-    'enableClientValidation' => true,
-    'errorSummaryCssClass' => 'error-summary alert alert-danger',
-    'fieldConfig' => [
-             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
-             'horizontalCssClasses' => [
-                 'label' => 'col-sm-5',
-                 #'offset' => 'col-sm-offset-4',
-                 'wrapper' => 'col-sm-7',
-                 'error' => '',
-                 'hint' => '',
-             ],
-         ],
-    ]
-    );
-    ?>
-
-    <div class="row">
-        <div class="col-md-5">
-            <?= $form->field($model, 'budget_type')->dropDownList(
-                [
-                    'ALL' => 'ALL （全て）',
-                    'PRODUCT' => 'FINAL_PRODUCT  （完成品）',
-                    'KD_PART' => 'KD_PARTS （ＫＤパーツ）'
-                ]
-            ); ?>
-        </div>
-        <div class="col-md-4">
-            <?= $form->field($model, 'qty_or_amount')->dropDownList(
-                [
-                    'QTY' => 'By Qty （数量）',
-                    'AMOUNT' => 'By Amount （金額）'
-                ]
-            ); ?>
-        </div>
-        <?= Yii::$app->params['update_chart_btn']; ?>
+    'method' => 'get',
+    'action' => Url::to(['production-budget/index']),
+]); ?>
+<div class="row">
+    <div class="col-md-2">
+        <?= $form->field($model, 'fiscal')->dropDownList(ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->limit(10)->all(), 'FISCAL', 'FISCAL'), [
+            'prompt' => 'Select FISCAL...',
+            'onchange'=>'this.form.submit()'
+        ])->label('FISCAL') ?>
     </div>
+    <div class="col-md-2">
+        <?= $form->field($model, 'budget_type')->dropDownList(
+            [
+                'ALL' => 'ALL （全て）',
+                'PRODUCT' => 'FINAL_PRODUCT  （完成品）',
+                'KD_PART' => 'KD_PARTS （ＫＤパーツ）'
+            ], [
+                'onchange'=>'this.form.submit()'
+            ]
+        ); ?>
+    </div>
+    <div class="col-md-2">
+        <?= $form->field($model, 'qty_or_amount')->dropDownList(
+            [
+                'QTY' => 'By Qty （数量）',
+                'AMOUNT' => 'By Amount （金額）'
+            ], [
+                'onchange'=>'this.form.submit()'
+            ]
+        ); ?>
+    </div>
+</div>
 
-    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
     
 <div class="box box-primary">
     <div class="box-header with-border">
