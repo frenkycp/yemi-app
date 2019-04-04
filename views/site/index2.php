@@ -85,6 +85,15 @@ $this->registerCss("
                         ]); ?>
                     </div>
                 </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Management Approval<br/><span class="japanesse-word"></span></div>
+                    <div class="list-group">
+                        <a class="list-group-item" href="http://172.17.144.6:99/plus/index_visitor"><i class="fa fa-fw fa-plus"></i> Visitor Confirmation <span class="japanesse-word"></span></a>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item" href="http://172.17.144.6:99/plus/clinic"><i class="fa fa-fw fa-plus"></i> Clinic Confirmation <span class="japanesse-word"></span></a>
+                    </div>
+                </div>
     		</div>
     		<div class="col-sm-3">
                 <div class="panel panel-success">
