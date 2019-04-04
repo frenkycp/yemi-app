@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\WipFilterModel;
 use app\models\WipPlanActualReport;
+use app\models\WipLocation;
 use yii\web\JsExpression;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -47,25 +48,6 @@ class WipPaintingMonitoringController extends Controller
                 $str_where2 = "LINE = '$line'";
             }
     	}
-    	$wip_painting_data_arr = WipPlanActualReport::find()
-    	->select([
-    		'week',
-    		'due_date',
-    		'total_plan' => 'SUM(summary_qty)',
-    		'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
-    		//'total_created' => 'SUM(CASE WHEN stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
-    		'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN summary_qty ELSE 0 END)',
-    		'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN summary_qty ELSE 0 END)',
-    		'total_handover' => 'SUM(CASE WHEN stage=\'04-HAND OVER\' THEN summary_qty ELSE 0 END)'
-    	])
-    	->where([
-    		'period' => $period
-    	])
-        ->andWhere($str_where)
-        ->andWhere($str_where2)
-    	->groupBy('week, due_date')
-    	->orderBy('due_date, week')
-    	->all();
 
     	if ($model->loc != null) {
     		$wip_painting_data_arr = WipPlanActualReport::find()
@@ -87,43 +69,65 @@ class WipPaintingMonitoringController extends Controller
             ->andWhere($str_where2)
 	    	->groupBy('week, due_date')
 	    	->orderBy('due_date, week')
+            ->asArray()
 	    	->all();
-    	}
+    	} else {
+            $wip_painting_data_arr = WipPlanActualReport::find()
+            ->select([
+                'week',
+                'due_date',
+                'total_plan' => 'SUM(summary_qty)',
+                'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
+                //'total_created' => 'SUM(CASE WHEN stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
+                'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN summary_qty ELSE 0 END)',
+                'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN summary_qty ELSE 0 END)',
+                'total_handover' => 'SUM(CASE WHEN stage=\'04-HAND OVER\' THEN summary_qty ELSE 0 END)'
+            ])
+            ->where([
+                'period' => $period
+            ])
+            ->andWhere($str_where)
+            ->andWhere($str_where2)
+            ->groupBy('week, due_date')
+            ->orderBy('due_date, week')
+            ->asArray()
+            ->all();
+        }
 
     	//$data = [];
     	$week_arr = [];
     	$tmp_data = [];
     	foreach ($wip_painting_data_arr as $wip_painting_data) {
-    		$tmp_data[$wip_painting_data->week]['category'][] = date('Y-m-d', strtotime($wip_painting_data->due_date));
+    		$tmp_data[$wip_painting_data['week']]['category'][] = date('Y-m-d', strtotime($wip_painting_data['due_date']));
 
-    		$order_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_order / $wip_painting_data->total_plan) * 100, 2);
-    		//$created_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_created / $wip_painting_data->total_plan) * 100, 2);
-    		$started_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_started / $wip_painting_data->total_plan) * 100, 2);
-    		$completed_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_completed / $wip_painting_data->total_plan) * 100, 2);
-    		$handover_percentage = $wip_painting_data->total_plan == 0 ? 0 : round(($wip_painting_data->total_handover / $wip_painting_data->total_plan) * 100, 2);
+    		$order_percentage = $wip_painting_data['total_plan'] == 0 ? 0 : round(($wip_painting_data['total_order'] / $wip_painting_data['total_plan']) * 100, 2);
+    		//$created_percentage = $wip_painting_data['total_plan'] == 0 ? 0 : round(($wip_painting_data->total_created / $wip_painting_data['total_plan']) * 100, 2);
+    		$started_percentage = $wip_painting_data['total_plan'] == 0 ? 0 : round(($wip_painting_data['total_started'] / $wip_painting_data['total_plan']) * 100, 2);
+    		$completed_percentage = $wip_painting_data['total_plan'] == 0 ? 0 : round(($wip_painting_data['total_completed'] / $wip_painting_data['total_plan']) * 100, 2);
+    		$handover_percentage = $wip_painting_data['total_plan'] == 0 ? 0 : round(($wip_painting_data['total_handover'] / $wip_painting_data['total_plan']) * 100, 2);
 
-    		$tmp_data[$wip_painting_data->week]['order_percentage'][] = [
+    		$tmp_data[$wip_painting_data['week']]['order_percentage'][] = [
     			'y' => $order_percentage == 0 ? null : $order_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '00-ORDER', 'category' => $model->category, 'line' => $model->line]),
-                'qty' => $wip_painting_data->total_order
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data['due_date'], 'loc' => $model->loc, 'stage' => '00-ORDER', 'category' => $model->category, 'line' => $model->line]),
+                'qty' => $wip_painting_data['total_order']
     		];
-    		$tmp_data[$wip_painting_data->week]['started_percentage'][] = [
+    		$tmp_data[$wip_painting_data['week']]['started_percentage'][] = [
     			'y' => $started_percentage == 0 ? null : $started_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '02-STARTED', 'category' => $model->category, 'line' => $model->line]),
-                'qty' => $wip_painting_data->total_started
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data['due_date'], 'loc' => $model->loc, 'stage' => '02-STARTED', 'category' => $model->category, 'line' => $model->line]),
+                'qty' => $wip_painting_data['total_started']
     		];
-    		$tmp_data[$wip_painting_data->week]['completed_percentage'][] = [
+    		$tmp_data[$wip_painting_data['week']]['completed_percentage'][] = [
     			'y' => $completed_percentage == 0 ? null : $completed_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '03-COMPLETED', 'category' => $model->category, 'line' => $model->line]),
-                'qty' => $wip_painting_data->total_completed
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data['due_date'], 'loc' => $model->loc, 'stage' => '03-COMPLETED', 'category' => $model->category, 'line' => $model->line]),
+                'qty' => $wip_painting_data['total_completed']
     		];
-    		$tmp_data[$wip_painting_data->week]['handover_percentage'][] = [
+    		$tmp_data[$wip_painting_data['week']]['handover_percentage'][] = [
     			'y' => $handover_percentage <= 0 ? null : $handover_percentage,
-                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data->due_date, 'loc' => $model->loc, 'stage' => '04-HAND OVER', 'category' => $model->category, 'line' => $model->line]),
-                'qty' => $wip_painting_data->total_handover
+                'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data['due_date'], 'loc' => $model->loc, 'stage' => '04-HAND OVER', 'category' => $model->category, 'line' => $model->line]),
+                'qty' => $wip_painting_data['total_handover']
     		];
 
-    		$week_arr[] = $wip_painting_data->week;
+    		$week_arr[] = $wip_painting_data['week'];
     	}
 
     	$today = new \DateTime(date('Y-m-d'));
@@ -171,7 +175,7 @@ class WipPaintingMonitoringController extends Controller
 			];
 		}
 
-		$dropdown_loc = ArrayHelper::map(WipPlanActualReport::find()->select('child_analyst_desc, child_analyst_desc')->groupBy('child_analyst_desc')->orderBy('child_analyst_desc ASC')->all(), 'child_analyst_desc', 'child_analyst_desc');
+        $dropdown_loc = ArrayHelper::map(WipLocation::find()->select('child_analyst_desc')->groupBy('child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');
 
     	return $this->render('index', [
     		'data' => $data,
@@ -183,7 +187,7 @@ class WipPaintingMonitoringController extends Controller
     	]);
     }
 
-    public function actionGetRemark($due_date, $loc, $stage, $category, $line)
+    public function actionGetRemark($due_date, $loc = null, $stage, $category = null, $line = null)
     {
         $stage_arr = [$stage];
         switch ($stage) {
