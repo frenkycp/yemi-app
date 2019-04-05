@@ -6,6 +6,8 @@ use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
 use app\models\search\ClinicDataSearch;
 use app\models\KlinikInput;
+use app\models\KlinikHandle;
+use app\models\Karyawan;
 use yii\helpers\Json;
 
 /**
@@ -18,7 +20,7 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	/**
 	* Lists all KlinikInput models.
 	* @return mixed
@@ -51,17 +53,8 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
             $post = ['KlinikInput' => $posted];
 
             if ($model->load($post)) {
-                // can save model or do something before saving model
                 $model->save();
-                /*$output = '';
-
-                if (isset($posted['unloading_time'])) {
-                    $output = $model->unloading_time;
-                }
-
-                $out = Json::encode(['output'=>$output, 'message'=>'']);*/
             }
-            // return ajax json encoded response and exit
             echo $out;
             return;
         }
@@ -85,8 +78,22 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 		try {
 			if ($model->load($_POST)) {
 				$model->masuk = date('H:i:s');
+
+				$count_status = KlinikHandle::find()
+				->where(['status' => 1])
+				->count();
+				if ($count_status == 0) {
+					\Yii::$app->session->setFlash("warning", "Tidak ada paramedis. Data tidak dapat ditambahkan ...");
+					return $this->redirect(Url::previous());
+				} elseif ($count_status == 1) {
+					$paramedis = KlinikHandle::findOne(['status' => 1]);
+					$model->handleby = $paramedis->pk;
+				} else {
+					$model->handleby = 'doctor';
+				}
+
 				if ($model->save()) {
-					return $this->redirect(['view', 'pk' => $model->pk]);
+					return $this->redirect(Url::previous());
 				} else {
 					return json_encode($model->errors());
 				}
@@ -99,5 +106,75 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 			$model->addError('_exception', $msg);
 		}
 		return $this->render('create', ['model' => $model]);
+	}
+
+	public function actionCheckOut()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = new \yii\base\DynamicModel([
+	        'nik'
+	    ]);
+	    $model->addRule(['nik'], 'required');
+
+	    if($model->load(\Yii::$app->request->post())){
+	        $nik = $model->nik;
+
+	        $tmp_data = KlinikInput::find()
+	        ->where([
+	        	'nik' => $nik,
+	        	'DATE(pk)' => date('Y-m-d')
+	        ])
+	        ->andWhere(['or', ['keluar' => '00:00:00'], 'keluar IS NULL'])
+	        ->orderBy('pk DESC')
+	        ->limit(1)
+	        ->one();
+
+	        if ($tmp_data->nik == 0) {
+	        	\Yii::$app->session->setFlash("warning", "NIK : $nik tidak ada di klinik ...");
+	        	return $this->redirect(Url::previous());
+	        } else {
+	        	$tmp_data->keluar = date('H:i:s');
+	        	if (!$tmp_data->save()) {
+		        	return json_encode($model->errors());
+		        } else {
+		        	\Yii::$app->session->setFlash("success", "NIK : $nik berhasil cek out ...");
+		        }
+	        }
+	        
+	        return $this->redirect(Url::previous());
+	    }
+
+	    return $this->renderAjax('check-out', [
+    		'model' => $model
+    	]);
+	}
+
+	public function actionChangeStatus($pk)
+	{
+		$tmp_data = KlinikHandle::find()
+		->where(['pk' => $pk])
+		->one();
+
+		if ($tmp_data->status == 0) {
+			$tmp_data->status = 1;
+		} else {
+			$tmp_data->status = 0;
+		}
+
+		if (!$tmp_data->save()) {
+			return json_encode($tmp_data->errors);
+		}
+
+		return $this->redirect(Url::previous());
+	}
+
+	public function actionEmpInfo($nik)
+	{
+		$emp = Karyawan::findOne(['NIK' => $nik]);
+		$data = [
+			'name' => $emp->NAMA_KARYAWAN,
+			'dept' => $emp->DEPARTEMEN
+		];
+		return $emp->NAMA_KARYAWAN . '||' . $emp->DEPARTEMEN;
 	}
 }

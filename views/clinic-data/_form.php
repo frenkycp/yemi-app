@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
 
 /**
 * @var yii\web\View $this
@@ -17,34 +19,42 @@ use yii\helpers\StringHelper;
 
     <?php $form = ActiveForm::begin([
     'id' => 'KlinikInput',
-    //'layout' => 'horizontal',
     'enableClientValidation' => true,
     'errorSummaryCssClass' => 'error-summary alert alert-danger',
-    /*'fieldConfig' => [
-             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
-             'horizontalCssClasses' => [
-                 'label' => 'col-sm-2',
-                 #'offset' => 'col-sm-offset-4',
-                 'wrapper' => 'col-sm-8',
-                 'error' => '',
-                 'hint' => '',
-             ],
-         ],*/
     ]
     );
     ?>
 
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-2">
-                    <?= $form->field($model, 'nik')->textInput() ?>
+                    <?= $form->field($model, 'nik')->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(app\models\MpInOut::find()->select([
+                            'NIK', 'NAMA_KARYAWAN'
+                        ])
+                        ->where(['TANGGAL' => date('Y-m-d')])
+                        ->all(), 'NIK', 'NIK'),
+                        'options' => [
+                            'placeholder' => 'Select NIK ...',
+                            'onchange' => '
+                                $.post( "' . Yii::$app->urlManager->createUrl('clinic-data/emp-info?nik=') . '"+$(this).val(), function( data ) {
+                                    var data_arr = data.split("||");
+                                    $( "#txt_name" ).val(data_arr[0]);
+                                    $( "#txt_dept" ).val(data_arr[1]);
+                                });
+                            ',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ]); ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'nama')->textInput(['readonly' => true]) ?>
+                    <?= $form->field($model, 'nama')->textInput(['readonly' => true, 'id' => 'txt_name']) ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'dept')->textInput(['readonly' => true]) ?>
+                    <?= $form->field($model, 'dept')->textInput(['readonly' => true, 'id' => 'txt_dept']) ?>
                 </div>
                 <div class="col-md-2">
                     <?= $form->field($model, 'opsi')->dropDownList([

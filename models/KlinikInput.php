@@ -28,7 +28,7 @@ class KlinikInput extends BaseKlinikInput
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['nik', 'anamnesa', 'root_cause', 'diagnosa'], 'required'],
+                [['nik'], 'required'],
             ]
         );
     }

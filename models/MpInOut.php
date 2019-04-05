@@ -32,4 +32,9 @@ class MpInOut extends BaseMpInOut
             ]
         );
     }
+
+    public function getNikNama($value='')
+    {
+        return $this->NIK . ' - ' . $this->NAMA_KARYAWAN;
+    }
 }

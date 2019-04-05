@@ -55,7 +55,6 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pk'], 'required'],
             [['pk', 'masuk', 'keluar'], 'safe'],
             [['nik', 'opsi', 'confirm'], 'integer'],
             [['nama', 'dept', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'string', 'max' => 255],

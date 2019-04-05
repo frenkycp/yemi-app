@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use yii\web\View;
 
 /**
 * @var yii\web\View $this
@@ -35,6 +36,13 @@ $script = <<< JS
 JS;
 
 $this->registerJs($script, View::POS_END);
+
+$this->registerJs("$(function() {
+   $('.btn_checkout').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+});");
 
 $gridColumns = [
     [
@@ -261,6 +269,32 @@ $gridColumns = [
     ],
 ];
 ?>
+<div class="row">
+    <div class="col-md-12">
+        <div class="pull-left">
+            <?php
+            $data_handle = app\models\KlinikHandle::find()->all();
+            foreach ($data_handle as $key => $value) {
+                if ($value->pk == 'doctor') {
+                    $nama = 'Dokter';
+                } elseif ($value->pk == 'nurse') {
+                    $nama = 'Perawat';
+                }
+                if ($value->status == 1) {
+                    $available = 'Ada';
+                    $bg = ' bg-green';
+                } elseif ($value->status == 0) {
+                    $available = 'Tidak Ada';
+                    $bg = ' bg-red';
+                }
+                echo Html::a('<span class="badge' . $bg . '">' . $available . '</span><i class="fa fa-user"></i> ' . $nama, ['change-status', 'pk' => $value->pk], ['class' => 'btn btn-app']);
+                echo "&nbsp;";
+            }
+            ?>
+        </div>
+    </div>
+</div>
+
 <div class="giiant-crud klinik-input-index">
 
     <?php
@@ -284,6 +318,12 @@ $gridColumns = [
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' =>  [
+                Html::button('<span class="glyphicon glyphicon-log-out"></span> ' . 'Cek Out', [
+                    'value' => Url::to(['check-out']),
+                    'title' => 'Cek Out Klinik',
+                    'class' => 'showModalButton btn btn-warning',
+                    'id' => 'btn_checkout'
+                ]),
                 Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Tambah', ['create'], ['class' => 'btn btn-success']),
                 '{export}',
                 '{toggleData}',
