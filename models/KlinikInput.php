@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class KlinikInput extends BaseKlinikInput
 {
-    public $input_date;
+    public $input_date, $masuk2, $keluar2, $total1, $total2, $total3;
 
     public function behaviors()
     {

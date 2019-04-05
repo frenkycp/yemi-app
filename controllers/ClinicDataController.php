@@ -78,6 +78,11 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 		try {
 			if ($model->load($_POST)) {
 				$model->masuk = date('H:i:s');
+				if ($model->opsi == 1) {
+					$model->keluar = date('H:i:s', strtotime('+10 minutes'));
+				} else {
+					$model->keluar = date('H:i:s', strtotime('+1 hour'));
+				}
 
 				$count_status = KlinikHandle::find()
 				->where(['status' => 1])
@@ -124,7 +129,6 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 	        	'nik' => $nik,
 	        	'DATE(pk)' => date('Y-m-d')
 	        ])
-	        ->andWhere(['or', ['keluar' => '00:00:00'], 'keluar IS NULL'])
 	        ->orderBy('pk DESC')
 	        ->limit(1)
 	        ->one();

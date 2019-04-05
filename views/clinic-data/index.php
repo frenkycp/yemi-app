@@ -44,9 +44,32 @@ $this->registerJs("$(function() {
    });
 });");
 
+$clinic_role_id = [1, 31];
+if (in_array(\Yii::$app->user->identity->role_id, $clinic_role_id)) {
+    $is_clinic = true;
+    $toolbar = [
+        Html::button('<span class="glyphicon glyphicon-log-out"></span> ' . 'Cek Out', [
+            'value' => Url::to(['check-out']),
+            'title' => 'Cek Out Klinik',
+            'class' => 'showModalButton btn btn-warning',
+            'id' => 'btn_checkout'
+        ]),
+        Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Tambah', ['create'], ['class' => 'btn btn-success']),
+        '{export}',
+        '{toggleData}',
+    ];
+} else {
+    $is_clinic = false;
+    $toolbar = [
+        '{export}',
+        '{toggleData}',
+    ];
+}
+
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
+        //'hidden' => !$is_clinic ? true : false,
         'template' => '{update}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
@@ -130,7 +153,7 @@ $gridColumns = [
         ],
     ],
     [
-        'class'=>'kartik\grid\EditableColumn',
+        'class' => 'kartik\grid\EditableColumn',
         'attribute' => 'masuk',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -145,10 +168,12 @@ $gridColumns = [
                     'secondStep' => 5,
                 ]
             ]
-        ]
+        ],
+        //'hiddenFromExport' => true,
+        //'hidden' => !$is_clinic ? true : false,
     ],
     [
-        'class'=>'kartik\grid\EditableColumn',
+        'class' => 'kartik\grid\EditableColumn',
         'attribute' => 'keluar',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -163,7 +188,37 @@ $gridColumns = [
                     'secondStep' => 5,
                 ]
             ]
-        ]
+        ],
+        //'hiddenFromExport' => true,
+        //'hidden' => !$is_clinic ? true : false,
+    ],
+    [
+        'attribute' => 'masuk2',
+        'label' => 'Masuk',
+        'value' => function($model){
+            return $model->masuk;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 70px;'
+        ],
+        //'hidden' => $is_clinic ? true : false,
+    ],
+    [
+        'attribute' => 'keluar2',
+        'label' => 'Keluar',
+        'value' => function($model){
+            return $model->keluar;
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 70px;'
+        ],
+        //'hidden' => $is_clinic ? true : false,
     ],
     [
         'attribute' => 'confirm',
@@ -268,8 +323,18 @@ $gridColumns = [
         ],
     ],
 ];
+
+if (!$is_clinic) {
+    unset($gridColumns[0]);
+    unset($gridColumns[6]);
+    unset($gridColumns[7]);
+} else {
+    unset($gridColumns[8]);
+    unset($gridColumns[9]);
+}
+
 ?>
-<div class="row">
+<div class="row" style="<?= !$is_clinic ? 'display: none;' : ''; ?>">
     <div class="col-md-12">
         <div class="pull-left">
             <?php
@@ -317,17 +382,7 @@ $gridColumns = [
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            'toolbar' =>  [
-                Html::button('<span class="glyphicon glyphicon-log-out"></span> ' . 'Cek Out', [
-                    'value' => Url::to(['check-out']),
-                    'title' => 'Cek Out Klinik',
-                    'class' => 'showModalButton btn btn-warning',
-                    'id' => 'btn_checkout'
-                ]),
-                Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Tambah', ['create'], ['class' => 'btn btn-success']),
-                '{export}',
-                '{toggleData}',
-            ],
+            'toolbar' => $toolbar,
             // set export properties
             'export' => [
                 'fontAwesome' => true

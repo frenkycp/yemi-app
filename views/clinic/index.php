@@ -145,8 +145,9 @@ echo '</pre>';*/
             <th>Nama</th>
             <th>Departemen</th>
             <th>Kategori</th>
-            <th class="text-center">Waktu</th>
-            <th class="text-center">Kunjungan Bulan Ini</th>
+            <th class="text-center">Masuk</th>
+            <th class="text-center">Keluar</th>
+            <th class="text-center">Kunjungan Bulan Ini<br/>(Periksa/Istirahat Sakit/Laktasi)</th>
             <th class="text-center">Konfirmasi Manager</th>
         </tr>
     </thead>
@@ -164,11 +165,18 @@ echo '</pre>';*/
         foreach ($data as $key => $value) {
             $random_visit = rand(1, 5);
             $total_this_month = app\models\KlinikInput::find()
+            ->select([
+                'nik',
+                'total1' => 'SUM(CASE WHEN opsi = 1 THEN 1 ELSE 0 END)',
+                'total2' => 'SUM(CASE WHEN opsi = 2 THEN 1 ELSE 0 END)',
+                'total3' => 'SUM(CASE WHEN opsi = 3 THEN 1 ELSE 0 END)',
+            ])
             ->where([
                 'EXTRACT(year_month FROM pk)' => date('Ym'),
                 'nik' => $value->nik
             ])
-            ->count();
+            ->groupBy('nik')
+            ->one();
 
             if ($value->confirm == 0) {
                 $konfirmasi = [
@@ -204,8 +212,9 @@ echo '</pre>';*/
                 <td>' . $value->nama . '</td>
                 <td>' . $value->dept . '</td>
                 <td>' . $category . '</td>
-                <td class="text-center">' . $bed_rest_time . '</td>
-                <td class="text-center">' . $total_this_month . '</td>
+                <td class="text-center">' . date('H:i', strtotime($value->masuk)) . '</td>
+                <td class="text-center">' . date('H:i', strtotime($value->keluar)) . '</td>
+                <td class="text-center">' . $total_this_month->total1 . ' / ' . $total_this_month->total2 . ' / ' . $total_this_month->total3 . '</td>
                 <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
             </tr>';
         }

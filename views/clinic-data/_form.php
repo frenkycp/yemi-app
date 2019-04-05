@@ -30,10 +30,9 @@ use kartik\select2\Select2;
             <div class="row">
                 <div class="col-md-2">
                     <?= $form->field($model, 'nik')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\MpInOut::find()->select([
+                        'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
                             'NIK', 'NAMA_KARYAWAN'
                         ])
-                        ->where(['TANGGAL' => date('Y-m-d')])
                         ->all(), 'NIK', 'NIK'),
                         'options' => [
                             'placeholder' => 'Select NIK ...',
