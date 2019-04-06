@@ -70,7 +70,7 @@ $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
         //'hidden' => !$is_clinic ? true : false,
-        'template' => '{update}',
+        'template' => '{update} {delete}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -193,11 +193,7 @@ $gridColumns = [
         //'hidden' => !$is_clinic ? true : false,
     ],
     [
-        'attribute' => 'masuk2',
-        'label' => 'Masuk',
-        'value' => function($model){
-            return $model->masuk;
-        },
+        'attribute' => 'masuk',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -207,11 +203,7 @@ $gridColumns = [
         //'hidden' => $is_clinic ? true : false,
     ],
     [
-        'attribute' => 'keluar2',
-        'label' => 'Keluar',
-        'value' => function($model){
-            return $model->keluar;
-        },
+        'attribute' => 'keluar',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [

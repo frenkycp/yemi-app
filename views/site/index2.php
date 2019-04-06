@@ -88,10 +88,16 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Management Approval<br/><span class="japanesse-word"></span></div>
                     <div class="list-group">
-                        <a class="list-group-item" href="http://172.17.144.6:99/plus/index_visitor"><i class="fa fa-fw fa-plus"></i> Visitor Confirmation <span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_visitor"><i class="fa fa-fw fa-plus"></i> Visitor Confirmation <span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" href="http://172.17.144.6:99/plus/clinic"><i class="fa fa-fw fa-plus"></i> Clinic Confirmation <span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/clinic"><i class="fa fa-fw fa-plus"></i> Clinic Confirmation <span class="japanesse-word"></span></a>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Production Support Applications<br/><span class="japanesse-word"></span></div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.217/kaizen"><i class="fa fa-fw fa-tag"></i> E-Kaizen<span class="japanesse-word"></span></a>
                     </div>
                 </div>
     		</div>
