@@ -46,7 +46,7 @@ echo '</pre>';*/
 ]); ?>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-2">
         <div class="form-group">
             <label for="posting_date" class="control-label">Date</label>
             <?= DatePicker::widget([
@@ -65,25 +65,22 @@ echo '</pre>';*/
             ?>
         </div>
     </div>
-    <div class="col-md-7">
+    <div class="col-md-6">
         <label for="machine_id" class="control-label">Machine</label>
         <?= Select2::widget([
             'id' => 'machine_id',
             'name' => 'machine_id',
             'value' => $machine_id,
-            'data' => ArrayHelper::map(app\models\AssetTbl::find()->where(['like', 'asset_id', 'MNT%', false])->all(), 'asset_id', 'computer_name'),
+            'data' => ArrayHelper::map(app\models\AssetTbl::find()->where(['like', 'asset_id', 'MNT%', false])->all(), 'asset_id', 'assetName'),
             'options' => ['placeholder' => 'Select states ...', 'class' => 'form-control', 'onchange'=>'this.form.submit()',]
         ]); ?>
     </div>
 </div>
-<br/>
 
 <?php ActiveForm::end(); ?>
 
-
-
-<div class="panel panel-primary">
-    <div class="panel-body">
+<div class="box box-primary">
+    <div class="box-body">
         <?php
         echo Highcharts::widget([
             'scripts' => [
@@ -97,7 +94,7 @@ echo '</pre>';*/
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
-                    'height' => 320
+                    'height' => 320,
                 ],
                 'credits' => [
                     'enabled' => false

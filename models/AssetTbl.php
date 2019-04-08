@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class AssetTbl extends BaseAssetTbl
 {
+    public $asset_name;
 
     public function behaviors()
     {
@@ -30,5 +31,10 @@ class AssetTbl extends BaseAssetTbl
                 # custom validation rules
             ]
         );
+    }
+
+    public function getAssetName($value='')
+    {
+        return $this->asset_id . ' - ' . $this->computer_name;
     }
 }
