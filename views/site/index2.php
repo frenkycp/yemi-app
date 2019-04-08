@@ -99,6 +99,9 @@ $this->registerCss("
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.217/kaizen"><i class="fa fa-fw fa-tag"></i> E-Kaizen<span class="japanesse-word"></span></a>
                     </div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_prd/index_prd_efficiency.php"><i class="fa fa-fw fa-tag"></i> Line Efficiency (MITA+)<span class="japanesse-word"></span></a>
+                    </div>
                 </div>
     		</div>
     		<div class="col-sm-3">
