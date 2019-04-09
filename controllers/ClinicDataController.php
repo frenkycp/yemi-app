@@ -77,6 +77,7 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 
 		try {
 			if ($model->load($_POST)) {
+				$model->pk = date('Y-m-d H:i:s');
 				$model->masuk = date('H:i:s');
 				if ($model->opsi == 1) {
 					$model->keluar = date('H:i:s', strtotime('+10 minutes'));
