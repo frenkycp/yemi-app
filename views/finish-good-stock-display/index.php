@@ -6,9 +6,9 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = [
-    'page_title' => 'Finish Goods Stock <span class="text-green japanesse">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers)',
-    'tab_title' => 'Finish Goods Stock',
-    'breadcrumbs_title' => 'Finish Goods Stock'
+    'page_title' => 'FINISH GOOD STOCK (<span class="japanesse">完成品在庫</span>) : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers)',
+    'tab_title' => 'FINISH GOOD STOCK',
+    'breadcrumbs_title' => 'FINISH GOOD STOCK'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -18,14 +18,14 @@ $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, san
 date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
     .content-header {color: white;}
     //.box-body {background-color: #33383D;}
     .box-title {font-weight: bold;}
     .box-header .box-title, .control-label{font-size: 1.5em;}
     .container {width: auto;}
-    .content-header>h1 {font-size: 3em}
+    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #33383D;}
@@ -93,7 +93,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 600,
+                    'height' => 700,
                     'style' => [
                         //'fontFamily' => 'Source Sans Pro'
                     ],
