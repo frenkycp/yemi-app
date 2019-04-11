@@ -430,7 +430,7 @@ $grid_columns = [
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            'pjax' => true, // pjax is set to always true for this demo
+            //'pjax' => true, // pjax is set to always true for this demo
             'rowOptions' => function($model){
                 $find_slip = app\models\GojekOrderTbl::find()
                 ->where([
