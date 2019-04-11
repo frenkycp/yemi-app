@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'sqlsrv:Server=172.17.144.6\nice;Database=PROD',
+    'dsn' => 'sqlsrv:Server=172.17.144.65;Database=PROD',
     'username' => '200074',
     'password' => 'Fredy@yemi',
     /*'dsn' => 'sqlsrv:Server=FRENKY-GLORIA\SQLEXPRESS;Database=PROD',
