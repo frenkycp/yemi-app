@@ -141,16 +141,16 @@ $this->registerCss("
                                     <?= Html::a('FA Line Efficiency & Loss Time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT Performance Data<br/><span class="japanesse-word">(SMT パフォーマンスデータ）</span>', ['/smt-performance-data']); ?>
+                                    <?= Html::a('SMT INJ Performance Data<br/><span class="japanesse-word">(SMT INJ パフォーマンスデータ）</span>', ['/smt-performance-data']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT Utility & Loss Time Management<br/><span class="japanesse-word">( SMT稼働率・ロスタイム管理）</span> | Daily', ['/smt-daily-utility-report']); ?>
+                                    <?= Html::a('SMT INJ Utility & Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Daily', ['/smt-daily-utility-report']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT Utility & Loss Time Management<br/><span class="japanesse-word">( SMT稼働率・ロスタイム管理）</span> | Monthly', ['/smt-line-monthly-utility']); ?>
+                                    <?= Html::a('SMT INJ Utility & Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Monthly', ['/smt-line-monthly-utility']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT Performance Ratio<br/><span class="japanesse-word"></span>', ['/smt-performance-ratio']); ?>
+                                    <?= Html::a('SMT Performance Ratio<br/><span class="japanesse-word">(SMT パフォーマンス)</span>', ['/smt-performance-ratio']); ?>
                                 </li>
                             </ol>
                         </div>

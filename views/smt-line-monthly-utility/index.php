@@ -8,9 +8,9 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'SMT Efficiency, Utility & Loss Time Management (Monthly)<span class="japanesse text-green"></span>',
-    'tab_title' => 'SMT Efficiency, Utility & Loss Time Management',
-    'breadcrumbs_title' => 'SMT Efficiency, Utility & Loss Time Management'
+    'page_title' => 'SMT INJ Efficiency, Utility & Loss Time Management (Monthly)<span class="japanesse text-green"></span>',
+    'tab_title' => 'SMT INJ Efficiency, Utility & Loss Time Management',
+    'breadcrumbs_title' => 'SMT INJ Efficiency, Utility & Loss Time Management'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
