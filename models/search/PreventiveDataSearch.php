@@ -41,7 +41,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = MachineMpPlanViewMaster02::find()->where(['not', ['master_plan_maintenance' => null]]);
+$query = MachineMpPlanViewMaster02::find();
 /*if (isset($_GET['status'])) {
       if ($_GET['status'] == 0) {
             $query = MachineMpPlanViewMaster02::find()->where(['not', ['master_plan_maintenance' => null]])->andWhere(['mesin_last_update' => null]);

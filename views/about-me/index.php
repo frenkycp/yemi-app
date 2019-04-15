@@ -12,6 +12,14 @@ $this->title = [
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
+$this->registerJs("$(function() {
+   $('.btn-video').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+});");
+
+
 date_default_timezone_set('Asia/Jakarta');
 
 ?>
@@ -91,7 +99,7 @@ date_default_timezone_set('Asia/Jakarta');
         <div class="timeline-item">
             <span class="time"><i class="fa fa-clock-o"></i> 2019-01-08</span>
 
-            <h3 class="timeline-header"><a href="#">GO-PICKING Monitor</a></h3>
+            <h3 class="timeline-header"><a href="#">GO-PICKING Monitor</a> <?= Html::a('<i class="fa fa-fw fa-youtube-play"></i>', '@web/uploads/video/Go Picking.mp4'); ?></h3>
 
             <div class="timeline-body">
                 Monitoring efficency of material movements from Warehouse to Production
@@ -209,6 +217,19 @@ date_default_timezone_set('Asia/Jakarta');
 
             <div class="timeline-body">
                 Transporter performance monitoring
+                <hr>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <span><b><u>GO-WIP</u></b></span>
+                                <?= '<video width="100%" height="240" controls>
+                    <source src="http://localhost/yemi-app/web/uploads/video/Go WIP.mp4" type="video/mp4">
+                </video>' ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </li>

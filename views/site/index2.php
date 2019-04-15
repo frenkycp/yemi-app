@@ -340,10 +340,13 @@ $this->registerCss("
                 <div class="panel panel-success" style="display: <?= in_array(Yii::$app->user->identity->role->id, [15]) ? 'none' : ''; ?>;">
                     <div class="panel-heading text-center">Production Engineering<br/></div>
                     <div class="list-group">
-                        <a class="list-group-item" href="http://172.17.144.2/yamaha/project/index">New Model Development <span class="japanesse-word">（新製品開発日程）</span></a>
+                        <a class="list-group-item" href="http://172.17.144.2/yamaha/project/index" target="_blank">New Model Development <span class="japanesse-word">（新製品開発日程）</span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" href="http://172.17.144.2">PRODUCTION ENGINEERING CONTROL DATA <span class="japanesse-word">(技術管理データ)</span></a>
+                        <a class="list-group-item" href="http://172.17.144.2" target="_blank">PRODUCTION ENGINEERING CONTROL DATA <span class="japanesse-word">(技術管理データ)</span></a>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item" href="http://172.17.144.2/repair" target="_blank">PCB Repair Database <span class="japanesse-word"></span></a>
                     </div>
                 </div>
     	   </div>

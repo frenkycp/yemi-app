@@ -10,6 +10,7 @@ use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use app\models\search\PreventiveDataSearch;
 use app\models\MesinCheckTbl;
+use app\models\AssetTbl;
 use yii\web\UploadedFile;
 use yii\web\Controller;
 use app\models\MachineMpPlanViewMaster02;
@@ -28,6 +29,7 @@ class MntPreventiveDataController extends Controller
 
 	public function actionIndex()
 	{
+		ini_set('max_execution_time', 600);
 	    $searchModel  = new PreventiveDataSearch;
 	    if (\Yii::$app->request->get('master_plan_maintenance') !== null) {
 	    	$searchModel->master_plan_maintenance = \Yii::$app->request->get('master_plan_maintenance');
@@ -37,11 +39,16 @@ class MntPreventiveDataController extends Controller
 	    }
 	    $dataProvider = $searchModel->search($_GET);
 
-	    $machine_periode_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(mesin_periode)')->orderBy('mesin_periode ASC')->all(), 'mesin_periode', 'mesin_periode');
+	    //$machine_periode_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(mesin_periode)')->orderBy('mesin_periode ASC')->all(), 'mesin_periode', 'mesin_periode');
 
-	    $loc_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(location)')->where(['<>', 'location', ''])->orderBy('location ASC')->all(), 'location', 'location');
+	    //$loc_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(location)')->where(['<>', 'location', ''])->orderBy('location ASC')->all(), 'location', 'location');
 
-	    $area_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(area)')->orderBy('area ASC')->all(), 'area', 'area');
+	    //$area_arr = ArrayHelper::map(MachineMpPlanViewMaster02::find()->select('DISTINCT(area)')->orderBy('area ASC')->all(), 'area', 'area');
+	    $area_arr = ArrayHelper::map(AssetTbl::find()->select('area')->where([
+	    	'location' => ['FACTORY 1', 'FACTORY 2', 'FACTORY 2.5']
+	    ])
+	    ->groupBy('area')
+	    ->orderBy('area ASC')->all(), 'area', 'area');
 
 		Tabs::clearLocalStorage();
 
