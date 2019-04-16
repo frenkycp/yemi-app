@@ -268,6 +268,19 @@ date_default_timezone_set('Asia/Jakarta');
 
             <div class="timeline-body">
                 Monitoring Production line efficency and lost time
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <span><b><u>DPR</u></b></span>
+                                <?= '<video width="100%" controls>
+                                    <source src="http://localhost/yemi-app/web/uploads/video/dpr.mp4" type="video/mp4">
+                                </video>' ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </li>
