@@ -37,6 +37,31 @@ date_default_timezone_set('Asia/Jakarta');
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
+            Apr. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-green"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-04-01</span>
+
+            <h3 class="timeline-header"><a href="#">Clinic System</a></h3>
+
+            <div class="timeline-body">
+                Monitoring people visit on clinic
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+    <!-- /.timeline-label -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
             Mar. 2019
         </span>
     </li>
@@ -103,6 +128,19 @@ date_default_timezone_set('Asia/Jakarta');
 
             <div class="timeline-body">
                 Monitoring efficency of material movements from Warehouse to Production
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <span><b><u>GO-PICKING</u></b></span>
+                                <?= '<video width="100%" controls>
+                                    <source src="http://localhost/yemi-app/web/uploads/video/go_picking.mp4" type="video/mp4">
+                                </video>' ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </li>
@@ -151,6 +189,19 @@ date_default_timezone_set('Asia/Jakarta');
 
             <div class="timeline-body">
                 Real time monitoring SMT performance ( Utilization & Losstime)  based on line output
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <span><b><u>SMT</u></b></span>
+                                <?= '<video width="100%" controls>
+                                    <source src="http://localhost/yemi-app/web/uploads/video/smt.mp4" type="video/mp4">
+                                </video>' ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </li>
@@ -165,6 +216,19 @@ date_default_timezone_set('Asia/Jakarta');
 
             <div class="timeline-body">
                 Monitoring efficency of transporter finish good from production to Warehouse Finish Good
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <span><b><u>GO-PALLET</u></b></span>
+                                <?= '<video width="100%" controls>
+                                    <source src="http://localhost/yemi-app/web/uploads/video/go_pallet.mp4" type="video/mp4">
+                                </video>' ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </li>
@@ -219,13 +283,13 @@ date_default_timezone_set('Asia/Jakarta');
                 Transporter performance monitoring
                 <hr>
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <div class="panel panel-primary">
                             <div class="panel-body">
                                 <span><b><u>GO-WIP</u></b></span>
-                                <?= '<video width="100%" height="240" controls>
-                    <source src="http://localhost/yemi-app/web/uploads/video/Go WIP.mp4" type="video/mp4">
-                </video>' ?>
+                                <?= '<video width="100%" controls>
+                                    <source src="http://localhost/yemi-app/web/uploads/video/go_wip.mp4" type="video/mp4">
+                                </video>' ?>
                             </div>
                         </div>
                     </div>
@@ -316,10 +380,23 @@ date_default_timezone_set('Asia/Jakarta');
         <div class="timeline-item">
             <span class="time"><i class="fa fa-clock-o"></i> 2018-07-03</span>
 
-            <h3 class="timeline-header"><a href="#">WH FG Control <span class="japanesse">(完成品倉庫管理)</span></a></h3>
+            <h3 class="timeline-header"><a href="#">WH FG Control <span class="japanesse">(完成品倉庫管理)</span> - <span class="text-red">*IoT</span></a></h3>
 
             <div class="timeline-body">
                 Monitoring finish good stock according in and out goods
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-body">
+                                <span><b><u>RFID</u></b></span>
+                                <?= '<video width="100%" controls>
+                                    <source src="http://localhost/yemi-app/web/uploads/video/rfid.mp4" type="video/mp4">
+                                </video>' ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </li>
