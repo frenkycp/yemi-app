@@ -135,7 +135,7 @@ date_default_timezone_set('Asia/Jakarta');
                             <div class="panel-body">
                                 <span><b><u>GO-PICKING</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://localhost/yemi-app/web/uploads/video/go_picking.mp4" type="video/mp4">
+                                    <source src="http://172.17.144.6:86/uploads/video/go_picking.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -196,7 +196,7 @@ date_default_timezone_set('Asia/Jakarta');
                             <div class="panel-body">
                                 <span><b><u>SMT</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://localhost/yemi-app/web/uploads/video/smt.mp4" type="video/mp4">
+                                    <source src="http://172.17.144.6:86/uploads/video/smt.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -223,7 +223,7 @@ date_default_timezone_set('Asia/Jakarta');
                             <div class="panel-body">
                                 <span><b><u>GO-PALLET</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://localhost/yemi-app/web/uploads/video/go_pallet.mp4" type="video/mp4">
+                                    <source src="http://172.17.144.6:86/uploads/video/go_pallet.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -275,7 +275,7 @@ date_default_timezone_set('Asia/Jakarta');
                             <div class="panel-body">
                                 <span><b><u>DPR</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://localhost/yemi-app/web/uploads/video/dpr.mp4" type="video/mp4">
+                                    <source src="http://172.17.144.6:86/uploads/video/dpr.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -301,7 +301,7 @@ date_default_timezone_set('Asia/Jakarta');
                             <div class="panel-body">
                                 <span><b><u>GO-WIP</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://localhost/yemi-app/web/uploads/video/go_wip.mp4" type="video/mp4">
+                                    <source src="http://172.17.144.6:86/uploads/video/go_wip.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -404,7 +404,7 @@ date_default_timezone_set('Asia/Jakarta');
                             <div class="panel-body">
                                 <span><b><u>RFID</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://localhost/yemi-app/web/uploads/video/rfid.mp4" type="video/mp4">
+                                    <source src="http://172.17.144.6:86/uploads/video/rfid.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
