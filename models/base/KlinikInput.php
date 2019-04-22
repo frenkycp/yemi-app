@@ -13,6 +13,7 @@ use Yii;
  * @property integer $nik
  * @property string $nama
  * @property string $dept
+  * @property string $section
  * @property integer $opsi
  * @property string $masuk
  * @property string $keluar
@@ -57,6 +58,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
         return [
             [['pk', 'masuk', 'keluar'], 'safe'],
             [['nik', 'opsi', 'confirm'], 'integer'],
+            [['section'], 'string', 'max' => 50],
             [['nama', 'dept', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'string', 'max' => 255],
             [['pk'], 'unique']
         ];
@@ -72,6 +74,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'nik' => 'Nik',
             'nama' => 'Nama',
             'dept' => 'Dept',
+            'section' => 'Seksi',
             'opsi' => 'Opsi',
             'masuk' => 'Masuk',
             'keluar' => 'Keluar',

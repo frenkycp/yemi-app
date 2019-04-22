@@ -178,8 +178,9 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 		$emp = Karyawan::findOne(['NIK' => $nik]);
 		$data = [
 			'name' => $emp->NAMA_KARYAWAN,
-			'dept' => $emp->DEPARTEMEN
+			'dept' => $emp->DEPARTEMEN,
+			'section' => $emp->SECTION
 		];
-		return $emp->NAMA_KARYAWAN . '||' . $emp->DEPARTEMEN;
+		return $emp->NAMA_KARYAWAN . '||' . $emp->DEPARTEMEN . '||' . $emp->SECTION;
 	}
 }
