@@ -13,7 +13,7 @@ class ClinicDailyVisitController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 		$year = date('Y');
@@ -35,7 +35,7 @@ class ClinicDailyVisitController extends Controller
 		])
 		->all();
 
-		$tmp_data = [];
+		$tmp_data = $tmp_data1 = $tmp_data2 = $tmp_data3 = [];
 		foreach ($daily_visit as $key => $value) {
 			$proddate = (strtotime($value->input_date . " +7 hours") * 1000);
 			$tmp_data[] = [
@@ -43,12 +43,36 @@ class ClinicDailyVisitController extends Controller
 				'y' => (int)$value->total_visitor,
 				'url' => Url::to(['get-remark', 'input_date' => $value->input_date]),
 			];
+			$tmp_data1[] = [
+				'x' => $proddate,
+				'y' => (int)$value->total_periksa,
+				'url' => Url::to(['get-remark', 'input_date' => $value->input_date, 'opsi' => 1]),
+			];
+			$tmp_data2[] = [
+				'x' => $proddate,
+				'y' => (int)$value->total_istirahat,
+				'url' => Url::to(['get-remark', 'input_date' => $value->input_date, 'opsi' => 2]),
+			];
+			$tmp_data3[] = [
+				'x' => $proddate,
+				'y' => (int)$value->total_laktasi,
+				'url' => Url::to(['get-remark', 'input_date' => $value->input_date, 'opsi' => 3]),
+			];
 		}
 
-		$data[] = [
-			'name' => 'Total Visitor',
-			'data' => $tmp_data,
-			'showInLegend' => false
+		$data = [
+			[
+				'name' => 'Total Periksa',
+				'data' => $tmp_data1
+			],
+			[
+				'name' => 'Total Istirahat',
+				'data' => $tmp_data2
+			],
+			[
+				'name' => 'Total Laktasi',
+				'data' => $tmp_data3
+			],
 		];
 
 		return $this->render('index', [
@@ -58,11 +82,18 @@ class ClinicDailyVisitController extends Controller
 		]);
 	}
 
-	public function actionGetRemark($input_date)
+	public function actionGetRemark($input_date, $opsi)
 	{
+		if ($opsi == 1) {
+    		$keperluan = 'PERIKSA';
+    	} elseif ($opsi == 2) {
+    		$keperluan = 'ISTIRAHAT SAKIT';
+    	} else {
+    		$keperluan = 'LAKSTASI';
+    	}
 		$remark = '<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>' . $input_date . '</h3>
+			<h3>' . $keperluan . ' <small>(' . $input_date . ')</small></h3>
 		</div>
 		<div class="modal-body">
 		';
@@ -73,16 +104,16 @@ class ClinicDailyVisitController extends Controller
 	    	<th class="text-center">NIK</th>
 	    	<th>Nama</th>
 	    	<th>Departemen</th>
-	    	<th class="text-center">Keperluan</th>
 	    	<th class="text-center">Masuk</th>
 	    	<th class="text-center">Keluar</th>
+	    	<th>Anamnesa</th>
 	    	<th class="text-center">Diagnosa</th>
 	    </tr>';
 
 	    $data_arr = KlinikInput::find()
 	    ->where([
 	    	'date(pk)' => $input_date,
-	    	'opsi' => [1, 2],
+	    	'opsi' => $opsi,
 	    ])
 	    ->orderBy('masuk')
 	    ->all();
@@ -101,9 +132,9 @@ class ClinicDailyVisitController extends Controller
 	    		<td class="text-center">' . $value->nik . '</td>
 	    		<td>' . $value->nama . '</td>
 	    		<td>' . $value->dept . '</td>
-	    		<td class="text-center">' . $keperluan . '</td>
 	    		<td class="text-center">' . $value->masuk . '</td>
 	    		<td class="text-center">' . $value->keluar . '</td>
+	    		<td>' . $value->anamnesa . '</td>
 	    		<td class="text-center">' . $value->diagnosa . '</td>
 	    	</tr>';
 	    	$no++;

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 use yii\web\View;
 
@@ -124,6 +125,7 @@ $gridColumns = [
         'attribute' => 'dept',
         'label' => 'Departemen',
         'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_GROUP')->groupBy('CC_GROUP')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px; min-width: 150px;'

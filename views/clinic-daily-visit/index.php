@@ -104,6 +104,9 @@ echo '</pre>';*/
                     //'categories' => $value['category'],
                 ],
                 'yAxis' => [
+                    'stackLabels' => [
+                        'enabled' => true
+                    ],
                     //'min' => 0,
                     'title' => [
                         'text' => 'Total Employee'
@@ -121,6 +124,7 @@ echo '</pre>';*/
                 ],
                 'plotOptions' => [
                     'column' => [
+                        'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
                             //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',

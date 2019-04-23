@@ -12,6 +12,9 @@ use Yii;
  * @property integer $period
  * @property string $input_date
  * @property string $total_visitor
+ * @property string $total_periksa
+ * @property string $total_istirahat
+ * @property string $total_laktasi
  * @property string $aliasModel
  */
 abstract class ClinicDailyVisit extends \yii\db\ActiveRecord
@@ -42,7 +45,8 @@ abstract class ClinicDailyVisit extends \yii\db\ActiveRecord
     {
         return [
             [['period', 'total_visitor'], 'integer'],
-            [['input_date'], 'safe']
+            [['input_date'], 'safe'],
+            [['total_periksa', 'total_istirahat', 'total_laktasi'], 'number']
         ];
     }
 
@@ -55,6 +59,9 @@ abstract class ClinicDailyVisit extends \yii\db\ActiveRecord
             'period' => 'Period',
             'input_date' => 'Input Date',
             'total_visitor' => 'Total Visitor',
+            'total_periksa' => 'Total Periksa',
+            'total_istirahat' => 'Total Istirahat',
+            'total_laktasi' => 'Total Laktasi',
         ];
     }
 
