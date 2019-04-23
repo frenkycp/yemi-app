@@ -93,6 +93,12 @@ $this->registerCss("
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/clinic"><i class="fa fa-fw fa-plus"></i> Clinic Confirmation <span class="japanesse-word"></span></a>
                     </div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/clinic-daily-visit"><i class="fa fa-fw fa-plus"></i> Clinic Monthly Visit <span class="japanesse-word"></span></a>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/clinic-data"><i class="fa fa-fw fa-plus"></i> Clinic Data <span class="japanesse-word"></span></a>
+                    </div>
                 </div>
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Production Support Applications<br/><span class="japanesse-word"></span></div>
