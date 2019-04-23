@@ -56,7 +56,6 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'date(pk)' => $this->input_date,
             'nik' => $this->nik,
             'opsi' => $this->opsi,
             'masuk' => $this->masuk,
@@ -65,6 +64,7 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'nama', $this->nama])
+            ->andFilterWhere(['like', 'date(pk)', $this->input_date])
             ->andFilterWhere(['like', 'dept', $this->dept])
             ->andFilterWhere(['like', 'anamnesa', $this->anamnesa])
             ->andFilterWhere(['like', 'root_cause', $this->root_cause])

@@ -30,8 +30,8 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 	    $searchModel  = new ClinicDataSearch;
 
 	    $searchModel->input_date = date('Y-m-d');
-        if (\Yii::$app->request->post('input_date') !== null) {
-            $searchModel->input_date = Yii::$app->request->post('input_date');
+        if (\Yii::$app->request->get('input_date') !== null) {
+            $searchModel->input_date = \Yii::$app->request->get('input_date');
         }
 
 	    $dataProvider = $searchModel->search($_GET);
