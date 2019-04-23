@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Daily Visitor <span class="japanesse text-green"></span>',
-    'tab_title' => 'Daily Visitor',
-    'breadcrumbs_title' => 'Daily Visitor'
+    'page_title' => 'CLINIC DAILY VISITOR <span class="japanesse text-green"></span>',
+    'tab_title' => 'CLINIC DAILY VISITOR',
+    'breadcrumbs_title' => 'CLINIC DAILY VISITOR'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -74,10 +74,9 @@ echo '</pre>';*/
         ]); ?>
     </div>
 </div>
-<br/>
 
 <?php ActiveForm::end(); ?>
-
+<h3>Last Update : <?= date('Y-m-d H:i'); ?></h3>
 <div class="box box-primary">
     <div class="box-body">
         <?php
@@ -95,7 +94,7 @@ echo '</pre>';*/
                     ],
                 ],
                 'title' => [
-                    'text' => 'Clinic Daily Visit'
+                    'text' => null
                 ],
                 'subtitle' => [
                     'text' => ''
@@ -107,7 +106,7 @@ echo '</pre>';*/
                 'yAxis' => [
                     //'min' => 0,
                     'title' => [
-                        'text' => 'Qty'
+                        'text' => 'Total Employee'
                     ],
                     //'gridLineWidth' => 0,
                 ],
@@ -139,7 +138,12 @@ echo '</pre>';*/
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
-                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
                             ]
                         ]
                     ]
@@ -150,3 +154,11 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>
