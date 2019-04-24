@@ -52,12 +52,12 @@ use kartik\select2\Select2;
                     ]); ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'nama')->textInput(['readonly' => true, 'id' => 'txt_name']) ?>
+                    <?= $form->field($model, 'nama')->textInput(['readonly' => true, 'id' => 'txt_name']); ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'dept')->textInput(['readonly' => true, 'id' => 'txt_dept']) ?>
-                    <?= $form->field($model, 'section')->textInput(['type' => 'hidden', 'id' => 'txt_section']) ?>
-                    <?= $form->field($model, 'status_karyawan')->textInput(['type' => 'hidden', 'id' => 'txt_status_karyawan']) ?>
+                    <?= $form->field($model, 'dept')->textInput(['readonly' => true, 'id' => 'txt_dept']); ?>
+                    <?= $form->field($model, 'section')->textInput(['type' => 'hidden', 'id' => 'txt_section'])->label(false); ?>
+                    <?= $form->field($model, 'status_karyawan')->textInput(['type' => 'hidden', 'id' => 'txt_status_karyawan'])->label(false); ?>
                 </div>
                 <div class="col-md-2">
                     <?= $form->field($model, 'opsi')->dropDownList([
@@ -69,13 +69,13 @@ use kartik\select2\Select2;
             </div>
             <div class="row">
                 <div class="col-md-4">
-                    <?= $form->field($model, 'anamnesa')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'anamnesa')->textInput(['maxlength' => true]); ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'root_cause')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'root_cause')->textInput(['maxlength' => true]); ?>
                 </div>
                 <div class="col-md-4">
-                    <?= $form->field($model, 'diagnosa')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'diagnosa')->textInput(['maxlength' => true]); ?>
                 </div>
             </div>
             <div class="panel panel-primary">
@@ -85,19 +85,19 @@ use kartik\select2\Select2;
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-2">
-                            <?= $form->field($model, 'obat1')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'obat1')->textInput(['maxlength' => true]); ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $form->field($model, 'obat2')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'obat2')->textInput(['maxlength' => true]); ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $form->field($model, 'obat3')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'obat3')->textInput(['maxlength' => true]); ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $form->field($model, 'obat4')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'obat4')->textInput(['maxlength' => true]); ?>
                         </div>
                         <div class="col-md-2">
-                            <?= $form->field($model, 'obat5')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'obat5')->textInput(['maxlength' => true]); ?>
                         </div>
                     </div>
                 </div>

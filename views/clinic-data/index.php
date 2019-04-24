@@ -132,6 +132,15 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'section',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_DESC')->groupBy('CC_DESC')->orderBy('CC_DESC')->all(), 'CC_DESC', 'CC_DESC'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 150px;'
+        ],
+    ],
+    [
         'attribute' => 'opsi',
         'value' => function($model){
             if ($model->opsi == 1) {
