@@ -116,10 +116,10 @@ use yii\helpers\StringHelper;
 			<?= $form->field($model, 'repair_pic')->textInput(['readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
 
 <!-- attribute mesin_last_update -->
-			<?= $form->field($model, 'mesin_last_update')->textInput(['readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
+			<?= $form->field($model, 'mesin_last_update')->textInput() ?>
 
 <!-- attribute repair_aktual -->
-			<?= $form->field($model, 'repair_aktual')->textInput(['readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
+			<?= $form->field($model, 'repair_aktual')->textInput() ?>
 
             <?= $form->field($model, 'down_time')->textInput(['type' => 'number', 'readonly' => Yii::$app->user->identity->role->id == 1 || Yii::$app->user->identity->role->id == 8 || Yii::$app->user->identity->role->id == 13 ? false : true]) ?>
             
