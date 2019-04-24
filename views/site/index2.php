@@ -86,7 +86,7 @@ $this->registerCss("
                     </div>
                 </div>
                 <div class="panel panel-success">
-                    <div class="panel-heading text-center">Management Approval<br/><span class="japanesse-word"></span></div>
+                    <div class="panel-heading text-center">Management Support<br/><span class="japanesse-word"></span></div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_visitor"><i class="fa fa-fw fa-plus"></i> Visitor Confirmation <span class="japanesse-word"></span></a>
                     </div>
@@ -98,6 +98,9 @@ $this->registerCss("
                     </div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/clinic-data"><i class="fa fa-fw fa-plus"></i> Clinic Data <span class="japanesse-word"></span></a>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/driver/display.php"><i class="fa fa-fw fa-plus"></i> Company Car Monitoring <span class="japanesse-word"></span></a>
                     </div>
                 </div>
                 <div class="panel panel-success">
