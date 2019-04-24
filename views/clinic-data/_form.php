@@ -42,6 +42,7 @@ use kartik\select2\Select2;
                                     $( "#txt_name" ).val(data_arr[0]);
                                     $( "#txt_dept" ).val(data_arr[1]);
                                     $( "#txt_section" ).val(data_arr[2]);
+                                    $( "#txt_status_karyawan" ).val(data_arr[3]);
                                 });
                             ',
                         ],
@@ -56,6 +57,7 @@ use kartik\select2\Select2;
                 <div class="col-md-4">
                     <?= $form->field($model, 'dept')->textInput(['readonly' => true, 'id' => 'txt_dept']) ?>
                     <?= $form->field($model, 'section')->textInput(['type' => 'hidden', 'id' => 'txt_section']) ?>
+                    <?= $form->field($model, 'status_karyawan')->textInput(['type' => 'hidden', 'id' => 'txt_status_karyawan']) ?>
                 </div>
                 <div class="col-md-2">
                     <?= $form->field($model, 'opsi')->dropDownList([
