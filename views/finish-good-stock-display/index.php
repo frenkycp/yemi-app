@@ -23,7 +23,7 @@ $this->registerCss("
     .content-header {color: white;}
     //.box-body {background-color: #33383D;}
     .box-title {font-weight: bold;}
-    .box-header .box-title, .control-label{font-size: 1.5em;}
+    .box-header .box-title, .control-label{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
@@ -58,7 +58,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 300000); // milliseconds
+      setTimeout("refreshPage();", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -79,7 +79,7 @@ echo '</pre>';*/
     <div class="col-md-12">
         <div class="box box-default box-solid">
     <div class="box-header with-border">
-        <h3 class="box-title"><?= 'Update Stock ' . date('d M\' Y H:i:s') ?></h3>
+        <h3 class="box-title"><?= 'Update Stock ' . date('d M\' Y H:i') ?></h3>
     </div>
     <div class="box-body">
         <?php
@@ -93,9 +93,9 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 700,
+                    'height' => 650,
                     'style' => [
-                        //'fontFamily' => 'Source Sans Pro'
+                        'fontFamily' => 'Source Sans Pro'
                     ],
                 ],
                 'credits' => [
@@ -108,19 +108,28 @@ echo '</pre>';*/
                     'text' => $subtitle
                 ],
                 'legend' => [
-                    'enabled' => true
+                    'enabled' => true,
+                    'itemStyle' => [
+                        'fontSize' => '18px',
+                    ],
                 ],
                 'xAxis' => [
-                    'categories' => $categories
+                    'categories' => $categories,
+                    'labels' => [
+                        'style' => [
+                            'fontSize' => '20px',
+                            'fontWeight' => 'bold'
+                        ],
+                    ],
                 ],
                 'yAxis' => [
                     'min' => 0,
-                    
                     'stackLabels' => [
                         'enabled' => true,
                         'style' => [
                             //'color' => 'white',
-                            //'fontWeight' => 'normal'
+                            'fontWeight' => 'bold',
+                            'fontSize' => '20px',
                         ],
                     ],
                 ],
@@ -135,7 +144,7 @@ echo '</pre>';*/
                         'stacking' => 'normal',
                     ],
                     'series' => [
-                        'cursor' => 'pointer',
+                        /*'cursor' => 'pointer',
                         'point' => [
                             'events' => [
                                 'click' => new JsExpression("
@@ -145,7 +154,7 @@ echo '</pre>';*/
                                     }
                                 "),
                             ]
-                        ]
+                        ]*/
                     ]
                 ],
                 'series' => [
@@ -188,7 +197,7 @@ echo '</pre>';*/
         yii\bootstrap\Modal::end();
         ?>
         <div class="well well-sm">
-            <h4 class="text-light-blue"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></h4>
+            <span class="text-light-blue" style="font-size: 30px;"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></span>
         </div>
     </div>
     
