@@ -131,7 +131,28 @@ $columns = [
     ],
     [
         'attribute' => 'description',
+        'value' => function($model){
+            if ($model->filename1 == null) {
+                return $model->description;
+            } else {
+                return Html::a($model->description, Url::to('@web/uploads/IPQA_PATROL/' . $model->filename1), ['target' => '_blank', 'data-pjax' => '0',]);
+            }
+        },
+        'format' => 'raw',
         'vAlign' => 'middle',
+        'hiddenFromExport' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 170px; font-size: 12px;',
+        ],
+    ],
+    [
+        'attribute' => 'description_export',
+        'value' => function($model){
+            return $model->description;
+        },
+        'vAlign' => 'middle',
+        'hidden' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 170px; font-size: 12px;',
