@@ -25,7 +25,7 @@ date_default_timezone_set('Asia/Jakarta');
 $columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update} {delete} {reply}',
+        'template' => '{update} {reply}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [

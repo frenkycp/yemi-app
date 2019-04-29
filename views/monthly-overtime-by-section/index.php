@@ -45,8 +45,8 @@ echo '</pre>';*/
 
 <div class="row">
     <div class="col-md-2">
-        <?= Html::label('Year'); ?>
-        <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
+        <?= Html::label('Fiscal'); ?>
+        <?= Html::dropDownList('fiscal', $fiscal, ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->limit(10)->all(), 'FISCAL', 'FISCAL'), [
             'class' => 'form-control',
             'onchange'=>'this.form.submit()'
         ]); ?>

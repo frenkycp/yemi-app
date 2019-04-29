@@ -10,6 +10,7 @@ use yii\web\JsExpression;
 use app\models\SplView;
 use app\models\Karyawan;
 use app\models\CostCenter;
+use app\models\FiscalTbl;
 
 class MonthlyOvertimeBySectionController extends Controller
 {
@@ -21,14 +22,42 @@ class MonthlyOvertimeBySectionController extends Controller
     
     public function actionIndex()
     {
-    	$year = date('Y');
+    	$fiscal = FiscalTbl::find()
+		->select('FISCAL')
+		->where([
+			'PERIOD' => date('Ym')
+		])
+		->one()
+		->FISCAL;
+		if ($fiscal == null) {
+			$fiscal = FiscalTbl::find()
+			->select([
+				'FISCAL' => 'MAX(FISCAL)'
+			])
+			->one()
+			->FISCAL;
+		}
 
-    	if (\Yii::$app->request->get('year') !== null) {
-			$year = \Yii::$app->request->get('year');
+		if (\Yii::$app->request->get('fiscal') !== null) {
+			$fiscal = \Yii::$app->request->get('fiscal');
 		}
 
 		if (\Yii::$app->request->get('section') !== null) {
 			$section = \Yii::$app->request->get('section');
+		}
+
+		$period_data_arr = FiscalTbl::find()
+		->select('PERIOD')
+		->where([
+			'FISCAL' => $fiscal
+		])
+		->orderBy('PERIOD')
+		->asArray()
+		->all();
+
+		$categories = [];
+		foreach ($period_data_arr as $key => $value) {
+			$categories[] = $value['PERIOD'];
 		}
 
 		$section_arr = ArrayHelper::map(CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC');
@@ -41,7 +70,7 @@ class MonthlyOvertimeBySectionController extends Controller
 				'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_DESC'
 			])
 			->where([
-				'LEFT(PERIOD, 4)' => $year,
+				'PERIOD' => $categories,
 			])
 			->andWhere('NIK IS NOT NULL')
 			->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
@@ -57,7 +86,7 @@ class MonthlyOvertimeBySectionController extends Controller
 				'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
 			])
 			->where([
-				'LEFT(PERIOD, 4)' => $year,
+				'PERIOD' => $categories,
 			])
 			->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
 			->orderBy('NIK, PERIOD')
@@ -70,7 +99,7 @@ class MonthlyOvertimeBySectionController extends Controller
 			])
 			->where([
 				'CC_ID' => $section,
-				'LEFT(PERIOD, 4)' => $year,
+				'PERIOD' => $categories,
 			])
 			->andWhere('NIK IS NOT NULL')
 			->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
@@ -86,7 +115,7 @@ class MonthlyOvertimeBySectionController extends Controller
 				'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
 			])
 			->where([
-				'LEFT(PERIOD, 4)' => $year,
+				'PERIOD' => $categories,
 				'CC_ID' => $section
 			])
 			->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
@@ -95,12 +124,6 @@ class MonthlyOvertimeBySectionController extends Controller
 			->all();
 		}
 
-		$categories = [];
-		for ($i = 1; $i <= 12; $i++) {
-			$bulan = str_pad($i, 2, '0', STR_PAD_LEFT);
-			$period = $year . $bulan;
-			$categories[] = $period;
-		}
 		$data = [];
 		foreach ($karyawan_arr as $karyawan) {
 			$tmp_data = [];
@@ -128,7 +151,7 @@ class MonthlyOvertimeBySectionController extends Controller
 
     	return $this->render('index', [
 			'data' => $data,
-			'year' => $year,
+			'fiscal' => $fiscal,
 			'section' => $section,
 			'categories' => $categories,
 			'section_arr' => $section_arr
