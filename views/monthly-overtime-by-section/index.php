@@ -35,6 +35,9 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
+$section_data = app\models\CostCenter::find()
+->where(['CC_ID' => $section])
+->one();
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -89,7 +92,10 @@ echo '</pre>';*/
                         'enabled' => false
                     ],
                     'title' => [
-                        'text' => 'YEAR ' . $year,
+                        'text' => $section == 'ALL' ? 'OT Management by Section (ALL SECTIONS)' : 'OT Management by Section (' . $section_data->CC_DESC . ')',
+                    ],
+                    'subtitle' => [
+                        'text' => 'FISCAL YEAR ' . $fiscal,
                     ],
                     'xAxis' => [
                         'categories' => $categories,

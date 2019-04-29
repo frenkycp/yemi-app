@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Menu;
 use app\models\HrComplaint;
+use app\models\IpqaPatrolTbl;
 
 class SidebarMenu extends Widget
 {
@@ -50,6 +51,22 @@ class SidebarMenu extends Widget
                     "url" => SidebarMenu::getUrl($menu),
                     "visible" => SidebarMenu::roleHasAccess($roleId, $menu->id),
                     'template' => '<a href="{url}">{icon} {label}<span class="pull-right-container"><small class="label pull-right bg-yellow">' . $total_waiting . '</small></span></a>',
+                ];
+            }
+
+            if ($menu->controller == 'ipqa-patrol-tbl' && $menu->action == 'index') {
+                $total_waiting = IpqaPatrolTbl::find()
+                ->where([
+                    'status' => 0,
+                    'flag' => 1,
+                ])
+                ->count();
+                $obj = [
+                    "label" => $menu->name,
+                    "icon" => $menu->icon,
+                    "url" => SidebarMenu::getUrl($menu),
+                    "visible" => SidebarMenu::roleHasAccess($roleId, $menu->id),
+                    'template' => '<a href="{url}">{icon} {label}<span class="pull-right-container"><small class="label pull-right bg-red">' . $total_waiting . '</small></span></a>',
                 ];
             }
 
