@@ -17,6 +17,7 @@ $script = "
         var link_arr = [
             'http://172.17.144.6:86/daily-container-display',
             'http://172.17.144.6:86/finish-good-stock-display',
+            'http://172.17.144.6:86/monthly-container-display'
         ];
         var index = link_arr.indexOf(src);
         var arr_length = link_arr.length;
