@@ -205,7 +205,34 @@ $this->registerCss("
                                 </li>
                             </ol>
                         </div>
-                        
+                        <div class="list-group-item">
+                            <p>GO-PICKING Monitor <span class="japanesse-word"></span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('Order Progress Monitor <span class="japanesse-word"> (配達進捗モニター）</span>', ['/go-picking-order-completion']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Transport Utilization <span class="japanesse-word">(配達の稼働率）</span>', ['/go-picking-driver-utility']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Transport Data <span class="japanesse-word">(配達データー)</span>', ['/go-picking-order-data']); ?>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="list-group-item">
+                            <p>GO-MACHINE Monitor <span class="japanesse-word"></span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('Order Progress Monitor <span class="japanesse-word"> (配達進捗モニター）</span>', ['/go-machine-order-completion']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Transport Utilization <span class="japanesse-word">(配達の稼働率）</span>', ['/go-machine-driver-utility']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Transport Data <span class="japanesse-word">(配達データー)</span>', ['/go-machine-order']); ?>
+                                </li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
                 <div class="text-center">
