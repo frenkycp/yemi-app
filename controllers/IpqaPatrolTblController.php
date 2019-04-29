@@ -15,11 +15,12 @@ use yii\web\UploadedFile;
 
 class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblController
 {
-	/**
-	* Creates a new IpqaPatrolTbl model.
-	* If creation is successful, the browser will be redirected to the 'view' page.
-	* @return mixed
-	*/
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
 	public function actionCreate()
 	{
 		date_default_timezone_set('Asia/Jakarta');

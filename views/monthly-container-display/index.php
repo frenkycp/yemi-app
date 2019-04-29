@@ -38,7 +38,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 10000); // milliseconds
+      setTimeout("refreshPage();", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
