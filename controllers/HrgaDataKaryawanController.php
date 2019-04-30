@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use dmstr\bootstrap\Tabs;
 
 use app\models\Karyawan;
+use app\models\ImageFile;
 use app\models\search\HrgaDataKaryawanSearch;
 use yii\web\UploadedFile;
 
@@ -67,7 +68,7 @@ class HrgaDataKaryawanController extends \app\controllers\base\HrgaDataKaryawanC
 	        	if ($model->upload_file) {
 	        		$filePath = \Yii::getAlias("@app/web/uploads/yemi_employee_img/") . $new_filename;
 	        		if ($model->upload_file->saveAs($filePath)) {
-	                    
+	                    ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
 	                }
 	        	}
 	        	return $this->redirect(Url::previous());
