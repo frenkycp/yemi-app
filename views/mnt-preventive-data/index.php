@@ -295,7 +295,7 @@ $grid_columns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'date_status',
         'label' => 'On-Time Status',
         'vAlign' => 'middle',
@@ -304,7 +304,28 @@ $grid_columns = [
             if ($model->count_close == 0) {
                 return '-';
             }
+
             if ($model->master_plan_maintenance > date('Y-m-d', strtotime($model->planDate))) {
+                return 'OVER';
+            }
+            return 'ON-TIME';
+        },
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
+        ],
+    ],*/
+    [
+        'attribute' => 'weekly_status',
+        'label' => 'On-Time (Weekly) Status',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'value' => function($model){
+            if ($model->count_close == 0) {
+                return '-';
+            }
+            
+            if (date("W", strtotime($model->master_plan_maintenance)) > date("W", strtotime($model->planDate))) {
                 return 'OVER';
             }
             return 'ON-TIME';
