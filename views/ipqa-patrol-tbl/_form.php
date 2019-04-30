@@ -16,6 +16,22 @@ use yii\web\View;
 * @var yii\widgets\ActiveForm $form
 */
 
+$script = <<< JS
+    $(document).on('beforeSubmit', 'form', function(event) {
+        $(this).find('[type=submit]').attr('disabled', true).addClass('disabled');
+        $('#btn-cancel').attr('disabled', true).addClass('disabled');
+    });
+    $(document).ready(function() {
+        $('#btn-cancel').click(function(){
+            //alert('ok');
+            $(document).find('[type=submit]').attr('disabled', true).addClass('disabled');
+            $(this).attr('disabled', true).addClass('disabled');
+        });
+    });
+    
+JS;
+$this->registerJs($script, View::POS_HEAD);
+
 ?>
 
 <div class="ipqa-patrol-tbl-form">
@@ -152,7 +168,7 @@ use yii\web\View;
             <?= Html::a(
             'Cancel',
             \yii\helpers\Url::previous(),
-            ['class' => 'btn btn-warning']) ?>
+            ['class' => 'btn btn-warning', 'id' => 'btn-cancel']) ?>
         </div>
     </div>
         
