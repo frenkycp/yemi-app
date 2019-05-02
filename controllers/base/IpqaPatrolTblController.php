@@ -109,7 +109,7 @@ return $this->render('update', [
 * If deletion is successful, the browser will be redirected to the 'index' page.
 * @param integer $id
 * @return mixed
-*/
+
 public function actionDelete($id)
 {
 try {
@@ -133,7 +133,7 @@ return $this->redirect($url);
 } else {
 return $this->redirect(['index']);
 }
-}
+}*/
 
 /**
 * Finds the IpqaPatrolTbl model based on its primary key value.

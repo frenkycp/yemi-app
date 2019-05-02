@@ -117,6 +117,34 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		}
 	}
 
+	/**
+	* Deletes an existing IpqaPatrolTbl model.
+	* If deletion is successful, the browser will be redirected to the 'index' page.
+	* @param integer $id
+	* @return mixed
+	*/
+	public function actionDelete($id)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+
+		try {
+			$model = $this->findModel($id);
+			$model->flag = 0;
+			$model->delete_datetime = date('Y-m-d H:i:s');
+			$model->deleted_by = \Yii::$app->user->identity->name;
+			if (!$model->save()) {
+				return json_encode($model->errors);
+			} else {
+				return $this->redirect(Url::previous());
+			}
+		} catch (\Exception $e) {
+			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+			\Yii::$app->getSession()->addFlash('error', $msg);
+			return $this->redirect(Url::previous());
+		}
+
+	}
+
 	public function actionReply($id)
 	{
 		date_default_timezone_set('Asia/Jakarta');
