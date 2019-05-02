@@ -5,6 +5,7 @@ use yii\bootstrap\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use kartik\select2\Select2;
 use app\models\SernoMaster;
 use kartik\date\DatePicker;
@@ -100,6 +101,13 @@ $this->registerJs($script, View::POS_HEAD);
                             ]); ?>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->where(['CC_GROUP' => ['PRODUCTION ENGINEERING', 'PRODUCTION']])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'), [
+                                'prompt' => '--Select Section--'
+                            ])->label('Section'); ?>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="row">
@@ -130,13 +138,14 @@ $this->registerJs($script, View::POS_HEAD);
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <?= $form->field($model, 'description')->textArea(['rows' => 3, 'style' => 'resize: none;']); ?>
+                            <?= $form->field($model, 'description')->textArea(['rows' => 5, 'style' => 'resize: none;']); ?>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
                             <?php
-                            echo $form->field($model, 'upload_file1')->widget(\kartik\file\FileInput::className(), [
+                            echo $model->filename1 == null ? 
+                            $form->field($model, 'upload_file1')->widget(\kartik\file\FileInput::className(), [
                                 'pluginOptions' => [
                                     'allowedFileExtensions' => ['jpg'],
                                     'showPreview' => false,
@@ -147,7 +156,7 @@ $this->registerJs($script, View::POS_HEAD);
                                     //'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
                                     //'browseLabel' =>  ' Select Photo'
                                 ],
-                            ])->label(false);
+                            ])->label('Attachment') : '<div class="form-group"><label class="control-label">Attachment</label><div class="form-control">' . Html::a('Click here to view attachment ...', Url::to('@web/uploads/IPQA_PATROL/' . $model->filename1), ['target' => '_blank', 'data-pjax' => '0',]) . '</div></div>';
                             ?>
                         </div>
                     </div>

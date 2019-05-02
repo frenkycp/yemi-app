@@ -30,6 +30,9 @@ use Yii;
  * @property integer $flag
  * @property string $filename1
  * @property string $closed_by
+ * @property string $CC_ID
+ * @property string $CC_GROUP
+ * @property string $CC_DESC
  * @property string $aliasModel
  */
 abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
@@ -59,7 +62,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'gmc', 'model_name', 'color', 'destination', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by'], 'string'],
+            [['period', 'gmc', 'model_name', 'color', 'destination', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'CC_ID', 'CC_GROUP', 'CC_DESC'], 'string'],
             [['event_date', 'input_datetime', 'close_datetime'], 'safe'],
             [['status', 'flag'], 'integer']
         ];
@@ -92,6 +95,9 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             'flag' => 'Flag',
             'filename1' => 'Filename1',
             'closed_by' => 'Closed By',
+            'CC_ID' => 'Cc  ID',
+            'CC_GROUP' => 'Cc  Group',
+            'CC_DESC' => 'Cc  Desc',
         ];
     }
 

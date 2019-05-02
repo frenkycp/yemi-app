@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class IpqaPatrolTbl extends BaseIpqaPatrolTbl
 {
-    public $upload_file1, $description_export;
+    public $upload_file1;
 
     public function behaviors()
     {
@@ -41,8 +41,15 @@ class IpqaPatrolTbl extends BaseIpqaPatrolTbl
             [
                 'gmc' => 'GMC',
                 'event_date' => 'Date',
-                'destination' => 'Dest.'
+                'destination' => 'Dest.',
+                'input_datetime' => 'Input Time',
+                'close_datetime' => 'Close Time',
             ]
         );
+    }
+
+    public function getCostCenter()
+    {
+        return $this->hasOne(CostCenter::className(), ['CC_ID' => 'CC_ID'])->one();
     }
 }

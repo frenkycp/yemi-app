@@ -20,7 +20,7 @@ public function rules()
 {
 return [
 [['id', 'status', 'flag'], 'integer'],
-            [['period', 'event_date', 'gmc', 'model_name', 'color', 'destination', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic'], 'safe'],
+            [['period', 'event_date', 'gmc', 'model_name', 'color', 'destination', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID'], 'safe'],
 ];
 }
 
@@ -42,14 +42,14 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = IpqaPatrolTbl::find()->where(['flag' => 1]);
+$query = IpqaPatrolTbl::find()->where(['flag' => 1])->orderBy('status ASC');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
 'sort' => [
       'defaultOrder' => [
             //'cust_desc' => SORT_ASC,
-            'status' => SORT_ASC,
+            //'status' => SORT_ASC,
             'event_date' => SORT_DESC,
             'input_datetime' => SORT_DESC
       ]
@@ -71,6 +71,7 @@ $query->andFilterWhere([
             'input_datetime' => $this->input_datetime,
             'close_datetime' => $this->close_datetime,
             'flag' => $this->flag,
+            'CC_ID' => $this->CC_ID,
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])

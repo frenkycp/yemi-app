@@ -40,7 +40,7 @@ $columns = [
                     'title' => 'Reply',
                     'data-pjax' => '0',
                 ];
-                return $model->status == 0 ? Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options) : null;
+                return Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options);
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -52,6 +52,26 @@ $columns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],
     [
+        'attribute' => 'filename1',
+        'label' => 'Attch.',
+        'mergeHeader' => true,
+        'value' => function($model){
+            if ($model->filename1 == null) {
+                return '-';
+            } else {
+                return Html::a('<i class="fa fa-fw fa-file-image-o"></i>', Url::to('@web/uploads/IPQA_PATROL/' . $model->filename1), ['target' => '_blank', 'data-pjax' => '0',]);
+            }
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hiddenFromExport' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 50px; font-size: 12px;',
+        ],
+    ],
+    /*[
         'attribute' => 'period',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -60,7 +80,7 @@ $columns = [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
         ],
-    ],
+    ],*/
     [
         'attribute' => 'event_date',
         'hAlign' => 'center',
@@ -83,14 +103,17 @@ $columns = [
     ],
     [
         'attribute' => 'model_name',
-        'hAlign' => 'center',
+        'value' => function($model){
+            return $model->model_name . ' // ' . $model->color . ' // ' . $model->destination;
+        },
+        //'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 110px; font-size: 12px; text-align: center;',
         ],
     ],
-    [
+    /*[
         'attribute' => 'color',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -109,7 +132,7 @@ $columns = [
             'class' => 'form-control',
             'style' => 'min-width: 40px; font-size: 12px; text-align: center;',
         ],
-    ],
+    ],*/
     [
         'attribute' => 'category',
         'hAlign' => 'center',
@@ -126,36 +149,35 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px;',
+            'style' => 'min-width: 120px; font-size: 12px;',
         ],
     ],
     [
         'attribute' => 'description',
-        'value' => function($model){
-            if ($model->filename1 == null) {
-                return $model->description;
-            } else {
-                return Html::a($model->description, Url::to('@web/uploads/IPQA_PATROL/' . $model->filename1), ['target' => '_blank', 'data-pjax' => '0',]);
-            }
-        },
-        'format' => 'raw',
         'vAlign' => 'middle',
-        'hiddenFromExport' => true,
+        'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 170px; font-size: 12px;',
         ],
     ],
     [
-        'attribute' => 'description_export',
+        'attribute' => 'CC_ID',
+        'label' => 'Section',
         'value' => function($model){
-            return $model->description;
+            if ($model->CC_ID != null) {
+                return $model->costCenter->CC_DESC;
+            } else {
+                return '-';
+            }
         },
+        'hAlign' => 'center',
         'vAlign' => 'middle',
-        'hidden' => true,
+        'width' => '100px',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->where(['CC_GROUP' => ['PRODUCTION ENGINEERING', 'PRODUCTION']])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 170px; font-size: 12px;',
+            'style' => 'min-width: 80px; font-size: 12px; text-align: center;',
         ],
     ],
     [
@@ -176,7 +198,7 @@ $columns = [
         'width' => '110px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 60px; font-size: 12px; text-align: center;',
         ],
     ],
     [
@@ -184,7 +206,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px;',
+            'style' => 'min-width: 60px; font-size: 12px;',
         ],
     ],
     [
@@ -192,11 +214,30 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px;',
+            'style' => 'min-width: 60px; font-size: 12px;',
         ],
     ],
     [
         'attribute' => 'cause',
+        'vAlign' => 'middle',
+        'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 170px; font-size: 12px;',
+        ],
+    ],
+    [
+        'attribute' => 'countermeasure',
+        'vAlign' => 'middle',
+        'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 170px; font-size: 12px;',
+        ],
+    ],
+    [
+        'attribute' => 'input_datetime',
+        'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
@@ -204,7 +245,8 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'countermeasure',
+        'attribute' => 'close_datetime',
+        'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',

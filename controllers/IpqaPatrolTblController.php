@@ -6,6 +6,7 @@ use app\models\IpqaPatrolTbl;
 use app\models\IpqaCategoryTbl;
 use app\models\SernoMaster;
 use app\models\ImageFile;
+use app\models\CostCenter;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
@@ -36,6 +37,10 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 				$model->period = date('Ym', strtotime($model->event_date));
 				$model->line_pic = strtoupper($model->line_pic);
 				$model->inspector_name = strtoupper($model->inspector_name);
+				$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
+				$model->CC_ID = $section->CC_ID;
+				$model->CC_GROUP = $section->CC_GROUP;
+				$model->CC_DESC = $section->CC_DESC;
 
 				//upload file
 				$model->upload_file1 = UploadedFile::getInstance($model, 'upload_file1');
@@ -81,6 +86,10 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		if ($model->load($_POST)) {
 			$model->period = date('Ym', strtotime($model->event_date));
 			$model->line_pic = strtoupper($model->line_pic);
+			$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
+			$model->CC_ID = $section->CC_ID;
+			$model->CC_GROUP = $section->CC_GROUP;
+			$model->CC_DESC = $section->CC_DESC;
 
 			//upload file
 			$model->upload_file1 = UploadedFile::getInstance($model, 'upload_file1');
@@ -117,10 +126,14 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 	        'cause', 'countermeasure'
 	    ]);
 	    $model_reply->addRule(['cause','countermeasure'], 'required');
+	    $model_reply->cause = $model->cause;
+	    $model_reply->countermeasure = $model->countermeasure;
 
 		if ($model_reply->load(\Yii::$app->request->post())) {
-			$model->close_datetime = date('Y-m-d H:i:s');
-			$model->closed_by = strtoupper(\Yii::$app->user->identity->name);
+			if ($model->close_datetime == null) {
+				$model->close_datetime = date('Y-m-d H:i:s');
+				$model->closed_by = strtoupper(\Yii::$app->user->identity->name);
+			}
 			$model->cause = $model_reply->cause;
 			$model->countermeasure = $model_reply->countermeasure;
 			$model->status = 1;
