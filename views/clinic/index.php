@@ -6,9 +6,9 @@ use yii\web\View;
 use yii\db\Expression;
 
 $this->title = [
-    'page_title' => '',
-    'tab_title' => 'CLINIC',
-    'breadcrumbs_title' => 'CLINIC'
+    'page_title' => 'CLINIC VISITING LIST (<span class="japanesse text-green">クリニック利用者の管理表</span>)',
+    'tab_title' => 'CLINIC VISITING LIST',
+    'breadcrumbs_title' => 'CLINIC VISITING LIST'
 ];
 
 $this->registerCss("
