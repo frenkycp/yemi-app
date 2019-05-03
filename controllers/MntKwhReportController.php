@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use app\models\MachineKwhReport;
 use app\models\MachineIotUtility;
+use app\models\MachineIotUtilityByHours02;
 
 class MntKwhReportController extends Controller
 {
@@ -46,18 +47,47 @@ class MntKwhReportController extends Controller
 			'posting_date' => $posting_date,
 			'mesin_id' => $machine_id,
 		])
+		->asArray()
+		->all();
+
+		$iot_by_hours = MachineIotUtilityByHours02::find()
+		->where([
+			'posting_date' => $posting_date,
+			'mesin_id' => $machine_id,
+		])
 		->all();
 
 		$tmp_data = [];
-		for ($i=1; $i <= 24; $i++) { 
+		$tmp_data_by_hours = [];
+		for ($i=0; $i < 24; $i++) { 
 			$kwh = null;
 			foreach ($data_report as $key => $value) {
-				if ($i == $value->jam_no) {
+				if ($i == $value['jam_no']) {
 					$kwh = (int)$value->power_consumption;
 				}
 			}
+			$total_putih = null;
+			$total_biru = null;
+			$total_hijau = null;
+			$total_merah = null;
+			$sisa_detik = null;
+			foreach ($iot_by_hours as $key => $value) {
+				if ($i == $value->jam_no) {
+					$sisa_detik = 3600 - $value->total_detik;
+					$total_putih = $value->total_detik_putih;
+					$total_hijau = $value->total_detik_hijau;
+					$total_biru = $value->total_detik_biru;
+					$total_merah = $value->total_detik_merah;
+				}
+				
+			}
 			$categories[] = $i;
 			$tmp_data[] = $kwh;
+			$tmp_data_by_hours['putih'][] = $total_putih == 0 ? null : $total_putih;
+			$tmp_data_by_hours['hijau'][] = $total_hijau == 0 ? null : $total_hijau;
+			$tmp_data_by_hours['biru'][] = $total_biru == 0 ? null : $total_biru;
+			$tmp_data_by_hours['merah'][] = $total_merah == 0 ? null : $total_merah;
+			$tmp_data_by_hours['sisa'][] = $sisa_detik == 0 ? null : $sisa_detik;
 		}
 
 		$data[] = [
@@ -68,6 +98,38 @@ class MntKwhReportController extends Controller
 				'enabled' => true,
 				'format' => '{y} KWh'
 			],
+		];
+		$data_iot_by_hours = [
+			[
+				'name' => 'UNKNOWN',
+				'data' => $tmp_data_by_hours['sisa'],
+				'color' => 'rgba(0, 0, 0, 0)',
+				'dataLabels' => [
+					'enabled' => false
+				],
+				'showInLegend' => false,
+			],
+			[
+				'name' => 'STANDBY',
+				'data' => $tmp_data_by_hours['putih'],
+				'color' => 'silver'
+			],
+			[
+				'name' => 'STOP',
+				'data' => $tmp_data_by_hours['merah'],
+				'color' => 'red'
+			],
+			[
+				'name' => 'SETTING',
+				'data' => $tmp_data_by_hours['biru'],
+				'color' => 'blue'
+			],
+			[
+				'name' => 'RUNNING',
+				'data' => $tmp_data_by_hours['hijau'],
+				'color' => 'green',
+			],
+			
 		];
 
 		$machine_iot_util = MachineIotUtility::find()
@@ -102,7 +164,7 @@ class MntKwhReportController extends Controller
 
 		$data_iot = [];
 		foreach ($tmp_data as $key => $value) {
-			$color = 'dark gray';
+			$color = 'dark silver';
 			$legend_name = '';
 			if ($key == 'MERAH') {
 				$color = 'red';
@@ -114,7 +176,7 @@ class MntKwhReportController extends Controller
 				$color = 'blue';
 				$legend_name = 'SETTING';
 			} elseif ($key == 'PUTIH') {
-				$color = 'white';
+				$color = 'silver';
 				$legend_name = 'STANDBY';
 			}
 			$data_iot[] = [
@@ -130,7 +192,8 @@ class MntKwhReportController extends Controller
 			'posting_date' => $posting_date,
 			'machine_id' => $machine_id,
 			'categories' => $categories,
-			'data_iot' => $data_iot
+			'data_iot' => $data_iot,
+			'data_iot_by_hours' => $data_iot_by_hours
 		]);
 	}
 }

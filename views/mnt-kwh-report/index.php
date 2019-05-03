@@ -79,48 +79,66 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<div class="box box-primary">
+<!--<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_1" data-toggle="tab">Power Consumption</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Machine Utility</a></li>
+        <li><a href="#tab_3" data-toggle="tab">Machine Utility (By Hours)</a></li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+            
+        </div>
+    </div>
+</div>-->
+<div class="box box-primary box-solid">
     <div class="box-body">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                //'modules/exporting',
-                //'themes/grid-light',
-                'themes/dark-unica',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'spline',
-                    'style' => [
-                        'fontFamily' => 'sans-serif',
+        <div class="col-md-12">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    //'themes/grid-light',
+                    'themes/dark-unica',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'spline',
+                        'style' => [
+                            'fontFamily' => 'sans-serif',
+                        ],
+                        'height' => 320,
                     ],
-                    'height' => 320,
-                ],
-                'credits' => [
-                    'enabled' => false
-                ],
-                'title' => [
-                    'text' => 'Power Consumption',
-                ],
-                'xAxis' => [
-                    'categories' => $categories,
+                    'credits' => [
+                        'enabled' => false
+                    ],
                     'title' => [
-                        'text' => 'Working Hour'
-                    ]
+                        'text' => 'Power Consumption',
+                    ],
+                    'xAxis' => [
+                        'categories' => $categories,
+                        'title' => [
+                            'text' => 'Working Hour'
+                        ]
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'text' => 'KWH',
+                            'rotation' => 0,
+                            'align' => 'high'
+                        ]
+                    ],
+                    'series' => $data,
                 ],
-                'yAxis' => [
-                    'title' => [
-                        'text' => 'KWH',
-                        'rotation' => 0,
-                        'align' => 'high'
-                    ]
-                ],
-                'series' => $data,
-            ],
-        ]);
+            ]);
 
-        ?>
-        <hr>
+            ?>
+        </div>
+        
+    </div>
+</div>
+<div class="box box-primary box-solid">
+    <div class="box-body">
         <?php
         echo Highcharts::widget([
             'scripts' => [
@@ -178,7 +196,7 @@ echo '</pre>';*/
                         //'borderWidth' => 1,
                         //'borderColor' => $color,
                     ],
-                    'series' => [
+                    /*'series' => [
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
@@ -190,11 +208,71 @@ echo '</pre>';*/
                                 "),
                             ]
                         ]
-                    ]
+                    ]*/
                 ],
                 'series' => $data_iot
             ],
         ]);
+        ?>
+    </div>
+</div>
+<div class="box box-primary box-solid">
+    <div class="box-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/grid-light',
+                //'themes/dark-unica',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
+                    'height' => 320,
+                ],
+                'credits' => [
+                    'enabled' => false
+                ],
+                'title' => [
+                    'text' => 'Machine Utility (By Hours)',
+                ],
+                'xAxis' => [
+                    'categories' => $categories,
+                    'title' => [
+                        'text' => 'Working Hour'
+                    ]
+                ],
+                'yAxis' => [
+                    'title' => [
+                        'text' => 'PERCENT',
+                        //'rotation' => 0,
+                        //'align' => 'high'
+                    ]
+                ],
+                'plotOptions' => [
+                    'column' => [
+                        'stacking' => 'percent',
+                        'dataLabels' => [
+                            'enabled' => true,
+                            'format' => '{point.percentage:.1f}%',
+                            //'color' => 'black',
+                            //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
+                            /*'style' => [
+                                'textOutline' => '0px',
+                                'fontWeight' => '0'
+                            ],*/
+                        ],
+                        //'borderWidth' => 1,
+                        //'borderColor' => $color,
+                    ],
+                ],
+                'series' => $data_iot_by_hours,
+            ],
+        ]);
+
         ?>
     </div>
 </div>
