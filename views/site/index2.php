@@ -120,6 +120,9 @@ $this->registerCss("
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_fg"><i class="fa fa-fw fa-tag"></i> FGS Monitoring (MITA+)<span class="japanesse-word"></span></a>
                     </div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-kwh-report"><i class="fa fa-fw fa-tag"></i> Machine IoT<span class="japanesse-word"></span></a>
+                    </div>
                 </div>
     		</div>
     		<div class="col-sm-3">
