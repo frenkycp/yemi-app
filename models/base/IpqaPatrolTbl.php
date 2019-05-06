@@ -27,12 +27,18 @@ use Yii;
  * @property integer $status
  * @property string $input_datetime
  * @property string $close_datetime
+ * @property string $delete_datetime
  * @property integer $flag
  * @property string $filename1
  * @property string $closed_by
+ * @property string $deleted_by
  * @property string $CC_ID
  * @property string $CC_GROUP
  * @property string $CC_DESC
+ * @property string $child_analyst
+ * @property string $child_analyst_desc
+ * @property string $child
+ * @property string $child_desc
  * @property string $aliasModel
  */
 abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
@@ -62,8 +68,8 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'gmc', 'model_name', 'color', 'destination', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'CC_ID', 'CC_GROUP', 'CC_DESC'], 'string'],
-            [['event_date', 'input_datetime', 'close_datetime'], 'safe'],
+            [['period', 'gmc', 'model_name', 'color', 'destination', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc'], 'string'],
+            [['event_date', 'input_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
             [['status', 'flag'], 'integer']
         ];
     }
@@ -92,12 +98,18 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             'status' => 'Status',
             'input_datetime' => 'Input Datetime',
             'close_datetime' => 'Close Datetime',
+            'delete_datetime' => 'Delete Datetime',
             'flag' => 'Flag',
             'filename1' => 'Filename1',
             'closed_by' => 'Closed By',
+            'deleted_by' => 'Deleted By',
             'CC_ID' => 'Cc  ID',
             'CC_GROUP' => 'Cc  Group',
             'CC_DESC' => 'Cc  Desc',
+            'child_analyst' => 'Child Analyst',
+            'child_analyst_desc' => 'Child Analyst Desc',
+            'child' => 'Child',
+            'child_desc' => 'Child Desc',
         ];
     }
 
