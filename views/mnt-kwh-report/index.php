@@ -121,6 +121,10 @@ echo '</pre>';*/
                             'text' => 'Working Hour'
                         ]
                     ],
+                    'tooltip' => [
+                        'pointFormat' => 'Power Consumption: <b>{point.y}</b><br/>',
+                        'valueSuffix' => ' KWH'
+                    ],
                     'yAxis' => [
                         'title' => [
                             'text' => 'KWH',

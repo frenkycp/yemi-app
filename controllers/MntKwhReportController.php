@@ -57,13 +57,13 @@ class MntKwhReportController extends Controller
 		])
 		->all();
 
-		$tmp_data = [];
+		$tmp_data_kwh = [];
 		$tmp_data_by_hours = [];
 		for ($i=0; $i < 24; $i++) { 
 			$kwh = null;
 			foreach ($data_report as $key => $value) {
 				if ($i == $value['jam_no']) {
-					$kwh = (int)$value->power_consumption;
+					$kwh = (double)$value['power_consumption'];
 				}
 			}
 			$total_putih = null;
@@ -85,7 +85,7 @@ class MntKwhReportController extends Controller
 				
 			}
 			$categories[] = $i;
-			$tmp_data[] = $kwh;
+			$tmp_data_kwh[] = $kwh;
 			$tmp_data_by_hours['putih'][] = $total_putih == 0 ? null : $total_putih;
 			$tmp_data_by_hours['hijau'][] = $total_hijau == 0 ? null : $total_hijau;
 			$tmp_data_by_hours['biru'][] = $total_biru == 0 ? null : $total_biru;
@@ -95,7 +95,7 @@ class MntKwhReportController extends Controller
 
 		$data[] = [
 			'name' => 'Working Hour',
-			'data' => $tmp_data,
+			'data' => $tmp_data_kwh,
 			'showInLegend' => false,
 			'dataLabels' => [
 				'enabled' => true,
