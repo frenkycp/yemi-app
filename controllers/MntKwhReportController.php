@@ -74,6 +74,9 @@ class MntKwhReportController extends Controller
 			foreach ($iot_by_hours as $key => $value) {
 				if ($i == $value->jam_no) {
 					$sisa_detik = 3600 - $value->total_detik;
+					if ($sisa_detik < 0) {
+						$sisa_detik = 0;
+					}
 					$total_putih = $value->total_detik_putih;
 					$total_hijau = $value->total_detik_hijau;
 					$total_biru = $value->total_detik_biru;
@@ -163,7 +166,7 @@ class MntKwhReportController extends Controller
 				];
 			}
 			$sisa_menit = 1440 - $total_menit;
-			if ($sisa_menit == 1440) {
+			if ($sisa_menit == 1440 || $sisa_menit <= 0) {
 				$sisa_menit = null;
 			}
 			$tmp_data['sisa'][] = [
