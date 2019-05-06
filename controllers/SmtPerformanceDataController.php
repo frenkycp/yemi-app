@@ -18,6 +18,11 @@ class SmtPerformanceDataController extends Controller
 	public function actionIndex()
 	{
 		$searchModel  = new SmtPerformanceDataSearch;
+
+		$searchModel->period = date('Ym');
+		if (\Yii::$app->request->get('period') !== null) {
+			$searchModel->period = \Yii::$app->request->get('period');
+		}
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

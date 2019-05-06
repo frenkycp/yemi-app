@@ -40,6 +40,15 @@ $this->registerJs("$(function() {
 
 $grid_column = [
     [
+        'attribute' => 'period',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'style' => 'font-size: 12px; text-align: center; min-width: 50px;',
+            'class' => 'form-control',
+        ],
+    ],
+    [
         'attribute' => 'post_date',
         'value' => function($model){
             return date('Y-m-d', strtotime($model->post_date));
