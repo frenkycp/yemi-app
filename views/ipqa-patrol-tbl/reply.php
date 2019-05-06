@@ -49,16 +49,10 @@ date_default_timezone_set('Asia/Jakarta');
 				<?= $form->field($model, 'event_date')->textInput(['readonly' => 'readonly']); ?>
 			</div>
 			<div class="col-md-2">
-				<?= $form->field($model, 'gmc')->textInput(['readonly' => 'readonly']); ?>
+				<?= $form->field($model, 'child')->textInput(['readonly' => 'readonly'])->label('Part/Product'); ?>
 			</div>
-			<div class="col-md-2">
-				<?= $form->field($model, 'model_name')->textInput(['readonly' => 'readonly']); ?>
-			</div>
-			<div class="col-md-2">
-				<?= $form->field($model, 'color')->textInput(['readonly' => 'readonly']); ?>
-			</div>
-			<div class="col-md-2">
-				<?= $form->field($model, 'destination')->textInput(['readonly' => 'readonly']); ?>
+			<div class="col-md-6">
+				<?= $form->field($model, 'child_desc')->textInput(['readonly' => 'readonly'])->label('Description'); ?>
 			</div>
 			<div class="col-md-2">
 				<?= $form->field($model, 'category')->textInput(['readonly' => 'readonly']); ?>
