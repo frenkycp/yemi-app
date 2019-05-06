@@ -36,4 +36,9 @@ class WipHdr extends BaseWipHdr
     {
         return $this->hasMany(WipDtr::className(), ['hdr_id_item' => 'hdr_id_item'])->all();
     }
+
+    public function getDescription()
+    {
+        return $this->child . ' - ' . $this->child_desc;
+    }
 }

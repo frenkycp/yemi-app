@@ -28,7 +28,7 @@ class IpqaPatrolTbl extends BaseIpqaPatrolTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['event_date', 'gmc', 'category', 'description', 'line_pic'], 'required'],
+                [['event_date', 'category', 'description', 'line_pic', 'child'], 'required'],
                 [['upload_file1'], 'file'],
             ]
         );

@@ -7,6 +7,7 @@ use app\models\IpqaCategoryTbl;
 use app\models\SernoMaster;
 use app\models\ImageFile;
 use app\models\CostCenter;
+use app\models\WipProductView;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
@@ -16,11 +17,11 @@ use yii\web\UploadedFile;
 
 class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblController
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
     
 	public function actionCreate()
 	{
@@ -182,6 +183,12 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 	{
 		$speaker_model = SernoMaster::findOne(['gmc' => $gmc]);
 		return $speaker_model->model . '||' . $speaker_model->color . '||' . $speaker_model->dest;
+	}
+
+	public function actionGetDesc($child)
+	{
+		$product = WipProductView::findOne(['child' => $child]);
+		return $product->child_desc . '||' . $product->child_analyst . '||' . $product->child_analyst_desc;
 	}
 
 	public function actionLists($category)

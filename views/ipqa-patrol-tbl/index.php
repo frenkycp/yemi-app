@@ -37,7 +37,7 @@ $columns = [
             }, 'reply' => function($url, $model, $key){
                 $url = ['reply', 'id' => $model->id];
                 $options = [
-                    'title' => 'Reply',
+                    'title' => 'Edit Cause & Countermeasure',
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options);
@@ -92,7 +92,8 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'gmc',
+        'attribute' => 'child',
+        'label' => 'Part Numb.',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '90px',
@@ -102,10 +103,8 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'model_name',
-        'value' => function($model){
-            return $model->model_name . ' // ' . $model->color . ' // ' . $model->destination;
-        },
+        'attribute' => 'child_desc',
+        'label' => 'Description',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [

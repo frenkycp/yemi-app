@@ -91,56 +91,7 @@ echo '</pre>';*/
         </div>
     </div>
 </div>-->
-<div class="box box-primary box-solid">
-    <div class="box-body">
-        <div class="col-md-12">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    //'themes/grid-light',
-                    'themes/dark-unica',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'spline',
-                        'style' => [
-                            'fontFamily' => 'sans-serif',
-                        ],
-                        'height' => 320,
-                    ],
-                    'credits' => [
-                        'enabled' => false
-                    ],
-                    'title' => [
-                        'text' => 'Power Consumption',
-                    ],
-                    'xAxis' => [
-                        'categories' => $categories,
-                        'title' => [
-                            'text' => 'Working Hour'
-                        ]
-                    ],
-                    'tooltip' => [
-                        'pointFormat' => 'Power Consumption: <b>{point.y}</b><br/>',
-                        'valueSuffix' => ' KWH'
-                    ],
-                    'yAxis' => [
-                        'title' => [
-                            'text' => 'KWH',
-                            'rotation' => 0,
-                            'align' => 'high'
-                        ]
-                    ],
-                    'series' => $data,
-                ],
-            ]);
 
-            ?>
-        </div>
-        
-    </div>
-</div>
 <div class="box box-primary box-solid">
     <div class="box-body">
         <div class="col-md-12">
@@ -287,5 +238,56 @@ echo '</pre>';*/
 
             ?>
         </div>
+    </div>
+</div>
+
+<div class="box box-primary box-solid">
+    <div class="box-body">
+        <div class="col-md-12">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    //'themes/grid-light',
+                    'themes/dark-unica',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'spline',
+                        'style' => [
+                            'fontFamily' => 'sans-serif',
+                        ],
+                        'height' => 320,
+                    ],
+                    'credits' => [
+                        'enabled' => false
+                    ],
+                    'title' => [
+                        'text' => 'Power Consumption',
+                    ],
+                    'xAxis' => [
+                        'categories' => $categories,
+                        'title' => [
+                            'text' => 'Working Hour'
+                        ]
+                    ],
+                    'tooltip' => [
+                        'pointFormat' => 'Power Consumption: <b>{point.y}</b><br/>',
+                        'valueSuffix' => ' KWH'
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'text' => 'KWH',
+                            'rotation' => 0,
+                            'align' => 'high'
+                        ]
+                    ],
+                    'series' => $data,
+                ],
+            ]);
+
+            ?>
+        </div>
+        
     </div>
 </div>

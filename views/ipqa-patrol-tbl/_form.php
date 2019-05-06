@@ -70,42 +70,45 @@ $this->registerJs($script, View::POS_HEAD);
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                            <?= $form->field($model, 'gmc')->widget(Select2::classname(), [
-                                'data' => ArrayHelper::map(SernoMaster::find()
-                                    ->orderBy('model, color, dest')
-                                    ->all(), 'gmc', 'description'),
+                            <?= $form->field($model, 'child')->widget(Select2::classname(), [
+                                'data' => ArrayHelper::map(app\models\WipHdr::find()
+                                    ->select('child, child_desc')
+                                    ->groupBy('child, child_desc')
+                                    ->orderBy('child_desc')
+                                    ->all(), 'child', 'description'),
                                 'options' => [
-                                    'placeholder' => 'Select Model ...',
+                                    'placeholder' => 'Select Product ...',
                                     'onchange' => '
-                                        $.post( "' . Yii::$app->urlManager->createUrl('ipqa-patrol-tbl/gmc-info?gmc=') . '"+$(this).val(), function( data ) {
+                                        $.post( "' . Yii::$app->urlManager->createUrl('ipqa-patrol-tbl/get-desc?child=') . '"+$(this).val(), function( data ) {
                                             var data_arr = data.split("||");
-                                            $( "#txt_model" ).val(data_arr[0]);
-                                            $( "#txt_color" ).val(data_arr[1]);
-                                            $( "#txt_destination" ).val(data_arr[2]);
+                                            $( "#txt_desc" ).val(data_arr[0]);
+                                            $( "#txt_loc" ).val(data_arr[1]);
+                                            $( "#txt_loc_desc" ).val(data_arr[2]);
                                         });
                                     ',
                                 ],
                                 'pluginOptions' => [
                                     'allowClear' => true
                                 ],
-                            ]); ?>
-                            <?= $form->field($model, 'model_name')->hiddenInput(['id' => 'txt_model'])->label(false); ?>
-                            <?= $form->field($model, 'color')->hiddenInput(['id' => 'txt_color'])->label(false); ?>
-                            <?= $form->field($model, 'destination')->hiddenInput(['id' => 'txt_destination'])->label(false); ?>
+                            ])->label('Part/Product'); ?>
+                            <?= $form->field($model, 'child_desc')->hiddenInput(['id' => 'txt_desc'])->label(false); ?>
+                            <?= $form->field($model, 'child_analyst')->hiddenInput(['id' => 'txt_loc'])->label(false); ?>
+                            <?= $form->field($model, 'child_analyst_desc')->hiddenInput(['id' => 'txt_loc_desc'])->label(false); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->where(['CC_GROUP' => ['PRODUCTION ENGINEERING', 'PRODUCTION']])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'), [
+                                'prompt' => '--Select Section--'
+                            ])->label('Section'); ?>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-8">
                             <?= $form->field($model, 'line_pic')->textInput([
                                 'style' => 'text-transform: uppercase;',
-                            ]); ?>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->where(['CC_GROUP' => ['PRODUCTION ENGINEERING', 'PRODUCTION']])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'), [
-                                'prompt' => '--Select Section--'
-                            ])->label('Section'); ?>
+                            ])->label('Line PIC'); ?>
                         </div>
                     </div>
                 </div>
