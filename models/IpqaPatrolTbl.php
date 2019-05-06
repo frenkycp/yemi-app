@@ -28,7 +28,7 @@ class IpqaPatrolTbl extends BaseIpqaPatrolTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['event_date', 'category', 'description', 'line_pic', 'child'], 'required'],
+                [['event_date', 'category', 'description', 'line_pic', 'child', 'CC_ID'], 'required'],
                 [['upload_file1'], 'file'],
             ]
         );
@@ -44,6 +44,7 @@ class IpqaPatrolTbl extends BaseIpqaPatrolTbl
                 'destination' => 'Dest.',
                 'input_datetime' => 'Input Time',
                 'close_datetime' => 'Close Time',
+                'CC_ID' => 'Section'
             ]
         );
     }
