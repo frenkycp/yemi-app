@@ -239,7 +239,7 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th class="text-center">Dandori</th>
 	    	<th class="text-center">Break Down</th>
 	    	<th class="text-center">Operating Loss</th>
-	    	<th class="text-center">Operation Ratio(%)<br/>((D-E-F) / 1440)</th>
+	    	<th class="text-center">Operation Ratio(%)<br/>((D-E) / 1440)</th>
 	    	<th class="text-center">Working Ratio(%)<br/>(C / (D-E-F))</th>
 	    </tr>';
 
