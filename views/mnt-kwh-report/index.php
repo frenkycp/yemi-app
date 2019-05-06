@@ -139,140 +139,149 @@ echo '</pre>';*/
 </div>
 <div class="box box-primary box-solid">
     <div class="box-body">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                //'modules/exporting',
-                //'themes/sand-signika',
-                //'themes/grid-light',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'column',
-                    'style' => [
-                        'fontFamily' => 'sans-serif',
-                    ],
-                    'height' => 350
+        <div class="col-md-12">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    //'themes/sand-signika',
+                    //'themes/grid-light',
                 ],
-                'title' => [
-                    'text' => 'Machine Utility'
-                ],
-                'subtitle' => [
-                    'text' => ''
-                ],
-                'xAxis' => [
-                    'type' => 'datetime',
-                    //'categories' => $value['category'],
-                ],
-                'yAxis' => [
-                    //'min' => 0,
-                    'title' => [
-                        'text' => 'Percentage'
-                    ],
-                    //'gridLineWidth' => 0,
-                ],
-                'credits' => [
-                    'enabled' =>false
-                ],
-                'tooltip' => [
-                    'enabled' => true,
-                    'xDateFormat' => '%A, %b %e %Y',
-                    'valueSuffix' => ' min'
-                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
-                ],
-                'plotOptions' => [
-                    'column' => [
-                        'stacking' => 'percent',
-                        'dataLabels' => [
-                            'enabled' => true,
-                            //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
-                            //'color' => 'black',
-                            //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                            /*'style' => [
-                                'textOutline' => '0px',
-                                'fontWeight' => '0'
-                            ],*/
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                        'style' => [
+                            'fontFamily' => 'sans-serif',
                         ],
-                        //'borderWidth' => 1,
-                        //'borderColor' => $color,
+                        'height' => 350
                     ],
-                    /*'series' => [
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression("
-                                    function(e){
-                                        e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                    }
-                                "),
+                    'title' => [
+                        'text' => 'Machine Utility'
+                    ],
+                    'subtitle' => [
+                        'text' => ''
+                    ],
+                    'xAxis' => [
+                        'type' => 'datetime',
+                        //'categories' => $value['category'],
+                    ],
+                    'yAxis' => [
+                        //'min' => 0,
+                        'title' => [
+                            'text' => 'Percentage'
+                        ],
+                        //'gridLineWidth' => 0,
+                    ],
+                    'credits' => [
+                        'enabled' =>false
+                    ],
+                    'tooltip' => [
+                        'enabled' => true,
+                        'xDateFormat' => '%A, %b %e %Y',
+                        'valueSuffix' => ' min'
+                        //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                    ],
+                    'plotOptions' => [
+                        'column' => [
+                            'stacking' => 'percent',
+                            'dataLabels' => [
+                                'enabled' => true,
+                                //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
+                                //'color' => 'black',
+                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
+                                /*'style' => [
+                                    'textOutline' => '0px',
+                                    'fontWeight' => '0'
+                                ],*/
+                            ],
+                            //'borderWidth' => 1,
+                            //'borderColor' => $color,
+                        ],
+                        /*'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression("
+                                        function(e){
+                                            e.preventDefault();
+                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                        }
+                                    "),
+                                ]
                             ]
-                        ]
-                    ]*/
+                        ]*/
+                    ],
+                    'series' => $data_iot
                 ],
-                'series' => $data_iot
-            ],
-        ]);
-        ?>
+            ]);
+            ?>
+        </div>
     </div>
 </div>
 <div class="box box-primary box-solid">
     <div class="box-body">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                //'modules/exporting',
-                //'themes/grid-light',
-                //'themes/dark-unica',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'column',
-                    'style' => [
-                        'fontFamily' => 'sans-serif',
-                    ],
-                    'height' => 320,
+        <div class="col-md-12">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    //'themes/grid-light',
+                    //'themes/dark-unica',
                 ],
-                'credits' => [
-                    'enabled' => false
-                ],
-                'title' => [
-                    'text' => 'Machine Utility (By Hours)',
-                ],
-                'xAxis' => [
-                    'categories' => $categories,
-                    'title' => [
-                        'text' => 'Working Hour'
-                    ]
-                ],
-                'yAxis' => [
-                    'title' => [
-                        'text' => 'PERCENT',
-                        //'rotation' => 0,
-                        //'align' => 'high'
-                    ]
-                ],
-                'plotOptions' => [
-                    'column' => [
-                        'stacking' => 'percent',
-                        'dataLabels' => [
-                            'enabled' => true,
-                            'format' => '{point.percentage:.1f}%',
-                            //'color' => 'black',
-                            //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                            /*'style' => [
-                                'textOutline' => '0px',
-                                'fontWeight' => '0'
-                            ],*/
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                        'style' => [
+                            'fontFamily' => 'sans-serif',
                         ],
-                        //'borderWidth' => 1,
-                        //'borderColor' => $color,
+                        'height' => 320,
                     ],
+                    'credits' => [
+                        'enabled' => false
+                    ],
+                    'title' => [
+                        'text' => 'Machine Utility (By Hours)',
+                    ],
+                    'xAxis' => [
+                        'categories' => $categories,
+                        'title' => [
+                            'text' => 'Working Hour'
+                        ]
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'text' => 'PERCENT',
+                            //'rotation' => 0,
+                            //'align' => 'high'
+                        ]
+                    ],
+                    'tooltip' => [
+                        'enabled' => true,
+                        'valueSuffix' => ' seconds'
+                        //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                    ],
+                    'plotOptions' => [
+                        'column' => [
+                            'stacking' => 'percent',
+                            'dataLabels' => [
+                                'enabled' => true,
+                                'format' => '{point.percentage:.1f}%',
+                                //'color' => 'black',
+                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
+                                /*'style' => [
+                                    'textOutline' => '0px',
+                                    'fontWeight' => '0'
+                                ],*/
+                            ],
+                            //'borderWidth' => 1,
+                            //'borderColor' => $color,
+                        ],
+                    ],
+                    'series' => $data_iot_by_hours,
                 ],
-                'series' => $data_iot_by_hours,
-            ],
-        ]);
+            ]);
 
-        ?>
+            ?>
+        </div>
     </div>
 </div>

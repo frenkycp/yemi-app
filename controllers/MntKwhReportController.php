@@ -147,6 +147,7 @@ class MntKwhReportController extends Controller
 		$tmp_data = [];
 		for($i = $begin; $i <= $end; $i->modify('+1 day')){
 			$proddate = (strtotime($i->format("Y-m-d") . " +7 hours") * 1000);
+			$total_menit = 0;
 			foreach ($color as $key => $color_value) {
 				$menit = null;
 				foreach ($machine_iot_util as $key => $value) {
@@ -155,37 +156,92 @@ class MntKwhReportController extends Controller
 						break;
 					}
 				}
+				$total_menit += $menit;
 				$tmp_data[$color_value][] = [
 					'x' => $proddate,
 					'y' => $menit
 				];
 			}
+			$sisa_menit = 1440 - $total_menit;
+			if ($sisa_menit == 1440) {
+				$sisa_menit = null;
+			}
+			$tmp_data['sisa'][] = [
+				'x' => $proddate,
+				'y' => $sisa_menit
+			];
 		}
 
 		$data_iot = [];
-		foreach ($tmp_data as $key => $value) {
+		$data_iot = [
+			[
+				'name' => 'UNKNOWN',
+				'data' => $tmp_data['sisa'],
+				'color' => 'rgba(0, 0, 0, 0)',
+				'dataLabels' => [
+					'enabled' => false
+				],
+				'showInLegend' => false,
+			],
+			[
+				'name' => 'STANDBY',
+				'data' => $tmp_data['PUTIH'],
+				'color' => 'silver'
+			],
+			[
+				'name' => 'STOP',
+				'data' => $tmp_data['MERAH'],
+				'color' => 'red'
+			],
+			[
+				'name' => 'SETTING',
+				'data' => $tmp_data['BIRU'],
+				'color' => 'blue'
+			],
+			[
+				'name' => 'RUNNING',
+				'data' => $tmp_data['HIJAU'],
+				'color' => 'green',
+			],
+			
+		];
+		/*foreach ($tmp_data as $key => $value) {
 			$color = 'dark silver';
-			$legend_name = '';
-			if ($key == 'MERAH') {
-				$color = 'red';
-				$legend_name = 'STOP';
-			} elseif ($key == 'HIJAU') {
-				$color = 'green';
-				$legend_name = 'RUNNING';
-			} elseif ($key == 'BIRU') {
-				$color = 'blue';
-				$legend_name = 'SETTING';
-			} elseif ($key == 'PUTIH') {
-				$color = 'silver';
-				$legend_name = 'STANDBY';
+
+			if ($key != 'sisa') {
+				$data_iot[] = [
+					'name' => $legend_name,
+					'data' => $value,
+					'color' => 'rgba(0, 0, 0, 0)',
+					'dataLabels' => [
+						'enabled' => false
+					],
+					'showInLegend' => false,
+				];
+			} else {
+				$legend_name = '';
+				if ($key == 'MERAH') {
+					$color = 'red';
+					$legend_name = 'STOP';
+				} elseif ($key == 'HIJAU') {
+					$color = 'green';
+					$legend_name = 'RUNNING';
+				} elseif ($key == 'BIRU') {
+					$color = 'blue';
+					$legend_name = 'SETTING';
+				} elseif ($key == 'PUTIH') {
+					$color = 'silver';
+					$legend_name = 'STANDBY';
+				}
+				$data_iot[] = [
+					'name' => $legend_name,
+					'data' => $value,
+					//'showInLegend' => false,
+					'color' => $color
+				];
 			}
-			$data_iot[] = [
-				'name' => $legend_name,
-				'data' => $value,
-				//'showInLegend' => false,
-				'color' => $color
-			];
-		}
+			
+		}*/
 
 		return $this->render('index', [
 			'data' => $data,
