@@ -20,7 +20,7 @@ public function rules()
 {
 return [
 [['id', 'status', 'flag'], 'integer'],
-            [['period', 'event_date', 'gmc', 'model_name', 'color', 'destination', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID'], 'safe'],
+            [['period', 'event_date', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID'], 'safe'],
 ];
 }
 
@@ -75,11 +75,7 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])
-            ->andFilterWhere(['like', 'gmc', $this->gmc])
             ->andFilterWhere(['like', 'line_pic', $this->line_pic])
-            ->andFilterWhere(['like', 'model_name', $this->model_name])
-            ->andFilterWhere(['like', 'color', $this->color])
-            ->andFilterWhere(['like', 'destination', $this->destination])
             ->andFilterWhere(['like', 'category', $this->category])
             ->andFilterWhere(['like', 'problem', $this->problem])
             ->andFilterWhere(['like', 'description', $this->description])

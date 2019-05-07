@@ -12,10 +12,6 @@ use Yii;
  * @property integer $id
  * @property string $period
  * @property string $event_date
- * @property string $gmc
- * @property string $model_name
- * @property string $color
- * @property string $destination
  * @property string $category
  * @property string $problem
  * @property string $description
@@ -68,7 +64,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'gmc', 'model_name', 'color', 'destination', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc'], 'string'],
+            [['period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc'], 'string'],
             [['event_date', 'input_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
             [['status', 'flag'], 'integer']
         ];
@@ -83,10 +79,6 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             'id' => 'ID',
             'period' => 'Period',
             'event_date' => 'Event Date',
-            'gmc' => 'Gmc',
-            'model_name' => 'Model Name',
-            'color' => 'Color',
-            'destination' => 'Destination',
             'category' => 'Category',
             'problem' => 'Problem',
             'description' => 'Description',
