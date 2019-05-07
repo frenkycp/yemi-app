@@ -99,7 +99,7 @@ $this->registerJs($script, View::POS_HEAD);
                     
                     <div class="row">
                         <div class="col-md-8">
-                            <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->where(['CC_GROUP' => ['PRODUCTION ENGINEERING', 'PRODUCTION']])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'), [
+                            <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'), [
                                 'prompt' => '--Select Section--'
                             ])->label('Section'); ?>
                         </div>
