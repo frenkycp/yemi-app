@@ -154,7 +154,7 @@ $columns = [
     [
         'attribute' => 'description',
         'vAlign' => 'middle',
-        'format' => 'ntext',
+        //'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 170px; font-size: 12px;',
