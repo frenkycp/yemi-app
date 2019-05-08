@@ -18,14 +18,26 @@ $this->title = [
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .disabled-link {color: DarkGrey; cursor: not-allowed;}");
 
 date_default_timezone_set('Asia/Jakarta');
+
+$this->registerJs("$(function() {
+   $('.btn-reject').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+   $('.btn-answer').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+});");
 
 $columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}&nbsp;&nbsp;&nbsp;&nbsp;{delete}&nbsp;&nbsp;&nbsp;&nbsp;{reply}',
+        'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}&nbsp;&nbsp;&nbsp;{reject}&nbsp;&nbsp;&nbsp;{close}<hr/>{reply}&nbsp;&nbsp;&nbsp;{answer}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -40,8 +52,56 @@ $columns = [
                     'title' => 'Edit Cause & Countermeasure',
                     'data-pjax' => '0',
                 ];
-                return Html::a('<span class="glyphicon glyphicon-check"></span>', $url, $options);
-            }
+                $karyawan = app\models\Karyawan::find()->where(['NIK' => \Yii::$app->user->identity->username])->one();
+                if ($karyawan->DEPARTEMEN == $model->CC_GROUP) {
+                    return Html::a('<i class="fa fa-fw fa-edit"></i>', $url, $options);
+                } else {
+                    return '<i class="fa fa-fw fa-edit disabled-link"></i>';
+                }
+                
+            }, 'close' => function($url, $model, $key){
+                $url = ['close', 'id' => $model->id];
+                $options = [
+                    'title' => 'Close',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are yout sure to close this problem ?'
+                ];
+                
+                if ($model->status == 2) {
+                    return Html::a('<i class="fa fa-fw fa-check"></i>', $url, $options);
+                } else {
+                    return '<i class="fa fa-fw fa-check disabled-link"></i>';
+                }
+            }, 'reject' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-reject',
+                    'value' => Url::to(['reject','id' => $model->id]),
+                    'title' => 'Reject Data',
+                    'class' => 'showModalButton'
+                ];
+                if ($model->status == 2) {
+                    return Html::a('<i class="fa fa-fw fa-ban"></i>', '#', $options);
+                } else {
+                    return '<i class="fa fa-fw fa-ban disabled-link"></i>';
+                }
+                
+            }, 'answer' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-answer',
+                    'value' => Url::to(['answer','id' => $model->id]),
+                    'title' => 'Reject Answer',
+                    'class' => 'showModalButton'
+                ];
+                $karyawan = app\models\Karyawan::find()->where(['NIK' => \Yii::$app->user->identity->username])->one();
+                if ($model->status == 3 && $karyawan->DEPARTEMEN == $model->CC_GROUP) {
+                    return Html::a('<i class="fa fa-fw fa-commenting"></i>', '#', $options);
+                } else {
+                    return '<i class="fa fa-fw fa-commenting disabled-link"></i>';
+                }
+                
+            },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator
@@ -49,7 +109,7 @@ $columns = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap']
+        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 100px;'],
     ],
     [
         'attribute' => 'filename1',
@@ -173,31 +233,10 @@ $columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px',
-        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->where(['CC_GROUP' => ['PRODUCTION ENGINEERING', 'PRODUCTION']])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'),
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 80px; font-size: 12px; text-align: center;',
-        ],
-    ],
-    [
-        'attribute' => 'status',
-        'value' => function($model){
-            if ($model->status == 0) {
-                return 'OPEN';
-            } else {
-                return 'CLOSE';
-            }
-        },
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filter' => [
-            0 => 'OPEN',
-            1 => 'CLOSED'
-        ],
-        'width' => '110px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'min-width: 60px; font-size: 12px; text-align: center;',
         ],
     ],
     [
@@ -209,11 +248,17 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'line_pic',
+        'attribute' => 'status',
+        'value' => function($model){
+            return $model->statusTbl->status_desc;
+        },
+        'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\IpqaStatusTbl::find()->orderBy('status_order ASC')->all(), 'status_id', 'status_desc'),
+        'width' => '110px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 60px; font-size: 12px;',
+            'style' => 'min-width: 80px; font-size: 12px; text-align: center;',
         ],
     ],
     [
@@ -227,6 +272,24 @@ $columns = [
     ],
     [
         'attribute' => 'countermeasure',
+        'vAlign' => 'middle',
+        'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 170px; font-size: 12px;',
+        ],
+    ],
+    [
+        'attribute' => 'reject_remark',
+        'vAlign' => 'middle',
+        'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 170px; font-size: 12px;',
+        ],
+    ],
+    [
+        'attribute' => 'reject_answer',
         'vAlign' => 'middle',
         'format' => 'ntext',
         'filterInputOptions' => [
@@ -250,6 +313,14 @@ $columns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px;',
+        ],
+    ],
+    [
+        'attribute' => 'line_pic',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 60px; font-size: 12px;',
         ],
     ],
 ];
@@ -277,7 +348,7 @@ $columns = [
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            'pjax' => true, // pjax is set to always true for this demo
+            'pjax' => false, // pjax is set to always true for this demo
             'toolbar' =>  [
                 Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
                 '{export}',
@@ -286,6 +357,10 @@ $columns = [
             'rowOptions' => function($model){
                 if ($model->status == 0) {
                     return ['class' => 'danger'];
+                } elseif ($model->status == 2) {
+                    return ['class' => 'warning'];
+                } elseif ($model->status == 3) {
+                    return ['class' => 'danger text-red'];
                 } else {
                     return ['class' => ''];
                 }
@@ -297,6 +372,10 @@ $columns = [
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
                 'heading' => $heading,
+                'before' => Html::a('READ ME FIRST ...!', Url::to('@web/uploads/daily_patrol_readme.pdf'), [
+                    'target' => '_blank',
+                    'class' => 'btn btn-danger'
+                ]),
                 //'footer' => false,
             ],
         ]); 

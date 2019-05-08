@@ -42,7 +42,10 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = IpqaPatrolTbl::find()->where(['flag' => 1])->orderBy('status ASC');
+$query = IpqaPatrolTbl::find()
+->joinWith('statusTbl')
+->where(['IPQA_PATROL_TBL.flag' => 1])
+->orderBy('IPQA_STATUS_TBL.status_order ASC');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -70,7 +73,7 @@ $query->andFilterWhere([
             'status' => $this->status,
             'input_datetime' => $this->input_datetime,
             'close_datetime' => $this->close_datetime,
-            'flag' => $this->flag,
+            //'flag' => $this->flag,
             'CC_ID' => $this->CC_ID,
         ]);
 

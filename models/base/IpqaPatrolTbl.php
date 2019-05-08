@@ -22,6 +22,7 @@ use Yii;
  * @property string $countermeasure
  * @property integer $status
  * @property string $input_datetime
+ * @property string $reply_datetime
  * @property string $close_datetime
  * @property string $delete_datetime
  * @property integer $flag
@@ -35,6 +36,14 @@ use Yii;
  * @property string $child_analyst_desc
  * @property string $child
  * @property string $child_desc
+ * @property string $replied_by_id
+ * @property string $replied_by_name
+ * @property string $closed_by_id
+ * @property string $closed_by_name
+ * @property string $deleted_by_id
+ * @property string $deleted_by_name
+ * @property string $reject_remark
+ * @property string $reject_answer
  * @property string $aliasModel
  */
 abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
@@ -64,8 +73,8 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc'], 'string'],
-            [['event_date', 'input_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
+            [['period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name', 'deleted_by_id', 'deleted_by_name', 'reject_remark', 'reject_answer'], 'string'],
+            [['event_date', 'input_datetime', 'reply_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
             [['status', 'flag'], 'integer']
         ];
     }
@@ -89,6 +98,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             'countermeasure' => 'Countermeasure',
             'status' => 'Status',
             'input_datetime' => 'Input Datetime',
+            'reply_datetime' => 'Reply Datetime',
             'close_datetime' => 'Close Datetime',
             'delete_datetime' => 'Delete Datetime',
             'flag' => 'Flag',
@@ -102,6 +112,14 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             'child_analyst_desc' => 'Child Analyst Desc',
             'child' => 'Child',
             'child_desc' => 'Child Desc',
+            'replied_by_id' => 'Replied By ID',
+            'replied_by_name' => 'Replied By Name',
+            'closed_by_id' => 'Closed By ID',
+            'closed_by_name' => 'Closed By Name',
+            'deleted_by_id' => 'Deleted By ID',
+            'deleted_by_name' => 'Deleted By Name',
+            'reject_remark' => 'Reject Remark',
+            'reject_answer' => 'Reject Answer',
         ];
     }
 

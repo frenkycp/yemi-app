@@ -44,7 +44,8 @@ class IpqaPatrolTbl extends BaseIpqaPatrolTbl
                 'destination' => 'Dest.',
                 'input_datetime' => 'Input Time',
                 'close_datetime' => 'Close Time',
-                'CC_ID' => 'Section'
+                'CC_ID' => 'Section',
+                'reject_answer' => 'Reply'
             ]
         );
     }
@@ -52,5 +53,10 @@ class IpqaPatrolTbl extends BaseIpqaPatrolTbl
     public function getCostCenter()
     {
         return $this->hasOne(CostCenter::className(), ['CC_ID' => 'CC_ID'])->one();
+    }
+
+    public function getStatusTbl()
+    {
+        return $this->hasOne(IpqaStatusTbl::className(), ['status_id' => 'status']);
     }
 }

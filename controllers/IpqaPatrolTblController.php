@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\IpqaPatrolTbl;
 use app\models\IpqaCategoryTbl;
+use app\models\IpqaRejectHistory;
 use app\models\SernoMaster;
 use app\models\ImageFile;
 use app\models\CostCenter;
@@ -17,7 +18,7 @@ use yii\web\UploadedFile;
 
 class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblController
 {
-	public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
@@ -132,7 +133,8 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 			$model = $this->findModel($id);
 			$model->flag = 0;
 			$model->delete_datetime = date('Y-m-d H:i:s');
-			$model->deleted_by = \Yii::$app->user->identity->name;
+			$model->deleted_by_id = \Yii::$app->user->identity->username;
+			$model->deleted_by_name = \Yii::$app->user->identity->name;
 			if (!$model->save()) {
 				return json_encode($model->errors);
 			} else {
@@ -159,13 +161,15 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 	    $model_reply->countermeasure = $model->countermeasure;
 
 		if ($model_reply->load(\Yii::$app->request->post())) {
-			if ($model->close_datetime == null) {
-				$model->close_datetime = date('Y-m-d H:i:s');
-				$model->closed_by = strtoupper(\Yii::$app->user->identity->name);
+			if ($model->reply_datetime == null) {
+				$model->reply_datetime = date('Y-m-d H:i:s');
+				$model->replied_by_id = \Yii::$app->user->identity->username;
+				$model->replied_by_name = \Yii::$app->user->identity->name;
+				$model->status = 2;
 			}
 			$model->cause = $model_reply->cause;
 			$model->countermeasure = $model_reply->countermeasure;
-			$model->status = 1;
+			
 			if (!$model->save()) {
 				return json_encode($model->errors);
 			}
@@ -177,6 +181,22 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 				'model_reply' => $model_reply,
 			]);
 		}
+	}
+
+	public function actionClose($id)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($id);
+		$model->status = 1;
+		$model->close_datetime = date('Y-m-d H:i:s');
+		$model->closed_by_id = \Yii::$app->user->identity->username;
+		$model->closed_by_name = \Yii::$app->user->identity->name;
+
+		if (!$model->save()) {
+			return json_encode($model->errors);
+		}
+		
+		return $this->redirect(Url::previous());
 	}
 
 	public function actionGmcInfo($gmc)
@@ -211,5 +231,73 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 			echo "<option>-</option>";
 		}
 
+	}
+
+	public function actionReject($id)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($id);
+		$model->reject_remark = null;
+
+		if ($model->load(\Yii::$app->request->post())) {
+			$model->status = 3;
+			$model->reject_answer = null;
+			if ($model->save()) {
+				$model_history = new IpqaRejectHistory();
+				$model_history->reference_id = $id;
+				$model_history->rejector_id = \Yii::$app->user->identity->username;
+				$model_history->rejector_name = \Yii::$app->user->identity->name;
+				$model_history->reject_remark = $model->reject_remark;
+				$model_history->reject_datetime = date('Y-m-d H:i:s');
+				if ($model_history->save()) {
+					return $this->redirect(Url::previous());
+				} else {
+					return json_encode($model_history->errors);
+				}
+			} else {
+				return json_encode($model->errors);
+			}
+
+			//return $this->redirect(Url::previous());
+		}
+
+		return $this->renderAjax('reject', [
+    		'model' => $model
+    	]);
+	}
+
+	public function actionAnswer($id)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($id);
+
+		if ($model->load(\Yii::$app->request->post())) {
+			$model->status = 2;
+			if ($model->save()) {
+				$model_history = IpqaRejectHistory::find()
+				->where([
+					'reference_id' => $id,
+				])
+				->andWhere('answerer_id IS NULL')
+				->one();
+				$model_history->answerer_id = \Yii::$app->user->identity->username;
+				$model_history->answerer_name = \Yii::$app->user->identity->name;
+				$model_history->answerer_remark = $model->reject_answer;
+				$model_history->answerer_datetime = date('Y-m-d H:i:s');
+				if ($model_history->save()) {
+					return $this->redirect(Url::previous());
+				} else {
+					return json_encode($model_history->errors);
+				}
+			} else {
+				return json_encode($model->errors);
+			}
+
+			//return $this->redirect(Url::previous());
+		}
+
+		return $this->renderAjax('answer', [
+    		'model' => $model
+    	]);
 	}
 }
