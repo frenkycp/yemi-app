@@ -57,9 +57,9 @@ class SidebarMenu extends Widget
             if ($menu->controller == 'ipqa-patrol-tbl' && $menu->action == 'index') {
                 $total_waiting = IpqaPatrolTbl::find()
                 ->where([
-                    'status' => 0,
                     'flag' => 1,
                 ])
+                ->andWhere(['<>', 'status', 1])
                 ->count();
                 $obj = [
                     "label" => $menu->name,

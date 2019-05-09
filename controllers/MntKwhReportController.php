@@ -25,10 +25,10 @@ class MntKwhReportController extends Controller
 		$posting_date = date('Y-m-d');
 		$categories = [];
 		$color = [
-			'PUTIH',//NO SHIFT
+			'PUTIH',//IDLE
 			'HIJAU',//running
-			'BIRU',//SHIFT
-			'KUNING',//SHIFT
+			'BIRU',//SETTING
+			'KUNING',//SETTING
 			'MERAH',//stop
 		];
 
@@ -114,7 +114,7 @@ class MntKwhReportController extends Controller
 				'showInLegend' => false,
 			],
 			[
-				'name' => 'NO SHIFT',
+				'name' => 'IDLE',
 				'data' => $tmp_data_by_hours['putih'],
 				'color' => 'silver'
 			],
@@ -124,7 +124,7 @@ class MntKwhReportController extends Controller
 				'color' => 'red'
 			],
 			[
-				'name' => 'SHIFT',
+				'name' => 'SETTING',
 				'data' => $tmp_data_by_hours['biru'],
 				'color' => 'blue'
 			],
@@ -215,7 +215,7 @@ class MntKwhReportController extends Controller
 				'showInLegend' => false,
 			],
 			[
-				'name' => 'NO SHIFT',
+				'name' => 'IDLE',
 				'data' => $tmp_data['PUTIH'],
 				'color' => 'silver'
 			],
@@ -225,7 +225,7 @@ class MntKwhReportController extends Controller
 				'color' => 'red'
 			],
 			[
-				'name' => 'SHIFT',
+				'name' => 'SETTING',
 				'data' => $tmp_data['BIRU'],
 				'color' => 'blue'
 			],
