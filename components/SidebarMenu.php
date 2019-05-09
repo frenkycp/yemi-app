@@ -54,7 +54,7 @@ class SidebarMenu extends Widget
                 ];
             }
 
-            if ($menu->controller == 'ipqa-patrol-tbl' && $menu->action == 'index') {
+            if ($menu->controller == 'ipqa-dashboard' && $menu->action == 'index') {
                 $total_waiting = IpqaPatrolTbl::find()
                 ->where([
                     'flag' => 1,

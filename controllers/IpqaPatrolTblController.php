@@ -9,6 +9,7 @@ use app\models\SernoMaster;
 use app\models\ImageFile;
 use app\models\CostCenter;
 use app\models\WipProductView;
+use app\models\search\IpqaPatrolTblSearch;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
@@ -23,6 +24,32 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
+
+    /**
+	* Lists all IpqaPatrolTbl models.
+	* @return mixed
+	*/
+	public function actionIndex()
+	{
+	    $searchModel  = new IpqaPatrolTblSearch;
+	    if (\Yii::$app->request->get('status') !== null) {
+	    	$searchModel->status = \Yii::$app->request->get('status');
+	    }
+	    if (\Yii::$app->request->get('CC_ID') !== null) {
+	    	$searchModel->CC_ID = \Yii::$app->request->get('CC_ID');
+	    }
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('index', [
+			'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
+	}
     
 	public function actionCreate()
 	{

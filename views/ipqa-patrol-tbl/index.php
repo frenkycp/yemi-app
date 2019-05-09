@@ -131,7 +131,7 @@ $columns = [
             'style' => 'min-width: 50px; font-size: 12px;',
         ],
     ],
-    /*[
+    /**/[
         'attribute' => 'period',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -140,7 +140,7 @@ $columns = [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
         ],
-    ],*/
+    ],
     [
         'attribute' => 'event_date',
         'hAlign' => 'center',
