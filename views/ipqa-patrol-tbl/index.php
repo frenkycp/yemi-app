@@ -131,7 +131,7 @@ $columns = [
             'style' => 'min-width: 50px; font-size: 12px;',
         ],
     ],
-    /**/[
+    /*[
         'attribute' => 'period',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -140,7 +140,7 @@ $columns = [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
         ],
-    ],
+    ],*/
     [
         'attribute' => 'event_date',
         'hAlign' => 'center',
@@ -170,6 +170,20 @@ $columns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 110px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
+        'attribute' => 'child_analyst',
+        'label' => 'Location',
+        'value' => function($model){
+            return $model->child_analyst_desc;
+        },
+        'vAlign' => 'middle',
+        'width' => '70px',
+        'filter' => ArrayHelper::map(app\models\WipLocation::find()->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
         ],
     ],
     /*[
@@ -267,7 +281,7 @@ $columns = [
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 170px; font-size: 12px;',
+            'style' => 'min-width: 150px; font-size: 12px;',
         ],
     ],
     [
@@ -276,7 +290,7 @@ $columns = [
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 170px; font-size: 12px;',
+            'style' => 'min-width: 150px; font-size: 12px;',
         ],
     ],
     [
@@ -285,7 +299,7 @@ $columns = [
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 170px; font-size: 12px;',
+            'style' => 'min-width: 150px; font-size: 12px;',
         ],
     ],
     [
@@ -294,7 +308,7 @@ $columns = [
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 170px; font-size: 12px;',
+            'style' => 'min-width: 150px; font-size: 12px;',
         ],
     ],
     [

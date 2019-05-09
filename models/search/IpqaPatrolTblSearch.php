@@ -20,7 +20,7 @@ public function rules()
 {
 return [
 [['id', 'status', 'flag'], 'integer'],
-            [['period', 'event_date', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID'], 'safe'],
+            [['period', 'event_date', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID', 'child', 'child_desc', 'child_analyst'], 'safe'],
 ];
 }
 
@@ -75,6 +75,8 @@ $query->andFilterWhere([
             'close_datetime' => $this->close_datetime,
             //'flag' => $this->flag,
             'CC_ID' => $this->CC_ID,
+            'child' => $this->child,
+            'child_analyst' => $this->child_analyst,
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])
@@ -85,6 +87,7 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'inspector_id', $this->inspector_id])
             ->andFilterWhere(['like', 'inspector_name', $this->inspector_name])
             ->andFilterWhere(['like', 'cause', $this->cause])
+            ->andFilterWhere(['like', 'child_desc', $this->child_desc])
             ->andFilterWhere(['like', 'countermeasure', $this->countermeasure]);
 
 return $dataProvider;
