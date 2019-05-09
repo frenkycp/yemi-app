@@ -189,7 +189,7 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'height' => 320,
+                        'height' => 400,
                     ],
                     'credits' => [
                         'enabled' => false
@@ -257,7 +257,7 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'height' => 320,
+                        'height' => 400,
                     ],
                     'credits' => [
                         'enabled' => false
@@ -272,15 +272,25 @@ echo '</pre>';*/
                         ]
                     ],
                     'tooltip' => [
-                        'pointFormat' => 'Power Consumption: <b>{point.y}</b><br/>',
+                        //'pointFormat' => 'Power Consumption: <b>{point.y}</b><br/>',
                         'valueSuffix' => ' KWH'
                     ],
                     'yAxis' => [
-                        'title' => [
-                            'text' => 'KWH',
-                            'rotation' => 0,
-                            'align' => 'high'
-                        ]
+                        [
+                            'title' => [
+                                'text' => 'KWH',
+                                'rotation' => 0,
+                                'align' => 'high'
+                            ]
+                        ],
+                        [
+                            'title' => [
+                                'text' => 'KWH',
+                                'rotation' => 0,
+                                'align' => 'high'
+                            ],
+                            'opposite' => true
+                        ],
                     ],
                     'series' => $data,
                 ],

@@ -58,13 +58,15 @@ class MntKwhReportController extends Controller
 		])
 		->all();
 
-		$tmp_data_kwh = [];
+		$tmp_data_kwh = $tmp_data_max_kwh = [];
 		$tmp_data_by_hours = [];
 		for ($i=0; $i < 24; $i++) { 
-			$kwh = null;
+			$kwh = 0;
+			$max_kwh = 0;
 			foreach ($data_report as $key => $value) {
 				if ($i == $value['jam_no']) {
 					$kwh = (double)$value['power_consumption'];
+					$max_kwh = (double)$value['end_kwh'];
 				}
 			}
 			$total_putih = null;
@@ -86,7 +88,8 @@ class MntKwhReportController extends Controller
 				
 			}
 			$categories[] = $i;
-			$tmp_data_kwh[] = $kwh;
+			$tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
+			$tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;
 			$tmp_data_by_hours['putih'][] = $total_putih == 0 ? null : $total_putih;
 			$tmp_data_by_hours['hijau'][] = $total_hijau == 0 ? null : $total_hijau;
 			$tmp_data_by_hours['biru'][] = $total_biru == 0 ? null : $total_biru;
@@ -94,14 +97,26 @@ class MntKwhReportController extends Controller
 			$tmp_data_by_hours['sisa'][] = $sisa_detik == 0 ? null : $sisa_detik;
 		}
 
-		$data[] = [
-			'name' => 'Working Hour',
-			'data' => $tmp_data_kwh,
-			'showInLegend' => false,
-			'dataLabels' => [
-				'enabled' => true,
-				'format' => '{y} KWh'
+		$data = [
+			[
+				'name' => 'KWH',
+				'data' => $tmp_data_max_kwh,
+				'yAxis' => 1,
+				//'showInLegend' => false,
+				'dataLabels' => [
+					'enabled' => true,
+					//'format' => '{y} KWh'
+				],
 			],
+			[
+				'name' => 'Power Consumption',
+				'data' => $tmp_data_kwh,
+				//'showInLegend' => false,
+				'dataLabels' => [
+					'enabled' => true,
+					//'format' => '{y} KWh'
+				],
+			]
 		];
 		$data_iot_by_hours = [
 			[
