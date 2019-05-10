@@ -28,6 +28,9 @@ use app\models\Karyawan;
 use app\models\CostCenter;
 use app\models\FiscalTbl;
 
+//hrga-spl-report-daily
+use app\models\SplOvertimeBudget;
+
 class DisplayController extends Controller
 {
 	public function actionProductionMonthlyInspection()
@@ -458,6 +461,143 @@ class DisplayController extends Controller
 		]);
 	}
 
+	public function actionHrgaSplReportDaily()
+	{
+		$this->layout = 'clean';
+		$title = '';
+    	$subtitle = '';
+    	$category = [];
+    	$data = [];
+        $data2 = [];
+    	$cc_group_arr = [];
+    	$category_arr = [];
+    	$tgl_lembur_arr = [];
+
+        $year_arr = [];
+        $month_arr = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
+        }
+
+        $min_year = SplView::find()->select([
+            'min_year' => 'MIN(FORMAT(TGL_LEMBUR, \'yyyy\'))'
+        ])->one();
+
+        $year_now = date('Y');
+        $star_year = $min_year->min_year;
+        for ($year = $star_year; $year <= $year_now; $year++) {
+            $year_arr[$year] = $year;
+        }
+
+        $model = new PlanReceivingPeriod();
+        $model->month = date('m');
+        $model->year = date('Y');
+        if ($model->load($_GET))
+        {
+
+        }
+
+        $period = $model->year . '-' . $model->month;
+
+        $spl_data = SplView::find()
+        ->select([
+            'TGL_LEMBUR' => 'TGL_LEMBUR',
+            'CC_GROUP' => 'CC_GROUP',
+            'JUMLAH' => 'COUNT(NIK)',
+            'total_lembur' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+        ])
+        ->where('NIK IS NOT NULL')
+        ->andWhere('CC_GROUP IS NOT NULL')
+        ->andWhere('NILAI_LEMBUR_ACTUAL IS NOT NULL')
+        ->andWhere([
+            'FORMAT(TGL_LEMBUR, \'yyyy-MM\')' => $period
+        ])
+        ->groupBy('CC_GROUP, TGL_LEMBUR')
+        ->orderBy('TGL_LEMBUR, CC_GROUP')
+        ->all();
+
+        foreach ($spl_data as $value) {
+            if(!in_array($value->CC_GROUP, $cc_group_arr)){
+                $cc_group_arr[] = $value->CC_GROUP;
+            }
+            if (!in_array($value->TGL_LEMBUR, $tgl_lembur_arr)) {
+                $tgl_lembur_arr[] = $value->TGL_LEMBUR;
+            }
+        }
+
+        $prod_total_jam_lembur = 0;
+        $others_total_jam_lembur = 0;
+        foreach ($cc_group_arr as $cc_group) {
+            $tmp_data = [];
+            $tmp_data2 = [];
+            foreach ($tgl_lembur_arr as $tgl_lembur) {
+                $is_found = false;
+                
+                foreach ($spl_data as $value) {
+                    if ($tgl_lembur == $value->TGL_LEMBUR && $cc_group == $value->CC_GROUP) {
+                        if ($value->CC_GROUP == 'PRODUCTION') {
+                            $prod_total_jam_lembur += $value->total_lembur;
+                        } else {
+                            $others_total_jam_lembur += $value->total_lembur;
+                        }
+                        $tmp_data[] = [
+                            'y' => (int)$value->JUMLAH,
+                            'url' => Url::to(['get-remark', 'tgl_lembur' => $tgl_lembur, 'cc_group' => $cc_group])
+                            //'remark' => $this->getDetailEmpRemark($tgl_lembur, $cc_group)
+                        ];
+                        $tmp_data2[] = [
+                            'y' => (float)$value->total_lembur,
+                            'url' => Url::to(['get-remark', 'tgl_lembur' => $tgl_lembur, 'cc_group' => $cc_group])
+                            //'remark' => $this->getDetailEmpRemark($tgl_lembur, $cc_group)
+                        ];
+                        $is_found = true;
+                    }
+                }
+                if (!$is_found) {
+                    $tmp_data[] = null;
+                    $tmp_data2[] = null;
+                }
+                if (!in_array($tgl_lembur, $category_arr)) {
+                    $category_arr[] = $tgl_lembur;
+                }
+            }
+            $data[] = [
+                'name' => $cc_group,
+                'data' => $tmp_data,
+            ];
+            $data2[] = [
+                'name' => $cc_group,
+                'data' => $tmp_data2,
+            ];
+        }
+
+        foreach ($category_arr as $key => $value) {
+            $category_arr[$key] = date('j', strtotime($value));
+        }
+
+        $overtime_budget = $this->getOvertimeBudget($model->year . $model->month, 1);
+        $overtime_budget2 = $this->getOvertimeBudget($model->year . $model->month, 2);
+
+    	return $this->render('hrga-spl-report-daily', [
+            'model' => $model,
+    		'title' => $title,
+    		'subtitle' => $subtitle,
+    		'category' => $category_arr,
+    		'data' => $data,
+            'data2' => $data2,
+            'year_arr' => $year_arr,
+            'month_arr' => $month_arr,
+            'prod_total_jam_lembur' => $prod_total_jam_lembur,
+            'others_total_jam_lembur' => $others_total_jam_lembur,
+            'overtime_budget' => $overtime_budget,
+            'overtime_budget2' => $overtime_budget2,
+            //'budget_progress' => 120,
+            'budget_progress' => $overtime_budget == 0 ? 0 : round((($prod_total_jam_lembur / $overtime_budget) * 100), 2),
+            'budget_progress2' => $overtime_budget2 == 0 ? 0 : round((($others_total_jam_lembur / $overtime_budget2) * 100), 2)
+    	]);
+	}
+
 	/*public function partsPickingGetRemark($req_date, $analyst, $stage_id, $stat)
     {
     	$data_arr = VisualPickingView::find()
@@ -535,5 +675,17 @@ class DisplayController extends Controller
     	}
 
     	return $return_arr;
+    }
+
+    public function getOvertimeBudget($period, $category_id)
+    {
+        $data = SplOvertimeBudget::find()
+        ->where([
+            'period' => $period,
+            'category_id' => $category_id
+        ])
+        ->one();
+
+        return $data->overtime_budget != null ? $data->overtime_budget : 0;
     }
 }
