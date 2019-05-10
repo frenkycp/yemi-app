@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 use yii\web\Controller;
+use yii\web\JsExpression;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 
@@ -14,6 +15,9 @@ use app\models\PlanReceivingPeriod;
 use app\models\PickingLocation;
 use app\models\VisualPickingView02;
 use app\models\VisualPickingView;
+
+//smt-dandori
+use app\models\WipEff03Dandori05;
 
 class DisplayController extends Controller
 {
@@ -179,19 +183,19 @@ class DisplayController extends Controller
 
                     $tmp_data_ordered[] = [
                         'y' => $ordered_percentage == 0 ? null : $ordered_percentage,
-                        'remark' => $this->partsPickingGetRemark($visual_picking->req_date, $visual_picking->analyst, [1, 2], 'O')
+                        //'remark' => $this->partsPickingGetRemark($visual_picking->req_date, $visual_picking->analyst, [1, 2], 'O')
                     ];
                     $tmp_data_started[] = [
                         'y' => $started_percentage == 0 ? null : $started_percentage,
-                        'remark' => $this->partsPickingGetRemark($visual_picking->req_date, $visual_picking->analyst, 3, 'O')
+                        //'remark' => $this->partsPickingGetRemark($visual_picking->req_date, $visual_picking->analyst, 3, 'O')
                     ];
                     $tmp_data_completed[] = [
                         'y' => $completed_percentage == 0 ? null : $completed_percentage,
-                        'remark' => $this->partsPickingGetRemark($visual_picking->req_date, $visual_picking->analyst, [4, 5], 'O')
+                        //'remark' => $this->partsPickingGetRemark($visual_picking->req_date, $visual_picking->analyst, [4, 5], 'O')
                     ];
                     $tmp_data_handover[] = [
                         'y' => $handover_percentage == 0 ? null : $handover_percentage,
-                        'remark' => $this->partsPickingGetRemark($visual_picking->req_date, $visual_picking->analyst, 5, 'C')
+                        //'remark' => $this->partsPickingGetRemark($visual_picking->req_date, $visual_picking->analyst, 5, 'C')
                     ];
 
     			}
@@ -231,7 +235,7 @@ class DisplayController extends Controller
     	]);
 	}
 
-	public function partsPickingGetRemark($req_date, $analyst, $stage_id, $stat)
+	/*public function partsPickingGetRemark($req_date, $analyst, $stage_id, $stat)
     {
     	$data_arr = VisualPickingView::find()
     	->where([
@@ -283,7 +287,7 @@ class DisplayController extends Controller
 
 		$data .= '</table>';
 		return $data;
-    }
+    }*/
 
 	public function getWeekPeriod($analyst)
     {

@@ -171,7 +171,7 @@ echo '</pre>';*/
                                 ],
                             ],
                         ],
-                        'series' => [
+                        /*'series' => [
                             'cursor' => 'pointer',
                             'point' => [
                                 'events' => [
@@ -182,7 +182,7 @@ echo '</pre>';*/
                                     '),
                                 ]
                             ]
-                        ]
+                        ]*/
                     ],
                     'series' => $value[0]['data']
                 ],

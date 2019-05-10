@@ -18,8 +18,21 @@ class SmtDandoriController extends Controller
     	$year = date('Y');
     	$month = date('m');
         $target_max = 0;
-    	
 
+        if (\Yii::$app->request->get('id') == 'smt1') {
+            $location = 'WM03';
+            $line = '01';
+        } elseif (\Yii::$app->request->get('id') == 'smt2') {
+            $location = 'WM03';
+            $line = '02';
+        } elseif (\Yii::$app->request->get('id') == 'inj1') {
+            $location = 'WI01';
+            $line = '01';
+        } elseif (\Yii::$app->request->get('id') == 'inj2') {
+            $location = 'WI02';
+            $line = '01';
+        }
+    	
     	if (\Yii::$app->request->get('year') !== null) {
 			$year = \Yii::$app->request->get('year');
 		}
