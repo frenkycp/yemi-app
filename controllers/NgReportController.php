@@ -2,7 +2,6 @@
 
 namespace app\controllers;
 
-use app\models\search\MesinCheckNgSearch;
 use yii\web\Controller;
 use yii\web\HttpException;
 use yii\helpers\Url;
