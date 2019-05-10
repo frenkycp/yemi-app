@@ -35,6 +35,9 @@ use app\models\SplOvertimeBudget;
 //overtime-monthly-summary
 use app\models\search\OvertimeMonthlySummarySearch;
 
+//top-overtime-data
+use app\models\search\TopOvertimeDataSearch;
+
 class DisplayController extends Controller
 {
 	public function actionProductionMonthlyInspection()
@@ -624,6 +627,33 @@ class DisplayController extends Controller
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
 		return $this->render('overtime-monthly-summary', [
+			'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
+	}
+
+	public function actionTopOvertimeData()
+	{
+		$this->layout = 'clean';
+		$searchModel  = new TopOvertimeDataSearch;
+
+		$year = date('Y');
+        $month = date('m');
+
+        $searchModel->PERIOD = $year . $month;
+        
+        if (\Yii::$app->request->get('PERIOD') !== null) {
+			$searchModel->PERIOD = \Yii::$app->request->get('PERIOD');
+		}
+
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('top-overtime-data', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
 		]);
