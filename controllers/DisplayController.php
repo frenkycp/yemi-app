@@ -5,6 +5,7 @@ use yii\web\Controller;
 use yii\web\JsExpression;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
+use dmstr\bootstrap\Tabs;
 
 //production-monthly-inspection
 use app\models\InspectionReportView;
@@ -30,6 +31,9 @@ use app\models\FiscalTbl;
 
 //hrga-spl-report-daily
 use app\models\SplOvertimeBudget;
+
+//overtime-monthly-summary
+use app\models\search\OvertimeMonthlySummarySearch;
 
 class DisplayController extends Controller
 {
@@ -596,6 +600,33 @@ class DisplayController extends Controller
             'budget_progress' => $overtime_budget == 0 ? 0 : round((($prod_total_jam_lembur / $overtime_budget) * 100), 2),
             'budget_progress2' => $overtime_budget2 == 0 ? 0 : round((($others_total_jam_lembur / $overtime_budget2) * 100), 2)
     	]);
+	}
+
+	public function actionOvertimeMonthlySummary()
+	{
+		$this->layout = 'clean';
+		$searchModel  = new OvertimeMonthlySummarySearch;
+
+		$year = date('Y');
+        $month = date('m');
+
+        $searchModel->PERIOD = $year . $month;
+        
+        if (\Yii::$app->request->get('PERIOD') !== null) {
+			$searchModel->PERIOD = \Yii::$app->request->get('PERIOD');
+		}
+
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('overtime-monthly-summary', [
+			'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
 	}
 
 	/*public function partsPickingGetRemark($req_date, $analyst, $stage_id, $stat)
