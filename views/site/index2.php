@@ -115,7 +115,7 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_prd/index_prd_efficiency.php"><i class="fa fa-fw fa-tag"></i> Line Efficiency (MITA+)<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/plan/hs.php"><i class="fa fa-fw fa-tag"></i> Priority Plan (MITA+)<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/plan/display.php"><i class="fa fa-fw fa-tag"></i> Priority Plan (MITA+)<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_fg"><i class="fa fa-fw fa-tag"></i> FGS Monitoring (MITA+)<span class="japanesse-word"></span></a>

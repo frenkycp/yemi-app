@@ -92,12 +92,12 @@ class ProductionMonthlyInspectionController extends Controller
 
     	$data = [
             [
-                'name' => 'Repair',
+                'name' => 'Repair 個別不良',
                 'data' => $tmp_data2,
                 'color' => 'rgba(0, 0, 255, 0.5)'
             ],
     		[
-    			'name' => 'Lot Out',
+    			'name' => 'Lot Out ロットアウト',
     			'data' => $tmp_data,
     			'color' => 'rgba(255, 0, 0, 0.5)'
     		],

@@ -13,25 +13,26 @@ $this->title = [
     'breadcrumbs_title' => 'Monthly Production Inspection Chart'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
-//$color = new JsExpression('Highcharts.getOptions().colors[7]');
-//$color = 'DarkSlateBlue';
-$color = 'rgba(72,61,139,0.6)';
-
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 
-$this->registerCss(".tab-content > .tab-pane,
-.pill-content > .pill-pane {
-    display: block;     
-    height: 0;          
-    overflow-y: hidden; 
-}
-
-.tab-content > .active,
-.pill-content > .active {
-    height: auto;       
-} ");
+$this->registerCss("
+    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
+    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    .form-control {font-size: 20px; height: 40px;}
+    .content-header {color: white;}
+    //.box-body {background-color: #33383D;}
+    .box-title {font-weight: bold;}
+    .box-header .box-title, .control-label{font-size: 2em;}
+    .container {width: auto;}
+    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    body {background-color: #ecf0f5;}
+    .form-group {margin-bottom: 0px;}
+    body, .content-wrapper {background-color: #33383D;}
+    .small-box .icon {top: 1px;}
+    .inner p {font-size: 18px;}
+    .form-horizontal .control-label {padding-top: 0px;}
+");
 
 $script = <<< JS
     window.onload = setupRefresh;
@@ -51,7 +52,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'id' => 'form_index',
     'method' => 'get',
-    'action' => Url::to(['production-monthly-inspection/index']),
+    'action' => Url::to(['display/production-monthly-inspection']),
     'layout' => 'horizontal',
     'enableClientValidation' => true,
     'errorSummaryCssClass' => 'error-summary alert alert-danger',
@@ -86,7 +87,7 @@ echo '</pre>';*/
         </div>
         
     </div>
-
+<hr/>
 <?php ActiveForm::end(); ?>
 <div class="box box-info">
     <div class="box-header with-border">
@@ -106,6 +107,7 @@ echo '</pre>';*/
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
+                    'height' => 650
                 ],
                 'credits' => [
                     'enabled' =>false
@@ -116,9 +118,21 @@ echo '</pre>';*/
                 'subtitle' => [
                     'text' => null
                 ],
+                'legend' => [
+                    'enabled' => true,
+                    'itemStyle' => [
+                        'fontSize' => '26px',
+                    ],
+                ],
                 'xAxis' => [
                     'type' => 'category',
                     'categories' => $categories,
+                    'labels' => [
+                        'style' => [
+                            'fontSize' => '14px',
+                            'fontWeight' => 'bold'
+                        ],
+                    ],
                 ],
                 'plotOptions' => [
                     'series' => [
@@ -134,7 +148,12 @@ echo '</pre>';*/
                             ]
                         ],
                         'dataLabels' => [
-                            'enabled' => true
+                            'enabled' => true,
+                            'style' => [
+                                //'color' => 'white',
+                                'fontWeight' => 'bold',
+                                'fontSize' => '26px',
+                            ],
                         ],
                     ],
                     'column' => [
