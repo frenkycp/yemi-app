@@ -6,7 +6,7 @@ use yii\web\JsExpression;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use app\models\MachineKwhReport;
+use app\models\MachineIot;
 use app\models\MachineIotUtility;
 use app\models\MachineIotUtilityByHours02;
 
@@ -43,11 +43,18 @@ class MntKwhReportController extends Controller
 		$year = substr($posting_date, 0, 4);
 		$month = substr($posting_date, 5, 2);
 
-		$data_report = MachineKwhReport::find()
+		$data_report = MachineIot::find()
+		->select([
+			'posting_date', 'mesin_id', 'jam_no',
+			'start_kwh' => 'MIN(kwh)',
+			'end_kwh' => 'MAX(kwh)',
+		])
 		->where([
-			'posting_date' => $posting_date,
+			'FORMAT(posting_date, \'yyyy-MM-dd\')' => $posting_date,
 			'mesin_id' => $machine_id,
 		])
+		->groupBy('posting_date, mesin_id, jam_no')
+		->orderBy('jam_no')
 		->asArray()
 		->all();
 
@@ -65,8 +72,11 @@ class MntKwhReportController extends Controller
 			$max_kwh = 0;
 			foreach ($data_report as $key => $value) {
 				if ($i == $value['jam_no']) {
-					$kwh = (double)$value['power_consumption'];
-					$max_kwh = (double)$value['end_kwh'];
+					$start_kwh = (int)$value['start_kwh'];
+					$end_kwh = (int)$value['end_kwh'];
+					$kwh = $end_kwh - $start_kwh;
+					$max_kwh = $end_kwh;
+					break;
 				}
 			}
 			$total_putih = null;
