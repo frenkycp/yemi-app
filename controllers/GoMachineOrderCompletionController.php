@@ -89,6 +89,7 @@ class GoMachineOrderCompletionController extends Controller
 			$tmp_data[$nik]['from_loc'] = $value->from_loc;
 			$tmp_data[$nik]['to_loc'] = $value->to_loc;
 			$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
+			$tmp_data[$nik]['hadir'] = $value->HADIR;
 		}
 
 		$fix_data = [];
@@ -110,6 +111,7 @@ class GoMachineOrderCompletionController extends Controller
 			$fix_data[$key]['from_loc'] = $value['from_loc'];
 			$fix_data[$key]['to_loc'] = $value['to_loc'];
 			$fix_data[$key]['last_update'] = $value['last_update'];
+			$fix_data[$key]['hadir'] = $value['hadir'];
 			$fix_data[$key]['todays_point'] = isset($driver_point_arr[$key]) ? $driver_point_arr[$key] : 0;
 		}
 

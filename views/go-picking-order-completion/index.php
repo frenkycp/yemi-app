@@ -61,6 +61,22 @@ echo '</pre>';*/
                 $panel_class = ' box-danger';
                 $text_status = '<b><u>No Order</u></b>';
             }
+
+            if ($value['hadir'] == 'N') {
+                $panel_class = ' box-default';
+                $text_status = 'INACTIVE';
+            }
+
+            $karyawan_aktif = app\models\MpInOut::find()->where([
+                'NIK' => $key,
+                'TANGGAL' => date('Y-m-d')
+            ])->one();
+
+            if ($karyawan_aktif->NIK == null) {
+                $panel_class = ' box-default';
+                $text_status = 'END CONTRACT';
+            }
+
             //$panel_class = ' box-primary';
             ?>
             <div class="panel box box-solid<?= $panel_class; ?>">

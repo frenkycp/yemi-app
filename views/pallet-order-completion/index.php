@@ -98,6 +98,16 @@ echo '</pre>';*/
                         $text_status = '<b><u>Idling</u></b> > ' . $limit_minutes . ' minutes (Since <b>' . $value['last_update'] . '</b>)';
                     }
                 }
+
+                $karyawan_aktif = app\models\MpInOut::find()->where([
+                    'NIK' => $key,
+                    'TANGGAL' => date('Y-m-d')
+                ])->one();
+
+                if ($karyawan_aktif->NIK == null) {
+                    $panel_class = ' box-default';
+                    $text_status = 'END CONTRACT';
+                }
                 ?>
                 <div class="panel box box-solid<?= $panel_class; ?>">
                     <div class="box-header with-border">

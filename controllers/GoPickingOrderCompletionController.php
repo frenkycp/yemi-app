@@ -89,6 +89,7 @@ class GoPickingOrderCompletionController extends Controller
 			$tmp_data[$nik]['from_loc'] = $value->from_loc;
 			$tmp_data[$nik]['to_loc'] = $value->to_loc;
 			$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
+			$tmp_data[$nik]['hadir'] = $value->HADIR;
 
 			if ($value->TERMINAL == 'Z') {
 				$factory = 'FACTORY-1';
@@ -113,6 +114,7 @@ class GoPickingOrderCompletionController extends Controller
 				]
 			];
 			$fix_data[$key]['nama'] = $value['nama'];
+			$fix_data[$key]['hadir'] = $value['hadir'];
 			$fix_data[$key]['last_stage'] = $value['last_stage'];
 			$fix_data[$key]['from_loc'] = $value['from_loc'];
 			$fix_data[$key]['to_loc'] = $value['to_loc'];

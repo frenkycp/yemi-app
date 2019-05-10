@@ -43,6 +43,10 @@ echo '</pre>';*/
         <div class="box-group" id="accordion">
         <?php
         foreach ($fix_data as $key => $value) {
+            $karyawan_aktif = app\models\Karyawan::find()->where([
+                'NIK' => $key,
+                //'TANGGAL' => date('Y-m-d')
+            ])->one();
             $last_update = date('Y-m-d H:i:s', strtotime($value['last_update']));
             if ($value['last_stage'] == 'DEPARTURE') {
                 $panel_class = ' box-success';
@@ -62,12 +66,22 @@ echo '</pre>';*/
                 $text_status = '<b><u>No Order</u></b>';
             }
             //$panel_class = ' box-primary';
+
+            if ($value['hadir'] == 'N') {
+                $panel_class = ' box-default';
+                $text_status = 'INACTIVE';
+            }
+
+            if (($karyawan_aktif->KONTRAK_KE == 1 && $karyawan_aktif->K1_END < date('Y-m-d')) || $karyawan_aktif->KONTRAK_KE == 2 && $karyawan_aktif->K2_END < date('Y-m-d')) {
+                $panel_class = ' box-default';
+                $text_status = 'END CONTRACT';
+            }
             ?>
             <div class="panel box box-solid<?= $panel_class; ?>">
                 <div class="box-header with-border">
                     <h4 class="box-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key; ?>">
-                            <?= $key . ' - ' . $value['nama'] . ' | '; ?>
+                            <?= $key . ' - ' . $value['nama'] . ' (' . $karyawan_aktif->SECTION . ') | '; ?>
                         </a>
                         <small style="color: white;">
                             <b><?= $value['todays_point'] > 1 ? $value['todays_point'] . '</b> points' : $value['todays_point'] . '</b> point'; ?>
