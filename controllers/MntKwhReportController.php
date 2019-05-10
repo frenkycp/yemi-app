@@ -99,8 +99,9 @@ class MntKwhReportController extends Controller
 
 		$data = [
 			[
-				'name' => 'KWH',
+				'name' => 'KWH Measured',
 				'data' => $tmp_data_max_kwh,
+				'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
 				'yAxis' => 1,
 				//'showInLegend' => false,
 				'dataLabels' => [
@@ -109,8 +110,9 @@ class MntKwhReportController extends Controller
 				],
 			],
 			[
-				'name' => 'Power Consumption',
+				'name' => 'KWH Consumption',
 				'data' => $tmp_data_kwh,
+				'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
 				//'showInLegend' => false,
 				'dataLabels' => [
 					'enabled' => true,
