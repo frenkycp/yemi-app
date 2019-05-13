@@ -17,7 +17,24 @@ $this->title = [
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
+    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    .form-control {font-size: 30px; height: 52px;}
+    .content-header {color: white;}
+    //.box-body {background-color: #33383D;}
+    .box-title {font-weight: bold;}
+    .box-header .box-title, .control-label{font-size: 2em;}
+    .container {width: auto;}
+    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    body {background-color: #ecf0f5;}
+    .form-group {margin-bottom: 0px;}
+    body, .content-wrapper {background-color: #33383D;}
+    .small-box .icon {top: 1px;}
+    .inner p {font-size: 18px;}
+    .form-horizontal .control-label {padding-top: 0px;}
+    .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
+");
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
@@ -29,7 +46,7 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $grid_columns = [
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         'template' => '{add-response}',
         'buttons' => [
@@ -64,9 +81,9 @@ $grid_columns = [
         'width' => '90px;',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; '
         ],
-    ],
+    ],*/
     [
         'attribute' => 'input_datetime',
         'label' => 'Question<br/>Datetime',
@@ -76,7 +93,7 @@ $grid_columns = [
         'width' => '80px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; '
         ],
     ],
     [
@@ -88,7 +105,7 @@ $grid_columns = [
         'width' => '80px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; '
         ],
     ],
     [
@@ -99,7 +116,7 @@ $grid_columns = [
         'width' => '90px;',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; '
         ],
     ],
     [
@@ -108,23 +125,23 @@ $grid_columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => ''
         ],
     ],
-    [
+    /*[
         'attribute' => 'department',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => ''
         ],
-    ],
+    ],*/
     [
         'attribute' => 'section',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => ''
         ],
     ],
     [
@@ -146,7 +163,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => ''
         ],
     ],
     [
@@ -156,7 +173,7 @@ $grid_columns = [
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => ''
         ],
     ],
     [
@@ -166,7 +183,7 @@ $grid_columns = [
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => ''
         ],
     ]
 ];
@@ -184,29 +201,27 @@ $grid_columns = [
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => $grid_columns,
             'hover' => true,
             //'showPageSummary' => true,
-            //'condensed' => true,
+            'condensed' => true,
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 14px; font-weight: bold;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
-            'toolbar' =>  [
-                '{export}',
-                '{toggleData}',
-            ],
+            'toolbar' =>  false,
             // set export properties
             'export' => [
                 'fontAwesome' => true
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => ''
+                'heading' => false,
+                'footer' => false,
             ],
         ]); ?>
     </div>

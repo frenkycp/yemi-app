@@ -38,6 +38,9 @@ use app\models\search\OvertimeMonthlySummarySearch;
 //top-overtime-data
 use app\models\search\TopOvertimeDataSearch;
 
+//hr-complaint
+use app\models\search\HrComplaintSearch;
+
 class DisplayController extends Controller
 {
 	public function actionProductionMonthlyInspection()
@@ -658,6 +661,23 @@ class DisplayController extends Controller
 		    'searchModel' => $searchModel,
 		]);
 	}
+
+    public function actionHrComplaint()
+    {
+        $this->layout = 'clean';
+        $searchModel  = new HrComplaintSearch;
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('hr-complaint', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
 
 	/*public function partsPickingGetRemark($req_date, $analyst, $stage_id, $stat)
     {
