@@ -21,7 +21,7 @@ $this->registerCss("
     .box-title {font-weight: bold;}
     .box-header .box-title, .control-label{font-size: 2em;}
     .container {width: auto;}
-    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    .content-header>h1 {font-size: 3em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #33383D;}
@@ -77,7 +77,7 @@ echo '</pre>';*/
 </div>
 
 <?php ActiveForm::end(); ?>
-<h4 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h4>
+<h4 class="box-title" style="color: white;"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i') ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php

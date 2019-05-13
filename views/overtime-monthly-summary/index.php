@@ -6,7 +6,7 @@ use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 $this->title = [
-    'page_title' => 'Monthly Overtime Summary <span class="japanesse text-green"></span>',
+    'page_title' => 'Monthly Overtime Summary <span class="japanesse text-green">課別残業時間平均</span>',
     'tab_title' => 'Monthly Overtime Summary',
     'breadcrumbs_title' => 'Monthly Overtime Summary'
 ];

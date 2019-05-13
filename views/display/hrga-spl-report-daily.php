@@ -19,7 +19,7 @@ date_default_timezone_set('Asia/Jakarta');
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
-    .form-control {font-size: 30px; height: 52px;}
+    .form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}
     //.box-body {background-color: #33383D;}
     .box-title {font-weight: bold;}
@@ -214,7 +214,7 @@ echo '</pre>';*/
                 'options' => [
                     'chart' => [
                         'type' => 'column',
-                        'height' => 600,
+                        'height' => 400,
                         'style' => [
                             'fontFamily' => 'sans-serif'
                         ],
@@ -254,7 +254,7 @@ echo '</pre>';*/
                     'legend' => [
                         'enabled' => true,
                         'itemStyle' => [
-                            'fontSize' => '20px',
+                            'fontSize' => '16px',
                         ],
                     ],
                     'plotOptions' => [
