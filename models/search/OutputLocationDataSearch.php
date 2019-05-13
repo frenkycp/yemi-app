@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['flo', 'adv'], 'integer'],
-            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'so', 'loct', 'speaker_model', 'rfid_no'], 'safe'],
+            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'so', 'loct', 'speaker_model', 'rfid_no', 'cntr'], 'safe'],
 ];
 }
 
@@ -49,7 +49,7 @@ $query = SernoInput::find()
     'tb_serno_input.gmc',
     'total' => 'COUNT(sernum)',
     'loct',
-    'loct_time'
+    'loct_time',
 ])
 ->joinWith('sernoRfid')
 ->joinWith('sernoMaster')
@@ -81,6 +81,7 @@ $query->andFilterWhere([
             'rfid' => $this->rfid_no,
             'adv' => $this->adv,
             'loct' => $this->loct,
+            'tb_serno_output.cntr' => $this->cntr,
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])

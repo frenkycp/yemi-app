@@ -95,6 +95,13 @@ $gridColumns = [
         },
         'hAlign' => 'center',
         'vAlign' => 'middle',
+    ],[
+        'attribute' => 'cntr',
+        'value' => 'sernoOutput.cntr',
+        'label' => 'Container Num.',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'pageSummary' => true,
     ],
     [
         'attribute' => 'total',
@@ -108,7 +115,7 @@ $gridColumns = [
         'value' => function($model){
             $string = '';
             if ($model->loct == 1) {
-                $string = 'FA Output';
+                $string = 'In Transit';
             } elseif ($model->loct == 2) {
                 $string = 'Finish Good WH';
             } elseif ($model->loct == 3) {
@@ -117,7 +124,7 @@ $gridColumns = [
             return $string;
         },
         'filter' => [
-            1 => 'FA Output',
+            1 => 'In Transit',
             2 => 'Finish Good WH',
             3 => 'Export',
         ],
