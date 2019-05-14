@@ -51,6 +51,7 @@ $dataProvider = new ActiveDataProvider([
         'period' => SORT_ASC,
         'start_date' => SORT_ASC,
         'child_analyst_desc' => SORT_ASC,
+        'model_group' => SORT_ASC,
         'child_desc' => SORT_ASC,
     ]
 ],

@@ -62,6 +62,16 @@ $columns = [
         ],
     ],
     [
+        'attribute' => 'model_group',
+        'label' => 'Model Group',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 110px; text-align: center;',
+        ],
+    ],
+    [
         'attribute' => 'child',
         'label' => 'Part Numb.',
         'hAlign' => 'center',
@@ -83,15 +93,16 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'model_group',
-        'label' => 'Model Group',
+        'attribute' => 'total_qty',
+        'label' => 'Qty',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 110px; text-align: center;',
+            'style' => 'min-width: 70px; text-align: center;',
         ],
     ],
+    
 ];
 ?>
 

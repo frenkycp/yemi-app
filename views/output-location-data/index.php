@@ -101,7 +101,6 @@ $gridColumns = [
         'label' => 'Container Num.',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'pageSummary' => true,
     ],
     [
         'attribute' => 'total',
