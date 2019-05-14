@@ -293,6 +293,33 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
     	]);
 	}
 
+	public function actionDueDate($id)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($id);
+
+		$model_reply = new \yii\base\DynamicModel([
+	        'due_date'
+	    ]);
+	    $model_reply->addRule(['due_date'], 'required');
+	    $model_reply->due_date = $model->due_date != null ? date('Y-m-d', strtotime($model->due_date)) : null;
+
+		if ($model_reply->load(\Yii::$app->request->post())) {
+			$model->status = 4;
+			$model->due_date = $model_reply->due_date;
+			if (!$model->save()) {
+				return json_encode($model->errors);
+			}
+
+			return $this->redirect(Url::previous());
+		}
+
+		return $this->renderAjax('due-date', [
+    		'model' => $model,
+    		'model_reply' => $model_reply
+    	]);
+	}
+
 	public function actionAnswer($id)
 	{
 		date_default_timezone_set('Asia/Jakarta');

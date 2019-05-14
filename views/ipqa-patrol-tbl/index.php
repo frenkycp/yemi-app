@@ -32,12 +32,16 @@ $this->registerJs("$(function() {
      e.preventDefault();
      $('#common-modal').modal('show');
    });
+   $('.btn-due-date').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
 });");
 
 $columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}&nbsp;&nbsp;&nbsp;{delete}&nbsp;&nbsp;&nbsp;{reject}&nbsp;&nbsp;&nbsp;{close}<hr/>{reply}&nbsp;&nbsp;&nbsp;{answer}',
+        'template' => '{update}&nbsp;&nbsp;{delete}&nbsp;&nbsp;{reject}&nbsp;&nbsp;{due_date}&nbsp;&nbsp;{close}<br/><span style="color: DarkGrey">------------------------</span><br/>{reply}&nbsp;&nbsp;&nbsp;{answer}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -67,7 +71,7 @@ $columns = [
                     'data-confirm' => 'Are yout sure to close this problem ?'
                 ];
                 
-                if ($model->status == 2) {
+                if ($model->status == 2 || $model->status == 4) {
                     return Html::a('<i class="fa fa-fw fa-check"></i>', $url, $options);
                 } else {
                     return '<i class="fa fa-fw fa-check disabled-link"></i>';
@@ -80,7 +84,7 @@ $columns = [
                     'title' => 'Reject Data',
                     'class' => 'showModalButton'
                 ];
-                if ($model->status == 2) {
+                if ($model->status == 2 || $model->status == 4) {
                     return Html::a('<i class="fa fa-fw fa-ban"></i>', '#', $options);
                 } else {
                     return '<i class="fa fa-fw fa-ban disabled-link"></i>';
@@ -99,6 +103,21 @@ $columns = [
                     return Html::a('<i class="fa fa-fw fa-commenting"></i>', '#', $options);
                 } else {
                     return '<i class="fa fa-fw fa-commenting disabled-link"></i>';
+                }
+                
+            }, 'due_date' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-due-date',
+                    'value' => Url::to(['due-date','id' => $model->id]),
+                    'title' => 'OK With Due Date',
+                    'class' => 'showModalButton'
+                ];
+                //return Html::a('<i class="fa fa-fw fa-calendar-check-o"></i>', '#', $options);
+                if ($model->status == 2 || $model->status == 4) {
+                    return Html::a('<i class="fa fa-fw fa-calendar-check-o"></i>', '#', $options);
+                } else {
+                    return '<i class="fa fa-fw fa-calendar-check-o disabled-link"></i>';
                 }
                 
             },
@@ -128,7 +147,7 @@ $columns = [
         'hiddenFromExport' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 50px; font-size: 12px;',
+            'style' => 'min-width: 50px; font-size: 11px;',
         ],
     ],
     /*[
@@ -138,7 +157,7 @@ $columns = [
         'width' => '70px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 70px; font-size: 11px; text-align: center;',
         ],
     ],*/
     [
@@ -148,7 +167,7 @@ $columns = [
         'width' => '100px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 70px; font-size: 11px; text-align: center;',
         ],
     ],
     [
@@ -159,7 +178,7 @@ $columns = [
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 70px; font-size: 11px; text-align: center;',
         ],
     ],
     [
@@ -169,7 +188,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 110px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 110px; font-size: 11px; text-align: center;',
         ],
     ],
     [
@@ -183,7 +202,7 @@ $columns = [
         'filter' => ArrayHelper::map(app\models\WipLocation::find()->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 70px; font-size: 11px; text-align: center;',
         ],
     ],
     /*[
@@ -193,7 +212,7 @@ $columns = [
         'width' => '50px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 50px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 50px; font-size: 11px; text-align: center;',
         ],
     ],
     [
@@ -203,7 +222,7 @@ $columns = [
         'width' => '40px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 40px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 40px; font-size: 11px; text-align: center;',
         ],
     ],*/
     [
@@ -214,7 +233,7 @@ $columns = [
         'filter' => ArrayHelper::map(app\models\IpqaCategoryTbl::find()->select('category')->groupBy('category')->orderBy('category')->all(), 'category', 'category'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 70px; font-size: 11px; text-align: center;',
         ],
     ],
     [
@@ -222,7 +241,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 120px; font-size: 12px;',
+            'style' => 'min-width: 120px; font-size: 11px;',
         ],
     ],
     [
@@ -231,7 +250,56 @@ $columns = [
         //'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 170px; font-size: 12px;',
+            'style' => 'min-width: 170px; font-size: 11px;',
+        ],
+    ],
+    [
+        'attribute' => 'status',
+        'value' => function($model){
+            return $model->statusTbl->status_desc;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\IpqaStatusTbl::find()->orderBy('status_order ASC')->all(), 'status_id', 'status_desc'),
+        'width' => '110px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 80px; font-size: 11px; text-align: center;',
+        ],
+    ],
+    [
+        'attribute' => 'due_date',
+        'value' => function($model){
+            if ($model->due_date == null) {
+                return '-';
+            } else {
+                return date('Y-m-d', strtotime($model->due_date));
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 80px; font-size: 11px;',
+        ],
+    ],
+    [
+        'attribute' => 'cause',
+        'vAlign' => 'middle',
+        'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 130px; font-size: 11px;',
+        ],
+    ],
+    [
+        'attribute' => 'countermeasure',
+        'vAlign' => 'middle',
+        'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 130px; font-size: 11px;',
         ],
     ],
     [
@@ -250,7 +318,7 @@ $columns = [
         'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 80px; font-size: 12px; text-align: center;',
+            'style' => 'min-width: 80px; font-size: 11px; text-align: center;',
         ],
     ],
     [
@@ -258,39 +326,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 60px; font-size: 12px;',
-        ],
-    ],
-    [
-        'attribute' => 'status',
-        'value' => function($model){
-            return $model->statusTbl->status_desc;
-        },
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filter' => ArrayHelper::map(app\models\IpqaStatusTbl::find()->orderBy('status_order ASC')->all(), 'status_id', 'status_desc'),
-        'width' => '110px',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'min-width: 80px; font-size: 12px; text-align: center;',
-        ],
-    ],
-    [
-        'attribute' => 'cause',
-        'vAlign' => 'middle',
-        'format' => 'ntext',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'min-width: 150px; font-size: 12px;',
-        ],
-    ],
-    [
-        'attribute' => 'countermeasure',
-        'vAlign' => 'middle',
-        'format' => 'ntext',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'min-width: 150px; font-size: 12px;',
+            'style' => 'min-width: 60px; font-size: 11px;',
         ],
     ],
     [
@@ -299,7 +335,7 @@ $columns = [
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 150px; font-size: 12px;',
+            'style' => 'min-width: 130px; font-size: 11px;',
         ],
     ],
     [
@@ -308,7 +344,7 @@ $columns = [
         'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 150px; font-size: 12px;',
+            'style' => 'min-width: 130px; font-size: 11px;',
         ],
     ],
     [
@@ -317,7 +353,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px;',
+            'style' => 'min-width: 70px; font-size: 11px;',
         ],
     ],
     [
@@ -326,7 +362,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px;',
+            'style' => 'min-width: 70px; font-size: 11px;',
         ],
     ],
     [
@@ -334,7 +370,7 @@ $columns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 60px; font-size: 12px;',
+            'style' => 'min-width: 60px; font-size: 11px;',
         ],
     ],
 ];
@@ -359,7 +395,7 @@ $columns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 11px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => false, // pjax is set to always true for this demo
@@ -375,6 +411,8 @@ $columns = [
                     return ['class' => 'warning'];
                 } elseif ($model->status == 3) {
                     return ['class' => 'danger text-red'];
+                } elseif ($model->status == 4) {
+                    return ['class' => 'success text-red'];
                 } else {
                     return ['class' => ''];
                 }

@@ -16,6 +16,7 @@ use Yii;
  * @property integer $total_pending
  * @property integer $total_rejected
  * @property integer $total_closed
+ * @property integer $total_ok_due_date
  * @property string $aliasModel
  */
 abstract class IpqaPatrolOutstandingView extends \yii\db\ActiveRecord
@@ -46,7 +47,7 @@ abstract class IpqaPatrolOutstandingView extends \yii\db\ActiveRecord
     {
         return [
             [['CC_ID', 'CC_GROUP', 'CC_DESC'], 'string'],
-            [['total_open', 'total_pending', 'total_rejected', 'total_closed'], 'integer']
+            [['total_open', 'total_pending', 'total_rejected', 'total_closed', 'total_ok_due_date'], 'integer']
         ];
     }
 
@@ -63,6 +64,7 @@ abstract class IpqaPatrolOutstandingView extends \yii\db\ActiveRecord
             'total_pending' => 'Total Pending',
             'total_rejected' => 'Total Rejected',
             'total_closed' => 'Total Closed',
+            'total_ok_due_date' => 'Total Ok Due Date',
         ];
     }
 

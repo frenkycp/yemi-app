@@ -20,6 +20,7 @@ use Yii;
  * @property string $line_pic
  * @property string $cause
  * @property string $countermeasure
+ * @property string $due_date
  * @property integer $status
  * @property string $input_datetime
  * @property string $reply_datetime
@@ -74,7 +75,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     {
         return [
             [['period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name', 'deleted_by_id', 'deleted_by_name', 'reject_remark', 'reject_answer'], 'string'],
-            [['event_date', 'input_datetime', 'reply_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
+            [['event_date', 'due_date', 'input_datetime', 'reply_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
             [['status', 'flag'], 'integer']
         ];
     }
@@ -96,6 +97,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             'line_pic' => 'Line Pic',
             'cause' => 'Cause',
             'countermeasure' => 'Countermeasure',
+            'due_date' => 'Due Date',
             'status' => 'Status',
             'input_datetime' => 'Input Datetime',
             'reply_datetime' => 'Reply Datetime',

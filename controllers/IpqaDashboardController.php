@@ -32,6 +32,11 @@ class IpqaDashboardController extends Controller
 				'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
 			],
 			[
+				'name' => 'OK WITH DUE DATE',
+				'data' => [],
+				'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+			],
+			[
 				'name' => 'REJECTED',
 				'data' => [],
 				'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
@@ -42,6 +47,7 @@ class IpqaDashboardController extends Controller
 			$total_open = $value['total_open'] == 0 ? null : (int)$value['total_open'];
 			$total_pending = $value['total_pending'] == 0 ? null : (int)$value['total_pending'];
 			$total_rejected = $value['total_rejected'] == 0 ? null : (int)$value['total_rejected'];
+			$total_ok = $value['total_ok_due_date'] == 0 ? null : (int)$value['total_ok_due_date'];
 			$outstanding_data[0]['data'][] = [
 				'y' => $total_open,
 				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 0, 'CC_ID' => $value['CC_ID']]),
@@ -51,6 +57,10 @@ class IpqaDashboardController extends Controller
 				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 2, 'CC_ID' => $value['CC_ID']]),
 			];
 			$outstanding_data[2]['data'][] = [
+				'y' => $total_ok,
+				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 2, 'CC_ID' => $value['CC_ID']]),
+			];
+			$outstanding_data[3]['data'][] = [
 				'y' => $total_rejected,
 				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 3, 'CC_ID' => $value['CC_ID']]),
 			];
