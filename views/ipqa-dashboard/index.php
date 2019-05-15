@@ -114,3 +114,72 @@ echo '</pre>';*/
         </div>
     </div>
 </div>
+<div class="box box-primary">
+    <div class="box-body">
+        <div class="col-md-12">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    //'themes/sand-signika',
+                    //'themes/grid-light',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                        'style' => [
+                            'fontFamily' => 'sans-serif',
+                        ],
+                        'zoomType' => 'x'
+                        //'height' => 350
+                    ],
+                    'title' => [
+                        'text' => 'Outstanding With Due Date'
+                    ],
+                    'subtitle' => [
+                        'text' => ''
+                    ],
+                    'xAxis' => [
+                        'type' => 'datetime',
+                        //'categories' => $value['category'],
+                    ],
+                    'yAxis' => [
+                        //'min' => 0,
+                        'title' => [
+                            'text' => 'Qty'
+                        ],
+                        //'gridLineWidth' => 0,
+                    ],
+                    'credits' => [
+                        'enabled' =>false
+                    ],
+                    'tooltip' => [
+                        'enabled' => true,
+                        'xDateFormat' => '%A, %b %e %Y',
+                        //'valueSuffix' => ' min'
+                        //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                    ],
+                    'plotOptions' => [
+                        'column' => [
+                            //'stacking' => 'normal',
+                            'dataLabels' => [
+                                'enabled' => true,
+                            ],
+                        ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
+                                ]
+                            ]
+                        ]
+                    ],
+                    'series' => $data['ok']['data'],
+                ],
+            ]);
+            ?>
+        </div>
+    </div>
+</div>

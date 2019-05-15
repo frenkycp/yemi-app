@@ -38,6 +38,9 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 	    if (\Yii::$app->request->get('CC_ID') !== null) {
 	    	$searchModel->CC_ID = \Yii::$app->request->get('CC_ID');
 	    }
+	    if (\Yii::$app->request->get('due_date') !== null) {
+	    	$searchModel->due_date = \Yii::$app->request->get('due_date');
+	    }
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
