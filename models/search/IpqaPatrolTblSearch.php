@@ -20,7 +20,7 @@ public function rules()
 {
 return [
 [['id', 'status', 'flag'], 'integer'],
-            [['period', 'event_date', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID', 'child', 'child_desc', 'child_analyst', 'due_date'], 'safe'],
+            [['period', 'event_date', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID', 'child', 'child_desc', 'child_analyst', 'due_date', 'reject_remark', 'reject_answer'], 'safe'],
 ];
 }
 

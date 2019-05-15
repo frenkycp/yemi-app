@@ -58,7 +58,7 @@ class IpqaDashboardController extends Controller
 			];
 			$outstanding_data[2]['data'][] = [
 				'y' => $total_ok,
-				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 2, 'CC_ID' => $value['CC_ID']]),
+				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 4, 'CC_ID' => $value['CC_ID']]),
 			];
 			$outstanding_data[3]['data'][] = [
 				'y' => $total_rejected,
