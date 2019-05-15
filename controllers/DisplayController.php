@@ -666,6 +666,7 @@ class DisplayController extends Controller
     {
         $this->layout = 'clean';
         $searchModel  = new HrComplaintSearch;
+        $searchModel->category = 'HR';
         $dataProvider = $searchModel->search($_GET);
 
         Tabs::clearLocalStorage();
