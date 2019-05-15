@@ -11,7 +11,7 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Question & Answer (HR) <span class="japanesse text-green">労務管理問い合わせ</span>',
+    'page_title' => 'Question & Answer (HR) <span class="japanesse text-green">労務管理問い合わせ</span> <span class="pull-right-container"><small class="label pull-right bg-yellow">' . $total_waiting . '</small></span>',
     'tab_title' => 'Question & Answer (HR)',
     'breadcrumbs_title' => 'Question & Answer (HR)'
 ];

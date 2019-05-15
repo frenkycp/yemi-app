@@ -40,6 +40,7 @@ use app\models\search\TopOvertimeDataSearch;
 
 //hr-complaint
 use app\models\search\HrComplaintSearch;
+use app\models\HrComplaint;
 
 class DisplayController extends Controller
 {
@@ -669,6 +670,13 @@ class DisplayController extends Controller
         $searchModel->category = 'HR';
         $dataProvider = $searchModel->search($_GET);
 
+        $total_waiting = HrComplaint::find()
+        ->where([
+            'status' => 0,
+            'category' => 'HR',
+        ])
+        ->count();
+
         Tabs::clearLocalStorage();
 
         Url::remember();
@@ -677,6 +685,7 @@ class DisplayController extends Controller
         return $this->render('hr-complaint', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+            'total_waiting' => $total_waiting,
         ]);
     }
 
