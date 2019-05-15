@@ -290,6 +290,23 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'start_job',
+        'label' => 'Start Actual',
+        'value' => function($model){
+            return $model->start_job == null ? '-' : date('Y-m-d', strtotime($model->start_job));
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size:12px;'
+        ],
+    ],
+    [
         'attribute' => 'end_job',
         'label' => 'Complete Actual',
         'value' => function($model){

@@ -87,6 +87,7 @@ class WipPlanActualReportSearch extends WipPlanActualReport
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),due_date,120)', $this->due_date])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),post_date,120)', $this->post_date])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),source_date,120)', $this->source_date])
+        ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),start_job,120)', $this->start_job])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),end_job,120)', $this->end_job])
         ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),hand_over_job,120)', $this->hand_over_job])
         ->andFilterWhere(['like', 'stage', $this->stage])
