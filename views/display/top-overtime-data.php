@@ -10,6 +10,12 @@ $this->title = [
     'tab_title' => 'OT Management by NIK',
     'breadcrumbs_title' => 'OT Management by NIK'
 ];
+
+if (\Yii::$app->request->get('section_id') == 1) {
+    $this->title['page_title'] .= ' - PRODUCTION';
+} elseif (\Yii::$app->request->get('section_id') == 2) {
+    $this->title['page_title'] .= ' - NON PRODUCTION';
+}
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
@@ -135,7 +141,7 @@ $gridColumns = [
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'containerOptions' => ['style' => 'overflow: auto; font-size: 20px; font-weight: bold;'], // only set when $responsive = false
-            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'headerRowOptions' => ['class' => 'kartik-sheet-style info'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' => false,
             // set export properties
@@ -146,6 +152,8 @@ $gridColumns = [
                 'type' => GridView::TYPE_PRIMARY,
                 'heading' => false,
                 'footer' => false,
+                'before' => false,
+                'after' => false,
             ],
         ]); ?>
     </div>

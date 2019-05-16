@@ -100,6 +100,7 @@ class IpqaDashboardController extends Controller
 					'name' => 'OK With Due Date',
 					'data' => $tmp_data_ok,
 					'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+					'showInLegend' => false
 				]
 			],
 		];

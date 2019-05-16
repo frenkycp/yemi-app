@@ -48,7 +48,7 @@ $dataProvider = new ActiveDataProvider([
 'sort' => [
 	'defaultOrder' => [
         //'PERIOD' => SORT_DESC,
-        'lembur_total' => SORT_DESC
+        'lembur_avg' => SORT_DESC
     ]
 ],
 ]);

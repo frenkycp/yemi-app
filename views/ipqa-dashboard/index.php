@@ -61,6 +61,7 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
+                        'height' => 350
                     ],
                     'credits' => [
                         'enabled' => false
@@ -130,8 +131,8 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'zoomType' => 'x'
-                        //'height' => 350
+                        'zoomType' => 'x',
+                        'height' => 350
                     ],
                     'title' => [
                         'text' => 'Outstanding With Due Date'

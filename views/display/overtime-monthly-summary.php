@@ -155,20 +155,19 @@ $gridColumns = [
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'containerOptions' => ['style' => 'overflow: auto; font-size: 20px; font-weight: bold;'], // only set when $responsive = false
-            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'headerRowOptions' => ['class' => 'kartik-sheet-style info'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            'toolbar' =>  [
-                '{export}',
-                '{toggleData}',
-            ],
+            'toolbar' =>  false,
             // set export properties
             'export' => [
                 'fontAwesome' => true
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => 'Last Update : ' . date('Y-m-d H:i:s')
-                //'footer' => false,
+                'heading' => false,
+                'footer' => false,
+                'before' => false,
+                'after' => false,
             ],
         ]); ?>
     </div>
