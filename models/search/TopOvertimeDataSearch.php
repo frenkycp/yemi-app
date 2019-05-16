@@ -45,6 +45,7 @@ class TopOvertimeDataSearch extends SplVIew
         if (\Yii::$app->request->get('section_id') == 1) {
             $query = SplVIew::find()
             ->select([
+                'CC_ID',
                 'CC_GROUP',
                 'CC_DESC',
                 'PERIOD',
@@ -55,13 +56,14 @@ class TopOvertimeDataSearch extends SplVIew
             ])
             ->where('NIK IS NOT NULL')
             ->andWhere([
-                'CC_GROUP' => 'PRODUCTION'
+                'CC_ID' => ['110B', '110C', '110D', '130A', '131', '200A', '220A', '230', '240', '300', '310', '320', '330', '340A', '340M', '350', '360', '370', '371', '399']
             ])
-            ->groupBy('CC_GROUP, CC_DESC, PERIOD, NIK, NAMA_KARYAWAN, GRADE')
+            ->groupBy('CC_ID, CC_GROUP, CC_DESC, PERIOD, NIK, NAMA_KARYAWAN, GRADE')
             ->having('SUM(NILAI_LEMBUR_ACTUAL) > 0');
         } elseif (\Yii::$app->request->get('section_id') == 2) {
             $query = SplVIew::find()
             ->select([
+                'CC_ID',
                 'CC_GROUP',
                 'CC_DESC',
                 'PERIOD',
@@ -71,12 +73,15 @@ class TopOvertimeDataSearch extends SplVIew
                 'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
             ])
             ->where('NIK IS NOT NULL')
-            ->andWhere(['<>', 'CC_GROUP', 'PRODUCTION'])
-            ->groupBy('CC_GROUP, CC_DESC, PERIOD, NIK, NAMA_KARYAWAN, GRADE')
+            ->andWhere([
+                'CC_ID' => ['110A', '110E', '120', '130', '200', '210', '220', '250', '251']
+            ])
+            ->groupBy('CC_ID, CC_GROUP, CC_DESC, PERIOD, NIK, NAMA_KARYAWAN, GRADE')
             ->having('SUM(NILAI_LEMBUR_ACTUAL) > 0');
         } else {
             $query = SplVIew::find()
             ->select([
+                'CC_ID',
                 'CC_GROUP',
                 'CC_DESC',
                 'PERIOD',
@@ -86,7 +91,7 @@ class TopOvertimeDataSearch extends SplVIew
                 'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
             ])
             ->where('NIK IS NOT NULL')
-            ->groupBy('CC_GROUP, CC_DESC, PERIOD, NIK, NAMA_KARYAWAN, GRADE')
+            ->groupBy('CC_ID, CC_GROUP, CC_DESC, PERIOD, NIK, NAMA_KARYAWAN, GRADE')
             ->having('SUM(NILAI_LEMBUR_ACTUAL) > 0');
         }
         
@@ -96,7 +101,8 @@ class TopOvertimeDataSearch extends SplVIew
             'sort' => [
             	'defaultOrder' => [
                     //'PERIOD' => SORT_DESC,
-                    'NILAI_LEMBUR_ACTUAL' => SORT_DESC
+                    'NILAI_LEMBUR_ACTUAL' => SORT_DESC,
+                    //'NIK' => 'ASC'
                 ]
             ],
         ]);
