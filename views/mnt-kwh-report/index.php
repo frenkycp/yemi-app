@@ -101,6 +101,7 @@ echo '</pre>';*/
                     //'modules/exporting',
                     //'themes/sand-signika',
                     //'themes/grid-light',
+                    'themes/dark-unica',
                 ],
                 'options' => [
                     'chart' => [
@@ -189,7 +190,7 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'height' => 400,
+                        'height' => 350,
                     ],
                     'credits' => [
                         'enabled' => false
@@ -241,11 +242,11 @@ echo '</pre>';*/
     </div>
 </div>
 
-<div class="box box-primary box-solid">
+<!--<div class="box box-primary box-solid" style="display: none;">
     <div class="box-body">
         <div class="col-md-12">
             <?php
-            echo Highcharts::widget([
+            /*echo ''; Highcharts::widget([
                 'scripts' => [
                     //'modules/exporting',
                     //'themes/grid-light',
@@ -294,10 +295,10 @@ echo '</pre>';*/
                     ],
                     'series' => $data,
                 ],
-            ]);
+            ]);*/
 
             ?>
         </div>
         
     </div>
-</div>
+</div>-->

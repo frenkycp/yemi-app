@@ -367,7 +367,7 @@ class SmtDailyUtilityReportController extends Controller
 	    		<td class="text-center"><span title="PCB Transfer Problem" class="' . $class[14] . '">' . round($value->pcb_transfer_problem, 1) . '</span></td>
 	    		<td class="text-center"><span title="Profile Problem" class="' . $class[15] . '">' . round($value->profile_problem, 1) . '</span></td>
 	    		<td class="text-center"><span title="Pick Up Error" class="' . $class[16] . '">' . round($value->pick_up_error, 1) . '</span></td>
-	    		<td class="text-center"><span title="Pick Up Error" class="' . $class[17] . '">' . round($value->machine_warming_up, 1) . '</span></td>
+	    		<td class="text-center"><span title="Warming Up" class="' . $class[17] . '">' . round($value->machine_warming_up, 1) . '</span></td>
 	    		<td class="text-center"><span title="Other" class="' . $class[18] . '">' . round($value->other, 1) . '</span></td>
 	    	</tr>';
 	    }

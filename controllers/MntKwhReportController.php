@@ -43,7 +43,7 @@ class MntKwhReportController extends Controller
 		$year = substr($posting_date, 0, 4);
 		$month = substr($posting_date, 5, 2);
 
-		$data_report = MachineIot::find()
+		/*$data_report = MachineIot::find()
 		->select([
 			'posting_date', 'mesin_id', 'jam_no',
 			'start_kwh' => 'MIN(kwh)',
@@ -57,6 +57,7 @@ class MntKwhReportController extends Controller
 		->orderBy('jam_no')
 		->asArray()
 		->all();
+		$data_report = [];*/
 
 		$iot_by_hours = MachineIotUtilityByHours02::find()
 		->where([
@@ -68,7 +69,7 @@ class MntKwhReportController extends Controller
 		$tmp_data_kwh = $tmp_data_max_kwh = [];
 		$tmp_data_by_hours = [];
 		for ($i=0; $i < 24; $i++) { 
-			$kwh = 0;
+			/*$kwh = 0;
 			$max_kwh = 0;
 			foreach ($data_report as $key => $value) {
 				if ($i == $value['jam_no']) {
@@ -78,7 +79,7 @@ class MntKwhReportController extends Controller
 					$max_kwh = $end_kwh;
 					break;
 				}
-			}
+			}*/
 			$total_putih = null;
 			$total_biru = null;
 			$total_hijau = null;
@@ -98,8 +99,8 @@ class MntKwhReportController extends Controller
 				
 			}
 			$categories[] = $i;
-			$tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
-			$tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;
+			/*$tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
+			$tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;*/
 			$tmp_data_by_hours['putih'][] = $total_putih == 0 ? null : $total_putih;
 			$tmp_data_by_hours['hijau'][] = $total_hijau == 0 ? null : $total_hijau;
 			$tmp_data_by_hours['biru'][] = $total_biru == 0 ? null : $total_biru;
@@ -107,7 +108,7 @@ class MntKwhReportController extends Controller
 			$tmp_data_by_hours['sisa'][] = $sisa_detik == 0 ? null : $sisa_detik;
 		}
 
-		$data = [
+		/*$data = [
 			[
 				'name' => 'KWH Measured',
 				'data' => $tmp_data_max_kwh,
@@ -129,7 +130,7 @@ class MntKwhReportController extends Controller
 					//'format' => '{y} KWh'
 				],
 			]
-		];
+		];*/
 		$data_iot_by_hours = [
 			[
 				'name' => 'UNKNOWN',
@@ -265,7 +266,7 @@ class MntKwhReportController extends Controller
 		];
 
 		return $this->render('index', [
-			'data' => $data,
+			//'data' => $data,
 			'posting_date' => $posting_date,
 			'machine_id' => $machine_id,
 			'categories' => $categories,
