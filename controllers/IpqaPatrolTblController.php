@@ -51,6 +51,7 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
+		    'section_arr' => $this->getSectionArr(),
 		]);
 	}
     
@@ -270,7 +271,8 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 			'230IPQA' => 'QUALITY ASSURANCE (IPQA)',
 			'230FQA' => 'QUALITY ASSURANCE (FQA)',
 		];
-		$cc = CostCenter::find()->select('CC_ID, CC_DESC')->where(['<>', 'CC_ID', '230'])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all();
+		//$cc = CostCenter::find()->select('CC_ID, CC_DESC')->where(['<>', 'CC_ID', '230'])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all();
+		$cc = CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all();
 		foreach ($cc as $key => $value) {
 			$tmp_arr[$value->CC_ID] =  $value->CC_DESC;
 		}

@@ -307,7 +307,7 @@ $columns = [
         'label' => 'Section',
         'value' => function($model){
             if ($model->CC_ID != null) {
-                return $model->costCenter->CC_DESC;
+                return $model->CC_DESC;
             } else {
                 return '-';
             }
@@ -315,7 +315,7 @@ $columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px',
-        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'),
+        'filter' => $section_arr,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 80px; font-size: 11px; text-align: center;',
