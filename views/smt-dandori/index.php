@@ -58,6 +58,7 @@ echo '</pre>';*/
 			    	'WM03' => 'SMT',
 			    	'WI02' => 'INJ LARGE',
 			    	'WI01' => 'INJ SMALL',
+			    	'WM02' => 'PCB AUTO INS.',
 			    ], [
 			        'class' => 'form-control',
 			        'onchange'=>'this.form.submit()',
