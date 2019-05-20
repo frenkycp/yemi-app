@@ -99,9 +99,18 @@ $this->registerJs($script, View::POS_HEAD);
                     
                     <div class="row">
                         <div class="col-md-8">
-                            <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(app\models\CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'), [
-                                'prompt' => '--Select Section--'
+                            <?= $form->field($model, 'CC_ID')->dropDownList($section_arr, [
+                                'prompt' => '--Select Section--',
+                                'onchange' => '
+                                    $.post( "' . Yii::$app->urlManager->createUrl('ipqa-patrol-tbl/get-cost-center?CC_ID=') . '"+$(this).val(), function( data ) {
+                                        var data_arr = data.split("||");
+                                        $( "#txt_dept" ).val(data_arr[0]);
+                                        $( "#txt_sect" ).val(data_arr[1]);
+                                    });
+                                ',
                             ])->label('Section'); ?>
+                            <?= $form->field($model, 'CC_GROUP')->hiddenInput(['id' => 'txt_dept'])->label(false); ?>
+                            <?= $form->field($model, 'CC_DESC')->hiddenInput(['id' => 'txt_sect'])->label(false); ?>
                         </div>
                     </div>
                     <div class="row">

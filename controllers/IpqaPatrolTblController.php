@@ -69,10 +69,10 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 				$model->period = date('Ym', strtotime($model->event_date));
 				$model->line_pic = strtoupper($model->line_pic);
 				$model->inspector_name = strtoupper($model->inspector_name);
-				$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
-				$model->CC_ID = $section->CC_ID;
-				$model->CC_GROUP = $section->CC_GROUP;
-				$model->CC_DESC = $section->CC_DESC;
+				//$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
+				//$model->CC_ID = $section->CC_ID;
+				//$model->CC_GROUP = $section->CC_GROUP;
+				//$model->CC_DESC = $section->CC_DESC;
 
 				//upload file
 				$model->upload_file1 = UploadedFile::getInstance($model, 'upload_file1');
@@ -100,7 +100,10 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
 			$model->addError('_exception', $msg);
 		}
-		return $this->render('create', ['model' => $model]);
+		return $this->render('create', [
+			'model' => $model,
+			'section_arr' => $this->getSectionArr(),
+		]);
 	}
 
 	/**
@@ -118,10 +121,10 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		if ($model->load($_POST)) {
 			$model->period = date('Ym', strtotime($model->event_date));
 			$model->line_pic = strtoupper($model->line_pic);
-			$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
-			$model->CC_ID = $section->CC_ID;
-			$model->CC_GROUP = $section->CC_GROUP;
-			$model->CC_DESC = $section->CC_DESC;
+			//$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
+			//$model->CC_ID = $section->CC_ID;
+			//$model->CC_GROUP = $section->CC_GROUP;
+			//$model->CC_DESC = $section->CC_DESC;
 
 			//upload file
 			$model->upload_file1 = UploadedFile::getInstance($model, 'upload_file1');
@@ -145,6 +148,7 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		} else {
 			return $this->render('update', [
 				'model' => $model,
+				'section_arr' => $this->getSectionArr()
 			]);
 		}
 	}
@@ -239,6 +243,39 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 	{
 		$product = WipProductView::findOne(['child' => $child]);
 		return $product->child_desc . '||' . $product->child_analyst . '||' . $product->child_analyst_desc;
+	}
+
+	public function actionGetCostCenter($CC_ID)
+	{
+		$cc = CostCenter::find()->where(['CC_ID' => $CC_ID])->one();
+		$return_str = '';
+		if ($cc->CC_ID != null) {
+			$return_str = $cc->CC_GROUP . '||' . $cc->CC_DESC;
+		} else {
+			if ($CC_ID == '230IQA') {
+				$return_str = 'QUALITY ASSURANCE||QUALITY ASSURANCE (IQA)';
+			} elseif ($CC_ID == '230IPQA') {
+				$return_str = 'QUALITY ASSURANCE||QUALITY ASSURANCE (IPQA)';
+			} else {
+				$return_str = 'QUALITY ASSURANCE||QUALITY ASSURANCE (FQA)';
+			}
+		}
+		return $return_str;
+	}
+
+	public function getSectionArr()
+	{
+		$tmp_arr = [
+			'230IQA' => 'QUALITY ASSURANCE (IQA)',
+			'230IPQA' => 'QUALITY ASSURANCE (IPQA)',
+			'230FQA' => 'QUALITY ASSURANCE (FQA)',
+		];
+		$cc = CostCenter::find()->select('CC_ID, CC_DESC')->where(['<>', 'CC_ID', '230'])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all();
+		foreach ($cc as $key => $value) {
+			$tmp_arr[$value->CC_ID] =  $value->CC_DESC;
+		}
+		asort($tmp_arr);
+		return $tmp_arr;
 	}
 
 	public function actionLists($category)

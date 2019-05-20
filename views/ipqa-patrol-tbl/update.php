@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = 'Edit';
 
     <?php echo $this->render('_form', [
     'model' => $model,
+    'section_arr' => $section_arr
     ]); ?>
 
 </div>
