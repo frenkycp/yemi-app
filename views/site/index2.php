@@ -102,6 +102,9 @@ $this->registerCss("
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/driver/display.php"><i class="fa fa-fw fa-plus"></i> Company Car Monitoring <span class="japanesse-word"></span></a>
                     </div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-shift-display"><i class="fa fa-fw fa-plus"></i> Shift Maintenance <span class="japanesse-word"></span></a>
+                    </div>
                 </div>
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Production Support Applications<br/><span class="japanesse-word"></span></div>
