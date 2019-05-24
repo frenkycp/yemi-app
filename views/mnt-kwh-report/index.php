@@ -11,8 +11,8 @@ use kartik\select2\Select2;
 
 $this->title = [
     'page_title' => null,
-    'tab_title' => 'Machine Daily KWh Report',
-    'breadcrumbs_title' => 'Machine Daily KWh Report'
+    'tab_title' => 'Machine Operation Status',
+    'breadcrumbs_title' => 'Machine Operation Status'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -82,8 +82,8 @@ echo '</pre>';*/
 <!--<div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab">Power Consumption</a></li>
-        <li><a href="#tab_2" data-toggle="tab">Machine Utility</a></li>
-        <li><a href="#tab_3" data-toggle="tab">Machine Utility (By Hours)</a></li>
+        <li><a href="#tab_2" data-toggle="tab">Machine Operation Status</a></li>
+        <li><a href="#tab_3" data-toggle="tab">Machine Operation Status (By Hours)</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
@@ -112,7 +112,7 @@ echo '</pre>';*/
                         'height' => 350
                     ],
                     'title' => [
-                        'text' => 'Machine Utility'
+                        'text' => 'Machine Operation Status'
                     ],
                     'subtitle' => [
                         'text' => ''
@@ -196,7 +196,7 @@ echo '</pre>';*/
                         'enabled' => false
                     ],
                     'title' => [
-                        'text' => 'Machine Utility (By Hours)',
+                        'text' => 'Machine Operation Status (By Hours)',
                     ],
                     'xAxis' => [
                         'categories' => $categories,
