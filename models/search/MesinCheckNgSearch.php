@@ -61,8 +61,6 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'urutan' => $this->urutan,
-            'repair_plan' => $this->repair_plan,
-            'repair_aktual' => $this->repair_aktual,
             'down_time' => $this->down_time,
             'non_down_time' => $this->non_down_time,
         ]);
@@ -70,6 +68,8 @@ $query->andFilterWhere([
         $query->andFilterWhere(['like', 'location', $this->location])
             ->andFilterWhere(['like', 'area', $this->area])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),mesin_last_update,120)', $this->mesin_last_update])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),repair_plan,120)', $this->repair_plan])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),repair_aktual,120)', $this->repair_aktual])
             ->andFilterWhere(['like', 'mesin_id', $this->mesin_id])
             ->andFilterWhere(['like', 'mesin_nama', $this->mesin_nama])
             ->andFilterWhere(['like', 'mesin_no', $this->mesin_no])
