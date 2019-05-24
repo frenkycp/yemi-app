@@ -233,7 +233,7 @@ $grid_columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px',
-        'filter' => ArrayHelper::map(app\models\MesinCheckDtr::find()->select('DISTINCT(pic)')->where('pic IS NOT NULL')->andWhere('pic != \'\'')->orderBy('pic')->all(), 'pic', 'pic'),
+        'filter' => ArrayHelper::map(app\models\MesinCheckDtr::find()->select('pic')->where('pic IS NOT NULL')->andWhere('pic != \'\'')->groupBy('pic')->orderBy('pic')->all(), 'pic', 'pic'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px; text-align: center;'
