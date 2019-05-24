@@ -39,6 +39,10 @@ return [
         'METHOD' => 'METHOD',
         'QUALITY' => 'QUALITY',
     ],
+    'shift_patrol_type' => [
+        1 => 'POSITIF',
+        2 => 'NEGATIF'
+    ],
 ];
 
 function getYearArray()
