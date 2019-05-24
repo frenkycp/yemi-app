@@ -58,52 +58,55 @@ $this->registerJs($script, View::POS_HEAD );
             <div class="box-body">
                 <div class="box-group" id="accordion1">
                     <?php
-                    foreach ($data[1] as $key => $value) {
-                        ?>
-                    <div class="panel box box-primary">
-                        <div class="box-header with-border">
-                            <h4 class="box-title">
-                                <a data-toggle="collapse" data-parent="#accordion1" href="#collapse_<?= $value['nik']; ?>" aria-expanded="false" class="collapsed">
-                                <?= $value['name']; ?>
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapse_<?= $value['nik']; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                            <div class="box-body">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <div class="pull-left image">
-                                            <?php
-                                            $filename = $value['nik'] . '.jpg';
-                                            $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
-                                            if (file_exists($path)) {
-                                                echo Html::img('@web/uploads/yemi_employee_img/' . $value['nik'] . '.jpg', [
-                                                    'class' => 'img-circle',
-                                                    'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
-                                                ]);
-                                            } else {
-                                                echo Html::img('@web/uploads/profpic_02.png', [
-                                                    'class' => 'img-circle',
-                                                    'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
-                                                ]);
-                                            }
-                                            ?>
-                                        </div>
-                                        <div class="pull-left info">
-                                            <dl>
-                                                <dt>Handphone </dt>
-                                                <dd>
-                                                    <?= $value['phone']; ?>
-                                                </dd>
-                                            </dl>
+                    if (isset($data[1]) && $data[1] != null) {
+                        foreach ($data[1] as $key => $value) {
+                            ?>
+                        <div class="panel box box-primary">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">
+                                    <a data-toggle="collapse" data-parent="#accordion1" href="#collapse_<?= $value['nik']; ?>" aria-expanded="false" class="collapsed">
+                                    <?= $value['name']; ?>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse_<?= $value['nik']; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-body">
+                                            <div class="pull-left image">
+                                                <?php
+                                                $filename = $value['nik'] . '.jpg';
+                                                $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
+                                                if (file_exists($path)) {
+                                                    echo Html::img('@web/uploads/yemi_employee_img/' . $value['nik'] . '.jpg', [
+                                                        'class' => 'img-circle',
+                                                        'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
+                                                    ]);
+                                                } else {
+                                                    echo Html::img('@web/uploads/profpic_02.png', [
+                                                        'class' => 'img-circle',
+                                                        'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
+                                                    ]);
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="pull-left info">
+                                                <dl>
+                                                    <dt>Handphone </dt>
+                                                    <dd>
+                                                        <?= $value['phone']; ?>
+                                                    </dd>
+                                                </dl>
+                                            </div>
                                         </div>
                                     </div>
+                                    
                                 </div>
-                                
                             </div>
                         </div>
-                    </div>
-                    <?php }
+                        <?php
+                        }
+                    }
                     ?>
                 </div>
                 
@@ -118,52 +121,55 @@ $this->registerJs($script, View::POS_HEAD );
             <div class="box-body">
                 <div class="box-group" id="accordion2">
                     <?php
-                    foreach ($data[2] as $key => $value) {
-                        ?>
-                    <div class="panel box box-primary">
-                        <div class="box-header with-border">
-                            <h4 class="box-title">
-                                <a data-toggle="collapse" data-parent="#accordion2" href="#collapse_<?= $value['nik']; ?>" aria-expanded="false" class="collapsed">
-                                <?= $value['name']; ?>
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapse_<?= $value['nik']; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                            <div class="box-body">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <div class="pull-left image">
-                                            <?php
-                                            $filename = $value['nik'] . '.jpg';
-                                            $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
-                                            if (file_exists($path)) {
-                                                echo Html::img('@web/uploads/yemi_employee_img/' . $value['nik'] . '.jpg', [
-                                                    'class' => 'img-circle',
-                                                    'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
-                                                ]);
-                                            } else {
-                                                echo Html::img('@web/uploads/profpic_02.png', [
-                                                    'class' => 'img-circle',
-                                                    'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
-                                                ]);
-                                            }
-                                            ?>
-                                        </div>
-                                        <div class="pull-left info">
-                                            <dl>
-                                                <dt>Handphone </dt>
-                                                <dd>
-                                                    <?= $value['phone']; ?>
-                                                </dd>
-                                            </dl>
+                    if (isset($data[2]) && $data[2] != null) {
+                        foreach ($data[2] as $key => $value) {
+                            ?>
+                        <div class="panel box box-primary">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">
+                                    <a data-toggle="collapse" data-parent="#accordion2" href="#collapse_<?= $value['nik']; ?>" aria-expanded="false" class="collapsed">
+                                    <?= $value['name']; ?>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse_<?= $value['nik']; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-body">
+                                            <div class="pull-left image">
+                                                <?php
+                                                $filename = $value['nik'] . '.jpg';
+                                                $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
+                                                if (file_exists($path)) {
+                                                    echo Html::img('@web/uploads/yemi_employee_img/' . $value['nik'] . '.jpg', [
+                                                        'class' => 'img-circle',
+                                                        'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
+                                                    ]);
+                                                } else {
+                                                    echo Html::img('@web/uploads/profpic_02.png', [
+                                                        'class' => 'img-circle',
+                                                        'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
+                                                    ]);
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="pull-left info">
+                                                <dl>
+                                                    <dt>Handphone </dt>
+                                                    <dd>
+                                                        <?= $value['phone']; ?>
+                                                    </dd>
+                                                </dl>
+                                            </div>
                                         </div>
                                     </div>
+                                    
                                 </div>
-                                
                             </div>
                         </div>
-                    </div>
-                    <?php }
+                        <?php 
+                        }
+                    }
                     ?>
                 </div>
                 
@@ -178,52 +184,57 @@ $this->registerJs($script, View::POS_HEAD );
             <div class="box-body">
                 <div class="box-group" id="accordion3">
                     <?php
-                    foreach ($data[3] as $key => $value) {
-                        ?>
-                    <div class="panel box box-primary">
-                        <div class="box-header with-border">
-                            <h4 class="box-title">
-                                <a data-toggle="collapse" data-parent="#accordion3" href="#collapse_<?= $value['nik']; ?>" aria-expanded="false" class="collapsed">
-                                <?= $value['name']; ?>
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapse_<?= $value['nik']; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
-                            <div class="box-body">
-                                <div class="panel panel-primary">
-                                    <div class="panel-body">
-                                        <div class="pull-left image">
-                                            <?php
-                                            $filename = $value['nik'] . '.jpg';
-                                            $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
-                                            if (file_exists($path)) {
-                                                echo Html::img('@web/uploads/yemi_employee_img/' . $value['nik'] . '.jpg', [
-                                                    'class' => 'img-circle',
-                                                    'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
-                                                ]);
-                                            } else {
-                                                echo Html::img('@web/uploads/profpic_02.png', [
-                                                    'class' => 'img-circle',
-                                                    'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
-                                                ]);
-                                            }
-                                            ?>
-                                        </div>
-                                        <div class="pull-left info">
-                                            <dl>
-                                                <dt>Handphone </dt>
-                                                <dd>
-                                                    <?= $value['phone']; ?>
-                                                </dd>
-                                            </dl>
+                    if (isset($data[3]) && $data[3] != null) {
+                        foreach ($data[3] as $key => $value) {
+                            ?>
+                        <div class="panel box box-primary">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">
+                                    <a data-toggle="collapse" data-parent="#accordion3" href="#collapse_<?= $value['nik']; ?>" aria-expanded="false" class="collapsed">
+                                    <?= $value['name']; ?>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse_<?= $value['nik']; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body">
+                                    <div class="panel panel-primary">
+                                        <div class="panel-body">
+                                            <div class="pull-left image">
+                                                <?php
+                                                $filename = $value['nik'] . '.jpg';
+                                                $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
+                                                if (file_exists($path)) {
+                                                    echo Html::img('@web/uploads/yemi_employee_img/' . $value['nik'] . '.jpg', [
+                                                        'class' => 'img-circle',
+                                                        'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
+                                                    ]);
+                                                } else {
+                                                    echo Html::img('@web/uploads/profpic_02.png', [
+                                                        'class' => 'img-circle',
+                                                        'style' => 'object-fit: cover; height: 80px; width: 80px; border: 3px solid #d0d0d0;'
+                                                    ]);
+                                                }
+                                                ?>
+                                            </div>
+                                            <div class="pull-left info">
+                                                <dl>
+                                                    <dt>Handphone </dt>
+                                                    <dd>
+                                                        <?= $value['phone']; ?>
+                                                    </dd>
+                                                </dl>
+                                            </div>
                                         </div>
                                     </div>
+                                    
                                 </div>
-                                
                             </div>
                         </div>
-                    </div>
-                    <?php }
+                        <?php
+                        }
+                    } else {
+                        echo '<span style="color: #3c8dbc; font-size: 20px">There is no employee on Shift 3 ...</span>';
+                    }
                     ?>
                 </div>
                 
