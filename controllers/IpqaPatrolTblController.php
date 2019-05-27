@@ -70,6 +70,9 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 				$model->period = date('Ym', strtotime($model->event_date));
 				$model->line_pic = strtoupper($model->line_pic);
 				$model->inspector_name = strtoupper($model->inspector_name);
+				$total_case = IpqaPatrolTbl::find()->count();
+				$case_number = 'QA-P-' . str_pad($total_case, 6, '0', STR_PAD_LEFT);
+				$model->case_no = $case_number;
 				//$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
 				//$model->CC_ID = $section->CC_ID;
 				//$model->CC_GROUP = $section->CC_GROUP;
@@ -83,10 +86,12 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 						$model->filename1 = $new_filename1;
 		        		$filePath = \Yii::getAlias("@app/web/uploads/IPQA_PATROL/") . $new_filename1;
 		        		if (!$model->upload_file1->saveAs($filePath)) {
-		                    return $model->errors;
+		                    return json_encode($model->errors);
 		                }
 		                ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
 		        	}
+				} else {
+					return json_encode($model->errors);
 				}
 
 				if (!$model->save()) {

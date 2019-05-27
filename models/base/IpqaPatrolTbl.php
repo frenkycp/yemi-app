@@ -10,6 +10,7 @@ use Yii;
  * This is the base-model class for table "db_owner.IPQA_PATROL_TBL".
  *
  * @property integer $id
+ * @property string $case_no
  * @property string $period
  * @property string $event_date
  * @property string $category
@@ -74,7 +75,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name', 'deleted_by_id', 'deleted_by_name', 'reject_remark', 'reject_answer'], 'string'],
+            [['case_no', 'period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name', 'deleted_by_id', 'deleted_by_name', 'reject_remark', 'reject_answer'], 'string'],
             [['event_date', 'due_date', 'input_datetime', 'reply_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
             [['status', 'flag'], 'integer']
         ];
@@ -87,6 +88,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'case_no' => 'Case No',
             'period' => 'Period',
             'event_date' => 'Event Date',
             'category' => 'Category',
