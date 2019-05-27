@@ -150,16 +150,16 @@ $columns = [
             'style' => 'min-width: 50px; font-size: 11px;',
         ],
     ],
-    /*[
-        'attribute' => 'period',
+    [
+        'attribute' => 'case_no',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '70px',
+        'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 11px; text-align: center;',
+            'style' => 'min-width: 90px; font-size: 11px; text-align: center;',
         ],
-    ],*/
+    ],
     [
         'attribute' => 'event_date',
         'hAlign' => 'center',

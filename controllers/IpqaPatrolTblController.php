@@ -29,6 +29,19 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 	* Lists all IpqaPatrolTbl models.
 	* @return mixed
 	*/
+
+	/*public function actionGenerateCaseNo()
+	{
+		$data_arr = IpqaPatrolTbl::find()->all();
+		$total_case = 1;
+		foreach ($data_arr as $key => $value) {
+			$tmp_data = IpqaPatrolTbl::find()->where(['id' => $value->id])->one();
+			$tmp_data->case_no = 'QA-P-' . str_pad($total_case, 6, '0', STR_PAD_LEFT);
+			$tmp_data->save();
+			$total_case++;
+		}
+	}*/
+
 	public function actionIndex()
 	{
 	    $searchModel  = new IpqaPatrolTblSearch;
@@ -71,6 +84,7 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 				$model->line_pic = strtoupper($model->line_pic);
 				$model->inspector_name = strtoupper($model->inspector_name);
 				$total_case = IpqaPatrolTbl::find()->count();
+				$total_case++;
 				$case_number = 'QA-P-' . str_pad($total_case, 6, '0', STR_PAD_LEFT);
 				$model->case_no = $case_number;
 				//$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
