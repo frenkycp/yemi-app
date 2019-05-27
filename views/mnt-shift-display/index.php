@@ -92,9 +92,9 @@ $this->registerJs($script, View::POS_HEAD );
                                             </div>
                                             <div class="pull-left info">
                                                 <dl>
-                                                    <dt>Handphone </dt>
+                                                    <dt>Speed Dial </dt>
                                                     <dd>
-                                                        <?= $value['phone']; ?>
+                                                        <?= $value['speed_dial'] . ' <small>(' . $value['phone'] . ')</small>'; ?>
                                                     </dd>
                                                 </dl>
                                             </div>
@@ -155,9 +155,9 @@ $this->registerJs($script, View::POS_HEAD );
                                             </div>
                                             <div class="pull-left info">
                                                 <dl>
-                                                    <dt>Handphone </dt>
+                                                    <dt>Speed Dial </dt>
                                                     <dd>
-                                                        <?= $value['phone']; ?>
+                                                        <?= $value['speed_dial'] . ' <small>(' . $value['phone'] . ')</small>'; ?>
                                                     </dd>
                                                 </dl>
                                             </div>
@@ -218,9 +218,9 @@ $this->registerJs($script, View::POS_HEAD );
                                             </div>
                                             <div class="pull-left info">
                                                 <dl>
-                                                    <dt>Handphone </dt>
+                                                    <dt>Speed Dial </dt>
                                                     <dd>
-                                                        <?= $value['phone']; ?>
+                                                        <?= $value['speed_dial'] . ' <small>(' . $value['phone'] . ')</small>'; ?>
                                                     </dd>
                                                 </dl>
                                             </div>

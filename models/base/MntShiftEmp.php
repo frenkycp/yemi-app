@@ -12,6 +12,8 @@ use Yii;
  * @property integer $id
  * @property string $nik
  * @property string $name
+ * @property string $speed_dial
+ * @property string $phone
  * @property integer $flag
  * @property string $aliasModel
  */
@@ -42,7 +44,7 @@ abstract class MntShiftEmp extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['nik', 'name'], 'string'],
+            [['nik', 'name', 'speed_dial', 'phone'], 'string'],
             [['flag'], 'integer']
         ];
     }
@@ -56,6 +58,8 @@ abstract class MntShiftEmp extends \yii\db\ActiveRecord
             'id' => 'ID',
             'nik' => 'Nik',
             'name' => 'Name',
+            'speed_dial' => 'Speed Dial',
+            'phone' => 'Phone',
             'flag' => 'Flag',
         ];
     }

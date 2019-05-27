@@ -15,6 +15,7 @@ use Yii;
  * @property string $shift_desc
  * @property string $nik
  * @property string $name
+ * @property string $speed_dial
  * @property string $phone
  * @property string $aliasModel
  */
@@ -45,7 +46,7 @@ abstract class MntShiftView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'shift_code', 'shift_desc', 'nik', 'name', 'phone'], 'string'],
+            [['period', 'shift_code', 'shift_desc', 'nik', 'name', 'speed_dial', 'phone'], 'string'],
             [['shift_date'], 'safe']
         ];
     }
@@ -62,6 +63,7 @@ abstract class MntShiftView extends \yii\db\ActiveRecord
             'shift_desc' => 'Shift Desc',
             'nik' => 'Nik',
             'name' => 'Name',
+            'speed_dial' => 'Speed Dial',
             'phone' => 'Phone',
         ];
     }

@@ -32,6 +32,7 @@ class MntShiftDisplayController extends Controller
 			$data[$value->shift_code][] = [
 				'nik' => $value->nik,
 				'name' => $value->name,
+				'speed_dial' => $value->speed_dial,
 				'phone' => $value->phone,
 			];
 		}

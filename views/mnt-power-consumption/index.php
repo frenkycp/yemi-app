@@ -43,33 +43,29 @@ $this->registerJs($script, View::POS_HEAD );
 
 <div class="row">
     <div class="col-md-2">
-        <div class="form-group">
-            <label for="posting_date" class="control-label">Date</label>
-            <?= DatePicker::widget([
-                'id' => 'posting_date',
-                'name' => 'posting_date',
+        <?= $form->field($model, 'posting_date')->widget(DatePicker::classname(), [
+            'options' => [
                 'type' => DatePicker::TYPE_INPUT,
-                'value' => $posting_date,
-                'options' => [
-                    'onchange'=>'this.form.submit()',
-                ],
-                'pluginOptions' => [
-                    'autoclose'=>true,
-                    'format' => 'yyyy-mm-dd'
-                ]
-            ]);
-            ?>
-        </div>
+            ],
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd'
+            ]
+        ]); ?>
+        
     </div>
     <div class="col-md-6">
-        <label for="machine_id" class="control-label">Machine</label>
-        <?= Select2::widget([
-            'id' => 'machine_id',
-            'name' => 'machine_id',
-            'value' => $machine_id,
+        <?= $form->field($model, 'machine_id')->widget(Select2::classname(), [
             'data' => ArrayHelper::map(app\models\AssetTbl::find()->where(['like', 'asset_id', 'MNT%', false])->all(), 'asset_id', 'assetName'),
-            'options' => ['placeholder' => 'Select states ...', 'class' => 'form-control', 'onchange'=>'this.form.submit()',]
+            'options' => ['placeholder' => 'Select a machine ...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
         ]); ?>
+    </div>
+    <div class="form-group">
+        <br/>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-success', 'style' => 'margin-top: 5px;']); ?>
     </div>
 </div>
 
