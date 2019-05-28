@@ -44,8 +44,30 @@ use kartik\datetime\DateTimePicker;
                         1 => 'POSITF',
                         2 => 'NEGATIF'
                     ], [
-                        'prompt' => '-Pilih Jenis Laporan-'
+                        'prompt' => '-Pilih Penilaian-'
                     ]); ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'status')->dropDownList([
+                        0 => 'OPEN',
+                        10 => 'CLOSED',
+                    ], [
+                        'prompt' => '-Pilih Status-'
+                    ]); ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'section_id')->dropDownList($section_arr, [
+                        'prompt' => '--Select Section--',
+                        'onchange' => '
+                            $.post( "' . Yii::$app->urlManager->createUrl('ipqa-patrol-tbl/get-cost-center?CC_ID=') . '"+$(this).val(), function( data ) {
+                                var data_arr = data.split("||");
+                                $( "#txt_dept" ).val(data_arr[0]);
+                                $( "#txt_sect" ).val(data_arr[1]);
+                            });
+                        ',
+                    ])->label('Section'); ?>
+                    <?= $form->field($model, 'section_group')->hiddenInput(['id' => 'txt_dept'])->label(false); ?>
+                    <?= $form->field($model, 'section_desc')->hiddenInput(['id' => 'txt_sect'])->label(false); ?>
                 </div>
             </div>
             

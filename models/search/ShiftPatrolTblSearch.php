@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id', 'flag'], 'integer'],
-            [['input_time', 'patrol_time', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_id', 'category_detail', 'location', 'location_detail', 'description', 'action', 'posting_date', 'patrol_type'], 'safe'],
+            [['input_time', 'patrol_time', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_id', 'category_detail', 'location', 'location_detail', 'description', 'action', 'posting_date', 'patrol_type', 'status'], 'safe'],
 ];
 }
 
@@ -41,7 +41,9 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = ShiftPatrolTbl::find();
+$query = ShiftPatrolTbl::find()->where([
+    'flag' => 1
+]);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -61,6 +63,7 @@ $query->andFilterWhere([
             'flag' => $this->flag,
             'category_id' => $this->category_id,
             'patrol_type' => $this->patrol_type,
+            'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'NIK', $this->NIK])

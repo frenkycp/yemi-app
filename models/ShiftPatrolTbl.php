@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ShiftPatrolTbl extends BaseShiftPatrolTbl
 {
-    public $upload_file1, $upload_file2, $posting_date, $time;
+    public $upload_file1, $upload_file2, $posting_date, $time, $penilaian;
 
     public function behaviors()
     {
@@ -28,7 +28,7 @@ class ShiftPatrolTbl extends BaseShiftPatrolTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['patrol_time', 'category_id', 'location', 'description', 'action', 'patrol_type'], 'required'],
+                [['patrol_time', 'category_id', 'location', 'description', 'patrol_type', 'status', 'section_id'], 'required'],
                 [['upload_file1', 'upload_file2'], 'file'],
             ]
         );
@@ -54,6 +54,7 @@ class ShiftPatrolTbl extends BaseShiftPatrolTbl
                 'patrol_type' => 'Penilaian',
                 'posting_date' => 'Tanggal',
                 'time' => 'Jam',
+                'section_id' => 'Section'
             ]
         );
     }

@@ -33,6 +33,18 @@ $columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            }, 'update' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'Update'),
+                    'aria-label' => Yii::t('cruds', 'Update'),
+                    'data-pjax' => '0',
+                ];
+                if ($model->NIK == \Yii::$app->user->identity->username) {
+                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, $options);
+                } else {
+                    return '<i class="glyphicon glyphicon-pencil disabled-link"></i>';
+                }
+                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, $options);
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -88,10 +100,10 @@ $columns = [
         'value' => function($model){
             if ($model->patrol_type == 1) {
                 //return Html::img('@web/uploads/ICON/icons8-thumbs-up-64.png', ['style' => 'height: 25px;']);
-                return '<span style="font-size: 16px;" class="glyphicon glyphicon-thumbs-up"></span>';
+                return '<span style="font-size: 16px;" class="glyphicon glyphicon-thumbs-up text-green"></span>';
             } else {
                 //return Html::img('@web/uploads/ICON/icons8-thumbs-down-64.png', ['style' => 'height: 25px;']);
-                return '<span style="font-size: 16px;" class="glyphicon glyphicon-thumbs-down"></span>';
+                return '<span style="font-size: 16px;" class="glyphicon glyphicon-thumbs-down text-red"></span>';
             }
             //$tmp_arr = Yii::$app->params['shift_patrol_type'];
             //return $tmp_arr[$model->patrol_type];
@@ -100,11 +112,25 @@ $columns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px',
+        'hiddenFromExport' => true,
         'filter' => Yii::$app->params['shift_patrol_type'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
         ],
+    ],
+    [
+        'attribute' => 'penilaian',
+        'value' => function($model){
+            if ($model->patrol_type == 1) {
+                return 'POSITIF';
+            } else {
+                return 'NEGATIF';
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hidden' => true,
     ],
     [
         'attribute' => 'patrol_time',
@@ -185,17 +211,38 @@ $columns = [
             'style' => 'min-width: 150px; font-size: 12px; text-align: center;',
         ],
     ],
-    /*[
-        'attribute' => 'NIK',
+    [
+        'attribute' => 'section_desc',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 100px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
+        'attribute' => 'status',
+        'value' => function($model){
+            if ($model->status == 0) {
+                return 'OPEN';
+            } elseif ($model->status == 10) {
+                return 'CLOSED';
+            } else {
+                return '-';
+            }
+        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '80px',
+        'filter' => [
+            0 => 'OPEN',
+            10 => 'CLOSED'
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
         ],
-        'hidden' => true,
-    ],*/
+    ],
     [
         'attribute' => 'NIK',
         'label' => 'PIC',

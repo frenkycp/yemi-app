@@ -10,14 +10,49 @@ use app\models\ImageFile;
 use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
 use app\models\search\ShiftPatrolTblSearch;
+use app\models\CostCenter;
 
 class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblController
 {
-	/**/public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
+
+    public function getSectionArr()
+	{
+		$tmp_arr = [
+			'230IQA' => 'QUALITY ASSURANCE (IQA)',
+			'230IPQA' => 'QUALITY ASSURANCE (IPQA)',
+			'230FQA' => 'QUALITY ASSURANCE (FQA)',
+		];
+		//$cc = CostCenter::find()->select('CC_ID, CC_DESC')->where(['<>', 'CC_ID', '230'])->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all();
+		$cc = CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all();
+		foreach ($cc as $key => $value) {
+			$tmp_arr[$value->CC_ID] =  $value->CC_DESC;
+		}
+		asort($tmp_arr);
+		return $tmp_arr;
+	}
+
+	public function actionGetCostCenter($CC_ID)
+	{
+		$cc = CostCenter::find()->where(['CC_ID' => $CC_ID])->one();
+		$return_str = '';
+		if ($cc->CC_ID != null) {
+			$return_str = $cc->CC_GROUP . '||' . $cc->CC_DESC;
+		} else {
+			if ($CC_ID == '230IQA') {
+				$return_str = 'QUALITY ASSURANCE||QUALITY ASSURANCE (IQA)';
+			} elseif ($CC_ID == '230IPQA') {
+				$return_str = 'QUALITY ASSURANCE||QUALITY ASSURANCE (IPQA)';
+			} else {
+				$return_str = 'QUALITY ASSURANCE||QUALITY ASSURANCE (FQA)';
+			}
+		}
+		return $return_str;
+	}
     
 	public function actionIndex()
 	{
@@ -45,7 +80,6 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 
 		try {
 			if ($model->load($_POST)) {
-				$model->status = 1;
 				$model->NIK = \Yii::$app->user->identity->username;
 				$model->NAMA_KARYAWAN = strtoupper(\Yii::$app->user->identity->name);
 				$karyawan = Karyawan::find()->where(['NIK' => $model->NIK])->one();
@@ -53,6 +87,11 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 				$model->CC_GROUP = $karyawan->DEPARTEMEN;
 				$model->CC_DESC = $karyawan->SECTION;
 				$model->input_time = date('Y-m-d H:i:s');
+
+				$total_case = ShiftPatrolTbl::find()->count();
+				$total_case++;
+				$case_number = 'S2-P-' . str_pad($total_case, 6, '0', STR_PAD_LEFT);
+				$model->case_no = $case_number;
 
 				$model->upload_file1 = UploadedFile::getInstance($model, 'upload_file1');
 				if ($model->validate()) {
@@ -93,7 +132,8 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 		}
 		return $this->render('create', [
 			'model' => $model,
-			'location_arr' => $this->getLocationArr()
+			'location_arr' => $this->getLocationArr(),
+			'section_arr' => $this->getSectionArr(),
 		]);
 	}
 
@@ -137,7 +177,8 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 		} else {
 			return $this->render('update', [
 				'model' => $model,
-				'location_arr' => $this->getLocationArr()
+				'location_arr' => $this->getLocationArr(),
+				'section_arr' => $this->getSectionArr(),
 			]);
 		}
 	}

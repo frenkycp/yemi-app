@@ -12,6 +12,7 @@ use Yii;
  * @property integer $id
  * @property string $input_time
  * @property string $patrol_time
+ * @property string $case_no
  * @property string $NIK
  * @property string $NAMA_KARYAWAN
  * @property string $CC_ID
@@ -23,12 +24,22 @@ use Yii;
  * @property string $location_detail
  * @property string $description
  * @property string $action
+ * @property string $countermeasure
  * @property string $img_filename1
  * @property string $img_filename2
  * @property integer $patrol_type
  * @property integer $status
  * @property string $last_modified
  * @property string $last_modified_by
+ * @property string $section_id
+ * @property string $section_group
+ * @property string $section_desc
+ * @property string $replied_by_id
+ * @property string $replied_by_name
+ * @property string $replied_datetime
+ * @property string $closed_by_id
+ * @property string $closed_by_name
+ * @property string $closed_datetime
  * @property integer $flag
  * @property string $aliasModel
  */
@@ -59,8 +70,8 @@ abstract class ShiftPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['input_time', 'patrol_time', 'last_modified'], 'safe'],
-            [['NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_detail', 'location', 'location_detail', 'description', 'action', 'img_filename1', 'img_filename2', 'last_modified_by'], 'string'],
+            [['input_time', 'patrol_time', 'last_modified', 'replied_datetime', 'closed_datetime'], 'safe'],
+            [['case_no', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_detail', 'location', 'location_detail', 'description', 'action', 'countermeasure', 'img_filename1', 'img_filename2', 'last_modified_by', 'section_id', 'section_group', 'section_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name'], 'string'],
             [['category_id', 'patrol_type', 'status', 'flag'], 'integer']
         ];
     }
@@ -74,6 +85,7 @@ abstract class ShiftPatrolTbl extends \yii\db\ActiveRecord
             'id' => 'ID',
             'input_time' => 'Input Time',
             'patrol_time' => 'Patrol Time',
+            'case_no' => 'Case No',
             'NIK' => 'Nik',
             'NAMA_KARYAWAN' => 'Nama  Karyawan',
             'CC_ID' => 'Cc  ID',
@@ -85,12 +97,22 @@ abstract class ShiftPatrolTbl extends \yii\db\ActiveRecord
             'location_detail' => 'Location Detail',
             'description' => 'Description',
             'action' => 'Action',
+            'countermeasure' => 'Countermeasure',
             'img_filename1' => 'Img Filename1',
             'img_filename2' => 'Img Filename2',
             'patrol_type' => 'Patrol Type',
             'status' => 'Status',
             'last_modified' => 'Last Modified',
             'last_modified_by' => 'Last Modified By',
+            'section_id' => 'Section ID',
+            'section_group' => 'Section Group',
+            'section_desc' => 'Section Desc',
+            'replied_by_id' => 'Replied By ID',
+            'replied_by_name' => 'Replied By Name',
+            'replied_datetime' => 'Replied Datetime',
+            'closed_by_id' => 'Closed By ID',
+            'closed_by_name' => 'Closed By Name',
+            'closed_datetime' => 'Closed Datetime',
             'flag' => 'Flag',
         ];
     }
