@@ -37,6 +37,63 @@ date_default_timezone_set('Asia/Jakarta');
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
+            May. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-05-17</span>
+
+            <h3 class="timeline-header"><a href="#">Data Acquisition Network</a></h3>
+
+            <div class="timeline-body">
+                Monitoring network stability on production.
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-yellow"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-05-02</span>
+
+            <h3 class="timeline-header"><a href="#">IoT Production Machine Performance</a></h3>
+
+            <div class="timeline-body">
+                Monitoring machine performance on production if there is something abnormal.
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-blue"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-05-02</span>
+
+            <h3 class="timeline-header"><a href="#">IPQA Daily Patrol</a></h3>
+
+            <div class="timeline-body">
+                IPQA daily patrol for monitoring process on production if there is something abnormal.
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+    <!-- /.timeline-label -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
             Apr. 2019
         </span>
     </li>
