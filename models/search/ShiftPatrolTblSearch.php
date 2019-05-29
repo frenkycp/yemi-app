@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id', 'flag'], 'integer'],
-            [['input_time', 'patrol_time', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_id', 'category_detail', 'location', 'location_detail', 'description', 'action', 'posting_date', 'patrol_type', 'status', 'section_id'], 'safe'],
+            [['input_time', 'patrol_time', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_id', 'category_detail', 'location', 'location_detail', 'description', 'action', 'posting_date', 'patrol_type', 'status', 'section_id', 'cause', 'countermeasure'], 'safe'],
 ];
 }
 
@@ -41,9 +41,10 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = ShiftPatrolTbl::find()->where([
-    'flag' => 1
-]);
+$query = ShiftPatrolTbl::find()
+->joinWith('statusTbl')
+->where(['SHIFT_PATROL_TBL.flag' => 1])
+->orderBy('IPQA_STATUS_TBL.status_order ASC');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,

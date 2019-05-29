@@ -28,7 +28,7 @@ class ShiftPatrolTbl extends BaseShiftPatrolTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['patrol_time', 'category_id', 'location', 'description', 'patrol_type', 'status', 'section_id'], 'required'],
+                [['patrol_time', 'category_id', 'location', 'description', 'patrol_type', 'section_id'], 'required'],
                 [['upload_file1', 'upload_file2'], 'file'],
             ]
         );
@@ -54,7 +54,9 @@ class ShiftPatrolTbl extends BaseShiftPatrolTbl
                 'patrol_type' => 'Penilaian',
                 'posting_date' => 'Tanggal',
                 'time' => 'Jam',
-                'section_id' => 'Section'
+                'section_id' => 'Section',
+                //'cause' => 'Penyebab',
+                //'countermeasure' => 'Countermeasure'
             ]
         );
     }
@@ -62,5 +64,17 @@ class ShiftPatrolTbl extends BaseShiftPatrolTbl
     public function getCategory()
     {
         return $this->hasOne(ShiftPatrolCategoryTbl::className(), ['id' => 'category_id'])->one();
+    }
+
+    public function getCategoryDetail()
+    {
+        $category = $this->getCategory();
+        $detail = $category->category_desc . ' (' . $this->category_detail . ')';
+        return $detail;
+    }
+
+    public function getStatusTbl()
+    {
+        return $this->hasOne(IpqaStatusTbl::className(), ['status_id' => 'status']);
     }
 }

@@ -24,6 +24,7 @@ use Yii;
  * @property string $location_detail
  * @property string $description
  * @property string $action
+ * @property string $cause
  * @property string $countermeasure
  * @property string $img_filename1
  * @property string $img_filename2
@@ -40,6 +41,9 @@ use Yii;
  * @property string $closed_by_id
  * @property string $closed_by_name
  * @property string $closed_datetime
+ * @property string $reject_remark
+ * @property string $reject_answer
+ * @property string $due_date
  * @property integer $flag
  * @property string $aliasModel
  */
@@ -70,8 +74,8 @@ abstract class ShiftPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['input_time', 'patrol_time', 'last_modified', 'replied_datetime', 'closed_datetime'], 'safe'],
-            [['case_no', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_detail', 'location', 'location_detail', 'description', 'action', 'countermeasure', 'img_filename1', 'img_filename2', 'last_modified_by', 'section_id', 'section_group', 'section_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name'], 'string'],
+            [['input_time', 'patrol_time', 'last_modified', 'replied_datetime', 'closed_datetime', 'due_date'], 'safe'],
+            [['case_no', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_detail', 'location', 'location_detail', 'description', 'action', 'cause', 'countermeasure', 'img_filename1', 'img_filename2', 'last_modified_by', 'section_id', 'section_group', 'section_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name', 'reject_remark', 'reject_answer'], 'string'],
             [['category_id', 'patrol_type', 'status', 'flag'], 'integer']
         ];
     }
@@ -97,6 +101,7 @@ abstract class ShiftPatrolTbl extends \yii\db\ActiveRecord
             'location_detail' => 'Location Detail',
             'description' => 'Description',
             'action' => 'Action',
+            'cause' => 'Cause',
             'countermeasure' => 'Countermeasure',
             'img_filename1' => 'Img Filename1',
             'img_filename2' => 'Img Filename2',
@@ -113,6 +118,9 @@ abstract class ShiftPatrolTbl extends \yii\db\ActiveRecord
             'closed_by_id' => 'Closed By ID',
             'closed_by_name' => 'Closed By Name',
             'closed_datetime' => 'Closed Datetime',
+            'reject_remark' => 'Reject Remark',
+            'reject_answer' => 'Reject Answer',
+            'due_date' => 'Due Date',
             'flag' => 'Flag',
         ];
     }

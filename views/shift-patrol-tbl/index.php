@@ -21,10 +21,29 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
     .disabled-link {color: DarkGrey; cursor: not-allowed;}");
 
+$this->registerJs("$(function() {
+   $('#btn-reject').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+   $('#btn-reply').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+   $('#btn-answer').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+   $('#btn-due-date').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+});");
+
 $columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}',
+        'template' => '{update}&nbsp;&nbsp;{reject}&nbsp;&nbsp;{due_date}&nbsp;&nbsp;{close}<br/><span style="color: DarkGrey">------------------------</span><br/>{reply}&nbsp;&nbsp;&nbsp;{answer}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -39,13 +58,85 @@ $columns = [
                     'aria-label' => Yii::t('cruds', 'Update'),
                     'data-pjax' => '0',
                 ];
-                if ($model->NIK == \Yii::$app->user->identity->username) {
+                if (($model->NIK == \Yii::$app->user->identity->username && $model->status != 1) || \Yii::$app->user->identity->role->id == 1) {
                     return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, $options);
                 } else {
                     return '<i class="glyphicon glyphicon-pencil disabled-link"></i>';
                 }
                 return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, $options);
-            }
+            }, 'reply' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-reply',
+                    'value' => Url::to(['reply','id' => $model->id]),
+                    'title' => 'Edit Cause & Countermeasure',
+                    'class' => 'showModalButton'
+                ];
+                $karyawan = app\models\Karyawan::find()->where(['NIK' => \Yii::$app->user->identity->username])->one();
+                if ($karyawan->DEPARTEMEN == $model->section_group && $model->status != 1) {
+                    return Html::a('<i class="fa fa-fw fa-edit"></i>', '#', $options);
+                } else {
+                    return '<i class="fa fa-fw fa-edit disabled-link"></i>';
+                }
+                
+            }, 'close' => function($url, $model, $key){
+                $url = ['close', 'id' => $model->id];
+                $options = [
+                    'title' => 'Close',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are yout sure to close this case ?'
+                ];
+                
+                if ($model->status == 2 || $model->status == 4) {
+                    return Html::a('<i class="fa fa-fw fa-check"></i>', $url, $options);
+                } else {
+                    return '<i class="fa fa-fw fa-check disabled-link"></i>';
+                }
+            }, 'reject' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-reject',
+                    'value' => Url::to(['reject','id' => $model->id]),
+                    'title' => 'Reject Data',
+                    'class' => 'showModalButton'
+                ];
+                if ($model->status == 2 || $model->status == 4) {
+                    return Html::a('<i class="fa fa-fw fa-ban"></i>', '#', $options);
+                } else {
+                    return '<i class="fa fa-fw fa-ban disabled-link"></i>';
+                }
+                
+            }, 'answer' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-answer',
+                    'value' => Url::to(['answer','id' => $model->id]),
+                    'title' => 'Reject Answer',
+                    'class' => 'showModalButton'
+                ];
+                $karyawan = app\models\Karyawan::find()->where(['NIK' => \Yii::$app->user->identity->username])->one();
+                if ($model->status == 3 && $karyawan->DEPARTEMEN == $model->CC_GROUP) {
+                    return Html::a('<i class="fa fa-fw fa-commenting"></i>', '#', $options);
+                } else {
+                    return '<i class="fa fa-fw fa-commenting disabled-link"></i>';
+                }
+                
+            }, 'due_date' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-due-date',
+                    'value' => Url::to(['due-date','id' => $model->id]),
+                    'title' => 'OK With Due Date',
+                    'class' => 'showModalButton'
+                ];
+                //return Html::a('<i class="fa fa-fw fa-calendar-check-o"></i>', '#', $options);
+                if ($model->status == 2 || $model->status == 4) {
+                    return Html::a('<i class="fa fa-fw fa-calendar-check-o"></i>', '#', $options);
+                } else {
+                    return '<i class="fa fa-fw fa-calendar-check-o disabled-link"></i>';
+                }
+                
+            },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator
@@ -98,6 +189,7 @@ $columns = [
     ],
     [
         'attribute' => 'patrol_type',
+        'label' => '(+/-)',
         'value' => function($model){
             if ($model->patrol_type == 1) {
                 //return Html::img('@web/uploads/ICON/icons8-thumbs-up-64.png', ['style' => 'height: 25px;']);
@@ -112,12 +204,12 @@ $columns = [
         'format' => 'raw',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px',
+        //'width' => '100px',
         'hiddenFromExport' => true,
         'filter' => Yii::$app->params['shift_patrol_type'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+            'style' => 'font-size: 12px; text-align: center;',
         ],
     ],
     [
@@ -204,6 +296,24 @@ $columns = [
         ],
     ],
     [
+        'attribute' => 'cause',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 150px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
+        'attribute' => 'countermeasure',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 150px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
         'attribute' => 'action',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -228,25 +338,34 @@ $columns = [
     [
         'attribute' => 'status',
         'value' => function($model){
-            if ($model->status == 0) {
-                return '<span class="label label-danger">OPEN</span>';
-            } elseif ($model->status == 10) {
-                return '<span class="label label-success">CLOSED</span>';
-            } else {
-                return '-';
-            }
+            return $model->statusTbl->status_desc;
         },
         'format' => 'raw',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '80px',
-        'filter' => [
-            0 => 'OPEN',
-            10 => 'CLOSED'
-        ],
+        'filter' => ArrayHelper::map(app\models\IpqaStatusTbl::find()->orderBy('status_order ASC')->all(), 'status_id', 'status_desc'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
+        'attribute' => 'reject_remark',
+        'vAlign' => 'middle',
+        //'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 170px; font-size: 11px;',
+        ],
+    ],
+    [
+        'attribute' => 'reject_answer',
+        'vAlign' => 'middle',
+        //'format' => 'ntext',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 170px; font-size: 11px;',
         ],
     ],
     [
@@ -293,15 +412,19 @@ $columns = [
                 '{export}',
                 '{toggleData}',
             ],
-            /*'rowOptions' => function($model){
+            'rowOptions' => function($model){
                 if ($model->status == 0) {
                     return ['class' => 'danger'];
-                } elseif ($model->status == 10) {
-                    return ['class' => 'success'];
+                } elseif ($model->status == 2) {
+                    return ['class' => 'warning'];
+                } elseif ($model->status == 3) {
+                    return ['class' => 'danger text-red'];
+                } elseif ($model->status == 4) {
+                    return ['class' => 'success text-red'];
                 } else {
                     return ['class' => ''];
                 }
-            },*/
+            },
             // set export properties
             'export' => [
                 'fontAwesome' => true
