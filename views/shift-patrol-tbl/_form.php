@@ -47,13 +47,11 @@ use kartik\datetime\DateTimePicker;
                         'prompt' => '-Pilih Penilaian-'
                     ]); ?>
                 </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'status')->dropDownList([
+                <div class="col-md-3" style="<?= $model->isNewRecord ? '' : 'display: none;'; ?>">
+                    <?= $model->isNewRecord ? $form->field($model, 'status')->dropDownList([
                         0 => 'OPEN',
-                        10 => 'CLOSED',
-                    ], [
-                        'prompt' => '-Pilih Status-'
-                    ]); ?>
+                        1 => 'CLOSED',
+                    ]) : ''; ?>
                 </div>
                 <div class="col-md-3">
                     <?= $form->field($model, 'section_id')->dropDownList($section_arr, [
