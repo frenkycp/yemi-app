@@ -14,11 +14,11 @@ use app\models\CostCenter;
 
 class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblController
 {
-	/*public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }*/
+    }
 
     public function getSectionArr()
 	{
@@ -68,6 +68,7 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
 		    'location_arr' => $this->getLocationArr(),
+		    'section_arr' => $this->getSectionArr(),
 		]);
 	}
 
@@ -102,7 +103,7 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 		        		if (!$model->upload_file1->saveAs($filePath)) {
 		                    return $model->errors;
 		                }
-		                ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
+		                ImageFile::resize_crop_image($filePath, $filePath, 70, 800);
 		        	}
 				}
 
@@ -115,7 +116,7 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 		        		if (!$model->upload_file2->saveAs($filePath)) {
 		                    return $model->errors;
 		                }
-		                ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
+		                ImageFile::resize_crop_image($filePath, $filePath, 70, 800);
 		        	}
 				}
 
@@ -154,7 +155,7 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 	        		if (!$model->upload_file1->saveAs($filePath)) {
 	                    return $model->errors;
 	                }
-	                ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
+	                ImageFile::resize_crop_image($filePath, $filePath, 70, 800);
 	        	}
 			}
 
@@ -167,7 +168,7 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 	        		if (!$model->upload_file2->saveAs($filePath)) {
 	                    return $model->errors;
 	                }
-	                ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
+	                ImageFile::resize_crop_image($filePath, $filePath, 70, 800);
 	        	}
 			}
 			if (!$model->save()) {

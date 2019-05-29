@@ -61,7 +61,8 @@ $columns = [
         'encodeLabel' => false,
         'value' => function($model){
             if ($model->img_filename1 != null) {
-                return Html::a(Html::img('@web/uploads/SHIFT_PATROL/' . $model->img_filename1, ['style' => 'height: 30px;']), Url::base(true) .'/uploads/SHIFT_PATROL/' . $model->img_filename1, ['target' => '_blank', 'data-pjax' => 0]);
+                //return Html::a(Html::img('@web/uploads/SHIFT_PATROL/' . $model->img_filename1, ['style' => 'height: 30px;']), Url::base(true) .'/uploads/SHIFT_PATROL/' . $model->img_filename1, ['target' => '_blank', 'data-pjax' => 0]);
+                return Html::a('<i class="fa fa-fw fa-photo"></i><br>Before', Url::base(true) .'/uploads/SHIFT_PATROL/' . $model->img_filename1, ['target' => '_blank', 'data-pjax' => 0]);
             } else {
                 return '-';
             }
@@ -81,7 +82,7 @@ $columns = [
         'encodeLabel' => false,
         'value' => function($model){
             if ($model->img_filename2 != null) {
-                return Html::a(Html::img('@web/uploads/SHIFT_PATROL/' . $model->img_filename2, ['style' => 'height: 30px;']), Url::base(true) .'/uploads/SHIFT_PATROL/' . $model->img_filename2, ['target' => '_blank', 'data-pjax' => 0]);
+                return Html::a('<i class="fa fa-fw fa-photo"></i><br/>After', Url::base(true) .'/uploads/SHIFT_PATROL/' . $model->img_filename2, ['target' => '_blank', 'data-pjax' => 0]);
             } else {
                 return '-';
             }
@@ -212,9 +213,13 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'section_desc',
+        'attribute' => 'section_id',
+        'value' => function($model){
+            return $model->section_desc;
+        },
         //'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filter' => $section_arr,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 100px; font-size: 12px; text-align: center;',
@@ -224,13 +229,14 @@ $columns = [
         'attribute' => 'status',
         'value' => function($model){
             if ($model->status == 0) {
-                return 'OPEN';
+                return '<span class="label label-danger">OPEN</span>';
             } elseif ($model->status == 10) {
-                return 'CLOSED';
+                return '<span class="label label-success">CLOSED</span>';
             } else {
                 return '-';
             }
         },
+        'format' => 'raw',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '80px',
@@ -287,6 +293,15 @@ $columns = [
                 '{export}',
                 '{toggleData}',
             ],
+            /*'rowOptions' => function($model){
+                if ($model->status == 0) {
+                    return ['class' => 'danger'];
+                } elseif ($model->status == 10) {
+                    return ['class' => 'success'];
+                } else {
+                    return ['class' => ''];
+                }
+            },*/
             // set export properties
             'export' => [
                 'fontAwesome' => true
