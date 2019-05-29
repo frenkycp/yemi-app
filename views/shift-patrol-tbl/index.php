@@ -226,6 +226,17 @@ $columns = [
         'hidden' => true,
     ],
     [
+        'attribute' => 'case_no',
+        'label' => 'No. Kasus',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
         'attribute' => 'patrol_time',
         'value' => function($model){
             return date('Y-m-d', strtotime($model->patrol_time));
@@ -296,6 +307,15 @@ $columns = [
         ],
     ],
     [
+        'attribute' => 'action',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 150px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
         'attribute' => 'cause',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -306,15 +326,6 @@ $columns = [
     ],
     [
         'attribute' => 'countermeasure',
-        //'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'min-width: 150px; font-size: 12px; text-align: center;',
-        ],
-    ],
-    [
-        'attribute' => 'action',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [

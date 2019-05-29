@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id', 'flag'], 'integer'],
-            [['input_time', 'patrol_time', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_id', 'category_detail', 'location', 'location_detail', 'description', 'action', 'posting_date', 'patrol_type', 'status', 'section_id', 'cause', 'countermeasure'], 'safe'],
+            [['input_time', 'patrol_time', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'category_id', 'category_detail', 'location', 'location_detail', 'description', 'action', 'posting_date', 'patrol_type', 'status', 'section_id', 'cause', 'countermeasure', 'case_no'], 'safe'],
 ];
 }
 
@@ -70,6 +70,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'NIK', $this->NIK])
             ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])
+            ->andFilterWhere(['like', 'case_no', $this->case_no])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),patrol_time,120)', $this->posting_date])
             ->andFilterWhere(['like', 'CC_ID', $this->CC_ID])
             ->andFilterWhere(['like', 'CC_GROUP', $this->CC_GROUP])
