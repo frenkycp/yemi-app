@@ -248,9 +248,18 @@ $gridColumns = [
     [
         'attribute' => 'handleby',
         'value' => function($model){
+            if ($model->handleby == 'nurse') {
+                return 'Perawat';
+            } else {
+                return 'dokter';
+            }
             return strtoupper($model->handleby);
         },
         'vAlign' => 'middle',
+        'filter' => [
+            'doctor' => 'dokter',
+            'nurse' => 'Perawat'
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px;'
@@ -344,7 +353,7 @@ if (!$is_clinic) {
             $data_handle = app\models\KlinikHandle::find()->all();
             foreach ($data_handle as $key => $value) {
                 if ($value->pk == 'doctor') {
-                    $nama = 'Dokter';
+                    $nama = 'dokter';
                 } elseif ($value->pk == 'nurse') {
                     $nama = 'Perawat';
                 }

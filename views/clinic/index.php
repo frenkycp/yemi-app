@@ -121,7 +121,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-lg-offset-2 col-md-offset-2 col-xs-6 col-md-3">
         <div class="small-box <?= $doctor_data['bg_color']; ?>">
             <div class="inner">
-                <h3>Dokter</h3>
+                <h3>dokter</h3>
                 <p>&nbsp;<?= $doctor_data['status']; ?></p>
             </div>
             <a class="small-box-footer"></a>
