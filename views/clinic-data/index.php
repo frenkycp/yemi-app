@@ -338,8 +338,8 @@ $gridColumns = [
 
 if (!$is_clinic) {
     unset($gridColumns[0]);
-    unset($gridColumns[6]);
     unset($gridColumns[7]);
+    unset($gridColumns[8]);
 } else {
     unset($gridColumns[8]);
     unset($gridColumns[9]);

@@ -48,6 +48,7 @@ $dataProvider = new ActiveDataProvider([
     'defaultOrder' => [
         'TGL_LEMBUR' => SORT_ASC,
         'CC_GROUP' => SORT_ASC,
+        'CC_DESC' => SORT_ASC,
         'NIK' => SORT_ASC
     ]
 ],

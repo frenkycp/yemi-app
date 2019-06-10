@@ -114,6 +114,7 @@ $gridColumns = [
         'attribute' => 'SECTION',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->orderBy('CC_DESC')->all(), 'CC_DESC', 'CC_DESC'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 150px;'

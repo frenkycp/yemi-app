@@ -66,12 +66,36 @@ $grid_columns = [
         //'width'=>'100px',
     ],
     [
+        'attribute' => 'CC_GROUP',
+        'label' => 'Department',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_GROUP')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP'),
+        //'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'CC_DESC',
+        'label' => 'Section',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_DESC')->orderBy('CC_DESC')->all(), 'CC_DESC', 'CC_DESC'),
+        //'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    /*[
         'attribute' => 'DEPT_SECTION',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
         'filter' => ArrayHelper::map(app\models\SplView::find()->select('DISTINCT(DEPT_SECTION)')->where('DEPT_SECTION <> \'\'')->orderBy('DEPT_SECTION')->all(), 'DEPT_SECTION', 'DEPT_SECTION')
         //'width'=>'100px',
-    ],
+    ],*/
     [
         'attribute' => 'START_LEMBUR_ACTUAL',
         'label' => 'Masuk<br/>(Aktual)',
@@ -147,7 +171,15 @@ $grid_columns = [
         'hidden'=> true,
     ],
     [
-        'attribute' => 'KETERANGAN',
+        'attribute' => 'URAIAN_UMUM',
+        'label' => 'Ket. Umum',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'URAIAN_LEMBUR',
+        'label' => 'Ket. Khusus',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
         'mergeHeader' => true,
