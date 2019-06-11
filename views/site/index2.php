@@ -176,9 +176,9 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('SMT INJ Utility & Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Monthly', ['/smt-line-monthly-utility']); ?>
                                 </li>
-                                <li>
-                                    <?= Html::a('SMT Performance Ratio<br/><span class="japanesse-word">(SMT パフォーマンス)</span>', ['/smt-performance-ratio']); ?>
-                                </li>
+                                <!--<li>
+                                    <?= ''; //Html::a('SMT Performance Ratio<br/><span class="japanesse-word">(SMT パフォーマンス)</span>', ['/smt-performance-ratio']); ?>
+                                </li>-->
                             </ol>
                         </div>
                     </div>

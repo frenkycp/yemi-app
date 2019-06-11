@@ -92,6 +92,7 @@ $config = [
         'db_wh_app' => require(__DIR__ . '/db_wh_app.php'),
         'db_mrbs' => require(__DIR__ . '/db_mrbs.php'),
         'db_supplement' => require(__DIR__ . '/db_supplement.php'),
+        'db_redy' => require(__DIR__ . '/db_redy.php'),
     ],
     'params' => $params,
     'modules' => [
