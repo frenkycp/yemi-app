@@ -194,7 +194,7 @@ $grid_columns = [
         'filter' => false,
         'vAlign' => 'middle',
         'width' => '100px',
-        'hidden' => true,
+        //'hidden' => true,
         //'hAlign' => 'center'
     ],
     [
@@ -211,7 +211,7 @@ $grid_columns = [
         'label' => 'Parts Remarks',
         'filter' => false,
         'vAlign' => 'middle',
-        'hidden' => true,
+        //'hidden' => true,
         //'width' => '150px',
         //'hAlign' => 'center'
     ],
@@ -232,7 +232,7 @@ $grid_columns = [
         'label' => 'Repair Note',
         'filter' => false,
         'vAlign' => 'middle',
-        'hidden' => true,
+        //'hidden' => true,
         //'width' => '150px',
         //'hAlign' => 'center'
     ],
