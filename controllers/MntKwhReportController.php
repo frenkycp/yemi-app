@@ -65,7 +65,7 @@ class MntKwhReportController extends Controller
 		->all();
 		$data_report = [];*/
 
-		if ($model->load($_GET)) {
+		if ($model->load($_GET) || \Yii::$app->request->get('posting_date') !== null) {
 			$iot_by_hours = MachineIotUtilityByHours02::find()
 			->where([
 				'posting_date' => $model->posting_date,
