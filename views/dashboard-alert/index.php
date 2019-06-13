@@ -11,7 +11,8 @@ use yii\helpers\ArrayHelper;
 */
 
 $this->title = [
-    'page_title' => 'Dashboard (Alert) <span class="japanesse text-green"></span>',
+    //'page_title' => '<u>Dashboard (Alert) <span class="japanesse text-green"></span></u>',
+    'page_title' => '',
     'tab_title' => 'Dashboard (Alert)',
     'breadcrumbs_title' => 'Dashboard (Alert)'
 ];
@@ -27,6 +28,7 @@ $this->registerCss("
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em; text-align: center;}
 	body {background-color: #33383D;}
+	//.small-box {margin: 0px 20px; border:0px solid white;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -62,8 +64,33 @@ $this->registerJs("
 	});
 ");
 ?>
-<hr>
 <div class="row">
+	<div class="col-md-3">
+		<h3 class="text-center" style="color: white;">MACHINE</h3>
+		<hr>
+		<div id="machine_alert_container"></div>
+		
+	</div>
+	<div class="col-md-3">
+		<h3 class="text-center" style="color: white;">MAN</h3>
+		<hr>
+		<div id="line_stop_container"></div>
+	</div>
+	<div class="col-md-3">
+		<h3 class="text-center" style="color: white;">MATERIAL</h3>
+		<hr>
+
+	</div>
+	<div class="col-md-3">
+		<h3 class="text-center" style="color: white;">METHOD</h3>
+		<hr>
+
+	</div>
+</div>
+<div class="row">
+	
+</div>
+<!--<div class="row">
 	<div class="col-md-3">
 		<div class="box box-solid box-default" id="box_machine">
 			<div class="box-header">
@@ -84,4 +111,4 @@ $this->registerJs("
             </div>
 		</div>
 	</div>
-</div>
+</div>-->
