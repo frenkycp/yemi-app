@@ -61,12 +61,12 @@ $query->andFilterWhere([
             'masuk' => $this->masuk,
             'keluar' => $this->keluar,
             'confirm' => $this->confirm,
+            'dept' => $this->dept,
+            'section' => $this->section,
         ]);
 
         $query->andFilterWhere(['like', 'nama', $this->nama])
             ->andFilterWhere(['like', 'date(pk)', $this->input_date])
-            ->andFilterWhere(['like', 'dept', $this->dept])
-            ->andFilterWhere(['like', 'section', $this->section])
             ->andFilterWhere(['like', 'anamnesa', $this->anamnesa])
             ->andFilterWhere(['like', 'root_cause', $this->root_cause])
             ->andFilterWhere(['like', 'diagnosa', $this->diagnosa])

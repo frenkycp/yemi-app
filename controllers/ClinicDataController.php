@@ -8,6 +8,7 @@ use app\models\search\ClinicDataSearch;
 use app\models\KlinikInput;
 use app\models\KlinikHandle;
 use app\models\Karyawan;
+use app\models\CostCenter;
 use yii\helpers\Json;
 
 /**
@@ -59,9 +60,20 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
             return;
         }
 
+        $tmp_dept = CostCenter::find()->select('CC_GROUP')->groupBy('CC_GROUP')->orderBy('CC_GROUP')->all();
+        $dept_arr = [];
+        foreach ($tmp_dept as $key => $value) {
+        	$dept = $value->CC_GROUP;
+        	if ($dept == 'FINANCE & ACCOUNTING') {
+        		$dept = 'FINANCE AND ACCOUNTING';
+        	}
+        	$dept_arr[$dept] = $dept;
+        }
+
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
+		    'dept_arr' => $dept_arr,
 		]);
 	}
 
@@ -79,11 +91,11 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 			if ($model->load($_POST)) {
 				$model->pk = date('Y-m-d H:i:s');
 				$model->masuk = date('H:i:s');
-				if ($model->opsi == 1) {
+				/*if ($model->opsi == 1) {
 					$model->keluar = date('H:i:s', strtotime('+10 minutes'));
 				} else {
 					$model->keluar = date('H:i:s', strtotime('+1 hour'));
-				}
+				}*/
 
 				$count_status = KlinikHandle::find()
 				->where(['status' => 1])

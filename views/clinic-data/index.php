@@ -125,7 +125,7 @@ $gridColumns = [
         'attribute' => 'dept',
         'label' => 'Departemen',
         'vAlign' => 'middle',
-        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_GROUP')->groupBy('CC_GROUP')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP'),
+        'filter' => $dept_arr,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px; min-width: 150px;'
@@ -341,8 +341,8 @@ if (!$is_clinic) {
     unset($gridColumns[7]);
     unset($gridColumns[8]);
 } else {
-    unset($gridColumns[8]);
     unset($gridColumns[9]);
+    unset($gridColumns[10]);
 }
 
 ?>
