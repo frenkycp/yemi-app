@@ -20,6 +20,8 @@ class MntKwhReportController extends Controller
     
 	public function actionIndex()
 	{
+		ini_set('max_execution_time', 300);
+		
 		$data = [];
 		//$machine_id = 'MNT00211';
 		$posting_date = date('Y-m-d');
@@ -108,11 +110,11 @@ class MntKwhReportController extends Controller
 				$categories[] = $i;
 				/*$tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
 				$tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;*/
-				$tmp_data_by_hours['putih'][] = $total_putih == 0 ? null : $total_putih;
-				$tmp_data_by_hours['hijau'][] = $total_hijau == 0 ? null : $total_hijau;
-				$tmp_data_by_hours['biru'][] = $total_biru == 0 ? null : $total_biru;
-				$tmp_data_by_hours['merah'][] = $total_merah == 0 ? null : $total_merah;
-				$tmp_data_by_hours['sisa'][] = $sisa_detik == 0 ? null : $sisa_detik;
+				$tmp_data_by_hours['putih'][] = $total_putih == 0 ? null : round($total_putih / 60, 1);
+				$tmp_data_by_hours['hijau'][] = $total_hijau == 0 ? null : round($total_hijau / 60, 1);
+				$tmp_data_by_hours['biru'][] = $total_biru == 0 ? null : round($total_biru / 60, 1);
+				$tmp_data_by_hours['merah'][] = $total_merah == 0 ? null : round($total_merah / 60, 1);
+				$tmp_data_by_hours['sisa'][] = $sisa_detik == 0 ? null : round($sisa_detik / 60, 1);
 			}
 
 			/*$data = [

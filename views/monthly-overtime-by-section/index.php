@@ -62,6 +62,11 @@ $section_data = app\models\CostCenter::find()
             'prompt' => 'Select a section...'
         ]); ?>
     </div>
+    <div class="col-md-2">
+        <?= Html::label('z', '', ['style' => 'opacity: 0;']); ?>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-primary form-control']); ?>
+    </div>
+    
 </div>
 <br/>
 
@@ -86,6 +91,7 @@ $section_data = app\models\CostCenter::find()
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
+                        'zoomType' => 'x',
                         //'height' => 290
                     ],
                     'credits' => [
@@ -95,10 +101,11 @@ $section_data = app\models\CostCenter::find()
                         'text' => $section == 'ALL' ? 'OT Management by Section (ALL SECTIONS)' : 'OT Management by Section (' . $section_data->CC_DESC . ')',
                     ],
                     'subtitle' => [
-                        'text' => 'FISCAL YEAR ' . $fiscal,
+                        'text' => '',
                     ],
                     'xAxis' => [
                         'categories' => $categories,
+
                     ],
                     'yAxis' => [
                         'title' => [

@@ -4,10 +4,10 @@ namespace app\controllers;
 use yii\web\Controller;
 use yii\web\JsExpression;
 use yii\helpers\Url;
-use app\models\IpqaPatrolOutstandingView;
-use app\models\IpqaPatrolTbl;
 
-class IpqaDashboardController extends Controller
+use app\models\ShiftPatrolTbl;
+
+class ShiftPatrolDashboardController extends Controller
 {
 	public function behaviors()
     {
@@ -21,10 +21,9 @@ class IpqaDashboardController extends Controller
 		$data = [];
 		$outstanding_categories = [];
 
-		//$tmp_outstanding = IpqaPatrolOutstandingView::find()->orderBy('CC_DESC')->asArray()->all();
-		$tmp_outstanding = IpqaPatrolTbl::find()
+		$tmp_outstanding = ShiftPatrolTbl::find()
 		->select([
-			'CC_ID', 'CC_GROUP', 'CC_DESC',
+			'section_id', 'section_group', 'section_desc',
 			'total_open' => 'SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END)',
 			'total_pending' => 'SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END)',
 			'total_rejected' => 'SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END)',
@@ -35,10 +34,10 @@ class IpqaDashboardController extends Controller
 		->where([
 			'flag' => 1
 		])
-		->andWhere('CC_ID IS NOT NULL')
+		->andWhere('section_id IS NOT NULL')
 		->andWhere(['<>', 'status', 1])
-		->groupBy('CC_ID, CC_GROUP, CC_DESC')
-		->orderBy('total_all DESC, CC_DESC')
+		->groupBy('section_id, section_group, section_desc')
+		->orderBy('total_all DESC, section_desc')
 		->asArray()
 		->all();
 		$outstanding_data = [
@@ -63,38 +62,40 @@ class IpqaDashboardController extends Controller
 				'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
 			],
 		];
+
 		foreach ($tmp_outstanding as $key => $value) {
-			$outstanding_categories[] = $value['CC_DESC'];
+			$outstanding_categories[] = $value['section_desc'];
 			$total_open = $value['total_open'] == 0 ? null : (int)$value['total_open'];
 			$total_pending = $value['total_pending'] == 0 ? null : (int)$value['total_pending'];
 			$total_rejected = $value['total_rejected'] == 0 ? null : (int)$value['total_rejected'];
 			$total_ok = $value['total_ok_due_date'] == 0 ? null : (int)$value['total_ok_due_date'];
 			$outstanding_data[0]['data'][] = [
 				'y' => $total_open,
-				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 0, 'CC_ID' => $value['CC_ID']]),
+				'url' => Url::to(['shift-patrol-tbl/index', 'status' => 0, 'section_id' => $value['section_id']]),
 			];
 			$outstanding_data[1]['data'][] = [
 				'y' => $total_pending,
-				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 2, 'CC_ID' => $value['CC_ID']]),
+				'url' => Url::to(['shift-patrol-tbl/index', 'status' => 2, 'section_id' => $value['section_id']]),
 			];
 			$outstanding_data[2]['data'][] = [
 				'y' => $total_ok,
-				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 4, 'CC_ID' => $value['CC_ID']]),
+				'url' => Url::to(['shift-patrol-tbl/index', 'status' => 4, 'section_id' => $value['section_id']]),
 			];
 			$outstanding_data[3]['data'][] = [
 				'y' => $total_rejected,
-				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 3, 'CC_ID' => $value['CC_ID']]),
+				'url' => Url::to(['shift-patrol-tbl/index', 'status' => 3, 'section_id' => $value['section_id']]),
 			];
 		}
+
 		$data['outstanding'] = [
 			'categories' => $outstanding_categories,
 			'data' => $outstanding_data
 		];
 
-		$ok_due_date = IpqaPatrolTbl::find()
+		$ok_due_date = ShiftPatrolTbl::find()
 		->select([
 			'due_date',
-			'total_qty' => 'COUNT(CC_ID)'
+			'total_qty' => 'COUNT(section_id)'
 		])
 		->where([
 			'flag' => 1,
@@ -110,7 +111,7 @@ class IpqaDashboardController extends Controller
 			$tmp_data_ok[] = [
 				'x' => $due_date,
 				'y' => (int)$value->total_qty,
-				'url' => Url::to(['ipqa-patrol-tbl/index', 'status' => 4, 'due_date' => date('Y-m-d', strtotime($value->due_date))]),
+				'url' => Url::to(['shift-patrol-tbl/index', 'status' => 4, 'due_date' => date('Y-m-d', strtotime($value->due_date))]),
 			];
 		}
 

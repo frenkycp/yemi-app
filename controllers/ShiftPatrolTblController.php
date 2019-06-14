@@ -58,6 +58,15 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 	public function actionIndex()
 	{
 	    $searchModel  = new ShiftPatrolTblSearch;
+	    if (\Yii::$app->request->get('status') !== null) {
+	    	$searchModel->status = \Yii::$app->request->get('status');
+	    }
+	    if (\Yii::$app->request->get('CC_ID') !== null) {
+	    	$searchModel->CC_ID = \Yii::$app->request->get('section_id');
+	    }
+	    if (\Yii::$app->request->get('due_date') !== null) {
+	    	$searchModel->due_date = \Yii::$app->request->get('due_date');
+	    }
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

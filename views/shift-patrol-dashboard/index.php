@@ -8,9 +8,9 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'IPQA Dashboard <span class="japanesse text-green"></span>',
-    'tab_title' => 'IPQA Dashboard',
-    'breadcrumbs_title' => 'IPQA Dashboard'
+    'page_title' => 'Shift Patrol Dashboard <span class="japanesse text-green"></span>',
+    'tab_title' => 'Shift Patrol Dashboard',
+    'breadcrumbs_title' => 'Shift Patrol Dashboard'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -43,7 +43,7 @@ echo '</pre>';*/
     <div class="box-header ui-sortable-handle">
         <div class="box-title"> </div>
         <div class="pull-right box-tools">
-            <?= Html::a('VIEW ALL DATA', Url::to('@web/ipqa-patrol-tbl/index'), ['class' => 'btn btn-success btn-sm', 'target' => '_blank']); ?>
+            <?= Html::a('VIEW ALL DATA', Url::to('@web/shift-patrol-tbl/index'), ['class' => 'btn btn-success btn-sm', 'target' => '_blank']); ?>
         </div>
     </div>
     <div class="box-body">
@@ -115,6 +115,7 @@ echo '</pre>';*/
         </div>
     </div>
 </div>
+
 <div class="box box-primary">
     <div class="box-body">
         <div class="col-md-12">
@@ -167,6 +168,7 @@ echo '</pre>';*/
                             'dataLabels' => [
                                 'enabled' => true,
                             ],
+                            'maxPointWidth' => 50,
                         ],
                         'series' => [
                             'cursor' => 'pointer',

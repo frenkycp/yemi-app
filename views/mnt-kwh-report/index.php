@@ -138,7 +138,7 @@ echo '</pre>';*/
                             'stacking' => 'percent',
                             'dataLabels' => [
                                 'enabled' => true,
-                                //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
+                                'format' => '{point.percentage:.1f}%',
                                 //'color' => 'black',
                                 //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                                 /*'style' => [
@@ -202,14 +202,14 @@ echo '</pre>';*/
                     ],
                     'yAxis' => [
                         'title' => [
-                            'text' => 'PERCENT',
+                            'text' => 'Percentage',
                             //'rotation' => 0,
                             //'align' => 'high'
                         ]
                     ],
                     'tooltip' => [
                         'enabled' => true,
-                        'valueSuffix' => ' seconds'
+                        'valueSuffix' => ' minutes'
                         //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                     ],
                     'plotOptions' => [
