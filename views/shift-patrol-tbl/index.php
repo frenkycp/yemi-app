@@ -239,11 +239,42 @@ $columns = [
     [
         'attribute' => 'patrol_time',
         'value' => function($model){
-            return date('Y-m-d', strtotime($model->patrol_time));
+            return date('Y-m-d H:i', strtotime($model->patrol_time));
         },
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '100px',
+        'width' => '110px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 80px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
+        'attribute' => 'NIK',
+        'label' => 'PIC',
+        'value' => function($model){
+            return $model->NAMA_KARYAWAN;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\ShiftPatrolTbl::find()->select('NIK, NAMA_KARYAWAN')->groupBy('NIK, NAMA_KARYAWAN')->all(), 'NIK', 'NAMA_KARYAWAN'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
+        ],
+    ],
+    [
+        'attribute' => 'location',
+        'value' => function($model){
+            if ($model->location_detail == null) {
+                return $model->location;
+            } else {
+                return $model->location . ' (' . $model->location_detail . ')';
+            }
+        },
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => $location_arr,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
@@ -267,7 +298,7 @@ $columns = [
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
         ],
     ],
-    [
+    /*[
         'attribute' => 'time',
         'value' => function($model){
             return date('H:i', strtotime($model->patrol_time));
@@ -279,24 +310,7 @@ $columns = [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
         ],
-    ],
-    [
-        'attribute' => 'location',
-        'value' => function($model){
-            if ($model->location_detail == null) {
-                return $model->location;
-            } else {
-                return $model->location . ' (' . $model->location_detail . ')';
-            }
-        },
-        //'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filter' => $location_arr,
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
-        ],
-    ],
+    ],*/
     [
         'attribute' => 'description',
         //'hAlign' => 'center',
@@ -379,19 +393,7 @@ $columns = [
             'style' => 'min-width: 170px; font-size: 11px;',
         ],
     ],
-    [
-        'attribute' => 'NIK',
-        'label' => 'PIC',
-        'value' => function($model){
-            return $model->NIK . ' - ' . $model->NAMA_KARYAWAN;
-        },
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'min-width: 70px; font-size: 12px; text-align: center;',
-        ],
-    ],
+    
 ];
 ?>
 <div class="giiant-crud shift-patrol-tbl-index">

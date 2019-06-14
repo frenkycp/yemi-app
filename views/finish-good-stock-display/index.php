@@ -165,7 +165,7 @@ echo '</pre>';*/
                         'color' => 'rgba(0, 0, 255, 0.7)',
                     ],
                     [
-                        'name' => 'Finish Good WH  (完成品倉庫) - No Judge',
+                        'name' => 'Finish Good WH  (完成品倉庫) - Under Judgement',
                         'data' => $data[0],
                         'color' => 'rgba(0, 200, 200, 0.7)',
                     ],
@@ -175,7 +175,7 @@ echo '</pre>';*/
                         'color' => 'rgba(0, 255, 0, 0.7)',
                     ],
                     [
-                        'name' => 'FA Output - No Judge',
+                        'name' => 'FA Output - Under Judgement',
                         'data' => $data[2],
                         'color' => 'rgba(200, 200, 0, 0.7)',
                     ],
