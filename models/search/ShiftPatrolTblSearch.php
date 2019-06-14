@@ -71,7 +71,7 @@ $query->andFilterWhere([
         $query->andFilterWhere(['like', 'NIK', $this->NIK])
             ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])
             ->andFilterWhere(['like', 'case_no', $this->case_no])
-            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),patrol_time,120)', $this->posting_date])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),patrol_time,120)', $this->patrol_time])
             ->andFilterWhere(['like', 'CC_ID', $this->CC_ID])
             ->andFilterWhere(['like', 'CC_GROUP', $this->CC_GROUP])
             ->andFilterWhere(['like', 'CC_DESC', $this->CC_DESC])

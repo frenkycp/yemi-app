@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class IpqaPatrolTbl extends BaseIpqaPatrolTbl
 {
-    public $upload_file1, $total_qty;
+    public $upload_file1, $total_qty, $total_open, $total_pending, $total_rejected, $total_closed, $total_ok_due_date, $total_all;
 
     public function behaviors()
     {

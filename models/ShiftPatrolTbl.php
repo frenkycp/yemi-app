@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ShiftPatrolTbl extends BaseShiftPatrolTbl
 {
-    public $upload_file1, $upload_file2, $posting_date, $time, $penilaian;
+    public $upload_file1, $upload_file2, $posting_date, $time, $penilaian, $total_open, $total_pending, $total_rejected, $total_closed, $total_ok_due_date, $total_all, $total_qty;
 
     public function behaviors()
     {

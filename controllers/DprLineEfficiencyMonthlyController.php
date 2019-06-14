@@ -57,30 +57,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    ->asArray()
 	    ->all();
 
-	    $target_eff_arr = [
-	    	'306' => 55,
-	    	'1600' => 60,
-	    	'2700' => 60,
-	    	'5600' => 50,
-	    	'AW' => 75,
-	    	'BR' => 50,
-	    	'CEFINE' => 50,
-	    	'DBR' => 80,
-	    	'DSR' => 50,
-	    	'HS' => 90,
-	    	'L85' => 110,
-	    	'P40' => 80,
-	    	'PNT' => 50,
-	    	'PTG' => 50,
-	    	'SML' => 60,
-	    	'SRT' => 50,
-	    	'SW' => 60,
-	    	'SW2' => 60,
-	    	'TB' => 60,
-	    	'VX' => 55,
-	    	'VX2' => 55,
-	    	'XXX' => 100,
-	    ];
+	    $target_eff_arr = \Yii::$app->params['line_eff_target'];
 	    $target_eff = 100;
 	    if (isset($target_eff_arr[$line])) {
 	    	$target_eff = $target_eff_arr[$line];
@@ -222,23 +199,27 @@ class DprLineEfficiencyMonthlyController extends Controller
 
 	    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
 	    $remark .= '<tr>
+	    	<th class="text-center">Prod. Date</th>
 	    	<th class="text-center">Start Time</th>
 	    	<th class="text-center">End Time</th>
 	    	<th class="text-center">Man Power</th>
 	    	<th class="text-center">Category</th>
 	    	<th class="text-center">Loss Time (min)</th>
-	    	<th>Remark</th>
+	    	<th class="text-center">Model</th>
+	    	<th>Reason</th>
 	    </tr>';
 
 	    foreach ($losstime_detail_arr as $value) {
 	    	$losstime_category = $value['category'] == 'CM' ? 'CHANGE MODEL' : $value['category'];
     		$remark .= '<tr>
+    			<td class="text-center">' . $value['proddate'] . '</td>
 	    		<td class="text-center">' . $value['start_time'] . '</td>
 	    		<td class="text-center">' . $value['end_time'] . '</td>
 	    		<td class="text-center">' . $value['mp'] . '</td>
 	    		<td class="text-center">' . $losstime_category . '</td>
 	    		<td class="text-center">' . number_format($value['losstime'], 2) . '</td>
-	    		<td>' . $value['model'] . '</td>
+	    		<td class="text-center">' . $value['model'] . '</td>
+	    		<td>' . $value['reason'] . '</td>
 	    	</tr>';
 	    }
 
@@ -256,7 +237,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	'category' => $category,
 	    	'line' => $line
 	    ])
-	    ->orderBy('line, start_time')
+	    ->orderBy('line, proddate, start_time')
 	    ->asArray()
 	    ->all();
 
@@ -270,24 +251,28 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
 	    $remark .= '<tr>
 	    	<th class="text-center">No.</th>
+	    	<th class="text-center">Prod. Date</th>
 	    	<th class="text-center">Start Time</th>
 	    	<th class="text-center">End Time</th>
 	    	<th class="text-center">Man Power</th>
 	    	<th class="text-center">Line</th>
 	    	<th class="text-center">Loss Time (min)</th>
-	    	<th>Remark</th>
+	    	<th class="text-center">Model</th>
+	    	<th>Reason</th>
 	    </tr>';
 
 	    $no = 1;
 	    foreach ($losstime_detail_arr as $value) {
     		$remark .= '<tr>
 	    		<td class="text-center">' . $no . '</td>
+	    		<td class="text-center">' . $value['proddate'] . '</td>
 	    		<td class="text-center">' . $value['start_time'] . '</td>
 	    		<td class="text-center">' . $value['end_time'] . '</td>
 	    		<td class="text-center">' . $value['mp'] . '</td>
 	    		<td class="text-center">' . $value['line'] . '</td>
 	    		<td class="text-center">' . number_format($value['losstime'], 2) . '</td>
-	    		<td>' . $value['model'] . '</td>
+	    		<td class="text-center">' . $value['model'] . '</td>
+	    		<td>' . $value['reason'] . '</td>
 	    	</tr>';
 	    	$no++;
 	    }

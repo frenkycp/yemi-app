@@ -158,27 +158,28 @@ echo '</pre>';*/
                     ]
                 ],
                 'series' => [
-                    
                     [
-                        'name' => 'Finish Good WH  (完成品倉庫) - OK',
-                        'data' => $data[1],
-                        'color' => 'rgba(0, 0, 255, 0.7)',
-                    ],
-                    [
-                        'name' => 'Finish Good WH  (完成品倉庫) - Under Judgement',
-                        'data' => $data[0],
-                        'color' => 'rgba(0, 200, 200, 0.7)',
-                    ],
-                    [
-                        'name' => 'FA Output - OK',
-                        'data' => $data[3],
-                        'color' => 'rgba(0, 255, 0, 0.7)',
-                    ],
-                    [
-                        'name' => 'FA Output - Under Judgement',
+                        'name' => 'FA - Under Inspection',
                         'data' => $data[2],
-                        'color' => 'rgba(200, 200, 0, 0.7)',
+                        'color' => 'rgba(255, 150, 0, 1)',
                     ],
+                    [
+                        'name' => 'FA - OK',
+                        'data' => $data[3],
+                        'color' => 'rgba(0, 255, 0, 1)',
+                    ],
+                    [
+                        'name' => 'Finish Good WH - Under Inspection',
+                        'data' => $data[0],
+                        'color' => 'rgba(0, 200, 255, 1)',
+                    ],
+                    [
+                        'name' => 'Finish Good WH - OK',
+                        'data' => $data[1],
+                        'color' => 'rgba(0, 0, 255, 1)',
+                    ],
+                    
+                    
                     
                     /*[
                         'name' => 'Production Floor (生産職場)',

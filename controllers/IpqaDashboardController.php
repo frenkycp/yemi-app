@@ -20,7 +20,26 @@ class IpqaDashboardController extends Controller
 		$data = [];
 		$outstanding_categories = [];
 
-		$tmp_outstanding = IpqaPatrolOutstandingView::find()->orderBy('CC_DESC')->asArray()->all();
+		//$tmp_outstanding = IpqaPatrolOutstandingView::find()->orderBy('CC_DESC')->asArray()->all();
+		$tmp_outstanding = IpqaPatrolTbl::find()
+		->select([
+			'CC_ID', 'CC_GROUP', 'CC_DESC',
+			'total_open' => 'SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END)',
+			'total_pending' => 'SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END)',
+			'total_rejected' => 'SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END)',
+			'total_closed' => 'SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END)',
+			'total_ok_due_date' => 'SUM(CASE WHEN status = 4 THEN 1 ELSE 0 END)',
+			'total_all' => 'SUM(CASE WHEN status <> 1 THEN 1 ELSE 0 END)',
+		])
+		->where([
+			'flag' => 1
+		])
+		->andWhere('CC_ID IS NOT NULL')
+		->andWhere(['<>', 'status', 1])
+		->groupBy('CC_ID, CC_GROUP, CC_DESC')
+		->orderBy('total_all DESC, CC_DESC')
+		->asArray()
+		->all();
 		$outstanding_data = [
 			[
 				'name' => 'OPEN',
