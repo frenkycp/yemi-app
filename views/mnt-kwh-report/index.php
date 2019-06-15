@@ -34,7 +34,7 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($data_iot);
+print_r($data_power_consumption);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
@@ -75,19 +75,6 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<!--<div class="nav-tabs-custom">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">Power Consumption</a></li>
-        <li><a href="#tab_2" data-toggle="tab">Machine Operation Status</a></li>
-        <li><a href="#tab_3" data-toggle="tab">Machine Operation Status (By Hours)</a></li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab_1">
-            
-        </div>
-    </div>
-</div>-->
-
 <div class="box box-primary box-solid">
     <div class="box-body">
         <div class="col-md-12">
@@ -121,14 +108,11 @@ echo '</pre>';*/
                     'yAxis' => [
                         'title' => [
                             'text' => 'Percentage',
-                            //'rotation' => 0,
-                            //'align' => 'high'
                         ]
                     ],
                     'tooltip' => [
                         'enabled' => true,
                         'valueSuffix' => ' minutes'
-                        //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                     ],
                     'plotOptions' => [
                         'column' => [
@@ -136,15 +120,7 @@ echo '</pre>';*/
                             'dataLabels' => [
                                 'enabled' => true,
                                 'format' => '{point.percentage:.1f}%',
-                                //'color' => 'black',
-                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                                /*'style' => [
-                                    'textOutline' => '0px',
-                                    'fontWeight' => '0'
-                                ],*/
                             ],
-                            //'borderWidth' => 1,
-                            //'borderColor' => $color,
                         ],
                     ],
                     'series' => $data_iot_by_hours,
@@ -201,7 +177,6 @@ echo '</pre>';*/
                         'enabled' => true,
                         'xDateFormat' => '%A, %b %e %Y',
                         'valueSuffix' => ' min'
-                        //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                     ],
                     'plotOptions' => [
                         'column' => [
@@ -209,29 +184,8 @@ echo '</pre>';*/
                             'dataLabels' => [
                                 'enabled' => true,
                                 'format' => '{point.percentage:.1f}%',
-                                //'color' => 'black',
-                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                                /*'style' => [
-                                    'textOutline' => '0px',
-                                    'fontWeight' => '0'
-                                ],*/
                             ],
-                            //'borderWidth' => 1,
-                            //'borderColor' => $color,
                         ],
-                        /*'series' => [
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression("
-                                        function(e){
-                                            e.preventDefault();
-                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                        }
-                                    "),
-                                ]
-                            ]
-                        ]*/
                     ],
                     'series' => $data_iot
                 ],
@@ -241,11 +195,11 @@ echo '</pre>';*/
     </div>
 </div>
 
-<!--<div class="box box-primary box-solid" style="display: none;">
+<div class="box box-primary box-solid">
     <div class="box-body">
         <div class="col-md-12">
             <?php
-            /*echo ''; Highcharts::widget([
+            echo Highcharts::widget([
                 'scripts' => [
                     //'modules/exporting',
                     //'themes/grid-light',
@@ -273,7 +227,8 @@ echo '</pre>';*/
                     ],
                     'tooltip' => [
                         //'pointFormat' => 'Power Consumption: <b>{point.y}</b><br/>',
-                        'valueSuffix' => ' KWH'
+                        'valueSuffix' => ' KWH',
+                        'shared' => true
                     ],
                     'yAxis' => [
                         [
@@ -292,12 +247,12 @@ echo '</pre>';*/
                             'opposite' => true
                         ],
                     ],
-                    'series' => $data,
+                    'series' => $data_power_consumption,
                 ],
-            ]);*/
+            ]);
 
             ?>
         </div>
         
     </div>
-</div>-->
+</div>

@@ -74,6 +74,8 @@ class MntKwhReportController extends Controller
 				if ($start_hour == 24) {
 					$start_hour = 0;
 				}
+				$kwh = 0;
+				$max_kwh = 0;
 				foreach ($iot_by_hours as $key => $value) {
 					if ($seq == $value['seq']) {
 						$sisa_detik = $value['lost_data'];
@@ -81,6 +83,8 @@ class MntKwhReportController extends Controller
 						$total_hijau = $value['hijau'];
 						$total_biru = $value['biru'] + $value['kuning'];
 						$total_merah = $value['merah'];
+						$kwh = (int)$value['kwh_consume'];
+						$max_kwh = (int)$value['kwh_end'];
 					}
 				}
 				$categories[] = $start_hour;
@@ -89,6 +93,10 @@ class MntKwhReportController extends Controller
 				$tmp_data_by_hours['biru'][] = round($total_biru / 60, 1) == 0 ? null : round($total_biru / 60, 1);
 				$tmp_data_by_hours['merah'][] = round($total_merah / 60, 1) == 0 ? null : round($total_merah / 60, 1);
 				$tmp_data_by_hours['sisa'][] = round($sisa_detik / 60, 1) == 0 ? null : round($sisa_detik / 60, 1);
+
+				$tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
+				$tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;
+
 				$start_hour++;
 			}
 
@@ -123,6 +131,30 @@ class MntKwhReportController extends Controller
 					'color' => 'green',
 				],
 				
+			];
+
+			$data_power_consumption = [
+				[
+					'name' => 'KWH Measured',
+					'data' => $tmp_data_max_kwh,
+					'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+					'yAxis' => 1,
+					//'showInLegend' => false,
+					'dataLabels' => [
+						'enabled' => true,
+						//'format' => '{y} KWh'
+					],
+				],
+				[
+					'name' => 'KWH Consumption',
+					'data' => $tmp_data_kwh,
+					'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
+					//'showInLegend' => false,
+					'dataLabels' => [
+						'enabled' => true,
+						//'format' => '{y} KWh'
+					],
+				]
 			];
 
 			$machine_iot_util = MachineIotCurrentEffLog::find()
@@ -179,62 +211,6 @@ class MntKwhReportController extends Controller
 					'y' => $total_sisa == 0 ? null : $total_sisa
 				];
 			}
-			/*for($i = $begin; $i <= $end; $i->modify('+1 day')){
-				$proddate = (strtotime($i->format("Y-m-d") . " +7 hours") * 1000);
-				$total_menit = null;
-				//foreach ($color as $key => $color_value) {
-				$total_putih = null;
-				$total_biru = null;
-				$total_hijau = null;
-				$total_merah = null;
-				foreach ($machine_iot_util as $key => $value) {
-					if (date('Y-m-d', strtotime($value['posting_shift']))) {
-						$total_putih += round((int)$value['total_detik'] / 60);
-						$total_biru += round((int)$value['total_detik'] / 60);
-						$total_hijau += round((int)$value['total_detik'] / 60);
-						$total_merah += round((int)$value['total_detik'] / 60);
-						//break;
-					}
-					if (date('Y-m-d', strtotime($value['posting_shift'])) == $i->format("Y-m-d") && ($value['status_warna'] == 'BIRU' || $value['status_warna'] == 'KUNING')) {
-						
-						//break;
-					}
-					if (date('Y-m-d', strtotime($value['posting_shift'])) == $i->format("Y-m-d") && $value['status_warna'] == 'HIJAU') {
-						
-						//break;
-					}
-					if (date('Y-m-d', strtotime($value['posting_shift'])) == $i->format("Y-m-d") && $value['status_warna'] == 'MERAH') {
-						
-						//break;
-					}
-				}
-				$total_menit += $total_putih + $total_biru + $total_hijau + $total_merah;
-				$tmp_data['PUTIH'][] = [
-					'x' => $proddate,
-					'y' => $total_putih
-				];
-				$tmp_data['BIRU'][] = [
-					'x' => $proddate,
-					'y' => $total_biru
-				];
-				$tmp_data['HIJAU'][] = [
-					'x' => $proddate,
-					'y' => $total_hijau
-				];
-				$tmp_data['MERAH'][] = [
-					'x' => $proddate,
-					'y' => $total_merah
-				];
-				//}
-				$sisa_menit = 1440 - $total_menit;
-				if ($sisa_menit == 1440 || $sisa_menit <= 0) {
-					$sisa_menit = null;
-				}
-				$tmp_data['sisa'][] = [
-					'x' => $proddate,
-					'y' => $sisa_menit
-				];
-			}*/
 
 			$data_iot = [];
 			$data_iot = [
@@ -282,6 +258,7 @@ class MntKwhReportController extends Controller
 			'data_iot_by_hours' => $data_iot_by_hours,
 			'start_date' => $start_date,
 			'end_date' => $end_date,
+			'data_power_consumption' => $data_power_consumption,
 		]);
 	}
 }
