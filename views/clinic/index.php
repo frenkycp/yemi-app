@@ -207,13 +207,21 @@ echo '</pre>';*/
                 $category = 'LAKTASI';
                 $bed_rest_time = date('H:i', strtotime($value->masuk)) . ' - ' . date('H:i', strtotime($value->keluar));
             }
+            $masuk = '-';
+            if ($value->masuk != null) {
+                $masuk = date('H:i', strtotime($value->masuk));
+            }
+            $keluar = '-';
+            if ($value->keluar != null) {
+                $keluar = date('H:i', strtotime($value->keluar));
+            }
             echo '<tr>
                 <td class="text-center">' . $value->nik . '</td>
                 <td>' . $value->nama . '</td>
                 <td>' . $value->dept . '</td>
                 <td>' . $category . '</td>
-                <td class="text-center">' . date('H:i', strtotime($value->masuk)) . '</td>
-                <td class="text-center">' . date('H:i', strtotime($value->keluar)) . '</td>
+                <td class="text-center">' . $masuk . '</td>
+                <td class="text-center">' . $keluar . '</td>
                 <td class="text-center">' . $total_this_month->total1 . ' / ' . $total_this_month->total2 . ' / ' . $total_this_month->total3 . '</td>
                 <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
             </tr>';

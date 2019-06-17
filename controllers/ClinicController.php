@@ -37,7 +37,7 @@ class ClinicController extends controller
 		->count();
 
 		$bed_used = KlinikInput::find()
-		->where(['>', 'keluar', date('H:i:s')])
+		->where('keluar IS NULL')
 		->andWhere([
 			'date(pk)' => date('Y-m-d')
 		])
