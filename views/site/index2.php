@@ -127,6 +127,9 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-kwh-report"><i class="fa fa-fw fa-tag"></i> Machine Operation Status<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-iot-utility"><i class="fa fa-fw fa-tag"></i> Machine Daily Utility<span class="japanesse-word"></span></a>
+                    </div>
+                    <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/shift-patrol-tbl"><i class="fa fa-fw fa-tag"></i> Shift Daily Patrol<span class="japanesse-word"></span></a>
                     </div>
                 </div>

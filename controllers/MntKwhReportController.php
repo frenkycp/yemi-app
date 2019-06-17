@@ -6,9 +6,6 @@ use yii\web\JsExpression;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
-use app\models\MachineIot;
-use app\models\MachineIotUtility;
-use app\models\MachineIotUtilityByHours02;
 use app\models\MachineIotCurrentEffLog;
 
 class MntKwhReportController extends Controller
@@ -21,20 +18,12 @@ class MntKwhReportController extends Controller
     
 	public function actionIndex()
 	{
-		ini_set('max_execution_time', 300);
+		//ini_set('max_execution_time', 300);
 		date_default_timezone_set('Asia/Jakarta');
 		
 		$data = [];
-		//$machine_id = 'MNT00211';
 		$posting_date = date('Y-m-d');
 		$categories = [];
-		$color = [
-			'PUTIH',//IDLE
-			'HIJAU',//running
-			'BIRU',//SETTING
-			'KUNING',//SETTING
-			'MERAH',//stop
-		];
 
 		$model = new \yii\base\DynamicModel([
 	        'posting_date', 'machine_id'
