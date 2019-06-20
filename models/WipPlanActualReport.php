@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WipPlanActualReport extends BaseWipPlanActualReport
 {
-    public $total_plan, $total_order, $total_created, $total_started, $total_completed, $total_handover, $request_qty;
+    public $total_plan, $total_actual, $total_order, $total_created, $total_started, $total_completed, $total_handover, $request_qty;
 
     public function behaviors()
     {

@@ -125,7 +125,7 @@ class DprLineEfficiencyDailyController extends Controller
 	    	if ($key == 'CM') {
 	    		$name = 'CHANGE MODEL';
 	    	} elseif ($key == 'CH') {
-	    		$name = 'CHOREI';
+	    		$name = 'WIP';
 	    	}
 	    	$losstime_category_categories[] = $name;
 	    	$losstime_category_final_data[] = [
@@ -239,7 +239,7 @@ class DprLineEfficiencyDailyController extends Controller
 		    foreach ($losstime_detail_arr as $value) {
 		    	$losstime_category = $value['category'] == 'CM' ? 'CHANGE MODEL' : $value['category'];
 		    	if ($losstime_category == 'CH') {
-		    		$losstime_category = 'CHOREI';
+		    		$losstime_category = 'WIP';
 		    	}
 	    		$remark .= '<tr>
 		    		<td class="text-center">' . $value['start_time'] . '</td>

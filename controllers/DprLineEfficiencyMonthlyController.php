@@ -104,7 +104,11 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    ->all();
 
 	    foreach ($losstime_category_arr as $key => $value) {
-	    	$categories_losstime_category[] = $value->category;
+	    	$tmp_category = $value->category;
+	    	if ($tmp_category == 'CH') {
+	    		$tmp_category = 'WIP';
+	    	}
+	    	$categories_losstime_category[] = $tmp_category;
 	    	$tmp_data_losstime_category[] = [
 	    		'y' => $value->losstime,
 	    		'qty' => $value->total_category,
@@ -211,6 +215,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 
 	    foreach ($losstime_detail_arr as $value) {
 	    	$losstime_category = $value['category'] == 'CM' ? 'CHANGE MODEL' : $value['category'];
+	    	$losstime_category = $value['category'] == 'CH' ? 'WIP' : $value['category'];
     		$remark .= '<tr>
     			<td class="text-center">' . $value['proddate'] . '</td>
 	    		<td class="text-center">' . $value['start_time'] . '</td>
@@ -240,6 +245,10 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    ->orderBy('line, proddate, start_time')
 	    ->asArray()
 	    ->all();
+
+	    if ($category == 'CH') {
+	    	$category = 'WIP';
+	    }
 
 	    $remark = '<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
