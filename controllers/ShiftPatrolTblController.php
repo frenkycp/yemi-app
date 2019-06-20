@@ -61,8 +61,8 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 	    if (\Yii::$app->request->get('status') !== null) {
 	    	$searchModel->status = \Yii::$app->request->get('status');
 	    }
-	    if (\Yii::$app->request->get('CC_ID') !== null) {
-	    	$searchModel->CC_ID = \Yii::$app->request->get('section_id');
+	    if (\Yii::$app->request->get('section_id') !== null) {
+	    	$searchModel->section_id = \Yii::$app->request->get('section_id');
 	    }
 	    if (\Yii::$app->request->get('due_date') !== null) {
 	    	$searchModel->due_date = \Yii::$app->request->get('due_date');

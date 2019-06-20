@@ -444,6 +444,10 @@ $columns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
+                'before' => Html::a('READ ME FIRST ...!', Url::to('@web/uploads/daily_patrol_readme.pdf'), [
+                    'target' => '_blank',
+                    'class' => 'btn btn-danger'
+                ]),
                 //'heading' => $heading,
                 //'footer' => false,
             ],
