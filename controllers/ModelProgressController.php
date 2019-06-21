@@ -11,7 +11,6 @@ class ModelProgressController extends Controller
 	public function actionIndex()
 	{
 		$loc_arr = [];
-		$year = date('Y');
 		$model = new \yii\base\DynamicModel([
 	        'gmc', 'year', 'month', 'location'
 	    ]);
