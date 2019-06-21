@@ -132,6 +132,9 @@ $this->registerCss("
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/shift-patrol-tbl"><i class="fa fa-fw fa-tag"></i> Shift Daily Patrol<span class="japanesse-word"></span></a>
                     </div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/new-model-progress"><i class="fa fa-fw fa-tag"></i> Model Monthly Progress<span class="japanesse-word"></span></a>
+                    </div>
                 </div>
     		</div>
     		<div class="col-sm-3">
