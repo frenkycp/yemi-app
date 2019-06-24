@@ -57,7 +57,7 @@ class NewModelProgressController extends Controller
 			'parent' => $parent,
 			'period' => $period
 		])
-		->andWhere('child_analyst NOT IN (\'WF01\', \'WS01\', \'WM04\', \'WM01\') ')
+		->andWhere('child_analyst NOT IN (\'WF01\', \'WS01\', \'WM04\') ')
 		->groupBy('child_analyst, child_analyst_desc, child, child_desc')
 		->orderBy('child_analyst_desc, child')
 		->asArray()
