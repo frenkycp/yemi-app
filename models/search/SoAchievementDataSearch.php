@@ -46,6 +46,7 @@ $query = SernoOutput::find()
       'id',
       'monthly_total_plan' => 'SUM(qty)',
       'monthly_progress_output' => 'SUM(output)',
+      'is_minus' => 'SUM(CASE WHEN qty <> output THEN 1 ELSE 0 END)',
       'total_delay' => 'SUM(CASE WHEN DATE_FORMAT(etd, \'%Y%m\') > id THEN qty ELSE 0 END)',
 ])
 ->groupBy('id')

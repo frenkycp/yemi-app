@@ -60,7 +60,11 @@ $grid_column = [
             if ($model->total_delay == 0) {
                 return $model->total_delay;
             } else {
-                return Html::a("$model->total_delay", ['get-so-detail-data', 'period' => $model->id, 'line' => $model->line], ['class' => 'modal_detail btn btn-warning btn-xs', 'data-pjax' => '0', 'title' => 'Click to show detail']);
+                $bg_class = 'modal_detail btn btn-warning btn-xs';
+                if ($model->is_minus > 0) {
+                    $bg_class = 'modal_detail btn btn-danger btn-xs';
+                }
+                return Html::a("$model->total_delay", ['get-so-detail-data', 'period' => $model->id, 'line' => $model->line], ['class' => $bg_class, 'data-pjax' => '0', 'title' => 'Click to show detail']);
             }
             
         },
