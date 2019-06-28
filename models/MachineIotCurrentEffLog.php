@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MachineIotCurrentEffLog extends BaseMachineIotCurrentEffLog
 {
+    public $hijau_biru_kuning;
 
     public function behaviors()
     {
