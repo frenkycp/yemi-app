@@ -15,11 +15,11 @@ use app\models\ShiftPatrolRejectHistory;
 
 class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblController
 {
-	/*public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }*/
+    }
 
     public function getSectionArr()
 	{
