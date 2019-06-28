@@ -38,12 +38,16 @@ $this->registerJs("$(function() {
      e.preventDefault();
      $('#common-modal').modal('show');
    });
+   $('#btn-img-after').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
 });");
 
 $columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}&nbsp;&nbsp;{reject}&nbsp;&nbsp;{due_date}&nbsp;&nbsp;{close}<br/><span style="color: DarkGrey">------------------------</span><br/>{reply}&nbsp;&nbsp;&nbsp;{answer}',
+        'template' => '{update}&nbsp;&nbsp;{reject}&nbsp;&nbsp;{due_date}&nbsp;&nbsp;{close}<br/><span style="color: DarkGrey"></span><br/>{reply}&nbsp;&nbsp;&nbsp;{answer}&nbsp;&nbsp;&nbsp;{upload_img_after}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -52,6 +56,21 @@ $columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            }, 'upload_img_after' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-upload-after',
+                    'value' => Url::to(['upload-img-after','id' => $model->id]),
+                    'title' => 'Upload Image (After)',
+                    'class' => 'showModalButton'
+                ];
+                $karyawan = app\models\Karyawan::find()->where(['NIK' => \Yii::$app->user->identity->username])->one();
+                if ($karyawan->DEPARTEMEN == $model->section_group) {
+                    return Html::a('<i class="fa fa-fw fa-upload"></i>', '#', $options);
+                } else {
+                    return '<i class="fa fa-fw fa-upload disabled-link"></i>';
+                }
+                
             }, 'update' => function ($url, $model, $key) {
                 $options = [
                     'title' => Yii::t('cruds', 'Update'),

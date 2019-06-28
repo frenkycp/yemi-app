@@ -15,11 +15,11 @@ use app\models\ShiftPatrolRejectHistory;
 
 class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblController
 {
-	/**/public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 
     public function getSectionArr()
 	{
@@ -36,6 +36,34 @@ class ShiftPatrolTblController extends \app\controllers\base\ShiftPatrolTblContr
 		asort($tmp_arr);
 		return $tmp_arr;
 	}
+
+	public function actionUploadImgAfter($id)
+    {
+    	date_default_timezone_set('Asia/Jakarta');
+        $model = ShiftPatrolTbl::find()->where(['id' => $id])->one();
+
+        if ($model->load($_POST)) {
+            $model->upload_file2 = UploadedFile::getInstance($model, 'upload_file2');
+			if ($model->validate()) {
+				if ($model->upload_file2) {
+					$new_filename2 = 'SHIFT_PATROL_AFTER_' . $model->NIK . '_' . date('Ymd_His') . '.' . $model->upload_file2->extension;
+					$model->img_filename2 = $new_filename2;
+	        		$filePath = \Yii::getAlias("@app/web/uploads/SHIFT_PATROL/") . $new_filename2;
+	        		if (!$model->upload_file2->saveAs($filePath)) {
+	                    return $model->errors;
+	                }
+	                ImageFile::resize_crop_image($filePath, $filePath, 70, 800);
+	        	}
+			}
+            if ($model->save()) {
+                return $this->redirect(Url::previous());
+            }
+        } else {
+            return $this->renderAjax('upload-img-after', [
+                'model' => $model,
+            ]);
+        }
+    }
 
 	public function actionGetCostCenter($CC_ID)
 	{
