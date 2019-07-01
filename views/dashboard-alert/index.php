@@ -39,6 +39,11 @@ $this->registerJs("
 	        type: 'POST',
 	        url: '" . Url::to(['machine-status']) . "',
 	        success: function(data){
+	        	if(data.content_str == ''){
+	        		$('#machine-container').hide();
+	        	} else {
+	        		$('#machine-container').show();
+	        	}
 		    	$('#machine_alert_container').html(data.content_str);
 		    },
 		    complete: function(){
@@ -51,6 +56,11 @@ $this->registerJs("
 	        type: 'POST',
 	        url: '" . Url::to(['line-status']) . "',
 	        success: function(data){
+	        	if(data.content_str == ''){
+	        		$('#man-container').hide();
+	        	} else {
+	        		$('#man-container').show();
+	        	}
 		    	$('#line_stop_container').html(data.content_str);
 		    },
 		    complete: function(){
@@ -64,31 +74,32 @@ $this->registerJs("
 	});
 ");
 ?>
-<div class="row">
-	<div class="col-md-3">
-		<h3 class="text-center" style="color: white;">MACHINE</h3>
-		<hr>
-		<div id="machine_alert_container"></div>
-		
-	</div>
-	<div class="col-md-3">
-		<h3 class="text-center" style="color: white;">MAN</h3>
+<div class="row" id="man-container" style="display: none;">
+	<div class="col-md-12">
+		<h3 class="" style="color: white;">MAN</h3>
 		<hr>
 		<div id="line_stop_container"></div>
 	</div>
-	<div class="col-md-3">
-		<h3 class="text-center" style="color: white;">MATERIAL</h3>
+</div>
+<div class="row" id="machine-container" style="display: none;">
+	<div class="col-md-12">
+		<h3 class="" style="color: white;">MACHINE</h3>
 		<hr>
-
-	</div>
-	<div class="col-md-3">
-		<h3 class="text-center" style="color: white;">METHOD</h3>
-		<hr>
-
+		<div id="machine_alert_container"></div>
 	</div>
 </div>
-<div class="row">
-	
+
+<div class="row" style="display: none;">
+	<div class="col-md-12">
+		<h3 class="" style="color: white;">MATERIAL</h3>
+		<hr>
+	</div>
+</div>
+<div class="row" style="display: none;">
+	<div class="col-md-12">
+		<h3 class="" style="color: white;">METHOD</h3>
+		<hr>
+	</div>
 </div>
 <!--<div class="row">
 	<div class="col-md-3">

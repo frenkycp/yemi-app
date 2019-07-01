@@ -6,6 +6,7 @@ use yii\web\Controller;
 
 use app\models\MachineIotCurrent;
 use app\models\SernoLosstime;
+use app\models\MachineIotCurrentEff;
 
 class DashboardAlertController extends Controller
 {
@@ -26,8 +27,8 @@ class DashboardAlertController extends Controller
 		} else {
 			$status = 0;
 			foreach ($tmp_data as $key => $value) {
-				$content_str .= '<div class="row">
-					<div class="col-md-12">
+				$content_str .= '
+					<div class="col-md-3">
 						<div class="small-box bg-red">
 							<div class="inner">
 		              			<h3>' . $value->mesin_id . '</h3>
@@ -40,8 +41,7 @@ class DashboardAlertController extends Controller
               					
             				</a>
 						</div>
-					</div>
-				</div>';
+					</div>';
 				//$content_str .= '<button type="button" class="btn btn-danger btn-block"">' . $value->mesin_id . ' - ' . $value->mesin_description . '</button>';
 			}
 		}
@@ -68,6 +68,7 @@ class DashboardAlertController extends Controller
 		->andWhere(['<>', 'line', ''])
 		->andWhere(['<>', 'category', 'CM'])
 		->andWhere(['<>', 'category', 'UNKNOWN'])
+		->andWhere(['<>', 'category', 'HP'])
 		->all();
 		$content_str = '';
 		$status = 1;
@@ -77,13 +78,8 @@ class DashboardAlertController extends Controller
 		} else {
 			$status = 0;
 			foreach ($line_stop as $key => $value) {
-				//$content_str .= '<button type="button" class="btn btn-danger btn-block"">' . $value->line . ' (' . $value->start_time . ')</button>';
-				/*$content_str .= '<div class="callout callout-danger">
-					<h4>Line ' . $value->line . ' (' . $proddate . ' ' . $value->start_time . ')</h4>
-					<p>' . $value->reason . '</p>
-				</div>';*/
-				$content_str .= '<div class="row">
-					<div class="col-md-12">
+				$content_str .= '
+					<div class="col-md-3">
 						<div class="small-box bg-red">
 							<div class="inner">
 		              			<h3>FA - LINE ' . $value->line . '</h3>
@@ -96,8 +92,7 @@ class DashboardAlertController extends Controller
               					
             				</a>
 						</div>
-					</div>
-				</div>';
+					</div>';
 			}
 		}
 
@@ -110,4 +105,5 @@ class DashboardAlertController extends Controller
 
 		return $return_data;
 	}
+
 }
