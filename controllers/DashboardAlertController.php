@@ -82,7 +82,7 @@ class DashboardAlertController extends Controller
 					<div class="col-md-3">
 						<div class="small-box bg-red">
 							<div class="inner">
-		              			<h3>FA - LINE ' . $value->line . '</h3>
+		              			<h3>LINE ' . $value->line . ' [ ' . $value->category . ' ]</h3>
 		              			<p>' . $value->reason . '</p>
 		            		</div>
 		            		<div class="icon">
