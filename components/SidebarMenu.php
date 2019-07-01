@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use app\models\Menu;
 use app\models\HrComplaint;
+use app\models\HrFacility;
 use app\models\IpqaPatrolTbl;
 use app\models\ShiftPatrolTbl;
 
@@ -28,6 +29,21 @@ class SidebarMenu extends Widget
                 ->where([
                     'status' => 0,
                     'category' => 'HR',
+                ])
+                ->count();
+                $obj = [
+                    "label" => $menu->name,
+                    "icon" => $menu->icon,
+                    "url" => SidebarMenu::getUrl($menu),
+                    "visible" => SidebarMenu::roleHasAccess($roleId, $menu->id),
+                    'template' => '<a href="{url}">{icon} {label}<span class="pull-right-container"><small class="label pull-right bg-yellow">' . $total_waiting . '</small></span></a>',
+                ];
+            }
+
+            if ($menu->controller == 'hr-facility' && $menu->action == 'index') {
+                $total_waiting = HrFacility::find()
+                ->where([
+                    'status' => 0,
                 ])
                 ->count();
                 $obj = [
