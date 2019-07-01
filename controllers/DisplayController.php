@@ -42,8 +42,42 @@ use app\models\search\TopOvertimeDataSearch;
 use app\models\search\HrComplaintSearch;
 use app\models\HrComplaint;
 
+//plan receiving calendar
+use app\models\PlanReceiving;
+
 class DisplayController extends Controller
 {
+    public function actionGetDailyReceiving()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $tmp_data = PlanReceiving::find()
+        ->select([
+            'receiving_date', 'vendor_name',
+            'total_qty' => 'SUM(QTY)'
+        ])
+        ->where('completed_time IS NULL')
+        ->groupBy('receiving_date, vendor_name')
+        ->orderBy('receiving_date, vendor_name')
+        ->all();
+
+        $data = [];
+        foreach ($tmp_data as $key => $value) {
+            $data[] = [
+                'title' => strtoupper($value->vendor_name) . ' - ' . $value->total_qty,
+                'start' => (strtotime($value->receiving_date . " +7 hours") * 1000),
+                'allDay' => true
+            ];
+        }
+
+        return json_encode($data);
+    }
+
+    public function actionReceivingCalendar()
+    {
+        $this->layout = 'clean';
+        return $this->render('receiving-calendar');
+    }
+
 	public function actionProductionMonthlyInspection()
 	{
 		$this->layout = 'clean';
