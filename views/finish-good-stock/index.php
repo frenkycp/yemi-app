@@ -7,9 +7,9 @@ use yii\helpers\Url;
 
 $day_stock = round($grand_total / 5000);
 if($day_stock > 1){
-    $day_total = $day_stock . ' days output';
+    $day_total = $day_stock . ' days stock';
 } else {
-    $day_total = $day_stock . ' day output';
+    $day_total = $day_stock . ' day stock';
 }
 
 $this->title = [
