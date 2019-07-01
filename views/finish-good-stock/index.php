@@ -5,8 +5,15 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+$day_stock = round($grand_total / 5000);
+if($day_stock > 1){
+    $day_total = $day_stock . ' days output';
+} else {
+    $day_total = $day_stock . ' day output';
+}
+
 $this->title = [
-    'page_title' => 'Finish Goods Stock <span class="text-green japanesse">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers)',
+    'page_title' => 'Finish Goods Stock <span class="text-green japanesse">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers &efDot; ' . $day_total . ')',
     'tab_title' => 'Finish Goods Stock',
     'breadcrumbs_title' => 'Finish Goods Stock'
 ];
@@ -159,6 +166,7 @@ echo '</pre>';*/
         ?>
         <div class="well well-sm">
             <h4 class="text-light-blue"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></h4>
+            <h4 class="text-light-blue"><b> 1 day output &efDot; 5.000 pcs</b></h4>
         </div>
     </div>
     

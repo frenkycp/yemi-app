@@ -5,8 +5,15 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+$day_stock = round($grand_total / 5000);
+if($day_stock > 1){
+    $day_total = $day_stock . ' days output';
+} else {
+    $day_total = $day_stock . ' day output';
+}
+
 $this->title = [
-    'page_title' => 'FINISH GOOD STOCK (<span class="japanesse">完成品在庫</span>) : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers)',
+    'page_title' => 'FINISH GOOD STOCK (<span class="japanesse">完成品在庫</span>) : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers &efDot; ' . $day_total . ')',
     'tab_title' => 'FINISH GOOD STOCK',
     'breadcrumbs_title' => 'FINISH GOOD STOCK'
 ];
@@ -25,31 +32,10 @@ $this->registerCss("
     .box-title {font-weight: bold;}
     .box-header .box-title, .control-label{font-size: 2em;}
     .container {width: auto;}
-    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    .content-header>h1 {font-size: 2.8em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #33383D;}
-
-    #clinic-tbl{
-        //border:1px solid #29B6F6;
-        border-top: 0;
-    }
-    #clinic-tbl > thead > tr > th{
-        border:1px solid #8b8c8d;
-        background-color: #858689;
-        color: white;
-        font-size: 22px;
-        border-bottom: 7px solid #ddd;
-        vertical-align: middle;
-    }
-    #clinic-tbl > tbody > tr > td{
-        //border:1px solid #29B6F6;
-        font-size: 16px;
-        background-color: #B3E5FC;
-        font-weight: 1000;
-        color: #555;
-        vertical-align: middle;
-    }
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
 ");
@@ -93,7 +79,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 650,
+                    'height' => 600,
                     'style' => [
                         'fontFamily' => 'Source Sans Pro'
                     ],
@@ -199,6 +185,8 @@ echo '</pre>';*/
         ?>
         <div class="well well-sm">
             <span class="text-light-blue" style="font-size: 30px;"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></span>
+            <br/>
+            <span class="text-light-blue" style="font-size: 30px;"><b> 1 day output &efDot; 5.000 pcs</b></span>
         </div>
     </div>
     
