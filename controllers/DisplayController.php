@@ -93,7 +93,7 @@ class DisplayController extends Controller
                 $tmp_data['open'][] = [
                     'x' => $tmp_request_date,
                     'y' => (int)$value->qty_open,
-                    'url' => Url::to(['get-remark', 'request_ymd' => $value->request_ymd, 'request_hour' => $value->request_hour, 'STAT' => 'O']),
+                    'url' => Url::to(['machine-order-get-remark', 'request_ymd' => $value->request_ymd, 'request_hour' => $value->request_hour, 'STAT' => 'O']),
                 ];
             }
             
@@ -101,7 +101,7 @@ class DisplayController extends Controller
                 $tmp_data['close'][] = [
                     'x' => $tmp_request_date,
                     'y' => (int)$value->qty_close,
-                    'url' => Url::to(['get-remark', 'request_ymd' => $value->request_ymd, 'request_hour' => $value->request_hour, 'STAT' => 'C']),
+                    'url' => Url::to(['machine-order-get-remark', 'request_ymd' => $value->request_ymd, 'request_hour' => $value->request_hour, 'STAT' => 'C']),
                 ];
             }
             
@@ -124,6 +124,62 @@ class DisplayController extends Controller
             'data' => $data,
             'model' => $model,
         ]);
+    }
+
+    public function actionMachineOrderGetRemark($request_ymd, $request_hour, $STAT)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        if ($STAT == 'O') {
+            $status = 'OPEN';
+        } else {
+            $status = 'CLOSE';
+        }
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Request ' . $status . ' <small>(' . $request_ymd . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 12px;">
+            <th class="text-center">Req. Time</th>
+            <th class="text-center">Slip ID</th>
+            <th>Location</th>
+            <th>Machine</th>
+            <th>Model</th>
+            <th>Requestor</th>
+            <th>Driver</th>
+        </tr>';
+
+        $data_arr = GojekOrderView01::find()
+        ->where([
+            'source' => 'MCH',
+            'request_ymd' => $request_ymd,
+            'request_hour' => $request_hour,
+            'STAT' => $STAT
+        ])
+        ->orderBy('request_date')
+        ->all();
+
+        $no = 1;
+        foreach ($data_arr as $key => $value) {
+            $remark .= '<tr style="font-size: 12px;">
+                <td class="text-center" style="font-weight: bold;">' . date('H:i', strtotime($value->request_date)) . '</td>
+                <td class="text-center">' . $value->slip_id . '</td>
+                <td>' . $value->to_loc . '</td>
+                <td>' . $value->item_desc . '</td>
+                <td>' . $value->model . '</td>
+                <td>' . $value->NAMA_KARYAWAN . '</td>
+                <td>' . $value->GOJEK_DESC . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
     }
 
     public function actionMachineHourlyRank()
