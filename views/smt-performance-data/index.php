@@ -67,11 +67,7 @@ $grid_column = [
         'value' => function($model){
             return $model->child_analyst_desc;
         },
-        'filter' => [
-            'WM03' => 'SMT',
-            'WI01' => 'INJ SMALL',
-            'WI02' => 'INJ LARGE',
-        ],
+        'filter' => \Yii::$app->params['smt_inj_loc_arr'],
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [

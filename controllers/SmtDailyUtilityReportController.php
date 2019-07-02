@@ -26,11 +26,7 @@ class SmtDailyUtilityReportController extends Controller
 		$line_arr = ['01', '02'];
 		$loc = 'WM03';
 
-		$loc_dropdown = [
-			'WM03' => 'SMT',
-			'WI01' => 'INJ SMALL',
-			'WI02' => 'INJ LARGE',
-		];
+		$loc_dropdown = \Yii::$app->params['smt_inj_loc_arr'];
 
 		if (\Yii::$app->request->get('year') !== null) {
 			$year = \Yii::$app->request->get('year');

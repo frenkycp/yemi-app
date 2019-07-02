@@ -67,6 +67,12 @@ return [
         'VX2' => 55,
         'XXX' => 100,
     ],
+    'smt_inj_loc_arr' => [
+        'WM03' => 'SMT',
+        'WI01' => 'INJ SMALL',
+        'WI02' => 'INJ LARGE',
+        'WM02' => 'PCB AUTO INS.',
+    ],
 ];
 
 function getYearArray()
