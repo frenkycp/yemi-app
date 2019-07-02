@@ -10,8 +10,8 @@ use yii\bootstrap\ActiveForm;
 $this->title = [
     //'page_title' => 'Machine Utility Rank (Daily) <span class="japanesse text-green"></span>',
     'page_title' => null,
-    'tab_title' => 'Machine Utility Rank (Last Day)',
-    'breadcrumbs_title' => 'Machine Utility Rank (Last Day)'
+    'tab_title' => 'Machine Utility Rank (Last Hour)',
+    'breadcrumbs_title' => 'Machine Utility Rank (Last Hour)'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -38,7 +38,7 @@ $this->registerCss("
 ?>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title" style="font-size: 28px;">Machine Utility on <?= date('l, j F Y', strtotime(date('Y-m-d') . ' -1 day')); ?></h3>
+        <h3 class="panel-title" style="font-size: 28px;">Machine Utility [ <?= date('Y-m-d H:00', strtotime($last_hour)) ?> ]</h3>
     </div>
     <div class="panel-body">
         <?php
@@ -59,7 +59,7 @@ $this->registerCss("
                     'height' => 500
                 ],
                 'title' => [
-                    'text' => 'Machine Utility (Last Day)'
+                    'text' => 'Machine Utility (Last Hour)'
                 ],
                 'subtitle' => [
                     'text' => ''

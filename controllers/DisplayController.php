@@ -139,7 +139,7 @@ class DisplayController extends Controller
         $posting_date = date('Y-m-d', strtotime($last_hour));
         $jam = date('G', strtotime($last_hour));
 
-        echo $posting_date . ' || ' . $jam;
+        //echo $posting_date . ' || ' . $jam;
 
         $tmp_eff_arr = MachineIotCurrentEffLog::find()
         ->where([
@@ -153,7 +153,7 @@ class DisplayController extends Controller
         $categories = [];
         foreach ($tmp_eff_arr as $key => $value) {
             $categories[] = $value->mesin_description;
-            $tmp_data[$value->mesin_description] = (int)$value->pct;
+            $tmp_data[] = (int)$value->pct;
         }
 
         $data = [
@@ -165,7 +165,7 @@ class DisplayController extends Controller
             ],
         ];
 
-        return $this->render('machine-daily-rank', [
+        return $this->render('machine-hourly-rank', [
             'data' => $data,
             'categories' => $categories,
             'last_hour' => $last_hour,
