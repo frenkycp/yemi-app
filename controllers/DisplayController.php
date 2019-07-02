@@ -47,10 +47,134 @@ use app\models\PlanReceiving;
 
 use app\models\MachineIotCurrentEffLog;
 
+//go machine order
+use app\models\GojekOrderView01;
+
 class DisplayController extends Controller
 {
+    public function actionGoMachineOrder()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = [];
+
+        $model = new \yii\base\DynamicModel([
+            'request_date'
+        ]);
+        $model->addRule(['request_date'], 'required');
+        $model->request_date = date('Y-m-d');
+
+        /*if (\Yii::$app->request->get('request_date') !== null) {
+            $model->request_date = \Yii::$app->request->get('request_date');
+        }*/
+
+        $model->load($_GET);
+
+        $tmp_order_arr = GojekOrderView01::find()
+        ->select([
+            'request_ymd', 'request_hour',
+            'qty_open' => 'SUM(CASE WHEN STAT = \'O\' THEN 1 ELSE 0 END)',
+            'qty_close' => 'SUM(CASE WHEN STAT = \'C\' THEN 1 ELSE 0 END)',
+        ])
+        ->where([
+            'source' => 'MCH',
+            'request_ymd' => $model->request_date
+        ])
+        ->groupBy('request_ymd, request_hour')
+        ->orderBy('request_hour')
+        ->all();
+        //echo $model->request_date;
+        //echo count($tmp_order_arr);
+
+        $tmp_data = [];
+        foreach ($tmp_order_arr as $key => $value) {
+            $tmp_request_date = (strtotime($value->request_ymd . ' ' . $value->request_hour . " +7 hours") * 1000);
+            if ($value->qty_open > 0) {
+                $tmp_data['open'][] = [
+                    'x' => $tmp_request_date,
+                    'y' => (int)$value->qty_open,
+                    'url' => Url::to(['get-remark', 'request_ymd' => $value->request_ymd, 'request_hour' => $value->request_hour, 'STAT' => 'O']),
+                ];
+            }
+            
+            if ($value->qty_close > 0) {
+                $tmp_data['close'][] = [
+                    'x' => $tmp_request_date,
+                    'y' => (int)$value->qty_close,
+                    'url' => Url::to(['get-remark', 'request_ymd' => $value->request_ymd, 'request_hour' => $value->request_hour, 'STAT' => 'C']),
+                ];
+            }
+            
+        }
+
+        $data = [
+            [
+                'name' => 'ORDER (OPEN)',
+                'data' => $tmp_data['open'],
+                'color' => 'rgba(255, 0, 0, 0.7)',
+            ],
+            [
+                'name' => 'ORDER (CLOSE)',
+                'data' => $tmp_data['close'],
+                'color' => 'rgba(0, 255, 0, 0.7)',
+            ],
+        ];
+
+        return $this->render('go-machine-order', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
+
+    public function actionMachineHourlyRank()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->layout = 'clean';
+        $data = [];
+        $last_hour = date('Y-m-d H:i:s', strtotime(' -1 hour'));
+        if ((int)date('i') <= 5) {
+            $last_hour = date('Y-m-d H:i:s', strtotime($last_hour . ' -1 hour'));
+        }
+
+        $posting_date = date('Y-m-d', strtotime($last_hour));
+        $jam = date('G', strtotime($last_hour));
+
+        echo $posting_date . ' || ' . $jam;
+
+        $tmp_eff_arr = MachineIotCurrentEffLog::find()
+        ->where([
+            'posting_date' => $posting_date,
+            'jam' => $jam
+        ])
+        ->orderBy('pct, mesin_description')
+        ->all();
+
+        $tmp_data = [];
+        $categories = [];
+        foreach ($tmp_eff_arr as $key => $value) {
+            $categories[] = $value->mesin_description;
+            $tmp_data[$value->mesin_description] = (int)$value->pct;
+        }
+
+        $data = [
+            [
+                'name' => 'Utility',
+                'data' => $tmp_data,
+                'color' => 'rgba(0, 255, 0, 0.7)',
+                'showInLegend' => false,
+            ],
+        ];
+
+        return $this->render('machine-daily-rank', [
+            'data' => $data,
+            'categories' => $categories,
+            'last_hour' => $last_hour,
+        ]);
+    }
+
     public function actionMachineDailyRank()
     {
+        date_default_timezone_set('Asia/Jakarta');
         $this->layout = 'clean';
         $data = [];
         $last_date = date('Y-m-d', strtotime(date('Y-m-d') . ' -1 day'));
@@ -94,6 +218,7 @@ class DisplayController extends Controller
                 'name' => 'Utility',
                 'data' => $tmp_data2,
                 'color' => 'rgba(0, 255, 0, 0.7)',
+                'showInLegend' => false,
             ],
         ];
         //print_r($tmp_data);
@@ -104,6 +229,7 @@ class DisplayController extends Controller
             'last_date' => $last_date,
         ]);
     }
+
     public function actionGetDailyReceiving()
     {
         date_default_timezone_set('Asia/Jakarta');

@@ -10,8 +10,8 @@ use yii\bootstrap\ActiveForm;
 $this->title = [
     //'page_title' => 'Machine Utility Rank (Daily) <span class="japanesse text-green"></span>',
     'page_title' => null,
-    'tab_title' => 'Machine Utility Rank (Daily)',
-    'breadcrumbs_title' => 'Machine Utility Rank (Daily)'
+    'tab_title' => 'Machine Utility Rank (Last Day)',
+    'breadcrumbs_title' => 'Machine Utility Rank (Last Day)'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -90,6 +90,11 @@ $this->registerCss("
                         'dataLabels' => [
                             'enabled' => true,
                             'format' => '{point.y}%',
+                            'style' => [
+                                //'color' => 'white',
+                                'fontWeight' => 'bold',
+                                'fontSize' => '20px',
+                            ],
                         ],
                     ],
                     'series' => [
