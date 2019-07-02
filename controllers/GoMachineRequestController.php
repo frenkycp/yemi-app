@@ -66,10 +66,17 @@ class GoMachineRequestController extends Controller
 			
 		}
 
-		$data[] = [
-			'name' => 'ORDER (OPEN)',
-			'data' => $tmp_data['open'],
-			'color' => 'rgba(255, 0, 0, 0.7)',
+		$data = [
+			[
+				'name' => 'ORDER (OPEN)',
+				'data' => $tmp_data['open'],
+				'color' => 'rgba(255, 0, 0, 0.7)',
+			],
+			[
+				'name' => 'ORDER (CLOSE)',
+				'data' => $tmp_data['close'],
+				'color' => 'rgba(0, 255, 0, 0.7)',
+			],
 		];
 
 		return $this->render('index', [

@@ -101,19 +101,21 @@ echo '</pre>';*/
                         'title' => [
                             'text' => 'Qty'
                         ],
-                        //'gridLineWidth' => 0,
+                        'stackLabels' => [
+                            'enabled' => true,
+                        ],
                     ],
                     'credits' => [
                         'enabled' =>false
                     ],
                     'tooltip' => [
                         'enabled' => true,
-                        'xDateFormat' => '%A, %b %e %Y',
+                        //'xDateFormat' => '%A, %b %e %Y',
                         //'valueSuffix' => ' min'
                     ],
                     'plotOptions' => [
                         'column' => [
-                            //'stacking' => 'percent',
+                            'stacking' => 'normal',
                             'dataLabels' => [
                                 'enabled' => true,
                                 //'format' => '{point.percentage:.1f}%',

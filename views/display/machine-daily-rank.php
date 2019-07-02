@@ -8,7 +8,8 @@ use yii\bootstrap\ActiveForm;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
-    'page_title' => 'Machine Utility Rank (Daily) <span class="japanesse text-green"></span>',
+    //'page_title' => 'Machine Utility Rank (Daily) <span class="japanesse text-green"></span>',
+    'page_title' => null,
     'tab_title' => 'Machine Utility Rank (Daily)',
     'breadcrumbs_title' => 'Machine Utility Rank (Daily)'
 ];
@@ -35,9 +36,9 @@ $this->registerCss("
 ");
 
 ?>
-<div class="panel panel-primary">
+<div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title" style="font-size: 24px;">Machine Utility on <?= date('l, j F Y', strtotime(date('Y-m-d') . ' -1 day')); ?></h3>
+        <h3 class="panel-title" style="font-size: 28px;">Machine Utility on <?= date('l, j F Y', strtotime(date('Y-m-d') . ' -1 day')); ?></h3>
     </div>
     <div class="panel-body">
         <?php
@@ -45,8 +46,8 @@ $this->registerCss("
             'scripts' => [
                 //'modules/exporting',
                 //'themes/sand-signika',
-                //'themes/dark-unica',
-                'themes/grid-light',
+                'themes/dark-unica',
+                //'themes/grid-light',
             ],
             'options' => [
                 'chart' => [
@@ -58,7 +59,7 @@ $this->registerCss("
                     'height' => 500
                 ],
                 'title' => [
-                    'text' => 'Machine Utility'
+                    'text' => 'Machine Utility (Last Day)'
                 ],
                 'subtitle' => [
                     'text' => ''
@@ -80,7 +81,7 @@ $this->registerCss("
                 'tooltip' => [
                     'enabled' => true,
                     //'xDateFormat' => '%A, %b %e %Y',
-                    'valueSuffix' => ' %'
+                    'valueSuffix' => '%'
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                 ],
                 'plotOptions' => [
@@ -88,6 +89,7 @@ $this->registerCss("
                         //'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
+                            'format' => '{point.y}%',
                         ],
                     ],
                     'series' => [
