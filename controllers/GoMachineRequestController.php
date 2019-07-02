@@ -25,9 +25,11 @@ class GoMachineRequestController extends Controller
 	    $model->addRule(['request_date'], 'required');
 	    $model->request_date = date('Y-m-d');
 
-	    if (\Yii::$app->request->get('request_date') !== null) {
+	    /*if (\Yii::$app->request->get('request_date') !== null) {
 			$model->request_date = \Yii::$app->request->get('request_date');
-		}
+		}*/
+
+		$model->load($_GET);
 
 		$tmp_order_arr = GojekOrderView01::find()
 		->select([
