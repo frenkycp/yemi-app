@@ -45,8 +45,65 @@ use app\models\HrComplaint;
 //plan receiving calendar
 use app\models\PlanReceiving;
 
+use app\models\MachineIotCurrentEffLog;
+
 class DisplayController extends Controller
 {
+    public function actionMachineDailyRank()
+    {
+        $this->layout = 'clean';
+        $data = [];
+        $last_date = date('Y-m-d', strtotime(date('Y-m-d') . ' -1 day'));
+
+        $tmp_eff_arr = MachineIotCurrentEffLog::find()
+        ->select([
+            'posting_shift', 'mesin_id', 'mesin_description',
+            'hijau' => 'SUM(hijau)',
+            'hijau_biru' => 'SUM(hijau_biru)',
+            'hijau_biru_kuning' => 'SUM(hijau_biru + kuning)',
+            'pct' => 'AVG(pct)'
+        ])
+        ->where([
+            'posting_shift' => $last_date
+        ])
+        ->groupBy('mesin_id, mesin_description, posting_shift')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_eff_arr as $key => $value) {
+            $tmp_util = 0;
+            if ($value->hijau_biru_kuning > 0) {
+                $tmp_util = round(($value->hijau / $value->hijau_biru_kuning) * 100, 1);
+            }
+            $tmp_data[$value->mesin_description] = $tmp_util;
+        }
+
+        asort($tmp_data);
+
+        $tmp_data2 = [];
+        $categories = [];
+        foreach ($tmp_data as $key => $value) {
+            $categories[] = $key;
+            $tmp_data2[] = [
+                'y' => $value
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'Utility',
+                'data' => $tmp_data2,
+                'color' => 'rgba(0, 255, 0, 0.7)',
+            ],
+        ];
+        //print_r($tmp_data);
+
+        return $this->render('machine-daily-rank', [
+            'data' => $data,
+            'categories' => $categories,
+            'last_date' => $last_date,
+        ]);
+    }
     public function actionGetDailyReceiving()
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -172,6 +229,54 @@ class DisplayController extends Controller
     		''
     	]);
 	}
+
+    public function actionDprLineEfficiency()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->layout = 'clean';
+        $line = 'HS';
+        $today = date('Y-m-d');
+
+        $target_eff_arr = \Yii::$app->params['line_eff_target'];
+        $target_eff = 100;
+        if (isset($target_eff_arr[$line])) {
+            $target_eff = $target_eff_arr[$line];
+        }
+
+        $data_arr = SernoInput::find()
+        ->where([
+            'proddate' => $today,
+            'line' => $line
+        ])
+        ->orderBy('waktu')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($data_arr as $key => $value) {
+            $post_time = (strtotime($value->proddate . ' ' . $value->waktu . " +7 hours") * 1000);
+            $eff = null;
+            if ($value->mp_time > 0) {
+                $eff = round(($value->qty_time / $value->mp_time) * 100, 1);
+            }
+
+            $tmp_data[] = [
+                'x' => $post_time,
+                'y' => $eff
+            ];
+        }
+
+        $series = [
+            [
+                'data' => $tmp_data,
+                'name' => 'Efficiency',
+                //'lineWidth' => 0.5
+            ],
+        ];
+
+        return $this->render('dpr-line-efficiency', [
+            'series' => $series,
+        ]);
+    }
 
 	public function actionPartsPickingStatus()
 	{

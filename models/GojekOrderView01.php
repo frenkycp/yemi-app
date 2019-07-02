@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class GojekOrderView01 extends BaseGojekOrderView01
 {
+    public $qty_open, $qty_close;
 
     public function behaviors()
     {
