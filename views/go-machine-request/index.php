@@ -11,8 +11,8 @@ use kartik\select2\Select2;
 
 $this->title = [
     'page_title' => null,
-    'tab_title' => 'Machine Operation Status',
-    'breadcrumbs_title' => 'Machine Operation Status'
+    'tab_title' => 'Go Machine Order',
+    'breadcrumbs_title' => 'Go Machine Order'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
