@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Machine Efficiency (By Range) <span class="text-green japanesse"></span>',
-    'tab_title' => 'Machine Efficiency (By Range)',
-    'breadcrumbs_title' => 'Machine Efficiency (By Range)'
+    'page_title' => 'Machine Utility (By Range) <span class="text-green japanesse"></span>',
+    'tab_title' => 'Machine Utility (By Range)',
+    'breadcrumbs_title' => 'Machine Utility (By Range)'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

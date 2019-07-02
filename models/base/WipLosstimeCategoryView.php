@@ -10,6 +10,8 @@ use Yii;
  * This is the base-model class for table "db_owner.WIP_LOSSTIME_CATEGORY_VIEW".
  *
  * @property string $period
+ * @property string $child_analyst
+ * @property string $child_analyst_desc
  * @property double $break_time
  * @property double $nozzle_maintenance
  * @property double $change_schedule
@@ -28,6 +30,7 @@ use Yii;
  * @property double $profile_problem
  * @property double $pick_up_error
  * @property double $other
+ * @property double $machine_warming_up
  * @property string $aliasModel
  */
 abstract class WipLosstimeCategoryView extends \yii\db\ActiveRecord
@@ -57,8 +60,8 @@ abstract class WipLosstimeCategoryView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period'], 'string'],
-            [['break_time', 'nozzle_maintenance', 'change_schedule', 'air_pressure_problem', 'power_failure', 'part_shortage', 'set_up_1st_time_running_tp', 'part_arrangement_dcn', 'meeting', 'dandori', 'porgram_error', 'm_c_problem', 'feeder_problem', 'quality_problem', 'pcb_transfer_problem', 'profile_problem', 'pick_up_error', 'other'], 'number']
+            [['period', 'child_analyst', 'child_analyst_desc'], 'string'],
+            [['break_time', 'nozzle_maintenance', 'change_schedule', 'air_pressure_problem', 'power_failure', 'part_shortage', 'set_up_1st_time_running_tp', 'part_arrangement_dcn', 'meeting', 'dandori', 'porgram_error', 'm_c_problem', 'feeder_problem', 'quality_problem', 'pcb_transfer_problem', 'profile_problem', 'pick_up_error', 'other', 'machine_warming_up'], 'number']
         ];
     }
 
@@ -69,6 +72,8 @@ abstract class WipLosstimeCategoryView extends \yii\db\ActiveRecord
     {
         return [
             'period' => 'Period',
+            'child_analyst' => 'Child Analyst',
+            'child_analyst_desc' => 'Child Analyst Desc',
             'break_time' => 'Break Time',
             'nozzle_maintenance' => 'Nozzle Maintenance',
             'change_schedule' => 'Change Schedule',
@@ -87,6 +92,7 @@ abstract class WipLosstimeCategoryView extends \yii\db\ActiveRecord
             'profile_problem' => 'Profile Problem',
             'pick_up_error' => 'Pick Up Error',
             'other' => 'Other',
+            'machine_warming_up' => 'Machine Warming Up',
         ];
     }
 

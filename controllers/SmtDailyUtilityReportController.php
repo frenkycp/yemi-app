@@ -160,7 +160,8 @@ class SmtDailyUtilityReportController extends Controller
 
 		$wip_losstime_category = WipLosstimeCategoryView::find()
 		->where([
-			'period' => $period
+			'period' => $period,
+			'child_analyst' => $loc
 		])
 		->one();
 

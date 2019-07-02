@@ -27,7 +27,7 @@ class CrusherTbl extends BaseCrusherTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                [['date', 'model', 'part', 'qty', 'bom', 'consume'], 'required'],
             ]
         );
     }
