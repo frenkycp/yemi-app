@@ -164,8 +164,8 @@ class MntKwhReportController extends Controller
 			->asArray()
 			->all();
 
-			$begin = new \DateTime(date('Y-m-d', strtotime($year . '-' . $month . '-01')));
-			$end   = new \DateTime(date('Y-m-t', strtotime($year . '-' . $month . '-01')));
+			$begin = new \DateTime(date('Y-m-d', strtotime(date('Y-m', strtotime($model->posting_date)) . '-01')));
+			$end   = new \DateTime(date('Y-m-t', strtotime(date('Y-m', strtotime($model->posting_date)) . '-01')));
 
 			$start_date = (strtotime($begin->format('Y-m-d') . " +7 hours") * 1000);
 			$end_date = (strtotime($end->format('Y-m-d') . " +7 hours") * 1000);

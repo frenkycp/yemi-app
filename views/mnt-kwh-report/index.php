@@ -83,7 +83,8 @@ echo '</pre>';*/
                 'scripts' => [
                     //'modules/exporting',
                     //'themes/grid-light',
-                    //'themes/dark-unica',
+                    'themes/dark-unica',
+                    //'themes/sand-signika',
                 ],
                 'options' => [
                     'chart' => [
@@ -119,7 +120,8 @@ echo '</pre>';*/
                             'stacking' => 'percent',
                             'dataLabels' => [
                                 'enabled' => true,
-                                'format' => '{point.percentage:.1f}%',
+                                //'format' => '{point.percentage:.1f}%',
+                                'format' => '{point.percentage:.0f}%',
                             ],
                         ],
                     ],
@@ -141,7 +143,7 @@ echo '</pre>';*/
                     //'modules/exporting',
                     //'themes/sand-signika',
                     //'themes/grid-light',
-                    'themes/dark-unica',
+                    //'themes/dark-unica',
                 ],
                 'options' => [
                     'chart' => [
@@ -183,7 +185,8 @@ echo '</pre>';*/
                             'stacking' => 'percent',
                             'dataLabels' => [
                                 'enabled' => true,
-                                'format' => '{point.percentage:.1f}%',
+                                //'format' => '{point.percentage:.1f}%',
+                                'format' => '{point.percentage:.0f}%',
                             ],
                         ],
                     ],
@@ -203,7 +206,7 @@ echo '</pre>';*/
                 'scripts' => [
                     //'modules/exporting',
                     //'themes/grid-light',
-                    'themes/dark-unica',
+                    //'themes/dark-unica',
                 ],
                 'options' => [
                     'chart' => [
