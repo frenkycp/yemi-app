@@ -100,15 +100,15 @@ class PlanReceivingVisualController extends Controller
 				'category' => $tmp_category,
 				'data' => [
 					[
-						'name' => 'Container',
+						'name' => 'Container [ Import ]',
 						'data' => $total_container_arr
 					],
 					[
-						'name' => 'Truck',
+						'name' => 'Truck [ JIT ]',
 						'data' => $total_truck_arr
 					],
 					[
-						'name' => 'WB',
+						'name' => 'WB [ Milk Run ]',
 						'data' => $total_wb_arr
 					]
 				]

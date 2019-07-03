@@ -134,6 +134,9 @@ $this->registerJs($js);
                     'options' => [
                         'chart' => [
                             'type' => 'column',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
+                            ],
                             //'height' => 300,
                         ],
                         'credits' => [
