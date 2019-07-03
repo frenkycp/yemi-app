@@ -52,6 +52,293 @@ use app\models\GojekOrderView01;
 
 class DisplayController extends Controller
 {
+    public function actionMachineStatusRange()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $data = [];
+        $categories = [];
+
+        $model = new \yii\base\DynamicModel([
+            'machine_id', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','machine_id'], 'required');
+
+        if ($model->load($_GET) || \Yii::$app->request->get('posting_date') !== null) {
+            $iot_by_hours = MachineIotCurrentEffLog::find()
+            ->where([
+                'mesin_id' => $model->machine_id,
+            ])
+            ->andWhere(['>=', 'posting_shift', $model->from_date])
+            ->andWhere(['<=', 'posting_shift', $model->to_date])
+            ->asArray()
+            ->all();
+
+            $avg_arr = MachineIotCurrentEffLog::find()
+            ->select([
+                'period_shift',
+                'hijau' => 'SUM(hijau)',
+                'hijau_biru' => 'SUM(hijau_biru)',
+                'total' => 'SUM(total)',
+            ])
+            ->where([
+                'mesin_id' => $model->machine_id,
+            ])
+            ->andWhere(['>=', 'posting_shift', $model->from_date])
+            ->groupBy('period_shift')
+            ->all();
+
+            $avg_arr_data = [];
+            foreach ($avg_arr as $key => $value) {
+                $pct = 0;
+                if ($value->hijau_biru > 0) {
+                    $pct = round(($value->hijau / $value->total) * 100);
+                }
+                $avg_arr_data[$value->period_shift] = $pct;
+            }
+
+            $begin = new \DateTime($model->from_date);
+            $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date . ' +1 day')));
+
+            $tmp_data_by_hours = [];
+            $tmp_avg_hijau = [];
+
+            /*for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $proddate = (strtotime($i->format("Y-m-d") . " +7 hours") * 1000);
+                $avg_hijau_pct = $avg_arr_data[$i->format('Ym')];
+                $tmp_avg_hijau[] = [
+                    'x' => $proddate,
+                    'y' => $avg_hijau_pct
+                ];
+            }*/
+
+            foreach ($iot_by_hours as $key => $value) {
+                $jam = str_pad($value['jam'], 2, '0', STR_PAD_LEFT);
+                $his = $jam . ':00:00';
+                $ymd_his = date('Y-m-d', strtotime($value['posting_date'])) . ' ' . $his;
+                $proddate = (strtotime($ymd_his . " +7 hours") * 1000);
+
+                $avg_hijau_pct = $avg_arr_data[date('Ym', strtotime($value['posting_date']))];
+
+                $total_putih = round($value['putih'] / 60, 1);
+                $total_biru = round($value['biru'] / 60, 1);
+                $total_hijau = round($value['hijau'] / 60, 1);
+                $total_merah = round($value['merah'] / 60, 1);
+                $total_lost = round($value['lost_data'] / 60, 1);
+
+                $tmp_data_by_hours['merah'][] = [
+                    'x' => $proddate,
+                    'y' => $total_merah == 0 ? null : $total_merah
+                ];
+                $tmp_data_by_hours['putih'][] = [
+                    'x' => $proddate,
+                    'y' => $total_putih == 0 ? null : $total_putih
+                ];
+                $tmp_data_by_hours['biru'][] = [
+                    'x' => $proddate,
+                    'y' => $total_biru == 0 ? null : $total_biru
+                ];
+                $tmp_data_by_hours['hijau'][] = [
+                    'x' => $proddate,
+                    'y' => $total_hijau == 0 ? null : $total_hijau
+                ];
+                $tmp_data_by_hours['lost'][] = [
+                    'x' => $proddate,
+                    'y' => $total_lost == 0 ? null : $total_lost
+                ];
+                $tmp_avg_hijau[] = [
+                    'x' => $proddate,
+                    'y' => $avg_hijau_pct
+                ];
+                
+            }
+            /*$start_hour = 7;
+            for ($i=1; $i <= 24; $i++) {
+                $seq = str_pad($i, 2, '0', STR_PAD_LEFT);
+                $total_putih = null;
+                $total_biru = null;
+                $total_hijau = null;
+                $total_merah = null;
+                $sisa_detik = null;
+                if ($start_hour == 24) {
+                    $start_hour = 0;
+                }
+                $kwh = 0;
+                $max_kwh = 0;
+                foreach ($iot_by_hours as $key => $value) {
+                    if ($seq == $value['seq']) {
+                        $sisa_detik = $value['lost_data'];
+                        $total_putih = $value['putih'];
+                        $total_hijau = $value['hijau'];
+                        $total_biru = $value['biru'] + $value['kuning'];
+                        $total_merah = $value['merah'];
+                        $kwh = (int)$value['kwh_consume'];
+                        $max_kwh = (int)$value['kwh_end'];
+                    }
+                }
+                $categories[] = $start_hour;
+                $tmp_data_by_hours['putih'][] = round($total_putih / 60, 1) == 0 ? null : round($total_putih / 60, 1);
+                $tmp_data_by_hours['hijau'][] = round($total_hijau / 60, 1) == 0 ? null : round($total_hijau / 60, 1);
+                $tmp_data_by_hours['biru'][] = round($total_biru / 60, 1) == 0 ? null : round($total_biru / 60, 1);
+                $tmp_data_by_hours['merah'][] = round($total_merah / 60, 1) == 0 ? null : round($total_merah / 60, 1);
+                $tmp_data_by_hours['sisa'][] = round($sisa_detik / 60, 1) == 0 ? null : round($sisa_detik / 60, 1);
+
+                $tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
+                $tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;
+
+                $start_hour++;
+            }*/
+
+            $data_iot_by_hours = [
+                [
+                    'name' => 'UNKNOWN',
+                    'data' => $tmp_data_by_hours['lost'],
+                    'color' => 'rgba(0, 0, 0, 0)',
+                    'dataLabels' => [
+                        'enabled' => false
+                    ],
+                    'showInLegend' => false,
+                    'type' => 'column'
+                ],
+                [
+                    'name' => 'IDLE',
+                    'data' => $tmp_data_by_hours['putih'],
+                    'color' => 'silver',
+                    'type' => 'column'
+                ],
+                [
+                    'name' => 'STOP',
+                    'data' => $tmp_data_by_hours['merah'],
+                    'color' => 'red',
+                    'type' => 'column'
+                ],
+                [
+                    'name' => 'SETTING',
+                    'data' => $tmp_data_by_hours['biru'],
+                    'color' => 'blue',
+                    'type' => 'column'
+                ],
+                [
+                    'name' => 'RUNNING',
+                    'data' => $tmp_data_by_hours['hijau'],
+                    'color' => 'green',
+                    'type' => 'column'
+                ],
+                [
+                    'name' => 'RUNNING [ AVG ]',
+                    'data' => $tmp_avg_hijau,
+                    'color' => 'rgba(0, 255, 10, 0.8)',
+                    'type' => 'line',
+                    'marker' => [
+                        'enabled' => false
+                    ],
+                    'tooltip' => [
+                        'valueSuffix' => '%'
+                    ],
+                ],
+            ];
+
+            $machine_iot_util = MachineIotCurrentEffLog::find()
+            ->select([
+                'posting_shift',
+                'merah' => 'SUM(merah)',
+                'kuning' => 'SUM(kuning)',
+                'hijau' => 'SUM(hijau)',
+                'biru' => 'SUM(biru)',
+                'putih' => 'SUM(putih)',
+                'lost_data' => 'SUM(lost_data)'
+            ])
+            ->where([
+                'mesin_id' => $model->machine_id,
+            ])
+            ->andWhere(['>=', 'posting_shift', $model->from_date])
+            ->andWhere(['<=', 'posting_shift', $model->to_date])
+            ->groupBy('posting_shift')
+            ->asArray()
+            ->all();
+
+            $start_date = (strtotime($model->from_date . " +7 hours") * 1000);
+            $end_date = (strtotime($model->to_date . " +7 hours") * 1000);
+
+            $tmp_data = [];
+            foreach ($machine_iot_util as $key => $value) {
+                $proddate = (strtotime($value['posting_shift'] . " +7 hours") * 1000);
+                $total_putih = round($value['putih'] / 60, 1);
+                $total_biru = round(($value['biru'] + $value['kuning']) / 60, 1);
+                $total_hijau = round($value['hijau'] / 60, 1);
+                $total_merah = round($value['merah'] / 60, 1);
+                $total_sisa = round($value['lost_data'] / 60, 1);
+
+                $tmp_data['PUTIH'][] = [
+                    'x' => $proddate,
+                    'y' => $total_putih == 0 ? null : $total_putih
+                ];
+                $tmp_data['BIRU'][] = [
+                    'x' => $proddate,
+                    'y' => $total_biru == 0 ? null : $total_biru
+                ];
+                $tmp_data['HIJAU'][] = [
+                    'x' => $proddate,
+                    'y' => $total_hijau == 0 ? null : $total_hijau
+                ];
+                $tmp_data['MERAH'][] = [
+                    'x' => $proddate,
+                    'y' => $total_merah == 0 ? null : $total_merah
+                ];
+                $tmp_data['sisa'][] = [
+                    'x' => $proddate,
+                    'y' => $total_sisa == 0 ? null : $total_sisa
+                ];
+            }
+
+            $data_iot = [];
+            $data_iot = [
+                [
+                    'name' => 'UNKNOWN',
+                    'data' => $tmp_data['sisa'],
+                    'color' => 'rgba(0, 0, 0, 0)',
+                    'dataLabels' => [
+                        'enabled' => false
+                    ],
+                    'showInLegend' => false,
+                ],
+                [
+                    'name' => 'IDLE',
+                    'data' => $tmp_data['PUTIH'],
+                    'color' => 'silver'
+                ],
+                [
+                    'name' => 'STOP',
+                    'data' => $tmp_data['MERAH'],
+                    'color' => 'red'
+                ],
+                [
+                    'name' => 'SETTING',
+                    'data' => $tmp_data['BIRU'],
+                    'color' => 'blue'
+                ],
+                [
+                    'name' => 'RUNNING',
+                    'data' => $tmp_data['HIJAU'],
+                    'color' => 'green',
+                ],
+                
+            ];
+        }
+
+        return $this->render('machine-status-range', [
+            'model' => $model,
+            'posting_date' => $posting_date,
+            'machine_id' => $machine_id,
+            'categories' => $categories,
+            'data_iot' => $data_iot,
+            'data_iot_by_hours' => $data_iot_by_hours,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+        ]);
+    }
+
     public function actionGoMachineOrder()
     {
         $this->layout = 'clean';

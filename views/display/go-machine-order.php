@@ -97,7 +97,7 @@ echo '</pre>';*/
                         'height' => 500
                     ],
                     'title' => [
-                        'text' => 'GO-Machine Request'
+                        'text' => 'GO-Machine [ 切替段取り ] Request'
                     ],
                     'subtitle' => [
                         'text' => ''
