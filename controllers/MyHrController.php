@@ -20,12 +20,6 @@ use yii\web\UploadedFile;
 
 class MyHrController extends Controller
 {
-	/**/public function behaviors()
-    {
-        //apply role_action table for privilege (doesn't apply to super admin)
-        return \app\models\Action::getAccess($this->id);
-    }
-
     /**
     * @var boolean whether to enable CSRF validation for the actions in this controller.
     * CSRF validation is enabled only when both this property and [[Request::enableCsrfValidation]] are true.
