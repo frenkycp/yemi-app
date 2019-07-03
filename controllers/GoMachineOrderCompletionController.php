@@ -33,17 +33,19 @@ class GoMachineOrderCompletionController extends Controller
 
 		$tmp_data = [];
 
-		$driver_point_arr = ArrayHelper::map(GojekOrderTbl::find()
+		/*$driver_point_arr = ArrayHelper::map(GojekOrderView01::find()
 		->select([
 			'GOJEK_ID',
 			'total_point' => 'COUNT(id)'
 		])
 		->where([
-			'CONVERT(date, arrival_date)' => date('Y-m-d'),
-			'CONVERT(date, issued_date)' => date('Y-m-d')
+			'request_ymd' => date('Y-m-d'),
+			'STAT' => 'C',
+			//'CONVERT(date, arrival_date)' => date('Y-m-d'),
+			//'CONVERT(date, issued_date)' => date('Y-m-d')
 		])
 		->groupBy('GOJEK_ID')
-		->all(), 'GOJEK_ID', 'total_point');
+		->all(), 'GOJEK_ID', 'total_point');*/
 
 		foreach ($driver_arr as $value) {
 			$nik = $value->GOJEK_ID;
@@ -51,7 +53,7 @@ class GoMachineOrderCompletionController extends Controller
 			->select([
 				'GOJEK_ID',
 				'GOJEK_DESC',
-				'issued_date',
+				'request_ymd',
 				'stat_open' => 'SUM(CASE WHEN STAT = \'O\' THEN 1 ELSE 0 END)',
 				'stat_close' => 'SUM(CASE WHEN STAT = \'C\' THEN 1 ELSE 0 END)',
 				'stat_total' => 'COUNT(STAT)'
@@ -59,24 +61,28 @@ class GoMachineOrderCompletionController extends Controller
 			->where([
 				'GOJEK_ID' => $nik,
 			])
-			->andWhere(['>=', 'issued_date', date('Y-m-d', strtotime(date('Y-m-d') . '-10 days'))])
-			->groupBy('GOJEK_ID, GOJEK_DESC, issued_date')
-			->orderBy('GOJEK_DESC, issued_date')
+			->andWhere(['>=', 'request_ymd', date('Y-m-d', strtotime(date('Y-m-d') . '-10 days'))])
+			->groupBy('GOJEK_ID, GOJEK_DESC, request_ymd')
+			->orderBy('GOJEK_DESC, request_ymd')
 			->asArray()
 			->all();
 
+			$total_point = 0;
 			if (count($order_data_arr) > 0) {
 				foreach ($order_data_arr as $order_data) {
-					$issued_date = (strtotime($order_data['issued_date'] . " +7 hours") * 1000);
+					if ($order_data['request_ymd'] == date('Y-m-d') && $nik == $order_data['GOJEK_ID']) {
+						$total_point = $order_data['stat_close'];
+					}
+					$issued_date = (strtotime($order_data['request_ymd'] . " +7 hours") * 1000);
 					$tmp_data[$nik]['open'][] = [
 						'x' => $issued_date,
 						'y' => $order_data['stat_open'] == 0 ? null : (int)$order_data['stat_open'],
-						'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'O']),
+						'url' => Url::to(['get-remark', 'request_ymd' => $order_data['request_ymd'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'O']),
 					];
 					$tmp_data[$nik]['close'][] = [
 						'x' => $issued_date,
 						'y' => $order_data['stat_close'] == 0 ? null : (int)$order_data['stat_close'],
-						'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'C']),
+						'url' => Url::to(['get-remark', 'request_ymd' => $order_data['request_ymd'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'C']),
 					];
 					$tmp_data[$nik]['nama'] = $order_data['GOJEK_DESC'];
 				}
@@ -90,6 +96,7 @@ class GoMachineOrderCompletionController extends Controller
 			$tmp_data[$nik]['to_loc'] = $value->to_loc;
 			$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
 			$tmp_data[$nik]['hadir'] = $value->HADIR;
+			$tmp_data[$nik]['todays_point'] = $total_point;
 		}
 
 		$fix_data = [];
@@ -112,7 +119,8 @@ class GoMachineOrderCompletionController extends Controller
 			$fix_data[$key]['to_loc'] = $value['to_loc'];
 			$fix_data[$key]['last_update'] = $value['last_update'];
 			$fix_data[$key]['hadir'] = $value['hadir'];
-			$fix_data[$key]['todays_point'] = isset($driver_point_arr[$key]) ? $driver_point_arr[$key] : 0;
+			//$fix_data[$key]['todays_point'] = isset($driver_point_arr[$key]) ? $driver_point_arr[$key] : 0;
+			$fix_data[$key]['todays_point'] =  $value['todays_point'];
 		}
 
 		return $this->render('index', [
@@ -124,14 +132,14 @@ class GoMachineOrderCompletionController extends Controller
 		]);
 	}
 
-	public function actionGetRemark($ISSUED_DATE, $GOJEK_ID, $GOJEK_DESC, $STAT)
+	public function actionGetRemark($request_ymd, $GOJEK_ID, $GOJEK_DESC, $STAT)
 	{
 		$data_arr = GojekOrderTbl::find()
 		->joinWith('wipPlanActualReport')
 		->where([
 			'GOJEK_ID' => $GOJEK_ID,
 			'STAT' => $STAT,
-			'FORMAT(issued_date, \'yyyy-MM-dd\')' => $ISSUED_DATE
+			'FORMAT(request_date, \'yyyy-MM-dd\')' => $request_ymd
 		])
 		->orderBy('request_date ASC, model_group ASC, period_line ASC, from_loc ASC, slip_id ASC')
 		->all();
