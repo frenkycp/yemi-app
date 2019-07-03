@@ -165,8 +165,8 @@ echo '</pre>';*/
         yii\bootstrap\Modal::end();
         ?>
         <div class="well well-sm">
-            <h4 class="text-light-blue"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></h4>
-            <h4 class="text-light-blue"><b> 1 day output &efDot; 5.000 pcs</b></h4>
+            <h4 class="text-light-blue"><b> 1 container &efDot; 54 m<sup>3</sup></b></h4>
+            <h4 class="text-light-blue"><b> 1 day output &efDot; 5,000 pcs</b></h4>
         </div>
     </div>
     

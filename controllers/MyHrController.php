@@ -11,16 +11,20 @@ use app\models\AbsensiTbl;
 use app\models\HrLoginLog;
 use yii\helpers\Url;
 use app\models\search\HrComplaintSearch;
+use app\models\search\HrFacilitySearch;
 use app\models\HrComplaint;
+use app\models\HrFacility;
 use dmstr\bootstrap\Tabs;
+use app\models\ImageFile;
+use yii\web\UploadedFile;
 
 class MyHrController extends Controller
 {
-	/*public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }*/
+    }
 
     /**
     * @var boolean whether to enable CSRF validation for the actions in this controller.
@@ -140,6 +144,24 @@ class MyHrController extends Controller
         ]);
     }
 
+    public function actionIndexFacility()
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['my_hr_user'];
+        $this->layout = 'my-hr';
+
+        $searchModel  = new HrFacilitySearch;
+        $searchModel->nik = $nik;
+        $dataProvider = $searchModel->search($_GET);
+        return $this->render('index-facility', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
     /**
     * Creates a new HrComplaint model.
     * If creation is successful, the browser will be redirected to the 'view' page.
@@ -182,6 +204,93 @@ class MyHrController extends Controller
             $model->addError('_exception', $msg);
         }
         return $this->render('create-laporan', ['model' => $model]);
+    }
+
+    public function actionCreateFacility()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['my_hr_user'];
+        $this->layout = 'my-hr';
+        $model = new HrFacility;
+        $model->scenario = HrFacility::SCENARIO_CREATE;
+
+        try {
+            if ($model->load($_POST)) {
+                $karyawan = Karyawan::find()
+                ->where(['NIK' => $nik])
+                ->one();
+
+                $model->nik = '' . $nik;
+                $model->emp_name = $karyawan->NAMA_KARYAWAN;
+                $model->cc_id = $karyawan->CC_ID;
+                $model->dept = $karyawan->DEPARTEMEN;
+                $model->section = $karyawan->SECTION;
+                $model->sub_section = $karyawan->SUB_SECTION;
+                $model->period = date('Ym');
+                $model->input_datetime = date('Y-m-d H:i:s');
+
+                $model->img_01 = UploadedFile::getInstance($model, 'img_01');
+                if ($model->validate()) {
+                    if ($model->img_01) {
+                        $new_filename1 = 'MY_FACILITY_' . $nik . '_' . date('Ymd_His') . '.' . $model->img_01->extension;
+                        $model->img_filename = $new_filename1;
+                        $filePath = \Yii::getAlias("@app/web/uploads/MY FACILITY/") . $new_filename1;
+                        if (!$model->img_01->saveAs($filePath)) {
+                            return $model->errors;
+                        }
+                        ImageFile::resize_crop_image($filePath, $filePath, 80, 800);
+                    }
+                }
+                //$model->category = 'HR';
+                if ($model->save()) {
+                    return $this->redirect(Url::previous());
+                }
+            } elseif (!\Yii::$app->request->isPost) {
+                $model->load($_GET);
+            }
+        } catch (\Exception $e) {
+            $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+            $model->addError('_exception', $msg);
+        }
+
+        return $this->render('create-facility', ['model' => $model]);
+    }
+
+    public function actionUploadFacilityImg($id)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['my_hr_user'];
+        $model = HrFacility::find()->where(['id' => $id])->one();
+
+        if ($model->load($_POST)) {
+            $model->img_01 = UploadedFile::getInstance($model, 'img_01');
+            if ($model->validate()) {
+                if ($model->img_01) {
+                    $new_filename1 = 'MY_FACILITY_' . $nik . '_' . date('Ymd_His') . '.' . $model->img_01->extension;
+                    $model->img_filename = $new_filename1;
+                    $filePath = \Yii::getAlias("@app/web/uploads/MY FACILITY/") . $new_filename1;
+                    if (!$model->img_01->saveAs($filePath)) {
+                        return $model->errors;
+                    }
+                    ImageFile::resize_crop_image($filePath, $filePath, 80, 800);
+                }
+            }
+            if ($model->save()) {
+                return $this->redirect(Url::previous());
+            }
+        } else {
+            return $this->renderAjax('upload-facility-img', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionLogin()

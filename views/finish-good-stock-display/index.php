@@ -184,9 +184,9 @@ echo '</pre>';*/
         yii\bootstrap\Modal::end();
         ?>
         <div class="well well-sm">
-            <span class="text-light-blue" style="font-size: 30px;"><b> 1 container &efDot; 54.0 m<sup>3</sup></b></span>
+            <span class="text-light-blue" style="font-size: 30px;"><b> 1 container &efDot; 54 m<sup>3</sup></b></span>
             <br/>
-            <span class="text-light-blue" style="font-size: 30px;"><b> 1 day output &efDot; 5.000 pcs</b></span>
+            <span class="text-light-blue" style="font-size: 30px;"><b> 1 day output &efDot; 5,000 pcs</b></span>
         </div>
     </div>
     
