@@ -12,9 +12,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'GO-MACHINE TRANSPORT DATA <span class="japanesse text-green">(切替段取り)</span>',
-    'tab_title' => 'GO-MACHINE TRANSPORT DATA',
-    'breadcrumbs_title' => 'GO-MACHINE TRANSPORT DATA'
+    'page_title' => 'TRANSPORT DATA <span class="japanesse text-green">[ 切替段取り ]</span> | GO-MACHINE',
+    'tab_title' => 'TRANSPORT DATA',
+    'breadcrumbs_title' => 'TRANSPORT DATA'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

@@ -11,7 +11,7 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'Order Information <span class="text-green japanesse"></span>',
+    'page_title' => 'Order Information <span class="text-green japanesse">[ 切替段取り ]</span> | GO-MACHINE',
     'tab_title' => 'Order Information',
     'breadcrumbs_title' => 'Order Information'
 ];

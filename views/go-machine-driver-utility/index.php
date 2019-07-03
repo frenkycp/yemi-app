@@ -9,7 +9,7 @@ use yii\bootstrap\ActiveForm;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'TRANSPORT UTILIZATION <span class="japanesse text-green">(配達の稼働率）</span> | GO-MACHINE',
+    'page_title' => 'TRANSPORT UTILIZATION <span class="japanesse text-green">[ 切替段取り ]</span> | GO-MACHINE',
     'tab_title' => 'TRANSPORT UTILIZATION',
     'breadcrumbs_title' => 'TRANSPORT UTILIZATION'
 ];
