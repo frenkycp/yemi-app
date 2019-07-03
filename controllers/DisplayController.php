@@ -93,7 +93,7 @@ class DisplayController extends Controller
             foreach ($avg_arr as $key => $value) {
                 $pct = 0;
                 if ($value->hijau_biru > 0) {
-                    $pct = round(($value->hijau / $value->total) * 100);
+                    $pct = round(($value->hijau / $value->hijau_biru) * 100);
                 }
                 $avg_arr_data[$value->period_shift] = $pct;
             }
