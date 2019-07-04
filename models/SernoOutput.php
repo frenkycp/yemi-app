@@ -89,4 +89,8 @@ class SernoOutput extends BaseSernoOutput
     {
         return $this->hasMany(SernoInput::className(), ['plan' => 'pk']);
     }
+    public function getSernoCnt()
+    {
+        return $this->hasOne(SernoCnt::className(), ['cnt' => 'cntr']);
+    }
 }

@@ -50,8 +50,39 @@ use app\models\MachineIotCurrentEffLog;
 //go machine order
 use app\models\GojekOrderView01;
 
+use app\models\SernoOutput;
+
 class DisplayController extends Controller
 {
+    public function actionContainerLoading()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->layout = 'clean';
+
+        $tmp_data = SernoOutput::find()
+        ->joinWith('sernoCnt')
+        ->select([
+            'cntr',
+            'dst' => 'tb_serno_output.dst',
+            'status' => 'IFNULL(status, 1.5)',
+            'start',
+            'tgl',
+            'line',
+            'gate',
+        ])
+        ->where([
+            'etd' => date('Y-m-d')
+        ])
+        ->groupBy('cntr')
+        ->orderBy('status, dst')
+        ->asArray()
+        ->all();
+
+        return $this->render('container-loading', [
+            'data' => $data,
+            'tmp_data' => $tmp_data
+        ]);
+    }
     public function actionMachineStatusRange()
     {
         $this->layout = 'clean';
