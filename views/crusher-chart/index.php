@@ -71,7 +71,8 @@ echo '</pre>';*/
     </div>
     <div class="form-group">
         <br/>
-        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-success', 'style' => 'margin-top: 5px;']); ?>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-success', 'style' => 'margin-top: 5px;']); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <?= Html::a('VIEW ALL DATA', ['crusher-tbl/index'], ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;', 'target' => '_blank']); ?>
     </div>
 </div>
 

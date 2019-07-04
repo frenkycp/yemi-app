@@ -16,6 +16,13 @@ use Yii;
  * @property double $qty
  * @property double $bom
  * @property double $consume
+ * @property string $created_datetime
+ * @property string $created_by_id
+ * @property string $created_by_name
+ * @property string $modified_datetime
+ * @property string $modified_by_id
+ * @property string $modified_by_name
+ * @property integer $status
  * @property string $aliasModel
  */
 abstract class CrusherTbl extends \yii\db\ActiveRecord
@@ -45,9 +52,10 @@ abstract class CrusherTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date'], 'safe'],
-            [['model', 'part'], 'string'],
-            [['qty', 'bom', 'consume'], 'number']
+            [['date', 'created_datetime', 'modified_datetime'], 'safe'],
+            [['model', 'part', 'created_by_id', 'created_by_name', 'modified_by_id', 'modified_by_name'], 'string'],
+            [['qty', 'bom', 'consume'], 'number'],
+            [['status'], 'integer']
         ];
     }
 
@@ -64,6 +72,13 @@ abstract class CrusherTbl extends \yii\db\ActiveRecord
             'qty' => 'Qty',
             'bom' => 'Bom',
             'consume' => 'Consume',
+            'created_datetime' => 'Created Datetime',
+            'created_by_id' => 'Created By ID',
+            'created_by_name' => 'Created By Name',
+            'modified_datetime' => 'Modified Datetime',
+            'modified_by_id' => 'Modified By ID',
+            'modified_by_name' => 'Modified By Name',
+            'status' => 'Status',
         ];
     }
 
