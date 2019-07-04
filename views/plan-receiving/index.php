@@ -10,8 +10,13 @@ use app\models\PlanReceiving;
 /* @var $searchModel app\models\search\PlanReceivingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Plan Receiving';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Plan Receiving <span class="japanesse text-green">(納入計画表)</span>',
+    'tab_title' => 'Plan Receiving',
+    'breadcrumbs_title' => 'Plan Receiving'
+];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);

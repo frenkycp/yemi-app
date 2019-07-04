@@ -12,8 +12,13 @@ use yii\web\JsExpression;
 /* @var $searchModel app\models\search\PlanReceivingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Plan Receiving Visual';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Plan Receiving <span class="japanesse text-green">(納入計画表)</span>',
+    'tab_title' => 'Plan Receiving',
+    'breadcrumbs_title' => 'Plan Receiving'
+];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $selected_month = date('n');
 if(!empty($_POST))
@@ -48,7 +53,6 @@ $this->registerJs($js);
 ?>
 <div class="plan-receiving-index">
 
-    <!--<h1><?= Html::encode($this->title) ?> <small><?= date('F Y'); ?></small></h1>-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>

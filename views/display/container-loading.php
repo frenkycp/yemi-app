@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Container Loading Progress',
-    'tab_title' => 'Container Loading Progress',
-    'breadcrumbs_title' => 'Container Loading Progress'
+    'page_title' => 'Container Loading by Group <span class="japanesse text-green">(グループ別コンテナー積み込み作業表)</span>',
+    'tab_title' => 'Container Loading by Group',
+    'breadcrumbs_title' => 'Container Loading by Group'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -116,7 +116,7 @@ echo '</pre>';*/
             }
 
             $color_css = ' progress-bar-green';
-            if ($minutes > 45) {
+            if ($minutes_pct > 100) {
                 $color_css = ' progress-bar-red';
             }
 
