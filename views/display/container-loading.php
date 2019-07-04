@@ -40,14 +40,14 @@ $this->registerCss("
     }
     #progress-tbl > thead > tr > th{
         border:1px solid #8b8c8d;
-        background-color: #858689;
+        background-color: #595F66;
         color: white;
         font-size: 24px;
         border-bottom: 7px solid #ddd;
         vertical-align: middle;
     }
     #progress-tbl > tbody > tr > td{
-        border:1px solid #4e4e4e;
+        border:1px solid #777474;
         font-size: 28px;
         //background-color: #B3E5FC;
         //font-weight: 1000;
@@ -75,7 +75,7 @@ print_r($tmp_data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
-<span style="font-size: 1.7em; color: white;"></span>
+<span style="color: white; font-size: 1.7em;"> LAST UPDATE : <?= date('Y-m-d H:i:s'); ?> </span>
 <table class="table table-bordered" id="progress-tbl">
     <thead>
         <tr>
@@ -122,16 +122,16 @@ echo '</pre>';*/
 
             ?>
             <tr>
-                <td class="text-center"><?= $value['status'] == 2 ? 'EXPORTED' : $value['gate']; ?></td>
+                <td class="text-center" style="font-weight: bold;"><?= $value['status'] == 2 ? 'EXPORTED' : $value['gate']; ?></td>
                 <td class="text-center"><?= $value['cntr']; ?></td>
-                <td><?= $value['dst']; ?></td>
+                <td style="font-weight: bold;"><?= $value['dst']; ?></td>
                 <td>
                     <div class="progress" style="height: 50px; background-color: #33383D; outline: 2px solid white;">
                         <div class="progress-bar<?= $color_css; ?><?= $active_class; ?>" role="progressbar" style="width: <?= $minutes_pct > 100 ? 100 : $minutes_pct; ?>%; font-size: 35px; padding-top: 13px;" aria-valuenow="<?= $minutes_pct; ?>" aria-valuemin="0" aria-valuemax="100"><span style="text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;"><?= $minutes == 0 ? '' : $minutes; ?></span></div>
                     </div>
                     
                 </td>
-                <td class="text-center"><?= $value['line']; ?></td>
+                <td class="text-center" style="font-weight: bold;"><?= $value['line']; ?></td>
                 <td class="text-center"><?= $time_start; ?></td>
                 <td class="text-center"><?= $time_end; ?></td>
             </tr>

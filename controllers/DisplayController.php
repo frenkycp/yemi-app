@@ -74,7 +74,7 @@ class DisplayController extends Controller
             'etd' => date('Y-m-d')
         ])
         ->groupBy('cntr')
-        ->orderBy('status, dst')
+        ->orderBy('status, gate, line')
         ->asArray()
         ->all();
 
