@@ -67,13 +67,13 @@ use kartik\date\DatePicker;
                     ]); ?>
                 </div>
                 <div class="col-md-2">
-                    <?= $form->field($model, 'qty')->textInput(['type' => 'number']); ?>
+                    <?= $form->field($model, 'qty')->textInput(); ?>
                 </div>
                 <div class="col-md-2">
-                    <?= $form->field($model, 'bom')->textInput(['type' => 'number']); ?>
+                    <?= $form->field($model, 'bom')->textInput(); ?>
                 </div>
                 <div class="col-md-2">
-                    <?= $form->field($model, 'consume')->textInput(['type' => 'number']); ?>
+                    <?= $form->field($model, 'consume')->textInput(); ?>
                 </div>
             </div>
             <?php echo $form->errorSummary($model); ?>
