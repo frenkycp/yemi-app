@@ -145,6 +145,24 @@ $gridColumns = [
             'style' => 'font-size: 12px;'
         ],
     ],
+    [
+        'attribute' => 'DETAIL_NG',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'LOT_CODE',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
     /*[
         'attribute' => 'DRS_PUR_LOC',
         'label' => 'Vendor Code',
