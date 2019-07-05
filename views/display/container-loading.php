@@ -82,7 +82,7 @@ echo '</pre>';*/
             <th style="color: #f1e115;" class="text-center" width="10%">GATE</th>
             <th style="color: #f1e115;" class="text-center" width="10%">CONTAINER ID</th>
             <th style="color: #f1e115;" width="20%">PORT<br/>(港先)</th>
-            <th style="color: #f1e115;" class="text-center" width="30%">LOADING TIME<br/>(TARGET MAX. 45 MINUTES)</th>
+            <th style="color: #f1e115;" class="text-center" width="30%">LOADING TIME<br/>(TARGET MAX. 60 MINUTES)</th>
             <th style="color: #f1e115;" class="text-center" width="10%">GROUP</th>
             <th style="color: #f1e115;" class="text-center" width="10%">START</th>
             <th style="color: #f1e115;" class="text-center" width="10%">END</th>
