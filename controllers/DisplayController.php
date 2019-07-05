@@ -52,8 +52,200 @@ use app\models\GojekOrderView01;
 
 use app\models\SernoOutput;
 
+use app\models\MachineIot;
+use app\models\MachineIotCurrent;
+use app\models\GojekTbl;
+
 class DisplayController extends Controller
 {
+    public function actionGoMachineOrderCompletion()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = [];
+        $categories = [];
+
+        $driver_arr = GojekTbl::find()
+        ->where([
+            'SOURCE' => 'MCH'
+        ])
+        ->orderBy('GOJEK_DESC')
+        ->all();
+
+        $tmp_data = [];
+
+        /*$driver_point_arr = ArrayHelper::map(GojekOrderView01::find()
+        ->select([
+            'GOJEK_ID',
+            'total_point' => 'COUNT(id)'
+        ])
+        ->where([
+            'request_ymd' => date('Y-m-d'),
+            'STAT' => 'C',
+            //'CONVERT(date, arrival_date)' => date('Y-m-d'),
+            //'CONVERT(date, issued_date)' => date('Y-m-d')
+        ])
+        ->groupBy('GOJEK_ID')
+        ->all(), 'GOJEK_ID', 'total_point');*/
+
+        foreach ($driver_arr as $value) {
+            $nik = $value->GOJEK_ID;
+            $order_data_arr = GojekOrderView01::find()
+            ->select([
+                'GOJEK_ID',
+                'GOJEK_DESC',
+                'request_ymd',
+                'stat_open' => 'SUM(CASE WHEN STAT = \'O\' THEN 1 ELSE 0 END)',
+                'stat_close' => 'SUM(CASE WHEN STAT = \'C\' THEN 1 ELSE 0 END)',
+                'stat_total' => 'COUNT(STAT)'
+            ])
+            ->where([
+                'GOJEK_ID' => $nik,
+            ])
+            ->andWhere(['>=', 'request_ymd', date('Y-m-d', strtotime(date('Y-m-d') . '-10 days'))])
+            ->groupBy('GOJEK_ID, GOJEK_DESC, request_ymd')
+            ->orderBy('GOJEK_DESC, request_ymd')
+            ->asArray()
+            ->all();
+
+            $total_point = 0;
+            if (count($order_data_arr) > 0) {
+                foreach ($order_data_arr as $order_data) {
+                    if ($order_data['request_ymd'] == date('Y-m-d') && $nik == $order_data['GOJEK_ID']) {
+                        $total_point = $order_data['stat_close'];
+                    }
+                    $issued_date = (strtotime($order_data['request_ymd'] . " +7 hours") * 1000);
+                    $tmp_data[$nik]['open'][] = [
+                        'x' => $issued_date,
+                        'y' => $order_data['stat_open'] == 0 ? null : (int)$order_data['stat_open'],
+                        'url' => Url::to(['get-remark', 'request_ymd' => $order_data['request_ymd'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'O']),
+                    ];
+                    $tmp_data[$nik]['close'][] = [
+                        'x' => $issued_date,
+                        'y' => $order_data['stat_close'] == 0 ? null : (int)$order_data['stat_close'],
+                        'url' => Url::to(['get-remark', 'request_ymd' => $order_data['request_ymd'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'C']),
+                    ];
+                    $tmp_data[$nik]['nama'] = $order_data['GOJEK_DESC'];
+                }
+            } else {
+                $tmp_data[$nik]['open'] = null;
+                $tmp_data[$nik]['close'] = null;
+                $tmp_data[$nik]['nama'] = $value->GOJEK_DESC;
+            }
+            $tmp_data[$nik]['last_stage'] = $value->STAGE;
+            $tmp_data[$nik]['from_loc'] = $value->from_loc;
+            $tmp_data[$nik]['to_loc'] = $value->to_loc;
+            $tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
+            $tmp_data[$nik]['hadir'] = $value->HADIR;
+            $tmp_data[$nik]['todays_point'] = $total_point;
+        }
+
+        $fix_data = [];
+        foreach ($tmp_data as $key => $value) {
+            $fix_data[$key]['data'] = [
+                [
+                    'name' => 'OPEN',
+                    'data' => $value['open'],
+                    'color' => 'rgba(255, 0, 0, 0.6)'
+                ],
+                [
+                    'name' => 'CLOSE',
+                    'data' => $value['close'],
+                    'color' => 'rgba(0, 255, 0, 0.6)'
+                ]
+            ];
+            $fix_data[$key]['nama'] = $value['nama'];
+            $fix_data[$key]['last_stage'] = $value['last_stage'];
+            $fix_data[$key]['from_loc'] = $value['from_loc'];
+            $fix_data[$key]['to_loc'] = $value['to_loc'];
+            $fix_data[$key]['last_update'] = $value['last_update'];
+            $fix_data[$key]['hadir'] = $value['hadir'];
+            //$fix_data[$key]['todays_point'] = isset($driver_point_arr[$key]) ? $driver_point_arr[$key] : 0;
+            $fix_data[$key]['todays_point'] =  $value['todays_point'];
+        }
+
+        return $this->render('go-machine-order-completion', [
+            //'data' => $data,
+            'categories' => $categories,
+            'max_order' => $max_order,
+            'tmp_data' => $tmp_data,
+            'fix_data' => $fix_data,
+        ]);
+    }
+
+    public function actionCurrentStatus()
+    {
+        $tmp_data = MachineIotCurrent::find()->orderBy('mesin_description')->asArray()->all();
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        return $tmp_data;
+    }
+
+    public function actionGetMachineStatus($mesin_id = 'MNT00078', $posting_date = '2019-07-03')
+    {
+        $data_iot_arr = MachineIot::find()
+        ->select([
+            'mesin_id', 'mesin_description', 'system_date_time', 'status_warna'
+        ])
+        ->where([
+            'mesin_id' => $mesin_id,
+            'posting_date' => $posting_date,
+        ])
+        ->asArray()
+        ->all();
+
+        $current_color = '';
+        $mesin_description = '';
+        foreach ($data_iot_arr as $key => $value2) {
+            $proddate = (strtotime($value2['system_date_time'] . " +7 hours") * 1000);
+            $current_color = $value2['status_warna'];
+            $mesin_description = $value2['mesin_description'];
+            $color = 'rgba(0, 0, 0, 1)';
+            if ($value2['status_warna'] == 'PUTIH') {
+                $color = 'rgba(255, 255, 255, 1)';
+            } elseif ($value2['status_warna'] == 'HIJAU') {
+                $color = 'rgba(0, 255, 0, 1)';
+            } elseif ($value2['status_warna'] == 'KUNING') {
+                $color = 'rgba(255, 255, 0, 1)';
+            } elseif ($value2['status_warna'] == 'BIRU') {
+                $color = 'rgba(0, 0, 255, 1)';
+            } elseif ($value2['status_warna'] == 'MERAH') {
+                $color = 'rgba(255, 0, 0, 1)';
+            }
+            $tmp_data[] = [
+                'x' => $proddate,
+                'y' => 1,
+                'color' => $color
+            ];
+        }
+
+        $data[$mesin_id] = [
+            'title' => $mesin_description,
+            'current_color' => $current_color,
+            'series' => [
+                [
+                    'name' => $mesin_description,
+                    'data' => $tmp_data
+                ]
+            ],
+        ];
+        
+        return json_encode($data);
+    }
+    public function actionMachineRealtimeStatus()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->layout = 'clean';
+
+        $current_arr = MachineIotCurrent::find()->asArray()->all();
+        foreach ($current_arr as $key => $value) {
+            $machine_arr[$value['mesin_id']] = $value['mesin_description'];
+        }
+
+        return $this->render('machine-realtime-status', [
+            'data' => $data,
+            'machine_arr' => $machine_arr,
+        ]);
+    }
     public function actionContainerLoading()
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -69,12 +261,13 @@ class DisplayController extends Controller
             'tgl',
             'line',
             'gate',
+            'remark' => 'tb_serno_cnt.remark',
         ])
         ->where([
             'etd' => date('Y-m-d')
         ])
         ->groupBy('cntr')
-        ->orderBy('status, gate, line')
+        ->orderBy('status, tb_serno_cnt.remark DESC, gate, line')
         ->asArray()
         ->all();
 

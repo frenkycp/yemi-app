@@ -129,7 +129,7 @@ echo '</pre>';*/
                     <div class="progress" style="height: 50px; background-color: #33383D; outline: 2px solid white;">
                         <div class="progress-bar<?= $color_css; ?><?= $active_class; ?>" role="progressbar" style="width: <?= $minutes_pct > 100 ? 100 : $minutes_pct; ?>%; font-size: 35px; padding-top: 13px;" aria-valuenow="<?= $minutes_pct; ?>" aria-valuemin="0" aria-valuemax="100"><span style="text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;"><?= $minutes == 0 ? '' : $minutes; ?></span></div>
                     </div>
-                    
+                    <span class="text-yellow" style="font-size: 18px;<?= $value['remark'] == '' ? ' display: none;' : ''; ?>"><em><?= '* ' . $value['remark']; ?></em></span>
                 </td>
                 <td class="text-center" style="font-weight: bold;"><?= $value['line']; ?></td>
                 <td class="text-center"><?= $time_start; ?></td>
