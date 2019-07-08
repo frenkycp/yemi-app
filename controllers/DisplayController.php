@@ -61,10 +61,19 @@ class DisplayController extends Controller
 {
     public function actionLSeriesDaily()
     {
-        $period = date('Ym', strtotime(date('Y-m-d') . ' -1 month'));
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $categories = $data = $tmp_data = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . ' -1 month'));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d') . ' -1 month'));
+
+        $model->load($_GET);
 
         $tmp_serno_output = SernoOutput::find()
         ->joinWith('sernoMaster')
@@ -74,9 +83,10 @@ class DisplayController extends Controller
             'total_qty' => 'datediff(etd, MIN(vms))'
         ])
         ->where([
-            'tb_serno_output.id' => $period,
             'line' => 'L85'
         ])
+        ->andWhere(['>=', 'etd', $model->from_date])
+        ->andWhere(['<=', 'etd', $model->to_date])
         ->groupBy('etd, dst')
         ->orderBy('etd, dst')
         ->all();
@@ -99,7 +109,7 @@ class DisplayController extends Controller
 
         return $this->render('l-series-daily', [
             'data' => $data,
-            'period' => $period,
+            'model' => $model,
             'categories' => $categories,
         ]);
     }

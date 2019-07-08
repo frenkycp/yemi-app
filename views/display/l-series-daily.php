@@ -7,7 +7,6 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
-use kartik\select2\Select2;
 
 $this->title = [
     'page_title' => 'Production Lead Time L-Series',
@@ -55,6 +54,37 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['l-series-daily']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-4">
+        <?php echo '<label class="control-label">Select date range</label>';
+        echo DatePicker::widget([
+            'model' => $model,
+            'attribute' => 'from_date',
+            'attribute2' => 'to_date',
+            'options' => ['placeholder' => 'Start date'],
+            'options2' => ['placeholder' => 'End date'],
+            'type' => DatePicker::TYPE_RANGE,
+            'form' => $form,
+            'pluginOptions' => [
+                'format' => 'yyyy-mm-dd',
+                'autoclose' => true,
+            ]
+        ]);?>
+    </div>
+    <div class="form-group">
+        <br/>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
+<br/>
 <div class="box box-primary box-solid">
     <div class="box-body">
         <div class="col-md-12">
@@ -72,7 +102,7 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'height' => 800,
+                        'height' => 1000,
                         //'zoomType' => 'x'
                     ],
                     'credits' => [
