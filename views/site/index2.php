@@ -124,6 +124,9 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_fg/display.php"><i class="fa fa-fw fa-tag"></i> FGS Loading Status (MITA+)<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/container-loading"><i class="fa fa-fw fa-tag"></i> Container Loading by Group <span class="japanesse-word">(グループ別コンテナー積み込み作業表)</span></a>
+                    </div>
+                    <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-kwh-report"><i class="fa fa-fw fa-tag"></i> Machine Operation Status<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
