@@ -28,6 +28,9 @@ class MonthlyOvertimeBySectionController extends Controller
         ]);
         $model->addRule(['from_date', 'to_date','section'], 'required');
 
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . '-1 year'));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
 		$section_arr = ArrayHelper::map(CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC');
 		$section_arr['ALL'] = '-- ALL SECTIONS --';
 		//asort($section_arr);

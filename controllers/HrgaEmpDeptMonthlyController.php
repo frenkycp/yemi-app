@@ -20,7 +20,7 @@ class HrgaEmpDeptMonthlyController extends Controller
 		$subtitle = '';
 		$data = [];
 		$category_arr = [];
-		$name_arr = [];
+		$name_arr = $emp_data = [];
 		$color_arr = [
 			'#BCD8C1', '#D6DBB2', '#E3D985', '#E57A44', '#422040',
 			'#D5C7BC', '#EDA4BD', '#4ADBC8', '#5CAB7D', '#EED5C2',
@@ -29,14 +29,23 @@ class HrgaEmpDeptMonthlyController extends Controller
 
 		$menu = 2;
 
-		$name_arr = $this->getDataName($menu);
-		$emp_data = $this->getEmployeeData($menu);
+		$model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . '-1 year'));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        $model->load($_GET);
+
+    	$name_arr = $this->getDataName($menu);
+		$emp_data = $this->getEmployeeData($menu, $model->from_date, $model->to_date);
 
 		$period_arr = MpInOut::find()
 		->select('DISTINCT(PERIOD)')
-		->where([
-			'LEFT(PERIOD,4)' => date('Y')
-		])
+		->where(['>=', 'PERIOD', date('Ym', strtotime($model->from_date))])
+		->andWhere(['<=', 'PERIOD', date('Ym', strtotime($model->to_date))])
 		->all();
 
 		$color_index = 0;
@@ -71,7 +80,7 @@ class HrgaEmpDeptMonthlyController extends Controller
 
 		$working_days = [19, 20, 21, 21, 21, 17, 23, 22, 20, 23, 20, 18];
 
-		$data[] = [
+		/*$data[] = [
 			'name' => 'Speaker',
 			'data' => [
 				(float)round(69899/19),
@@ -90,7 +99,7 @@ class HrgaEmpDeptMonthlyController extends Controller
 			'type' => 'spline',
 			'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
 			'yAxis' => 1,
-		];
+		];*/
 		/*$data[] = [
 			'name' => 'Other',
 			'data' => [
@@ -111,13 +120,14 @@ class HrgaEmpDeptMonthlyController extends Controller
 		];*/
 
 		foreach ($category_arr as $key => $value) {
-			$category_arr[$key] = date('M', strtotime(substr_replace($value, '-', 4, 0)));
+			$category_arr[$key] = date('M\' y', strtotime(substr_replace($value, '-', 4, 0)));
 		}
 
 		return $this->render('index', [
 			'title' => $title,
 			'subtitle' => $subtitle,
 			'data' => $data,
+			'model' => $model,
 			'category' => $category_arr,
 			'section' => $this->getDepartment(),
 			'menu' => $menu
@@ -148,7 +158,7 @@ class HrgaEmpDeptMonthlyController extends Controller
 		return $category_arr;
 	}
 
-	public function getEmployeeData($menu)
+	public function getEmployeeData($menu, $from_date, $to_date)
 	{
 		if ($menu == 1) {
 			$emp_data = MpInOut::find()
@@ -159,8 +169,9 @@ class HrgaEmpDeptMonthlyController extends Controller
 			])
 			->where([
 				'AKHIR_BULAN' => 'end_of_month',
-				'LEFT(PERIOD,4)' => date('Y')
 			])
+			->andWhere(['>=', 'PERIOD', date('Ym', strtotime($from_date))])
+			->andWhere(['<=', 'PERIOD', date('Ym', strtotime($to_date))])
 			->groupBy('PERIOD, PKWT')
 			->orderBy('PERIOD, PKWT')
 			->all();
@@ -173,8 +184,9 @@ class HrgaEmpDeptMonthlyController extends Controller
 			])
 			->where([
 				'AKHIR_BULAN' => 'end_of_month',
-				'LEFT(PERIOD,4)' => date('Y')
 			])
+			->andWhere(['>=', 'PERIOD', date('Ym', strtotime($from_date))])
+			->andWhere(['<=', 'PERIOD', date('Ym', strtotime($to_date))])
 			->groupBy('PERIOD, DEPARTEMEN')
 			->orderBy('PERIOD, DEPARTEMEN')
 			->all();
