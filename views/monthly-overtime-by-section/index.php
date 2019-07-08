@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use kartik\date\DatePicker;
 
 $this->title = [
     'page_title' => 'OT Management by Section <span class="japanesse text-green">(部門別残業管理）</span>',
@@ -47,24 +48,31 @@ $section_data = app\models\CostCenter::find()
 ]); ?>
 
 <div class="row">
-    <div class="col-md-2">
-        <?= Html::label('Fiscal'); ?>
-        <?= Html::dropDownList('fiscal', $fiscal, ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->limit(10)->all(), 'FISCAL', 'FISCAL'), [
+    <div class="col-md-3">
+        <?= $form->field($model, 'section')->dropDownList($section_arr, [
             'class' => 'form-control',
-            'onchange'=>'this.form.submit()'
-        ]); ?>
-    </div>
-    <div class="col-md-2">
-        <?= Html::label('SECTION'); ?>
-        <?= Html::dropDownList('section', $section, $section_arr, [
-            'class' => 'form-control',
-            'onchange'=>'this.form.submit()',
             'prompt' => 'Select a section...'
         ]); ?>
     </div>
-    <div class="col-md-2">
-        <?= Html::label('z', '', ['style' => 'opacity: 0;']); ?>
-        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-primary form-control']); ?>
+    <div class="col-md-4">
+        <?php echo '<label class="control-label">Select date range</label>';
+        echo DatePicker::widget([
+            'model' => $model,
+            'attribute' => 'from_date',
+            'attribute2' => 'to_date',
+            'options' => ['placeholder' => 'Start date'],
+            'options2' => ['placeholder' => 'End date'],
+            'type' => DatePicker::TYPE_RANGE,
+            'form' => $form,
+            'pluginOptions' => [
+                'format' => 'yyyy-mm-dd',
+                'autoclose' => true,
+            ]
+        ]);?>
+    </div>
+    <div class="form-group">
+        <br/>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-success', 'style' => 'margin-top: 5px;']); ?>
     </div>
     
 </div>

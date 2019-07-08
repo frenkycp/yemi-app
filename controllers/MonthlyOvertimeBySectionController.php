@@ -22,136 +22,116 @@ class MonthlyOvertimeBySectionController extends Controller
     
     public function actionIndex()
     {
-    	$fiscal = FiscalTbl::find()
-		->select('FISCAL')
-		->where([
-			'PERIOD' => date('Ym')
-		])
-		->one()
-		->FISCAL;
-		if ($fiscal == null) {
-			$fiscal = FiscalTbl::find()
-			->select([
-				'FISCAL' => 'MAX(FISCAL)'
-			])
-			->one()
-			->FISCAL;
-		}
-
-		if (\Yii::$app->request->get('fiscal') !== null) {
-			$fiscal = \Yii::$app->request->get('fiscal');
-		}
-
-		if (\Yii::$app->request->get('section') !== null) {
-			$section = \Yii::$app->request->get('section');
-		}
-
-		$period_data_arr = FiscalTbl::find()
-		->select('PERIOD')
-		->where([
-			'FISCAL' => $fiscal
-		])
-		->orderBy('PERIOD')
-		->asArray()
-		->all();
-
-		$categories = [];
-		foreach ($period_data_arr as $key => $value) {
-			$categories[] = $value['PERIOD'];
-		}
+    	$categories = $data = [];
+    	$model = new \yii\base\DynamicModel([
+            'section', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','section'], 'required');
 
 		$section_arr = ArrayHelper::map(CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC');
 		$section_arr['ALL'] = '-- ALL SECTIONS --';
 		//asort($section_arr);
 
-		if ($section == 'ALL') {
-			$karyawan_arr = SplView::find()
-			->select([
-				'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_DESC'
-			])
-			->where([
-				'PERIOD' => $categories,
-			])
-			->andWhere('NIK IS NOT NULL')
-			->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
-			->asArray()
+		if ($model->load($_GET)) {
+			$section = $model->section;
+			$tmp_categories = SplView::find()
+			->select('PERIOD')
+			->where(['>=', 'PERIOD', date('Ym', strtotime($model->from_date))])
+			->andWhere(['<=', 'PERIOD', date('Ym', strtotime($model->to_date))])
+			->groupBy('PERIOD')
 			->all();
+			
+			foreach ($tmp_categories as $key => $value) {
+				$categories[] = $value->PERIOD;
+			}
+			if ($section == 'ALL') {
+				$karyawan_arr = SplView::find()
+				->select([
+					'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_DESC'
+				])
+				->where([
+					'PERIOD' => $categories,
+				])
+				->andWhere('NIK IS NOT NULL')
+				->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
+				->asArray()
+				->all();
 
-			$overtime_data = SplView::find()
-			->select([
-				'PERIOD',
-				'NIK',
-				'NAMA_KARYAWAN',
-				'CC_ID',
-				'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
-			])
-			->where([
-				'PERIOD' => $categories,
-			])
-			->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
-			->orderBy('NIK, PERIOD')
-			->asArray()
-			->all();
-		} else {
-			$karyawan_arr = SplView::find()
-			->select([
-				'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_DESC'
-			])
-			->where([
-				'CC_ID' => $section,
-				'PERIOD' => $categories,
-			])
-			->andWhere('NIK IS NOT NULL')
-			->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
-			->asArray()
-			->all();
+				$overtime_data = SplView::find()
+				->select([
+					'PERIOD',
+					'NIK',
+					'NAMA_KARYAWAN',
+					'CC_ID',
+					'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+				])
+				->where([
+					'PERIOD' => $categories,
+				])
+				->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
+				->orderBy('NIK, PERIOD')
+				->asArray()
+				->all();
+			} else {
+				$karyawan_arr = SplView::find()
+				->select([
+					'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_DESC'
+				])
+				->where([
+					'CC_ID' => $section,
+					'PERIOD' => $categories,
+				])
+				->andWhere('NIK IS NOT NULL')
+				->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
+				->asArray()
+				->all();
 
-			$overtime_data = SplView::find()
-			->select([
-				'PERIOD',
-				'NIK',
-				'NAMA_KARYAWAN',
-				'CC_ID',
-				'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
-			])
-			->where([
-				'PERIOD' => $categories,
-				'CC_ID' => $section
-			])
-			->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
-			->orderBy('NIK, PERIOD')
-			->asArray()
-			->all();
-		}
+				$overtime_data = SplView::find()
+				->select([
+					'PERIOD',
+					'NIK',
+					'NAMA_KARYAWAN',
+					'CC_ID',
+					'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+				])
+				->where([
+					'PERIOD' => $categories,
+					'CC_ID' => $section
+				])
+				->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
+				->orderBy('NIK, PERIOD')
+				->asArray()
+				->all();
+			}
 
-		$data = [];
-		foreach ($karyawan_arr as $karyawan) {
-			$tmp_data = [];
-			foreach ($categories as $period_value) {
-				$hour = 0;
-				foreach ($overtime_data as $value) {
-					if ($value['NIK'] == $karyawan['NIK'] && $period_value == $value['PERIOD']) {
-						$hour = $value['NILAI_LEMBUR_ACTUAL'];
-						continue;
+			foreach ($karyawan_arr as $karyawan) {
+				$tmp_data = [];
+				foreach ($categories as $period_value) {
+					$hour = 0;
+					foreach ($overtime_data as $value) {
+						if ($value['NIK'] == $karyawan['NIK'] && $period_value == $value['PERIOD']) {
+							$hour = $value['NILAI_LEMBUR_ACTUAL'];
+							continue;
+						}
 					}
+					$tmp_data[] = [
+						'y' => round($hour, 2),
+						'url' => Url::to(['get-remark', 'nik' => $karyawan['NIK'], 'nama_karyawan' => $karyawan['NAMA_KARYAWAN'], 'period' => $period_value])
+					];
 				}
-				$tmp_data[] = [
-					'y' => round($hour, 2),
-					'url' => Url::to(['get-remark', 'nik' => $karyawan['NIK'], 'nama_karyawan' => $karyawan['NAMA_KARYAWAN'], 'period' => $period_value])
+				$data[] = [
+					'name' => $karyawan['NIK'] . ' - ' . $karyawan['NAMA_KARYAWAN'] . ' (' . $karyawan['CC_DESC'] . ')',
+					'data' => $tmp_data,
+					'showInLegend' => false,
+					'lineWidth' => 0.8,
+					'color' => new JsExpression('Highcharts.getOptions().colors[0]')
 				];
 			}
-			$data[] = [
-				'name' => $karyawan['NIK'] . ' - ' . $karyawan['NAMA_KARYAWAN'] . ' (' . $karyawan['CC_DESC'] . ')',
-				'data' => $tmp_data,
-				'showInLegend' => false,
-				'lineWidth' => 0.8,
-				'color' => new JsExpression('Highcharts.getOptions().colors[0]')
-			];
 		}
 
     	return $this->render('index', [
 			'data' => $data,
-			'fiscal' => $fiscal,
+			'model' => $model,
 			'section' => $section,
 			'categories' => $categories,
 			'section_arr' => $section_arr

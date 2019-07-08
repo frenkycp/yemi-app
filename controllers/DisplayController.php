@@ -74,20 +74,6 @@ class DisplayController extends Controller
 
         $tmp_data = [];
 
-        /*$driver_point_arr = ArrayHelper::map(GojekOrderView01::find()
-        ->select([
-            'GOJEK_ID',
-            'total_point' => 'COUNT(id)'
-        ])
-        ->where([
-            'request_ymd' => date('Y-m-d'),
-            'STAT' => 'C',
-            //'CONVERT(date, arrival_date)' => date('Y-m-d'),
-            //'CONVERT(date, issued_date)' => date('Y-m-d')
-        ])
-        ->groupBy('GOJEK_ID')
-        ->all(), 'GOJEK_ID', 'total_point');*/
-
         foreach ($driver_arr as $value) {
             $nik = $value->GOJEK_ID;
             $order_data_arr = GojekOrderView01::find()
@@ -328,15 +314,6 @@ class DisplayController extends Controller
             $tmp_data_by_hours = [];
             $tmp_avg_hijau = [];
 
-            /*for($i = $begin; $i <= $end; $i->modify('+1 day')){
-                $proddate = (strtotime($i->format("Y-m-d") . " +7 hours") * 1000);
-                $avg_hijau_pct = $avg_arr_data[$i->format('Ym')];
-                $tmp_avg_hijau[] = [
-                    'x' => $proddate,
-                    'y' => $avg_hijau_pct
-                ];
-            }*/
-
             foreach ($iot_by_hours as $key => $value) {
                 $jam = str_pad($value['jam'], 2, '0', STR_PAD_LEFT);
                 $his = $jam . ':00:00';
@@ -377,42 +354,6 @@ class DisplayController extends Controller
                 ];
                 
             }
-            /*$start_hour = 7;
-            for ($i=1; $i <= 24; $i++) {
-                $seq = str_pad($i, 2, '0', STR_PAD_LEFT);
-                $total_putih = null;
-                $total_biru = null;
-                $total_hijau = null;
-                $total_merah = null;
-                $sisa_detik = null;
-                if ($start_hour == 24) {
-                    $start_hour = 0;
-                }
-                $kwh = 0;
-                $max_kwh = 0;
-                foreach ($iot_by_hours as $key => $value) {
-                    if ($seq == $value['seq']) {
-                        $sisa_detik = $value['lost_data'];
-                        $total_putih = $value['putih'];
-                        $total_hijau = $value['hijau'];
-                        $total_biru = $value['biru'] + $value['kuning'];
-                        $total_merah = $value['merah'];
-                        $kwh = (int)$value['kwh_consume'];
-                        $max_kwh = (int)$value['kwh_end'];
-                    }
-                }
-                $categories[] = $start_hour;
-                $tmp_data_by_hours['putih'][] = round($total_putih / 60, 1) == 0 ? null : round($total_putih / 60, 1);
-                $tmp_data_by_hours['hijau'][] = round($total_hijau / 60, 1) == 0 ? null : round($total_hijau / 60, 1);
-                $tmp_data_by_hours['biru'][] = round($total_biru / 60, 1) == 0 ? null : round($total_biru / 60, 1);
-                $tmp_data_by_hours['merah'][] = round($total_merah / 60, 1) == 0 ? null : round($total_merah / 60, 1);
-                $tmp_data_by_hours['sisa'][] = round($sisa_detik / 60, 1) == 0 ? null : round($sisa_detik / 60, 1);
-
-                $tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
-                $tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;
-
-                $start_hour++;
-            }*/
 
             $data_iot_by_hours = [
                 [
