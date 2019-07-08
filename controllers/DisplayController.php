@@ -92,12 +92,14 @@ class DisplayController extends Controller
         }
 
         $data[] = [
-            'name' => 'Production Days L-Series',
-            'data' => $tmp_data
+            'name' => 'Production Lead Time L-Series',
+            'data' => $tmp_data,
+            'showInLegend' => false
         ];
 
         return $this->render('l-series-daily', [
             'data' => $data,
+            'period' => $period,
             'categories' => $categories,
         ]);
     }
