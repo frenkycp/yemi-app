@@ -136,6 +136,19 @@ echo '</pre>';*/
                                 //'format' => '{point.percentage:.1f}%',
                             ],
                         ],
+                        'series' => [
+                            'cursor' => 'pointer',
+                            'point' => [
+                                'events' => [
+                                    'click' => new JsExpression("
+                                        function(e){
+                                            e.preventDefault();
+                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                        }
+                                    "),
+                                ]
+                            ]
+                        ]
                     ],
                     'series' => $data
                 ],
@@ -144,3 +157,12 @@ echo '</pre>';*/
         </div>
     </div>
 </div>
+
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>
