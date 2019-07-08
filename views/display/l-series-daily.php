@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => null,
+    'page_title' => 'Production Lead Time L-Series',
     'tab_title' => 'Production Lead Time L-Series',
     'breadcrumbs_title' => 'Production Lead Time L-Series'
 ];
@@ -79,7 +79,7 @@ echo '</pre>';*/
                         'enabled' => false
                     ],
                     'title' => [
-                        'text' => null,
+                        'text' => $period,
                     ],
                     'xAxis' => [
                         'categories' => $categories
