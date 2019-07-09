@@ -92,8 +92,14 @@ echo '</pre>';*/
         <?php
         foreach ($tmp_data as $key => $value) {
             $now = date('Y-m-d H:i:s');
+            $today_name = date('D');
             $start_date = new DateTime($value['start']);
             $end_date = new DateTime($now);
+            $break_time1 = new DateTime(date('Y-m-d 09:20:00'));
+            $break_time2 = new DateTime(date('Y-m-d 11:40:00'));
+            $break_time3 = new DateTime(date('Y-m-d 14:20:00'));
+            $min1 = $min3 = 10;
+            $min2 = 40;
             if ($value['status'] == 2) {
                 $end_date = new DateTime($value['tgl']);
             }
@@ -102,6 +108,26 @@ echo '</pre>';*/
             $minutes = $since_start->days * 24 * 60;
             $minutes += $since_start->h * 60;
             $minutes += $since_start->i;
+
+            if ($today_name == 'Fri') {
+                $min2 = 70;
+                $break_time2 = new DateTime(date('Y-m-d 12:00:00'));
+                $break_time3 = new DateTime(date('Y-m-d 14:50:00'));
+            }
+
+            if ($start_date < $break_time1 && $end_date > $break_time1) {
+                $minutes -= $min1;
+            }
+
+            if ($start_date < $break_time2 && $end_date > $break_time2) {
+                $minutes -= $min2;
+            }
+
+            if ($start_date < $break_time3 && $end_date > $break_time3) {
+                $minutes -= $min3;
+            }
+
+            //echo $end_date->format('Y-m-d H:i:s');
 
             $minutes_pct = round(($minutes / 60) * 100, 1);
             $time_start = $time_end = '';
