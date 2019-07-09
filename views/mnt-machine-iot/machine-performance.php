@@ -44,8 +44,8 @@ $this->registerJs("
 		        	var color = 'white';
 		        	if(val.status_warna == 'KUNING'){
 		        		//background_color = 'yellow';
-		        		//color = 'black';
-		        		background_color = 'blue';
+		        		color = 'black';
+		        		background_color = 'yellow';
 		        	} else if (val.status_warna == 'HIJAU') {
 		        		background_color = 'green';
 		        	} else if (val.status_warna == 'BIRU') {
