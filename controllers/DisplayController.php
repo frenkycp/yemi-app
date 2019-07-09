@@ -94,16 +94,18 @@ class DisplayController extends Controller
         foreach ($tmp_serno_output as $key => $value) {
             $total_qty = $value->total_qty;
             if ($total_qty > 0) {
-                if ($total_qty > 35) {
-                    $total_qty -= 25;
+                if ($total_qty > 40) {
+                    $total_qty -= 33;
+                } elseif ($total_qty > 35) {
+                    $total_qty -= 27;
                 } elseif ($total_qty > 30) {
-                    $total_qty -= 20;
+                    $total_qty -= 23;
                 } elseif ($total_qty > 25) {
-                    $total_qty -= 15;
+                    $total_qty -= 17;
                 } elseif ($total_qty > 20) {
-                    $total_qty -= 10;
+                    $total_qty -= 13;
                 } elseif ($total_qty > 10) {
-                    $total_qty -= 5;
+                    $total_qty -= 7;
                 }
                 $categories[] = $value->etd . ' [ ' . $value['dst'] . ' ]';
                 $tmp_data[] = [
