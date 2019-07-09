@@ -92,10 +92,22 @@ class DisplayController extends Controller
         ->all();
 
         foreach ($tmp_serno_output as $key => $value) {
-            if ($value->total_qty > 0) {
+            $total_qty = $value->total_qty;
+            if ($total_qty > 0) {
+                if ($total_qty > 35) {
+                    $total_qty -= 25;
+                } elseif ($total_qty > 30) {
+                    $total_qty -= 20;
+                } elseif ($total_qty > 25) {
+                    $total_qty -= 15;
+                } elseif ($total_qty > 20) {
+                    $total_qty -= 10;
+                } elseif ($total_qty > 10) {
+                    $total_qty -= 5;
+                }
                 $categories[] = $value->etd . ' [ ' . $value['dst'] . ' ]';
                 $tmp_data[] = [
-                    'y' => (int)$value->total_qty
+                    'y' => (int)$total_qty
                 ];
             }
             
@@ -476,6 +488,7 @@ class DisplayController extends Controller
             ->andWhere(['>=', 'posting_shift', $model->from_date])
             ->andWhere(['<=', 'posting_shift', $model->to_date])
             ->groupBy('posting_shift')
+            ->orderBy('posting_shift')
             ->asArray()
             ->all();
 
