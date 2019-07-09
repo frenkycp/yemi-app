@@ -22,7 +22,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 600000); // milliseconds
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;

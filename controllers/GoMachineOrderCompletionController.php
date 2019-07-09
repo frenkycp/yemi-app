@@ -28,7 +28,7 @@ class GoMachineOrderCompletionController extends Controller
 		->where([
 			'SOURCE' => 'MCH'
 		])
-		->orderBy('GOJEK_DESC')
+		->orderBy('HADIR DESC, GOJEK_DESC')
 		->all();
 
 		$tmp_data = [];
