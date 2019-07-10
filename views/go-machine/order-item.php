@@ -82,7 +82,9 @@ $this->registerJs("
                                 'type' => DateTimePicker::TYPE_COMPONENT_PREPEND,
                                 'pluginOptions' => [
                                     'autoclose'=>true,
-                                    'format' => 'yyyy-mm-dd hh:ii:ss'
+                                    'format' => 'yyyy-mm-dd hh:ii:ss',
+                                    'startDate' => date('Y-m-d 00:00:01'),
+                                    'endDate' => date('Y-m-d 23:59:59')
                                 ],
                             ]);
                             ?>
