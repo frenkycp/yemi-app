@@ -39,7 +39,7 @@ $this->registerJs($script, View::POS_HEAD );
 $grid_column = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => $actionColumnTemplateString,
+        'template' => '{update} {delete}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -48,7 +48,7 @@ $grid_column = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            }
+            },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator
@@ -132,7 +132,10 @@ $grid_column = [
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 ['content' => 
-                    Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['data-pjax' => 0, 'class' => 'btn btn-success'])
+                    Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['data-pjax' => 0, 'class' => 'btn btn-success']),
+                ],
+                ['content' => 
+                    Html::a('Add (Multiple)', ['add-multiple'], ['data-pjax' => 0, 'class' => 'btn btn-info']),
                 ],
                 '{export}',
                 '{toggleData}',
