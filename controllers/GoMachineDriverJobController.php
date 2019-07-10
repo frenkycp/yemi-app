@@ -20,7 +20,7 @@ class GoMachineDriverJobController extends Controller
     	->where([
     		'source' => 'MCH',
     		'STAT' => 'O',
-    		//'GOJEK_ID' => \Yii::$app->user->identity->username,
+    		'GOJEK_ID' => \Yii::$app->user->identity->username,
     	])
     	->orderBy('request_date')
     	->all();
