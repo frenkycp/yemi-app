@@ -59,6 +59,7 @@ class MntKwhReportController extends Controller
 				$total_biru = null;
 				$total_hijau = null;
 				$total_merah = null;
+				$total_kuning = null;
 				$sisa_detik = null;
 				if ($start_hour == 24) {
 					$start_hour = 0;
@@ -70,7 +71,8 @@ class MntKwhReportController extends Controller
 						$sisa_detik = $value['lost_data'];
 						$total_putih = $value['putih'];
 						$total_hijau = $value['hijau'];
-						$total_biru = $value['biru'] + $value['kuning'];
+						$total_biru = $value['biru'];
+						$total_kuning = $value['kuning'];
 						$total_merah = $value['merah'];
 						$kwh = (int)$value['kwh_consume'];
 						$max_kwh = (int)$value['kwh_end'];
@@ -81,6 +83,7 @@ class MntKwhReportController extends Controller
 				$tmp_data_by_hours['hijau'][] = round($total_hijau / 60, 1) == 0 ? null : round($total_hijau / 60, 1);
 				$tmp_data_by_hours['biru'][] = round($total_biru / 60, 1) == 0 ? null : round($total_biru / 60, 1);
 				$tmp_data_by_hours['merah'][] = round($total_merah / 60, 1) == 0 ? null : round($total_merah / 60, 1);
+				$tmp_data_by_hours['kuning'][] = round($total_kuning / 60, 1) == 0 ? null : round($total_kuning / 60, 1);
 				$tmp_data_by_hours['sisa'][] = round($sisa_detik / 60, 1) == 0 ? null : round($sisa_detik / 60, 1);
 
 				$tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
@@ -108,6 +111,11 @@ class MntKwhReportController extends Controller
 					'name' => 'STOP',
 					'data' => $tmp_data_by_hours['merah'],
 					'color' => 'red'
+				],
+				[
+					'name' => 'HANDLING',
+					'data' => $tmp_data_by_hours['kuning'],
+					'color' => 'yellow'
 				],
 				[
 					'name' => 'SETTING',
@@ -174,7 +182,8 @@ class MntKwhReportController extends Controller
 			foreach ($machine_iot_util as $key => $value) {
 				$proddate = (strtotime($value['posting_shift'] . " +7 hours") * 1000);
 				$total_putih = round($value['putih'] / 60, 1);
-				$total_biru = round(($value['biru'] + $value['kuning']) / 60, 1);
+				$total_biru = round($value['biru'] / 60, 1);
+				$total_kuning = round($value['kuning'] / 60, 1);
 				$total_hijau = round($value['hijau'] / 60, 1);
 				$total_merah = round($value['merah'] / 60, 1);
 				$total_sisa = round($value['lost_data'] / 60, 1);
@@ -186,6 +195,10 @@ class MntKwhReportController extends Controller
 				$tmp_data['BIRU'][] = [
 					'x' => $proddate,
 					'y' => $total_biru == 0 ? null : $total_biru
+				];
+				$tmp_data['KUNING'][] = [
+					'x' => $proddate,
+					'y' => $total_kuning == 0 ? null : $total_kuning
 				];
 				$tmp_data['HIJAU'][] = [
 					'x' => $proddate,
@@ -221,6 +234,11 @@ class MntKwhReportController extends Controller
 					'name' => 'STOP',
 					'data' => $tmp_data['MERAH'],
 					'color' => 'red'
+				],
+				[
+					'name' => 'HANDLING',
+					'data' => $tmp_data['KUNING'],
+					'color' => 'yellow'
 				],
 				[
 					'name' => 'SETTING',

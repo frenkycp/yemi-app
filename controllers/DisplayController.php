@@ -394,6 +394,7 @@ class DisplayController extends Controller
 
                 $total_putih = round($value['putih'] / 60, 1);
                 $total_biru = round($value['biru'] / 60, 1);
+                $total_kuning = round($value['kuning'] / 60, 1);
                 $total_hijau = round($value['hijau'] / 60, 1);
                 $total_merah = round($value['merah'] / 60, 1);
                 $total_lost = round($value['lost_data'] / 60, 1);
@@ -409,6 +410,10 @@ class DisplayController extends Controller
                 $tmp_data_by_hours['biru'][] = [
                     'x' => $proddate,
                     'y' => $total_biru == 0 ? null : $total_biru
+                ];
+                $tmp_data_by_hours['kuning'][] = [
+                    'x' => $proddate,
+                    'y' => $total_kuning == 0 ? null : $total_kuning
                 ];
                 $tmp_data_by_hours['hijau'][] = [
                     'x' => $proddate,
@@ -446,6 +451,12 @@ class DisplayController extends Controller
                     'name' => 'STOP',
                     'data' => $tmp_data_by_hours['merah'],
                     'color' => 'red',
+                    'type' => 'column'
+                ],
+                [
+                    'name' => 'HANDLING',
+                    'data' => $tmp_data_by_hours['kuning'],
+                    'color' => 'yellow',
                     'type' => 'column'
                 ],
                 [
@@ -501,7 +512,8 @@ class DisplayController extends Controller
             foreach ($machine_iot_util as $key => $value) {
                 $proddate = (strtotime($value['posting_shift'] . " +7 hours") * 1000);
                 $total_putih = round($value['putih'] / 60, 1);
-                $total_biru = round(($value['biru'] + $value['kuning']) / 60, 1);
+                $total_biru = round(($value['biru']) / 60, 1);
+                $total_kuning = round(($value['kuning']) / 60, 1);
                 $total_hijau = round($value['hijau'] / 60, 1);
                 $total_merah = round($value['merah'] / 60, 1);
                 $total_sisa = round($value['lost_data'] / 60, 1);
@@ -513,6 +525,10 @@ class DisplayController extends Controller
                 $tmp_data['BIRU'][] = [
                     'x' => $proddate,
                     'y' => $total_biru == 0 ? null : $total_biru
+                ];
+                $tmp_data['KUNING'][] = [
+                    'x' => $proddate,
+                    'y' => $total_kuning == 0 ? null : $total_kuning
                 ];
                 $tmp_data['HIJAU'][] = [
                     'x' => $proddate,
@@ -548,6 +564,11 @@ class DisplayController extends Controller
                     'name' => 'STOP',
                     'data' => $tmp_data['MERAH'],
                     'color' => 'red'
+                ],
+                [
+                    'name' => 'HANDLING',
+                    'data' => $tmp_data['KUNING'],
+                    'color' => 'yellow'
                 ],
                 [
                     'name' => 'SETTING',
