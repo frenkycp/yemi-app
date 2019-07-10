@@ -43,6 +43,7 @@ $this->registerJs($script, View::POS_HEAD );
 			<thead>
 				<tr>
 					<th>Action</th>
+					<th>Request for</th>
 					<th>Slip Number</th>
 					<th>Machine Name</th>
 					<th>Model</th>
@@ -66,6 +67,7 @@ $this->registerJs($script, View::POS_HEAD );
 					}
 					echo '<tr class="' . $row_class . '">
 						<td>' . $btn_start . '&nbsp;&nbsp;&nbsp;' . $btn_end . '</td>
+						<td>' . date('Y-m-d H:i', strtotime($value->request_date)) . '</td>
 						<td>' . $value->slip_id . '</td>
 						<td>' . $value->item . ' - ' . $value->item_desc . '</td>
 						<td>' . $value->model . '</td>
