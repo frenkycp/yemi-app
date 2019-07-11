@@ -73,6 +73,11 @@ return [
         'WI02' => 'INJ LARGE',
         'WM02' => 'PCB AUTO INS.',
     ],
+    'bg-yellow' => 'rgba(243, 156, 18, 1)',
+    'bg-green' => 'rgba(0, 166, 90, 1)',
+    'bg-blue' => 'rgba(0, 166, 90, 1)',
+    'bg-red' => 'rgba(221, 75, 57, 1)',
+    'bg-gray' => 'rgba(210, 214, 222, 1)',
 ];
 
 function getYearArray()
