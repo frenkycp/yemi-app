@@ -63,7 +63,7 @@ $query->andFilterWhere([
             'period' => $this->period
         ]);
 
-        $query->andFilterWhere(['like', 'GOJEK_ORDER_TBL.slip_id', $this->slip_id])
+        $query->andFilterWhere(['like', 'slip_id', $this->slip_id])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),issued_date,120)', $this->issued_date])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),request_date,120)', $this->request_date])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),issued_date_ori,120)', $this->issued_date_ori])

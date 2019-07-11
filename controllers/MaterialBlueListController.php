@@ -15,6 +15,12 @@ use app\models\VisualPickingList;
 */
 class MaterialBlueListController extends \app\controllers\base\MaterialBlueListController
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
 	public function actionIndex()
 	{
 		$location_dropdown = ArrayHelper::map(WipPlanActualReport::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');
