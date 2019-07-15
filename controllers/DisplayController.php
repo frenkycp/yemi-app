@@ -62,6 +62,57 @@ use app\models\MasalahPcb;
 
 class DisplayController extends Controller
 {
+    public function actionFgsStock($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_input_arr = SernoInput::find()
+        ->select([
+            'start_time' => 'date(loct_time)',
+            'end_time' => 'CURDATE()',
+            'days_diff' => 'DATEDIFF(CURDATE(), date(loct_time))',
+            'total' => 'COUNT(date(loct_time))'
+        ])
+        ->where([
+            'loct' => 2
+        ])
+        ->andWhere(['<>', 'loct_time', '0000-00-00'])
+        ->groupBy('DATEDIFF(CURDATE(), date(loct_time))')
+        ->orderBy('DATEDIFF(CURDATE(), date(loct_time)) DESC')
+        ->all();
+
+        $tmp_data = $tmp_data2 = $categories = [];
+        foreach ($tmp_input_arr as $key => $value) {
+            $tmp_title = ' over 12 d';
+
+            if ($value->days_diff <12) {
+                $tmp_title = $value->days_diff . ' d';
+            }
+
+            if (!isset($tmp_data[$tmp_title])) {
+                $tmp_data[$tmp_title] = 0;
+            }
+            $tmp_data[$tmp_title] += $value->total;
+        }
+
+        foreach ($tmp_data as $key => $value) {
+            $categories[] = $key;
+            $tmp_data2[] = [
+                'y' => $value
+            ];
+        }
+
+        $data[] = [
+            'name' => 'FGS Stock',
+            'data' => $tmp_data2
+        ];
+
+        return $this->render('fgs-stock', [
+            'data' => $data,
+            'categories' => $categories
+        ]);
+    }
     public function getLineArr()
     {
         $tmp_data = MasalahPcb::find()
@@ -135,6 +186,7 @@ class DisplayController extends Controller
     public function actionDefectDailyPcb($value='')
     {
         $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
         $data = [];
         $month_arr = [];
 
