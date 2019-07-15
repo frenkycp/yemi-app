@@ -154,6 +154,12 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/summary.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Summary<span class="japanesse-word"></span></a>
                     </div>
                 </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Production Defect (Daily)<br/><span class="japanesse-word"></span></div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/defect-daily-pcb"><i class="fa fa-fw fa-tag"></i> PCB<span class="japanesse-word"></span></a>
+                    </div>
+                </div>
     		</div>
     		<div class="col-sm-3">
                 <div class="panel panel-success">

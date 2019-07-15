@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use yii\web\JsExpression;
+use yii\web\Response;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
@@ -56,9 +57,178 @@ use app\models\SernoOutput;
 use app\models\MachineIot;
 use app\models\MachineIotCurrent;
 use app\models\GojekTbl;
+use app\models\PcbNgDaily;
+use app\models\MasalahPcb;
 
 class DisplayController extends Controller
 {
+    public function getLineArr()
+    {
+        $tmp_data = MasalahPcb::find()
+        ->where('line_pcb IS NOT NULL')
+        ->andWhere(['<>', 'line_pcb', ''])
+        ->groupBy('line_pcb')
+        ->orderBy('line_pcb')
+        ->all();
+
+        $data_arr = [];
+
+        foreach ($tmp_data as $key => $value) {
+            $data_arr[$value->line_pcb] = $value->line_pcb;
+        }
+
+        return $data_arr;
+    }
+
+    public function actionDefectDailyPcbGetRemark($post_date, $line_pcb)
+    {
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>NG Detail <small>(' . $post_date . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 12px;">
+            <th class="text-center">No.</th>
+            <th class="text-center">Kode Laporan</th>
+            <th class="text-center">GMC</th>
+            <th class="text-center">PCB</th>
+            <th class="text-center">NG Found</th>
+            <th class="text-center">Side</th>
+            <th class="text-center">Qty</th>
+            <th>Problem</th>
+            <th>Cause</th>
+        </tr>';
+
+        $data_arr = MasalahPcb::find()
+        ->where([
+            'date(created_date)' => $post_date,
+            'line_pcb' => $line_pcb
+        ])
+        ->orderBy('created_date')
+        ->all();
+
+        $no = 1;
+        foreach ($data_arr as $key => $value) {
+            $remark .= '<tr style="font-size: 12px;">
+                <td class="text-center">' . $no . '</td>
+                <td class="text-center">' . $value->kode_laporan_pcb . '</td>
+                <td class="text-center">' . $value->kode_gmc . '</td>
+                <td class="text-center">' . $value->pcb . '</td>
+                <td class="text-center">' . $value->ng_found . '</td>
+                <td class="text-center">' . $value->side . '</td>
+                <td class="text-center">' . $value->qty_pcb . '</td>
+                <td>' . $value->problem_pcb . '</td>
+                <td>' . $value->cause_pcb . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
+    public function actionDefectDailyPcb($value='')
+    {
+        $this->layout = 'clean';
+        $data = [];
+        $month_arr = [];
+
+        for ($month = 1; $month <= 12; $month++) {
+            $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
+        }
+
+        $model = new \yii\base\DynamicModel([
+            'year', 'month', 'line_pcb'
+        ]);
+        $model->addRule(['year', 'month', 'line_pcb'], 'required');
+
+        $model->month = date('m');
+        $model->year = date('Y');
+        $pcb_line_arr = $this->getLineArr();
+        if ($model->load($_GET))
+        {
+            $period = $model->year . $model->month;
+
+            $ng_daily = MasalahPcb::find()
+            ->select([
+                'post_date' => 'CAST(created_date AS date)',
+                'total' => 'COUNT(kode_laporan_pcb)'
+            ])
+            ->where([
+                'EXTRACT(year_month FROM created_date)' => $period,
+                'line_pcb' => $model->line_pcb
+            ])
+            ->groupBy('post_date')
+            ->orderBy('post_date')
+            ->all();
+
+            foreach ($ng_daily as $key => $value) {
+                $post_date = (strtotime($value->post_date . " +7 hours") * 1000);
+                $tmp_data[] = [
+                    'x' => $post_date,
+                    'y' => (int)$value->total,
+                    'url' => Url::to(['defect-daily-pcb-get-remark', 'post_date' => $value->post_date, 'line_pcb' => $model->line_pcb]),
+                ];
+            }
+
+            $data = [
+                [
+                    'name' => 'Total NG',
+                    'data' => $tmp_data,
+                    'color' => 'rgba(255, 0, 0, 0.8)'
+                ],
+            ];
+        }
+
+        return $this->render('defect-daily-pcb', [
+            'data' => $data,
+            'model' => $model,
+            'month_arr' => $month_arr,
+            'pcb_line_arr' => $pcb_line_arr
+        ]);
+    }
+    public function actionIotTimeline($machine_id = 'MNT00078')
+    {
+
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        $data[] = [
+            'name' => 'TEST',
+            'data' => [
+                [
+                    'x' => (int)strtotime('2019-07-01') * 1000,
+                    'y' => (int)1,
+                    'color' => 'red'
+                ],
+                [
+                    'x' => (int)strtotime('2019-07-02') * 1000,
+                    'y' => (int)1,
+                    'color' => 'red'
+                ],
+                [
+                    'x' => (int)strtotime('2019-07-03') * 1000,
+                    'y' => (int)1,
+                    'color' => 'red'
+                ],
+                [
+                    'x' => (int)strtotime('2019-07-04') * 1000,
+                    'y' => (int)1,
+                    'color' => 'red'
+                ],
+                [
+                    'x' => (int)strtotime('2019-07-05') * 1000,
+                    'y' => (int)1,
+                    'color' => 'red'
+                ],
+            ],
+        ];
+        return $data;
+    }
+
     public function actionLSeriesDaily()
     {
         $this->layout = 'clean';
@@ -237,6 +407,7 @@ class DisplayController extends Controller
 
     public function actionGetMachineStatus($mesin_id = 'MNT00078', $posting_date = '2019-07-03')
     {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
         $data_iot_arr = MachineIot::find()
         ->select([
             'mesin_id', 'mesin_description', 'system_date_time', 'status_warna'
@@ -244,6 +415,7 @@ class DisplayController extends Controller
         ->where([
             'mesin_id' => $mesin_id,
             'posting_date' => $posting_date,
+            //'jam_no' => 10
         ])
         ->asArray()
         ->all();
@@ -273,7 +445,7 @@ class DisplayController extends Controller
             ];
         }
 
-        $data[$mesin_id] = [
+        $data = [
             'title' => $mesin_description,
             'current_color' => $current_color,
             'series' => [
@@ -284,7 +456,7 @@ class DisplayController extends Controller
             ],
         ];
         
-        return json_encode($data);
+        return $data;
     }
     public function actionMachineRealtimeStatus()
     {
