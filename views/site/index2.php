@@ -153,6 +153,9 @@ $this->registerCss("
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/summary.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Summary<span class="japanesse-word"></span></a>
                     </div>
+                    <div class="list-group">
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/fgs-stock"><i class="fa fa-fw fa-tag"></i> FGS Stock (Group by Days)<span class="japanesse-word"></span></a>
+                    </div>
                 </div>
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Production Defect (Daily)<br/><span class="japanesse-word"></span></div>
