@@ -64,7 +64,8 @@ echo '</pre>';*/
             'scripts' => [
                 //'modules/exporting',
                 //'themes/sand-signika',
-                'themes/grid-light',
+                //'themes/grid-light',
+                'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
@@ -72,7 +73,7 @@ echo '</pre>';*/
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
-                    'height' => 500
+                    'height' => 550
                 ],
                 'title' => [
                     'text' => null
@@ -83,6 +84,12 @@ echo '</pre>';*/
                 'xAxis' => [
                     //'type' => 'datetime',
                     'categories' => $categories,
+                    'labels' => [
+                        'style' => [
+                            'fontSize' => '18px',
+                            'fontWeight' => 'bold'
+                        ],
+                    ],
                 ],
                 'yAxis' => [
                     /*'stackLabels' => [
@@ -108,18 +115,16 @@ echo '</pre>';*/
                         //'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
-                            //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
-                            //'color' => 'black',
-                            //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                            /*'style' => [
+                            'style' => [
+                                'fontSize' => '18px',
                                 'textOutline' => '0px',
                                 'fontWeight' => '0'
-                            ],*/
+                            ],
                         ],
                         //'borderWidth' => 1,
                         //'borderColor' => $color,
                     ],
-                    /*'series' => [
+                    'series' => [
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
@@ -131,7 +136,7 @@ echo '</pre>';*/
                                 "),
                             ]
                         ]
-                    ]*/
+                    ]
                 ],
                 'series' => $data
             ],
@@ -139,3 +144,12 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>

@@ -62,10 +62,62 @@ use app\models\MasalahPcb;
 
 class DisplayController extends Controller
 {
+    public function actionFgsStockDetail($is_over, $days, $category)
+    {
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>FGS Stock <small>(' . $category . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 14px;">
+            <th class="text-center">GMC</th>
+            <th>Description</th>
+            <th>Port</th>
+            <th class="text-center">Qty</th>
+        </tr>';
+
+        $data_arr = SernoInput::find()
+        ->joinWith('sernoOutput')
+        ->joinWith('sernoMaster')
+        ->select([
+            'tb_serno_output.dst', 'tb_serno_input.gmc',
+            //'etd_ship' => 'tb_serno_output.etd',
+            'tb_serno_master.model', 'tb_serno_master.dest', 'tb_serno_master.color',
+            'total' => 'COUNT(tb_serno_input.gmc)'
+        ])
+        ->where([
+            'loct' => 2,
+            'DATEDIFF(CURDATE(), date(loct_time))' => $days
+        ])
+        ->andWhere(['<>', 'loct_time', '0000-00-00'])
+        ->groupBy('tb_serno_input.gmc, tb_serno_output.dst')
+        ->all();
+
+        $no = 1;
+        foreach ($data_arr as $key => $value) {
+            $remark .= '<tr style="font-size: 14px;">
+                <td class="text-center">' . $value->gmc . '</td>
+                <td>' . $value->partName . '</td>
+                <td>' . $value->dst . '</td>
+                <td class="text-center">' . $value->total . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
     public function actionFgsStock($value='')
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
+        $limit_over = 12;
 
         $tmp_input_arr = SernoInput::find()
         ->select([
@@ -84,10 +136,10 @@ class DisplayController extends Controller
 
         $tmp_data = $tmp_data2 = $categories = [];
         foreach ($tmp_input_arr as $key => $value) {
-            $tmp_title = ' over 12 d';
+            $tmp_title = $limit_over;
 
-            if ($value->days_diff <12) {
-                $tmp_title = $value->days_diff . ' d';
+            if ($value->days_diff < $limit_over) {
+                $tmp_title = $value->days_diff;
             }
 
             if (!isset($tmp_data[$tmp_title])) {
@@ -97,9 +149,20 @@ class DisplayController extends Controller
         }
 
         foreach ($tmp_data as $key => $value) {
-            $categories[] = $key;
+            $tmp_category = '';
+            if ((int)$key == $limit_over) {
+                $tmp_category = 'over ' . $key . ' d';
+                $is_over = true;
+            } else {
+                $tmp_category = $key . ' d';
+                $is_over = false;
+            }
+
+            $categories[] = $tmp_category;
+            
             $tmp_data2[] = [
-                'y' => $value
+                'y' => $value,
+                'url' => Url::to(['fgs-stock-detail', 'is_over' => $is_over, 'days' => (int)$key, 'category' => $tmp_category]),
             ];
         }
 
