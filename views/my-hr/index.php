@@ -3,6 +3,8 @@ use yii\helpers\Html;
 use app\models\SplView;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use miloschuman\highcharts\Highcharts;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 
@@ -23,6 +25,9 @@ $this->registerCss('
 ');
 
 $profpic = "";
+/*echo '<pre>';
+print_r($data);
+echo '</pre>';*/
 /*if ($model_karyawan !== null && $model_karyawan->JENIS_KELAMIN == 'P') {
     $profpic = 'profile-picture-woman.png';
 }*/
@@ -251,6 +256,103 @@ $profpic = "";
                         ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="box box-primary box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-user"></i> <?= 'OT Management by Section (' . $section . ')' ?></h3>
+            </div>
+            <div class="box-body">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        //'modules/exporting',
+                        'themes/grid-light',
+                        //'themes/dark-unica',
+                    ],
+                    'options' => [
+                        'chart' => [
+                            'type' => 'spline',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
+                            ],
+                            'zoomType' => 'x',
+                            //'height' => 290
+                        ],
+                        'credits' => [
+                            'enabled' => false
+                        ],
+                        'title' => [
+                            'text' => null,
+                        ],
+                        'subtitle' => [
+                            'text' => '',
+                        ],
+                        'xAxis' => [
+                            'categories' => $categories,
+
+                        ],
+                        'yAxis' => [
+                            'title' => [
+                                'text' => 'HOURS'
+                            ],
+                            'min' => 0,
+                            'max' => 100,
+                            'plotLines' => [
+                                [
+                                    'value' => 10,
+                                    'color' => 'orange',
+                                    'dashStyle' => 'shortdash',
+                                    'width' => 2,
+                                    'label' => [
+                                        'text' => 'NORMAL (10)',
+                                        'align' => 'left',
+                                    ],
+                                    //'zIndex' => 5
+                                ], [
+                                    'value' => 20,
+                                    'color' => 'red',
+                                    'dashStyle' => 'shortdash',
+                                    'width' => 2,
+                                    'label' => [
+                                        'text' => 'MAXIMUM (20)',
+                                        'align' => 'left',
+                                    ],
+                                    //'zIndex' => 5
+                                ]
+                            ]
+                        ],
+                        'plotOptions' => [
+                            'spline' => [
+                                'dataLabels' => [
+                                    'enabled' => true,
+                                ],
+                            ],
+                            'series' => [
+                                'cursor' => 'pointer',
+                                'marker' => [
+                                    'enabled' => false
+                                ],
+                                'dataLabels' => [
+                                    //'allowOverlap' => true
+                                    //'enabled' => true
+                                ],
+                                /*'point' => [
+                                    'events' => [
+                                        'click' => new JsExpression("
+                                            function(e){
+                                                e.preventDefault();
+                                                $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                            }
+                                        "),
+                                    ]
+                                ]*/
+                            ]
+                        ],
+                        'series' => $data,
+                    ],
+                ]);
+                ?>
             </div>
         </div>
     </div>

@@ -17,6 +17,7 @@ use app\models\HrFacility;
 use dmstr\bootstrap\Tabs;
 use app\models\ImageFile;
 use yii\web\UploadedFile;
+use yii\web\JsExpression;
 
 class MyHrController extends Controller
 {
@@ -43,6 +44,8 @@ class MyHrController extends Controller
         $model_karyawan = Karyawan::find()->where([
             'NIK' => $nik
         ])->one();
+
+        $section = $model_karyawan->SECTION;
 
         /*$model_rekap_absensi = RekapAbsensiView::find()->where([
             'NIK' => $nik,
@@ -98,6 +101,76 @@ class MyHrController extends Controller
             $sisa_cuti = 0;
         }
 
+        $from_date = date('Y-m-01', strtotime(date('Y-m-d') . '-1 year'));
+        $to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $tmp_categories = SplView::find()
+        ->select('PERIOD')
+        ->where(['>=', 'PERIOD', date('Ym', strtotime($from_date))])
+        ->andWhere(['<=', 'PERIOD', date('Ym', strtotime($to_date))])
+        ->groupBy('PERIOD')
+        ->all();
+        
+        foreach ($tmp_categories as $key => $value) {
+            $categories[] = $value->PERIOD;
+        }
+
+        $karyawan_arr = SplView::find()
+        ->select([
+            'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'CC_DESC'
+        ])
+        ->where([
+            'CC_ID' => $model_karyawan->CC_ID,
+            'PERIOD' => $categories,
+            //'NIK' => $model_karyawan->NIK,
+        ])
+        ->andWhere('NIK IS NOT NULL')
+        ->groupBy('NIK, NAMA_KARYAWAN, CC_ID, CC_DESC')
+        ->asArray()
+        ->all();
+
+        $overtime_data = SplView::find()
+        ->select([
+            'PERIOD',
+            'NIK',
+            'NAMA_KARYAWAN',
+            'CC_ID',
+            'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+        ])
+        ->where([
+            'PERIOD' => $categories,
+            //'NIK' => $model_karyawan->NIK,
+            'CC_ID' => $model_karyawan->CC_ID
+        ])
+        ->groupBy('PERIOD, NIK, NAMA_KARYAWAN, CC_ID')
+        ->orderBy('NIK, PERIOD')
+        ->asArray()
+        ->all();
+
+        $data = [];
+        foreach ($karyawan_arr as $karyawan) {
+            $tmp_data = [];
+            foreach ($categories as $period_value) {
+                $hour = 0;
+                foreach ($overtime_data as $value) {
+                    if ($value['NIK'] == $karyawan['NIK'] && $period_value == $value['PERIOD']) {
+                        $hour = $value['NILAI_LEMBUR_ACTUAL'];
+                        continue;
+                    }
+                }
+                $tmp_data[] = [
+                    'y' => round($hour, 2),
+                    'url' => Url::to(['get-remark', 'nik' => $karyawan['NIK'], 'nama_karyawan' => $karyawan['NAMA_KARYAWAN'], 'period' => $period_value])
+                ];
+            }
+            $data[] = [
+                'name' => $karyawan['NIK'] . ' - ' . $karyawan['NAMA_KARYAWAN'] . ' (' . $karyawan['CC_DESC'] . ')',
+                'data' => $tmp_data,
+                'showInLegend' => false,
+                'lineWidth' => 0.9,
+                'color' => new JsExpression('Highcharts.getOptions().colors[0]')
+            ];
+        }
+
 		return $this->render('index', [
             'absensi_data' => $absensi_data,
 			'model_karyawan' => $model_karyawan,
@@ -106,6 +179,9 @@ class MyHrController extends Controller
             'kuota_cuti' => $kuota_cuti,
             'sisa_cuti' => $sisa_cuti,
             'year' => $this_year,
+            'section' => $section,
+            'categories' => $categories,
+            'data' => $data
 		]);
 	}
 
