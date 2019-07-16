@@ -153,6 +153,9 @@ class DisplayController extends Controller
             if ((int)$key == $limit_over) {
                 $tmp_category = 'over ' . $key . ' d';
                 $is_over = true;
+            } elseif((int)$key == 0) {
+                $tmp_category = 'Today';
+                $is_over = false;
             } else {
                 $tmp_category = $key . ' d';
                 $is_over = false;
@@ -168,7 +171,8 @@ class DisplayController extends Controller
 
         $data[] = [
             'name' => 'FGS Stock',
-            'data' => $tmp_data2
+            'data' => $tmp_data2,
+            'showInLegend' => false
         ];
 
         return $this->render('fgs-stock', [
