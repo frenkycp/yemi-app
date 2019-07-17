@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'FG Stocks Waiting time before Shipping (<span class="japanesse text-green">出荷までの完成品停滞時間</span>)',
+    'page_title' => 'FG Stocks Waiting time before Shipping (<span class="japanesse text-green">出荷までの完成品停滞時間</span>)<span style="font-size: 0.7em;"> Last Update : ' . date('Y-m-d H:i') . '</span>',
     'tab_title' => 'FG Stocks Waiting time before Shipping',
     'breadcrumbs_title' => 'FG Stocks Waiting time before Shipping'
 ];
@@ -75,96 +75,94 @@ echo '</pre>';*/
 
 ?>
 
-<div class="box box-primary">
-    <div class="box-header">
-        <h5 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i') ?></h5>
-    </div>
-    <div class="box-body">
+<div class="row">
+    <div class="col-md-12">
         <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                //'modules/exporting',
-                //'themes/sand-signika',
-                //'themes/grid-light',
-                'themes/dark-unica',
+echo Highcharts::widget([
+    'scripts' => [
+        //'modules/exporting',
+        //'themes/sand-signika',
+        //'themes/grid-light',
+        'themes/dark-unica',
+    ],
+    'options' => [
+        'chart' => [
+            'type' => 'column',
+            'style' => [
+                'fontFamily' => 'sans-serif',
             ],
-            'options' => [
-                'chart' => [
-                    'type' => 'column',
-                    'style' => [
-                        'fontFamily' => 'sans-serif',
-                    ],
-                    'height' => 300
+            'height' => 200
+        ],
+        'title' => [
+            'text' => null
+        ],
+        'subtitle' => [
+            'text' => ''
+        ],
+        'xAxis' => [
+            //'type' => 'datetime',
+            'categories' => $categories,
+            'labels' => [
+                'style' => [
+                    'fontSize' => '18px',
+                    'fontWeight' => 'bold'
                 ],
-                'title' => [
-                    'text' => null
-                ],
-                'subtitle' => [
-                    'text' => ''
-                ],
-                'xAxis' => [
-                    //'type' => 'datetime',
-                    'categories' => $categories,
-                    'labels' => [
-                        'style' => [
-                            'fontSize' => '18px',
-                            'fontWeight' => 'bold'
-                        ],
-                    ],
-                ],
-                'yAxis' => [
-                    /*'stackLabels' => [
-                        'enabled' => true
-                    ],*/
-                    //'min' => 0,
-                    'title' => [
-                        'text' => 'Total Product'
-                    ],
-                    //'gridLineWidth' => 0,
-                ],
-                'credits' => [
-                    'enabled' =>false
-                ],
-                'tooltip' => [
+            ],
+        ],
+        'yAxis' => [
+            /*'stackLabels' => [
+                'enabled' => true
+            ],*/
+            //'min' => 0,
+            'title' => [
+                'text' => 'Total Product'
+            ],
+            //'gridLineWidth' => 0,
+        ],
+        'credits' => [
+            'enabled' =>false
+        ],
+        'tooltip' => [
+            'enabled' => true,
+            'xDateFormat' => '%A, %b %e %Y',
+            //'valueSuffix' => ' min'
+            //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+        ],
+        'plotOptions' => [
+            'column' => [
+                //'stacking' => 'normal',
+                'dataLabels' => [
                     'enabled' => true,
-                    'xDateFormat' => '%A, %b %e %Y',
-                    //'valueSuffix' => ' min'
-                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
-                ],
-                'plotOptions' => [
-                    'column' => [
-                        //'stacking' => 'normal',
-                        'dataLabels' => [
-                            'enabled' => true,
-                            'style' => [
-                                'fontSize' => '18px',
-                                'textOutline' => '0px',
-                                'fontWeight' => '0'
-                            ],
-                        ],
-                        //'borderWidth' => 1,
-                        //'borderColor' => $color,
+                    'style' => [
+                        'fontSize' => '18px',
+                        'textOutline' => '0px',
+                        'fontWeight' => '0'
                     ],
-                    'series' => [
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression("
-                                    function(e){
-                                        e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                    }
-                                "),
-                            ]
-                        ]
-                    ]
                 ],
-                'series' => $data
+                //'borderWidth' => 1,
+                //'borderColor' => $color,
             ],
-        ]);
-        ?>
+            'series' => [
+                'cursor' => 'pointer',
+                'point' => [
+                    'events' => [
+                        'click' => new JsExpression("
+                            function(e){
+                                e.preventDefault();
+                                $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                            }
+                        "),
+                    ]
+                ]
+            ]
+        ],
+        'series' => $data
+    ],
+]);
+?>
     </div>
 </div>
+<hr>
 <table class="table" id="progress-tbl">
     <thead>
         <tr>
