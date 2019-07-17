@@ -73,9 +73,9 @@ class DisplayController extends Controller
         
         $remark .= '<table class="table table-bordered table-striped table-hover">';
         $remark .= '<tr style="font-size: 14px;">
+            <th>Port</th>
             <th class="text-center">GMC</th>
             <th>Description</th>
-            <th>Port</th>
             <th class="text-center">Qty</th>
         </tr>';
 
@@ -84,24 +84,24 @@ class DisplayController extends Controller
         ->joinWith('sernoMaster')
         ->select([
             'tb_serno_output.dst', 'tb_serno_input.gmc',
-            //'etd_ship' => 'tb_serno_output.etd',
             'tb_serno_master.model', 'tb_serno_master.dest', 'tb_serno_master.color',
             'total' => 'COUNT(tb_serno_input.gmc)'
         ])
         ->where([
             'loct' => 2,
+            'tb_serno_input.adv' => 0,
             'DATEDIFF(CURDATE(), date(loct_time))' => $days
         ])
         ->andWhere(['<>', 'loct_time', '0000-00-00'])
-        ->groupBy('tb_serno_input.gmc, tb_serno_output.dst')
+        ->groupBy('tb_serno_output.dst, tb_serno_input.gmc')
         ->all();
 
         $no = 1;
         foreach ($data_arr as $key => $value) {
             $remark .= '<tr style="font-size: 14px;">
+                <td>' . $value->dst . '</td>
                 <td class="text-center">' . $value->gmc . '</td>
                 <td>' . $value->partName . '</td>
-                <td>' . $value->dst . '</td>
                 <td class="text-center">' . $value->total . '</td>
             </tr>';
             $no++;
@@ -120,21 +120,22 @@ class DisplayController extends Controller
         $limit_over = 12;
 
         $tmp_input_arr = SernoInput::find()
+        ->joinWith('sernoOutput')
         ->select([
-            'start_time' => 'date(loct_time)',
-            'end_time' => 'CURDATE()',
             'days_diff' => 'DATEDIFF(CURDATE(), date(loct_time))',
+            'dst' => 'tb_serno_output.dst',
             'total' => 'COUNT(date(loct_time))'
         ])
         ->where([
-            'loct' => 2
+            'loct' => 2,
+            'tb_serno_input.adv' => 0
         ])
         ->andWhere(['<>', 'loct_time', '0000-00-00'])
-        ->groupBy('DATEDIFF(CURDATE(), date(loct_time))')
-        ->orderBy('DATEDIFF(CURDATE(), date(loct_time)) DESC')
+        ->groupBy('DATEDIFF(CURDATE(), date(loct_time)), tb_serno_output.dst')
+        ->orderBy('DATEDIFF(CURDATE(), date(loct_time)) DESC, tb_serno_output.dst')
         ->all();
 
-        $tmp_data = $tmp_data2 = $categories = [];
+        $tmp_data = $tmp_data2 = $tmp_data3 = $categories = [];
         foreach ($tmp_input_arr as $key => $value) {
             $tmp_title = $limit_over;
 
@@ -146,12 +147,17 @@ class DisplayController extends Controller
                 $tmp_data[$tmp_title] = 0;
             }
             $tmp_data[$tmp_title] += $value->total;
+
+            if (!isset($tmp_data3[$tmp_title][$value->dst])) {
+                $tmp_data3[$tmp_title][$value->dst] = 0;
+            }
+            $tmp_data3[$tmp_title][$value->dst] += $value->total;
         }
 
         foreach ($tmp_data as $key => $value) {
             $tmp_category = '';
             if ((int)$key == $limit_over) {
-                $tmp_category = 'over ' . $key . ' d';
+                $tmp_category = $key . ' d and over';
                 $is_over = true;
             } elseif((int)$key == 0) {
                 $tmp_category = 'Today';
@@ -169,6 +175,13 @@ class DisplayController extends Controller
             ];
         }
 
+        $data_table = $table_column = [];
+        foreach ($tmp_data3 as $key => $value) {
+            arsort($value);
+            $table_column[] = $key;
+            $data_table[$key] = $value;
+        }
+
         $data[] = [
             'name' => 'FGS Stock',
             'data' => $tmp_data2,
@@ -177,6 +190,8 @@ class DisplayController extends Controller
 
         return $this->render('fgs-stock', [
             'data' => $data,
+            'data_table' => $data_table,
+            'table_column' => $table_column,
             'categories' => $categories
         ]);
     }

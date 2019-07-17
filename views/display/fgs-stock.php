@@ -25,13 +25,34 @@ $this->registerCss("
     .box-title {font-weight: bold;}
     .box-header .box-title{font-size: 2em;}
     .container {width: auto;}
-    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    .content-header>h1 {font-size: 2.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #33383D;}
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
+
+    #progress-tbl{
+        //border:1px solid #29B6F6;
+        border-top: 0;
+    }
+    #progress-tbl > thead > tr > th{
+        border:1px solid #8b8c8d;
+        background-color: #595F66;
+        color: white;
+        font-size: 20px;
+        border-bottom: 7px solid #ddd;
+        vertical-align: middle;
+    }
+    #progress-tbl > tbody > tr > td{
+        border:1px solid #777474;
+        font-size: 16px;
+        //background-color: #B3E5FC;
+        //font-weight: 1000;
+        color: #FFF;
+        vertical-align: top;
+    }
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -49,7 +70,7 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($data);
+print_r($tmp_data3);
 echo '</pre>';*/
 
 ?>
@@ -73,7 +94,7 @@ echo '</pre>';*/
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
-                    'height' => 550
+                    'height' => 300
                 ],
                 'title' => [
                     'text' => null
@@ -144,6 +165,33 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+<table class="table" id="progress-tbl">
+    <thead>
+        <tr>
+            <?php
+            foreach ($categories as $key => $value) {
+                echo '<th>' . $value . '</th>';
+            }
+            ?>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <?php
+        foreach ($data_table as $key => $value) {
+            ?>
+            <td>
+                <?php
+                foreach ($value as $key2 => $value2) {
+                    echo $key2 . ' [ <span class="text-yellow">' . $value2 . '</span> ]' . '<br/>';
+                }
+                ?>
+            </td>
+        <?php }
+        ?>
+        </tr>
+    </tbody>
+</table>
 
 <?php
 yii\bootstrap\Modal::begin([
