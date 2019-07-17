@@ -612,6 +612,7 @@ class DisplayController extends Controller
         ->where([
             'etd' => date('Y-m-d')
         ])
+        ->andWhere(['<>', 'back_order', 2])
         ->groupBy('cntr')
         ->orderBy('status, tb_serno_cnt.remark DESC, gate, line')
         ->asArray()
