@@ -1765,6 +1765,51 @@ class DisplayController extends Controller
 		]);
 	}
 
+    public function actionMonthlyOvertimeBySectionGetRemark($nik, $nama_karyawan, $period)
+    {
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $nama_karyawan . ' <small>(' . $period . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 14px;">
+            <th class="text-center">Date</th>
+            <th class="text-center">Check In</th>
+            <th class="text-center">Check Out</th>
+            <th class="text-center">Total Hour</th>
+            <th>Job Desc.</th>
+        </tr>';
+
+        $overtime_data_arr = SplView::find()
+        ->where([
+            'NIK' => $nik,
+            'PERIOD' => $period,
+        ])
+        ->orderBy('TGL_LEMBUR')
+        ->all();
+
+        $no = 1;
+        foreach ($overtime_data_arr as $key => $value) {
+
+            $remark .= '<tr style="font-size: 14px;">
+                <td class="text-center">' . date('Y-m-d', strtotime($value->TGL_LEMBUR)) . '</td>
+                <td class="text-center">' . date('H:i', strtotime($value->START_LEMBUR_ACTUAL)) . '</td>
+                <td class="text-center">' . date('H:i', strtotime($value->END_LEMBUR_ACTUAL)) . '</td>
+                <td class="text-center">' . $value->NILAI_LEMBUR_ACTUAL . '</td>
+                <td>' . $value->KETERANGAN . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
 	public function actionMonthlyOvertimeBySection()
 	{
 		$this->layout = 'clean';
@@ -1872,7 +1917,7 @@ class DisplayController extends Controller
                     }
                     $tmp_data[] = [
                         'y' => round($hour, 2),
-                        'url' => Url::to(['get-remark', 'nik' => $karyawan['NIK'], 'nama_karyawan' => $karyawan['NAMA_KARYAWAN'], 'period' => $period_value])
+                        'url' => Url::to(['monthly-overtime-by-section-get-remark', 'nik' => $karyawan['NIK'], 'nama_karyawan' => $karyawan['NAMA_KARYAWAN'], 'period' => $period_value])
                     ];
                 }
                 $data[] = [
