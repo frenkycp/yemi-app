@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use kartik\date\DatePicker;
 
 $this->title = [
     'page_title' => 'OT Management by Section <span class="japanesse text-green">(部門別残業管理）</span>',
@@ -17,11 +18,11 @@ $this->title = [
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
-    .form-control {font-size: 30px; height: 52px;}
+    //.form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}
     //.box-body {background-color: #33383D;}
     .box-title {font-weight: bold;}
-    .box-header .box-title, .control-label{font-size: 2em;}
+    .box-header .box-title{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
@@ -59,25 +60,37 @@ $section_data = app\models\CostCenter::find()
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['monthly-overtime-by-section/index']),
+    'action' => Url::to(['monthly-overtime-by-section']),
 ]); ?>
 
 <div class="row">
-    <div class="col-md-2">
-        <?= Html::label('Fiscal'); ?>
-        <?= Html::dropDownList('fiscal', $fiscal, ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->limit(10)->all(), 'FISCAL', 'FISCAL'), [
+    <div class="col-md-3">
+        <?= $form->field($model, 'section')->dropDownList($section_arr, [
             'class' => 'form-control',
-            'onchange'=>'this.form.submit()'
-        ]); ?>
-    </div>
-    <div class="col-md-2">
-        <?= Html::label('SECTION'); ?>
-        <?= Html::dropDownList('section', $section, $section_arr, [
-            'class' => 'form-control',
-            'onchange'=>'this.form.submit()',
             'prompt' => 'Select a section...'
         ]); ?>
     </div>
+    <div class="col-md-4">
+        <?php echo '<label class="control-label">Select date range</label>';
+        echo DatePicker::widget([
+            'model' => $model,
+            'attribute' => 'from_date',
+            'attribute2' => 'to_date',
+            'options' => ['placeholder' => 'Start date'],
+            'options2' => ['placeholder' => 'End date'],
+            'type' => DatePicker::TYPE_RANGE,
+            'form' => $form,
+            'pluginOptions' => [
+                'format' => 'yyyy-mm-dd',
+                'autoclose' => true,
+            ]
+        ]);?>
+    </div>
+    <div class="form-group">
+        <br/>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+    </div>
+    
 </div>
 <br/>
 

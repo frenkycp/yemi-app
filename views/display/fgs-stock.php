@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'FG Stocks Waiting time before Shipping <span class="japanesse text-green">(出荷までの完成品停滞時間)</span>',
+    'page_title' => 'FG Stocks Waiting time before Shipping (<span class="japanesse text-green">出荷までの完成品停滞時間</span>)',
     'tab_title' => 'FG Stocks Waiting time before Shipping',
     'breadcrumbs_title' => 'FG Stocks Waiting time before Shipping'
 ];

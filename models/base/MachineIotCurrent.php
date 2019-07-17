@@ -13,6 +13,12 @@ use Yii;
  * @property string $mesin_description
  * @property string $status_warna
  * @property string $system_date_time
+ * @property string $kelompok
+ * @property string $lot_number
+ * @property string $gmc
+ * @property string $gmc_desc
+ * @property double $lot_qty
+ * @property string $product_name
  * @property string $aliasModel
  */
 abstract class MachineIotCurrent extends \yii\db\ActiveRecord
@@ -43,8 +49,9 @@ abstract class MachineIotCurrent extends \yii\db\ActiveRecord
     {
         return [
             [['mesin_id'], 'required'],
-            [['mesin_id', 'mesin_description', 'status_warna'], 'string'],
+            [['mesin_id', 'mesin_description', 'status_warna', 'kelompok', 'lot_number', 'gmc', 'gmc_desc', 'product_name'], 'string'],
             [['system_date_time'], 'safe'],
+            [['lot_qty'], 'number'],
             [['mesin_id'], 'unique']
         ];
     }
@@ -59,6 +66,12 @@ abstract class MachineIotCurrent extends \yii\db\ActiveRecord
             'mesin_description' => 'Mesin Description',
             'status_warna' => 'Status Warna',
             'system_date_time' => 'System Date Time',
+            'kelompok' => 'Kelompok',
+            'lot_number' => 'Lot Number',
+            'gmc' => 'Gmc',
+            'gmc_desc' => 'Gmc Desc',
+            'lot_qty' => 'Lot Qty',
+            'product_name' => 'Product Name',
         ];
     }
 
