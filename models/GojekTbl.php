@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class GojekTbl extends BaseGojekTbl
 {
-    public $stat_open, $stat_close, $stat_total;
+    public $stat_open, $stat_close, $stat_total, $JOB_COUNT, $TOTAL_LT;
 
     public function behaviors()
     {

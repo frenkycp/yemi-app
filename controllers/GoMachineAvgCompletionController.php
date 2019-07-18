@@ -1,5 +1,4 @@
 <?php
-
 namespace app\controllers;
 
 use yii\web\Controller;
@@ -9,16 +8,17 @@ use app\models\GojekTbl;
 use app\models\GojekOrderTbl;
 use yii\helpers\Url;
 
-class GoPickingDriverAvgCompletionController extends Controller
+class GoMachineAvgCompletionController extends Controller
 {
 	public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
-	public function actionIndex()
+
+	public function actionIndex($value='')
 	{
+		set_time_limit(300);
 		$data = [];
 		$categories = [];
 		$year = date('Y');
@@ -43,7 +43,7 @@ class GoPickingDriverAvgCompletionController extends Controller
 			'TOTAL_LT' => 'SUM(LT)',
 		])
 		->where([
-			'GOJEK_TBL.SOURCE' => 'MAT',
+			'GOJEK_TBL.SOURCE' => 'MCH',
 			'FORMAT(daparture_date, \'yyyyMM\')' => $period,
 			'STAT' => 'C'
 		])
