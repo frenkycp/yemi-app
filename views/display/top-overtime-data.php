@@ -20,7 +20,7 @@ if (\Yii::$app->request->get('section_id') == 1) {
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
-    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    //.form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
     .form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}
     //.box-body {background-color: #33383D;}
@@ -53,7 +53,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
         ],
     ],
     [
@@ -64,7 +64,7 @@ $gridColumns = [
         'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_GROUP')->groupBy('CC_GROUP')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
         ],
     ],
     [
@@ -75,7 +75,7 @@ $gridColumns = [
         'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_DESC')->groupBy('CC_DESC')->orderBy('CC_DESC')->all(), 'CC_DESC', 'CC_DESC'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
         ],
     ],
     [
@@ -85,7 +85,7 @@ $gridColumns = [
         'format' => 'html',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
         ],
     ],
     [
@@ -95,7 +95,7 @@ $gridColumns = [
         //'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
         ],
     ],
     [
@@ -105,7 +105,7 @@ $gridColumns = [
         'filter' => \Yii::$app->params['grade_arr'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
         ],
     ],
     [
@@ -113,9 +113,10 @@ $gridColumns = [
         'label' => 'Overtime Total',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'mergeHeader' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
         ],
     ],
     
@@ -133,7 +134,7 @@ $gridColumns = [
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            //'filterModel' => $searchModel,
+            'filterModel' => $searchModel,
             'columns' => $gridColumns,
             'hover' => true,
             'condensed' => true,
@@ -143,17 +144,21 @@ $gridColumns = [
             'containerOptions' => ['style' => 'overflow: auto; font-size: 20px; font-weight: bold;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style info'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-            'toolbar' => false,
+            //'toolbar' => false,
+            'toolbar' =>  [
+                //'{export}',
+                '{toggleData}',
+            ],
             // set export properties
             'export' => [
                 'fontAwesome' => true
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => false,
-                'footer' => false,
-                'before' => false,
-                'after' => false,
+                //'heading' => false,
+                //'footer' => false,
+                //'before' => false,
+                //'after' => false,
             ],
         ]); ?>
     </div>
