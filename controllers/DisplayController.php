@@ -79,22 +79,42 @@ class DisplayController extends Controller
             <th class="text-center">Qty</th>
         </tr>';
 
-        $data_arr = SernoInput::find()
-        ->joinWith('sernoOutput')
-        ->joinWith('sernoMaster')
-        ->select([
-            'tb_serno_output.dst', 'tb_serno_input.gmc',
-            'tb_serno_master.model', 'tb_serno_master.dest', 'tb_serno_master.color',
-            'total' => 'COUNT(tb_serno_input.gmc)'
-        ])
-        ->where([
-            'loct' => 2,
-            'tb_serno_input.adv' => 0,
-            'DATEDIFF(CURDATE(), date(loct_time))' => $days
-        ])
-        ->andWhere(['<>', 'loct_time', '0000-00-00'])
-        ->groupBy('tb_serno_output.dst, tb_serno_input.gmc')
-        ->all();
+        if ($is_over == true) {
+            $data_arr = SernoInput::find()
+            ->joinWith('sernoOutput')
+            ->joinWith('sernoMaster')
+            ->select([
+                'tb_serno_output.dst', 'tb_serno_input.gmc',
+                'tb_serno_master.model', 'tb_serno_master.dest', 'tb_serno_master.color',
+                'total' => 'COUNT(tb_serno_input.gmc)'
+            ])
+            ->where([
+                'loct' => 2,
+                'tb_serno_input.adv' => 0,
+            ])
+            ->andWhere(['<>', 'loct_time', '0000-00-00'])
+            ->andWhere(['>=', 'DATEDIFF(CURDATE(), date(loct_time))', $days])
+            ->groupBy('tb_serno_output.dst, tb_serno_input.gmc')
+            ->all();
+        } else {
+            $data_arr = SernoInput::find()
+            ->joinWith('sernoOutput')
+            ->joinWith('sernoMaster')
+            ->select([
+                'tb_serno_output.dst', 'tb_serno_input.gmc',
+                'tb_serno_master.model', 'tb_serno_master.dest', 'tb_serno_master.color',
+                'total' => 'COUNT(tb_serno_input.gmc)'
+            ])
+            ->where([
+                'loct' => 2,
+                'tb_serno_input.adv' => 0,
+                'DATEDIFF(CURDATE(), date(loct_time))' => $days
+            ])
+            ->andWhere(['<>', 'loct_time', '0000-00-00'])
+            ->groupBy('tb_serno_output.dst, tb_serno_input.gmc')
+            ->all();
+        }
+        
 
         $no = 1;
         foreach ($data_arr as $key => $value) {
