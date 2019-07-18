@@ -280,11 +280,14 @@ class DisplayController extends Controller
             'year', 'month', 'line_pcb'
         ]);
         $model->addRule(['year', 'month', 'line_pcb'], 'required');
+        if (\Yii::$app->request->get('line') !== null) {
+            $model->line_pcb = \Yii::$app->request->get('line');
+        }
 
         $model->month = date('m');
         $model->year = date('Y');
         $pcb_line_arr = $this->getLineArr();
-        if ($model->load($_GET))
+        if ($model->load($_GET) || \Yii::$app->request->get('line') !== null)
         {
             $period = $model->year . $model->month;
 
