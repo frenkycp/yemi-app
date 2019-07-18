@@ -62,7 +62,7 @@ use app\models\MasalahPcb;
 
 class DisplayController extends Controller
 {
-    public function actionFgsStockDetail($is_over, $days, $category)
+    public function actionFgsStockDetail($over_category, $days, $category)
     {
         $remark = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -79,7 +79,7 @@ class DisplayController extends Controller
             <th class="text-center">Qty</th>
         </tr>';
 
-        if ($is_over == true) {
+        if ($over_category == 1) {
             $data_arr = SernoInput::find()
             ->joinWith('sernoOutput')
             ->joinWith('sernoMaster')
@@ -93,7 +93,7 @@ class DisplayController extends Controller
                 'tb_serno_input.adv' => 0,
             ])
             ->andWhere(['<>', 'loct_time', '0000-00-00'])
-            ->andWhere(['>=', 'DATEDIFF(CURDATE(), date(loct_time))', $days])
+            ->andWhere(['>=', 'DATEDIFF(tb_serno_output.etd, CURDATE())', $days])
             ->groupBy('tb_serno_output.dst, tb_serno_input.gmc')
             ->all();
         } else {
@@ -108,7 +108,7 @@ class DisplayController extends Controller
             ->where([
                 'loct' => 2,
                 'tb_serno_input.adv' => 0,
-                'DATEDIFF(CURDATE(), date(loct_time))' => $days
+                'DATEDIFF(tb_serno_output.etd, CURDATE())' => $days
             ])
             ->andWhere(['<>', 'loct_time', '0000-00-00'])
             ->groupBy('tb_serno_output.dst, tb_serno_input.gmc')
@@ -142,17 +142,18 @@ class DisplayController extends Controller
         $tmp_input_arr = SernoInput::find()
         ->joinWith('sernoOutput')
         ->select([
-            'days_diff' => 'DATEDIFF(CURDATE(), date(loct_time))',
+            'days_diff' => 'DATEDIFF(tb_serno_output.etd, CURDATE())',
             'dst' => 'tb_serno_output.dst',
-            'total' => 'COUNT(date(loct_time))'
+            'total' => 'COUNT(CURDATE())'
         ])
         ->where([
             'loct' => 2,
             'tb_serno_input.adv' => 0
         ])
         ->andWhere(['<>', 'loct_time', '0000-00-00'])
-        ->groupBy('DATEDIFF(CURDATE(), date(loct_time)), tb_serno_output.dst')
-        ->orderBy('DATEDIFF(CURDATE(), date(loct_time)) DESC, tb_serno_output.dst')
+        ->groupBy('DATEDIFF(tb_serno_output.etd, CURDATE()), tb_serno_output.dst')
+        ->having('days_diff > -1')
+        ->orderBy('DATEDIFF(tb_serno_output.etd, CURDATE()) DESC, tb_serno_output.dst')
         ->all();
 
         $tmp_data = $tmp_data2 = $tmp_data3 = $categories = [];
@@ -178,20 +179,20 @@ class DisplayController extends Controller
             $tmp_category = '';
             if ((int)$key == $limit_over) {
                 $tmp_category = $key . ' d and over';
-                $is_over = true;
+                $over_category = 1;
             } elseif((int)$key == 0) {
                 $tmp_category = 'Today';
-                $is_over = false;
+                $over_category = 0;
             } else {
                 $tmp_category = $key . ' d';
-                $is_over = false;
+                $over_category = 0;
             }
 
             $categories[] = $tmp_category;
             
             $tmp_data2[] = [
                 'y' => $value,
-                'url' => Url::to(['fgs-stock-detail', 'is_over' => $is_over, 'days' => (int)$key, 'category' => $tmp_category]),
+                'url' => Url::to(['fgs-stock-detail', 'over_category' => $over_category, 'days' => (int)$key, 'category' => $tmp_category]),
             ];
         }
 

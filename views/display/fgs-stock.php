@@ -163,7 +163,7 @@ echo Highcharts::widget([
     </div>
 </div>
 <hr>
-<table class="table" id="progress-tbl">
+<table class="table table-responsive" id="progress-tbl">
     <thead>
         <tr>
             <?php
@@ -181,7 +181,7 @@ echo Highcharts::widget([
             <td>
                 <?php
                 foreach ($value as $key2 => $value2) {
-                    echo $key2 . ' [ <span class="text-yellow">' . $value2 . '</span> ]' . '<br/>';
+                    echo $key2 . ' [<span class="text-yellow">' . $value2 . '</span>]' . '<br/>';
                 }
                 ?>
             </td>
