@@ -90,7 +90,7 @@ echo '</pre>';*/
                         'height' => 350
                     ],
                     'title' => [
-                        'text' => 'MACHINE AVAILABILITY = [ (GREEN + BLUE) / 24h ]'
+                        'text' => 'MACHINE AVAILABILITY = [ (GREEN + BLUE + YELLOW) / 24h ]'
                     ],
                     'subtitle' => [
                         'text' => ''
@@ -160,7 +160,7 @@ echo '</pre>';*/
                         'height' => 350
                     ],
                     'title' => [
-                        'text' => 'MACHINE EFFICIENCY = [ GREEN / (GREEN + BLUE) ]'
+                        'text' => 'MACHINE EFFICIENCY = [ GREEN / (GREEN + BLUE + YELLOW) ]'
                     ],
                     'subtitle' => [
                         'text' => ''
