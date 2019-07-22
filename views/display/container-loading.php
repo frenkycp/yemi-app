@@ -96,8 +96,11 @@ echo '</pre>';*/
             $start_date = new DateTime($value['start']);
             $end_date = new DateTime($now);
             $break_time1 = new DateTime(date('Y-m-d 09:20:00'));
-            $break_time2 = new DateTime(date('Y-m-d 11:40:00'));
+            $break_time1_end = new DateTime(date('Y-m-d 09:30:00'));
+            $break_time2 = new DateTime(date('Y-m-d 12:10:00'));
+            $break_time2_end = new DateTime(date('Y-m-d 12:50:00'));
             $break_time3 = new DateTime(date('Y-m-d 14:20:00'));
+            $break_time3_end = new DateTime(date('Y-m-d 14:30:00'));
             $min1 = $min3 = 10;
             $min2 = 40;
             if ($value['status'] == 2) {
@@ -112,18 +115,20 @@ echo '</pre>';*/
             if ($today_name == 'Fri') {
                 $min2 = 70;
                 $break_time2 = new DateTime(date('Y-m-d 12:00:00'));
+                $break_time2_end = new DateTime(date('Y-m-d 13:10:00'));
                 $break_time3 = new DateTime(date('Y-m-d 14:50:00'));
+                $break_time3_end = new DateTime(date('Y-m-d 15:00:00'));
             }
 
-            if ($start_date < $break_time1 && $end_date > $break_time1) {
+            if ($start_date < $break_time1 && $end_date > $break_time1_end) {
                 $minutes -= $min1;
             }
 
-            if ($start_date < $break_time2 && $end_date > $break_time2) {
+            if ($start_date < $break_time2 && $end_date > $break_time2_end) {
                 $minutes -= $min2;
             }
 
-            if ($start_date < $break_time3 && $end_date > $break_time3) {
+            if ($start_date < $break_time3 && $end_date > $break_time3_end) {
                 $minutes -= $min3;
             }
 

@@ -91,7 +91,7 @@ echo Highcharts::widget([
             'style' => [
                 'fontFamily' => 'sans-serif',
             ],
-            'height' => 200
+            'height' => 300
         ],
         'title' => [
             'text' => null
