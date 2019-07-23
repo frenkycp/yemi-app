@@ -148,7 +148,7 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/crusher-chart"><i class="fa fa-fw fa-tag"></i> Crusher Chart<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/display.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Monitor <span class="japanesse-word">( ダイレクトバンニング進捗表 )</span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/monitor.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Monitor <span class="japanesse-word">( ダイレクトバンニング進捗表 )</span></a>
                     </div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/summary.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Summary<span class="japanesse-word"></span></a>
