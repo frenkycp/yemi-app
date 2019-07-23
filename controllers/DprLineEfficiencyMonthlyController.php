@@ -73,6 +73,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	'line' => $line
 	    ])
 	    ->andWhere(['<>', 'category', 'UNKNOWN'])
+	    ->andWhere(['<>', 'category', 'CANCELED'])
 	    ->groupBy('proddate')
 	    ->orderBy('proddate')
 	    ->asArray()
@@ -99,6 +100,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	'line' => $line
 	    ])
 	    ->andWhere(['<>', 'category', 'UNKNOWN'])
+	    ->andWhere(['<>', 'category', 'CANCELED'])
 	    ->groupBy('category')
 	    ->orderBy('losstime DESC')
 	    ->all();
