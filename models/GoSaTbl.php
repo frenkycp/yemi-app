@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class GoSaTbl extends BaseGoSaTbl
 {
+    public $emp;
 
     public function behaviors()
     {
@@ -28,6 +29,16 @@ class GoSaTbl extends BaseGoSaTbl
             parent::rules(),
             [
                 # custom validation rules
+            ]
+        );
+    }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(
+            parent::rules(),
+            [
+                'employees' => 'Operator'
             ]
         );
     }

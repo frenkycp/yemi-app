@@ -10,11 +10,14 @@ use Yii;
  * This is the base-model class for table "db_owner.GO_SA_TBL".
  *
  * @property integer $ID
- * @property string $GOJEK_ID
- * @property string $GOJEK_DESC
+ * @property string $REQUESTOR_NIK
+ * @property string $REQUESTOR_NAME
  * @property string $START_TIME
  * @property string $END_TIME
  * @property string $REMARK
+ * @property integer $TOTAL_MP
+ * @property double $LT
+ * @property integer $STATUS
  * @property integer $FLAG
  * @property string $aliasModel
  */
@@ -45,9 +48,10 @@ abstract class GoSaTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ID', 'FLAG'], 'integer'],
-            [['GOJEK_ID', 'GOJEK_DESC', 'REMARK'], 'string'],
-            [['START_TIME', 'END_TIME'], 'safe']
+            [['REQUESTOR_NIK', 'REQUESTOR_NAME', 'REMARK'], 'string'],
+            [['START_TIME', 'END_TIME'], 'safe'],
+            [['TOTAL_MP', 'STATUS', 'FLAG'], 'integer'],
+            [['LT'], 'number']
         ];
     }
 
@@ -58,11 +62,14 @@ abstract class GoSaTbl extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'GOJEK_ID' => 'Gojek  ID',
-            'GOJEK_DESC' => 'Gojek  Desc',
+            'REQUESTOR_NIK' => 'Requestor  Nik',
+            'REQUESTOR_NAME' => 'Requestor  Name',
             'START_TIME' => 'Start  Time',
             'END_TIME' => 'End  Time',
             'REMARK' => 'Remark',
+            'TOTAL_MP' => 'Total  Mp',
+            'LT' => 'Lt',
+            'STATUS' => 'Status',
             'FLAG' => 'Flag',
         ];
     }

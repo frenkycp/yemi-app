@@ -42,4 +42,9 @@ class GojekTbl extends BaseGojekTbl
     {
         return $this->hasMany(GojekView02::className(), ['GOJEK_ID' => 'GOJEK_ID']);
     }
+
+    public function getNikName($value='')
+    {
+        return $this->GOJEK_ID . ' - ' . $this->GOJEK_DESC;
+    }
 }
