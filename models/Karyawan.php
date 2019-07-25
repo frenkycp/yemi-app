@@ -32,4 +32,9 @@ class Karyawan extends BaseKaryawan
             ]
         );
     }
+
+    public function getNikNama()
+    {
+        return $this->NIK . ' - ' . $this->NAMA_KARYAWAN;
+    }
 }

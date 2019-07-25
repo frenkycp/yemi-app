@@ -43,17 +43,12 @@ $this->title = [
     <div class="">
         <div class="row">
             <div class="col-md-12">
-                <?= $form->field($model, 'GOJEK_ID')->textInput(['readonly' => true])->label('NIK'); ?>
+                <?= $form->field($model, 'requestor_nik')->textInput()->label('Requestor NIK'); ?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?= $form->field($model, 'GOJEK_DESC')->textInput(['readonly' => true])->label('NAME'); ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <?= $form->field($model, 'CURRENT_REMARK')->textInput()->label('JOB DESCRIPTION'); ?>
+                <?= $form->field($model, 'remark')->textInput()->label('Job Description'); ?>
             </div>
         </div>
 			

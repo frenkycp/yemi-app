@@ -1,5 +1,6 @@
 <?php
 use miloschuman\highcharts\Highcharts;
+use miloschuman\highcharts\HighchartsAsset;
 use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
@@ -16,6 +17,7 @@ $this->title = [
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
+HighchartsAsset::register($this)->withScripts(['highstock']);
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
@@ -48,7 +50,7 @@ $this->registerCss("
     }
     #progress-tbl > tbody > tr > td{
         border:1px solid #777474;
-        font-size: 24px;
+        font-size: 20px;
         //background-color: #B3E5FC;
         //font-weight: 1000;
         color: #FFF;
@@ -59,14 +61,18 @@ $this->registerCss("
 date_default_timezone_set('Asia/Jakarta');
 
 $script = "
+    function refreshPage() {
+       window.location = location.href;
+    }
     window.onload = setupRefresh;
+    var chart;
+
+
 
     function setupRefresh() {
       setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
-    function refreshPage() {
-       window.location = location.href;
-    }
+    
 
     function update_data(){
         $.ajax({
@@ -76,47 +82,124 @@ $script = "
                 //alert(data[0].mesin_id);
                 var content = '';
                 $.each(data , function(index, val) {
-                    var background_color = 'white';
+                    var background_color = '" . Yii::$app->params['bg-gray'] . "';
                     var color = 'black';
                     var status_txt = 'IDLE';
                     if(val.status_warna == 'KUNING'){
                         //background_color = 'yellow';
-                        color = 'black';
-                        background_color = 'yellow';
+                        color = 'white';
+                        background_color = '" . Yii::$app->params['bg-yellow'] . "';
                         status_txt = 'HADNLING';
                     } else if (val.status_warna == 'HIJAU') {
-                        background_color = 'green';
+                        background_color = '" . Yii::$app->params['bg-green'] . "';
                         status_txt = 'RUNNING';
                         color = 'white';
                     } else if (val.status_warna == 'BIRU') {
-                        background_color = 'blue';
+                        background_color = '" . Yii::$app->params['bg-blue'] . "';
                         status_txt = 'SETTING';
                         color = 'white';
                     } else if (val.status_warna == 'MERAH') {
-                        background_color = 'red';
+                        background_color = '" . Yii::$app->params['bg-red'] . "';
                         status_txt = 'STOP';
                         color = 'white';
                     }
 
-                    $('#current-'+val.mesin_id).html('<button style=\"background-color: ' + background_color + '; color: ' + color + '; font-size: 16px;\" type=\"button\" class=\"btn btn-block btn-default\">' + status_txt + '</button>');
+                    $('#'+val.mesin_id).html('<button style=\"background-color: ' + background_color + '; color: ' + color + '; font-size: 12px;\" type=\"button\" class=\"btn btn-block btn-default\">' + status_txt + '</button>');
 
-                    /*if (background_color != 'white') {
-                        $('#'+val.mesin_id).css('background-color', background_color);
-                        $('#'+val.mesin_id).css('color', color);
-                    }*/
-                    //var label = val.mesin_id+' - '+val.mesin_description;
-                    //var tmp = '<div class=\"row\"><div class=\"col-md-12\"><button type=\"button\" class=\"\"></button></div></div>';
-                    //console.log(index, val.mesin_id);
+                    $.ajax({
+                        type: 'POST',
+                        url: '" . Url::to(['iot-timeline']) . "',
+                        //url: 'http://localhost/yemi-app/web/display/get-machine-status?mesin_id=' + val.mesin_id + '&posting_date=" . date('Y-m-d') . "',
+                        success: function(data2){
+                            //$('#progress-MNT00078').html(data.title + ' : ' + data.message);
+                            chart = new Highcharts.Chart({
+                                chart : {
+                                    type : 'column',
+                                    renderTo: 'container-' + val.mesin_id,
+                                    height : 20,
+                                    backgroundColor : null,
+                                    borderWidth : 0,
+                                    margin : [2, 0, 2, 0],
+                                    style : {
+                                        overflow : 'visible'
+                                    },
+                                    skipClone : true,
+                                },
+                                credits : {
+                                    enabled :false
+                                },
+                                title : {
+                                    text : null
+                                },
+                                xAxis : {
+                                    type : 'datetime',
+                                    labels : {
+                                        enabled : false
+                                    },
+                                    title : {
+                                        text : null
+                                    },
+                                    startOnTick : false,
+                                    endOnTick : false,
+                                    tickPositions : [],
+                                    //'type' : 'datetime',
+                                    //'offset' : 10,
+                                },
+                                yAxis : {
+                                    labels : {
+                                        enabled : false
+                                    },
+                                    title : {
+                                        text : null
+                                    },
+                                    startOnTick : false,
+                                    endOnTick : false,
+                                    tickPositions : [0],
+                                },
+                                legend : {
+                                    enabled : false
+                                },
+                                tooltip : {
+                                    //shared : true,
+                                    crosshairs : true,
+                                    xDateFormat : '%Y-%m-%d',
+                                },
+                                plotOptions : {
+                                    column : {
+                                        dataLabels : {
+                                            enabled : false,
+                                        },
+                                        //'borderWidth' : 1,
+                                        //'borderColor' : '',
+                                    },
+                                },
+                                series : data2
+                            });
+                        }
+                    });
+
+                    
                 });
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 1000);
+                setTimeout(function(){update_data();}, 100000);
+            }
+        });
+    }
+
+    function update_timeline(){
+        $.ajax({
+            type: 'POST',
+            url: '" . Url::to(['iot-timeline']) . "',
+            success: function(data){
+                $('#progress-MNT00078').html(data.title + ' : ' + data.message);
             }
         });
     }
 
     $(document).ready(function() {
         update_data();
+        //update_timeline();
     });
 ";
 $this->registerJs($script, View::POS_HEAD );
@@ -129,10 +212,10 @@ echo '</pre>';*/
 <table class="table" id="progress-tbl">
     <thead>
         <tr>
-            <th style="width: 40%;">Machine</th>
+            <th style="width: 30%;">Machine</th>
             <th style="width: 10%;">Current</th>
             <th style="width: 30%;">Operational Status</th>
-            <th style="width: 20%;">Summary</th>
+            <th style="width: 30%;">Summary</th>
         </tr>
     </thead>
     <tbody>
@@ -141,8 +224,11 @@ echo '</pre>';*/
             ?>
             <tr>
                 <td><?= $value; ?></td>
-                <td id="current-<?= $key; ?>"></td>
-                <td></td>
+                <td class="machine" id="<?= $key; ?>"></td>
+                <td id="<?= 'progress-' . $key; ?>">
+                    <div id="container-<?= $key; ?>"></div>
+                    
+                </td>
                 <td>
                     <span class="label bg-green" style="font-weight: normal; font-size: 14px;">RUNNING : X%</span>
                     <span class="label bg-blue" style="font-weight: normal; font-size: 14px;">SETTING : X%</span>

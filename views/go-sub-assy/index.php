@@ -26,7 +26,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 180000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -35,7 +35,7 @@ $script = "
 
 $msg_header = '';
 $msg_class = ' box-primary';
-if ($driver_data['STATUS'] == 0) {
+if ($driver_data['STAGE'] == 'STANDBY') {
     $msg_header = 'WAITING FOR ORDER';
     $msg_class = ' box-danger';
 }
@@ -61,13 +61,13 @@ echo $data['name'];*/
     <div class="box-body">
         <div class="form-group">
             <label class="control-label">Current Job</label>
-            <?= Html::textInput('current_job', $driver_data['GOJEK_DESC'], ['class' => 'form-control', 'disabled' => true]) ?>
+            <?= Html::textInput('current_job', $detail_data['id'] != null ? $detail_data['item_desc'] : '-', ['class' => 'form-control', 'disabled' => true]) ?>
         </div>
     </div>
     <div class="box-footer">
         <div class="row">
             <div class="col-md-6">
-                <?= $driver_data['STATUS'] == 1 ? Html::button('START', ['class' => 'btn btn-primary disabled btn-block btn-lg']) : Html::button('START', [
+                <?= $driver_data['STAGE'] == 'DEPARTURE' ? Html::button('START', ['class' => 'btn btn-primary disabled btn-block btn-lg']) : Html::button('START', [
                     'id' => 'btn-start',
                     'class' => 'showModalButton btn btn-primary btn-block btn-lg',
                     'title' => 'GO - Sub Assy (Start)',
@@ -75,9 +75,12 @@ echo $data['name'];*/
                 ]); ?>
             </div>
             <div class="col-md-6">
-                <?= $driver_data['STATUS'] != 1 ? Html::button('END', ['class' => 'btn btn-primary disabled btn-block btn-lg']) : Html::a('END', ['progress', 'status' => 2], [
-                    'class' => 'btn btn-primary btn-block btn-lg'
-                ]) ?>
+                <?= $driver_data['STAGE'] == 'DEPARTURE' ? Html::a('END', ['end', 'GOJEK_ID' => $driver_data['GOJEK_ID'], 'GOJEK_DESC' => $driver_data['GOJEK_DESC']], [
+                    'class' => 'btn btn-primary btn-block btn-lg',
+                    'data' => [
+                        'confirm' => 'Are you sure to finish this job ?',
+                    ],
+                ]) : Html::button('END', ['class' => 'btn btn-primary disabled btn-block btn-lg']); ?>
             </div>
         </div>
     </div>

@@ -14,6 +14,7 @@ use Yii;
  * @property integer $STATUS
  * @property string $LAST_UPDATE
  * @property string $CURRENT_REMARK
+ * @property integer $CURRENT_JOB_ID
  * @property string $aliasModel
  */
 abstract class GoSaDriver extends \yii\db\ActiveRecord
@@ -45,7 +46,7 @@ abstract class GoSaDriver extends \yii\db\ActiveRecord
         return [
             [['GOJEK_ID'], 'required'],
             [['GOJEK_ID', 'GOJEK_DESC', 'CURRENT_REMARK'], 'string'],
-            [['STATUS'], 'integer'],
+            [['STATUS', 'CURRENT_JOB_ID'], 'integer'],
             [['LAST_UPDATE'], 'safe'],
             [['GOJEK_ID'], 'unique']
         ];
@@ -62,6 +63,7 @@ abstract class GoSaDriver extends \yii\db\ActiveRecord
             'STATUS' => 'Status',
             'LAST_UPDATE' => 'Last  Update',
             'CURRENT_REMARK' => 'Current  Remark',
+            'CURRENT_JOB_ID' => 'Current  Job  ID',
         ];
     }
 

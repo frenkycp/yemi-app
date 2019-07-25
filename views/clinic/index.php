@@ -57,19 +57,6 @@ $script = <<< JS
     function refreshPage() {
        window.location = location.href;
     }
-    $(document).ready(function() {
-        var i = 0;
-        setInterval(function() {
-            i++;
-            if(i%2 == 0){
-                $("#run-text").css("background-color", "#00ff00");
-                //$("#run-text").css("color", "white");
-            } else {
-                $("#run-text").css("background-color", "yellow");
-                //$("#run-text").css("color", "#555");
-            }
-        }, 300);
-    });
 JS;
 
 $this->registerJs($script, View::POS_END);
