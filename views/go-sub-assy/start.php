@@ -41,11 +41,11 @@ $this->title = [
     ?>
 
     <div class="">
-        <div class="row">
+        <!--<div class="row">
             <div class="col-md-12">
-                <?= $form->field($model, 'requestor_nik')->textInput()->label('Requestor NIK'); ?>
+                <?= ''; //$form->field($model, 'requestor_nik')->textInput()->label('Requestor NIK'); ?>
             </div>
-        </div>
+        </div>-->
         <div class="row">
             <div class="col-md-12">
                 <?= $form->field($model, 'remark')->textInput()->label('Job Description'); ?>

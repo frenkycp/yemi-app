@@ -9,12 +9,12 @@ use yii\helpers\Url;
 
 class GoSubAssyController extends Controller
 {
-	public function behaviors()
+	/**/public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 		Url::remember();
@@ -38,9 +38,11 @@ class GoSubAssyController extends Controller
 	{
 		date_default_timezone_set('Asia/Jakarta');
     	$model = new \yii\base\DynamicModel([
-	        'remark', 'requestor_nik'
+	        'remark'
+	        //'remark', 'requestor_nik'
 	    ]);
-	    $model->addRule(['remark', 'requestor_nik'], 'required');
+	    $model->addRule(['remark'], 'required');
+	    //$model->addRule(['remark', 'requestor_nik'], 'required');
 
 	    try{
 	    	if ($model->load(\Yii::$app->request->post())) {
@@ -51,7 +53,7 @@ class GoSubAssyController extends Controller
 	    		])
 	    		->one();
 
-	    		$requestor = Karyawan::find()->where([
+	    		/*$requestor = Karyawan::find()->where([
 	    			'NIK' => $model->requestor_nik
 	    		])->one();
 
@@ -59,7 +61,7 @@ class GoSubAssyController extends Controller
 	    			$nama_karyawan = $requestor->NAMA_KARYAWAN;
 	    		} else {
 	    			$nama_karyawan = 'NO NAME';
-	    		}
+	    		}*/
 	    		
 	    		$count_data = GojekOrderTbl::find()->where(['source' => 'SUB'])->count();
 	    		$count_data++;
@@ -76,8 +78,8 @@ class GoSubAssyController extends Controller
 	    		$new_record->daparture_date = date('Y-m-d H:i:s');
 	    		$new_record->GOJEK_ID = $GOJEK_ID;
 	    		$new_record->GOJEK_DESC = $GOJEK_DESC;
-	    		$new_record->NIK_REQUEST = $model->requestor_nik;
-	    		$new_record->NAMA_KARYAWAN = $nama_karyawan;
+	    		//$new_record->NIK_REQUEST = $model->requestor_nik;
+	    		//$new_record->NAMA_KARYAWAN = $nama_karyawan;
 	    		$new_record->STAT = 'O';
 	    		$new_record->DEPARTURE_NAMA_KARYAWAN = $GOJEK_DESC;
 	    		$new_record->quantity = 1;
