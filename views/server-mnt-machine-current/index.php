@@ -162,7 +162,7 @@ echo $data['name'];*/
                         echo Html::a('START', ['start-machine', 'mesin_id' => $mesin_id, 'lot_id' => $value['lot_id']], [
                             'class' => 'btn btn-success btn-block',
                             'data' => [
-                                'confirm' => 'Are you sure to start this lot',
+                                'confirm' => 'Are you sure to start this lot ?',
                             ],
                         ]);
                     } else {

@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 use app\models\WipEffNew10;
 use app\models\WipEffNew12;
+use app\models\FiscalTbl;
 
 class SmtLineMonthlyUtilityController extends Controller
 {
@@ -19,30 +20,39 @@ class SmtLineMonthlyUtilityController extends Controller
 	{
 		$data = [];
 		$categories = [];
-		$year = date('Y');
 		$line_arr = ['01', '02'];
-		$loc = 'WM03';
-		$type = 1;
 		$loc_dropdown = \Yii::$app->params['smt_inj_loc_arr'];
 
-		if (\Yii::$app->request->get('year') !== null) {
-			$year = \Yii::$app->request->get('year');
-		}
+		$model = new \yii\base\DynamicModel([
+            'loc', 'type', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','loc', 'type'], 'required');
 
-		if (\Yii::$app->request->get('loc') !== null) {
-			$loc = \Yii::$app->request->get('loc');
-		}
+        $model->type = 1;
+        $model->loc = 'WM03';
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . '-1 year'));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
 
-		if (\Yii::$app->request->get('type') !== null) {
-			$type = \Yii::$app->request->get('type');
+		if ($model->load($_GET)) {
+			
 		}
+		$loc = $model->loc;
+		$type = $model->type;
+		$from_date = $model->from_date;
+		$to_date = $model->to_date;
 
 		$tmp_working_ratio = [];
 		$tmp_operating_ratio = [];
 
-		for ($i = 1; $i <= 12; $i++) { 
-			$tmp_month = str_pad($i, 2, '0', STR_PAD_LEFT);
-			$period = $year . $tmp_month;
+		$period_arr = FiscalTbl::find()
+		->select('PERIOD')
+		->where(['>=', 'PERIOD', date('Ym', strtotime($from_date))])
+		->andWhere(['<=', 'PERIOD', date('Ym', strtotime($to_date))])
+		->groupBy('PERIOD')
+		->asArray()->all();
+
+		foreach ($period_arr as $key => $value) {
+			$period = $value['PERIOD'];
 			$categories[] = $period;
 
 			if ($type == 1) {
@@ -93,7 +103,6 @@ class SmtLineMonthlyUtilityController extends Controller
 			    	'url' => Url::to(['get-remark', 'period' => $period, 'loc' => $loc])
 		    	];
 			}
-
 		}
 
 		if ($type == 1) {
@@ -147,6 +156,7 @@ class SmtLineMonthlyUtilityController extends Controller
 
 		return $this->render('index', [
 			'data' => $data,
+			'model' => $model,
 			'categories' => $categories,
 			'loc_dropdown' => $loc_dropdown,
 			'year' => $year,

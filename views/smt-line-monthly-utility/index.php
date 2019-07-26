@@ -6,6 +6,7 @@ use yii\web\View;
 use miloschuman\highcharts\Highcharts;
 use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
+use kartik\date\DatePicker;
 
 $this->title = [
     'page_title' => 'SMT INJ Efficiency, Utility & Loss Time Management (Monthly)<span class="japanesse text-green"></span>',
@@ -45,12 +46,21 @@ echo '</pre>';*/
 ]); ?>
 
 <div class="row">
-    <div class="col-md-2">
-        <?= Html::label('Year'); ?>
-        <?= Html::dropDownList('year', $year, \Yii::$app->params['year_arr'], [
-            'class' => 'form-control',
-            'onchange'=>'this.form.submit()'
-        ]); ?>
+    <div class="col-md-4">
+        <?php echo '<label class="control-label">Select date range</label>';
+        echo DatePicker::widget([
+            'model' => $model,
+            'attribute' => 'from_date',
+            'attribute2' => 'to_date',
+            'options' => ['placeholder' => 'Start date'],
+            'options2' => ['placeholder' => 'End date'],
+            'type' => DatePicker::TYPE_RANGE,
+            'form' => $form,
+            'pluginOptions' => [
+                'format' => 'yyyy-mm-dd',
+                'autoclose' => true,
+            ]
+        ]);?>
     </div>
     <div class="col-md-2">
         <?= Html::label('Location'); ?>

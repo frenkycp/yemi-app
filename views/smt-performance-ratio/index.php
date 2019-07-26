@@ -197,6 +197,9 @@ $this->registerJs($script, View::POS_HEAD );
             'options' => [
                 'chart' => [
                     'type' => 'column',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
                 ],
                 'credits' => [
                     'enabled' =>false
