@@ -60,6 +60,7 @@ use app\models\MachineIotCurrent;
 use app\models\GojekTbl;
 use app\models\PcbNgDaily;
 use app\models\MasalahPcb;
+use app\models\GojekOrderTbl;
 
 class DisplayController extends Controller
 {
@@ -78,10 +79,25 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $tmp_data = GojekTbl::find()->where(['hadir' => 'Y', 'SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->asArray()->all();
+        $tmp_order = GojekOrderTbl::find()
+        ->where([
+            'source' => 'SUB',
+            'STAT' => 'O'
+        ])
+        ->andWhere('daparture_date IS NULL')
+        ->asArray()
+        ->all();
         $tmp_str = '';
         $tmp_str .= '<div class="row">';
         foreach ($tmp_data as $key => $value) {
-
+            $get_new_order = false;
+            $txt_new_order = '';
+            foreach ($tmp_order as $key => $value_order) {
+                if ($value_order['GOJEK_ID'] == $value['GOJEK_ID']) {
+                    $get_new_order = true;
+                }
+            }
+            
             if ($value['STAGE'] == 'STANDBY') {
                 $bg_class = ' bg-red';
                 $text_remark = 'STANDBY';
@@ -95,6 +111,9 @@ class DisplayController extends Controller
                 if ($diff_min > 2) {
                     $bg_class = ' bg-red';
                     $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
+                }
+                if ($get_new_order) {
+                    $txt_new_order = '<span class="pull-right label label-info">New Order!</span>';
                 }
             } else {
                 $bg_class = ' bg-light-blue';
@@ -110,7 +129,7 @@ class DisplayController extends Controller
                                 //'style' => 'object-fit: cover; height: 120px; width: 120px;'
                             ]) . '
                         </div>
-                        <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . '</h3>
+                        <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . $txt_new_order . '</h3>
                         <h5 class="widget-user-desc">' . $text_remark . '</h5>
                     </div>
                 </div>
