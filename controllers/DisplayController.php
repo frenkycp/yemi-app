@@ -721,6 +721,17 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $this->layout = 'clean';
 
+        $model = new \yii\base\DynamicModel([
+            'post_date'
+        ]);
+        $model->addRule(['post_date'], 'required');
+
+        $model->post_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+            # code...
+        }
+
         $tmp_data = SernoOutput::find()
         ->joinWith('sernoCnt')
         ->select([
@@ -734,7 +745,7 @@ class DisplayController extends Controller
             'remark' => 'tb_serno_cnt.remark',
         ])
         ->where([
-            'etd' => date('Y-m-d')
+            'etd' => $model->post_date
         ])
         ->andWhere(['<>', 'back_order', 2])
         ->groupBy('cntr')
@@ -744,6 +755,7 @@ class DisplayController extends Controller
 
         return $this->render('container-loading', [
             'data' => $data,
+            'model' => $model,
             'tmp_data' => $tmp_data
         ]);
     }

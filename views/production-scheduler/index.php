@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use kartik\form\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
 
 /**
 * @var yii\web\View $this
@@ -88,6 +89,7 @@ $this->registerJs("
             var shift_val = $('#shift option:selected').val();
             var group_val = $('#group option:selected').val();
             var plan_date_val = $('#plan_date').val();
+            var jenis_mesin_val = $('#jenis_mesin option:selected').val();
             
             if(loc_val == ''){
                 alert('Please select location first before order!');
@@ -140,7 +142,8 @@ $this->registerJs("
                         line : line_val,
                         shift : shift_val,
                         group : group_val,
-                        plan_date : plan_date_val
+                        plan_date : plan_date_val,
+                        jenis_mesin : jenis_mesin_val
                     },
                     dataType: 'json',
                     success: function(data) {
@@ -321,14 +324,14 @@ $grid_columns = [
         ]); ?>
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <?= $form->field($searchModel, 'child_analyst')->dropDownList($location_dropdown, [
                     'prompt' => 'Select Location ...',
                     'onchange' => 'this.form.submit();',
                     'id' => 'location_dropdown',
                 ])->label('Location'); ?>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <div class="form-group">
                     <label class="control-label" for="line">Line</label>
                     <?= Html::dropDownList('line', null, [
@@ -369,6 +372,16 @@ $grid_columns = [
             </div>
             <div class="col-md-3">
                 <div class="form-group">
+                    <label class="control-label" for="group">Machine</label>
+                    <?= Html::dropDownList('jenis_mesin', null, $jenis_mesin_dropdown, [
+                        'class' => 'form-control',
+                        'id' => 'jenis_mesin',
+                        'prompt' => '-- Select group (WW Must) --'
+                    ]); ?>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
                     <label class="control-label" for="plan_date">Plan Date</label>
                     <?= DatePicker::widget([
                         'name' => 'plan_date',
@@ -378,7 +391,8 @@ $grid_columns = [
                         'options' => ['placeholder' => 'Select plan date ...'],
                         'pluginOptions' => [
                             'format' => 'yyyy-mm-dd',
-                            'todayHighlight' => true
+                            'todayHighlight' => true,
+                            'autoclose'=>true
                         ]
                     ]); ?>
                 </div>

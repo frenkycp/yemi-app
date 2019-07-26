@@ -1,13 +1,10 @@
 <?php
-use miloschuman\highcharts\Highcharts;
-use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
-use kartik\select2\Select2;
 
 $this->title = [
     'page_title' => 'Container Loading by Group <span class="japanesse text-green">(グループ別コンテナー積み込み作業表)</span>',
@@ -75,7 +72,39 @@ print_r($tmp_data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
-<span style="color: white; font-size: 1.7em;"> LAST UPDATE : <?= date('Y-m-d H:i:s'); ?> </span>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    'layout' => 'horizontal',
+    'action' => Url::to(['container-loading']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="pull-left" style="font-size: 1.7em;">
+        <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
+            'type' => DatePicker::TYPE_INPUT,
+            'options' => [
+                'placeholder' => 'Enter date ...',
+                'class' => 'form-control',
+                'style' => 'font-size: 1em;',
+                'onchange'=>'this.form.submit()',
+            ],
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd'
+            ]
+        ])->label('DATE :'); ?>
+        </div>
+        
+    </div>
+    <div class="col-md-8">
+        <span class="pull-right" style="color: white; font-size: 1.7em;"> LAST UPDATE : <?= date('Y-m-d H:i:s'); ?> </span>
+    </div>
+</div>
+
+
+<?php ActiveForm::end(); ?>
+
 <table class="table table-bordered" id="progress-tbl">
     <thead>
         <tr>

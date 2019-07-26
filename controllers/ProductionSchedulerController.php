@@ -12,7 +12,7 @@ use yii\web\Response;
 use yii\helpers\Json;
 
 use app\models\WipLocation;
-
+use app\models\MachineIotCurrent;
 use app\models\search\ProductionSchedulerSearch;
 
 class ProductionSchedulerController extends Controller
@@ -35,10 +35,13 @@ class ProductionSchedulerController extends Controller
 
 		$location_dropdown = ArrayHelper::map(WipLocation::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc');
 
+		$jenis_mesin_dropdown = ArrayHelper::map(MachineIotCurrent::find()->select(['kelompok'])->groupBy('kelompok')->orderBy('kelompok')->all(), 'kelompok', 'kelompok');
+
     	return $this->render('index', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
 		    'location_dropdown' => $location_dropdown,
+		    'jenis_mesin_dropdown' => $jenis_mesin_dropdown,
 		]);
     }
 
@@ -85,9 +88,13 @@ class ProductionSchedulerController extends Controller
 
 			//$response['message'] = $tmp_no;
 
-			/**/$sql = "{CALL WIP_RESERVATION_PLAN(:child_analyst, :child_analyst_desc, :LINE, :SMT_SHIFT, :KELOMPOK, :plan_date, :slip_id_01, :slip_id_02, :slip_id_03, :slip_id_04, :slip_id_05, :slip_id_06, :slip_id_07, :slip_id_08, :slip_id_09, :slip_id_10, :USER_ID)}";
+			/*$sql = "{CALL WIP_RESERVATION_PLAN(:child_analyst, :child_analyst_desc, :LINE, :SMT_SHIFT, :KELOMPOK, :plan_date, :slip_id_01, :slip_id_02, :slip_id_03, :slip_id_04, :slip_id_05, :slip_id_06, :slip_id_07, :slip_id_08, :slip_id_09, :slip_id_10, :USER_ID)}";*/
+			$sql = "{CALL WIP_RESERVATION_PLAN_IOT(:child_analyst, :child_analyst_desc, :LINE, :SMT_SHIFT, :KELOMPOK, :plan_date, :slip_id_01, :slip_id_02, :slip_id_03, :slip_id_04, :slip_id_05, :slip_id_06, :slip_id_07, :slip_id_08, :slip_id_09, :slip_id_10, :USER_ID, :mesin_id, :mesin_description, :jenis_mesin)}";
 
 			$params[':USER_ID'] = \Yii::$app->user->identity->username;
+			$params[':mesin_id'] = '';
+			$params[':mesin_description'] = '';
+			$params[':jenis_mesin'] = $data_post['jenis_mesin'];
 
 			try {
 			    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->queryOne();
