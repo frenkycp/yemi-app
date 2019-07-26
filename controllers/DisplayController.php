@@ -63,9 +63,19 @@ use app\models\MasalahPcb;
 
 class DisplayController extends Controller
 {
+    public function getMinutes($start, $end)
+    {
+        $start_date = new \DateTime($start);
+        $since_start = $start_date->diff(new \DateTime($end));
+        $minutes = $since_start->days * 24 * 60;
+        $minutes += $since_start->h * 60;
+        $minutes += $since_start->i;
+        return $minutes;
+    }
+
     public function actionGoSubDriverStatusData()
     {
-        
+        date_default_timezone_set('Asia/Jakarta');
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $tmp_data = GojekTbl::find()->where(['hadir' => 'Y', 'SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->asArray()->all();
         $tmp_str = '';
@@ -77,10 +87,15 @@ class DisplayController extends Controller
                 $text_remark = 'STANDBY';
             } elseif ($value['STAGE'] == 'DEPARTURE') {
                 $bg_class = ' bg-green';
-                $text_remark = 'WORKING';
+                $text_remark = 'START WORKING - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
             } elseif ($value['STAGE'] == 'ARRIVAL') {
                 $bg_class = ' bg-yellow';
-                $text_remark = 'JUST FINISHED';
+                $text_remark = 'JUST FINISHED - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
+                $diff_min = $this->getMinutes($value['LAST_UPDATE'], date('Y-m-d H:i:s'));
+                if ($diff_min > 2) {
+                    $bg_class = ' bg-red';
+                    $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
+                }
             } else {
                 $bg_class = ' bg-light-blue';
                 $text_remark = 'NO INFORMATION';
