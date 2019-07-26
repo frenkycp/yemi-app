@@ -16,9 +16,9 @@ $this->title = Yii::t('models', 'Go Sa Tbls');
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->title = [
-    'page_title' => 'GO Sub Assy Data <span class="japanesse text-green"></span>',
-    'tab_title' => 'GO Sub Assy Data',
-    'breadcrumbs_title' => 'GO Sub Assy Data'
+    'page_title' => 'GO Sub Assy Data [ START - END ] <span class="japanesse text-green"></span>',
+    'tab_title' => 'GO Sub Assy Data [ START - END ]',
+    'breadcrumbs_title' => 'GO Sub Assy Data [ START - END ]'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -28,7 +28,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 10000); // milliseconds
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -37,14 +37,14 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 ?>
 <div class="panel panel-primary">
-	<div class="panel-body">
+	<div class="panel-body no-padding">
 		<table class="table table-responsive table-bordered table-striped">
 			<thead>
 				<tr style="font-size: 20px;">
 					<th class="text-center">No.</th>
-					<th>Remark</th>
-					<th>MP</th>
-					<th>Action</th>
+					<th>Job Description</th>
+					<th>Manpower</th>
+					<th class="text-center">Action</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -60,8 +60,26 @@ $this->registerJs($script, View::POS_HEAD );
 						<tr style="font-size: 20px;">
 							<td class="text-center"><?= $no; ?></td>
 							<td><?= $value['REMARK']; ?></td>
-							<td><?= $value['TOTAL_MP']; ?></td>
-							<td width="10%">
+							<td><?php
+							$tmp_mp_txt = '';
+							$tmp_mp = app\models\GojekOrderTbl::find()
+							->select(['GOJEK_DESC'])
+							->where([
+								'session_id' => $value['ID'],
+								'source' => 'SUB'
+							])
+							->asArray()
+							->all();
+							foreach ($tmp_mp as $key => $mp_detail) {
+								if ($tmp_mp_txt == '') {
+									$tmp_mp_txt = $mp_detail['GOJEK_DESC'];
+								} else {
+									$tmp_mp_txt .= ', ' . $mp_detail['GOJEK_DESC'];
+								}
+							}
+							echo $tmp_mp_txt;
+							?>
+							<td width="10%" class="text-center">
 								<?php
 								if ($value['STATUS'] == 0) {
 									echo Html::a('START', ['start', 'session_id' => $value['ID']], [
