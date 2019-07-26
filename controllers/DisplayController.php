@@ -5,6 +5,7 @@ use yii\web\Controller;
 use yii\web\JsExpression;
 use yii\web\Response;
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 
@@ -62,6 +63,56 @@ use app\models\MasalahPcb;
 
 class DisplayController extends Controller
 {
+    public function actionGoSubDriverStatusData()
+    {
+        
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $tmp_data = GojekTbl::find()->where(['hadir' => 'Y', 'SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->asArray()->all();
+        $tmp_str = '';
+        $tmp_str .= '<div class="row">';
+        foreach ($tmp_data as $key => $value) {
+
+            if ($value['STAGE'] == 'STANDBY') {
+                $bg_class = ' bg-red';
+                $text_remark = 'STANDBY';
+            } elseif ($value['STAGE'] == 'DEPARTURE') {
+                $bg_class = ' bg-green';
+                $text_remark = 'WORKING';
+            } elseif ($value['STAGE'] == 'ARRIVAL') {
+                $bg_class = ' bg-yellow';
+                $text_remark = 'JUST FINISHED';
+            } else {
+                $bg_class = ' bg-light-blue';
+                $text_remark = 'NO INFORMATION';
+            }
+            $tmp_str .= '<div class="col-md-3">
+                <div class="box box-widget widget-user-2">
+                    <div class="widget-user-header' . $bg_class . '">
+                        <div class="widget-user-image">
+                            ' . Html::img('@web/uploads/profpic_02.png', [
+                                //'class' => 'profile-user-img img-responsive img-circle',
+                                'class' => 'img-circle',
+                                //'style' => 'object-fit: cover; height: 120px; width: 120px;'
+                            ]) . '
+                        </div>
+                        <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . '</h3>
+                        <h5 class="widget-user-desc">' . $text_remark . '</h5>
+                    </div>
+                </div>
+            </div>';
+        }
+        $tmp_str .= '</div>';
+        return $tmp_str;
+    }
+    public function actionGoSubDriverStatus($value='')
+    {
+        $this->layout = 'clean';
+        $data = [];
+        return $this->render('go-sub-driver-status', [
+            'data' => $data
+        ]);
+    }
+
     public function actionFgsStockDetail($over_category, $days, $category)
     {
         $remark = '<div class="modal-header">
