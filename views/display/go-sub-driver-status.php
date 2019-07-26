@@ -79,7 +79,7 @@ $this->registerJs("
                 $('#container').html(data);
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 100000);
+                setTimeout(function(){update_data();}, 3000);
             }
         });
     }
