@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'GO Sub Assy Driver Status <span class="japanesse text-green"></span>',
-    'tab_title' => 'GO Sub Assy Driver Status',
-    'breadcrumbs_title' => 'GO Sub Assy Driver Status'
+    'page_title' => 'GO Sub Assy Status <span class="japanesse text-green"></span>',
+    'tab_title' => 'GO Sub Assy Status',
+    'breadcrumbs_title' => 'GO Sub Assy Status'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
