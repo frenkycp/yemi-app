@@ -78,7 +78,7 @@ class DisplayController extends Controller
     {
         date_default_timezone_set('Asia/Jakarta');
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $tmp_data = GojekTbl::find()->where(['hadir' => 'Y', 'SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->asArray()->all();
+        $tmp_data = GojekTbl::find()->where(['SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->asArray()->all();
         $tmp_order = GojekOrderTbl::find()
         ->where([
             'source' => 'SUB',
@@ -97,37 +97,53 @@ class DisplayController extends Controller
                     $get_new_order = true;
                 }
             }
-            
-            if ($value['STAGE'] == 'STANDBY') {
-                $bg_class = ' bg-red';
-                $text_remark = 'STANDBY';
-            } elseif ($value['STAGE'] == 'DEPARTURE') {
-                $bg_class = ' bg-green';
-                $text_remark = 'START WORKING - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
-            } elseif ($value['STAGE'] == 'ARRIVAL') {
-                $bg_class = ' bg-yellow';
-                $text_remark = 'JUST FINISHED - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
-                $diff_min = $this->getMinutes($value['LAST_UPDATE'], date('Y-m-d H:i:s'));
-                if ($diff_min > 2) {
-                    $bg_class = ' bg-red';
-                    $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
-                }
-                if ($get_new_order) {
-                    $txt_new_order = '<span class="pull-right label label-info">New Order!</span>';
-                }
+
+            if ($value['HADIR'] == 'N') {
+                $bg_class = ' bg-gray';
+                $text_remark = 'INACTIVE';
             } else {
-                $bg_class = ' bg-light-blue';
-                $text_remark = 'NO INFORMATION';
+                if ($value['STAGE'] == 'STANDBY') {
+                    $bg_class = ' bg-red';
+                    $text_remark = 'STANDBY';
+                } elseif ($value['STAGE'] == 'DEPARTURE') {
+                    $bg_class = ' bg-green';
+                    $text_remark = 'START WORKING - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
+                } elseif ($value['STAGE'] == 'ARRIVAL') {
+                    $bg_class = ' bg-yellow';
+                    $text_remark = 'JUST FINISHED - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
+                    $diff_min = $this->getMinutes($value['LAST_UPDATE'], date('Y-m-d H:i:s'));
+                    if ($diff_min > 2) {
+                        $bg_class = ' bg-red';
+                        $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
+                    }
+                    if ($get_new_order) {
+                        $txt_new_order = '<span class="pull-right label label-info">New Order!</span>';
+                    }
+                } else {
+                    $bg_class = ' bg-light-blue';
+                    $text_remark = 'NO INFORMATION';
+                }
             }
+            
+            $filename = $value['GOJEK_ID'] . '.jpg';
+            $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
+            if (file_exists($path)) {
+                $profpic =  Html::img('@web/uploads/yemi_employee_img/' . $model_karyawan->NIK . '.jpg', [
+                    'class' => 'img-circle',
+                    //'style' => 'object-fit: cover; height: 120px; width: 120px;'
+                ]);
+            } else {
+                $profpic =  Html::img('@web/uploads/profpic_03.png', [
+                    'class' => 'img-circle',
+                    //'style' => 'object-fit: cover; height: 120px; width: 120px;'
+                ]);
+            }
+            
             $tmp_str .= '<div class="col-md-3">
                 <div class="box box-widget widget-user-2">
                     <div class="widget-user-header' . $bg_class . '">
                         <div class="widget-user-image">
-                            ' . Html::img('@web/uploads/profpic_02.png', [
-                                //'class' => 'profile-user-img img-responsive img-circle',
-                                'class' => 'img-circle',
-                                //'style' => 'object-fit: cover; height: 120px; width: 120px;'
-                            ]) . '
+                            ' . $profpic . '
                         </div>
                         <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . $txt_new_order . '</h3>
                         <h5 class="widget-user-desc">' . $text_remark . '</h5>
