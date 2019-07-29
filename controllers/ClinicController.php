@@ -20,7 +20,7 @@ class ClinicController extends controller
 		->where([
 			'date(pk)' => date('Y-m-d')
 		])
-		->orderBy('opsi DESC, masuk DESC')
+		->orderBy('confirm, masuk DESC')
 		//->limit(5)
 		->all();
 
