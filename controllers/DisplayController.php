@@ -128,7 +128,7 @@ class DisplayController extends Controller
             $filename = $value['GOJEK_ID'] . '.jpg';
             $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
             if (file_exists($path)) {
-                $profpic =  Html::img('@web/uploads/yemi_employee_img/' . $model_karyawan->NIK . '.jpg', [
+                $profpic =  Html::img('@web/uploads/yemi_employee_img/' . $value['GOJEK_ID'] . '.jpg', [
                     'class' => 'img-circle',
                     //'style' => 'object-fit: cover; height: 120px; width: 120px;'
                 ]);
