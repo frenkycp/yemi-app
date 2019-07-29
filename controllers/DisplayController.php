@@ -130,12 +130,12 @@ class DisplayController extends Controller
             if (file_exists($path)) {
                 $profpic =  Html::img('@web/uploads/yemi_employee_img/' . $value['GOJEK_ID'] . '.jpg', [
                     'class' => 'img-circle',
-                    //'style' => 'object-fit: cover; height: 120px; width: 120px;'
+                    'style' => 'object-fit: cover; height: 60px; width: 60px;'
                 ]);
             } else {
                 $profpic =  Html::img('@web/uploads/profpic_03.png', [
                     'class' => 'img-circle',
-                    //'style' => 'object-fit: cover; height: 120px; width: 120px;'
+                    'style' => 'object-fit: cover; height: 60px; width: 60px;'
                 ]);
             }
             
