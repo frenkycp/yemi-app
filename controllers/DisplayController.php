@@ -113,8 +113,14 @@ class DisplayController extends Controller
                     $text_remark = 'JUST FINISHED - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
                     $diff_min = $this->getMinutes($value['LAST_UPDATE'], date('Y-m-d H:i:s'));
                     if ($diff_min > 2) {
-                        $bg_class = ' bg-red';
-                        $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
+                        if ($value['LAST_UPDATE'] == date('Y-m-d')) {
+                            $bg_class = ' bg-red';
+                            $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
+                        } else {
+                            $bg_class = ' bg-red';
+                            $text_remark = 'STANDBY';
+                        }
+                        
                     }
                     if ($get_new_order) {
                         $txt_new_order = '<span class="pull-right label label-info">New Order!</span>';
@@ -145,7 +151,7 @@ class DisplayController extends Controller
                         <div class="widget-user-image">
                             ' . $profpic . '
                         </div>
-                        <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . $txt_new_order . '</h3>
+                        <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . ' <span style="font-size: 0.9em;">[' . $value['GOJEK_ID'] . ']</span>' . $txt_new_order . '</h3>
                         <h5 class="widget-user-desc">' . $text_remark . '</h5>
                     </div>
                 </div>

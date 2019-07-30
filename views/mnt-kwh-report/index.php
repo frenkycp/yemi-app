@@ -60,7 +60,7 @@ echo '</pre>';*/
     </div>
     <div class="col-md-6">
         <?= $form->field($model, 'machine_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(app\models\AssetTbl::find()->where(['like', 'asset_id', 'MNT%', false])->all(), 'asset_id', 'assetName'),
+            'data' => ArrayHelper::map(app\models\MachineIotCurrent::find()->all(), 'mesin_id', 'assetName'),
             'options' => ['placeholder' => 'Select a machine ...'],
             'pluginOptions' => [
                 'allowClear' => true
