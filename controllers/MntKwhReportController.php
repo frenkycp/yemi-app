@@ -169,6 +169,7 @@ class MntKwhReportController extends Controller
 				'mesin_id' => $model->machine_id,
 			])
 			->groupBy('posting_shift')
+			->orderBy('posting_shift')
 			->asArray()
 			->all();
 
