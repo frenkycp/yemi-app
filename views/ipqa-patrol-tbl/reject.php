@@ -58,20 +58,20 @@ $this->title = [
                 <?= $form->field($model, 'problem')->textInput(['readonly' => 'readonly']); ?>
             </div>
             <div class="col-md-8">
-                <?= $form->field($model, 'description')->textInput(['readonly' => 'readonly']); ?>
+                <?= $form->field($model, 'description')->textArea(['rows' => 5, 'readonly' => 'readonly']); ?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <?= $form->field($model, 'cause')->textArea(['rows' => 2, 'style' => 'resize: none;', 'placeholder' => 'Input Cause Here ...', 'readonly' => 'readonly'])->label('Cause'); ?>
+                <?= $form->field($model, 'cause')->textArea(['rows' => 4, 'placeholder' => 'Input Cause Here ...', 'readonly' => 'readonly'])->label('Cause'); ?>
             </div>
             <div class="col-md-6">
-                <?= $form->field($model, 'countermeasure')->textArea(['rows' => 2, 'style' => 'resize: none;', 'placeholder' => 'Input Countermeasure Here ...', 'readonly' => 'readonly'])->label('Countermeasure'); ?>
+                <?= $form->field($model, 'countermeasure')->textArea(['rows' => 4, 'placeholder' => 'Input Countermeasure Here ...', 'readonly' => 'readonly'])->label('Countermeasure'); ?>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?= $form->field($model, 'reject_remark')->textArea(['rows' => 2, 'style' => 'resize: none;', 'placeholder' => 'Input Reject Remark Here ...'])->label('Reject Remark'); ?>
+                <?= $form->field($model, 'reject_remark')->textArea(['rows' => 4, 'placeholder' => 'Input Reject Remark Here ...'])->label('Reject Remark'); ?>
             </div>
         </div>
 			

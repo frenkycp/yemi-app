@@ -63,15 +63,15 @@ date_default_timezone_set('Asia/Jakarta');
 				<?= $form->field($model, 'problem')->textInput(['readonly' => 'readonly']); ?>
 			</div>
 			<div class="col-md-8">
-				<?= $form->field($model, 'description')->textInput(['readonly' => 'readonly']); ?>
+				<?= $form->field($model, 'description')->textArea(['rows' => 5, 'readonly' => 'readonly']); ?>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-6">
-                <?= $form->field($model_reply, 'cause')->textArea(['rows' => 2, 'style' => 'resize: none;', 'placeholder' => 'Input Cause Here ...'])->label('Cause'); ?>
+                <?= $form->field($model_reply, 'cause')->textArea(['rows' => 4, 'placeholder' => 'Input Cause Here ...'])->label('Cause'); ?>
             </div>
             <div class="col-md-6">
-                <?= $form->field($model_reply, 'countermeasure')->textArea(['rows' => 2, 'style' => 'resize: none;', 'placeholder' => 'Input Countermeasure Here ...'])->label('Countermeasure'); ?>
+                <?= $form->field($model_reply, 'countermeasure')->textArea(['rows' => 4, 'placeholder' => 'Input Countermeasure Here ...'])->label('Countermeasure'); ?>
             </div>
 		</div>
 	</div>
