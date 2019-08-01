@@ -61,6 +61,7 @@ use app\models\GojekTbl;
 use app\models\PcbNgDaily;
 use app\models\MasalahPcb;
 use app\models\GojekOrderTbl;
+use app\models\MachineIotOutput;
 
 class DisplayController extends Controller
 {
@@ -114,21 +115,22 @@ class DisplayController extends Controller
                     $diff_min = $this->getMinutes($value['LAST_UPDATE'], date('Y-m-d H:i:s'));
                     if ($diff_min > 2) {
                         if ($value['LAST_UPDATE'] == date('Y-m-d')) {
-                            $bg_class = ' bg-red';
+                            $bg_class = ' bg-light-blue';
                             $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
                         } else {
-                            $bg_class = ' bg-red';
+                            $bg_class = ' bg-light-blue';
                             $text_remark = 'STANDBY';
                         }
-                        
+                        if ($get_new_order) {
+                            $txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
+                        }
                     }
-                    if ($get_new_order) {
-                        $txt_new_order = '<span class="pull-right label label-info">New Order!</span>';
-                    }
+                    
                 } else {
-                    $bg_class = ' bg-light-blue';
+                    $bg_class = ' bg-aqua';
                     $text_remark = 'NO INFORMATION';
                 }
+                //$txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
             }
             
             $filename = $value['GOJEK_ID'] . '.jpg';
@@ -663,11 +665,132 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function getPostingShift($end_date)
+    {
+        if ($end_date >= date('Y-m-d 07:00:00') && $end_date <= date('Y-m-d 15:59:59')) {
+            $return_data['posting_shift'] = date('Y-m-d');
+            $return_data['shift'] = 1;
+        }
+        if ($end_date >= date('Y-m-d 16:00:00') && $end_date <= date('Y-m-d 21:59:59')) {
+            $return_data['posting_shift'] = date('Y-m-d');
+            $return_data['shift'] = 2;
+        }
+        if ($end_date <= date('Y-m-d 06:59:59') && $end_date >= date('Y-m-d 00:00:00')) {
+            $return_data['posting_shift'] = date('Y-m-d', strtotime('-1 day'));
+            $return_data['shift'] = 3;
+        }
+        if ($end_date >= date('Y-m-d 22:00:00') && $end_date <= date('Y-m-d 23:59:59')) {
+            $return_data['posting_shift'] = date('Y-m-d');
+            $return_data['shift'] = 3;
+        }
+        return $return_data;
+    }
+
     public function actionCurrentStatus()
     {
-        $tmp_data = MachineIotCurrent::find()->orderBy('mesin_description')->asArray()->all();
+        date_default_timezone_set('Asia/Jakarta');
+        $get_posting_shift = $this->getPostingShift(date('Y-m-d H:i:s'));
+        $posting_shift = $get_posting_shift['posting_shift'];
+        $tmp_data = MachineIotCurrent::find()->orderBy('kelompok, mesin_description')->asArray()->all();
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        return $tmp_data;
+
+        $working_time_arr = MachineIotCurrentEffLog::find()
+        ->select([
+            'mesin_id', 'shift',
+            'hijau' => 'SUM(hijau)'
+        ])
+        ->where([
+            'posting_shift' => $posting_shift
+        ])
+        ->groupBy('mesin_id, shift')
+        ->asArray()
+        ->all();
+
+        $qty_arr = MachineIotOutput::find()
+        ->select([
+            'posting_shift', 'shift', 'mesin_id', 'mesin_description',
+            'lot_qty' => 'SUM(lot_qty)'
+        ])
+        ->where([
+            'posting_shift' => $posting_shift
+        ])
+        ->groupBy('posting_shift, shift, mesin_id, mesin_description')
+        ->asArray()
+        ->all();
+
+        $current_job_data = MachineIotOutput::find()
+        ->where('end_date IS NULL')
+        ->asArray()
+        ->all();
+
+        $tmp_working_time = [];
+        $tmp_qty_arr = [];
+        $tmp_gmc_desc = [];
+        $tmp_btn_class = [];
+        foreach ($tmp_data as $key => $value) {
+            $btn_class = 'btn btn-lg btn-block bg-gray';
+            $bg_color = \Yii::$app->params['bg-gray'];
+            if($value['status_warna'] == 'KUNING'){
+                //background_color = 'yellow';
+                $btn_class = 'btn btn-lg btn-block bg-yellow';
+                $bg_color = \Yii::$app->params['bg-yellow'];
+            } else if ($value['status_warna'] == 'HIJAU') {
+                $btn_class = 'btn btn-lg btn-block bg-green';
+                $bg_color = \Yii::$app->params['bg-green'];
+            } else if ($value['status_warna'] == 'BIRU') {
+                $btn_class = 'btn btn-lg btn-block bg-blue';
+                $bg_color = \Yii::$app->params['bg-blue'];
+            } else if ($value['status_warna'] == 'MERAH') {
+                $btn_class = 'btn btn-lg btn-block bg-red';
+                $bg_color = \Yii::$app->params['bg-red'];
+            }
+            $tmp_btn_class[$value['mesin_id'] . '_mesin_desc'] = '<button type="button" class="' . $btn_class . '">' . $value['mesin_description'] . ' - ' . $value['mesin_id'] . '</button>';
+            for ($i = 1; $i <= 3; $i++) { 
+                $working_time_pct = 0;
+                foreach ($working_time_arr as $key => $working_time) {
+                    if ($value['mesin_id'] == $working_time['mesin_id'] && $working_time['shift'] == $i) {
+                        if ($i == 2) {
+                            $total_work_time = 5 * 3600;
+                        } else {
+                            $total_work_time = 8 * 3600;
+                        }
+                        $working_time_pct = round(($working_time['hijau'] / $total_work_time) * 100);
+                    }
+                }
+                if ($working_time_pct <= 50) {
+                    $tmp_working_time[$value['mesin_id'] . '_shift' . $i . '_working_time']['content'] = $working_time_pct == 0 ? '' : '<span class="" style="">' . $working_time_pct . '</span>';
+                    $tmp_working_time[$value['mesin_id'] . '_shift' . $i . '_working_time']['parent_class'] = $working_time_pct == 0 ? '' : 'bg-red text-center';
+                } else {
+                    $tmp_working_time[$value['mesin_id'] . '_shift' . $i . '_working_time']['content'] = $working_time_pct == 0 ? '' : '<span class="" style="">' . $working_time_pct . '</span>';
+                    $tmp_working_time[$value['mesin_id'] . '_shift' . $i . '_working_time']['parent_class'] = $working_time_pct == 0 ? '' : 'bg-green text-center';
+                }
+
+                $tmp_qty = 0;
+                foreach ($qty_arr as $key => $qty) {
+                    if ($value['mesin_id'] == $qty['mesin_id'] && $qty['shift'] == $i) {
+                        $tmp_qty = $qty['lot_qty'];
+                    }
+                }
+                $tmp_qty_arr[$value['mesin_id'] . '_shift' . $i . '_qty'] = $tmp_qty == 0 ? '' : number_format($tmp_qty);
+            }
+
+            $tmp_current_job = '';
+            foreach ($current_job_data as $key => $current_job) {
+                if ($value['mesin_id'] == $current_job['mesin_id']) {
+                    $tmp_current_job = $current_job['gmc'] . ' - ' . $current_job['gmc_desc'];
+                }
+            }
+            $tmp_gmc_desc[$value['mesin_id'] . '_gmc_desc'] = $tmp_current_job;
+            
+        }
+        
+        $data = [
+            'working_time' => $tmp_working_time,
+            'lot_qty' => $tmp_qty_arr,
+            'gmc_desc' => $tmp_gmc_desc,
+            'btn_class' => $tmp_btn_class
+        ];
+        return $data;
     }
 
     public function actionGetMachineStatus($mesin_id = 'MNT00078', $posting_date = '2019-07-03')
@@ -728,7 +851,8 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $this->layout = 'clean';
 
-        $current_arr = MachineIotCurrent::find()->asArray()->all();
+        $current_arr = MachineIotCurrent::find()->orderBy('kelompok, mesin_description')->asArray()->all();
+
         foreach ($current_arr as $key => $value) {
             $machine_arr[$value['mesin_id']] = $value['mesin_description'];
         }
@@ -736,6 +860,7 @@ class DisplayController extends Controller
         return $this->render('machine-realtime-status', [
             'data' => $data,
             'machine_arr' => $machine_arr,
+            'current_arr' => $current_arr,
         ]);
     }
     public function actionContainerLoading()

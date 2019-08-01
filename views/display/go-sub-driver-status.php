@@ -71,6 +71,10 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 $this->registerJs("
+    function flash_order(){
+        $('.label').toggleClass('label-danger');
+        setTimeout(function(){flash_order();}, 600);
+    }
     function update_data(){
         $.ajax({
             type: 'POST',
@@ -85,6 +89,7 @@ $this->registerJs("
     }
     $(document).ready(function() {
         update_data();
+        flash_order();
     });
 ");
 
