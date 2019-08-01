@@ -97,23 +97,25 @@ echo $data['name'];*/
                     <thead>
                         <tr class="">
                             <th class="text-center">Lot Number</th>
+                            <th class="text-center">Qty</th>
                             <th class="text-center">GMC</th>
                             <th>Description</th>
-                            <th class="text-center">Qty</th>
+                            <th>Man Power<?= ' (' . $output_data['man_power_qty'] . ')'; ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         if (!isset($current_data['lot_id'])) {
                             $btn_end_class = 'btn btn-danger btn-block btn-lg disabled';
-                            echo '<tr><td colspan=4 style="text-align: left;">Machine is idling ...</td></tr>';
+                            echo '<tr><td colspan=5 style="text-align: left;">Machine is idling ...</td></tr>';
                         } else {
                             $btn_end_class = 'showModalButton btn btn-danger btn-block btn-lg';
                             echo '<tr class="">
                                 <td class="text-center">' . $current_data['lot_id'] . '</td>
+                                <td class="text-center">' . $current_data['lot_qty'] . '</td>
                                 <td class="text-center">' . $current_data['gmc'] . '</td>
                                 <td style="text-align: left;">' . $current_data['gmc_desc'] . '</td>
-                                <td class="text-center">' . $current_data['lot_qty'] . '</td>
+                                <td style="text-align: left;">' . $output_data['man_power_name'] . '</td>
                             </tr>';
                         }
                         ?>
@@ -162,7 +164,7 @@ echo $data['name'];*/
                         echo Html::a('START', ['start-machine', 'mesin_id' => $mesin_id, 'lot_id' => $value['lot_id']], [
                             'class' => 'btn btn-success btn-block',
                             'data' => [
-                                'confirm' => 'Are you sure to start this lot ?',
+                                'confirm' => 'Are you sure to start lot number ' . $value['lot_id'] . ' ?',
                             ],
                         ]);
                     } else {

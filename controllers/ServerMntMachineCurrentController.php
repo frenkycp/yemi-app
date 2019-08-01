@@ -4,10 +4,22 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\ServerMachineIotCurrent;
 use app\models\WipEffTbl;
+use app\models\MachineIotOutput;
 use yii\helpers\Url;
 
 class ServerMntMachineCurrentController extends Controller
 {
+	public function getSeconds($start, $end)
+	{
+		$start_date = new \DateTime($start);
+		$since_start = $start_date->diff(new \DateTime($end));
+		$seconds = $since_start->days * 24 * 3600;
+		$seconds += $since_start->h * 3600;
+		$seconds += $since_start->i * 60;
+		$seconds += $since_start->s;
+		return $seconds;
+	}
+
 	public function actionIndex()
 	{
 		$this->layout = 'clean';
@@ -40,10 +52,19 @@ class ServerMntMachineCurrentController extends Controller
         	])
         	->asArray()
         	->all();
+
+        	$output_data = MachineIotOutput::find()
+        	->where([
+        		'mesin_id' => $mesin_id,
+        		'lot_number' => $tmp_data->lot_number
+        	])
+        	->andWhere('end_date IS NULL')
+        	->one();
         }
 
 		return $this->render('index', [
 			'data' => $data,
+			'output_data' => $output_data,
 			'current_data' => $current_data,
 			'lot_data' => $lot_data,
 			'mesin_description' => $mesin_description,
@@ -53,39 +74,98 @@ class ServerMntMachineCurrentController extends Controller
 
 	public function actionStartMachine($mesin_id='', $lot_id = '')
 	{
+		$this->layout = 'clean';
 		date_default_timezone_set('Asia/Jakarta');
-		$lot_data = WipEffTbl::find()
-    	->where([
-    		'lot_id' => $lot_id,
-    	])
-    	->one();
+		$model = new \yii\base\DynamicModel([
+	        'man_power'
+	    ]);
+	    $model->addRule('man_power', 'required');
 
-    	$current_data = ServerMachineIotCurrent::find()
-    	->where([
-    		'mesin_id' => $mesin_id
-    	])
-    	->one();
+	    if ($model->load($_POST)) {
+	    	$man_power_name = '';
+	    	$man_power_qty = count($model->man_power);
+	    	foreach ($model->man_power as $key => $value) {
+	    		$split_mp = explode(' - ', $value);
+	    		if ($man_power_name == '') {
+	    			$man_power_name = $split_mp[1];
+	    		} else {
+	    			$man_power_name .= ', ' . $split_mp[1];
+	    		}
+	    	}
+	    	//return $mesin_id . '<br/>' . $lot_id . '<br/>' . $man_power_qty . '<br/>' . $man_power_name;
+	    	/**/$lot_data = WipEffTbl::find()
+	    	->where([
+	    		'lot_id' => $lot_id,
+	    	])
+	    	->one();
 
-    	$lot_data->mesin_id = $current_data->mesin_id;
-    	$lot_data->mesin_description = $current_data->mesin_description;
-    	$lot_data->plan_run = 'R';
-    	if ($lot_data->start_date == null) {
-    		$lot_data->start_date = date('Y-m-d H:i:s');
-    	}
-    	if (!$lot_data->save()) {
-    		return json_encode($lot_data->errors);
-    	}
+	    	$current_data = ServerMachineIotCurrent::find()
+	    	->where([
+	    		'mesin_id' => $mesin_id
+	    	])
+	    	->one();
 
-    	$current_data->lot_number = $lot_id;
-    	$current_data->gmc = $lot_data->child_all;
-    	$current_data->gmc_desc = $lot_data->child_desc_all;
-    	$current_data->lot_qty = $lot_data->qty_all;
-    	if ($current_data->save()) {
-    		return $this->redirect(Url::previous());
-    	} else {
-    		return json_encode($current_data->errors);
-    	}
+	    	$lot_data->mesin_id = $current_data->mesin_id;
+	    	$lot_data->mesin_description = $current_data->mesin_description;
+	    	$lot_data->plan_run = 'R';
+	    	if ($lot_data->start_date == null) {
+	    		$lot_data->start_date = date('Y-m-d H:i:s');
+	    	}
+	    	if (!$lot_data->save()) {
+	    		return json_encode($lot_data->errors);
+	    	}
+
+	    	$current_data->lot_number = $lot_id;
+	    	$current_data->gmc = $lot_data->child_all;
+	    	$current_data->gmc_desc = $lot_data->child_desc_all;
+	    	$current_data->lot_qty = $lot_data->qty_all;
+	    	if ($current_data->save()) {
+	    		$iot_output = new MachineIotOutput;
+	    		$iot_output->mesin_id = $mesin_id;
+	    		$iot_output->mesin_description = $current_data->mesin_description;
+	    		$iot_output->kelompok = $lot_data->jenis_mesin;
+	    		$iot_output->lot_number = $lot_id;
+	    		$iot_output->gmc = $lot_data->child_all;
+	    		$iot_output->gmc_desc = $lot_data->child_desc_all;
+	    		$iot_output->lot_qty = $lot_data->qty_all;
+	    		$iot_output->start_date = date('Y-m-d H:i:s');
+	    		$iot_output->man_power_qty = $man_power_qty;
+	    		$iot_output->man_power_name = $man_power_name;
+	    		if (!$iot_output->save()) {
+	    			return json_encode($iot_output->errors);
+	    		}
+	    		return $this->redirect(Url::previous());
+	    	} else {
+	    		return json_encode($current_data->errors);
+	    	}
+	    }
+		
+
+    	return $this->render('start', [
+    		'model' => $model
+    	]);
     	
+	}
+
+	public function getPostingShift($end_date)
+	{
+		if ($end_date >= date('Y-m-d 07:00:00') && $end_date <= date('Y-m-d 15:59:59')) {
+			$return_data['posting_shift'] = date('Y-m-d');
+			$return_data['shift'] = 1;
+		}
+		if ($end_date >= date('Y-m-d 16:00:00') && $end_date <= date('Y-m-d 21:59:59')) {
+			$return_data['posting_shift'] = date('Y-m-d');
+			$return_data['shift'] = 2;
+		}
+		if ($end_date <= date('Y-m-d 06:59:59') && $end_date >= date('Y-m-d 00:00:00')) {
+			$return_data['posting_shift'] = date('Y-m-d', strtotime('-1 day'));
+			$return_data['shift'] = 3;
+		}
+		if ($end_date >= date('Y-m-d 22:00:00') && $end_date <= date('Y-m-d 23:59:59')) {
+			$return_data['posting_shift'] = date('Y-m-d');
+			$return_data['shift'] = 3;
+		}
+		return $return_data;
 	}
 
 	public function actionFinish($mesin_id)
@@ -130,6 +210,21 @@ class ServerMntMachineCurrentController extends Controller
 			    	$lot_data->jenis_mesin = $next_process;
 			    	if (!$lot_data->save()) {
 			    		return json_encode($lot_data->errors);
+			    	}
+			    	$iot_output = MachineIotOutput::find()
+			    	->where([
+			    		'mesin_id' => $mesin_id,
+			    		'lot_number' => $lot_id
+			    	])
+			    	->andWhere('end_date IS NULL')
+			    	->one();
+			    	$iot_output->end_date = date('Y-m-d H:i:s');
+			    	$iot_output->lama_proses = $this->getSeconds($iot_output->start_date, $iot_output->end_date);
+			    	$posting_shift_data = $this->getPostingShift($iot_output->end_date);
+			    	$iot_output->posting_shift = $posting_shift_data['posting_shift'];
+			    	$iot_output->shift = $posting_shift_data['shift'];
+			    	if (!$iot_output->save()) {
+			    		return json_encode($iot_output->errors);
 			    	}
 		    	} else {
 		    		return json_encode($current_data->errors);

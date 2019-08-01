@@ -44,16 +44,16 @@ $this->registerCss("
         border:1px solid #8b8c8d;
         background-color: #595F66;
         color: white;
-        font-size: 24px;
-        border-bottom: 7px solid #ddd;
+        font-size: 20px;
+        //border-bottom: 7px solid #ddd;
         vertical-align: middle;
     }
     #progress-tbl > tbody > tr > td{
         border:1px solid #777474;
         font-size: 20px;
-        //background-color: #B3E5FC;
+        //background-color: #ddd;
         //font-weight: 1000;
-        color: #FFF;
+        color: #fff;
         vertical-align: middle;
     }
 ");
@@ -67,21 +67,36 @@ $script = "
     window.onload = setupRefresh;
     var chart;
 
-
-
     function setupRefresh() {
       setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
-    
 
     function update_data(){
         $.ajax({
             type: 'POST',
             url: '" . Url::to(['current-status']) . "',
             success: function(data){
+                $.each(data.working_time , function(index, val) {
+                    //alert(index);
+                    $('#'+index).html(val.content);
+                    $('#'+index).attr('class', val.parent_class);
+                });
+                $.each(data.lot_qty , function(index, val) {
+                    //alert(index);
+                    $('#'+index).html(val);
+                });
+                $.each(data.gmc_desc , function(index, val) {
+                    //alert(index);
+                    $('#'+index).html(val);
+                });
+                $.each(data.btn_class , function(index, val) {
+                    //alert(index);
+                    //$('#'+index).attr('class', val);
+                    $('#'+index).html(val);
+                });
                 //alert(data[0].mesin_id);
                 var content = '';
-                $.each(data , function(index, val) {
+                /*$.each(data.data , function(index, val) {
                     var background_color = '" . Yii::$app->params['bg-gray'] . "';
                     var color = 'black';
                     var status_txt = 'IDLE';
@@ -104,7 +119,7 @@ $script = "
                         color = 'white';
                     }
 
-                    $('#'+val.mesin_id).html('<button style=\"background-color: ' + background_color + '; color: ' + color + '; font-size: 12px;\" type=\"button\" class=\"btn btn-block btn-default\">' + status_txt + '</button>');
+                    //$('#'+val.mesin_id).html('<button style=\"background-color: ' + background_color + '; color: ' + color + '; font-size: 12px;\" type=\"button\" class=\"btn btn-block btn-default\">' + status_txt + '</button>');
 
                     $.ajax({
                         type: 'POST',
@@ -177,9 +192,7 @@ $script = "
                             });
                         }
                     });
-
-                    
-                });
+                });*/
             },
             complete: function(){
                 setTimeout(function(){update_data();}, 100000);
@@ -212,30 +225,41 @@ echo '</pre>';*/
 <table class="table" id="progress-tbl">
     <thead>
         <tr>
-            <th style="width: 30%;">Machine</th>
-            <th style="width: 10%;">Current</th>
-            <th style="width: 30%;">Operational Status</th>
-            <th style="width: 30%;">Summary</th>
+            <th style="" class="text-center" rowspan="2">Group</th>
+            <th style="" width="30%" rowspan="2">Machine</th>
+            <th style="" width="30%" rowspan="2">Current Job</th>
+            <!--<th style="width: 10%;">Current</th>
+            <th style="width: 30%;">Operational Status</th>-->
+            <th style="" class="text-center" colspan="3">Output Qty</th>
+            <th style="" class="text-center" colspan="3">Working Time (%)</th>
+        </tr>
+        <tr>
+            <th class="text-center">Shift I</th>
+            <th class="text-center">Shift II</th>
+            <th class="text-center">Shift III</th>
+            <th class="text-center">Shift I</th>
+            <th class="text-center">Shift II</th>
+            <th class="text-center">Shift III</th>
         </tr>
     </thead>
     <tbody>
         <?php
-        foreach ($machine_arr as $key => $value) {
+        foreach ($current_arr as $key => $value) {
             ?>
             <tr>
-                <td><?= $value; ?></td>
-                <td class="machine" id="<?= $key; ?>"></td>
-                <td id="<?= 'progress-' . $key; ?>">
-                    <div id="container-<?= $key; ?>"></div>
-                    
-                </td>
-                <td>
-                    <span class="label bg-green" style="font-weight: normal; font-size: 14px;">RUNNING : X%</span>
-                    <span class="label bg-blue" style="font-weight: normal; font-size: 14px;">SETTING : X%</span>
-                    <span class="label bg-yellow" style="font-weight: normal; font-size: 14px;">HANDLING : X%</span>
-                    <span class="label bg-red" style="font-weight: normal; font-size: 14px;">STOP : X%</span>
-                    <span class="label bg-gray" style="font-weight: normal; font-size: 14px;">IDLING : X%</span>
-                </td>
+                <td class="text-center"><?= $value['kelompok'] ?></td>
+                <td id="<?= $value['mesin_id'] . '_mesin_desc'; ?>"></td>
+                <td id="<?= $value['mesin_id'] . '_gmc_desc'; ?>"></td>
+                <!--<td class="machine" id="<?= ''; // $key; ?>"></td>
+                <td id="<?= '';// 'progress-' . $key; ?>">
+                    <div id="container-<?= ''; // $key; ?>"></div>
+                </td>-->
+                <td id="<?= $value['mesin_id'] . '_shift1_qty'; ?>" class="text-center"></td>
+                <td id="<?= $value['mesin_id'] . '_shift2_qty'; ?>" class="text-center"></td>
+                <td id="<?= $value['mesin_id'] . '_shift3_qty'; ?>" class="text-center"></td>
+                <td id="<?= $value['mesin_id'] . '_shift1_working_time'; ?>" class="text-center"></td>
+                <td id="<?= $value['mesin_id'] . '_shift2_working_time'; ?>" class="text-center"></td>
+                <td id="<?= $value['mesin_id'] . '_shift3_working_time'; ?>" class="text-center"></td>
             </tr>
         <?php }
         ?>
