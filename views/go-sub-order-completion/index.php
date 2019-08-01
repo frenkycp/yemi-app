@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'ORDER PROGRESS MONITOR <span class="japanesse text-green">[ 切替段取り ]</span> | GO-MACHINE',
+    'page_title' => 'ORDER PROGRESS MONITOR <span class="japanesse text-green">[ 切替段取り ]</span> | GO-SUB ASSY',
     'tab_title' => 'ORDER PROGRESS MONITOR',
     'breadcrumbs_title' => 'ORDER PROGRESS MONITOR'
 ];
