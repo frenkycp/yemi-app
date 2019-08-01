@@ -6,6 +6,7 @@ use yii\bootstrap\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
 use app\models\Karyawan;
+use app\models\CostCenter;
 use kartik\typeahead\Typeahead;
 
 /**
@@ -57,6 +58,8 @@ foreach ($tmp_data_section as $key => $value) {
 
 <!-- attribute NAMA_KARYAWAN -->
 			<?= $form->field($model, 'NAMA_KARYAWAN')->textInput() ?>
+
+            <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(CostCenter::find()->orderBy('CC_ID')->all(), 'CC_ID', 'CC_ID'))->label('CC ID'); ?>
 
 <!-- attribute DEPARTEMEN -->
             <?= $form->field($model, 'DEPARTEMEN')->dropDownList(ArrayHelper::map(Karyawan::find()->select('DISTINCT(DEPARTEMEN)')->orderBy('DEPARTEMEN')->all(), 'DEPARTEMEN', 'DEPARTEMEN')) ?>
@@ -114,9 +117,6 @@ foreach ($tmp_data_section as $key => $value) {
 
 <!-- attribute STATUS_KARYAWAN -->
 			<?= ''; //$form->field($model, 'STATUS_KARYAWAN')->hiddenInput()->label(false) ?>
-
-<!-- attribute CC_ID -->
-			<?= ''; //$form->field($model, 'CC_ID')->hiddenInput()->label(false) ?>
 
 <!-- attribute JABATAN_SR -->
 			<?= ''; //$form->field($model, 'JABATAN_SR')->hiddenInput()->label(false) ?>

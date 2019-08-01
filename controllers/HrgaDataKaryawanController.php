@@ -9,6 +9,7 @@ use dmstr\bootstrap\Tabs;
 
 use app\models\Karyawan;
 use app\models\ImageFile;
+use app\models\CostCenter;
 use app\models\search\HrgaDataKaryawanSearch;
 use yii\web\UploadedFile;
 
@@ -42,6 +43,7 @@ class HrgaDataKaryawanController extends \app\controllers\base\HrgaDataKaryawanC
 		$section_dropdown = ArrayHelper::map(Karyawan::find()->select('DISTINCT(SECTION)')->where('SECTION IS NOT NULL')->orderBy('SECTION')->all(), 'SECTION', 'SECTION');
 		$sub_section_dropdown = ArrayHelper::map(Karyawan::find()->select('DISTINCT(SUB_SECTION)')->where('SUB_SECTION IS NOT NULL')->orderBy('SUB_SECTION')->all(), 'SUB_SECTION', 'SUB_SECTION');
 		$status_karyawan_dropdown = ArrayHelper::map(Karyawan::find()->select('DISTINCT(STATUS_KARYAWAN)')->orderBy('STATUS_KARYAWAN')->all(), 'STATUS_KARYAWAN', 'STATUS_KARYAWAN');
+		$cost_center_dropdown = ArrayHelper::map(CostCenter::find()->orderBy('CC_ID')->all(), 'CC_ID', 'CC_ID');
 
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
@@ -50,6 +52,7 @@ class HrgaDataKaryawanController extends \app\controllers\base\HrgaDataKaryawanC
 		    'section_dropdown' => $section_dropdown,
 		    'sub_section_dropdown' => $sub_section_dropdown,
 		    'status_karyawan_dropdown' => $status_karyawan_dropdown,
+		    'cost_center_dropdown' => $cost_center_dropdown,
 		]);
 	}
 

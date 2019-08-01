@@ -89,6 +89,17 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'CC_ID',
+        'label' => 'CC ID',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => $cost_center_dropdown,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'DEPARTEMEN',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
@@ -212,33 +223,6 @@ $gridColumns = [
             'style' => 'font-size: 12px;'
         ],
     ],
-    /*'JENIS_KELAMIN',
-    'STATUS_PERKAWINAN',
-    'ALAMAT',
-    'ALAMAT_SEMENTARA',
-    'TELP',
-    'NPWP',*/
-    /*'KTP',*/
-    /*'BPJS_KESEHATAN',*/
-    /*'BPJS_KETENAGAKERJAAN',*/
-    /*'STATUS_KARYAWAN',*/
-    /*'CC_ID',*/
-    /*'JABATAN_SR',*/
-    /*'JABATAN_SR_GROUP',*/
-    /*'GRADE',*/
-    /*'DIRECT_INDIRECT',*/
-    /*'JENIS_PEKERJAAN',*/
-    /*'SERIKAT_PEKERJA',*/
-    /*'ACTIVE_STAT',*/
-    /*'PASSWORD',*/
-    /*'TGL_LAHIR',*/
-    /*'TGL_MASUK_YEMI',*/
-    /*'K1_START',*/
-    /*'K1_END',*/
-    /*'K2_START',*/
-    /*'K2_END',*/
-    /*'SKILL',*/
-    /*'KONTRAK_KE',*/
 ];
 ?>
 <div class="giiant-crud karyawan-index">
