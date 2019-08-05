@@ -91,6 +91,7 @@ echo '</pre>';*/
                 <li class="active"><a href="#tab_1" data-toggle="tab">Line Efficiency</a></li>
                 <li><a href="#tab_2" data-toggle="tab">FA Loss time by Line <span class="japanesse">（ライン別総組ロースタイム）</span></a></li>
                 <li><a href="#tab_3" data-toggle="tab">FA Loss time by Category <span class="japanesse">（原因カテゴリー別総組ロースタイム）</span></a></li>
+                <li><a href="#tab_4" data-toggle="tab">FA Working Time V.S Loss Time <span class="japanesse"></span></a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1">
@@ -222,6 +223,10 @@ echo '</pre>';*/
                                         'label' => ['text' => '']
                                     ]
                                 ],
+                                'stackLabels' => [
+                                    'enabled' => true,
+                                    'allowOverlap' => true
+                                ],
                                 //'max' => 100,
                             ],
                             'tooltip' => [
@@ -315,6 +320,78 @@ echo '</pre>';*/
                                 ],
                             ],
                             'series' => $data3,
+                        ],
+                    ]); ?>
+                </div>
+                <div class="tab-pane" id="tab_4">
+                    <?php
+                    echo Highcharts::widget([
+                        'scripts' => [
+                            //'modules/exporting',
+                            //'themes/grid-light',
+                            //'themes/sand-signika',
+                            //'themes/dark-unica',
+                        ],
+                        'options' => [
+                            'chart' => [
+                                'type' => 'column',
+                                'style' => [
+                                    'fontFamily' => 'Source Sans Pro'
+                                ],
+                            ],
+                            'credits' => [
+                                'enabled' => false
+                            ],
+                            'title' => [
+                                'text' => 'Line : ' . $line
+                            ],
+                            'xAxis' => [
+                                //'categories' => $categories,
+                                'type' => 'datetime',
+                            ],
+                            'yAxis' => [
+                                'title' => [
+                                    'text' => 'Minutes'
+                                ],
+                                /*'plotLines' => [
+                                    [
+                                        'value' => 100,
+                                        'color' =>  '#D3D3D3',
+                                        'width' => 1,
+                                        'zIndex' => 0,
+                                        'label' => ['text' => '']
+                                    ]
+                                ],*/
+                                //'max' => 100,
+                            ],
+                            'tooltip' => [
+                                //'shared' => true,
+                                //'crosshairs' => true,
+                                'xDateFormat' => '%Y-%m-%d',
+                                'valueSuffix' => ' minutes',
+                            ],
+                            'plotOptions' => [
+                                /*'series' => [
+                                    'cursor' => 'pointer',
+                                    'point' => [
+                                        'events' => [
+                                            'click' => new JsExpression("
+                                                function(e){
+                                                    e.preventDefault();
+                                                    $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                                }
+                                            "),
+                                        ]
+                                    ]
+                                ],*/
+                                'column' => [
+                                    'stacking' => 'normal',
+                                    'dataLabels' => [
+                                        'enabled' => false
+                                    ],
+                                ],
+                            ],
+                            'series' => $working_time_losstime,
                         ],
                     ]); ?>
                 </div>

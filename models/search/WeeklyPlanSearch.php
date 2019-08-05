@@ -47,7 +47,8 @@ $dataProvider = new ActiveDataProvider([
     'query' => $query,
     'sort' => [
         'defaultOrder' => [
-            'week' => SORT_ASC
+            'period' => SORT_DESC,
+            'week' => SORT_DESC
         ],
     ]
 ]);

@@ -5,6 +5,7 @@ use yii\web\Controller;
 use app\models\DprLineEfficiencyView02;
 use app\models\DprGmcEffView;
 use app\models\SernoLosstime;
+use app\models\SernoInput;
 use app\models\HakAkses;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
@@ -152,6 +153,72 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	'color' => new JsExpression('Highcharts.getOptions().colors[5]'),
 	    ];
 
+	    $wt_vs_lt = SernoLosstime::find()
+	    ->select([
+	    	'line', 'proddate',
+	    	'cm_losstime' => 'SUM(CASE WHEN category = \'CM\' THEN IFNULL(ROUND( losstime / mp, 2 ), 0) ELSE 0 END)',
+	    	'other_losstime' => 'SUM(CASE WHEN category != \'CM\' THEN IFNULL(ROUND( losstime / mp, 2 ), 0) ELSE 0 END)'
+	    ])
+	    ->where([
+	    	'line' => $line,
+	    	'extract(year_month from proddate)' => $period
+	    ])
+	    ->groupBy('line, proddate')
+	    ->orderBy('proddate')
+	    ->asArray()
+	    ->all();
+
+	    $wtlt_arr = $cm_losstime = $other_losstime = [];
+	    foreach ($wt_vs_lt as $key => $value) {
+	    	$proddate = (strtotime($value['proddate'] . " +7 hours") * 1000);
+	    	$cm_losstime[] = [
+	    		'x' => $proddate,
+	    		'y' => (float)$value['cm_losstime'],
+	    	];
+	    	$other_losstime[] = [
+	    		'x' => $proddate,
+	    		'y' => (float)$value['other_losstime'],
+	    	];
+	    }
+
+	    $tmp_working_time = SernoInput::find()
+	    ->select([
+	    	'proddate',
+	    	'wrk_time' => 'SUM(wrk_time)'
+	    ])
+	    ->where([
+	    	'line' => $line,
+	    	'extract(year_month from proddate)' => $period
+	    ])
+	    ->groupBy('proddate')
+	    ->orderBy('proddate')
+	    ->asArray()
+	    ->all();
+
+	    $working_time_arr = [];
+	    foreach ($tmp_working_time as $key => $value) {
+	    	$proddate = (strtotime($value['proddate'] . " +7 hours") * 1000);
+	    	$working_time_arr[] = [
+	    		'x' => $proddate,
+	    		'y' => (float)$value['wrk_time'],
+	    	];
+	    }
+
+	    $wtlt_arr = [
+	    	[
+	    		'name' => 'CM Loss Time',
+	    		'data' => $cm_losstime
+	    	],
+	    	[
+	    		'name' => 'Other Loss Time',
+	    		'data' => $other_losstime
+	    	],
+	    	[
+	    		'name' => 'Working Time',
+	    		'data' => $working_time_arr
+	    	],
+	    ];
+
 		return $this->render('index', [
 			'data1' => $data1,
 			'data2' => $data2,
@@ -165,6 +232,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 			'month' => $month,
 			'target_eff' => $target_eff,
 			'max' => $max,
+			'working_time_losstime' => $wtlt_arr
 		]);
 	}
 
