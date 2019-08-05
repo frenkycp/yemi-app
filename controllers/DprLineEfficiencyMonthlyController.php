@@ -200,7 +200,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	$proddate = (strtotime($value['proddate'] . " +7 hours") * 1000);
 	    	$working_time_arr[] = [
 	    		'x' => $proddate,
-	    		'y' => (float)$value['wrk_time'],
+	    		'y' => (float)round($value['wrk_time'], 2),
 	    	];
 	    }
 

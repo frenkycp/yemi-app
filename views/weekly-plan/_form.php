@@ -17,10 +17,10 @@ use yii\helpers\StringHelper;
 
     <?php $form = ActiveForm::begin([
     'id' => 'WeeklyPlan',
-    'layout' => 'horizontal',
+    //'layout' => 'horizontal',
     'enableClientValidation' => true,
     'errorSummaryCssClass' => 'error-summary alert alert-danger',
-    'fieldConfig' => [
+    /*'fieldConfig' => [
              'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
              'horizontalCssClasses' => [
                  'label' => 'col-sm-2',
@@ -29,68 +29,48 @@ use yii\helpers\StringHelper;
                  'error' => '',
                  'hint' => '',
              ],
-         ],
+         ],*/
     ]
     );
     ?>
+    <div class="panel panel-primary">
+        <div class="panel-body">
 
-    <div class="">
-        <?php $this->beginBlock('main'); ?>
+            <?= $form->field($model, 'period')->textInput(['maxlength' => true]) ?>
 
-        <p>
+            <?= $form->field($model, 'week')->textInput() ?>
+
+            <?= $form->field($model, 'plan_export')->textInput() ?>
+
+            <?= $form->field($model, 'actual_export')->textInput() ?>
+
+            <?= $form->field($model, 'remark')->textArea(['rows' => 3]) ?>
+
+            <?= $form->field($model, 'category')->hiddenInput(['maxlength' => true]) ?>
+
+            <?php echo $form->errorSummary($model); ?>
+        </div>
+        <div class="panel-footer">
+            <?= Html::submitButton('<span class="glyphicon glyphicon-check"></span> ' . ($model->isNewRecord ? 'Create' : 'Save'),
+            [
+            'id' => 'save-' . $model->formName(),
+            'class' => 'btn btn-success'
+            ]
+            );
+            ?>
+            &nbsp;&nbsp;
+            <?= Html::a('Cancel', \yii\helpers\Url::previous(), ['class' => 'btn btn-default']); ?>
+        </div>
+    </div>
             
 
-<!-- attribute week -->
-			<?= $form->field($model, 'week')->textInput() ?>
+			
 
-<!-- attribute plan_qty -->
-			<?= $form->field($model, 'plan_qty')->textInput() ?>
-
-<!-- attribute actual_qty -->
-			<?= $form->field($model, 'actual_qty')->textInput() ?>
-
-<!-- attribute flag -->
-			<?= $form->field($model, 'flag')->textInput() ?>
-
-<!-- attribute category -->
-			<?= $form->field($model, 'category')->textInput(['maxlength' => true]) ?>
-
-<!-- attribute period -->
-			<?= $form->field($model, 'period')->textInput(['maxlength' => true]) ?>
-        </p>
-        <?php $this->endBlock(); ?>
         
-        <?=
-    Tabs::widget(
-                 [
-                    'encodeLabels' => false,
-                    'items' => [ 
-                        [
-    'label'   => Yii::t('app', 'WeeklyPlan'),
-    'content' => $this->blocks['main'],
-    'active'  => true,
-],
-                    ]
-                 ]
-    );
-    ?>
-        <hr/>
 
-        <?php echo $form->errorSummary($model); ?>
-
-        <?= Html::submitButton(
-        '<span class="glyphicon glyphicon-check"></span> ' .
-        ($model->isNewRecord ? 'Create' : 'Save'),
-        [
-        'id' => 'save-' . $model->formName(),
-        'class' => 'btn btn-success'
-        ]
-        );
-        ?>
+        
 
         <?php ActiveForm::end(); ?>
-
-    </div>
 
 </div>
 

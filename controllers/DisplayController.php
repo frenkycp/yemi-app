@@ -62,9 +62,93 @@ use app\models\PcbNgDaily;
 use app\models\MasalahPcb;
 use app\models\GojekOrderTbl;
 use app\models\MachineIotOutput;
+use app\models\SernoCalendar;
 
 class DisplayController extends Controller
 {
+    public function actionChourei()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $today = date('Y-m-d');
+        $tomorrow = date('Y-m-d', strtotime('+1 day'));
+
+        $tmp_yesterday = SernoCalendar::find()
+        ->select('etd')
+        ->where(['<', 'etd', $today])
+        ->orderBy('etd DESC')
+        ->one();
+
+        $serno_calendar = SernoCalendar::find()
+        ->select('etd')
+        ->where(['>=', 'etd', $tmp_yesterday->etd])
+        ->orderBy('etd')
+        ->limit(3)
+        ->all();
+
+        $cal_arr = [];
+        foreach ($serno_calendar as $key => $value) {
+            $cal_arr[] = $value->etd;
+        }
+
+        $shipping_data = SernoOutput::find()
+        ->joinWith('sernoMaster')
+        ->select([
+            'etd',
+            'model' => 'tb_serno_master.model',
+            'qty' => 'SUM(qty)',
+            'output' => 'SUM(output)',
+            'balance' => 'SUM(output-qty)'
+        ])
+        ->where(['etd' => $cal_arr])
+        ->groupBy('etd, tb_serno_master.model')
+        ->orderBy('etd')
+        ->all();
+
+        $tmp_shipping_arr = [];
+        $model_name = [];
+        foreach ($shipping_data as $key => $value) {
+            $tmp_shipping_arr[$value->etd]['plan'] += $value->qty;
+            $tmp_shipping_arr[$value->etd]['actual'] += $value->output;
+            $tmp_shipping_arr[$value->etd]['balance'] += $value->balance;
+
+            if ($value->balance < 0) {
+                if (!isset($tmp_shipping_arr[$value->etd]['gmc_balance'][$value->model])) {
+                    $gmc_desc = $value->sernoMaster->description;
+                    $tmp_shipping_arr[$value->etd]['gmc_balance'][$value->model] = 0;
+                    $model_name[$value->model] = $gmc_desc;
+                }
+                $tmp_shipping_arr[$value->etd]['gmc_balance'][$value->model] += $value->balance;
+            }
+
+            //arsort($tmp_shipping_arr[$value->etd]['gmc_balance']);
+        }
+
+        foreach ($cal_arr as $key => $value) {
+            $plan = $tmp_shipping_arr[$value]['plan'];
+            $actual = $tmp_shipping_arr[$value]['actual'];
+            if ($plan > 0) {
+                $pct = round(($actual / $plan) * 100, 1);
+            } else {
+                $pct = 0;
+            }
+            $tmp_shipping_arr[$value]['percentage'] = $pct;
+
+            if (isset($tmp_shipping_arr[$value]['gmc_balance'])) {
+                asort($tmp_shipping_arr[$value]['gmc_balance']);
+                $tmp_shipping_arr[$value]['gmc_balance'] = array_slice($tmp_shipping_arr[$value]['gmc_balance'], 0, 3);
+            }
+
+        }
+
+        return $this->render('chourei', [
+            'shipping_data' => $tmp_shipping_arr,
+            'cal_arr' => $cal_arr,
+            'model_name' => $model_name,
+        ]);
+    }
+
     public function getMinutes($start, $end)
     {
         $start_date = new \DateTime($start);

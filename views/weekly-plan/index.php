@@ -50,18 +50,6 @@ function weekOfMonth($date) {
     return $w;
 }
 
-
-
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
-
-
 $totActual = 0;
 $totPlan = 0;
 $totActualExport = 0;
@@ -89,9 +77,9 @@ if($totPlanExport > 0)
 
 //$totPercentage = 98;
 $columns = [
-    /* [
+    [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => $actionColumnTemplateString,
+        'template' => '{update}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -100,6 +88,19 @@ $columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            }, 'update' => function($url, $model, $key){
+                $tmp_data = app\models\WeeklyPlan::find()
+                ->where([
+                    'period' => $model->period,
+                    'week' => $model->week
+                ])
+                ->one();
+                $url = ['update', 'id' => $tmp_data->id];
+                $options = [
+                    'title' => 'Edit Cause & Countermeasure',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<i class="fa fa-fw fa-edit"></i>', $url, $options);
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -109,7 +110,7 @@ $columns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ], */
+    ],
     /* [
         'attribute' => 'category',
         'hAlign' => 'center',
@@ -317,6 +318,7 @@ $columns = [
             'pjax' => true, // pjax is set to always true for this demo
             'showPageSummary' => true,
             'toolbar' =>  [
+                Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
                 '{export}',
                 '{toggleData}',
             ],
