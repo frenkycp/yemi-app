@@ -74,15 +74,15 @@ echo '</pre>';*/
                                 <td style="vertical-align: middle;">
                                     <?php
                                     if (isset($value['gmc_balance'])) {
-                                        //echo '<ul class="text-left">';
+                                        echo '<ul class="text-left">';
                                         foreach ($value['gmc_balance'] as $gmc_number => $balance) {
-                                            echo '<div class="well well-sm" style="text-align: left;">';
                                             //echo $model_name[$gmc_number];
+                                            echo '<li>';
                                             echo $gmc_number;
-                                            echo '<span class="text-red pull-right"> (' . $balance . ')</span>';
-                                            echo '</div>';
+                                            echo ' <i class="fa fa-fw fa-long-arrow-right"></i> <span class="text-red"> [' . $balance . ']</span>';
+                                            echo '</li>';
                                         }
-                                        //echo '</ul>';
+                                        echo '</ul>';
                                     }
                                     
                                     ?>

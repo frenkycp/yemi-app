@@ -91,7 +91,7 @@ echo '</pre>';*/
                 <li class="active"><a href="#tab_1" data-toggle="tab">Line Efficiency</a></li>
                 <li><a href="#tab_2" data-toggle="tab">FA Loss time by Line <span class="japanesse">（ライン別総組ロースタイム）</span></a></li>
                 <li><a href="#tab_3" data-toggle="tab">FA Loss time by Category <span class="japanesse">（原因カテゴリー別総組ロースタイム）</span></a></li>
-                <li><a href="#tab_4" data-toggle="tab">FA Working Time V.S Loss Time <span class="japanesse"></span></a></li>
+                <li><a href="#tab_4" data-toggle="tab">Availability <span class="japanesse"></span></a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="tab_1">
@@ -387,7 +387,8 @@ echo '</pre>';*/
                                 'column' => [
                                     'stacking' => 'normal',
                                     'dataLabels' => [
-                                        'enabled' => false
+                                        'enabled' => true,
+                                        'allowOverlap' => true
                                     ],
                                 ],
                             ],

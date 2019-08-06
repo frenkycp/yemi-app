@@ -24,6 +24,7 @@ class DprLineEfficiencyMonthlyController extends Controller
 
 	public function actionIndex()
 	{
+		date_default_timezone_set('Asia/Jakarta');
 		$line_arr = $this->getLineArr();
 		$line = $line_arr[0];
 		$year = date('Y');
@@ -156,8 +157,8 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    $wt_vs_lt = SernoLosstime::find()
 	    ->select([
 	    	'line', 'proddate',
-	    	'cm_losstime' => 'SUM(CASE WHEN category = \'CM\' THEN IFNULL(ROUND( losstime / mp, 2 ), 0) ELSE 0 END)',
-	    	'other_losstime' => 'SUM(CASE WHEN category != \'CM\' THEN IFNULL(ROUND( losstime / mp, 2 ), 0) ELSE 0 END)'
+	    	'cm_losstime' => 'SUM(CASE WHEN category = \'CM\' THEN IFNULL(ROUND( losstime / mp), 0) ELSE 0 END)',
+	    	'other_losstime' => 'SUM(CASE WHEN category != \'CM\' THEN IFNULL(ROUND( losstime / mp), 0) ELSE 0 END)'
 	    ])
 	    ->where([
 	    	'line' => $line,
@@ -173,11 +174,11 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	$proddate = (strtotime($value['proddate'] . " +7 hours") * 1000);
 	    	$cm_losstime[] = [
 	    		'x' => $proddate,
-	    		'y' => (float)$value['cm_losstime'],
+	    		'y' => $value['cm_losstime'] == 0 ? null : (float)$value['cm_losstime'],
 	    	];
 	    	$other_losstime[] = [
 	    		'x' => $proddate,
-	    		'y' => (float)$value['other_losstime'],
+	    		'y' => $value['other_losstime'] == 0 ? null : (float)$value['other_losstime'],
 	    	];
 	    }
 
@@ -200,22 +201,25 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	$proddate = (strtotime($value['proddate'] . " +7 hours") * 1000);
 	    	$working_time_arr[] = [
 	    		'x' => $proddate,
-	    		'y' => (float)round($value['wrk_time'], 2),
+	    		'y' => (float)round($value['wrk_time']),
 	    	];
 	    }
 
 	    $wtlt_arr = [
 	    	[
 	    		'name' => 'CM Loss Time',
-	    		'data' => $cm_losstime
+	    		'data' => $cm_losstime,
+	    		'color' => \Yii::$app->params['bg-blue']
 	    	],
 	    	[
 	    		'name' => 'Other Loss Time',
-	    		'data' => $other_losstime
+	    		'data' => $other_losstime,
+	    		'color' => \Yii::$app->params['bg-red']
 	    	],
 	    	[
 	    		'name' => 'Working Time',
-	    		'data' => $working_time_arr
+	    		'data' => $working_time_arr,
+	    		'color' => \Yii::$app->params['bg-green']
 	    	],
 	    ];
 
