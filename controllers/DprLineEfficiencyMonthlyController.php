@@ -164,6 +164,9 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    	'line' => $line,
 	    	'extract(year_month from proddate)' => $period
 	    ])
+	    ->andWhere(['<>', 'stopline', 'STOPLINE'])
+	    ->andWhere(['<>', 'category', 'CANCELED'])
+	    ->andWhere(['<>', 'category', 'CH'])
 	    ->groupBy('line, proddate')
 	    ->orderBy('proddate')
 	    ->asArray()
