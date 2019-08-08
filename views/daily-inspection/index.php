@@ -97,7 +97,7 @@ echo '</pre>';*/
                 ],
                 'yAxis' => [
                     'title' => [
-                        'text' => 'Completion'
+                        'text' => 'Total GMC'
                     ],
                     /*'plotLines' => [
                         [
@@ -114,7 +114,7 @@ echo '</pre>';*/
                     //'shared' => true,
                     //'crosshairs' => true,
                     'xDateFormat' => '%Y-%m-%d',
-                    'valueSuffix' => ' pcs',
+                    'valueSuffix' => ' GMC',
                 ],
                 'plotOptions' => [
                     /**/'series' => [

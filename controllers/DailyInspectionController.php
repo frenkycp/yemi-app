@@ -31,20 +31,33 @@ class DailyInspectionController extends Controller
 
 		$serno_input_data = SernoInput::find()
 		->select([
-			'proddate',
-			'total' => 'COUNT(pk)',
-			'total_check' => 'SUM(CASE WHEN qa_ok != \'\' OR qa_ng != \'\' THEN 1 ELSE 0 END)',
-			'total_no_check' => 'SUM(CASE WHEN qa_ok = \'\' AND qa_ng = \'\' THEN 1 ELSE 0 END)'
+			'proddate', 'gmc',
+			'total_no_check' => 'SUM(CASE WHEN qa_ok = \'\' THEN 1 ELSE 0 END)'
 		])
 		->where(['AND', ['>=', 'proddate', $model->from_date], ['<=', 'proddate', $model->to_date]])
-		->groupBy('proddate')
+		->groupBy('proddate, gmc')
+		->orderBy('proddate')
 		->asArray()
 		->all();
 
 		$tmp_data = [];
 		foreach ($serno_input_data as $key => $value) {
-			$proddate = (strtotime($value['proddate'] . " +7 hours") * 1000);
-			$tmp_data['open'][] = [
+
+			if (!isset($tmp_data[$value['proddate']]['open'])) {
+				$tmp_data[$value['proddate']]['open'] = 0;
+			}
+
+			if (!isset($tmp_data[$value['proddate']]['close'])) {
+				$tmp_data[$value['proddate']]['close'] = 0;
+			}
+
+			if ($value['total_no_check'] == 0) {
+				$tmp_data[$value['proddate']]['close']++;
+			} else {
+				$tmp_data[$value['proddate']]['open']++;
+			}
+
+			/*$tmp_data['open'][] = [
 				'x' => $proddate,
                 'y' => $value['total_no_check'] == 0 ? null : (int)$value['total_no_check'],
                 'url' => Url::to(['get-inspection-detail', 'proddate' => $value['proddate'], 'status' => 'qa_ok = \'\' AND qa_ng = \'\''])
@@ -53,18 +66,33 @@ class DailyInspectionController extends Controller
 				'x' => $proddate,
                 'y' => $value['total_check'] == 0 ? null : (int)$value['total_check'],
                 'url' => Url::to(['get-inspection-detail', 'proddate' => $value['proddate'], 'status' => 'qa_ok != \'\' OR qa_ng != \'\''])
+			];*/
+		}
+
+		$tmp_data2 = [];
+		foreach ($tmp_data as $key => $value) {
+			$proddate = (strtotime($key . " +7 hours") * 1000);
+			$tmp_data2['open'][] = [
+				'x' => $proddate,
+                'y' => $value['open'] == 0 ? null : (int)$value['open'],
+                'url' => Url::to(['get-inspection-detail', 'proddate' => $key, 'status' => 'qa_ok = \'\''])
+			];
+			$tmp_data2['close'][] = [
+				'x' => $proddate,
+                'y' => $value['close'] == 0 ? null : (int)$value['close'],
+                'url' => Url::to(['get-inspection-detail', 'proddate' => $key, 'status' => 'qa_ok != \'\''])
 			];
 		}
 
 		$data = [
 			[
 				'name' => 'OPEN',
-				'data' => $tmp_data['open'],
+				'data' => $tmp_data2['open'],
 				'color' => \Yii::$app->params['bg-red'],
 			],
 			[
 				'name' => 'CLOSE',
-				'data' => $tmp_data['close'],
+				'data' => $tmp_data2['close'],
 				'color' => \Yii::$app->params['bg-green'],
 			],
 		];
@@ -124,17 +152,21 @@ class DailyInspectionController extends Controller
 
 	    $remark .= '<table class="table table-bordered table-striped table-hover table-condensed">';
 	    $remark .= '<tr>
+	    	<th class="text-center">No.</th>
 	    	<th class="text-center">GMC</th>
 	    	<th>Description</th>
 	    	<th class="text-center">Qty</th>
 	    </tr>';
 
+	    $no = 1;
 	    foreach ($detail_arr as $value) {
     		$remark .= '<tr>
+    			<td class="text-center">' . $no . '</td>
     			<td class="text-center">' . $value['gmc'] . '</td>
     			<td>' . $gmc_desc_arr[$value['gmc']] . '</td>
 	    		<td class="text-center">' . $value['total'] . '</td>
 	    	</tr>';
+	    	$no++;
 	    }
 
 	    $remark .= '</table>';
