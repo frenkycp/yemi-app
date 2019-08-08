@@ -6,7 +6,7 @@ use app\models\DprLineEfficiencyView02;
 use app\models\DprGmcEffView;
 use app\models\SernoLosstime;
 use app\models\SernoInput;
-use app\models\HakAkses;
+use app\models\HakAksesPlus;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
@@ -25,8 +25,8 @@ class DprLineEfficiencyMonthlyController extends Controller
 	public function actionIndex()
 	{
 		date_default_timezone_set('Asia/Jakarta');
-		$line_arr = $this->getLineArr();
-		$line = $line_arr[0];
+		//$line_arr = $this->getLineArr();
+		$line = '1600';
 		$year = date('Y');
 		$month = date('m');
 		
@@ -45,8 +45,8 @@ class DprLineEfficiencyMonthlyController extends Controller
 
 		$period = $year . $month;
 
-		$line_dropdown = ArrayHelper::map($data_arr = HakAkses::find()
-		->where(['level_akses' => '4'])
+		$line_dropdown = ArrayHelper::map($data_arr = HakAksesPlus::find()
+		->where(['level_akses' => '1a'])->andWhere(['<>', 'hak_akses', 'MIS'])
 		->orderBy('hak_akses')
 		->all(), 'hak_akses', 'hak_akses');
 
@@ -59,10 +59,10 @@ class DprLineEfficiencyMonthlyController extends Controller
 	    ->asArray()
 	    ->all();
 
-	    $target_eff_arr = \Yii::$app->params['line_eff_target'];
+	    $target_eff_arr = HakAksesPlus::find()->where(['hak_akses' => $line])->andWhere(['<>', 'hak_akses', 'MIS'])->one();
 	    $target_eff = 100;
-	    if (isset($target_eff_arr[$line])) {
-	    	$target_eff = $target_eff_arr[$line];
+	    if ($target_eff_arr->hak_akses != null) {
+	    	$target_eff = $target_eff_arr->target_eff;
 	    }
 
 	    $losstime_arr = SernoLosstime::find()
@@ -241,22 +241,6 @@ class DprLineEfficiencyMonthlyController extends Controller
 			'max' => $max,
 			'working_time_losstime' => $wtlt_arr
 		]);
-	}
-
-	public function getLineArr()
-	{
-		$data_arr = HakAkses::find()
-		->where(['<>', 'hak_akses', 'MIS'])
-		->orderBy('hak_akses')
-		->all();
-
-		$return_arr = [];
-
-		foreach ($data_arr as $key => $value) {
-			$return_arr[] = $value->hak_akses;
-		}
-
-		return $return_arr;
 	}
 
 	public function actionGetLosstimeDetail($line, $proddate)
