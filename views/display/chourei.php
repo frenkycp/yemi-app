@@ -113,7 +113,7 @@ echo '</pre>';*/
         <div class="col-md-4">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">VMS SUMMARY</h3>
+                    <h3 class="panel-title">WIP COMPLETION DUE TO VMS DATE</h3>
                 </div>
                 <div class="panel-body no-padding">
                     <table class="table table-responsive table-bordered table-striped text-center" style="font-size: 1.1em;">
@@ -167,6 +167,15 @@ echo '</pre>';*/
     ?>
 </div>
 <hr/>
+<div style="display: none;" class="row">
+    <div class="col-md-12">
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+                <h3 class="panel-title">INSPECTION SUMMARY</h3>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="row" style="display: none;">
     <div class="col-md-4">
         <div class="panel panel-primary">
