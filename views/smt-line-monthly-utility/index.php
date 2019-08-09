@@ -63,21 +63,19 @@ echo '</pre>';*/
         ]);?>
     </div>
     <div class="col-md-2">
-        <?= Html::label('Location'); ?>
-        <?= Html::dropDownList('loc', $loc, $loc_dropdown, [
+        <?= $form->field($model, 'loc')->dropDownList($loc_dropdown, [
             'class' => 'form-control',
             'onchange'=>'this.form.submit()'
-        ]); ?>
+        ])->label('Location'); ?>
     </div>
     <div class="col-md-2">
-        <?= Html::label('Data Type'); ?>
-        <?= Html::dropDownList('type', $type, [
+        <?= $form->field($model, 'type')->dropDownList([
             1 => 'Line 1 V.S Line 2',
             2 => 'Total',
         ], [
             'class' => 'form-control',
             'onchange'=>'this.form.submit()'
-        ]); ?>
+        ])->label('Data Type'); ?>
     </div>
 </div>
 

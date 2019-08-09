@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WipHdrDtr extends BaseWipHdrDtr
 {
-    public $summary_qty, $complete_qty;
+    public $summary_qty, $complete_qty, $plan_total, $output_total, $balance_total;
 
     public function behaviors()
     {

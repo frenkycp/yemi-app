@@ -39,12 +39,136 @@ $this->registerCss("
 //$this->registerCssFile('@web/adminty_assets/css/component.css');
 //$this->registerCssFile('@web/adminty_assets/css/style.css');
 /*echo '<pre>';
-print_r($shipping_data);
+print_r($vms_data);
 echo '</pre>';*/
 
 ?>
 <div class="row">
-    <div class="col-md-6">
+    <?php
+    foreach ($cal_arr as $key => $value) {
+        $tmp_shipping_data = $shipping_data[$value];
+        ?>
+        <div class="col-md-4">
+            <div class="text-center">
+                <span style="color: white; font-size: 20px;"><?= $value; ?></span>
+            </div>
+            
+            <hr/>
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <h3 class="panel-title">SHIPPING SUMMARY</h3>
+                </div>
+                <div class="panel-body no-padding">
+                    <table class="table table-responsive table-bordered table-striped text-center" style="font-size: 1.1em;">
+                        <thead>
+                            <tr>
+                                <!--<th style="vertical-align: middle;">Shipping Date</th>-->
+                                <th style="vertical-align: middle;">Plan</th>
+                                <th style="vertical-align: middle;">Actual</th>
+                                <th style="vertical-align: middle;">Min.</th>
+                                <th style="vertical-align: middle;">Percentage</th>
+                                <th style="vertical-align: middle;">Outstanding Model<br/>(Top 3)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!--<td style="vertical-align: middle;"><?= ''; //date('j M\' Y', strtotime($value)); ?></td>-->
+                                <td style="vertical-align: middle;"><?= number_format($tmp_shipping_data['plan']); ?></td>
+                                <td style="vertical-align: middle;"><?= number_format($tmp_shipping_data['actual']); ?></td>
+                                <td style="vertical-align: middle;"><?= number_format($tmp_shipping_data['balance']); ?></td>
+                                <td style="vertical-align: middle;"><?= $tmp_shipping_data['percentage'] . '%'; ?></td>
+                                <td style="vertical-align: middle;">
+                                    <?php
+                                    if (isset($tmp_shipping_data['gmc_balance'])) {
+                                        echo '<ul class="text-left">';
+                                        foreach ($tmp_shipping_data['gmc_balance'] as $gmc_number => $balance) {
+                                            echo '<li>';
+                                            echo $gmc_number;
+                                            echo ' <i class="fa fa-fw fa-long-arrow-right"></i> <span class="text-red"> [' . number_format($balance) . ']</span>';
+                                            echo '</li>';
+                                        }
+                                        echo '</ul>';
+                                    } else {
+                                        echo "-";
+                                    }
+                                    
+                                    ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            
+
+        </div>
+    <?php }
+    ?>
+</div>
+<div class="row">
+    <?php
+    foreach ($cal_arr as $key => $value) {
+        ?>
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">VMS SUMMARY</h3>
+                </div>
+                <div class="panel-body no-padding">
+                    <table class="table table-responsive table-bordered table-striped text-center" style="font-size: 1.1em;">
+                        <thead>
+                            <tr>
+                                <th style="vertical-align: middle;">Location</th>
+                                <th style="vertical-align: middle;">Plan</th>
+                                <th style="vertical-align: middle;">Actual</th>
+                                <th style="vertical-align: middle;">Min.</th>
+                                <th style="vertical-align: middle;">Percentage</th>
+                                <th style="vertical-align: middle;">Outstanding Model<br/>(Top 3)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($vms_data as $child_analyst_desc => $vms_detail) {
+                                ?>
+                                <tr>
+                                    <td style="vertical-align: middle;"><?= $child_analyst_desc; ?></td>
+                                    <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['plan']); ?></td>
+                                    <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['actual']); ?></td>
+                                    <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['balance']); ?></td>
+                                    <td style="vertical-align: middle;"><?= $vms_detail[$value]['percentage'] . '%'; ?></td>
+                                    <td style="vertical-align: middle;">
+                                        <?php
+                                        if (isset($vms_detail[$value]['gmc_balance'])) {
+                                            echo '<ul class="text-left">';
+                                            foreach ($vms_detail[$value]['gmc_balance'] as $gmc_number => $balance) {
+                                                echo '<li>';
+                                                echo $gmc_number;
+                                                echo ' <i class="fa fa-fw fa-long-arrow-right"></i> <span class="text-red"> [' . number_format($balance) . ']</span>';
+                                                echo '</li>';
+                                            }
+                                            echo '</ul>';
+                                        } else {
+                                            echo "-";
+                                        }
+                                        
+                                        ?>
+                                    </td>
+                                </tr>
+                            <?php }
+                            ?>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <?php }
+    ?>
+</div>
+<hr/>
+<div class="row" style="display: none;">
+    <div class="col-md-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">SHIPPING SUMMARY</h3>
@@ -53,12 +177,12 @@ echo '</pre>';*/
                 <table class="table table-responsive table-bordered table-striped text-center" style="font-size: 1.2em;">
                     <thead>
                         <tr>
-                            <th>Shipping Date</th>
-                            <th>Plan</th>
-                            <th>Actual</th>
-                            <th>Balance</th>
-                            <th>Percentage</th>
-                            <th>Outstanding Model (Top 3)</th>
+                            <th style="vertical-align: middle;">Shipping Date</th>
+                            <th style="vertical-align: middle;">Plan</th>
+                            <th style="vertical-align: middle;">Actual</th>
+                            <th style="vertical-align: middle;">Min.</th>
+                            <th style="vertical-align: middle;">Percentage</th>
+                            <th style="vertical-align: middle;">Outstanding Model<br/>(Top 3)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,7 +200,6 @@ echo '</pre>';*/
                                     if (isset($value['gmc_balance'])) {
                                         echo '<ul class="text-left">';
                                         foreach ($value['gmc_balance'] as $gmc_number => $balance) {
-                                            //echo $model_name[$gmc_number];
                                             echo '<li>';
                                             echo $gmc_number;
                                             echo ' <i class="fa fa-fw fa-long-arrow-right"></i> <span class="text-red"> [' . $balance . ']</span>';
@@ -95,5 +218,9 @@ echo '</pre>';*/
             </div>
         </div>
     </div>
-    <div class="col-md-6"></div>
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            
+        </div>
+    </div>
 </div>

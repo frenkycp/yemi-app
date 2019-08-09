@@ -32,9 +32,10 @@ class DailyInspectionController extends Controller
 		$serno_input_data = SernoInput::find()
 		->select([
 			'proddate', 'gmc',
-			'total_no_check' => 'SUM(CASE WHEN qa_ok = \'\' THEN 1 ELSE 0 END)'
+			'total_no_check' => 'SUM(CASE WHEN qa_ok = \'\' AND qa_ng = \'\' THEN 1 ELSE 0 END)'
 		])
 		->where(['AND', ['>=', 'proddate', $model->from_date], ['<=', 'proddate', $model->to_date]])
+		->andWhere(['<>', 'flo', 0])
 		->groupBy('proddate, gmc')
 		->orderBy('proddate')
 		->asArray()
@@ -75,12 +76,12 @@ class DailyInspectionController extends Controller
 			$tmp_data2['open'][] = [
 				'x' => $proddate,
                 'y' => $value['open'] == 0 ? null : (int)$value['open'],
-                'url' => Url::to(['get-inspection-detail', 'proddate' => $key, 'status' => 'qa_ok = \'\''])
+                'url' => Url::to(['get-inspection-detail', 'proddate' => $key, 'status' => 'qa_ok = \'\' AND qa_ng = \'\''])
 			];
 			$tmp_data2['close'][] = [
 				'x' => $proddate,
                 'y' => $value['close'] == 0 ? null : (int)$value['close'],
-                'url' => Url::to(['get-inspection-detail', 'proddate' => $key, 'status' => 'qa_ok != \'\''])
+                'url' => Url::to(['get-inspection-detail', 'proddate' => $key, 'status' => 'qa_ok != \'\' OR qa_ng != \'\''])
 			];
 		}
 
@@ -114,6 +115,7 @@ class DailyInspectionController extends Controller
 			'proddate' => $proddate
 		])
 		->andWhere($status)
+		->andWhere(['<>', 'flo', 0])
 		->groupBy('gmc')
 		->orderBy('COUNT(pk) DESC')
 		->asArray()

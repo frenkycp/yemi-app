@@ -63,6 +63,7 @@ use app\models\MasalahPcb;
 use app\models\GojekOrderTbl;
 use app\models\MachineIotOutput;
 use app\models\SernoCalendar;
+use app\models\WipHdrDtr;
 
 class DisplayController extends Controller
 {
@@ -80,9 +81,10 @@ class DisplayController extends Controller
         ->orderBy('etd DESC')
         ->one();
 
-        $serno_calendar = SernoCalendar::find()
+        $serno_calendar = SernoOutput::find()
         ->select('etd')
         ->where(['>=', 'etd', $tmp_yesterday->etd])
+        ->groupBy('etd')
         ->orderBy('etd')
         ->limit(3)
         ->all();
@@ -142,10 +144,56 @@ class DisplayController extends Controller
 
         }
 
+        //vms
+        $wip_hdr_dtr = WipHdrDtr::find()
+        ->select([
+            'source_date', 'child_analyst', 'child_analyst_desc', 'model_group',
+            'plan_total' => 'SUM(act_qty)',
+            'output_total' => 'SUM(CASE WHEN stage IN (\'03-COMPLETED\', \'04-HAND OVER\') THEN act_qty ELSE 0 END)',
+            'balance_total' => 'SUM(CASE WHEN stage IN (\'00-ORDER\', \'01-CREATED\', \'02-STARTED\') THEN -act_qty ELSE 0 END)'
+        ])
+        ->where([
+            'source_date' => $cal_arr,
+            'child_analyst' => ['WP01', 'WW02']
+        ])
+        ->andWhere('stage IS NOT NULL')
+        ->groupBy('source_date, child_analyst, child_analyst_desc, model_group')
+        ->orderBy('source_date, child_analyst_desc, balance_total')
+        ->asArray()
+        ->all();
+
+        $tmp_vms_data = [];
+        foreach ($wip_hdr_dtr as $key => $value) {
+            $source_date = date('Y-m-d', strtotime($value['source_date']));
+            $tmp_vms_data[$value['child_analyst_desc']][$source_date]['plan'] += $value[plan_total];
+            $tmp_vms_data[$value['child_analyst_desc']][$source_date]['actual'] += $value[output_total];
+            $tmp_vms_data[$value['child_analyst_desc']][$source_date]['balance'] += $value[balance_total];
+
+            if ($value['balance_total'] < 0) {
+                $tmp_vms_data[$value['child_analyst_desc']][$source_date]['gmc_balance'][$value['model_group']] = $value['balance_total'];
+            }
+        }
+
+        foreach ($tmp_vms_data as $child_analyst_desc => $summary_arr) {
+            foreach ($summary_arr as $source_date => $value) {
+                $tmp_pct = 0;
+                $plan = $value['plan'];
+                $actual = $value['actual'];
+                if ($plan > 0) {
+                    $tmp_pct = round(($actual / $plan) * 100, 2);
+                }
+                $tmp_vms_data[$child_analyst_desc][$source_date]['percentage'] = $tmp_pct;
+
+                if (isset($tmp_vms_data[$child_analyst_desc][$source_date]['gmc_balance'])) {
+                    $tmp_vms_data[$child_analyst_desc][$source_date]['gmc_balance'] = array_slice($tmp_vms_data[$child_analyst_desc][$source_date]['gmc_balance'], 0, 3);
+                }
+            }
+        }
+
         return $this->render('chourei', [
             'shipping_data' => $tmp_shipping_arr,
             'cal_arr' => $cal_arr,
-            'model_name' => $model_name,
+            'vms_data' => $tmp_vms_data,
         ]);
     }
 
