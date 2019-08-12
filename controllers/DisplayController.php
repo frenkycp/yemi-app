@@ -64,9 +64,84 @@ use app\models\GojekOrderTbl;
 use app\models\MachineIotOutput;
 use app\models\SernoCalendar;
 use app\models\WipHdrDtr;
+use app\models\MeetingEvent;
+use app\models\MrbsRoom;
 
 class DisplayController extends Controller
 {
+    public function actionTodaysMeetingData($room_id)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $today = date('Y-m-d');
+        $meeting_content = '<span style="font-size: 4em; color: rgba(255, 235, 59, 1)">NO MEETING TODAY</span>';
+        $room_info = MrbsRoom::find()
+        ->where(['id' => (int)$room_id])
+        ->one();
+
+        $room_name = strtoupper($room_info->room_name);
+        if ($room_id == 1 || $room_id == 6) {
+            $room_name = strtoupper($room_info->room_name . ' ROOM');
+        }
+
+        $tmp_data = MeetingEvent::find()
+        ->where([
+            'room_id' => $room_id,
+            'tgl_start' => $today
+        ])
+        ->orderBy('jam_start')
+        ->all();
+
+        if (count($tmp_data) > 0) {
+            $meeting_content = '<table class="table" style="font-size: 3.5em;">';
+            $count = 1;
+            foreach ($tmp_data as $key => $value) {
+                if ($jam_end < date('H:i:s')) {
+                    $font_color = 'rgba(255, 235, 59, 0.3)';
+                } else {
+                    $font_color = 'rgba(255, 235, 59, 1)';
+                }
+                $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1);">
+                <td style="border-top: 0px; width: 350px;">' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
+                '</td>
+                <td style="border-top: 0px;">' . $value->name . '</td></tr>';
+            }
+            $meeting_content .= '</table>';
+        }
+        
+        $data = [
+            'room_name' => $room_name,
+            'today' => date('d F Y'),
+            'meeting_content' => $meeting_content
+        ];
+        return $data;
+    }
+    public function actionTodaysMeeting()
+    {
+        $this->layout = 'clean';
+        $today = date('Y-m-d');
+        $data = [];
+        $room_name = '';
+
+        if (isset($_GET['room_id']) && $_GET['room_id'] != null) {
+            $room_info = MrbsRoom::find()
+            ->where(['id' => (int)$_GET['room_id']])
+            ->one();
+
+            $tmp_data = MeetingEvent::find()
+            ->where([
+                'room_id' => $_GET['room_id'],
+                'tgl_start' => $today
+            ])
+            ->all();
+            //echo $_GET['room_id'];
+        }
+        
+        return $this->render('todays-meeting', [
+            'data' => $tmp_data,
+            'room_info' => $room_info,
+        ]);
+    }
+
     public function actionChourei()
     {
         $this->layout = 'clean';
