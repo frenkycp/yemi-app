@@ -71,21 +71,20 @@ class DisplayController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        //$yesterday = date('Y-m-d', strtotime('-1 day'));
         $today = date('Y-m-d');
-        $tomorrow = date('Y-m-d', strtotime('+1 day'));
+        //$tomorrow = date('Y-m-d', strtotime('+1 day'));
 
         $tmp_yesterday = SernoCalendar::find()
         ->select('etd')
         ->where(['<', 'etd', $today])
         ->orderBy('etd DESC')
         ->one();
+        //echo $tmp_yesterday->etd;
 
-        $serno_calendar = SernoOutput::find()
+        $serno_calendar = SernoCalendar::find()
         ->select('etd')
         ->where(['>=', 'etd', $tmp_yesterday->etd])
-        ->groupBy('etd')
-        ->orderBy('etd')
         ->limit(3)
         ->all();
 

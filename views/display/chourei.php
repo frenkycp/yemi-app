@@ -10,8 +10,8 @@ use yii\bootstrap\ActiveForm;
 $this->title = [
     //'page_title' => 'Machine Utility Rank (Daily) <span class="japanesse text-green"></span>',
     'page_title' => null,
-    'tab_title' => 'Machine Utility Rank (Last Day)',
-    'breadcrumbs_title' => 'Machine Utility Rank (Last Day)'
+    'tab_title' => 'Morning Chourei',
+    'breadcrumbs_title' => 'Morning Chourei'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -136,7 +136,7 @@ echo '</pre>';*/
                                     <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['plan']); ?></td>
                                     <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['actual']); ?></td>
                                     <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['balance']); ?></td>
-                                    <td style="vertical-align: middle;"><?= $vms_detail[$value]['percentage'] . '%'; ?></td>
+                                    <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['percentage']) . '%'; ?></td>
                                     <td style="vertical-align: middle;">
                                         <?php
                                         if (isset($vms_detail[$value]['gmc_balance'])) {
