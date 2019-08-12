@@ -57,7 +57,7 @@ $columns = [
                     'data-pjax' => '0',
                 ];
                 $karyawan = app\models\Karyawan::find()->where(['NIK' => \Yii::$app->user->identity->username])->one();
-                if ($karyawan->DEPARTEMEN == $model->CC_GROUP) {
+                if (strtoupper($karyawan->DEPARTEMEN) == strtoupper($model->CC_GROUP)) {
                     return Html::a('<i class="fa fa-fw fa-edit"></i>', $url, $options);
                 } else {
                     return '<i class="fa fa-fw fa-edit disabled-link"></i>';
@@ -99,7 +99,7 @@ $columns = [
                     'class' => 'showModalButton'
                 ];
                 $karyawan = app\models\Karyawan::find()->where(['NIK' => \Yii::$app->user->identity->username])->one();
-                if ($model->status == 3 && $karyawan->DEPARTEMEN == $model->CC_GROUP) {
+                if ($model->status == 3 && strtoupper($karyawan->DEPARTEMEN) == strtoupper($model->CC_GROUP)) {
                     return Html::a('<i class="fa fa-fw fa-commenting"></i>', '#', $options);
                 } else {
                     return '<i class="fa fa-fw fa-commenting disabled-link"></i>';
