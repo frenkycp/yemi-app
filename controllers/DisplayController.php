@@ -73,7 +73,7 @@ class DisplayController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $today = date('Y-m-d');
-        $meeting_content = '<span style="font-size: 4em; color: rgba(255, 235, 59, 1)">NO MEETING TODAY</span>';
+        $meeting_content = '<span style="font-size: 8em; color: rgba(255, 235, 59, 1)">NO MEETING TODAY</span>';
         $room_info = MrbsRoom::find()
         ->where(['id' => (int)$room_id])
         ->one();
@@ -92,7 +92,7 @@ class DisplayController extends Controller
         ->all();
 
         if (count($tmp_data) > 0) {
-            $meeting_content = '<table class="table" style="font-size: 3.5em;">';
+            $meeting_content = '<table class="table" style="font-size: 6em;">';
             $count = 1;
             foreach ($tmp_data as $key => $value) {
                 if ($jam_end < date('H:i:s')) {
@@ -101,7 +101,7 @@ class DisplayController extends Controller
                     $font_color = 'rgba(255, 235, 59, 1)';
                 }
                 $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1);">
-                <td style="border-top: 0px; width: 350px;">' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
+                <td style="border-top: 0px; width: 550px;">' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
                 '</td>
                 <td style="border-top: 0px;">' . $value->name . '</td></tr>';
             }
