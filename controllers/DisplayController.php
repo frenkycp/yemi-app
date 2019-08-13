@@ -72,8 +72,9 @@ class DisplayController extends Controller
     public function actionTodaysMeetingData($room_id)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
-        $meeting_content = '<span style="font-size: 8em; color: rgba(255, 235, 59, 1)">NO MEETING TODAY</span>';
+        $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO MEETING TODAY</span>';
         $room_info = MrbsRoom::find()
         ->where(['id' => (int)$room_id])
         ->one();
@@ -92,18 +93,25 @@ class DisplayController extends Controller
         ->all();
 
         if (count($tmp_data) > 0) {
-            $meeting_content = '<table class="table" style="font-size: 6em;">';
+            $meeting_content = '<table class="table" cellspacing="0" style="">';
             $count = 1;
             foreach ($tmp_data as $key => $value) {
-                if ($jam_end < date('H:i:s')) {
+                if ($value->jam_end < date('H:i:s')) {
                     $font_color = 'rgba(255, 235, 59, 0.3)';
+                    $opacity = 0.3;
                 } else {
                     $font_color = 'rgba(255, 235, 59, 1)';
+                    $opacity = 1;
                 }
-                $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1);">
-                <td style="border-top: 0px; width: 550px;">' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
-                '</td>
-                <td style="border-top: 0px;">' . $value->name . '</td></tr>';
+
+                $background_color = 'rgba(255, 255, 255, 0)';
+                if (date('H:i:s') > $value->jam_start && date('H:i:s') < $value->jam_end) {
+                    $background_color = 'rgba(0, 255, 255, 0.2)';
+                }
+                $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . '; border: 1px solid gray;">
+                <td style="border-top: 0px; width: 550px; color: rgba(59, 255, 248, 1); font-size: 6em; vertical-align: middle; text-align: right; padding-right: 50px;">(' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
+                ')</td>
+                <td style="border-top: 0px; font-size: 8em;">' . strtoupper($value->name) . '</td></tr>';
             }
             $meeting_content .= '</table>';
         }

@@ -29,15 +29,14 @@ $this->registerCss("
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     //body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #33383D;}
+    body, .content-wrapper {background-color: #000;}
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .content {padding-top: 0px;}
-    .table {border: 0px;}
-    #no-meeting {font-size:70px; color: #ffeb3b;}
-    tr:nth-child(even) {background-color: rgba(255, 255, 255, 0.2);}
-    tr:nth-child(odd) {background-color: rgba(255, 255, 255, 0.1);}
+    .table tr {border-collapse:separate; border-spacing:0 5px;}
+    //tr:nth-child(even) {background-color: rgba(255, 255, 255, 0.15);}
+    //tr:nth-child(odd) {background-color: rgba(255, 255, 255, 0.1);}
 ");
 
 $this->registerJs("
@@ -51,7 +50,7 @@ $this->registerJs("
                 $('#meeting-content').html(data.meeting_content);
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 60000);
+                setTimeout(function(){update_data();}, 300000);
             }
         });
     }
