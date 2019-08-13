@@ -106,7 +106,7 @@ class DisplayController extends Controller
 
                 $background_color = 'rgba(181, 181, 181, 0)';
                 if (date('H:i:s') > $value->jam_start && date('H:i:s') < $value->jam_end) {
-                    $background_color = 'rgba(181, 181, 181, 0.3)';
+                    $background_color = 'rgba(181, 181, 181, 0.2)';
                 }
                 $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
                 <td style="border-top: 0px; width: 550px; color: rgba(59, 255, 248, 1); font-size: 5.3em; text-align: right; padding-right: 50px; padding-top: 20px; letter-spacing: 3px;">(' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
