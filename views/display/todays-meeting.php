@@ -68,7 +68,7 @@ echo '</pre>';*/
 
 ?>
 
-<div class="row" style="background-color: #553e7d; color: white; font-size: 7em; border-top: 1px solid white; border-bottom: 1px solid white;">
+<div class="row" style="background-color: #553e7d; color: white; font-size: 7em; border-top: 1px solid white; border-bottom: 1px solid white; letter-spacing: 3px;">
     <div class="col-md-12">
         <span id="room-name">
             <?php
@@ -81,7 +81,7 @@ echo '</pre>';*/
         </span>
 
         <span id="todays-date" class="pull-right">
-            <?= date('d F Y'); ?>
+            <?= strtoupper(date('d M\' Y')); ?>
         </span>
     </div>
 </div>

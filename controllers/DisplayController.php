@@ -104,21 +104,21 @@ class DisplayController extends Controller
                     $opacity = 1;
                 }
 
-                $background_color = 'rgba(255, 255, 255, 0)';
+                $background_color = 'rgba(181, 181, 181, 0)';
                 if (date('H:i:s') > $value->jam_start && date('H:i:s') < $value->jam_end) {
-                    $background_color = 'rgba(0, 255, 255, 0.2)';
+                    $background_color = 'rgba(181, 181, 181, 0.3)';
                 }
-                $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . '; border: 1px solid gray;">
-                <td style="border-top: 0px; width: 550px; color: rgba(59, 255, 248, 1); font-size: 6em; vertical-align: middle; text-align: right; padding-right: 50px;">(' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
+                $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
+                <td style="border-top: 0px; width: 550px; color: rgba(59, 255, 248, 1); font-size: 5.3em; text-align: right; padding-right: 50px; padding-top: 20px; letter-spacing: 3px;">(' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
                 ')</td>
-                <td style="border-top: 0px; font-size: 8em;">' . strtoupper($value->name) . '</td></tr>';
+                <td style="border-top: 0px; font-size: 7em;  letter-spacing: 2px;">' . strtoupper($value->name) . '</td></tr>';
             }
             $meeting_content .= '</table>';
         }
         
         $data = [
             'room_name' => $room_name,
-            'today' => date('d F Y'),
+            'today' => strtoupper(date('d M\' Y')),
             'meeting_content' => $meeting_content
         ];
         return $data;
