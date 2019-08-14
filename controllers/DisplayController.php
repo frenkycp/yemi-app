@@ -101,15 +101,15 @@ class DisplayController extends Controller
                     $opacity = 0.3;
                 } else {
                     $font_color = 'rgba(255, 235, 59, 1)';
-                    $opacity = 1;
+                    $opacity = 0.9;
                 }
 
-                $background_color = 'rgba(181, 181, 181, 0)';
+                $background_color = 'rgba(255, 255, 255, 0)';
                 if (date('H:i:s') > $value->jam_start && date('H:i:s') < $value->jam_end) {
-                    $background_color = 'rgba(181, 181, 181, 0.2)';
+                    $background_color = 'rgba(255, 255, 255, 0.25)';
                 }
                 $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
-                <td style="border-top: 0px; width: 550px; color: rgba(59, 255, 248, 1); font-size: 5.3em; text-align: right; padding-right: 50px; padding-top: 20px; letter-spacing: 3px;">(' . substr($value->jam_start, 0, 5) . ' - ' . substr($value->jam_end, 0, 5) .
+                <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 20px 0px 0px 20px; letter-spacing: 2px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .
                 ')</td>
                 <td style="border-top: 0px; font-size: 7em;  letter-spacing: 2px;">' . strtoupper($value->name) . '</td></tr>';
             }
@@ -367,7 +367,7 @@ class DisplayController extends Controller
                         <div class="widget-user-image">
                             ' . $profpic . '
                         </div>
-                        <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . ' <span style="font-size: 0.9em;">[' . $value['GOJEK_ID'] . ']</span>' . $txt_new_order . '</h3>
+                        <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . ' <span style="position: absolute; top: 10px; right: 10px;">[' . $value['GOJEK_ID'] . ']</span>' . $txt_new_order . '</h3>
                         <h5 class="widget-user-desc">' . $text_remark . '</h5>
                     </div>
                 </div>

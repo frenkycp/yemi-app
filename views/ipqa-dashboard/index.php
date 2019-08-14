@@ -43,7 +43,9 @@ echo '</pre>';*/
     <div class="box-header ui-sortable-handle">
         <div class="box-title"> </div>
         <div class="pull-right box-tools">
-            <?= Html::a('VIEW ALL DATA', Url::to('@web/ipqa-patrol-tbl/index'), ['class' => 'btn btn-success btn-sm', 'target' => '_blank']); ?>
+            <?= Html::a('VIEW ALL DATA', Url::to('@web/ipqa-patrol-tbl/index'), ['class' => 'btn btn-primary btn-sm', 'target' => '_blank']); ?>
+            &nbsp;&nbsp;
+            <?= Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['ipqa-patrol-tbl/create'], ['class' => 'btn btn-success btn-sm']); ?>
         </div>
     </div>
     <div class="box-body">

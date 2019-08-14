@@ -33,6 +33,7 @@ $this->registerCss("
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
+    h3, h5 {opacity: 0.9;}
 
     #progress-tbl{
         //border:1px solid #29B6F6;

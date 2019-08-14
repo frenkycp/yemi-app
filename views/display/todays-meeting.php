@@ -87,8 +87,8 @@ echo '</pre>';*/
 </div>
 <br/>
 <div class="row">
-    <div class="col-md-12">
+    
         <div id="meeting-content">
         </div>
-    </div>
+    
 </div>

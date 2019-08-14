@@ -76,7 +76,14 @@ $gridColumns = [
         'label' => 'Manpower',
         'hAlign' => 'center',
         'value' => function($model){
-            return Html::a($model->mp, ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
+            $total_mp = app\models\SernoMp::find()
+            ->where([
+                'tgl' => $model->proddate,
+                'line' => $model->line,
+                'status' => 0
+            ])
+            ->count();
+            return Html::a($total_mp, ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
         },
         'format' => 'raw',
         'mergeHeader' => true,
