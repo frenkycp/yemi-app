@@ -89,7 +89,7 @@ class DisplayController extends Controller
             'room_id' => $room_id,
             'tgl_start' => $today
         ])
-        ->orderBy('jam_start')
+        ->orderBy('jam_start DESC')
         ->all();
 
         if (count($tmp_data) > 0) {
