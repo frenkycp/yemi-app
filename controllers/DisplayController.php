@@ -74,7 +74,11 @@ class DisplayController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
-        $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO MEETING TODAY</span>';
+        if ($room_id == 9) {
+            $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO GUEST TODAY</span>';
+        } else {
+            $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO MEETING TODAY</span>';
+        }
         $room_info = MrbsRoom::find()
         ->where(['id' => (int)$room_id])
         ->one();
