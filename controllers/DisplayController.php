@@ -89,7 +89,7 @@ class DisplayController extends Controller
             'room_id' => $room_id,
             'tgl_start' => $today
         ])
-        ->orderBy('jam_start DESC')
+        ->orderBy('jam_start')
         ->all();
 
         if (count($tmp_data) > 0) {
@@ -109,7 +109,7 @@ class DisplayController extends Controller
                     $background_color = 'rgba(255, 255, 255, 0.25)';
                 }
                 $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
-                <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 20px 0px 0px 20px; letter-spacing: 2px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .
+                <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 12px 0px 0px 20px; letter-spacing: 2px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .
                 ')</td>
                 <td style="border-top: 0px; font-size: 7em;  letter-spacing: 2px;">' . strtoupper($value->name) . '</td></tr>';
             }
@@ -289,9 +289,46 @@ class DisplayController extends Controller
         return $minutes;
     }
 
+    public function isBreakTime($datetime)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $datetime = new \DateTime($datetime);
+
+        $break_time1 = new \DateTime(date('Y-m-d 09:20:00'));
+        $break_time1_end = new \DateTime(date('Y-m-d 09:30:00'));
+        $break_time2 = new \DateTime(date('Y-m-d 12:10:00'));
+        $break_time2_end = new \DateTime(date('Y-m-d 12:50:00'));
+        $break_time3 = new \DateTime(date('Y-m-d 14:20:00'));
+        $break_time3_end = new \DateTime(date('Y-m-d 14:30:00'));
+
+        if ($today_name == 'Fri') {
+            $break_time2 = new \DateTime(date('Y-m-d 12:00:00'));
+            $break_time2_end = new \DateTime(date('Y-m-d 13:10:00'));
+            $break_time3 = new \DateTime(date('Y-m-d 14:50:00'));
+            $break_time3_end = new \DateTime(date('Y-m-d 15:00:00'));
+        }
+
+        if ($datetime > $break_time1 && $datetime < $break_time1_end) {
+            return true;
+        }
+
+        if ($datetime > $break_time2 && $datetime < $break_time2_end) {
+            return true;
+        }
+
+        if ($datetime > $break_time3 && $datetime < $break_time3_end) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function actionGoSubDriverStatusData()
     {
         date_default_timezone_set('Asia/Jakarta');
+        $now = date('Y-m-d H:i:s');
+        //$now = '2019-08-14 09:25:00';
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $tmp_data = GojekTbl::find()->where(['SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->asArray()->all();
         $tmp_order = GojekOrderTbl::find()
@@ -344,6 +381,10 @@ class DisplayController extends Controller
                     $bg_class = ' bg-aqua';
                     $text_remark = 'NO INFORMATION';
                 }
+                if ($this->isBreakTime($now)) {
+                    $txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">Break Time!</span>';
+                }
+                //$txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">Break Time!</span>';
                 //$txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
             }
             

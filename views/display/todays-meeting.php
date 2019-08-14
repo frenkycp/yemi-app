@@ -35,6 +35,7 @@ $this->registerCss("
     .form-horizontal .control-label {padding-top: 0px;}
     .content {padding-top: 0px;}
     .table tr {border-collapse:separate; border-spacing:0 5px;}
+    .table > tbody > tr > td {padding: 0px;}
     //tr:nth-child(even) {background-color: rgba(255, 255, 255, 0.15);}
     //tr:nth-child(odd) {background-color: rgba(255, 255, 255, 0.1);}
 ");
