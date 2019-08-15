@@ -67,7 +67,6 @@ $this->registerJs("
 /*echo '<pre>';
 print_r($vms_data);
 echo '</pre>';*/
-
 ?>
 
 <div class="row" style="background-color: #553e7d; color: white; font-size: 7em; border-top: 1px solid white; border-bottom: 1px solid white; letter-spacing: 3px;">
@@ -90,7 +89,7 @@ echo '</pre>';*/
 <br/>
 <div class="row">
     
-        <div id="meeting-content">
+        <div id="meeting-content" style="font-family: 'MS PGothic', Osaka, Arial, sans-serif; text-transform: uppercase;">
         </div>
     
 </div>

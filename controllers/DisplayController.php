@@ -96,7 +96,7 @@ class DisplayController extends Controller
         ->orderBy('jam_start')
         ->all();
 
-        if (count($tmp_data) > 0) {
+        //if (count($tmp_data) > 0) {
             $meeting_content = '<table class="table" cellspacing="0" style="">';
             $count = 1;
             foreach ($tmp_data as $key => $value) {
@@ -113,12 +113,12 @@ class DisplayController extends Controller
                     $background_color = 'rgba(255, 255, 255, 0.25)';
                 }
                 $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
-                <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 12px 0px 0px 20px; letter-spacing: 2px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .
+                <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 6px 0px 0px 20px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .
                 ')</td>
-                <td style="border-top: 0px; font-size: 7em;  letter-spacing: 2px;">' . mb_convert_encoding(strtoupper($value->name), 'UTF-8') . '</td></tr>';
+                <td style="border-top: 0px; font-size: 6em;">' . $value->name . '</td></tr>';
             }
             $meeting_content .= '</table>';
-        }
+        //}
         
         $data = [
             'room_name' => $room_name,
