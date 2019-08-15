@@ -46,9 +46,10 @@ $this->registerJs("
             type: 'POST',
             url: '" . Url::to(['todays-meeting-data', 'room_id' => $_GET['room_id']]) . "',
             success: function(data){
-                $('#room-name').html(data.room_name);
-                $('#todays-date').html(data.today);
-                $('#meeting-content').html(data.meeting_content);
+                var tmp_data = JSON.parse(data);
+                $('#room-name').html(tmp_data.room_name);
+                $('#todays-date').html(tmp_data.today);
+                $('#meeting-content').html(tmp_data.meeting_content);
             },
             complete: function(){
                 setTimeout(function(){update_data();}, 300000);

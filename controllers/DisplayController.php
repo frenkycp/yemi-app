@@ -71,7 +71,7 @@ class DisplayController extends Controller
 {
     public function actionTodaysMeetingData($room_id)
     {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
         if ($room_id == 9) {
@@ -115,7 +115,7 @@ class DisplayController extends Controller
                 $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
                 <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 12px 0px 0px 20px; letter-spacing: 2px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .
                 ')</td>
-                <td style="border-top: 0px; font-size: 7em;  letter-spacing: 2px;">' . htmlspecialchars(strtoupper($value->name)) . '</td></tr>';
+                <td style="border-top: 0px; font-size: 7em;  letter-spacing: 2px;">' . mb_convert_encoding(strtoupper($value->name), 'UTF-8') . '</td></tr>';
             }
             $meeting_content .= '</table>';
         }
@@ -125,7 +125,7 @@ class DisplayController extends Controller
             'today' => strtoupper(date('d M\' Y')),
             'meeting_content' => $meeting_content
         ];
-        return $data;
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
     public function actionTodaysMeeting()
     {
