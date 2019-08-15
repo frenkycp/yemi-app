@@ -25,23 +25,24 @@ $this->registerCss("
     body, .content-wrapper {background-color: #33383D;}
 
     #clinic-tbl{
-        //border:1px solid #29B6F6;
+        border:1px solid #ddd;
         border-top: 0;
     }
     #clinic-tbl > thead > tr > th{
+        font-weight: normal;
         border:1px solid #8b8c8d;
         background-color: #858689;
         color: white;
-        font-size: 22px;
+        font-size: 1.7em;
         border-bottom: 7px solid #ddd;
         vertical-align: middle;
     }
     #clinic-tbl > tbody > tr > td{
-        //border:1px solid #29B6F6;
-        font-size: 16px;
-        background-color: #B3E5FC;
-        font-weight: 1000;
-        color: #555;
+        border:1px solid #ddd;
+        font-size: 1.5em;
+        background-color: #33383D;
+        //font-weight: 1000;
+        color: rgba(255, 235, 59, 1);
         vertical-align: middle;
     }
     .small-box .icon {top: 1px;}
@@ -202,7 +203,7 @@ echo '</pre>';*/
             if ($value->keluar != null) {
                 $keluar = date('H:i', strtotime($value->keluar));
             }
-            echo '<tr>
+            echo '<tr style="letter-spacing: 2px;">
                 <td class="text-center">' . $value->nik . '</td>
                 <td>' . $value->nama . '</td>
                 <td>' . $value->dept . '</td>
