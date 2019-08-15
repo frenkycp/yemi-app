@@ -96,7 +96,7 @@ class DisplayController extends Controller
         ->orderBy('jam_start')
         ->all();
 
-        //if (count($tmp_data) > 0) {
+        if (count($tmp_data) > 0) {
             $meeting_content = '<table class="table" cellspacing="0" style="">';
             $count = 1;
             foreach ($tmp_data as $key => $value) {
@@ -118,7 +118,7 @@ class DisplayController extends Controller
                 <td style="border-top: 0px; font-size: 6em;">' . $value->name . '</td></tr>';
             }
             $meeting_content .= '</table>';
-        //}
+        }
         
         $data = [
             'room_name' => $room_name,
