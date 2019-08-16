@@ -52,7 +52,7 @@ $this->registerJs("
                 $('#meeting-content').html(tmp_data.meeting_content);
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 300000);
+                setTimeout(function(){update_data();}, 3000);
             }
         });
     }
