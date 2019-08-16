@@ -112,10 +112,21 @@ class DisplayController extends Controller
                 if (date('H:i:s') > $value->jam_start && date('H:i:s') < $value->jam_end) {
                     $background_color = 'rgba(255, 255, 255, 0.25)';
                 }
-                $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
-                <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 6px 0px 0px 20px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .
-                ')</td>
-                <td style="border-top: 0px; font-size: 6em;">' . $value->name . '</td></tr>';
+                if ($room_id == 9) {
+                    $splitted_name = explode(',', $value->name);
+                    $new_list = '';
+                    foreach ($splitted_name as $key => $japanesse_name) {
+                        $new_list .= '<div class="col-md-6">» ' . $japanesse_name . '</div>';
+                    }
+                    $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
+                    <td style="border-top: 0px; font-size: 4em;">' . $new_list . '</td></tr>';
+                } else {
+                    $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
+                    <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 6px 0px 0px 20px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .
+                    ')</td>
+                    <td style="border-top: 0px; font-size: 6em;">' . $value->name . '</td></tr>';
+                }
+                
             }
             $meeting_content .= '</table>';
         }
