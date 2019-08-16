@@ -74,7 +74,7 @@ if (isset($current_data['lot_id'])) {
     $this->registerJs("$(function() {
        $('#btn-complete').click(function(e) {
          e.preventDefault();
-         $('#common-modal').modal('show');
+         //$('#common-modal').modal('show');
        });
     });");
 }
@@ -126,12 +126,17 @@ echo $data['name'];*/
                 </table>
             </div>
             <div class="box-footer text-right">
-                <?= Html::button('FINISH', [
+                <?= Html::a('FINISH', ['finish', 'mesin_id' => $mesin_id], [
+                            'class' => $btn_end_class,
+                            /*'data' => [
+                                'confirm' => 'Are you sure to start lot number ' . $value['lot_id'] . ' ?',
+                            ],*/
+                        ]); /*Html::button('FINISH', [
                     'id' => 'btn-complete',
                     'class' => $btn_end_class,
                     'title' => 'Finish Machine Process',
                     'value' => !isset($current_data['lot_id']) ? '#' : Url::to(['finish', 'mesin_id' => $mesin_id]),
-                ]); ?>
+                ]);*/ ?>
             </div>
         </div>
     </div>

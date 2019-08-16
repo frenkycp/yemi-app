@@ -24,6 +24,10 @@ use Yii;
  * @property integer $lama_proses
  * @property integer $man_power_qty
  * @property string $man_power_name
+ * @property string $start_by_id
+ * @property string $start_by_name
+ * @property string $end_by_id
+ * @property string $end_by_name
  * @property string $aliasModel
  */
 abstract class MachineIotOutput extends \yii\db\ActiveRecord
@@ -54,7 +58,7 @@ abstract class MachineIotOutput extends \yii\db\ActiveRecord
     {
         return [
             [['mesin_id'], 'required'],
-            [['mesin_id', 'mesin_description', 'kelompok', 'lot_number', 'gmc', 'gmc_desc', 'man_power_name'], 'string'],
+            [['mesin_id', 'mesin_description', 'kelompok', 'lot_number', 'gmc', 'gmc_desc', 'man_power_name', 'start_by_id', 'start_by_name', 'end_by_id', 'end_by_name'], 'string'],
             [['lot_qty'], 'number'],
             [['start_date', 'end_date', 'posting_shift'], 'safe'],
             [['shift', 'lama_proses', 'man_power_qty'], 'integer']
@@ -82,6 +86,10 @@ abstract class MachineIotOutput extends \yii\db\ActiveRecord
             'lama_proses' => 'Lama Proses',
             'man_power_qty' => 'Man Power Qty',
             'man_power_name' => 'Man Power Name',
+            'start_by_id' => 'Start By ID',
+            'start_by_name' => 'Start By Name',
+            'end_by_id' => 'End By ID',
+            'end_by_name' => 'End By Name',
         ];
     }
 
