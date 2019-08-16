@@ -118,7 +118,7 @@ class DisplayController extends Controller
                     foreach ($splitted_name as $key => $japanesse_name) {
                         $new_list .= '<div class="col-md-6">» ' . $japanesse_name . '</div>';
                     }
-                    $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
+                    $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); background-color: rgba(255, 255, 255, 0);">
                     <td style="border-top: 0px; font-size: 3.5em; font-family: \'Source Sans Pro\',\'Helvetica Neue\',Helvetica,Arial,sans-serif">' . $new_list . '</td></tr>';
                 } else {
                     $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
