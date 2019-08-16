@@ -46,6 +46,7 @@ use Yii;
  * @property string $deleted_by_name
  * @property string $reject_remark
  * @property string $reject_answer
+ * @property string $rank_category
  * @property string $aliasModel
  */
 abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
@@ -75,7 +76,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['case_no', 'period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name', 'deleted_by_id', 'deleted_by_name', 'reject_remark', 'reject_answer'], 'string'],
+            [['case_no', 'period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name', 'deleted_by_id', 'deleted_by_name', 'reject_remark', 'reject_answer', 'rank_category'], 'string'],
             [['event_date', 'due_date', 'input_datetime', 'reply_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
             [['status', 'flag'], 'integer']
         ];
@@ -124,6 +125,7 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             'deleted_by_name' => 'Deleted By Name',
             'reject_remark' => 'Reject Remark',
             'reject_answer' => 'Reject Answer',
+            'rank_category' => 'Rank Category',
         ];
     }
 
