@@ -2,7 +2,7 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use app\models\ServerMachineIotCurrent;
+use app\models\MachineIotCurrent;
 use app\models\WipEffTbl;
 use app\models\MachineIotOutput;
 use app\models\Karyawan;
@@ -33,7 +33,7 @@ class ServerMntMachineCurrentController extends Controller
 
         if (\Yii::$app->request->get('mesin_id') !== '') {
         	$mesin_id = \Yii::$app->request->get('mesin_id');
-        	$tmp_data = ServerMachineIotCurrent::find()
+        	$tmp_data = MachineIotCurrent::find()
         	->where([
         		'mesin_id' => $mesin_id
         	])
@@ -109,7 +109,7 @@ class ServerMntMachineCurrentController extends Controller
 		    	])
 		    	->one();
 
-		    	$current_data = ServerMachineIotCurrent::find()
+		    	$current_data = MachineIotCurrent::find()
 		    	->where([
 		    		'mesin_id' => $mesin_id
 		    	])
@@ -233,7 +233,7 @@ class ServerMntMachineCurrentController extends Controller
 		    	} else {
 		    		$next_process = $model->next_process_id;
 
-		    		$current_data = ServerMachineIotCurrent::find()
+		    		$current_data = MachineIotCurrent::find()
 			    	->where([
 			    		'mesin_id' => $mesin_id
 			    	])
