@@ -351,7 +351,7 @@ class DisplayController extends Controller
             'source' => 'SUB',
             'STAT' => 'O'
         ])
-        ->andWhere('daparture_date IS NULL')
+        //->andWhere('daparture_date IS NULL')
         ->asArray()
         ->all();
         $tmp_str = '';
@@ -359,9 +359,13 @@ class DisplayController extends Controller
         foreach ($tmp_data as $key => $value) {
             $get_new_order = false;
             $txt_new_order = '';
+            $current_job = 'No Job Order';
             foreach ($tmp_order as $key => $value_order) {
                 if ($value_order['GOJEK_ID'] == $value['GOJEK_ID']) {
-                    $get_new_order = true;
+                    if ($value_order['daparture_date'] == NULL) {
+                        $get_new_order = true;
+                    }
+                    $current_job = $value_order['item_desc'];
                 }
             }
 
@@ -418,14 +422,18 @@ class DisplayController extends Controller
             }
             
             $tmp_str .= '<div class="col-md-3">
-                <div class="box box-widget widget-user-2">
-                    <div class="widget-user-header' . $bg_class . '">
+                <div class="box box-widget widget-user-2' . $bg_class . '">
+                    <div class="widget-user-header">
                         <div class="widget-user-image">
                             ' . $profpic . '
                         </div>
                         <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . ' <span style="position: absolute; top: 10px; right: 10px;">[' . $value['GOJEK_ID'] . ']</span>' . $txt_new_order . '</h3>
                         <h5 class="widget-user-desc">' . $text_remark . '</h5>
                     </div>
+                    <div class="text-left" style="background: rgba(0,0,0,0.15); padding: 0px 5px;">
+                        <span>' . $current_job . '</span>
+                    </div>
+                    
                 </div>
             </div>';
         }

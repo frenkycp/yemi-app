@@ -65,7 +65,8 @@ class GoSubAssyController extends Controller
 	    		
 	    		$count_data = GojekOrderTbl::find()->where(['source' => 'SUB'])->count();
 	    		$count_data++;
-	    		$slip_id = 'SUB' . str_pad($count_data, 7, '0', STR_PAD_LEFT);
+	    		$slip_id = 'SUB';
+	    		$slip_id .= str_pad($count_data, 7, '0', STR_PAD_LEFT);
 
 	    		$new_record = new GojekOrderTbl();
 	    		$new_record->slip_id = $slip_id;
