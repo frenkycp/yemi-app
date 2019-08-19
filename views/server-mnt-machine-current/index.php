@@ -62,7 +62,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 10000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -105,16 +105,16 @@ echo $data['name'];*/
                     </thead>
                     <tbody>
                         <?php
-                        if (!isset($current_data['lot_id'])) {
+                        if (!isset($output_data['lot_number'])) {
                             $btn_end_class = 'btn btn-danger btn-block btn-lg disabled';
                             echo '<tr><td colspan=5 style="text-align: left;">Machine is idling ...</td></tr>';
                         } else {
                             $btn_end_class = 'showModalButton btn btn-danger btn-block btn-lg';
                             echo '<tr class="">
-                                <td class="text-center">' . $current_data['lot_id'] . '</td>
-                                <td class="text-center">' . $current_data['lot_qty'] . '</td>
-                                <td class="text-center">' . $current_data['gmc'] . '</td>
-                                <td style="text-align: left;">' . $current_data['gmc_desc'] . '</td>
+                                <td class="text-center">' . $output_data['lot_number'] . '</td>
+                                <td class="text-center">' . $output_data['lot_qty'] . '</td>
+                                <td class="text-center">' . $output_data['gmc'] . '</td>
+                                <td style="text-align: left;">' . $output_data['gmc_desc'] . '</td>
                                 <td style="text-align: left;">' . $output_data['man_power_name'] . '</td>
                             </tr>';
                         }
@@ -148,6 +148,7 @@ echo $data['name'];*/
         <tr>
             <th class="text-center">Action</th>
             <th class="text-center">Lot Number</th>
+            <th class="text-center">Plan Date</th>
             <th class="text-center">Part Number</th>
             <th>Part Name</th>
             <th class="text-center">Lot Qty</th>
@@ -165,17 +166,17 @@ echo $data['name'];*/
             <tr>
                 <td class="text-center">
                     <?php
-                    if (!isset($current_data['lot_id'])) {
-                        echo Html::a('START', ['start-machine', 'mesin_id' => $mesin_id, 'lot_id' => $value['lot_id']], [
-                            'class' => 'btn btn-success btn-block',
-                            'data' => [
-                                'confirm' => 'Are you sure to start lot number ' . $value['lot_id'] . ' ?',
-                            ],
+                    if ($value['plan_run'] == 'R') {
+                        echo Html::button('RUNNING', [
+                            'class' => 'btn btn-warning btn-block disabled'
                         ]);
                     } else {
-                        if ($current_data['lot_id'] == $value['lot_id']) {
-                            echo Html::button('RUNNING', [
-                                'class' => 'btn btn-warning btn-block disabled'
+                        if (!isset($output_data['lot_number'])) {
+                            echo Html::a('START', ['start-machine', 'mesin_id' => $mesin_id, 'lot_id' => $value['lot_id']], [
+                                'class' => 'btn btn-success btn-block',
+                                'data' => [
+                                    'confirm' => 'Are you sure to start lot number ' . $value['lot_id'] . ' ?',
+                                ],
                             ]);
                         } else {
                             echo Html::button('<strike>START</strike>', [
@@ -183,9 +184,11 @@ echo $data['name'];*/
                             ]);
                         }
                     }
+                    
                     ?>
                 </td>
                 <td class="text-center"><?= $value['lot_id']; ?></td>
+                <td class="text-center"><?= date('Y-m-d', strtotime($value['plan_date'])); ?></td>
                 <td class="text-center"><?= $value['child_all']; ?></td>
                 <td><?= $value['child_desc_all']; ?></td>
                 <td class="text-center"><?= (int)$value['qty_all']; ?></td>

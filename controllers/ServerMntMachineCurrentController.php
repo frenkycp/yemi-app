@@ -2,7 +2,7 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use app\models\MachineIotCurrent;
+use app\models\ServerMachineIotCurrent;
 use app\models\WipEffTbl;
 use app\models\MachineIotOutput;
 use app\models\Karyawan;
@@ -33,7 +33,7 @@ class ServerMntMachineCurrentController extends Controller
 
         if (\Yii::$app->request->get('mesin_id') !== '') {
         	$mesin_id = \Yii::$app->request->get('mesin_id');
-        	$tmp_data = MachineIotCurrent::find()
+        	$tmp_data = ServerMachineIotCurrent::find()
         	->where([
         		'mesin_id' => $mesin_id
         	])
@@ -109,7 +109,7 @@ class ServerMntMachineCurrentController extends Controller
 		    	])
 		    	->one();
 
-		    	$current_data = MachineIotCurrent::find()
+		    	$current_data = ServerMachineIotCurrent::find()
 		    	->where([
 		    		'mesin_id' => $mesin_id
 		    	])
@@ -142,7 +142,7 @@ class ServerMntMachineCurrentController extends Controller
 
 							try {
 							    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
-							    \Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been started ...');
+							    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been started ...');
 							} catch (Exception $ex) {
 								\Yii::$app->session->setFlash('danger', "Error : $ex");
 							}
@@ -233,7 +233,7 @@ class ServerMntMachineCurrentController extends Controller
 		    	} else {
 		    		$next_process = $model->next_process_id;
 
-		    		$current_data = MachineIotCurrent::find()
+		    		$current_data = ServerMachineIotCurrent::find()
 			    	->where([
 			    		'mesin_id' => $mesin_id
 			    	])
@@ -247,6 +247,7 @@ class ServerMntMachineCurrentController extends Controller
 			    	->one();
 			    	$lot_data->mesin_id = null;
 			    	$lot_data->mesin_description = null;
+			    	$lot_data->plan_run = 'E';
 
 			    	$current_data->lot_number = null;
 			    	$current_data->gmc = null;
@@ -255,7 +256,7 @@ class ServerMntMachineCurrentController extends Controller
 
 		    		if ($model->next_process_id == null) {
 		    			$lot_data->end_date = date('Y-m-d H:i:s');
-		    			$lot_data->plan_run = 'E';
+		    			
 		    			$lot_data->plan_stats = 'C';
 		    			$slip_id_arr = [
 		    				$lot_data->slip_id_01,
@@ -279,7 +280,7 @@ class ServerMntMachineCurrentController extends Controller
 
 								try {
 								    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
-								    \Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
+								    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
 								} catch (Exception $ex) {
 									\Yii::$app->session->setFlash('danger', "Error : $ex");
 								}
