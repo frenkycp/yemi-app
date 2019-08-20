@@ -96,11 +96,12 @@ echo $data['name'];*/
                 <table class="table table-responsive table-stripped" style="font-size: 24px;">
                     <thead>
                         <tr class="">
-                            <th class="text-center">Lot Number</th>
-                            <th class="text-center">Qty</th>
-                            <th class="text-center">GMC</th>
-                            <th>Description</th>
-                            <th>Man Power<?= ' (' . $output_data['man_power_qty'] . ')'; ?></th>
+                            <th class="text-center" style="vertical-align: middle;">Lot Number</th>
+                            <th class="text-center" style="vertical-align: middle;">Qty</th>
+                            <th class="text-center" style="vertical-align: middle;">GMC</th>
+                            <th style="vertical-align: middle;">Description</th>
+                            <th style="vertical-align: middle;">Man Power<?= ' (' . $output_data['man_power_qty'] . ')'; ?></th>
+                            <th width="150" class="text-center" style="vertical-align: middle;">Start Time</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -111,11 +112,12 @@ echo $data['name'];*/
                         } else {
                             $btn_end_class = 'showModalButton btn btn-danger btn-block btn-lg';
                             echo '<tr class="">
-                                <td class="text-center">' . $output_data['lot_number'] . '</td>
-                                <td class="text-center">' . $output_data['lot_qty'] . '</td>
-                                <td class="text-center">' . $output_data['gmc'] . '</td>
-                                <td style="text-align: left;">' . $output_data['gmc_desc'] . '</td>
-                                <td style="text-align: left;">' . $output_data['man_power_name'] . '</td>
+                                <td class="text-center" style="vertical-align: middle;">' . $output_data['lot_number'] . '</td>
+                                <td class="text-center" style="vertical-align: middle;">' . $output_data['lot_qty'] . '</td>
+                                <td class="text-center" style="vertical-align: middle;">' . $output_data['gmc'] . '</td>
+                                <td style="text-align: left; vertical-align: middle;">' . $output_data['gmc_desc'] . '</td>
+                                <td style="text-align: left; vertical-align: middle;">' . $output_data['man_power_name'] . '</td>
+                                <td class="text-center" style="vertical-align: middle;">' . date('Y-m-d H:i', strtotime($output_data['start_date'])) . '</td>
                             </tr>';
                         }
                         ?>

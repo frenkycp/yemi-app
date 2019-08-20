@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use app\models\GoSaTbl;
 use app\models\GojekOrderTbl;
 use app\models\GojekTbl;
+use app\models\GeneralFunction;
 
 class GoSubStartEndController extends Controller
 {
@@ -69,9 +70,15 @@ class GoSubStartEndController extends Controller
 			$update_model->ARRIVAL_KARYAWAN = $value->GOJEK_DESC;
 			$update_model->STAT = 'C';
 
-			$lt = $this->getMinutes($update_model->daparture_date, $now);
-			$update_model->LT = $minutes;
+			$lt = GeneralFunction::instance()->getWorkingTime($update_model->daparture_date, $now);
+			$update_model->LT = $lt;
+			$tmp_data = [
+				'START_TIME' => $update_model->daparture_date,
+				'END_TIME' => $now,
+				'WORKING_TIME' => $lt
+			];
 
+			return json_encode($tmp_data);
 			if (!$update_model->save()) {
 				return json_encode($update_model->errors);
 			}
@@ -94,13 +101,4 @@ class GoSubStartEndController extends Controller
 		return $this->redirect(Url::previous());
 	}
 
-	public function getMinutes($start, $end)
-	{
-		$start_date = new \DateTime($start);
-		$since_start = $start_date->diff(new \DateTime($end));
-		$minutes = $since_start->days * 24 * 60;
-		$minutes += $since_start->h * 60;
-		$minutes += $since_start->i;
-		return $minutes;
-	}
 }
