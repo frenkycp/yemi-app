@@ -72,13 +72,7 @@ class GoSubStartEndController extends Controller
 
 			$lt = GeneralFunction::instance()->getWorkingTime($update_model->daparture_date, $now);
 			$update_model->LT = $lt;
-			$tmp_data = [
-				'START_TIME' => $update_model->daparture_date,
-				'END_TIME' => $now,
-				'WORKING_TIME' => $lt
-			];
-
-			return json_encode($tmp_data);
+			
 			if (!$update_model->save()) {
 				return json_encode($update_model->errors);
 			}
