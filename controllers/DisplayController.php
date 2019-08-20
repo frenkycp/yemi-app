@@ -66,6 +66,7 @@ use app\models\SernoCalendar;
 use app\models\WipHdrDtr;
 use app\models\MeetingEvent;
 use app\models\MrbsRoom;
+use app\models\GeneralFunction;
 
 class DisplayController extends Controller
 {
@@ -304,6 +305,69 @@ class DisplayController extends Controller
         return $minutes;
     }
 
+    public function actionGoSubDriverUtility()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->layout = 'clean';
+        $data = $categories = $tmp_data = $tmp_data2 = [];
+        $post_date = date('Y-m-d');
+
+        $tmp_driver = GojekTbl::find()
+        ->select(['GOJEK_ID', 'GOJEK_DESC'])
+        ->where([
+            'SOURCE' => 'SUB',
+            'HADIR' => 'Y'
+        ])
+        ->orderBy('GOJEK_DESC')
+        ->all();
+
+        $tmp_order = GojekOrderTbl::find()
+        ->where([
+            'source' => 'SUB',
+            'FORMAT(post_date, \'yyyy-MM-dd\')' => $post_date
+        ])
+        ->andWhere('daparture_date IS NOT NULL')
+        ->all();
+
+        foreach ($tmp_driver as $driver) {
+            $lt = 0;
+            foreach ($tmp_order as $value) {
+                if ($value->GOJEK_ID == $driver->GOJEK_ID) {
+                    if ($value->LT != null) {
+                        $lt += $value->LT;
+                    } else {
+                        $lt += GeneralFunction::instance()->getWorkingTime($value->daparture_date, date('Y-m-d H:i:s'));
+                    }
+                    
+                }
+            }
+            $tmp_data[$driver->GOJEK_ID . ' - ' . $driver->GOJEK_DESC] = $lt;
+        }
+
+        arsort($tmp_data);
+        foreach ($tmp_data as $key => $value) {
+            $categories[] = $key;
+            $utility = 0;
+            if ($value > 0) {
+                $utility = round(($value / 470) * 100, 1);
+            }
+            $tmp_data2[] = [
+                'y' => $utility
+            ];
+        }
+
+        $data[] = [
+            'name' => 'Driver Utility',
+            'data' => $tmp_data2,
+            'showInLegend' => false
+        ];
+        
+        return $this->render('go-sub-driver-utility', [
+            'data' => $data,
+            'categories' => $categories,
+        ]);
+    }
+
     public function isBreakTime($datetime)
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -430,15 +494,19 @@ class DisplayController extends Controller
                         <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . ' <span style="position: absolute; top: 10px; right: 10px;">[' . $value['GOJEK_ID'] . ']</span>' . $txt_new_order . '</h3>
                         <h5 class="widget-user-desc">' . $text_remark . '</h5>
                     </div>
-                    <div class="text-left" style="background: rgba(0,0,0,0.15); padding: 0px 5px;">
-                        <span>' . $current_job . '</span>
+                    <div class="text-left" style="background: rgba(0,0,0,0.15); padding: 2px 5px;">
+                        <span style="opacity: 0.8;">JOB : ' . strtoupper($current_job) . '</span>
                     </div>
                     
                 </div>
             </div>';
         }
         $tmp_str .= '</div>';
-        return $tmp_str;
+        $data = [
+            'content' => $tmp_str,
+            'last_update' => '<u>Last Update : ' . date('Y-m-d H:i') . '</u>'
+        ];
+        return $data;
     }
     public function actionGoSubDriverStatus($value='')
     {

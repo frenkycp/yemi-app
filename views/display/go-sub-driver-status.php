@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'GO Sub Assy Status <span class="japanesse text-green"></span>',
+    'page_title' => 'GO Sub Assy Status <small style="color: white; opacity: 0.8;" id="last-update"></small><span class="japanesse text-green"></span>',
     'tab_title' => 'GO Sub Assy Status',
     'breadcrumbs_title' => 'GO Sub Assy Status'
 ];
@@ -81,7 +81,9 @@ $this->registerJs("
             type: 'POST',
             url: '" . Url::to(['go-sub-driver-status-data']) . "',
             success: function(data){
-                $('#container').html(data);
+                $('#container').html(data.content);
+                $('#last-update').html(data.last_update);
+                $('#driver-chart').html(data.chart);
             },
             complete: function(){
                 setTimeout(function(){update_data();}, 3000);
@@ -101,3 +103,6 @@ echo '</pre>';*/
 ?>
 
 <div id="container"></div>
+<div class="pull-right">
+    <?= Html::a('>> CLICK TO VIEW DRIVER UTILITY <<', ['display/go-sub-driver-utility'], ['style' => 'color: white;', 'target' => '_blank']); ?>
+</div>
