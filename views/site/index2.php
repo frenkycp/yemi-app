@@ -88,10 +88,16 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Management Support<br/><span class="japanesse-word"></span></div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_visitor"><i class="fa fa-fw fa-plus"></i> Visitor Confirmation <span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-plus"></i> Visitor Confirmation <span class="japanesse-word"></span>', ['before-load-url/visitor-confirm', 'url' => 'http://172.17.144.6:99/plus/index_visitor'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/clinic"><i class="fa fa-fw fa-plus"></i> Clinic Confirmation <span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-plus"></i> Clinic Confirmation <span class="japanesse-word"></span>', ['before-load-url/clinic-confirm', 'url' => 'http://172.17.144.6:99/plus/clinic'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/clinic-daily-visit"><i class="fa fa-fw fa-plus"></i> Clinic Monthly Visit <span class="japanesse-word"></span></a>
