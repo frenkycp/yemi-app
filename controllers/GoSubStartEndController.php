@@ -109,7 +109,7 @@ class GoSubStartEndController extends Controller
 		$tmp_go_sub = GoSaTbl::find()->where(['ID' => $session_id])->one();
 		$tmp_go_sub->END_TIME = $now;
 		$tmp_go_sub->STATUS = 2;
-		$tmp_go_sub->LT = $lt;
+		$tmp_go_sub->LT = GeneralFunction::instance()->getWorkingTime($tmp_go_sub->START_TIME, $now);
 		if (!$tmp_go_sub->save()) {
 			return json_encode($tmp_go_sub->errors);
 		}
