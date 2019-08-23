@@ -76,8 +76,8 @@ class GoSubStartEndController extends Controller
 		foreach ($tmp_data_start as $key => $value) {
 			$sql = "{CALL CALL_GOJEK_ARRIVAL(:slip_id, :dep_nik)}";
 	        $params = [
-				':slip_id' => $slip_id,
-				':dep_nik' => \Yii::$app->user->identity->username,
+				':slip_id' => $value->slip_id,
+				':dep_nik' => $value->GOJEK_ID,
 			];
 
 			try {
