@@ -31,7 +31,19 @@ class GoSubStartEndController extends Controller
 		$now = date('Y-m-d H:i:s');
 		$tmp_data_start = GojekOrderTbl::find()->where(['session_id' => $session_id, 'source' => 'SUB'])->all();
 		foreach ($tmp_data_start as $key => $value) {
-			$update_model = GojekOrderTbl::find()->where(['id' => $value->id])->one();
+			$sql = "{CALL CALL_GOJEK_DEPARTURE(:slip_id, :dep_nik)}";
+	        $params = [
+				':slip_id' => $value->slip_id,
+				':dep_nik' => $value->GOJEK_ID,
+			];
+
+			try {
+			    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
+			    //\Yii::$app->session->setFlash('success', "Slip Number : $value->slip_id has been departed.");
+			} catch (Exception $ex) {
+				\Yii::$app->session->setFlash('danger', "Error : $ex");
+			}
+			/*$update_model = GojekOrderTbl::find()->where(['id' => $value->id])->one();
 			$update_model->daparture_date = $now;
 			$update_model->DEPARTURE_NAMA_KARYAWAN = $value->GOJEK_DESC;
 			if (!$update_model->save()) {
@@ -43,9 +55,7 @@ class GoSubStartEndController extends Controller
 			$tmp_driver->LAST_UPDATE = $now;
 			if (!$tmp_driver->save()) {
 				return json_encode($tmp_driver->errors);
-			}
-
-
+			}*/
 		}
 		$tmp_go_sub = GoSaTbl::find()->where(['ID' => $session_id])->one();
 		$tmp_go_sub->START_TIME = $now;
@@ -64,7 +74,20 @@ class GoSubStartEndController extends Controller
 		$tmp_data_start = GojekOrderTbl::find()->where(['session_id' => $session_id, 'source' => 'SUB'])->all();
 		$lt = 0;
 		foreach ($tmp_data_start as $key => $value) {
-			$update_model = GojekOrderTbl::find()->where(['id' => $value->id])->one();
+			$sql = "{CALL CALL_GOJEK_ARRIVAL(:slip_id, :dep_nik)}";
+	        $params = [
+				':slip_id' => $slip_id,
+				':dep_nik' => \Yii::$app->user->identity->username,
+			];
+
+			try {
+			    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
+			    //\Yii::$app->session->setFlash('success', "Slip Number : $slip_id has been arrived.");
+			} catch (Exception $ex) {
+				\Yii::$app->session->setFlash('danger', "Error : $ex");
+			}
+
+			/*$update_model = GojekOrderTbl::find()->where(['id' => $value->id])->one();
 			$update_model->arrival_date = $now;
 			$update_model->ARRIVAL_KARYAWAN = $value->GOJEK_DESC;
 			$update_model->STAT = 'C';
@@ -81,7 +104,7 @@ class GoSubStartEndController extends Controller
 			$tmp_driver->LAST_UPDATE = $now;
 			if (!$tmp_driver->save()) {
 				return json_encode($tmp_driver->errors);
-			}
+			}*/
 		}
 		$tmp_go_sub = GoSaTbl::find()->where(['ID' => $session_id])->one();
 		$tmp_go_sub->END_TIME = $now;
