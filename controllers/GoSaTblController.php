@@ -34,7 +34,7 @@ class GoSaTblController extends \app\controllers\base\GoSaTblController
 
 		try {
 			if ($model->load($_POST)) {
-				$columnNameArray=['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'issued_date', 'GOJEK_ID', 'GOJEK_DESC', 'STAT', 'quantity', 'post_date', 'session_id', 'NIK_REQUEST', 'NAMA_KARYAWAN'];
+				$columnNameArray=['slip_id', 'item', 'item_desc', 'from_loc', 'to_loc', 'source', 'issued_date', 'GOJEK_ID', 'GOJEK_DESC', 'STAT', 'quantity', 'post_date', 'session_id', 'NIK_REQUEST', 'NAMA_KARYAWAN', 'SequenceID'];
 				$count_data = GojekOrderTbl::find()->where(['source' => 'SUB'])->count();
 
 				$total_mp = 0;
@@ -54,7 +54,7 @@ class GoSaTblController extends \app\controllers\base\GoSaTblController
 					$emp_split = explode(' - ', $value);
 					$total_mp++;
 					$count_data++;
-    				$slip_id = str_pad($count_data, 7, '0', STR_PAD_LEFT);
+    				$slip_id = 'SUB' . str_pad($count_data, 7, '0', STR_PAD_LEFT);
 					$tmp_insert[] = [
 						$slip_id,
 						$slip_id,
@@ -70,7 +70,8 @@ class GoSaTblController extends \app\controllers\base\GoSaTblController
 						date('Y-m-d'),
 						$sa_tbl->ID,
 						$model->REQUESTOR_NIK,
-						$model->REQUESTOR_NAME
+						$model->REQUESTOR_NAME,
+						$emp_split[0] . '-' . date('Ymd')
 					];
 				}
 

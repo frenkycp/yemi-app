@@ -37,7 +37,6 @@ class GoSubStartEndController extends Controller
 			if (!$update_model->save()) {
 				return json_encode($update_model->errors);
 			}
-			echo $value->GOJEK_ID . '<br/>';
 
 			$tmp_driver = GojekTbl::find()->where(['GOJEK_ID' => $value->GOJEK_ID, 'SOURCE' => 'SUB'])->one();
 			$tmp_driver->STAGE = 'DEPARTURE';
