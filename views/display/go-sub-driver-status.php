@@ -103,6 +103,18 @@ echo '</pre>';*/
 ?>
 
 <div id="container"></div>
-<div class="pull-right">
-    <?= Html::a('>> CLICK TO VIEW DRIVER UTILITY <<', ['display/go-sub-driver-utility'], ['style' => 'color: white;', 'target' => '_blank']); ?>
+<div class="row">
+    <div class="col-md-6">
+        <ul style="color: white;">
+            <li>
+                <u><?= Html::a('DRIVER UTILITY (DAILY)', ['display/go-sub-driver-utility'], ['style' => 'color: white;', 'target' => '_blank']); ?></u>
+            </li>
+            <li>
+                <u><?= Html::a('DRIVER UTILITY (MONTHLY)', ['gosub-operation-ratio/index'], ['style' => 'color: white;', 'target' => '_blank']); ?></u>
+            </li>
+        </ul>
+        
+    </div>
+    <div class="col-md-6">
+    </div>
 </div>
