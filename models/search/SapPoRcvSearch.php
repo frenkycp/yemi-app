@@ -42,9 +42,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = SapPoRcv::find()->select([
-      'rcv_date', 'vendor_name', 'inv_no', 'material', 'description', 'Inspection_level', 'Judgement', 'Remark'
-]);
+$query = SapPoRcv::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -60,10 +58,10 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'quantity' => $this->quantity,
+            'rcv_date' => $this->rcv_date
         ]);
 
-        $query->andFilterWhere(['like', 'CONVERT(VARCHAR(10),rcv_date,120)', $this->rcv_date])
-            ->andFilterWhere(['like', 'vendor_name', $this->vendor_name])
+        $query->andFilterWhere(['like', 'vendor_name', $this->vendor_name])
             ->andFilterWhere(['like', 'inv_no', $this->inv_no])
             ->andFilterWhere(['like', 'material', $this->material])
             ->andFilterWhere(['like', 'description', $this->description])
