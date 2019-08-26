@@ -48,4 +48,11 @@ class GeneralFunction extends Model
 
         return $minutes;
 	}
+
+    public function getJsDateFormat($datetime)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $new_datetime = (strtotime($datetime . " +7 hours") * 1000);
+        return $new_datetime;
+    }
 }

@@ -70,10 +70,114 @@ use app\models\GeneralFunction;
 
 class DisplayController extends Controller
 {
-    public function GosubTimeline($value='')
+    public function actionGosubTimeline()
     {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = $tmp_data = $categories = [];
+        $posting_date = date('Y-m-d');
+        $today_name = date('D');
+
+        $model = new \yii\base\DynamicModel([
+            'posting_date', 'operator'
+        ]);
+        $model->addRule(['posting_date','operator'], 'required');
+        $model->posting_date = $posting_date;
+        
+
+        if ($model->load($_GET)) {
+            
+        }
+
+        $max_x = (strtotime($model->posting_date . ' 24:00:00' . " +7 hours") * 1000);
+        $tmp_operator = GojekTbl::find()
+        ->where([
+            'SOURCE' => 'SUB'
+        ])
+        ->all();
+
+        $tmp_order = GojekOrderTbl::find()
+        ->where([
+            'source' => 'SUB',
+            'post_date' => $model->posting_date
+        ])
+        ->andWhere('daparture_date IS NOT NULL')
+        ->orderBy('daparture_date')
+        ->all();
+
+        $index = 0;
+        foreach ($tmp_operator as $operator) {
+            $categories[] = $operator->nikName;
+            foreach ($tmp_order as $order) {
+                if ($operator->GOJEK_ID == $order->GOJEK_ID) {
+                    $start_time_ori = $order->daparture_date;
+
+                    $start_time = (strtotime($order->daparture_date . " +7 hours") * 1000);
+                    if ($order->STAT == 'C') {
+                        $end_time = (strtotime($order->arrival_date . " +7 hours") * 1000);
+                        $end_time_ori = $order->arrival_date;
+                    } else {
+                        $end_time = (strtotime(date('Y-m-d H:i:s') . " +7 hours") * 1000);
+                        $end_time_ori = date('Y-m-d H:i:s');
+                    }
+
+                    $break_time1 = date('09:20:00');
+                    $break_time1_end = date('09:30:00');
+                    $break_time2 = date('12:10:00');
+                    $break_time2_end = date('12:50:00');
+                    $break_time3 = date('14:20:00');
+                    $break_time3_end = date('14:30:00');
+
+                    if ($today_name == 'Fri') {
+                        $break_time2 = date('12:00:00');
+                        $break_time2_end = date('13:10:00');
+                        $break_time3 = date('14:50:00');
+                        $break_time3_end = date('15:00:00');
+                    }
+
+                    /*if (date('H:i:s', strtotime($start_time_ori)) < $break_time1 && date('H:i:s', strtotime($end_time_ori)) > $break_time1_end) {
+                        $tgl = date('Y-m-d', strtotime($order->post_date));
+                        $tmp_data[] = [
+                            'x' => $start_time,
+                            'x2' => (strtotime($tgl . ' ' . $break_time1 . " +7 hours") * 1000),
+                            'y' => $index,
+                            'color' => \Yii::$app->params['bg-green']
+                        ];
+                        $tmp_data[] = [
+                            'x' => (strtotime($tgl . ' ' . $break_time1 . " +7 hours") * 1000),
+                            'x2' => (strtotime($tgl . ' ' . $break_time1_end . " +7 hours") * 1000),
+                            'y' => $index,
+                            'color' => \Yii::$app->params['bg-yellow']
+                        ];
+                        $start_time = $tgl . ' ' . $break_time1_end;
+                    }*/
+
+                    $tmp_data[] = [
+                        'x' => $start_time,
+                        'x2' => $end_time,
+                        'y' => $index,
+                        'color' => \Yii::$app->params['bg-green']
+                    ];
+                }
+            }
+            $index++;
+        }
+
+        $data = [
+            [
+                'name' => 'Operator Timeline',
+                'data' => $tmp_data,
+                'showInLegend' => false,
+                'pointWidth' => 20,
+
+            ]
+        ];
+
         return $this->render('gosub-timeline', [
-            'data' => $data
+            'data' => $data,
+            'max_x' => $max_x,
+            'categories' => $categories,
+            'model' => $model
         ]);
     }
     public function actionTodaysMeetingData($room_id)
@@ -377,6 +481,7 @@ class DisplayController extends Controller
     public function isBreakTime($datetime)
     {
         date_default_timezone_set('Asia/Jakarta');
+        $today_name = date('D');
 
         $datetime = new \DateTime($datetime);
 
@@ -453,7 +558,7 @@ class DisplayController extends Controller
                     $bg_class = ' bg-yellow';
                     $text_remark = 'JUST FINISHED - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
                     $diff_min = $this->getMinutes($value['LAST_UPDATE'], date('Y-m-d H:i:s'));
-                    if ($diff_min > 2) {
+                    if ($diff_min > 7) {
                         if ($value['LAST_UPDATE'] == date('Y-m-d')) {
                             $bg_class = ' bg-light-blue';
                             $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
