@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use yii\web\View;
 
@@ -49,7 +50,7 @@ $this->registerJs($script, View::POS_HEAD);
             <?php echo $form->errorSummary($model); ?>
 
             <div class="pull-right">
-                <?= Html::a('Cancel', ['index-laporan'], ['class' => 'btn btn-danger']) ?>
+                <?= Html::a('Cancel', Url::previous(), ['class' => 'btn btn-danger']) ?>
 
             <?= Html::submitButton('Submit',
             [
