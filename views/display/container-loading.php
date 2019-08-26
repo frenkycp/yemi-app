@@ -16,17 +16,17 @@ $color = 'ForestGreen';
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
-    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}
-    //.box-body {background-color: #33383D;}
+    //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #33383D;}
+    body, .content-wrapper {background-color: #000;}
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
@@ -186,7 +186,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= $value['cntr']; ?></td>
                 <td style="font-weight: bold;"><?= $value['dst']; ?></td>
                 <td>
-                    <div class="progress" style="height: 50px; background-color: #33383D; outline: 2px solid white;">
+                    <div class="progress" style="height: 50px; background-color: #000; outline: 2px solid white;">
                         <div class="progress-bar<?= $color_css; ?><?= $active_class; ?>" role="progressbar" style="width: <?= $minutes_pct > 100 ? 100 : $minutes_pct; ?>%; font-size: 35px; padding-top: 13px;" aria-valuenow="<?= $minutes_pct; ?>" aria-valuemin="0" aria-valuemax="100"><span style="text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;"><?= $minutes == 0 ? '' : $minutes; ?></span></div>
                     </div>
                     <span class="text-yellow" style="font-size: 18px;<?= $value['remark'] == '' ? ' display: none;' : ''; ?>"><em><?= '* ' . $value['remark']; ?></em></span>

@@ -19,10 +19,10 @@ date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
-    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}
-    //.box-body {background-color: #33383D;}
+    //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title, .control-label{font-size: 2em;}
     .container {width: auto;}

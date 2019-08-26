@@ -21,17 +21,17 @@ HighchartsAsset::register($this)->withScripts(['highstock']);
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
-    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}
-    //.box-body {background-color: #33383D;}
+    //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #33383D;}
+    body, .content-wrapper {background-color: #000;}
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
@@ -195,7 +195,7 @@ $script = "
                 });*/
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 100000);
+                setTimeout(function(){update_data();}, 1000);
             }
         });
     }
@@ -230,7 +230,7 @@ echo '</pre>';*/
             <th style="" width="30%" rowspan="2">Current Job</th>
             <!--<th style="width: 10%;">Current</th>
             <th style="width: 30%;">Operational Status</th>-->
-            <th style="" class="text-center" colspan="3">Output Qty</th>
+            <th style="" class="text-center" colspan="3">Today's Output</th>
             <th style="" class="text-center" colspan="3">Working Time (%)</th>
         </tr>
         <tr>
