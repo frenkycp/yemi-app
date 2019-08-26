@@ -13,16 +13,16 @@ $this->title = [
 
 $this->registerCss("
 	.japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
-    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    .form-control, .control-label {background-color: #000; color: white; border-color: white;}
 	.content-header {color: white;}
-    .box-body {background-color: #33383D;}
+    .box-body {background-color: #000;}
 	.box-title {font-weight: bold;}
 	.box-header .box-title, .control-label{font-size: 1.5em;}
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #33383D;}
+    body, .content-wrapper {background-color: #000;}
 
     #clinic-tbl{
         border:1px solid #ddd;
@@ -40,7 +40,7 @@ $this->registerCss("
     #clinic-tbl > tbody > tr > td{
         border:1px solid #ddd;
         font-size: 1.5em;
-        background-color: #33383D;
+        background-color: #000;
         //font-weight: 1000;
         color: rgba(255, 235, 59, 1);
         vertical-align: middle;

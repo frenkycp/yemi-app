@@ -12,15 +12,15 @@ $this->title = [
 
 $this->registerCss("
 	.japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
-	.content-wrapper {background-color: #33383D;}
+	.content-wrapper {background-color: #000;}
 	.content-header {color: white;}
-	.form-control {background-color: #33383D; color: rgb(255, 235, 59); border-color: #33383D;}
-	.box-body {background-color: #33383D; color: rgb(255, 235, 59); font-weight: bold;}
+	.form-control {background-color: #000; color: rgb(255, 235, 59); border-color: #000;}
+	.box-body {background-color: #000; color: rgb(255, 235, 59); font-weight: bold;}
 	.box-title {font-weight: bold;}
 	.box-header .box-title{font-size: 20px;}
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em}
-	body {background-color: #33383D;}
+	body {background-color: #000;}
 ");
 
 $script = <<< JS

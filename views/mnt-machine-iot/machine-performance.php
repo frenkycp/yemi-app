@@ -19,14 +19,14 @@ $this->title = [
 
 $this->registerCss("
 	.japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
-	.content-wrapper {background-color: #33383D;}
+	.content-wrapper {background-color: #000;}
 	.content-header {color: white;}
-	.form-control, .control-label {background-color: #33383D; color: rgb(255, 235, 59); border-color: white;}
+	.form-control, .control-label {background-color: #000; color: rgb(255, 235, 59); border-color: white;}
 	.box-title {font-weight: bold;}
 	.box-header .box-title, .control-label{font-size: 1.5em;}
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em; text-align: center;}
-	body {background-color: #33383D;}
+	body {background-color: #000;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');

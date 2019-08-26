@@ -70,6 +70,12 @@ use app\models\GeneralFunction;
 
 class DisplayController extends Controller
 {
+    public function GosubTimeline($value='')
+    {
+        return $this->render('gosub-timeline', [
+            'data' => $data
+        ]);
+    }
     public function actionTodaysMeetingData($room_id)
     {
         //\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -1123,7 +1129,7 @@ class DisplayController extends Controller
             $tmp_current_job = '';
             foreach ($current_job_data as $key => $current_job) {
                 if ($value['mesin_id'] == $current_job['mesin_id']) {
-                    $tmp_current_job = $current_job['gmc'] . ' - ' . $current_job['gmc_desc'];
+                    $tmp_current_job = $current_job['gmc'] . ' - ' . $current_job['gmc_desc'] . ' (' . number_format($current_job['lot_qty']) . ' PCS)';
                 }
             }
             $tmp_gmc_desc[$value['mesin_id'] . '_gmc_desc'] = $tmp_current_job;

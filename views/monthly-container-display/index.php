@@ -17,16 +17,16 @@ $color = 'ForestGreen';
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
-    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .content-header {color: white;}
-    //.box-body {background-color: #33383D;}
+    //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title, .control-label{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #33383D;}
+    body, .content-wrapper {background-color: #000;}
 
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}

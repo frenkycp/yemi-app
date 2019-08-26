@@ -21,16 +21,16 @@ date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
-    .form-control, .control-label {background-color: #33383D; color: white; border-color: white;}
+    .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .content-header {color: white;}
-    //.box-body {background-color: #33383D;}
+    //.box-body {background-color: #000;}
     .box-title {font-weight: bold; font}
     .box-header .box-title, .control-label{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #33383D;}
+    body, .content-wrapper {background-color: #000;}
 
     #clinic-tbl{
         //border:1px solid #29B6F6;
