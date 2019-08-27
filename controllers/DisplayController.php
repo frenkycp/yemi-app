@@ -70,6 +70,63 @@ use app\models\GeneralFunction;
 
 class DisplayController extends Controller
 {
+    public function actionGosubLocationData()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $now = date('Y-m-d H:i:s');
+        $data = $tmp_data = [];
+        $location_arr = ['PANGKALAN', 'SUB-ASSY-NETWORK', 'SUB-ASSY-FRONT-GRILL', 'SUB-ASSY-ACCESORIES'];
+        //$now = '2019-08-14 09:25:00';
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $tmp_str = '';
+        $tmp_str .= '<div class="row">';
+        $tmp_str .= '</div>';
+
+        $tmp_operator = GojekTbl::find()
+        ->where([
+            'SOURCE' => 'SUB'
+        ])
+        ->all();
+
+        foreach ($location_arr as $location) {
+            $tmp_content = '<ul>';
+            $count = 0;
+            foreach ($tmp_operator as $key => $value) {
+                if ($value->beacon_location == $location) {
+                    $count++;
+                    $tmp_content .= '<li>' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm]</li>';
+                    $tmp_location = strtolower($value->beacon_location);
+                    $tmp_data[$tmp_location][] = [
+                        'name' => $value->GOJEK_DESC,
+                        'distance' => round($value->distance, 1)
+                    ];
+                }
+            }
+            $tmp_content .= '</ul>';
+            if ($count == 0) {
+                $tmp_content = '<span>No Operator Here ...</span>';
+            }
+            $tmp_data[strtolower($location)] = $tmp_content;
+        }
+
+        $data = [
+            'data' => $tmp_data,
+            'last_update' => '<u>Last Update : ' . date('Y-m-d H:i') . '</u>'
+        ];
+        return $data;
+    }
+    public function actionGosubLocation()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = $tmp_data = [];
+        $location_arr = ['PANGKALAN', 'SUB-ASSY-NETWORK', 'SUB-ASSY-FRONT-GRILL', 'SUB-ASSY-ACCESORIES'];
+
+        return $this->render('gosub-location', [
+            'data' => $data,
+            'location_arr' => $location_arr,
+        ]);
+    }
     public function actionGosubTimeline()
     {
         $this->layout = 'clean';
