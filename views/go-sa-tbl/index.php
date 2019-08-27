@@ -71,9 +71,9 @@ $columns = [
         ],
     ],
     [
-        'attribute' => 'TOTAL_MP',
+        'attribute' => 'manpower',
         'vAlign' => 'middle',
-        'hAlign' => 'center',
+        //'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'

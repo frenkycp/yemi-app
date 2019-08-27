@@ -90,6 +90,7 @@ class DisplayController extends Controller
         }
 
         $max_x = (strtotime($model->posting_date . ' 24:00:00' . " +7 hours") * 1000);
+        $min_x = (strtotime($model->posting_date . ' 07:00:00' . " +7 hours") * 1000);
         $tmp_operator = GojekTbl::find()
         ->where([
             'SOURCE' => 'SUB'
@@ -175,6 +176,7 @@ class DisplayController extends Controller
 
         return $this->render('gosub-timeline', [
             'data' => $data,
+            'min_x' => $min_x,
             'max_x' => $max_x,
             'categories' => $categories,
             'model' => $model

@@ -42,4 +42,24 @@ class GoSaTbl extends BaseGoSaTbl
             ]
         );
     }
+
+    public function getManpower()
+    {
+        $tmp_order = GojekOrderTbl::find()
+        ->where([
+            'session_id' => $this->ID,
+            'source' => 'SUB'
+        ])
+        ->all();
+
+        $manpower = '';
+        foreach ($tmp_order as $value) {
+            if ($manpower == '') {
+                $manpower = $value->GOJEK_DESC;
+            } else {
+                $manpower .= ', ' . $value->GOJEK_DESC;
+            }
+        }
+        return $manpower;
+    }
 }

@@ -111,6 +111,7 @@ echo Highcharts::widget([
             'title' => [
                 'text' => 'Utility (%)'
             ],
+            'max' => 100
             //'gridLineWidth' => 0,
         ],
         'credits' => [

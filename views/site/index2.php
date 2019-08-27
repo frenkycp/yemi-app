@@ -287,6 +287,23 @@ $this->registerCss("
                                 </li>
                             </ol>
                         </div>
+                        <div class="list-group-item">
+                            <p>GO-SUB ASSY Monitor <span class="japanesse-word"></span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('Order Progress Monitor <span class="japanesse-word"> (配達進捗モニター）</span>', ['/go-sub-order-completion']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Transport Utilization <span class="japanesse-word">(配達の稼働率）</span>', ['/gosub-operation-ratio']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Transport Data <span class="japanesse-word">(配達データー)</span>', ['/go-sa-tbl']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Operator Current Status <span class="japanesse-word"></span>', ['/display/go-sub-driver-status']); ?>
+                                </li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
                 <div class="text-center">

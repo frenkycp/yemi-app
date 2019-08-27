@@ -107,6 +107,7 @@ echo Highcharts::widget([
         ],
         'xAxis' => [
             'type' => 'datetime',
+            'min' => $min_x,
             'max' => $max_x
         ],
         'yAxis' => [
