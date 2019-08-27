@@ -20,19 +20,10 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
 
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{update}";
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
-
 $columns = [
 	[
         'class' => 'yii\grid\ActionColumn',
-        'template' => $actionColumnTemplateString,
+        'template' => '{update}&nbsp;&nbsp;|&nbsp;&nbsp;{flow-process}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -41,6 +32,18 @@ $columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            }, 'flow-process' => function($url, $model, $key){
+                $url = ['display/lot-flow-process', 'lot_number' => $model->lot_id];
+                $options = [
+                    'title' => 'View Flow Process',
+                    'data-pjax' => '0',
+                ];
+                if ($model->child_analyst == 'WW02') {
+                    return Html::a('<span class="fa fa-bar-chart"></span>', $url, $options);
+                } else {
+                    return '';
+                }
+                
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {

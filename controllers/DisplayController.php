@@ -70,6 +70,61 @@ use app\models\GeneralFunction;
 
 class DisplayController extends Controller
 {
+    public function actionLotFlowProcess($lot_number)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = $tmp_data = $categories = [];
+        $now = date('Y-m-d H:i:s');
+
+        $machine_output_arr = MachineIotOutput::find()
+        ->where([
+            'lot_number' => $lot_number
+        ])
+        ->andWhere('start_date IS NOT NULL')
+        ->orderBy('start_date')
+        ->all();
+
+        $index = 0;
+        $part_name = '';
+        foreach ($machine_output_arr as $machine_output) {
+            if ($part_name == '') {
+                $part_name = $machine_output->gmc . ' - ' . $machine_output->gmc_desc . ' (' . $machine_output->lot_qty . ' PCS)';
+            }
+            $categories[] = $machine_output->mesin_id . ' - ' . $machine_output->mesin_description;
+            $start_date = $machine_output->start_date;
+            $start_date_js = strtotime($start_date . " +7 hours") * 1000;
+            if ($machine_output->end_date == null) {
+                $end_date = $now;
+            } else {
+                $end_date = $machine_output->end_date;
+            }
+            $end_date_js = strtotime($end_date . " +7 hours") * 1000;
+            $tmp_data[] = [
+                'x' => $start_date_js,
+                'x2' => $end_date_js,
+                'y' => $index,
+                'color' => \Yii::$app->params['bg-green']
+            ];
+            $index++;
+        }
+
+        $data = [
+            [
+                'name' => 'Lot Timeline',
+                'data' => $tmp_data,
+                'showInLegend' => false,
+                'pointWidth' => 20,
+            ]
+        ];
+
+        return $this->render('lot-flow-process', [
+            'data' => $data,
+            'lot_number' => $lot_number,
+            'part_name' => $part_name,
+            'categories' => $categories,
+        ]);
+    }
     public function actionGosubLocationData()
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -94,7 +149,20 @@ class DisplayController extends Controller
             foreach ($tmp_operator as $key => $value) {
                 if ($value->beacon_location == $location) {
                     $count++;
-                    $tmp_content .= '<li>' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm]</li>';
+                    $seconds = $this->getSeconds($value->beacon_last_update, $now);
+                    $seconds_str = ' seconds';
+                    if ($seconds == 1) {
+                        $seconds_str = ' second';
+                    }
+                    if ($seconds >= 60) {
+                        $seconds = $this->getMinutes($value->beacon_last_update, $now);
+                        $seconds_str = ' minutes';
+                        if ($seconds == 1) {
+                            $seconds_str = ' minute';
+                        }
+                        
+                    }
+                    $tmp_content .= '<li>' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - ' . $seconds . $seconds_str . ' ago</li>';
                     $tmp_location = strtolower($value->beacon_location);
                     $tmp_data[$tmp_location][] = [
                         'name' => $value->GOJEK_DESC,
@@ -472,6 +540,17 @@ class DisplayController extends Controller
         $minutes += $since_start->h * 60;
         $minutes += $since_start->i;
         return $minutes;
+    }
+
+    public function getSeconds($start, $end)
+    {
+        $start_date = new \DateTime($start);
+        $since_start = $start_date->diff(new \DateTime($end));
+        $seconds = $since_start->days * 24 * 3600;
+        $seconds += $since_start->h * 3600;
+        $seconds += $since_start->i * 60;
+        $seconds += $since_start->s;
+        return $seconds;
     }
 
     public function actionGoSubDriverUtility()
