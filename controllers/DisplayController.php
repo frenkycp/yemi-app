@@ -149,7 +149,7 @@ class DisplayController extends Controller
             foreach ($tmp_operator as $key => $value) {
                 if ($value->beacon_location == $location) {
                     $count++;
-                    $seconds = $this->getSeconds($value->beacon_last_update, $now);
+                    $seconds = $seconds_ori = $this->getSeconds($value->beacon_last_update, $now);
                     $seconds_str = ' seconds';
                     if ($seconds == 1) {
                         $seconds_str = ' second';
@@ -162,12 +162,15 @@ class DisplayController extends Controller
                         }
                         
                     }
-                    $tmp_content .= '<li>' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - ' . $seconds . $seconds_str . ' ago</li>';
-                    $tmp_location = strtolower($value->beacon_location);
+                    if ($seconds_ori < 3600) {
+                        $tmp_content .= '<li>' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - <small style="opacity: 0.6;">' . $seconds . $seconds_str . ' ago</small></li>';
+                    }
+                    
+                    /*$tmp_location = strtolower($value->beacon_location);
                     $tmp_data[$tmp_location][] = [
                         'name' => $value->GOJEK_DESC,
                         'distance' => round($value->distance, 1)
-                    ];
+                    ];*/
                 }
             }
             $tmp_content .= '</ul>';

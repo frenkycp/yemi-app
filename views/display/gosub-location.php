@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'GO Sub Assy Operator Location <small style="color: white; opacity: 0.8;" id="last-update"></small><span class="japanesse text-green"></span>',
-    'tab_title' => 'GO Sub Assy Operator Location',
-    'breadcrumbs_title' => 'GO Sub Assy Operator Location'
+    'page_title' => 'GO Sub Assy Tracking <small style="color: white; opacity: 0.8;" id="last-update"></small><span class="japanesse text-green"></span>',
+    'tab_title' => 'GO Sub Assy Tracking',
+    'breadcrumbs_title' => 'GO Sub Assy Tracking'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -36,7 +36,7 @@ $this->registerCss("
     h3, h5 {opacity: 0.9;}
     .location-container {padding: 0px 10px; border: 1px solid white; border-radius: 5px;}
     .station-header {display: block; border-bottom: 1px solid white; font-size: 2em; text-align: center; padding: 10px;}
-    .station-body ul li {padding: 10px 0px;}
+    .station-body ul li {padding: 10px 0px; font-size: 1.2em;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');

@@ -8,9 +8,9 @@ use yii\web\JsExpression;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'SMT INJ Efficiency, Utility & Loss Time Management <span class="japanesse text-green">( SMT稼働率・ロスタイム管理）</span>',
-    'tab_title' => 'SMT INJ Efficiency, Utility & Loss Time Management',
-    'breadcrumbs_title' => 'SMT INJ Efficiency, Utility & Loss Time Management'
+    'page_title' => 'SMT INJ Loss Time Management <span class="japanesse text-green">( SMT INJ稼働率・ロスタイム管理）</span>',
+    'tab_title' => 'SMT INJ Loss Time Management',
+    'breadcrumbs_title' => 'SMT INJ Loss Time Management'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -87,145 +87,11 @@ echo '</pre>';*/
 <h4 class="box-title">Last Update : <?= date('Y-m-d H:i:s') ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">Working Ratio <span class="japanesse">（稼働率）</a></li>
-        <li><a href="#tab_2" data-toggle="tab">Operation Ratio <span class="japanesse">（操業率）</span></a></li>
-        <li><a href="#tab_3" data-toggle="tab">Loss time by Line <span class="japanesse">（ライン別ロスタイム)</span></a></li>
+        <li class="active"><a href="#tab_3" data-toggle="tab">Loss time by Line <span class="japanesse">（ライン別ロスタイム)</span></a></li>
         <li><a href="#tab_4" data-toggle="tab">Loss time by Category <span class="japanesse">(カテゴリー別ロスタイム)</span></a></li>
     </ul>
     <div class="tab-content">
-        <div class="tab-pane active" id="tab_1">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    'themes/grid-light',
-                    //'themes/sand-signika',
-                    //'themes/dark-unica',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'line',
-                        'style' => [
-                            'fontFamily' => 'Source Sans Pro'
-                        ],
-                    ],
-                    'credits' => [
-                        'enabled' => false
-                    ],
-                    'title' => [
-                        'text' => null,
-                    ],  
-                    'xAxis' => [
-                        'type' => 'datetime',
-                    ],
-                    'yAxis' => [
-                        'title' => [
-                            'text' => 'Percentage (%)'
-                        ],
-                        'min' => 0,
-                        //'max' => 100,
-                    ],
-                    'tooltip' => [
-                        //'shared' => true,
-                        'crosshairs' => true,
-                        'xDateFormat' => '%Y-%m-%d',
-                        'valueSuffix' => '%',
-                    ],
-                    'plotOptions' => [
-                        'line' => [
-                            'dataLabels' => [
-                                'enabled' => true
-                            ],
-                        ],
-                        'series' => [
-                            'cursor' => 'pointer',
-                            'dataLabels' => [
-                                'enabled' => true,
-                                //'allowOverlap' => true
-                            ],
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression("
-                                        function(e){
-                                            e.preventDefault();
-                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                        }
-                                    "),
-                                ]
-                            ]
-                        ]
-                    ],
-                    'series' => $data['working_ratio'],
-                ],
-            ]); ?>
-        </div>
-        <div class="tab-pane" id="tab_2">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    //'themes/grid-light',
-                    //'themes/sand-signika',
-                    //'themes/dark-unica',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'line',
-                        'style' => [
-                            'fontFamily' => 'Source Sans Pro'
-                        ],
-                    ],
-                    'credits' => [
-                        'enabled' => false
-                    ],
-                    'title' => [
-                        'text' => null,
-                    ],  
-                    'xAxis' => [
-                        'type' => 'datetime',
-                    ],
-                    'yAxis' => [
-                        'title' => [
-                            'text' => 'Percentage (%)'
-                        ],
-                        'min' => 0,
-                        //'max' => 100,
-                    ],
-                    'tooltip' => [
-                        //'shared' => true,
-                        'crosshairs' => true,
-                        'xDateFormat' => '%Y-%m-%d',
-                        'valueSuffix' => '%',
-                    ],
-                    'plotOptions' => [
-                        'line' => [
-                            'dataLabels' => [
-                                'enabled' => true
-                            ],
-                        ],
-                        'series' => [
-                            'cursor' => 'pointer',
-                            'dataLabels' => [
-                                'enabled' => true,
-                                //'allowOverlap' => true
-                            ],
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression("
-                                        function(e){
-                                            e.preventDefault();
-                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                        }
-                                    "),
-                                ]
-                            ]
-                        ]
-                    ],
-                    'series' => $data['operation_ratio'],
-                ],
-            ]); ?>
-        </div>
-        <div class="tab-pane" id="tab_3">
+        <div class="tab-pane active" id="tab_3">
             <?php
             echo Highcharts::widget([
                 'scripts' => [

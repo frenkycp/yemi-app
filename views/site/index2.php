@@ -302,6 +302,9 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Operator Current Status <span class="japanesse-word"></span>', ['/display/go-sub-driver-status']); ?>
                                 </li>
+                                <li>
+                                    <?= Html::a('Movement Tracking <span class="japanesse-word"></span>', ['/display/gosub-location']); ?>
+                                </li>
                             </ol>
                         </div>
                     </div>
