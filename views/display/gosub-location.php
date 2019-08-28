@@ -36,7 +36,7 @@ $this->registerCss("
     h3, h5 {opacity: 0.9;}
     .location-container {padding: 0px 10px; border: 1px solid white; border-radius: 5px;}
     .station-header {display: block; border-bottom: 1px solid white; font-size: 2em; text-align: center; padding: 10px;}
-    .station-body ul li {padding: 10px 0px; font-size: 1.2em;}
+    .station-body ul li {padding: 5px 0px; font-size: 1.2em;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');

@@ -139,8 +139,10 @@ class DisplayController extends Controller
 
         $tmp_operator = GojekTbl::find()
         ->where([
-            'SOURCE' => 'SUB'
+            'SOURCE' => 'SUB',
+            'HADIR' => 'Y'
         ])
+        ->orderBy('GOJEK_DESC')
         ->all();
 
         foreach ($location_arr as $location) {
@@ -163,7 +165,7 @@ class DisplayController extends Controller
                         
                     }
                     if ($seconds_ori < 3600) {
-                        $tmp_content .= '<li>' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - <small style="opacity: 0.6;">' . $seconds . $seconds_str . ' ago</small></li>';
+                        $tmp_content .= '<li><span style="opacity: 0.9; letter-spacing: 1px;">' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - </span><small style="opacity: 0.6;">' . $seconds . $seconds_str . ' ago</small></li>';
                     }
                     
                     /*$tmp_location = strtolower($value->beacon_location);
