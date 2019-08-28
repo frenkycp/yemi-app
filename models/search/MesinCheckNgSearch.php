@@ -86,6 +86,14 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'repair_pic', $this->repair_pic])
             ->andFilterWhere(['like', 'repair_note', $this->repair_note]);
 
+      if (isset($params['downtime_status'])) {
+            if ($params['downtime_status'] == 1) {
+                  $query->andFilterWhere(['>', 'down_time', 0]);
+            } else {
+                  $query->andFilterWhere(['down_time' => 0]);
+            }
+      }
+
             /*if (strpos($this->closing_day_total, '>') !== false) {
                   $day = str_replace('>', '', $this->closing_day_total);
                   $query->andFilterWhere(['>', 'DATEDIFF(d, mesin_last_update, ISNULL(repair_aktual,GETDATE()))', $day]);

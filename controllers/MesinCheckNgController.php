@@ -36,6 +36,9 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 	    if (\Yii::$app->request->get('ticket_no') !== null) {
 	    	$searchModel->urutan = \Yii::$app->request->get('ticket_no');
 	    }
+	    if (\Yii::$app->request->get('mesin_id') !== null) {
+	    	$searchModel->mesin_id = \Yii::$app->request->get('mesin_id');
+	    }
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

@@ -32,7 +32,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+            'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
     [
@@ -41,7 +41,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+            'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
     [
@@ -50,7 +50,7 @@ $gridColumns = [
         //'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+            'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
     [
@@ -59,7 +59,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+            'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
     [
@@ -68,7 +68,7 @@ $gridColumns = [
         //'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+            'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
     [
@@ -78,16 +78,34 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+            'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
     [
         'attribute' => 'down_time_number',
+
+        'value' => function($model){
+            if ($model->down_time_number <= 0) {
+                return 0;
+            } else {
+                $tmp_year = substr($model->period, 0, 4);
+                $tmp_month = substr($model->period, 4);
+                $tmp_period = $tmp_year . '-' . $tmp_month;
+                return Html::a($model->down_time_number,
+                    ['mesin-check-ng/index',
+                        'downtime_status' => 1,
+                        'mesin_id' => $model->mesin_id,
+                        'mesin_last_update' => $tmp_period
+                    ],
+                    ['title' => 'Click to view detail ...', 'target' => '_blank']);
+            }
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'format' => 'raw',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+            'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
     [
@@ -97,7 +115,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
+            'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
     
@@ -122,7 +140,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' =>  [
