@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
@@ -51,14 +52,11 @@ use kartik\date\DatePicker;
                     ]); ?>
                 </div>
                 <div class="col-md-2">
-                    <?= $form->field($model, 'model')->dropDownList([
-                        'BF 10' => 'BF 10',
-                        'BF 15' => 'BF 15',
-                        'BF 12' => 'BF 12',
-                        'CA 10' => 'CA 10',
-                        'CA 12' => 'CA 12',
-                        'CA 15' => 'CA 15',
-                    ]); ?>
+                    <?= $form->field($model, 'model')->dropDownList(ArrayHelper::map(app\models\CrusherBomModel::find()
+                    ->select('model_name')
+                    ->groupBy('model_name')
+                    ->orderBy('model_name')
+                    ->all(), 'model_name', 'model_name')); ?>
                 </div>
                 <div class="col-md-2">
                     <?= $form->field($model, 'part')->dropDownList([
