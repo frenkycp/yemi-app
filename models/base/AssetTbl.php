@@ -20,8 +20,6 @@ use Yii;
  * @property string $ram_desc
  * @property string $rom_desc
  * @property string $os_desc
- * @property string $nik
- * @property string $NAMA_KARYAWAN
  * @property string $fixed_asst_account
  * @property string $asset_category
  * @property string $purchase_date
@@ -34,11 +32,25 @@ use Yii;
  * @property string $note
  * @property string $location
  * @property string $area
- * @property string $department_pic
  * @property string $project
  * @property string $cur
  * @property double $price
  * @property double $price_usd
+ * @property string $manager_name
+ * @property string $department_pic
+ * @property string $cost_centre
+ * @property string $department_name
+ * @property string $section_name
+ * @property string $nik
+ * @property string $NAMA_KARYAWAN
+ * @property string $primary_picture
+ * @property string $FINANCE_ASSET
+ * @property double $qty
+ * @property double $AtCost
+ * @property string $Discontinue
+ * @property string $DateDisc
+ * @property string $status
+ * @property string $label
  * @property string $aliasModel
  */
 abstract class AssetTbl extends \yii\db\ActiveRecord
@@ -69,10 +81,10 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id'], 'required'],
-            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'nik', 'NAMA_KARYAWAN', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'department_pic', 'project', 'cur'], 'string'],
-            [['purchase_date', 'LAST_UPDATE'], 'safe'],
+            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label'], 'string'],
+            [['purchase_date', 'LAST_UPDATE', 'DateDisc'], 'safe'],
             [['report_type'], 'integer'],
-            [['price', 'price_usd'], 'number'],
+            [['price', 'price_usd', 'qty', 'AtCost'], 'number'],
             [['asset_id'], 'unique']
         ];
     }
@@ -94,8 +106,6 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'ram_desc' => 'Ram Desc',
             'rom_desc' => 'Rom Desc',
             'os_desc' => 'Os Desc',
-            'nik' => 'Nik',
-            'NAMA_KARYAWAN' => 'Nama  Karyawan',
             'fixed_asst_account' => 'Fixed Asst Account',
             'asset_category' => 'Asset Category',
             'purchase_date' => 'Purchase Date',
@@ -108,11 +118,25 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'note' => 'Note',
             'location' => 'Location',
             'area' => 'Area',
-            'department_pic' => 'Department Pic',
             'project' => 'Project',
             'cur' => 'Cur',
             'price' => 'Price',
             'price_usd' => 'Price Usd',
+            'manager_name' => 'Manager Name',
+            'department_pic' => 'Department Pic',
+            'cost_centre' => 'Cost Centre',
+            'department_name' => 'Department Name',
+            'section_name' => 'Section Name',
+            'nik' => 'Nik',
+            'NAMA_KARYAWAN' => 'Nama  Karyawan',
+            'primary_picture' => 'Primary Picture',
+            'FINANCE_ASSET' => 'Finance  Asset',
+            'qty' => 'Qty',
+            'AtCost' => 'At Cost',
+            'Discontinue' => 'Discontinue',
+            'DateDisc' => 'Date Disc',
+            'status' => 'Status',
+            'label' => 'Label',
         ];
     }
 

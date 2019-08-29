@@ -3,13 +3,13 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\CrusherTbl as BaseCrusherTbl;
+use \app\models\base\CrusherBomModel as BaseCrusherBomModel;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.CRUSHER_TBL".
+ * This is the model class for table "db_owner.CRUSHER_BOM_MODEL".
  */
-class CrusherTbl extends BaseCrusherTbl
+class CrusherBomModel extends BaseCrusherBomModel
 {
 
     public function behaviors()
@@ -27,8 +27,7 @@ class CrusherTbl extends BaseCrusherTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['date', 'model', 'part', 'qty'], 'required'],
-                [['bom', 'consume'], 'number'],
+                # custom validation rules
             ]
         );
     }
