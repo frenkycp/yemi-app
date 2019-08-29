@@ -231,6 +231,7 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
         	'room_id' => $room_id,
         	'event_id' => $event_id
         ])
+        ->orderBy('last_update DESC')
         ->asArray()
         ->all();
 		
