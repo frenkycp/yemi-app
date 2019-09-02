@@ -86,7 +86,7 @@ echo '</pre>';*/
 ?>
 
 <div id="main-body">
-    <?= Html::img('@web/uploads/MAP/go_sub_map_crop3.png', ['alt' => 'My logo', 'style' => 'opacity: 0.5']); ?>
+    <?= Html::img('@web/uploads/MAP/go_sub_map_crop3.png', ['alt' => 'My logo', 'style' => 'opacity: 0.8']); ?>
 </div>
 
 <hr>
