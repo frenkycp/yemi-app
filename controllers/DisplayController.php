@@ -129,8 +129,55 @@ class DisplayController extends Controller
     {
         date_default_timezone_set('Asia/Jakarta');
         $now = date('Y-m-d H:i:s');
-        $data = $tmp_data = [];
-        $location_arr = ['PANGKALAN', 'SUB-ASSY-NETWORK', 'SUB-ASSY-FRONT-GRILL', 'SUB-ASSY-ACCESORIES'];
+        $data = $tmp_data = $absolute_loc_arr = [];
+        $location_arr = [
+            'PANGKALAN' => [
+                'top' => '995',
+                'left' => '980',
+                'max_left' => '1180',
+                'max_top' => '1225'
+            ],
+            'SUB-ASSY-NETWORK' => [
+                'top' => '995',
+                'left' => '670',
+                'max_left' => '882',
+                'max_top' => '1225'
+            ],
+            'SUB-ASSY-FRONT-GRILL' => [
+                'top' => '250',
+                'left' => '140',
+                'max_left' => '583',
+                'max_top' => '360'
+            ],
+            'SUB-ASSY-ACCESORIES' => [
+                'top' => '250',
+                'left' => '980',
+                'max_left' => '1170',
+                'max_top' => '360'
+            ]
+        ];
+        $default_initial_location = [
+            [
+                'top' => '1135px',
+                'left' => '1135px',
+            ],
+            [
+                'top' => '1135px',
+                'left' => '1135px',
+            ],
+            [
+                'top' => '2275px',
+                'left' => '165px',
+                'max_left' => '675px',
+                'max_top' => '360px'
+            ],
+            [
+                'top' => '275px',
+                'left' => '1135px',
+                'max_left' => '1355px',
+                'max_top' => '360px'
+            ],
+        ];
         //$now = '2019-08-14 09:25:00';
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $tmp_str = '';
@@ -145,9 +192,11 @@ class DisplayController extends Controller
         ->orderBy('GOJEK_DESC')
         ->all();
 
-        foreach ($location_arr as $location) {
-            $tmp_content = '<ul>';
+        foreach ($location_arr as $location => $location_detail) {
+            $tmp_content = '<ol>';
             $count = 0;
+            $top = $location_detail['top'];
+            $left = $location_detail['left'];
             foreach ($tmp_operator as $key => $value) {
                 if ($value->beacon_location == $location) {
                     $count++;
@@ -165,17 +214,25 @@ class DisplayController extends Controller
                         
                     }
                     if ($seconds_ori < 3600) {
+                        $absolute_loc_arr[] = [
+                            'station' => $location,
+                            'nik' => $value->GOJEK_ID,
+                            'name' => $value->GOJEK_DESC,
+                            'last_update' => $seconds . $seconds_str,
+                            'top' => $top . 'px',
+                            'left' => $left . 'px',
+                        ];
+                        //$top += 25;
+                        $left += 30;
+                        if ($left > $location_detail['max_left']) {
+                            $left = $location_detail['left'];
+                            $top += 35;
+                        }
                         $tmp_content .= '<li><span style="opacity: 0.9; letter-spacing: 1px;">' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - </span><small style="opacity: 0.6;">' . $seconds . $seconds_str . ' ago</small></li>';
                     }
-                    
-                    /*$tmp_location = strtolower($value->beacon_location);
-                    $tmp_data[$tmp_location][] = [
-                        'name' => $value->GOJEK_DESC,
-                        'distance' => round($value->distance, 1)
-                    ];*/
                 }
             }
-            $tmp_content .= '</ul>';
+            $tmp_content .= '</ol>';
             if ($count == 0) {
                 $tmp_content = '<span>No Operator Here ...</span>';
             }
@@ -184,7 +241,8 @@ class DisplayController extends Controller
 
         $data = [
             'data' => $tmp_data,
-            'last_update' => '<u>Last Update : ' . date('Y-m-d H:i') . '</u>'
+            'last_update' => '<u>Last Update : ' . date('Y-m-d H:i') . '</u>',
+            'absolute_loc_arr' => $absolute_loc_arr
         ];
         return $data;
     }
@@ -663,7 +721,7 @@ class DisplayController extends Controller
         $now = date('Y-m-d H:i:s');
         //$now = '2019-08-14 09:25:00';
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $tmp_data = GojekTbl::find()->where(['SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->asArray()->all();
+        $tmp_data = GojekTbl::find()->where(['SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->all();
         $tmp_order = GojekOrderTbl::find()
         ->where([
             'source' => 'SUB',
@@ -675,85 +733,103 @@ class DisplayController extends Controller
         $tmp_str = '';
         $tmp_str .= '<div class="row">';
         foreach ($tmp_data as $key => $value) {
-            $get_new_order = false;
-            $txt_new_order = '';
-            $current_job = 'No Job Order';
-            foreach ($tmp_order as $key => $value_order) {
-                if ($value_order['GOJEK_ID'] == $value['GOJEK_ID']) {
-                    if ($value_order['daparture_date'] == NULL) {
-                        $get_new_order = true;
-                    }
-                    $current_job = $value_order['item_desc'];
+            $data_karyawan = $value->karyawan;
+            $is_end_contract = 0;
+            $d1 = new \DateTime($now);
+            if ($data_karyawan->KONTRAK_KE == 1) {
+                $d2 = new \DateTime($data_karyawan->K1_END);
+                if ($d1 > $d2) {
+                    $is_end_contract = 1;
+                }
+            } else {
+                $d2 = new \DateTime($data_karyawan->K2_END);
+                if ($d1 > $d2) {
+                    $is_end_contract = 1;
                 }
             }
+            if ($is_end_contract == 0) {
+                $get_new_order = false;
+                $txt_new_order = '';
+                $current_job = 'No Job Order';
+                foreach ($tmp_order as $key => $value_order) {
+                    if ($value_order['GOJEK_ID'] == $value->GOJEK_ID) {
+                        if ($value_order['daparture_date'] == NULL) {
+                            $get_new_order = true;
+                        }
+                        $current_job = $value_order['item_desc'];
+                    }
+                }
+                $current_job .= ' | ' . $is_end_contract;
 
-            if ($value['HADIR'] == 'N') {
-                $bg_class = ' bg-gray';
-                $text_remark = 'INACTIVE';
-            } else {
-                if ($value['STAGE'] == 'STANDBY') {
-                    $bg_class = ' bg-red';
-                    $text_remark = 'STANDBY';
-                } elseif ($value['STAGE'] == 'DEPARTURE') {
-                    $bg_class = ' bg-green';
-                    $text_remark = 'START WORKING - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
-                } elseif ($value['STAGE'] == 'ARRIVAL') {
-                    $bg_class = ' bg-yellow';
-                    $text_remark = 'JUST FINISHED - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . '';
-                    $diff_min = $this->getMinutes($value['LAST_UPDATE'], date('Y-m-d H:i:s'));
-                    if ($diff_min > 7) {
-                        if ($value['LAST_UPDATE'] == date('Y-m-d')) {
-                            $bg_class = ' bg-light-blue';
-                            $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value['LAST_UPDATE'])) . ' ]';
-                        } else {
-                            $bg_class = ' bg-light-blue';
-                            $text_remark = 'STANDBY';
-                        }
-                        if ($get_new_order) {
-                            $txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
-                        }
-                    }
-                    
+                if ($value->HADIR == 'N') {
+                    $bg_class = ' bg-gray';
+                    $text_remark = 'INACTIVE';
                 } else {
-                    $bg_class = ' bg-aqua';
-                    $text_remark = 'NO INFORMATION';
+                    if ($value->STAGE == 'STANDBY') {
+                        $bg_class = ' bg-red';
+                        $text_remark = 'STANDBY';
+                    } elseif ($value->STAGE == 'DEPARTURE') {
+                        $bg_class = ' bg-green';
+                        $text_remark = 'START WORKING - ' . date('H:i', strtotime($value->LAST_UPDATE)) . '';
+                    } elseif ($value->STAGE == 'ARRIVAL') {
+                        $bg_class = ' bg-yellow';
+                        $text_remark = 'JUST FINISHED - ' . date('H:i', strtotime($value->LAST_UPDATE)) . '';
+                        $diff_min = $this->getMinutes($value->LAST_UPDATE, date('Y-m-d H:i:s'));
+                        if ($diff_min > 7) {
+                            if ($value->LAST_UPDATE == date('Y-m-d')) {
+                                $bg_class = ' bg-light-blue';
+                                $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value->LAST_UPDATE)) . ' ]';
+                            } else {
+                                $bg_class = ' bg-light-blue';
+                                $text_remark = 'STANDBY';
+                            }
+                            if ($get_new_order) {
+                                $txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
+                            }
+                        }
+                        
+                    } else {
+                        $bg_class = ' bg-aqua';
+                        $text_remark = 'NO INFORMATION';
+                    }
+                    if ($this->isBreakTime($now)) {
+                        $txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">Break Time!</span>';
+                    }
+                    //$txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">Break Time!</span>';
+                    //$txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
                 }
-                if ($this->isBreakTime($now)) {
-                    $txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">Break Time!</span>';
+                
+                $filename = $value->GOJEK_ID . '.jpg';
+                $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
+                if (file_exists($path)) {
+                    $profpic =  Html::img('@web/uploads/yemi_employee_img/' . $value->GOJEK_ID . '.jpg', [
+                        'class' => 'img-circle',
+                        'style' => 'object-fit: cover; height: 60px; width: 60px;'
+                    ]);
+                } else {
+                    $profpic =  Html::img('@web/uploads/profpic_03.png', [
+                        'class' => 'img-circle',
+                        'style' => 'object-fit: cover; height: 60px; width: 60px;'
+                    ]);
                 }
-                //$txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">Break Time!</span>';
-                //$txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
-            }
-            
-            $filename = $value['GOJEK_ID'] . '.jpg';
-            $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
-            if (file_exists($path)) {
-                $profpic =  Html::img('@web/uploads/yemi_employee_img/' . $value['GOJEK_ID'] . '.jpg', [
-                    'class' => 'img-circle',
-                    'style' => 'object-fit: cover; height: 60px; width: 60px;'
-                ]);
-            } else {
-                $profpic =  Html::img('@web/uploads/profpic_03.png', [
-                    'class' => 'img-circle',
-                    'style' => 'object-fit: cover; height: 60px; width: 60px;'
-                ]);
-            }
-            
-            $tmp_str .= '<div class="col-md-3">
-                <div class="box box-widget widget-user-2' . $bg_class . '">
-                    <div class="widget-user-header">
-                        <div class="widget-user-image">
-                            ' . $profpic . '
+                
+                $tmp_str .= '<div class="col-md-3">
+                    <div class="box box-widget widget-user-2' . $bg_class . '">
+                        <div class="widget-user-header">
+                            <div class="widget-user-image">
+                                ' . $profpic . '
+                            </div>
+                            <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value->GOJEK_DESC . ' <span style="position: absolute; top: 10px; right: 10px;">[' . $value->GOJEK_ID . ']</span>' . $txt_new_order . '</h3>
+                            <h5 class="widget-user-desc">' . $text_remark . '</h5>
                         </div>
-                        <h3 class="widget-user-username" style="font-size: 18px; font-weight: 500;">' . $value['GOJEK_DESC'] . ' <span style="position: absolute; top: 10px; right: 10px;">[' . $value['GOJEK_ID'] . ']</span>' . $txt_new_order . '</h3>
-                        <h5 class="widget-user-desc">' . $text_remark . '</h5>
+                        <div class="text-left" style="background: rgba(0,0,0,0.15); padding: 2px 5px;">
+                            <span style="opacity: 0.8;">JOB : ' . strtoupper($current_job) . '</span>
+                        </div>
+                        
                     </div>
-                    <div class="text-left" style="background: rgba(0,0,0,0.15); padding: 2px 5px;">
-                        <span style="opacity: 0.8;">JOB : ' . strtoupper($current_job) . '</span>
-                    </div>
-                    
-                </div>
-            </div>';
+                </div>';
+            }
+            
         }
         $tmp_str .= '</div>';
         $data = [

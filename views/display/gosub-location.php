@@ -45,7 +45,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 300000); // milliseconds
+      //setTimeout(\"refreshPage();\", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -62,6 +62,11 @@ $this->registerJs("
                 $.each(data.data , function(index, val) {
                     //alert(index);
                     $('#'+index).html(val);
+                });
+                $('.user-loc').remove();
+                $.each(data.absolute_loc_arr , function(index, val) {
+                    //alert(val.name);
+                    $('#main-body').append('<img title=\"' + val.nik + ' - ' + val.name + ' (LAST UPDATE : ' + val.last_update + ' ago)\" class=\"user-image user-loc\" width=\"25px\" src=\"" . Url::to('@web/uploads/ICON/marker_05.png') . "\" style=\"position: absolute; top: ' + val.top + '; left: ' + val.left + '; opacity: 1;\"></img>');
                 });
             },
             complete: function(){
@@ -80,6 +85,11 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 
+<div id="main-body">
+    <?= Html::img('@web/uploads/MAP/go_sub_map_crop3.png', ['alt' => 'My logo', 'style' => 'opacity: 0.5']); ?>
+</div>
+
+<hr>
 <div class="row" style="color: white;">
     <div class="col-md-3">
         <div class="location-container">

@@ -33,6 +33,11 @@ class GojekTbl extends BaseGojekTbl
         );
     }
 
+    public function getKaryawan()
+    {
+        return $this->hasOne(Karyawan::className(), ['NIK' => 'GOJEK_ID']);
+    }
+
     public function getGojekOrderTbl()
     {
         return $this->hasMany(GojekOrderTbl::className(), ['GOJEK_ID' => 'GOJEK_ID']);
