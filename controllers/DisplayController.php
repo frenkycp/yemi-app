@@ -377,6 +377,8 @@ class DisplayController extends Controller
         $today = date('Y-m-d');
         if ($room_id == 9) {
             $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO GUEST TODAY</span>';
+        } elseif ($room_id == 13){
+            $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO PATROL TODAY</span>';
         } else {
             $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO MEETING TODAY</span>';
         }
