@@ -105,6 +105,12 @@ return [
     'bg-blue' => 'rgba(60, 141, 188, 1)',
     'bg-red' => 'rgba(221, 75, 57, 1)',
     'bg-gray' => 'rgba(244, 244, 244, 1)',
+    'fixed_asset_status' => [
+        'OK' => 'OK',
+        'NG' => 'NG',
+        'REPAIR' => 'REPAIR',
+        'STANDBY' => 'STANDBY',
+    ]
 ];
 
 function getYearArray()

@@ -30,6 +30,8 @@ use Yii;
  * @property string $camera
  * @property string $battery
  * @property string $note
+ * @property string $loc_type
+ * @property string $LOC
  * @property string $location
  * @property string $area
  * @property string $project
@@ -81,7 +83,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id'], 'required'],
-            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label'], 'string'],
+            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'loc_type', 'LOC', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label'], 'string'],
             [['purchase_date', 'LAST_UPDATE', 'DateDisc'], 'safe'],
             [['report_type'], 'integer'],
             [['price', 'price_usd', 'qty', 'AtCost'], 'number'],
@@ -116,6 +118,8 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'camera' => 'Camera',
             'battery' => 'Battery',
             'note' => 'Note',
+            'loc_type' => 'Loc Type',
+            'LOC' => 'Loc',
             'location' => 'Location',
             'area' => 'Area',
             'project' => 'Project',
