@@ -60,7 +60,7 @@ echo '</pre>';*/
                         <div class="panel panel-primary" style="margin: 15px;">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
-                                    <?= Html::a($value->area, ['temp-humidity-chart']); ?>
+                                    <?= Html::a($value->area, ['temp-humidity-chart', 'map_no' => $value->map_no]); ?>
                                 </h3>
                             </div>
                             <div class="panel-body no-padding">

@@ -71,8 +71,86 @@ use app\models\SensorTbl;
 
 class DisplayController extends Controller
 {
+    public function actionTempHumidityChart($map_no)
+    {
+        $this->layout = 'clean';
+        $model = new \yii\base\DynamicModel([
+            'section', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','map_'], 'required');
 
-    public function actionTempHumidityControl($value='')
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $data = $tmp_data_temperature = $tmp_data_humidity = [];
+
+        if ($model->load($_GET)) {
+
+        }
+        $data_dummy = [
+            [
+                'system_date_time' => '2019-09-02 07:00:00',
+                'temparature' => rand(20, 40),
+                'humidity' => rand(10, 100)
+            ],
+            [
+                'system_date_time' => '2019-09-02 08:00:00',
+                'temparature' => rand(20, 40),
+                'humidity' => rand(10, 100)
+            ],
+            [
+                'system_date_time' => '2019-09-02 09:00:00',
+                'temparature' => rand(20, 40),
+                'humidity' => rand(10, 100)
+            ],
+            [
+                'system_date_time' => '2019-09-02 10:00:00',
+                'temparature' => rand(20, 40),
+                'humidity' => rand(10, 100)
+            ],
+            [
+                'system_date_time' => '2019-09-02 11:00:00',
+                'temparature' => rand(20, 40),
+                'humidity' => rand(10, 100)
+            ],
+            [
+                'system_date_time' => '2019-09-02 12:00:00',
+                'temparature' => rand(20, 40),
+                'humidity' => rand(10, 100)
+            ],
+        ];
+        foreach ($data_dummy as $value) {
+            $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
+            $tmp_data_temperature[] = [
+                'x' => $proddate,
+                'y' => (int)$value['temparature']
+            ];
+            $tmp_data_humidity[] = [
+                'x' => $proddate,
+                'y' => (int)$value['humidity']
+            ];
+        }
+
+        $data = [
+            'temparature' => [
+                [
+                    'name' => 'Temperature',
+                    'data' => $tmp_data_temperature
+                ],
+            ],
+            'humidity' => [
+                [
+                    'name' => 'Humidity',
+                    'data' => $tmp_data_humidity
+                ],
+            ],
+        ];
+
+        return $this->render('temp-humidity-chart', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
+    public function actionTempHumidityControl()
     {
         $data = [];
         $this->layout = 'clean';
