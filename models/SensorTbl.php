@@ -31,4 +31,9 @@ class SensorTbl extends BaseSensorTbl
             ]
         );
     }
+
+    public function getLocationArea()
+    {
+        return $this->location . ' (' . $this->area . ')';
+    }
 }

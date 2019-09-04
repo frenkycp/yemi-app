@@ -68,56 +68,38 @@ use app\models\MeetingEvent;
 use app\models\MrbsRoom;
 use app\models\GeneralFunction;
 use app\models\SensorTbl;
+use app\models\SensorLog;
 
 class DisplayController extends Controller
 {
-    public function actionTempHumidityChart($map_no)
+    public function actionTempHumidityChart()
     {
         $this->layout = 'clean';
         $model = new \yii\base\DynamicModel([
-            'section', 'from_date', 'to_date'
+            'map_no', 'from_date', 'to_date'
         ]);
-        $model->addRule(['from_date', 'to_date','map_'], 'required');
+        $model->addRule(['from_date', 'to_date','map_no'], 'required');
 
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
         $data = $tmp_data_temperature = $tmp_data_humidity = [];
 
+        $model->map_no = $_GET['map_no'];
+
         if ($model->load($_GET)) {
 
         }
-        $data_dummy = [
-            [
-                'system_date_time' => '2019-09-02 07:00:00',
-                'temparature' => rand(20, 40),
-                'humidity' => rand(10, 100)
-            ],
-            [
-                'system_date_time' => '2019-09-02 08:00:00',
-                'temparature' => rand(20, 40),
-                'humidity' => rand(10, 100)
-            ],
-            [
-                'system_date_time' => '2019-09-02 09:00:00',
-                'temparature' => rand(20, 40),
-                'humidity' => rand(10, 100)
-            ],
-            [
-                'system_date_time' => '2019-09-02 10:00:00',
-                'temparature' => rand(20, 40),
-                'humidity' => rand(10, 100)
-            ],
-            [
-                'system_date_time' => '2019-09-02 11:00:00',
-                'temparature' => rand(20, 40),
-                'humidity' => rand(10, 100)
-            ],
-            [
-                'system_date_time' => '2019-09-02 12:00:00',
-                'temparature' => rand(20, 40),
-                'humidity' => rand(10, 100)
-            ],
-        ];
+
+        $data_dummy = SensorLog::find()
+        ->where([
+            'AND',
+            ['>=', 'system_date_time', $model->from_date],
+            ['<=', 'system_date_time', $model->to_date]
+        ])
+        ->andWhere(['map_no' => $model->map_no])
+        ->asArray()
+        ->all();
+
         foreach ($data_dummy as $value) {
             $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
             $tmp_data_temperature[] = [
@@ -134,13 +116,15 @@ class DisplayController extends Controller
             'temparature' => [
                 [
                     'name' => 'Temperature',
-                    'data' => $tmp_data_temperature
+                    'data' => $tmp_data_temperature,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[9]')
                 ],
             ],
             'humidity' => [
                 [
                     'name' => 'Humidity',
-                    'data' => $tmp_data_humidity
+                    'data' => $tmp_data_humidity,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
                 ],
             ],
         ];

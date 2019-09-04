@@ -12,9 +12,9 @@ use kartik\select2\Select2;
 date_default_timezone_set('Asia/Jakarta');
 
 $this->title = [
-    'page_title' => 'Temperature & Humidity Control <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
-    'tab_title' => 'Temperature & Humidity Control',
-    'breadcrumbs_title' => 'Temperature & Humidity Control'
+    'page_title' => 'Temperature & Humidity Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+    'tab_title' => 'Temperature & Humidity Monitoring',
+    'breadcrumbs_title' => 'Temperature & Humidity Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -60,7 +60,7 @@ echo '</pre>';*/
                         <div class="panel panel-primary" style="margin: 15px;">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
-                                    <?= Html::a($value->area, ['temp-humidity-chart', 'map_no' => $value->map_no]); ?>
+                                    <?= Html::a($value->area, ['temp-humidity-chart', 'map_no' => $value->map_no], ['target' => '_blank']); ?>
                                 </h3>
                             </div>
                             <div class="panel-body no-padding">
