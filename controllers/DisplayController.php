@@ -67,9 +67,21 @@ use app\models\WipHdrDtr;
 use app\models\MeetingEvent;
 use app\models\MrbsRoom;
 use app\models\GeneralFunction;
+use app\models\SensorTbl;
 
 class DisplayController extends Controller
 {
+
+    public function actionTempHumidityControl($value='')
+    {
+        $data = [];
+        $this->layout = 'clean';
+        $factory1_data = SensorTbl::find()->where(['Factory' => 'Factory #1'])->all();
+        return $this->render('temp-humidity-control', [
+            'factory1_data' => $factory1_data
+        ]);
+    }
+
     public function actionLotFlowProcess($lot_number)
     {
         $this->layout = 'clean';
