@@ -72,6 +72,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
             'yii\\codeception\\' => 16,
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
+            'yii2fullcalendar\\' => 17,
         ),
         's' => 
         array (
@@ -108,6 +109,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
             'kartik\\grid\\' => 12,
             'kartik\\form\\' => 12,
             'kartik\\file\\' => 12,
+            'kartik\\field\\' => 13,
             'kartik\\export\\' => 14,
             'kartik\\editable\\' => 16,
             'kartik\\dynagrid\\' => 16,
@@ -215,6 +217,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
         ),
+        'yii2fullcalendar\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/philippfrenzel/yii2fullcalendar',
+        ),
         'scotthuangzl\\googlechart\\' => 
         array (
             0 => __DIR__ . '/..' . '/scotthuangzl/yii2-google-chart',
@@ -298,6 +304,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         'kartik\\file\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-fileinput/src',
+        ),
+        'kartik\\field\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-field-range/src',
         ),
         'kartik\\export\\' => 
         array (
