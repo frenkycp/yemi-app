@@ -139,8 +139,10 @@ class DisplayController extends Controller
         $data = [];
         $this->layout = 'clean';
         $factory1_data = SensorTbl::find()->where(['Factory' => 'Factory #1'])->all();
+        $factory2_data = SensorTbl::find()->where(['Factory' => 'Factory #2'])->all();
         return $this->render('temp-humidity-control', [
-            'factory1_data' => $factory1_data
+            'factory1_data' => $factory1_data,
+            'factory2_data' => $factory2_data,
         ]);
     }
 

@@ -58,7 +58,7 @@ echo '</pre>';*/
                     ?>
                     <div class="col-md-4">
                         <div class="panel panel-primary" style="margin: 15px;">
-                            <div class="panel-heading">
+                            <div class="panel-heading text-center">
                                 <h3 class="panel-title">
                                     <?= Html::a($value->area, ['temp-humidity-chart', 'map_no' => $value->map_no], ['target' => '_blank']); ?>
                                 </h3>
@@ -66,36 +66,12 @@ echo '</pre>';*/
                             <div class="panel-body no-padding">
                                 <table class="table" style="margin-bottom: 0px;">
                                     <tr>
-                                        <th class="text-center">Temperature</th>
-                                        <th class="text-center">Humidity</th>
+                                        <th class="text-center" width="50%">Temperature</th>
+                                        <th class="text-center" width="50%">Humidity</th>
                                     </tr>
                                     <tr>
-                                        <td class="text-center" style="font-size: 3em;"><?= $value->temparature; ?>&deg;C</td>
-                                        <td class="text-center" style="font-size: 3em;"><?= $value->humidity; ?>&#37;</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                <?php }
-                for ($i=0; $i < 10; $i++) { 
-                    ?>
-                    <div class="col-md-4">
-                        <div class="panel panel-primary" style="margin: 15px;">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">
-                                    -
-                                </h3>
-                            </div>
-                            <div class="panel-body no-padding">
-                                <table class="table" style="margin-bottom: 0px;">
-                                    <tr>
-                                        <th class="text-center">Temperature</th>
-                                        <th class="text-center">Humidity</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center" style="font-size: 3em;">-</td>
-                                        <td class="text-center" style="font-size: 3em;">-</td>
+                                        <td class="text-center" style="font-size: 1.5em; font-weight: bold;"><?= $value->temparature == null ? '-' : $value->temparature . '&deg;C'; ?></td>
+                                        <td class="text-center" style="font-size: 1.5em; font-weight: bold;"><?= $value->humidity == null ? '-' : $value->humidity . '&#37;'; ?></td>
                                     </tr>
                                 </table>
                             </div>
@@ -111,24 +87,24 @@ echo '</pre>';*/
         <div class="factory-container">
             <div class="row">
                 <?php
-                for ($i=0; $i < 12; $i++) { 
+                foreach ($factory2_data as $key => $value) {
                     ?>
                     <div class="col-md-4">
                         <div class="panel panel-primary" style="margin: 15px;">
-                            <div class="panel-heading">
+                            <div class="panel-heading text-center">
                                 <h3 class="panel-title">
-                                    -
+                                    <?= Html::a($value->area, ['temp-humidity-chart', 'map_no' => $value->map_no], ['target' => '_blank']); ?>
                                 </h3>
                             </div>
                             <div class="panel-body no-padding">
                                 <table class="table" style="margin-bottom: 0px;">
                                     <tr>
-                                        <th class="text-center">Temperature</th>
-                                        <th class="text-center">Humidity</th>
+                                        <th class="text-center" width="50%">Temperature</th>
+                                        <th class="text-center" width="50%">Humidity</th>
                                     </tr>
                                     <tr>
-                                        <td class="text-center" style="font-size: 3em;">-</td>
-                                        <td class="text-center" style="font-size: 3em;">-</td>
+                                        <td class="text-center" style="font-size: 1.5em; font-weight: bold;"><?= $value->temparature == null ? '-' : $value->temparature . '&deg;C'; ?></td>
+                                        <td class="text-center" style="font-size: 1.5em; font-weight: bold;"><?= $value->humidity == null ? '-' : $value->humidity . '&#37;'; ?></td>
                                     </tr>
                                 </table>
                             </div>
