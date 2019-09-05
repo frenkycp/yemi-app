@@ -46,4 +46,33 @@ class CrusherTblController extends \app\controllers\base\CrusherTblController
 		}
 		return $this->render('create', ['model' => $model]);
 	}
+
+	public function actionUpdate($trans_id)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($trans_id);
+		$model->date = date('Y-m-d', strtotime($model->date));
+		$model->modified_datetime = date('Y-m-d H:i:s');
+		$model->modified_by_id = \Yii::$app->user->identity->username;
+		$model->modified_by_name = \Yii::$app->user->identity->name;
+
+		if ($model->load($_POST)) {
+			$tmp_bom = CrusherBomModel::find()->where(['model_name' => $model->model, 'part_type' => $model->part])->one();
+			$model->bom = $model->consume = 0;
+			if ($tmp_bom->id != null) {
+				$bom_qty = $tmp_bom->bom_qty;
+				$model->bom = $bom_qty;
+				$model->consume = round($bom_qty * $model->qty, 3);
+			}
+			if ($model->save()) {
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($model->errors);
+			}
+		} else {
+		return $this->render('update', [
+		'model' => $model,
+		]);
+		}
+	}
 }
