@@ -216,7 +216,7 @@ $this->registerCss("
                                     <?= Html::a('SMT INJ Performance Data<br/><span class="japanesse-word">(SMT INJ パフォーマンスデータ）</span>', ['/smt-performance-data']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT INJ Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Daily', ['/smt-daily-utility-report']); ?>
+                                    <?= Html::a('SMT INJ Utility & Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Daily', ['/smt-daily-utility-report']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('SMT INJ Utility & Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Monthly', ['/smt-line-monthly-utility']); ?>
