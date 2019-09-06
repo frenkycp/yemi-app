@@ -79,41 +79,36 @@ $this->registerCss("
     );
     ?>
 
-    <div class="">
-        <div class="row">
-            <div class="col-md-6">
-                <?= $form->field($model, 'username')->textInput(); ?>
+    <div class="panel panel-primary">
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <?= $form->field($model, 'next_process_id')->dropDownList(
+                        ArrayHelper::map(app\models\MachineIotCurrent::find()->select(['kelompok'])->groupBy('kelompok')->orderBy('kelompok')->all(), 'kelompok', 'kelompok'),           // Flat array ('id'=>'label')
+                        [
+                            'prompt' => '-- Select a group --'
+                        ]    // options
+                    )->label('Next Process (Leave empty if there is no next process)'); ?>
+                </div>
             </div>
-            <div class="col-md-6">
-                <?= $form->field($model, 'password')->passwordInput(); ?>
-            </div>
+
+            <?php echo $form->errorSummary($model); ?>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <?= $form->field($model, 'next_process_id')->dropDownList(
-                    ArrayHelper::map(app\models\MachineIotCurrent::find()->select(['kelompok'])->groupBy('kelompok')->orderBy('kelompok')->all(), 'kelompok', 'kelompok'),           // Flat array ('id'=>'label')
-                    [
-                        'prompt' => '-- Select a group --'
-                    ]    // options
-                )->label('Next Process (Leave empty if there is no next process)'); ?>
-            </div>
+        <div class="panel-footer">
+            <?= Html::submitButton(
+            '<span class="glyphicon glyphicon-check"></span> SUBMIT',
+            [
+            'id' => 'save-' . $model->formName(),
+            'class' => 'btn btn-success'
+            ]
+            );
+            ?>
+
+            <?php ActiveForm::end(); ?>
+            <?= Html::a('<span class="glyphicon glyphicon-remove"></span> CANCEL', Url::previous(), ['class' => 'btn btn-warning']) ?>
         </div>
-			
-        <hr/>
 
-        <?php echo $form->errorSummary($model); ?>
-
-        <?= Html::submitButton(
-        '<span class="glyphicon glyphicon-check"></span> SUBMIT',
-        [
-        'id' => 'save-' . $model->formName(),
-        'class' => 'btn btn-success'
-        ]
-        );
-        ?>
-
-        <?php ActiveForm::end(); ?>
-        <?= Html::a('<span class="glyphicon glyphicon-remove"></span> CANCEL', Url::previous(), ['class' => 'btn btn-warning']) ?>
+        
         <!--<button type="button" class="btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span> Cancel</button>-->
 
     </div>

@@ -31,4 +31,9 @@ class CostCenter extends BaseCostCenter
             ]
         );
     }
+
+    public function getDeptSection()
+    {
+        return $this->CC_GROUP . ' - ' . $this->CC_DESC;
+    }
 }

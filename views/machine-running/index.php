@@ -62,7 +62,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 10000); // milliseconds
+      setTimeout(\"refreshPage();\", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -85,13 +85,44 @@ print_r($current_data);
 echo '</pre>';
 echo $data['name'];*/
 ?>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <div class="pull-right" style="color: white;">
+            User : <?= $mcr_name; ?>
+        </div>
+    </div>
+    <div class="col-md-12" style="padding-top: 5px;">
+        <div class="pull-right">
+            <?= Html::a('Log Out', ['logout'], [
+                'class' => 'btn btn-danger'
+            ]) ?>
+        </div>
+    </div>
+    
+</div>
+<hr>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['machine-running/index']),
+]); ?>
 
+<?= $form->field($model, 'mesin_id')->widget(Select2::classname(), [
+    'data' => ArrayHelper::map(app\models\MachineIotCurrent::find()->all(), 'mesin_id', 'assetName'),
+    'options' => [
+        'placeholder' => 'Select a machine ...',
+        'onchange' => 'this.form.submit()'
+    ],
+    'pluginOptions' => [
+        'allowClear' => true
+    ],
+])->label(false); ?>
+
+<?php ActiveForm::end(); ?>
 <div class="row">
     <div class="col-md-12">
         <div class="box box-success box-solid text-center">
-            <div class="box-header">
-                <h3 class="box-title"><?= $mesin_description; ?></h3>
-            </div>
             <div class="box-body no-padding">
                 <table class="table table-responsive table-stripped" style="font-size: 24px;">
                     <thead>
@@ -154,48 +185,52 @@ echo $data['name'];*/
             <th class="text-center">Part Number</th>
             <th>Part Name</th>
             <th class="text-center">Lot Qty</th>
+            <th>Start on Machine</th>
         </tr>
     </thead>
     <tbody>
         <?php
         if (!$lot_data) {
             echo '<tr>
-                <td colspan=5 style="font-size: 20px;">There is no plan for this machine ...</td>
+                <td colspan=7 style="font-size: 20px;">There is no plan for this machine ...</td>
             </tr>';
-        }
-        foreach ($lot_data as $key => $value) {
-            ?>
-            <tr>
-                <td class="text-center">
-                    <?php
-                    if ($value['plan_run'] == 'R') {
-                        echo Html::button('RUNNING', [
-                            'class' => 'btn btn-warning btn-block disabled'
-                        ]);
-                    } else {
-                        if (!isset($output_data['lot_number'])) {
-                            echo Html::a('START', ['start-machine', 'mesin_id' => $mesin_id, 'lot_id' => $value['lot_id']], [
-                                'class' => 'btn btn-success btn-block',
-                                'data' => [
-                                    'confirm' => 'Are you sure to start lot number ' . $value['lot_id'] . ' ?',
-                                ],
+        } else {
+            foreach ($lot_data as $key => $value) {
+                ?>
+                <tr>
+                    <td class="text-center">
+                        <?php
+                        if ($value['plan_run'] == 'R') {
+                            echo Html::button('RUNNING', [
+                                'class' => 'btn btn-warning btn-block disabled'
                             ]);
                         } else {
-                            echo Html::button('<strike>START</strike>', [
-                                'class' => 'btn btn-success btn-block disabled'
-                            ]);
+                            if (!isset($output_data['lot_number'])) {
+                                echo Html::a('START', ['start-machine', 'mesin_id' => $mesin_id, 'lot_id' => $value['lot_id']], [
+                                    'class' => 'btn btn-success btn-block',
+                                    'data' => [
+                                        'confirm' => 'Are you sure to start lot number ' . $value['lot_id'] . ' ?',
+                                    ],
+                                ]);
+                            } else {
+                                echo Html::button('<strike>START</strike>', [
+                                    'class' => 'btn btn-success btn-block disabled'
+                                ]);
+                            }
                         }
-                    }
-                    
-                    ?>
-                </td>
-                <td class="text-center"><?= $value['lot_id']; ?></td>
-                <td class="text-center"><?= date('Y-m-d', strtotime($value['plan_date'])); ?></td>
-                <td class="text-center"><?= $value['child_all']; ?></td>
-                <td><?= $value['child_desc_all']; ?></td>
-                <td class="text-center"><?= (int)$value['qty_all']; ?></td>
-            </tr>
-        <?php }
+                        
+                        ?>
+                    </td>
+                    <td class="text-center"><?= $value['lot_id']; ?></td>
+                    <td class="text-center"><?= date('Y-m-d', strtotime($value['plan_date'])); ?></td>
+                    <td class="text-center"><?= $value['child_all']; ?></td>
+                    <td><?= $value['child_desc_all']; ?></td>
+                    <td class="text-center"><?= (int)$value['qty_all']; ?></td>
+                    <td><?= $value['mesin_id'] . ' - ' . $value['mesin_description']; ?></td>
+                </tr>
+            <?php }
+        }
+        
         ?>
         
     </tbody>

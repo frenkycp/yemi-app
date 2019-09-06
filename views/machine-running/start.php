@@ -67,14 +67,6 @@ $this->registerCss("
 
 <div class="panel panel-primary">
 	<div class="panel-body">
-        <div class="row">
-            <div class="col-md-6">
-                <?= $form->field($model, 'username')->textInput(); ?>
-            </div>
-            <div class="col-md-6">
-                <?= $form->field($model, 'password')->passwordInput(); ?>
-            </div>
-        </div>
 		<div>
 			<?= $form->field($model, 'man_power')->widget(Select2::classname(), [
 			    'data' => ArrayHelper::map(app\models\Karyawan::find()->select(['NIK', 'NAMA_KARYAWAN'])->orderBy('NAMA_KARYAWAN')->all(), 'nikNama', 'nikNama'),
