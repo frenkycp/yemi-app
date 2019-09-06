@@ -30,6 +30,7 @@ class MntKwhReportController extends Controller
 	    ]);
 	    $model->addRule(['posting_date','machine_id'], 'required');
 	    $model->posting_date = $posting_date;
+	    $model->machine_id = 'MNT00076';
 
 		if (\Yii::$app->request->get('posting_date') !== null) {
 			$model->posting_date = \Yii::$app->request->get('posting_date');
@@ -42,219 +43,219 @@ class MntKwhReportController extends Controller
 		$year = substr($posting_date, 0, 4);
 		$month = substr($posting_date, 5, 2);
 
-		if ($model->load($_GET) || \Yii::$app->request->get('posting_date') !== null) {
-			$iot_by_hours = MachineIotCurrentEffLog::find()
-			->where([
-				'posting_shift' => $model->posting_date,
-				'mesin_id' => $model->machine_id,
-			])
-			->asArray()
-			->all();
+		if ($model->load($_GET)) {
+			
+		}
+		$iot_by_hours = MachineIotCurrentEffLog::find()
+		->where([
+			'posting_shift' => $model->posting_date,
+			'mesin_id' => $model->machine_id,
+		])
+		->asArray()
+		->all();
 
-			$tmp_data_by_hours = [];
-			$start_hour = 7;
-			for ($i=1; $i <= 24; $i++) {
-				$seq = str_pad($i, 2, '0', STR_PAD_LEFT);
-				$total_putih = null;
-				$total_biru = null;
-				$total_hijau = null;
-				$total_merah = null;
-				$total_kuning = null;
-				$sisa_detik = null;
-				if ($start_hour == 24) {
-					$start_hour = 0;
-				}
-				$kwh = 0;
-				$max_kwh = 0;
-				foreach ($iot_by_hours as $key => $value) {
-					if ($seq == $value['seq']) {
-						$sisa_detik = $value['lost_data'];
-						$total_putih = $value['putih'];
-						$total_hijau = $value['hijau'];
-						$total_biru = $value['biru'];
-						$total_kuning = $value['kuning'];
-						$total_merah = $value['merah'];
-						$kwh = (int)$value['kwh_consume'];
-						$max_kwh = (int)$value['kwh_end'];
-					}
-				}
-				$categories[] = $start_hour;
-				$tmp_data_by_hours['putih'][] = round($total_putih / 60, 1) == 0 ? null : round($total_putih / 60, 1);
-				$tmp_data_by_hours['hijau'][] = round($total_hijau / 60, 1) == 0 ? null : round($total_hijau / 60, 1);
-				$tmp_data_by_hours['biru'][] = round($total_biru / 60, 1) == 0 ? null : round($total_biru / 60, 1);
-				$tmp_data_by_hours['merah'][] = round($total_merah / 60, 1) == 0 ? null : round($total_merah / 60, 1);
-				$tmp_data_by_hours['kuning'][] = round($total_kuning / 60, 1) == 0 ? null : round($total_kuning / 60, 1);
-				$tmp_data_by_hours['sisa'][] = round($sisa_detik / 60, 1) == 0 ? null : round($sisa_detik / 60, 1);
-
-				$tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
-				$tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;
-
-				$start_hour++;
+		$tmp_data_by_hours = [];
+		$start_hour = 7;
+		for ($i=1; $i <= 24; $i++) {
+			$seq = str_pad($i, 2, '0', STR_PAD_LEFT);
+			$total_putih = null;
+			$total_biru = null;
+			$total_hijau = null;
+			$total_merah = null;
+			$total_kuning = null;
+			$sisa_detik = null;
+			if ($start_hour == 24) {
+				$start_hour = 0;
 			}
-
-			$data_iot_by_hours = [
-				[
-					'name' => 'UNKNOWN',
-					'data' => $tmp_data_by_hours['sisa'],
-					'color' => 'rgba(0, 0, 0, 0)',
-					'dataLabels' => [
-						'enabled' => false
-					],
-					'showInLegend' => false,
-				],
-				[
-					'name' => 'IDLE',
-					'data' => $tmp_data_by_hours['putih'],
-					'color' => 'silver'
-				],
-				[
-					'name' => 'STOP',
-					'data' => $tmp_data_by_hours['merah'],
-					'color' => 'red'
-				],
-				[
-					'name' => 'HANDLING',
-					'data' => $tmp_data_by_hours['kuning'],
-					'color' => 'yellow'
-				],
-				[
-					'name' => 'SETTING',
-					'data' => $tmp_data_by_hours['biru'],
-					'color' => 'blue'
-				],
-				[
-					'name' => 'RUNNING',
-					'data' => $tmp_data_by_hours['hijau'],
-					'color' => 'green',
-				],
-				
-			];
-
-			$data_power_consumption = [
-				[
-					'name' => 'KWH Measured',
-					'data' => $tmp_data_max_kwh,
-					'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
-					'yAxis' => 1,
-					//'showInLegend' => false,
-					'dataLabels' => [
-						'enabled' => true,
-						//'format' => '{y} KWh'
-					],
-				],
-				[
-					'name' => 'KWH Consumption',
-					'data' => $tmp_data_kwh,
-					'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
-					//'showInLegend' => false,
-					'dataLabels' => [
-						'enabled' => true,
-						//'format' => '{y} KWh'
-					],
-				]
-			];
-
-			$machine_iot_util = MachineIotCurrentEffLog::find()
-			->select([
-				'posting_shift',
-				'merah' => 'SUM(merah)',
-				'kuning' => 'SUM(kuning)',
-				'hijau' => 'SUM(hijau)',
-				'biru' => 'SUM(biru)',
-				'putih' => 'SUM(putih)',
-				'lost_data' => 'SUM(lost_data)'
-			])
-			->where([
-				'period_shift' => date('Ym', strtotime($model->posting_date)),
-				'mesin_id' => $model->machine_id,
-			])
-			->groupBy('posting_shift')
-			->orderBy('posting_shift')
-			->asArray()
-			->all();
-
-			$begin = new \DateTime(date('Y-m-d', strtotime(date('Y-m', strtotime($model->posting_date)) . '-01')));
-			$end   = new \DateTime(date('Y-m-t', strtotime(date('Y-m', strtotime($model->posting_date)) . '-01')));
-
-			$start_date = (strtotime($begin->format('Y-m-d') . " +7 hours") * 1000);
-			$end_date = (strtotime($end->format('Y-m-d') . " +7 hours") * 1000);
-
-			$tmp_data = [];
-			foreach ($machine_iot_util as $key => $value) {
-				$proddate = (strtotime($value['posting_shift'] . " +7 hours") * 1000);
-				$total_putih = round($value['putih'] / 60, 1);
-				$total_biru = round($value['biru'] / 60, 1);
-				$total_kuning = round($value['kuning'] / 60, 1);
-				$total_hijau = round($value['hijau'] / 60, 1);
-				$total_merah = round($value['merah'] / 60, 1);
-				$total_sisa = round($value['lost_data'] / 60, 1);
-
-				$tmp_data['PUTIH'][] = [
-					'x' => $proddate,
-					'y' => $total_putih == 0 ? null : $total_putih
-				];
-				$tmp_data['BIRU'][] = [
-					'x' => $proddate,
-					'y' => $total_biru == 0 ? null : $total_biru
-				];
-				$tmp_data['KUNING'][] = [
-					'x' => $proddate,
-					'y' => $total_kuning == 0 ? null : $total_kuning
-				];
-				$tmp_data['HIJAU'][] = [
-					'x' => $proddate,
-					'y' => $total_hijau == 0 ? null : $total_hijau
-				];
-				$tmp_data['MERAH'][] = [
-					'x' => $proddate,
-					'y' => $total_merah == 0 ? null : $total_merah
-				];
-				$tmp_data['sisa'][] = [
-					'x' => $proddate,
-					'y' => $total_sisa == 0 ? null : $total_sisa
-				];
+			$kwh = 0;
+			$max_kwh = 0;
+			foreach ($iot_by_hours as $key => $value) {
+				if ($seq == $value['seq']) {
+					$sisa_detik = $value['lost_data'];
+					$total_putih = $value['putih'];
+					$total_hijau = $value['hijau'];
+					$total_biru = $value['biru'];
+					$total_kuning = $value['kuning'];
+					$total_merah = $value['merah'];
+					$kwh = (int)$value['kwh_consume'];
+					$max_kwh = (int)$value['kwh_end'];
+				}
 			}
+			$categories[] = $start_hour;
+			$tmp_data_by_hours['putih'][] = round($total_putih / 60, 1) == 0 ? null : round($total_putih / 60, 1);
+			$tmp_data_by_hours['hijau'][] = round($total_hijau / 60, 1) == 0 ? null : round($total_hijau / 60, 1);
+			$tmp_data_by_hours['biru'][] = round($total_biru / 60, 1) == 0 ? null : round($total_biru / 60, 1);
+			$tmp_data_by_hours['merah'][] = round($total_merah / 60, 1) == 0 ? null : round($total_merah / 60, 1);
+			$tmp_data_by_hours['kuning'][] = round($total_kuning / 60, 1) == 0 ? null : round($total_kuning / 60, 1);
+			$tmp_data_by_hours['sisa'][] = round($sisa_detik / 60, 1) == 0 ? null : round($sisa_detik / 60, 1);
 
-			$data_iot = [];
-			$data_iot = [
-				[
-					'name' => 'UNKNOWN',
-					'data' => $tmp_data['sisa'],
-					'color' => 'rgba(0, 0, 0, 0)',
-					'dataLabels' => [
-						'enabled' => false
-					],
-					'showInLegend' => false,
+			$tmp_data_kwh[] = $kwh == 0 ? null : $kwh;
+			$tmp_data_max_kwh[] = $max_kwh == 0 ? null : $max_kwh;
+
+			$start_hour++;
+		}
+
+		$data_iot_by_hours = [
+			[
+				'name' => 'UNKNOWN',
+				'data' => $tmp_data_by_hours['sisa'],
+				'color' => 'rgba(0, 0, 0, 0)',
+				'dataLabels' => [
+					'enabled' => false
 				],
-				[
-					'name' => 'IDLE',
-					'data' => $tmp_data['PUTIH'],
-					'color' => 'silver'
+				'showInLegend' => false,
+			],
+			[
+				'name' => 'IDLE',
+				'data' => $tmp_data_by_hours['putih'],
+				'color' => 'silver'
+			],
+			[
+				'name' => 'STOP',
+				'data' => $tmp_data_by_hours['merah'],
+				'color' => 'red'
+			],
+			[
+				'name' => 'HANDLING',
+				'data' => $tmp_data_by_hours['kuning'],
+				'color' => 'yellow'
+			],
+			[
+				'name' => 'SETTING',
+				'data' => $tmp_data_by_hours['biru'],
+				'color' => 'blue'
+			],
+			[
+				'name' => 'RUNNING',
+				'data' => $tmp_data_by_hours['hijau'],
+				'color' => 'green',
+			],
+			
+		];
+
+		$data_power_consumption = [
+			[
+				'name' => 'KWH Measured',
+				'data' => $tmp_data_max_kwh,
+				'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+				'yAxis' => 1,
+				//'showInLegend' => false,
+				'dataLabels' => [
+					'enabled' => true,
+					//'format' => '{y} KWh'
 				],
-				[
-					'name' => 'STOP',
-					'data' => $tmp_data['MERAH'],
-					'color' => 'red'
+			],
+			[
+				'name' => 'KWH Consumption',
+				'data' => $tmp_data_kwh,
+				'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
+				//'showInLegend' => false,
+				'dataLabels' => [
+					'enabled' => true,
+					//'format' => '{y} KWh'
 				],
-				[
-					'name' => 'HANDLING',
-					'data' => $tmp_data['KUNING'],
-					'color' => 'yellow'
-				],
-				[
-					'name' => 'SETTING',
-					'data' => $tmp_data['BIRU'],
-					'color' => 'blue'
-				],
-				[
-					'name' => 'RUNNING',
-					'data' => $tmp_data['HIJAU'],
-					'color' => 'green',
-				],
-				
+			]
+		];
+
+		$machine_iot_util = MachineIotCurrentEffLog::find()
+		->select([
+			'posting_shift',
+			'merah' => 'SUM(merah)',
+			'kuning' => 'SUM(kuning)',
+			'hijau' => 'SUM(hijau)',
+			'biru' => 'SUM(biru)',
+			'putih' => 'SUM(putih)',
+			'lost_data' => 'SUM(lost_data)'
+		])
+		->where([
+			'period_shift' => date('Ym', strtotime($model->posting_date)),
+			'mesin_id' => $model->machine_id,
+		])
+		->groupBy('posting_shift')
+		->orderBy('posting_shift')
+		->asArray()
+		->all();
+
+		$begin = new \DateTime(date('Y-m-d', strtotime(date('Y-m', strtotime($model->posting_date)) . '-01')));
+		$end   = new \DateTime(date('Y-m-t', strtotime(date('Y-m', strtotime($model->posting_date)) . '-01')));
+
+		$start_date = (strtotime($begin->format('Y-m-d') . " +7 hours") * 1000);
+		$end_date = (strtotime($end->format('Y-m-d') . " +7 hours") * 1000);
+
+		$tmp_data = [];
+		foreach ($machine_iot_util as $key => $value) {
+			$proddate = (strtotime($value['posting_shift'] . " +7 hours") * 1000);
+			$total_putih = round($value['putih'] / 60, 1);
+			$total_biru = round($value['biru'] / 60, 1);
+			$total_kuning = round($value['kuning'] / 60, 1);
+			$total_hijau = round($value['hijau'] / 60, 1);
+			$total_merah = round($value['merah'] / 60, 1);
+			$total_sisa = round($value['lost_data'] / 60, 1);
+
+			$tmp_data['PUTIH'][] = [
+				'x' => $proddate,
+				'y' => $total_putih == 0 ? null : $total_putih
+			];
+			$tmp_data['BIRU'][] = [
+				'x' => $proddate,
+				'y' => $total_biru == 0 ? null : $total_biru
+			];
+			$tmp_data['KUNING'][] = [
+				'x' => $proddate,
+				'y' => $total_kuning == 0 ? null : $total_kuning
+			];
+			$tmp_data['HIJAU'][] = [
+				'x' => $proddate,
+				'y' => $total_hijau == 0 ? null : $total_hijau
+			];
+			$tmp_data['MERAH'][] = [
+				'x' => $proddate,
+				'y' => $total_merah == 0 ? null : $total_merah
+			];
+			$tmp_data['sisa'][] = [
+				'x' => $proddate,
+				'y' => $total_sisa == 0 ? null : $total_sisa
 			];
 		}
 
+		$data_iot = [];
+		$data_iot = [
+			[
+				'name' => 'UNKNOWN',
+				'data' => $tmp_data['sisa'],
+				'color' => 'rgba(0, 0, 0, 0)',
+				'dataLabels' => [
+					'enabled' => false
+				],
+				'showInLegend' => false,
+			],
+			[
+				'name' => 'IDLE',
+				'data' => $tmp_data['PUTIH'],
+				'color' => 'silver'
+			],
+			[
+				'name' => 'STOP',
+				'data' => $tmp_data['MERAH'],
+				'color' => 'red'
+			],
+			[
+				'name' => 'HANDLING',
+				'data' => $tmp_data['KUNING'],
+				'color' => 'yellow'
+			],
+			[
+				'name' => 'SETTING',
+				'data' => $tmp_data['BIRU'],
+				'color' => 'blue'
+			],
+			[
+				'name' => 'RUNNING',
+				'data' => $tmp_data['HIJAU'],
+				'color' => 'green',
+			],
+			
+		];
 		
 
 		return $this->render('index', [
