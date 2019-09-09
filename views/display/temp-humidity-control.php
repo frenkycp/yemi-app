@@ -11,11 +11,7 @@ use kartik\select2\Select2;
 
 date_default_timezone_set('Asia/Jakarta');
 
-$this->title = [
-    'page_title' => 'Temperature & Humidity Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
-    'tab_title' => 'Temperature & Humidity Monitoring',
-    'breadcrumbs_title' => 'Temperature & Humidity Monitoring'
-];
+$this->title = $title;
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
@@ -24,9 +20,7 @@ $this->registerCss("
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
     body, .content-wrapper {background-color: #000;}
-    .box-no {background-color: green; width:20px;}
-    table tr td, table tr th {border: 1px solid #d2d2d2; border-radius: 5px;}
-    .factory-container {border: 1px solid white; border-radius: 5px;}
+    .temp-widget {border-radius: 4px;}
 ");
 
 
@@ -43,79 +37,51 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
+/*$this->registerJs("
+    function update_data(){
+        $.ajax({
+            type: 'POST',
+            url: '" . Url::to(['temp-humi-data', 'room_id' => $_GET['room_id']]) . "',
+            success: function(data){
+                var tmp_data = JSON.parse(data);
+                $('#room-name').html(tmp_data.room_name);
+                $('#todays-date').html(tmp_data.today);
+                $('#meeting-content').html(tmp_data.meeting_content);
+            },
+            complete: function(){
+                setTimeout(function(){update_data();}, 1000);
+            }
+        });
+    }
+    $(document).ready(function() {
+        update_data();
+    });
+");*/
+
 /*echo '<pre>';
 print_r($tmp_data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
-<div class="row">
-    <div class="col-md-6">
-        <div style="color: white; font-size: 2em;"><span>FACTORY 1</span></div>
-        <div class="factory-container">
-            <div class="row">
-                <?php
-                foreach ($factory1_data as $key => $value) {
-                    ?>
-                    <div class="col-md-4">
-                        <div class="panel panel-primary" style="margin: 15px;">
-                            <div class="panel-heading text-center">
-                                <h3 class="panel-title">
-                                    <?= Html::a($value->area, ['temp-humidity-chart', 'map_no' => $value->map_no], ['target' => '_blank']); ?>
-                                </h3>
-                            </div>
-                            <div class="panel-body no-padding">
-                                <table class="table" style="margin-bottom: 0px;">
-                                    <tr>
-                                        <th class="text-center" width="50%">Temperature</th>
-                                        <th class="text-center" width="50%">Humidity</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center" style="font-size: 1.5em; font-weight: bold;"><?= $value->temparature == null ? '-' : $value->temparature . '&deg;C'; ?></td>
-                                        <td class="text-center" style="font-size: 1.5em; font-weight: bold;"><?= $value->humidity == null ? '-' : $value->humidity . '&#37;'; ?></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                <?php }
-                ?>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div style="color: white; font-size: 2em;"><span>FACTORY 2</span></div>
-        <div class="factory-container">
-            <div class="row">
-                <?php
-                foreach ($factory2_data as $key => $value) {
-                    ?>
-                    <div class="col-md-4">
-                        <div class="panel panel-primary" style="margin: 15px;">
-                            <div class="panel-heading text-center">
-                                <h3 class="panel-title">
-                                    <?= Html::a($value->area, ['temp-humidity-chart', 'map_no' => $value->map_no], ['target' => '_blank']); ?>
-                                </h3>
-                            </div>
-                            <div class="panel-body no-padding">
-                                <table class="table" style="margin-bottom: 0px;">
-                                    <tr>
-                                        <th class="text-center" width="50%">Temperature</th>
-                                        <th class="text-center" width="50%">Humidity</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center" style="font-size: 1.5em; font-weight: bold;"><?= $value->temparature == null ? '-' : $value->temparature . '&deg;C'; ?></td>
-                                        <td class="text-center" style="font-size: 1.5em; font-weight: bold;"><?= $value->humidity == null ? '-' : $value->humidity . '&#37;'; ?></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                <?php }
-                ?>
-            </div>
-        </div>
-    </div>
-</div>
 <div id="main-body">
-    <?= ''; //Html::img('@web/uploads/MAP/suhu_humidity_map.JPG', ['alt' => 'My logo', 'style' => 'opacity: 0.8']); ?>
+    <?= Html::img('@web/uploads/MAP/suhu_humidity_map.jpg', ['alt' => 'My logo', 'style' => 'opacity: 0.8']); ?>
+    <?php
+    foreach ($data as $key => $value) {
+        $temp_class = ' bg-green-active';
+        if ($category == 1) {
+            $params_val = $value->temparature . '&deg;';
+            if ($params_val < $value->temp_min || $params_val > $value->temp_max) {
+                $temp_class = ' bg-red-active';
+            }
+        } elseif ($category == 2) {
+            $params_val = $value->humidity . '<small>%</small>';
+            if ($params_val < $value->humi_min || $params_val > $value->humi_max) {
+                $temp_class = ' bg-red-active';
+            }
+        }
+
+        $content = '<div class="temp-widget text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 1px 5px;">' . $params_val . '</div></div>';
+        echo Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+    }
+    ?>
 </div>

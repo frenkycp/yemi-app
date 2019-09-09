@@ -134,15 +134,37 @@ class DisplayController extends Controller
             'model' => $model,
         ]);
     }
-    public function actionTempHumidityControl()
+
+    public function ationTempHumiData($value='')
     {
-        $data = [];
+        # code...
+    }
+
+    public function actionTempHumidityControl($category)
+    {
         $this->layout = 'clean';
-        $factory1_data = SensorTbl::find()->where(['Factory' => 'Factory #1'])->all();
-        $factory2_data = SensorTbl::find()->where(['Factory' => 'Factory #2'])->all();
+        if ($category == 1) {
+            $title = [
+                'page_title' => 'Temperature Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                'tab_title' => 'Temperature Monitoring',
+                'breadcrumbs_title' => 'Temperature Monitoring'
+            ];
+        } elseif ($category == 2) {
+            $title = [
+                'page_title' => 'Humidity Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                'tab_title' => 'Humidity Monitoring',
+                'breadcrumbs_title' => 'Humidity Monitoring'
+            ];
+        }
+        
+        $data = SensorTbl::find()->where([
+            'is_showing' => 1
+        ])->all();
+
         return $this->render('temp-humidity-control', [
-            'factory1_data' => $factory1_data,
-            'factory2_data' => $factory2_data,
+            'data' => $data,
+            'title' => $title,
+            'category' => $category,
         ]);
     }
 

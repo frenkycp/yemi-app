@@ -17,6 +17,14 @@ use Yii;
  * @property double $temparature
  * @property double $humidity
  * @property string $system_date_time
+ * @property integer $temp_min
+ * @property integer $temp_max
+ * @property integer $humi_min
+ * @property integer $humi_max
+ * @property integer $top_pos
+ * @property integer $left_pos
+ * @property integer $is_showing
+ * @property string $layout
  * @property string $aliasModel
  */
 abstract class SensorTbl extends \yii\db\ActiveRecord
@@ -48,8 +56,9 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
         return [
             [['map_no'], 'required'],
             [['map_no', 'temparature', 'humidity'], 'number'],
-            [['loc_no', 'Factory', 'location', 'area'], 'string'],
+            [['loc_no', 'Factory', 'location', 'area', 'layout'], 'string'],
             [['system_date_time'], 'safe'],
+            [['temp_min', 'temp_max', 'humi_min', 'humi_max', 'top_pos', 'left_pos', 'is_showing'], 'integer'],
             [['map_no'], 'unique']
         ];
     }
@@ -68,6 +77,14 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
             'temparature' => 'Temparature',
             'humidity' => 'Humidity',
             'system_date_time' => 'System Date Time',
+            'temp_min' => 'Temp Min',
+            'temp_max' => 'Temp Max',
+            'humi_min' => 'Humi Min',
+            'humi_max' => 'Humi Max',
+            'top_pos' => 'Top Pos',
+            'left_pos' => 'Left Pos',
+            'is_showing' => 'Is Showing',
+            'layout' => 'Layout',
         ];
     }
 

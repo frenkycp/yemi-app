@@ -132,6 +132,13 @@ echo '</pre>';*/
                         'enabled' => true,
                         'valueSuffix' => ' C'
                     ],
+                    'plotOptions' => [
+                        'line' => [
+                            'marker' => [
+                                'enabled' =>false
+                            ],
+                        ],
+                    ],
                     'series' => $data['temparature'],
                 ],
             ]);
@@ -179,6 +186,13 @@ echo '</pre>';*/
                     'tooltip' => [
                         'enabled' => true,
                         'valueSuffix' => ' %'
+                    ],
+                    'plotOptions' => [
+                        'line' => [
+                            'marker' => [
+                                'enabled' =>false
+                            ],
+                        ],
                     ],
                     'series' => $data['humidity'],
                 ],

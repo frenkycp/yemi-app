@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SensorTbl extends BaseSensorTbl
 {
+    public $value;
 
     public function behaviors()
     {

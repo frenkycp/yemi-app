@@ -323,7 +323,8 @@ $this->registerCss("
                                 <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
                                 <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
                                 <li><?= Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
-                                <li><?= Html::a('Temperature & Humidity Monitoring <span class="japanesse-word"></span>', ['/display/temp-humidity-control']); ?></li>
+                                <li><?= Html::a('Temperature Monitoring <span class="japanesse-word"></span>', ['/display/temp-humidity-control?category=1']); ?></li>
+                                <li><?= Html::a('Humidity Monitoring <span class="japanesse-word"></span>', ['/display/temp-humidity-control?category=2']); ?></li>
                             </ol>
                         </div>
 
