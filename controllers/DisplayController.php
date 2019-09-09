@@ -512,7 +512,7 @@ class DisplayController extends Controller
         
         $data = [
             'room_name' => $room_name,
-            'today' => strtoupper(date('d M\' Y H:i')),
+            'today' => strtoupper(date('d M\' Y')) . ' <small style="color: #D58936;"><b>' . date('H:i') . '</b></small>',
             'meeting_content' => $meeting_content
         ];
         return json_encode($data, JSON_UNESCAPED_UNICODE);

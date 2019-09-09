@@ -52,7 +52,7 @@ $this->registerJs("
                 $('#meeting-content').html(tmp_data.meeting_content);
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 3000);
+                setTimeout(function(){update_data();}, 1000);
             }
         });
     }
@@ -69,7 +69,7 @@ print_r($vms_data);
 echo '</pre>';*/
 ?>
 
-<div class="row" style="background-color: #553e7d; color: white; font-size: 7em; border-top: 1px solid white; border-bottom: 1px solid white; letter-spacing: 3px;">
+<div class="row" style="background-color: #21005a; color: white; font-size: 7em; border-top: 1px solid white; border-bottom: 1px solid white; letter-spacing: 3px;">
     <div class="col-md-12">
         <span id="room-name">
             <?php
@@ -82,7 +82,7 @@ echo '</pre>';*/
         </span>
 
         <span id="todays-date" class="pull-right">
-            <?= strtoupper(date('d M\' Y')); ?>
+            <?= strtoupper(date('d M\' Y')) . ' <small style="color: #D58936;">' . date('H:i') . '</small>'; ?>
         </span>
     </div>
 </div>
