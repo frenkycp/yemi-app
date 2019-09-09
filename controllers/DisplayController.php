@@ -319,6 +319,7 @@ class DisplayController extends Controller
                             'last_update' => $seconds . $seconds_str,
                             'top' => $value->position_y * 20 . 'px',
                             'left' => $value->position_x * 20 . 'px',
+                            'minor' => $value->minor,
                         ];
                         //$top += 25;
                         $left += 30;
