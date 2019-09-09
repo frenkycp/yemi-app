@@ -24,9 +24,12 @@ use Yii;
  * @property string $uuid
  * @property string $major
  * @property string $minor
+ * @property string $reader
  * @property string $beacon_location
  * @property double $distance
  * @property string $beacon_last_update
+ * @property double $position_x
+ * @property double $position_y
  * @property string $aliasModel
  */
 abstract class GojekTbl extends \yii\db\ActiveRecord
@@ -57,8 +60,8 @@ abstract class GojekTbl extends \yii\db\ActiveRecord
     {
         return [
             [['GOJEK_ID'], 'required'],
-            [['GOJEK_ID', 'GOJEK_DESC', 'from_loc', 'to_loc', 'STAGE', 'TERMINAL', 'TERMINAL_NAME', 'HADIR', 'SOURCE', 'beacon_id', 'uuid', 'major', 'minor', 'beacon_location'], 'string'],
-            [['GOJEK_VALUE', 'distance'], 'number'],
+            [['GOJEK_ID', 'GOJEK_DESC', 'from_loc', 'to_loc', 'STAGE', 'TERMINAL', 'TERMINAL_NAME', 'HADIR', 'SOURCE', 'beacon_id', 'uuid', 'major', 'minor', 'reader', 'beacon_location'], 'string'],
+            [['GOJEK_VALUE', 'distance', 'position_x', 'position_y'], 'number'],
             [['LAST_UPDATE', 'beacon_last_update'], 'safe'],
             [['GOJEK_ID'], 'unique']
         ];
@@ -85,9 +88,12 @@ abstract class GojekTbl extends \yii\db\ActiveRecord
             'uuid' => 'Uuid',
             'major' => 'Major',
             'minor' => 'Minor',
+            'reader' => 'Reader',
             'beacon_location' => 'Beacon Location',
             'distance' => 'Distance',
             'beacon_last_update' => 'Beacon Last Update',
+            'position_x' => 'Position X',
+            'position_y' => 'Position Y',
         ];
     }
 
