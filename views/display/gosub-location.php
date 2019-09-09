@@ -66,7 +66,7 @@ $this->registerJs("
                 $('.user-loc').remove();
                 $.each(data.absolute_loc_arr , function(index, val) {
                     //alert(val.name);
-                    $('#main-body').append('<img title=\"' + val.nik + ' - ' + val.name + ' (LAST UPDATE : ' + val.last_update + ' ago)\" class=\"user-image user-loc\" width=\"25px\" src=\"" . Url::to('@web/uploads/ICON/marker_08.png') . "\" style=\"position: absolute; top: ' + val.top + '; left: ' + val.left + '; opacity: 1;\"></img>');
+                    $('#main-body').append('<img title=\"' + val.nik + ' [' + val.minor + '] - ' + val.name + ' (LAST UPDATE : ' + val.last_update + ' ago)\" class=\"user-image user-loc\" width=\"25px\" src=\"" . Url::to('@web/uploads/ICON/marker_08.png') . "\" style=\"position: absolute; top: ' + val.top + '; left: ' + val.left + '; opacity: 1;\"></img>');
                 });
             },
             complete: function(){
