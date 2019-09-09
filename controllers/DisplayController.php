@@ -317,8 +317,8 @@ class DisplayController extends Controller
                             'nik' => $value->GOJEK_ID,
                             'name' => $value->GOJEK_DESC,
                             'last_update' => $seconds . $seconds_str,
-                            'top' => $top . 'px',
-                            'left' => $left . 'px',
+                            'top' => $value->position_y * 20 . 'px',
+                            'left' => $value->position_x * 20 . 'px',
                         ];
                         //$top += 25;
                         $left += 30;
