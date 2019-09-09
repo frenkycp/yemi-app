@@ -320,6 +320,8 @@ class DisplayController extends Controller
                             'top' => $value->position_y * 20 . 'px',
                             'left' => $value->position_x * 20 . 'px',
                             'minor' => $value->minor,
+                            'pos_x' => round($value->position_x),
+                            'pos_y' => round($value->position_y),
                         ];
                         //$top += 25;
                         $left += 30;
