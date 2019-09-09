@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'GO Sub Assy Tracking <small style="color: white; opacity: 0.8;" id="last-update"></small><span class="japanesse text-green"></span>',
+    'page_title' => null,
     'tab_title' => 'GO Sub Assy Tracking',
     'breadcrumbs_title' => 'GO Sub Assy Tracking'
 ];
@@ -86,11 +86,10 @@ echo '</pre>';*/
 ?>
 
 <div id="main-body">
-    <?= Html::img('@web/uploads/MAP/go_sub_map_crop3.png', ['alt' => 'My logo', 'style' => 'opacity: 0.8']); ?>
+    <?= Html::img('@web/uploads/MAP/go_sub_map_crop2.png', ['alt' => 'My logo', 'height' => 900, 'style' => 'opacity: 0.8', 'style' => 'position: absolute; top: 0px; left: 0px;']); ?>
 </div>
 
-<hr>
-<div class="row" style="color: white;">
+<div class="row" style="color: white; padding-top: 900px;">
     <div class="col-md-3">
         <div class="location-container">
             <div class="station-header">
