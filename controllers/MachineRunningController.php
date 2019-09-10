@@ -321,22 +321,33 @@ class MachineRunningController extends Controller
 	    				$lot_data->slip_id_09,
 	    				$lot_data->slip_id_10
 	    			];
-	    			foreach ($slip_id_arr as $key => $value) {
-	    				if ($value != null) {
-	    					$sql = "{CALL WIP_03_COMPLETED(:slip_id, :USER_ID)}";
-	    					$params = [
-								':slip_id' => $value,
-								':USER_ID' => $nik,
-							];
+	    			$sql_lot = "{CALL MACHINE_OUTPUT_TIME_TABLE(:lot_number)}";
+	    			$params_lot = [
+						':lot_number' => $lot_id
+					];
+	    			try {
+					    $result_lot = \Yii::$app->db_sql_server->createCommand($sql_lot, $params_lot)->execute();
+					    foreach ($slip_id_arr as $key => $value) {
+		    				if ($value != null) {
+		    					$sql = "{CALL WIP_03_COMPLETED(:slip_id, :USER_ID)}";
+		    					$params = [
+									':slip_id' => $value,
+									':USER_ID' => $nik,
+								];
 
-							try {
-							    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
-							    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
-							} catch (Exception $ex) {
-								\Yii::$app->session->setFlash('danger', "Error : $ex");
-							}
-	    				}
-	    			}
+								try {
+								    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
+								    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
+								} catch (Exception $ex) {
+									\Yii::$app->session->setFlash('danger', "Error : $ex");
+								}
+		    				}
+		    			}
+					    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
+					} catch (Exception $ex) {
+						\Yii::$app->session->setFlash('danger', "Error : $ex");
+					}
+	    			
 	    		}
 
 	    		if ($current_data->save()) {
