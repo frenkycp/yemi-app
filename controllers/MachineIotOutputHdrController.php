@@ -9,12 +9,6 @@ use app\models\MachineIotOutputDtr;
 */
 class MachineIotOutputHdrController extends \app\controllers\base\MachineIotOutputHdrController
 {
-	public function behaviors()
-    {
-        //apply role_action table for privilege (doesn't apply to super admin)
-        return \app\models\Action::getAccess($this->id);
-    }
-    
 	public function actionDetail($lot_number)
 	{
 		date_default_timezone_set('Asia/Jakarta');
