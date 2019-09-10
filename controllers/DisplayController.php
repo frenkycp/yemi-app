@@ -293,8 +293,8 @@ class DisplayController extends Controller
         foreach ($location_arr as $location => $location_detail) {
             $tmp_content = '<ol>';
             $count = 0;
-            $top = $location_detail['top'];
-            $left = $location_detail['left'];
+            //$top = $location_detail['top'];
+            //$left = $location_detail['left'];
             foreach ($tmp_operator as $key => $value) {
                 if ($value->beacon_location == $location) {
                     $count++;
@@ -311,26 +311,34 @@ class DisplayController extends Controller
                         }
                         
                     }
-                    if ($seconds_ori < 3600) {
+                    $top = ($value->position_y * 16.98);
+                    if ($top < 0) {
+                        $top = 0;
+                    }
+                    $left = ($value->position_x * 16.51);
+                    if ($left < 0) {
+                        $left = 0;
+                    }
+                    //if ($seconds_ori < 3600) {
                         $absolute_loc_arr[] = [
                             'station' => $location,
                             'nik' => $value->GOJEK_ID,
                             'name' => $value->GOJEK_DESC,
                             'last_update' => $seconds . $seconds_str,
-                            'top' => $value->position_y * 20 . 'px',
-                            'left' => $value->position_x * 20 . 'px',
+                            'top' => $top . 'px',
+                            'left' => $left . 'px',
                             'minor' => $value->minor,
-                            'pos_x' => round($value->position_x),
-                            'pos_y' => round($value->position_y),
+                            'pos_x' => round($value->position_x, 3),
+                            'pos_y' => round($value->position_y, 3),
                         ];
                         //$top += 25;
-                        $left += 30;
+                        /*$left += 30;
                         if ($left > $location_detail['max_left']) {
                             $left = $location_detail['left'];
                             $top += 35;
-                        }
+                        }*/
                         $tmp_content .= '<li><span style="opacity: 0.9; letter-spacing: 1px;">' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - </span><small style="opacity: 0.6;">' . $seconds . $seconds_str . ' ago</small></li>';
-                    }
+                    //}
                 }
             }
             $tmp_content .= '</ol>';
