@@ -5,7 +5,7 @@ use app\models\Karyawan;
 /* @var $this \yii\web\View */
 /* @var $content string */
 $session = \Yii::$app->session;
-$nik = $session['iqa_inspection_user'];
+$nik = $session['fix_asset_user'];
 $model_karyawan = Karyawan::find()->where([
     'NIK' => $nik
 ])->one();
@@ -41,10 +41,10 @@ $model_karyawan = Karyawan::find()->where([
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                 <!-- The user image in the navbar-->
                 <?php
-                    $filename =$session['iqa_inspection_user'] . '.jpg';
+                    $filename =$session['fix_asset_user'] . '.jpg';
                     $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
                     if (file_exists($path)) {
-                        echo Html::img('@web/uploads/yemi_employee_img/' .$session['iqa_inspection_user'] . '.jpg', [
+                        echo Html::img('@web/uploads/yemi_employee_img/' .$session['fix_asset_user'] . '.jpg', [
                             'class' => 'user-image',
                         ]);
                     } else {
@@ -55,16 +55,16 @@ $model_karyawan = Karyawan::find()->where([
                 ?>
                 <!--<img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image">-->
                 <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                <span class="hidden-xs"><?= strtoupper($session['iqa_inspection_name']); ?></span>
+                <span class="hidden-xs"><?= strtoupper($session['fix_asset_name']); ?></span>
               </a>
               <ul class="dropdown-menu">
                 <!-- The user image in the menu -->
                 <li class="user-header">
                     <?php
-                        $filename =$session['iqa_inspection_user'] . '.jpg';
+                        $filename =$session['fix_asset_user'] . '.jpg';
                         $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
                         if (file_exists($path)) {
-                            echo Html::img('@web/uploads/yemi_employee_img/' .$session['iqa_inspection_user'] . '.jpg', [
+                            echo Html::img('@web/uploads/yemi_employee_img/' .$session['fix_asset_user'] . '.jpg', [
                                 'class' => 'img-circle',
                             ]);
                         } else {

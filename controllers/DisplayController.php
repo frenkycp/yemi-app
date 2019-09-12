@@ -503,7 +503,11 @@ class DisplayController extends Controller
         $tmp_data = MeetingEvent::find()
         ->where([
             'room_id' => $room_id,
-            'tgl_start' => $today
+        ])
+        ->andWhere([
+            'AND',
+            ['<=', 'tgl_start', $today],
+            ['>=', 'tgl_end', $today]
         ])
         ->orderBy('jam_start')
         ->all();
