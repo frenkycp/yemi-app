@@ -14,7 +14,7 @@ $model_karyawan = Karyawan::find()->where([
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-            <?= Html::a('<i class="fa fa-cubes"> </i><b style="padding-left: 5px;">Fix</b>ASSET', Yii::$app->homeUrl . 'iqa-inspection', ['class' => 'navbar-brand']) ?>
+            <?= Html::a('<i class="fa fa-cubes"> </i><b style="padding-left: 5px;">Fix</b>ASSET', Yii::$app->homeUrl . 'fix-asset', ['class' => 'navbar-brand']) ?>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
