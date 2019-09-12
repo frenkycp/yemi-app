@@ -7,7 +7,7 @@ use yii\helpers\Html;
 * @var app\models\AssetTbl $model
 */
 
-$this->title = Yii::t('models', 'Asset Tbl');
+$this->title = Yii::t('models', 'Update Asset Data');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Asset Tbl'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => (string)$model->asset_id, 'url' => ['view', 'asset_id' => $model->asset_id]];
 $this->params['breadcrumbs'][] = 'Edit';

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use kartik\grid\GridView;
 
@@ -82,7 +83,7 @@ $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
         //'hidden' => !$is_clinic ? true : false,
-        'template' => '{update} {stock-take}',
+        'template' => '{stock-take}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -143,6 +144,7 @@ $gridColumns = [
         'attribute' => 'cost_centre',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->all(), 'CC_ID', 'CC_ID'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
@@ -152,6 +154,7 @@ $gridColumns = [
         'attribute' => 'department_name',
         'label' => 'Department',
         'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('department_name')->where(['FINANCE_ASSET' => 'Y'])->andWhere('department_name IS NOT NULL')->groupBy('department_name')->orderBy('department_name')->all(), 'department_name', 'department_name'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
@@ -161,6 +164,7 @@ $gridColumns = [
         'attribute' => 'section_name',
         'label' => 'Section',
         'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('section_name')->where(['FINANCE_ASSET' => 'Y'])->andWhere('section_name IS NOT NULL')->groupBy('section_name')->orderBy('section_name')->all(), 'section_name', 'section_name'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
@@ -186,7 +190,7 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'loc_type',
         'label' => 'Type (I/O)',
         'vAlign' => 'middle',
@@ -199,7 +203,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'LOC',
         'label' => 'Loc. ID',
@@ -244,6 +248,7 @@ $gridColumns = [
         'attribute' => 'status',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => \Yii::$app->params['fixed_asset_status'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
@@ -293,7 +298,6 @@ $gridColumns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'heading' => 'Last Update : ' . date('Y-m-d H:i:s')
                 //'footer' => false,
             ],
         ]); ?>

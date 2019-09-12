@@ -53,6 +53,7 @@ use Yii;
  * @property string $DateDisc
  * @property string $status
  * @property string $label
+ * @property double $NBV
  * @property string $aliasModel
  */
 abstract class AssetTbl extends \yii\db\ActiveRecord
@@ -86,7 +87,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'loc_type', 'LOC', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label'], 'string'],
             [['purchase_date', 'LAST_UPDATE', 'DateDisc'], 'safe'],
             [['report_type'], 'integer'],
-            [['price', 'price_usd', 'qty', 'AtCost'], 'number'],
+            [['price', 'price_usd', 'qty', 'AtCost', 'NBV'], 'number'],
             [['asset_id'], 'unique']
         ];
     }
@@ -141,6 +142,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'DateDisc' => 'Date Disc',
             'status' => 'Status',
             'label' => 'Label',
+            'NBV' => 'Nbv',
         ];
     }
 

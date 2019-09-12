@@ -21,6 +21,7 @@ use Yii;
  * @property string $note
  * @property string $status
  * @property string $label
+ * @property double $NBV
  * @property string $aliasModel
  */
 abstract class AssetLogTbl extends \yii\db\ActiveRecord
@@ -51,7 +52,8 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
     {
         return [
             [['trans_type', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label'], 'string'],
-            [['posting_date'], 'safe']
+            [['posting_date'], 'safe'],
+            [['NBV'], 'number']
         ];
     }
 
@@ -73,6 +75,7 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
             'note' => 'Note',
             'status' => 'Status',
             'label' => 'Label',
+            'NBV' => 'Nbv',
         ];
     }
 

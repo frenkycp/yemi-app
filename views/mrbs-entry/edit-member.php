@@ -163,9 +163,9 @@ $this->registerJs($script, View::POS_HEAD );
         if ($total_member == null) {
             echo '<div class="col-md-12"><span>No Member</span></div>';
         } else {
-            echo '<ul class="users-list clearfix">';
+            //echo '<ul class="users-list clearfix">';
             foreach ($total_member as $key => $value) {
-                $filename = $value['NIK'] . '.jpg';
+                /*$filename = $value['NIK'] . '.jpg';
                 $path = \Yii::$app->basePath . '\\web\\uploads\\yemi_employee_img\\' . $filename;
 
                 echo '<li>';
@@ -180,10 +180,10 @@ $this->registerJs($script, View::POS_HEAD );
                 }
                 echo '<a class="users-list-name" href="#">' . $value['NAMA_KARYAWAN'] . '</a>';
                 echo '<span class="users-list-date"><b>' . date('H:i', strtotime($value['last_update'])) . '</b></span>';
-                echo '</li>';
+                echo '</li>';*/
                 
             }
-            echo '</ul>';
+            //echo '</ul>';
         }
         ?>
     </div>

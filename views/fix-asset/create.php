@@ -7,7 +7,7 @@ use yii\helpers\Html;
 * @var app\models\AssetTbl $model
 */
 
-$this->title = Yii::t('models', 'Asset Tbl');
+$this->title = Yii::t('models', 'Input New Asset');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Asset Tbls'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
