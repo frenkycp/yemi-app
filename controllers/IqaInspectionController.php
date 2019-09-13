@@ -4,13 +4,14 @@ namespace app\controllers;
 
 use yii\helpers\Url;
 use dmstr\bootstrap\Tabs;
-use app\models\search\SapPoRcvSearch;
+use app\models\search\IqaInspectionSearch;
 use app\models\Karyawan;
+use app\models\StoreInOutWsus;
 
 /**
 * This is the class for controller "SapPoRcvController".
 */
-class IqaInspectionController extends \app\controllers\base\SapPoRcvController
+class IqaInspectionController extends \app\controllers\base\IqaInspectionController
 {
 	public function actionLogin()
     {
@@ -59,6 +60,7 @@ class IqaInspectionController extends \app\controllers\base\SapPoRcvController
 
         return $this->redirect(['login']);
     }
+    
 	public function actionIndex($value='')
 	{
 		$session = \Yii::$app->session;
@@ -82,13 +84,14 @@ class IqaInspectionController extends \app\controllers\base\SapPoRcvController
         }
         $nik = $session['iqa_inspection_user'];
 		$this->layout = 'iqa-inspection\main';
-	    $searchModel  = new SapPoRcvSearch;
-	    /*$searchModel->rcv_date = date('Y-m-d');
+	    $searchModel  = new IqaInspectionSearch;
+	    $searchModel->TRANS_ID = '11';
+	    $searchModel->POST_DATE = date('Y-m-d');
 
-	    if(\Yii::$app->request->get('rcv_date') !== null)
+	    if(\Yii::$app->request->get('POST_DATE') !== null)
 	    {
-	    	$searchModel->rcv_date = \Yii::$app->request->get('rcv_date');
-	    }*/
+	    	$searchModel->POST_DATE = \Yii::$app->request->get('POST_DATE');
+	    }/**/
 
 	    $dataProvider = $searchModel->search($_GET);
 
@@ -103,7 +106,7 @@ class IqaInspectionController extends \app\controllers\base\SapPoRcvController
 		]);
 	}
 
-	public function actionJudgement($material_document_number)
+	public function actionJudgement($SEQ_LOG)
 	{
 		$session = \Yii::$app->session;
         if (!$session->has('iqa_inspection_user')) {
@@ -112,8 +115,8 @@ class IqaInspectionController extends \app\controllers\base\SapPoRcvController
         $nik = $session['iqa_inspection_user'];
         $name = $session['iqa_inspection_name'];
 		date_default_timezone_set('Asia/Jakarta');
-		$model = $this->findModel($material_document_number);
-		$model->rcv_date = date('Y-m-d', strtotime($model->rcv_date));
+		$model = $this->findModel($SEQ_LOG);
+		//$model->POST_DATE = date('Y-m-d', strtotime($model->POST_DATE));
 
 		$model_judgement = new \yii\base\DynamicModel([
 	        'judgement', 'remark'
@@ -150,5 +153,89 @@ class IqaInspectionController extends \app\controllers\base\SapPoRcvController
 				'model_judgement' => $model_judgement,
 			]);
 		}
+	}
+
+	public function actionDailyInspection()
+	{
+		$session = \Yii::$app->session;
+        if (!$session->has('iqa_inspection_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['iqa_inspection_user'];
+        $name = $session['iqa_inspection_name'];
+        $this->layout = 'iqa-inspection\main';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = $tmp_data_open = $tmp_data_ok = $tmp_data_ng = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-d', strtotime(date('Y-m-d') . '-1 month'));
+        $model->to_date = date('Y-m-d', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {}
+
+    	$in_out_data = StoreInOutWsus::find()
+    	->select([
+    		'POST_DATE',
+    		'TOTAL_ITEM' => 'COUNT(SEQ_LOG)',
+    		'TOTAL_OK' => 'SUM(CASE WHEN Judgement = \'OK\' THEN 1 ELSE 0 END)',
+    		'TOTAL_NG' => 'SUM(CASE WHEN Judgement = \'NG\' THEN 1 ELSE 0 END)',
+    		'TOTAL_OPEN' => 'SUM(CASE WHEN Judgement IS NULL THEN 1 ELSE 0 END)'
+    	])
+    	->where([
+    		'AND',
+    		['>=', 'POST_DATE', $model->from_date],
+    		['<=', 'POST_DATE', $model->to_date],
+    	])
+    	->andWhere(['TRANS_ID' => 11])
+    	->groupBy('POST_DATE')
+    	->orderBy('POST_DATE')
+    	->all();
+
+    	foreach ($in_out_data as $key => $value) {
+    		$post_date = (strtotime($value->POST_DATE . " +7 hours") * 1000);
+			$tmp_data_open[] = [
+				'x' => $post_date,
+				'y' => $value->TOTAL_OPEN == 0 ? null : (int)$value->TOTAL_OPEN,
+				//'url' => Url::to(['get-remark', 'post_date' => $value->post_date]),
+			];
+			$tmp_data_ok[] = [
+				'x' => $post_date,
+				'y' => $value->TOTAL_OK == 0 ? null : (int)$value->TOTAL_OK,
+				//'url' => Url::to(['get-remark', 'post_date' => $value->post_date]),
+			];
+			$tmp_data_ng[] = [
+				'x' => $post_date,
+				'y' => $value->TOTAL_NG == 0 ? null : (int)$value->TOTAL_NG,
+				//'url' => Url::to(['get-remark', 'post_date' => $value->post_date]),
+			];
+    	}
+
+    	$data = [
+    		[
+    			'name' => 'UNDER INSPECTION',
+    			'data' => $tmp_data_open,
+    			'color' => \Yii::$app->params['bg-light-blue']
+    		],
+    		[
+    			'name' => 'OK',
+    			'data' => $tmp_data_ok,
+    			'color' => \Yii::$app->params['bg-green']
+    		],
+    		[
+    			'name' => 'NG',
+    			'data' => $tmp_data_ng,
+    			'color' => \Yii::$app->params['bg-red']
+    		],
+    	];
+
+        return $this->render('daily-inspection', [
+        	'data' => $data,
+        	'model' => $model,
+        ]);
 	}
 }

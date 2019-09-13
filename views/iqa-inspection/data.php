@@ -30,7 +30,7 @@ $gridColumns = [
                 $options = [
                     'data-pjax' => '0',
                     'id' => 'btn-judgement',
-                    'value' => Url::to(['judgement','material_document_number' => $model->material_document_number]),
+                    'value' => Url::to(['judgement','SEQ_LOG' => $model->SEQ_LOG]),
                     'title' => 'Judgement',
                     'class' => 'showModalButton'
                 ];
@@ -38,18 +38,65 @@ $gridColumns = [
             },
 		],
 	],
-	[
-        'attribute' => 'rcv_date',
+    [
+        'attribute' => 'ITEM',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'ITEM_DESC',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'POST_DATE',
         'format' => ['date', 'php:Y-m-d'],
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 90px;'
+        ],
+    ],
+    [
+        'attribute' => 'QTY_IN',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
-        'attribute' => 'inv_no',
+        'attribute' => 'LOC',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'LOC_DESC',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+	[
+        'attribute' => 'TAG_SLIP',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -58,16 +105,7 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'vendor_name',
-        //'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'material',
+        'attribute' => 'NO',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -76,8 +114,8 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'description',
-        //'hAlign' => 'center',
+        'attribute' => 'SLIP_REF',
+        'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
@@ -85,7 +123,88 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'quantity',
+        'attribute' => 'BC_NO',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'LOT_CODE',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'BACTH_NO',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'CSI_NO',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'NOTE',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'PIC',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'RACK',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'RACK_LOC',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'IQA',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'LAST_UPDATE',
+        'format' => ['date', 'php:Y-m-d H:i'],
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -97,6 +216,10 @@ $gridColumns = [
         'attribute' => 'Judgement',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filter' => [
+            'OK' => 'OK',
+            'NG' => 'NG',
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'

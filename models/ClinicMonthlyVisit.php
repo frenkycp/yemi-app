@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\StoreInOutWsus as BaseStoreInOutWsus;
+use \app\models\base\ClinicMonthlyVisit as BaseClinicMonthlyVisit;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.STORE_IN_OUT".
+ * This is the model class for table "clinic_monthly_visit".
  */
-class StoreInOutWsus extends BaseStoreInOutWsus
+class ClinicMonthlyVisit extends BaseClinicMonthlyVisit
 {
-    public $TOTAL_ITEM, $TOTAL_OK, $TOTAL_NG, $TOTAL_OPEN;
 
     public function behaviors()
     {

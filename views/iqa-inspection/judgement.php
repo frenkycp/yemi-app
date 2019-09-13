@@ -44,12 +44,12 @@ date_default_timezone_set('Asia/Jakarta');
 
 <div class="box box-primary">
 	<div class="box-body">
-		<?= $form->field($model, 'rcv_date')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'vendor_name')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'inv_no')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'material')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'description')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'quantity')->textInput(['readonly' => 'readonly']); ?>
+		<?= $form->field($model, 'POST_DATE')->textInput(['readonly' => 'readonly']); ?>
+		<?= $form->field($model, 'ITEM')->textInput(['readonly' => 'readonly']); ?>
+		<?= $form->field($model, 'ITEM_DESC')->textInput(['readonly' => 'readonly']); ?>
+		<?= $form->field($model, 'LOC')->textInput(['readonly' => 'readonly']); ?>
+		<?= $form->field($model, 'LOC_DESC')->textInput(['readonly' => 'readonly']); ?>
+		<?= $form->field($model, 'QTY_IN')->textInput(['readonly' => 'readonly']); ?>
 		<div class="row">
 			<div class="col-md-3">
                 <?= $form->field($model_judgement, 'judgement')->dropDownList([

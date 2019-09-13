@@ -23,11 +23,11 @@ $model_karyawan = Karyawan::find()->where([
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="<?= \Yii::$app->controller->id == 'iqa-inspection' && \Yii::$app->controller->action->id == 'index' ? 'active' : ''; ?>">
-                <?= Html::a('Home', ['index']) ?>
-            </li>
             <li class="<?= \Yii::$app->controller->id == 'iqa-inspection' && \Yii::$app->controller->action->id == 'data' ? 'active' : ''; ?>">
-                <?= Html::a('Data', ['data']) ?>
+                <?= Html::a('<i class="fa fa-sw fa-book"></i> Data', ['data']) ?>
+            </li>
+            <li class="<?= \Yii::$app->controller->id == 'iqa-inspection' && \Yii::$app->controller->action->id == 'daily-inspection' ? 'active' : ''; ?>">
+                <?= Html::a('<i class="fa fa-sw fa-calendar-check-o"></i> Daily Inspection', ['daily-inspection']) ?>
             </li>
           </ul>
         </div>
