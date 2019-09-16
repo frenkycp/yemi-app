@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ClinicMonthlyVisit01 extends BaseClinicMonthlyVisit01
 {
+    public $TOTAL_EMP;
 
     public function behaviors()
     {

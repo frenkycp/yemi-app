@@ -6,6 +6,8 @@ use yii\helpers\Url;
 use app\models\ClinicDailyVisit;
 use app\models\KlinikInput;
 use app\models\ClinicMonthlyVisit01;
+use app\models\AbsensiTbl;
+use yii\web\JsExpression;
 
 class ClinicDailyVisitController extends Controller
 {
@@ -30,102 +32,196 @@ class ClinicDailyVisitController extends Controller
 
         $period = $year . $month;
 
-        //data by date
-		$daily_visit = ClinicDailyVisit::find()
-		->where([
-			'period' => $period
-		])
-		->all();
-
-		$tmp_data1 = $tmp_data2 = $tmp_data3 = [];
-		foreach ($daily_visit as $key => $value) {
-			$proddate = (strtotime($value->input_date . " +7 hours") * 1000);
-			$tmp_data1[] = [
-				'x' => $proddate,
-				'y' => (int)$value->total_periksa,
-				'url' => Url::to(['get-remark', 'input_date' => $value->input_date, 'opsi' => 1]),
-			];
-			$tmp_data2[] = [
-				'x' => $proddate,
-				'y' => (int)$value->total_istirahat,
-				'url' => Url::to(['get-remark', 'input_date' => $value->input_date, 'opsi' => 2]),
-			];
-			$tmp_data3[] = [
-				'x' => $proddate,
-				'y' => (int)$value->total_laktasi,
-				'url' => Url::to(['get-remark', 'input_date' => $value->input_date, 'opsi' => 3]),
-			];
-		}
-
-		$data = [
-			[
-				'name' => 'Total Periksa',
-				'data' => $tmp_data1
-			],
-			[
-				'name' => 'Total Istirahat',
-				'data' => $tmp_data2
-			],
-			[
-				'name' => 'Total Laktasi',
-				'data' => $tmp_data3
-			],
-		];
-
 		//data by section
 		$visit_by_section = ClinicMonthlyVisit01::find()
 		->select([
-			'period',
 			'section',
 			'total_kunjungan' => 'SUM(total_kunjungan)',
 			'total_periksa' => 'SUM(total_periksa)',
 			'total_istirahat' => 'SUM(total_istirahat)',
-			'total_laktasi' => 'SUM(total_laktasi)'
+			'total_laktasi' => 'SUM(total_laktasi)',
+			'TOTAL_EMP' => 'COUNT(nik)'
 		])
-		->groupBy('period, section')
-		->orderBy('total_kunjungan DESC')
+		->where([
+			'period' => $period
+		])
+		->andWhere(['<>', 'section', ''])
+		->groupBy('section')
+		->orderBy('section')
+		->all();
+
+		$tmp_total_emp = AbsensiTbl::find()
+		->select([
+			'SECTION',
+			'DATE',
+			'total_karyawan' => 'COUNT(NIK)'
+		])
+		->where([
+			'PERIOD' => $period
+		])
+		->groupBy('SECTION, DATE')
 		->all();
 
 		$section_categories = [];
-		$tmp_data_section1 = $tmp_data_section2 = $tmp_data_section3 = [];
+		$tmp_data_section1 = $tmp_data_section2 = $tmp_data_section3 = $tmp_emp_arr = [];
+
 		foreach ($visit_by_section as $key => $value) {
-			$section_categories[] = $value->section;
+			$section_categories[] = strtoupper($value->section);
 			$tmp_data_section1[] = [
-				'y' => $value->total_periksa == 0 ? null : (int)$value->total_periksa,
+				'y' => $value->TOTAL_EMP == 0 ? null : (int)$value->TOTAL_EMP,
 				'url' => Url::to(['get-remark-by-section', 'section' => $value->section, 'opsi' => 1, 'period' => $period]),
 			];
-			$tmp_data_section2[] = [
-				'y' => $value->total_istirahat == 0 ? null : (int)$value->total_istirahat,
-				'url' => Url::to(['get-remark-by-section', 'section' => $value->section, 'opsi' => 2, 'period' => $period]),
-			];
-			$tmp_data_section3[] = [
-				'y' => $value->total_laktasi == 0 ? null : (int)$value->total_laktasi,
-				'url' => Url::to(['get-remark-by-section', 'section' => $value->section, 'opsi' => 3, 'period' => $period]),
+
+			$total_emp = 0;
+			foreach ($tmp_total_emp as $key => $value2) {
+				if ($value2->SECTION == $value->section && $value2->total_karyawan > $total_emp) {
+					$total_emp = $value2->total_karyawan;
+				}
+			}
+			$tmp_pct = 0;
+			if ($total_emp > 0) {
+				$tmp_pct = round(($value->TOTAL_EMP / $total_emp) * 100);
+			}
+			$tmp_emp_arr[] = [
+				'y' => $tmp_pct
 			];
 		}
 
 		$data_by_section = [
 			[
-				'name' => 'Total Periksa',
-				'data' => $tmp_data_section1
+				'name' => 'Jumlah Karyawan',
+				'data' => $tmp_data_section1,
+				'type' => 'column',
+				'yAxis' => 1,
+				'dataLabels' => [
+					'enabled' => true
+				],
+				'showInLegend' => false
 			],
 			[
-				'name' => 'Total Istirahat',
-				'data' => $tmp_data_section2
-			],
-			[
-				'name' => 'Total Laktasi',
-				'data' => $tmp_data_section3
+				'name' => 'Presentase Kunjungan',
+				'data' => $tmp_emp_arr,
+				'type' => 'line',
+				'tooltip' => [
+					'valueSuffix' => '%'
+				],
+				'dataLabels' => [
+					'enabled' => true,
+					'format' => '{y} %',
+				],
+				'showInLegend' => false
 			],
 		];
 
 		return $this->render('index', [
-			'data' => $data,
 			'section_categories' => $section_categories,
 			'data_by_section' => $data_by_section,
 			'year' => $year,
 			'month' => $month,
+			'checkup_by_diagnose' => $this->checkupByDiagnose($period, 1),
+			'checkup_by_root_cause' => $this->checkupByRootCause($period, 1),
+			'rest_by_diagnose' => $this->checkupByDiagnose($period, 2),
+			'rest_by_root_cause' => $this->checkupByRootCause($period, 2),
 		]);
+	}
+
+	public function checkupByDiagnose($period, $opsi)
+	{
+		$tmp_data = $categories = [];
+		$diagnose_data = KlinikInput::find()
+		->select([
+			'diagnosa',
+			'jumlah_karyawan' => 'COUNT(pk)'
+		])
+		->where([
+			'EXTRACT(year_month FROM pk)' => $period,
+			'opsi' => $opsi
+		])
+		->groupBy('diagnosa')
+		->orderBy('jumlah_karyawan DESC')
+		->asArray()
+		->all();
+
+		$data_count = 1;
+		foreach ($diagnose_data as $key => $value) {
+			
+			$categories[] = $value['diagnosa'];
+			if ($data_count == 1) {
+				$color = \Yii::$app->params['bg-red'];
+				
+			} elseif ($data_count == 2){
+				$color = \Yii::$app->params['bg-yellow'];
+			}else {
+				$color = new JsExpression('Highcharts.getOptions().colors[0]');
+			}
+			$tmp_data[] = [
+				'y' => (int)$value['jumlah_karyawan'],
+				'color' => $color,
+			];
+			$data_count++;
+		}
+
+		$data = [
+			'categories' => $categories,
+			'data' => [
+				[
+					'name' => 'DIAGNOSA',
+					'data' => $tmp_data,
+					'showInLegend' => false
+				]
+			],
+		];
+
+		return $data;
+	}
+
+	public function checkupByRootCause($period, $opsi)
+	{
+		$tmp_data = $categories = [];
+		$diagnose_data = KlinikInput::find()
+		->select([
+			'root_cause',
+			'jumlah_karyawan' => 'COUNT(pk)'
+		])
+		->where([
+			'EXTRACT(year_month FROM pk)' => $period,
+			'opsi' => $opsi
+		])
+		->groupBy('root_cause')
+		->orderBy('jumlah_karyawan DESC')
+		->asArray()
+		->all();
+
+		$data_count = 1;
+		foreach ($diagnose_data as $key => $value) {
+			$categories[] = $value['root_cause'];
+			if ($data_count == 1) {
+				$color = \Yii::$app->params['bg-red'];
+				
+			} elseif ($data_count == 2){
+				$color = \Yii::$app->params['bg-yellow'];
+			}else {
+				$color = new JsExpression('Highcharts.getOptions().colors[0]');
+			}
+			$tmp_data[] = [
+				'y' => (int)$value['jumlah_karyawan'],
+				'color' => $color,
+			];
+			$data_count++;
+		}
+
+		$data = [
+			'categories' => $categories,
+			'data' => [
+				[
+					'name' => 'PENYEBAB',
+					'data' => $tmp_data,
+					'showInLegend' => false
+				]
+			],
+		];
+
+		return $data;
 	}
 
 	public function actionGetRemark($input_date, $opsi)

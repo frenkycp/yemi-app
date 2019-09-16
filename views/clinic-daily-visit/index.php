@@ -34,7 +34,7 @@ date_default_timezone_set('Asia/Jakarta');
 $this->registerJs($script, View::POS_HEAD );*/
 
 /*echo '<pre>';
-print_r($data_iot);
+print_r($checkup_by_diagnose);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
@@ -77,169 +77,303 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 <h3>Last Update : <?= date('Y-m-d H:i'); ?></h3>
-<div class="nav-tabs-custom">
-    <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_1" data-toggle="tab">By Section</a></li>
-        <li><a href="#tab_2" data-toggle="tab">By Tanggal</a></li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane active" id="tab_1">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    //'themes/sand-signika',
-                    'themes/grid-light',
+
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title">Frekuensi Kunjungan v.s Jumlah Karyawan</h3>
+    </div>
+    <div class="box-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/sand-signika',
+                'themes/grid-light',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
                 ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'column',
-                        'style' => [
-                            'fontFamily' => 'sans-serif',
-                        ],
-                    ],
-                    'title' => [
-                        'text' => null
-                    ],
-                    'subtitle' => [
-                        'text' => ''
-                    ],
-                    'xAxis' => [
-                        //'type' => 'datetime',
-                        'categories' => $section_categories,
-                    ],
-                    'yAxis' => [
-                        'stackLabels' => [
-                            'enabled' => true
-                        ],
-                        //'min' => 0,
-                        'title' => [
-                            'text' => 'Total Employee'
-                        ],
-                        //'gridLineWidth' => 0,
-                    ],
-                    'credits' => [
-                        'enabled' =>false
-                    ],
-                    'tooltip' => [
-                        'enabled' => true,
-                        //'xDateFormat' => '%A, %b %e %Y',
-                        //'valueSuffix' => ' min'
-                        //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
-                    ],
-                    'plotOptions' => [
-                        'column' => [
-                            'stacking' => 'normal',
-                            'dataLabels' => [
-                                'enabled' => false,
-                                //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
-                                //'color' => 'black',
-                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                                /*'style' => [
-                                    'textOutline' => '0px',
-                                    'fontWeight' => '0'
-                                ],*/
-                            ],
-                            //'borderWidth' => 1,
-                            //'borderColor' => $color,
-                        ],
-                        'series' => [
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression("
-                                        function(e){
-                                            e.preventDefault();
-                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                        }
-                                    "),
-                                ]
+                'title' => [
+                    'text' => null
+                ],
+                'subtitle' => [
+                    'text' => ''
+                ],
+                'xAxis' => [
+                    //'type' => 'datetime',
+                    'categories' => $section_categories,
+                ],
+                'yAxis' => [
+                    [
+                        'labels' => [
+                            'format' => '{value}%',
+                            'style' => [
+                                //'color' => Highcharts.getOptions().colors[2]
                             ]
-                        ]
+                        ],
+                        'title' => [
+                            'text' => 'Presentase Kunjungan',
+                            'style' => [
+                                //'color' => Highcharts.getOptions().colors[2]
+                            ]
+                        ],
+                        'opposite' => true
                     ],
-                    'series' => $data_by_section
+                    [
+                        'labels' => [
+                            //'format' => '{value}%',
+                            'style' => [
+                                //'color' => Highcharts.getOptions().colors[2]
+                            ]
+                        ],
+                        'title' => [
+                            'text' => 'Jumlah Karyawan',
+                            'style' => [
+                                //'color' => Highcharts.getOptions().colors[2]
+                            ]
+                        ],
+                    ],
                 ],
-            ]);
-            ?>
+                'credits' => [
+                    'enabled' =>false
+                ],
+                'tooltip' => [
+                    'shared' => true,
+                ],
+                'plotOptions' => [
+                    'column' => [
+                        'stacking' => 'normal',
+                        'dataLabels' => [
+                            'enabled' => false,
+                        ],
+                    ],
+                    'series' => [
+                        /*'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ]*/
+                    ]
+                ],
+                'series' => $data_by_section
+            ],
+        ]);
+        ?>
+    </div>
+</div>
+
+<div class="box box-primary">
+    <div class="box-header with-border">PEMERIKSAAN</div>
+    <div class="box-body">
+        <div class="box box-primary box-solid">
+            <div class="box-body">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        //'modules/exporting',
+                        //'themes/sand-signika',
+                        'themes/grid-light',
+                    ],
+                    'options' => [
+                        'chart' => [
+                            'type' => 'column',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
+                            ],
+                            'height' => 300
+                        ],
+                        'title' => [
+                            'text' => 'Diagnosa'
+                        ],
+                        'xAxis' => [
+                            'categories' => $checkup_by_diagnose['categories']
+                        ],
+                        'yAxis' => [
+                            'title' => [
+                                'text' => 'Jumlah Karyawan'
+                            ],
+                        ],
+                        'credits' => [
+                            'enabled' =>false
+                        ],
+                        'tooltip' => [
+                            'enabled' => false
+                        ],
+                        'plotOptions' => [
+                            'column' => [
+                                'dataLabels' => [
+                                    'enabled' =>true
+                                ],
+                                'maxPointWidth' => 50
+                            ],
+                        ],
+                        'series' => $checkup_by_diagnose['data']
+                    ],
+                ]);
+                ?>
+            </div>
         </div>
-        <div class="tab-pane" id="tab_2">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    //'themes/sand-signika',
-                    'themes/grid-light',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'column',
-                        'style' => [
-                            'fontFamily' => 'sans-serif',
-                        ],
+
+        <div class="box box-primary box-solid">
+            <div class="box-body">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        //'modules/exporting',
+                        //'themes/sand-signika',
+                        'themes/grid-light',
                     ],
-                    'title' => [
-                        'text' => null
-                    ],
-                    'subtitle' => [
-                        'text' => ''
-                    ],
-                    'xAxis' => [
-                        'type' => 'datetime',
-                        //'categories' => $value['category'],
-                    ],
-                    'yAxis' => [
-                        'stackLabels' => [
-                            'enabled' => true
-                        ],
-                        //'min' => 0,
-                        'title' => [
-                            'text' => 'Total Employee'
-                        ],
-                        //'gridLineWidth' => 0,
-                    ],
-                    'credits' => [
-                        'enabled' =>false
-                    ],
-                    'tooltip' => [
-                        'enabled' => true,
-                        'xDateFormat' => '%A, %b %e %Y',
-                        //'valueSuffix' => ' min'
-                        //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
-                    ],
-                    'plotOptions' => [
-                        'column' => [
-                            'stacking' => 'normal',
-                            'dataLabels' => [
-                                'enabled' => true,
-                                //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
-                                //'color' => 'black',
-                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                                /*'style' => [
-                                    'textOutline' => '0px',
-                                    'fontWeight' => '0'
-                                ],*/
+                    'options' => [
+                        'chart' => [
+                            'type' => 'column',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
                             ],
-                            //'borderWidth' => 1,
-                            //'borderColor' => $color,
+                            'height' => 300
                         ],
-                        'series' => [
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression("
-                                        function(e){
-                                            e.preventDefault();
-                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                        }
-                                    "),
-                                ]
-                            ]
-                        ]
+                        'title' => [
+                            'text' => 'Penyebab'
+                        ],
+                        'xAxis' => [
+                            'categories' => $checkup_by_root_cause['categories']
+                        ],
+                        'yAxis' => [
+                            'title' => [
+                                'text' => 'Jumlah Karyawan'
+                            ],
+                        ],
+                        'credits' => [
+                            'enabled' =>false
+                        ],
+                        'tooltip' => [
+                            'enabled' => false
+                        ],
+                        'plotOptions' => [
+                            'column' => [
+                                'dataLabels' => [
+                                    'enabled' =>true
+                                ],
+                                'maxPointWidth' => 50
+                            ],
+                        ],
+                        'series' => $checkup_by_root_cause['data']
                     ],
-                    'series' => $data
-                ],
-            ]);
-            ?>
+                ]);
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box box-primary">
+    <div class="box-header with-border">ISTIRAHAT SAKIT (MAX 1 JAM)</div>
+    <div class="box-body">
+        <div class="box box-primary box-solid">
+            <div class="box-body">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        //'modules/exporting',
+                        //'themes/sand-signika',
+                        'themes/grid-light',
+                    ],
+                    'options' => [
+                        'chart' => [
+                            'type' => 'column',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
+                            ],
+                            'height' => 300
+                        ],
+                        'title' => [
+                            'text' => 'Diagnosa'
+                        ],
+                        'xAxis' => [
+                            'categories' => $rest_by_diagnose['categories']
+                        ],
+                        'yAxis' => [
+                            'title' => [
+                                'text' => 'Jumlah Karyawan'
+                            ],
+                        ],
+                        'credits' => [
+                            'enabled' =>false
+                        ],
+                        'tooltip' => [
+                            'enabled' => false
+                        ],
+                        'plotOptions' => [
+                            'column' => [
+                                'dataLabels' => [
+                                    'enabled' =>true
+                                ],
+                                'maxPointWidth' => 50
+                            ],
+                        ],
+                        'series' => $rest_by_diagnose['data']
+                    ],
+                ]);
+                ?>
+            </div>
+        </div>
+
+        <div class="box box-primary box-solid">
+            <div class="box-body">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        //'modules/exporting',
+                        //'themes/sand-signika',
+                        'themes/grid-light',
+                    ],
+                    'options' => [
+                        'chart' => [
+                            'type' => 'column',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
+                            ],
+                            'height' => 300
+                        ],
+                        'title' => [
+                            'text' => 'Penyebab'
+                        ],
+                        'xAxis' => [
+                            'categories' => $rest_by_root_cause['categories']
+                        ],
+                        'yAxis' => [
+                            'title' => [
+                                'text' => 'Jumlah Karyawan'
+                            ],
+                        ],
+                        'credits' => [
+                            'enabled' =>false
+                        ],
+                        'tooltip' => [
+                            'enabled' => false
+                        ],
+                        'plotOptions' => [
+                            'column' => [
+                                'dataLabels' => [
+                                    'enabled' =>true
+                                ],
+                                'maxPointWidth' => 50
+                            ],
+                        ],
+                        'series' => $rest_by_root_cause['data']
+                    ],
+                ]);
+                ?>
+            </div>
         </div>
     </div>
 </div>
