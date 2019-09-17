@@ -12,6 +12,7 @@ use Yii;
  * @property string $pk
  * @property integer $nik
  * @property string $nama
+ * @property string $CC_ID
  * @property string $dept
  * @property string $section
  * @property string $status_karyawan
@@ -61,6 +62,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             [['pk', 'masuk', 'keluar'], 'safe'],
             [['nik', 'opsi', 'confirm'], 'integer'],
             [['nama', 'dept', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'string', 'max' => 255],
+            [['CC_ID'], 'string', 'max' => 10],
             [['section'], 'string', 'max' => 50],
             [['status_karyawan'], 'string', 'max' => 20],
             [['pk'], 'unique']
@@ -76,6 +78,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'pk' => 'Pk',
             'nik' => 'Nik',
             'nama' => 'Nama',
+            'CC_ID' => 'Cc  ID',
             'dept' => 'Dept',
             'section' => 'Section',
             'status_karyawan' => 'Status Karyawan',

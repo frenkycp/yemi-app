@@ -193,6 +193,6 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 			'dept' => $emp->DEPARTEMEN,
 			'section' => $emp->SECTION
 		];
-		return $emp->NAMA_KARYAWAN . '||' . $emp->DEPARTEMEN . '||' . $emp->SECTION . '||' . $emp->STATUS_KARYAWAN;
+		return $emp->NAMA_KARYAWAN . '||' . $emp->DEPARTEMEN . '||' . $emp->SECTION . '||' . $emp->STATUS_KARYAWAN . '||' . $emp->CC_ID;
 	}
 }

@@ -37,12 +37,15 @@ use kartik\select2\Select2;
                         'options' => [
                             'placeholder' => 'Select NIK ...',
                             'onchange' => '
+                                $("#btn-submit").attr("disabled", true);
                                 $.post( "' . Yii::$app->urlManager->createUrl('clinic-data/emp-info?nik=') . '"+$(this).val(), function( data ) {
                                     var data_arr = data.split("||");
                                     $( "#txt_name" ).val(data_arr[0]);
                                     $( "#txt_dept" ).val(data_arr[1]);
                                     $( "#txt_section" ).val(data_arr[2]);
                                     $( "#txt_status_karyawan" ).val(data_arr[3]);
+                                    $( "#cc_id" ).val(data_arr[4]);
+                                    $("#btn-submit").removeAttr("disabled");
                                 });
                             ',
                         ],
@@ -51,7 +54,10 @@ use kartik\select2\Select2;
                         ],
                     ]); ?>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-1">
+                    <?= $form->field($model, 'CC_ID')->textInput(['readonly' => true, 'id' => 'cc_id'])->label('CC ID'); ?>
+                </div>
+                <div class="col-md-3">
                     <?= $form->field($model, 'nama')->textInput(['readonly' => true, 'id' => 'txt_name']); ?>
                 </div>
                 <div class="col-md-4">
@@ -109,7 +115,7 @@ use kartik\select2\Select2;
             '<span class="glyphicon glyphicon-check"></span> ' .
             ($model->isNewRecord ? 'Create' : 'Save'),
             [
-            'id' => 'save-' . $model->formName(),
+            'id' => 'btn-submit',
             'class' => 'btn btn-success'
             ]
             );

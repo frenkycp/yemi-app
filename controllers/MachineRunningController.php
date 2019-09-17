@@ -307,6 +307,24 @@ class MachineRunningController extends Controller
 		    	$current_data->gmc_desc = null;
 		    	$current_data->lot_qty = null;
 
+		    	$iot_output = MachineIotOutput::find()
+		    	->where([
+		    		'mesin_id' => $mesin_id,
+		    		'lot_number' => $lot_id
+		    	])
+		    	->andWhere('end_date IS NULL')
+		    	->one();
+		    	$iot_output->end_date = date('Y-m-d H:i:s');
+		    	$iot_output->end_by_id = $nik;
+		    	$iot_output->end_by_name = $name;
+		    	$iot_output->lama_proses = $this->getSeconds($iot_output->start_date, $iot_output->end_date);
+		    	$posting_shift_data = $this->getPostingShift($iot_output->end_date);
+		    	$iot_output->posting_shift = $posting_shift_data['posting_shift'];
+		    	$iot_output->shift = $posting_shift_data['shift'];
+		    	if (!$iot_output->save()) {
+		    		return json_encode($iot_output->errors);
+		    	}
+
 	    		if ($model->next_process_id == null) {
 	    			$lot_data->end_date = date('Y-m-d H:i:s');
 	    			
@@ -341,13 +359,13 @@ class MachineRunningController extends Controller
 								    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
 								    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
 								} catch (Exception $ex) {
-									\Yii::$app->session->setFlash('danger', "Error : $ex");
+									\Yii::$app->session->setFlash('danger', "Error : $ex, $lot_id aaaaaaa");
 								}
 		    				}
 		    			}
 					    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
 					} catch (Exception $ex) {
-						\Yii::$app->session->setFlash('danger', "Error : $ex");
+						\Yii::$app->session->setFlash('danger', "Error : $ex, $lot_id aaaaaaa");
 					}
 	    			
 	    		}
@@ -356,23 +374,6 @@ class MachineRunningController extends Controller
 			    	$lot_data->jenis_mesin = $next_process;
 			    	if (!$lot_data->save()) {
 			    		return json_encode($lot_data->errors);
-			    	}
-			    	$iot_output = MachineIotOutput::find()
-			    	->where([
-			    		'mesin_id' => $mesin_id,
-			    		'lot_number' => $lot_id
-			    	])
-			    	->andWhere('end_date IS NULL')
-			    	->one();
-			    	$iot_output->end_date = date('Y-m-d H:i:s');
-			    	$iot_output->end_by_id = $nik;
-			    	$iot_output->end_by_name = $name;
-			    	$iot_output->lama_proses = $this->getSeconds($iot_output->start_date, $iot_output->end_date);
-			    	$posting_shift_data = $this->getPostingShift($iot_output->end_date);
-			    	$iot_output->posting_shift = $posting_shift_data['posting_shift'];
-			    	$iot_output->shift = $posting_shift_data['shift'];
-			    	if (!$iot_output->save()) {
-			    		return json_encode($iot_output->errors);
 			    	}
 		    	} else {
 		    		return json_encode($current_data->errors);
