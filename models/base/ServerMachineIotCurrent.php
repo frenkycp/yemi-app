@@ -18,6 +18,7 @@ use Yii;
  * @property string $gmc
  * @property string $gmc_desc
  * @property double $lot_qty
+ * @property string $model_group
  * @property string $product_name
  * @property string $aliasModel
  */
@@ -49,7 +50,7 @@ abstract class ServerMachineIotCurrent extends \yii\db\ActiveRecord
     {
         return [
             [['mesin_id'], 'required'],
-            [['mesin_id', 'mesin_description', 'status_warna', 'kelompok', 'lot_number', 'gmc', 'gmc_desc', 'product_name'], 'string'],
+            [['mesin_id', 'mesin_description', 'status_warna', 'kelompok', 'lot_number', 'gmc', 'gmc_desc', 'model_group', 'product_name'], 'string'],
             [['system_date_time'], 'safe'],
             [['lot_qty'], 'number'],
             [['mesin_id'], 'unique']
@@ -71,6 +72,7 @@ abstract class ServerMachineIotCurrent extends \yii\db\ActiveRecord
             'gmc' => 'Gmc',
             'gmc_desc' => 'Gmc Desc',
             'lot_qty' => 'Lot Qty',
+            'model_group' => 'Model Group',
             'product_name' => 'Product Name',
         ];
     }

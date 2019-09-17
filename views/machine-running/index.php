@@ -128,6 +128,7 @@ echo $data['name'];*/
                     <thead>
                         <tr class="">
                             <th class="text-center" style="vertical-align: middle;">Lot Number</th>
+                            <th class="text-center" style="vertical-align: middle;">Model</th>
                             <th class="text-center" style="vertical-align: middle;">Qty</th>
                             <th class="text-center" style="vertical-align: middle;">GMC</th>
                             <th style="vertical-align: middle;">Description</th>
@@ -139,11 +140,12 @@ echo $data['name'];*/
                         <?php
                         if (!isset($output_data['lot_number'])) {
                             $btn_end_class = 'btn btn-danger btn-block btn-lg disabled';
-                            echo '<tr><td colspan=5 style="text-align: left;">Machine is idling ...</td></tr>';
+                            echo '<tr><td colspan=7 style="text-align: left;">Machine is idling ...</td></tr>';
                         } else {
                             $btn_end_class = 'showModalButton btn btn-danger btn-block btn-lg';
                             echo '<tr class="">
                                 <td class="text-center" style="vertical-align: middle;">' . $output_data['lot_number'] . '</td>
+                                <td style="text-align: center; vertical-align: middle;">' . $output_data['model_group'] . '</td>
                                 <td class="text-center" style="vertical-align: middle;">' . $output_data['lot_qty'] . '</td>
                                 <td class="text-center" style="vertical-align: middle;">' . $output_data['gmc'] . '</td>
                                 <td style="text-align: left; vertical-align: middle;">' . $output_data['gmc_desc'] . '</td>
@@ -181,6 +183,7 @@ echo $data['name'];*/
         <tr>
             <th class="text-center">Action</th>
             <th class="text-center">Lot Number</th>
+            <th class="text-center">Model</th>
             <th class="text-center">Plan Date</th>
             <th class="text-center">Part Number</th>
             <th>Part Name</th>
@@ -192,7 +195,7 @@ echo $data['name'];*/
         <?php
         if (!$lot_data) {
             echo '<tr>
-                <td colspan=7 style="font-size: 20px;">There is no plan for this machine ...</td>
+                <td colspan=8 style="font-size: 20px;">There is no plan for this machine ...</td>
             </tr>';
         } else {
             foreach ($lot_data as $key => $value) {
@@ -222,6 +225,7 @@ echo $data['name'];*/
                         ?>
                     </td>
                     <td class="text-center"><?= $value['lot_id']; ?></td>
+                    <td class="text-center"><?= $value['model_group']; ?></td>
                     <td class="text-center"><?= date('Y-m-d', strtotime($value['plan_date'])); ?></td>
                     <td class="text-center"><?= $value['child_all']; ?></td>
                     <td><?= $value['child_desc_all']; ?></td>
