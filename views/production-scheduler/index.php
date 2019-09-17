@@ -107,7 +107,9 @@ $this->registerJs("
             }
 
             var tmp_no = '';
+            var tmp_model = '';
             var is_multiple = false;
+            var is_multiple_model = false;
             var strvalue = \"\";
             $('input[name=\"selection[]\"]:checked').each(function() {
                 var tmp_child = this.value.split('|');
@@ -119,15 +121,30 @@ $this->registerJs("
                     }
                 }
 
+                if(tmp_model == ''){
+                    tmp_model = tmp_child[2];
+                } else {
+                    if(tmp_model != tmp_child[2]){
+                        is_multiple_model = true;
+                    }
+                }
+
                 if(strvalue!=\"\")
                     strvalue = strvalue + \",\"+tmp_child[0];
                 else
                     strvalue = tmp_child[0];
             });
-            //alert(strvalue);
+            alert(tmp_model);
             if(is_multiple == true){
                 alert('There is multiple item in your selection...! (1 lot 1 item)');
                 return false;
+            }
+
+            if(loc_val == 'WW02'){
+                if(is_multiple_model == true){
+                    alert('There is multiple model in your selection...! (1 lot 1 model)');
+                    return false;
+                }
             }
 
             if (confirm('Are you sure to continue?')) {
@@ -143,7 +160,8 @@ $this->registerJs("
                         shift : shift_val,
                         group : group_val,
                         plan_date : plan_date_val,
-                        jenis_mesin : jenis_mesin_val
+                        jenis_mesin : jenis_mesin_val,
+                        model_group : tmp_model
                     },
                     dataType: 'json',
                     success: function(data) {
@@ -171,7 +189,7 @@ $grid_columns = [
         'class' => 'yii\grid\CheckboxColumn',
         'checkboxOptions' => function($model) {
             return [
-                'value' => $model->slip_id . '|' . $model->child,
+                'value' => $model->slip_id . '|' . $model->child . '|' . $model->model_group,
                 'class' => 'cb-column'
             ];
         },
@@ -441,7 +459,7 @@ $grid_columns = [
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
-            'rowOptions' => function($model){
+            /*'rowOptions' => function($model){
                 $find_slip = app\models\GojekOrderTbl::find()
                 ->where([
                     'slip_id' => $model->slip_id
@@ -452,7 +470,7 @@ $grid_columns = [
                 } else {
                     return ['class' => 'bg-success'];
                 }
-            },
+            },*/
             'toolbar' =>  [
                 '{export}',
                 '{toggleData}',

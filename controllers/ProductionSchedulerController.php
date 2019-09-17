@@ -89,12 +89,13 @@ class ProductionSchedulerController extends Controller
 			//$response['message'] = $tmp_no;
 
 			/*$sql = "{CALL WIP_RESERVATION_PLAN(:child_analyst, :child_analyst_desc, :LINE, :SMT_SHIFT, :KELOMPOK, :plan_date, :slip_id_01, :slip_id_02, :slip_id_03, :slip_id_04, :slip_id_05, :slip_id_06, :slip_id_07, :slip_id_08, :slip_id_09, :slip_id_10, :USER_ID)}";*/
-			$sql = "{CALL WIP_RESERVATION_PLAN_IOT(:child_analyst, :child_analyst_desc, :LINE, :SMT_SHIFT, :KELOMPOK, :plan_date, :slip_id_01, :slip_id_02, :slip_id_03, :slip_id_04, :slip_id_05, :slip_id_06, :slip_id_07, :slip_id_08, :slip_id_09, :slip_id_10, :USER_ID, :mesin_id, :mesin_description, :jenis_mesin)}";
+			$sql = "{CALL WIP_RESERVATION_PLAN_IOT(:child_analyst, :child_analyst_desc, :LINE, :SMT_SHIFT, :KELOMPOK, :plan_date, :slip_id_01, :slip_id_02, :slip_id_03, :slip_id_04, :slip_id_05, :slip_id_06, :slip_id_07, :slip_id_08, :slip_id_09, :slip_id_10, :USER_ID, :mesin_id, :mesin_description, :jenis_mesin, :model_group)}";
 
 			$params[':USER_ID'] = \Yii::$app->user->identity->username;
 			$params[':mesin_id'] = '';
 			$params[':mesin_description'] = '';
 			$params[':jenis_mesin'] = $data_post['jenis_mesin'];
+			$params[':model_group'] = $data_post['model_group'];
 
 			try {
 			    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->queryOne();
