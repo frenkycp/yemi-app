@@ -77,105 +77,17 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 <h3>Last Update : <?= date('Y-m-d H:i'); ?></h3>
+<div class="box-group" id="accordion">
 
-<div class="box box-primary">
-    <div class="box-header with-border">
-        <h3 class="box-title">Frekuensi Kunjungan v.s Jumlah Karyawan</h3>
-    </div>
-    <div class="box-body">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                //'modules/exporting',
-                //'themes/sand-signika',
-                'themes/grid-light',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'column',
-                    'style' => [
-                        'fontFamily' => 'sans-serif',
-                    ],
-                ],
-                'title' => [
-                    'text' => null
-                ],
-                'subtitle' => [
-                    'text' => ''
-                ],
-                'xAxis' => [
-                    //'type' => 'datetime',
-                    'categories' => $section_categories,
-                ],
-                'yAxis' => [
-                    [
-                        'labels' => [
-                            'format' => '{value}%',
-                            'style' => [
-                                //'color' => Highcharts.getOptions().colors[2]
-                            ]
-                        ],
-                        'title' => [
-                            'text' => 'Presentase Kunjungan',
-                            'style' => [
-                                //'color' => Highcharts.getOptions().colors[2]
-                            ]
-                        ],
-                        'opposite' => true
-                    ],
-                    [
-                        'labels' => [
-                            //'format' => '{value}%',
-                            'style' => [
-                                //'color' => Highcharts.getOptions().colors[2]
-                            ]
-                        ],
-                        'title' => [
-                            'text' => 'Jumlah Karyawan',
-                            'style' => [
-                                //'color' => Highcharts.getOptions().colors[2]
-                            ]
-                        ],
-                    ],
-                ],
-                'credits' => [
-                    'enabled' =>false
-                ],
-                'tooltip' => [
-                    'shared' => true,
-                ],
-                'plotOptions' => [
-                    'column' => [
-                        'stacking' => 'normal',
-                        'dataLabels' => [
-                            'enabled' => false,
-                        ],
-                    ],
-                    'series' => [
-                        /*'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression("
-                                    function(e){
-                                        e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                    }
-                                "),
-                            ]
-                        ]*/
-                    ]
-                ],
-                'series' => $data_by_section
-            ],
-        ]);
-        ?>
-    </div>
-</div>
-
-<div class="box box-primary">
-    <div class="box-header with-border">PEMERIKSAAN</div>
-    <div class="box-body">
-        <div class="box box-primary box-solid">
+    <div class="panel box box-primary">
+        <div class="box-header with-border">
+            <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                    FREKUENSI KUNJUNGAN V.S JUMLAH KARYAWAN
+                </a>
+            </h4>
+        </div>
+        <div id="collapseOne" class="panel-collapse collapse">
             <div class="box-body">
                 <?php
                 echo Highcharts::widget([
@@ -190,192 +102,305 @@ echo '</pre>';*/
                             'style' => [
                                 'fontFamily' => 'sans-serif',
                             ],
-                            'height' => 300
                         ],
                         'title' => [
-                            'text' => 'Diagnosa'
+                            'text' => null
+                        ],
+                        'subtitle' => [
+                            'text' => ''
                         ],
                         'xAxis' => [
-                            'categories' => $checkup_by_diagnose['categories']
+                            //'type' => 'datetime',
+                            'categories' => $section_categories,
                         ],
                         'yAxis' => [
-                            'title' => [
-                                'text' => 'Jumlah Karyawan'
+                            [
+                                'labels' => [
+                                    'format' => '{value}%',
+                                    'style' => [
+                                        //'color' => Highcharts.getOptions().colors[2]
+                                    ]
+                                ],
+                                'title' => [
+                                    'text' => 'Presentase Kunjungan',
+                                    'style' => [
+                                        //'color' => Highcharts.getOptions().colors[2]
+                                    ]
+                                ],
+                                'opposite' => true
+                            ],
+                            [
+                                'labels' => [
+                                    //'format' => '{value}%',
+                                    'style' => [
+                                        //'color' => Highcharts.getOptions().colors[2]
+                                    ]
+                                ],
+                                'title' => [
+                                    'text' => 'Jumlah Karyawan',
+                                    'style' => [
+                                        //'color' => Highcharts.getOptions().colors[2]
+                                    ]
+                                ],
                             ],
                         ],
                         'credits' => [
                             'enabled' =>false
                         ],
                         'tooltip' => [
-                            'enabled' => false
+                            'shared' => true,
                         ],
                         'plotOptions' => [
                             'column' => [
+                                'stacking' => 'normal',
                                 'dataLabels' => [
-                                    'enabled' =>true
+                                    'enabled' => false,
                                 ],
-                                'maxPointWidth' => 50
                             ],
+                            'series' => [
+                                /*'cursor' => 'pointer',
+                                'point' => [
+                                    'events' => [
+                                        'click' => new JsExpression("
+                                            function(e){
+                                                e.preventDefault();
+                                                $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                            }
+                                        "),
+                                    ]
+                                ]*/
+                            ]
                         ],
-                        'series' => $checkup_by_diagnose['data']
-                    ],
-                ]);
-                ?>
-            </div>
-        </div>
-
-        <div class="box box-primary box-solid">
-            <div class="box-body">
-                <?php
-                echo Highcharts::widget([
-                    'scripts' => [
-                        //'modules/exporting',
-                        //'themes/sand-signika',
-                        'themes/grid-light',
-                    ],
-                    'options' => [
-                        'chart' => [
-                            'type' => 'column',
-                            'style' => [
-                                'fontFamily' => 'sans-serif',
-                            ],
-                            'height' => 300
-                        ],
-                        'title' => [
-                            'text' => 'Penyebab'
-                        ],
-                        'xAxis' => [
-                            'categories' => $checkup_by_root_cause['categories']
-                        ],
-                        'yAxis' => [
-                            'title' => [
-                                'text' => 'Jumlah Karyawan'
-                            ],
-                        ],
-                        'credits' => [
-                            'enabled' =>false
-                        ],
-                        'tooltip' => [
-                            'enabled' => false
-                        ],
-                        'plotOptions' => [
-                            'column' => [
-                                'dataLabels' => [
-                                    'enabled' =>true
-                                ],
-                                'maxPointWidth' => 50
-                            ],
-                        ],
-                        'series' => $checkup_by_root_cause['data']
+                        'series' => $data_by_section
                     ],
                 ]);
                 ?>
             </div>
         </div>
     </div>
-</div>
 
-<div class="box box-primary">
-    <div class="box-header with-border">ISTIRAHAT SAKIT (MAX 1 JAM)</div>
-    <div class="box-body">
-        <div class="box box-primary box-solid">
-            <div class="box-body">
-                <?php
-                echo Highcharts::widget([
-                    'scripts' => [
-                        //'modules/exporting',
-                        //'themes/sand-signika',
-                        'themes/grid-light',
-                    ],
-                    'options' => [
-                        'chart' => [
-                            'type' => 'column',
-                            'style' => [
-                                'fontFamily' => 'sans-serif',
-                            ],
-                            'height' => 300
-                        ],
-                        'title' => [
-                            'text' => 'Diagnosa'
-                        ],
-                        'xAxis' => [
-                            'categories' => $rest_by_diagnose['categories']
-                        ],
-                        'yAxis' => [
-                            'title' => [
-                                'text' => 'Jumlah Karyawan'
-                            ],
-                        ],
-                        'credits' => [
-                            'enabled' =>false
-                        ],
-                        'tooltip' => [
-                            'enabled' => false
-                        ],
-                        'plotOptions' => [
-                            'column' => [
-                                'dataLabels' => [
-                                    'enabled' =>true
-                                ],
-                                'maxPointWidth' => 50
-                            ],
-                        ],
-                        'series' => $rest_by_diagnose['data']
-                    ],
-                ]);
-                ?>
-            </div>
+    <div class="panel box box-primary">
+        <div class="box-header with-border">
+            <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                    PEMERIKSAAN
+                </a>
+            </h4>
         </div>
-
-        <div class="box box-primary box-solid">
+        <div id="collapseTwo" class="panel-collapse collapse">
             <div class="box-body">
-                <?php
-                echo Highcharts::widget([
-                    'scripts' => [
-                        //'modules/exporting',
-                        //'themes/sand-signika',
-                        'themes/grid-light',
-                    ],
-                    'options' => [
-                        'chart' => [
-                            'type' => 'column',
-                            'style' => [
-                                'fontFamily' => 'sans-serif',
+                <div class="box box-primary box-solid">
+                    <div class="box-body">
+                        <?php
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                //'modules/exporting',
+                                //'themes/sand-signika',
+                                'themes/grid-light',
                             ],
-                            'height' => 300
-                        ],
-                        'title' => [
-                            'text' => 'Penyebab'
-                        ],
-                        'xAxis' => [
-                            'categories' => $rest_by_root_cause['categories']
-                        ],
-                        'yAxis' => [
-                            'title' => [
-                                'text' => 'Jumlah Karyawan'
-                            ],
-                        ],
-                        'credits' => [
-                            'enabled' =>false
-                        ],
-                        'tooltip' => [
-                            'enabled' => false
-                        ],
-                        'plotOptions' => [
-                            'column' => [
-                                'dataLabels' => [
-                                    'enabled' =>true
+                            'options' => [
+                                'chart' => [
+                                    'type' => 'column',
+                                    'style' => [
+                                        'fontFamily' => 'sans-serif',
+                                    ],
+                                    'height' => 300
                                 ],
-                                'maxPointWidth' => 50
+                                'title' => [
+                                    'text' => 'Diagnosa'
+                                ],
+                                'xAxis' => [
+                                    'categories' => $checkup_by_diagnose['categories']
+                                ],
+                                'yAxis' => [
+                                    'title' => [
+                                        'text' => 'Jumlah Karyawan'
+                                    ],
+                                ],
+                                'credits' => [
+                                    'enabled' =>false
+                                ],
+                                'tooltip' => [
+                                    'enabled' => false
+                                ],
+                                'plotOptions' => [
+                                    'column' => [
+                                        'dataLabels' => [
+                                            'enabled' =>true
+                                        ],
+                                        'maxPointWidth' => 50
+                                    ],
+                                ],
+                                'series' => $checkup_by_diagnose['data']
                             ],
-                        ],
-                        'series' => $rest_by_root_cause['data']
-                    ],
-                ]);
-                ?>
+                        ]);
+                        ?>
+                    </div>
+                </div>
+
+                <div class="box box-primary box-solid">
+                    <div class="box-body">
+                        <?php
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                //'modules/exporting',
+                                //'themes/sand-signika',
+                                'themes/grid-light',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    'type' => 'column',
+                                    'style' => [
+                                        'fontFamily' => 'sans-serif',
+                                    ],
+                                    'height' => 300
+                                ],
+                                'title' => [
+                                    'text' => 'Penyebab'
+                                ],
+                                'xAxis' => [
+                                    'categories' => $checkup_by_root_cause['categories']
+                                ],
+                                'yAxis' => [
+                                    'title' => [
+                                        'text' => 'Jumlah Karyawan'
+                                    ],
+                                ],
+                                'credits' => [
+                                    'enabled' =>false
+                                ],
+                                'tooltip' => [
+                                    'enabled' => false
+                                ],
+                                'plotOptions' => [
+                                    'column' => [
+                                        'dataLabels' => [
+                                            'enabled' =>true
+                                        ],
+                                        'maxPointWidth' => 50
+                                    ],
+                                ],
+                                'series' => $checkup_by_root_cause['data']
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <div class="panel box box-primary">
+        <div class="box-header with-border">
+            <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                    ISTIRAHAT SAKIT (MAX 1 JAM)
+                </a>
+            </h4>
+        </div>
+        <div id="collapseThree" class="panel-collapse collapse">
+            <div class="box-body">
+                <div class="box box-primary box-solid">
+                    <div class="box-body">
+                        <?php
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                //'modules/exporting',
+                                //'themes/sand-signika',
+                                'themes/grid-light',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    'type' => 'column',
+                                    'style' => [
+                                        'fontFamily' => 'sans-serif',
+                                    ],
+                                    'height' => 300
+                                ],
+                                'title' => [
+                                    'text' => 'Diagnosa'
+                                ],
+                                'xAxis' => [
+                                    'categories' => $rest_by_diagnose['categories']
+                                ],
+                                'yAxis' => [
+                                    'title' => [
+                                        'text' => 'Jumlah Karyawan'
+                                    ],
+                                ],
+                                'credits' => [
+                                    'enabled' =>false
+                                ],
+                                'tooltip' => [
+                                    'enabled' => false
+                                ],
+                                'plotOptions' => [
+                                    'column' => [
+                                        'dataLabels' => [
+                                            'enabled' =>true
+                                        ],
+                                        'maxPointWidth' => 50
+                                    ],
+                                ],
+                                'series' => $rest_by_diagnose['data']
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+
+                <div class="box box-primary box-solid">
+                    <div class="box-body">
+                        <?php
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                //'modules/exporting',
+                                //'themes/sand-signika',
+                                'themes/grid-light',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    'type' => 'column',
+                                    'style' => [
+                                        'fontFamily' => 'sans-serif',
+                                    ],
+                                    'height' => 300
+                                ],
+                                'title' => [
+                                    'text' => 'Penyebab'
+                                ],
+                                'xAxis' => [
+                                    'categories' => $rest_by_root_cause['categories']
+                                ],
+                                'yAxis' => [
+                                    'title' => [
+                                        'text' => 'Jumlah Karyawan'
+                                    ],
+                                ],
+                                'credits' => [
+                                    'enabled' =>false
+                                ],
+                                'tooltip' => [
+                                    'enabled' => false
+                                ],
+                                'plotOptions' => [
+                                    'column' => [
+                                        'dataLabels' => [
+                                            'enabled' =>true
+                                        ],
+                                        'maxPointWidth' => 50
+                                    ],
+                                ],
+                                'series' => $rest_by_root_cause['data']
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <?php
