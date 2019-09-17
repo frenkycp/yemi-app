@@ -134,7 +134,7 @@ $this->registerJs("
                 else
                     strvalue = tmp_child[0];
             });
-            alert(tmp_model);
+            //alert(tmp_model);
             if(is_multiple == true){
                 alert('There is multiple item in your selection...! (1 lot 1 item)');
                 return false;
