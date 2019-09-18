@@ -223,7 +223,8 @@ $gridColumns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
-                'before' => '<b><em>* Jika ada kritik/saran/pujian terkait fasilitas perusahaan, bisa disampaikan melalui menu ini. Akan lebih baik jika disertai foto.</em></b>',
+                'before' => '<b><em>* Menu ini khusus digunakan jika ada kritik/saran/pujian terkait fasilitas perusahaan. Akan lebih baik jika disertai foto.</em></b><br/>
+                <em><span class="text-red">* Untuk keluhan mengenai absensi, lembur dan yang berkaitan dengan data karyawan, gunakan menu "Question & Answer with HR"</span></em>',
                 'heading' => ''
             ],
         ]); ?>
