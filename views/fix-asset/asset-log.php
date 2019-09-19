@@ -131,6 +131,19 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'propose_scrap',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            'Y' => 'Y',
+            'N' => 'N',
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    [
         'attribute' => 'label',
         'vAlign' => 'middle',
         'hAlign' => 'center',

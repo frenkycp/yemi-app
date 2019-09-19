@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['trans_id'], 'integer'],
-            [['trans_type', 'posting_date', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label'], 'safe'],
+            [['trans_type', 'posting_date', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap'], 'safe'],
             [['NBV'], 'number'],
 ];
 }
@@ -60,6 +60,7 @@ $query->andFilterWhere([
             'trans_id' => $this->trans_id,
             'posting_date' => $this->posting_date,
             'NBV' => $this->NBV,
+            'propose_scrap' => $this->propose_scrap,
         ]);
 
         $query->andFilterWhere(['like', 'trans_type', $this->trans_type])
