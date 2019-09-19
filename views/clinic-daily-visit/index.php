@@ -34,7 +34,7 @@ date_default_timezone_set('Asia/Jakarta');
 $this->registerJs($script, View::POS_HEAD );*/
 
 /*echo '<pre>';
-print_r($checkup_by_diagnose);
+print_r($emp_multi_visit_data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
@@ -175,6 +175,104 @@ echo '</pre>';*/
                     ],
                 ]);
                 ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel box box-primary">
+        <div class="box-header with-border">
+            <h4 class="box-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapseKunjunganBySection">
+                    FREKUENSI KUNJUNGAN BY SECTION
+                </a>
+            </h4>
+        </div>
+        <div id="collapseKunjunganBySection" class="panel-collapse collapse">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">
+                                    KARYAWAN > 1X
+                                </h3>
+                            </div>
+                            <div class="box-body no-padding">
+                                <table class="table table-responsive table-condensed table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>NAMA</th>
+                                            <th>DEPARTEMEN</th>
+                                            <th>SECTION</th>
+                                            <th class="text-center">KUNJUNGAN</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="font-size: 10px;">
+                                        <?php
+                                        if (count($emp_multi_visit_data) == 0) {
+                                            echo '<tr>
+                                                <td colspan=4></td>
+                                            </tr>';
+                                        }
+                                        foreach ($emp_multi_visit_data as $key => $value) {
+                                            ?>
+                                            <tr>
+                                                <td><?= $value['nama']; ?></td>
+                                                <td><?= $value['dept']; ?></td>
+                                                <td><?= $value['sect']; ?></td>
+                                                <td class="text-center"><?= $value['total_kunjungan']; ?></td>
+                                            </tr>
+                                        <?php }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <?php
+                        echo Highcharts::widget([
+                            'scripts' => [
+                                //'modules/exporting',
+                                //'themes/sand-signika',
+                                'themes/grid-light',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    'type' => 'pie',
+                                    'style' => [
+                                        'fontFamily' => 'sans-serif',
+                                    ],
+                                    'plotBackgroundColor' => null,
+                                    'plotBorderWidth' => null,
+                                    'plotShadow' => false
+                                ],
+                                'title' => [
+                                    'text' => null
+                                ],
+                                'credits' => [
+                                    'enabled' =>false
+                                ],
+                                'tooltip' => [
+                                    'pointFormat' => '{series.name}: <b>{point.percentage:.0f}%</b>',
+                                ],
+                                'plotOptions' => [
+                                    'pie' => [
+                                        'allowPointSelect' => true,
+                                        'cursor' => 'pointer',
+                                        'dataLabels' => [
+                                            'enabled' => true,
+                                            'format' => '<b>{point.name}</b>: {point.percentage:.0f} %'
+                                        ],
+                                    ],
+                                ],
+                                'series' => $data_freq_kunjungan
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+                
             </div>
         </div>
     </div>

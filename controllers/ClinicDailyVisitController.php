@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use app\models\ClinicDailyVisit;
 use app\models\CostCenter;
 use app\models\KlinikInput;
@@ -51,6 +52,13 @@ class ClinicDailyVisitController extends Controller
 		->orderBy('CC_ID')
 		->all();
 
+		$total_monthly_visitor = ClinicMonthlyVisit01::find()
+		->where([
+			'period' => $period
+		])
+		->andWhere(['<>', 'CC_ID', ''])
+		->count();
+
 		$tmp_total_emp = AbsensiTbl::find()
 		->select([
 			'CC_ID',
@@ -63,12 +71,14 @@ class ClinicDailyVisitController extends Controller
 		->groupBy('CC_ID, DATE')
 		->all();
 
+		$cc_data_arr = ArrayHelper::map(CostCenter::find()->all(), 'CC_ID', 'CC_DESC');
+
 		$section_categories = [];
-		$tmp_data_section1 = $tmp_data_section2 = $tmp_data_section3 = $tmp_emp_arr = [];
+		$tmp_data_section1 = $tmp_data_section2 = $tmp_data_section3 = $tmp_emp_arr = $tmp_freq_kunjungan = [];
 
 		foreach ($visit_by_section as $key => $value) {
-			$cc_data = CostCenter::find()->where(['CC_ID' => $value->CC_ID])->one();
-			$section_categories[] = strtoupper($cc_data->CC_DESC);
+			$cc_data = $cc_data_arr[$value->CC_ID];
+			$section_categories[] = strtoupper($cc_data);
 			$tmp_data_section1[] = [
 				'y' => $value->TOTAL_EMP == 0 ? null : (int)$value->TOTAL_EMP,
 				//'url' => Url::to(['get-remark-by-section', 'section' => $value->section, 'opsi' => 1, 'period' => $period]),
@@ -86,6 +96,10 @@ class ClinicDailyVisitController extends Controller
 			}
 			$tmp_emp_arr[] = [
 				'y' => $tmp_pct
+			];
+			$tmp_freq_kunjungan[] = [
+				'name' => $cc_data,
+				'y' => round(($value->TOTAL_EMP / $total_monthly_visitor) * 100)
 			];
 		}
 
@@ -115,6 +129,13 @@ class ClinicDailyVisitController extends Controller
 			],
 		];
 
+		$data_freq_kunjungan = [
+			[
+				'name' => 'Visitor by Section',
+				'data' => $tmp_freq_kunjungan
+			],
+		];
+
 		return $this->render('index', [
 			'section_categories' => $section_categories,
 			'data_by_section' => $data_by_section,
@@ -124,7 +145,45 @@ class ClinicDailyVisitController extends Controller
 			'checkup_by_root_cause' => $this->checkupByRootCause($period, 1),
 			'rest_by_diagnose' => $this->checkupByDiagnose($period, 2),
 			'rest_by_root_cause' => $this->checkupByRootCause($period, 2),
+			'data_freq_kunjungan' => $data_freq_kunjungan,
+			'emp_multi_visit_data' => $this->getEmpMultipleVisit($period)
 		]);
+	}
+
+	public function getEmpMultipleVisit($period)
+	{
+		$visiting_data = ClinicMonthlyVisit01::find()
+		->select([
+			'nik', 'nama', 'CC_ID', 'total_kunjungan'
+		])
+		->where([
+			'period' => $period
+		])
+		->andWhere(['<>', 'CC_ID', ''])
+		->andWhere(['>', 'total_kunjungan', 1])
+		->orderBy('total_kunjungan DESC, CC_ID, nama')
+		->all();
+
+		$cc_data_arr = CostCenter::find()->all();
+
+		$return_data = [];
+		foreach ($visiting_data as $key => $value) {
+			$dept = $sect = '';
+			foreach ($cc_data_arr as $key => $cc_data) {
+				if ($cc_data->CC_ID == $value->CC_ID) {
+					$dept = $cc_data->CC_GROUP;
+					$sect = $cc_data->CC_DESC;
+				}
+			}
+			$return_data[] = [
+				'nik' => $value->nik,
+				'nama' => $value->nama,
+				'dept' => $dept,
+				'sect' => $sect,
+				'total_kunjungan' => $value->total_kunjungan,
+			];
+		}
+		return $return_data;
 	}
 
 	public function checkupByDiagnose($period, $opsi)
