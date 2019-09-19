@@ -12,6 +12,7 @@ use Yii;
  * @property integer $period
  * @property integer $nik
  * @property string $nama
+ * @property string $CC_ID
  * @property string $dept
  * @property string $section
  * @property string $status_karyawan
@@ -51,6 +52,7 @@ abstract class ClinicMonthlyVisit01 extends \yii\db\ActiveRecord
             [['period', 'nik', 'total_kunjungan'], 'integer'],
             [['total_periksa', 'total_istirahat', 'total_laktasi'], 'number'],
             [['nama', 'dept'], 'string', 'max' => 255],
+            [['CC_ID'], 'string', 'max' => 10],
             [['section'], 'string', 'max' => 50],
             [['status_karyawan'], 'string', 'max' => 20]
         ];
@@ -65,6 +67,7 @@ abstract class ClinicMonthlyVisit01 extends \yii\db\ActiveRecord
             'period' => 'Period',
             'nik' => 'Nik',
             'nama' => 'Nama',
+            'CC_ID' => 'Cc  ID',
             'dept' => 'Dept',
             'section' => 'Section',
             'status_karyawan' => 'Status Karyawan',

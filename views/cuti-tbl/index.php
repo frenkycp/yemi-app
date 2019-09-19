@@ -84,7 +84,7 @@ $columns = [
     ],
     [
         'attribute' => 'JUMLAH_CUTI',
-        'label' => 'Quota',
+        'label' => 'Remains',
         'value' => function($model){
             $using = app\models\CutiRekapView02::find()
             ->select([
@@ -102,11 +102,7 @@ $columns = [
                 $balance = 0;
             }
 
-            return '<span class="badge bg-light-blue">' . $balance . '/' . $model->JUMLAH_CUTI . '</span>';
-
-            return Html::a($balance . '/' . $model->JUMLAH_CUTI, '#', [
-                'class' => 'badge bg-light-blue'
-            ]);
+            return '<span class="badge bg-light-blue">' . $balance . '</span>';
         },
         'contentOptions' => [
             'style' => 'max-width: 30px;'

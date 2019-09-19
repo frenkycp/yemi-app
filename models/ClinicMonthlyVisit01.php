@@ -32,4 +32,9 @@ class ClinicMonthlyVisit01 extends BaseClinicMonthlyVisit01
             ]
         );
     }
+
+    public function getCostCenter()
+    {
+        return $this->hasOne(CostCenter::className(), ['CC_ID' => 'CC_ID']);
+    }
 }

@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use yii\helpers\Url;
 use app\models\ClinicDailyVisit;
+use app\models\CostCenter;
 use app\models\KlinikInput;
 use app\models\ClinicMonthlyVisit01;
 use app\models\AbsensiTbl;
@@ -35,7 +36,7 @@ class ClinicDailyVisitController extends Controller
 		//data by section
 		$visit_by_section = ClinicMonthlyVisit01::find()
 		->select([
-			'section',
+			'CC_ID',
 			'total_kunjungan' => 'SUM(total_kunjungan)',
 			'total_periksa' => 'SUM(total_periksa)',
 			'total_istirahat' => 'SUM(total_istirahat)',
@@ -45,36 +46,37 @@ class ClinicDailyVisitController extends Controller
 		->where([
 			'period' => $period
 		])
-		->andWhere(['<>', 'section', ''])
-		->groupBy('section')
-		->orderBy('section')
+		->andWhere(['<>', 'CC_ID', ''])
+		->groupBy('CC_ID')
+		->orderBy('CC_ID')
 		->all();
 
 		$tmp_total_emp = AbsensiTbl::find()
 		->select([
-			'SECTION',
+			'CC_ID',
 			'DATE',
 			'total_karyawan' => 'COUNT(NIK)'
 		])
 		->where([
 			'PERIOD' => $period
 		])
-		->groupBy('SECTION, DATE')
+		->groupBy('CC_ID, DATE')
 		->all();
 
 		$section_categories = [];
 		$tmp_data_section1 = $tmp_data_section2 = $tmp_data_section3 = $tmp_emp_arr = [];
 
 		foreach ($visit_by_section as $key => $value) {
-			$section_categories[] = strtoupper($value->section);
+			$cc_data = CostCenter::find()->where(['CC_ID' => $value->CC_ID])->one();
+			$section_categories[] = strtoupper($cc_data->CC_DESC);
 			$tmp_data_section1[] = [
 				'y' => $value->TOTAL_EMP == 0 ? null : (int)$value->TOTAL_EMP,
-				'url' => Url::to(['get-remark-by-section', 'section' => $value->section, 'opsi' => 1, 'period' => $period]),
+				//'url' => Url::to(['get-remark-by-section', 'section' => $value->section, 'opsi' => 1, 'period' => $period]),
 			];
 
 			$total_emp = 0;
 			foreach ($tmp_total_emp as $key => $value2) {
-				if ($value2->SECTION == $value->section && $value2->total_karyawan > $total_emp) {
+				if ($value2->CC_ID == $value->CC_ID && $value2->total_karyawan > $total_emp) {
 					$total_emp = $value2->total_karyawan;
 				}
 			}
