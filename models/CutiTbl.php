@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class CutiTbl extends BaseCutiTbl
 {
+    public $REMAINING_QTY;
 
     public function behaviors()
     {

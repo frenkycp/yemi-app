@@ -84,6 +84,16 @@ $columns = [
     ],
     [
         'attribute' => 'JUMLAH_CUTI',
+        'label' => 'Quota',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'REMAINING_QTY',
         'label' => 'Remains',
         'value' => function($model){
             $using = app\models\CutiRekapView02::find()
