@@ -22,6 +22,7 @@ use Yii;
  * @property string $status
  * @property string $label
  * @property double $NBV
+ * @property string $propose_scrap
  * @property string $aliasModel
  */
 abstract class AssetLogTbl extends \yii\db\ActiveRecord
@@ -51,7 +52,7 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['trans_type', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label'], 'string'],
+            [['trans_type', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap'], 'string'],
             [['posting_date'], 'safe'],
             [['NBV'], 'number']
         ];
@@ -76,6 +77,7 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
             'status' => 'Status',
             'label' => 'Label',
             'NBV' => 'Nbv',
+            'propose_scrap' => 'Propose Scrap',
         ];
     }
 

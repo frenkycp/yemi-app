@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class AssetLogTbl extends BaseAssetLogTbl
 {
+    public $propose_scrap_dd;
 
     public function behaviors()
     {

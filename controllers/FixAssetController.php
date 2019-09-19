@@ -12,7 +12,7 @@ use app\models\Karyawan;
 use app\models\AssetLocTbl;
 use app\models\AssetLogTbl;
 
-class FixAssetController extends \app\controllers\base\FixAssetDataController
+class FixAssetController extends \app\controllers\base\FixAssetController
 {
 	public function actionLogin()
     {
@@ -38,6 +38,8 @@ class FixAssetController extends \app\controllers\base\FixAssetDataController
             if ($karyawan->NIK !== null) {
                 $session['fix_asset_user'] = $model->username;
                 $session['fix_asset_name'] = $karyawan->NAMA_KARYAWAN;
+                $session['fix_asset_cc_id'] = $karyawan->CC_ID;
+                $session['fix_asset_department'] = $karyawan->DEPARTEMEN;
                 return $this->redirect(['index']);
             } else {
                 \Yii::$app->getSession()->setFlash('error', 'Incorrect username or password...');
@@ -57,6 +59,8 @@ class FixAssetController extends \app\controllers\base\FixAssetDataController
         if ($session->has('fix_asset_user')) {
             $session->remove('fix_asset_user');
             $session->remove('fix_asset_name');
+            $session->remove('fix_asset_cc_id');
+            $session->remove('fix_asset_department');
         }
 
         return $this->redirect(['login']);
@@ -80,6 +84,7 @@ class FixAssetController extends \app\controllers\base\FixAssetDataController
         $nik = $session['fix_asset_user'];
 		$this->layout = 'fixed-asset/main';
 	    $searchModel  = new FixAssetDataSearch;
+	    $searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
@@ -133,15 +138,17 @@ class FixAssetController extends \app\controllers\base\FixAssetDataController
 		$model->user_id = $nik;
 		$model->user_desc = $name;
 		$model->note = $fixed_asset_data->note;
+		$model->propose_scrap = $model->propose_scrap_dd = 'N';
 
 		if ($model->load($_POST)) {
 			if ($model->to_loc != '' && $model->to_loc != null) {
 				$fixed_asset_data->location = $model->to_loc;
 			} else {
 				$model->to_loc = '-';
-			}
+			};
 			$fixed_asset_data->status = $model->status;
 			$fixed_asset_data->label = $model->label;
+			$fixed_asset_data->propose_scrap = $model->propose_scrap;
 			$fixed_asset_data->NBV = $model->NBV;
 
 			if ($model->save()) {
@@ -183,7 +190,7 @@ class FixAssetController extends \app\controllers\base\FixAssetDataController
 		]);
 	}
 
-	public function actionCreate()
+	/*public function actionCreate()
 	{
 		$this->layout = 'fixed-asset/main';
 		$model = new AssetTbl;
@@ -213,5 +220,5 @@ class FixAssetController extends \app\controllers\base\FixAssetDataController
 				'model' => $model,
 			]);
 		}
-	}
+	}*/
 }

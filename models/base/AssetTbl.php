@@ -54,6 +54,7 @@ use Yii;
  * @property string $status
  * @property string $label
  * @property double $NBV
+ * @property string $propose_scrap
  * @property string $aliasModel
  */
 abstract class AssetTbl extends \yii\db\ActiveRecord
@@ -84,7 +85,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id'], 'required'],
-            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'loc_type', 'LOC', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label'], 'string'],
+            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'loc_type', 'LOC', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label', 'propose_scrap'], 'string'],
             [['purchase_date', 'LAST_UPDATE', 'DateDisc'], 'safe'],
             [['report_type'], 'integer'],
             [['price', 'price_usd', 'qty', 'AtCost', 'NBV'], 'number'],
@@ -143,6 +144,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'status' => 'Status',
             'label' => 'Label',
             'NBV' => 'Nbv',
+            'propose_scrap' => 'Propose Scrap',
         ];
     }
 

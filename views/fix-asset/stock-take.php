@@ -20,8 +20,7 @@ $this->registerCssFile("@web/css/data_table.css");
 
 ?>
 
-
-<span id="dept-text">DEPARTMENT<span style="padding: 0px 30px;">:&nbsp;&nbsp;&nbsp;&nbsp;<i><?= $fixed_asset_data->cost_centre; ?></span><?= $fixed_asset_data->department_name; ?></i></span>
+<span id="dept-text">DEPARTMENT<span style="padding: 0px 30px;">:&nbsp;&nbsp;&nbsp;&nbsp;<i><?= $fixed_asset_data->cost_centre; ?></span><?= $fixed_asset_data->section_name; ?></i></span>
 
 <div class="row">
 	<div class="col-md-12">
@@ -55,20 +54,25 @@ $this->registerCssFile("@web/css/data_table.css");
 						</div>
 					</div>
 					<div class="col-md-8">
-						<hr>
+						
 						<strong>Fixed Asset ID</strong>
 						<p class="text-muted">
 							<?= $model->asset_id; ?>
 						</p>
-						<hr>
+						
 						<strong>Fixed Asset Description</strong>
 						<p class="text-muted">
 							<?= $model->computer_name; ?>
 						</p>
-						<hr>
+						
 						<strong>Qty</strong>
 						<p class="text-muted">
 							<?= number_format($fixed_asset_data->qty); ?>
+						</p>
+
+						<strong>PIC Name</strong>
+						<p class="text-muted">
+							<?= $fixed_asset_data->NAMA_KARYAWAN == null ? '<em>(Not Set)</em>' : $fixed_asset_data->NAMA_KARYAWAN; ?>
 						</p>
 					</div>
 				</div>
@@ -110,20 +114,44 @@ $this->registerCssFile("@web/css/data_table.css");
 				<hr>
 				<div class="row">
 					<div class="col-md-2">
-						<?= $form->field($model, 'status')->dropDownList(\Yii::$app->params['fixed_asset_status']); ?>
+						<?= $form->field($model, 'status')->dropDownList(\Yii::$app->params['fixed_asset_status'], [
+							'onchange' => '
+							var dd_val = $(this).val();
+							if(dd_val == "NG"){
+								$("#propose_scrap_dd").removeAttr("disabled");
+							} else {
+								$("#propose_scrap_dd").prop("disabled", true);
+								$("#propose_scrap_dd").val("N");
+								$("#propose_scrap").val("N");
+							}
+							'
+						]); ?>
 					</div>
+					<div class="col-md-2">
+						<?= $form->field($model, 'propose_scrap_dd')->dropDownList([
+							'Y' => 'Yes',
+							'N' => 'No'
+						], [
+							'disabled' => true,
+							'id' => 'propose_scrap_dd',
+							'onchange' => '$("#propose_scrap").val($(this).val());'
+						]); ?>
+						<?= $form->field($model, 'propose_scrap')->hiddenInput(['id' => 'propose_scrap'])->label(false); ?>
+					</div>
+					
+				</div>
+				<div class="row">
 					<div class="col-md-2">
 						<?= $form->field($model, 'label')->dropDownList([
 							'Y' => 'Yes',
 							'N' => 'No'
 						]); ?>
 					</div>
-					<div class="col-md-2">
-						<?= $form->field($model, 'NBV')->textInput(); ?>
-					</div>
-					<div class="col-md-6">
+					
+					<div class="col-md-10">
 						<?= $form->field($model, 'note')->textInput(['placeholder' => 'Insert remark here ...'])->label('Remark'); ?>
 					</div>
+					<?= $form->field($model, 'NBV')->hiddenInput()->label(false); ?>
 				</div>
 			</div>
 			<div class="box-footer">
@@ -146,44 +174,3 @@ $this->registerCssFile("@web/css/data_table.css");
 		<?php ActiveForm::end(); ?>
 	</div>
 </div>
-
-<div id="stock-take-container" style="display: none;">
-	<table class="table-fill">
-		<thead class="">
-			<tr>
-				<th width="10%" class="text-center">Fixed Asset ID</th>
-				<th>Fixed Asset Description</th>
-				<th class="text-center" width="5%">Qtys</th>
-				<th width="25%">Image</th>
-			</tr>
-		</thead>
-		<tbody class="table-hover">
-			<tr>
-				<td class="text-center"><?= $fixed_asset_data->asset_id; ?></td>
-				<td><?= $fixed_asset_data->computer_name; ?></td>
-				<td class="text-center"><?= number_format($fixed_asset_data->qty); ?></td>
-				<td>
-					<?php
-					$filename = $fixed_asset_data->primary_picture . '.jpg';
-					$path1 = \Yii::$app->basePath . '\\web\\uploads\\ASSET_IMG\\' . $filename;
-					if (file_exists($path1)) {
-						echo Html::img('@web/uploads/ASSET_IMG/' . $fixed_asset_data->primary_picture . '.jpg', [
-							'class' => 'media-object img-rounded',
-							'width' => '100%',
-							//'height' => '300'
-						]);
-					} else {
-						echo Html::img('@web/uploads/image-not-available.png', [
-							'class' => 'media-object img-rounded',
-							'width' => '100%',
-							'height' => '350'
-						]);
-					}
-					?>
-				</td>
-			</tr>
-		</tbody>
-	</table>
-</div>
-
-
