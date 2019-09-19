@@ -135,7 +135,7 @@ $this->registerCssFile("@web/css/data_table.css");
 							'disabled' => true,
 							'id' => 'propose_scrap_dd',
 							'onchange' => '$("#propose_scrap").val($(this).val());'
-						]); ?>
+						])->label('Propose Scrap'); ?>
 						<?= $form->field($model, 'propose_scrap')->hiddenInput(['id' => 'propose_scrap'])->label(false); ?>
 					</div>
 					
