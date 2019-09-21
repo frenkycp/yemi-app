@@ -75,6 +75,7 @@ class DisplayController extends Controller
     public function actionTempHumidityChart()
     {
         $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
         $model = new \yii\base\DynamicModel([
             'map_no', 'from_date', 'to_date'
         ]);
@@ -93,8 +94,8 @@ class DisplayController extends Controller
         $data_dummy = SensorLog::find()
         ->where([
             'AND',
-            ['>=', 'system_date_time', $model->from_date],
-            ['<=', 'system_date_time', $model->to_date]
+            ['>=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->from_date . ' 00:00:01'))],
+            ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
         ])
         ->andWhere(['map_no' => $model->map_no])
         ->asArray()
@@ -117,21 +118,30 @@ class DisplayController extends Controller
                 [
                     'name' => 'Temperature',
                     'data' => $tmp_data_temperature,
-                    'color' => new JsExpression('Highcharts.getOptions().colors[9]')
+                    //'color' => new JsExpression('Highcharts.getOptions().colors[4]')
+                    'color' => 'white'
                 ],
             ],
             'humidity' => [
                 [
                     'name' => 'Humidity',
                     'data' => $tmp_data_humidity,
-                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    //'color' => new JsExpression('Highcharts.getOptions().colors[4]')
+                    'color' => 'white'
                 ],
             ],
         ];
 
+        $sensor_data = SensorTbl::find()
+        ->where([
+            'map_no' => $model->map_no
+        ])
+        ->one();
+
         return $this->render('temp-humidity-chart', [
             'data' => $data,
             'model' => $model,
+            'sensor_data' => $sensor_data,
         ]);
     }
 

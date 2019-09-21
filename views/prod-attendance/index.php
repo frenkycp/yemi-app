@@ -17,7 +17,7 @@ $color = 'ForestGreen';
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
-    //.form-control {font-size: 20px; height: 40px;}
+    .form-control {font-size: 20px; height: 40px;}
     .content-header {color: white; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
@@ -31,6 +31,7 @@ $this->registerCss("
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .bg-yellow {font-size: 2em;}
+    .help-block {display: none;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -69,7 +70,6 @@ echo '</pre>';*/
             <div class="box-body">
                 <?= $form->field($model, 'child_analyst')->dropDownList(ArrayHelper::map(app\models\WipLocation::find()->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'), [
                     'class' => 'form-control',
-                    'prompt' => '--Select Location--',
                 ])->label(false); ?>
                 <?= $form->field($model, 'child_analyst_desc')->hiddenInput()->label(false); ?>
             </div>
@@ -91,6 +91,16 @@ echo '</pre>';*/
             </div>
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="box box-primary box-solid">
+            <div class="box-header">
+                <h3 class="box-title">Total MP</h3>
+            </div>
+            <div class="box-body">
+                <span class="form-control"><?= $total_mp; ?></span>
+            </div>
+        </div>
+    </div>
 </div>
 
 <?= $form->field($model, 'nik', [
@@ -101,9 +111,11 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
+<br/>
+
 <div class="panel panel-success">
     <div class="panel-heading">
-        <h3 class="panel-title">Attendance List</h3>
+        <h3 class="panel-title">Attendance Log</h3>
     </div>
     <div class="panel-body no-padding">
         <table class="table table-responsive table-condensed table-bordered table-striped">
@@ -117,20 +129,20 @@ echo '</pre>';*/
             </thead>
             <tbody>
                 <?php
-                if (!$attendance_data) {
+                if (!$attendance_log) {
                     echo '<tr>
                     <td colspan="4"><em>No Attendance Data today...</em></td>
                     </tr>';
                 }
                 $i = 1;
-                foreach ($attendance_data as $key => $attendance) {
+                foreach ($attendance_log as $key => $attendance) {
                     $tr_class = '';
 
                     if ($i == 1) {
                         $tr_class = 'bg-yellow';
                     }
                     $status_class = 'text-center';
-                    if ($attendance->current_status == 'I') {
+                    if ($attendance->att_type == 'I') {
                         $current_status = 'IN';
                         if ($i > 1) {
                             $status_class .= ' text-green';

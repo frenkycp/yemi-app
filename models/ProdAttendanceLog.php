@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ProdAttendanceLog extends BaseProdAttendanceLog
 {
+    public $nik, $name;
 
     public function behaviors()
     {
@@ -30,5 +31,10 @@ class ProdAttendanceLog extends BaseProdAttendanceLog
                 # custom validation rules
             ]
         );
+    }
+
+    public function getProdAttendanceData()
+    {
+        return $this->hasOne(ProdAttendanceData::className(), ['att_data_id' => 'att_data_id']);
     }
 }

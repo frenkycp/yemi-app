@@ -127,6 +127,21 @@ echo '</pre>';*/
                             'text' => 'TERMPERATURE (Celcius)',
                         ],
                         'max' => 100,
+                        'plotBands' => [
+                            [
+                                'from' => $sensor_data->temp_min,
+                                'to' => $sensor_data->temp_max,
+                                'color' => 'rgba(76, 187, 23, 1)',
+                                'label' => [
+                                    'text' => 'Normal Temperature',
+                                    'style' => [
+                                        'color' => 'black'
+                                    ],
+                                    //'align' => 'center'
+                                ],
+                            ],
+                        ],
+                        'tickInterval' => 10
                     ],
                     'tooltip' => [
                         'enabled' => true,
@@ -182,6 +197,21 @@ echo '</pre>';*/
                             'text' => 'Humidity (%)',
                         ],
                         'max' => 100,
+                        'plotBands' => [
+                            [
+                                'from' => $sensor_data->humi_min,
+                                'to' => $sensor_data->humi_max,
+                                'color' => 'rgba(76, 187, 23, 1)',
+                                'label' => [
+                                    'text' => 'Normal Humidity',
+                                    'style' => [
+                                        'color' => 'black'
+                                    ],
+                                    //'align' => 'center'
+                                ],
+                            ],
+                        ],
+                        'tickInterval' => 10
                     ],
                     'tooltip' => [
                         'enabled' => true,

@@ -77,6 +77,7 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		$model->inspector_id = \Yii::$app->user->identity->username;
 		$model->inspector_name = \Yii::$app->user->identity->name;
 		$model->input_datetime = date('Y-m-d H:i:s');
+		$model->rank_category = 'B';
 
 		try {
 			if ($model->load($_POST)) {
