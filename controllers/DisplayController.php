@@ -118,16 +118,16 @@ class DisplayController extends Controller
                 [
                     'name' => 'Temperature',
                     'data' => $tmp_data_temperature,
-                    //'color' => new JsExpression('Highcharts.getOptions().colors[4]')
-                    'color' => 'white'
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    //'color' => 'white'
                 ],
             ],
             'humidity' => [
                 [
                     'name' => 'Humidity',
                     'data' => $tmp_data_humidity,
-                    //'color' => new JsExpression('Highcharts.getOptions().colors[4]')
-                    'color' => 'white'
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    //'color' => 'white'
                 ],
             ],
         ];

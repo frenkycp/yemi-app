@@ -126,8 +126,8 @@ echo '</pre>';*/
                         'title' => [
                             'text' => 'TERMPERATURE (Celcius)',
                         ],
-                        'max' => 100,
-                        'plotBands' => [
+                        'max' => 60,
+                        /*'plotBands' => [
                             [
                                 'from' => $sensor_data->temp_min,
                                 'to' => $sensor_data->temp_max,
@@ -140,7 +140,7 @@ echo '</pre>';*/
                                     //'align' => 'center'
                                 ],
                             ],
-                        ],
+                        ],*/
                         'tickInterval' => 10
                     ],
                     'tooltip' => [
@@ -197,7 +197,7 @@ echo '</pre>';*/
                             'text' => 'Humidity (%)',
                         ],
                         'max' => 100,
-                        'plotBands' => [
+                        /*'plotBands' => [
                             [
                                 'from' => $sensor_data->humi_min,
                                 'to' => $sensor_data->humi_max,
@@ -210,7 +210,7 @@ echo '</pre>';*/
                                     //'align' => 'center'
                                 ],
                             ],
-                        ],
+                        ],*/
                         'tickInterval' => 10
                     ],
                     'tooltip' => [
