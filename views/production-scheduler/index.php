@@ -108,6 +108,8 @@ $this->registerJs("
 
             var tmp_no = '';
             var tmp_model = '';
+            var tmp_parent = '';
+            var tmp_parent_desc = '';
             var is_multiple = false;
             var is_multiple_model = false;
             var strvalue = \"\";
@@ -123,6 +125,8 @@ $this->registerJs("
 
                 if(tmp_model == ''){
                     tmp_model = tmp_child[2];
+                    tmp_parent = tmp_child[3];
+                    tmp_parent_desc = tmp_child[4];
                 } else {
                     if(tmp_model != tmp_child[2]){
                         is_multiple_model = true;
@@ -161,7 +165,9 @@ $this->registerJs("
                         group : group_val,
                         plan_date : plan_date_val,
                         jenis_mesin : jenis_mesin_val,
-                        model_group : tmp_model
+                        model_group : tmp_model,
+                        parent : tmp_parent,
+                        parent_desc : tmp_parent_desc
                     },
                     dataType: 'json',
                     success: function(data) {
@@ -188,8 +194,9 @@ $grid_columns = [
     [
         'class' => 'yii\grid\CheckboxColumn',
         'checkboxOptions' => function($model) {
+            $model_group = $model->model_group == null ? '-' : $model->model_group;
             return [
-                'value' => $model->slip_id . '|' . $model->child . '|' . $model->model_group,
+                'value' => $model->slip_id . '|' . $model->child . '|' . $model_group . '|' . $model->parent . '|' . $model->parent_desc,
                 'class' => 'cb-column'
             ];
         },
