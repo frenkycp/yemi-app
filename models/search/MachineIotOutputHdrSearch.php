@@ -18,7 +18,7 @@ class MachineIotOutputHdrSearch extends MachineIotOutputHdr
 public function rules()
 {
 return [
-[['lot_number', 'gmc', 'gmc_desc', 'start_date', 'end_date'], 'safe'],
+[['lot_number', 'gmc', 'gmc_desc', 'start_date', 'end_date', 'parent', 'parent_desc'], 'safe'],
             [['lot_qty'], 'number'],
 ];
 }
@@ -64,6 +64,8 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10), start_date, 120)', $this->start_date])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10), end_date, 120)', $this->end_date])
             ->andFilterWhere(['like', 'gmc', $this->gmc])
+            ->andFilterWhere(['like', 'parent', $this->parent])
+            ->andFilterWhere(['like', 'parent_desc', $this->parent_desc])
             ->andFilterWhere(['like', 'gmc_desc', $this->gmc_desc]);
 
 return $dataProvider;

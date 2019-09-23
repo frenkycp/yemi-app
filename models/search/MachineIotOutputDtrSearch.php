@@ -18,7 +18,7 @@ class MachineIotOutputDtrSearch extends MachineIotOutputDtr
 public function rules()
 {
 return [
-            [['lot_number', 'mesin_id', 'mesin_description', 'kelompok', 'gmc', 'gmc_desc', 'start_date', 'end_date', 'status'], 'safe'],
+            [['lot_number', 'mesin_id', 'mesin_description', 'kelompok', 'gmc', 'gmc_desc', 'start_date', 'end_date', 'status', 'parent', 'parent_desc'], 'safe'],
             [['lot_qty'], 'number'],
 ];
 }
@@ -70,6 +70,8 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'kelompok', $this->kelompok])
             ->andFilterWhere(['like', 'gmc', $this->gmc])
             ->andFilterWhere(['like', 'gmc_desc', $this->gmc_desc])
+            ->andFilterWhere(['like', 'parent', $this->parent])
+            ->andFilterWhere(['like', 'parent_desc', $this->parent_desc])
             ->andFilterWhere(['like', 'status', $this->status]);
 
 return $dataProvider;

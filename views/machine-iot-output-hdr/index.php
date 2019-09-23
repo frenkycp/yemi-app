@@ -56,6 +56,25 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'parent',
+        'label' => 'Parent',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'parent_desc',
+        'label' => 'Parent Name',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'gmc',
         'label' => 'Part No.',
         'vAlign' => 'middle',
