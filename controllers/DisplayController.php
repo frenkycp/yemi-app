@@ -240,26 +240,26 @@ class DisplayController extends Controller
         $data = $tmp_data = $absolute_loc_arr = [];
         $location_arr = [
             'PANGKALAN' => [
-                'top' => '995',
-                'left' => '980',
-                'max_left' => '1180',
+                'top' => '775',
+                'left' => '810',
+                'max_left' => '980',
                 'max_top' => '1225'
             ],
             'SUB-ASSY-NETWORK' => [
-                'top' => '995',
-                'left' => '670',
-                'max_left' => '882',
+                'top' => '777',
+                'left' => '545',
+                'max_left' => '725',
                 'max_top' => '1225'
             ],
             'SUB-ASSY-FRONT-GRILL' => [
-                'top' => '250',
-                'left' => '140',
-                'max_left' => '583',
+                'top' => '142',
+                'left' => '93',
+                'max_left' => '470',
                 'max_top' => '360'
             ],
             'SUB-ASSY-ACCESORIES' => [
-                'top' => '250',
-                'left' => '980',
+                'top' => '142',
+                'left' => '810',
                 'max_left' => '1170',
                 'max_top' => '360'
             ]
@@ -303,8 +303,8 @@ class DisplayController extends Controller
         foreach ($location_arr as $location => $location_detail) {
             $tmp_content = '<ol>';
             $count = 0;
-            //$top = $location_detail['top'];
-            //$left = $location_detail['left'];
+            $top = $location_detail['top'];
+            $left = $location_detail['left'];
             foreach ($tmp_operator as $key => $value) {
                 if ($value->beacon_location == $location) {
                     $count++;
@@ -321,15 +321,15 @@ class DisplayController extends Controller
                         }
                         
                     }
-                    $top = ($value->position_y * 16.98);
+                    /*$top = ($value->position_y * 16.98);
                     if ($top < 0) {
                         $top = 0;
                     }
                     $left = ($value->position_x * 16.51);
                     if ($left < 0) {
                         $left = 0;
-                    }
-                    //if ($seconds_ori < 3600) {
+                    }*/
+                    if ($seconds_ori < 3600) {
                         $absolute_loc_arr[] = [
                             'station' => $location,
                             'nik' => $value->GOJEK_ID,
@@ -341,14 +341,14 @@ class DisplayController extends Controller
                             'pos_x' => round($value->position_x, 3),
                             'pos_y' => round($value->position_y, 3),
                         ];
-                        //$top += 25;
-                        /*$left += 30;
+                        /**///$top += 25;
+                        $left += 30;
                         if ($left > $location_detail['max_left']) {
                             $left = $location_detail['left'];
-                            $top += 35;
-                        }*/
+                            $top += 25;
+                        }
                         $tmp_content .= '<li><span style="opacity: 0.9; letter-spacing: 1px;">' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - </span><small style="opacity: 0.6;">' . $seconds . $seconds_str . ' ago</small></li>';
-                    //}
+                    }
                 }
             }
             $tmp_content .= '</ol>';

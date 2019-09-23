@@ -214,6 +214,8 @@ class MachineRunningController extends Controller
 	    	$current_data->gmc_desc = $lot_data->child_desc_all;
 	    	$current_data->lot_qty = $lot_data->qty_all;
 	    	$current_data->model_group = $lot_data->model_group;
+	    	$current_data->parent = $lot_data->parent;
+	    	$current_data->parent_desc = $lot_data->parent_desc;
 	    	if ($current_data->save()) {
 	    		$iot_output = new MachineIotOutput;
 	    		$iot_output->mesin_id = $mesin_id;
@@ -221,6 +223,8 @@ class MachineRunningController extends Controller
 	    		$iot_output->kelompok = $lot_data->jenis_mesin;
 	    		$iot_output->lot_number = $lot_id;
 	    		$iot_output->model_group = $lot_data->model_group;
+	    		$iot_output->parent = $lot_data->parent;
+	    		$iot_output->parent_desc = $lot_data->parent_desc;
 	    		$iot_output->gmc = $lot_data->child_all;
 	    		$iot_output->gmc_desc = $lot_data->child_desc_all;
 	    		$iot_output->lot_qty = $lot_data->qty_all;

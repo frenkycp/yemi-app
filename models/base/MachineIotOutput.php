@@ -15,6 +15,8 @@ use Yii;
  * @property string $kelompok
  * @property string $lot_number
  * @property string $model_group
+ * @property string $parent
+ * @property string $parent_desc
  * @property string $gmc
  * @property string $gmc_desc
  * @property double $lot_qty
@@ -59,7 +61,7 @@ abstract class MachineIotOutput extends \yii\db\ActiveRecord
     {
         return [
             [['mesin_id'], 'required'],
-            [['mesin_id', 'mesin_description', 'kelompok', 'lot_number', 'model_group', 'gmc', 'gmc_desc', 'man_power_name', 'start_by_id', 'start_by_name', 'end_by_id', 'end_by_name'], 'string'],
+            [['mesin_id', 'mesin_description', 'kelompok', 'lot_number', 'model_group', 'parent', 'parent_desc', 'gmc', 'gmc_desc', 'man_power_name', 'start_by_id', 'start_by_name', 'end_by_id', 'end_by_name'], 'string'],
             [['lot_qty'], 'number'],
             [['start_date', 'end_date', 'posting_shift'], 'safe'],
             [['shift', 'lama_proses', 'man_power_qty'], 'integer']
@@ -78,6 +80,8 @@ abstract class MachineIotOutput extends \yii\db\ActiveRecord
             'kelompok' => 'Kelompok',
             'lot_number' => 'Lot Number',
             'model_group' => 'Model Group',
+            'parent' => 'Parent',
+            'parent_desc' => 'Parent Desc',
             'gmc' => 'Gmc',
             'gmc_desc' => 'Gmc Desc',
             'lot_qty' => 'Lot Qty',
