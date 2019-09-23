@@ -66,9 +66,9 @@ class ProdAttendanceController extends Controller
 	                $insert_attendance->current_status = 'I';
 	            } else {
 	            	$insert_attendance = $find_data;
-	                $insert_attendance->check_out = $now;
 	                if ($insert_attendance->current_status == 'I') {
 	                	$insert_attendance->current_status = 'O';
+	                	$insert_attendance->check_out = $now;
 	                } else {
 	                	$insert_attendance->current_status = 'I';
 	                }
@@ -87,8 +87,10 @@ class ProdAttendanceController extends Controller
 	                if ($find_log->att_log_id == null) {
 	                    $new_log->att_type = 'I';
 	                } else {
-	                    if ($new_log->att_type == 'I') {
+	                    if ($find_log->att_type == 'I') {
 	                        $new_log->att_type = 'O';
+	                    } else {
+	                    	$new_log->att_type = 'I';
 	                    }
 	                }
 	                $new_log->att_data_id = $insert_attendance->att_data_id;
