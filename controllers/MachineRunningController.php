@@ -282,13 +282,13 @@ class MachineRunningController extends Controller
 		$this->layout = 'clean';
 		date_default_timezone_set('Asia/Jakarta');
     	$model = new \yii\base\DynamicModel([
-	        'next_process_id'
+	        'next_process'
 	    ]);
-	    $model->addRule('next_process_id', 'string');
+	    $model->addRule('next_process', 'required');
 
 	    try{
 	    	if ($model->load(\Yii::$app->request->post())) {
-		    	$next_process = $model->next_process_id;
+		    	$next_process = $model->next_process;
 
 	    		$current_data = ServerMachineIotCurrent::find()
 		    	->where([
@@ -329,7 +329,7 @@ class MachineRunningController extends Controller
 		    		return json_encode($iot_output->errors);
 		    	}
 
-	    		if ($model->next_process_id == null) {
+	    		if ($next_process == 'END') {
 	    			$lot_data->end_date = date('Y-m-d H:i:s');
 	    			
 	    			$lot_data->plan_stats = 'C';
