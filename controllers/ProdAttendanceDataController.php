@@ -18,6 +18,12 @@ class ProdAttendanceDataController extends \app\controllers\base\ProdAttendanceD
 	    if (\Yii::$app->request->get('posting_shift') !== null) {
 	    	$searchModel->posting_shift = \Yii::$app->request->get('posting_shift');
 	    }
+	    if (\Yii::$app->request->get('child_analyst') !== null) {
+	    	$searchModel->child_analyst = \Yii::$app->request->get('child_analyst');
+	    }
+	    if (\Yii::$app->request->get('line') !== null) {
+	    	$searchModel->line = \Yii::$app->request->get('line');
+	    }
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

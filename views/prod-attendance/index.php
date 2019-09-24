@@ -101,7 +101,7 @@ echo '</pre>';*/
                 <h3 class="box-title">Total MP</h3>
             </div>
             <div class="box-body">
-                <span class="form-control"><?= $total_mp; ?></span>
+                <span class="form-control"><?= $total_mp == 0 ? '0' : Html::a($total_mp, ['prod-attendance-data/index', 'child_analyst' => $model->child_analyst, 'line' => $model->line], ['target' => '_blank']); ?></span>
             </div>
         </div>
     </div>

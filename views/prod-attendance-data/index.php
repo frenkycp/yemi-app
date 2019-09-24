@@ -16,7 +16,7 @@ $color = 'ForestGreen';
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
-    .form-control {font-size: 20px; height: 40px;}
+    //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
@@ -40,7 +40,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -49,7 +49,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -61,7 +61,7 @@ $gridColumns = [
         'filter' => ArrayHelper::map(app\models\WipLocation::find()->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -70,7 +70,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -79,7 +79,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -87,17 +87,17 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'check_in',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'format' => ['date', 'php:Y-m-d H:i:s'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -107,9 +107,9 @@ $gridColumns = [
         'format' => ['date', 'php:Y-m-d H:i:s'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
-    ],
+    ],*/
 ];
 ?>
 <div class="giiant-crud prod-attendance-data-index">
@@ -131,7 +131,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' =>  [
