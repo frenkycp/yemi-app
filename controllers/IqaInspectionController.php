@@ -92,6 +92,10 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 	    {
 	    	$searchModel->POST_DATE = \Yii::$app->request->get('POST_DATE');
 	    }/**/
+        if(\Yii::$app->request->get('Judgement') !== null)
+        {
+            $searchModel->Judgement = \Yii::$app->request->get('Judgement');
+        }
 
 	    $dataProvider = $searchModel->search($_GET);
 
@@ -223,17 +227,17 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 			$tmp_data_open[] = [
 				'x' => $post_date,
 				'y' => $value->TOTAL_OPEN == 0 ? null : (int)$value->TOTAL_OPEN,
-				//'url' => Url::to(['get-remark', 'post_date' => $value->post_date]),
+				'url' => Url::to(['data', 'POST_DATE' => date('Y-m-d', strtotime($value->POST_DATE)), 'Judgement' => 'PENDING']),
 			];
 			$tmp_data_ok[] = [
 				'x' => $post_date,
 				'y' => $value->TOTAL_OK == 0 ? null : (int)$value->TOTAL_OK,
-				//'url' => Url::to(['get-remark', 'post_date' => $value->post_date]),
+				'url' => Url::to(['data', 'POST_DATE' => date('Y-m-d', strtotime($value->POST_DATE)), 'Judgement' => 'OK']),
 			];
 			$tmp_data_ng[] = [
 				'x' => $post_date,
 				'y' => $value->TOTAL_NG == 0 ? null : (int)$value->TOTAL_NG,
-				//'url' => Url::to(['get-remark', 'post_date' => $value->post_date]),
+				'url' => Url::to(['data', 'POST_DATE' => date('Y-m-d', strtotime($value->POST_DATE)), 'Judgement' => 'NG']),
 			];
     	}
 

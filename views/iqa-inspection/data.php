@@ -45,7 +45,7 @@ $gridColumns = [
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
@@ -64,7 +64,7 @@ $gridColumns = [
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 90px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
@@ -74,7 +74,7 @@ $gridColumns = [
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 50px;'
         ],
     ],
     [
@@ -84,7 +84,7 @@ $gridColumns = [
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 60px;'
         ],
     ],
     [
@@ -101,7 +101,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
     [
@@ -110,7 +110,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 30px;'
         ],
     ],
     [
@@ -119,7 +119,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
         ],
     ],
     [
@@ -172,7 +172,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
     [
@@ -199,7 +199,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 50px;'
         ],
     ],
     [
