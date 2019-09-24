@@ -70,6 +70,8 @@ echo '</pre>';*/
             <div class="box-body">
                 <?= $form->field($model, 'child_analyst')->dropDownList(ArrayHelper::map(app\models\WipLocation::find()->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'), [
                     'class' => 'form-control',
+                    'onchange'=>'this.form.submit()',
+                    'prompt' => '-Select Location-'
                 ])->label(false); ?>
                 <?= $form->field($model, 'child_analyst_desc')->hiddenInput()->label(false); ?>
             </div>
@@ -87,6 +89,8 @@ echo '</pre>';*/
                     3 => 3,
                     4 => 4,
                     5 => 5,
+                ], [
+                    'onchange'=>'this.form.submit()'
                 ])->label(false); ?>
             </div>
         </div>

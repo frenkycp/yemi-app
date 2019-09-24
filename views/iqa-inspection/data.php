@@ -219,6 +219,7 @@ $gridColumns = [
         'filter' => [
             'OK' => 'OK',
             'NG' => 'NG',
+            'PENDING' => 'PENDING'
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
@@ -265,6 +266,7 @@ $gridColumns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
+                //Html::a('Judge W/I to "OK"', ['judge-wi'], ['class' => 'btn btn-primary']),
                 '{export}',
                 '{toggleData}',
             ],

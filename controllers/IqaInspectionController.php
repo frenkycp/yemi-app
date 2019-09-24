@@ -155,6 +155,28 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 		}
 	}
 
+    public function actionJudgeWi($value='')
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('iqa_inspection_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['iqa_inspection_user'];
+        $name = $session['iqa_inspection_name'];
+        $this->layout = 'iqa-inspection\main';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $condition = ['IQA' => 'W/I'];
+
+        $rows = StoreInOutWsus::updateAll([
+            'Judgement' => 'OK',
+            'inspect_datetime' => date('Y-m-d H:i:s'),
+            'inspect_period' => date('Ym'),
+        ], $condition);
+
+        return $this->redirect(Url::previous());
+    }
+
 	public function actionDailyInspection()
 	{
 		$session = \Yii::$app->session;

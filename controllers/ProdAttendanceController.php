@@ -27,86 +27,94 @@ class ProdAttendanceController extends Controller
         $model->line = $line;
 
         if($model->load(\Yii::$app->request->post())){
-        	$karyawan = Karyawan::find()
-            ->select('NIK, NAMA_KARYAWAN')
-            ->where([
-                'NIK' => $model->nik
-            ])
-            ->one();
+        	if ($model->child_analyst == '') {
+        		\Yii::$app->session->setFlash("danger", "Location must be set ...");
+        	} else {
+        		if ($model->nik != '') {
+	        		$karyawan = Karyawan::find()
+		            ->select('NIK, NAMA_KARYAWAN')
+		            ->where([
+		                'NIK' => $model->nik
+		            ])
+		            ->one();
 
-            if ($karyawan->NIK != null) {
-            	$find_data = ProdAttendanceData::find()
-	            ->where([
-	                'nik' => $model->nik,
-	                'child_analyst' => $model->child_analyst,
-	                'line' => $model->line,
-	                'posting_shift' => $posting_shift
-	            ])
-	            ->one();
-	            $now = date('Y-m-d H:i:s');
+		            if ($karyawan->NIK != null) {
+		            	$find_data = ProdAttendanceData::find()
+			            ->where([
+			                'nik' => $model->nik,
+			                'child_analyst' => $model->child_analyst,
+			                'line' => $model->line,
+			                'posting_shift' => $posting_shift
+			            ])
+			            ->one();
+			            $now = date('Y-m-d H:i:s');
 
-	            if ($find_data->nik == null) {
-	                $insert_attendance = new ProdAttendanceData;
-	                $insert_attendance->period = date('Ym', strtotime($posting_shift));
-	                $insert_attendance->posting_date = date('Y-m-d');
-	                $insert_attendance->posting_shift = $posting_shift;
-	                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $model->nik;
-	                $insert_attendance->nik = $model->nik;
+			            if ($find_data->nik == null) {
+			                $insert_attendance = new ProdAttendanceData;
+			                $insert_attendance->period = date('Ym', strtotime($posting_shift));
+			                $insert_attendance->posting_date = date('Y-m-d');
+			                $insert_attendance->posting_shift = $posting_shift;
+			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $model->nik;
+			                $insert_attendance->nik = $model->nik;
 
-	                $insert_attendance->name = $karyawan->NAMA_KARYAWAN;
-	                $insert_attendance->check_in = $now;
-	                $insert_attendance->child_analyst = $model->child_analyst;
+			                $insert_attendance->name = $karyawan->NAMA_KARYAWAN;
+			                $insert_attendance->check_in = $now;
+			                $insert_attendance->child_analyst = $model->child_analyst;
 
-	                $location_data = WipLocation::find()
-	                ->where([
-	                    'child_analyst' => $model->child_analyst
-	                ])
-	                ->one();
-	                $insert_attendance->child_analyst_desc = $location_data->child_analyst_desc;
-	                $insert_attendance->current_status = 'I';
-	            } else {
-	            	$insert_attendance = $find_data;
-	                if ($insert_attendance->current_status == 'I') {
-	                	$insert_attendance->current_status = 'O';
-	                	$insert_attendance->check_out = $now;
-	                } else {
-	                	$insert_attendance->current_status = 'I';
-	                }
-	            }
-	            $insert_attendance->line = $model->line;
-	            $insert_attendance->last_update = $now;
+			                $location_data = WipLocation::find()
+			                ->where([
+			                    'child_analyst' => $model->child_analyst
+			                ])
+			                ->one();
+			                $insert_attendance->child_analyst_desc = $location_data->child_analyst_desc;
+			                $insert_attendance->current_status = 'I';
+			            } else {
+			            	$insert_attendance = $find_data;
+			                if ($insert_attendance->current_status == 'I') {
+			                	$insert_attendance->current_status = 'O';
+			                	$insert_attendance->check_out = $now;
+			                } else {
+			                	$insert_attendance->current_status = 'I';
+			                }
+			            }
+			            $insert_attendance->line = $model->line;
+			            $insert_attendance->last_update = $now;
 
-	            if ($insert_attendance->save()) {
-	                $find_log = ProdAttendanceLog::find()
-	                ->where(['att_data_id' => $insert_attendance->att_data_id])
-	                ->orderBy('last_update DESC')
-	                ->one();
+			            if ($insert_attendance->save()) {
+			                $find_log = ProdAttendanceLog::find()
+			                ->where(['att_data_id' => $insert_attendance->att_data_id])
+			                ->orderBy('last_update DESC')
+			                ->one();
 
-	                $new_log = new ProdAttendanceLog;
+			                $new_log = new ProdAttendanceLog;
 
-	                if ($find_log->att_log_id == null) {
-	                    $new_log->att_type = 'I';
-	                } else {
-	                    if ($find_log->att_type == 'I') {
-	                        $new_log->att_type = 'O';
-	                    } else {
-	                    	$new_log->att_type = 'I';
-	                    }
-	                }
-	                $new_log->att_data_id = $insert_attendance->att_data_id;
-	                $new_log->last_update = $now;
-	                if (!$new_log->save()) {
-	                    return json_encode($new_log->errors);
-	                }
-	            } else {
-	                return json_encode($insert_attendance->errors);
-	            }
-            } else {
-            	\Yii::$app->session->setFlash("danger", "NIK is not registered ...");
-            }
+			                if ($find_log->att_log_id == null) {
+			                    $new_log->att_type = 'I';
+			                } else {
+			                    if ($find_log->att_type == 'I') {
+			                        $new_log->att_type = 'O';
+			                    } else {
+			                    	$new_log->att_type = 'I';
+			                    }
+			                }
+			                $new_log->att_data_id = $insert_attendance->att_data_id;
+			                $new_log->last_update = $now;
+			                if (!$new_log->save()) {
+			                    return json_encode($new_log->errors);
+			                }
+			            } else {
+			                return json_encode($insert_attendance->errors);
+			            }
+		            } else {
+		            	\Yii::$app->session->setFlash("danger", "NIK is not registered ...");
+		            }
 
-            
-            $model->nik = null;
+		            
+	        	}
+        	}
+        	
+        	$model->nik = null;
+        	
         }
 
         $attendance_data = ProdAttendanceData::find()

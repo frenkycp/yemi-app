@@ -95,11 +95,17 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'AUTO_REPORT', $this->AUTO_REPORT])
             ->andFilterWhere(['like', 'CANCEL', $this->CANCEL])
             ->andFilterWhere(['like', 'Inspection_level', $this->Inspection_level])
-            ->andFilterWhere(['like', 'Judgement', $this->Judgement])
+            //->andFilterWhere(['like', 'Judgement', $this->Judgement])
             ->andFilterWhere(['like', 'Remark', $this->Remark])
             ->andFilterWhere(['like', 'inspect_by_id', $this->inspect_by_id])
             ->andFilterWhere(['like', 'inspect_by_name', $this->inspect_by_name])
             ->andFilterWhere(['like', 'inspect_period', $this->inspect_period]);
+
+      if ($this->Judgement == 'PENDING') {
+            $query->andFilterWhere(['is', 'Judgement', new \yii\db\Expression('null')]);
+      } else {
+            $query->andFilterWhere(['like', 'Judgement', $this->Judgement]);
+      }
 
 return $dataProvider;
 }
