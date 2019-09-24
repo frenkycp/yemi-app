@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ProdAttendanceData extends BaseProdAttendanceData
 {
+    public $total;
 
     public function behaviors()
     {

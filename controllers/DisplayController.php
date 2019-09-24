@@ -69,9 +69,58 @@ use app\models\MrbsRoom;
 use app\models\GeneralFunction;
 use app\models\SensorTbl;
 use app\models\SensorLog;
+use app\models\ProdAttendanceData;
 
 class DisplayController extends Controller
 {
+    public function actionDailyProdAttendance($value='')
+    {
+        $this->layout = 'clean';
+        $posting_shift = date('Y-m-d');
+        
+        $model = new \yii\base\DynamicModel([
+            'posting_shift'
+        ]);
+        $model->addRule(['posting_shift'], 'required');
+        $model->posting_shift = $posting_shift;
+
+        if ($model->load($_GET)) {
+            
+        }
+
+        $tmp_att_data = ProdAttendanceData::find()
+        ->select([
+            'child_analyst', 'child_analyst_desc',
+            'total' => 'COUNT(nik)'
+        ])
+        ->where([
+            'posting_shift' => $model->posting_shift,
+            'current_status' => 'I'
+        ])
+        ->groupBy('child_analyst, child_analyst_desc')
+        ->orderBy('child_analyst_desc')
+        ->all();
+
+        $tmp_data = $data = $categories = [];
+        foreach ($tmp_att_data as $key => $value) {
+            $categories[] = $value->child_analyst_desc;
+            $tmp_data[] = [
+                'y' => (int)$value->total
+            ];
+        }
+
+        $data[] = [
+            'name' => 'Total Manpower',
+            'data' => $tmp_data
+        ];
+
+        return $this->render('daily-prod-attendance', [
+            'data' => $data,
+            'model' => $model,
+            'categories' => $categories,
+        ]);
+    }
+
     public function actionTempHumidityChart()
     {
         $this->layout = 'clean';
