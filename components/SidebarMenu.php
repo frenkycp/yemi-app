@@ -55,6 +55,22 @@ class SidebarMenu extends Widget
                 ];
             }
 
+            if ($menu->controller == 'hr-bpjs' && $menu->action == 'index') {
+                $total_waiting = HrComplaint::find()
+                ->where([
+                    'status' => 0,
+                    'category' => 'BPJS',
+                ])
+                ->count();
+                $obj = [
+                    "label" => $menu->name,
+                    "icon" => $menu->icon,
+                    "url" => SidebarMenu::getUrl($menu),
+                    "visible" => SidebarMenu::roleHasAccess($roleId, $menu->id),
+                    'template' => '<a href="{url}">{icon} {label}<span class="pull-right-container"><small class="label pull-right bg-yellow">' . $total_waiting . '</small></span></a>',
+                ];
+            }
+
             if ($menu->controller == 'mis-complaint' && $menu->action == 'index') {
                 $total_waiting = HrComplaint::find()
                 ->where([

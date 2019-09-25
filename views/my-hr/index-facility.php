@@ -122,6 +122,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
+        'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -153,6 +154,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
+        'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -209,7 +211,7 @@ $gridColumns = [
             'pjax' => false, // pjax is set to always true for this demo
             'toolbar' =>  [
                 [
-                    'content' => Html::a('New Report', ['my-hr/create-facility'], ['data-pjax' => 0, 'class' => 'btn btn-success pull-left'])
+                    'content' => Html::a('New', ['my-hr/create-facility'], ['data-pjax' => 0, 'class' => 'btn btn-success pull-left'])
                 ],
                 [
                     'content' => Html::a('Back', ['my-hr/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning'])

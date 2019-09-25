@@ -9,12 +9,15 @@ $nik = $session['my_hr_user'];
 $model_karyawan = Karyawan::find()->where([
     'NIK' => $nik
 ])->one();
+
+$current_controller = \Yii::$app->controller->id;
+$current_action = \Yii::$app->controller->action->id;
 ?>
 <header class="main-header">
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-            <?= Html::a('<b>My HR</b>', Yii::$app->homeUrl . 'my-hr', ['class' => 'navbar-brand']) ?>
+            <?= Html::a('<span class="glyphicon glyphicon-home"></span>', Yii::$app->homeUrl . 'my-hr', ['class' => 'navbar-brand']) ?>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
@@ -23,11 +26,15 @@ $model_karyawan = Karyawan::find()->where([
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="<?= \Yii::$app->controller->id == 'my-hr' && \Yii::$app->controller->action->id == 'index' ? 'active' : ''; ?>">
+            <li class="<?= \Yii::$app->controller->id == 'my-hr' && $current_action == 'index' ? 'active' : ''; ?>">
                 <?= Html::a('My Information', ['index']) ?>
             </li>
             
-            <li class="dropdown <?= \Yii::$app->controller->action->id == 'index-laporan' || \Yii::$app->controller->action->id == 'create-laporan' ? 'active' : ''; ?>">
+            <li class="dropdown <?= $current_action == 'index-laporan'
+            || $current_action == 'create-laporan'
+            || $current_action == 'index-facility'
+            || $current_action == 'create-facility'
+            || $current_action == 'index-bpjs' ? 'active' : ''; ?>">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Question & Answer <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
                 <li class="<?= $_GET['category'] == 'HR' ? 'active' : ''; ?>">
@@ -35,6 +42,9 @@ $model_karyawan = Karyawan::find()->where([
                 </li>
                 <li class="<?= $_GET['category'] == 'FACILITY' ? 'active' : ''; ?>">
                     <?= Html::a('My Facility', ['index-facility', 'category' => 'FACILITY']); ?>
+                </li>
+                <li class="<?= $current_controller == 'my-hr' && $current_action == 'index-bpjs' ? 'active' : ''; ?>">
+                    <?= Html::a('My BPJS', ['index-bpjs']); ?>
                 </li>
                 <li style="<?= $model_karyawan->JABATAN_SR == 'FOREMAN' || $model_karyawan->JABATAN_SR == 'SENIOR FOREMAN' || $model_karyawan->JABATAN_SR == 'MANAGER' ? '' : 'display: none;'; ?>" class="<?= $_GET['category'] == 'MIS' ? 'active' : ''; ?>">
                     <?= Html::a('with MIS', ['index-laporan', 'category' => 'MIS']) ?>

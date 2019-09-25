@@ -11,27 +11,15 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Question & Answer (HR) <span class="japanesse text-green">労務管理問い合わせ</span>',
-    'tab_title' => 'Question & Answer (HR)',
-    'breadcrumbs_title' => 'Question & Answer (HR)'
+    'page_title' => 'My BPJS <small class="">Question & Answer (BPJS Kesehatan & BPJS Ketenagakerjaan)</small>',
+    'tab_title' => 'My BPJS',
+    'breadcrumbs_title' => 'My BPJS'
 ];
-//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
-
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
-
-$grid_columns = [
-    [
+$gridColumns = [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{add-response}',
+        'template' => $actionColumnTemplateString,
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -40,14 +28,7 @@ $grid_columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            }, 'add-response' => function($url, $model, $key){
-                $url = ['add-response', 'id' => $model->id];
-                $options = [
-                    'title' => 'Add Response',
-                    'data-pjax' => '0',
-                ];
-                return Html::a('<span class="fa fa-reply"></span>', $url, $options);
-            },
+            }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator
@@ -56,77 +37,49 @@ $grid_columns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ],
+    ],*/
     [
-        'attribute' => 'period',
+        'attribute' => 'input_datetime',
+        'label' => 'Input Datetime',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '90px;',
+        'width' => '130px',
+        'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
+    
     [
-        'attribute' => 'input_datetime',
-        'label' => 'Question<br/>Datetime',
-        'encodeLabel' => false,
+        'attribute' => 'remark',
+        'label' => 'Question',
         'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'width' => '80px',
-        'format' => ['date', 'php:Y-m-d H:i'],
+        'format' => 'ntext',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'response',
+        'label' => 'Answer',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
         ],
     ],
     [
         'attribute' => 'response_datetime',
-        'label' => 'Answered<br/>Datetime',
-        'encodeLabel' => false,
-        'vAlign' => 'middle',
+        'label' => 'Answer Datetime',
         'hAlign' => 'center',
-        'width' => '80px',
+        'vAlign' => 'middle',
+        'width' => '130px',
         'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'nik',
-        'label' => 'NIK',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'width' => '90px;',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'emp_name',
-        'label' => 'Name',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'department',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'section',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
         ],
     ],
     [
@@ -151,27 +104,7 @@ $grid_columns = [
             'style' => 'font-size: 12px;'
         ],
     ],
-    [
-        'attribute' => 'remark',
-        'label' => 'Question',
-        'vAlign' => 'middle',
-        'format' => 'ntext',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'response',
-        'label' => 'Answer',
-        'vAlign' => 'middle',
-        'format' => 'ntext',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ]
-];
+]
 ?>
 <div class="giiant-crud hr-complaint-index">
 
@@ -182,12 +115,11 @@ $grid_columns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
-            'columns' => $grid_columns,
+            'columns' => $gridColumns,
             'hover' => true,
             //'showPageSummary' => true,
             //'condensed' => true,
@@ -199,7 +131,13 @@ $grid_columns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
-                '{export}',
+                [
+                    'content' => Html::a('New', ['my-hr/create-bpjs', 'category' => $_GET['category']], ['data-pjax' => 0, 'class' => 'btn btn-success pull-left'])
+                ],
+                [
+                    'content' => Html::a('Back', ['my-hr/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning'])
+                ],
+                //'{export}',
                 '{toggleData}',
             ],
             // set export properties
@@ -208,6 +146,7 @@ $grid_columns = [
             ],
             'panel' => [
                 'type' => GridView::TYPE_PRIMARY,
+                'before' => '<em><span class="text-red" style="font-size: 1.4em;">* Untuk fast response, silakan menghubungi <b>Ibu Jeli</b> <u>(08119421088)</u> atau <b>Ibu Anggra</b> <u>(081519691007)</u></span></em>',
                 'heading' => ''
             ],
         ]); ?>
@@ -217,5 +156,3 @@ $grid_columns = [
 
 
 <?php \yii\widgets\Pjax::end() ?>
-
-

@@ -6,9 +6,9 @@ use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
 
 $this->title = [
-    'page_title' => 'My Facility <small class="">Add Response</small>',
-    'tab_title' => 'My Facility',
-    'breadcrumbs_title' => 'My Facility'
+    'page_title' => 'My BPJS <small class="">Add Response</small>',
+    'tab_title' => 'My BPJS',
+    'breadcrumbs_title' => 'My BPJS'
 ];
 
 ?>
@@ -48,11 +48,12 @@ $this->title = [
                     <?= $form->field($model, 'emp_name')->textInput(['readonly' => true]) ?>
                 </div>
                 <div class="col-md-5">
-                    <?= $form->field($model, 'dept')->textInput(['readonly' => true]) ?>
+                    <?= $form->field($model, 'department')->textInput(['readonly' => true]) ?>
                 </div>
             </div>
             <?= $form->field($model, 'remark')->textarea(['rows' => 6, 'readonly' => true, 'style' => 'resize : none;']) ?>
             <?= $form->field($model, 'response')->textarea(['rows' => 6, 'style' => 'resize : none;']) ?>
+            
         </div>
         <div class="panel-footer text-right">
             <?php echo $form->errorSummary($model); ?>
@@ -70,7 +71,7 @@ $this->title = [
     </div>
 
 <!-- attribute nik -->
-            
+			
         
 
         

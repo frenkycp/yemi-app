@@ -50,6 +50,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '130px',
+        'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -81,6 +82,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '130px',
+        'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -136,7 +138,7 @@ $gridColumns = [
             'pjax' => true, // pjax is set to always true for this demo
             'toolbar' =>  [
                 [
-                    'content' => Html::a('New Report', ['my-hr/create-laporan', 'category' => $_GET['category']], ['data-pjax' => 0, 'class' => 'btn btn-success pull-left'])
+                    'content' => Html::a('New', ['my-hr/create-laporan', 'category' => $_GET['category']], ['data-pjax' => 0, 'class' => 'btn btn-success pull-left'])
                 ],
                 [
                     'content' => Html::a('Back', ['my-hr/index'], ['data-pjax' => 0, 'class' => 'btn btn-warning'])

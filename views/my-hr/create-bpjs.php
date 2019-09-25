@@ -11,7 +11,7 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'My HR <small class="">Input Form</small>',
+    'page_title' => 'My BPJS <small class="">Input Form</small>',
     'tab_title' => 'Monthly Overtime Control',
     'breadcrumbs_title' => 'Monthly Overtime Control'
 ];
@@ -44,7 +44,6 @@ $this->registerJs($script, View::POS_HEAD);
             );
             ?>
 
-            <?= $form->field($model, 'category')->textInput(['readonly' => true])->label('To') ?>
             <?= $form->field($model, 'remark')->textarea(['rows' => 6, 'style' => 'resize: none;']) ?>
 
             <hr/>

@@ -214,6 +214,31 @@ class MyHrController extends Controller
         ]);
     }
 
+    public function actionIndexBpjs()
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['my_hr_user'];
+        $this->layout = 'my-hr';
+        $searchModel  = new HrComplaintSearch;
+        $searchModel->nik = $nik;
+        $searchModel->category = 'BPJS';
+        $_GET['hr_sort'] = 'hr_sort';
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('index-bpjs', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
     public function actionIndexFacility()
     {
         $session = \Yii::$app->session;
@@ -274,6 +299,44 @@ class MyHrController extends Controller
             $model->addError('_exception', $msg);
         }
         return $this->render('create-laporan', ['model' => $model]);
+    }
+
+    public function actionCreateBpjs()
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['my_hr_user'];
+        $this->layout = 'my-hr';
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new HrComplaint;
+
+        try {
+            if ($model->load($_POST)) {
+                $karyawan = Karyawan::find()
+                ->where(['NIK' => $nik])
+                ->one();
+
+                $model->nik = '' . $nik;
+                $model->emp_name = $karyawan->NAMA_KARYAWAN;
+                $model->department = $karyawan->DEPARTEMEN;
+                $model->section = $karyawan->SECTION;
+                $model->sub_section = $karyawan->SUB_SECTION;
+                $model->period = date('Ym');
+                $model->input_datetime = date('Y-m-d H:i:s');
+                $model->category = 'BPJS';
+                if ($model->save()) {
+                    return $this->redirect(Url::previous());
+                }
+            } elseif (!\Yii::$app->request->isPost) {
+                $model->load($_GET);
+            }
+        } catch (\Exception $e) {
+            $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+            $model->addError('_exception', $msg);
+        }
+        return $this->render('create-bpjs', ['model' => $model]);
     }
 
     public function actionCreateFacility()

@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Question & Answer (HR) <span class="japanesse text-green">労務管理問い合わせ</span>',
-    'tab_title' => 'Question & Answer (HR)',
-    'breadcrumbs_title' => 'Question & Answer (HR)'
+    'page_title' => 'Question & Answer (My BPJS) <span class="japanesse text-green"></span>',
+    'tab_title' => 'Question & Answer (My BPJS)',
+    'breadcrumbs_title' => 'Question & Answer (My BPJS)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -61,10 +61,10 @@ $grid_columns = [
         'attribute' => 'period',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '90px;',
+        'width' => '80px;',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
@@ -77,7 +77,7 @@ $grid_columns = [
         'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
@@ -90,7 +90,7 @@ $grid_columns = [
         'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
@@ -98,10 +98,10 @@ $grid_columns = [
         'label' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'width' => '90px;',
+        'width' => '80px;',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
@@ -148,7 +148,7 @@ $grid_columns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'font-size: 12px;'
+            'style' => 'font-size: 12px; min-width: 90px;'
         ],
     ],
     [
