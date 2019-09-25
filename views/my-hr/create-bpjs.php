@@ -12,8 +12,8 @@ use yii\web\View;
 
 $this->title = [
     'page_title' => 'My BPJS <small class="">Input Form</small>',
-    'tab_title' => 'Monthly Overtime Control',
-    'breadcrumbs_title' => 'Monthly Overtime Control'
+    'tab_title' => 'My BPJS',
+    'breadcrumbs_title' => 'My BPJS'
 ];
 
 $script = <<< JS

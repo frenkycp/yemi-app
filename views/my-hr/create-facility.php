@@ -9,9 +9,11 @@ use yii\web\View;
 * @var app\models\HrComplaint $model
 */
 
-$this->title = 'Form Input Pesan';
-$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Hr Facility'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'My Facility <small class="">Input Form</small>',
+    'tab_title' => 'My Facility',
+    'breadcrumbs_title' => 'My Facility'
+];
 
 $script = <<< JS
     $(document).on('beforeSubmit', 'form', function(event) {
@@ -45,6 +47,8 @@ $this->registerJs($script, View::POS_HEAD);
             <?= $form->field($model, 'remark_category')->dropDownList([
                 1 => 'POSITIF',
                 2 => 'NEGATIF'
+            ], [
+                'prompt' => '-Pilih Jenis Komentar-'
             ])->label('Jenis Komentar') ?>
             <?= $form->field($model, 'remark')->textarea(['rows' => 6, 'style' => 'resize: none;'])->label('Komentar') ?>
 

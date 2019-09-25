@@ -31,7 +31,7 @@ class HrFacility extends BaseHrFacility
             parent::rules(),
             [
                 [['img_01'], 'file'],
-                [['remark'], 'required', 'on' => self::SCENARIO_CREATE],
+                [['remark', 'remark_category'], 'required', 'on' => self::SCENARIO_CREATE],
                 [['response'], 'required', 'on' => self::SCENARIO_ANSWER],
             ]
         );
