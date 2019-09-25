@@ -76,7 +76,7 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 
             if ($model->load($post)) {
                 $model->save();
-                if ($model->rank_category == 'S') {
+                if ($model->rank_category == 'S' || $model->rank_category == 'A') {
                 	$client = new \mongosoft\soapclient\Client([
 					    'url' => 'http://172.17.144.211/WebService01.asmx?WSDL',
 					]);
@@ -104,7 +104,6 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		$model->inspector_id = \Yii::$app->user->identity->username;
 		$model->inspector_name = \Yii::$app->user->identity->name;
 		$model->input_datetime = date('Y-m-d H:i:s');
-		$model->rank_category = 'B';
 
 		try {
 			if ($model->load($_POST)) {
