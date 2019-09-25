@@ -89,6 +89,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         ),
         'm' => 
         array (
+            'mongosoft\\soapclient\\' => 21,
             'miloschuman\\highcharts\\' => 23,
             'mikehaertl\\tmp\\' => 15,
             'mikehaertl\\shellcommand\\' => 24,
@@ -103,6 +104,7 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
             'kartik\\popover\\' => 15,
             'kartik\\plugins\\popover\\' => 23,
             'kartik\\plugins\\fileinput\\' => 25,
+            'kartik\\number\\' => 14,
             'kartik\\mpdf\\' => 12,
             'kartik\\helpers\\' => 15,
             'kartik\\growl\\' => 13,
@@ -237,6 +239,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         array (
             0 => __DIR__ . '/..' . '/pheme/yii2-settings',
         ),
+        'mongosoft\\soapclient\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mongosoft/yii2-soap-client',
+        ),
         'miloschuman\\highcharts\\' => 
         array (
             0 => __DIR__ . '/..' . '/miloschuman/yii2-highcharts-widget/src',
@@ -280,6 +286,10 @@ class ComposerStaticInitb67f4ccc492bdd59afbcc1ba1d1df3f0
         'kartik\\plugins\\fileinput\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/bootstrap-fileinput',
+        ),
+        'kartik\\number\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-number/src',
         ),
         'kartik\\mpdf\\' => 
         array (

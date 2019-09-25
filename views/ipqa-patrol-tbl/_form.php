@@ -133,6 +133,12 @@ $this->registerJs($script, View::POS_HEAD);
                                 });
                                 ']); ?>
                         </div>
+                        <div class="col-md-6">
+                            <?= $form->field($model, 'rank_category')->dropDownList([
+                                'A' => 'A',
+                                'B' => 'B',
+                            ]); ?>
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">

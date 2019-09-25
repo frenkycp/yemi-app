@@ -38,7 +38,11 @@
         "kartik-v/yii2-editable": "*",
         "kartik-v/yii2-widget-datepicker": "@dev",
         "kartik-v/yii2-widget-typeahead": "*",
-        "kartik-v/yii2-widget-datetimepicker": "1.4.6"
+        "kartik-v/yii2-widget-datetimepicker": "1.4.6",
+        "philippfrenzel/yii2fullcalendar": "*",
+        "kartik-v/yii2-field-range": "*",
+        "kartik-v/yii2-number": "@dev",
+        "mongosoft/yii2-soap-client": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -16,6 +16,8 @@ use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use yii\web\UploadedFile;
+use yii\helpers\Json;
+use yii\httpclient\Client;
 
 class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblController
 {
@@ -60,6 +62,31 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		if (\Yii::$app->request->post('hasEditable')) {
+            // instantiate your book model for saving
+            $id = \Yii::$app->request->post('editableKey');
+            $model = IpqaPatrolTbl::findOne(['id' => $id]);
+
+            // store a default json response as desired by editable
+            $out = Json::encode(['output'=> '' , 'message' => '']);
+
+            $posted = current($_POST['IpqaPatrolTbl']);
+            $post = ['IpqaPatrolTbl' => $posted];
+
+            if ($model->load($post)) {
+                $model->save();
+                if ($model->rank_category == 'S') {
+                	$client = new \mongosoft\soapclient\Client([
+					    'url' => 'http://172.17.144.211/WebService01.asmx?WSDL',
+					]);
+					$client->IPQA_Patrol_Rank_S(['id' => $id]);
+                }
+            }
+            
+            echo $out;
+            return;
+        }
 
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,

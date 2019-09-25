@@ -290,6 +290,35 @@ $columns = [
             'class' => 'form-control',
             'style' => 'min-width: 50px; font-size: 11px; text-align: center;',
         ],
+        'filter' => [
+            'S' => 'S',
+            'A' => 'A',
+            'B' => 'B',
+        ],
+    ],
+    [
+        'class' => 'kartik\grid\EditableColumn',
+        'attribute' => 'rank_category',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'editableOptions'=> [
+            'inputType'=>\kartik\editable\Editable::INPUT_DROPDOWN_LIST,
+            'asPopover' => true,
+            'header' => 'Rank',
+            'data' => ['S' => 'S', 'A' => 'A', 'B' => 'B'],
+            'options' => ['class'=>'form-control', 'prompt'=>'Select status...'],
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 50px; font-size: 11px; text-align: center;',
+        ],
+        'filter' => [
+            'S' => 'S',
+            'A' => 'A',
+            'B' => 'B',
+        ],
+        //'hiddenFromExport' => true,
+        //'hidden' => !$is_clinic ? true : false,
     ],
     [
         'attribute' => 'due_date',
@@ -398,6 +427,15 @@ $columns = [
         ],
     ],
 ];
+
+$special_role_id = [1, 28];
+if (in_array(\Yii::$app->user->identity->role_id, $special_role_id)) {
+    $special_role = true;
+    unset($columns[11]);
+} else {
+    $special_role = false;
+    unset($columns[12]);
+}
 ?>
 
 <div class="giiant-crud ipqa-patrol-tbl-index">

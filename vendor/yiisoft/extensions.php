@@ -366,4 +366,22 @@ return array (
       '@kartik/field' => $vendorDir . '/kartik-v/yii2-field-range/src',
     ),
   ),
+  'kartik-v/yii2-number' => 
+  array (
+    'name' => 'kartik-v/yii2-number',
+    'version' => '1.0.3.0',
+    'alias' => 
+    array (
+      '@kartik/number' => $vendorDir . '/kartik-v/yii2-number/src',
+    ),
+  ),
+  'mongosoft/yii2-soap-client' => 
+  array (
+    'name' => 'mongosoft/yii2-soap-client',
+    'version' => '0.1.0.0',
+    'alias' => 
+    array (
+      '@mongosoft/soapclient' => $vendorDir . '/mongosoft/yii2-soap-client',
+    ),
+  ),
 );

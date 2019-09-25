@@ -70,6 +70,7 @@ echo '</pre>';*/
                 ],
                 'xAxis' => [
                     'type' => 'datetime',
+                    'max' => $tmp_end_date_js
                 ],
                 'yAxis' => [
                     'title' => [
