@@ -122,7 +122,13 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
-        'format' => ['date', 'php:Y-m-d H:i'],
+        'value' => function($model){
+            if ($model->input_datetime == null) {
+                return '-';
+            } else {
+                return date('Y-m-d H:i', strtotime($model->input_datetime));
+            }
+        },
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -154,7 +160,13 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
-        'format' => ['date', 'php:Y-m-d H:i'],
+        'value' => function($model){
+            if ($model->response_datetime == null) {
+                return '-';
+            } else {
+                return date('Y-m-d H:i', strtotime($model->response_datetime));
+            }
+        },
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'

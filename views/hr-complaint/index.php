@@ -18,6 +18,7 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+date_default_timezone_set('Asia/Jakarta');
 
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
@@ -70,11 +71,17 @@ $grid_columns = [
     [
         'attribute' => 'input_datetime',
         'label' => 'Question<br/>Datetime',
+        'value' => function($model){
+            if ($model->input_datetime == null) {
+                return '-';
+            } else {
+                return date('Y-m-d H:i', strtotime($model->input_datetime));
+            }
+        },
         'encodeLabel' => false,
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
-        'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -83,11 +90,17 @@ $grid_columns = [
     [
         'attribute' => 'response_datetime',
         'label' => 'Answered<br/>Datetime',
+        'value' => function($model){
+            if ($model->response_datetime == null) {
+                return '-';
+            } else {
+                return date('Y-m-d H:i', strtotime($model->response_datetime));
+            }
+        },
         'encodeLabel' => false,
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'width' => '80px',
-        'format' => ['date', 'php:Y-m-d H:i'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
