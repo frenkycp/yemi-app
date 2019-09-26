@@ -44,6 +44,7 @@ $script = "
     $(document).ready(function() {
 
         // page is now ready, initialize the calendar..
+
         $('#calendar').fullCalendar({
             header: {
                 left: 'prev,next today',
@@ -55,14 +56,48 @@ $script = "
             editable: true,
             eventLimit: true, 
             editable: false,
-            events: '" . Yii::$app->urlManager->createUrl('display/get-daily-receiving') . "',  // request to load current events
+            events: '" . Yii::$app->urlManager->createUrl('display/get-daily-receiving') . "' + '?category=' + $('#filter_category').val(),  // request to load current events
             
         });
+
+        $('#filter_category_').change(function(){
+            var category_val = $('#filter_category').val();
+            //alert(category_val);
+            $('#calendar').fullCalendar('removeEvents');
+            $('#calendar').fullCalendar( 'addEventSource', '" . Yii::$app->urlManager->createUrl('display/get-daily-receiving') . "' + '?category=' + $('#filter_category').val() );
+            //$('#calendar').fullCalendar('refetchEvents');
+        });
     });
+
+    
 ";
 
 $this->registerJs($script, View::POS_READY);
 ?>
+
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['display/receiving-calendar']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-2">
+        <?= $form->field($model, 'category')->dropDownList([
+            'all' => 'All',
+            'Container' => 'Container',
+            'Truck' => 'Truck',
+            'wb' => 'WB',
+        ], [
+            'class' => 'form-control',
+            'id' => 'filter_category',
+            'onchange' => 'this.form.submit()',
+        ])->label(false); ?>
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
+
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">

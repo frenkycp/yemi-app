@@ -2569,25 +2569,40 @@ class DisplayController extends Controller
         ]);
     }
 
-    public function actionGetDailyReceiving()
+    public function actionGetDailyReceiving($category)
     {
         date_default_timezone_set('Asia/Jakarta');
-        $tmp_data = PlanReceiving::find()
-        ->select([
-            'receiving_date', 'vendor_name',
-            'total_qty' => 'SUM(QTY)'
-        ])
-        ->where('completed_time IS NULL')
-        ->groupBy('receiving_date, vendor_name')
-        ->orderBy('receiving_date, vendor_name')
-        ->all();
+        
+        if ($category == 'all') {
+            $tmp_data = PlanReceiving::find()
+            ->select([
+                'receiving_date', 'vendor_name',
+                'total_qty' => 'SUM(QTY)'
+            ])
+            ->where('completed_time IS NULL')
+            ->groupBy('receiving_date, vendor_name')
+            ->orderBy('receiving_date, vendor_name')
+            ->all();
+        } else {
+            $tmp_data = PlanReceiving::find()
+            ->select([
+                'receiving_date', 'vendor_name',
+                'total_qty' => 'SUM(QTY)'
+            ])
+            ->where('completed_time IS NULL')
+            ->andWhere(['vehicle' => $category])
+            ->groupBy('receiving_date, vendor_name')
+            ->orderBy('receiving_date, vendor_name')
+            ->all();
+        }
 
         $data = [];
         foreach ($tmp_data as $key => $value) {
             $data[] = [
                 'title' => strtoupper($value->vendor_name) . ' - ' . $value->total_qty,
                 'start' => (strtotime($value->receiving_date . " +7 hours") * 1000),
-                'allDay' => true
+                'allDay' => true,
+                'color' => '#00a65a'
             ];
         }
 
@@ -2597,7 +2612,20 @@ class DisplayController extends Controller
     public function actionReceivingCalendar()
     {
         $this->layout = 'clean';
-        return $this->render('receiving-calendar');
+
+        $model = new \yii\base\DynamicModel([
+            'category'
+        ]);
+        $model->addRule(['category'], 'required');
+
+        $model->category = 'all';
+        if ($model->load($_GET)) {
+            # code...
+        }
+
+        return $this->render('receiving-calendar', [
+            'model' => $model
+        ]);
     }
 
 	public function actionProductionMonthlyInspection()
