@@ -73,6 +73,18 @@ $script = "
 ";
 
 $this->registerJs($script, View::POS_READY);
+
+$script2 = "
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout(\"refreshPage();\", 300000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+";
+$this->registerJs($script2, View::POS_HEAD );
 ?>
 
 <?php $form = ActiveForm::begin([
