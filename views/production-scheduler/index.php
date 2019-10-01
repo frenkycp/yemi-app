@@ -123,14 +123,15 @@ $this->registerJs("
                     }
                 }
 
+                tmp_parent = tmp_child[3];
+                tmp_parent_desc = tmp_child[4];
+
                 if(tmp_model == ''){
                     tmp_model = tmp_child[2];
-                    tmp_parent = tmp_child[3];
-                    tmp_parent_desc = tmp_child[4];
-                } else {
-                    if(tmp_model != tmp_child[2]){
-                        is_multiple_model = true;
-                    }
+                }
+
+                if(tmp_model != tmp_child[2]){
+                    is_multiple_model = true;
                 }
 
                 if(strvalue!=\"\")

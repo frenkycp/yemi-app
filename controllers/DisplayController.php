@@ -70,12 +70,59 @@ use app\models\GeneralFunction;
 use app\models\SensorTbl;
 use app\models\SensorLog;
 use app\models\ProdAttendanceData;
+use app\models\Toilet;
+use app\models\StockWaitingNextProcess;
 
 class DisplayController extends Controller
 {
+    public function actionStockWaitingNextProcess($value='')
+    {
+        $this->layout = 'clean';
+        return $this->render('stock-waiting-next-process');
+    }
+
+    public function actionToiletStatusData()
+    {
+        $data = [];
+        $session = \Yii::$app->session;
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+        $tmp_data = Toilet::find()->asArray()->all();
+
+        foreach ($tmp_data as $key => $value) {
+            $stopwatch = '';
+            if ($value['room_value'] == 1) {
+                $second_date = new \DateTime($value['end_date']);
+                $first_date = new \DateTime($value['start_date']);
+                $interval = $first_date->diff($second_date);
+                $stopwatch = $interval->i . ':' . str_pad($interval->s, 2, '0', STR_PAD_LEFT);
+            } else {
+                
+            }
+            $data[] = [
+                'room_id' => $value['room_id'],
+                'room_desc' => $value['room_desc'],
+                'room_value' => $value['room_value'],
+                'stopwatch' => $stopwatch
+            ];
+        }
+
+        return $data;
+    }
+
+    public function actionToiletStatus($value='')
+    {
+        $this->layout = 'clean';
+        $data = Toilet::find()->asArray()->all();
+        return $this->render('toilet-status', [
+            'data' => $data
+        ]);
+    }
+
     public function actionDailyProdAttendance($value='')
     {
         $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
         $posting_shift = date('Y-m-d');
         
         $model = new \yii\base\DynamicModel([
