@@ -87,7 +87,7 @@ echo '</pre>';*/
 
 <div id="main-body">
     <?= Html::img('@web/uploads/MAP/go_sub_map_crop2.png', ['alt' => 'My logo', 'height' => 900, 'style' => 'opacity: 0.8', 'style' => 'position: absolute; top: 0px; left: 0px;']); ?>
-    <img class="user-image user-loc" width="25px" src="<?= Url::to('@web/uploads/ICON/marker_08.png'); ?>" style="position: absolute; top: 100px; left: 100px; opacity: 1;"></img>
+    
 </div>
 
 <div class="row" style="color: white; padding-top: 900px;">
