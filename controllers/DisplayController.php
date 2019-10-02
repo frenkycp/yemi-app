@@ -75,12 +75,6 @@ use app\models\StockWaitingNextProcess;
 
 class DisplayController extends Controller
 {
-    public function actionStockWaitingNextProcess($value='')
-    {
-        $this->layout = 'clean';
-        return $this->render('stock-waiting-next-process');
-    }
-
     public function actionToiletStatusData()
     {
         $data = [];
