@@ -75,6 +75,28 @@ use app\models\StockWaitingNextProcess;
 
 class DisplayController extends Controller
 {
+    public function actionClinicFiscal()
+    {
+        $this->layout = 'clean';
+        $model = new \yii\base\DynamicModel([
+            'fiscal'
+        ]);
+        $model->addRule(['fiscal'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal = $current_fiscal->FISCAL;
+
+        if ($model->load($_GET)) {
+            
+        }
+
+        return $this->render('clinic-fiscal', [
+            'model' => $model
+        ]);
+    }
+
     public function actionToiletStatusData()
     {
         $data = [];
@@ -243,18 +265,23 @@ class DisplayController extends Controller
     public function actionTempHumidityControl($category)
     {
         $this->layout = 'clean';
+
         if ($category == 1) {
             $title = [
-                'page_title' => 'Temperature Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                //'page_title' => 'Temperature Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                'page_title' => null,
                 'tab_title' => 'Temperature Monitoring',
                 'breadcrumbs_title' => 'Temperature Monitoring'
             ];
+            $custom_title = 'Temperature<br/>Monitoring';
         } elseif ($category == 2) {
             $title = [
-                'page_title' => 'Humidity Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                //'page_title' => 'Humidity Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                'page_title' => null,
                 'tab_title' => 'Humidity Monitoring',
                 'breadcrumbs_title' => 'Humidity Monitoring'
             ];
+            $custom_title = 'Humidity<br/>Monitoring';
         }
         
         $data = SensorTbl::find()->where([
@@ -265,6 +292,7 @@ class DisplayController extends Controller
             'data' => $data,
             'title' => $title,
             'category' => $category,
+            'custom_title' => $custom_title,
         ]);
     }
 

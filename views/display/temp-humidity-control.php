@@ -20,8 +20,9 @@ $this->registerCss("
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
     body, .content-wrapper {background-color: #000;}
-    .temp-widget {border-radius: 4px; overflow: auto;}
+    .temp-widget {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 30px; letter-spacing: 1.1px;}
     #main-body {overflow: auto;}
+    #custom-title {position: absolute; top: 40px; left: 40px; font-size: 1.5em; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: rgba(0, 255, 0, 0.4);}
 ");
 
 
@@ -30,7 +31,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 10000); // milliseconds
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -65,24 +66,25 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 <div id="main-body">
-    <?= Html::img('@web/uploads/MAP/suhu_humidity_map.jpg', ['alt' => 'My logo', 'style' => 'opacity: 0.8']); ?>
+    <?= Html::img('@web/uploads/MAP/suhu_humidity_map.jpg', ['alt' => 'My logo', 'style' => 'opacity: 0.8', 'width' => '1600px']); ?>
     <?php
     foreach ($data as $key => $value) {
         $temp_class = ' bg-green-active';
         if ($category == 1) {
             $params_val = $value->temparature . '&deg;';
             if ($params_val < $value->temp_min || $params_val > $value->temp_max) {
-                $temp_class = ' bg-red-active';
+                //$temp_class = ' bg-red-active';
             }
         } elseif ($category == 2) {
             $params_val = $value->humidity . '<small>%</small>';
             if ($params_val < $value->humi_min || $params_val > $value->humi_max) {
-                $temp_class = ' bg-red-active';
+                //$temp_class = ' bg-red-active';
             }
         }
 
-        $content = '<div class="temp-widget text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 1px 5px;">' . $params_val . '</div></div>';
+        $content = '<div class="temp-widget text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . $params_val . '</div></div>';
         echo Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
     }
     ?>
+    <div id="custom-title" class="text-center"><?= $custom_title; ?></div>
 </div>

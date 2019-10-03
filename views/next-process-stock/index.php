@@ -113,6 +113,9 @@ $gridColumns = [
     [
         'attribute' => 'end_date',
         'value' => function($model){
+            if ($model->end_date == NULL) {
+                return '-';
+            }
         	return date('Y-m-d H:i:s', strtotime($model->end_date));
         },
         'vAlign' => 'middle',
@@ -125,6 +128,9 @@ $gridColumns = [
     [
         'attribute' => 'next_process_date',
         'value' => function($model){
+            if ($model->end_date == NULL) {
+                return '-';
+            }
         	return date('Y-m-d H:i:s', strtotime($model->next_process_date));
         },
         'vAlign' => 'middle',
