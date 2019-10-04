@@ -62,11 +62,11 @@ $query->andFilterWhere([
             'SEQ_ID' => $this->SEQ_ID,
             'QTY_IN' => $this->QTY_IN,
             'QTY_OUT' => $this->QTY_OUT,
-            'LAST_UPDATE' => $this->LAST_UPDATE,
             'inspect_datetime' => $this->inspect_datetime,
         ]);
 
         $query->andFilterWhere(['like', 'TAG_SLIP', $this->TAG_SLIP])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10), LAST_UPDATE, 120)', $this->LAST_UPDATE])
             ->andFilterWhere(['like', 'SLIP_REF', $this->SLIP_REF])
             ->andFilterWhere(['like', 'NO', $this->NO])
             ->andFilterWhere(['like', 'LOC', $this->LOC])

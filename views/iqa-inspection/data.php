@@ -40,6 +40,7 @@ $gridColumns = [
 	],
     [
         'attribute' => 'ITEM',
+        'label' => 'Part No.',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '90px',
@@ -50,6 +51,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'ITEM_DESC',
+        'label' => 'Part Name',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
@@ -58,13 +60,37 @@ $gridColumns = [
     ],
     [
         'attribute' => 'POST_DATE',
-        'format' => ['date', 'php:Y-m-d'],
+        'value' => function($model){
+            if ($model->POST_DATE == null) {
+                return '-';
+            } else {
+                return date('Y-m-d', strtotime($model->POST_DATE));
+            }
+        },
+        'label' => 'Inc. Date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'LAST_UPDATE',
+        'mergeHeader' => true,
+        'value' => function($model){
+            if ($model->LAST_UPDATE == null) {
+                return '-';
+            } else {
+                return date('Y-m-d H:i:s', strtotime($model->LAST_UPDATE));
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
@@ -75,6 +101,47 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 50px;'
+        ],
+    ],
+    [
+        'attribute' => 'NOTE',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'IQA',
+        'label' => 'Inspection Stage',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 50px;'
+        ],
+    ],
+    [
+        'attribute' => 'Judgement',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            'OK' => 'OK',
+            'NG' => 'NG',
+            'PENDING' => 'PENDING'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'Remark',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
@@ -159,14 +226,6 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'NOTE',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
         'attribute' => 'PIC',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -186,48 +245,6 @@ $gridColumns = [
     ],
     [
         'attribute' => 'RACK_LOC',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'IQA',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 50px;'
-        ],
-    ],
-    [
-        'attribute' => 'LAST_UPDATE',
-        'format' => ['date', 'php:Y-m-d H:i'],
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'Judgement',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filter' => [
-            'OK' => 'OK',
-            'NG' => 'NG',
-            'PENDING' => 'PENDING'
-        ],
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'Remark',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
