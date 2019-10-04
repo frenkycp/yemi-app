@@ -72,10 +72,11 @@ use app\models\SensorLog;
 use app\models\ProdAttendanceData;
 use app\models\Toilet;
 use app\models\StockWaitingNextProcess;
+use app\models\KlinikInput;
 
 class DisplayController extends Controller
 {
-    public function actionClinicFiscal()
+    public function actionClinicByFreq()
     {
         $this->layout = 'clean';
         $model = new \yii\base\DynamicModel([
@@ -88,12 +89,94 @@ class DisplayController extends Controller
         ])->one();
         $model->fiscal = $current_fiscal->FISCAL;
 
-        if ($model->load($_GET)) {
-            
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal = $_GET['fiscal'];
         }
 
-        return $this->render('clinic-fiscal', [
-            'model' => $model
+        if ($model->load($_GET)) {
+            
+        };
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_visit = KlinikInput::find()
+        ->select([
+            'dept', 'nik', 'nama',
+            'total_minutes' => 'SUM(abs(timestampdiff(MINUTE, masuk, keluar)))',
+            'total1' => 'COUNT(pk)'
+        ])
+        ->where([
+            'EXTRACT(year_month FROM pk)' => $period_arr
+        ])
+        ->andWhere(['<>', 'opsi', 3])
+        ->groupBy('dept, nik, nama')
+        ->orderBy('total1 DESC, nama')
+        ->all();
+
+        return $this->render('clinic-by-freq', [
+            'model' => $model,
+            'data' => $tmp_visit
+        ]);
+    }
+
+    public function actionClinicByMin()
+    {
+        $this->layout = 'clean';
+        $model = new \yii\base\DynamicModel([
+            'fiscal'
+        ]);
+        $model->addRule(['fiscal'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) {
+            
+        };
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_visit = KlinikInput::find()
+        ->select([
+            'dept', 'nik', 'nama',
+            'total_minutes' => 'SUM(abs(timestampdiff(MINUTE, masuk, keluar)))',
+            'total1' => 'COUNT(pk)'
+        ])
+        ->where([
+            'EXTRACT(year_month FROM pk)' => $period_arr
+        ])
+        ->andWhere(['<>', 'opsi', 3])
+        ->groupBy('dept, nik, nama')
+        ->orderBy('total_minutes DESC, nama')
+        ->all();
+
+        return $this->render('clinic-by-min', [
+            'model' => $model,
+            'data' => $tmp_visit
         ]);
     }
 
