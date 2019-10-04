@@ -105,7 +105,7 @@ $this->registerJs($script, View::POS_HEAD );*/
                                 <td><?= $value->dept; ?></td>
                                 <td class="text-center"><?= $value->nik; ?></td>
                                 <td><?= $value->nama; ?></td>
-                                <td class="text-center"><?= $value->total_minutes; ?></td>
+                                <td class="text-center"><?= number_format($value->total_minutes); ?></td>
                             </tr>
                         <?php }
                         ?>
