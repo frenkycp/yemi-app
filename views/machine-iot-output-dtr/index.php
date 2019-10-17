@@ -132,7 +132,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filter' => [
             'RUN' => 'RUN',
-            'IDLE' => 'IDLE',
+            'IDDLE' => 'IDDLE',
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
