@@ -38,6 +38,9 @@ class MachineIotOutputHdrController extends \app\controllers\base\MachineIotOutp
         		//$categories[] = $desc;
         	}
         	$start_date = $value->start_date;
+            if ($tmp_start_date == '') {
+                $tmp_start_date = $start_date;
+            }
         	//$tmp_start_date = date('Y-m-d 00:00:00', strtotime(time));
         	$start_date_js = strtotime($start_date . " +7 hours") * 1000;
         	$end_date = $value->end_date;
@@ -59,6 +62,10 @@ class MachineIotOutputHdrController extends \app\controllers\base\MachineIotOutp
             ];
         }
 
+        $tmp_end_date = date('Y-m-d 24:00:00', strtotime($tmp_start_date . ' +12 days'));
+        $tmp_start_date_js = strtotime($tmp_start_date . " +7 hours") * 1000;
+        $tmp_end_date_js = strtotime($tmp_end_date . " +7 hours") * 1000;
+
         $data = [
             [
                 'name' => 'Lot Timeline',
@@ -73,6 +80,8 @@ class MachineIotOutputHdrController extends \app\controllers\base\MachineIotOutp
 			'lot_number' => $lot_number,
             'part_name' => $part_name,
             'categories' => $categories,
+            'tmp_start_date_js' => $tmp_start_date_js,
+            'tmp_end_date_js' => $tmp_end_date_js,
 		]);
 	}
 }

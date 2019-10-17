@@ -45,6 +45,12 @@ $query = PabxLog::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+    'defaultOrder' => [
+        //'cust_desc' => SORT_ASC,
+        'tanggal' => SORT_DESC,
+    ]
+],
 ]);
 
 $this->load($params);
