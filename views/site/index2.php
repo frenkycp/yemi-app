@@ -201,6 +201,9 @@ $this->registerCss("
                         <?= Html::a('Machine IoT Output Data (Detail)', ['machine-iot-output-dtr/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
+                        <?= Html::a('Wood Working Lot Waiting Next Process', ['display/ww-lot-waiting'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
                     </div>
                 </div>
                 <div class="panel panel-success">

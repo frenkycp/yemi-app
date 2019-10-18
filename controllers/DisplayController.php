@@ -73,9 +73,107 @@ use app\models\ProdAttendanceData;
 use app\models\Toilet;
 use app\models\StockWaitingNextProcess;
 use app\models\KlinikInput;
+use app\models\MachineIotOutputDtr;
+use app\models\WwStockWaitingProcess02Open;
 
 class DisplayController extends Controller
 {
+    public function actionLotWaitingDetail($lot_number, $jenis_mesin, $start_date, $end_date, $model_group, $parent_desc, $gmc, $gmc_desc, $mesin_id, $mesin_description)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Lot Number : ' . $lot_number . '<small><br/>(Model ' . $model_group . ')<br/>Machine : ' . $mesin_description . ' - ' . $mesin_id . '</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr>
+            <th class="text-center" style="width: 90px;">Start Time</th>
+            <th class="text-center" style="width: 90px;">End Time</th>
+            <th class="text-center">Part No.</th>
+            <th>Part Name</th>
+            <th class="text-center">Parent</th>
+            <th class="text-center">Next Process</th>
+        </tr>';
+
+        $remark .= '<tr>
+            <td class="text-center">' . date('Y-m-d H:i', strtotime($start_date)) . '</td>
+            <td class="text-center">' . date('Y-m-d H:i', strtotime($end_date)) . '</td>
+            <td class="text-center">' . $gmc . '</td>
+            <td>' . $gmc_desc . '</td>
+            <td class="text-center">' . $parent_desc . '</td>
+            <td class="text-center">' . $jenis_mesin . '</td>
+        </tr>';
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
+    public function actionWwLotWaiting($value='')
+    {
+        $this->layout = 'clean';
+
+        $model = new \yii\base\DynamicModel([
+            'machine_group'
+        ]);
+        $model->addRule(['machine_group'], 'string');
+
+        if ($model->load($_GET)) {
+            if ($model->machine_group != null) {
+                $waiting_data_arr = WwStockWaitingProcess02Open::find()
+                ->where(['kelompok' => $model->machine_group])
+                ->orderBy('hours_waiting DESC')
+                ->all();
+            } else {
+                $waiting_data_arr = WwStockWaitingProcess02Open::find()
+                ->orderBy('hours_waiting DESC')
+                ->all();
+            }
+            
+        } else {
+            $waiting_data_arr = WwStockWaitingProcess02Open::find()
+            ->orderBy('hours_waiting DESC')
+            ->all();
+        }
+
+        
+
+        $categories = $tmp_data = $data = [];
+        foreach ($waiting_data_arr as $key => $value) {
+            $categories[] = 'Lot - ' . $value->lot_number;
+            $tmp_data[] = [
+                'y' => round($value->hours_waiting),
+                'url' => Url::to(['lot-waiting-detail',
+                    'lot_number' => $value->lot_number,
+                    'jenis_mesin' => $value->jenis_mesin,
+                    'start_date' => $value->start_date,
+                    'end_date' => $value->end_date,
+                    'model_group' => $value->model_group,
+                    'parent_desc' => $value->parent_desc,
+                    'gmc' => $value->gmc,
+                    'gmc_desc' => $value->gmc_desc,
+                    'mesin_id' => $value->mesin_id,
+                    'mesin_description' => $value->mesin_description,
+                ]),
+            ];
+        }
+
+        $data[] = [
+            'name' => 'Time Waiting Next Process',
+            'data' => $tmp_data
+        ];
+
+        return $this->render('ww-lot-waiting', [
+            'data' => $data,
+            'model' => $model,
+            'categories' => $categories,
+        ]);
+    }
+
     public function actionClinicByFreq()
     {
         $this->layout = 'clean';
