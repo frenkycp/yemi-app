@@ -39,7 +39,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['gojek-operation-ratio/index']),
+    'action' => Url::to(['gosub-operation-ratio/index']),
 ]); ?>
 
 <div class="row">

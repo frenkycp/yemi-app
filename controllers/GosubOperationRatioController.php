@@ -53,6 +53,7 @@ class GosubOperationRatioController extends Controller
 			'source' => 'SUB'
 		])
 		->groupBy('post_date, GOJEK_ID, GOJEK_DESC')
+		->orderBy('post_date')
 		->all();
 
 		$started_job = GojekOrderTbl::find()
@@ -118,7 +119,7 @@ class GosubOperationRatioController extends Controller
 					];
 					$tmp_data1[$nik]['idle'][] = [
 						'x' => $post_date,
-						'y' => $idle_minutes == null ? '0' : round($idle_minutes/60, 1)
+						'y' => $idle_minutes == null ? 0 : round($idle_minutes/60, 1)
 					];
 				}
 				
