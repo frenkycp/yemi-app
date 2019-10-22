@@ -1235,11 +1235,16 @@ class DisplayController extends Controller
                             } else {
                                 $bg_class = ' bg-light-blue';
                                 $text_remark = 'STANDBY';
+                                if ($now > date('Y-m-d 16:00:00')) {
+                                    $bg_class = ' bg-gray';
+                                    $text_remark = 'INACTIVE';
+                                }
                             }
                             if ($get_new_order) {
                                 $txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
                             }
                         }
+                        
                         
                     } else {
                         $bg_class = ' bg-aqua';
