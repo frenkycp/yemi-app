@@ -88,28 +88,44 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Management Support<br/><span class="japanesse-word"></span></div>
                     <div class="list-group">
-                        <?= Html::a('<i class="fa fa-fw fa-plus"></i> Visitor Confirmation <span class="japanesse-word"></span>', ['before-load-url/visitor-confirm', 'url' => 'http://172.17.144.6:99/plus/index_visitor'], [
+                        <?= Html::a('Visitor Confirmation <span class="japanesse-word"></span>', ['before-load-url/visitor-confirm', 'url' => 'http://172.17.144.6:99/plus/index_visitor'], [
                             'class' => 'list-group-item',
                             'target' => '_blank'
                         ]) ?>
                     </div>
                     <div class="list-group">
-                        <?= Html::a('<i class="fa fa-fw fa-plus"></i> Clinic Confirmation <span class="japanesse-word"></span>', ['before-load-url/clinic-confirm', 'url' => 'http://172.17.144.6:99/plus/clinic'], [
-                            'class' => 'list-group-item',
-                            'target' => '_blank'
-                        ]) ?>
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="list-group-item">
+                            CLINIC
+                        </a>
+                        <div id="collapseOne" class="panel-collapse collapse">
+                            <div class="box-body">
+                                <ol>
+                                    <li>
+                                        <?= Html::a('Clinic Confirmation <span class="japanesse-word"></span>', ['before-load-url/clinic-confirm', 'url' => 'http://172.17.144.6:99/plus/clinic'], [
+                                            'target' => '_blank'
+                                        ]) ?>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="http://172.17.144.6:86/clinic-daily-visit">Clinic Monthly Visit <span class="japanesse-word"></span></a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="http://172.17.144.6:86/clinic-data">Clinic Data <span class="japanesse-word"></span></a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="http://172.17.144.6:86/display/clinic-by-freq">Clinic FY Visit by Freq. <span class="japanesse-word"></span></a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="http://172.17.144.6:86/display/clinic-by-freq">Clinic FY Visit by Total Minutes <span class="japanesse-word"></span></a>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/clinic-daily-visit"><i class="fa fa-fw fa-plus"></i> Clinic Monthly Visit <span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/driver/display.php">Company Car Monitoring <span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/clinic-data"><i class="fa fa-fw fa-plus"></i> Clinic Data <span class="japanesse-word"></span></a>
-                    </div>
-                    <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/driver/display.php"><i class="fa fa-fw fa-plus"></i> Company Car Monitoring <span class="japanesse-word"></span></a>
-                    </div>
-                    <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-shift-display"><i class="fa fa-fw fa-plus"></i> Shift Maintenance <span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-shift-display">Shift Maintenance <span class="japanesse-word"></span></a>
                     </div>
                 </div>
                 <div class="panel panel-success">

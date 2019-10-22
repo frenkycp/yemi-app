@@ -216,6 +216,7 @@ class DisplayController extends Controller
             'EXTRACT(year_month FROM pk)' => $period_arr
         ])
         ->andWhere(['<>', 'opsi', 3])
+        ->andWhere('keluar IS NOT NULL')
         ->groupBy('dept, nik, nama')
         ->orderBy('total1 DESC, nama')
         ->all();
@@ -268,6 +269,7 @@ class DisplayController extends Controller
             'EXTRACT(year_month FROM pk)' => $period_arr
         ])
         ->andWhere(['<>', 'opsi', 3])
+        ->andWhere('keluar IS NOT NULL')
         ->groupBy('dept, nik, nama')
         ->orderBy('total_minutes DESC, nama')
         ->all();

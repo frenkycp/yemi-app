@@ -9,7 +9,7 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Wood Working Lot Waiting Next Process <span class="japanesse text-green"></span>',
+    'page_title' => 'Wood Working Lot Waiting Next Process <em style="font-size: 0.5em;">(Total Hours)</em> <span class="japanesse text-green"></span>',
     'tab_title' => 'Wood Working Lot Waiting Next Process',
     'breadcrumbs_title' => 'Wood Working Lot Waiting Next Process'
 ];
@@ -104,7 +104,7 @@ echo '</pre>';*/
                 ],
                 'yAxis' => [
                     'title' => [
-                        'text' => null
+                        'text' => 'Hours'
                     ],
                 ],
                 'tooltip' => [
