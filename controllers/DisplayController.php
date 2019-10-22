@@ -75,15 +75,17 @@ use app\models\StockWaitingNextProcess;
 use app\models\KlinikInput;
 use app\models\MachineIotOutputDtr;
 use app\models\WwStockWaitingProcess02Open;
+use app\models\WipLocation;
 
 class DisplayController extends Controller
 {
     public function actionLotWaitingDetail($lot_number, $jenis_mesin, $start_date, $end_date, $model_group, $parent_desc, $gmc, $gmc_desc, $mesin_id, $mesin_description)
     {
         date_default_timezone_set('Asia/Jakarta');
+        $lot_flow_link = Html::a($lot_number, ['machine-iot-output-hdr/detail', 'lot_number' => $lot_number]);
         $remark = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>Lot Number : ' . $lot_number . '<small><br/>(Model ' . $model_group . ')<br/>Machine : ' . $mesin_description . ' - ' . $mesin_id . '</small></h3>
+            <h3>Lot Number : <u>' . $lot_flow_link . '</u> <em style="font-size: 0.8em; color: blue;">(Click lot number to view flow process)</em><small><br/>(Model ' . $model_group . ')<br/>Machine : ' . $mesin_description . ' - ' . $mesin_id . '</small></h3>
         </div>
         <div class="modal-body">
         ';
@@ -323,12 +325,15 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $posting_shift = date('Y-m-d');
+
         
         $model = new \yii\base\DynamicModel([
-            'posting_shift'
+            'map_no', 'from_date', 'to_date'
         ]);
-        $model->addRule(['posting_shift'], 'required');
-        $model->posting_shift = $posting_shift;
+        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
 
         if ($model->load($_GET)) {
             
@@ -336,29 +341,51 @@ class DisplayController extends Controller
 
         $tmp_att_data = ProdAttendanceData::find()
         ->select([
-            'child_analyst', 'child_analyst_desc',
+            'child_analyst', 'child_analyst_desc', 'posting_shift',
             'total' => 'COUNT(nik)'
         ])
         ->where([
-            'posting_shift' => $model->posting_shift,
+            'AND',
+            ['>=', 'posting_shift', $model->from_date],
+            ['<=', 'posting_shift', $model->to_date],
+        ])
+        ->andWhere([
             'current_status' => 'I'
         ])
-        ->groupBy('child_analyst, child_analyst_desc')
+        ->groupBy('child_analyst, child_analyst_desc, posting_shift')
         ->orderBy('child_analyst_desc')
         ->all();
 
+        $tmp_location = WipLocation::find()->orderBy('child_analyst_desc')->all();
+
         $tmp_data = $data = $categories = [];
-        foreach ($tmp_att_data as $key => $value) {
-            $categories[] = $value->child_analyst_desc;
-            $tmp_data[] = [
-                'y' => (int)$value->total
-            ];
+
+        foreach ($tmp_location as $key => $location) {
+            
+            foreach ($tmp_att_data as $key => $value) {
+                if ($value->child_analyst == $location->child_analyst) {
+                    $proddate = (strtotime($value->posting_shift . " +7 hours") * 1000);
+                    $tmp_data[$location->child_analyst_desc][] = [
+                        'x' => $proddate,
+                        'y' => (int)$value->total
+                    ];
+                }
+                
+            }
         }
 
-        $data[] = [
+        foreach ($tmp_data as $key => $value) {
+            $data[] = [
+                'name' => $key,
+                'data' => $value
+            ];
+        }
+        
+
+        /*$data[] = [
             'name' => 'Total Manpower',
             'data' => $tmp_data
-        ];
+        ];*/
 
         return $this->render('daily-prod-attendance', [
             'data' => $data,

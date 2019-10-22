@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\MachineIotOutputDtr;
+use app\models\WwStockWaitingProcess02Open;
 
 /**
 * This is the class for controller "MachineIotOutputHdrController".
@@ -11,6 +12,7 @@ class MachineIotOutputHdrController extends \app\controllers\base\MachineIotOutp
 {
 	public function actionDetail($lot_number)
 	{
+        $this->layout = 'clean';
 		date_default_timezone_set('Asia/Jakarta');
         $data = $tmp_data = $categories = [];
 
@@ -55,6 +57,32 @@ class MachineIotOutputHdrController extends \app\controllers\base\MachineIotOutp
         		//'name' => $desc,
                 'x' => $start_date_js,
                 'x2' => $end_date_js,
+                //'y' => $index,
+                'y' => 0,
+                'color' => $color,
+                'machine' => $desc
+            ];
+        }
+
+        $lot_waiting = WwStockWaitingProcess02Open::find()
+        ->where([
+            'lot_number' => $lot_number
+        ])
+        ->one();
+
+        if ($lot_waiting->lot_number != null) {
+            $end_date = $lot_waiting->end_date;
+            $end_date_js = strtotime($end_date . " +7 hours") * 1000;
+            $next_process_date = $lot_waiting->next_process_date;
+            $next_process_date_js = strtotime($next_process_date . " +7 hours") * 1000;
+            $color = \Yii::$app->params['bg-gray'];
+            $minute = round($lot_waiting->hours_waiting * 60);
+            $desc = $lot_waiting->mesin_id . ' - ' . $lot_waiting->mesin_description . ' (' . $minute . ' minutes)';
+
+            $tmp_data[] = [
+                //'name' => $desc,
+                'x' => $end_date_js,
+                'x2' => $next_process_date_js,
                 //'y' => $index,
                 'y' => 0,
                 'color' => $color,

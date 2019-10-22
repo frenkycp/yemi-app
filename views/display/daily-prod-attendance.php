@@ -45,23 +45,26 @@ date_default_timezone_set('Asia/Jakarta');
 ]); ?>
 
 <div class="row">
-    <div class="col-md-2">
-        <?= $form->field($model, 'posting_shift')->widget(DatePicker::classname(), [
-            'options' => [
-                'type' => DatePicker::TYPE_INPUT,
-                'onchange' => 'this.form.submit()',
-            ],
+    <div class="col-md-4">
+        <?php echo '<label class="control-label">Select date range</label>';
+        echo DatePicker::widget([
+            'model' => $model,
+            'attribute' => 'from_date',
+            'attribute2' => 'to_date',
+            'options' => ['placeholder' => 'Start date', 'onchange' => 'this.form.submit()'],
+            'options2' => ['placeholder' => 'End date', 'onchange' => 'this.form.submit()'],
+            'type' => DatePicker::TYPE_RANGE,
+            'form' => $form,
             'pluginOptions' => [
-                'autoclose'=>true,
-                'format' => 'yyyy-mm-dd'
+                'format' => 'yyyy-mm-dd',
+                'autoclose' => true,
             ]
-        ])->label('Date'); ?>
-        
+        ]);?>
     </div>
 </div>
 
 <?php ActiveForm::end(); ?>
-
+<br/>
 <div class="box box-primary">
     <div class="box-body">
         <?php
@@ -69,8 +72,8 @@ date_default_timezone_set('Asia/Jakarta');
             'scripts' => [
                 //'modules/exporting',
                 //'themes/sand-signika',
-                //'themes/grid-light',
-                'themes/dark-unica',
+                'themes/grid-light',
+                //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
@@ -87,7 +90,12 @@ date_default_timezone_set('Asia/Jakarta');
                     'text' => ''
                 ],
                 'xAxis' => [
-                    'categories' => $categories,
+                    'type' => 'datetime',
+                ],
+                'yAxis' => [
+                    'stackLabels' => [
+                        'enabled' => true,
+                    ],
                 ],
                 'credits' => [
                     'enabled' =>false
@@ -97,8 +105,9 @@ date_default_timezone_set('Asia/Jakarta');
                 ],
                 'plotOptions' => [
                     'column' => [
+                        'stacking' => 'normal',
                         'dataLabels' => [
-                            'enabled' => true,
+                            'enabled' => false,
                         ],
                         'maxPointWidth' => 50
                     ],
