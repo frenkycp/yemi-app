@@ -326,7 +326,7 @@ class DisplayController extends Controller
     {
         $remark = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>Line : ' . $loc_desc . ' <small>(' . $proddate . ')<small></h3>
+            <h3>' . $loc_desc . ' <small>(' . $proddate . ')<small></h3>
         </div>
         <div class="modal-body">
         ';
