@@ -111,6 +111,7 @@ date_default_timezone_set('Asia/Jakarta');
                     'title' => [
                         'text' => 'Total NG'
                     ],
+                    'allowDecimals' => false
                     //'gridLineWidth' => 0,
                 ],
                 'credits' => [

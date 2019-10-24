@@ -1579,7 +1579,8 @@ class DisplayController extends Controller
         $data_arr = MasalahPcb::find()
         ->where([
             'date(created_date)' => $post_date,
-            'line_pcb' => $line_pcb
+            'line_pcb' => $line_pcb,
+            'ng_found' => 'FCT'
         ])
         ->orderBy('created_date')
         ->all();
@@ -1639,7 +1640,8 @@ class DisplayController extends Controller
             ])
             ->where([
                 'EXTRACT(year_month FROM created_date)' => $period,
-                'line_pcb' => $model->line_pcb
+                'line_pcb' => $model->line_pcb,
+                'ng_found' => 'FCT'
             ])
             ->groupBy('post_date')
             ->orderBy('post_date')
