@@ -76,7 +76,7 @@ echo '</pre>';*/
                         'pluginOptions' => ['highlight'=>true],
                     ]); ?>
 
-    				<?= $form->field($model, 'port')->dropDownList(ArrayHelper::map(app\models\SernoOutput::find()->orderBy('dst')->all(), 'dst', 'dst'), [
+    				<?= $form->field($model, 'port')->dropDownList(ArrayHelper::map(app\models\SernoOutput::find()->select('dst')->groupBy('dst')->orderBy('dst')->all(), 'dst', 'dst'), [
                         'prompt' => 'Select port ...'
                     ]) ?>
     			</div>
@@ -92,7 +92,7 @@ echo '</pre>';*/
                         'REPAIR' => 'Repair'
                     ], ['prompt'=>'Select...'])->label('Quality Status') ?>
                     
-                    <?= $form->field($model, 'line')->dropDownList(ArrayHelper::map(app\models\SernoInput::find()->select('distinct(line)')->orderBy('line')->all(), 'line', 'line'), [
+                    <?= $form->field($model, 'line')->dropDownList(ArrayHelper::map(app\models\SernoInput::find()->select('line')->groupBy('line')->orderBy('line')->all(), 'line', 'line'), [
                         'prompt' => 'Select line ...'
                     ]) ?>
 
