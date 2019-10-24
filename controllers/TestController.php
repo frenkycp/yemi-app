@@ -2,6 +2,7 @@
 namespace app\controllers;
 
 use yii\web\Controller;
+use yii\httpclient\Client;
 
 class TestController extends Controller
 {
@@ -22,5 +23,13 @@ class TestController extends Controller
 	public function actionFullCalendar()
 	{
 		return $this->render('full-calendar');
+	}
+
+	public function actionWebService($value='')
+	{
+    	$client = new \mongosoft\soapclient\Client([
+		    'url' => 'http://172.17.144.211/WebService01.asmx?WSDL',
+		]);
+		$client->IPQA_Patrol_Rank_S(['id' => 642]);
 	}
 }

@@ -76,6 +76,8 @@ use app\models\KlinikInput;
 use app\models\MachineIotOutputDtr;
 use app\models\WwStockWaitingProcess02Open;
 use app\models\WipLocation;
+use app\models\FaMp02;
+use app\models\FaMp01;
 
 class DisplayController extends Controller
 {
@@ -320,6 +322,58 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionDailyAttendanceDetail($proddate, $loc, $loc_desc)
+    {
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Line : ' . $loc_desc . ' <small>(' . $proddate . ')<small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="">
+            <th class="text-center">NO</th>
+            <th class="text-center">NIK</th>
+            <th class="">Name</th>
+        </tr>';
+
+        $no = 1;
+        if($loc != 'WF01'){
+            $tmp_att_data = ProdAttendanceData::find()
+            ->select([
+                'nik', 'name'
+            ])
+            ->where([
+                'posting_shift' => $proddate,
+                'child_analyst' => $loc,
+                'current_status' => 'I'
+            ])
+            ->orderBy('name')
+            ->all();
+
+            
+            foreach ($tmp_att_data as $key => $value) {
+                $remark .= '<tr style="">
+                    <td class="text-center">' . $no++ . '</td>
+                    <td class="text-center">' . $value->nik . '</td>
+                    <td class="">' . $value->name . '</td>
+                </tr>';
+            }
+        } else {
+            $fa_mp_arr = FaMp01::find()->where(['tgl' => $proddate])->orderBy('nama')->all();
+            foreach ($fa_mp_arr as $key => $value) {
+                $remark .= '<tr style="">
+                    <td class="text-center">' . $no++ . '</td>
+                    <td class="text-center">' . $value->nik . '</td>
+                    <td class="">' . $value->nama . '</td>
+                </tr>';
+            }
+        }
+
+        return $remark;
+    }
+
     public function actionDailyProdAttendance($value='')
     {
         $this->layout = 'clean';
@@ -356,7 +410,7 @@ class DisplayController extends Controller
         ->orderBy('child_analyst_desc')
         ->all();
 
-        $tmp_location = WipLocation::find()->orderBy('child_analyst_desc')->all();
+        $tmp_location = WipLocation::find()->where(['<>', 'child_analyst', 'WF01'])->orderBy('child_analyst_desc')->all();
 
         $tmp_data = $data = $categories = [];
 
@@ -367,7 +421,8 @@ class DisplayController extends Controller
                     $proddate = (strtotime($value->posting_shift . " +7 hours") * 1000);
                     $tmp_data[$location->child_analyst_desc][] = [
                         'x' => $proddate,
-                        'y' => (int)$value->total
+                        'y' => (int)$value->total,
+                        'url' => Url::to(['daily-attendance-detail', 'proddate' => $value->posting_shift, 'loc' => $value->child_analyst, 'loc_desc' => $value->child_analyst_desc]),
                     ];
                 }
                 
@@ -381,7 +436,29 @@ class DisplayController extends Controller
             ];
         }
         
+        $fa_mp_arr = FaMp02::find()
+        ->where([
+            'AND',
+            ['>=', 'tgl', $model->from_date],
+            ['<=', 'tgl', $model->to_date],
+        ])
+        ->orderBy('tgl')
+        ->all();
 
+        $tmp_fa = [];
+        foreach ($fa_mp_arr as $key => $value) {
+            $proddate = (strtotime($value->tgl . " +7 hours") * 1000);
+            $tmp_fa[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total_mp,
+                'url' => Url::to(['daily-attendance-detail', 'proddate' => $value->tgl, 'loc' => 'WF01', 'loc_desc' => 'FINAL ASSY']),
+            ];
+        }
+
+        $data[] = [
+            'name' => 'FINAL ASSY',
+            'data' => $tmp_fa
+        ];
         /*$data[] = [
             'name' => 'Total Manpower',
             'data' => $tmp_data
