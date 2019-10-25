@@ -946,11 +946,20 @@ class DisplayController extends Controller
                 if ($room_id == 9) {
                     $splitted_name = explode(',', $value->name);
                     $new_list = '';
-                    foreach ($splitted_name as $key => $japanesse_name) {
-                        $new_list .= '<div class="col-md-6">» ' . $japanesse_name . '</div>';
+                    if (count($splitted_name) < 5) {
+                        foreach ($splitted_name as $key => $japanesse_name) {
+                            $new_list .= '<div class="col-md-12">» ' . $japanesse_name . '</div>';
+                        }
+                        $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); background-color: rgba(255, 255, 255, 0);">
+                        <td style="border-top: 0px; font-size: 7em; font-family: \'Source Sans Pro\',\'Helvetica Neue\',Helvetica,Arial,sans-serif">' . $new_list . '</td></tr>';
+                    } else {
+                        foreach ($splitted_name as $key => $japanesse_name) {
+                            $new_list .= '<div class="col-md-6">» ' . $japanesse_name . '</div>';
+                        }
+                        $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); background-color: rgba(255, 255, 255, 0);">
+                        <td style="border-top: 0px; font-size: 3.5em; font-family: \'Source Sans Pro\',\'Helvetica Neue\',Helvetica,Arial,sans-serif">' . $new_list . '</td></tr>';
                     }
-                    $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); background-color: rgba(255, 255, 255, 0);">
-                    <td style="border-top: 0px; font-size: 3.5em; font-family: \'Source Sans Pro\',\'Helvetica Neue\',Helvetica,Arial,sans-serif">' . $new_list . '</td></tr>';
+                    
                 } else {
                     $meeting_content .= '<tr style="color: rgba(255, 235, 59, 1); opacity: ' . $opacity . '; background-color: ' . $background_color . ';">
                     <td style="border-top: 0px; width: 540px; color: rgba(59, 255, 248, 1); font-size: 5.5em; padding: 6px 0px 0px 20px;">(' . substr($value->jam_start, 0, 5) . '-' . substr($value->jam_end, 0, 5) .

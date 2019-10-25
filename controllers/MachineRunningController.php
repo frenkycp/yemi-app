@@ -6,6 +6,7 @@ use app\models\ServerMachineIotCurrent;
 use app\models\WipEffTbl;
 use app\models\MachineIotOutput;
 use app\models\Karyawan;
+use app\models\BeaconTbl;
 use yii\helpers\Url;
 
 class MachineRunningController extends Controller
@@ -144,11 +145,56 @@ class MachineRunningController extends Controller
 		$this->layout = 'clean';
 		date_default_timezone_set('Asia/Jakarta');
 		$model = new \yii\base\DynamicModel([
-	        'man_power'
+	        'man_power', 'beacon_id'
 	    ]);
-	    $model->addRule(['man_power'], 'required');
+	    $model->addRule(['man_power', 'beacon_id'], 'required');
+
+	    $tmp_mio = MachineIotOutput::find()
+    	->where([
+    		'lot_number' => $lot_id
+    	])
+    	->orderBy('seq DESC')
+    	->one();
+
+    	$model->beacon_id = $tmp_mio->minor;
 	    //\Yii::$app->getSession()->addFlash('error', $msg);
 	    if ($model->load($_POST)) {
+	    	$beacon_id_current = $tmp_mio->minor;
+
+	    	if ($tmp_mio->seq == null) {
+	    		$isNewRecord = true;
+	    		$beacon_tbl = BeaconTbl::find()
+		    	->where(['minor' => $model->beacon_id])
+		    	->one();
+
+		    	if ($beacon_tbl->id == null) {
+		    		\Yii::$app->session->setFlash("warning", "Beacon ID not found! Please input the correct ID.");
+		    		return $this->render('start', [
+			    		'model' => $model,
+			    		'isNewRecord' => true,
+			    	]);
+		    	} else {
+		    		if ($beacon_tbl->lot_number != null) {
+		    			\Yii::$app->session->setFlash("warning", "Beacon was being used! Please select another one.");
+			    		return $this->render('start', [
+				    		'model' => $model,
+				    		'isNewRecord' => true,
+				    	]);
+		    		} else {
+		    			$beacon_tbl->lot_number = $lot_id;
+		    			$beacon_tbl->start_date = date('Y-m-d H:i:s');
+		    			if (!$beacon_tbl->save()) {
+		    				return json_encode($beacon_tbl->errors);
+		    			}
+		    			$beacon_id_current = $beacon_tbl->minor;
+		    		}
+		    	}
+	    	} else {
+	    		$isNewRecord = false;
+	    	}
+
+	    	
+
 	    	$man_power_name = '';
 	    	$man_power_qty = count($model->man_power);
 	    	foreach ($model->man_power as $key => $value) {
@@ -233,6 +279,7 @@ class MachineRunningController extends Controller
 	    		$iot_output->start_by_name = $name;
 	    		$iot_output->man_power_qty = $man_power_qty;
 	    		$iot_output->man_power_name = $man_power_name;
+	    		$iot_output->minor = $beacon_id_current;
 	    		if (!$iot_output->save()) {
 	    			return json_encode($iot_output->errors);
 	    		}
@@ -244,7 +291,8 @@ class MachineRunningController extends Controller
 	    }
 
     	return $this->render('start', [
-    		'model' => $model
+    		'model' => $model,
+    		'isNewRecord' => $isNewRecord,
     	]);
     	
 	}
@@ -371,7 +419,15 @@ class MachineRunningController extends Controller
 					} catch (Exception $ex) {
 						\Yii::$app->session->setFlash('danger', "Error : $ex, $lot_id aaaaaaa");
 					}
-	    			
+
+					$tmp_beacon_tbl = BeaconTbl::find()->where([
+						'minor' => $iot_output->minor
+					])->one();
+					$tmp_beacon_tbl->lot_number = null;
+					$tmp_beacon_tbl->start_date = null;
+	    			if (!$tmp_beacon_tbl->save()) {
+	    				return json_encode($tmp_beacon_tbl->errors);
+	    			}
 	    		}
 
 	    		if ($current_data->save()) {
