@@ -156,16 +156,31 @@ class MachineRunningController extends Controller
     	->orderBy('seq DESC')
     	->one();
 
+    	$isNewRecord = true;
+
     	$model->beacon_id = $tmp_mio->minor;
 	    //\Yii::$app->getSession()->addFlash('error', $msg);
 	    if ($model->load($_POST)) {
 	    	$beacon_id_current = $tmp_mio->minor;
 
+	    	$current_data = ServerMachineIotCurrent::find()
+	    	->where([
+	    		'mesin_id' => $mesin_id
+	    	])
+	    	->one();
+
+	    	$lot_data = WipEffTbl::find()
+	    	->where([
+	    		'lot_id' => $lot_id,
+	    	])
+	    	->one();
+
+	    	$beacon_tbl = BeaconTbl::find()
+	    	->where(['minor' => $model->beacon_id])
+	    	->one();
+
 	    	if ($tmp_mio->seq == null) {
 	    		$isNewRecord = true;
-	    		$beacon_tbl = BeaconTbl::find()
-		    	->where(['minor' => $model->beacon_id])
-		    	->one();
 
 		    	if ($beacon_tbl->id == null) {
 		    		\Yii::$app->session->setFlash("warning", "Beacon ID not found! Please input the correct ID.");
@@ -183,17 +198,27 @@ class MachineRunningController extends Controller
 		    		} else {
 		    			$beacon_tbl->lot_number = $lot_id;
 		    			$beacon_tbl->start_date = date('Y-m-d H:i:s');
-		    			if (!$beacon_tbl->save()) {
-		    				return json_encode($beacon_tbl->errors);
-		    			}
 		    			$beacon_id_current = $beacon_tbl->minor;
 		    		}
 		    	}
 	    	} else {
-	    		$isNewRecord = false;
+	    		$isNewRecord = true;
 	    	}
 
-	    	
+	    	$beacon_tbl->current_machine_start = date('Y-m-d H:i:s');
+	    	$beacon_tbl->mesin_id = $current_data->mesin_id;
+	    	$beacon_tbl->mesin_description = $current_data->mesin_description;
+	    	$beacon_tbl->gmc = $lot_data->child_all;
+	    	$beacon_tbl->gmc_desc = $lot_data->child_desc_all;
+	    	$beacon_tbl->kelompok = $lot_data->jenis_mesin;
+	    	$beacon_tbl->model_group = $lot_data->model_group;
+	    	$beacon_tbl->parent = $lot_data->parent;
+	    	$beacon_tbl->parent_desc = $lot_data->parent_desc;
+	    	$beacon_tbl->lot_qty = $lot_data->qty_all;
+
+	    	if (!$beacon_tbl->save()) {
+				return json_encode($beacon_tbl->errors);
+			}
 
 	    	$man_power_name = '';
 	    	$man_power_qty = count($model->man_power);
@@ -205,17 +230,7 @@ class MachineRunningController extends Controller
 	    			$man_power_name .= ', ' . $split_mp[1];
 	    		}
 	    	}
-	    	$lot_data = WipEffTbl::find()
-	    	->where([
-	    		'lot_id' => $lot_id,
-	    	])
-	    	->one();
-
-	    	$current_data = ServerMachineIotCurrent::find()
-	    	->where([
-	    		'mesin_id' => $mesin_id
-	    	])
-	    	->one();
+	    	
 
 	    	$lot_data->mesin_id = $current_data->mesin_id;
 	    	$lot_data->mesin_description = $current_data->mesin_description;
@@ -425,6 +440,16 @@ class MachineRunningController extends Controller
 					])->one();
 					$tmp_beacon_tbl->lot_number = null;
 					$tmp_beacon_tbl->start_date = null;
+					$tmp_beacon_tbl->mesin_id = null;
+					$tmp_beacon_tbl->mesin_description = null;
+					$tmp_beacon_tbl->parent = null;
+					$tmp_beacon_tbl->parent_desc = null;
+					$tmp_beacon_tbl->gmc = null;
+					$tmp_beacon_tbl->gmc_desc = null;
+					$tmp_beacon_tbl->lot_qty = null;
+					$tmp_beacon_tbl->kelompok = null;
+					$tmp_beacon_tbl->model_group = null;
+					$tmp_beacon_tbl->current_machine_start = null;
 	    			if (!$tmp_beacon_tbl->save()) {
 	    				return json_encode($tmp_beacon_tbl->errors);
 	    			}

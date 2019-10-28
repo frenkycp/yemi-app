@@ -78,9 +78,32 @@ use app\models\WwStockWaitingProcess02Open;
 use app\models\WipLocation;
 use app\models\FaMp02;
 use app\models\FaMp01;
+use app\models\BeaconTbl;
 
 class DisplayController extends Controller
 {
+    public function actionWwBeaconLoc()
+    {
+        $this->layout = 'clean';
+        $loc_arr = [
+            'PILAR-16I',
+            'PILAR-12I',
+            'PILAR-10I',
+            'PILAR-6I',
+        ];
+
+        $tmp_beacon = BeaconTbl::find()
+        ->where('lot_number IS NOT NULL')
+        ->orderBy('lot_number')
+        ->asArray()
+        ->all();
+
+        return $this->render('ww-beacon-loc', [
+            'data' => $tmp_beacon,
+            'loc_arr' => $loc_arr,
+        ]);
+    }
+
     public function actionSensorTblDisplay()
     {
         $this->layout = 'clean';

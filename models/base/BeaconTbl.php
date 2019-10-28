@@ -15,6 +15,21 @@ use Yii;
  * @property string $minor
  * @property string $lot_number
  * @property string $start_date
+ * @property string $lokasi
+ * @property string $reader
+ * @property double $distance
+ * @property string $distance_last_update
+ * @property string $review_date
+ * @property string $mesin_id
+ * @property string $mesin_description
+ * @property string $kelompok
+ * @property string $model_group
+ * @property string $parent
+ * @property string $parent_desc
+ * @property string $gmc
+ * @property string $gmc_desc
+ * @property double $lot_qty
+ * @property string $current_machine_start
  * @property string $aliasModel
  */
 abstract class BeaconTbl extends \yii\db\ActiveRecord
@@ -45,8 +60,12 @@ abstract class BeaconTbl extends \yii\db\ActiveRecord
     {
         return [
             [['id'], 'required'],
-            [['start_date'], 'safe'],
-            [['id', 'uuid', 'major', 'minor', 'lot_number'], 'string', 'max' => 50],
+            [['start_date', 'distance_last_update', 'review_date', 'current_machine_start'], 'safe'],
+            [['distance', 'lot_qty'], 'number'],
+            [['id', 'uuid', 'major', 'minor', 'lot_number', 'lokasi', 'reader', 'mesin_id', 'kelompok', 'model_group'], 'string', 'max' => 50],
+            [['mesin_description'], 'string', 'max' => 100],
+            [['parent', 'gmc'], 'string', 'max' => 20],
+            [['parent_desc', 'gmc_desc'], 'string', 'max' => 250],
             [['id'], 'unique']
         ];
     }
@@ -63,6 +82,21 @@ abstract class BeaconTbl extends \yii\db\ActiveRecord
             'minor' => 'Minor',
             'lot_number' => 'Lot Number',
             'start_date' => 'Start Date',
+            'lokasi' => 'Lokasi',
+            'reader' => 'Reader',
+            'distance' => 'Distance',
+            'distance_last_update' => 'Distance Last Update',
+            'review_date' => 'Review Date',
+            'mesin_id' => 'Mesin ID',
+            'mesin_description' => 'Mesin Description',
+            'kelompok' => 'Kelompok',
+            'model_group' => 'Model Group',
+            'parent' => 'Parent',
+            'parent_desc' => 'Parent Desc',
+            'gmc' => 'Gmc',
+            'gmc_desc' => 'Gmc Desc',
+            'lot_qty' => 'Lot Qty',
+            'current_machine_start' => 'Current Machine Start',
         ];
     }
 
