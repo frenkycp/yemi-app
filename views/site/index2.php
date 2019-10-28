@@ -349,6 +349,7 @@ $this->registerCss("
                                 <li><?= Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
                                 <li><?= Html::a('Temperature Monitoring <span class="japanesse-word"></span>', ['/display/temp-humidity-control?category=1']); ?></li>
                                 <li><?= Html::a('Humidity Monitoring <span class="japanesse-word"></span>', ['/display/temp-humidity-control?category=2']); ?></li>
+                                <li><?= Html::a('Temperature & Humidity Data <span class="japanesse-word"></span>', ['/display/sensor-tbl-display']); ?></li>
                             </ol>
                         </div>
 

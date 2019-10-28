@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Jakarta');
 $columns = [
 	[
         'class' => 'yii\grid\ActionColumn',
-        'template' => '{update}&nbsp;&nbsp;|&nbsp;&nbsp;{flow-process}',
+        'template' => '{update}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [

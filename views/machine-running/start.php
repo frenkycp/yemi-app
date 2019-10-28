@@ -67,16 +67,27 @@ $this->registerCss("
 
 <div class="panel panel-primary">
 	<div class="panel-body">
-		<div>
-			<?= $form->field($model, 'man_power')->widget(Select2::classname(), [
-			    'data' => ArrayHelper::map(app\models\Karyawan::find()->select(['NIK', 'NAMA_KARYAWAN'])->orderBy('NAMA_KARYAWAN')->all(), 'nikNama', 'nikNama'),
-			    'options' => ['placeholder' => 'Select operator ...'],
-			    'pluginOptions' => [
-			        'allowClear' => true,
-			        'multiple' => true
-			    ],
-			]); ?>
+		<div class="row">
+            <div class="col-md-12">
+                <?= $form->field($model, 'man_power')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(app\models\Karyawan::find()->select(['NIK', 'NAMA_KARYAWAN'])->orderBy('NAMA_KARYAWAN')->all(), 'nikNama', 'nikNama'),
+                    'options' => ['placeholder' => 'Select operator ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'multiple' => true
+                    ],
+                ]); ?>
+            </div>
 		</div>
+        <div class="row">
+            <div class="col-md-12">
+                <?=
+                $form->field($model, 'beacon_id')->textInput([
+                    'readonly' => $isNewRecord == true ? false : true,
+                ]);
+                ?>
+            </div>
+        </div>
 	</div>
 	<div class="panel-footer">
 		<?= Html::submitButton(

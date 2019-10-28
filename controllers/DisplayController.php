@@ -81,6 +81,29 @@ use app\models\FaMp01;
 
 class DisplayController extends Controller
 {
+    public function actionSensorTblDisplay()
+    {
+        $this->layout = 'clean';
+
+        $model = new \yii\base\DynamicModel([
+            'factory'
+        ]);
+        $model->addRule(['factory'], 'string');
+        $model->factory = 'Factory #1';
+
+        if ($model->load($_GET)) {};
+
+        $data = SensorTbl::find()->where([
+            'factory' => $model->factory,
+            'is_showing' => 1
+        ])->orderBy('area')->asArray()->all();
+
+        return $this->render('sensor-tbl-display', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
+
     public function actionLotWaitingDetail($lot_number, $jenis_mesin, $start_date, $end_date, $model_group, $parent_desc, $gmc, $gmc_desc, $mesin_id, $mesin_description)
     {
         date_default_timezone_set('Asia/Jakarta');
