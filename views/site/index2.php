@@ -115,7 +115,7 @@ $this->registerCss("
                                         <a target="_blank" href="http://172.17.144.6:86/display/clinic-by-freq">Clinic FY Visit by Freq. <span class="japanesse-word"></span></a>
                                     </li>
                                     <li>
-                                        <a target="_blank" href="http://172.17.144.6:86/display/clinic-by-freq">Clinic FY Visit by Total Minutes <span class="japanesse-word"></span></a>
+                                        <a target="_blank" href="http://172.17.144.6:86/display/clinic-by-min">Clinic FY Visit by Total Minutes <span class="japanesse-word"></span></a>
                                     </li>
                                 </ol>
                             </div>
