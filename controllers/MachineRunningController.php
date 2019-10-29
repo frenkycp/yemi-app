@@ -119,6 +119,8 @@ class MachineRunningController extends Controller
         	])
         	->andWhere('end_date IS NULL')
         	->one();
+
+        	$beacon_tbl = BeaconTbl::find()->where('lot_number IS NOT NULL')->asArray()->all();
         }
 
 		return $this->render('index', [
@@ -129,7 +131,8 @@ class MachineRunningController extends Controller
 			'lot_data' => $lot_data,
 			'mesin_description' => $mesin_description,
 			'mesin_id' => $mesin_id,
-			'mcr_name' => $session['mcr_name']
+			'mcr_name' => $session['mcr_name'],
+			'beacon_tbl' => $beacon_tbl,
 		]);
 	}
 

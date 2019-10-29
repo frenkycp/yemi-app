@@ -55,6 +55,18 @@ $this->registerCss("
 
 date_default_timezone_set('Asia/Jakarta');
 
+$script = "
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+";
+$this->registerJs($script, View::POS_HEAD );
+
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -102,14 +114,17 @@ date_default_timezone_set('Asia/Jakarta');
                 $no = 1;
                 foreach ($data as $key => $value) {
                     $temp_class = '';
+                    $txt_temp_class = $txt_humi_class = '';
                     if ($value['temp_min'] != null && $value['temp_max'] != null) {
                         if ($value['temparature'] < $value['temp_min'] || $value['temparature'] > $value['temp_max']) {
                             $temp_class = 'danger';
+                            $txt_temp_class = ' text-red';
                         }
                     }
                     if ($value['humi_min'] != null && $value['humi_max'] != null) {
-                        if ($value['temparature'] < $value['humi_min'] || $value['temparature'] > $value['humi_max']) {
+                        if ($value['humidity'] < $value['humi_min'] || $value['humidity'] > $value['humi_max']) {
                             $temp_class = 'danger';
+                            $txt_humi_class = ' text-red';
                         }
                     }
                     ?>
@@ -118,10 +133,10 @@ date_default_timezone_set('Asia/Jakarta');
                         <td><?= $value['area']; ?></td>
                         <td class="text-center"><?= $value['temp_min'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['temp_min']); ?></td>
                         <td class="text-center"><?= $value['temp_max'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['temp_max']); ?></td>
-                        <td class="text-center"><?= $value['temparature'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['temparature']); ?></td>
+                        <td class="text-center<?= $txt_temp_class; ?>"><?= $value['temparature'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['temparature']); ?></td>
                         <td class="text-center"><?= $value['humi_min'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['humi_min']); ?></td>
                         <td class="text-center"><?= $value['humi_max'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['humi_max']); ?></td>
-                        <td class="text-center"><?= $value['humidity'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['humidity']); ?></td>
+                        <td class="text-center<?= $txt_humi_class; ?>"><?= $value['humidity'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['humidity']); ?></td>
                     </tr>
                     <?php
                 }

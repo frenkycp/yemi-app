@@ -183,6 +183,7 @@ echo $data['name'];*/
         <tr>
             <th class="text-center">Action</th>
             <th class="text-center">Lot Number</th>
+            <th class="text-center">Beacon ID</th>
             <th class="text-center">Model</th>
             <th class="text-center">Plan Date</th>
             <th class="text-center">Part Number</th>
@@ -199,6 +200,12 @@ echo $data['name'];*/
             </tr>';
         } else {
             foreach ($lot_data as $key => $value) {
+                $beacon_id = '-';
+                foreach ($beacon_tbl as $key => $beacon) {
+                    if ($value['lot_id'] == $beacon['lot_number']) {
+                        $beacon_id = $beacon['minor'];
+                    }
+                }
                 ?>
                 <tr>
                     <td class="text-center">
@@ -225,6 +232,7 @@ echo $data['name'];*/
                         ?>
                     </td>
                     <td class="text-center"><?= $value['lot_id']; ?></td>
+                    <td class="text-center"><?= $beacon_id; ?></td>
                     <td class="text-center"><?= $value['model_group']; ?></td>
                     <td class="text-center"><?= date('Y-m-d', strtotime($value['plan_date'])); ?></td>
                     <td class="text-center"><?= $value['child_all']; ?></td>
