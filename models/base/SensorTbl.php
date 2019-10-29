@@ -25,6 +25,7 @@ use Yii;
  * @property integer $left_pos
  * @property integer $is_showing
  * @property string $layout
+ * @property integer $is_refrigerator
  * @property string $aliasModel
  */
 abstract class SensorTbl extends \yii\db\ActiveRecord
@@ -56,9 +57,11 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
         return [
             [['map_no'], 'required'],
             [['map_no', 'temparature', 'humidity'], 'number'],
-            [['loc_no', 'Factory', 'location', 'area', 'layout'], 'string'],
             [['system_date_time'], 'safe'],
-            [['temp_min', 'temp_max', 'humi_min', 'humi_max', 'top_pos', 'left_pos', 'is_showing'], 'integer'],
+            [['temp_min', 'temp_max', 'humi_min', 'humi_max', 'top_pos', 'left_pos', 'is_showing', 'is_refrigerator'], 'integer'],
+            [['loc_no'], 'string', 'max' => 6],
+            [['Factory', 'location', 'area'], 'string', 'max' => 100],
+            [['layout'], 'string', 'max' => 1],
             [['map_no'], 'unique']
         ];
     }
@@ -85,6 +88,7 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
             'left_pos' => 'Left Pos',
             'is_showing' => 'Is Showing',
             'layout' => 'Layout',
+            'is_refrigerator' => 'Is Refrigerator',
         ];
     }
 

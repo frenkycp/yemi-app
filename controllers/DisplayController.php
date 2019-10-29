@@ -79,9 +79,83 @@ use app\models\WipLocation;
 use app\models\FaMp02;
 use app\models\FaMp01;
 use app\models\BeaconTbl;
+use app\models\WipEffTbl;
 
 class DisplayController extends Controller
 {
+    public function actionGetBeaconDetail($minor = '')
+    {
+        $beacon_data = BeaconTbl::find()->where(['minor' => $minor])->one();
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Beacon ID : ' . $minor . '</h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $data .= '<dl class="dl-horizontal">
+            <dt>Lot Number : </dt>
+            <dd>' . $beacon_data->lot_number . '</dd>
+            <dt>Start Time : </dt>
+            <dd>' . $beacon_data->current_machine_start . '</dd>
+            <dt>Model : </dt>
+            <dd>' . $beacon_data->model_group . '</dd>
+            <dt>Part Number : </dt>
+            <dd>' . $beacon_data->gmc . '</dd>
+            <dt>Part Name : </dt>
+            <dd>' . $beacon_data->gmc_desc . '</dd>
+            <dt>Qty : </dt>
+            <dd>' . $beacon_data->lot_qty . '</dd>
+            <dt>Machine ID : </dt>
+            <dd>' . $beacon_data->mesin_id . '</dd>
+            <dt>Machine Desc. : </dt>
+            <dd>' . $beacon_data->mesin_description . '</dd>
+
+        </dl>';
+
+        $lot_data = WipEffTbl::find()
+        ->where([
+            'lot_id' => $beacon_data->lot_number,
+        ])
+        ->one();
+
+        $slip_id_arr = [
+            $lot_data->slip_id_01,
+            $lot_data->slip_id_02,
+            $lot_data->slip_id_03,
+            $lot_data->slip_id_04,
+            $lot_data->slip_id_05,
+            $lot_data->slip_id_06,
+            $lot_data->slip_id_07,
+            $lot_data->slip_id_08,
+            $lot_data->slip_id_09,
+            $lot_data->slip_id_10
+        ];
+
+        $no = 1;
+        $data .= '<table class="table table-bordered table-striped table-hover">';
+        $data .= 
+        '<thead><tr>
+            <th width="5%" class="text-center">No.</th>
+            <th>Slip Num.</th>
+        </tr></thead>'
+        ;
+        $data .= '<tbody>';
+        foreach ($slip_id_arr as $key => $value) {
+            if ($value != null) {
+                $data .= '<tr>
+                    <td class="text-center">' . $no++ . '</td>
+                    <td>' . $value . '</td>
+                </tr>';
+            }
+        }
+        $data .= '</tbody>';
+        $data .= '</table>';
+
+        return $data;
+    }
+
     public function actionWwBeaconLoc()
     {
         $this->layout = 'clean';
@@ -1306,7 +1380,10 @@ class DisplayController extends Controller
         $now = date('Y-m-d H:i:s');
         //$now = '2019-08-14 09:25:00';
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $tmp_data = GojekTbl::find()->where(['SOURCE' => 'SUB'])->orderBy('GOJEK_DESC')->all();
+        $tmp_data = GojekTbl::find()
+        ->where(['SOURCE' => 'SUB'])
+        ->andWhere(['<>', 'HADIR', 'M'])
+        ->orderBy('GOJEK_DESC')->all();
         $tmp_order = GojekOrderTbl::find()
         ->where([
             'source' => 'SUB',

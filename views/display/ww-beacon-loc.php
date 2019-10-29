@@ -40,13 +40,20 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 25000); // milliseconds
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
+
+$this->registerJs("$(function() {
+   $('.popup_btn').click(function(e) {
+     e.preventDefault();
+     $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+   });
+});");
 ?>
 
 <?php
@@ -70,7 +77,8 @@ foreach ($loc_arr as $key => $loc) {
                         if ($diff_hours > 10) {
                             $txt_class = ' text-red';
                         }
-                        echo '<i style="font-size: 3em; padding: 5px 15px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time : ' . date('Y-m-d H:i', strtotime($value_beacon['start_date'])) . '"></i>';
+                        echo Html::a('<i style="font-size: 3em; padding: 5px 15px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time : ' . date('Y-m-d H:i', strtotime($value_beacon['current_machine_start'])) . '"></i>', ['get-beacon-detail', 'minor' => $value_beacon['minor']], ['class' => 'popup_btn']);
+                        echo '';
                     }
                 }
                 ?>
@@ -78,4 +86,13 @@ foreach ($loc_arr as $key => $loc) {
         </div>
     </div>
 <?php }
+?>
+
+<?php
+    yii\bootstrap\Modal::begin([
+        'id' =>'modal',
+        'header' => '<h3>Detail Info</h3>',
+        'size' => 'modal-lg',
+    ]);
+    yii\bootstrap\Modal::end();
 ?>

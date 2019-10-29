@@ -21,6 +21,7 @@ $this->registerCss("
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
     body, .content-wrapper {background-color: #000;}
     .temp-widget {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
+    .temp-widget-refrigerator {border-radius: 15px 15px 0px 0px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
     #main-body {overflow: auto;}
     #custom-title {position: absolute; top: 40px; left: 40px; font-size: 1.5em; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: rgba(0, 255, 0, 0.4);}
 ");
@@ -74,18 +75,23 @@ echo '</pre>';*/
             //$params_val = $value->temparature . '&deg;';
             $params_val = $value->temparature;
             if ($params_val < $value->temp_min || $params_val > $value->temp_max) {
-                //$temp_class = ' bg-red-active';
+                $temp_class = ' bg-red-active';
             }
         } elseif ($category == 2) {
             //$params_val = $value->humidity . '<small>%</small>';
             $params_val = $value->humidity;
             if ($params_val < $value->humi_min || $params_val > $value->humi_max) {
-                //$temp_class = ' bg-red-active';
+                $temp_class = ' bg-red-active';
             }
         }
 
-        $content = '<div class="temp-widget text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . $params_val . '</div></div>';
-        echo Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+        $widget_class = 'temp-widget';
+        if ($value->is_refrigerator == 1) {
+            $widget_class = 'temp-widget-refrigerator';
+        }
+
+        $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . $params_val . '</div></div>';
+        echo $params_val == null ? '' : Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
     }
     ?>
     <div id="custom-title" class="text-center"><?= $custom_title; ?></div>

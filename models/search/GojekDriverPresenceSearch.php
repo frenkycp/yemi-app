@@ -41,7 +41,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = GojekTbl::find();
+$query = GojekTbl::find()->where(['<>', 'HADIR', 'M']);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
