@@ -28,6 +28,7 @@ use Yii;
  * @property string $plan_stats
  * @property string $plan_run
  * @property string $jenis_mesin
+ * @property string $minor
  * @property string $aliasModel
  */
 abstract class WwStockWaitingProcess02Open extends \yii\db\ActiveRecord
@@ -61,7 +62,7 @@ abstract class WwStockWaitingProcess02Open extends \yii\db\ActiveRecord
             [['lot_qty', 'days_waiting', 'hours_waiting'], 'number'],
             [['start_date', 'end_date', 'next_process_date'], 'safe'],
             [['total_next_process'], 'integer'],
-            [['mesin_id', 'kelompok', 'lot_number', 'model_group', 'gmc_desc', 'jenis_mesin'], 'string', 'max' => 50],
+            [['mesin_id', 'kelompok', 'lot_number', 'model_group', 'gmc_desc', 'jenis_mesin', 'minor'], 'string', 'max' => 50],
             [['mesin_description'], 'string', 'max' => 100],
             [['parent'], 'string', 'max' => 20],
             [['parent_desc'], 'string', 'max' => 250],
@@ -95,6 +96,7 @@ abstract class WwStockWaitingProcess02Open extends \yii\db\ActiveRecord
             'plan_stats' => 'Plan Stats',
             'plan_run' => 'Plan Run',
             'jenis_mesin' => 'Jenis Mesin',
+            'minor' => 'Minor',
         ];
     }
 

@@ -94,11 +94,16 @@ class DisplayController extends Controller
         <div class="modal-body">
         ';
 
+        $start_time = '-';
+        if ($beacon_data->start_date != null) {
+            $start_time = date('d M\' Y H:i', strtotime($beacon_data->start_date));
+        }
+
         $data .= '<dl class="dl-horizontal">
             <dt>Lot Number : </dt>
             <dd>' . $beacon_data->lot_number . '</dd>
-            <dt>Start Time : </dt>
-            <dd>' . $beacon_data->current_machine_start . '</dd>
+            <dt>Start Time (First Process) : </dt>
+            <dd>' . $start_time . '</dd>
             <dt>Model : </dt>
             <dd>' . $beacon_data->model_group . '</dd>
             <dt>Part Number : </dt>
@@ -201,7 +206,7 @@ class DisplayController extends Controller
         ]);
     }
 
-    public function actionLotWaitingDetail($lot_number, $jenis_mesin, $start_date, $end_date, $model_group, $parent_desc, $gmc, $gmc_desc, $mesin_id, $mesin_description)
+    public function actionLotWaitingDetail($lot_number, $jenis_mesin, $start_date, $end_date, $model_group, $parent_desc, $gmc, $gmc_desc, $mesin_id, $mesin_description, $minor)
     {
         date_default_timezone_set('Asia/Jakarta');
         $lot_flow_link = Html::a($lot_number, ['machine-iot-output-hdr/detail', 'lot_number' => $lot_number]);
@@ -216,6 +221,7 @@ class DisplayController extends Controller
         $remark .= '<tr>
             <th class="text-center" style="width: 90px;">Start Time</th>
             <th class="text-center" style="width: 90px;">End Time</th>
+            <th class="text-center" style="width: 90px;">Beacon ID</th>
             <th class="text-center">Part No.</th>
             <th>Part Name</th>
             <th class="text-center">Parent</th>
@@ -225,6 +231,7 @@ class DisplayController extends Controller
         $remark .= '<tr>
             <td class="text-center">' . date('Y-m-d H:i', strtotime($start_date)) . '</td>
             <td class="text-center">' . date('Y-m-d H:i', strtotime($end_date)) . '</td>
+            <td class="text-center">' . $minor . '</td>
             <td class="text-center">' . $gmc . '</td>
             <td>' . $gmc_desc . '</td>
             <td class="text-center">' . $parent_desc . '</td>
@@ -282,6 +289,7 @@ class DisplayController extends Controller
                     'gmc_desc' => $value->gmc_desc,
                     'mesin_id' => $value->mesin_id,
                     'mesin_description' => $value->mesin_description,
+                    'minor' => $value->minor,
                 ]),
             ];
         }
