@@ -35,23 +35,6 @@ $this->registerCss("
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
-
-    #progress-tbl{
-        //border:1px solid #29B6F6;
-        border-top: 0;
-    }
-    th{
-        vertical-align: middle !important;
-        font-weight: normal;
-    }
-    #progress-tbl > tbody > tr > td{
-        border:1px solid #777474;
-        font-size: 28px;
-        //background-color: #B3E5FC;
-        //font-weight: 1000;
-        color: #FFF;
-        vertical-align: middle;
-    }
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -97,6 +80,7 @@ $this->registerJs($script, View::POS_HEAD );
             <thead>
                 <tr class="bg-light-blue">
                     <th rowspan="2" class="text-center">No.</th>
+                    <th rowspan="2" class="text-center">Location</th>
                     <th rowspan="2" class="text-center">Area</th>
                     <th colspan="3" class="text-center">Temperature (&deg;C)</th>
                     <th colspan="3" class="text-center">Humidity (%)</th>
@@ -128,9 +112,14 @@ $this->registerJs($script, View::POS_HEAD );
                             $txt_humi_class = ' text-red';
                         }
                     }
+                    $priority_style = 'font-size: 0.9em;';
+                    if ($value['priority_no'] == 1) {
+                    	$priority_style = 'font-weight: bold; font-size: 1.2em; font-style: italic;';
+                    }
                     ?>
-                    <tr class="<?= $temp_class; ?>">
+                    <tr class="<?= $temp_class; ?>" style="<?= $priority_style; ?>">
                         <td class="text-center"><?= $no++; ?></td>
+                        <td><?= $value['location']; ?></td>
                         <td><?= $value['area']; ?></td>
                         <td class="text-center"><?= $value['temp_min'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['temp_min']); ?></td>
                         <td class="text-center"><?= $value['temp_max'] == null ? '<em style="color: silver;" class="">(Not Set)</em>' : number_format($value['temp_max']); ?></td>

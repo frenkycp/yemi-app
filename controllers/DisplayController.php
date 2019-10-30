@@ -204,7 +204,7 @@ class DisplayController extends Controller
         $data = SensorTbl::find()->where([
             'factory' => $model->factory,
             'is_showing' => 1
-        ])->orderBy('area')->asArray()->all();
+        ])->orderBy('priority_no, area')->asArray()->all();
 
         return $this->render('sensor-tbl-display', [
             'model' => $model,

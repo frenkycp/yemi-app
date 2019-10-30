@@ -63,7 +63,7 @@ $this->registerJs("$(function() {
     });
 });");
 ?>
-
+<span style="color: white; font-size: 1.5em;">Last Update : <?= date('Y-m-d H:i:s'); ?></span>
 <div class="row" id="beacon-container">
     <?php
     foreach ($loc_arr as $key => $loc) {
