@@ -173,13 +173,19 @@ class DisplayController extends Controller
 
         $tmp_beacon = BeaconTbl::find()
         ->where('lot_number IS NOT NULL')
-        ->orderBy('lot_number')
+        ->orderBy('lot_qty DESC')
+        ->asArray()
+        ->all();
+
+        $beacon_data = BeaconTbl::find()
+        ->orderBy('minor')
         ->asArray()
         ->all();
 
         return $this->render('ww-beacon-loc', [
             'data' => $tmp_beacon,
             'loc_arr' => $loc_arr,
+            'beacon_data' => $beacon_data,
         ]);
     }
 

@@ -18,7 +18,7 @@ $this->title = [
 
 $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
-    .form-control, .control-label {background-color: #000; color: white; border-color: white;}
+    //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}
     //.box-body {background-color: #000;}
@@ -35,6 +35,11 @@ $this->registerCss("
 ");
 
 date_default_timezone_set('Asia/Jakarta');
+
+$this->registerCssFile('@web/css/dataTables.bootstrap.css');
+$this->registerJsFile('@web/js/jquery.dataTables.min.js');
+$this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
+
 
 $script = "
     window.onload = setupRefresh;
@@ -53,44 +58,106 @@ $this->registerJs("$(function() {
      e.preventDefault();
      $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
+   $('#myTable').DataTable({
+        'pageLength': 5
+    });
 });");
 ?>
 
-<?php
-foreach ($loc_arr as $key => $loc) {
-    ?>
-    <div class="col-md-3">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title"><?= $loc; ?></h3>
-            </div>
-            <div class="panel-body" style="min-height: 600px;">
-                <?php
-                foreach ($data as $key => $value_beacon) {
-                    if ($value_beacon['lokasi'] == $loc) {
-                        //$date1 = new \DateTime();
-                        $time_second = strtotime(date('Y-m-d H:i:s'));
-                        $time_first = strtotime($value_beacon['start_date']);
-                        $diff_seconds = $time_second - $time_first;
-                        $diff_hours = round(($diff_seconds / 3600), 1);
-                        $txt_class = ' text-green';
-                        $start_time = '-';
-                        if ($value_beacon['start_date'] != null) {
-                            $start_time = date('d M\' Y H:i', strtotime($value_beacon['start_date']));
+<div class="row" id="beacon-container">
+    <?php
+    foreach ($loc_arr as $key => $loc) {
+        $total_qty = 0;
+        $total_lot = 0;
+        foreach ($data as $key => $value_beacon) {
+            if ($value_beacon['lokasi'] == $loc) {
+                $total_qty += $value_beacon['lot_qty'];
+                $total_lot++;
+            }
+        }
+        ?>
+        <div class="col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><?= $loc; ?></h3>
+                </div>
+                <div class="panel-body" style="min-height: 300px;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span style="font-size: 1.2em;">Total Lot : <b><?= number_format($total_lot); ?></b></span>
+                        </div>
+                        <div class="col-md-6">
+                            <span style="font-size: 1.2em;">Total Qty : <b><?= number_format($total_qty); ?></b></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <?php
+                    
+                    foreach ($data as $key => $value_beacon) {
+                        if ($value_beacon['lokasi'] == $loc) {
+                            //$date1 = new \DateTime();
+                            $time_second = strtotime(date('Y-m-d H:i:s'));
+                            $time_first = strtotime($value_beacon['start_date']);
+                            $diff_seconds = $time_second - $time_first;
+                            $diff_hours = round(($diff_seconds / 3600), 1);
+                            $txt_class = ' text-green';
+                            $start_time = '-';
+                            if ($value_beacon['start_date'] != null) {
+                                $start_time = date('d M\' Y H:i', strtotime($value_beacon['start_date']));
+                            }
+                            if ($diff_hours > 24) {
+                                $txt_class = ' text-red';
+                            }
+                            echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['get-beacon-detail', 'minor' => $value_beacon['minor']], ['class' => 'popup_btn']);
+                            
                         }
-                        if ($diff_hours > 24) {
-                            $txt_class = ' text-red';
-                        }
-                        echo Html::a('<i style="font-size: 3em; padding: 5px 15px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['get-beacon-detail', 'minor' => $value_beacon['minor']], ['class' => 'popup_btn']);
-                        echo '';
                     }
-                }
-                ?>
+                    ?>
+                </div>
             </div>
         </div>
+    <?php }
+    ?>
+</div>
+
+<div class="panel panel-info">
+    <div class="panel-heading">
+        <h3 class="panel-title">Beacon Status Information</h3>
     </div>
-<?php }
-?>
+    <div class="panel-body">
+        <table id="myTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Beacon ID</th>
+                    <th>Location</th>
+                    <th>Lot Number</th>
+                    <th>Model</th>
+                    <th>Part Number</th>
+                    <th>Part Name</th>
+                    <th>Lot Qty</th>
+                    <th>Last Machine</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($beacon_data as $key => $value_beacon) {
+                    ?>
+                    <tr>
+                        <td><?= $value_beacon['minor']; ?></td>
+                        <td><?= $value_beacon['lokasi']; ?></td>
+                        <td><?= $value_beacon['lot_number']; ?></td>
+                        <td><?= $value_beacon['model_group']; ?></td>
+                        <td><?= $value_beacon['gmc']; ?></td>
+                        <td><?= $value_beacon['gmc_desc']; ?></td>
+                        <td><?= $value_beacon['lot_qty'] == null ? '' : number_format($value_beacon['lot_qty']); ?></td>
+                        <td><?= $value_beacon['mesin_id'] == null ? '' : $value_beacon['mesin_id'] . ' - ' . $value_beacon['mesin_description']; ?></td>
+                    </tr>
+                <?php }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>
 
 <?php
     yii\bootstrap\Modal::begin([
