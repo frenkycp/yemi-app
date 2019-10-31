@@ -15,7 +15,7 @@ use Yii;
  * @property integer $so
  * @property string $stc
  * @property string $dst
- * @property integer $num
+ * @property string $num
  * @property string $gmc
  * @property integer $qty
  * @property integer $output
@@ -31,6 +31,7 @@ use Yii;
  * @property integer $m3
  * @property integer $back_order
  * @property string $etd_old
+ * @property integer $cntr_old
  * @property string $aliasModel
  */
 abstract class SernoOutput extends \yii\db\ActiveRecord
@@ -60,15 +61,10 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pk', 'uniq', 'stc', 'dst', 'gmc', 'vms', 'etd', 'ship'], 'required'],
-            [['id', 'so', 'num', 'qty', 'output', 'adv', 'cntr', 'm3', 'back_order'], 'integer'],
+            [['pk'], 'required'],
+            [['id', 'so', 'qty', 'output', 'adv', 'cntr', 'm3', 'back_order', 'cntr_old'], 'integer'],
             [['vms', 'etd', 'ship'], 'safe'],
-            [['pk'], 'string', 'max' => 35],
-            [['uniq'], 'string', 'max' => 25],
-            [['stc', 'gmc'], 'string', 'max' => 7],
-            [['dst', 'remark'], 'string', 'max' => 50],
-            [['category', 'etd_old'], 'string', 'max' => 10],
-            [['invo', 'cont'], 'string', 'max' => 30],
+            [['pk', 'uniq', 'stc', 'dst', 'num', 'gmc', 'category', 'remark', 'invo', 'cont', 'etd_old'], 'string', 'max' => 255],
             [['pk'], 'unique']
         ];
     }
@@ -101,6 +97,7 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'm3' => 'M3',
             'back_order' => 'Back Order',
             'etd_old' => 'Etd Old',
+            'cntr_old' => 'Cntr Old',
         ];
     }
 
