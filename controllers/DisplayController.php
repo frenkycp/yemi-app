@@ -83,41 +83,14 @@ use app\models\WipEffTbl;
 
 class DisplayController extends Controller
 {
-    public function actionGetBeaconDetail($minor = '')
+    public function actionWwBeaconShipping($minor = '')
     {
+        $this->layout = 'clean';
         $beacon_data = BeaconTbl::find()->where(['minor' => $minor])->one();
-
-        $data = '<div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>Beacon ID : ' . $minor . '</h3>
-        </div>
-        <div class="modal-body">
-        ';
-
         $start_time = '-';
         if ($beacon_data->start_date != null) {
             $start_time = date('d M\' Y H:i', strtotime($beacon_data->start_date));
         }
-
-        $data .= '<dl class="dl-horizontal">
-            <dt>Lot Number : </dt>
-            <dd>' . $beacon_data->lot_number . '</dd>
-            <dt>Start Time (First Process) : </dt>
-            <dd>' . $start_time . '</dd>
-            <dt>Model : </dt>
-            <dd>' . $beacon_data->model_group . '</dd>
-            <dt>Part Number : </dt>
-            <dd>' . $beacon_data->gmc . '</dd>
-            <dt>Part Name : </dt>
-            <dd>' . $beacon_data->gmc_desc . '</dd>
-            <dt>Qty : </dt>
-            <dd>' . $beacon_data->lot_qty . '</dd>
-            <dt>Machine ID : </dt>
-            <dd>' . $beacon_data->mesin_id . '</dd>
-            <dt>Machine Desc. : </dt>
-            <dd>' . $beacon_data->mesin_description . '</dd>
-
-        </dl>';
 
         $lot_data = WipEffTbl::find()
         ->where([
@@ -138,25 +111,195 @@ class DisplayController extends Controller
             $lot_data->slip_id_10
         ];
 
-        $no = 1;
-        $data .= '<table class="table table-bordered table-striped table-hover">';
-        $data .= 
-        '<thead><tr>
-            <th width="5%" class="text-center">No.</th>
-            <th>Slip Num.</th>
-        </tr></thead>'
-        ;
-        $data .= '<tbody>';
+        sort($slip_id_arr);
+
+        $slip_no_txt = '';
+        $slip_no_qty = $lot_data->slip_count;
+        $hdr_id_arr = [];
+        $tmp_slip_id = [];
         foreach ($slip_id_arr as $key => $value) {
             if ($value != null) {
-                $data .= '<tr>
-                    <td class="text-center">' . $no++ . '</td>
-                    <td>' . $value . '</td>
-                </tr>';
+                $tmp_slip_id[] = $value;
+                if ($slip_no_txt == '') {
+                    $slip_no_txt .= $value;
+                } else {
+                    $slip_no_txt .= ', ' . $value;
+                }
             }
         }
-        $data .= '</tbody>';
-        $data .= '</table>';
+
+        $tmp_hdr_dtr = WipHdrDtr::find()
+        ->select('hdr_id')
+        ->where([
+            'child_analyst' => 'WW02',
+            'slip_id' => $tmp_slip_id
+        ])
+        ->groupBy('hdr_id')
+        ->all();
+
+        foreach ($tmp_hdr_dtr as $key => $value) {
+            $hdr_id_arr[] = $value['hdr_id'];
+        }
+
+        $serno_output_data = SernoOutput::find()
+        ->where([
+            'num' => $hdr_id_arr
+        ])
+        ->orderBy('etd')
+        ->all();
+
+        return $this->render('ww-beacon-shipping', [
+            'beacon_data' => $beacon_data,
+            'start_time' => $start_time,
+            'slip_no_txt' => $slip_no_txt,
+            'slip_no_qty' => $slip_no_qty,
+            'serno_output_data' => $serno_output_data,
+        ]);
+    }
+
+    public function actionGetBeaconDetail($minor = '')
+    {
+        $beacon_data = BeaconTbl::find()->where(['minor' => $minor])->one();
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Beacon ID : ' . $minor . '</h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $start_time = '-';
+        if ($beacon_data->start_date != null) {
+            $start_time = date('d M\' Y H:i', strtotime($beacon_data->start_date));
+        }
+
+        $lot_data = WipEffTbl::find()
+        ->where([
+            'lot_id' => $beacon_data->lot_number,
+        ])
+        ->one();
+
+        $slip_id_arr = [
+            $lot_data->slip_id_01,
+            $lot_data->slip_id_02,
+            $lot_data->slip_id_03,
+            $lot_data->slip_id_04,
+            $lot_data->slip_id_05,
+            $lot_data->slip_id_06,
+            $lot_data->slip_id_07,
+            $lot_data->slip_id_08,
+            $lot_data->slip_id_09,
+            $lot_data->slip_id_10
+        ];
+
+        sort($slip_id_arr);
+
+        $slip_no_txt = '';
+        $slip_no_qty = $lot_data->slip_count;
+        $hdr_id_arr = [];
+        $tmp_slip_id = [];
+        foreach ($slip_id_arr as $key => $value) {
+            if ($value != null) {
+                $tmp_slip_id[] = $value;
+                if ($slip_no_txt == '') {
+                    $slip_no_txt .= $value;
+                } else {
+                    $slip_no_txt .= ', ' . $value;
+                }
+            }
+        }
+
+        $tmp_hdr_dtr = WipHdrDtr::find()
+        ->select('hdr_id')
+        ->where([
+            'child_analyst' => 'WW02',
+            'slip_id' => $tmp_slip_id
+        ])
+        ->groupBy('hdr_id')
+        ->all();
+
+        foreach ($tmp_hdr_dtr as $key => $value) {
+            $hdr_id_arr[] = $value['hdr_id'];
+        }
+
+        $tmp_serno_output = SernoOutput::find()
+        ->where([
+            'num' => $hdr_id_arr
+        ])
+        ->orderBy('etd')
+        ->asArray()
+        ->all();
+
+        $data .= '<dl class="dl-horizontal">
+            <dt>Lot Number : </dt>
+            <dd>' . $beacon_data->lot_number . '</dd>
+            <dt>Start Time (First Process) : </dt>
+            <dd>' . $start_time . '</dd>
+            <dt>Model : </dt>
+            <dd>' . $beacon_data->model_group . '</dd>
+            <dt>Part Number : </dt>
+            <dd>' . $beacon_data->gmc . '</dd>
+            <dt>Part Name : </dt>
+            <dd>' . $beacon_data->gmc_desc . '</dd>
+            <dt>Qty : </dt>
+            <dd>' . $beacon_data->lot_qty . '</dd>
+            <dt>Machine ID : </dt>
+            <dd>' . $beacon_data->mesin_id . '</dd>
+            <dt>Machine Desc. : </dt>
+            <dd>' . $beacon_data->mesin_description . '</dd>
+            <dt>Slip Number (' . $slip_no_qty . ') : </dt>
+            <dd>' . $slip_no_txt . '</dd>
+        </dl>';
+
+        $data .= '<table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">ETD</th>
+                    <th>Port</th>
+                    <th class="text-center">Container No.</th>
+                    <th class="text-center">GMC</th>
+                    <th class="text-center">Plan Qty</th>
+                    <th class="text-center">Actual Qty</th>
+                    <th class="text-center">Balance Qty</th>
+                </tr>
+            </thead>
+            <tbody>';
+
+        $total_qty = $total_output = $total_balance = 0;
+        if (count($tmp_serno_output) > 0) {
+            
+            foreach ($tmp_serno_output as $key => $value) {
+                $balance = $value['output'] - $value['qty'];
+                $total_qty += $value['qty'];
+                $total_output += $value['output'];
+                $total_balance += $balance;
+                $data .= '<tr>
+                    <td class="text-center">' . $value['etd'] . '</td>
+                    <td>' . $value['dst'] . '</td>
+                    <td class="text-center">' . $value['cntr'] . '</td>
+                    <td class="text-center">' . $value['gmc'] . '</td>
+                    <td class="text-center">' . $value['qty'] . '</td>
+                    <td class="text-center">' . $value['output'] . '</td>
+                    <td class="text-center">' . $balance . '</td>
+                </tr>';
+            }
+        } else {
+            $data .= '<tr>
+                <td colspan="7">No shipping data connection ...</td>
+            </tr>';
+        }
+        
+
+        $data .= '</tbody>
+            <tfoot>
+                <tr class="info" style="font-weight: bold;">
+                    <td colspan="4" class="text-right">Total</td>
+                    <td class="text-center">' . $total_qty . '</td>
+                    <td class="text-center">' . $total_output . '</td>
+                    <td class="text-center">' . $total_balance . '</td>
+                </tr>
+            </tfoot>
+        </table>';
 
         return $data;
     }

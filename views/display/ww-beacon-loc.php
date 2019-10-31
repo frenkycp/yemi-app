@@ -66,6 +66,12 @@ $this->registerJs("$(function() {
 <span style="color: white; font-size: 1.5em;">Last Update : <?= date('Y-m-d H:i:s'); ?></span>
 <div class="row" id="beacon-container">
     <?php
+    $loc_title_arr = [
+        'PILAR-16I' => 'PILAR-16I (Running Saw, Edge Bander, NCB, Panel Saw)',
+        'PILAR-12I' => 'PILAR-12I (DET 3)',
+        'PILAR-10I' => 'PILAR-12I (DET 3)',
+        'PILAR-6I' => 'PILAR-12I (HVC 3, NCR 6, NCR 7)',
+    ];
     foreach ($loc_arr as $key => $loc) {
         $total_qty = 0;
         $total_lot = 0;
@@ -79,7 +85,7 @@ $this->registerJs("$(function() {
         <div class="col-md-3">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><?= $loc; ?></h3>
+                    <h3 class="panel-title"><?= $loc_title_arr[$loc]; ?></h3>
                 </div>
                 <div class="panel-body" style="min-height: 300px;">
                     <div class="row">
