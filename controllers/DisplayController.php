@@ -133,6 +133,7 @@ class DisplayController extends Controller
             'child_analyst' => 'WW02',
             'slip_id' => $tmp_slip_id
         ])
+        ->asArray()
         ->all();
 
         $tmp_hdr_dtr_txt = '';
@@ -147,7 +148,10 @@ class DisplayController extends Controller
             } else {
                 $tmp_hdr_dtr_txt .= ', ' . $value['hdr_id'];
             }
-            $tmp_fa_date[] = $value['source_date'];
+            if ($value['stat'] == 'O') {
+                $tmp_fa_date[] = $value['source_date'];
+            }
+            
         }
 
         $serno_output_data = SernoOutput::find()
@@ -162,7 +166,10 @@ class DisplayController extends Controller
 
         $tmp_first_date = [];
         foreach ($serno_output_data as $key => $value) {
-            $tmp_first_date[] = $value->etd;
+            if ($value->qty != $value->output) {
+                $tmp_first_date[] = $value->etd;
+            }
+            
         }
         sort($tmp_first_date);
         $nearest_shipping_date = '-';
@@ -197,6 +204,8 @@ class DisplayController extends Controller
             }
         }
 
+        $lt_current = (new \DateTime(date('Y-m-d', strtotime($datetime1))))->diff(new \DateTime(date('Y-m-d')))->days;;
+
         return $this->render('ww-beacon-shipping', [
             'beacon_data' => $beacon_data,
             'start_time' => $start_time,
@@ -208,6 +217,7 @@ class DisplayController extends Controller
             'nearest_fa_date' => $nearest_fa_date,
             'lt_to_shipping' => $lt_to_shipping,
             'lt_to_fa' => $lt_to_fa,
+            'lt_current' => $lt_current,
         ]);
     }
 

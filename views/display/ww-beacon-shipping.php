@@ -75,6 +75,8 @@ date_default_timezone_set('Asia/Jakarta');
                     <dd><?= $lt_to_shipping; ?></dd>
                     <dt>Lead Time to FA Start :</dt>
                     <dd><?= $lt_to_fa; ?></dd>
+                    <dt>Lead Time Current :</dt>
+                    <dd><?= $lt_current; ?></dd>
                 </dl>
             </div>
         </div>
