@@ -34,13 +34,19 @@ class WeeklySummaryView extends BaseWeeklySummaryView
 
     public function getWeekStartDate()
     {
-        $calendar = SernoCalendar::find()->where(['week_ship' => $this->week])->orderBy('ship ASC')->one();
+        $calendar = SernoCalendar::find()->where([
+            'week_ship' => $this->week_no,
+        ])
+        ->andWhere(['>', 'ship', date('Y-m-d', strtotime($this->getWeekEndDate() . ' -1 month'))])
+        ->orderBy('ship ASC')->one();
         return $calendar->ship;
     }
 
     public function getWeekEndDate()
     {
-        $calendar = SernoCalendar::find()->where(['week_ship' => $this->week])->orderBy('ship DESC')->one();
+        $calendar = SernoCalendar::find()->where([
+            'week_ship' => $this->week_no,
+        ])->orderBy('ship DESC')->one();
         return $calendar->ship;
     }
 
@@ -75,7 +81,7 @@ class WeeklySummaryView extends BaseWeeklySummaryView
             'total' => 'COUNT(*)'
         ])
         ->where([
-            'WEEK(tb_serno_output.ship,4)' => $this->week,
+            'WEEK(tb_serno_output.ship,4)' => $this->week_no,
         ])
         ->andWhere('tb_serno_input.proddate > tb_serno_output.etd')
         ->one();

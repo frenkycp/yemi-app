@@ -89,15 +89,9 @@ $columns = [
                 ];
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
             }, 'update' => function($url, $model, $key){
-                $tmp_data = app\models\WeeklyPlan::find()
-                ->where([
-                    'period' => $model->period,
-                    'week' => $model->week
-                ])
-                ->one();
-                $url = ['update', 'id' => $tmp_data->id];
+                $url = ['update', 'period' => $model->period, 'week_no' => $model->week_no];
                 $options = [
-                    'title' => 'Edit Cause & Countermeasure',
+                    'title' => 'Add/Edit',
                     'data-pjax' => '0',
                 ];
                 return Html::a('<i class="fa fa-fw fa-edit"></i>', $url, $options);
@@ -125,12 +119,27 @@ $columns = [
             'style' => 'text-align: center;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'week',
         'value' => function($model)
         {
             $week = $model->week;
             return '<b>Week-' . $week;
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],*/
+    [
+        'attribute' => 'week_no',
+        'value' => function($model)
+        {
+            $week_no = $model->week_no;
+            return '<b>Week-' . $week_no;
         },
         'format' => 'raw',
         'hAlign' => 'center',
@@ -145,7 +154,7 @@ $columns = [
         'label' => 'ETD - SUB',
         'value' => function($model)
         {
-            $week = $model->week;
+            //$week = $model->week;
             $start_date = date('d M Y', strtotime($model->weekStartDate));
             $end_date = date('d M Y', strtotime($model->weekEndDate));
             return $start_date . ' - ' . $end_date;
@@ -217,6 +226,9 @@ $columns = [
         'hAlign' => 'center',
         'label' => 'On-Time<br/>Completion',
         'value' => function($model){
+            if ($model->on_time_completion == null) {
+                return '-';
+            }
             return $model->on_time_completion . '%';
         },
         'encodeLabel' => false,
@@ -279,7 +291,7 @@ $columns = [
             if ($model->remark != null) {
                 return '<abbr class="text-danger" title="' . $model->remark . '">' . $model->getWeekPercentageExport() . '</abbr>';
             }
-            return $model->getWeekPercentageExport();
+            return '-';
         },
         'format' => 'raw',
         'label' => 'Completion<br/>Export',
@@ -318,7 +330,7 @@ $columns = [
             'pjax' => true, // pjax is set to always true for this demo
             'showPageSummary' => true,
             'toolbar' =>  [
-                Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
+                //Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
                 '{export}',
                 '{toggleData}',
             ],

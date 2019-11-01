@@ -91,7 +91,7 @@ return $this->render('create', ['model' => $model]);
 * @param integer $id
 * @return mixed
 */
-public function actionUpdate($id)
+/*public function actionUpdate($id)
 {
 $model = $this->findModel($id);
 
@@ -102,7 +102,7 @@ return $this->render('update', [
 'model' => $model,
 ]);
 }
-}
+}*/
 
 /**
 * Deletes an existing WeeklyPlan model.

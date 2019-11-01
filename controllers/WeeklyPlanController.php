@@ -71,9 +71,22 @@ class WeeklyPlanController extends \app\controllers\base\WeeklyPlanController
 		return $this->render('create', ['model' => $model]);
 	}
 
-	public function actionUpdate($id)
+	public function actionUpdate($period, $week_no)
 	{
-		$model = $this->findModel($id);
+		$model = WeeklyPlan::find()
+		->where([
+			'period' => $period,
+			'week' => $week_no
+		])
+		->one();
+
+		if ($model->id == null) {
+			$model = new WeeklyPlan;
+			$model->category = 'ETD_YEMI';
+			$model->period = $period;
+			$model->week = $week_no;
+			$model->plan_export = $model->actual_export = 0;
+		}
 
 		if ($model->load($_POST)) {
 			$balance_export = (int)$model->actual_export - (int)$model->plan_export;

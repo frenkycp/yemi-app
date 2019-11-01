@@ -18,7 +18,7 @@ class WeeklyPlanSearch extends WeeklySummaryView
 public function rules()
 {
 return [
-[['week', 'plan_qty', 'actual_qty', 'balance_qty', 'flag'], 'integer'],
+[['week', 'week_no', 'plan_qty', 'actual_qty', 'balance_qty', 'flag'], 'integer'],
             [['category', 'period'], 'safe'],
 ];
 }
@@ -48,7 +48,7 @@ $dataProvider = new ActiveDataProvider([
     'sort' => [
         'defaultOrder' => [
             'period' => SORT_DESC,
-            'week' => SORT_DESC
+            'week_no' => SORT_DESC
         ],
     ]
 ]);
@@ -63,6 +63,7 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'week' => $this->week,
+            'week_no' => $this->week_no,
             'plan_qty' => $this->plan_qty,
             'actual_qty' => $this->actual_qty,
             'balance_qty' => $this->balance_qty,

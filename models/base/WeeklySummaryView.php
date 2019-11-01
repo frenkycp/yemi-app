@@ -11,6 +11,7 @@ use Yii;
  *
  * @property integer $period
  * @property integer $week
+ * @property integer $week_no
  * @property string $category
  * @property string $plan_qty
  * @property string $actual_qty
@@ -51,7 +52,7 @@ abstract class WeeklySummaryView extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'week', 'plan_export', 'actual_export', 'balance_export', 'flag'], 'integer'],
+            [['period', 'week', 'week_no', 'plan_export', 'actual_export', 'balance_export', 'flag'], 'integer'],
             [['plan_qty', 'actual_qty', 'balance_qty', 'total_delay', 'on_time_completion'], 'number'],
             [['remark'], 'string'],
             [['category'], 'string', 'max' => 20]
@@ -66,6 +67,7 @@ abstract class WeeklySummaryView extends \yii\db\ActiveRecord
         return [
             'period' => 'Period',
             'week' => 'Week',
+            'week_no' => 'Week No',
             'category' => 'Category',
             'plan_qty' => 'Plan Qty',
             'actual_qty' => 'Actual Qty',

@@ -36,22 +36,22 @@ use yii\helpers\StringHelper;
     <div class="panel panel-primary">
         <div class="panel-body">
 
-            <?= $form->field($model, 'period')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'period')->textInput(['maxlength' => true, 'readonly' => true]) ?>
 
-            <?= $form->field($model, 'week')->textInput() ?>
+            <?= $form->field($model, 'week')->textInput(['maxlength' => true, 'readonly' => true]) ?>
 
-            <?= $form->field($model, 'plan_export')->textInput() ?>
+            <?= $form->field($model, 'plan_export')->textInput(['type' => 'number']) ?>
 
-            <?= $form->field($model, 'actual_export')->textInput() ?>
+            <?= $form->field($model, 'actual_export')->textInput(['type' => 'number']) ?>
 
             <?= $form->field($model, 'remark')->textArea(['rows' => 3]) ?>
 
-            <?= $form->field($model, 'category')->hiddenInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'category')->hiddenInput(['maxlength' => true])->label(false) ?>
 
             <?php echo $form->errorSummary($model); ?>
         </div>
         <div class="panel-footer">
-            <?= Html::submitButton('<span class="glyphicon glyphicon-check"></span> ' . ($model->isNewRecord ? 'Create' : 'Save'),
+            <?= Html::submitButton('<span class="glyphicon glyphicon-check"></span> Submit',
             [
             'id' => 'save-' . $model->formName(),
             'class' => 'btn btn-success'
