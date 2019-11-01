@@ -98,27 +98,68 @@ $this->registerJs("$(function() {
                     </div>
                     <hr>
                     <?php
-                    
-                    foreach ($data as $key => $value_beacon) {
-                        if ($value_beacon['lokasi'] == $loc) {
-                            //$date1 = new \DateTime();
-                            $time_second = strtotime(date('Y-m-d H:i:s'));
-                            $time_first = strtotime($value_beacon['start_date']);
-                            $diff_seconds = $time_second - $time_first;
-                            $diff_hours = round(($diff_seconds / 3600), 1);
-                            $txt_class = ' text-green';
-                            $start_time = '-';
-                            if ($value_beacon['start_date'] != null) {
-                                $start_time = date('d M\' Y H:i', strtotime($value_beacon['start_date']));
+
+                    if (true) {
+                        foreach ($kelompok_machine as $key => $kelompok_data) {
+                            ?>
+                            <div class="panel panel-warning">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><?= $kelompok_data->kelompok; ?></h3>
+                                </div>
+                                <div class="panel-body">
+                                    <?php
+                                    foreach ($data as $key => $value_beacon) {
+                                        if ($value_beacon['lokasi'] == $loc && $value_beacon['kelompok'] == $kelompok_data->kelompok) {
+
+                                            
+                                            //$date1 = new \DateTime();
+                                            $time_second = strtotime(date('Y-m-d H:i:s'));
+                                            $time_first = strtotime($value_beacon['start_date']);
+                                            $diff_seconds = $time_second - $time_first;
+                                            $diff_hours = round(($diff_seconds / 3600), 1);
+                                            $txt_class = ' btn-success';
+                                            $start_time = '-';
+                                            if ($value_beacon['start_date'] != null) {
+                                                $start_time = date('d M\' Y H:i', strtotime($value_beacon['start_date']));
+                                            }
+                                            if ($diff_hours > 24) {
+                                                $txt_class = ' btn-danger';
+                                            }
+                                            //echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['get-beacon-detail', 'minor' => $value_beacon['minor']], ['class' => 'popup_btn']);
+                                            echo Html::a('<span style="font-size: 1.1em; margin: 3px 3px;" class="btn btn-xs' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '">' . $value_beacon['minor'] . '</span>', ['ww-beacon-shipping', 'minor' => $value_beacon['minor']], ['class' => '', 'target' => '_blank']);
+                                            
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        <?php }
+                    } else {
+                        foreach ($data as $key => $value_beacon) {
+                            if ($value_beacon['lokasi'] == $loc) {
+
+                                
+                                //$date1 = new \DateTime();
+                                $time_second = strtotime(date('Y-m-d H:i:s'));
+                                $time_first = strtotime($value_beacon['start_date']);
+                                $diff_seconds = $time_second - $time_first;
+                                $diff_hours = round(($diff_seconds / 3600), 1);
+                                $txt_class = ' text-green';
+                                $start_time = '-';
+                                if ($value_beacon['start_date'] != null) {
+                                    $start_time = date('d M\' Y H:i', strtotime($value_beacon['start_date']));
+                                }
+                                if ($diff_hours > 24) {
+                                    $txt_class = ' text-red';
+                                }
+                                //echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['get-beacon-detail', 'minor' => $value_beacon['minor']], ['class' => 'popup_btn']);
+                                echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['ww-beacon-shipping', 'minor' => $value_beacon['minor']], ['class' => '', 'target' => '_blank']);
+                                
                             }
-                            if ($diff_hours > 24) {
-                                $txt_class = ' text-red';
-                            }
-                            //echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['get-beacon-detail', 'minor' => $value_beacon['minor']], ['class' => 'popup_btn']);
-                            echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['ww-beacon-shipping', 'minor' => $value_beacon['minor']], ['class' => '', 'target' => '_blank']);
-                            
                         }
                     }
+                    
+                    
                     ?>
                 </div>
             </div>

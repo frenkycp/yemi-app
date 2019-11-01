@@ -157,7 +157,8 @@ class DisplayController extends Controller
         ->orderBy('etd')
         ->all();
 
-        $datetime1 = strtotime($beacon_data->start_date);
+        //$datetime1 = strtotime($beacon_data->start_date);
+        $datetime1 = $beacon_data->start_date;
 
         $tmp_first_date = [];
         foreach ($serno_output_data as $key => $value) {
@@ -168,9 +169,11 @@ class DisplayController extends Controller
         $lt_to_shipping = '-';
         if (count($tmp_first_date) > 0) {
             $nearest_shipping_date = $tmp_first_date[0];
-            $datetime2 = strtotime($nearest_shipping_date . ' 07:00:00');
+            //$datetime2 = strtotime($nearest_shipping_date . ' 07:00:00');
+            $datetime2 = $nearest_shipping_date;
             $diff_seconds = $datetime2 - $datetime1;
-            $diff_day = round(($diff_seconds / (3600 * 24)), 1);
+            //$diff_day = round(($diff_seconds / (3600 * 24)), 1);
+            $diff_day = (new \DateTime(date('Y-m-d', strtotime($datetime1))))->diff(new \DateTime(date('Y-m-d', strtotime($datetime2))))->days;
             if ($diff_day > 1) {
                 $lt_to_shipping = $diff_day . ' days';
             } else {
@@ -182,9 +185,11 @@ class DisplayController extends Controller
         $lt_to_fa = '-';
         if (count($tmp_fa_date) > 0) {
             $nearest_fa_date = date('Y-m-d', strtotime($tmp_fa_date[0]));
-            $datetime2 = strtotime($nearest_fa_date . ' 07:00:00');
+            //$datetime2 = strtotime($nearest_fa_date . ' 07:00:00');
+            $datetime2 = $nearest_fa_date;
             $diff_seconds = $datetime2 - $datetime1;
-            $diff_day = round(($diff_seconds / (3600 * 24)), 1);
+            //$diff_day = round(($diff_seconds / (3600 * 24)), 1);
+            $diff_day = (new \DateTime(date('Y-m-d', strtotime($datetime1))))->diff(new \DateTime(date('Y-m-d', strtotime($datetime2))))->days;
             if ($diff_day > 1) {
                 $lt_to_fa = $diff_day . ' days';
             } else {
@@ -374,10 +379,22 @@ class DisplayController extends Controller
         ->asArray()
         ->all();
 
+        $kelompok_machine = MachineIotCurrent::find()
+        ->select('kelompok')
+        ->where([
+            'AND',
+            ['<>', 'kelompok', 'CHM'],
+            ['<>', 'kelompok', 'INJ']
+        ])
+        ->groupBy('kelompok')
+        ->orderBy('kelompok')
+        ->all();
+
         return $this->render('ww-beacon-loc', [
             'data' => $tmp_beacon,
             'loc_arr' => $loc_arr,
             'beacon_data' => $beacon_data,
+            'kelompok_machine' => $kelompok_machine,
         ]);
     }
 
