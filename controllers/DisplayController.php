@@ -129,16 +129,25 @@ class DisplayController extends Controller
         }
 
         $tmp_hdr_dtr = WipHdrDtr::find()
-        ->select('hdr_id')
         ->where([
             'child_analyst' => 'WW02',
             'slip_id' => $tmp_slip_id
         ])
-        ->groupBy('hdr_id')
         ->all();
 
+        $tmp_hdr_dtr_txt = '';
+        $tmp_fa_date = [];
         foreach ($tmp_hdr_dtr as $key => $value) {
-            $hdr_id_arr[] = $value['hdr_id'];
+            if (!in_array($value['hdr_id'], $hdr_id_arr)) {
+                $hdr_id_arr[] = $value['hdr_id'];
+            }
+            
+            if ($tmp_hdr_dtr_txt == '') {
+                $tmp_hdr_dtr_txt = $value['hdr_id'];
+            } else {
+                $tmp_hdr_dtr_txt .= ', ' . $value['hdr_id'];
+            }
+            $tmp_fa_date[] = $value['source_date'];
         }
 
         $serno_output_data = SernoOutput::find()
@@ -148,12 +157,52 @@ class DisplayController extends Controller
         ->orderBy('etd')
         ->all();
 
+        $datetime1 = strtotime($beacon_data->start_date);
+
+        $tmp_first_date = [];
+        foreach ($serno_output_data as $key => $value) {
+            $tmp_first_date[] = $value->etd;
+        }
+        sort($tmp_first_date);
+        $nearest_shipping_date = '-';
+        $lt_to_shipping = '-';
+        if (count($tmp_first_date) > 0) {
+            $nearest_shipping_date = $tmp_first_date[0];
+            $datetime2 = strtotime($nearest_shipping_date . ' 07:00:00');
+            $diff_seconds = $datetime2 - $datetime1;
+            $diff_day = round(($diff_seconds / (3600 * 24)), 1);
+            if ($diff_day > 1) {
+                $lt_to_shipping = $diff_day . ' days';
+            } else {
+                $lt_to_shipping = $diff_day . ' day';
+            }
+        }
+        sort($tmp_fa_date);
+        $nearest_fa_date = '-';
+        $lt_to_fa = '-';
+        if (count($tmp_fa_date) > 0) {
+            $nearest_fa_date = date('Y-m-d', strtotime($tmp_fa_date[0]));
+            $datetime2 = strtotime($nearest_fa_date . ' 07:00:00');
+            $diff_seconds = $datetime2 - $datetime1;
+            $diff_day = round(($diff_seconds / (3600 * 24)), 1);
+            if ($diff_day > 1) {
+                $lt_to_fa = $diff_day . ' days';
+            } else {
+                $lt_to_fa = $diff_day . ' day';
+            }
+        }
+
         return $this->render('ww-beacon-shipping', [
             'beacon_data' => $beacon_data,
             'start_time' => $start_time,
             'slip_no_txt' => $slip_no_txt,
             'slip_no_qty' => $slip_no_qty,
             'serno_output_data' => $serno_output_data,
+            'nearest_shipping_date' => $nearest_shipping_date,
+            'tmp_hdr_dtr_txt' => $tmp_hdr_dtr_txt,
+            'nearest_fa_date' => $nearest_fa_date,
+            'lt_to_shipping' => $lt_to_shipping,
+            'lt_to_fa' => $lt_to_fa,
         ]);
     }
 

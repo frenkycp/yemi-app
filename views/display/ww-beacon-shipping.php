@@ -62,6 +62,19 @@ date_default_timezone_set('Asia/Jakarta');
                     <dd><?= $beacon_data->mesin_description; ?></dd>
                     <dt>Slip Number (<?= $slip_no_qty; ?>) : </dt>
                     <dd><?= $slip_no_txt; ?></dd>
+                    <dt>HDR ID :</dt>
+                    <dd><?= $tmp_hdr_dtr_txt; ?></dd>
+                </dl>
+                <hr>
+                <dl>
+                    <dt>Nearest Shipping Date :</dt>
+                    <dd><?= $nearest_shipping_date; ?></dd>
+                    <dt>Nearest FA Date :</dt>
+                    <dd><?= $nearest_fa_date; ?></dd>
+                    <dt>Lead Time to Shipping :</dt>
+                    <dd><?= $lt_to_shipping; ?></dd>
+                    <dt>Lead Time to FA Start :</dt>
+                    <dd><?= $lt_to_fa; ?></dd>
                 </dl>
             </div>
         </div>

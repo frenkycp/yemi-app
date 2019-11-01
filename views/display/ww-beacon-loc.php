@@ -69,8 +69,8 @@ $this->registerJs("$(function() {
     $loc_title_arr = [
         'PILAR-16I' => 'PILAR-16I (Running Saw, Edge Bander, NCB, Panel Saw)',
         'PILAR-12I' => 'PILAR-12I (DET 3)',
-        'PILAR-10I' => 'PILAR-12I (DET 3)',
-        'PILAR-6I' => 'PILAR-12I (HVC 3, NCR 6, NCR 7)',
+        'PILAR-10I' => 'PILAR-10I (DET 3)',
+        'PILAR-6I' => 'PILAR-6I (HVC 3, NCR 6, NCR 7)',
     ];
     foreach ($loc_arr as $key => $loc) {
         $total_qty = 0;
@@ -114,7 +114,8 @@ $this->registerJs("$(function() {
                             if ($diff_hours > 24) {
                                 $txt_class = ' text-red';
                             }
-                            echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['get-beacon-detail', 'minor' => $value_beacon['minor']], ['class' => 'popup_btn']);
+                            //echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['get-beacon-detail', 'minor' => $value_beacon['minor']], ['class' => 'popup_btn']);
+                            echo Html::a('<i style="font-size: 2.5em; margin: 3px 3px;" class="fa fa-fw fa-cart-plus' . $txt_class . '" title="Beacon ID : ' . $value_beacon['minor'] . '&#010;Lot number : ' . $value_beacon['lot_number'] . '&#010;Model : ' . $value_beacon['model_group'] . '&#010;Machine ID : ' . $value_beacon['mesin_id'] . '&#010;Machine Desc. : ' . $value_beacon['mesin_description'] . '&#010;Start Time (First Process): ' . $start_time . '"></i>', ['ww-beacon-shipping', 'minor' => $value_beacon['minor']], ['class' => '', 'target' => '_blank']);
                             
                         }
                     }
