@@ -214,6 +214,8 @@ class MachineRunningController extends Controller
 	    	$beacon_tbl->gmc = $lot_data->child_all;
 	    	$beacon_tbl->gmc_desc = $lot_data->child_desc_all;
 	    	$beacon_tbl->kelompok = $lot_data->jenis_mesin;
+	    	$beacon_tbl->next_process = $lot_data->jenis_mesin;
+	    	$beacon_tbl->lot_status = 'R';
 	    	$beacon_tbl->model_group = $lot_data->model_group;
 	    	$beacon_tbl->parent = $lot_data->parent;
 	    	$beacon_tbl->parent_desc = $lot_data->parent_desc;
@@ -395,6 +397,12 @@ class MachineRunningController extends Controller
 		    		return json_encode($iot_output->errors);
 		    	}
 
+		    	$tmp_beacon_tbl = BeaconTbl::find()->where([
+					'minor' => $iot_output->minor
+				])->one();
+				$tmp_beacon_tbl->next_process = $lot_data->jenis_mesin;
+    			$tmp_beacon_tbl->lot_status = 'E';
+
 	    		if ($next_process == 'END') {
 	    			$lot_data->end_date = date('Y-m-d H:i:s');
 	    			
@@ -438,9 +446,7 @@ class MachineRunningController extends Controller
 						\Yii::$app->session->setFlash('danger', "Error : $ex, $lot_id aaaaaaa");
 					}
 
-					$tmp_beacon_tbl = BeaconTbl::find()->where([
-						'minor' => $iot_output->minor
-					])->one();
+					
 					$tmp_beacon_tbl->lot_number = null;
 					$tmp_beacon_tbl->start_date = null;
 					$tmp_beacon_tbl->mesin_id = null;
@@ -453,10 +459,15 @@ class MachineRunningController extends Controller
 					$tmp_beacon_tbl->kelompok = null;
 					$tmp_beacon_tbl->model_group = null;
 					$tmp_beacon_tbl->current_machine_start = null;
-	    			if (!$tmp_beacon_tbl->save()) {
-	    				return json_encode($tmp_beacon_tbl->errors);
-	    			}
+					$tmp_beacon_tbl->next_process = null;
+    				$tmp_beacon_tbl->lot_status = null;
+					
 	    		}
+
+	    		
+    			if (!$tmp_beacon_tbl->save()) {
+    				return json_encode($tmp_beacon_tbl->errors);
+    			}
 
 	    		if ($current_data->save()) {
 			    	$lot_data->jenis_mesin = $next_process;

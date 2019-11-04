@@ -121,6 +121,7 @@ echo '</pre>';*/
                     ],
                     'xAxis' => [
                         'type' => 'datetime',
+                        'gridLineWidth' => 0
                     ],
                     'yAxis' => [
                         'title' => [
@@ -141,6 +142,34 @@ echo '</pre>';*/
                                 ],
                             ],
                         ],*/
+                        'plotLines' => [
+                            [
+                                'color' => 'red',
+                                'dashStyle' => 'longdashdot',
+                                'value' => $sensor_data->temp_min,
+                                'width' => 2,
+                                'label' => [
+                                    'text' => 'MIN',
+                                    'align' => 'right',
+                                    'style' => [
+                                        'color' => '#white'
+                                    ]
+                                ],
+                            ],
+                            [
+                                'color' => 'red',
+                                'dashStyle' => 'longdashdot',
+                                'value' => $sensor_data->temp_max,
+                                'width' => 2,
+                                'label' => [
+                                    'text' => 'MAX',
+                                    'align' => 'right',
+                                    'style' => [
+                                        'color' => '#white'
+                                    ]
+                                ],
+                            ]
+                        ],
                         'tickInterval' => 10
                     ],
                     'tooltip' => [
@@ -211,6 +240,20 @@ echo '</pre>';*/
                                 ],
                             ],
                         ],*/
+                        'plotLines' => [
+                            [
+                                'color' => 'red',
+                                'dashStyle' => 'longdashdot',
+                                'value' => 40,
+                                'width' => 2
+                            ],
+                            [
+                                'color' => 'red',
+                                'dashStyle' => 'longdashdot',
+                                'value' => 80,
+                                'width' => 2
+                            ]
+                        ],
                         'tickInterval' => 10
                     ],
                     'tooltip' => [

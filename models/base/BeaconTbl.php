@@ -30,6 +30,8 @@ use Yii;
  * @property string $gmc_desc
  * @property double $lot_qty
  * @property string $current_machine_start
+ * @property string $next_process
+ * @property string $lot_status
  * @property string $aliasModel
  */
 abstract class BeaconTbl extends \yii\db\ActiveRecord
@@ -66,6 +68,8 @@ abstract class BeaconTbl extends \yii\db\ActiveRecord
             [['mesin_description'], 'string', 'max' => 100],
             [['parent', 'gmc'], 'string', 'max' => 20],
             [['parent_desc', 'gmc_desc'], 'string', 'max' => 250],
+            [['next_process'], 'string', 'max' => 5],
+            [['lot_status'], 'string', 'max' => 1],
             [['id'], 'unique']
         ];
     }
@@ -97,6 +101,8 @@ abstract class BeaconTbl extends \yii\db\ActiveRecord
             'gmc_desc' => 'Gmc Desc',
             'lot_qty' => 'Lot Qty',
             'current_machine_start' => 'Current Machine Start',
+            'next_process' => 'Next Process',
+            'lot_status' => 'Lot Status',
         ];
     }
 
