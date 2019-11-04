@@ -42,6 +42,8 @@ date_default_timezone_set('Asia/Jakarta');
         <div class="panel panel-primary">
             <div class="panel-body">
                 <dl>
+                    <dt>Status : </dt>
+                    <dd><?= $beacon_data->lot_status == 'R' ? 'RUNNING' : 'IDLING'; ?></dd>
                     <dt>Beacon ID : </dt>
                     <dd><?= $beacon_data->minor; ?></dd>
                     <dt>Lot Number : </dt>
@@ -60,6 +62,8 @@ date_default_timezone_set('Asia/Jakarta');
                     <dd><?= $beacon_data->mesin_id; ?></dd>
                     <dt>Machine Desc. : </dt>
                     <dd><?= $beacon_data->mesin_description; ?></dd>
+                    <dt>Next Process : </dt>
+                    <dd><?= $beacon_data->next_process; ?></dd>
                     <dt>Slip Number (<?= $slip_no_qty; ?>) : </dt>
                     <dd><?= $slip_no_txt; ?></dd>
                     <dt>HDR ID :</dt>

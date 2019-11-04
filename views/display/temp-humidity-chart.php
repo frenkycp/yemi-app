@@ -155,6 +155,7 @@ echo '</pre>';*/
                                         'color' => '#white'
                                     ]
                                 ],
+                                'zIndex' => 1,
                             ],
                             [
                                 'color' => 'red',
@@ -168,6 +169,7 @@ echo '</pre>';*/
                                         'color' => '#white'
                                     ]
                                 ],
+                                'zIndex' => 1,
                             ]
                         ],
                         'tickInterval' => 10
@@ -220,6 +222,7 @@ echo '</pre>';*/
                     ],
                     'xAxis' => [
                         'type' => 'datetime',
+                        'gridLineWidth' => 0
                     ],
                     'yAxis' => [
                         'title' => [
@@ -245,13 +248,15 @@ echo '</pre>';*/
                                 'color' => 'red',
                                 'dashStyle' => 'longdashdot',
                                 'value' => 40,
-                                'width' => 2
+                                'width' => 2,
+                                'zIndex' => 1,
                             ],
                             [
                                 'color' => 'red',
                                 'dashStyle' => 'longdashdot',
                                 'value' => 80,
-                                'width' => 2
+                                'width' => 2,
+                                'zIndex' => 1,
                             ]
                         ],
                         'tickInterval' => 10
