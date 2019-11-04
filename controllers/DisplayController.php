@@ -1087,7 +1087,7 @@ class DisplayController extends Controller
                     if ($left < 0) {
                         $left = 0;
                     }*/
-                    if ($seconds_ori < 3600) {
+                    //if ($seconds_ori < 3600) {
                         $absolute_loc_arr[] = [
                             'station' => $location,
                             'nik' => $value->GOJEK_ID,
@@ -1106,7 +1106,7 @@ class DisplayController extends Controller
                             $top += 25;
                         }
                         $tmp_content .= '<li><span style="opacity: 0.9; letter-spacing: 1px;">' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - </span><small style="opacity: 0.6;">' . $seconds . $seconds_str . ' ago</small></li>';
-                    }
+                    //}
                 }
             }
             $tmp_content .= '</ol>';
