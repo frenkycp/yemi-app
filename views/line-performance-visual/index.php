@@ -4,8 +4,10 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\web\View;
 
+date_default_timezone_set('Asia/Jakarta');
+
 $this->title = [
-    'page_title' => '<div class="text-center" style="font-weight: bold">VISUAL LINE PERFORMANCE <span class="japanesse text-green"></span></div>',
+    'page_title' => '<div class="text-center" style="font-weight: bold">VISUAL LINE PERFORMANCE <span class="japanesse text-green"></span><br/><em id="last-update-text" style="font-size: 0.5em; font-weight: normal;">Last Update : ' . date('Y-m-d H:i:s') . '</em></div>',
     'tab_title' => 'VISUAL LINE PERFORMANCE',
     'breadcrumbs_title' => 'VISUAL LINE PERFORMANCE'
 ];
@@ -51,6 +53,7 @@ $this->registerJs("
                 $('#avg-eff').html(tmp_data.avg_eff + '%');
                 $('#progress-bar-id').html(tmp_data.progress_content);
                 $('#text-bagus').html(tmp_data.text_bagus_content);
+                $('#last-update-text').html('Last Update : ' + tmp_data.last_update);
             },
             complete: function(){
                 setTimeout(function(){update_data();}, 3000);

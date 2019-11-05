@@ -15,6 +15,8 @@ class LinePerformanceVisualController extends Controller
 {
 	public function actionIndexUpdate($line)
 	{
+		date_default_timezone_set('Asia/Jakarta');
+		
 		$line_dropdown = ArrayHelper::map($data_arr = HakAkses::find()
 		->where(['level_akses' => '4'])
 		->orderBy('hak_akses')
@@ -108,6 +110,7 @@ class LinePerformanceVisualController extends Controller
 			'total_eff' => $tmp_total[0],
 			'progress_content' => $progress_content,
 			'text_bagus_content' => $text_bagus_content,
+			'last_update' => date('Y-m-d H:i:s'),
 		];
 
 		return json_encode($data, JSON_UNESCAPED_UNICODE);
