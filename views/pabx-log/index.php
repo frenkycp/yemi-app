@@ -46,7 +46,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => ' min-width: 100px;'
+            'style' => ' min-width: 80px;'
         ],
     ],
     [
@@ -69,7 +69,40 @@ $gridColumns = [
     ],
     [
         'attribute' => 'durasi',
+        'value' => function($model){
+            if ($model->durasi == null) {
+                return '-';
+            } else {
+                return date('H:i:s', strtotime($model->durasi));
+            }
+        },
         'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => ' min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'phone',
+        'label' => 'Phone Number',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => ' min-width: 100px;'
+        ],
+    ],
+    [
+        'attribute' => 'provider_name',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => ' min-width: 100px;'
+        ],
+    ],
+    [
+        'attribute' => 'registered_name',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
