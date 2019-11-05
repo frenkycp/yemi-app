@@ -23,38 +23,46 @@ $this->registerCss("
 	body {background-color: #000;}
 ");
 
-$script = <<< JS
+/*$script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 10000); // milliseconds
+      setTimeout("refreshPage();", 1000000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
 JS;
-/*$script = <<< JS
-    window.onload = setupRefresh;
+$this->registerJs($script, View::POS_END);*/
 
-    function setupRefresh() {
-      setTimeout("refreshPage();", 10000); // milliseconds
+$this->registerJs("
+    function update_data(){
+        $.ajax({
+            type: 'POST',
+            url: '" . Url::to(['index-update', 'line' => $line]) . "',
+            success: function(data){
+                var tmp_data = JSON.parse(data);
+                $('#gmc').html(tmp_data.gmc);
+                $('#current-model').html(tmp_data.currently_model);
+                $('#manpower-qty').html(tmp_data.mp);
+                $('#last-production-time').html(tmp_data.last_production_time);
+                $('#total-production-time').html(tmp_data.total_production_time);
+                $('#total-eff').html(tmp_data.total_eff + '%');
+                $('#avg-eff').html(tmp_data.avg_eff + '%');
+                $('#progress-bar-id').html(tmp_data.progress_content);
+                $('#text-bagus').html(tmp_data.text_bagus_content);
+            },
+            complete: function(){
+                setTimeout(function(){update_data();}, 3000);
+            }
+        });
     }
-    function refreshPage() {
-       $.ajax({
-	       url: '<?php echo Yii::$app->request->baseUrl. '/line-performance-visual/update-data'; ?>',
-	       type: 'post',
-	       data: {
-	                 gmc: $("#gmc").val() ,
-	                 _csrf : '<?=Yii::$app->request->getCsrfToken()?>'
-	             },
-	       success: function (data) {
-	          console.log(data.search);
-	       }
-	  });
-    }
-JS;*/
+    $(document).ready(function() {
+        update_data();
+    });
+");
 
-$this->registerJs($script, View::POS_HEAD );
+
 
 $avg_min = $avg_eff - 3;
 $avg_max = $avg_eff + 3;
@@ -99,6 +107,7 @@ if ($gmc == '-') {
 
 		        <?= Html::dropDownList('line', \Yii::$app->request->get('line'), $line_dropdown, [
 		            'class' => 'form-control',
+		            'id' => 'line-input',
 		            'onchange'=>'this.form.submit()',
 		            'style' => 'height: 60px; padding: 3px 12px; font-size:3em;'
 		        ]); ?>
@@ -123,7 +132,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">Model</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 3em;"><?= $currently_model; ?></span>
+				<span id="current-model" style="font-size: 3em;"><?= $currently_model; ?></span>
 			</div>
 		</div>
 	</div>
@@ -137,7 +146,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">Manpower</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 3em;"><?= $mp; ?></span>
+				<span id="manpower-qty" style="font-size: 3em;"><?= $mp; ?></span>
 			</div>
 		</div>
 	</div>
@@ -147,7 +156,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">Output Production Time</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 3em;"><?= $last_production_time; ?></span>
+				<span id="last-production-time" style="font-size: 3em;"><?= $last_production_time; ?></span>
 			</div>
 		</div>
 	</div>
@@ -157,7 +166,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">Total Production Time</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 3em;"><?= $total_production_time; ?></span>
+				<span id="total-production-time" style="font-size: 3em;"><?= $total_production_time; ?></span>
 			</div>
 		</div>
 	</div>
@@ -167,7 +176,7 @@ if ($gmc == '-') {
 				<h3 class="box-title">Efficiency Total</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 3em;"><?= $total_eff . '%'; ?></span>
+				<span id="total-eff" style="font-size: 3em;"><?= $total_eff . '%'; ?></span>
 			</div>
 		</div>
 	</div>
@@ -179,16 +188,16 @@ if ($gmc == '-') {
 				<h3 class="box-title">Efficiency Target</h3>
 			</div>
 			<div class="box-body">
-				<span style="font-size: 3em;"><?= $avg_eff . '%'; ?></span>
+				<span id="avg-eff" style="font-size: 3em;"><?= $avg_eff . '%'; ?></span>
 			</div>
 		</div>
 	</div>
 </div>
-<div class="progress" style="height: 50px; background-color: #363636; outline: 2px solid white;">
+<div id="progress-bar-id" class="progress" style="height: 50px; background-color: #363636; outline: 2px solid white;">
 	<div class="progress-bar progress-bar-striped progress-bar-<?= $panel_class; ?> active" role="progressbar" aria-valuenow="<?= $current_eff; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $current_eff > 100 ? 100 : $current_eff; ?>%; padding: 15px; font-size: 35px;"><?= $current_eff; ?>%</div>
 </div>
 <hr>
-<div class="text-center">
+<div class="text-center" id="text-bagus">
 	<span style="font-size: 4em; font-weight: bold; text-shadow: -2px 0 white, 0 2px white, 2px 0 white, 0 -2px white;" class="<?= $text_class; ?>"><?= $text; ?></span>
 </div>
 <hr>
