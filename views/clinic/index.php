@@ -53,12 +53,36 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 60000); // milliseconds
+      setTimeout("refreshPage();", 3600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
 JS;
+
+$this->registerJs("
+    function update_data(){
+        $.ajax({
+            type: 'POST',
+            url: '" . Url::to(['index-update']) . "',
+            success: function(data){
+                var tmp_data = JSON.parse(data);
+                $('#today-visitor').html(tmp_data.today_visitor);
+                $('#monthly-visitor').html(tmp_data.monthly_visitor);
+                $('#available-beds').html(tmp_data.available_beds);
+                $('#doctor-content').html(tmp_data.doctor_content);
+                $('#nurse-content').html(tmp_data.nurse_content);
+                $('#table-container').html(tmp_data.table_container);
+            },
+            complete: function(){
+                setTimeout(function(){update_data();}, 3000);
+            }
+        });
+    }
+    $(document).ready(function() {
+        update_data();
+    });
+");
 
 $this->registerJs($script, View::POS_END);
 
@@ -73,7 +97,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box bg-purple">
             <div class="inner">
-                <h3><?= $today_visitor; ?></h3>
+                <h3 id="today-visitor"><?= $today_visitor; ?></h3>
                 <p>Pengunjung Hari Ini</p>
             </div>
             <div class="icon">
@@ -85,7 +109,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box bg-purple">
             <div class="inner">
-                <h3><?= $monthly_visitor; ?></h3>
+                <h3 id="monthly-visitor"><?= $monthly_visitor; ?></h3>
                 <p>Pengunjung Bulan Ini</p>
             </div>
             <div class="icon">
@@ -97,7 +121,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box bg-purple">
             <div class="inner">
-                <h3><?= $available_beds; ?>/3</h3>
+                <h3><span id="available-beds"><?= $available_beds; ?></span>/3</h3>
                 <p>Ruangan Tersedia</p>
             </div>
             <div class="icon">
@@ -106,7 +130,7 @@ echo '</pre>';*/
             <a class="small-box-footer"></a>
         </div>
     </div>
-    <div class="col-lg-2 col-lg-offset-2 col-md-offset-2 col-xs-6 col-md-3">
+    <div id="doctor-content" class="col-lg-2 col-lg-offset-2 col-md-offset-2 col-xs-6 col-md-3">
         <div class="small-box <?= $doctor_data['bg_color']; ?>">
             <div class="inner">
                 <h3>dokter</h3>
@@ -115,7 +139,7 @@ echo '</pre>';*/
             <a class="small-box-footer"></a>
         </div>
     </div>
-    <div class="col-lg-2 col-xs-6 col-md-3">
+    <div id="nurse-content" class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box <?= $nurse_data['bg_color']; ?>">
             <div class="inner">
                 <h3>Perawat</h3>
@@ -139,7 +163,7 @@ echo '</pre>';*/
             <th class="text-center">Konfirmasi Manager</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="table-container">
         <?php
         /*$dummy_data = app\models\Karyawan::find()
         ->where(['DEPARTEMEN' => 'PRODUCTION ENGINEERING'])
@@ -151,7 +175,6 @@ echo '</pre>';*/
             ->queryAll();*/
         
         foreach ($data as $key => $value) {
-            $random_visit = rand(1, 5);
             $total_this_month = app\models\KlinikInput::find()
             ->select([
                 'nik',
