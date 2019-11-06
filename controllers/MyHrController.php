@@ -597,7 +597,7 @@ class MyHrController extends Controller
                 $abensi_data_arr = AbsensiTbl::find()->where([
                     'NIK' => $nik,
                     'PERIOD' => $period,
-                    'NOTE' => ['CK', 'CK1', 'CK3', 'CK5', 'CK7', 'CK10', 'CK11']
+                    'NOTE' => ['CK', 'CK1', 'CK3', 'CK5', 'CK7', 'CK10', 'CK11', 'CK12']
                 ])
                 ->orderBy('DATE')
                 ->all();
