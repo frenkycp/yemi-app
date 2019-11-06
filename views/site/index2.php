@@ -223,6 +223,9 @@ $this->registerCss("
                         <?= Html::a('Wood Working Lot Location', ['display/ww-beacon-loc'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
+                        <?= Html::a('Lot Qty by Hour', ['display/lot-timeline'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
                     </div>
                 </div>
                 <div class="panel panel-success">
@@ -331,6 +334,9 @@ $this->registerCss("
                                 </li>
                                 <li>
                                     <?= Html::a('Movement Tracking <span class="japanesse-word"></span>', ['/display/gosub-location']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Daily Driver Utility <span class="japanesse-word"></span>', ['/display/sub-assy-driver-utility']); ?>
                                 </li>
                             </ol>
                         </div>

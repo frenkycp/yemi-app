@@ -80,9 +80,129 @@ use app\models\FaMp02;
 use app\models\FaMp01;
 use app\models\BeaconTbl;
 use app\models\WipEffTbl;
+use app\models\BeaconTblTrack;
 
 class DisplayController extends Controller
 {
+    function actionSubAssyDriverUtility()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->layout = 'clean';
+        $post_date = date('Y-m-d');
+        $location_arr = ['PANGKALAN', 'SUB-ASSY-NETWORK', 'SUB-ASSY-FRONT-GRILL', 'SUB-ASSY-ACCESORIES'];
+        $tmp_operator = GojekTbl::find()
+        ->where([
+            'SOURCE' => 'SUB',
+            'HADIR' => 'Y'
+        ])
+        ->orderBy('GOJEK_DESC')
+        ->all();
+
+        $tmp_order = GojekOrderTbl::find()
+        ->where([
+            'source' => 'SUB',
+            'FORMAT(post_date, \'yyyy-MM-dd\')' => $post_date
+        ])
+        ->andWhere('daparture_date IS NOT NULL')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_operator as $driver) {
+            $lt = 0;
+            foreach ($tmp_order as $value) {
+                if ($value->GOJEK_ID == $driver->GOJEK_ID) {
+                    if ($value->LT != null) {
+                        $lt += $value->LT;
+                    } else {
+                        $lt += GeneralFunction::instance()->getWorkingTime($value->daparture_date, date('Y-m-d H:i:s'));
+                    }
+                    
+                }
+            }
+            $tmp_data[$driver->GOJEK_ID] = $lt;
+        }
+
+        $data = [];
+        foreach ($location_arr as $key => $location) {
+            $operator_arr = [];
+            foreach ($tmp_operator as $key => $operator) {
+                if ($operator->beacon_location == $location) {
+                    $utility = 0;
+                    $tmp_lt = (int)$tmp_data[$operator->GOJEK_ID];
+
+                    if ($tmp_lt > 0) {
+                        $utility = round(($tmp_lt / 480) * 100, 1);
+                    }
+                    
+                    $operator_arr[] = [
+                        'nik' => $operator->GOJEK_ID,
+                        'name' => $operator->GOJEK_DESC,
+                        'utility' => $utility
+                    ];
+                }
+            }
+            $data[$location]['operator'] = $operator_arr;
+        }
+
+        return $this->render('sub-assy-driver-utility', [
+            'location_arr' => $location_arr,
+            'data' => $data,
+            'tmp_data' => $tmp_data,
+        ]);
+    }
+    public function actionLotTimeline()
+    {
+        $this->layout = 'clean';
+        $data = [];
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'map_no', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+            # code...
+        }
+
+        $tmp_beacon_arr = BeaconTblTrack::find()
+        ->select([
+            'upload_date',
+            'total_qty' => 'COUNT(upload_date)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
+            ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
+        ])
+        ->groupBy('upload_date')
+        ->orderBy('upload_date')
+        ->all();
+
+        foreach ($tmp_beacon_arr as $key => $value) {
+            $proddate = (strtotime($value->upload_date . " +7 hours") * 1000);
+            $tmp_data_qty[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total_qty
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'Total Lot by Hours',
+                'data' => $tmp_data_qty,
+                'showInLegend' => false
+            ],
+        ];
+
+        return $this->render('lot-timeline', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
+
     public function actionWwBeaconShipping($minor = '')
     {
         $this->layout = 'clean';
@@ -1568,7 +1688,8 @@ class DisplayController extends Controller
                 $utility = round(($value / 470) * 100, 1);
             }
             $tmp_data2[] = [
-                'y' => $utility
+                'y' => $utility,
+                'color' => 'red'
             ];
         }
 
@@ -1581,6 +1702,7 @@ class DisplayController extends Controller
         return $this->render('go-sub-driver-utility', [
             'data' => $data,
             'categories' => $categories,
+            'tmp_data' => $tmp_data,
         ]);
     }
 
