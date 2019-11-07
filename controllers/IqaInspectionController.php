@@ -259,9 +259,23 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
     		],
     	];
 
+        $ng_data_arr = StoreInOutWsus::find()
+        ->where([
+            'AND',
+            ['>=', 'POST_DATE', $model->from_date],
+            ['<=', 'POST_DATE', $model->to_date],
+        ])
+        ->andWhere([
+            'TRANS_ID' => 11,
+            'Judgement' => 'NG'
+        ])
+        ->asArray()
+        ->all();
+
         return $this->render('daily-inspection', [
         	'data' => $data,
         	'model' => $model,
+            'ng_data_arr' => $ng_data_arr,
         ]);
 	}
 }

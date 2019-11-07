@@ -22,6 +22,10 @@ $this->registerCss("
 
 date_default_timezone_set('Asia/Jakarta');
 
+$this->registerCssFile('@web/css/dataTables.bootstrap.css');
+$this->registerJsFile('@web/js/jquery.dataTables.min.js');
+$this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
+
 $script = "
     window.onload = setupRefresh;
 
@@ -33,6 +37,12 @@ $script = "
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
+
+$this->registerJs("$(function() {
+   $('#myTable').DataTable({
+        //'pageLength': 5
+    });
+});");
 
 /*echo '<pre>';
 print_r($fix_data);
@@ -145,6 +155,49 @@ echo '</pre>';*/
             ],
         ]);
         ?>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">NG Data Table</h3>
+    </div>
+    <div class="panel-body">
+        <table id="myTable" class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Inc. Date</th>
+                    <th>Last Update</th>
+                    <th>Part No.</th>
+                    <th>Part Name.</th>
+                    <th>Qty In</th>
+                    <th>Note</th>
+                    <th>Remark</th>
+                    <th>Vendor ID</th>
+                    <th>Vendor Name</th>
+                    <th>Tag Slip</th>
+                    <th>Slip Reff.</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($ng_data_arr as $key => $value): ?>
+                    <tr>
+                        <td><?= date('Y-m-d', strtotime($value['POST_DATE'])); ?></td>
+                        <td><?= date('Y-m-d H:i:s', strtotime($value['LAST_UPDATE'])); ?></td>
+                        <td><?= $value['ITEM']; ?></td>
+                        <td><?= $value['ITEM_DESC']; ?></td>
+                        <td><?= number_format($value['QTY_IN']); ?></td>
+                        <td><?= $value['NOTE']; ?></td>
+                        <td><?= $value['Remark']; ?></td>
+                        <td><?= $value['LOC']; ?></td>
+                        <td><?= $value['LOC_DESC']; ?></td>
+                        <td><?= $value['TAG_SLIP']; ?></td>
+                        <td><?= $value['SLIP_REF']; ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+        
     </div>
 </div>
 
