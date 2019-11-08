@@ -5,6 +5,7 @@ use yii\bootstrap\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
 use kartik\date\DatePicker;
+use yii\helpers\ArrayHelper;
 
 /**
 * @var yii\web\View $this
@@ -80,6 +81,9 @@ use kartik\date\DatePicker;
 		                        'C' => 'C',
 		                        'D' => 'D',
     						])->label('Group'); ?>
+                            <?= $form->field($model, 'jenis_mesin')->dropDownList(ArrayHelper::map(app\models\MachineIotCurrent::find()->select(['kelompok'])->groupBy('kelompok')->orderBy('kelompok')->all(), 'kelompok', 'kelompok'), [
+                                'prompt' => '-- Select group (WW Must) --'
+                            ])->label('Next Process (WW)'); ?>
     					</div>
     				</div>
     			</div>

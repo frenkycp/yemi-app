@@ -170,6 +170,18 @@ $columns = [
         ],
     ],
     [
+        'attribute' => 'jenis_mesin',
+        'label' => 'Next Process (WW)',
+        'mergeHeader' => true,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '100px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'plan_run',
         'label' => 'status',
         'value' => function($model){

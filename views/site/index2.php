@@ -152,16 +152,16 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/l-series-daily"><i class="fa fa-fw fa-tag"></i> Production Lead Time L-Series<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-kwh-report"><i class="fa fa-fw fa-tag"></i> Machine Operation Status<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-kwh-report"><i class="fa fa-fw fa-tag"></i> Machine Operation Status<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/machine-status-range"><i class="fa fa-fw fa-tag"></i> Machine Operation Status (Long Range)<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/machine-status-range"><i class="fa fa-fw fa-tag"></i> Machine Operation Status (Long Range)<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/machine-status-range-shift"><i class="fa fa-fw fa-tag"></i> Machine Operation Status (Shift)<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/machine-status-range-shift"><i class="fa fa-fw fa-tag"></i> Machine Operation Status (Shift)<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-iot-utility"><i class="fa fa-fw fa-tag"></i> Machine Daily Utility<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-iot-utility"><i class="fa fa-fw fa-tag"></i> Machine Daily Utility<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>
                     </div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/shift-patrol-tbl"><i class="fa fa-fw fa-tag"></i> Shift Daily Patrol<span class="japanesse-word"></span></a>
@@ -211,19 +211,19 @@ $this->registerCss("
                         <?= Html::a('WIP Data Record（仕掛りデーター）', ['wip-plan-actual-report/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Machine IoT Output Data', ['machine-iot-output-hdr/index'], [
+                        <?= Html::a('Machine IoT Output Data <span class="text-red"><b>*IoT</b></span>', ['machine-iot-output-hdr/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Machine IoT Output Data (Detail)', ['machine-iot-output-dtr/index'], [
+                        <?= Html::a('Machine IoT Output Data (Detail) <span class="text-red"><b>*IoT</b></span>', ['machine-iot-output-dtr/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working Lot Waiting Next Process', ['display/ww-lot-waiting'], [
+                        <?= Html::a('Wood Working Lot Waiting Next Process <span class="text-red"><b>*IoT</b></span>', ['display/ww-lot-waiting'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working Lot Location', ['display/ww-beacon-loc'], [
+                        <?= Html::a('Wood Working Lot Location <span class="text-red"><b>*IoT</b></span>', ['display/ww-beacon-loc'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Lot Qty by Hour', ['display/lot-timeline'], [
+                        <?= Html::a('Lot Qty by Hour <span class="text-red"><b>*IoT</b></span>', ['display/lot-timeline'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                     </div>
@@ -356,9 +356,9 @@ $this->registerCss("
                                 <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
                                 <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
                                 <li><?= Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
-                                <li><?= Html::a('Temperature Monitoring <span class="japanesse-word"></span>', ['/display/temp-humidity-control?category=1']); ?></li>
-                                <li><?= Html::a('Humidity Monitoring <span class="japanesse-word"></span>', ['/display/temp-humidity-control?category=2']); ?></li>
-                                <li><?= Html::a('Temperature & Humidity Data <span class="japanesse-word"></span>', ['/display/sensor-tbl-display']); ?></li>
+                                <li><?= Html::a('Temperature Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
+                                <li><?= Html::a('Humidity Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
+                                <li><?= Html::a('Temperature & Humidity Data <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-tbl-display']); ?></li>
                             </ol>
                         </div>
 
