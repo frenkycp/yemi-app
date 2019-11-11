@@ -109,7 +109,7 @@ $this->registerJs("$(function() {
                                 <div class="panel-body">
                                     <?php
                                     foreach ($data as $key => $value_beacon) {
-                                        if ($value_beacon['lokasi'] == $loc && $value_beacon['next_process'] == $kelompok_data->kelompok) {
+                                        if ($value_beacon['lokasi'] == $loc && $value_beacon['jenis_mesin'] == $kelompok_data->kelompok) {
 
                                             
                                             //$date1 = new \DateTime();
@@ -201,7 +201,7 @@ $this->registerJs("$(function() {
                         <td><?= $value_beacon['gmc_desc']; ?></td>
                         <td><?= $value_beacon['lot_qty'] == null ? '' : number_format($value_beacon['lot_qty']); ?></td>
                         <td><?= $value_beacon['mesin_id'] == null ? '' : $value_beacon['mesin_id'] . ' - ' . $value_beacon['mesin_description']; ?></td>
-                        <td><?= $value_beacon['lot_status'] == 'R' ? '-' : $value_beacon['next_process']; ?></td>
+                        <td><?= $value_beacon['lot_status'] == 'R' ? '-' : $value_beacon['jenis_mesin']; ?></td>
                         <td><?= $value_beacon['lot_status'] == 'R' ? 'RUNNING' : 'IDLING'; ?></td>
                     </tr>
                 <?php }

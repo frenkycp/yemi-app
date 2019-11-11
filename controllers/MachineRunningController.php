@@ -354,11 +354,25 @@ class MachineRunningController extends Controller
 	    ]);
 	    $model->addRule('next_process', 'required');
 
+	    $current_data = ServerMachineIotCurrent::find()
+    	->where([
+    		'mesin_id' => $mesin_id
+    	])
+    	->one();
+    	$lot_id = $current_data->lot_number;
+
+    	$lot_data = WipEffTbl::find()
+    	->where([
+    		'lot_id' => $lot_id,
+    	])
+    	->one();
+    	$current_kelompok = $lot_data->jenis_mesin;
+
 	    try{
 	    	if ($model->load(\Yii::$app->request->post())) {
 		    	$next_process = $model->next_process;
 
-	    		$current_data = ServerMachineIotCurrent::find()
+	    		/*$current_data = ServerMachineIotCurrent::find()
 		    	->where([
 		    		'mesin_id' => $mesin_id
 		    	])
@@ -369,7 +383,7 @@ class MachineRunningController extends Controller
 		    	->where([
 		    		'lot_id' => $lot_id,
 		    	])
-		    	->one();
+		    	->one();*/
 		    	$lot_data->mesin_id = null;
 		    	$lot_data->mesin_description = null;
 		    	$lot_data->plan_run = 'E';
@@ -400,10 +414,11 @@ class MachineRunningController extends Controller
 		    	$tmp_beacon_tbl = BeaconTbl::find()->where([
 					'minor' => $iot_output->minor
 				])->one();
-				$tmp_beacon_tbl->next_process = $lot_data->jenis_mesin;
+				
     			$tmp_beacon_tbl->lot_status = 'E';
 
 	    		if ($next_process == 'END') {
+	    			$tmp_beacon_tbl->next_process = null;
 	    			$lot_data->end_date = date('Y-m-d H:i:s');
 	    			
 	    			$lot_data->plan_stats = 'C';
@@ -462,6 +477,8 @@ class MachineRunningController extends Controller
 					$tmp_beacon_tbl->next_process = null;
     				$tmp_beacon_tbl->lot_status = null;
 					
+	    		} else {
+	    			$tmp_beacon_tbl->next_process = $next_process;
 	    		}
 
 	    		
@@ -485,7 +502,8 @@ class MachineRunningController extends Controller
 		}
 
     	return $this->render('finish', [
-    		'model' => $model
+    		'model' => $model,
+    		'current_kelompok' => $current_kelompok
     	]);
 	}
 }

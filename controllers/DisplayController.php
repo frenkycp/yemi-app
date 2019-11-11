@@ -81,6 +81,7 @@ use app\models\FaMp01;
 use app\models\BeaconTbl;
 use app\models\WipEffTbl;
 use app\models\BeaconTblTrack;
+use app\models\BeaconWipView;
 
 class DisplayController extends Controller
 {
@@ -206,7 +207,7 @@ class DisplayController extends Controller
     public function actionWwBeaconShipping($minor = '')
     {
         $this->layout = 'clean';
-        $beacon_data = BeaconTbl::find()->where(['minor' => $minor])->one();
+        $beacon_data = BeaconWipView::find()->where(['minor' => $minor])->one();
         $start_time = '-';
         if ($beacon_data->start_date != null) {
             $start_time = date('d M\' Y H:i', strtotime($beacon_data->start_date));
@@ -498,13 +499,18 @@ class DisplayController extends Controller
             'PILAR-6I',
         ];
 
-        $tmp_beacon = BeaconTbl::find()
+        $tmp_beacon = BeaconWipView::find()
         ->where('lot_number IS NOT NULL')
         ->orderBy('lot_qty DESC')
         ->asArray()
         ->all();
 
-        $beacon_data = BeaconTbl::find()
+        $lot_number_arr = [];
+        foreach ($tmp_beacon as $key => $value) {
+            $lot_number_arr[] = $value->lot_number;
+        }
+
+        $beacon_data = BeaconWipView::find()
         ->orderBy('minor')
         ->asArray()
         ->all();
@@ -518,6 +524,12 @@ class DisplayController extends Controller
         ])
         ->groupBy('kelompok')
         ->orderBy('kelompok')
+        ->all();
+
+        $tmp_lot_arr = WipEffTbl::find()
+        ->where([
+            'lot_id' => $lot_number_arr
+        ])
         ->all();
 
         return $this->render('ww-beacon-loc', [

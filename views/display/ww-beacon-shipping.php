@@ -63,7 +63,7 @@ date_default_timezone_set('Asia/Jakarta');
                     <dt>Machine Desc. : </dt>
                     <dd><?= $beacon_data->mesin_description; ?></dd>
                     <dt>Next Process : </dt>
-                    <dd><?= $beacon_data->next_process; ?></dd>
+                    <dd><?= $beacon_data->jenis_mesin; ?></dd>
                     <dt>Slip Number (<?= $slip_no_qty; ?>) : </dt>
                     <dd><?= $slip_no_txt; ?></dd>
                     <dt>HDR ID :</dt>

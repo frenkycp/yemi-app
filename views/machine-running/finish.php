@@ -89,7 +89,10 @@ $dropdown['END'] = '--END PROCESS--';
                     <?= $form->field($model, 'next_process')->dropDownList(
                         $dropdown,           // Flat array ('id'=>'label')
                         [
-                            'prompt' => '-- Select a group --'
+                            'prompt' => '-- Select a group --',
+                            'options' => [
+                                $current_kelompok => ['disabled' => true]
+                            ]
                         ]    // options
                     )->label('Next Process'); ?>
                 </div>
