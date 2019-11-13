@@ -82,9 +82,52 @@ use app\models\BeaconTbl;
 use app\models\WipEffTbl;
 use app\models\BeaconTblTrack;
 use app\models\BeaconWipView;
+use app\models\Visitor;
 
 class DisplayController extends Controller
 {
+    public function actionVisitorRfidView($visitor_name = '', $visitor_company = '')
+    {
+        $this->layout = 'clean';
+        return $this->render('visitor-rfid-view', [
+            'visitor_name' => $visitor_name,
+            'visitor_company' => $visitor_company,
+        ]);
+    }
+
+    public function actionVisitorRfid()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this->layout = 'clean';
+        $is_alert = 1;
+
+        $model = new \yii\base\DynamicModel([
+            'rfid_no'
+        ]);
+        $model->addRule(['rfid_no'], 'string');
+        $visitor_name = '';
+
+        if ($model->load($_POST)) {
+            if ($model->rfid_no != null && $model->rfid_no != '') {
+                $visitor = Visitor::find()->where([
+                    'date(tgl)' => date('Y-m-d')
+                ]);
+                $visitor = $visitor->andFilterWhere(['like', 'card', $model->rfid_no])->orderBy('tgl DESC')->one();
+                if ($visitor->pk) {
+                    $visitor_name = $visitor->visitor_name;
+                    return $this->redirect(Url::to(['visitor-rfid-view', 'visitor_name' => $visitor_name, 'visitor_company' => $visitor->visitor_comp]));
+                }
+            }
+            $model->rfid_no = '';
+        }
+
+        return $this->render('visitor-rfid', [
+            'model' => $model,
+            'is_alert' => $is_alert,
+            'visitor_name' => $visitor_name,
+        ]);
+    }
+
     function actionSubAssyDriverUtility()
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -171,7 +214,8 @@ class DisplayController extends Controller
         $tmp_beacon_arr = BeaconTblTrack::find()
         ->select([
             'upload_date',
-            'total_qty' => 'COUNT(upload_date)'
+            'total_lot' => 'COUNT(upload_date)',
+            'total_qty' => 'SUM(lot_qty)'
         ])
         ->where([
             'AND',
@@ -182,25 +226,39 @@ class DisplayController extends Controller
         ->orderBy('upload_date')
         ->all();
 
+        $tmp_data_qty = $tmp_data_lot = [];
         foreach ($tmp_beacon_arr as $key => $value) {
             $proddate = (strtotime($value->upload_date . " +7 hours") * 1000);
+            $tmp_data_lot[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total_lot
+            ];
             $tmp_data_qty[] = [
                 'x' => $proddate,
                 'y' => (int)$value->total_qty
             ];
         }
 
-        $data = [
+        $data_lot = [
             [
                 'name' => 'Total Lot by Hours',
+                'data' => $tmp_data_lot,
+                //'showInLegend' => false
+            ],
+        ];
+
+        $data_qty = [
+            [
+                'name' => 'Total Qty by Hours',
                 'data' => $tmp_data_qty,
-                'showInLegend' => false
+                //'showInLegend' => false
             ],
         ];
 
         return $this->render('lot-timeline', [
             'model' => $model,
-            'data' => $data,
+            'data_lot' => $data_lot,
+            'data_qty' => $data_qty,
         ]);
     }
 

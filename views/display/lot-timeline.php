@@ -119,7 +119,7 @@ echo '</pre>';*/
                     ],
                     'yAxis' => [
                         'title' => [
-                            'text' => 'Lot Qty',
+                            'text' => 'Total Lot',
                         ],
                         //'max' => 60,
                         //'tickInterval' => 10
@@ -131,7 +131,60 @@ echo '</pre>';*/
                             ],
                         ],
                     ],
-                    'series' => $data,
+                    'series' => $data_lot,
+                ],
+            ]);
+
+            ?>
+        </div>
+    </div>
+</div>
+
+<div class="box box-primary box-solid">
+    <div class="box-body">
+        <div class="col-md-12">
+            <?php
+            echo Highcharts::widget([
+                'scripts' => [
+                    //'modules/exporting',
+                    //'themes/grid-light',
+                    'themes/dark-unica',
+                    //'themes/sand-signika',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'line',
+                        'style' => [
+                            'fontFamily' => 'sans-serif',
+                        ],
+                        'height' => 350,
+                        'zoomType' => 'x'
+                    ],
+                    'credits' => [
+                        'enabled' => false
+                    ],
+                    'title' => [
+                        'text' => null,
+                    ],
+                    'xAxis' => [
+                        'type' => 'datetime',
+                        'gridLineWidth' => 0
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'text' => 'Total Qty',
+                        ],
+                        //'max' => 60,
+                        //'tickInterval' => 10
+                    ],
+                    'plotOptions' => [
+                        'line' => [
+                            'marker' => [
+                                'enabled' =>false
+                            ],
+                        ],
+                    ],
+                    'series' => $data_qty,
                 ],
             ]);
 

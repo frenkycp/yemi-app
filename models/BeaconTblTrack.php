@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class BeaconTblTrack extends BaseBeaconTblTrack
 {
-    public $total_qty;
+    public $total_qty, $total_lot;
 
     public function behaviors()
     {

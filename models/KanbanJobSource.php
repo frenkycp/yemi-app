@@ -3,16 +3,15 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\Karyawan as BaseKaryawan;
+use \app\models\base\KanbanJobSource as BaseKanbanJobSource;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.KARYAWAN".
+ * This is the model class for table "db_owner.KANBAN_JOB_SOURCE".
  */
-class Karyawan extends BaseKaryawan
+class KanbanJobSource extends BaseKanbanJobSource
 {
-    public $cuti, $kontrak_start, $kontrak_end;
-    
+
     public function behaviors()
     {
         return ArrayHelper::merge(
@@ -31,15 +30,5 @@ class Karyawan extends BaseKaryawan
                 # custom validation rules
             ]
         );
-    }
-
-    public function getNikNama()
-    {
-        return $this->NIK . ' - ' . $this->NAMA_KARYAWAN;
-    }
-
-    public function getNikSunfishNama()
-    {
-        return $this->NIK_SUN_FISH . ' - ' . $this->NAMA_KARYAWAN;
     }
 }
