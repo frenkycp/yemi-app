@@ -220,7 +220,7 @@ class ClinicController extends controller
 	        if ($value->keluar != null) {
 	            $keluar = date('H:i', strtotime($value->keluar));
 	        }
-	        $table_container .= '<tr style="letter-spacing: 2px;">
+	        /*$table_container .= '<tr style="letter-spacing: 2px;">
 	            <td class="text-center">' . $value->nik . '</td>
 	            <td>' . $value->nama . '</td>
 	            <td>' . $value->dept . '</td>
@@ -229,12 +229,21 @@ class ClinicController extends controller
 	            <td class="text-center">' . $keluar . '</td>
 	            <td class="text-center">' . $total_this_month->total1 . ' / ' . $total_this_month->total2 . ' / ' . $total_this_month->total3 . '</td>
 	            <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
+	        </tr>';*/
+	        $table_container .= '<tr style="letter-spacing: 2px;">
+	            <td class="text-center">' . $value->nik . '</td>
+	            <td>' . $value->nama . '</td>
+	            <td>' . $value->dept . '</td>
+	            <td class="text-center">' . $category . '</td>
+	            <td class="text-center">' . $masuk . '</td>
+	            <td class="text-center">' . $keluar . '</td>
+	            <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
 	        </tr>';
 	    }
 
 	    if (count($data_clinic) == 0) {
 	        $table_container = '<tr>
-	        <td colspan="8">No Visitor Today</td>
+	        <td colspan="7">No Visitor Today</td>
 	        </tr>';
 	    }
 

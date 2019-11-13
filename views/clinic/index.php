@@ -33,20 +33,20 @@ $this->registerCss("
         border:1px solid #8b8c8d;
         background-color: #858689;
         color: white;
-        font-size: 1.7em;
+        font-size: 2.5em;
         border-bottom: 7px solid #ddd;
         vertical-align: middle;
     }
     #clinic-tbl > tbody > tr > td{
         border:1px solid #ddd;
-        font-size: 1.5em;
+        font-size: 2em;
         background-color: #000;
         //font-weight: 1000;
         color: rgba(255, 235, 59, 1);
         vertical-align: middle;
     }
     .small-box .icon {top: 1px;}
-    .inner p {font-size: 18px;}
+    .inner p {font-size: 18px; text-transform: uppercase;}
 ");
 
 $script = <<< JS
@@ -156,11 +156,11 @@ echo '</pre>';*/
             <th class="text-center">NIK</th>
             <th>Nama</th>
             <th>Departemen</th>
-            <th>Kategori</th>
+            <th class="text-center">Kategori</th>
             <th class="text-center">Masuk</th>
             <th class="text-center">Keluar</th>
-            <th class="text-center">Kunjungan Bulan Ini<br/>(Periksa/Istirahat Sakit/Laktasi)</th>
-            <th class="text-center">Konfirmasi Manager</th>
+            <!--<th class="text-center">Kunjungan Bulan Ini<br/>(Periksa/Istirahat Sakit/Laktasi)</th>-->
+            <th class="text-center">Konfirmasi<br/>Manager</th>
         </tr>
     </thead>
     <tbody id="table-container">
@@ -226,7 +226,7 @@ echo '</pre>';*/
             if ($value->keluar != null) {
                 $keluar = date('H:i', strtotime($value->keluar));
             }
-            echo '<tr style="letter-spacing: 2px;">
+            /*echo '<tr style="letter-spacing: 2px;">
                 <td class="text-center">' . $value->nik . '</td>
                 <td>' . $value->nama . '</td>
                 <td>' . $value->dept . '</td>
@@ -235,12 +235,21 @@ echo '</pre>';*/
                 <td class="text-center">' . $keluar . '</td>
                 <td class="text-center">' . $total_this_month->total1 . ' / ' . $total_this_month->total2 . ' / ' . $total_this_month->total3 . '</td>
                 <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
+            </tr>';*/
+            echo '<tr style="letter-spacing: 2px;">
+                <td class="text-center">' . $value->nik . '</td>
+                <td>' . $value->nama . '</td>
+                <td>' . $value->dept . '</td>
+                <td class="text-center">' . $category . '</td>
+                <td class="text-center">' . $masuk . '</td>
+                <td class="text-center">' . $keluar . '</td>
+                <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
             </tr>';
         }
 
         if (count($data) == 0) {
             echo '<tr>
-            <td colspan="8">No Visitor Today</td>
+            <td colspan="7">No Visitor Today</td>
             </tr>';
         }
         ?>
