@@ -7,6 +7,7 @@ use dmstr\bootstrap\Tabs;
 use yii\web\Controller;
 use app\models\Karyawan;
 use app\models\KanbanHdr;
+use app\models\KanbanDtr;
 use app\models\search\KanbanDataSearch;
 
 class KanbanOfficeController extends Controller
@@ -48,8 +49,6 @@ class KanbanOfficeController extends Controller
                 }
             }
             
-            //$model->username = null;
-            //$model->password = null;
         }
 
         return $this->render('login', [
@@ -91,6 +90,7 @@ class KanbanOfficeController extends Controller
 		return $this->render('index', [
             'total_request' => $total_request,
             'total_progress' => $total_progress,
+            'nik' => $nik
         ]);
 	}
 
@@ -178,6 +178,136 @@ class KanbanOfficeController extends Controller
 
         return $this->render('create', [
             'model' => $model
+        ]);
+    }
+
+    public function actionGetDailyKanban($nik)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $tmp_kanban = KanbanHdr::find()
+        ->where([
+            'confirm_to_nik' => $nik,
+            'job_stage' => 2
+        ])
+        ->all();
+
+        $data = [];
+        foreach ($tmp_kanban as $key => $value) {
+            $data[] = [
+                'title' => strtoupper($value->job_desc) . ' [' . $value->job_dtr_step_close . '/' . $value->job_dtr_step_total . ']',
+                'start' => (strtotime($value->confirm_schedule_date . " +7 hours") * 1000),
+                'allDay' => true,
+                'url' => Url::to(['completion', 'job_hdr_no' => $value->job_hdr_no]),
+                //'color' => '#00a65a' //green
+                'color' => '#f39c12' //orange
+            ];
+        }
+
+        return json_encode($data);
+    }
+
+    public function actionCompletion($job_hdr_no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('kanban_office_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['kanban_office_user'];
+        $name = $session['kanban_office_name'];
+        $this->layout = 'kanban-office\main';
+
+        $header = KanbanHdr::find()->where(['job_hdr_no' => $job_hdr_no])->one();
+        $detail = KanbanDtr::find()->where(['job_hdr_no' => $job_hdr_no])->orderBy('job_dtr_no')->all();
+        return $this->render('completion', [
+            'header' => $header,
+            'detail' => $detail,
+        ]);
+    }
+
+    public function actionFinishJob($job_dtr_seq)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $model = KanbanDtr::find()->where(['job_dtr_seq' => $job_dtr_seq])->one();
+        $model->job_dtr_close_reason = null;
+
+        if ($model->load(\Yii::$app->request->post())) {
+            $model->job_dtr_close_date = date('Y-m-d H:i:s');
+            $model->job_dtr_close_open = 'C';
+            if (!$model->save()) {
+                return json_encode($model->errors);
+            } else {
+                $header = KanbanHdr::find()->where([
+                    'job_hdr_no' => $model->job_hdr_no
+                ])->one();
+
+                $total_close = KanbanDtr::find()->where([
+                    'job_hdr_no' => $model->job_hdr_no,
+                    'job_dtr_close_open' => 'C'
+                ])->count();
+
+                $total_job = KanbanDtr::find()->where([
+                    'job_hdr_no' => $model->job_hdr_no
+                ])->count();
+
+                $header->job_dtr_step_close = $total_close;
+                $header->job_dtr_step_open = $total_job - $total_close;
+                $header->job_dtr_step_total = $total_job;
+                $pct = round(($total_close / $total_job) * 100, 2);
+
+                if (!$header->save()) {
+                    return json_encode($model->errors);
+                }
+                return $this->redirect(Url::previous());
+            }
+        }
+
+        return $this->renderAjax('finish-job', [
+            'model' => $model
+        ]);
+    }
+
+    public function actionConfirm($job_hdr_no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('kanban_office_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['kanban_office_user'];
+        $name = $session['kanban_office_name'];
+        $this->layout = 'kanban-office\main';
+        $model = KanbanHdr::find()->where(['job_hdr_no' => $job_hdr_no])->one();
+        date_default_timezone_set('Asia/Jakarta');
+        $model->request_date = date('Y-m-d', strtotime($model->request_date));
+
+        $input_model = new \yii\base\DynamicModel([
+            'confirm_schedule_date'
+        ]);
+        $input_model->addRule(['confirm_schedule_date'], 'required');
+
+        if($input_model->load(\Yii::$app->request->post())){
+            $karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $nik])->one();
+
+            $model->confirm_schedule_date = $input_model->confirm_schedule_date;
+            $model->confirm_to_nik = $nik;
+            $model->confirm_to_nik_name = $name;
+            $model->confirm_cost_center = $karyawan->CC_ID;
+            $model->confirm_cost_center_desc = $karyawan->SECTION;
+            $model->confirm_department = $karyawan->DEPARTEMEN;
+            $model->confirm_close_open = 'C';
+            $model->job_stage = 2;
+            $model->job_stage_desc = 'IN-PROGRESS';
+            $model->confirm_last_date = date('Y-m-d H:i:s');
+
+            if (!$model->save()) {
+                return json_encode($model->errors);
+            }
+            return $this->redirect(Url::previous());
+        }
+
+        return $this->render('confirm', [
+            'model' => $model,
+            'input_model' => $input_model
         ]);
     }
 }

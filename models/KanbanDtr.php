@@ -31,4 +31,14 @@ class KanbanDtr extends BaseKanbanDtr
             ]
         );
     }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(
+            parent::rules(),
+            [
+                'job_dtr_close_reason' => 'Close Reason',
+            ]
+        );
+    }
 }

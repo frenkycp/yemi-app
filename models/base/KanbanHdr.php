@@ -37,9 +37,9 @@ use Yii;
  * @property string $confirm_close_open
  * @property string $confirm_last_date
  * @property integer $job_lead_time
- * @property string $job_close_open_date
+ * @property string $job_close_date
  * @property string $job_close_open
- * @property string $job_close_open_desc
+ * @property string $job_close_desc
  * @property string $attach_hdr_no
  * @property string $aliasModel
  */
@@ -73,8 +73,8 @@ abstract class KanbanHdr extends \yii\db\ActiveRecord
             [['job_hdr_no'], 'required'],
             [['job_dtr_step_close', 'job_dtr_step_open', 'job_dtr_step_total', 'job_stage', 'job_lead_time'], 'integer'],
             [['job_percentage'], 'number'],
-            [['job_issued_date', 'request_date', 'confirm_schedule_date', 'confirm_last_date', 'job_close_open_date'], 'safe'],
-            [['job_hdr_no', 'job_source', 'job_priority', 'job_type', 'job_flow_id', 'job_issued_nik', 'job_issued_nik_name', 'request_to_nik', 'request_to_nik_name', 'job_stage_desc', 'confirm_to_nik', 'confirm_to_nik_name', 'confirm_cost_center', 'confirm_cost_center_desc', 'confirm_department', 'confirm_type', 'job_close_open', 'job_close_open_desc', 'attach_hdr_no'], 'string', 'max' => 50],
+            [['job_issued_date', 'request_date', 'confirm_schedule_date', 'confirm_last_date', 'job_close_date'], 'safe'],
+            [['job_hdr_no', 'job_source', 'job_priority', 'job_type', 'job_flow_id', 'job_issued_nik', 'job_issued_nik_name', 'request_to_nik', 'request_to_nik_name', 'job_stage_desc', 'confirm_to_nik', 'confirm_to_nik_name', 'confirm_cost_center', 'confirm_cost_center_desc', 'confirm_department', 'confirm_type', 'job_close_open', 'job_close_desc', 'attach_hdr_no'], 'string', 'max' => 50],
             [['job_desc'], 'string', 'max' => 100],
             [['confirm_close_open'], 'string', 'max' => 1],
             [['job_hdr_no'], 'unique']
@@ -115,9 +115,9 @@ abstract class KanbanHdr extends \yii\db\ActiveRecord
             'confirm_close_open' => 'Confirm Close Open',
             'confirm_last_date' => 'Confirm Last Date',
             'job_lead_time' => 'Job Lead Time',
-            'job_close_open_date' => 'Job Close Open Date',
+            'job_close_date' => 'Job Close Date',
             'job_close_open' => 'Job Close Open',
-            'job_close_open_desc' => 'Job Close Open Desc',
+            'job_close_desc' => 'Job Close Desc',
             'attach_hdr_no' => 'Attach Hdr No',
         ];
     }

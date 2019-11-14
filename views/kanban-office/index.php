@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use yii\web\View;
 
 /**
 * @var yii\web\View $this
@@ -18,6 +19,36 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+
+//$this->registerCssFile('@web/css/fullcalendar.css');
+//$this->registerJsFile('@web/js/moment.js');
+//$this->registerJsFile('@web/js/fullcalendar.js');
+
+$script = "
+    $(document).ready(function() {
+
+        // page is now ready, initialize the calendar..
+
+        $('#calendar').fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listWeek'
+            },
+            height: 870,
+            navLinks: true, 
+            editable: true,
+            eventLimit: true, 
+            editable: false,
+            events: '" . Yii::$app->urlManager->createUrl('kanban-office/get-daily-kanban') . "' + '?nik=" . $nik . "',  // request to load current events
+            
+        });
+    });
+
+    
+";
+
+$this->registerJs($script, View::POS_READY);
 
 ?>
 
@@ -58,4 +89,18 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
 			<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
 		</div>
 	</div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="box box-primary box-solid">
+        	<div class="box-header">
+        		<h3 class="box-title">My Kanban Progress</h3>
+        	</div>
+            <div class="box-body no-padding">
+                <div id="calendar"></div>
+            </div>
+        </div>
+
+    </div>
 </div>

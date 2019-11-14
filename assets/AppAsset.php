@@ -18,12 +18,15 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
+        'css/fullcalendar.min.css',
         'css/site.css',
         'css/font.css',
     ];
     public $js = [
         'js/main.js',
         'js/modal.js',
+        'js/moment.js',
+        'js/fullcalendar.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

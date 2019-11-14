@@ -40,8 +40,18 @@ class KanbanHdr extends BaseKanbanHdr
                 'job_desc' => 'Job Description',
                 'job_hdr_no' => 'Job No.',
                 'job_flow_id' => 'Job Group',
-                'request_to_nik' => 'Request to'
+                'request_to_nik' => 'Request to',
+                'job_issued_nik_name' => 'Issued by',
+                'request_to_nik_name' => 'Request to',
+                'confirm_to_nik_name' => 'Confirmed by',
+                'confirm_department' => 'Department',
+                'confirm_cost_center_desc' => 'Section'
             ]
         );
+    }
+
+    public function getKanbanFlowHdr()
+    {
+        return $this->hasOne(KanbanFlowHdr::className(), ['job_flow_id' => 'job_flow_id']);
     }
 }

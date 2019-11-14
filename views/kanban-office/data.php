@@ -17,27 +17,54 @@ $this->title = [
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .container {width: 100% !important;}
+    .disabled-link {color: DarkGrey; cursor: not-allowed;}
+    ");
 
 
 
 $gridColumns = [
 	[
 		'class' => 'kartik\grid\ActionColumn',
-		'template' => '',
+		'template' => '{confirm}',
 		'buttons' => [
-			'judgement' => function($url, $model, $key){
+			'confirm' => function($url, $model, $key){
+                $url = ['confirm', 'job_hdr_no' => $model->job_hdr_no];
                 $options = [
+                    'title' => 'Confirm',
                     'data-pjax' => '0',
-                    'id' => 'btn-judgement',
-                    'value' => Url::to(['judgement','SEQ_LOG' => $model->SEQ_LOG]),
-                    'title' => 'Judgement',
-                    'class' => 'showModalButton'
                 ];
-                return Html::a('<i class="fa fa-fw fa-balance-scale"></i>', '#', $options);
-            },
+                if($model->job_stage == 1){
+                    return Html::a('<i class="glyphicon glyphicon-copy" style="font-size: 1.5em;"></i>', $url, $options);
+                } else {
+                    return '<i class="glyphicon glyphicon-copy disabled-link" style="font-size: 1.5em;"></i>';
+                }
+                
+            }
 		],
 	],
+    [
+        'class' => 'kartik\grid\EnumColumn',
+        'attribute' => 'job_stage',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'enum' => [
+            1 => '<span class="badge bg-light-blue">REQUEST</span>',
+            2 => '<span class="badge bg-yellow">IN-PROGRESS</span>',
+            3 => '<span class="badge bg-green">DONE</span>',
+        ],
+        'filter' => [
+            1 => 'REQUEST',
+            2 => 'IN-PROGRESS',
+            3 => 'DONE',
+        ],
+        'format' => 'html',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
     [
         'attribute' => 'job_hdr_no',
         'hAlign' => 'center',
@@ -48,8 +75,113 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'job_flow_id',
+        'value' => function($model){
+            return $model->kanbanFlowHdr->job_flow_desc;
+        },
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'job_desc',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'job_issued_nik_name',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'request_to_nik_name',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'request_date',
+        'value' => function($model){
+            if ($model->request_date == null) {
+                return '-';
+            } else {
+                return date('Y-m-d', strtotime($model->request_date));
+            }
+        },
         'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'job_issued_date',
+        'value' => function($model){
+            if ($model->job_issued_date == null) {
+                return '-';
+            } else {
+                return date('Y-m-d H:i', strtotime($model->job_issued_date));
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'confirm_schedule_date',
+        'value' => function($model){
+            if ($model->confirm_schedule_date == null) {
+                return '-';
+            } else {
+                return date('Y-m-d', strtotime($model->confirm_schedule_date));
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'confirm_to_nik_name',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'confirm_department',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'confirm_cost_center_desc',
+        //'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
@@ -69,40 +201,24 @@ $gridColumns = [
         'attribute' => 'job_priority',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filter' => [
+            'NORMAL' => 'NORMAL',
+            'URGENT' => 'URGENT'
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
-        'attribute' => 'job_flow_id',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'job_issued_date',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'request_date',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'job_stage',
+        'attribute' => 'job_close_date',
+        'value' => function($model){
+            if ($model->job_close_date == null) {
+                return '-';
+            } else {
+                return date('Y-m-d', strtotime($model->job_close_date));
+            }
+        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -126,9 +242,10 @@ $gridColumns = [
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => $gridColumns,
-            //'hover' => true,
+            'hover' => true,
+            'bordered' => true,
             //'condensed' => true,
-            'striped' => false,
+            'striped' => true,
             'pager' => [
                 'firstPageLabel' => 'First',
                 'lastPageLabel'  => 'Last'
