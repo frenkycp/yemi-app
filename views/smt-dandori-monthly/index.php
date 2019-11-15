@@ -9,9 +9,9 @@ use miloschuman\highcharts\Highcharts;
 use yii\web\JsExpression;
 
 $this->title = [
-    'page_title' => 'Monthly SMT Change Model INT Dandori <span class="japanesse text-green">月次SMT段取り管理</span>',
-    'tab_title' => 'Monthly SMT Change Model INT Dandori',
-    'breadcrumbs_title' => 'Monthly SMT Change Model INT Dandori'
+    'page_title' => 'Monthly SMT Internal Dandori <span class="japanesse text-green">月次SMT内段取り管理</span>',
+    'tab_title' => 'Monthly SMT Internal Dandori',
+    'breadcrumbs_title' => 'Monthly SMT Internal Dandori'
 ];
 
 $this->registerCss("
