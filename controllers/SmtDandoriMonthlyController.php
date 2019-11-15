@@ -89,7 +89,7 @@ class SmtDandoriMonthlyController extends Controller
 
         $data = [
             [
-                'name' => 'Total Lot',
+                'name' => 'Avg Lot',
                 'data' => $tmp_data2,
                 'yAxis' => 1,
                 'type' => 'column',
