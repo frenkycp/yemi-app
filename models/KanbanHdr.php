@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class KanbanHdr extends BaseKanbanHdr
 {
+    public $progress;
 
     public function behaviors()
     {

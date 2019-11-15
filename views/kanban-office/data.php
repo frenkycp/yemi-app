@@ -27,7 +27,7 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
 $gridColumns = [
 	[
 		'class' => 'kartik\grid\ActionColumn',
-		'template' => '{confirm}',
+		'template' => '{confirm}&nbsp;&nbsp;&nbsp;{completion}',
 		'buttons' => [
 			'confirm' => function($url, $model, $key){
                 $url = ['confirm', 'job_hdr_no' => $model->job_hdr_no];
@@ -41,8 +41,19 @@ $gridColumns = [
                     return '<i class="glyphicon glyphicon-copy disabled-link" style="font-size: 1.5em;"></i>';
                 }
                 
+            }, 'completion' => function($url, $model, $key){
+                $url = ['completion', 'job_hdr_no' => $model->job_hdr_no];
+                $options = [
+                    'title' => 'Progress Completion',
+                    'data-pjax' => '0',
+                ];
+
+                return Html::a('<i class="glyphicon glyphicon-list-alt" style="font-size: 1.5em;"></i>', $url, $options);
             }
 		],
+        'contentOptions' => [
+            'style' => 'min-width: 80px;'
+        ],
 	],
     [
         'class' => 'kartik\grid\EnumColumn',
@@ -60,6 +71,19 @@ $gridColumns = [
             3 => 'DONE',
         ],
         'format' => 'html',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'progress',
+        'value' => function($model){
+            return '<span>' . $model->job_dtr_step_close . '/' . $model->job_dtr_step_total . '</span>';
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
@@ -170,7 +194,7 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'confirm_department',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -187,7 +211,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'job_source',
         'hAlign' => 'center',

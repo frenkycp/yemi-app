@@ -53,7 +53,7 @@ $this->registerJs("$(function() {
             </div>
             <div class="col-sm-4">
                 <strong>Confirmed Schedule Date</strong>
-                <p class="text-muted"><?= date('Y-m-d', strtotime($header->confirm_schedule_date)); ?></p>
+                <p class="text-muted"><?= $header->confirm_schedule_date == null ? '-' : date('Y-m-d', strtotime($header->confirm_schedule_date)); ?></p>
             </div>
         </div>
     </div>
@@ -78,13 +78,19 @@ $this->registerJs("$(function() {
                 <?php foreach ($detail as $key => $value): ?>
                     <tr>
                         <td class="text-center btn-action">
-                            <?= $value->job_dtr_close_open == 'C' ? '<i class="glyphicon glyphicon-check disabled-link"></i>' : Html::a('<i class="glyphicon glyphicon-check"></i>', '#', [
-                                'data-pjax' => '0',
-                                'id' => 'btn-finish',
-                                'value' => Url::to(['finish-job','job_dtr_seq' => $value->job_dtr_seq]),
-                                'title' => 'Finish Job',
-                                'class' => 'showModalButton'
-                            ]); ?>
+                            <?php
+                            if ($value->job_dtr_close_open == 'O' && $header->job_stage == 2) {
+                                echo Html::a('<i class="glyphicon glyphicon-check"></i>', '#', [
+                                    'data-pjax' => '0',
+                                    'id' => 'btn-finish',
+                                    'value' => Url::to(['finish-job','job_dtr_seq' => $value->job_dtr_seq]),
+                                    'title' => 'Finish Job',
+                                    'class' => 'showModalButton'
+                                ]);
+                            } else {
+                                echo '<i class="glyphicon glyphicon-check disabled-link"></i>';
+                            }
+                            ?>
                         </td>
                         <td class="text-center"><?= $value->job_dtr_no; ?></td>
                         <td><?= $value->job_dtr_desc; ?></td>

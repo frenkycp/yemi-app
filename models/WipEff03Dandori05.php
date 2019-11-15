@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WipEff03Dandori05 extends BaseWipEff03Dandori05
 {
+    public $AVG_ITEM;
 
     public function behaviors()
     {
