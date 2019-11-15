@@ -98,25 +98,29 @@ class DisplayController extends Controller
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
         $model->location = 'WM03';
         $model->line = '01';
+        $target_max = 0;
+        $yaxis_max = 30;
 
         $tmp_data = $tmp_data2 = $tmp_data3 = $categories = $data = [];
-        $yaxis_max = 30;
-        if ($line == '01') {
-            $target_max = 25;
-        } elseif ($line == '02') {
-            $target_max = 15;
-        }
-
-        if ($location == 'WI02') {
-            $target_max = 100;
-            $yaxis_max = 100;
-        } elseif ($location == 'WI01') {
-            $target_max = 60;
-            $yaxis_max = 60;
-        }
+        
+        
 
         if ($model->load($_GET)) {
             
+        }
+
+        if ($model->line == '01') {
+            $target_max = 25;
+        } elseif ($model->line == '02') {
+            $target_max = 15;
+        }
+
+        if ($model->location == 'WI02') {
+            $target_max = 100;
+            $yaxis_max = 100;
+        } elseif ($model->location == 'WI01') {
+            $target_max = 60;
+            $yaxis_max = 60;
         }
 
         $tmp_dandori = WipEff03Dandori05::find()

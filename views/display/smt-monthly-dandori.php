@@ -123,7 +123,7 @@ echo '</pre>';*/
 		                        'style' => [
 		                            'fontFamily' => 'sans-serif',
 		                        ],
-		                        'height' => 290
+		                        'height' => 300
 		                    ],
 		                    'credits' => [
 		                        'enabled' =>false
@@ -194,7 +194,7 @@ echo '</pre>';*/
 		                        'style' => [
 		                            'fontFamily' => 'sans-serif',
 		                        ],
-		                        'height' => 230
+		                        'height' => 300
 		                    ],
 		                    'credits' => [
 		                        'enabled' =>false
@@ -213,7 +213,7 @@ echo '</pre>';*/
 		                            'enabled' => true,
 		                            'text' => 'Minutes',
 		                        ],
-		                        'plotLines' => [
+		                        /*'plotLines' => [
 		                            [
 		                                'value' => $target_max,
 		                                'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
@@ -222,7 +222,7 @@ echo '</pre>';*/
 		                                'label' => ['text' => '']
 		                            ]
 		                        ],
-		                        'max' => $yaxis_max,
+		                        'max' => $yaxis_max,*/
 	                        ],
 		                    'tooltip' => [
 		                        //'shared' => true,
