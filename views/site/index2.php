@@ -229,7 +229,7 @@ $this->registerCss("
                     </div>
                 </div>
                 <div class="panel panel-success">
-                    <div class="panel-heading text-center">E-WIP Performance<br/><span class="japanesse-word"> (E-WIPパフォーマンス)</span></div>
+                    <div class="panel-heading text-center">E-WIP Performance [FA]<br/><span class="japanesse-word"> (E-WIPパフォーマンス)</span></div>
                     <div class="list-group">
                         <div class="list-group-item">
                             <ol style="padding-left: 1em">
@@ -241,6 +241,21 @@ $this->registerCss("
                                 </li>
                                 <li>
                                     <?= Html::a('FA Line Efficiency & Loss Time Monthly<br/><span class="japanesse-word">(月次総組ライン能率&ロースタイム）</span>', ['/dpr-line-efficiency-monthly']); ?>
+                                </li>
+                                <!--<li>
+                                    <?= ''; //Html::a('SMT Performance Ratio<br/><span class="japanesse-word">(SMT パフォーマンス)</span>', ['/smt-performance-ratio']); ?>
+                                </li>-->
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">E-WIP Performance [SMT-INJ]<br/><span class="japanesse-word"> (E-WIPパフォーマンス)</span></div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('Monthly SMT Internal Dandori <span class="japanesse-word">月次SMT内段取り管理</span>', ['/smt-dandori-monthly']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('SMT INJ Performance Data<br/><span class="japanesse-word">(SMT INJ パフォーマンスデータ）</span>', ['/smt-performance-data']); ?>
