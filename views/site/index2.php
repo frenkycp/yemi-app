@@ -258,14 +258,16 @@ $this->registerCss("
                                     <?= Html::a('Monthly SMT Internal Dandori <span class="japanesse-word">月次SMT内段取り管理</span>', ['/smt-dandori-monthly']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT INJ Performance Data<br/><span class="japanesse-word">(SMT INJ パフォーマンスデータ）</span>', ['/smt-performance-data']); ?>
+                                    <?= Html::a('SMT INJ Utility & Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Monthly', ['/smt-line-monthly-utility']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('SMT INJ Utility & Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Daily', ['/smt-daily-utility-report']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT INJ Utility & Loss Time Management<br/><span class="japanesse-word">( SMT INJ 稼働率・ロスタイム管理）</span> | Monthly', ['/smt-line-monthly-utility']); ?>
+                                    <?= Html::a('SMT INJ Performance Data<br/><span class="japanesse-word">(SMT INJ パフォーマンスデータ）</span>', ['/smt-performance-data']); ?>
                                 </li>
+                                
+                                
                                 <!--<li>
                                     <?= ''; //Html::a('SMT Performance Ratio<br/><span class="japanesse-word">(SMT パフォーマンス)</span>', ['/smt-performance-ratio']); ?>
                                 </li>-->

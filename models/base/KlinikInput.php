@@ -29,6 +29,7 @@ use Yii;
  * @property string $obat5
  * @property string $handleby
  * @property integer $confirm
+ * @property string $last_status
  * @property string $aliasModel
  */
 abstract class KlinikInput extends \yii\db\ActiveRecord
@@ -65,6 +66,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             [['CC_ID'], 'string', 'max' => 10],
             [['section'], 'string', 'max' => 50],
             [['status_karyawan'], 'string', 'max' => 20],
+            [['last_status'], 'string', 'max' => 30],
             [['pk'], 'unique']
         ];
     }
@@ -78,7 +80,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'pk' => 'Pk',
             'nik' => 'Nik',
             'nama' => 'Nama',
-            'CC_ID' => 'Cc  ID',
+            'CC_ID' => 'Cc ID',
             'dept' => 'Dept',
             'section' => 'Section',
             'status_karyawan' => 'Status Karyawan',
@@ -95,6 +97,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'obat5' => 'Obat5',
             'handleby' => 'Handleby',
             'confirm' => 'Confirm',
+            'last_status' => 'Last Status',
         ];
     }
 

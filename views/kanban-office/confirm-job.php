@@ -45,11 +45,7 @@ $this->title = [
         	'class' => 'btn btn-success'
         ]); ?>
         
-        
-        <?= Html::a(
-        'Cancel',
-        \yii\helpers\Url::previous(),
-        ['class' => 'btn btn-warning', 'id' => 'btn-cancel']) ?>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" aria-hidden="true"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
     </div>
 </div>
 

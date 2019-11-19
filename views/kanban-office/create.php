@@ -43,6 +43,10 @@ $this->title = [
             'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
                 'NIK_SUN_FISH', 'NAMA_KARYAWAN'
             ])
+            ->where([
+            	'JABATAN_SR' => 'MANAGER',
+            	'AKTIF' => 'Y'
+            ])
             ->all(), 'NIK_SUN_FISH', 'nikSunfishNama'),
             'options' => [
                 'placeholder' => 'Request to ...',

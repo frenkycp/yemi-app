@@ -37,7 +37,7 @@ class KanbanDtr extends BaseKanbanDtr
         return ArrayHelper::merge(
             parent::rules(),
             [
-                'job_dtr_close_reason' => 'Close Reason',
+                'job_dtr_close_reason' => 'Reason',
             ]
         );
     }

@@ -150,7 +150,7 @@ echo '</pre>';*/
     </div>
 </div>
 
-<table class="table table-bordered" id="clinic-tbl">
+<table class="table table-bordered table-condensed" id="clinic-tbl">
     <thead>
         <tr>
             <th class="text-center">NIK</th>
@@ -159,6 +159,7 @@ echo '</pre>';*/
             <th class="text-center">Kategori</th>
             <th class="text-center">Masuk</th>
             <th class="text-center">Keluar</th>
+            <th class="text-center">Status</th>
             <!--<th class="text-center">Kunjungan Bulan Ini<br/>(Periksa/Istirahat Sakit/Laktasi)</th>-->
             <th class="text-center">Konfirmasi<br/>Manager</th>
         </tr>
@@ -243,6 +244,7 @@ echo '</pre>';*/
                 <td class="text-center">' . $category . '</td>
                 <td class="text-center">' . $masuk . '</td>
                 <td class="text-center">' . $keluar . '</td>
+                <td class="text-center">' . $value->last_status . '</td>
                 <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
             </tr>';
         }

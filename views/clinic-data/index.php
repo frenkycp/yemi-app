@@ -224,6 +224,34 @@ $gridColumns = [
         //'hidden' => $is_clinic ? true : false,
     ],
     [
+        'class' => 'kartik\grid\EditableColumn',
+        'attribute' => 'last_status',
+        'label' => 'Status',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'editableOptions'=> [
+            'inputType'=>\kartik\editable\Editable::INPUT_DROPDOWN_LIST ,
+            'data' => \Yii::$app->params['clinic_last_status'],
+        ],
+        'filter' => \Yii::$app->params['clinic_last_status'],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
+        ],
+    ],
+    [
+        'attribute' => 'last_status',
+        'label' => 'Status',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'format' => 'html',
+        'filter' => \Yii::$app->params['clinic_last_status'],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
+        ],
+    ],
+    [
         'attribute' => 'confirm',
         'label' => 'Konfirmasi Manager',
         'value' => function($model){
@@ -340,9 +368,11 @@ if (!$is_clinic) {
     unset($gridColumns[0]);
     unset($gridColumns[7]);
     unset($gridColumns[8]);
+    unset($gridColumns[11]);
 } else {
     unset($gridColumns[9]);
     unset($gridColumns[10]);
+    unset($gridColumns[12]);
 }
 
 ?>

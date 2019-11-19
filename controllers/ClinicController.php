@@ -237,6 +237,7 @@ class ClinicController extends controller
 	            <td class="text-center">' . $category . '</td>
 	            <td class="text-center">' . $masuk . '</td>
 	            <td class="text-center">' . $keluar . '</td>
+	            <td class="text-center">' . $value->last_status . '</td>
 	            <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
 	        </tr>';
 	    }

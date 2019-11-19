@@ -22,23 +22,31 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
     .disabled-link {color: DarkGrey; cursor: not-allowed;}
     ");
 
-
+$this->registerJs("$(function() {
+   $('.btn-confirm').click(function(e) {
+     e.preventDefault();
+     $('#common-modal').modal('show');
+   });
+});");
 
 $gridColumns = [
 	[
 		'class' => 'kartik\grid\ActionColumn',
-		'template' => '{confirm}&nbsp;&nbsp;&nbsp;{completion}',
+		'template' => '{confirm} {completion}',
 		'buttons' => [
 			'confirm' => function($url, $model, $key){
-                $url = ['confirm', 'job_hdr_no' => $model->job_hdr_no];
-                $options = [
-                    'title' => 'Confirm',
-                    'data-pjax' => '0',
-                ];
+                $link_txt = '<i class="fa fa-fw fa-calendar-check-o"></i> CONFIRM';
                 if($model->job_stage == 1){
-                    return Html::a('<i class="glyphicon glyphicon-copy" style="font-size: 1.5em;"></i>', $url, $options);
+                    return Html::a($link_txt, '#', [
+                        'data-pjax' => '0',
+                        'id' => 'btn-confirm',
+                        'value' => Url::to(['confirm-job','job_hdr_no' => $model->job_hdr_no]),
+                        'title' => 'Confirm Schedule Date',
+                        'class' => 'showModalButton btn btn-success btn-xs',
+                    ]);
+                    //return Html::a('<i class="glyphicon glyphicon-copy" style="font-size: 1.5em;"></i>', $url, $options);
                 } else {
-                    return '<i class="glyphicon glyphicon-copy disabled-link" style="font-size: 1.5em;"></i>';
+                    return '<button class="btn btn-success btn-xs disabled">' . $link_txt . '</button>';
                 }
                 
             }, 'completion' => function($url, $model, $key){
@@ -46,49 +54,19 @@ $gridColumns = [
                 $options = [
                     'title' => 'Progress Completion',
                     'data-pjax' => '0',
+                    'class' => 'btn btn-warning btn-xs',
+                    //'style' => 'margin-top: 5px;'
                 ];
 
-                return Html::a('<i class="glyphicon glyphicon-list-alt" style="font-size: 1.5em;"></i>', $url, $options);
+                return Html::a('<i class="glyphicon glyphicon-hourglass"></i> PROGRESS', $url, $options);
             }
 		],
         'contentOptions' => [
-            'style' => 'min-width: 80px;'
+            'style' => 'min-width: 190px;',
         ],
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
 	],
-    [
-        'class' => 'kartik\grid\EnumColumn',
-        'attribute' => 'job_stage',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'enum' => [
-            1 => '<span class="badge bg-light-blue">REQUEST</span>',
-            2 => '<span class="badge bg-yellow">IN-PROGRESS</span>',
-            3 => '<span class="badge bg-green">DONE</span>',
-        ],
-        'filter' => [
-            1 => 'REQUEST',
-            2 => 'IN-PROGRESS',
-            3 => 'DONE',
-        ],
-        'format' => 'html',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'progress',
-        'value' => function($model){
-            return '<span>' . $model->job_dtr_step_close . '/' . $model->job_dtr_step_total . '</span>';
-        },
-        'format' => 'html',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
     [
         'attribute' => 'job_hdr_no',
         'hAlign' => 'center',
@@ -113,6 +91,40 @@ $gridColumns = [
     [
         'attribute' => 'job_desc',
         //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'class' => 'kartik\grid\EnumColumn',
+        'attribute' => 'job_stage',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'enum' => [
+            1 => '<span class="text-light-blue">REQUEST</span>',
+            2 => '<span class="text-yellow">IN-PROGRESS</span>',
+            3 => '<span class="text-green">DONE</span>',
+        ],
+        'filter' => [
+            1 => 'REQUEST',
+            2 => 'IN-PROGRESS',
+            3 => 'DONE',
+        ],
+        'format' => 'html',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'progress',
+        'value' => function($model){
+            return '<span>' . $model->job_dtr_step_close . '/' . $model->job_dtr_step_total . '</span>';
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',

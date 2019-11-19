@@ -86,6 +86,11 @@ class KanbanOfficeController extends Controller
         ])
         ->count();
 
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
 		$this->layout = 'kanban-office\main';
 		return $this->render('index', [
             'total_request' => $total_request,
@@ -217,6 +222,11 @@ class KanbanOfficeController extends Controller
         $name = $session['kanban_office_name'];
         $this->layout = 'kanban-office\main';
 
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
         $header = KanbanHdr::find()->where(['job_hdr_no' => $job_hdr_no])->one();
         $detail = KanbanDtr::find()->where(['job_hdr_no' => $job_hdr_no])->orderBy('job_dtr_no')->all();
         return $this->render('completion', [
@@ -225,41 +235,38 @@ class KanbanOfficeController extends Controller
         ]);
     }
 
-    public function actionFinishJob($job_dtr_seq)
+    public function actionFinishJob($job_dtr_seq, $status)
     {
+        $session = \Yii::$app->session;
+        if (!$session->has('kanban_office_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['kanban_office_user'];
+        $name = $session['kanban_office_name'];
+        $this->layout = 'kanban-office\main';
+
         date_default_timezone_set('Asia/Jakarta');
         $model = KanbanDtr::find()->where(['job_dtr_seq' => $job_dtr_seq])->one();
         $model->job_dtr_close_reason = null;
 
         if ($model->load(\Yii::$app->request->post())) {
-            $model->job_dtr_close_date = date('Y-m-d H:i:s');
-            $model->job_dtr_close_open = 'C';
-            if (!$model->save()) {
-                return json_encode($model->errors);
-            } else {
-                $header = KanbanHdr::find()->where([
-                    'job_hdr_no' => $model->job_hdr_no
-                ])->one();
+            $sql = "{CALL KANBAN_JOB_CLOSE_NORMAL(:job_hdr_no, :job_dtr_no, :job_dtr_close_open, :job_dtr_close_reason, :job_dtr_close_open_user_id)}";
+            $params = [
+                ':job_hdr_no' => $model->job_hdr_no,
+                ':job_dtr_no' => $model->job_dtr_no,
+                ':job_dtr_close_open' => $status,
+                ':job_dtr_close_reason' => $model->job_dtr_close_reason,
+                ':job_dtr_close_open_user_id' => $nik
+            ];
 
-                $total_close = KanbanDtr::find()->where([
-                    'job_hdr_no' => $model->job_hdr_no,
-                    'job_dtr_close_open' => 'C'
-                ])->count();
-
-                $total_job = KanbanDtr::find()->where([
-                    'job_hdr_no' => $model->job_hdr_no
-                ])->count();
-
-                $header->job_dtr_step_close = $total_close;
-                $header->job_dtr_step_open = $total_job - $total_close;
-                $header->job_dtr_step_total = $total_job;
-                $pct = round(($total_close / $total_job) * 100, 2);
-
-                if (!$header->save()) {
-                    return json_encode($model->errors);
-                }
-                return $this->redirect(Url::previous());
+            try {
+                $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
+                //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
+            } catch (Exception $ex) {
+                \Yii::$app->session->setFlash('danger', "Error : $ex");
             }
+
+            return $this->redirect(Url::previous());
         }
 
         return $this->renderAjax('finish-job', [
@@ -267,7 +274,7 @@ class KanbanOfficeController extends Controller
         ]);
     }
 
-    public function actionConfirm($job_hdr_no)
+    public function actionConfirmJob($job_hdr_no)
     {
         $session = \Yii::$app->session;
         if (!$session->has('kanban_office_user')) {
@@ -277,35 +284,33 @@ class KanbanOfficeController extends Controller
         $name = $session['kanban_office_name'];
         $this->layout = 'kanban-office\main';
         $model = KanbanHdr::find()->where(['job_hdr_no' => $job_hdr_no])->one();
-        date_default_timezone_set('Asia/Jakarta');
         $model->request_date = date('Y-m-d', strtotime($model->request_date));
+        date_default_timezone_set('Asia/Jakarta');
 
         $input_model = new \yii\base\DynamicModel([
             'confirm_schedule_date'
         ]);
         $input_model->addRule(['confirm_schedule_date'], 'required');
 
-        if($input_model->load(\Yii::$app->request->post())){
-            $karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $nik])->one();
+        if ($input_model->load(\Yii::$app->request->post())) {
+            //return $job_hdr_no . ', ' . $input_model->confirm_schedule_date . ' - ' . $nik;
+            $sql = "{CALL KANBAN_JOB_CONFIRM(:job_hdr_no, :confirm_date, :confirm_to_nik)}";
+            $params = [
+                ':job_hdr_no' => $job_hdr_no,
+                ':confirm_date' => $input_model->confirm_schedule_date,
+                ':confirm_to_nik' => $nik
+            ];
 
-            $model->confirm_schedule_date = $input_model->confirm_schedule_date;
-            $model->confirm_to_nik = $nik;
-            $model->confirm_to_nik_name = $name;
-            $model->confirm_cost_center = $karyawan->CC_ID;
-            $model->confirm_cost_center_desc = $karyawan->SECTION;
-            $model->confirm_department = $karyawan->DEPARTEMEN;
-            $model->confirm_close_open = 'C';
-            $model->job_stage = 2;
-            $model->job_stage_desc = 'IN-PROGRESS';
-            $model->confirm_last_date = date('Y-m-d H:i:s');
-
-            if (!$model->save()) {
-                return json_encode($model->errors);
+            try {
+                $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
+                //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
+            } catch (Exception $ex) {
+                \Yii::$app->session->setFlash('danger', "Error : $ex");
             }
             return $this->redirect(Url::previous());
         }
 
-        return $this->render('confirm', [
+        return $this->renderAjax('confirm-job', [
             'model' => $model,
             'input_model' => $input_model
         ]);
