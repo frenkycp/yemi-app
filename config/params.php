@@ -110,7 +110,12 @@ return [
         'NG' => 'NG',
         'REPAIR' => 'REPAIR',
         'STANDBY' => 'STANDBY',
-    ]
+    ],
+    'clinic_last_status' => [
+        'KEMBALI BEKERJA' => 'KEMBALI BEKERJA',
+        'PULANG' => 'PULANG',
+        'DIRUJUK' => 'DIRUJUK'
+    ],
 ];
 
 function getYearArray()
