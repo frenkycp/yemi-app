@@ -54,7 +54,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['smt-monthly-dandori']),
+    'action' => Url::to(['index']),
 ]); ?>
 
 <div class="row">
