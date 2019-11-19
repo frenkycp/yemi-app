@@ -20,9 +20,9 @@ $this->title = [
 
 $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
-//$this->registerCssFile('@web/css/fullcalendar.css');
-//$this->registerJsFile('@web/js/moment.js');
-//$this->registerJsFile('@web/js/fullcalendar.js');
+$this->registerCssFile('@web/css/fullcalendar.css');
+$this->registerJsFile('@web/js/moment.js');
+$this->registerJsFile('@web/js/fullcalendar.js');
 
 $script = "
     $(document).ready(function() {
