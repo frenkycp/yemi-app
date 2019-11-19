@@ -3,22 +3,21 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\WipHdrDtr as BaseWipHdrDtr;
+use \app\models\base\SprOut as BaseSprOut;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.WIP_HDR_DTR".
+ * This is the model class for table "spr_out".
  */
-class WipHdrDtr extends BaseWipHdrDtr
+class SprOut extends BaseSprOut
 {
-    public $summary_qty, $complete_qty, $plan_total, $output_total, $balance_total, $total_order, $total_started, $total_completed;
 
     public function behaviors()
     {
         return ArrayHelper::merge(
             parent::behaviors(),
             [
-                
+                # custom behaviors
             ]
         );
     }
@@ -28,7 +27,7 @@ class WipHdrDtr extends BaseWipHdrDtr
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['summary_qty', 'complete_qty'], 'number']
+                # custom validation rules
             ]
         );
     }

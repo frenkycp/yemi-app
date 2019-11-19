@@ -83,10 +83,77 @@ use app\models\WipEffTbl;
 use app\models\BeaconTblTrack;
 use app\models\BeaconWipView;
 use app\models\Visitor;
+use app\models\MasalahSmt;
+use app\models\SprOut;
 
 class DisplayController extends Controller
 {
-    
+    public function actionSmtInjToday($value='')
+    {
+        $this->layout = 'clean';
+        $location = 'WM03';
+
+        $dandori_data = WipEff03Dandori05::find()
+        ->select([
+            'child_analyst',
+            'dandori_second' => 'SUM(dandori_second)',
+            'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
+            'lost_etc' => 'SUM(lost_etc)'
+        ])
+        ->where([
+            'child_analyst' => $location,
+            'CONVERT(date, post_date)' => date('Y-m-d')
+        ])
+        ->groupBy('child_analyst')
+        ->one();
+        $dandori_pct = round(($dandori_data->dandori_second / ($dandori_data->SHIFT_TIME - $dandori_data->lost_etc)) * 100);
+
+        $masalah_pcb = MasalahSmt::find()->select([
+            'total_ng' => 'SUM(qty_smt)'
+        ])
+        ->where(['date(created_date)' => date('Y-m-d')])
+        ->groupBy('date(created_date)')
+        ->one();
+        $total_ng = $masalah_pcb->total_ng;
+
+        $output_smt = SprOut::find()
+        ->select([
+            'qty_sprout' => 'SUM(qty_sprout)'
+        ])
+        ->where(['date_sprout' => date('Y-m-d')])
+        ->groupBy('date_sprout')
+        ->one();
+        $total_output = $output_smt->qty_sprout;
+
+        $spr_aoi = 0;
+        if ($total_output > 0) {
+            $spr_aoi = round((($total_output - $total_ng) / $total_output) * 100, 2);
+        }
+
+        $wip_data = WipHdrDtr::find()
+        ->select([
+            'child_analyst',
+            'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+            'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+            'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+        ])
+        ->where([
+            'child_analyst' => $location
+        ])
+        ->andWhere(['<', 'due_date', date('Y-m-d')])
+        ->groupBy('child_analyst')
+        ->one();
+
+        $total_delay = $wip_data->total_order;
+        $total_stock = $wip_data->total_started + $wip_data->total_completed;
+
+        return $this->render('smt-inj-today', [
+            'dandori_pct' => $dandori_pct,
+            'spr_aoi' => $spr_aoi,
+            'total_delay' => $total_delay,
+            'total_stock' => $total_stock,
+        ]);
+    }
     public function actionVisitorRfidView($visitor_name = '', $visitor_company = '')
     {
         $this->layout = 'clean';

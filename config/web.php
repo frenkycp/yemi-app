@@ -112,6 +112,7 @@ $config = [
         'db_mrbs' => require(__DIR__ . '/db_mrbs.php'),
         'db_supplement' => require(__DIR__ . '/db_supplement.php'),
         'db_redy' => require(__DIR__ . '/db_redy.php'),
+        'db_spr' => require(__DIR__ . '/db_spr.php'),
         'db_iot' => require(__DIR__ . '/db_iot.php'),
     ],
     'params' => $params,
