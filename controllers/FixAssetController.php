@@ -85,7 +85,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         $nik = $session['fix_asset_user'];
 		$this->layout = 'fixed-asset/main';
 	    $searchModel  = new FixAssetDataSearch;
-	    //$searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
+	    $searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
