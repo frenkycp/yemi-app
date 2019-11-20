@@ -88,26 +88,9 @@ use app\models\SprOut;
 
 class DisplayController extends Controller
 {
-    public function actionSmtInjToday($value='')
+    public function getSprAoi()
     {
-        $this->layout = 'clean';
-        $location = 'WM03';
-
-        $dandori_data = WipEff03Dandori05::find()
-        ->select([
-            'child_analyst',
-            'dandori_second' => 'SUM(dandori_second)',
-            'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
-            'lost_etc' => 'SUM(lost_etc)'
-        ])
-        ->where([
-            'child_analyst' => $location,
-            'CONVERT(date, post_date)' => date('Y-m-d')
-        ])
-        ->groupBy('child_analyst')
-        ->one();
-        $dandori_pct = round(($dandori_data->dandori_second / ($dandori_data->SHIFT_TIME - $dandori_data->lost_etc)) * 100);
-
+        $return_arr = [];
         $masalah_pcb = MasalahSmt::find()->select([
             'total_ng' => 'SUM(qty_smt)'
         ])
@@ -127,8 +110,80 @@ class DisplayController extends Controller
 
         $spr_aoi = 0;
         if ($total_output > 0) {
-            $spr_aoi = round((($total_output - $total_ng) / $total_output) * 100, 2);
+            $spr_aoi = round((($total_output - $total_ng) / $total_output) * 100, 1);
         }
+        $return_arr[] = $spr_aoi;
+
+        $masalah_pcb = MasalahSmt::find()->select([
+            'total_ng' => 'SUM(qty_smt)'
+        ])
+        ->where(['EXTRACT(year_month FROM created_date)' => date('Ym')])
+        ->groupBy('EXTRACT(year_month FROM created_date)')
+        ->one();
+        $total_ng = $masalah_pcb->total_ng;
+
+        $output_smt = SprOut::find()
+        ->select([
+            'qty_sprout' => 'SUM(qty_sprout)'
+        ])
+        ->where(['EXTRACT(year_month FROM date_sprout)' => date('Ym')])
+        ->groupBy('EXTRACT(year_month FROM date_sprout)')
+        ->one();
+        $total_output = $output_smt->qty_sprout;
+
+        $spr_aoi = 0;
+        if ($total_output > 0) {
+            $spr_aoi = round((($total_output - $total_ng) / $total_output) * 100, 1);
+        }
+
+        $return_arr[] = $spr_aoi;
+        return $return_arr;
+    }
+
+    public function getInternalDandori($location)
+    {
+        $return_arr = [];
+        $dandori_data = WipEff03Dandori05::find()
+        ->select([
+            'child_analyst',
+            'dandori_second' => 'SUM(dandori_second)',
+            'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
+            'lost_etc' => 'SUM(lost_etc)'
+        ])
+        ->where([
+            'child_analyst' => $location,
+            'CONVERT(date, post_date)' => date('Y-m-d')
+        ])
+        ->groupBy('child_analyst')
+        ->one();
+        $dandori_pct = round(($dandori_data->dandori_second / ($dandori_data->SHIFT_TIME - $dandori_data->lost_etc)) * 100);
+        $return_arr[] = $dandori_pct;
+
+        $dandori_data = WipEff03Dandori05::find()
+        ->select([
+            'child_analyst',
+            'dandori_second' => 'SUM(dandori_second)',
+            'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
+            'lost_etc' => 'SUM(lost_etc)'
+        ])
+        ->where([
+            'child_analyst' => $location,
+            'FORMAT(post_date, \'yyyyMM\')' => date('Ym')
+        ])
+        ->groupBy('child_analyst')
+        ->one();
+        $dandori_pct = round(($dandori_data->dandori_second / ($dandori_data->SHIFT_TIME - $dandori_data->lost_etc)) * 100);
+        $return_arr[] = $dandori_pct;
+
+        return $return_arr;
+    }
+
+    public function actionSmtInjToday($value='')
+    {
+        $this->layout = 'clean';
+        $location = 'WM03';
+
+        $dandori_pct = $this->getInternalDandori($location);
 
         $wip_data = WipHdrDtr::find()
         ->select([
@@ -147,6 +202,8 @@ class DisplayController extends Controller
 
         $total_delay = $wip_data->total_order;
         $total_stock = $wip_data->total_started + $wip_data->total_completed;
+
+        $spr_aoi = $this->getSprAoi();
 
         return $this->render('smt-inj-today', [
             'dandori_pct' => $dandori_pct,
