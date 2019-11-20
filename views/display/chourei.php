@@ -74,7 +74,7 @@ echo '</pre>';*/
                                 <!--<td style="vertical-align: middle;"><?= ''; //date('j M\' Y', strtotime($value)); ?></td>-->
                                 <td style="vertical-align: middle;"><?= number_format($tmp_shipping_data['plan']); ?></td>
                                 <td style="vertical-align: middle;"><?= number_format($tmp_shipping_data['actual']) . '<br/><span class="text-green">(' . $tmp_shipping_data['percentage'] . '%)</span>'; ?></td>
-                                <td style="vertical-align: middle;"><?= number_format($tmp_shipping_data['balance']) . '<br/><span class="text-red">(' . (100 - $tmp_shipping_data['percentage']) . '%)</span>'; ?></td>
+                                <td style="vertical-align: middle;"><?= number_format($tmp_shipping_data['balance']) . '<br/><span class="text-red">(' . round((100 - $tmp_shipping_data['percentage']), 2) . '%)</span>'; ?></td>
                                 <td style="vertical-align: middle;">
                                     <?php
                                     if (isset($tmp_shipping_data['gmc_balance'])) {
@@ -132,7 +132,7 @@ echo '</pre>';*/
                                     <td style="vertical-align: middle;"><?= $child_analyst_desc; ?></td>
                                     <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['plan']); ?></td>
                                     <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['actual']) . '<br/><span class="text-green">(' . $vms_detail[$value]['percentage'] . '%)</span>'; ?></td>
-                                    <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['balance']) . '<br/><span class="text-red">(' . (100 - (float)$vms_detail[$value]['percentage']) . '%)</span>'; ?></td>
+                                    <td style="vertical-align: middle;"><?= number_format($vms_detail[$value]['balance']) . '<br/><span class="text-red">(' . round((100 - (float)$vms_detail[$value]['percentage']), 2) . '%)</span>'; ?></td>
                                     <td style="vertical-align: middle;">
                                         <?php
                                         if (isset($vms_detail[$value]['gmc_balance'])) {
