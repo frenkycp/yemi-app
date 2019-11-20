@@ -141,6 +141,7 @@ class DisplayController extends Controller
             'child_analyst' => $location
         ])
         ->andWhere(['<', 'due_date', date('Y-m-d')])
+        ->andWhere(['>=', 'due_date', '2019-11-01'])
         ->groupBy('child_analyst')
         ->one();
 

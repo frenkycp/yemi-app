@@ -11,6 +11,7 @@ use app\models\AssetTbl;
 use app\models\Karyawan;
 use app\models\AssetLocTbl;
 use app\models\AssetLogTbl;
+use app\models\AssetDtrTbl;
 
 class FixAssetController extends \app\controllers\base\FixAssetController
 {
@@ -84,7 +85,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         $nik = $session['fix_asset_user'];
 		$this->layout = 'fixed-asset/main';
 	    $searchModel  = new FixAssetDataSearch;
-	    $searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
+	    //$searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
@@ -140,6 +141,13 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		$model->note = $fixed_asset_data->note;
 		$model->propose_scrap = $model->propose_scrap_dd = 'N';
 
+		$asset_dtr = AssetDtrTbl::find()
+		->where([
+			'faid' => $asset_id
+		])
+		->orderBy('subexp')
+		->all();
+
 		if ($model->load($_POST)) {
 			if ($model->to_loc != '' && $model->to_loc != null) {
 				$fixed_asset_data->location = $model->to_loc;
@@ -165,6 +173,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		return $this->render('stock-take', [
 			'fixed_asset_data' => $fixed_asset_data,
 			'model' => $model,
+			'asset_dtr' => $asset_dtr,
 		]);
 	}
 
