@@ -41,14 +41,8 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
     td {vertical-align: middle !important; height: 120px;}
     .target, .actual {font-size: 4em !important; font-weight: bold !important;}
     .pct {font-size: 0.5em;}
-    .container tr:nth-child(odd) {
-      background-color: #2C3446;
-    }
-
-    /* Background-color of the even rows */
-    .container tr:nth-child(even) {
-          background-color: #2C3446;
-    }
+    .row-title {font-size: 3.5em !important; padding-left: 20px !important;}
+    
 ");
 
 //$this->registerCssFile('@web/css/responsive.css');
@@ -141,7 +135,7 @@ $target_stock = 2000;
                     </td>
                 </tr>
                 <tr>
-                    <td style="font-size: 2em;" rowspan="2">Internal Setup<br/><span class="japanesse">(内段取り)</span></td>
+                    <td class="row-title" rowspan="2">Internal Setup<br/><span class="japanesse">(内段取り)</span></td>
                     <td class="text-center"><?= strtoupper(date('d M \'y')); ?></td>
                     <td class="text-center target">10 <span class="pct">%</span></td>
                     <td class="text-center actual<?= $dandori_txt_class[0]; ?>"><?= $dandori_pct[0]; ?> <span class="pct">%</span></td>
@@ -163,7 +157,7 @@ $target_stock = 2000;
                     </td>
                 </tr>
                 <tr>
-                    <td style="font-size: 2em;">External Setup<br/><span class="japanesse">(外段取り)</span></td>
+                    <td class="row-title">External Setup<br/><span class="japanesse">(外段取り)</span></td>
                     <td class="text-center">NEXT MODEL</td>
                     <td class="text-center target">100 <span class="pct">%</span></td>
                     <td class="text-center actual">-<span style="display: none;" class="pct">%</span></td>
@@ -183,7 +177,7 @@ $target_stock = 2000;
                         $delay_icon = '<i class="fa fa-circle-o icon-status' . $delay_txt_class . '"></i>';
                     }
                     ?>
-                    <td style="font-size: 2em;" colspan="2">Delay Production<br/><span class="japanesse">(生産遅れ)</span></td>
+                    <td class="row-title" colspan="2">Delay Production<br/><span class="japanesse">(生産遅れ)</span></td>
                     <td class="text-center target"><?= number_format($target_delay); ?> <span style="font-size: 0.5em;">PCS</span></td>
                     <td class="text-center actual<?= $delay_txt_class; ?>"><?= number_format($total_delay); ?> <span style="font-size: 0.5em;">PCS</span></td>
                     <td class="text-center">
@@ -202,7 +196,7 @@ $target_stock = 2000;
                         $stock_icon = '<i class="fa fa-circle-o icon-status' . $stock_txt_class . '"></i>';
                     }
                     ?>
-                    <td style="font-size: 2em;" colspan="2">Stock WIP<br/><span class="japanesse">(仕掛り在庫)</span></td>
+                    <td class="row-title" colspan="2">Stock WIP<br/><span class="japanesse">(仕掛り在庫)</span></td>
                     <td class="text-center target"><?= number_format($target_stock); ?> <span style="font-size: 0.5em;">PCS</span></td>
                     <td class="text-center actual<?= $stock_txt_class; ?>"><?= number_format($total_stock); ?> <span style="font-size: 0.5em;">PCS</span></td>
                     <td class="text-center">
