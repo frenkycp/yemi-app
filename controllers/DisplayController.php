@@ -200,8 +200,8 @@ class DisplayController extends Controller
         ->groupBy('child_analyst')
         ->one();
 
-        $total_delay = $wip_data->total_order;
-        $total_stock = $wip_data->total_started + $wip_data->total_completed;
+        $total_delay = ($wip_data->total_order) * -1;
+        $total_stock = ($wip_data->total_started + $wip_data->total_completed);
 
         $spr_aoi = $this->getSprAoi();
 

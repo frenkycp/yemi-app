@@ -40,7 +40,18 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
     }
     td {vertical-align: middle !important; height: 120px;}
     .target, .actual {font-size: 4em !important; font-weight: bold !important;}
+    .pct {font-size: 0.5em;}
+    .container tr:nth-child(odd) {
+      background-color: #2C3446;
+    }
+
+    /* Background-color of the even rows */
+    .container tr:nth-child(even) {
+          background-color: #2C3446;
+    }
 ");
+
+//$this->registerCssFile('@web/css/responsive.css');
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -91,7 +102,7 @@ foreach ($dandori_pct as $key => $value) {
 }
 
 
-$target_delay = 500;
+$target_delay = 0;
 $target_stock = 2000;
 ?>
 <div class="row">
@@ -106,9 +117,9 @@ $target_stock = 2000;
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr style="display: none;">
                     <td style="font-size: 2em;" rowspan="2">SPR (AOI)</td>
-                    <td class="text-center"><?= strtoupper(date('d F Y')); ?></td>
+                    <td class="text-center"><?= strtoupper(date('d M \'y')); ?></td>
                     <td class="text-center target">99.5 %</td>
                     <td class="text-center actual<?= $spr_txt_class[0]; ?>"><?= $spr_aoi[0]; ?> %</td>
                     <td class="text-center" style="">
@@ -118,8 +129,8 @@ $target_stock = 2000;
                         ?>
                     </td>
                 </tr>
-                <tr>
-                    <td class="text-center"><?= strtoupper(date('F Y')); ?></td>
+                <tr style="display: none;">
+                    <td class="text-center"><?= strtoupper(date('M \'y')); ?></td>
                     <td class="text-center target">99.5 %</td>
                     <td class="text-center actual<?= $spr_txt_class[1]; ?>"><?= $spr_aoi[1]; ?> %</td>
                     <td class="text-center" style="">
@@ -130,10 +141,10 @@ $target_stock = 2000;
                     </td>
                 </tr>
                 <tr>
-                    <td style="font-size: 2em;" rowspan="2">INTERNAL SETUP</td>
-                    <td class="text-center"><?= strtoupper(date('d F Y')); ?></td>
-                    <td class="text-center target">10 %</td>
-                    <td class="text-center actual<?= $dandori_txt_class[0]; ?>"><?= $dandori_pct[0]; ?> %</td>
+                    <td style="font-size: 2em;" rowspan="2">Internal Setup<br/><span class="japanesse">(内段取り)</span></td>
+                    <td class="text-center"><?= strtoupper(date('d M \'y')); ?></td>
+                    <td class="text-center target">10 <span class="pct">%</span></td>
+                    <td class="text-center actual<?= $dandori_txt_class[0]; ?>"><?= $dandori_pct[0]; ?> <span class="pct">%</span></td>
                     <td class="text-center">
                         <?php
                         echo $dandori_icon[0];
@@ -141,9 +152,9 @@ $target_stock = 2000;
                     </td>
                 </tr>
                 <tr>
-                    <td class="text-center"><?= strtoupper(date('F Y')); ?></td>
-                    <td class="text-center target">10 %</td>
-                    <td class="text-center actual<?= $dandori_txt_class[1]; ?>"><?= $dandori_pct[1]; ?> %</td>
+                    <td class="text-center"><?= strtoupper(date('M \'y')); ?></td>
+                    <td class="text-center target">10 <span class="pct">%</span></td>
+                    <td class="text-center actual<?= $dandori_txt_class[1]; ?>"><?= $dandori_pct[1]; ?> <span class="pct">%</span></td>
                     <td class="text-center" style="">
                         <?php
                         echo $dandori_icon[1];
@@ -152,8 +163,19 @@ $target_stock = 2000;
                     </td>
                 </tr>
                 <tr>
+                    <td style="font-size: 2em;">External Setup<br/><span class="japanesse">(外段取り)</span></td>
+                    <td class="text-center">NEXT MODEL</td>
+                    <td class="text-center target">100 <span class="pct">%</span></td>
+                    <td class="text-center actual">-<span style="display: none;" class="pct">%</span></td>
+                    <td class="text-center">
+                        <?php
+                        echo '<i class="fa fa-circle-o text-green icon-status"></i>';
+                        ?>
+                    </td>
+                </tr>
+                <tr>
                     <?php
-                    if ($total_delay > $target_delay) {
+                    if ($total_delay < $target_delay) {
                         $delay_txt_class = ' text-red';
                         $delay_icon = '<i class="fa fa-close icon-status blinked' . $delay_txt_class . '"></i>';
                     } else {
@@ -161,9 +183,9 @@ $target_stock = 2000;
                         $delay_icon = '<i class="fa fa-circle-o icon-status' . $delay_txt_class . '"></i>';
                     }
                     ?>
-                    <td style="font-size: 2em;" colspan="2">DELAY PRODUCTION</td>
-                    <td class="text-center target"><?= number_format($target_delay); ?> PCS</td>
-                    <td class="text-center actual<?= $delay_txt_class; ?>"><?= number_format($total_delay); ?> PCS</td>
+                    <td style="font-size: 2em;" colspan="2">Delay Production<br/><span class="japanesse">(生産遅れ)</span></td>
+                    <td class="text-center target"><?= number_format($target_delay); ?> <span style="font-size: 0.5em;">PCS</span></td>
+                    <td class="text-center actual<?= $delay_txt_class; ?>"><?= number_format($total_delay); ?> <span style="font-size: 0.5em;">PCS</span></td>
                     <td class="text-center">
                         <?php
                         echo $delay_icon;
@@ -171,12 +193,21 @@ $target_stock = 2000;
                     </td>
                 </tr>
                 <tr>
-                    <td style="font-size: 2em;" colspan="2">STOCK WIP</td>
-                    <td class="text-center target"><?= number_format($target_stock); ?> PCS</td>
-                    <td class="text-center actual<?= $delay_txt_class; ?>"><?= number_format($total_stock); ?> PCS</td>
+                    <?php
+                    if ($total_stock > $target_stock) {
+                        $stock_txt_class = ' text-red';
+                        $stock_icon = '<i class="fa fa-close icon-status blinked' . $stock_txt_class . '"></i>';
+                    } else {
+                        $stock_txt_class = ' text-green';
+                        $stock_icon = '<i class="fa fa-circle-o icon-status' . $stock_txt_class . '"></i>';
+                    }
+                    ?>
+                    <td style="font-size: 2em;" colspan="2">Stock WIP<br/><span class="japanesse">(仕掛り在庫)</span></td>
+                    <td class="text-center target"><?= number_format($target_stock); ?> <span style="font-size: 0.5em;">PCS</span></td>
+                    <td class="text-center actual<?= $stock_txt_class; ?>"><?= number_format($total_stock); ?> <span style="font-size: 0.5em;">PCS</span></td>
                     <td class="text-center">
                         <?php
-                        echo $delay_icon;
+                        echo $stock_icon;
                         ?>
                     </td>
                 </tr>
