@@ -53,7 +53,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 600000); // milliseconds
+      setTimeout("refreshPage();", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -104,7 +104,7 @@ $target_stock = 2000;
         <table id="smt-today" class="table table-responsive table-bordered">
             <thead>
                 <tr style="font-size: 3em;" class="">
-                    <th class="text-center" colspan="2">SMT</th>
+                    <th class="text-center" colspan="2">SMT <?= $line == '' ? '' : 'LINE ' . (int)$line ?></th>
                     <th class="text-center">TARGET</th>
                     <th class="text-center">ACTUAL</th>
                     <th class="text-center" style="width: 200px;">STATUS</th>

@@ -85,9 +85,102 @@ use app\models\BeaconWipView;
 use app\models\Visitor;
 use app\models\MasalahSmt;
 use app\models\SprOut;
+use app\models\OnhandNice;
 
 class DisplayController extends Controller
 {
+    public function actionSmtStockWip()
+    {
+        $this->layout = 'clean';
+
+        $wip_stock_delay = $this->getWipStockDelay('WM03');
+
+        $tgl_arr = [
+            date('Y-m-d'),
+            date('Y-m-d', strtotime('+1 day')),
+            date('Y-m-d', strtotime('+2 days'))
+        ];
+
+        $stock_arr = [];
+
+        $tmp_stock_delay = $this->getWipStockDelay('WM03', $tgl_arr[0]);
+        $stock_arr[] = $tmp_stock_delay['total_stock'];
+
+        $tmp_stock_delay = $this->getWipStockDelay('WM03', $tgl_arr[1]);
+        $stock_arr[] = $tmp_stock_delay['total_stock'];
+
+        $tmp_stock_delay = $this->getWipStockDelay('WM03', $tgl_arr[2], 'other');
+        $stock_arr[] = $tmp_stock_delay['total_stock'];
+
+        return $this->render('smt-stock-wip', [
+            'target_stock' => 2000,
+            'total_stock' => $wip_stock_delay['total_stock'],
+            'tgl_arr' => $tgl_arr,
+            'stock_arr' => $stock_arr,
+        ]);
+    }
+
+    public function actionOnhandNice($value='')
+    {
+        $this->layout = 'clean';
+        $data = [];
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+            # code...
+        }
+
+        $tmp_onhand = OnhandNice::find()
+        ->select([
+            'LAST_UPDATE',
+            'ONHAND_QTY' => 'SUM(ONHAND_QTY)',
+            'TOT_M3' => 'SUM(TOT_M3)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'FORMAT(LAST_UPDATE, \'yyyy-MM-dd\')', $model->from_date],
+            ['<=', 'FORMAT(LAST_UPDATE, \'yyyy-MM-dd\')', $model->to_date]
+        ])
+        ->groupBy('LAST_UPDATE')
+        ->all();
+
+        $tmp_data_qty = $tmp_data_m3 = [];
+        foreach ($tmp_onhand as $key => $value) {
+            $proddate = (strtotime($value->LAST_UPDATE . " +7 hours") * 1000);
+            $tmp_data_qty[] = [
+                'x' => $proddate,
+                'y' => $value->ONHAND_QTY
+            ];
+            $tmp_data_m3[] = [
+                'x' => $proddate,
+                'y' => $value->TOT_M3
+            ];
+        }
+
+        $data_qty[] = [
+            'name' => 'Total Qty',
+            'data' => $tmp_data_qty
+        ];
+
+        $data_m3[] = [
+            'name' => 'Total M3',
+            'data' => $tmp_data_m3
+        ];
+
+        return $this->render('onhand-nice', [
+            'model' => $model,
+            'data_qty' => $data_qty,
+            'data_m3' => $data_m3,
+        ]);
+    }
+
     public function getSprAoi()
     {
         $return_arr = [];
@@ -140,76 +233,161 @@ class DisplayController extends Controller
         return $return_arr;
     }
 
-    public function getInternalDandori($location)
+    public function getInternalDandori($location, $line = '')
     {
         $return_arr = [];
-        $dandori_data = WipEff03Dandori05::find()
-        ->select([
-            'child_analyst',
-            'dandori_second' => 'SUM(dandori_second)',
-            'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
-            'lost_etc' => 'SUM(lost_etc)'
-        ])
-        ->where([
-            'child_analyst' => $location,
-            'CONVERT(date, post_date)' => date('Y-m-d')
-        ])
-        ->groupBy('child_analyst')
-        ->one();
+        if ($line == '') {
+            $dandori_data = WipEff03Dandori05::find()
+            ->select([
+                'child_analyst',
+                'dandori_second' => 'SUM(dandori_second)',
+                'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
+                'lost_etc' => 'SUM(lost_etc)'
+            ])
+            ->where([
+                'child_analyst' => $location,
+                'CONVERT(date, post_date)' => date('Y-m-d')
+            ])
+            ->groupBy('child_analyst')
+            ->one();
+
+            $dandori_data_monthly = WipEff03Dandori05::find()
+            ->select([
+                'child_analyst',
+                'dandori_second' => 'SUM(dandori_second)',
+                'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
+                'lost_etc' => 'SUM(lost_etc)'
+            ])
+            ->where([
+                'child_analyst' => $location,
+                'FORMAT(post_date, \'yyyyMM\')' => date('Ym')
+            ])
+            ->groupBy('child_analyst')
+            ->one();
+        } else {
+            $dandori_data = WipEff03Dandori05::find()
+            ->select([
+                'child_analyst',
+                'dandori_second' => 'SUM(dandori_second)',
+                'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
+                'lost_etc' => 'SUM(lost_etc)'
+            ])
+            ->where([
+                'child_analyst' => $location,
+                'CONVERT(date, post_date)' => date('Y-m-d'),
+                'LINE' => $line
+            ])
+            ->groupBy('child_analyst')
+            ->one();
+
+            $dandori_data_monthly = WipEff03Dandori05::find()
+            ->select([
+                'child_analyst',
+                'dandori_second' => 'SUM(dandori_second)',
+                'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
+                'lost_etc' => 'SUM(lost_etc)',
+            ])
+            ->where([
+                'child_analyst' => $location,
+                'FORMAT(post_date, \'yyyyMM\')' => date('Ym'),
+                'LINE' => $line
+            ])
+            ->groupBy('child_analyst')
+            ->one();
+        }
+        
         $dandori_pct = round(($dandori_data->dandori_second / ($dandori_data->SHIFT_TIME - $dandori_data->lost_etc)) * 100);
         $return_arr[] = $dandori_pct;
 
-        $dandori_data = WipEff03Dandori05::find()
-        ->select([
-            'child_analyst',
-            'dandori_second' => 'SUM(dandori_second)',
-            'SHIFT_TIME' => 'SUM(SHIFT_TIME)',
-            'lost_etc' => 'SUM(lost_etc)'
-        ])
-        ->where([
-            'child_analyst' => $location,
-            'FORMAT(post_date, \'yyyyMM\')' => date('Ym')
-        ])
-        ->groupBy('child_analyst')
-        ->one();
-        $dandori_pct = round(($dandori_data->dandori_second / ($dandori_data->SHIFT_TIME - $dandori_data->lost_etc)) * 100);
-        $return_arr[] = $dandori_pct;
+        
+        $dandori_pct_monthly = round(($dandori_data_monthly->dandori_second / ($dandori_data_monthly->SHIFT_TIME - $dandori_data_monthly->lost_etc)) * 100);
+        $return_arr[] = $dandori_pct_monthly;
 
         return $return_arr;
     }
 
-    public function actionSmtInjToday($value='')
+    public function getWipStockDelay($location = '', $tgl = '', $other = '')
+    {
+        if ($tgl == '') {
+            $wip_data = WipHdrDtr::find()
+            ->select([
+                'child_analyst',
+                'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+                'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+                'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+            ])
+            ->where([
+                'child_analyst' => $location
+            ])
+            ->andWhere(['<', 'due_date', date('Y-m-d')])
+            ->andWhere(['>=', 'due_date', '2019-11-01'])
+            ->groupBy('child_analyst')
+            ->one();
+        } else {
+            if ($other == 'other') {
+               $wip_data = WipHdrDtr::find()
+                ->select([
+                    'child_analyst',
+                    'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+                    'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+                    'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+                ])
+                ->where([
+                    'child_analyst' => $location,
+                    'source_date' => $tgl
+                ])
+                ->andWhere(['>=', 'source_date', $tgl])
+                ->andWhere(['<', 'due_date', date('Y-m-d')])
+                ->andWhere(['>=', 'due_date', '2019-11-01'])
+                ->groupBy('child_analyst')
+                ->one();
+            } else {
+                 $wip_data = WipHdrDtr::find()
+                ->select([
+                    'child_analyst',
+                    'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+                    'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+                    'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
+                ])
+                ->where([
+                    'child_analyst' => $location,
+                    'source_date' => $tgl
+                ])
+                ->andWhere(['<', 'due_date', date('Y-m-d')])
+                ->andWhere(['>=', 'due_date', '2019-11-01'])
+                ->groupBy('child_analyst')
+                ->one();
+            }
+            
+        }
+        
+
+        $total_delay = ($wip_data->total_order) * -1;
+        $total_stock = ($wip_data->total_started + $wip_data->total_completed);
+
+        return [
+            'total_delay' => $total_delay,
+            'total_stock' => $total_stock
+        ];
+    }
+
+    public function actionSmtInjToday($line='')
     {
         $this->layout = 'clean';
         $location = 'WM03';
 
-        $dandori_pct = $this->getInternalDandori($location);
+        $dandori_pct = $this->getInternalDandori($location, $line);
 
-        $wip_data = WipHdrDtr::find()
-        ->select([
-            'child_analyst',
-            'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
-            'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
-            'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN (act_qty - balance_by_day_2) ELSE 0 END)',
-        ])
-        ->where([
-            'child_analyst' => $location
-        ])
-        ->andWhere(['<', 'due_date', date('Y-m-d')])
-        ->andWhere(['>=', 'due_date', '2019-11-01'])
-        ->groupBy('child_analyst')
-        ->one();
-
-        $total_delay = ($wip_data->total_order) * -1;
-        $total_stock = ($wip_data->total_started + $wip_data->total_completed);
+        $wip_stock_delay = $this->getWipStockDelay($location);
 
         $spr_aoi = $this->getSprAoi();
 
         return $this->render('smt-inj-today', [
             'dandori_pct' => $dandori_pct,
             'spr_aoi' => $spr_aoi,
-            'total_delay' => $total_delay,
-            'total_stock' => $total_stock,
+            'total_delay' => $wip_stock_delay['total_delay'],
+            'total_stock' => $wip_stock_delay['total_stock'],
+            'line' => $line
         ]);
     }
     public function actionVisitorRfidView($visitor_name = '', $visitor_company = '')
