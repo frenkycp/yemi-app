@@ -24,7 +24,7 @@ $model_karyawan = Karyawan::find()->where([
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="<?= \Yii::$app->controller->id == 'external-dandori' && \Yii::$app->controller->action->id == 'data' ? 'active' : ''; ?>">
-                <?= Html::a('<i class="fa fa-sw fa-book"></i> Prod. Plan', ['data']) ?>
+                <?= Html::a('<i class="fa fa-sw fa-book"></i> Dandori Plan', ['data']) ?>
             </li>
           </ul>
         </div>

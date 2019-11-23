@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'WIP SMT Stock',
-    'tab_title' => 'WIP SMT Stock',
-    'breadcrumbs_title' => 'WIP SMT Stock',
+    'page_title' => 'SMT WIP Stock <span class="japanesse">(仕掛り在庫)</span>',
+    'tab_title' => 'SMT WIP Stock ',
+    'breadcrumbs_title' => 'SMT WIP Stock ',
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -58,6 +58,7 @@ $this->registerCss("
     }
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important; font-weight: bold !important;}
+    .description {font-size: 2.2em; padding-left: 10px;}
 ");
 
 
@@ -110,21 +111,21 @@ $this->registerJs($script, View::POS_HEAD );
 <table class="table table-responsive table-bordered">
     <thead>
         <tr>
-            <th>Stock by FA Start</th>
+            <th>Stock LT to FA <span style="color: white;" class="japanesse">(総組までのLT在庫)</span></th>
             <th class="text-center">Qty</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td width="50%">Today (<?= date('d M \'y') ?>)</td>
+            <td width="50%"><span class="description">Today (<?= date('d M \'y') ?>)</span></td>
             <td width="50%" class="actual text-center"><?= number_format($stock_arr[0]); ?> <span style="font-size: 0.5em">pcs</span></td>
         </tr>
         <tr>
-            <td width="50%">Tomorrow</td>
+            <td width="50%"><span class="description">Tomorrow</span></td>
             <td width="50%" class="actual text-center"><?= number_format($stock_arr[1]); ?> <span style="font-size: 0.5em">pcs</span></td>
         </tr>
         <tr>
-            <td width="50%">Other (After Tomorrow)</td>
+            <td width="50%"><span class="description">Other</span></td>
             <td width="50%" class="actual text-center"><?= number_format($stock_arr[2]); ?> <span style="font-size: 0.5em">pcs</span></td>
         </tr>
     </tbody>

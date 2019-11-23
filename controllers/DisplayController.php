@@ -160,7 +160,7 @@ class DisplayController extends Controller
             ];
             $tmp_data_m3[] = [
                 'x' => $proddate,
-                'y' => $value->TOT_M3
+                'y' => round($value->TOT_M3, 1)
             ];
         }
 
@@ -295,8 +295,11 @@ class DisplayController extends Controller
             ->groupBy('child_analyst')
             ->one();
         }
+        $dandori_pct = 0;
+        if (($dandori_data->SHIFT_TIME - $dandori_data->lost_etc) > 0) {
+            $dandori_pct = round(($dandori_data->dandori_second / ($dandori_data->SHIFT_TIME - $dandori_data->lost_etc)) * 100);
+        }
         
-        $dandori_pct = round(($dandori_data->dandori_second / ($dandori_data->SHIFT_TIME - $dandori_data->lost_etc)) * 100);
         $return_arr[] = $dandori_pct;
 
         
@@ -371,6 +374,28 @@ class DisplayController extends Controller
         ];
     }
 
+    public function getCurrentModel($location = '', $line = '')
+    {
+        $today = '2019-11-22';
+        $tmp_data = WipEffTbl::find()
+        ->where([
+            'child_analyst' => $location,
+            'LINE' => $line
+        ])
+        ->andWhere(['<>', 'ext_dandori_status', 0])
+        ->andWhere('ext_dandori_status IS NOT NULL')
+        ->orderBy('ext_dandori_start')
+        ->one();
+
+        $data = [
+            'model_group' => $tmp_data->model_group,
+            'parent_desc' => $tmp_data->parent_desc,
+            'status' => \Yii::$app->params['ext_dandori_status'][$tmp_data->ext_dandori_status],
+        ];
+
+        return $data;
+    }
+
     public function actionSmtInjToday($line='')
     {
         $this->layout = 'clean';
@@ -381,6 +406,8 @@ class DisplayController extends Controller
         $wip_stock_delay = $this->getWipStockDelay($location);
 
         $spr_aoi = $this->getSprAoi();
+
+        $ext_dandori_current = $this->getCurrentModel($location, $line);
 
         return $this->render('smt-inj-today', [
             'dandori_pct' => $dandori_pct,
