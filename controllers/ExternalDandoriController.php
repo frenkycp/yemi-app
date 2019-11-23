@@ -99,11 +99,11 @@ class ExternalDandoriController extends Controller
 
         $searchModel  = new ProdPlanDataSearch;
 
-	    $searchModel->plan_date = date('Y-m-d');
+	    /*$searchModel->plan_date = date('Y-m-d');
 	    if(\Yii::$app->request->get('plan_date') !== null)
 	    {
 	    	$searchModel->plan_date = \Yii::$app->request->get('plan_date');
-	    }
+	    }*/
 	    $searchModel->plan_stats = 'O';
 	    $searchModel->plan_run = 'N';
 	    $searchModel->child_analyst_desc = 'SMT';
@@ -216,10 +216,12 @@ class ExternalDandoriController extends Controller
     	$model->ext_dandori_handover_nik = $nik;
     	$model->ext_dandori_handover_name = $name;
     	$model->ext_dandori_last_update = $this_time;
+    	$model->ext_dandori_lt = strtotime($this_time) - strtotime($model->ext_dandori_start);
 
     	if (!$model->save()) {
-    		return $model->errors;
+    		return json_encode($model->errors);
     	}
+
     	return $this->redirect(Url::previous());
     }
 

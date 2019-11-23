@@ -116,6 +116,18 @@ return [
         'PULANG' => 'PULANG',
         'DIRUJUK' => 'DIRUJUK'
     ],
+    'ext_dandori_status' => [
+        0 => 'OPEN',
+        1 => 'PROGRESS',
+        2 => 'FINISH',
+        3 => 'HAND OVER',
+    ],
+    'ext_dandori_text_class' => [
+        0 => ' text-red',
+        1 => ' text-yellow',
+        2 => ' text-yellow',
+        3 => ' text-greem',
+    ],
 ];
 
 function getYearArray()

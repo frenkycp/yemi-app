@@ -376,24 +376,65 @@ class DisplayController extends Controller
 
     public function getCurrentModel($location = '', $line = '')
     {
-        $today = '2019-11-22';
-        $tmp_data = WipEffTbl::find()
+        //$today = '2019-11-22';
+        //$today = date('Y-m-d');
+        $data = $tmp_data = [];
+
+        $tmp_wip = WipEffTbl::find()
         ->where([
             'child_analyst' => $location,
-            'LINE' => $line
+            'LINE' => $line,
+            //'plan_date' => $today,
+            'ext_dandori_status' => [1, 2],
+            'plan_stats' => 'O',
+            'plan_run' => 'N'
         ])
-        ->andWhere(['<>', 'ext_dandori_status', 0])
-        ->andWhere('ext_dandori_status IS NOT NULL')
         ->orderBy('ext_dandori_start')
         ->one();
+        $kondisi = 1;
 
-        $data = [
-            'model_group' => $tmp_data->model_group,
-            'parent_desc' => $tmp_data->parent_desc,
-            'status' => \Yii::$app->params['ext_dandori_status'][$tmp_data->ext_dandori_status],
+        if ($tmp_wip->lot_id != null) {
+            
+        } else {
+            $tmp_wip = WipEffTbl::find()
+            ->where([
+                'child_analyst' => $location,
+                'LINE' => $line,
+                //'plan_date' => $today,
+                'ext_dandori_status' => 3,
+                'plan_stats' => 'O',
+                'plan_run' => 'N'
+            ])
+            ->orderBy('ext_dandori_handover DESC')
+            ->one();
+            $kondisi = 2;
+            if ($tmp_wip->lot_id != null) {
+                
+            } else {
+                $tmp_wip = WipEffTbl::find()
+                ->where([
+                    'child_analyst' => $location,
+                    'LINE' => $line,
+                    //'plan_date' => $today,
+                    'ext_dandori_status' => 0,
+                    'plan_stats' => 'O',
+                    'plan_run' => 'N'
+                ])
+                ->orderBy('lot_id')
+                ->one();
+                $kondisi = 3;
+            }
+        }
+
+        $tmp_data = [
+            'model_group' => $tmp_wip->model_group,
+            'parent_desc' => $tmp_wip->parent_desc,
+            'status' => $tmp_wip->ext_dandori_status,
+            'qty' => $tmp_wip->qty_all,
+            'kondisi' => $kondisi
         ];
 
-        return $data;
+        return $tmp_data;
     }
 
     public function actionSmtInjToday($line='')
@@ -414,7 +455,8 @@ class DisplayController extends Controller
             'spr_aoi' => $spr_aoi,
             'total_delay' => $wip_stock_delay['total_delay'],
             'total_stock' => $wip_stock_delay['total_stock'],
-            'line' => $line
+            'line' => $line,
+            'ext_dandori_current' => $ext_dandori_current,
         ]);
     }
     public function actionVisitorRfidView($visitor_name = '', $visitor_company = '')

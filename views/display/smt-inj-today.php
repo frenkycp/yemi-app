@@ -106,7 +106,7 @@ $target_stock = 2000;
                 <tr style="font-size: 3em;" class="">
                     <th class="text-center" colspan="2">SMT <?= $line == '' ? '' : 'LINE ' . (int)$line ?></th>
                     <th class="text-center">TARGET</th>
-                    <th class="text-center">ACTUAL</th>
+                    <th class="text-center" width="400px">ACTUAL</th>
                     <th class="text-center" style="width: 200px;">STATUS</th>
                 </tr>
             </thead>
@@ -158,12 +158,41 @@ $target_stock = 2000;
                 </tr>
                 <tr>
                     <td class="row-title">External Setup<br/><span class="japanesse">(外段取り)</span></td>
-                    <td class="text-center">NEXT MODEL</td>
-                    <td class="text-center target">100 <span class="pct">%</span></td>
-                    <td class="text-center actual">-<span style="display: none;" class="pct">%</span></td>
                     <td class="text-center">
                         <?php
-                        echo '<i class="fa fa-circle-o text-green icon-status"></i>';
+
+                        if ($ext_dandori_current['parent_desc'] !== null) {
+                            echo $ext_dandori_current['parent_desc'] . '<br/>(' . $ext_dandori_current['qty'] . ' <span style="font-size: 0.5em;">PCS</span>)';
+                            $ext_dandori_stat = $ext_dandori_current['status'];
+                        } else {
+                            echo 'No Plan Today ...';
+                            $ext_dandori_stat = '-';
+                        }
+                        ?>
+                    </td>
+                    <td class="text-center target">100 <span class="pct">%</span></td>
+                    <td class="text-center actual">
+                        <?php
+                        $ext_dandori_icon = '<i class="fa fa-circle-o text-green icon-status"></i>';
+                        if ($ext_dandori_stat === 0) {
+                            echo '<span class="text-red">' . \Yii::$app->params['ext_dandori_status'][$ext_dandori_stat] . '</span>';
+                            $ext_dandori_icon = '<i class="fa fa-close text-red icon-status blinked"></i>';
+                        } elseif ($ext_dandori_stat === 1) {
+                            echo '<span class="text-yellow">' . \Yii::$app->params['ext_dandori_status'][$ext_dandori_stat] . '</span>';
+                            $ext_dandori_icon = '<i class="fa fa-warning text-yellow icon-status blinked"></i>';
+                        } elseif ($ext_dandori_stat === 2) {
+                            echo '<span class="text-yellow">' . \Yii::$app->params['ext_dandori_status'][$ext_dandori_stat] . '</span>';
+                            $ext_dandori_icon = '<i class="fa fa-warning text-yellow icon-status blinked"></i>';
+                        } elseif ($ext_dandori_stat === 3) {
+                            echo '<span class="text-green">' . \Yii::$app->params['ext_dandori_status'][$ext_dandori_stat] . '</span>';
+                        } else {
+                            echo '-';
+                        }
+                        ?>
+                    </td>
+                    <td class="text-center">
+                        <?php
+                        echo $ext_dandori_icon;
                         ?>
                     </td>
                 </tr>

@@ -35,12 +35,24 @@ class ProductionPlanMonitoringController extends Controller
             'plan_run' => 'R'
     	])
     	->one();
+        if ($currently_running->ext_dandori_status === 0) {
+            $txt_class = 'text-red';
+        } elseif ($currently_running->ext_dandori_status === 1) {
+            $txt_class = 'text-yellow';
+        } elseif ($currently_running->ext_dandori_status === 2) {
+            $txt_class = 'text-yellow';
+        } elseif ($currently_running->ext_dandori_status === 3) {
+            $txt_class = 'text-green';
+        } else {
+            $txt_class = '';
+        }
 
         $running = [
             'lot_no' => $currently_running->lot_id == null ? '-' : $currently_running->lot_id,
             'part_no' => $currently_running->child_all == null ? '-' : $currently_running->child_all,
             'part_desc' => $currently_running->child_desc_all == null ? '-' : $currently_running->child_desc_all,
             'qty' => $currently_running->qty_all == null ? '0' : $currently_running->qty_all,
+            'dandori_status' => $currently_running->ext_dandori_status === null ? '-' : '<span class="' . $txt_class . '">' . \Yii::$app->params['ext_dandori_status'][$currently_running->ext_dandori_status] . '</span>',
         ];
 
     	$location_dropdown = ArrayHelper::map(WipLocation::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc');
@@ -72,12 +84,24 @@ class ProductionPlanMonitoringController extends Controller
 
         $plan_data_arr = [];
         foreach ($plan_data as $value) {
+            if ($value->ext_dandori_status === 0) {
+                $txt_class = 'text-red';
+            } elseif ($value->ext_dandori_status === 1) {
+                $txt_class = 'text-yellow';
+            } elseif ($value->ext_dandori_status === 2) {
+                $txt_class = 'text-yellow';
+            } elseif ($value->ext_dandori_status === 3) {
+                $txt_class = 'text-green';
+            } else {
+                $txt_class = '';
+            }
             $plan_data_arr[] = [
                 'lot_no' => $value->lot_id,
                 'part_no' => $value->child_all,
                 'part_desc' => $value->child_desc_all,
                 'qty' => $value->qty_all,
                 'status' => $value->plan_stats == 'O' ? 'OPEN' : 'CLOSED',
+                'dandori_status' => '<span class="' . $txt_class . '">' . \Yii::$app->params['ext_dandori_status'][$value->ext_dandori_status] . '</span>',
             ];
         }
         /*if (count($plan_data_arr) == 0) {

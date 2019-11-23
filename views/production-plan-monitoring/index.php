@@ -131,7 +131,9 @@ echo '</pre>';*/
             <th style="text-align: center; vertical-align: middle;">Part Number</th>
             <th style="text-align: center; vertical-align: middle;">Part Description</th>
             <th style="text-align: center; vertical-align: middle;">Total Qty</th>
-            <th style="text-align: center; vertical-align: middle;">Status</th>
+            <th style="text-align: center; vertical-align: middle;">Dandori Status</th>
+            <th style="text-align: center; vertical-align: middle;">Plan Status</th>
+            
         </tr>
     </thead>
     <tbody>
@@ -142,6 +144,7 @@ echo '</pre>';*/
                 echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['part_no'] . '</td>';
                 echo '<td style="text-align: center; font-size: 45px; background-color: yellow;">' . $running['part_desc'] . '</td>';
                 echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['qty'] . '</td>';
+                echo '<td style="text-align: center; font-size: 50px; background-color: yellow;">' . $running['dandori_status'] . '</td>';
                 echo '<td id="run-text" style="text-align: center; font-size: 50px; background-color: yellow;">RUN</td>';
             } else {
                 if (count($plan_data) == 0) {
@@ -161,6 +164,7 @@ echo '</pre>';*/
             echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_no'] . '</td>';
             echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['part_desc'] . '</td>';
             echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['qty'] . '</td>';
+            echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['dandori_status'] . '</td>';
             echo '<td class="' . $status_class . '" style="text-align: center; background-color: white; font-size: 30px;">' . $value['status'] . '</td>';
             echo '</tr>';
         }
