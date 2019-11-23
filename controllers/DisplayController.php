@@ -104,7 +104,7 @@ class DisplayController extends Controller
         if ($model->load($_GET)) {
             $tmp_log = KanbanPchLog::find()
             ->select([
-                'last_update',
+                'last_update' => 'FORMAT(last_update, \'yyyy-MM-dd\')',
                 'count_stat' => 'SUM(count_stat)',
                 'in_progress' => 'SUM(in_progress)',
                 'done' => 'SUM(done)',
