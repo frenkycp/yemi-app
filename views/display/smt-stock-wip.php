@@ -17,7 +17,7 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
+    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #00ff2b;}
     .control-label {color: white;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
@@ -59,6 +59,7 @@ $this->registerCss("
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important; font-weight: bold !important;}
     .description {font-size: 2.2em; padding-left: 10px;}
+    .text-red{color: #ff1c00 !important;}
 ");
 
 
@@ -111,22 +112,22 @@ $this->registerJs($script, View::POS_HEAD );
 <table class="table table-responsive table-bordered">
     <thead>
         <tr>
-            <th>Stock LT to FA <span style="color: white;" class="japanesse">(総組までのLT在庫)</span></th>
-            <th class="text-center">Qty</th>
+            <th width="70%" style="font-size: 3.2em;">Stock LT to FA <span class="japanesse">(総組までのLT在庫)</span></th>
+            <th width="30%" style="font-size: 3.2em;" class="text-center">Qty</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td width="50%"><span class="description">Today (<?= date('d M \'y') ?>)</span></td>
-            <td width="50%" class="actual text-center"><?= number_format($stock_arr[0]); ?> <span style="font-size: 0.5em">pcs</span></td>
+            <td><span class="description">Today (<?= date('d M \'y') ?>)</span></td>
+            <td class="actual text-center"><?= number_format($stock_arr[0]); ?> <span style="font-size: 0.5em">pcs</span></td>
         </tr>
         <tr>
-            <td width="50%"><span class="description">Tomorrow</span></td>
-            <td width="50%" class="actual text-center"><?= number_format($stock_arr[1]); ?> <span style="font-size: 0.5em">pcs</span></td>
+            <td><span class="description">Next Day</span></td>
+            <td class="actual text-center"><?= number_format($stock_arr[1]); ?> <span style="font-size: 0.5em">pcs</span></td>
         </tr>
         <tr>
-            <td width="50%"><span class="description">Other</span></td>
-            <td width="50%" class="actual text-center"><?= number_format($stock_arr[2]); ?> <span style="font-size: 0.5em">pcs</span></td>
+            <td><span class="description">Others</span></td>
+            <td class="actual text-center"><?= number_format($stock_arr[2]); ?> <span style="font-size: 0.5em">pcs</span></td>
         </tr>
     </tbody>
 </table>

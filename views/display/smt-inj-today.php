@@ -42,7 +42,7 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
     .target, .actual {font-size: 4em !important; font-weight: bold !important;}
     .pct {font-size: 0.5em;}
     .row-title {font-size: 3.5em !important; padding-left: 20px !important;}
-    
+    .text-red{color: #ff1c00 !important;}
 ");
 
 //$this->registerCssFile('@web/css/responsive.css');
@@ -53,7 +53,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 300000); // milliseconds
+      setTimeout("refreshPage();", 30000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;

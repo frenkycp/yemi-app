@@ -86,9 +86,74 @@ use app\models\Visitor;
 use app\models\MasalahSmt;
 use app\models\SprOut;
 use app\models\OnhandNice;
+use app\models\KanbanPchLog;
 
 class DisplayController extends Controller
 {
+    public function actionPchKanban($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = [];
+
+        $model = new \yii\base\DynamicModel([
+            'kanban_period'
+        ]);
+        $model->addRule(['kanban_period'], 'required');
+
+        if ($model->load($_GET)) {
+            $tmp_log = KanbanPchLog::find()
+            ->select([
+                'last_update',
+                'count_stat' => 'SUM(count_stat)',
+                'in_progress' => 'SUM(in_progress)',
+                'done' => 'SUM(done)',
+            ])
+            ->where([
+                'period' => $model->kanban_period
+            ])
+            ->groupBy('last_update')
+            ->orderBy('last_update')
+            ->all();
+
+            foreach ($tmp_log as $key => $value) {
+                $proddate = (strtotime($value->last_update . " +7 hours") * 1000);
+                $tmp_data_total[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value->count_stat
+                ];
+                $tmp_data_progress[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value->in_progress
+                ];
+                $tmp_data_done[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value->done
+                ];
+            }
+        }
+
+        $data = [
+            [
+                'name' => 'Total',
+                'data' => $tmp_data_total,
+            ],
+            [
+                'name' => 'Done',
+                'data' => $tmp_data_done,
+            ],
+            [
+                'name' => 'In Progress',
+                'data' => $tmp_data_progress,
+            ],
+            
+        ];
+
+        return $this->render('pch-kanban', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
     public function actionSmtStockWip()
     {
         $this->layout = 'clean';
