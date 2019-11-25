@@ -168,14 +168,14 @@ class DisplayController extends Controller
 
         $stock_arr = [];
 
-        $tmp_stock_delay = $this->getWipStockDelay('WM03', $tgl_arr[0]);
-        $stock_arr[] = $tmp_stock_delay['total_stock'];
+        $tmp_stock_delay1 = $this->getWipStockDelay('WM03', $tgl_arr[0]);
+        $stock_arr[] = $tmp_stock_delay1['total_stock'];
 
-        $tmp_stock_delay = $this->getWipStockDelay('WM03', $tgl_arr[1]);
-        $stock_arr[] = $tmp_stock_delay['total_stock'];
+        $tmp_stock_delay2 = $this->getWipStockDelay('WM03', $tgl_arr[1]);
+        $stock_arr[] = $tmp_stock_delay2['total_stock'];
 
-        $tmp_stock_delay = $this->getWipStockDelay('WM03', $tgl_arr[2], 'other');
-        $stock_arr[] = $tmp_stock_delay['total_stock'];
+        $tmp_stock_delay3 = $this->getWipStockDelay('WM03');
+        $stock_arr[] = $tmp_stock_delay3['total_stock'] - ($tmp_stock_delay1['total_stock'] + $tmp_stock_delay2['total_stock']);
 
         return $this->render('smt-stock-wip', [
             'target_stock' => 2000,
@@ -367,8 +367,11 @@ class DisplayController extends Controller
         
         $return_arr[] = $dandori_pct;
 
+        $dandori_pct_monthly = 0;
+        if (($dandori_data_monthly->SHIFT_TIME - $dandori_data_monthly->lost_etc) > 0) {
+            $dandori_pct_monthly = round(($dandori_data_monthly->dandori_second / ($dandori_data_monthly->SHIFT_TIME - $dandori_data_monthly->lost_etc)) * 100); 
+        }
         
-        $dandori_pct_monthly = round(($dandori_data_monthly->dandori_second / ($dandori_data_monthly->SHIFT_TIME - $dandori_data_monthly->lost_etc)) * 100);
         $return_arr[] = $dandori_pct_monthly;
 
         return $return_arr;
