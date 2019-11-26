@@ -70,7 +70,7 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data_losstime);
 echo '</pre>';*/
 
-$img_class = $spr_txt_class = '';
+/*$img_class = $spr_txt_class = '';
 foreach ($spr_aoi as $key => $value) {
     if ($value >= 97) {
         $spr_txt_class[] = ' text-green';
@@ -82,7 +82,7 @@ foreach ($spr_aoi as $key => $value) {
         $spr_txt_class[] = ' text-danger';
         $spr_icon[] = '<i class="fa fa-close text-red icon-status blinked"></i>';
     }
-}
+}*/
 
 foreach ($dandori_pct as $key => $value) {
     
@@ -104,25 +104,25 @@ $target_stock = 2000;
         <table id="smt-today" class="table table-responsive table-bordered">
             <thead>
                 <tr style="font-size: 3em;" class="">
-                    <th class="text-center" colspan="2">SMT <?= $line == '' ? '' : 'LINE ' . (int)$line ?></th>
+                    <th class="text-center" colspan="2"><?= $location_str; ?> <?= $line == '' ? '' : 'LINE ' . (int)$line ?></th>
                     <th class="text-center">TARGET</th>
                     <th class="text-center" width="400px">ACTUAL</th>
                     <th class="text-center" style="width: 200px;">STATUS</th>
                 </tr>
             </thead>
             <tbody>
-                <tr style="display: none;">
+                <!--<tr style="display: none;">
                     <td style="font-size: 2em;" rowspan="2">SPR (AOI)</td>
-                    <td class="text-center"><?= strtoupper(date('d M \'y')); ?></td>
+                    <td class="text-center"><?= '';//strtoupper(date('d M \'y')); ?></td>
                     <td class="text-center target">99.5 %</td>
-                    <td class="text-center actual<?= $spr_txt_class[0]; ?>"><?= $spr_aoi[0]; ?> %</td>
+                    <td class="text-center actual<?= '';//$spr_txt_class[0]; ?>"><?= '';//$spr_aoi[0]; ?> %</td>
                     <td class="text-center" style="">
                         <?php
-                        echo $spr_icon[0];
+                        //echo $spr_icon[0];
                         //echo Html::img($img_link, ['width' => '100', 'class' => $img_class]);
                         ?>
                     </td>
-                </tr>
+                </tr>-->
                 <tr style="display: none;">
                     <td class="text-center"><?= strtoupper(date('M \'y')); ?></td>
                     <td class="text-center target">99.5 %</td>

@@ -505,16 +505,22 @@ class DisplayController extends Controller
         return $tmp_data;
     }
 
-    public function actionSmtInjToday($line='')
+    public function actionSmtInjToday($loc = '',$line='')
     {
         $this->layout = 'clean';
         $location = 'WM03';
+        $location_str = 'SMT';
+        if ($loc != '') {
+            $location = $loc;
+            $tmp_loc = WipLocation::find()->where(['child_analyst' => $location])->one();
+            $location_str = $tmp_loc->child_analyst_desc;
+        }
 
         $dandori_pct = $this->getInternalDandori($location, $line);
 
         $wip_stock_delay = $this->getWipStockDelay($location);
 
-        $spr_aoi = $this->getSprAoi();
+        //$spr_aoi = $this->getSprAoi();
 
         $ext_dandori_current = $this->getCurrentModel($location, $line);
 
@@ -524,6 +530,7 @@ class DisplayController extends Controller
             'total_delay' => $wip_stock_delay['total_delay'],
             'total_stock' => $wip_stock_delay['total_stock'],
             'line' => $line,
+            'location_str' => $location_str,
             'ext_dandori_current' => $ext_dandori_current,
         ]);
     }
