@@ -87,6 +87,7 @@ use app\models\MasalahSmt;
 use app\models\SprOut;
 use app\models\OnhandNice;
 use app\models\KanbanPchLog;
+use app\models\GoSaTbl;
 
 class DisplayController extends Controller
 {
@@ -1703,19 +1704,36 @@ class DisplayController extends Controller
             $left = $location_detail['left'];
             foreach ($tmp_operator as $key => $value) {
                 if ($value->beacon_location == $location) {
+                    $gosa_tbl = GojekOrderTbl::find()->where([
+                        'GOJEK_ID' => $value->GOJEK_ID,
+                        'post_date' => date('Y-m-d')
+                    ])
+                    ->orderBy('daparture_date DESC')
+                    ->one();
                     $count++;
-                    $seconds = $seconds_ori = $this->getSeconds($value->beacon_last_update, $now);
+                    $seconds = $seconds_ori = 0;
+                    if ($gosa_tbl->daparture_date !== null) {
+                        $seconds = $seconds_ori = $this->getSeconds($gosa_tbl->daparture_date, $now);
+                    }
+                    
                     $seconds_str = ' seconds';
                     if ($seconds == 1) {
                         $seconds_str = ' second';
                     }
                     if ($seconds >= 60) {
-                        $seconds = $this->getMinutes($value->beacon_last_update, $now);
+                        $seconds = $this->getMinutes($gosa_tbl->daparture_date, $now);
                         $seconds_str = ' minutes';
                         if ($seconds == 1) {
                             $seconds_str = ' minute';
                         }
                         
+                    }
+                    if ($seconds >= 60) {
+                        $seconds = round($seconds / 60, 1);
+                        $seconds_str = ' hour';
+                        if ($seconds > 1) {
+                            $seconds_str = ' hours';
+                        }
                     }
                     /*$top = ($value->position_y * 16.98);
                     if ($top < 0) {
@@ -1743,7 +1761,7 @@ class DisplayController extends Controller
                             $left = $location_detail['left'];
                             $top += 25;
                         }
-                        $tmp_content .= '<li><span style="opacity: 0.9; letter-spacing: 1px;">' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - </span><small style="opacity: 0.6;">' . $seconds . $seconds_str . ' ago</small></li>';
+                        $tmp_content .= '<li><span style="opacity: 0.9; letter-spacing: 1px;">' . $value->GOJEK_DESC . ' [' . round($value->distance, 1) . 'm] - </span><small style="opacity: 0.6;">' . $seconds . $seconds_str . ' working</small></li>';
                     //}
                 }
             }
