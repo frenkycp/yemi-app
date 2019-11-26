@@ -91,6 +91,51 @@ use app\models\GoSaTbl;
 
 class DisplayController extends Controller
 {
+    public function actionDandoriPlanMonitoring()
+    {
+        $this->layout = 'clean';
+        $data = [];
+        $location = 'WM03';
+        $location_dropdown = ArrayHelper::map(WipLocation::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc');
+
+        if(\Yii::$app->request->get('location') !== null){
+            $location = \Yii::$app->request->get('location');
+        }
+
+        $tmp_wip_eff_tbl = WipEffTbl::find()->where([
+            'child_analyst' => $location,
+            'plan_stats' => 'O',
+            'plan_run' => 'N'
+        ])
+        ->andWhere(['<>', 'ext_dandori_status', 3])
+        ->orderBy('LINE, SMT_SHIFT')
+        ->all();
+
+        foreach ($tmp_wip_eff_tbl as $key => $value) {
+            $data[$value->ext_dandori_status][] = [
+                'line' => $value->LINE,
+                'lot_no' => $value->lot_id,
+                'part_no' => $value->child_all,
+                'part_desc' => $value->child_desc_all,
+                'qty' => $value->qty_all,
+                'dandori_status' => $value->ext_dandori_status
+            ];
+        }
+
+        if ($tmp_wip_eff_tbl) {
+            $no_plan = false;
+        } else {
+            $no_plan = true;
+        }
+
+        return $this->render('dandori-plan-monitoring', [
+            'model' => $model,
+            'data' => $data,
+            'no_plan' => $no_plan,
+            'location' => $location,
+            'location_dropdown' => $location_dropdown,
+        ]);
+    }
     public function actionPchKanban($value='')
     {
         $this->layout = 'clean';
