@@ -91,6 +91,95 @@ use app\models\GoSaTbl;
 
 class DisplayController extends Controller
 {
+    public function actionWipControl2($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $total_wip = 0;
+
+        $tmp_qty = WwStockWaitingProcess02Open::find()
+        ->select([
+            'kelompok',
+            'lot_qty' => 'SUM(lot_qty)'
+        ])
+        ->groupBy('kelompok')
+        ->all();
+
+        $tmp_qty_arr = [];
+        
+        foreach ($tmp_qty as $key => $value) {
+            $tmp_qty_arr[$value->kelompok] = $value->lot_qty;
+            $total_wip += $value->lot_qty;
+        }
+
+        $tmp_ewip = WipEffTbl::find()
+        ->where([
+            'child_analyst' => 'WW02',
+            'jenis_mesin' => 'END',
+        ])
+        ->andWhere(['>', 'plan_date', date('Y-m-d', strtotime(' -15 days'))])
+        ->all();
+
+        $tmp_hdr_dtr = WipHdrDtr::find()
+        ->where([
+            'child_analyst' => 'WW02',
+            'stage' => '03-COMPLETED'
+        ])
+        ->andWhere(['>=', 'source_date', date('Y-m-d', strtotime(' -1 month'))])
+        ->all();
+
+        $tmp_qty = 0;
+        foreach ($tmp_hdr_dtr as $key => $hdr_dtr) {
+            foreach ($tmp_ewip as $key => $ewip) {
+                switch ($hdr_dtr->slip_id) {
+                    case $ewip->slip_id_01:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_02:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_03:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_04:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_05:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_06:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_07:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_08:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_09:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    case $ewip->slip_id_10:
+                        $tmp_qty += ($hdr_dtr->act_qty - $hdr_dtr->balance_by_day_2);
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+            }
+        }
+
+        $data = [
+            'running_saw' => isset($tmp_qty_arr['RSAW']) ? $tmp_qty_arr['RSAW'] : 0,
+            'det' => isset($tmp_qty_arr['DET']) ? $tmp_qty_arr['DET'] : 0,
+            'end' => $tmp_qty,
+            'total_wip' => $total_wip
+        ];
+
+        return $this->render('wip-control2', [
+            'data' => $data,
+        ]);
+    }
     public function actionDandoriPlanMonitoring()
     {
         $this->layout = 'clean';
@@ -224,7 +313,7 @@ class DisplayController extends Controller
         $stock_arr[] = $tmp_stock_delay3['total_stock'] - ($tmp_stock_delay1['total_stock'] + $tmp_stock_delay2['total_stock']);
 
         return $this->render('smt-stock-wip', [
-            'target_stock' => 2000,
+            'target_stock' => 5000,
             'total_stock' => $wip_stock_delay['total_stock'],
             'tgl_arr' => $tgl_arr,
             'stock_arr' => $stock_arr,
