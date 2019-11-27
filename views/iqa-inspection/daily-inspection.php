@@ -117,6 +117,7 @@ echo '</pre>';*/
                         'text' => null
                     ],
                     //'gridLineWidth' => 0,
+                    'max' => 1500
                 ],
                 'credits' => [
                     'enabled' =>false
@@ -129,7 +130,7 @@ echo '</pre>';*/
                 ],
                 'plotOptions' => [
                     'column' => [
-                        'stacking' => 'percent',
+                        'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
                             //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
