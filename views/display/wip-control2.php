@@ -93,61 +93,61 @@ $this->registerJs($script, View::POS_HEAD );
             <?php
             if ($data['total_wip'] >= 6000) {
                 $total_txt_class = ' text-red';
-                $total_src_img = 'thumbs_down_02.gif';
+                $total_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
                 $total_txt_class = ' text-green';
-                $total_src_img = 'thumbs_up_02.png';
+                $total_src_img = '<i style="font-size: 2.5em;" class="fa fa-circle-o text-green"></i>';
             }
             ?>
             <td>Jumlah WIP WW</td>
             <td class="text-center target">< 6,000 <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $total_txt_class; ?>"><?= number_format($data['total_wip']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center"><?= Html::img('@web/uploads/ICON/' . $total_src_img, ['alt' => 'My Icon', 'height' => '100px']); ?></td>
+            <td class="text-center"><?= $total_src_img; ?></td>
         </tr>
         <tr>
             <?php
             if ($data['running_saw'] >= 1000) {
                 $rsaw_txt_class = ' text-red';
-                $rsaw_src_img = 'thumbs_down_02.gif';
+                $rsaw_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
                 $rsaw_txt_class = ' text-green';
-                $rsaw_src_img = 'thumbs_up_02.png';
+                $rsaw_src_img = '<i style="font-size: 2.5em;" class="fa fa-circle-o text-green"></i>';
             }
             ?>
             <td>WIP - Running Saw</td>
             <td class="text-center target">< 1,000 <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $rsaw_txt_class; ?>"><?= number_format($data['running_saw']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center"><?= Html::img('@web/uploads/ICON/' . $rsaw_src_img, ['alt' => 'My Icon', 'height' => '100px']); ?></td>
+            <td class="text-center"><?= $rsaw_src_img; ?></td>
         </tr>
         <tr>
             <?php
             if ($data['det'] >= 1000) {
                 $det_txt_class = ' text-red';
-                $det_src_img = 'thumbs_down_02.gif';
+                $det_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
                 $det_txt_class = ' text-green';
-                $det_src_img = 'thumbs_up_02.png';
+                $det_src_img = '<i style="font-size: 2.5em;" class="fa fa-circle-o text-green"></i>';
             }
             ?>
             <td>WIP - DET</td>
             <td class="text-center target">< 1,000 <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $det_txt_class; ?>"><?= number_format($data['det']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center"><?= Html::img('@web/uploads/ICON/' . $det_src_img, ['alt' => 'My Icon', 'height' => '100px']); ?></td>
+            <td class="text-center"><?= $det_src_img; ?></td>
         </tr>
         <tr>
             <?php
             if ($data['end'] >= 4000) {
                 $end_txt_class = ' text-red';
-                $end_src_img = 'thumbs_down_02.gif';
+                $end_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
                 $end_txt_class = ' text-green';
-                $end_src_img = 'thumbs_up_02.png';
+                $end_src_img = '<i style="font-size: 2.5em;" class="fa fa-circle-o text-green"></i>';
             }
             ?>
             <td>WIP - End</td>
             <td class="text-center target">< 4,000 <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $end_txt_class; ?>"><?= number_format($data['end']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center"><?= Html::img('@web/uploads/ICON/' . $end_src_img, ['alt' => 'My Icon', 'height' => '100px']); ?></td>
+            <td class="text-center"><?= $end_src_img; ?></td>
         </tr>
     </tbody>
 </table>
