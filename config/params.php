@@ -119,8 +119,8 @@ return [
     'ext_dandori_status' => [
         0 => 'OPEN',
         1 => 'PROGRESS',
-        2 => 'FINISH',
-        3 => 'HAND OVER',
+        2 => 'COMPLETE',
+        3 => 'ONSITE',
     ],
     'ext_dandori_text_class' => [
         0 => ' text-red',

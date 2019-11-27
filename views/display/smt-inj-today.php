@@ -98,7 +98,15 @@ foreach ($dandori_pct as $key => $value) {
 
 $target_delay = 0;
 $target_stock = 2000;
+$title_txt = '';
+if (strpos($location_str, 'SMT') !== false) {
+    $title_txt = '<span style="font-size: 5em; color: white; font-weight: bold;">YEMI - SMT TODAY <span style="color: #60e418;" class="japanesse">(本日の塗装)</span></span>';
+}
+if (strpos($location_str, 'INJ') !== false) {
+    $title_txt = '<span style="font-size: 5em; color: white; font-weight: bold;">YEMI - INJ TODAY <span style="color: #60e418;" class="japanesse">(本日のプラ成形)</span></span>';
+}
 ?>
+<?= $title_txt; ?>
 <div class="row">
     <div class="col-md-12">
         <table id="smt-today" class="table table-responsive table-bordered">
@@ -198,7 +206,7 @@ $target_stock = 2000;
                 </tr>
                 <tr>
                     <?php
-                    if ($total_delay < $target_delay) {
+                    if ($prod_target_actual['balance'] < 0) {
                         $delay_txt_class = ' text-red';
                         $delay_icon = '<i class="fa fa-close icon-status blinked' . $delay_txt_class . '"></i>';
                     } else {
@@ -206,18 +214,14 @@ $target_stock = 2000;
                         $delay_icon = '<i class="fa fa-circle-o icon-status' . $delay_txt_class . '"></i>';
                     }
                     ?>
-                    <td class="row-title" colspan="2">Delay Production<br/><span class="japanesse">(生産遅れ)</span></td>
-                    <td class="text-center target"><?= number_format($target_delay); ?> <span style="font-size: 0.5em;">PCS</span></td>
-                    <td class="text-center actual<?= $delay_txt_class; ?>"><?= number_format($total_delay); ?> <span style="font-size: 0.5em;">PCS</span></td>
-                    <td class="text-center">
-                        <?php
-                        echo $delay_icon;
-                        ?>
-                    </td>
+                    <td class="row-title" colspan="2">PRODUCTION PROGRESS (N)<br/><span class="japanesse">対生産計画</span></td>
+                    <td class="text-center target"><?= number_format($prod_target_actual['plan']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                    <td class="text-center actual"><?= number_format($prod_target_actual['actual']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                    <td class="text-center actual<?= $delay_txt_class; ?>"><?= number_format($prod_target_actual['balance']); ?> <span style="font-size: 0.3em;">PCS</span></td>
                 </tr>
-                <tr>
+                <!--<tr>
                     <?php
-                    if ($total_stock > $target_stock) {
+                    /*if ($total_stock > $target_stock) {
                         $stock_txt_class = ' text-red';
                         $stock_icon = '<i class="fa fa-close icon-status blinked' . $stock_txt_class . '"></i>';
                     } else {
@@ -230,10 +234,10 @@ $target_stock = 2000;
                     <td class="text-center actual<?= $stock_txt_class; ?>"><?= number_format($total_stock); ?> <span style="font-size: 0.5em;">PCS</span></td>
                     <td class="text-center">
                         <?php
-                        echo $stock_icon;
+                        echo $stock_icon;*/
                         ?>
                     </td>
-                </tr>
+                </tr>-->
             </tbody>
         </table>
     </div>

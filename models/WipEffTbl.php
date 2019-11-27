@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WipEffTbl extends BaseWipEffTbl
 {
+    public $target_qty, $actual_qty;
 
     public function behaviors()
     {

@@ -5,9 +5,9 @@ use yii\helpers\Html;
 use yii\web\View;
 
 $this->title = [
-    'page_title' => '',
-    'tab_title' => 'Dandori Plan Monitoring',
-    'breadcrumbs_title' => 'Dandori Plan Monitoring'
+    'page_title' => 'External Setup <span class="japanesse" style="color: #60e418;">(外段取り)</span>',
+    'tab_title' => 'External Setup',
+    'breadcrumbs_title' => 'External Setup'
 ];
 
 $this->registerCss("

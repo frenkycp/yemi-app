@@ -132,7 +132,7 @@ echo '</pre>';*/
             <th style="text-align: center; vertical-align: middle;">Part Description</th>
             <th style="text-align: center; vertical-align: middle;">Total Qty</th>
             <th style="text-align: center; vertical-align: middle;">Dandori Status</th>
-            <th style="text-align: center; vertical-align: middle;">Plan Status</th>
+            <th style="text-align: center; vertical-align: middle;">Prod. Status</th>
             
         </tr>
     </thead>

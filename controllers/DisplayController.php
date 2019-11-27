@@ -553,6 +553,7 @@ class DisplayController extends Controller
 
     public function actionSmtInjToday($loc = '',$line='')
     {
+        date_default_timezone_set('Asia/Jakarta');
         $this->layout = 'clean';
         $location = 'WM03';
         $location_str = 'SMT';
@@ -570,6 +571,24 @@ class DisplayController extends Controller
 
         $ext_dandori_current = $this->getCurrentModel($location, $line);
 
+        $tmp_target_actual = WipEffTbl::find()
+        ->select([
+            'plan_date',
+            'target_qty' => 'SUM(qty_all)',
+            'actual_qty' => 'SUM(CASE WHEN plan_stats = \'C\' THEN qty_all ELSE 0 END)'
+        ])
+        ->where([
+            'child_analyst' => $location,
+            'plan_date' => date('Y-m-d')
+        ])
+        ->groupBy('plan_date')
+        ->one();
+        $prod_target_actual = [
+            'plan' => (int)$tmp_target_actual->target_qty,
+            'actual' => (int)$tmp_target_actual->actual_qty,
+            'balance' => (int)($tmp_target_actual->actual_qty - $tmp_target_actual->target_qty)
+        ];
+
         return $this->render('smt-inj-today', [
             'dandori_pct' => $dandori_pct,
             'spr_aoi' => $spr_aoi,
@@ -578,6 +597,7 @@ class DisplayController extends Controller
             'line' => $line,
             'location_str' => $location_str,
             'ext_dandori_current' => $ext_dandori_current,
+            'prod_target_actual' => $prod_target_actual,
         ]);
     }
     public function actionVisitorRfidView($visitor_name = '', $visitor_company = '')
