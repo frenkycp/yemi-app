@@ -43,7 +43,7 @@ use yii\helpers\StringHelper;
             <?= $form->field($model, 'mesin_id')->textInput() ?>
 
 <!-- attribute mesin_nama -->
-            <?= $form->field($model, 'mesin_nama')->textInput(['readonly' => Yii::$app->user->identity->role->id == 1 ? false : true]) ?>
+            <?= $form->field($model, 'mesin_nama')->textInput() ?>
 
 <!-- attribute mesin_catatan -->
             <?= $form->field($model, 'mesin_catatan')->textArea([

@@ -24,10 +24,10 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
     }
     #smt-today > thead > tr > th{
         border:1px solid #8b8c8d;
-        background-color: #595F66;
+        background-color: " . \Yii::$app->params['purple_color'] . ";
         color: white;
         font-size: 24px;
-        border-bottom: 7px solid #ddd;
+        border-bottom: 7px solid #797979;
         vertical-align: middle;
     }
     #smt-today > tbody > tr > td{
