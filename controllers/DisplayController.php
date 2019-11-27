@@ -91,6 +91,54 @@ use app\models\GoSaTbl;
 
 class DisplayController extends Controller
 {
+    public function actionWipControl3($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_beacon = BeaconTbl::find()
+        ->where('lot_number IS NOT NULL')
+        ->all();
+        $now = date('Y-m-d H:i:s');
+
+        $l_series_qty1 = $l_series_qty2 = $hs_series_qty1 = $hs_series_qty2 = $others_qty1 = $others_qty2 = 0;
+        foreach ($tmp_beacon as $key => $value) {
+            $waktu1 = strtotime($value->start_date);
+            $waktu2 = strtotime($now);
+            $waktu_balance_s = $waktu2 - $waktu1;
+            $limit_s = 24 * 3600;
+            if (waktu_balance_s <= $limit_s) {
+                if (strpos($value->model_group, 'HS') !== false && $value->model_group != 'HS8S') {
+                    $hs_series_qty1 += $value->lot_qty;
+                } elseif (strpos($value->model_group, 'L-') !== false) {
+                    $l_series_qty1 += $value->lot_qty;
+                } else {
+                    $others_qty1 += $value->lot_qty;
+                }
+            } else {
+                if (strpos($value->model_group, 'HS') !== false && $value->model_group != 'HS8S') {
+                    $hs_series_qty2 += $value->lot_qty;
+                } elseif (strpos($value->model_group, 'L-') !== false) {
+                    $l_series_qty2 += $value->lot_qty;
+                } else {
+                    $others_qty2 += $value->lot_qty;
+                }
+            }
+        }
+
+        $data = [
+            'hs1' => $hs_series_qty1,
+            'hs2' => $hs_series_qty2,
+            'l1' => $l_series_qty1,
+            'l2' => $l_series_qty2,
+            'others1' => $others_qty1,
+            'others2' => $others_qty2,
+        ];
+
+        return $this->render('wip-control3', [
+            'data' => $data
+        ]);
+    }
     public function actionWipControl2($value='')
     {
         $this->layout = 'clean';
@@ -171,6 +219,7 @@ class DisplayController extends Controller
 
         $data = [
             'running_saw' => isset($tmp_qty_arr['RSAW']) ? $tmp_qty_arr['RSAW'] : 0,
+            //'running_saw' => 2000,
             'det' => isset($tmp_qty_arr['DET']) ? $tmp_qty_arr['DET'] : 0,
             'end' => $tmp_qty,
             'total_wip' => $total_wip

@@ -45,7 +45,7 @@ $this->registerCss("
     }
     .table > tbody > tr > td{
         border:1px solid #777474;
-        font-size: 4em;
+        font-size: 2.5em;
         //background-color: #B3E5FC;
         //font-weight: 1000;
         color: #FFF;
@@ -85,42 +85,69 @@ $this->registerJs($script, View::POS_HEAD );
             <th></th>
             <th class="text-center" width="25%">Target</th>
             <th class="text-center" width="25%">Actual</th>
+            <th class="text-center">Status</th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <?php
+            if ($data['total_wip'] >= 6000) {
+                $total_txt_class = ' text-red';
+                $total_src_img = 'thumbs_down_02.gif';
+            } else {
+                $total_txt_class = ' text-green';
+                $total_src_img = 'thumbs_up_02.png';
+            }
+            ?>
             <td>Jumlah WIP WW</td>
             <td class="text-center target">< 6,000 <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual"><?= number_format($data['total_wip']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual<?= $total_txt_class; ?>"><?= number_format($data['total_wip']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center"><?= Html::img('@web/uploads/ICON/' . $total_src_img, ['alt' => 'My Icon', 'height' => '100px']); ?></td>
         </tr>
         <tr>
             <?php
             if ($data['running_saw'] >= 1000) {
                 $rsaw_txt_class = ' text-red';
+                $rsaw_src_img = 'thumbs_down_02.gif';
             } else {
-                //$rsaw_txt_class = ' text-green';
+                $rsaw_txt_class = ' text-green';
+                $rsaw_src_img = 'thumbs_up_02.png';
             }
             ?>
             <td>WIP - Running Saw</td>
             <td class="text-center target">< 1,000 <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $rsaw_txt_class; ?>"><?= number_format($data['running_saw']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center"><?= Html::img('@web/uploads/ICON/' . $rsaw_src_img, ['alt' => 'My Icon', 'height' => '100px']); ?></td>
         </tr>
         <tr>
             <?php
             if ($data['det'] >= 1000) {
                 $det_txt_class = ' text-red';
+                $det_src_img = 'thumbs_down_02.gif';
             } else {
-                //$det_txt_class = ' text-green';
+                $det_txt_class = ' text-green';
+                $det_src_img = 'thumbs_up_02.png';
             }
             ?>
             <td>WIP - DET</td>
             <td class="text-center target">< 1,000 <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $det_txt_class; ?>"><?= number_format($data['det']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center"><?= Html::img('@web/uploads/ICON/' . $det_src_img, ['alt' => 'My Icon', 'height' => '100px']); ?></td>
         </tr>
         <tr>
+            <?php
+            if ($data['end'] >= 4000) {
+                $end_txt_class = ' text-red';
+                $end_src_img = 'thumbs_down_02.gif';
+            } else {
+                $end_txt_class = ' text-green';
+                $end_src_img = 'thumbs_up_02.png';
+            }
+            ?>
             <td>WIP - End</td>
             <td class="text-center target">< 4,000 <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual"><?= number_format($data['end']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual<?= $end_txt_class; ?>"><?= number_format($data['end']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center"><?= Html::img('@web/uploads/ICON/' . $end_src_img, ['alt' => 'My Icon', 'height' => '100px']); ?></td>
         </tr>
     </tbody>
 </table>
