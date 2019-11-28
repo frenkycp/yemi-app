@@ -2115,6 +2115,15 @@ class DisplayController extends Controller
                             'y' => $index,
                             'color' => \Yii::$app->params['bg-green']
                         ];
+
+                        $start_time = (strtotime($break_time1 . " +7 hours") * 1000);
+                        $tmp_data[] = [
+                            'x' => $start_time,
+                            'x2' => (strtotime($break_time1_end . " +7 hours") * 1000),
+                            'y' => $index,
+                            'color' => \Yii::$app->params['bg-yellow']
+                        ];
+
                         if (strtotime($end_time_ori) > strtotime($break_time1_end)) {
                             $start_time_ori = $break_time1_end;
                         }
@@ -2129,6 +2138,15 @@ class DisplayController extends Controller
                             'y' => $index,
                             'color' => \Yii::$app->params['bg-green']
                         ];
+
+                        $start_time = (strtotime($break_time2 . " +7 hours") * 1000);
+                        $tmp_data[] = [
+                            'x' => $start_time,
+                            'x2' => (strtotime($break_time2_end . " +7 hours") * 1000),
+                            'y' => $index,
+                            'color' => \Yii::$app->params['bg-yellow']
+                        ];
+                        
                         if (strtotime($end_time_ori) > strtotime($break_time2_end)) {
                             $start_time_ori = $break_time2_end;
                         }
@@ -2143,6 +2161,15 @@ class DisplayController extends Controller
                             'y' => $index,
                             'color' => \Yii::$app->params['bg-green']
                         ];
+
+                        $start_time = (strtotime($break_time3 . " +7 hours") * 1000);
+                        $tmp_data[] = [
+                            'x' => $start_time,
+                            'x2' => (strtotime($break_time3_end . " +7 hours") * 1000),
+                            'y' => $index,
+                            'color' => \Yii::$app->params['bg-yellow']
+                        ];
+
                         if (strtotime($end_time_ori) > strtotime($break_time3_end)) {
                             $start_time_ori = $break_time3_end;
                         }
