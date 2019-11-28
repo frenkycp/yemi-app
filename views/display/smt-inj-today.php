@@ -100,7 +100,7 @@ $target_delay = 0;
 $target_stock = 2000;
 $title_txt = '';
 if (strpos($location_str, 'SMT') !== false) {
-    $title_txt = '<span style="font-size: 5em; color: white; font-weight: bold;">YEMI - SMT TODAY <span style="color: #60e418;" class="japanesse">(本日の塗装)</span></span>';
+    $title_txt = '<span style="font-size: 5em; color: white; font-weight: bold;">YEMI - SMT TODAY <span style="color: #60e418;" class="japanesse"></span></span>';
 }
 if (strpos($location_str, 'INJ') !== false) {
     $title_txt = '<span style="font-size: 5em; color: white; font-weight: bold;">YEMI - INJ TODAY <span style="color: #60e418;" class="japanesse">(本日のプラ成形)</span></span>';

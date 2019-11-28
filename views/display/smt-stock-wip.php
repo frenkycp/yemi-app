@@ -9,6 +9,16 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
+$title = 'WIP Stock';
+$tab_title = 'WIP Stock';
+if ($loc == 'WM03') {
+    $title = 'SMT WIP Stock <span class="japanesse">(仕掛り在庫)</span>';
+    $tab_title = 'SMT WIP Stock ';
+} elseif ($loc == 'WU01') {
+    $title = 'SPU WIP Stock <span class="japanesse"></span>';
+    $tab_title = 'SMT WIP Stock ';
+}
+
 $this->title = [
     'page_title' => 'SMT WIP Stock <span class="japanesse">(仕掛り在庫)</span>',
     'tab_title' => 'SMT WIP Stock ',
@@ -86,7 +96,7 @@ $this->registerJs($script, View::POS_HEAD );
 <table class="table table-responsive table-bordered">
     <thead>
         <tr>
-            <th class="text-center">Target</th>
+            <th class="text-center">Max</th>
             <th class="text-center">Actual</th>
             <th class="text-center" width="200px">Status</th>
         </tr>

@@ -90,19 +90,19 @@ $this->registerJs($script, View::POS_HEAD );
     </thead>
     <tbody>
         <tr>
-            <td>Model L-Series</td>
+            <td>L - Series</td>
             <td class="text-center actual"><?= number_format($data['l1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $data['l2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['l2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
         <tr>
-            <td>Model HS-Series</td>
+            <td>HS - Series</td>
             <td class="text-center actual"><?= number_format($data['hs1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $data['hs2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['hs2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
         <tr>
-            <td>Others</td>
+            <td>P40 - Series</td>
             <td class="text-center actual"><?= number_format($data['others1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $data['others2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['others2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual<?= $data['others2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= '0'; //number_format($data['others2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
     </tbody>
 </table>

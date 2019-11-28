@@ -146,17 +146,12 @@ class DisplayController extends Controller
         $total_wip = 0;
 
         $tmp_qty = WwStockWaitingProcess02Open::find()
-        ->select([
-            'kelompok',
-            'lot_qty' => 'SUM(lot_qty)'
-        ])
-        ->groupBy('kelompok')
         ->all();
 
         $tmp_qty_arr = [];
         
         foreach ($tmp_qty as $key => $value) {
-            $tmp_qty_arr[$value->kelompok] = $value->lot_qty;
+            $tmp_qty_arr[$value->kelompok] += $value->lot_qty;
             $total_wip += $value->lot_qty;
         }
 
@@ -338,11 +333,12 @@ class DisplayController extends Controller
             'model' => $model,
         ]);
     }
-    public function actionSmtStockWip()
+    public function actionSmtStockWip($loc = 'WM03')
     {
         $this->layout = 'clean';
 
-        $wip_stock_delay = $this->getWipStockDelay('WM03');
+
+        $wip_stock_delay = $this->getWipStockDelay($loc);
 
         $tgl_arr = [
             date('Y-m-d'),
@@ -352,19 +348,20 @@ class DisplayController extends Controller
 
         $stock_arr = [];
 
-        $tmp_stock_delay1 = $this->getWipStockDelay('WM03', $tgl_arr[0]);
+        $tmp_stock_delay1 = $this->getWipStockDelay($loc, $tgl_arr[0]);
         $stock_arr[] = $tmp_stock_delay1['total_stock'];
 
-        $tmp_stock_delay2 = $this->getWipStockDelay('WM03', $tgl_arr[1]);
+        $tmp_stock_delay2 = $this->getWipStockDelay($loc, $tgl_arr[1]);
         $stock_arr[] = $tmp_stock_delay2['total_stock'];
 
-        $tmp_stock_delay3 = $this->getWipStockDelay('WM03');
+        $tmp_stock_delay3 = $this->getWipStockDelay($loc);
         $stock_arr[] = $tmp_stock_delay3['total_stock'] - ($tmp_stock_delay1['total_stock'] + $tmp_stock_delay2['total_stock']);
 
         return $this->render('smt-stock-wip', [
             'target_stock' => 5000,
             'total_stock' => $wip_stock_delay['total_stock'],
             'tgl_arr' => $tgl_arr,
+            'loc' => $loc,
             'stock_arr' => $stock_arr,
         ]);
     }
