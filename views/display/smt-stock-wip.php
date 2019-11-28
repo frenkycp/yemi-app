@@ -20,9 +20,9 @@ if ($loc == 'WM03') {
 }
 
 $this->title = [
-    'page_title' => 'SMT WIP Stock <span class="japanesse">(仕掛り在庫)</span>',
-    'tab_title' => 'SMT WIP Stock ',
-    'breadcrumbs_title' => 'SMT WIP Stock ',
+    'page_title' => $title,
+    'tab_title' => $tab_title,
+    'breadcrumbs_title' => $tab_title,
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
