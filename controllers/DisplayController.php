@@ -2047,7 +2047,6 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $data = $tmp_data = $categories = [];
         $posting_date = date('Y-m-d');
-        $today_name = date('D');
 
         $model = new \yii\base\DynamicModel([
             'posting_date', 'operator'
@@ -2059,6 +2058,7 @@ class DisplayController extends Controller
         if ($model->load($_GET)) {
             
         }
+        $today_name = date('D', strtotime($model->posting_date));
 
         $max_x = (strtotime($model->posting_date . ' 24:00:00' . " +7 hours") * 1000);
         $min_x = (strtotime($model->posting_date . ' 07:00:00' . " +7 hours") * 1000);
@@ -2093,40 +2093,66 @@ class DisplayController extends Controller
                         $end_time_ori = date('Y-m-d H:i:s');
                     }
 
-                    $break_time1 = date('09:20:00');
-                    $break_time1_end = date('09:30:00');
-                    $break_time2 = date('12:10:00');
-                    $break_time2_end = date('12:50:00');
-                    $break_time3 = date('14:20:00');
-                    $break_time3_end = date('14:30:00');
+                    $break_time1 = $model->posting_date . ' 09:20:00';
+                    $break_time1_end = $model->posting_date . ' 09:30:00';
+                    $break_time2 = $model->posting_date . ' 12:10:00';
+                    $break_time2_end = $model->posting_date . ' 12:50:00';
+                    $break_time3 = $model->posting_date . ' 14:20:00';
+                    $break_time3_end = $model->posting_date . ' 14:30:00';
 
                     if ($today_name == 'Fri') {
-                        $break_time2 = date('12:00:00');
-                        $break_time2_end = date('13:10:00');
-                        $break_time3 = date('14:50:00');
-                        $break_time3_end = date('15:00:00');
+                        $break_time2 = $model->posting_date . ' 12:00:00';
+                        $break_time2_end = $model->posting_date . ' 13:10:00';
+                        $break_time3 = $model->posting_date . ' 14:50:00';
+                        $break_time3_end = $model->posting_date . ' 15:00:00';
                     }
 
-                    /*if (date('H:i:s', strtotime($start_time_ori)) < $break_time1 && date('H:i:s', strtotime($end_time_ori)) > $break_time1_end) {
-                        $tgl = date('Y-m-d', strtotime($order->post_date));
+                    if (strtotime($start_time_ori) < strtotime($break_time1) && strtotime($end_time_ori) > strtotime($break_time1)) {
+                        $start_time = (strtotime($start_time_ori . " +7 hours") * 1000);
                         $tmp_data[] = [
                             'x' => $start_time,
-                            'x2' => (strtotime($tgl . ' ' . $break_time1 . " +7 hours") * 1000),
+                            'x2' => (strtotime($break_time1 . " +7 hours") * 1000),
                             'y' => $index,
                             'color' => \Yii::$app->params['bg-green']
                         ];
-                        $tmp_data[] = [
-                            'x' => (strtotime($tgl . ' ' . $break_time1 . " +7 hours") * 1000),
-                            'x2' => (strtotime($tgl . ' ' . $break_time1_end . " +7 hours") * 1000),
-                            'y' => $index,
-                            'color' => \Yii::$app->params['bg-yellow']
-                        ];
-                        $start_time = $tgl . ' ' . $break_time1_end;
-                    }*/
+                        if (strtotime($end_time_ori) > strtotime($break_time1_end)) {
+                            $start_time_ori = $break_time1_end;
+                        }
+                        
+                    }
 
+                    if (strtotime($start_time_ori) < strtotime($break_time2) && strtotime($end_time_ori) > strtotime($break_time2)) {
+                        $start_time = (strtotime($start_time_ori . " +7 hours") * 1000);
+                        $tmp_data[] = [
+                            'x' => $start_time,
+                            'x2' => (strtotime($break_time2 . " +7 hours") * 1000),
+                            'y' => $index,
+                            'color' => \Yii::$app->params['bg-green']
+                        ];
+                        if (strtotime($end_time_ori) > strtotime($break_time2_end)) {
+                            $start_time_ori = $break_time2_end;
+                        }
+                        
+                    }
+
+                    if (strtotime($start_time_ori) < strtotime($break_time3) && strtotime($end_time_ori) > strtotime($break_time3)) {
+                        $start_time = (strtotime($start_time_ori . " +7 hours") * 1000);
+                        $tmp_data[] = [
+                            'x' => $start_time,
+                            'x2' => (strtotime($break_time3 . " +7 hours") * 1000),
+                            'y' => $index,
+                            'color' => \Yii::$app->params['bg-green']
+                        ];
+                        if (strtotime($end_time_ori) > strtotime($break_time3_end)) {
+                            $start_time_ori = $break_time3_end;
+                        }
+                        
+                    }
+
+                    $start_time = (strtotime($start_time_ori . " +7 hours") * 1000);
                     $tmp_data[] = [
                         'x' => $start_time,
-                        'x2' => $end_time,
+                        'x2' => (strtotime($end_time_ori . " +7 hours") * 1000),
                         'y' => $index,
                         'color' => \Yii::$app->params['bg-green']
                     ];
