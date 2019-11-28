@@ -78,7 +78,7 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 ?>
-<span style="color: white">Last Update : <?= date('Y-m-d H:i'); ?></span>
+<span style="color: white; font-size: 1.5em;">Last Update : <?= date('Y-m-d H:i'); ?></span>
 <table class="table table-responsive table-bordered">
     <thead>
         <tr>
@@ -148,6 +148,24 @@ $this->registerJs($script, View::POS_HEAD );
             <td class="text-center target">< 4,000 <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $end_txt_class; ?>"><?= number_format($data['end']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center"><?= $end_src_img; ?></td>
+        </tr>
+    </tbody>
+</table>
+
+<span style="color: white; font-size: 1.5em;">Jumlah WIP WW (Breakdown)</span>
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th width="33%" class="text-center">L - Series</th>
+            <th width="33%" class="text-center">HS - Series</th>
+            <th width="33%" class="text-center">P40 - Series</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-center actual"><?= number_format($qty_series['l_series']) ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual"><?= number_format($qty_series['hs_series']) ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual"><?= number_format($qty_series['p40_series']) ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
     </tbody>
 </table>

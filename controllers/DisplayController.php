@@ -91,6 +91,45 @@ use app\models\GoSaTbl;
 
 class DisplayController extends Controller
 {
+    public function actionWwBeaconLt($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $now = date('Y-m-d H:i:s');
+
+        $tmp_beacon_tbl = BeaconTbl::find()
+        ->where('lot_number IS NOT NULL')
+        ->orderBy('start_date')
+        ->limit(20)
+        ->all();
+
+        $tmp_data = $data = [];
+        foreach ($tmp_beacon_tbl as $key => $value) {
+            $tgl1 = strtotime($value->start_date);
+            $tgl2 = strtotime($now);
+            $balance_s = $tgl2 - $tgl1;
+            $balance_d = round($balance_s / (24 * 3600), 1);
+            $color = 'rgb(0, 255, 0)';
+            if ($balance_d >= 5) {
+                $color = 'rgb(255, 0, 0)';
+            }
+            $categories[] = $value->model_group . ' - ' . $value->gmc_desc . ' (' . $value->gmc . ') ' . $value->lot_qty . ' PCS';
+            $tmp_data[] = [
+                'y' => (float)$balance_d,
+                'color' => $color
+            ];
+        }
+        $data[] = [
+            'name' => 'WW Beacon LT',
+            'data' => $tmp_data
+        ];
+
+        return $this->render('ww-beacon-lt', [
+            'data' => $data,
+            'categories' => $categories
+        ]);
+    }
+
     public function actionWipControl3($value='')
     {
         $this->layout = 'clean';
@@ -151,10 +190,22 @@ class DisplayController extends Controller
 
         $tmp_qty_arr = [];
         
+        $qty_series = [
+            'hs_series' => 0,
+            'l_series' => 0,
+            'p40_series' => 0,
+            'others' => 0
+        ];
         foreach ($tmp_qty as $key => $value) {
             $tmp_qty_arr[$value->kelompok] += $value->lot_qty;
             $total_wip += $value->lot_qty;
-
+            if (strpos($value->model_group, 'HS') !== false && $value->model_group != 'HS8S') {
+                $qty_series['hs_series'] += $value->lot_qty;
+            } elseif (strpos($value->model_group, 'L-') !== false) {
+                $qty_series['l_series'] += $value->lot_qty;
+            } else {
+                $qty_series['others'] += $value->lot_qty;
+            }
         }
 
         $tmp_ewip = WipEffTbl::find()
@@ -224,6 +275,7 @@ class DisplayController extends Controller
 
         return $this->render('wip-control2', [
             'data' => $data,
+            'qty_series' => $qty_series,
         ]);
     }
     public function actionDandoriPlanMonitoring()
