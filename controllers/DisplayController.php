@@ -88,6 +88,7 @@ use app\models\SprOut;
 use app\models\OnhandNice;
 use app\models\KanbanPchLog;
 use app\models\GoSaTbl;
+use app\models\WipModelGroup;
 
 class DisplayController extends Controller
 {
@@ -130,6 +131,19 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function getWipModelGroupId($model_group, $gmc)
+    {
+        $tmp_model_id = 'OTHERS';
+        foreach ($model_group as $key => $value) {
+            if ($value->gmc == $gmc) {
+                $tmp_model_id = $value->category_id;
+            }
+        }
+
+        return $tmp_model_id;
+        # code...
+    }
+
     public function actionWipControl3($value='')
     {
         $this->layout = 'clean';
@@ -140,25 +154,33 @@ class DisplayController extends Controller
         ->all();
         $now = date('Y-m-d H:i:s');
 
-        $l_series_qty1 = $l_series_qty2 = $hs_series_qty1 = $hs_series_qty2 = $others_qty1 = $others_qty2 = 0;
+        $wip_model_group = WipModelGroup::find()->all();
+
+        $l_series_qty1 = $l_series_qty2 = $hs_series_qty1 = $hs_series_qty2 = $p40_series_qty1 = $p40_series_qty2 = $others_qty1 = $others_qty2 = 0;
         foreach ($tmp_beacon as $key => $value) {
             $waktu1 = strtotime($value->start_date);
             $waktu2 = strtotime($now);
             $waktu_balance_s = $waktu2 - $waktu1;
             $limit_s = 24 * 3600;
             if (waktu_balance_s <= $limit_s) {
-                if (strpos($value->model_group, 'HS') !== false && $value->model_group != 'HS8S') {
+                $tmp_model_group = $this->getWipModelGroupId($wip_model_group, $value->parent);
+
+                if ($tmp_model_group == '05') {
                     $hs_series_qty1 += $value->lot_qty;
-                } elseif (strpos($value->model_group, 'L-') !== false) {
+                } elseif ($tmp_model_group == '04') {
                     $l_series_qty1 += $value->lot_qty;
+                } elseif ($tmp_model_group == '03') {
+                    $p40_series_qty1 += $value->lot_qty;
                 } else {
                     $others_qty1 += $value->lot_qty;
                 }
             } else {
-                if (strpos($value->model_group, 'HS') !== false && $value->model_group != 'HS8S') {
+                if ($tmp_model_group == '05') {
                     $hs_series_qty2 += $value->lot_qty;
-                } elseif (strpos($value->model_group, 'L-') !== false) {
+                } elseif ($tmp_model_group == '04') {
                     $l_series_qty2 += $value->lot_qty;
+                } elseif ($tmp_model_group == '03') {
+                    $p40_series_qty2 += $value->lot_qty;
                 } else {
                     $others_qty2 += $value->lot_qty;
                 }
@@ -170,6 +192,8 @@ class DisplayController extends Controller
             'hs2' => $hs_series_qty2,
             'l1' => $l_series_qty1,
             'l2' => $l_series_qty2,
+            'p40_1' => $p40_series_qty1,
+            'p40_2' => $p40_series_qty2,
             'others1' => $others_qty1,
             'others2' => $others_qty2,
         ];
@@ -196,13 +220,19 @@ class DisplayController extends Controller
             'p40_series' => 0,
             'others' => 0
         ];
+
+        $wip_model_group = WipModelGroup::find()->all();
+
         foreach ($tmp_qty as $key => $value) {
             $tmp_qty_arr[$value->kelompok] += $value->lot_qty;
             $total_wip += $value->lot_qty;
-            if (strpos($value->model_group, 'HS') !== false && $value->model_group != 'HS8S') {
+            $tmp_model_group = $this->getWipModelGroupId($wip_model_group, $value->parent);
+            if ($tmp_model_group == '05') {
                 $qty_series['hs_series'] += $value->lot_qty;
-            } elseif (strpos($value->model_group, 'L-') !== false) {
+            } elseif ($tmp_model_group == '04') {
                 $qty_series['l_series'] += $value->lot_qty;
+            } elseif ($tmp_model_group == '03') {
+                $qty_series['p40_series'] += $value->lot_qty;
             } else {
                 $qty_series['others'] += $value->lot_qty;
             }

@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Wood Working Lot LT <span class="japanesse text-green"></span>',
+    'page_title' => 'Wood Working Lot LT (TOP 20) <span class="japanesse text-green"></span>',
     'tab_title' => 'Wood Working Lot LT',
     'breadcrumbs_title' => 'Wood Working Lot LT'
 ];

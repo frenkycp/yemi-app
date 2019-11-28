@@ -101,8 +101,8 @@ $this->registerJs($script, View::POS_HEAD );
         </tr>
         <tr>
             <td>P40 - Series</td>
-            <td class="text-center actual"><?= number_format($data['others1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $data['others2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= '0'; //number_format($data['others2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual"><?= number_format($data['p40_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual<?= $data['p40_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['p40_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
     </tbody>
 </table>
