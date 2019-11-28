@@ -139,6 +139,7 @@ class DisplayController extends Controller
             'data' => $data
         ]);
     }
+
     public function actionWipControl2($value='')
     {
         $this->layout = 'clean';
@@ -153,6 +154,7 @@ class DisplayController extends Controller
         foreach ($tmp_qty as $key => $value) {
             $tmp_qty_arr[$value->kelompok] += $value->lot_qty;
             $total_wip += $value->lot_qty;
+
         }
 
         $tmp_ewip = WipEffTbl::find()
@@ -634,46 +636,11 @@ class DisplayController extends Controller
             'child_analyst' => $location,
             'LINE' => $line,
             //'plan_date' => $today,
-            'ext_dandori_status' => [1, 2],
             'plan_stats' => 'O',
             'plan_run' => 'N'
         ])
-        ->orderBy('ext_dandori_start')
+        ->orderBy('lot_id')
         ->one();
-        $kondisi = 1;
-
-        if ($tmp_wip->lot_id != null) {
-            
-        } else {
-            $tmp_wip = WipEffTbl::find()
-            ->where([
-                'child_analyst' => $location,
-                'LINE' => $line,
-                //'plan_date' => $today,
-                'ext_dandori_status' => 3,
-                'plan_stats' => 'O',
-                'plan_run' => 'N'
-            ])
-            ->orderBy('ext_dandori_handover DESC')
-            ->one();
-            $kondisi = 2;
-            if ($tmp_wip->lot_id != null) {
-                
-            } else {
-                $tmp_wip = WipEffTbl::find()
-                ->where([
-                    'child_analyst' => $location,
-                    'LINE' => $line,
-                    //'plan_date' => $today,
-                    'ext_dandori_status' => 0,
-                    'plan_stats' => 'O',
-                    'plan_run' => 'N'
-                ])
-                ->orderBy('lot_id')
-                ->one();
-                $kondisi = 3;
-            }
-        }
 
         $tmp_data = [
             'model_group' => $tmp_wip->model_group,
@@ -686,7 +653,7 @@ class DisplayController extends Controller
         return $tmp_data;
     }
 
-    public function actionSmtInjToday($loc = '',$line='')
+    public function actionSmtInjToday($loc = '',$line='01')
     {
         date_default_timezone_set('Asia/Jakarta');
         $this->layout = 'clean';
@@ -714,6 +681,7 @@ class DisplayController extends Controller
         ])
         ->where([
             'child_analyst' => $location,
+            'LINE' => $line,
             'plan_date' => date('Y-m-d')
         ])
         ->groupBy('plan_date')
