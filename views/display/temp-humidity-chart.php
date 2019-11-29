@@ -247,14 +247,14 @@ echo '</pre>';*/
                             [
                                 'color' => 'red',
                                 'dashStyle' => 'longdashdot',
-                                'value' => 40,
+                                'value' => $sensor_data->humi_min,
                                 'width' => 2,
                                 'zIndex' => 1,
                             ],
                             [
                                 'color' => 'red',
                                 'dashStyle' => 'longdashdot',
-                                'value' => 80,
+                                'value' => $sensor_data->humi_max,
                                 'width' => 2,
                                 'zIndex' => 1,
                             ]
