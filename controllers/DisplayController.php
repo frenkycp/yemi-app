@@ -92,6 +92,58 @@ use app\models\WipModelGroup;
 
 class DisplayController extends Controller
 {
+    public function actionTemperatureOverDetail($map_no, $period, $shift, $area, $absolute, $category)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        if ($absolute == 'ABSOLUTE') {
+            if ($category == 'PRODUCTION') {
+                $data_table = SensorLog::find()
+                ->where([
+                    'map_no' => $map_no,
+                    'ref_abs' => 'ABSOLUTE',
+                    'range_24_jam' => 'N',
+                    'temp_over' => 1,
+                    'period' => $period,
+                    'shift' => $shift
+                ])
+                ->andWhere('day_name NOT IN (\'Saturday\', \'Sunday\')')
+                ->orderBy('system_date_time')
+                ->all();
+            } else {
+                $data_table = SensorLog::find()
+                ->where([
+                    'map_no' => $map_no,
+                    'ref_abs' => 'ABSOLUTE',
+                    'range_24_jam' => 'Y',
+                    'temp_over' => 1,
+                    'period' => $period,
+                    'shift' => $shift
+                ])
+                ->orderBy('system_date_time')
+                ->all();
+            }
+        } else {
+            $data_table = SensorLog::find()
+            ->where([
+                'map_no' => $map_no,
+                'ref_abs' => 'REFERENCE',
+                'range_24_jam' => 'N',
+                'temp_over' => 1,
+                'period' => $period,
+                'shift' => $shift
+            ])
+            ->andWhere('day_name NOT IN (\'Saturday\', \'Sunday\')')
+            ->orderBy('system_date_time')
+            ->all();
+        }
+
+        return $this->render('temperature-over-detail', [
+            'data_table' => $data_table,
+            'area' => $area,
+        ]);
+    }
     public function actionTemperatureOver($value='')
     {
         $this->layout = 'clean';
@@ -106,56 +158,82 @@ class DisplayController extends Controller
         $model->absolute_or_reference = 'ABSOLUTE';
         $model->production_or_warehouse = 'PRODUCTION';
 
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
         if ($model->load($_GET)) {
 
         }
 
         if ($model->absolute_or_reference == 'ABSOLUTE') {
             if ($model->production_or_warehouse == 'PRODUCTION') {
-                # code...
+                $tmp_tbl = SensorLog::find()
+                ->select([
+                    'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
+                    'total_freq' => 'SUM(temp_over)',
+                    'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
+                    'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
+                    'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
+                ])
+                ->where([
+                    'ref_abs' => 'ABSOLUTE',
+                    'range_24_jam' => 'N',
+                    'temp_over' => 1,
+                    'period' => $model->period
+                ])
+                ->andWhere('day_name NOT IN (\'Saturday\', \'Sunday\')')
+                ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
+                ->orderBy('area')
+                ->all();
+            } else {
+                $tmp_tbl = SensorLog::find()
+                ->select([
+                    'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
+                    'total_freq' => 'SUM(temp_over)',
+                    'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
+                    'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
+                    'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
+                ])
+                ->where([
+                    'ref_abs' => 'ABSOLUTE',
+                    'range_24_jam' => 'Y',
+                    'temp_over' => 1,
+                    'period' => $model->period
+                ])
+                ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
+                ->orderBy('area')
+                ->all();
             }
+        } else {
+            $tmp_tbl = SensorLog::find()
+            ->select([
+                'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
+                'total_freq' => 'SUM(temp_over)',
+                'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
+                'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
+                'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
+            ])
+            ->where([
+                'ref_abs' => 'REFERENCE',
+                'range_24_jam' => 'N',
+                'temp_over' => 1,
+                'period' => $model->period
+            ])
+            ->andWhere('day_name NOT IN (\'Saturday\', \'Sunday\')')
+            ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
+            ->orderBy('area')
+            ->all();
         }
 
-        $tmp_tbl1 = SensorLog::find()
-        ->select([
-            'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
-            'total_freq' => 'SUM(temp_over)',
-            'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
-            'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
-            'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
-        ])
-        ->where([
-            'ref_abs' => 'ABSOLUTE',
-            'range_24_jam' => 'Y',
-            'temp_over' => 1,
-            'period' => $model->period
-        ])
-        ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
-        ->orderBy('area')
-        ->all();
+        
 
-        $tmp_tbl2 = SensorLog::find()
-        ->select([
-            'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
-            'total_freq' => 'SUM(temp_over)',
-            'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
-            'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
-            'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
-        ])
-        ->where([
-            'ref_abs' => 'ABSOLUTE',
-            'range_24_jam' => 'Y',
-            'temp_over' => 1,
-            'period' => $model->period
-        ])
-        ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
-        ->orderBy('area')
-        ->all();
+        
 
         return $this->render('temperature-over', [
             'model' => $model,
-            'tmp_tbl1' => $tmp_tbl1,
-            'tmp_tbl2' => $tmp_tbl2,
+            'tmp_tbl' => $tmp_tbl,
         ]);
     }
     public function actionWwBeaconLt($value='')

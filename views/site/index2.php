@@ -376,6 +376,7 @@ $this->registerCss("
                                 <li><?= Html::a('Temperature Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
                                 <li><?= Html::a('Humidity Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
                                 <li><?= Html::a('Temperature & Humidity Data <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-tbl-display']); ?></li>
+                                <li><?= Html::a('Temperature Over (Total Frequency) <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
                             </ol>
                         </div>
 
