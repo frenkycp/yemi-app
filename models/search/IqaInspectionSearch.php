@@ -58,7 +58,6 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'SEQ_LOG' => $this->SEQ_LOG,
-            'POST_DATE' => $this->POST_DATE,
             'SEQ_ID' => $this->SEQ_ID,
             'QTY_IN' => $this->QTY_IN,
             'QTY_OUT' => $this->QTY_OUT,
@@ -67,6 +66,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'TAG_SLIP', $this->TAG_SLIP])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10), LAST_UPDATE, 120)', $this->LAST_UPDATE])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10), POST_DATE, 120)', $this->POST_DATE])
             ->andFilterWhere(['like', 'SLIP_REF', $this->SLIP_REF])
             ->andFilterWhere(['like', 'NO', $this->NO])
             ->andFilterWhere(['like', 'LOC', $this->LOC])

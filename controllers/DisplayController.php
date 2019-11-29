@@ -92,6 +92,72 @@ use app\models\WipModelGroup;
 
 class DisplayController extends Controller
 {
+    public function actionTemperatureOver($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $period = date('Ym');
+
+        $model = new \yii\base\DynamicModel([
+            'period', 'absolute_or_reference', 'production_or_warehouse'
+        ]);
+        $model->addRule(['period', 'absolute_or_reference', 'production_or_warehouse'], 'required');
+        $model->period = $period;
+        $model->absolute_or_reference = 'ABSOLUTE';
+        $model->production_or_warehouse = 'PRODUCTION';
+
+        if ($model->load($_GET)) {
+
+        }
+
+        if ($model->absolute_or_reference == 'ABSOLUTE') {
+            if ($model->production_or_warehouse == 'PRODUCTION') {
+                # code...
+            }
+        }
+
+        $tmp_tbl1 = SensorLog::find()
+        ->select([
+            'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
+            'total_freq' => 'SUM(temp_over)',
+            'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
+            'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
+            'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
+        ])
+        ->where([
+            'ref_abs' => 'ABSOLUTE',
+            'range_24_jam' => 'Y',
+            'temp_over' => 1,
+            'period' => $model->period
+        ])
+        ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
+        ->orderBy('area')
+        ->all();
+
+        $tmp_tbl2 = SensorLog::find()
+        ->select([
+            'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
+            'total_freq' => 'SUM(temp_over)',
+            'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
+            'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
+            'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
+        ])
+        ->where([
+            'ref_abs' => 'ABSOLUTE',
+            'range_24_jam' => 'Y',
+            'temp_over' => 1,
+            'period' => $model->period
+        ])
+        ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
+        ->orderBy('area')
+        ->all();
+
+        return $this->render('temperature-over', [
+            'model' => $model,
+            'tmp_tbl1' => $tmp_tbl1,
+            'tmp_tbl2' => $tmp_tbl2,
+        ]);
+    }
     public function actionWwBeaconLt($value='')
     {
         $this->layout = 'clean';
@@ -157,14 +223,21 @@ class DisplayController extends Controller
         $wip_model_group = WipModelGroup::find()->all();
 
         $l_series_qty1 = $l_series_qty2 = $hs_series_qty1 = $hs_series_qty2 = $p40_series_qty1 = $p40_series_qty2 = $others_qty1 = $others_qty2 = 0;
+        $tmp_time_arr = [];
         foreach ($tmp_beacon as $key => $value) {
             $waktu1 = strtotime($value->start_date);
             $waktu2 = strtotime($now);
             $waktu_balance_s = $waktu2 - $waktu1;
             $limit_s = 24 * 3600;
-            if (waktu_balance_s <= $limit_s) {
-                $tmp_model_group = $this->getWipModelGroupId($wip_model_group, $value->parent);
-
+            $tmp_time_arr[] = [
+                'beacon_id' => $value->minor,
+                'start' => $value->start_date,
+                'end' => $now,
+                'second' => $waktu_balance_s,
+                'limit' => $limit_s
+            ];
+            $tmp_model_group = $this->getWipModelGroupId($wip_model_group, $value->parent);
+            if ($waktu_balance_s <= $limit_s) {
                 if ($tmp_model_group == '05') {
                     $hs_series_qty1 += $value->lot_qty;
                 } elseif ($tmp_model_group == '04') {
@@ -199,7 +272,8 @@ class DisplayController extends Controller
         ];
 
         return $this->render('wip-control3', [
-            'data' => $data
+            'data' => $data,
+            'tmp_time_arr' => $tmp_time_arr
         ]);
     }
 
