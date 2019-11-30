@@ -169,8 +169,8 @@ if (strpos($location_str, 'INJ') !== false) {
                     <td class="text-center">
                         <?php
 
-                        if ($ext_dandori_current['parent_desc'] !== null) {
-                            echo $ext_dandori_current['parent_desc'] . '<br/>(' . $ext_dandori_current['qty'] . ' <span style="font-size: 0.5em;">PCS</span>)';
+                        if ($ext_dandori_current['child_desc'] !== null) {
+                            echo $ext_dandori_current['child_desc'] . '<br/>(' . $ext_dandori_current['qty'] . ' <span style="font-size: 0.5em;">PCS</span>)';
                             $ext_dandori_stat = $ext_dandori_current['status'];
                         } else {
                             echo 'No Plan Today ...';

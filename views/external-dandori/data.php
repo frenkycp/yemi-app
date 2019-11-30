@@ -79,17 +79,20 @@ $columns = [
         },
         'contentOptions' => ['nowrap'=>'nowrap', 'class' => 'text-center', 'style' => 'vertical-align: middle;'],
     ],
-    /*[
-        'attribute' => 'child_analyst_desc',
+    [
+        'attribute' => 'child_analyst',
         'label' => 'Location',
+        'value' => function($model){
+            return $model->child_analyst_desc;
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filter' => ArrayHelper::map(app\models\WipLocation::find()->select('child_analyst_desc, child_analyst_desc')->groupBy('child_analyst_desc, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc'),
+        'filter' => ArrayHelper::map(app\models\WipLocation::find()->select('child_analyst, child_analyst_desc')->where(['child_analyst' => ['WM03', 'WI01', 'WI02']])->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
-    ],*/
+    ],
     [
         'attribute' => 'plan_date',
         'value' => function($model){
@@ -146,7 +149,7 @@ $columns = [
             'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'KELOMPOK',
         'label' => 'Group',
         'vAlign' => 'middle',
@@ -161,7 +164,7 @@ $columns = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'child_all',
         'label' => 'Part Number',

@@ -879,6 +879,7 @@ class DisplayController extends Controller
         $tmp_data = [
             'model_group' => $tmp_wip->model_group,
             'parent_desc' => $tmp_wip->parent_desc,
+            'child_desc' => $tmp_wip->child_desc_all,
             'status' => $tmp_wip->ext_dandori_status,
             'qty' => $tmp_wip->qty_all,
             'kondisi' => $kondisi

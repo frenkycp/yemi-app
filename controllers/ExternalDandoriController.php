@@ -6,7 +6,7 @@ use dmstr\bootstrap\Tabs;
 use yii\web\Controller;
 use app\models\Karyawan;
 use app\models\WipEffTbl;
-use app\models\search\ProdPlanDataSearch;
+use app\models\search\ExternalDandoriDataSearch;
 
 class ExternalDandoriController extends Controller
 {
@@ -97,7 +97,7 @@ class ExternalDandoriController extends Controller
         $nik = $session['external_dandori_user'];
         $this->layout = 'external-dandori\main';
 
-        $searchModel  = new ProdPlanDataSearch;
+        $searchModel  = new ExternalDandoriDataSearch;
 
 	    /*$searchModel->plan_date = date('Y-m-d');
 	    if(\Yii::$app->request->get('plan_date') !== null)
@@ -106,7 +106,7 @@ class ExternalDandoriController extends Controller
 	    }*/
 	    $searchModel->plan_stats = 'O';
 	    $searchModel->plan_run = 'N';
-	    $searchModel->child_analyst_desc = 'SMT';
+	    $searchModel->child_analyst = 'WM03';
 
 	    $dataProvider = $searchModel->search($_GET);
 
