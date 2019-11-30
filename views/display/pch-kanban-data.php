@@ -23,7 +23,7 @@ $this->registerCss("
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title{font-size: 2em;}
-    //.container {width: auto;}
+    .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
@@ -52,17 +52,18 @@ $this->registerCss("
         //font-weight: 1000;
         color: #FFF;
         vertical-align: middle;
-        //height: 120px;
+        height: 130px;
     }
     .table > tfoot > tr > td{
         border:1px solid #4A1573;
         font-size: 3.5em;
-        background-color: #9163B5;
+        background-color: rgba(255, 255, 255, 0.1);
         //font-weight: 1000;
         color: #FFF;
         vertical-align: middle;
-        //height: 120px;
+        //height: 130px;
     }
+    .icon-status {font-size : 2em;}
 
 ");
 
@@ -72,11 +73,15 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 600000); // milliseconds
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
+
+    window.setInterval(function(){
+        $('.blinked').toggle();
+    },600);
 ";
 $this->registerJs($script, View::POS_HEAD );
 
@@ -115,11 +120,12 @@ echo '</pre>';*/
             <th class="text-center" colspan="3">In-Progress</th>
             <th class="text-center" rowspan="2">Done</th>
             <th class="text-center" rowspan="2">Transfer</th>
+            <th class="text-center" rowspan="2" width="140px">Status</th>
         </tr>
         <tr>
             <th class="text-center">(Invoice Wating)</th>
             <th class="text-center">Normal</th>
-            <th class="text-center">Harga</th>
+            <th class="text-center">Price</th>
             <th class="text-center">Late</th>
         </tr>
     </thead>
@@ -129,18 +135,36 @@ echo '</pre>';*/
             <td class="text-center"><?= number_format($data['sap']['request_qty']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['in_progress_normal']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['in_progress_harga']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['in_progress_late']); ?></td>
+            <td class="text-center<?= $data['sap']['in_progress_late'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['in_progress_late']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['done_qty']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['trf_qty']); ?></td>
+            <td class="text-center">
+                <?php
+                $sap_icon = '<i class="fa fa-circle-o text-green icon-status"></i>';
+                if ($data['sap']['in_progress_late'] > 0) {
+                    $sap_icon = '<i class="fa fa-close text-red icon-status blinked"></i>';
+                }
+                echo $sap_icon;
+                ?>
+            </td>
         </tr>
         <tr>
             <td class="text-center">NICE</td>
             <td class="text-center"><?= number_format($data['nice']['request_qty']); ?></td>
             <td class="text-center"><?= number_format($data['nice']['in_progress_normal']); ?></td>
             <td class="text-center"><?= number_format($data['nice']['in_progress_harga']); ?></td>
-            <td class="text-center"><?= number_format($data['nice']['in_progress_late']); ?></td>
+            <td class="text-center<?= $data['nice']['in_progress_late'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['nice']['in_progress_late']); ?></td>
             <td class="text-center"><?= number_format($data['nice']['done_qty']); ?></td>
             <td class="text-center"><?= number_format($data['nice']['trf_qty']); ?></td>
+            <td class="text-center">
+                <?php
+                $nice_icon = '<i class="fa fa-circle-o text-green icon-status"></i>';
+                if ($data['nice']['in_progress_late'] > 0) {
+                    $nice_icon = '<i class="fa fa-close text-red icon-status blinked"></i>';
+                }
+                echo $nice_icon;
+                ?>
+            </td>
         </tr>
     </tbody>
     <tfoot>
@@ -148,8 +172,9 @@ echo '</pre>';*/
             <td class="text-center"><?= number_format($data['sap']['request_qty'] + $data['nice']['request_qty']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['in_progress_normal'] + $data['nice']['in_progress_normal']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['in_progress_harga'] + $data['nice']['in_progress_harga']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']); ?></td>
+            <td class="text-center<?= ($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']) > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['done_qty'] + $data['nice']['done_qty']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['trf_qty'] + $data['nice']['trf_qty']); ?></td>
+            <td class="text-center"></td>
     </tfoot>
 </table>

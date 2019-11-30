@@ -89,9 +89,147 @@ use app\models\OnhandNice;
 use app\models\KanbanPchLog;
 use app\models\GoSaTbl;
 use app\models\WipModelGroup;
+use app\models\DrossInput;
 
 class DisplayController extends Controller
 {
+    public function actionDrossInputDaily($value='')
+    {
+        $this->layout = 'clean';
+        $data = [];
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+            # code...
+        }
+
+        $tmp_input = DrossInput::find()
+        ->select([
+            'tgl_in',
+            'new' => 'SUM(new)',
+            'recycle' => 'SUM(recycle)',
+        ])
+        ->where([
+            'AND',
+            ['>=', 'tgl_in', $model->from_date],
+            ['<=', 'tgl_in', $model->to_date]
+        ])
+        ->groupBy('tgl_in')
+        ->orderBy('tgl_in')
+        ->all();
+        $tmp_data_new = $tmp_data_recycle = [];
+        foreach ($tmp_input as $key => $value) {
+            $proddate = (strtotime($value->tgl_in . " +7 hours") * 1000);
+            $tmp_data_new[] = [
+                'x' => $proddate,
+                'y' => (float)$value->new
+            ];
+            $tmp_data_recycle[] = [
+                'x' => $proddate,
+                'y' => (float)$value->recycle
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'NEW',
+                'data' => $tmp_data_new
+            ],
+            [
+                'name' => 'RECYCLE',
+                'data' => $tmp_data_recycle
+            ],
+        ];
+
+        return $this->render('dross-input-daily', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
+    public function actionCriticalTempUpdate($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $sensor_data = SensorTbl::find()
+        ->where([
+            'map_no' => [12, 13, 7, 8, 17, 18]
+        ])
+        ->orderBy('area')
+        ->all();
+
+        $title_arr = [
+            '7' => '1. Line-X Booth <Black><br/><span class="japanesse">(ラインエックス黒のブース)</span>',
+            '8' => '2. Line-X Booth <White><br/><span class="japanesse">(ラインエックス白のブース)</span>',
+            '18' => '3. Oven Room 1<br/><span class="japanesse">(強制乾燥室 1)</span>',
+            '17' => '4. Oven Room 2<br/><span class="japanesse">(強制乾燥室 2)</span>',
+            '13' => '5. Inwax Piano 1<br/><span class="japanesse">(インワックスのピアノ塗装 1)</span>',
+            '12' => '6. Inwax Piano 13&14<br/><span class="japanesse">(インワックスのピアノ塗装 13&14)</span>',
+        ];
+
+        $tbody = '';
+        $temp_data_arr = $humi_data_arr = $standard_temp_arr = $standard_humi_arr = [];
+        foreach ($sensor_data as $key => $value) {
+            $temperature_value = $value->temparature;
+            //$temperature_value = 50;
+            if ($temperature_value >= $value->temp_min && $temperature_value <= $value->temp_max) {
+                $temp_data_arr[$value->map_no] = '<span class="text-green">' . $temperature_value . '</span>';
+            } else {
+                $temp_data_arr[$value->map_no] = '<span class="text-red">' . $temperature_value . '</span>';
+            }
+            $standard_temp_arr[$value->map_no] = $value->temp_min . ' - ' . $value->temp_max;
+
+            $humidity_value = $value->humidity;
+            if ($humidity_value >= $value->humi_min && $humidity_value <= $value->humi_max) {
+                $humi_data_arr[$value->map_no] = '<span class="text-green">' . $humidity_value . '</span>';
+            } else {
+                $humi_data_arr[$value->map_no] = '<span class="text-red">' . $humidity_value . '</span>';
+            }
+            $standard_humi_arr[$value->map_no] = $value->humi_min . ' - ' . $value->humi_max;
+        }
+
+        $data = [
+            'temp_data_arr' => $temp_data_arr,
+            'humi_data_arr' => $humi_data_arr,
+            'standard_humi_arr' => $standard_humi_arr,
+            'standard_temp_arr' => $standard_temp_arr,
+        ];
+
+        return $data;
+    }
+
+    public function actionCriticalTempMonitoring($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = SensorTbl::find()
+        ->where([
+            'map_no' => [12, 13, 7, 8, 17, 18]
+        ])
+        ->orderBy('area')
+        ->all();
+
+        $title_arr = [
+            '7' => '1. Line-X Booth <Black><br/><span class="japanesse">(ラインエックス黒のブース)</span>',
+            '8' => '2. Line-X Booth <White><br/><span class="japanesse">(ラインエックス白のブース)</span>',
+            '18' => '3. Oven Room 1<br/><span class="japanesse">(強制乾燥室 1)</span>',
+            '17' => '4. Oven Room 2<br/><span class="japanesse">(強制乾燥室 2)</span>',
+            '13' => '5. Inwax Piano 1<br/><span class="japanesse">(インワックスのピアノ塗装 1)</span>',
+            '12' => '6. Inwax Piano 13&14<br/><span class="japanesse">(インワックスのピアノ塗装 13&14)</span>',
+        ];
+
+        return $this->render('critical-temp-monitoring', [
+            'data' => $data,
+            'title_arr' => $title_arr,
+        ]);
+    }
+
     public function actionPchKanbanData()
     {
         $this->layout = 'clean';
@@ -340,7 +478,7 @@ class DisplayController extends Controller
             if ($balance_d >= 5) {
                 $color = 'rgb(255, 0, 0)';
             }
-            $categories[] = $value->model_group . ' - ' . $value->gmc_desc . ' (' . $value->gmc . ') ' . $value->lot_qty . ' PCS';
+            $categories[] = $value->model_group . ' - ' . $value->gmc_desc . ' (' . $value->gmc . ') ' . $value->lot_qty . ' PCS [Beacon ID : ' . $value->minor . ']';
             $tmp_data[] = [
                 'y' => (float)$balance_d,
                 'color' => $color
@@ -713,6 +851,7 @@ class DisplayController extends Controller
             ['<=', 'FORMAT(LAST_UPDATE, \'yyyy-MM-dd\')', $model->to_date]
         ])
         ->groupBy('LAST_UPDATE')
+        ->orderBy('LAST_UPDATE')
         ->all();
 
         $tmp_data_qty = $tmp_data_m3 = [];

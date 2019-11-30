@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => null,
-    'tab_title' => 'Onhand NICE',
-    'breadcrumbs_title' => 'Onhand NICE'
+    'page_title' => 'Dross Daily Input',
+    'tab_title' => 'Dross Daily Input',
+    'breadcrumbs_title' => 'Dross Daily Input'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -57,7 +57,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['onhand-nice']),
+    'action' => Url::to(['dross-input-daily']),
 ]); ?>
 
 <div class="row">
@@ -100,11 +100,11 @@ echo '</pre>';*/
                 ],
                 'options' => [
                     'chart' => [
-                        'type' => 'line',
+                        'type' => 'column',
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'height' => 350,
+                        'height' => 500,
                         'zoomType' => 'x'
                     ],
                     'credits' => [
@@ -121,70 +121,22 @@ echo '</pre>';*/
                         'title' => [
                             'text' => 'Total Qty',
                         ],
+                        'allowDecimals' => false,
+                        'stackLabels' => [
+                            'enabled' => true
+                        ]
                         //'max' => 60,
                         //'tickInterval' => 10
                     ],
                     'plotOptions' => [
-                        'line' => [
-                            'marker' => [
-                                'enabled' =>false
+                        'column' => [
+                            'stacking' => 'normal',
+                            'dataLabels' => [
+                                'enabled' =>true
                             ],
                         ],
                     ],
-                    'series' => $data_qty,
-                ],
-            ]);
-
-            ?>
-        </div>
-    </div>
-</div>
-
-<div class="box box-primary box-solid">
-    <div class="box-body">
-        <div class="col-md-12">
-            <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    //'themes/grid-light',
-                    'themes/dark-unica',
-                    //'themes/sand-signika',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'line',
-                        'style' => [
-                            'fontFamily' => 'sans-serif',
-                        ],
-                        'height' => 350,
-                        'zoomType' => 'x'
-                    ],
-                    'credits' => [
-                        'enabled' => false
-                    ],
-                    'title' => [
-                        'text' => null,
-                    ],
-                    'xAxis' => [
-                        'type' => 'datetime',
-                        'gridLineWidth' => 0
-                    ],
-                    'yAxis' => [
-                        'title' => [
-                            'text' => 'Total M3',
-                        ],
-                        //'max' => 60,
-                        //'tickInterval' => 10
-                    ],
-                    'plotOptions' => [
-                        'line' => [
-                            'marker' => [
-                                'enabled' =>false
-                            ],
-                        ],
-                    ],
-                    'series' => $data_m3,
+                    'series' => $data,
                 ],
             ]);
 
