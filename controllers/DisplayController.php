@@ -92,6 +92,88 @@ use app\models\WipModelGroup;
 
 class DisplayController extends Controller
 {
+    public function actionPchKanbanData()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = [
+            'sap' => [
+                'request_qty' => 0,
+                'in_progress_normal' => 0,
+                'in_progress_harga' => 0,
+                'in_progress_late' => 0,
+                'done_qty' => 0,
+                'trf_qty' => 0
+            ],
+            'nice' => [
+                'request_qty' => 0,
+                'in_progress_normal' => 0,
+                'in_progress_harga' => 0,
+                'in_progress_late' => 0,
+                'done_qty' => 0,
+                'trf_qty' => 0
+            ],
+        ];
+
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+
+        $result = null;
+        if ($model->load($_GET)) {
+
+        }
+
+        $params = [
+            ':period' => $model->period,
+        ];
+        $sql = "{CALL INVOICE_KANBAN(:period)}";
+        try {
+            $result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryAll();
+            foreach ($result as $key => $value) {
+                if ($value['source_data'] == '01-SAP') {
+                    $data['sap_qty']++;
+                    $data['sap']['request_qty'] += (int)$value['request'];
+                    $data['sap']['done_qty'] += (int)$value['done'];
+                    $data['sap']['trf_qty'] += (int)$value['transfer'];
+                    if ($value['in_progress'] == 1) {
+                        if ($value['delay_reason'] == 'NORMAL') {
+                            $data['sap']['in_progress_normal']++;
+                        } elseif ($value['delay_reason'] == 'HARGA') {
+                            $data['sap']['in_progress_harga']++;
+                        } elseif ($value['delay_reason'] == 'LATE') {
+                            $data['sap']['in_progress_late']++;
+                        }
+                    }
+                } else {
+                    $data['nice_qty']++;
+                    $data['nice']['request_qty'] += (int)$value['request'];
+                    $data['nice']['done_qty'] += (int)$value['done'];
+                    $data['nice']['trf_qty'] += (int)$value['transfer'];
+                    if ($value['in_progress'] == 1) {
+                        if ($value['delay_reason'] == 'NORMAL') {
+                            $data['nice']['in_progress_normal']++;
+                        } elseif ($value['delay_reason'] == 'HARGA') {
+                            $data['nice']['in_progress_harga']++;
+                        } elseif ($value['delay_reason'] == 'LATE') {
+                            $data['nice']['in_progress_late']++;
+                        }
+                    }
+                }
+            }
+        } catch (Exception $ex) {
+            return json_encode($ex->getMessage());
+        }
+
+        return $this->render('pch-kanban-data', [
+            'data' => $data,
+            'model' => $model,
+            'result' => $result
+        ]);
+    }
+
     public function actionTemperatureOverDetail($map_no, $period, $shift, $area, $absolute, $category)
     {
         $this->layout = 'clean';
