@@ -70,9 +70,19 @@ $script = <<< JS
        window.location = location.href;
     }
 
-    window.setInterval(function(){
-        $('.blinked').toggle();
-    },600);
+    $(document).ready(function() {
+        var i = 0;
+        setInterval(function() {
+            i++;
+            if(i%2 == 0){
+                $(".blinked").css("color", "white");
+                //$(".blinked").css("color", "white");
+            } else {
+                $(".blinked").css("color", "red");
+                //$(".blinked").css("color", "#555");
+            }
+        }, 300);
+    });
 
 JS;
 $this->registerJs($script, View::POS_HEAD );
@@ -140,11 +150,11 @@ $this->registerJs($script, View::POS_END);
             }
             $temp_txt_class = 'text-green';
             if ($act_temp < $temp_min || $act_temp > $temp_max) {
-                $temp_txt_class = 'text-red';
+                $temp_txt_class = 'text-red blinked';
             }
             $humi_txt_class = 'text-green';
             if ($act_humi < $humi_min || $act_humi > $humi_max) {
-                $humi_txt_class = 'text-red';
+                $humi_txt_class = 'text-red blinked';
             }
             ?>
             <tr>

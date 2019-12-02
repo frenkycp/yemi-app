@@ -29,6 +29,9 @@ $this->registerCss("
     .list-group-item {
         font-size: 13px;
     }
+    .panel-success > .panel-heading {
+        background-color: #61258e !important; color: white;
+    }
 ");
 ?>
 <hr>

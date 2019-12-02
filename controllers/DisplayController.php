@@ -180,7 +180,7 @@ class DisplayController extends Controller
             if ($temperature_value >= $value->temp_min && $temperature_value <= $value->temp_max) {
                 $temp_data_arr[$value->map_no] = '<span class="text-green">' . $temperature_value . '</span>';
             } else {
-                $temp_data_arr[$value->map_no] = '<span class="text-red">' . $temperature_value . '</span>';
+                $temp_data_arr[$value->map_no] = '<span class="blinked">' . $temperature_value . '</span>';
             }
             $standard_temp_arr[$value->map_no] = $value->temp_min . ' - ' . $value->temp_max;
 
@@ -188,7 +188,7 @@ class DisplayController extends Controller
             if ($humidity_value >= $value->humi_min && $humidity_value <= $value->humi_max) {
                 $humi_data_arr[$value->map_no] = '<span class="text-green">' . $humidity_value . '</span>';
             } else {
-                $humi_data_arr[$value->map_no] = '<span class="text-red">' . $humidity_value . '</span>';
+                $humi_data_arr[$value->map_no] = '<span class="blinked">' . $humidity_value . '</span>';
             }
             $standard_humi_arr[$value->map_no] = $value->humi_min . ' - ' . $value->humi_max;
         }

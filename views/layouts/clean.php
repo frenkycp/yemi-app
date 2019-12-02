@@ -31,6 +31,9 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
      
     ?></title>
     <?php $this->head() ?>
+    <style type="text/css">
+        .content-header {background-color: #61258e !important; padding: 10px; border-radius: 5px;}
+    </style>
 </head>
 <body class="hold-transition skin-blue layout-top-nav">
 <?php $this->beginBody() ?>
