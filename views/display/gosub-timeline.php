@@ -48,9 +48,9 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-/**/echo '<pre>';
-print_r($tmp_idle_time);
-echo '</pre>';
+/*echo '<pre>';
+print_r($tmp_start_end);
+echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 
@@ -121,3 +121,4 @@ echo Highcharts::widget([
     ],
 ]);
 ?>
+<span style="font-size: 2.5em; color: white;">Total Idle Time : <?= round($total_idling_time / 3600, 1) ?> hours</span>

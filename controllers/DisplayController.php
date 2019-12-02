@@ -2187,6 +2187,8 @@ class DisplayController extends Controller
             ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
         ])
         ->andWhere(['map_no' => $model->map_no])
+        ->andWhere(['>', 'temparature', 0])
+        ->andWhere(['>', 'humidity', 0])
         ->asArray()
         ->all();
 
@@ -2646,11 +2648,16 @@ class DisplayController extends Controller
 
         $tmp_idle_time = [];
         $tmp_end_time = null;
+        $total_idling_time = 0;
         foreach ($tmp_start_end as $nik => $operator_start_end) {
             foreach ($operator_start_end as $key => $value) {
                 if ($key > 0) {
-                    $diff_seconds = strtotime($value->daparture_date) - strtotime($operator_start_end[$key - 1]->arrival_date);
-                    $tmp_idle_time[$nik] += $diff_seconds;
+                    $diff_seconds = strtotime($value['start']) - strtotime($operator_start_end[$key - 1]['end']);
+                    if ($diff_seconds > 0) {
+                        $tmp_idle_time[$nik] += $diff_seconds;
+                        $total_idling_time += $diff_seconds;
+                    }
+                    
                 }
             }
         }
@@ -2671,7 +2678,9 @@ class DisplayController extends Controller
             'max_x' => $max_x,
             'categories' => $categories,
             'model' => $model,
-            'tmp_idle_time' => $tmp_idle_time
+            'tmp_idle_time' => $tmp_idle_time,
+            'total_idling_time' => $total_idling_time,
+            'tmp_start_end' => $tmp_start_end
         ]);
     }
     public function actionTodaysMeetingData($room_id)
