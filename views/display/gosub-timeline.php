@@ -48,9 +48,9 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-/*echo '<pre>';
-print_r($data);
-echo '</pre>';*/
+/**/echo '<pre>';
+print_r($tmp_idle_time);
+echo '</pre>';
 //echo Yii::$app->request->baseUrl;
 ?>
 

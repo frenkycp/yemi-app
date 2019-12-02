@@ -273,6 +273,13 @@ class DisplayController extends Controller
             foreach ($result as $key => $value) {
                 if ($value['source_data'] == '01-SAP') {
                     $data['sap_qty']++;
+                    if ($value['request'] == 1) {
+                        if ($value['delay_reason' == 'INVOICE-WAITING']) {
+                            $data['sap']['request_waiting']++;
+                        } elseif ($value['delay_reason' == 'INVOICE-LATE']) {
+                            $data['sap']['request_late']++;
+                        }
+                    }
                     $data['sap']['request_qty'] += (int)$value['request'];
                     $data['sap']['done_qty'] += (int)$value['done'];
                     $data['sap']['trf_qty'] += (int)$value['transfer'];
@@ -287,6 +294,13 @@ class DisplayController extends Controller
                     }
                 } else {
                     $data['nice_qty']++;
+                    if ($value['request'] == 1) {
+                        if ($value['delay_reason' == 'INVOICE-WAITING']) {
+                            $data['nice']['request_waiting']++;
+                        } elseif ($value['delay_reason' == 'INVOICE-LATE']) {
+                            $data['nice']['request_late']++;
+                        }
+                    }
                     $data['nice']['request_qty'] += (int)$value['request'];
                     $data['nice']['done_qty'] += (int)$value['done'];
                     $data['nice']['trf_qty'] += (int)$value['transfer'];
@@ -2448,14 +2462,17 @@ class DisplayController extends Controller
             'post_date' => $model->posting_date
         ])
         ->andWhere('daparture_date IS NOT NULL')
-        ->orderBy('daparture_date')
+        ->orderBy('GOJEK_ID, daparture_date')
         ->all();
 
         $index = 0;
+        $idle_s = 0;
+        $tmp_start_end = [];
         foreach ($tmp_operator as $operator) {
             $categories[] = $operator->nikName;
             foreach ($tmp_order as $order) {
                 if ($operator->GOJEK_ID == $order->GOJEK_ID) {
+
                     $start_time_ori = $order->daparture_date;
 
                     $start_time = (strtotime($order->daparture_date . " +7 hours") * 1000);
@@ -2466,6 +2483,11 @@ class DisplayController extends Controller
                         $end_time = (strtotime(date('Y-m-d H:i:s') . " +7 hours") * 1000);
                         $end_time_ori = date('Y-m-d H:i:s');
                     }
+
+                    $tmp_start_end[$operator->GOJEK_ID][] = [
+                        'start' => $start_time_ori,
+                        'end' => $end_time_ori
+                    ];
 
                     $break_time1 = $model->posting_date . ' 09:20:00';
                     $break_time1_end = $model->posting_date . ' 09:30:00';
@@ -2562,6 +2584,17 @@ class DisplayController extends Controller
             $index++;
         }
 
+        $tmp_idle_time = [];
+        $tmp_end_time = null;
+        foreach ($tmp_start_end as $nik => $operator_start_end) {
+            foreach ($operator_start_end as $key => $value) {
+                if ($key > 0) {
+                    $diff_seconds = strtotime($value->daparture_date) - strtotime($operator_start_end[$key - 1]->arrival_date);
+                    $tmp_idle_time[$nik] += $diff_seconds;
+                }
+            }
+        }
+
         $data = [
             [
                 'name' => 'Operator Timeline',
@@ -2577,7 +2610,8 @@ class DisplayController extends Controller
             'min_x' => $min_x,
             'max_x' => $max_x,
             'categories' => $categories,
-            'model' => $model
+            'model' => $model,
+            'tmp_idle_time' => $tmp_idle_time
         ]);
     }
     public function actionTodaysMeetingData($room_id)

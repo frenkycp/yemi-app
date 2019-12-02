@@ -116,14 +116,15 @@ echo '</pre>';*/
     <thead>
         <tr>
             <th class="text-center" rowspan="2">Source</th>
-            <th class="text-center">Request/Todo</th>
+            <th class="text-center" colspan="2">Request/Todo</th>
             <th class="text-center" colspan="3">In-Progress</th>
             <th class="text-center" rowspan="2">Done</th>
             <th class="text-center" rowspan="2">Transfer</th>
             <th class="text-center" rowspan="2" width="140px">Status</th>
         </tr>
         <tr>
-            <th class="text-center">(Invoice Wating)</th>
+            <th class="text-center">Invoice Wating</th>
+            <th class="text-center">Invoice Late</th>
             <th class="text-center">Normal</th>
             <th class="text-center">Price</th>
             <th class="text-center">Late</th>
@@ -132,16 +133,17 @@ echo '</pre>';*/
     <tbody>
         <tr>
             <td class="text-center">SAP</td>
-            <td class="text-center"><?= number_format($data['sap']['request_qty']); ?></td>
+            <td class="text-center"><?= number_format($data['sap']['request_waiting']); ?></td>
+            <td class="text-center<?= $data['sap']['request_late'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['sap']['request_late']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['in_progress_normal']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['in_progress_harga']); ?></td>
+            <td class="text-center<?= $data['sap']['in_progress_harga'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['sap']['in_progress_harga']); ?></td>
             <td class="text-center<?= $data['sap']['in_progress_late'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['in_progress_late']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['done_qty']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['trf_qty']); ?></td>
             <td class="text-center">
                 <?php
                 $sap_icon = '<i class="fa fa-circle-o text-green icon-status"></i>';
-                if ($data['sap']['in_progress_late'] > 0) {
+                if ($data['sap']['in_progress_late'] > 0 || $data['sap']['in_progress_harga'] > 0 || $data['sap']['request_late']) {
                     $sap_icon = '<i class="fa fa-close text-red icon-status blinked"></i>';
                 }
                 echo $sap_icon;
@@ -150,16 +152,17 @@ echo '</pre>';*/
         </tr>
         <tr>
             <td class="text-center">NICE</td>
-            <td class="text-center"><?= number_format($data['nice']['request_qty']); ?></td>
+            <td class="text-center"><?= number_format($data['nice']['request_waiting']); ?></td>
+            <td class="text-center<?= $data['nice']['request_late'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['nice']['request_late']); ?></td>
             <td class="text-center"><?= number_format($data['nice']['in_progress_normal']); ?></td>
-            <td class="text-center"><?= number_format($data['nice']['in_progress_harga']); ?></td>
+            <td class="text-center<?= $data['nice']['in_progress_harga'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['nice']['in_progress_harga']); ?></td>
             <td class="text-center<?= $data['nice']['in_progress_late'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['nice']['in_progress_late']); ?></td>
             <td class="text-center"><?= number_format($data['nice']['done_qty']); ?></td>
             <td class="text-center"><?= number_format($data['nice']['trf_qty']); ?></td>
             <td class="text-center">
                 <?php
                 $nice_icon = '<i class="fa fa-circle-o text-green icon-status"></i>';
-                if ($data['nice']['in_progress_late'] > 0) {
+                if ($data['nice']['in_progress_late'] > 0 || $data['nice']['in_progress_harga'] > 0 || $data['nice']['request_late']) {
                     $nice_icon = '<i class="fa fa-close text-red icon-status blinked"></i>';
                 }
                 echo $nice_icon;
@@ -169,7 +172,8 @@ echo '</pre>';*/
     </tbody>
     <tfoot>
         <td class="text-center">Total</td>
-            <td class="text-center"><?= number_format($data['sap']['request_qty'] + $data['nice']['request_qty']); ?></td>
+            <td class="text-center"><?= number_format($data['sap']['request_waiting'] + $data['nice']['request_waiting']); ?></td>
+            <td class="text-center"><?= number_format($data['sap']['request_late'] + $data['nice']['request_late']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['in_progress_normal'] + $data['nice']['in_progress_normal']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['in_progress_harga'] + $data['nice']['in_progress_harga']); ?></td>
             <td class="text-center<?= ($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']) > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']); ?></td>

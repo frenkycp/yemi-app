@@ -22,6 +22,7 @@ $this->registerCss("
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em}
 	body {background-color: #000;}
+	.box-header {background-color: " . \Yii::$app->params['purple_color'] . " !important; color: white !important;}
 ");
 
 $script = <<< JS
