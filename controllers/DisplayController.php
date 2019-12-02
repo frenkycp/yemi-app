@@ -90,6 +90,7 @@ use app\models\KanbanPchLog;
 use app\models\GoSaTbl;
 use app\models\WipModelGroup;
 use app\models\DrossInput;
+use app\models\DrossOutput;
 
 class DisplayController extends Controller
 {
@@ -124,9 +125,13 @@ class DisplayController extends Controller
         ->groupBy('tgl_in')
         ->orderBy('tgl_in')
         ->all();
+
         $tmp_data_new = $tmp_data_recycle = [];
+        $total_in = $total_in_new = $total_in_recycle = 0;
         foreach ($tmp_input as $key => $value) {
             $proddate = (strtotime($value->tgl_in . " +7 hours") * 1000);
+            $total_in_new += $value->new;
+            $total_in_recycle += $value->recycle;
             $tmp_data_new[] = [
                 'x' => $proddate,
                 'y' => (float)$value->new
@@ -135,6 +140,38 @@ class DisplayController extends Controller
                 'x' => $proddate,
                 'y' => (float)$value->recycle
             ];
+        }
+        $total_in = (float)$total_in_new + (float)$total_in_recycle;
+
+        $tmp_output = DrossOutput::find()
+        ->select([
+            'tgl',
+            'dross' => 'SUM(dross)',
+            'dross_recycle' => 'SUM(dross_recycle)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'tgl', $model->from_date],
+            ['<=', 'tgl', $model->to_date]
+        ])
+        ->groupBy('tgl')
+        ->all();
+
+        $total_dross = $total_dross_recylce = $total_dross_scrap = 0;
+        foreach ($tmp_output as $key => $value) {
+            $total_dross += $value->dross;
+            $total_dross_recylce += $value->dross_recycle;
+        }
+        $total_dross_scrap = $total_dross - $total_dross_recylce;
+
+        $scrap_ratio = 0;
+        if ($total_dross_scrap > 0) {
+            $scrap_ratio = round(($total_dross_scrap / $total_in) * 100, 1);
+        }
+        
+        $recycle_ratio = 0;
+        if ($total_in > 0) {
+            $recycle_ratio = round(($total_in_recycle / $total_in) * 100, 1);
         }
 
         $data = [
@@ -151,6 +188,10 @@ class DisplayController extends Controller
         return $this->render('dross-input-daily', [
             'data' => $data,
             'model' => $model,
+            'total_in' => $total_in,
+            'total_dross_scrap' => $total_dross_scrap,
+            'scrap_ratio' => $scrap_ratio,
+            'recycle_ratio' => $recycle_ratio,
         ]);
     }
     public function actionCriticalTempUpdate($value='')

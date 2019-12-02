@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Dross Daily Input',
-    'tab_title' => 'Dross Daily Input',
-    'breadcrumbs_title' => 'Dross Daily Input'
+    'page_title' => 'Dross Input-Output Monitoring',
+    'tab_title' => 'Dross Input-Output Monitoring',
+    'breadcrumbs_title' => 'Dross Input-Output Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -32,6 +32,30 @@ $this->registerCss("
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
+
+    .table{
+        //border:1px solid #29B6F6;
+        border-top: 0;
+    }
+    .table > thead > tr > th{
+        border:1px solid #8b8c8d;
+        background-color: " . \Yii::$app->params['purple_color'] . ";
+        color: white;
+        font-size: 24px;
+        border-bottom: 7px solid #797979;
+        vertical-align: middle;
+    }
+    .table > tbody > tr > td{
+        border:1px solid #777474;
+        font-size: 4em;
+        //background-color: #B3E5FC;
+        //font-weight: 1000;
+        color: #FFF;
+        vertical-align: middle;
+        height: 100px;
+    }
+    .icon-status {font-size : 3em;}
+    .target, .actual {font-size: 4em !important;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -79,7 +103,7 @@ echo '</pre>';*/
     </div>
     <div class="form-group">
         <br/>
-        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+        <?= Html::submitButton('GENERATE', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
     </div>
     
 </div>
@@ -104,7 +128,7 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'height' => 500,
+                        'height' => 300,
                         'zoomType' => 'x'
                     ],
                     'credits' => [
@@ -144,3 +168,22 @@ echo '</pre>';*/
         </div>
     </div>
 </div>
+
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th class="text-center" width="25%">Total IN</th>
+            <th class="text-center" width="25%">Scrap Ratio</th>
+            <th class="text-center" width="25%">Recycle Ratio</th>
+            <th class="text-center" width="25%">Total Scrap</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-center"><?= number_format($total_in); ?> <span style="font-size: 0.3em;">Kg</span></td>
+            <td class="text-center"><?= number_format($scrap_ratio); ?> <span style="font-size: 0.3em;">%</span></td>
+            <td class="text-center"><?= number_format($recycle_ratio); ?> <span style="font-size: 0.3em;">%</span></td>
+            <td class="text-center"><?= number_format($total_dross_scrap); ?> <span style="font-size: 0.3em;">Kg</span></td>
+        </tr>
+    </tbody>
+</table>

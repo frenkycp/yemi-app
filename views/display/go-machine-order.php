@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => null,
+    'page_title' => 'GO-Machine <span class="japanesse">[ 切替段取り ]</span> Request',
     'tab_title' => 'Go Machine Order',
     'breadcrumbs_title' => 'Go Machine Order'
 ];
