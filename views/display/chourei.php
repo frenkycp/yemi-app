@@ -9,7 +9,7 @@ use yii\bootstrap\ActiveForm;
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
     //'page_title' => 'Machine Utility Rank (Daily) <span class="japanesse text-green"></span>',
-    'page_title' => null,
+    'page_title' => 'Morning Chourei',
     'tab_title' => 'Morning Chourei',
     'breadcrumbs_title' => 'Morning Chourei'
 ];
@@ -26,7 +26,7 @@ $this->registerCss("
     .box-title {font-weight: bold;}
     .box-header .box-title, .control-label{font-size: 2em;}
     .container {width: auto;}
-    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; text-align: center;}
     //body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
@@ -34,6 +34,18 @@ $this->registerCss("
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
 ");
+
+$script = "
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout(\"refreshPage();\", 600000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+";
+$this->registerJs($script, View::POS_HEAD );
 
 //$this->registerCssFile('@web/adminty_assets/css/bootstrap.min.css');
 //$this->registerCssFile('@web/adminty_assets/css/component.css');

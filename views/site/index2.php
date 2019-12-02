@@ -18,6 +18,7 @@ $this->registerCss("
     }
     .content-header {
         text-align: center;
+        /*background-color: " . \Yii::$app->params['purple_color'] . " !important; padding: 10px; color: white;*/
     }
     ol {
         font-size: 12px;
@@ -28,9 +29,6 @@ $this->registerCss("
     }
     .list-group-item {
         font-size: 13px;
-    }
-    .panel-success > .panel-heading {
-        background-color: #61258e !important; color: white;
     }
 ");
 ?>

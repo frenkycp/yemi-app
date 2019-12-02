@@ -20,7 +20,7 @@ $this->registerCss("
     .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 20px; height: 40px;}
-    .content-header {color: white; text-align: center;}
+    .content-header {color: white; text-align: center; padding: 0px !important;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title, .control-label{font-size: 2em;}
@@ -137,5 +137,5 @@ $this->registerJs($script, View::POS_HEAD );
 </div>
 
 <div id="marquee-container">
-    <marquee behavior="alternate" scrollamount="12">KEEP DRY AND CLEAN</marquee>
+    <marquee behavior="alternate" scrollamount="12" style="background-color: #61258e; color: darkgray;">Keep Clean & Dry !  <span class="japanesse" style="color: darkgray;">清潔第一</span>！</marquee>
 </div>

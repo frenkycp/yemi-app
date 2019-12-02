@@ -104,8 +104,15 @@ class DisplayController extends Controller
         ]);
         $model->addRule(['from_date', 'to_date'], 'required');
 
-        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
-        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $tgl_arr = [];
+        $dross_date = $tmp_output = DrossOutput::find()->orderBy('tgl DESC')->limit(2)->all();
+        foreach ($dross_date as $key => $value) {
+            $tgl_arr[] = $value->tgl;
+        }
+        $model->from_date = date('Y-m-d', strtotime($tgl_arr[1] . ' +1 day'));
+        $model->to_date = $tgl_arr[0];
+        //$model->from_date = date('Y-m-01', strtotime(date('Y-m-d', strtotime(' -2 months'))));
+        //$model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
 
         if ($model->load($_GET)) {
             # code...
@@ -165,23 +172,26 @@ class DisplayController extends Controller
         $total_dross_scrap = $total_dross - $total_dross_recylce;
 
         $scrap_ratio = 0;
-        if ($total_dross_scrap > 0) {
+        $in_recycle_ratio = 0;
+        if ($total_in > 0) {
             $scrap_ratio = round(($total_dross_scrap / $total_in) * 100, 1);
+            $in_recycle_ratio = round(($total_in_recycle / $total_in) * 100, 1);
         }
         
         $recycle_ratio = 0;
-        if ($total_in > 0) {
-            $recycle_ratio = round(($total_in_recycle / $total_in) * 100, 1);
+        if ($total_in_new > 0) {
+            $recycle_ratio = round(($total_dross_recylce / $total_in_new) * 100, 1);
         }
+        
 
         $data = [
             [
-                'name' => 'NEW',
-                'data' => $tmp_data_new
-            ],
-            [
                 'name' => 'RECYCLE',
                 'data' => $tmp_data_recycle
+            ],
+            [
+                'name' => 'NEW',
+                'data' => $tmp_data_new
             ],
         ];
 
@@ -189,9 +199,14 @@ class DisplayController extends Controller
             'data' => $data,
             'model' => $model,
             'total_in' => $total_in,
+            'total_in_new' => $total_in_new,
+            'total_in_recycle' => $total_in_recycle,
             'total_dross_scrap' => $total_dross_scrap,
+            'total_dross' => $total_dross,
+            'total_dross_recylce' => $total_dross_recylce,
             'scrap_ratio' => $scrap_ratio,
             'recycle_ratio' => $recycle_ratio,
+            'in_recycle_ratio' => $in_recycle_ratio,
         ]);
     }
     public function actionCriticalTempUpdate($value='')

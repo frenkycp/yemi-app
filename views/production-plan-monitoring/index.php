@@ -18,7 +18,7 @@ $this->registerCss("
 	.box-title {font-weight: bold;}
 	.box-header .box-title, .control-label{font-size: 1.5em;}
 	.container {width: auto;}
-	.content-header>h1 {font-size: 3em}
+	.content-header>h1 {font-size: 3em;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}

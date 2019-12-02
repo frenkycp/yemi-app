@@ -168,22 +168,57 @@ echo '</pre>';*/
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center" width="25%">Total IN<br/>[A + B]</th>
+                    <th class="text-center" width="25%">IN (Recycle) Ratio<br/>[B / (A + B)]</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center"><?= number_format($total_in); ?> <span style="font-size: 0.3em;">Kg</span></td>
+                    <td class="text-center"><?= number_format($in_recycle_ratio); ?> <span style="font-size: 0.3em;">%</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <th class="text-center" width="25%">Total Scrap<br/>[D]</th>
+                    <th class="text-center" width="25%">Scrap Ratio<br/>[D / (A + B)]</th>
+                    <th class="text-center" width="25%">OUT (Recycle) Ratio<br/>[(C - D) / A]</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center"><?= number_format($total_dross_scrap); ?> <span style="font-size: 0.3em;">Kg</span></td>
+                    <td class="text-center"><?= number_format($scrap_ratio); ?> <span style="font-size: 0.3em;">%</span></td>
+                    <td class="text-center"><?= number_format($recycle_ratio); ?> <span style="font-size: 0.3em;">%</span></td>
+                    
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-<table class="table table-responsive table-bordered">
-    <thead>
-        <tr>
-            <th class="text-center" width="25%">Total IN</th>
-            <th class="text-center" width="25%">Scrap Ratio</th>
-            <th class="text-center" width="25%">Recycle Ratio</th>
-            <th class="text-center" width="25%">Total Scrap</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="text-center"><?= number_format($total_in); ?> <span style="font-size: 0.3em;">Kg</span></td>
-            <td class="text-center"><?= number_format($scrap_ratio); ?> <span style="font-size: 0.3em;">%</span></td>
-            <td class="text-center"><?= number_format($recycle_ratio); ?> <span style="font-size: 0.3em;">%</span></td>
-            <td class="text-center"><?= number_format($total_dross_scrap); ?> <span style="font-size: 0.3em;">Kg</span></td>
-        </tr>
-    </tbody>
-</table>
+<hr>
+<div class="row" style="font-size: 2em; color: silver; font-style: italic;">
+    <div class="col-md-3">
+        In (New) : <?= $total_in_new; ?> Kg (A)
+    </div>
+    <div class="col-md-3">
+        In (Recycle) : <?= $total_in_recycle; ?> Kg (B)
+    </div>
+    <div class="col-md-3">
+        Out (Dross) : <?= $total_dross; ?> Kg (C)
+    </div>
+    <div class="col-md-3">
+        Out (Scrap) : <?= $total_dross_scrap; ?> Kg (D)
+    </div>
+</div>

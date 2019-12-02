@@ -36,6 +36,11 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
         var baseUrl = "<?= Yii::$app->urlManager->baseUrl ?>";
     </script>
     <?php $this->head() ?>
+    <style type="text/css">
+        .content-header>.breadcrumb>li>a, .breadcrumb > .active {
+            color: silver;
+        }
+    </style>
 </head>
 <body class="hold-transition <?= \dmstr\helpers\AdminLteHelper::skinClass(); ?> sidebar-mini<?= \Yii::$app->controller->id == 'about-me' || \Yii::$app->controller->id == 'manufacture-flow' ? ' sidebar-collapse' : ''; ?>">
 <?php $this->beginBody() ?>
