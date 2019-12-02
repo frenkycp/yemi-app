@@ -164,8 +164,8 @@ class DisplayController extends Controller
         ->all();
 
         $title_arr = [
-            '7' => '1. Line-X Booth <Black><br/><span class="japanesse">(ラインエックス黒のブース)</span>',
-            '8' => '2. Line-X Booth <White><br/><span class="japanesse">(ラインエックス白のブース)</span>',
+            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse">(ラインエックス黒のブース)</span>',
+            '8' => '2. Line-X Booth (White)<br/><span class="japanesse">(ラインエックス白のブース)</span>',
             '18' => '3. Oven Room 1<br/><span class="japanesse">(強制乾燥室 1)</span>',
             '17' => '4. Oven Room 2<br/><span class="japanesse">(強制乾燥室 2)</span>',
             '13' => '5. Inwax Piano 1<br/><span class="japanesse">(インワックスのピアノ塗装 1)</span>',
@@ -216,8 +216,8 @@ class DisplayController extends Controller
         ->all();
 
         $title_arr = [
-            '7' => '1. Line-X Booth <Black><br/><span class="japanesse">(ラインエックス黒のブース)</span>',
-            '8' => '2. Line-X Booth <White><br/><span class="japanesse">(ラインエックス白のブース)</span>',
+            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse">(ラインエックス黒のブース)</span>',
+            '8' => '2. Line-X Booth (White)<br/><span class="japanesse">(ラインエックス白のブース)</span>',
             '18' => '3. Oven Room 1<br/><span class="japanesse">(強制乾燥室 1)</span>',
             '17' => '4. Oven Room 2<br/><span class="japanesse">(強制乾燥室 2)</span>',
             '13' => '5. Inwax Piano 1<br/><span class="japanesse">(インワックスのピアノ塗装 1)</span>',
@@ -237,6 +237,8 @@ class DisplayController extends Controller
         $data = [
             'sap' => [
                 'request_qty' => 0,
+                'request_waiting' => 0,
+                'request_late' => 0,
                 'in_progress_normal' => 0,
                 'in_progress_harga' => 0,
                 'in_progress_late' => 0,
@@ -245,6 +247,8 @@ class DisplayController extends Controller
             ],
             'nice' => [
                 'request_qty' => 0,
+                'request_waiting' => 0,
+                'request_late' => 0,
                 'in_progress_normal' => 0,
                 'in_progress_harga' => 0,
                 'in_progress_late' => 0,
@@ -274,9 +278,9 @@ class DisplayController extends Controller
                 if ($value['source_data'] == '01-SAP') {
                     $data['sap_qty']++;
                     if ($value['request'] == 1) {
-                        if ($value['delay_reason' == 'INVOICE-WAITING']) {
+                        if ($value['delay_reason'] == 'INVOICE-WAITING') {
                             $data['sap']['request_waiting']++;
-                        } elseif ($value['delay_reason' == 'INVOICE-LATE']) {
+                        } elseif ($value['delay_reason'] == 'INVOICE-LATE') {
                             $data['sap']['request_late']++;
                         }
                     }
@@ -295,9 +299,9 @@ class DisplayController extends Controller
                 } else {
                     $data['nice_qty']++;
                     if ($value['request'] == 1) {
-                        if ($value['delay_reason' == 'INVOICE-WAITING']) {
+                        if ($value['delay_reason'] == 'INVOICE-WAITING') {
                             $data['nice']['request_waiting']++;
-                        } elseif ($value['delay_reason' == 'INVOICE-LATE']) {
+                        } elseif ($value['delay_reason'] == 'INVOICE-LATE') {
                             $data['nice']['request_late']++;
                         }
                     }

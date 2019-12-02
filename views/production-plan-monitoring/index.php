@@ -29,7 +29,7 @@ $this->registerCss("
     }
     #run-tbl > thead > tr > th{
         border:1px solid #8b8c8d;
-        background-color: #858689;
+        background-color: " . \Yii::$app->params['purple_color'] . ";
         color: white;
         font-size: 30px;
         border-bottom: 7px solid #ddd;

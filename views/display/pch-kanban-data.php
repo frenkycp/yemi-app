@@ -173,9 +173,9 @@ echo '</pre>';*/
     <tfoot>
         <td class="text-center">Total</td>
             <td class="text-center"><?= number_format($data['sap']['request_waiting'] + $data['nice']['request_waiting']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['request_late'] + $data['nice']['request_late']); ?></td>
+            <td class="text-center<?= $data['sap']['request_late'] + $data['nice']['request_late'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['request_late'] + $data['nice']['request_late']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['in_progress_normal'] + $data['nice']['in_progress_normal']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['in_progress_harga'] + $data['nice']['in_progress_harga']); ?></td>
+            <td class="text-center<?= $data['sap']['in_progress_harga'] + $data['nice']['in_progress_harga'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['sap']['in_progress_harga'] + $data['nice']['in_progress_harga']); ?></td>
             <td class="text-center<?= ($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']) > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['done_qty'] + $data['nice']['done_qty']); ?></td>
             <td class="text-center"><?= number_format($data['sap']['trf_qty'] + $data['nice']['trf_qty']); ?></td>
