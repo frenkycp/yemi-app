@@ -38,15 +38,15 @@ $this->registerCss("
         border-top: 0;
     }
     .table > thead > tr > th{
-        border:1px solid #4A1573;
-        background-color: " . \Yii::$app->params['purple_color'] . ";
+        border:1px solid darkgray;
+        background-color: gray;
         color: white;
         font-size: 24px;
-        border-bottom: 7px solid #4A1573;
+        border-bottom: 7px solid darkgray;
         vertical-align: middle;
     }
     .table > tbody > tr > td{
-        border:1px solid #4A1573;
+        border:1px solid darkgray;
         font-size: 3.5em;
         //background-color: #B3E5FC;
         //font-weight: 1000;
@@ -55,7 +55,7 @@ $this->registerCss("
         height: 130px;
     }
     .table > tfoot > tr > td{
-        border:1px solid #4A1573;
+        border:1px solid darkgray;
         font-size: 3.5em;
         background-color: rgba(255, 255, 255, 0.1);
         //font-weight: 1000;
@@ -112,73 +112,85 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 
 
-<table class="table table-responsive table-bordered">
+<table class="table table-responsive">
     <thead>
         <tr>
-            <th class="text-center" rowspan="2">Source</th>
-            <th class="text-center" colspan="2">Request/Todo</th>
-            <th class="text-center" colspan="3">In-Progress</th>
-            <th class="text-center" rowspan="2">Done</th>
-            <th class="text-center" rowspan="2">Transfer</th>
-            <th class="text-center" rowspan="2" width="140px">Status</th>
+            <th rowspan="3" style="background: transparent; border-left: 0px;"></th>
+            <th class="text-center">WAREHOUSE</th>
+            <th class="text-center" colspan="4">PURCHASING</th>
+            <th class="text-center" colspan="4">ACCOUNTING</th>
         </tr>
         <tr>
-            <th class="text-center">Invoice Wating</th>
-            <th class="text-center">Invoice Late</th>
-            <th class="text-center">Normal</th>
-            <th class="text-center">Price</th>
-            <th class="text-center">Late</th>
+            <th class="text-center">Kanban</th>
+            <th class="text-center" colspan="2">Document Received</th>
+            <th class="text-center" colspan="2">Document Verification</th>
+            <th class="text-center" colspan="2">Accounting Verification</th>
+            <th class="text-center" colspan="2">Accounting Paid</th>
+        </tr>
+        <tr>
+            <th class="text-center">Document</th>
+            <th class="text-center">TARGET</th>
+            <th class="text-center">BALANCE</th>
+            <th class="text-center">TARGET</th>
+            <th class="text-center">BALANCE</th>
+            <th class="text-center">TARGET</th>
+            <th class="text-center">BALANCE</th>
+            <th class="text-center">TARGET</th>
+            <th class="text-center">BALANCE</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td class="text-center">SAP</td>
-            <td class="text-center"><?= number_format($data['sap']['request_waiting']); ?></td>
-            <td class="text-center<?= $data['sap']['request_late'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['sap']['request_late']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['in_progress_normal']); ?></td>
-            <td class="text-center<?= $data['sap']['in_progress_harga'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['sap']['in_progress_harga']); ?></td>
-            <td class="text-center<?= $data['sap']['in_progress_late'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['in_progress_late']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['done_qty']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['trf_qty']); ?></td>
-            <td class="text-center">
-                <?php
-                $sap_icon = '<i class="fa fa-circle-o text-green icon-status"></i>';
-                if ($data['sap']['in_progress_late'] > 0 || $data['sap']['in_progress_harga'] > 0 || $data['sap']['request_late']) {
-                    $sap_icon = '<i class="fa fa-close text-red icon-status blinked"></i>';
-                }
-                echo $sap_icon;
-                ?>
-            </td>
+            <td>DIRECT</td>
+            <td class="text-center"><?= number_format($data['direct']['kanban_doc']); ?></td>
+            <td class="text-center"><?= number_format($data['direct']['pch']['received']['target']); ?></td>
+            <td class="text-center"><?= $data['direct']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['received']['balance']), ['pch-kanban-detail',
+                'direct_indirect' => '01-SAP',
+                'balance_no' => 1
+            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            <td class="text-center"><?= number_format($data['direct']['pch']['verification']['target']); ?></td>
+            <td class="text-center"><?= $data['direct']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['verification']['balance']), ['pch-kanban-detail',
+                'direct_indirect' => '01-SAP',
+                'balance_no' => 2
+            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            <td class="text-center"><?= number_format($data['direct']['acc']['verification']['target']); ?></td>
+            <td class="text-center"><?= $data['direct']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['verification']['balance']), ['pch-kanban-detail',
+                'direct_indirect' => '01-SAP',
+                'balance_no' => 3
+            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            <td class="text-center"><?= number_format($data['direct']['acc']['paid']['target']); ?></td>
+            <td class="text-center"><?= $data['direct']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['paid']['balance']), ['pch-kanban-detail',
+                'direct_indirect' => '01-SAP',
+                'balance_no' => 4
+            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
         </tr>
         <tr>
-            <td class="text-center">NICE</td>
-            <td class="text-center"><?= number_format($data['nice']['request_waiting']); ?></td>
-            <td class="text-center<?= $data['nice']['request_late'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['nice']['request_late']); ?></td>
-            <td class="text-center"><?= number_format($data['nice']['in_progress_normal']); ?></td>
-            <td class="text-center<?= $data['nice']['in_progress_harga'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['nice']['in_progress_harga']); ?></td>
-            <td class="text-center<?= $data['nice']['in_progress_late'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['nice']['in_progress_late']); ?></td>
-            <td class="text-center"><?= number_format($data['nice']['done_qty']); ?></td>
-            <td class="text-center"><?= number_format($data['nice']['trf_qty']); ?></td>
-            <td class="text-center">
-                <?php
-                $nice_icon = '<i class="fa fa-circle-o text-green icon-status"></i>';
-                if ($data['nice']['in_progress_late'] > 0 || $data['nice']['in_progress_harga'] > 0 || $data['nice']['request_late']) {
-                    $nice_icon = '<i class="fa fa-close text-red icon-status blinked"></i>';
-                }
-                echo $nice_icon;
-                ?>
-            </td>
+            <td>INDIRECT</td>
+            <td class="text-center"><?= number_format($data['indirect']['kanban_doc']); ?></td>
+            <td class="text-center"><?= number_format($data['indirect']['pch']['received']['target']); ?></td>
+            <td class="text-center"><?= $data['indirect']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['received']['balance']), ['pch-kanban-detail',
+                'direct_indirect' => '02-NICE',
+                'balance_no' => 1
+            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            <td class="text-center"><?= number_format($data['indirect']['pch']['verification']['target']); ?></td>
+            <td class="text-center"><?= $data['indirect']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['verification']['balance']), ['pch-kanban-detail',
+                'direct_indirect' => '02-NICE',
+                'balance_no' => 2
+            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            <td class="text-center"><?= number_format($data['indirect']['acc']['verification']['target']); ?></td>
+            <td class="text-center"><?= $data['indirect']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['verification']['balance']), ['pch-kanban-detail',
+                'direct_indirect' => '02-NICE',
+                'balance_no' => 3
+            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            <td class="text-center"><?= number_format($data['indirect']['acc']['paid']['target']); ?></td>
+            <td class="text-center"><?= $data['indirect']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['paid']['balance']), ['pch-kanban-detail',
+                'direct_indirect' => '02-NICE',
+                'balance_no' => 4
+            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
         </tr>
     </tbody>
     <tfoot>
         <td class="text-center">Total</td>
-            <td class="text-center"><?= number_format($data['sap']['request_waiting'] + $data['nice']['request_waiting']); ?></td>
-            <td class="text-center<?= $data['sap']['request_late'] + $data['nice']['request_late'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['request_late'] + $data['nice']['request_late']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['in_progress_normal'] + $data['nice']['in_progress_normal']); ?></td>
-            <td class="text-center<?= $data['sap']['in_progress_harga'] + $data['nice']['in_progress_harga'] > 0 ? ' text-red' : ' text-green' ?>"><?= number_format($data['sap']['in_progress_harga'] + $data['nice']['in_progress_harga']); ?></td>
-            <td class="text-center<?= ($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']) > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['sap']['in_progress_late'] + $data['nice']['in_progress_late']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['done_qty'] + $data['nice']['done_qty']); ?></td>
-            <td class="text-center"><?= number_format($data['sap']['trf_qty'] + $data['nice']['trf_qty']); ?></td>
-            <td class="text-center"></td>
+            
     </tfoot>
 </table>

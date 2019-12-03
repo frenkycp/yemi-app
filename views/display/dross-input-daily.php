@@ -190,7 +190,7 @@ echo '</pre>';*/
                 <tr>
                     <th class="text-center" width="25%">Total Scrap<br/>[D]</th>
                     <th class="text-center" width="25%">Scrap Ratio<br/>[D / A]</th>
-                    <th class="text-center" width="25%">OUT (Recycle) Ratio<br/>[(C - D) / (A + B)]</th>
+                    <th class="text-center" width="25%">Recycle Ratio<br/>[B / A]</th>
                     
                 </tr>
             </thead>

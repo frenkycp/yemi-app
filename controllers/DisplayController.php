@@ -172,15 +172,17 @@ class DisplayController extends Controller
         $total_dross_scrap = $total_dross - $total_dross_recylce;
 
         $scrap_ratio = 0;
+        $recycle_ratio = 0;
         if ($total_in_new > 0) {
             $scrap_ratio = round(($total_dross_scrap / $total_in_new) * 100, 1);
+            $recycle_ratio = round(($total_in_recycle / $total_in_new) * 100, 1);
         }
         $in_recycle_ratio = 0;
-        $recycle_ratio = 0;
+        
         if ($total_in > 0) {
             
             $in_recycle_ratio = round(($total_in_recycle / $total_in) * 100, 1);
-            $recycle_ratio = round(($total_dross_recylce / $total_in) * 100, 1);
+            
         }
 
         $data = [
@@ -360,8 +362,8 @@ class DisplayController extends Controller
                     $data['direct']['kanban_doc']++;
                     $data['direct']['pch']['received']['target'] += $value['doc_received'];
                     $data['direct']['pch']['received']['balance'] -= $value['doc_minus'];
-                    $data['direct']['pch']['verification']['target'] += $value['verifikasi_done'];
-                    $data['direct']['pch']['verification']['balance'] -= $value['verifikasi_minus'];
+                    $data['direct']['pch']['verification']['target'] += $value['verikasi_done'];
+                    $data['direct']['pch']['verification']['balance'] -= $value['verikasi_minus'];
                     $data['direct']['acc']['verification']['target'] += $value['finance_rcv_done'];
                     $data['direct']['acc']['verification']['balance'] -= $value['finance_rcv_minus'];
                     $data['direct']['acc']['paid']['target'] += $value['finance_transfer_done'];
