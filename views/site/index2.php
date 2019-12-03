@@ -233,7 +233,7 @@ $this->registerCss("
                         <?= Html::a('Wood Working - LT Control (24 Hours Max.) <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/wip-control3'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working - Lot LT Control (Top 20) <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-lt'], [
+                        <?= Html::a('Wood Working - Lot LT Control <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-lt'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                     </div>

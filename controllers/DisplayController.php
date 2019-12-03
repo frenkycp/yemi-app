@@ -813,7 +813,6 @@ class DisplayController extends Controller
         $tmp_beacon_tbl = BeaconTbl::find()
         ->where('lot_number IS NOT NULL')
         ->orderBy('start_date')
-        ->limit(20)
         ->all();
 
         $tmp_data = $data = [];
