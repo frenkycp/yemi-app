@@ -212,7 +212,7 @@ echo '</pre>';*/
                 <h3 class="panel-title">Stock Dross</h3>
             </div>
             <div class="panel-body">
-                <?= number_format($dross_stock->st_dross); ?>
+                <?= number_format($dross_stock->st_dross); ?> Kg
             </div>
         </div>
     </div>
@@ -222,7 +222,7 @@ echo '</pre>';*/
                 <h3 class="panel-title">Stock Recylce</h3>
             </div>
             <div class="panel-body">
-                <?= number_format($dross_stock->st_recycle); ?>
+                <?= number_format($dross_stock->st_recycle); ?> Kg
             </div>
         </div>
     </div>

@@ -95,6 +95,66 @@ use app\models\DrossStock;
 
 class DisplayController extends Controller
 {
+    public function actionSensorLog()
+    {
+        $this->layout = 'clean';
+        $data = [];
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d', strtotime(' -1 month'))));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+            # code...
+        }
+
+        $data_dummy = SensorLog::find()
+        ->where([
+            'AND',
+            ['>=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->from_date . ' 00:00:01'))],
+            ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
+        ])
+        ->orderBy('map_no, system_date_time')
+        ->asArray()
+        ->all();
+
+        foreach ($data_dummy as $value) {
+            $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
+            $tmp_data_temperature[$value['area']][] = [
+                'x' => $proddate,
+                'y' => (int)$value['temparature']
+            ];
+            $tmp_data_humidity[$value['area']][] = [
+                'x' => $proddate,
+                'y' => (int)$value['humidity']
+            ];
+        }
+        foreach ($tmp_data_temperature as $key => $value) {
+            $data['temperature'][] = [
+                'name' => $key,
+                'data' => $value,
+                'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+                'showInLegend' => false,
+            ];
+        }
+        foreach ($tmp_data_humidity as $key => $value) {
+            $data['humidity'][] = [
+                'name' => $key,
+                'data' => $value,
+                'color' => new JsExpression('Highcharts.getOptions().colors[3]'),
+                'showInLegend' => false,
+            ];
+        }
+
+        return $this->render('sensor-log', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
     public function actionDrossInputDaily($value='')
     {
         $this->layout = 'clean';
@@ -110,7 +170,7 @@ class DisplayController extends Controller
         foreach ($dross_date as $key => $value) {
             $tgl_arr[] = $value->tgl;
         }
-        $model->from_date = date('Y-m-d', strtotime($tgl_arr[1] . ' +1 day'));
+        $model->from_date = '2019-04-01';
         $model->to_date = $tgl_arr[0];
         //$model->from_date = date('Y-m-01', strtotime(date('Y-m-d', strtotime(' -2 months'))));
         //$model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
@@ -290,7 +350,80 @@ class DisplayController extends Controller
             'title_arr' => $title_arr,
         ]);
     }
+    public function actionPchKanbanDetail($period, $direct_indirect, $balance_no)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = [];
+        if ($balance_no == 1) {
+            $where_arr = [
+                'doc_minus' => 1
+            ];
+        } elseif ($balance_no == 2) {
+            $where_arr = [
+                'verikasi_minus' => 1
+            ];
+        } elseif ($balance_no == 3) {
+            $where_arr = [
+                'finance_rcv_minus' => 1
+            ];
+        } elseif ($balance_no == 4) {
+            $where_arr = [
+                'finance_transfer_minus' => 1
+            ];
+        }
 
+        $params = [
+            ':period' => $period,
+        ];
+        $sql = "{CALL INVOICE_KANBAN_NEW(:period)}";
+        try {
+            $result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryAll();
+            foreach ($result as $key => $value) {
+                $is_find = false;
+                if ($value['source_data'] == $direct_indirect) {
+                    if ($balance_no == 1) {
+                        if ($value['doc_minus'] == 1) {
+                            $is_find = true;
+                        }
+                    } elseif ($balance_no == 2) {
+                        if ($value['verikasi_minus'] == 1) {
+                            $is_find = true;
+                        }
+                    } elseif ($balance_no == 3) {
+                        if ($value['finance_rcv_minus'] == 1) {
+                            $is_find = true;
+                        }
+                    } elseif ($balance_no == 4) {
+                        if ($value['finance_transfer_minus'] == 1) {
+                            $is_find = true;
+                        }
+                    }
+                    if ($is_find == true) {
+                        $data[] = [
+                            'period' => $value['period'],
+                            'vendor_code' => $value['vendor_code'],
+                            'vendor_name' => $value['vendor_name'],
+                            'voucher_no' => $value['voucher_no'],
+                            'invoice_act' => $value['invoice_act'],
+                            'do' => $value['do'],
+                            'currency' => $value['currency'],
+                            'amount' => $value['amount'],
+                            'pic' => $value['pic'],
+                            'division' => $value['division'],
+                            'term' => $value['term'],
+                        ];
+                    }
+                }
+            }
+        } catch (Exception $ex) {
+            return json_encode($ex->getMessage());
+        }
+
+        return $this->render('pch-kanban-detail', [
+            'data' => $data
+        ]);
+    }
     public function actionPchKanbanData()
     {
         $this->layout = 'clean';

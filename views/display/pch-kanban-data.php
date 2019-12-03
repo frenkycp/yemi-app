@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Purchasing Kanban Data',
-    'tab_title' => 'Purchasing Kanban Data',
-    'breadcrumbs_title' => 'Purchasing Kanban Data'
+    'page_title' => 'Office Kanban Workflow (Supplier Payment)',
+    'tab_title' => 'Office Kanban Workflow',
+    'breadcrumbs_title' => 'Office Kanban Workflow'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -144,49 +144,49 @@ echo '</pre>';*/
             <td>DIRECT</td>
             <td class="text-center"><?= number_format($data['direct']['kanban_doc']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['pch']['received']['target']); ?></td>
-            <td class="text-center"><?= $data['direct']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['received']['balance']), ['pch-kanban-detail',
+            <td class="text-center"><?= $data['direct']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['received']['balance']), ['period' => $model->period, 'pch-kanban-detail',
                 'direct_indirect' => '01-SAP',
                 'balance_no' => 1
-            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['pch']['verification']['target']); ?></td>
-            <td class="text-center"><?= $data['direct']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['verification']['balance']), ['pch-kanban-detail',
+            <td class="text-center"><?= $data['direct']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['verification']['balance']), ['period' => $model->period, 'pch-kanban-detail',
                 'direct_indirect' => '01-SAP',
                 'balance_no' => 2
-            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['acc']['verification']['target']); ?></td>
-            <td class="text-center"><?= $data['direct']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['verification']['balance']), ['pch-kanban-detail',
+            <td class="text-center"><?= $data['direct']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['verification']['balance']), ['period' => $model->period, 'pch-kanban-detail',
                 'direct_indirect' => '01-SAP',
                 'balance_no' => 3
-            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['acc']['paid']['target']); ?></td>
-            <td class="text-center"><?= $data['direct']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['paid']['balance']), ['pch-kanban-detail',
+            <td class="text-center"><?= $data['direct']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['paid']['balance']), ['period' => $model->period, 'pch-kanban-detail',
                 'direct_indirect' => '01-SAP',
                 'balance_no' => 4
-            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
         </tr>
         <tr>
             <td>INDIRECT</td>
             <td class="text-center"><?= number_format($data['indirect']['kanban_doc']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['pch']['received']['target']); ?></td>
-            <td class="text-center"><?= $data['indirect']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['received']['balance']), ['pch-kanban-detail',
+            <td class="text-center"><?= $data['indirect']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['received']['balance']), ['period' => $model->period, 'pch-kanban-detail',
                 'direct_indirect' => '02-NICE',
                 'balance_no' => 1
-            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['pch']['verification']['target']); ?></td>
-            <td class="text-center"><?= $data['indirect']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['verification']['balance']), ['pch-kanban-detail',
+            <td class="text-center"><?= $data['indirect']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['verification']['balance']), ['period' => $model->period, 'pch-kanban-detail',
                 'direct_indirect' => '02-NICE',
                 'balance_no' => 2
-            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['acc']['verification']['target']); ?></td>
-            <td class="text-center"><?= $data['indirect']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['verification']['balance']), ['pch-kanban-detail',
+            <td class="text-center"><?= $data['indirect']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['verification']['balance']), ['period' => $model->period, 'pch-kanban-detail',
                 'direct_indirect' => '02-NICE',
                 'balance_no' => 3
-            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['acc']['paid']['target']); ?></td>
-            <td class="text-center"><?= $data['indirect']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['paid']['balance']), ['pch-kanban-detail',
+            <td class="text-center"><?= $data['indirect']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['paid']['balance']), ['period' => $model->period, 'pch-kanban-detail',
                 'direct_indirect' => '02-NICE',
                 'balance_no' => 4
-            ], ['style' => 'color: red; font-weight: bold;']); ?></td>
+            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
         </tr>
     </tbody>
     <tfoot>
