@@ -34,7 +34,7 @@ $this->registerCss("
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title{font-size: 2em;}
-    //.container {width: auto;}
+    .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}

@@ -90,7 +90,8 @@ $this->registerJs($script, View::POS_HEAD );
     <tbody>
         <tr>
             <?php
-            if ($data['total_wip'] >= 6000) {
+            $target_total = 6000;
+            if ($data['total_wip'] >= $target_total) {
                 $total_txt_class = ' text-red';
                 $total_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
@@ -99,7 +100,7 @@ $this->registerJs($script, View::POS_HEAD );
             }
             ?>
             <td>Jumlah WIP WW</td>
-            <td class="text-center target">< 6,000 <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center target">< <?= number_format($target_total); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $total_txt_class; ?>"><?= number_format($data['total_wip']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center"><?= $total_src_img; ?></td>
         </tr>
