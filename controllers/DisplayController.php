@@ -358,10 +358,25 @@ class DisplayController extends Controller
             foreach ($result as $key => $value) {
                 if ($value['source_data'] == '01-SAP') {
                     $data['direct']['kanban_doc']++;
+                    $data['direct']['pch']['received']['target'] += $value['doc_received'];
+                    $data['direct']['pch']['received']['balance'] -= $value['doc_minus'];
+                    $data['direct']['pch']['verification']['target'] += $value['verifikasi_done'];
+                    $data['direct']['pch']['verification']['balance'] -= $value['verifikasi_minus'];
+                    $data['direct']['acc']['verification']['target'] += $value['finance_rcv_done'];
+                    $data['direct']['acc']['verification']['balance'] -= $value['finance_rcv_minus'];
+                    $data['direct']['acc']['paid']['target'] += $value['finance_transfer_done'];
+                    $data['direct']['acc']['paid']['balance'] -= $value['finance_transfer_minus'];
                     
                 } else {
                     $data['indirect']['kanban_doc']++;
-                    
+                    $data['indirect']['pch']['received']['target'] += $value['doc_received'];
+                    $data['indirect']['pch']['received']['balance'] -= $value['doc_minus'];
+                    $data['indirect']['pch']['verification']['target'] += $value['verifikasi_done'];
+                    $data['indirect']['pch']['verification']['balance'] -= $value['verifikasi_minus'];
+                    $data['indirect']['acc']['verification']['target'] += $value['finance_rcv_done'];
+                    $data['indirect']['acc']['verification']['balance'] -= $value['finance_rcv_minus'];
+                    $data['indirect']['acc']['paid']['target'] += $value['finance_transfer_done'];
+                    $data['indirect']['acc']['paid']['balance'] -= $value['finance_transfer_minus'];
                 }
             }
         } catch (Exception $ex) {
@@ -2176,8 +2191,6 @@ class DisplayController extends Controller
             ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
         ])
         ->andWhere(['map_no' => $model->map_no])
-        ->andWhere(['>', 'temparature', 0])
-        ->andWhere(['>', 'humidity', 0])
         ->asArray()
         ->all();
 
