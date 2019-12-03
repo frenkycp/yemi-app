@@ -249,9 +249,9 @@ echo '</pre>';*/
         <table class="table table-responsive table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center" width="25%">Total Scrap<br/>[D]</th>
-                    <th class="text-center" width="25%">Scrap Ratio<br/>[D / A]</th>
-                    <th class="text-center" width="25%">Recycle Ratio<br/>[B / A]</th>
+                    <th class="text-center" width="25%">Total Scrap <span class="japanesse">処分量</span><br/>[D]</th>
+                    <th class="text-center" width="25%">Scrap Ratio <span class="japanesse">処分率</span><br/>[D / A]</th>
+                    <th class="text-center" width="25%">Recycle Ratio <span class="japanesse">再生率</span><br/>[B / A]</th>
                     
                 </tr>
             </thead>
