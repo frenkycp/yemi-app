@@ -289,8 +289,8 @@ class DisplayController extends Controller
         ->all();
 
         $title_arr = [
-            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse light-green">(ラインエックス黒のブース)</span>',
-            '8' => '2. Line-X Booth (White)<br/><span class="japanesse light-green">(ラインエックス白のブース)</span>',
+            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse light-green">(黒ラインエックスのブース)</span>',
+            '8' => '2. Line-X Booth (White)<br/><span class="japanesse light-green">(白ラインエックスのブース)</span>',
             '18' => '3. Oven Room 1<br/><span class="japanesse light-green">(強制乾燥室 1)</span>',
             '17' => '4. Oven Room 2<br/><span class="japanesse light-green">(強制乾燥室 2)</span>',
             '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
@@ -341,8 +341,8 @@ class DisplayController extends Controller
         ->all();
 
         $title_arr = [
-            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse light-green">(ラインエックス黒のブース)</span>',
-            '8' => '2. Line-X Booth (White)<br/><span class="japanesse light-green">(ラインエックス白のブース)</span>',
+            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse light-green">(黒ラインエックスのブース)</span>',
+            '8' => '2. Line-X Booth (White)<br/><span class="japanesse light-green">(白ラインエックスのブース)</span>',
             '18' => '3. Oven Room 1<br/><span class="japanesse light-green">(強制乾燥室 1)</span>',
             '17' => '4. Oven Room 2<br/><span class="japanesse light-green">(強制乾燥室 2)</span>',
             '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
