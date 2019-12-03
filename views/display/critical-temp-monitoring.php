@@ -127,10 +127,10 @@ $this->registerJs($script, View::POS_END);
     <thead>
         <tr>
             <th>Area</th>
-            <th class="text-center">Standard<br/>Temperature (&deg;C)</th>
-            <th class="text-center">Act.<br/>Temperature (&deg;C)</th>
-            <th class="text-center">Standard<br/>Humidity (%)</th>
-            <th class="text-center">Act.<br/>Humidity (%)</th>
+            <th class="text-center">Standard 基準<br/>Temperature (&deg;C)</th>
+            <th class="text-center">Actual 現在<br/>Temperature (&deg;C)</th>
+            <th class="text-center">Standard 基準<br/>Humidity (%)</th>
+            <th class="text-center">Actual 現在<br/>Humidity (%)</th>
         </tr>
     </thead>
     <tbody id="body-content">
