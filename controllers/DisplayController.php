@@ -95,6 +95,10 @@ use app\models\DrossStock;
 
 class DisplayController extends Controller
 {
+    public function actionMitaUrl($value='')
+    {
+        return $this->render('mita-url');
+    }
     public function actionSensorLog()
     {
         $this->layout = 'clean';
@@ -285,12 +289,12 @@ class DisplayController extends Controller
         ->all();
 
         $title_arr = [
-            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse">(ラインエックス黒のブース)</span>',
-            '8' => '2. Line-X Booth (White)<br/><span class="japanesse">(ラインエックス白のブース)</span>',
-            '18' => '3. Oven Room 1<br/><span class="japanesse">(強制乾燥室 1)</span>',
-            '17' => '4. Oven Room 2<br/><span class="japanesse">(強制乾燥室 2)</span>',
-            '13' => '5. Inwax Piano 1<br/><span class="japanesse">(インワックスのピアノ塗装 1)</span>',
-            '12' => '6. Inwax Piano 13&14<br/><span class="japanesse">(インワックスのピアノ塗装 13&14)</span>',
+            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse light-green">(ラインエックス黒のブース)</span>',
+            '8' => '2. Line-X Booth (White)<br/><span class="japanesse light-green">(ラインエックス白のブース)</span>',
+            '18' => '3. Oven Room 1<br/><span class="japanesse light-green">(強制乾燥室 1)</span>',
+            '17' => '4. Oven Room 2<br/><span class="japanesse light-green">(強制乾燥室 2)</span>',
+            '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
+            '12' => '6. Inwax Piano 13&14<br/><span class="japanesse light-green">(インワックスのピアノ塗装 13&14)</span>',
         ];
 
         $tbody = '';
@@ -337,12 +341,12 @@ class DisplayController extends Controller
         ->all();
 
         $title_arr = [
-            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse">(ラインエックス黒のブース)</span>',
-            '8' => '2. Line-X Booth (White)<br/><span class="japanesse">(ラインエックス白のブース)</span>',
-            '18' => '3. Oven Room 1<br/><span class="japanesse">(強制乾燥室 1)</span>',
-            '17' => '4. Oven Room 2<br/><span class="japanesse">(強制乾燥室 2)</span>',
-            '13' => '5. Inwax Piano 1<br/><span class="japanesse">(インワックスのピアノ塗装 1)</span>',
-            '12' => '6. Inwax Piano 13&14<br/><span class="japanesse">(インワックスのピアノ塗装 13&14)</span>',
+            '7' => '1. Line-X Booth (Black)<br/><span class="japanesse light-green">(ラインエックス黒のブース)</span>',
+            '8' => '2. Line-X Booth (White)<br/><span class="japanesse light-green">(ラインエックス白のブース)</span>',
+            '18' => '3. Oven Room 1<br/><span class="japanesse light-green">(強制乾燥室 1)</span>',
+            '17' => '4. Oven Room 2<br/><span class="japanesse light-green">(強制乾燥室 2)</span>',
+            '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
+            '12' => '6. Inwax Piano 13&14<br/><span class="japanesse light-green">(インワックスのピアノ塗装 13&14)</span>',
         ];
 
         return $this->render('critical-temp-monitoring', [
