@@ -92,6 +92,8 @@ use app\models\WipModelGroup;
 use app\models\DrossInput;
 use app\models\DrossOutput;
 use app\models\DrossStock;
+use app\models\CrusherInput;
+use app\models\CrusherTbl;
 
 class DisplayController extends Controller
 {
@@ -99,6 +101,7 @@ class DisplayController extends Controller
     {
         return $this->render('mita-url');
     }
+
     public function actionSensorLog()
     {
         $this->layout = 'clean';
@@ -159,6 +162,129 @@ class DisplayController extends Controller
             'data' => $data,
         ]);
     }
+
+    public function actionCrusherInputDaily($value='')
+    {
+        $this->layout = 'clean';
+        $data = [];
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $tgl_arr = [];
+        $dross_date = $tmp_output = DrossOutput::find()->select('tgl')->groupBy('tgl')->orderBy('tgl DESC')->limit(2)->all();
+        foreach ($dross_date as $key => $value) {
+            $tgl_arr[] = $value->tgl;
+        }
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d', strtotime(' -1 months'))));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+            # code...
+        }
+
+        $tmp_input = CrusherInput::find()
+        ->select([
+            'tgl',
+            'fresh_inj' => 'SUM(fresh_inj)',
+            'cr_inj' => 'SUM(cr_inj)',
+        ])
+        ->where([
+            'AND',
+            ['>=', 'tgl', $model->from_date],
+            ['<=', 'tgl', $model->to_date]
+        ])
+        ->groupBy('tgl')
+        ->orderBy('tgl')
+        ->all();
+
+        $tmp_data_new = $tmp_data_recycle = [];
+        $total_in = $total_in_new = $total_in_recycle = 0;
+        foreach ($tmp_input as $key => $value) {
+            $proddate = (strtotime($value->tgl . " +7 hours") * 1000);
+            $total_in_new += $value->fresh_inj;
+            $total_in_recycle += $value->cr_inj;
+            $tmp_data_new[] = [
+                'x' => $proddate,
+                'y' => (float)$value->fresh_inj
+            ];
+            $tmp_data_recycle[] = [
+                'x' => $proddate,
+                'y' => (float)$value->cr_inj
+            ];
+        }
+        $total_in = (float)$total_in_new + (float)$total_in_recycle;
+
+        $tmp_output = CrusherTbl::find()
+        ->select([
+            'date',
+            'consume' => 'SUM(consume)',
+        ])
+        ->where([
+            'AND',
+            ['>=', 'date', $model->from_date],
+            ['<=', 'date', $model->to_date]
+        ])
+        ->groupBy('date')
+        ->all();
+
+        $total_dross = $total_dross_recylce = $total_dross_scrap = 0;
+        foreach ($tmp_output as $key => $value) {
+            $total_dross += $value->consume;
+            $total_dross_recylce += $value->consume;
+        }
+        $total_dross_scrap = $total_dross - $total_dross_recylce;
+
+        $scrap_ratio = 0;
+        $recycle_ratio = 0;
+        if ($total_in_new > 0) {
+            $scrap_ratio = round(($total_dross_scrap / $total_in_new) * 100, 1);
+            $recycle_ratio = round(($total_in_recycle / $total_in_new) * 100, 1);
+        }
+        $in_recycle_ratio = 0;
+        
+        if ($total_in > 0) {
+            
+            $in_recycle_ratio = round(($total_in_recycle / $total_in) * 100, 1);
+            
+        }
+
+        $data = [
+            [
+                'name' => 'RECYCLE',
+                'data' => $tmp_data_recycle
+            ],
+            [
+                'name' => 'NEW',
+                'data' => $tmp_data_new
+            ],
+        ];
+
+        $dross_stock = DrossStock::find()->orderBy('tgl DESC')->one();
+        $dross_stock = [
+            'st_dross' => 0,
+            'st_recycle' => $total_dross_recylce - $total_in_recycle
+        ];
+
+        return $this->render('crusher-input-daily', [
+            'data' => $data,
+            'model' => $model,
+            'total_in' => $total_in,
+            'total_in_new' => $total_in_new,
+            'total_in_recycle' => $total_in_recycle,
+            'total_dross_scrap' => $total_dross_scrap,
+            'total_dross' => $total_dross,
+            'total_dross_recylce' => $total_dross_recylce,
+            'scrap_ratio' => $scrap_ratio,
+            'recycle_ratio' => $recycle_ratio,
+            'in_recycle_ratio' => $in_recycle_ratio,
+            'dross_stock' => $dross_stock
+        ]);
+    }
+
     public function actionDrossInputDaily($value='')
     {
         $this->layout = 'clean';
@@ -278,6 +404,7 @@ class DisplayController extends Controller
             'dross_stock' => $dross_stock
         ]);
     }
+
     public function actionCriticalTempUpdate($value='')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
