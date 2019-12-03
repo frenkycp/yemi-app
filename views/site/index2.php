@@ -549,7 +549,7 @@ $this->registerCss("
                                     <?= Html::a('YEMI - SMT TODAY (Line 1)', ['/display/smt-inj-today', 'line' => '01']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('YEMI - SMT TODAY (Line 2)', ['/display/smt-inj-today', 'line' => '01']); ?>
+                                    <?= Html::a('YEMI - SMT TODAY (Line 2)', ['/display/smt-inj-today', 'line' => '02']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('YEMI - INJ LARGE TODAY <span class="japanesse">(本日のプラ成形)</span>', ['/display/smt-inj-today', 'loc' => 'WI02']); ?>
