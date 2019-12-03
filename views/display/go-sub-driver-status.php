@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'GO Sub Assy Status <small style="color: white; opacity: 0.8;" id="last-update"></small><span class="japanesse text-green"></span>',
+    'page_title' => 'GO Sub Assy Status <small style="color: white; opacity: 0.8;" id="last-update"></small><span class="japanesse light-green"></span>',
     'tab_title' => 'GO Sub Assy Status',
     'breadcrumbs_title' => 'GO Sub Assy Status'
 ];
@@ -18,7 +18,6 @@ $this->title = [
 $color = 'ForestGreen';
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}

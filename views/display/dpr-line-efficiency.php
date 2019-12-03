@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'DPR Line Efficiency <span class="japanesse text-green"></span>',
+    'page_title' => 'DPR Line Efficiency <span class="japanesse light-green"></span>',
     'tab_title' => 'DPR Line Efficiency',
     'breadcrumbs_title' => 'DPR Line Efficiency'
 ];
@@ -17,7 +17,6 @@ $color = 'ForestGreen';
 date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}

@@ -17,7 +17,8 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    ");
 
 date_default_timezone_set('Asia/Jakarta');
 

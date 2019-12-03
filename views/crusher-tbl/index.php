@@ -17,10 +17,6 @@ $this->title = [
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
-");
-
 date_default_timezone_set('Asia/Jakarta');
 
 $gridColumns = [

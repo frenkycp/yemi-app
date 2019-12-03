@@ -8,7 +8,7 @@ use yii\bootstrap\ActiveForm;
 
 //$this->title = 'Shipping Chart <span class="text-green">週次出荷（コンテナー別）</span>';
 $this->title = [
-    'page_title' => 'Monthly Production Inspection Chart <span class="japanesse text-green">(月次出荷管理検査)</span>',
+    'page_title' => 'Monthly Production Inspection Chart <span class="japanesse light-green">(月次出荷管理検査)</span>',
     'tab_title' => 'Monthly Production Inspection Chart',
     'breadcrumbs_title' => 'Monthly Production Inspection Chart'
 ];
@@ -17,7 +17,6 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}

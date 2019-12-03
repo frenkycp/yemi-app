@@ -9,14 +9,13 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Wood Working Lot Waiting Next Process <em style="font-size: 0.5em;">(Total Hours)</em> <span class="japanesse text-green"></span>',
+    'page_title' => 'Wood Working Lot Waiting Next Process <em style="font-size: 0.5em;">(Total Hours)</em> <span class="japanesse light-green"></span>',
     'tab_title' => 'Wood Working Lot Waiting Next Process',
     'breadcrumbs_title' => 'Wood Working Lot Waiting Next Process'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}

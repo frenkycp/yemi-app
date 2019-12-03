@@ -18,7 +18,6 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: #FFF; border-color: #FFF !important;}
     .form-control {font-size: 20px; height: 40px;}
     .content-header, h1 {color: white;}

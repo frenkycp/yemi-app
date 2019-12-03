@@ -60,14 +60,13 @@ use kartik\grid\GridView;
  */
 
 $this->title = [
-    'page_title' => 'Fixed Asset Data Table <span class="japanesse text-green"></span>',
+    'page_title' => 'Fixed Asset Data Table <span class="japanesse light-green"></span>',
     'tab_title' => 'Fixed Asset Data Table',
     'breadcrumbs_title' => 'Fixed Asset Data Table'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
 ");
 
 if (isset($actionColumnTemplates)) {

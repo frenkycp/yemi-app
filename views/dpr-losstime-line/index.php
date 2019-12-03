@@ -7,13 +7,13 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'FA Loss time by Line <span class="japanesse text-green">（ライン別総組ロースタイム）</span>',
+    'page_title' => 'FA Loss time by Line <span class="japanesse light-green">（ライン別総組ロースタイム）</span>',
     'tab_title' => 'FA Loss time by Line',
     'breadcrumbs_title' => 'FA Loss time by Line'
 ];
 $color = 'ForestGreen';
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("");
 
 date_default_timezone_set('Asia/Jakarta');
 

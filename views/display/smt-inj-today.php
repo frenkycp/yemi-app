@@ -10,7 +10,7 @@ $this->title = [
 ];
 $color = 'ForestGreen';
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
+$this->registerCss("
     .container {width: auto;}
     
     

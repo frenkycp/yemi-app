@@ -7,7 +7,7 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Container Loading by Group <span class="japanesse text-green">(グループ別コンテナー積み込み作業表)</span>',
+    'page_title' => 'Container Loading by Group <span class="japanesse light-green">(グループ別コンテナー積み込み作業表)</span>',
     'tab_title' => 'Container Loading by Group',
     'breadcrumbs_title' => 'Container Loading by Group'
 ];
@@ -15,7 +15,6 @@ $this->title = [
 $color = 'ForestGreen';
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}

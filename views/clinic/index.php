@@ -6,13 +6,12 @@ use yii\web\View;
 use yii\db\Expression;
 
 $this->title = [
-    'page_title' => 'CLINIC VISITING LIST (<span class="japanesse text-green">クリニック利用者の管理表</span>)',
+    'page_title' => 'CLINIC VISITING LIST (<span class="japanesse light-green">クリニック利用者の管理表</span>)',
     'tab_title' => 'CLINIC VISITING LIST',
     'breadcrumbs_title' => 'CLINIC VISITING LIST'
 ];
 
 $this->registerCss("
-	.japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
 	.content-header {color: white;}
     .box-body {background-color: #000;}

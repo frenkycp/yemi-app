@@ -9,14 +9,15 @@ use yii\bootstrap\ActiveForm;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'One Job Completion Time (AVG) <span class="japanesse text-green"></span> | GO-PICKING',
+    'page_title' => 'One Job Completion Time (AVG) | GO-PICKING',
     'tab_title' => 'One Job Completion Time (AVG)',
     'breadcrumbs_title' => 'One Job Completion Time (AVG)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+	");
 
 date_default_timezone_set('Asia/Jakarta');
 

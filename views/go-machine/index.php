@@ -11,13 +11,13 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'BLUE LIST <span class="japanesse text-green">[ 切替段取り ]</span> | GO-MACHINE',
+    'page_title' => 'BLUE LIST <span class="japanesse light-green">[ 切替段取り ]</span> | GO-MACHINE',
     'tab_title' => 'BLUE LIST',
     'breadcrumbs_title' => 'BLUE LIST'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+$this->registerCss("
     ");
 
 if (isset($actionColumnTemplates)) {

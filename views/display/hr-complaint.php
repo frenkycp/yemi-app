@@ -11,14 +11,13 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Question & Answer (HR) <span class="japanesse text-green">労務管理問い合わせ</span> <span class="pull-right-container"><small class="label pull-right bg-yellow">' . $total_waiting . '</small></span>',
+    'page_title' => 'Question & Answer (HR) <span class="japanesse light-green">労務管理問い合わせ</span> <span class="pull-right-container"><small class="label pull-right bg-yellow">' . $total_waiting . '</small></span>',
     'tab_title' => 'Question & Answer (HR)',
     'breadcrumbs_title' => 'Question & Answer (HR)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}

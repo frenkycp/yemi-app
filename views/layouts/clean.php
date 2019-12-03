@@ -33,6 +33,13 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
     <?php $this->head() ?>
     <style type="text/css">
         .content-header {background-color: #61258e !important; padding: 10px; border-radius: 5px;}
+        .japanesse {
+            font-family: 'MS PGothic', Osaka, Arial, sans-serif;
+            font-weight: bold;
+        }
+        .light-green {
+            color: <?= \Yii::$app->params['green_color_j']; ?> !important;
+        }
     </style>
 </head>
 <body class="hold-transition skin-blue layout-top-nav">

@@ -14,7 +14,7 @@ use kartik\file\FileInput;
 */
 
 $this->title = [
-    'page_title' => 'Final Assy WIP Data (CREATED) <span class="text-green japanesse"></span>',
+    'page_title' => 'Final Assy WIP Data (CREATED) <span class="light-green japanesse"></span>',
     'tab_title' => 'Final Assy WIP Data (CREATED)',
     'breadcrumbs_title' => 'Final Assy WIP Data (CREATED)'
 ];
@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("");
 
 $this->registerJs("$(function() {
    $('.btn-complete').click(function(e) {

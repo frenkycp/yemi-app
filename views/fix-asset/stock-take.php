@@ -4,13 +4,13 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
 $this->title = [
-    'page_title' => 'STOCK TAKING FIXED ASSET ' . date('d M Y') . '<span class="japanesse text-green"></span>',
+    'page_title' => 'STOCK TAKING FIXED ASSET ' . date('d M Y') . '<span class="japanesse light-green"></span>',
     'tab_title' => 'STOCK TAKING FIXED ASSET',
     'breadcrumbs_title' => 'STOCK TAKING FIXED ASSET'
 ];
 
 //$this->registerCssFile("@web/css/data_table.css");
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+$this->registerCss("
 	#dept-text {font-size: 1.2em; font-weight: bold; padding-bottom: 20px;}
 	th, td {font-weight: normal; font-size: 0.9em; padding: 10px; vertical-align: middle !important; letter-spacing: 1px;}
 	.date-format {min-width: 90px;}

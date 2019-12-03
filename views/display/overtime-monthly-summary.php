@@ -6,14 +6,13 @@ use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 $this->title = [
-    'page_title' => 'Monthly Overtime Summary <span class="japanesse text-green">課別残業時間平均</span>',
+    'page_title' => 'Monthly Overtime Summary <span class="japanesse light-green">課別残業時間平均</span>',
     'tab_title' => 'Monthly Overtime Summary',
     'breadcrumbs_title' => 'Monthly Overtime Summary'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}

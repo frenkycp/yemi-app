@@ -10,14 +10,13 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Beacon Detail Info <span class="japanesse text-green"></span>',
+    'page_title' => 'Beacon Detail Info <span class="japanesse light-green"></span>',
     'tab_title' => 'Beacon Detail Info',
     'breadcrumbs_title' => 'Beacon Detail Info'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}

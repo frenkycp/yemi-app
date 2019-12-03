@@ -11,13 +11,13 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'Order Information <span class="text-green japanesse">[ 切替段取り ]</span> | GO-MACHINE',
+    'page_title' => 'Order Information <span class="light-green japanesse">[ 切替段取り ]</span> | GO-MACHINE',
     'tab_title' => 'Order Information',
     'breadcrumbs_title' => 'Order Information'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+$this->registerCss("
 	th, td {text-align: center; font-size: 16px;}
 	.text-center {vertical-align: middle;}
 	");

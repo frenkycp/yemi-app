@@ -13,14 +13,13 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'Temperature & Humidity Data Table <span class="japanesse text-green"></span>',
+    'page_title' => 'Temperature & Humidity Data Table <span class="japanesse light-green"></span>',
     'tab_title' => 'Temperature & Humidity Data Table',
     'breadcrumbs_title' => 'Temperature & Humidity Data Table'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white; text-align: center;}

@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'ORDER PROGRESS MONITOR <span class="japanesse text-green">[ 切替段取り ]</span> | GO-MACHINE',
+    'page_title' => 'ORDER PROGRESS MONITOR <span class="japanesse light-green">[ 切替段取り ]</span> | GO-MACHINE',
     'tab_title' => 'ORDER PROGRESS MONITOR',
     'breadcrumbs_title' => 'ORDER PROGRESS MONITOR'
 ];
@@ -15,7 +15,6 @@ $this->title = [
 $color = 'ForestGreen';
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}

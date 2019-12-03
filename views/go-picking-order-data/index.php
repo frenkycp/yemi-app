@@ -12,13 +12,14 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'TRANSPORT DATA <span class="japanesse text-green">(配達データー)</span> | GO-PICKING ',
+    'page_title' => 'TRANSPORT DATA <span class="japanesse light-green">(配達データー)</span> | GO-PICKING ',
     'tab_title' => 'TRANSPORT DATA',
     'breadcrumbs_title' => 'TRANSPORT DATA'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    ");
 
 date_default_timezone_set('Asia/Jakarta');
 

@@ -129,6 +129,7 @@ return [
         3 => ' text-greem',
     ],
     'purple_color' => '#61258e',
+    'green_color_j' => '#5aff00',
 ];
 
 function getYearArray()

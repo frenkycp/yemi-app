@@ -10,14 +10,13 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'FG Stocks Waiting time before Shipping (<span class="japanesse text-green">出荷までの完成品停滞時間</span>)<span style="font-size: 0.7em;"> Last Update : ' . date('Y-m-d H:i') . '</span>',
+    'page_title' => 'FG Stocks Waiting time before Shipping (<span class="japanesse light-green">出荷までの完成品停滞時間</span>)<span style="font-size: 0.7em;"> Last Update : ' . date('Y-m-d H:i') . '</span>',
     'tab_title' => 'FG Stocks Waiting time before Shipping',
     'breadcrumbs_title' => 'FG Stocks Waiting time before Shipping'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}

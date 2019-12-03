@@ -5,12 +5,13 @@ use yii\helpers\Url;
 use app\models\SernoSlipLog2;
 
 $this->title = [
-    'page_title' => 'GO-SHOP Transporter (Factory ' . $fa .') <span class="japanesse text-green"></span>',
+    'page_title' => 'GO-SHOP Transporter (Factory ' . $fa .')</span>',
     'tab_title' => 'GO-SHOP Transporter (Factory ' . $fa .')',
     'breadcrumbs_title' => 'GO-SHOP Transporter (Factory ' . $fa .')'
 ];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    ");
 
 date_default_timezone_set('Asia/Jakarta');
 

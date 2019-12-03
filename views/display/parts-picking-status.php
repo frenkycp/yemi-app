@@ -7,13 +7,12 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Weekly Picking Status <span class="japanesse text-green">(週次ピッキング状況)</span> - Handover based <span class="japanesse text-green">(使用工程との引渡し基準）</span>',
+    'page_title' => 'Weekly Picking Status <span class="japanesse light-green">(週次ピッキング状況)</span> - Handover based <span class="japanesse light-green">(使用工程との引渡し基準）</span>',
     'tab_title' => 'Weekly Picking Status',
     'breadcrumbs_title' => 'Weekly Picking Status'
 ];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 20px; height: 40px;}
     .content-header {color: white;}

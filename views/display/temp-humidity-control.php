@@ -16,7 +16,6 @@ $this->title = $title;
 $color = 'ForestGreen';
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
     body, .content-wrapper {background-color: #000;}

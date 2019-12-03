@@ -7,13 +7,13 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'DPR Line Efficiency (Target v.s Actual) <span class="japanesse text-green"></span>',
+    'page_title' => 'DPR Line Efficiency (Target v.s Actual) <span class="japanesse light-green"></span>',
     'tab_title' => 'DPR Line Efficiency (Target v.s Actual)',
     'breadcrumbs_title' => 'DPR Line Efficiency (Target v.s Actual)'
 ];
 $color = 'ForestGreen';
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("");
 
 date_default_timezone_set('Asia/Jakarta');
 

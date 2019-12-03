@@ -9,14 +9,13 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Dross Input-Output Monitoring',
-    'tab_title' => 'Dross Input-Output Monitoring',
-    'breadcrumbs_title' => 'Dross Input-Output Monitoring'
+    'page_title' => 'Solder Dross Recycle Monitoring <span class="japanesse light-green">はんだドロスのリサイクル管理</span>',
+    'tab_title' => 'Solder Dross Recycle Monitoring',
+    'breadcrumbs_title' => 'Solder Dross Recycle Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}
@@ -190,8 +189,8 @@ echo '</pre>';*/
             <thead>
                 <tr>
                     <th class="text-center" width="25%">Total Scrap<br/>[D]</th>
-                    <th class="text-center" width="25%">Scrap Ratio<br/>[D / (A + B)]</th>
-                    <th class="text-center" width="25%">OUT (Recycle) Ratio<br/>[(C - D) / A]</th>
+                    <th class="text-center" width="25%">Scrap Ratio<br/>[D / A]</th>
+                    <th class="text-center" width="25%">OUT (Recycle) Ratio<br/>[(C - D) / (A + B)]</th>
                     
                 </tr>
             </thead>

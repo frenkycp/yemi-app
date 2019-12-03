@@ -12,10 +12,10 @@ use kartik\select2\Select2;
 $title = 'WIP Stock';
 $tab_title = 'WIP Stock';
 if ($loc == 'WM03') {
-    $title = 'SMT WIP Stock <span class="japanesse">(仕掛り在庫)</span>';
+    $title = 'SMT WIP Stock <span class="japanesse light-green">(仕掛り在庫)</span>';
     $tab_title = 'SMT WIP Stock ';
 } elseif ($loc == 'WU01') {
-    $title = 'SPU WIP Stock <span class="japanesse"></span>';
+    $title = 'SPU WIP Stock <span class="japanesse light-green"></span>';
     $tab_title = 'SMT WIP Stock ';
 }
 
@@ -27,7 +27,6 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #00ff2b;}
     .control-label {color: white;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}

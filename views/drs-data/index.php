@@ -12,7 +12,7 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Defect Report Slip Data <span class="text-green japanesse"></span>',
+    'page_title' => 'Defect Report Slip Data <span class="light-green japanesse"></span>',
     'tab_title' => 'Defect Report Slip Data',
     'breadcrumbs_title' => 'Defect Report Slip Data'
 ];
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("");
 
 $gridColumns = [
     [

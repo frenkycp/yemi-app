@@ -7,14 +7,14 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Employee Monthly Overtime <span class="japanesse text-green"></span>',
+    'page_title' => 'Employee Monthly Overtime <span class="japanesse light-green"></span>',
     'tab_title' => 'Employee Monthly Overtime',
     'breadcrumbs_title' => 'Employee Monthly Overtime'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("");
 
 date_default_timezone_set('Asia/Jakarta');
 

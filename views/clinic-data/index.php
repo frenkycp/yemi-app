@@ -13,15 +13,11 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => 'Data Klinik <span class="japanesse text-green"></span>',
+    'page_title' => 'Data Klinik <span class="japanesse light-green"></span>',
     'tab_title' => 'Data Klinik',
     'breadcrumbs_title' => 'Data Klinik'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
-
-$this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
-");
 
 date_default_timezone_set('Asia/Jakarta');
 

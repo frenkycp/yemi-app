@@ -218,13 +218,22 @@ $this->registerCss("
                         <?= Html::a('Machine IoT Output Data (Detail) <span class="text-red"><b>*IoT</b></span>', ['machine-iot-output-dtr/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working Lot Waiting Next Process <span class="text-red"><b>*IoT</b></span>', ['display/ww-lot-waiting'], [
+                        <?= Html::a('Wood Working Lot Waiting Next Process <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-lot-waiting'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working Lot Location <span class="text-red"><b>*IoT</b></span>', ['display/ww-beacon-loc'], [
+                        <?= Html::a('Lot Qty by Hour <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/lot-timeline'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Lot Qty by Hour <span class="text-red"><b>*IoT</b></span>', ['display/lot-timeline'], [
+                        <?= Html::a('Wood Working - Lot Location Monitoring <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-loc'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
+                        <?= Html::a('Wood Working - WIP Control <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/wip-control2'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
+                        <?= Html::a('Wood Working - LT Control (24 Hours Max.) <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/wip-control3'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
+                        <?= Html::a('Wood Working - Lot LT Control (Top 20) <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-lt'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                     </div>

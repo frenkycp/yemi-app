@@ -6,13 +6,12 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = [
-    'page_title' => 'DAILY CONTAINER BY PORT <span class="text-green">(港別の出荷コンテナー)</span>',
+    'page_title' => 'DAILY CONTAINER BY PORT <span class="japanesse light-green">(港別の出荷コンテナー)</span>',
     'tab_title' => 'DAILY CONTAINER BY PORT',
     'breadcrumbs_title' => 'DAILY CONTAINER BY PORT'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss("h1 span { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 //$color = new JsExpression('Highcharts.getOptions().colors[7]');
 $color = 'rgba(0, 255, 0, 0.7)';
 $font_color = 'black';

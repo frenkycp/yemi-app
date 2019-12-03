@@ -5,12 +5,10 @@ use yii\helpers\Url;
 use yii\web\View;
 
 $this->title = [
-    'page_title' => 'Data Flow & Site Timeline <span class="japanesse text-green"></span>',
+    'page_title' => 'Data Flow & Site Timeline <span class="japanesse light-green"></span>',
     'tab_title' => 'Data Flow & Site Timeline',
     'breadcrumbs_title' => 'Data Flow & Site Timeline'
 ];
-
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 $this->registerJs("$(function() {
    $('.btn-video').click(function(e) {

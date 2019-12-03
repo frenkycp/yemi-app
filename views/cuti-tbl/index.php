@@ -11,13 +11,11 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'PERSONAL LEAVE DATA TABLE <span class="japanesse text-green"></span>',
+    'page_title' => 'PERSONAL LEAVE DATA TABLE <span class="japanesse light-green"></span>',
     'tab_title' => 'PERSONAL LEAVE DATA TABLE',
     'breadcrumbs_title' => 'PERSONAL LEAVE DATA TABLE'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
-
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 

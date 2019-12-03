@@ -6,14 +6,13 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'LT Control (BEACON) - MAX 24 HOURS <span class="japanesse"></span>',
+    'page_title' => 'LT Control (BEACON) - MAX 24 HOURS <span class="japanesse light-green"></span>',
     'tab_title' => 'LT Control (BEACON) - MAX 24 HOURS ',
     'breadcrumbs_title' => 'LT Control (BEACON) - MAX 24 HOURS ',
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #00ff2b;}
     .control-label {color: white;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}

@@ -8,13 +8,13 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'FA Line (All) Efficiency <span class="japanesse text-green"></span>',
+    'page_title' => 'FA Line (All) Efficiency <span class="japanesse light-green"></span>',
     'tab_title' => 'FA Line (All) Efficiency',
     'breadcrumbs_title' => 'FA Line (All) Efficiency'
 ];
 $color = 'ForestGreen';
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("");
 
 date_default_timezone_set('Asia/Jakarta');
 

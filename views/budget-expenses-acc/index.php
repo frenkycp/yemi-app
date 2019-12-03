@@ -7,13 +7,11 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Budget Expenses By Goods Received <span class="japanesse text-green">(経費モニター部門別・YEMI着基準)</span>',
+    'page_title' => 'Budget Expenses By Goods Received <span class="japanesse light-green">(経費モニター部門別・YEMI着基準)</span>',
     'tab_title' => 'Budget Expenses By Goods Received',
     'breadcrumbs_title' => 'Budget Expenses By Goods Received'
 ];
 $color = 'ForestGreen';
-
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 

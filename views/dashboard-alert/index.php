@@ -19,7 +19,6 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-	.japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
 	.content-wrapper {background-color: #000;}
 	.content-header {color: white;}
 	.form-control, .control-label {background-color: #000; color: rgb(255, 235, 59); border-color: white;}

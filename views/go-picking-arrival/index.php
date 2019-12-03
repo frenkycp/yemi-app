@@ -2,7 +2,7 @@
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Transporter Arrival Control (PICKING) <span class="japanesse text-green"></span>',
+    'page_title' => 'Transporter Arrival Control (PICKING) <span class="japanesse light-green"></span>',
     'tab_title' => 'Transporter Arrival Control (PICKING)',
     'breadcrumbs_title' => 'Transporter Arrival Control (PICKING)'
 ];

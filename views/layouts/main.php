@@ -40,6 +40,13 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
         .content-header>.breadcrumb>li>a, .breadcrumb > .active {
             color: silver;
         }
+        .japanesse {
+            font-family: 'MS PGothic', Osaka, Arial, sans-serif;
+            font-weight: bold;
+        }
+        .light-green {
+            color: <?= \Yii::$app->params['green_color_j']; ?> !important;
+        }
     </style>
 </head>
 <body class="hold-transition <?= \dmstr\helpers\AdminLteHelper::skinClass(); ?> sidebar-mini<?= \Yii::$app->controller->id == 'about-me' || \Yii::$app->controller->id == 'manufacture-flow' ? ' sidebar-collapse' : ''; ?>">

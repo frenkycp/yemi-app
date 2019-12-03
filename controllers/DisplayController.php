@@ -105,7 +105,7 @@ class DisplayController extends Controller
         $model->addRule(['from_date', 'to_date'], 'required');
 
         $tgl_arr = [];
-        $dross_date = $tmp_output = DrossOutput::find()->orderBy('tgl DESC')->limit(2)->all();
+        $dross_date = $tmp_output = DrossOutput::find()->select('tgl')->groupBy('tgl')->orderBy('tgl DESC')->limit(2)->all();
         foreach ($dross_date as $key => $value) {
             $tgl_arr[] = $value->tgl;
         }
@@ -172,17 +172,16 @@ class DisplayController extends Controller
         $total_dross_scrap = $total_dross - $total_dross_recylce;
 
         $scrap_ratio = 0;
-        $in_recycle_ratio = 0;
-        if ($total_in > 0) {
-            $scrap_ratio = round(($total_dross_scrap / $total_in) * 100, 1);
-            $in_recycle_ratio = round(($total_in_recycle / $total_in) * 100, 1);
-        }
-        
-        $recycle_ratio = 0;
         if ($total_in_new > 0) {
-            $recycle_ratio = round(($total_dross_recylce / $total_in_new) * 100, 1);
+            $scrap_ratio = round(($total_dross_scrap / $total_in_new) * 100, 1);
         }
-        
+        $in_recycle_ratio = 0;
+        $recycle_ratio = 0;
+        if ($total_in > 0) {
+            
+            $in_recycle_ratio = round(($total_in_recycle / $total_in) * 100, 1);
+            $recycle_ratio = round(($total_dross_recylce / $total_in) * 100, 1);
+        }
 
         $data = [
             [
@@ -291,25 +290,51 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $data = [
-            'sap' => [
-                'request_qty' => 0,
-                'request_waiting' => 0,
-                'request_late' => 0,
-                'in_progress_normal' => 0,
-                'in_progress_harga' => 0,
-                'in_progress_late' => 0,
-                'done_qty' => 0,
-                'trf_qty' => 0
+            'direct' => [
+                'kanban_doc' => 0,
+                'pch' => [
+                    'received' => [
+                        'target' => 0,
+                        'balance' => 0
+                    ],
+                    'verification' => [
+                        'target' => 0,
+                        'balance' => 0
+                    ]
+                ],
+                'acc' => [
+                    'verification' => [
+                        'target' => 0,
+                        'balance' => 0
+                    ],
+                    'paid' => [
+                        'target' => 0,
+                        'balance' => 0
+                    ],
+                ],
             ],
-            'nice' => [
-                'request_qty' => 0,
-                'request_waiting' => 0,
-                'request_late' => 0,
-                'in_progress_normal' => 0,
-                'in_progress_harga' => 0,
-                'in_progress_late' => 0,
-                'done_qty' => 0,
-                'trf_qty' => 0
+            'indirect' => [
+                'kanban_doc' => 0,
+                'pch' => [
+                    'received' => [
+                        'target' => 0,
+                        'balance' => 0
+                    ],
+                    'verification' => [
+                        'target' => 0,
+                        'balance' => 0
+                    ]
+                ],
+                'acc' => [
+                    'verification' => [
+                        'target' => 0,
+                        'balance' => 0
+                    ],
+                    'paid' => [
+                        'target' => 0,
+                        'balance' => 0
+                    ],
+                ],
             ],
         ];
 
@@ -327,52 +352,16 @@ class DisplayController extends Controller
         $params = [
             ':period' => $model->period,
         ];
-        $sql = "{CALL INVOICE_KANBAN(:period)}";
+        $sql = "{CALL INVOICE_KANBAN_NEW(:period)}";
         try {
             $result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryAll();
             foreach ($result as $key => $value) {
                 if ($value['source_data'] == '01-SAP') {
-                    $data['sap_qty']++;
-                    if ($value['request'] == 1) {
-                        if ($value['delay_reason'] == 'INVOICE-WAITING') {
-                            $data['sap']['request_waiting']++;
-                        } elseif ($value['delay_reason'] == 'INVOICE-LATE') {
-                            $data['sap']['request_late']++;
-                        }
-                    }
-                    $data['sap']['request_qty'] += (int)$value['request'];
-                    $data['sap']['done_qty'] += (int)$value['done'];
-                    $data['sap']['trf_qty'] += (int)$value['transfer'];
-                    if ($value['in_progress'] == 1) {
-                        if ($value['delay_reason'] == 'NORMAL') {
-                            $data['sap']['in_progress_normal']++;
-                        } elseif ($value['delay_reason'] == 'HARGA') {
-                            $data['sap']['in_progress_harga']++;
-                        } elseif ($value['delay_reason'] == 'LATE') {
-                            $data['sap']['in_progress_late']++;
-                        }
-                    }
+                    $data['direct']['kanban_doc']++;
+                    
                 } else {
-                    $data['nice_qty']++;
-                    if ($value['request'] == 1) {
-                        if ($value['delay_reason'] == 'INVOICE-WAITING') {
-                            $data['nice']['request_waiting']++;
-                        } elseif ($value['delay_reason'] == 'INVOICE-LATE') {
-                            $data['nice']['request_late']++;
-                        }
-                    }
-                    $data['nice']['request_qty'] += (int)$value['request'];
-                    $data['nice']['done_qty'] += (int)$value['done'];
-                    $data['nice']['trf_qty'] += (int)$value['transfer'];
-                    if ($value['in_progress'] == 1) {
-                        if ($value['delay_reason'] == 'NORMAL') {
-                            $data['nice']['in_progress_normal']++;
-                        } elseif ($value['delay_reason'] == 'HARGA') {
-                            $data['nice']['in_progress_harga']++;
-                        } elseif ($value['delay_reason'] == 'LATE') {
-                            $data['nice']['in_progress_late']++;
-                        }
-                    }
+                    $data['indirect']['kanban_doc']++;
+                    
                 }
             }
         } catch (Exception $ex) {

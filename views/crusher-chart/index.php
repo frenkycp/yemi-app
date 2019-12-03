@@ -9,13 +9,12 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Crusher <span class="text-green japanesse"></span>',
+    'page_title' => 'Crusher <span class="japanesse light-green"></span>',
     'tab_title' => 'Crusher',
     'breadcrumbs_title' => 'Crusher'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
 
 date_default_timezone_set('Asia/Jakarta');
 

@@ -13,14 +13,14 @@ if($day_stock > 1){
 }
 
 $this->title = [
-    'page_title' => 'FINISH GOOD STOCK (<span class="japanesse">完成品在庫</span>) : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers &efDot; ' . $day_total . ')',
+    'page_title' => 'FINISH GOOD STOCK (<span class="japanesse light-green">完成品在庫</span>) : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers &efDot; ' . $day_total . ')',
     'tab_title' => 'FINISH GOOD STOCK',
     'breadcrumbs_title' => 'FINISH GOOD STOCK'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("");
 
 date_default_timezone_set('Asia/Jakarta');
 

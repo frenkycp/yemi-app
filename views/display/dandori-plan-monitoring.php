@@ -5,13 +5,12 @@ use yii\helpers\Html;
 use yii\web\View;
 
 $this->title = [
-    'page_title' => 'External Setup <span class="japanesse" style="color: #60e418;">(外段取り)</span>',
+    'page_title' => 'External Setup <span class="japanesse light-green">(外段取り)</span>',
     'tab_title' => 'External Setup',
     'breadcrumbs_title' => 'External Setup'
 ];
 
 $this->registerCss("
-	.japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
 	.content-header {color: white;}
     .box-body {background-color: #000;}

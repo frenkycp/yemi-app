@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Weekly Corrective <span class="text-green">(週次修繕)',
+    'page_title' => 'Weekly Corrective <span class="japanesse light-green">(週次修繕)',
     'tab_title' => 'Weekly Corrective',
     'breadcrumbs_title' => 'Weekly Corrective'
 ];
@@ -16,7 +16,6 @@ $color = 'ForestGreen';
 
 date_default_timezone_set('Asia/Jakarta');
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}

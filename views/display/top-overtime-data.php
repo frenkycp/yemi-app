@@ -6,7 +6,7 @@ use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 
 $this->title = [
-    'page_title' => 'OT Management by NIK <span class="japanesse text-green">(社員別残業管理）</span>',
+    'page_title' => 'OT Management by NIK <span class="japanesse light-green">(社員別残業管理）</span>',
     'tab_title' => 'OT Management by NIK',
     'breadcrumbs_title' => 'OT Management by NIK'
 ];
@@ -19,7 +19,6 @@ if (\Yii::$app->request->get('section_id') == 1) {
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}

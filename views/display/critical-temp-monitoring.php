@@ -4,14 +4,13 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 
 $this->title = [
-    'page_title' => 'Critical Control Room <span class="japanesse">音湿度の管理</span>',
+    'page_title' => 'Critical Control Room <span class="japanesse light-green">音湿度の管理</span>',
     'tab_title' => 'Critical Control Room',
     'breadcrumbs_title' => 'Critical Control Room'
 ];
 $color = 'ForestGreen';
 
 $this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #00ff2b;}
     .control-label {color: white;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}

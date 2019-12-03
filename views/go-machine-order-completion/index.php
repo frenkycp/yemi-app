@@ -7,14 +7,15 @@ use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'ORDER PROGRESS MONITOR <span class="japanesse text-green">[ 切替段取り ]</span> | GO-MACHINE',
+    'page_title' => 'ORDER PROGRESS MONITOR <span class="japanesse light-green">[ 切替段取り ]</span> | GO-MACHINE',
     'tab_title' => 'ORDER PROGRESS MONITOR',
     'breadcrumbs_title' => 'ORDER PROGRESS MONITOR'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    ");
 
 date_default_timezone_set('Asia/Jakarta');
 
