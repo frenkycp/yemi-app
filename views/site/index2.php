@@ -533,6 +533,40 @@ $this->registerCss("
                         <a class="list-group-item" href="http://172.17.144.2/repair" target="_blank">PCB Repair Database <span class="japanesse-word"></span></a>
                     </div>
                 </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Display Monitor<br/><span class="japanesse-word"></span></div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <p>PCB</p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('Solder Dross Recycle Monitoring <span class="japanesse">はんだドロスのリサイクル管理</span>', ['/display/dross-input-daily']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Plastic Crusher Recycle Monitoring <span class="japanesse">プラクラッシャーのリサイクル管理</span>', ['/display/crusher-input-daily']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('YEMI - SMT TODAY (Line 1)', ['/display/smt-inj-today', 'line' => '01']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('YEMI - SMT TODAY (Line 2)', ['/display/smt-inj-today', 'line' => '01']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('YEMI - INJ LARGE TODAY <span class="japanesse">(本日のプラ成形)</span>', ['/display/smt-inj-today', 'loc' => 'WI02']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('YEMI - INJ SMALL TODAY <span class="japanesse">(本日のプラ成形))</span>', ['/display/smt-inj-today', 'loc' => 'WI01']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('SMT WIP Stock <span class="japanesse">(仕掛り在庫)</span>', ['/display/smt-stock-wip']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('SPU WIP Stock <span class="japanesse"></span>', ['/display/smt-stock-wip', 'loc' => 'WU01']); ?>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
     	   </div>
         </div>
     	<br/>
