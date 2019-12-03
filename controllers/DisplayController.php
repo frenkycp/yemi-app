@@ -91,6 +91,7 @@ use app\models\GoSaTbl;
 use app\models\WipModelGroup;
 use app\models\DrossInput;
 use app\models\DrossOutput;
+use app\models\DrossStock;
 
 class DisplayController extends Controller
 {
@@ -196,6 +197,8 @@ class DisplayController extends Controller
             ],
         ];
 
+        $dross_stock = DrossStock::find()->orderBy('tgl DESC')->one();
+
         return $this->render('dross-input-daily', [
             'data' => $data,
             'model' => $model,
@@ -208,6 +211,7 @@ class DisplayController extends Controller
             'scrap_ratio' => $scrap_ratio,
             'recycle_ratio' => $recycle_ratio,
             'in_recycle_ratio' => $in_recycle_ratio,
+            'dross_stock' => $dross_stock
         ]);
     }
     public function actionCriticalTempUpdate($value='')

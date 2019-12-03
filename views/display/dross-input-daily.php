@@ -167,6 +167,67 @@ echo '</pre>';*/
         </div>
     </div>
 </div>
+<div class="row text-center" style="font-size: 2.5em;">
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">In (New)</h3>
+            </div>
+            <div class="panel-body">
+                <?= number_format($total_in_new); ?> Kg (A)
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">In (Recycle)</h3>
+            </div>
+            <div class="panel-body"><?= number_format($total_in_recycle); ?> Kg (B)</div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Out (Dross)</h3>
+            </div>
+            <div class="panel-body">
+                <?= number_format($total_dross); ?> Kg (C)
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Out (Scrap)</h3>
+            </div>
+            <div class="panel-body">
+                <?= number_format($total_dross_scrap); ?> Kg (D)
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Stock Dross</h3>
+            </div>
+            <div class="panel-body">
+                <?= number_format($dross_stock->st_dross); ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Stock Recylce</h3>
+            </div>
+            <div class="panel-body">
+                <?= number_format($dross_stock->st_recycle); ?>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-6">
         <table class="table table-responsive table-bordered">
@@ -206,18 +267,3 @@ echo '</pre>';*/
     </div>
 </div>
 
-<hr>
-<div class="row" style="font-size: 2em; color: silver; font-style: italic;">
-    <div class="col-md-3">
-        In (New) : <?= $total_in_new; ?> Kg (A)
-    </div>
-    <div class="col-md-3">
-        In (Recycle) : <?= $total_in_recycle; ?> Kg (B)
-    </div>
-    <div class="col-md-3">
-        Out (Dross) : <?= $total_dross; ?> Kg (C)
-    </div>
-    <div class="col-md-3">
-        Out (Scrap) : <?= $total_dross_scrap; ?> Kg (D)
-    </div>
-</div>
