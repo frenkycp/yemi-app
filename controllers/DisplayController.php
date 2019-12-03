@@ -510,8 +510,8 @@ class DisplayController extends Controller
                     $data['indirect']['kanban_doc']++;
                     $data['indirect']['pch']['received']['target'] += $value['doc_received'];
                     $data['indirect']['pch']['received']['balance'] -= $value['doc_minus'];
-                    $data['indirect']['pch']['verification']['target'] += $value['verifikasi_done'];
-                    $data['indirect']['pch']['verification']['balance'] -= $value['verifikasi_minus'];
+                    $data['indirect']['pch']['verification']['target'] += $value['verikasi_done'];
+                    $data['indirect']['pch']['verification']['balance'] -= $value['verikasi_minus'];
                     $data['indirect']['acc']['verification']['target'] += $value['finance_rcv_done'];
                     $data['indirect']['acc']['verification']['balance'] -= $value['finance_rcv_minus'];
                     $data['indirect']['acc']['paid']['target'] += $value['finance_transfer_done'];

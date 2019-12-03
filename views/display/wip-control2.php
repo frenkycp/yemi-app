@@ -105,7 +105,8 @@ $this->registerJs($script, View::POS_HEAD );
         </tr>
         <tr>
             <?php
-            if ($data['running_saw'] >= 1000) {
+            $target_rsaw = 2000;
+            if ($data['running_saw'] >= $target_rsaw) {
                 $rsaw_txt_class = ' text-red';
                 $rsaw_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
@@ -114,13 +115,14 @@ $this->registerJs($script, View::POS_HEAD );
             }
             ?>
             <td>WIP - Running Saw</td>
-            <td class="text-center target">< 1,000 <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center target">< <?= number_format($target_rsaw); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $rsaw_txt_class; ?>"><?= number_format($data['running_saw']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center"><?= $rsaw_src_img; ?></td>
         </tr>
         <tr>
             <?php
-            if ($data['det'] >= 1000) {
+            $target_det = 2000;
+            if ($data['det'] >= $target_det) {
                 $det_txt_class = ' text-red';
                 $det_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
@@ -129,13 +131,14 @@ $this->registerJs($script, View::POS_HEAD );
             }
             ?>
             <td>WIP - DET</td>
-            <td class="text-center target">< 1,000 <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center target">< <?= number_format($target_det); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $det_txt_class; ?>"><?= number_format($data['det']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center"><?= $det_src_img; ?></td>
         </tr>
         <tr>
             <?php
-            if ($data['end'] >= 4000) {
+            $target_end = 4000;
+            if ($data['end'] >= $target_end) {
                 $end_txt_class = ' text-red';
                 $end_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
@@ -144,7 +147,7 @@ $this->registerJs($script, View::POS_HEAD );
             }
             ?>
             <td>WIP - End</td>
-            <td class="text-center target">< 4,000 <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center target">< <?= number_format($target_end); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $end_txt_class; ?>"><?= number_format($data['end']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center"><?= $end_src_img; ?></td>
         </tr>
