@@ -179,8 +179,8 @@ class DisplayController extends Controller
             $tgl_arr[] = $value->tgl;
         }
 
-        $model->from_date = '2019-11-01';
-        $model->to_date = '2019-11-30';
+        $model->from_date = '2019-04-01';
+        $model->to_date = date('Y-m-d');
 
         if ($model->load($_GET)) {
             # code...
@@ -237,6 +237,7 @@ class DisplayController extends Controller
             $total_dross_recylce += $value->consume;
         }
         $total_dross_scrap = $total_dross - $total_dross_recylce;
+        $total_dross_scrap = 3194;
 
         $scrap_ratio = 0;
         $recycle_ratio = 0;
