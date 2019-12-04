@@ -623,6 +623,7 @@ class DisplayController extends Controller
             ':period' => $model->period,
         ];
         $sql = "{CALL INVOICE_KANBAN_NEW(:period)}";
+        $modal_data = [];
         try {
             $result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryAll();
             foreach ($result as $key => $value) {
@@ -636,6 +637,18 @@ class DisplayController extends Controller
                     $data['direct']['acc']['verification']['balance'] -= $value['finance_rcv_minus'];
                     $data['direct']['acc']['paid']['target'] += $value['finance_transfer_done'];
                     $data['direct']['acc']['paid']['balance'] -= $value['finance_transfer_minus'];
+                    if ($value['doc_minus'] == 1) {
+                        $modal_data['direct']['balance-1'][] = $value;
+                    }
+                    if ($value['verikasi_minus'] == 1) {
+                        $modal_data['direct']['balance-2'][] = $value;
+                    }
+                    if ($value['finance_rcv_minus'] == 1) {
+                        $modal_data['direct']['balance-3'][] = $value;
+                    }
+                    if ($value['finance_transfer_minus'] == 1) {
+                        $modal_data['direct']['balance-4'][] = $value;
+                    }
                     
                 } else {
                     $data['indirect']['kanban_doc']++;
@@ -655,6 +668,7 @@ class DisplayController extends Controller
 
         return $this->render('pch-kanban-data', [
             'data' => $data,
+            'modal_data' => $modal_data,
             'model' => $model,
             'result' => $result
         ]);

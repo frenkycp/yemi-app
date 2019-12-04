@@ -189,7 +189,7 @@ echo '</pre>';*/
     <div class="col-md-2">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Out (Dross)</h3>
+                <h3 class="panel-title">Out (Crusher)</h3>
             </div>
             <div class="panel-body">
                 <?= number_format($total_dross); ?> Kg (C)
@@ -209,7 +209,7 @@ echo '</pre>';*/
     <div class="col-md-2">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Stock Dross</h3>
+                <h3 class="panel-title">Stock Crusher</h3>
             </div>
             <div class="panel-body">
                 <?= number_format($dross_stock['st_dross']); ?> Kg
