@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Temperature & Humidity Data Record <span class="japanesse light-green"></span>',
-    'tab_title' => 'Temperature & Humidity Data Record',
-    'breadcrumbs_title' => 'Temperature & Humidity Data Record'
+    'page_title' => 'Temperature & Humidity Monitoring (All Area)',
+    'tab_title' => 'Temperature & Humidity Monitoring (All Area)',
+    'breadcrumbs_title' => 'Temperature & Humidity Monitoring (All Area)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

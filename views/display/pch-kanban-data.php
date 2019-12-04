@@ -9,7 +9,7 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Office Kanban Workflow (Supplier Payment)',
+    'page_title' => 'Office Kanban Workflow (Supplier Payment) <span class="japanesse light-green">ベンダー支払い処理</span>',
     'tab_title' => 'Office Kanban Workflow',
     'breadcrumbs_title' => 'Office Kanban Workflow'
 ];
@@ -38,15 +38,15 @@ $this->registerCss("
         border-top: 0;
     }
     .table > thead > tr > th{
-        border:1px solid darkgray;
-        background-color: gray;
+        border:1px solid #005a8e;
+        background-color: " . \Yii::$app->params['bg-blue'] . ";
         color: white;
         font-size: 24px;
-        border-bottom: 7px solid darkgray;
+        border-bottom: 7px solid #005a8e;
         vertical-align: middle;
     }
     .table > tbody > tr > td{
-        border:1px solid darkgray;
+        border:1px solid #005a8e;
         font-size: 3.5em;
         //background-color: #B3E5FC;
         //font-weight: 1000;
@@ -55,7 +55,7 @@ $this->registerCss("
         height: 130px;
     }
     .table > tfoot > tr > td{
-        border:1px solid darkgray;
+        border:1px solid #005a8e;
         font-size: 3.5em;
         background-color: rgba(255, 255, 255, 0.1);
         //font-weight: 1000;
@@ -116,9 +116,9 @@ echo '</pre>';*/
     <thead>
         <tr>
             <th rowspan="3" style="background: transparent; border-left: 0px;"></th>
-            <th class="text-center">WAREHOUSE</th>
-            <th class="text-center" colspan="4">PURCHASING</th>
-            <th class="text-center" colspan="4">ACCOUNTING</th>
+            <th class="text-center">WAREHOUSE <span class="japanesse light-green">倉庫</span></th>
+            <th class="text-center" colspan="4">PURCHASING <span class="japanesse light-green">購買</span></th>
+            <th class="text-center" colspan="4">ACCOUNTING <span class="japanesse light-green">経理</span></th>
         </tr>
         <tr>
             <th class="text-center">Kanban</th>
@@ -141,7 +141,7 @@ echo '</pre>';*/
     </thead>
     <tbody>
         <tr>
-            <td>DIRECT</td>
+            <td>DIRECT <span class="japanesse light-green">直材</span></td>
             <td class="text-center"><?= number_format($data['direct']['kanban_doc']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['pch']['received']['target']); ?></td>
             <td class="text-center"><?= $data['direct']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['received']['balance']), ['period' => $model->period, 'pch-kanban-detail',
@@ -165,7 +165,7 @@ echo '</pre>';*/
             ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
         </tr>
         <tr>
-            <td>INDIRECT</td>
+            <td>INDIRECT <span class="japanesse light-green">関材</span></td>
             <td class="text-center"><?= number_format($data['indirect']['kanban_doc']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['pch']['received']['target']); ?></td>
             <td class="text-center"><?= $data['indirect']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['received']['balance']), ['period' => $model->period, 'pch-kanban-detail',
