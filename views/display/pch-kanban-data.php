@@ -180,7 +180,23 @@ echo '</pre>';*/
     </tbody>
     <tfoot>
         <td class="text-center">Total</td>
-            
+        <td class="text-center"><?= number_format($data['direct']['kanban_doc'] + $data['indirect']['kanban_doc']); ?></td>
+        <td class="text-center"><?= number_format($data['direct']['pch']['received']['target'] + $data['indirect']['pch']['received']['target']); ?></td>
+        <td class="text-center" style="<?= ($data['direct']['pch']['received']['balance'] + $data['indirect']['pch']['received']['balance']) < 0 ? 'color: red; font-weight: bold;' : ''; ?>">
+            <?= number_format($data['direct']['pch']['received']['balance'] + $data['indirect']['pch']['received']['balance']); ?>
+        </td>
+        <td class="text-center"><?= number_format($data['direct']['pch']['verification']['target'] + $data['indirect']['pch']['verification']['target']); ?></td>
+        <td class="text-center" style="<?= ($data['direct']['pch']['verification']['balance'] + $data['indirect']['pch']['verification']['balance']) < 0 ? 'color: red; font-weight: bold;' : ''; ?>">
+            <?= number_format($data['direct']['pch']['verification']['balance'] + $data['indirect']['pch']['verification']['balance']); ?>
+        </td>
+        <td class="text-center"><?= number_format($data['direct']['acc']['verification']['target'] + $data['indirect']['acc']['verification']['target']); ?></td>
+        <td class="text-center" style="<?= ($data['direct']['acc']['verification']['balance'] + $data['indirect']['acc']['verification']['balance']) < 0 ? 'color: red; font-weight: bold;' : ''; ?>">
+            <?= number_format($data['direct']['acc']['verification']['balance'] + $data['indirect']['acc']['verification']['balance']); ?>
+        </td>
+        <td class="text-center"><?= number_format($data['direct']['acc']['paid']['target'] + $data['indirect']['acc']['paid']['target']); ?></td>
+        <td class="text-center" style="<?= ($data['direct']['acc']['paid']['balance'] + $data['indirect']['acc']['paid']['balance']) < 0 ? 'color: red; font-weight: bold;' : ''; ?>">
+            <?= number_format($data['direct']['acc']['paid']['balance'] + $data['indirect']['acc']['paid']['balance']); ?>
+        </td>
     </tfoot>
 </table>
 

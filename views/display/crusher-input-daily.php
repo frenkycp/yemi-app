@@ -80,7 +80,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['dross-input-daily']),
+    'action' => Url::to(['crusher-input-daily']),
 ]); ?>
 
 <div class="row">
