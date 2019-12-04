@@ -221,7 +221,7 @@ $this->registerCss("
                         <?= Html::a('Wood Working Lot Waiting Next Process <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-lot-waiting'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Lot Qty by Hour <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/lot-timeline'], [
+                        <?= Html::a('Lot Qty by Hour <span class="japanesse-word">(仕掛り品在庫の推移)</span><span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/lot-timeline'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                         <?= Html::a('Wood Working - Lot Location Monitoring <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-loc'], [
