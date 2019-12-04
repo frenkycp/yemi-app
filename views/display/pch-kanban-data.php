@@ -165,7 +165,7 @@ echo '</pre>';*/
             ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
         </tr>
         <tr>
-            <td>INDIRECT <span class="japanesse light-green">関材</span></td>
+            <td>INDIRECT <span class="japanesse light-green">間材</span></td>
             <td class="text-center"><?= number_format($data['indirect']['kanban_doc']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['pch']['received']['target']); ?></td>
             <td class="text-center"><?= $data['indirect']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['received']['balance']), ['period' => $model->period, 'pch-kanban-detail',

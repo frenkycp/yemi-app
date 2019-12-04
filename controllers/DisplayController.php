@@ -2663,7 +2663,7 @@ class DisplayController extends Controller
         $tmp_operator = GojekTbl::find()
         ->where([
             'SOURCE' => 'SUB',
-            //'HADIR' => 'Y'
+            'HADIR' => 'Y'
         ])
         ->orderBy('GOJEK_DESC')
         ->all();

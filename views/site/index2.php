@@ -388,7 +388,7 @@ $this->registerCss("
                                 <li><?= Html::a('Temperature & Humidity Data <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-tbl-display']); ?></li>
                                 <li><?= Html::a('Temperature Over (Total Frequency) <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
                                 <li><?= Html::a('Critical Control Room <span class="japanesse-word">音湿度の管理</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
-                                <li><?= Html::a('Temperature & Humidity Monitoring (All Area) <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
+                                <li><?= Html::a('Temperature & Humidity Monitoring (All Area)<br/><span class="japanesse">温湿度データ　(全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
                             </ol>
                         </div>
 
