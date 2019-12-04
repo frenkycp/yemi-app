@@ -266,7 +266,7 @@ class DisplayController extends Controller
 
         $dross_stock = DrossStock::find()->orderBy('tgl DESC')->one();
         $dross_stock = [
-            'st_dross' => 0,
+            'st_dross' => 205.926,
             'st_recycle' => $total_dross_recylce - $total_in_recycle
         ];
 
