@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
+use yii\bootstrap\Modal;
 
 $this->title = [
     'page_title' => 'Office Kanban Workflow (Supplier Payment) <span class="japanesse light-green">ベンダー支払い処理</span>',
@@ -32,12 +33,13 @@ $this->registerCss("
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
+    .modal-dialog {width: 1000px;}
 
-    .table{
+    #main-table{
         //border:1px solid #29B6F6;
         border-top: 0;
     }
-    .table > thead > tr > th{
+    #main-table > thead > tr > th{
         border:1px solid #005a8e;
         background-color: " . \Yii::$app->params['bg-blue'] . ";
         color: white;
@@ -45,7 +47,7 @@ $this->registerCss("
         border-bottom: 7px solid #005a8e;
         vertical-align: middle;
     }
-    .table > tbody > tr > td{
+    #main-table > tbody > tr > td{
         border:1px solid #005a8e;
         font-size: 3.5em;
         //background-color: #B3E5FC;
@@ -54,7 +56,7 @@ $this->registerCss("
         vertical-align: middle;
         height: 130px;
     }
-    .table > tfoot > tr > td{
+    #main-table > tfoot > tr > td{
         border:1px solid #005a8e;
         font-size: 3.5em;
         background-color: rgba(255, 255, 255, 0.1);
@@ -73,7 +75,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 300000); // milliseconds
+      setTimeout(\"refreshPage();\", 1800000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -82,6 +84,17 @@ $script = "
     window.setInterval(function(){
         $('.blinked').toggle();
     },600);
+
+    $(document).ready(function(){
+        var arr_modal = ['direct-balance-1', 'direct-balance-2', 'direct-balance-3', 'direct-balance-4', 'indirect-balance-1', 'indirect-balance-2', 'indirect-balance-3', 'indirect-balance-4'];
+        $.each(arr_modal, function(index, value){
+            $('#'+value).click(function(){
+                //alert('Balance 1');
+                $('#modal-' + value).modal('show');
+            });
+        });
+        
+    });
 ";
 $this->registerJs($script, View::POS_HEAD );
 
@@ -112,7 +125,7 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 
 
-<table class="table table-responsive">
+<table id="main-table" class="table table-responsive">
     <thead>
         <tr>
             <th rowspan="3" style="background: transparent; border-left: 0px;"></th>
@@ -144,49 +157,25 @@ echo '</pre>';*/
             <td>DIRECT <span class="japanesse light-green">直材</span></td>
             <td class="text-center"><?= number_format($data['direct']['kanban_doc']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['pch']['received']['target']); ?></td>
-            <td class="text-center"><?= $data['direct']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['received']['balance']), ['period' => $model->period, 'pch-kanban-detail',
-                'direct_indirect' => '01-SAP',
-                'balance_no' => 1
-            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
+            <td class="text-center"><?= $data['direct']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['received']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'direct-balance-1']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['pch']['verification']['target']); ?></td>
-            <td class="text-center"><?= $data['direct']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['verification']['balance']), ['period' => $model->period, 'pch-kanban-detail',
-                'direct_indirect' => '01-SAP',
-                'balance_no' => 2
-            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
+            <td class="text-center"><?= $data['direct']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['verification']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'direct-balance-2']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['acc']['verification']['target']); ?></td>
-            <td class="text-center"><?= $data['direct']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['verification']['balance']), ['period' => $model->period, 'pch-kanban-detail',
-                'direct_indirect' => '01-SAP',
-                'balance_no' => 3
-            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
+            <td class="text-center"><?= $data['direct']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['verification']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'direct-balance-3']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['acc']['paid']['target']); ?></td>
-            <td class="text-center"><?= $data['direct']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['paid']['balance']), ['period' => $model->period, 'pch-kanban-detail',
-                'direct_indirect' => '01-SAP',
-                'balance_no' => 4
-            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
+            <td class="text-center"><?= $data['direct']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['paid']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'direct-balance-4']); ?></td>
         </tr>
         <tr>
             <td>INDIRECT <span class="japanesse light-green">間材</span></td>
             <td class="text-center"><?= number_format($data['indirect']['kanban_doc']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['pch']['received']['target']); ?></td>
-            <td class="text-center"><?= $data['indirect']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['received']['balance']), ['period' => $model->period, 'pch-kanban-detail',
-                'direct_indirect' => '02-NICE',
-                'balance_no' => 1
-            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
+            <td class="text-center"><?= $data['indirect']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['received']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'indirect-balance-1']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['pch']['verification']['target']); ?></td>
-            <td class="text-center"><?= $data['indirect']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['verification']['balance']), ['period' => $model->period, 'pch-kanban-detail',
-                'direct_indirect' => '02-NICE',
-                'balance_no' => 2
-            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
+            <td class="text-center"><?= $data['indirect']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['verification']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'indirect-balance-2']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['acc']['verification']['target']); ?></td>
-            <td class="text-center"><?= $data['indirect']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['verification']['balance']), ['period' => $model->period, 'pch-kanban-detail',
-                'direct_indirect' => '02-NICE',
-                'balance_no' => 3
-            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
+            <td class="text-center"><?= $data['indirect']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['verification']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'indirect-balance-3']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['acc']['paid']['target']); ?></td>
-            <td class="text-center"><?= $data['indirect']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['paid']['balance']), ['period' => $model->period, 'pch-kanban-detail',
-                'direct_indirect' => '02-NICE',
-                'balance_no' => 4
-            ], ['style' => 'color: red; font-weight: bold;', 'target' => '_blank']); ?></td>
+            <td class="text-center"><?= $data['indirect']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['paid']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'indirect-balance-4']); ?></td>
         </tr>
     </tbody>
     <tfoot>
@@ -194,3 +183,60 @@ echo '</pre>';*/
             
     </tfoot>
 </table>
+
+<?php
+foreach ($modal_data as $direct_indirect => $value) {
+    foreach ($value as $key => $detail) {
+        Modal::begin([
+            'header' => '<h2>Detail Payment</h2>',
+            'id' => 'modal-' . $direct_indirect . '-' . $key,
+            'size' => 'modal-lg'
+        ]);
+
+        echo "<div id='modalContent'>";
+        echo '<table class="table table-responsive table-bordered table-striped" style="font-size: 12px;">';
+        echo '<thead>
+            <tr>
+                <th>No</th>
+                <th>Period</th>
+                <th>Vendor Code</th>
+                <th>Vendor Name</th>
+                <th>Voucher No.</th>
+                <th>Invoice Act.</th>
+                <th>Do</th>
+                <th>Currency</th>
+                <th>Ammount</th>
+                <th>PIC</th>
+                <th>Division</th>
+                <th>Term</th>
+            </tr>
+        </thead>';
+        echo '<tbody>';
+        $no = 1;
+        foreach ($detail as $key => $value) {
+            echo '<tr>
+                <td>' . $no++ . '</td>
+                <td>' . $value['period'] . '</td>
+                <td>' . $value['vendor_code'] . '</td>
+                <td>' . $value['vendor_name'] . '</td>
+                <td>' . $value['voucher_no'] . '</td>
+                <td>' . $value['invoice_act'] . '</td>
+                <td>' . $value['do'] . '</td>
+                <td>' . $value['currency'] . '</td>
+                <td>' . round($value['amount'], 2) . '</td>
+                <td>' . $value['pic'] . '</td>
+                <td>' . $value['division'] . '</td>
+                <td>' . $value['term'] . '</td>
+            </tr>';
+        }
+        echo '</tbody>';
+        echo '</table>';
+        
+        echo "</div>";
+
+        Modal::end();
+    }
+    
+}
+
+?>

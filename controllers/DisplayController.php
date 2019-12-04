@@ -660,6 +660,18 @@ class DisplayController extends Controller
                     $data['indirect']['acc']['verification']['balance'] -= $value['finance_rcv_minus'];
                     $data['indirect']['acc']['paid']['target'] += $value['finance_transfer_done'];
                     $data['indirect']['acc']['paid']['balance'] -= $value['finance_transfer_minus'];
+                    if ($value['doc_minus'] == 1) {
+                        $modal_data['indirect']['balance-1'][] = $value;
+                    }
+                    if ($value['verikasi_minus'] == 1) {
+                        $modal_data['indirect']['balance-2'][] = $value;
+                    }
+                    if ($value['finance_rcv_minus'] == 1) {
+                        $modal_data['indirect']['balance-3'][] = $value;
+                    }
+                    if ($value['finance_transfer_minus'] == 1) {
+                        $modal_data['indirect']['balance-4'][] = $value;
+                    }
                 }
             }
         } catch (Exception $ex) {
