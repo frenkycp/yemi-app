@@ -32,6 +32,92 @@ date_default_timezone_set('Asia/Jakarta');
 <h2>Timeline</h2>
 <ul class="timeline">
 
+	<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            July. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-07-04</span>
+
+            <h3 class="timeline-header"><a href="#">Container Loading Progress Monitoring</a></h3>
+
+            <div class="timeline-body">
+                Add display for monitoring daily container progress.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/container_loading.jpg', ['class' => 'attachment-img', 'height' => '300px']); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-07-01</span>
+
+            <h3 class="timeline-header"><a href="#">Receiving Calendar</a></h3>
+
+            <div class="timeline-body">
+                Monitoring Incoming Material ETD YEMI.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/receiving_calendar.jpg', ['class' => 'attachment-img', 'height' => '300px']); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+	<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            June. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-06-28</span>
+
+            <h3 class="timeline-header"><a href="#">Crusher Data Monitoring</a></h3>
+
+            <div class="timeline-body">
+                Monitoring crusher data on Injection Location.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/crusher.jpg', ['class' => 'attachment-img', 'height' => '300px']); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-06-10</span>
+
+            <h3 class="timeline-header"><a href="#">Shift Daily Patrol</a></h3>
+
+            <div class="timeline-body">
+                Night daily patrol for monitoring production area if there is something abnormal.
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
