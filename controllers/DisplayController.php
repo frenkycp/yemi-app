@@ -678,11 +678,17 @@ class DisplayController extends Controller
             return json_encode($ex->getMessage());
         }
 
+        $completion = 0;
+        if ($data['direct']['kanban_doc'] + $data['indirect']['kanban_doc'] > 0) {
+            $completion = round(($data['direct']['pch']['verification']['target'] + $data['indirect']['pch']['verification']['target']) / ($data['direct']['kanban_doc'] + $data['indirect']['kanban_doc']) * 100, 1);
+        }
+
         return $this->render('pch-kanban-data', [
             'data' => $data,
             'modal_data' => $modal_data,
             'model' => $model,
-            'result' => $result
+            'result' => $result,
+            'completion' => $completion,
         ]);
     }
 

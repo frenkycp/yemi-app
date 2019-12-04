@@ -199,6 +199,38 @@ echo '</pre>';*/
         </td>
     </tfoot>
 </table>
+<div class="progress-group">
+    <span class="progress-text" style="color: white;">Target</span>
+    <div class="progress">
+        <div class="progress-bar progress-bar-danger" style="width: 25%">
+            <span class="" style="color: black; font-weight: bold;">0% - 25% Complete (max. 5<sup>th</sup>)</span>
+        </div>
+        <div class="progress-bar progress-bar-warning" style="width: 25%">
+            <span class="" style="color: black; font-weight: bold;">26% - 50% Complete (max. 10<sup>th</sup>)</span>
+        </div>
+        <div class="progress-bar progress-bar-info" style="width: 25%">
+            <span class="" style="color: black; font-weight: bold;">51% - 75% Complete (max. 15<sup>th</sup>)</span>
+        </div>
+        <div class="progress-bar progress-bar-success" style="width: 25%">
+            <span class="" style="color: black; font-weight: bold;">76% - 100% Complete (max. 20<sup>th</sup>)</span>
+        </div>
+    </div>
+</div>
+<div class="progress-group">
+    <span class="progress-text" style="color: white;">Actual</span>
+    <div class="progress">
+        <?php
+        if ($completion <= 25) {
+            $progress_class = 'progress-bar-danger';
+        } elseif ($completion <= 50) {
+             $progress_class = 'progress-bar-warning';
+        }
+        ?>
+        <div class="progress-bar progress-bar-success progress-bar-striped active" style="width: <?= $completion . '%'; ?>">
+            <span class="" style="color: black; font-weight: bold;"><?= $completion; ?>%</span>
+        </div>
+    </div>
+</div>
 
 <?php
 foreach ($modal_data as $direct_indirect => $value) {
