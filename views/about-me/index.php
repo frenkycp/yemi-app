@@ -19,6 +19,7 @@ $this->registerJs("$(function() {
 
 
 date_default_timezone_set('Asia/Jakarta');
+$image_height = '300px';
 
 ?>
 <div>
@@ -35,10 +36,151 @@ date_default_timezone_set('Asia/Jakarta');
 	<!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
-            July. 2019
+            Nov. 2019
         </span>
     </li>
     <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-11-01</span>
+
+            <h3 class="timeline-header"><a href="#">Wood Working Beacon (Location)</a></h3>
+
+            <div class="timeline-body">
+                Add beacon to WIP on Wood Working to detect location.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/ww_beacon.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+	<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Oct. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-10-28</span>
+
+            <h3 class="timeline-header"><a href="#">Sensor Monitoring</a></h3>
+
+            <div class="timeline-body">
+                Add sensors that connected to the network to help monitoring process.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/temp_humi.jpg', ['class' => 'attachment-img', 'height' => $image_height, 'width' => '650px']); ?>&nbsp;&nbsp;&nbsp;
+                <?= Html::img('@web/uploads/ABOUT/temp_humi_2.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Sep. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-09-16</span>
+
+            <h3 class="timeline-header"><a href="#">Sub Assy Beacon (Location)</a></h3>
+
+            <div class="timeline-body">
+                Add beacon to Sub Assy employee to track the movemnent & current location.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/beacon_sa.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+	<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Aug. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-08-19</span>
+
+            <h3 class="timeline-header"><a href="#">Visitor Welcome Display</a></h3>
+
+            <div class="timeline-body">
+                Display welcome message for incoming visitor.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/visitor_welcome.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-08-12</span>
+
+            <h3 class="timeline-header"><a href="#">Meeting Room Display Information</a></h3>
+
+            <div class="timeline-body">
+                Display meeting schedule for each meeting room and show current meeting.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/mrbs.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+	<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jul. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-07-10</span>
+
+            <h3 class="timeline-header"><a href="#">Vanning Project L-Sries</a></h3>
+
+            <div class="timeline-body">
+                Vanning project for L-Series model.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/direct_vanning.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
 
     <!-- timeline item -->
     <li>
@@ -52,7 +194,7 @@ date_default_timezone_set('Asia/Jakarta');
             <div class="timeline-body">
                 Add display for monitoring daily container progress.
                 <br/>
-                <?= Html::img('@web/uploads/ABOUT/container_loading.jpg', ['class' => 'attachment-img', 'height' => '300px']); ?>
+                <?= Html::img('@web/uploads/ABOUT/container_loading.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
             </div>
         </div>
     </li>
@@ -70,7 +212,7 @@ date_default_timezone_set('Asia/Jakarta');
             <div class="timeline-body">
                 Monitoring Incoming Material ETD YEMI.
                 <br/>
-                <?= Html::img('@web/uploads/ABOUT/receiving_calendar.jpg', ['class' => 'attachment-img', 'height' => '300px']); ?>
+                <?= Html::img('@web/uploads/ABOUT/receiving_calendar.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
             </div>
         </div>
     </li>
@@ -79,7 +221,7 @@ date_default_timezone_set('Asia/Jakarta');
 	<!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
-            June. 2019
+            Jun. 2019
         </span>
     </li>
     <!-- /.timeline-label -->
@@ -96,7 +238,7 @@ date_default_timezone_set('Asia/Jakarta');
             <div class="timeline-body">
                 Monitoring crusher data on Injection Location.
                 <br/>
-                <?= Html::img('@web/uploads/ABOUT/crusher.jpg', ['class' => 'attachment-img', 'height' => '300px']); ?>
+                <?= Html::img('@web/uploads/ABOUT/crusher.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
             </div>
         </div>
     </li>
