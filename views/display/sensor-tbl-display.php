@@ -100,7 +100,7 @@ $this->registerJs($script, View::POS_HEAD );
                     $temp_class = '';
                     $txt_temp_class = $txt_humi_class = '';
                     if ($value['temp_min'] != null && $value['temp_max'] != null) {
-                        if ($value['temparature'] < $value['temp_min'] || $value['temparature'] > $value['temp_max']) {
+                        if ($value['temparature'] > $value['temp_max']) {
                             $temp_class = 'danger';
                             $txt_temp_class = ' text-red';
                         }

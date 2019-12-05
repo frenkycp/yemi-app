@@ -430,7 +430,7 @@ class DisplayController extends Controller
         foreach ($sensor_data as $key => $value) {
             $temperature_value = $value->temparature;
             //$temperature_value = 50;
-            if ($temperature_value >= $value->temp_min && $temperature_value <= $value->temp_max) {
+            if ($temperature_value <= $value->temp_max) {
                 $temp_data_arr[$value->map_no] = '<span class="text-green">' . $temperature_value . '</span>';
             } else {
                 $temp_data_arr[$value->map_no] = '<span class="blinked">' . $temperature_value . '</span>';

@@ -148,7 +148,7 @@ $this->registerJs($script, View::POS_END);
                 }
             }
             $temp_txt_class = 'text-green';
-            if ($act_temp < $temp_min || $act_temp > $temp_max) {
+            if ($act_temp > $temp_max) {
                 $temp_txt_class = 'text-red blinked';
             }
             $humi_txt_class = 'text-green';
