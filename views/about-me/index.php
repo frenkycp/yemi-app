@@ -36,6 +36,32 @@ $image_height = '300px';
 	<!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
+            Dec. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-12-02</span>
+
+            <h3 class="timeline-header"><a href="#">Solder Dross Recycle Monitoring <span class="japanesse">はんだドロスのリサイクル管理</span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring In & Out Dross quantity & ratio.
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/dross_monitoring.jpg', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+	<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
             Nov. 2019
         </span>
     </li>
