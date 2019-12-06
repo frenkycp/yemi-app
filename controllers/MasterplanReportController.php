@@ -30,10 +30,8 @@ class MasterplanReportController extends Controller
             $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
         }
 
-        $min_year = MachineMpPlanViewMaster02::find()->select('MIN(year) as min_year')->one();
-
         $year_now = date('Y');
-        $star_year = $min_year->min_year;
+        $star_year = 2018;
     	for ($year = $star_year; $year <= ($year_now + 1); $year++) {
             $year_arr[$year] = $year;
         }
@@ -56,6 +54,8 @@ class MasterplanReportController extends Controller
 		->orderBy('period, week, master_plan_maintenance')
 		->all();
 
+		$target = 0;
+		$actual = 0;
 		foreach ($masterplan_data_arr as $masterplan_data) {
 			if (!isset($tmp_data[$masterplan_data->week][$masterplan_data->master_plan_maintenance]['total_open'])) {
 				$tmp_data[$masterplan_data->week][$masterplan_data->master_plan_maintenance]['total_open'] = 0;
@@ -70,6 +70,8 @@ class MasterplanReportController extends Controller
 			$tmp_data[$masterplan_data->week][$masterplan_data->master_plan_maintenance]['total_open'] += $masterplan_data->count_open;
 			$tmp_data[$masterplan_data->week][$masterplan_data->master_plan_maintenance]['total_close'] += $masterplan_data->count_close;
 			$tmp_data[$masterplan_data->week][$masterplan_data->master_plan_maintenance]['total_plan'] += $masterplan_data->count_list;
+			$target += $masterplan_data->count_list;
+			$actual += $masterplan_data->count_close;
 		}
 
 		foreach ($tmp_data as $key => $value) {
@@ -77,32 +79,37 @@ class MasterplanReportController extends Controller
 			$presentase_open_arr = [];
 			$presentase_close_arr = [];
 			foreach ($tmp_data[$key] as $key2 => $value2) {
-				$tmp_category[] = $key2;
-				$presentase_open = 0;
-				$presentase_close = 0;
-				if ($value2['total_plan'] > 0) {
-					$presentase_open = round((($value2['total_open'] / $value2['total_plan']) * 100), 2);
-					$presentase_close = round((($value2['total_close'] / $value2['total_plan']) * 100), 2);
+				if ($key2 != 'target' && $key2 != 'actual') {
+					$tmp_category[] = $key2;
+					$presentase_open = 0;
+					$presentase_close = 0;
+					if ($value2['total_plan'] > 0) {
+						$presentase_open = round((($value2['total_open'] / $value2['total_plan']) * 100), 2);
+						$presentase_close = round((($value2['total_close'] / $value2['total_plan']) * 100), 2);
+					}
+					$presentase_open_arr[] = [
+						'y' => $presentase_open,
+						'qty' => $value2['total_open'],
+						'url' => Url::to(['mnt-preventive-data/index',
+							'master_plan_maintenance' => $key2,
+							'status' => 0
+						])
+					];
+					$presentase_close_arr[] = [
+						'y' => $presentase_close,
+						'qty' => $value2['total_close'],
+						'url' => Url::to(['mnt-preventive-data/index',
+							'master_plan_maintenance' => $key2,
+							'status' => 1
+						])
+					];
 				}
-				$presentase_open_arr[] = [
-					'y' => $presentase_open,
-					'qty' => $value2['total_open'],
-					'url' => Url::to(['mnt-preventive-data/index',
-						'master_plan_maintenance' => $key2,
-						'status' => 0
-					])
-				];
-				$presentase_close_arr[] = [
-					'y' => $presentase_close,
-					'qty' => $value2['total_close'],
-					'url' => Url::to(['mnt-preventive-data/index',
-						'master_plan_maintenance' => $key2,
-						'status' => 1
-					])
-				];
+				
 			}
 			$data[$key] = [
 				'category' => $tmp_category,
+				'target' => $value['target'],
+				'actual' => $value['actual'],
 				'data' => [
 					[
 						'name' => 'OPEN',
@@ -132,7 +139,9 @@ class MasterplanReportController extends Controller
 			'model' => $model,
 			'year_arr' => $year_arr,
 			'month_arr' => $month_arr,
-			'data' => $data
+			'data' => $data,
+			'target' => $target,
+			'actual' => $actual,
 		]);
 	}
 }

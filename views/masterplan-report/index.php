@@ -33,7 +33,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 300000); // milliseconds
+      setTimeout("refreshPage();", 600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -103,7 +103,28 @@ echo '</pre>';*/
     
 
 <?php ActiveForm::end(); ?>
-<u><h5>Last Updated : <?= date('d-M-Y H:i:s') ?></h5></u>
+<?php
+$pct = 0;
+if ($target > 0) {
+    $pct = round(($actual / $target) * 100);
+}
+?>
+<hr>
+<u><h4>Last Updated : <?= date('d-M-Y H:i:s') ?></h4></u>
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <!-- /.progress-group -->
+        <div class="progress-group">
+            <span class="progress-text">Monthly Progress Completion</span>
+            <span class="progress-number"><b><?= number_format($actual) ?></b>/<?= number_format($target); ?></span>
+
+            <div class="progress">
+                <div class="progress-bar progress-bar-success<?= $pct != 100 ? ' progress-bar-striped active' : '' ?>" style="width: <?= $pct; ?>%"><?= $pct; ?>%</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="nav-tabs-custom">
 	<ul class="nav nav-tabs">
         <?php
@@ -131,7 +152,7 @@ echo '</pre>';*/
             {
                 echo '<div class="tab-pane" id="tab_1_' . $key .'">';
             }
-            
+
             echo Highcharts::widget([
             'scripts' => [
                 'modules/exporting',
