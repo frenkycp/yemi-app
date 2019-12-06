@@ -100,10 +100,18 @@ $this->registerJs($script, View::POS_HEAD );
                     $temp_class = '';
                     $txt_temp_class = $txt_humi_class = '';
                     if ($value['temp_min'] != null && $value['temp_max'] != null) {
-                        if ($value['temparature'] > $value['temp_max']) {
-                            $temp_class = 'danger';
-                            $txt_temp_class = ' text-red';
+                        if ($value['map_no'] == 17 || $value['map_no'] == 18) {
+                            if ($value['temparature'] < $value['temp_min']) {
+                                $temp_class = 'danger';
+                                $txt_temp_class = ' text-red';
+                            }
+                        } else {
+                            if ($value['temparature'] > $value['temp_max']) {
+                                $temp_class = 'danger';
+                                $txt_temp_class = ' text-red';
+                            }
                         }
+                        
                     }
                     if ($value['humi_min'] != null && $value['humi_max'] != null) {
                         if ($value['humidity'] < $value['humi_min'] || $value['humidity'] > $value['humi_max']) {

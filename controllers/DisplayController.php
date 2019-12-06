@@ -430,11 +430,20 @@ class DisplayController extends Controller
         foreach ($sensor_data as $key => $value) {
             $temperature_value = $value->temparature;
             //$temperature_value = 50;
-            if ($temperature_value <= $value->temp_max) {
-                $temp_data_arr[$value->map_no] = '<span class="text-green">' . $temperature_value . '</span>';
+            if ($value->map_no == 17 || $value->map_no == 18) {
+                if ($temperature_value >= $value->temp_min) {
+                    $temp_data_arr[$value->map_no] = '<span class="text-green">' . $temperature_value . '</span>';
+                } else {
+                    $temp_data_arr[$value->map_no] = '<span class="blinked">' . $temperature_value . '</span>';
+                }
             } else {
-                $temp_data_arr[$value->map_no] = '<span class="blinked">' . $temperature_value . '</span>';
+                if ($temperature_value <= $value->temp_max) {
+                    $temp_data_arr[$value->map_no] = '<span class="text-green">' . $temperature_value . '</span>';
+                } else {
+                    $temp_data_arr[$value->map_no] = '<span class="blinked">' . $temperature_value . '</span>';
+                }
             }
+            
             $standard_temp_arr[$value->map_no] = $value->temp_min . ' - ' . $value->temp_max;
 
             $humidity_value = $value->humidity;

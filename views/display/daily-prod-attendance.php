@@ -107,6 +107,7 @@ date_default_timezone_set('Asia/Jakarta');
                         'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => false,
+                            'allowOverlap' => true
                         ],
                         'maxPointWidth' => 50,
                     ],
@@ -114,7 +115,7 @@ date_default_timezone_set('Asia/Jakarta');
                         'cursor' => 'pointer',
                         'dataLabels' => [
                             //'allowOverlap' => true
-                            'enabled' => true
+                            'enabled' => false
                         ],
                         /**/'point' => [
                             'events' => [

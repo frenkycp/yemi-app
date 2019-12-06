@@ -148,9 +148,16 @@ $this->registerJs($script, View::POS_END);
                 }
             }
             $temp_txt_class = 'text-green';
-            if ($act_temp > $temp_max) {
-                $temp_txt_class = 'text-red blinked';
+            if ($value->map_no == 17 || $value->map_no == 18) {
+                if ($act_temp < $temp_min) {
+                    $temp_txt_class = 'text-red blinked';
+                }
+            } else {
+                if ($act_temp > $temp_max) {
+                    $temp_txt_class = 'text-red blinked';
+                }
             }
+            
             $humi_txt_class = 'text-green';
             if ($act_humi < $humi_min || $act_humi > $humi_max) {
                 $humi_txt_class = 'text-red blinked';

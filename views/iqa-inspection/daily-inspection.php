@@ -40,6 +40,7 @@ $this->registerJs($script, View::POS_HEAD );
 
 $this->registerJs("$(function() {
    $('#myTable').DataTable({
+        'order': [[ 1, 'desc' ]]
         //'pageLength': 5
     });
 });");
