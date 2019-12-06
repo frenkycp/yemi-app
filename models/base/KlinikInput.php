@@ -10,7 +10,7 @@ use Yii;
  * This is the base-model class for table "tb_klinik_input".
  *
  * @property string $pk
- * @property integer $nik
+ * @property string $nik
  * @property string $nama
  * @property string $CC_ID
  * @property string $dept
@@ -61,11 +61,11 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
         return [
             [['pk'], 'required'],
             [['pk', 'masuk', 'keluar'], 'safe'],
-            [['nik', 'opsi', 'confirm'], 'integer'],
+            [['opsi', 'confirm'], 'integer'],
+            [['nik', 'status_karyawan'], 'string', 'max' => 20],
             [['nama', 'dept', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'string', 'max' => 255],
             [['CC_ID'], 'string', 'max' => 10],
             [['section'], 'string', 'max' => 50],
-            [['status_karyawan'], 'string', 'max' => 20],
             [['last_status'], 'string', 'max' => 30],
             [['pk'], 'unique']
         ];

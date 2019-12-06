@@ -2399,9 +2399,6 @@ class DisplayController extends Controller
             ['>=', 'posting_shift', $model->from_date],
             ['<=', 'posting_shift', $model->to_date],
         ])
-        ->andWhere([
-            'current_status' => 'I'
-        ])
         ->groupBy('child_analyst, child_analyst_desc, posting_shift')
         ->orderBy('child_analyst_desc')
         ->all();
