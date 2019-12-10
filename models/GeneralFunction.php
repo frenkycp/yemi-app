@@ -55,4 +55,21 @@ class GeneralFunction extends Model
         $new_datetime = (strtotime($datetime . " +7 hours") * 1000);
         return $new_datetime;
     }
+
+    public function getPeriodByRange($start_date, $end_date)
+    {
+        $d1 = strtotime($start_date . ' -1 month');
+        $d2 = strtotime($end_date);
+        $min_date = min($d1, $d2);
+        $max_date = max($d1, $d2);
+        $i = 0;
+        $period_arr = [];
+
+        while (($min_date = strtotime("+1 MONTH", $min_date)) <= $max_date) {
+            $period_arr[] = date('Ym', $min_date);
+            $i++;
+        }
+        
+        return $period_arr;
+    }
 }
