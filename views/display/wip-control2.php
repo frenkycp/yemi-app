@@ -6,9 +6,9 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Wood Working - WIP Control "BEACON" <span class="japanesse light-green"></span>',
-    'tab_title' => 'Wood Working - WIP Control "BEACON" ',
-    'breadcrumbs_title' => 'Wood Working - WIP Control "BEACON" ',
+    'page_title' => 'Wood Working WIP <span class="japanesse light-green">– 木工仕掛り在庫管理</span>',
+    'tab_title' => 'Wood Working WIP ',
+    'breadcrumbs_title' => 'Wood Working WIP ',
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

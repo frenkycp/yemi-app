@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Lot Qty by Hour <span class="japanesse light-green">(仕掛り品在庫の推移)</span>',
-    'tab_title' => 'Lot Qty by Hour',
-    'breadcrumbs_title' => 'Lot Qty by Hour'
+    'page_title' => 'Lot Qty by Hour <span class="japanesse light-green">(仕掛り品在庫の推移)</span> | Filter by Model',
+    'tab_title' => 'Lot Qty by Hour | Filter by Model',
+    'breadcrumbs_title' => 'Lot Qty by Hour | Filter by Model'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

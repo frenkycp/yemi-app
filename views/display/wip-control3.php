@@ -6,9 +6,9 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'LT Control (BEACON) - MAX 24 HOURS <span class="japanesse light-green"></span>',
-    'tab_title' => 'LT Control (BEACON) - MAX 24 HOURS ',
-    'breadcrumbs_title' => 'LT Control (BEACON) - MAX 24 HOURS ',
+    'page_title' => 'Abnormal LT control (Max 24h) <span class="japanesse light-green">リードタイム異常管理</span>',
+    'tab_title' => 'Abnormal LT control (Max 24h) ',
+    'breadcrumbs_title' => 'Abnormal LT control (Max 24h) ',
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

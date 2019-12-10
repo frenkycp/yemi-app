@@ -96,7 +96,7 @@ $this->registerCss("
                     </div>
                     <div class="list-group">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="list-group-item">
-                            CLINIC
+                            CLINIC <span class="caret"></span>
                         </a>
                         <div id="collapseOne" class="panel-collapse collapse">
                             <div class="box-body">
@@ -224,16 +224,16 @@ $this->registerCss("
                         <?= Html::a('Lot Qty by Hour <span class="japanesse-word">(仕掛り品在庫の推移)</span><span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/lot-timeline'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working - Lot Location Monitoring <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-loc'], [
+                        <?= Html::a('Wood Working Lot Location Monitoring <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-loc'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working - WIP Control <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/wip-control2'], [
+                        <?= Html::a('Wood Working WIP <span class="japanesse-word">– 木工仕掛り在庫管理</span> <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/wip-control2'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working - LT Control (24 Hours Max.) <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/wip-control3'], [
+                        <?= Html::a('Abnormal LT control (Max 24h) <span class="japanesse-word">リードタイム異常管理</span> <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/wip-control3'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
-                        <?= Html::a('Wood Working - Lot LT Control <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-lt'], [
+                        <?= Html::a('Wood Working Lot LT <span class="japanesse-word">(木工製造LT)</span> <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-beacon-lt'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
                     </div>
@@ -541,10 +541,10 @@ $this->registerCss("
                             <p>PCB</p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Solder Dross Recycle Monitoring <span class="japanesse">はんだドロスのリサイクル管理</span>', ['/display/dross-input-daily']); ?>
+                                    <?= Html::a('Solder Dross Recycle Monitoring <span class="japanesse-word">はんだドロスのリサイクル管理</span>', ['/display/dross-input-daily']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Plastic Crusher Recycle Monitoring <span class="japanesse">プラクラッシャーのリサイクル管理</span>', ['/display/crusher-input-daily']); ?>
+                                    <?= Html::a('Plastic Crusher Recycle Monitoring <span class="japanesse-word">プラクラッシャーのリサイクル管理</span>', ['/display/crusher-input-daily']); ?>
                                 </li>
                                 <li>
                                     <?= Html::a('YEMI - SMT TODAY (Line 1)', ['/display/smt-inj-today', 'line' => '01']); ?>
@@ -553,16 +553,16 @@ $this->registerCss("
                                     <?= Html::a('YEMI - SMT TODAY (Line 2)', ['/display/smt-inj-today', 'line' => '02']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('YEMI - INJ LARGE TODAY <span class="japanesse">(本日のプラ成形)</span>', ['/display/smt-inj-today', 'loc' => 'WI02']); ?>
+                                    <?= Html::a('YEMI - INJ LARGE TODAY <span class="japanesse-word">(本日のプラ成形)</span>', ['/display/smt-inj-today', 'loc' => 'WI02']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('YEMI - INJ SMALL TODAY <span class="japanesse">(本日のプラ成形))</span>', ['/display/smt-inj-today', 'loc' => 'WI01']); ?>
+                                    <?= Html::a('YEMI - INJ SMALL TODAY <span class="japanesse-word">(本日のプラ成形))</span>', ['/display/smt-inj-today', 'loc' => 'WI01']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SMT WIP Stock <span class="japanesse">(仕掛り在庫)</span>', ['/display/smt-stock-wip']); ?>
+                                    <?= Html::a('SMT WIP Stock <span class="japanesse-word">(仕掛り在庫)</span>', ['/display/smt-stock-wip']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('SPU WIP Stock <span class="japanesse"></span>', ['/display/smt-stock-wip', 'loc' => 'WU01']); ?>
+                                    <?= Html::a('SPU WIP Stock <span class="japanesse-word"></span>', ['/display/smt-stock-wip', 'loc' => 'WU01']); ?>
                                 </li>
                             </ol>
                         </div>
