@@ -182,6 +182,7 @@ echo $data['name'];*/
     <thead>
         <tr>
             <th class="text-center">Action</th>
+            <th class="text-center">Start Time<br/>(First Process)</th>
             <th class="text-center">Lot Number</th>
             <th class="text-center">Beacon ID</th>
             <th class="text-center">Model</th>
@@ -231,6 +232,7 @@ echo $data['name'];*/
                         
                         ?>
                     </td>
+                    <td class="text-center"><?= $value['start_date'] == null ? '-' : date('Y-m-d', strtotime($value['start_date'])) . '<br/>' . date('H:i', strtotime($value['start_date'])); ?></td>
                     <td class="text-center"><?= $value['lot_id']; ?></td>
                     <td class="text-center"><?= $beacon_id; ?></td>
                     <td class="text-center"><?= $value['model_group']; ?></td>

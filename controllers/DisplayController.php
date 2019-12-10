@@ -852,10 +852,33 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $now = date('Y-m-d H:i:s');
 
-        $tmp_beacon_tbl = BeaconTbl::find()
-        ->where('lot_number IS NOT NULL')
-        ->orderBy('start_date')
-        ->all();
+        $model = new \yii\base\DynamicModel([
+            'model_group'
+        ]);
+        $model->addRule(['model_group'], 'safe');
+
+        if ($model->load($_GET)) {
+            # code...
+        }
+
+        if ($model->model_group != '' && $model->model_group != null) {
+            $tmp_model_wip = WipModelGroup::find()->select('gmc')->where(['category_id' => $model->model_group])->all();
+            $gmc_arr = [];
+            foreach ($tmp_model_wip as $key => $value) {
+                $gmc_arr[] = $value->gmc;
+            }
+
+            $tmp_beacon_tbl = BeaconTbl::find()
+            ->where('lot_number IS NOT NULL')
+            ->andWhere(['parent' => $gmc_arr])
+            ->orderBy('start_date')
+            ->all();
+        } else {
+            $tmp_beacon_tbl = BeaconTbl::find()
+            ->where('lot_number IS NOT NULL')
+            ->orderBy('start_date')
+            ->all();
+        }
 
         $tmp_data = $data = [];
         foreach ($tmp_beacon_tbl as $key => $value) {
@@ -880,6 +903,7 @@ class DisplayController extends Controller
 
         return $this->render('ww-beacon-lt', [
             'data' => $data,
+            'model' => $model,
             'categories' => $categories
         ]);
     }

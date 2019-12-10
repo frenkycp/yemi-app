@@ -45,6 +45,9 @@ public function search($params)
 $query = IpqaPatrolTbl::find()
 ->joinWith('statusTbl')
 ->where(['IPQA_PATROL_TBL.flag' => 1])
+->andWhere([
+      'OR', ['AND', ['<', 'event_date', '2019-12-09'], ['status' => 1]], ['>=', 'event_date', '2019-12-09']
+])
 ->orderBy('IPQA_STATUS_TBL.status_order ASC');
 
 $dataProvider = new ActiveDataProvider([

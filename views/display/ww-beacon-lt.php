@@ -4,6 +4,7 @@ use yii\web\JsExpression;
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
@@ -51,6 +52,28 @@ print_r($data_losstime);
 echo '</pre>';*/
 
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['ww-beacon-lt']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-2">
+        <?= $form->field($model, 'model_group')->dropDownList(ArrayHelper::map(\app\models\WipModelGroup::find()
+            ->select(['category_id', 'category_desc'])
+            ->where(['<>', 'category_desc', 'L-851'])
+            ->groupBy('category_id, category_desc')->orderBy('category_desc')->all(), 'category_id', 'category_desc'), [
+                'prompt' => '- All Model -',
+                'onchange'=>'this.form.submit()'
+            ]
+        ); ?>
+    </div>
+    
+</div>
+<br/>
+
+<?php ActiveForm::end(); ?>
 <span style="color: white; font-size: 2em;">Last Update : <?= date('Y-m-d H:i'); ?></span>
 <div class="panel panel-primary">
     <div class="panel-body">

@@ -83,6 +83,7 @@ echo '</pre>';*/
                             //'rotation' => 0,
                             //'align' => 'high'
                         ],
+                        'allowDecimals' => false,
                         'stackLabels' => [
                             'enabled' => true,
                         ],

@@ -7,9 +7,9 @@ use miloschuman\highcharts\Highcharts;
 use yii\web\JsExpression;
 
 $this->title = [
-    'page_title' => 'Dandori Ratio',
-    'tab_title' => 'Dandori Ratio',
-    'breadcrumbs_title' => 'Dandori Ratio'
+    'page_title' => 'Internal Setup Ratio <span class="japanesse light-green">内段取り比率管理</span>',
+    'tab_title' => 'Internal Setup Ratio',
+    'breadcrumbs_title' => 'Internal Setup Ratio'
 ];
 
 $this->registerCss("

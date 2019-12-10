@@ -109,6 +109,7 @@ class MachineRunningController extends Controller
         		'plan_stats' => 'O',
         		'jenis_mesin' => $tmp_data->kelompok
         	])
+        	->orderBy('start_date, plan_date')
         	->asArray()
         	->all();
 
