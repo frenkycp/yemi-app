@@ -51,13 +51,35 @@ $unit_list = ArrayHelper::map(ItemUnit::find()->where(['flag' => 1])->orderBy('n
                         'options' => [
                             'class' => 'form-control'
                         ]
-                    ])->label('Plan Date') ?>
+                    ])->label('Plan Date'); ?>
+
                     <?= $form->field($model, 'eta_yemi_date')->widget(DatePicker::className(), [
                         'dateFormat' => 'yyyy-MM-dd',
                         'options' => [
                             'class' => 'form-control'
                         ]
-                    ])->label('ETA YEMI Date') ?>
+                    ]); ?>
+
+                    <?= $form->field($model, 'cut_off_date')->widget(DatePicker::className(), [
+                        'dateFormat' => 'yyyy-MM-dd',
+                        'options' => [
+                            'class' => 'form-control'
+                        ]
+                    ]); ?>
+
+                    <?= $form->field($model, 'etd_port_date')->widget(DatePicker::className(), [
+                        'dateFormat' => 'yyyy-MM-dd',
+                        'options' => [
+                            'class' => 'form-control'
+                        ]
+                    ]); ?>
+
+                    <?= $form->field($model, 'eta_port_date')->widget(DatePicker::className(), [
+                        'dateFormat' => 'yyyy-MM-dd',
+                        'options' => [
+                            'class' => 'form-control'
+                        ]
+                    ]); ?>
 
                     <?= ''; $form->field($model, 'unloading_time')->widget(TimePicker::classname(), [
                         'value'=> null,

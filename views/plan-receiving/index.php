@@ -128,8 +128,38 @@ $columns = [
                 'pluginOptions' => [
                     'autoclose'=>true,
                     'format' => 'yyyy-mm-dd'
-                ]
+                ],
             ],
+            'contentOptions' => [
+                'style' => 'min-width: 80px;'
+            ],
+        ],
+    ],
+    [
+        'attribute' => 'cut_off_date',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'etd_port_date',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'eta_port_date',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [

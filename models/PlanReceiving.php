@@ -32,4 +32,17 @@ class PlanReceiving extends BasePlanReceiving
             ]
         );
     }
+
+    public function attributeLabels()
+    {
+        return ArrayHelper::merge(
+            parent::attributeLabels(),
+            [
+                'cut_off_date' => 'Cut Off Date',
+                'etd_port_date' => 'ETD Port',
+                'eta_port_date' => 'ETA Port',
+                'eta_yemi_date' => 'ETA YEMI',
+            ]
+        );
+    }
 }

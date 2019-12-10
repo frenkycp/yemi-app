@@ -19,7 +19,7 @@ class PlanReceivingSearch extends PlanReceiving
     {
         return [
             [['id', 'flag'], 'integer'],
-            [['vendor_name', 'vehicle', 'item_type', 'receiving_date', 'month_periode', 'container_no', 'urgent_status'], 'safe'],
+            [['vendor_name', 'vehicle', 'item_type', 'receiving_date', 'month_periode', 'container_no', 'urgent_status', 'eta_yemi_date', 'cut_off_date', 'eta_port_date', 'etd_port_date'], 'safe'],
         ];
     }
 
@@ -63,13 +63,17 @@ class PlanReceivingSearch extends PlanReceiving
         $query->andFilterWhere([
             'id' => $this->id,
             'qty' => $this->qty,
-            'receiving_date' => $this->receiving_date,
             'flag' => $this->flag,
             'urgent_status' => $this->urgent_status
         ]);
 
         $query->andFilterWhere(['like', 'vendor_name', $this->vendor_name])
             ->andFilterWhere(['like', 'vehicle', $this->vehicle])
+            ->andFilterWhere(['like', 'receiving_date', $this->receiving_date])
+            ->andFilterWhere(['like', 'eta_yemi_date', $this->eta_yemi_date])
+            ->andFilterWhere(['like', 'cut_off_date', $this->cut_off_date])
+            ->andFilterWhere(['like', 'eta_port_date', $this->eta_port_date])
+            ->andFilterWhere(['like', 'etd_port_date', $this->etd_port_date])
             ->andFilterWhere(['like', 'container_no', $this->container_no])
             ->andFilterWhere(['like', 'month_periode', $this->month_periode])
             ->andFilterWhere(['like', 'item_type', $this->item_type]);
