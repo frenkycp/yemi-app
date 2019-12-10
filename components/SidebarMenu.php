@@ -93,6 +93,7 @@ class SidebarMenu extends Widget
                     'flag' => 1,
                 ])
                 ->andWhere(['<>', 'status', 1])
+                ->andWhere(['>=', 'event_date', '2019-12-09'])
                 ->count();
                 $obj = [
                     "label" => $menu->name,

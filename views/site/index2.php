@@ -561,7 +561,7 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('SMT WIP Stock <span class="japanesse-word">(仕掛り在庫)</span>', ['/display/smt-stock-wip']); ?>
                                 </li>
-                                <li>
+                                <li style="display: none;">
                                     <?= Html::a('SPU WIP Stock <span class="japanesse-word"></span>', ['/display/smt-stock-wip', 'loc' => 'WU01']); ?>
                                 </li>
                             </ol>
