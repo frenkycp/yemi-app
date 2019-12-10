@@ -7,9 +7,9 @@ use miloschuman\highcharts\Highcharts;
 use yii\web\JsExpression;
 
 $this->title = [
-    'page_title' => '',
-    'tab_title' => 'SMT Dandori',
-    'breadcrumbs_title' => 'SMT Dandori'
+    'page_title' => 'Dandori Ratio',
+    'tab_title' => 'Dandori Ratio',
+    'breadcrumbs_title' => 'Dandori Ratio'
 ];
 
 $this->registerCss("
@@ -22,7 +22,7 @@ $this->registerCss("
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em}
 	body {background-color: #000;}
-	.box-header {background-color: " . \Yii::$app->params['purple_color'] . " !important; color: white !important;}
+	//.box-header {background-color: " . \Yii::$app->params['purple_color'] . " !important; color: white !important;}
 ");
 
 $script = <<< JS

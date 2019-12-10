@@ -76,6 +76,16 @@ echo '</pre>';*/
             ]
         ]);?>
     </div>
+    <div class="col-md-2">
+        <?= $form->field($model, 'model_group')->dropDownList(ArrayHelper::map(\app\models\WipModelGroup::find()
+            ->select(['category_id', 'category_desc'])
+            ->where(['<>', 'category_desc', 'L-851'])
+            ->groupBy('category_id, category_desc')->orderBy('category_desc')->all(), 'category_id', 'category_desc'), [
+                'prompt' => '- All Model -'
+                //'onchange'=>'this.form.submit()'
+            ]
+        ); ?>
+    </div>
     <div class="form-group">
         <br/>
         <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>

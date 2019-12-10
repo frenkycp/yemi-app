@@ -1662,9 +1662,10 @@ class DisplayController extends Controller
         $data = [];
         date_default_timezone_set('Asia/Jakarta');
         $model = new \yii\base\DynamicModel([
-            'map_no', 'from_date', 'to_date'
+            'model_group', 'from_date', 'to_date'
         ]);
-        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+        $model->addRule(['from_date', 'to_date'], 'required')
+        ->addRule(['model_group'], 'safe');
 
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
@@ -1673,20 +1674,46 @@ class DisplayController extends Controller
             # code...
         }
 
-        $tmp_beacon_arr = BeaconTblTrack::find()
-        ->select([
-            'upload_date',
-            'total_lot' => 'COUNT(upload_date)',
-            'total_qty' => 'SUM(lot_qty)'
-        ])
-        ->where([
-            'AND',
-            ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
-            ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
-        ])
-        ->groupBy('upload_date')
-        ->orderBy('upload_date')
-        ->all();
+        if ($model->model_group != '' && $model->model_group != null) {
+            $tmp_model_wip = WipModelGroup::find()->select('gmc')->where(['category_id' => $model->model_group])->all();
+            $gmc_arr = [];
+            foreach ($tmp_model_wip as $key => $value) {
+                $gmc_arr[] = $value->gmc;
+            }
+
+            $tmp_beacon_arr = BeaconTblTrack::find()
+            ->select([
+                'upload_date',
+                'total_lot' => 'COUNT(upload_date)',
+                'total_qty' => 'SUM(lot_qty)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
+                ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
+            ])
+            ->andWhere(['parent' => $gmc_arr])
+            ->groupBy('upload_date')
+            ->orderBy('upload_date')
+            ->all();
+        } else {
+            $tmp_beacon_arr = BeaconTblTrack::find()
+            ->select([
+                'upload_date',
+                'total_lot' => 'COUNT(upload_date)',
+                'total_qty' => 'SUM(lot_qty)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
+                ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
+            ])
+            ->groupBy('upload_date')
+            ->orderBy('upload_date')
+            ->all();
+        }
+
+        
 
         $tmp_data_qty = $tmp_data_lot = [];
         foreach ($tmp_beacon_arr as $key => $value) {

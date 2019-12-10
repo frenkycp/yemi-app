@@ -41,6 +41,11 @@ use Yii;
  * @property string $K2_END
  * @property string $ACTIVE_STAT
  * @property string $PASSWORD
+ * @property string $TT_START
+ * @property string $TT_END
+ * @property string $RESIGN
+ * @property string $AKTIF
+ * @property string $NIK_SUN_FISH
  * @property string $aliasModel
  */
 abstract class Karyawan extends \yii\db\ActiveRecord
@@ -71,9 +76,14 @@ abstract class Karyawan extends \yii\db\ActiveRecord
     {
         return [
             [['NIK'], 'required'],
-            [['NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_PERKAWINAN', 'ALAMAT', 'ALAMAT_SEMENTARA', 'TELP', 'NPWP', 'KTP', 'BPJS_KESEHATAN', 'BPJS_KETENAGAKERJAAN', 'STATUS_KARYAWAN', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'JABATAN_SR', 'JABATAN_SR_GROUP', 'GRADE', 'DIRECT_INDIRECT', 'JENIS_PEKERJAAN', 'SERIKAT_PEKERJA', 'ACTIVE_STAT', 'PASSWORD'], 'string'],
-            [['TGL_LAHIR', 'TGL_MASUK_YEMI', 'K1_START', 'K1_END', 'K2_START', 'K2_END'], 'safe'],
+            [['TGL_LAHIR', 'TGL_MASUK_YEMI', 'K1_START', 'K1_END', 'K2_START', 'K2_END', 'TT_START', 'TT_END'], 'safe'],
             [['SKILL', 'KONTRAK_KE'], 'integer'],
+            [['NIK', 'PASSWORD'], 'string', 'max' => 30],
+            [['NAMA_KARYAWAN', 'TELP', 'NPWP', 'KTP', 'BPJS_KESEHATAN', 'BPJS_KETENAGAKERJAAN', 'STATUS_KARYAWAN', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'JABATAN_SR', 'JABATAN_SR_GROUP', 'GRADE', 'DIRECT_INDIRECT', 'JENIS_PEKERJAAN', 'SERIKAT_PEKERJA'], 'string', 'max' => 50],
+            [['JENIS_KELAMIN', 'ACTIVE_STAT', 'RESIGN', 'AKTIF'], 'string', 'max' => 1],
+            [['STATUS_PERKAWINAN'], 'string', 'max' => 4],
+            [['ALAMAT', 'ALAMAT_SEMENTARA'], 'string', 'max' => 300],
+            [['CC_ID', 'NIK_SUN_FISH'], 'string', 'max' => 10],
             [['NIK'], 'unique']
         ];
     }
@@ -85,37 +95,42 @@ abstract class Karyawan extends \yii\db\ActiveRecord
     {
         return [
             'NIK' => 'Nik',
-            'NAMA_KARYAWAN' => 'Nama  Karyawan',
-            'TGL_LAHIR' => 'Tgl  Lahir',
-            'JENIS_KELAMIN' => 'Jenis  Kelamin',
-            'STATUS_PERKAWINAN' => 'Status  Perkawinan',
+            'NAMA_KARYAWAN' => 'Nama Karyawan',
+            'TGL_LAHIR' => 'Tgl Lahir',
+            'JENIS_KELAMIN' => 'Jenis Kelamin',
+            'STATUS_PERKAWINAN' => 'Status Perkawinan',
             'ALAMAT' => 'Alamat',
-            'ALAMAT_SEMENTARA' => 'Alamat  Sementara',
+            'ALAMAT_SEMENTARA' => 'Alamat Sementara',
             'TELP' => 'Telp',
             'NPWP' => 'Npwp',
             'KTP' => 'Ktp',
-            'BPJS_KESEHATAN' => 'Bpjs  Kesehatan',
-            'BPJS_KETENAGAKERJAAN' => 'Bpjs  Ketenagakerjaan',
-            'TGL_MASUK_YEMI' => 'Tgl  Masuk  Yemi',
-            'STATUS_KARYAWAN' => 'Status  Karyawan',
-            'CC_ID' => 'Cc  ID',
+            'BPJS_KESEHATAN' => 'Bpjs Kesehatan',
+            'BPJS_KETENAGAKERJAAN' => 'Bpjs Ketenagakerjaan',
+            'TGL_MASUK_YEMI' => 'Tgl Masuk Yemi',
+            'STATUS_KARYAWAN' => 'Status Karyawan',
+            'CC_ID' => 'Cc ID',
             'DEPARTEMEN' => 'Departemen',
             'SECTION' => 'Section',
-            'SUB_SECTION' => 'Sub  Section',
-            'JABATAN_SR' => 'Jabatan  Sr',
-            'JABATAN_SR_GROUP' => 'Jabatan  Sr  Group',
+            'SUB_SECTION' => 'Sub Section',
+            'JABATAN_SR' => 'Jabatan Sr',
+            'JABATAN_SR_GROUP' => 'Jabatan Sr Group',
             'GRADE' => 'Grade',
-            'DIRECT_INDIRECT' => 'Direct  Indirect',
-            'JENIS_PEKERJAAN' => 'Jenis  Pekerjaan',
+            'DIRECT_INDIRECT' => 'Direct Indirect',
+            'JENIS_PEKERJAAN' => 'Jenis Pekerjaan',
             'SKILL' => 'Skill',
-            'SERIKAT_PEKERJA' => 'Serikat  Pekerja',
-            'KONTRAK_KE' => 'Kontrak  Ke',
-            'K1_START' => 'K1  Start',
-            'K1_END' => 'K1  End',
-            'K2_START' => 'K2  Start',
-            'K2_END' => 'K2  End',
-            'ACTIVE_STAT' => 'Active  Stat',
+            'SERIKAT_PEKERJA' => 'Serikat Pekerja',
+            'KONTRAK_KE' => 'Kontrak Ke',
+            'K1_START' => 'K1 Start',
+            'K1_END' => 'K1 End',
+            'K2_START' => 'K2 Start',
+            'K2_END' => 'K2 End',
+            'ACTIVE_STAT' => 'Active Stat',
             'PASSWORD' => 'Password',
+            'TT_START' => 'Tt Start',
+            'TT_END' => 'Tt End',
+            'RESIGN' => 'Resign',
+            'AKTIF' => 'Aktif',
+            'NIK_SUN_FISH' => 'Nik Sun Fish',
         ];
     }
 
