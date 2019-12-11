@@ -53,7 +53,7 @@ date_default_timezone_set('Asia/Jakarta');
 			->where(['level_akses' => '1a'])->andWhere(['<>', 'hak_akses', 'MIS'])
 			->orderBy('hak_akses')
 			->all(), 'hak_akses', 'hak_akses'), [
-                'prompt' => '- Select Line -',
+                'prompt' => '- All Line -',
             ]
         ); ?>
     </div>

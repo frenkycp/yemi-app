@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\web\View;
 
 $this->title = [
-    'page_title' => 'Data Flow & Site Timeline <span class="japanesse light-green"></span>',
+    'page_title' => 'Data Flow & Site Timeline MITA (<b><u>M</u></b>anufacturing <b><u>I</u></b>nformation <b><u>T</u></b>echnology <b><u>A</u></b>rchitecture) <span class="japanesse light-green"></span>',
     'tab_title' => 'Data Flow & Site Timeline',
     'breadcrumbs_title' => 'Data Flow & Site Timeline'
 ];
