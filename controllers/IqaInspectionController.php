@@ -199,8 +199,8 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
         ]);
         $model->addRule(['from_date', 'to_date'], 'required');
 
-        $model->from_date = date('Y-m-d', strtotime(date('Y-m-d') . '-1 month'));
-        $model->to_date = date('Y-m-d', strtotime(date('Y-m-d')));
+        $model->from_date = date('Y-m-d', strtotime(date('Y-m-26') . '-1 month'));
+        $model->to_date = date('Y-m-d', strtotime(date('Y-m-25')));
 
         if ($model->load($_GET)) {}
 
@@ -222,8 +222,11 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
     	->orderBy('POST_DATE')
     	->all();
 
+        $tmp_total_ok = $tmp_total_ng = 0;
     	foreach ($in_out_data as $key => $value) {
     		$post_date = (strtotime($value->POST_DATE . " +7 hours") * 1000);
+            $tmp_total_ok += (int)$value->TOTAL_OK;
+            $tmp_total_ng += (int)$value->TOTAL_NG;
 			$tmp_data_open[] = [
 				'x' => $post_date,
 				'y' => $value->TOTAL_OPEN == 0 ? null : (int)$value->TOTAL_OPEN,
@@ -240,6 +243,11 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 				'url' => Url::to(['data', 'POST_DATE' => date('Y-m-d', strtotime($value->POST_DATE)), 'Judgement' => 'NG']),
 			];
     	}
+
+        $ng_rate = 0;
+        if ($tmp_total_ok > 0) {
+            $ng_rate = round(($tmp_total_ng / $tmp_total_ok) * 100, 2);
+        }
 
     	$data = [
     		[
@@ -272,10 +280,16 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
         ->asArray()
         ->all();
 
+        $target_ng_rate = 0.25;
+
         return $this->render('daily-inspection', [
         	'data' => $data,
         	'model' => $model,
             'ng_data_arr' => $ng_data_arr,
+            'tmp_total_ng' => $tmp_total_ng,
+            'tmp_total_ok' => $tmp_total_ok,
+            'ng_rate' => $ng_rate,
+            'target_ng_rate' => $target_ng_rate,
         ]);
 	}
 }

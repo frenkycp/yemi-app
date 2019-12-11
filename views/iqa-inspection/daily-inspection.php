@@ -57,29 +57,65 @@ echo '</pre>';*/
 ]); ?>
 
 <div class="row">
-    <div class="col-md-4">
-        <?php echo '<label class="control-label">Select date range</label>';
-        echo DatePicker::widget([
-            'model' => $model,
-            'attribute' => 'from_date',
-            'attribute2' => 'to_date',
-            'options' => ['placeholder' => 'Start date'],
-            'options2' => ['placeholder' => 'End date'],
-            'type' => DatePicker::TYPE_RANGE,
-            'form' => $form,
-            'pluginOptions' => [
-                'format' => 'yyyy-mm-dd',
-                'autoclose' => true,
-            ]
-        ]);?>
+    <div class="col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-body" style="min-height: 117px;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <?php echo '<label class="control-label">Select date range</label>';
+                        echo DatePicker::widget([
+                            'model' => $model,
+                            'attribute' => 'from_date',
+                            'attribute2' => 'to_date',
+                            'options' => ['placeholder' => 'Start date'],
+                            'options2' => ['placeholder' => 'End date'],
+                            'type' => DatePicker::TYPE_RANGE,
+                            'form' => $form,
+                            'pluginOptions' => [
+                                'format' => 'yyyy-mm-dd',
+                                'autoclose' => true,
+                            ]
+                        ]);?>
+                    </div>
+                    <div class="form-group">
+                        <br/>
+                        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
-    <div class="form-group">
-        <br/>
-        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="box box-warning box-solid">
+                    <div class="box-header with-border text-center">
+                        <h3 class="box-title">NG Rate</h3>
+                    </div>
+                    <div class="box-body no-padding">
+                        <table class="table table-responsive table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">TARGET (%)</th>
+                                    <th class="text-center">ACTUAL (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-center"><?= $target_ng_rate ?></td>
+                                    <td class="text-center">
+                                        <span class="<?= $ng_rate > $target_ng_rate ? 'badge bg-red' : 'badge bg-green'; ?>" style="font-weight: normal;"><?= $ng_rate; ?></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
 </div>
-<br/>
 
 <?php ActiveForm::end(); ?>
 
