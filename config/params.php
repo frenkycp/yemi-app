@@ -130,6 +130,7 @@ return [
     ],
     'purple_color' => '#61258e',
     'green_color_j' => '#5aff00',
+    'ww_wip_model' => ['HS', 'L85', 'P40', 'XXX'],
 ];
 
 function getYearArray()

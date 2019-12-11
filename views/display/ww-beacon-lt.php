@@ -60,10 +60,12 @@ echo '</pre>';*/
 
 <div class="row">
     <div class="col-md-2">
-        <?= $form->field($model, 'model_group')->dropDownList(ArrayHelper::map(\app\models\WipModelGroup::find()
-            ->select(['category_id', 'category_desc'])
-            ->where(['<>', 'category_desc', 'L-851'])
-            ->groupBy('category_id, category_desc')->orderBy('category_desc')->all(), 'category_id', 'category_desc'), [
+        <?= $form->field($model, 'line')->dropDownList(ArrayHelper::map(\app\models\SernoMaster::find()
+            ->select(['line'])
+            ->where([
+                'line' => $line_arr
+            ])
+            ->groupBy('line')->orderBy('line')->all(), 'line', 'line'), [
                 'prompt' => '- All Model -',
                 'onchange'=>'this.form.submit()'
             ]
@@ -129,19 +131,6 @@ echo '</pre>';*/
                     'valueSuffix' => ' days',
                 ],
                 'plotOptions' => [
-                    'series' => [
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression("
-                                    function(e){
-                                        e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                    }
-                                "),
-                            ]
-                        ]
-                    ],
                     'bar' => [
                         'dataLabels' => [
                             'enabled' => true,

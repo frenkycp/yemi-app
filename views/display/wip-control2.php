@@ -159,9 +159,10 @@ $this->registerJs($script, View::POS_HEAD );
 <table class="table table-responsive table-bordered">
     <thead>
         <tr>
-            <th width="33%" class="text-center">L - Series</th>
-            <th width="33%" class="text-center">HS - Series</th>
-            <th width="33%" class="text-center">P40 - Series</th>
+            <th width="25%" class="text-center">L - Series</th>
+            <th width="25%" class="text-center">HS - Series</th>
+            <th width="25%" class="text-center">P40 - Series</th>
+            <th width="25%" class="text-center">XXX - Series</th>
         </tr>
     </thead>
     <tbody>
@@ -169,6 +170,7 @@ $this->registerJs($script, View::POS_HEAD );
             <td class="text-center actual"><?= number_format($qty_series['l_series']) ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual"><?= number_format($qty_series['hs_series']) ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual"><?= number_format($qty_series['p40_series']) ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual"><?= number_format($qty_series['xxx_series']) ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
     </tbody>
 </table>

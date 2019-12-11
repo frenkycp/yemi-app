@@ -88,12 +88,12 @@ use app\models\SprOut;
 use app\models\OnhandNice;
 use app\models\KanbanPchLog;
 use app\models\GoSaTbl;
-use app\models\WipModelGroup;
 use app\models\DrossInput;
 use app\models\DrossOutput;
 use app\models\DrossStock;
 use app\models\CrusherInput;
 use app\models\CrusherTbl;
+use app\models\SernoMaster;
 
 class DisplayController extends Controller
 {
@@ -857,18 +857,19 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $now = date('Y-m-d H:i:s');
+        $line_arr = \Yii::$app->params['ww_wip_model'];
 
         $model = new \yii\base\DynamicModel([
-            'model_group'
+            'line'
         ]);
-        $model->addRule(['model_group'], 'safe');
+        $model->addRule(['line'], 'safe');
 
         if ($model->load($_GET)) {
             # code...
         }
 
-        if ($model->model_group != '' && $model->model_group != null) {
-            $tmp_model_wip = WipModelGroup::find()->select('gmc')->where(['category_id' => $model->model_group])->all();
+        if ($model->line != '' && $model->line != null) {
+            $tmp_model_wip = SernoMaster::find()->select('gmc')->where(['line' => $model->line])->all();
             $gmc_arr = [];
             foreach ($tmp_model_wip as $key => $value) {
                 $gmc_arr[] = $value->gmc;
@@ -909,12 +910,13 @@ class DisplayController extends Controller
 
         return $this->render('ww-beacon-lt', [
             'data' => $data,
+            'line_arr' => $line_arr,
             'model' => $model,
             'categories' => $categories
         ]);
     }
 
-    public function getWipModelGroupId($model_group, $gmc)
+    /*public function getWipModelGroupId($model_group, $gmc)
     {
         $tmp_model_id = 'OTHERS';
         foreach ($model_group as $key => $value) {
@@ -925,9 +927,9 @@ class DisplayController extends Controller
 
         return $tmp_model_id;
         # code...
-    }
+    }*/
 
-    public function actionWipControl3($value='')
+    public function actionWipControl3()
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
@@ -937,9 +939,7 @@ class DisplayController extends Controller
         ->all();
         $now = date('Y-m-d H:i:s');
 
-        $wip_model_group = WipModelGroup::find()->all();
-
-        $l_series_qty1 = $l_series_qty2 = $hs_series_qty1 = $hs_series_qty2 = $p40_series_qty1 = $p40_series_qty2 = $others_qty1 = $others_qty2 = 0;
+        $l_series_qty1 = $l_series_qty2 = $hs_series_qty1 = $hs_series_qty2 = $p40_series_qty1 = $p40_series_qty2 = $others_qty1 = $others_qty2 = $xxx_series_qty1 = $xxx_series_qty2 = 0;
         $tmp_time_arr = [];
         foreach ($tmp_beacon as $key => $value) {
             $waktu1 = strtotime($value->start_date);
@@ -953,24 +953,28 @@ class DisplayController extends Controller
                 'second' => $waktu_balance_s,
                 'limit' => $limit_s
             ];
-            $tmp_model_group = $this->getWipModelGroupId($wip_model_group, $value->parent);
+            $tmp_model_group = SernoMaster::find()->where(['gmc' => $value->parent])->one();
             if ($waktu_balance_s <= $limit_s) {
-                if ($tmp_model_group == '05') {
+                if ($tmp_model_group->line == 'HS') {
                     $hs_series_qty1 += $value->lot_qty;
-                } elseif ($tmp_model_group == '04') {
+                } elseif ($tmp_model_group->line == 'L85') {
                     $l_series_qty1 += $value->lot_qty;
-                } elseif ($tmp_model_group == '03') {
+                } elseif ($tmp_model_group->line == 'P-40') {
                     $p40_series_qty1 += $value->lot_qty;
+                } elseif ($tmp_model_group->line == 'XXX') {
+                    $xxx_series_qty1 += $value->lot_qty;
                 } else {
                     $others_qty1 += $value->lot_qty;
                 }
             } else {
-                if ($tmp_model_group == '05') {
+                if ($tmp_model_group->line == 'HS') {
                     $hs_series_qty2 += $value->lot_qty;
-                } elseif ($tmp_model_group == '04') {
+                } elseif ($tmp_model_group->line == 'L85') {
                     $l_series_qty2 += $value->lot_qty;
-                } elseif ($tmp_model_group == '03') {
+                } elseif ($tmp_model_group->line == 'P40') {
                     $p40_series_qty2 += $value->lot_qty;
+                } elseif ($tmp_model_group->line == 'XXX') {
+                    $xxx_series_qty2 += $value->lot_qty;
                 } else {
                     $others_qty2 += $value->lot_qty;
                 }
@@ -986,6 +990,8 @@ class DisplayController extends Controller
             'p40_2' => $p40_series_qty2,
             'others1' => $others_qty1,
             'others2' => $others_qty2,
+            'xxx_1' => $xxx_series_qty1,
+            'xxx_2' => $xxx_series_qty2,
         ];
 
         return $this->render('wip-control3', [
@@ -1012,18 +1018,18 @@ class DisplayController extends Controller
             'others' => 0
         ];
 
-        $wip_model_group = WipModelGroup::find()->all();
-
         foreach ($tmp_qty as $key => $value) {
             $tmp_qty_arr[$value->kelompok] += $value->lot_qty;
             $total_wip += $value->lot_qty;
-            $tmp_model_group = $this->getWipModelGroupId($wip_model_group, $value->parent);
-            if ($tmp_model_group == '05') {
+            $tmp_model_group = SernoMaster::find()->where(['gmc' => $value->parent])->one();
+            if ($tmp_model_group->line == 'HS') {
                 $qty_series['hs_series'] += $value->lot_qty;
-            } elseif ($tmp_model_group == '04') {
+            } elseif ($tmp_model_group->line == 'L85') {
                 $qty_series['l_series'] += $value->lot_qty;
-            } elseif ($tmp_model_group == '03') {
+            } elseif ($tmp_model_group->line == 'P40') {
                 $qty_series['p40_series'] += $value->lot_qty;
+            } elseif ($tmp_model_group->line == 'XXX') {
+                $qty_series['xxx_series'] += $value->lot_qty;
             } else {
                 $qty_series['others'] += $value->lot_qty;
             }
@@ -1705,7 +1711,7 @@ class DisplayController extends Controller
         }
 
         if ($model->model_group != '' && $model->model_group != null) {
-            $tmp_model_wip = WipModelGroup::find()->select('gmc')->where(['category_id' => $model->model_group])->all();
+            $tmp_model_wip = SernoMaster::find()->select('gmc')->where(['line' => $model->model_group])->all();
             $gmc_arr = [];
             foreach ($tmp_model_wip as $key => $value) {
                 $gmc_arr[] = $value->gmc;

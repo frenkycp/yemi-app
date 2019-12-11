@@ -89,19 +89,24 @@ $this->registerJs($script, View::POS_HEAD );
     </thead>
     <tbody>
         <tr>
-            <td>L - Series</td>
+            <td style="">L - Series</td>
             <td class="text-center actual"><?= number_format($data['l1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $data['l2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['l2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
         <tr>
-            <td>HS - Series</td>
+            <td style="">HS - Series</td>
             <td class="text-center actual"><?= number_format($data['hs1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $data['hs2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['hs2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
         <tr>
-            <td>P40 - Series</td>
+            <td style="">P40 - Series</td>
             <td class="text-center actual"><?= number_format($data['p40_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $data['p40_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['p40_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+        </tr>
+        <tr>
+            <td style="">XXX - Series</td>
+            <td class="text-center actual"><?= number_format($data['xxx_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+            <td class="text-center actual<?= $data['xxx_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['xxx_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
     </tbody>
 </table>
