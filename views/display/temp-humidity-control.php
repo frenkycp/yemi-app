@@ -73,9 +73,18 @@ echo '</pre>';*/
         if ($category == 1) {
             //$params_val = $value->temparature . '&deg;';
             $params_val = $value->temparature;
-            if ($params_val < $value->temp_min || $params_val > $value->temp_max) {
-                $temp_class = ' bg-red-active';
+            if ($value->map_no == 17 || $value->map_no == 18) {
+                if ($params_val < $value->temp_min){
+                    $temp_class = ' bg-red-active';
+                }
+            } else {
+                if ($params_val > $value->temp_max) {
+                    $temp_class = ' bg-red-active';
+                }
             }
+            /*if ($params_val < $value->temp_min || $params_val > $value->temp_max) {
+                $temp_class = ' bg-red-active';
+            }*/
         } elseif ($category == 2) {
             //$params_val = $value->humidity . '<small>%</small>';
             $params_val = $value->humidity;
