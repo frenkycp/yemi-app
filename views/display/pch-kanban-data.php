@@ -86,8 +86,10 @@ $script = "
     },600);
 
     $(document).ready(function(){
-        var arr_modal = ['direct-balance-1', 'direct-balance-2', 'direct-balance-3', 'direct-balance-4', 'indirect-balance-1', 'indirect-balance-2', 'indirect-balance-3', 'indirect-balance-4'];
+        var arr_modal = ['direct-balance-1', 'direct-balance-2', 'direct-balance-3', 'direct-balance-4', 'indirect-balance-1', 'indirect-balance-2', 'indirect-balance-3', 'indirect-balance-4', 'direct-acc-target', 'indirect-acc-target'];
         $.each(arr_modal, function(index, value){
+            $('#'+value).css('text-decoration', 'underline');
+            $('#'+value).attr('title', 'Click to view detail ...');
             $('#'+value).click(function(){
                 //alert('Balance 1');
                 $('#modal-' + value).modal('show');
@@ -160,7 +162,7 @@ echo '</pre>';*/
             <td class="text-center"><?= $data['direct']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['received']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'direct-balance-1']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['pch']['verification']['target']); ?></td>
             <td class="text-center"><?= $data['direct']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['pch']['verification']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'direct-balance-2']); ?></td>
-            <td class="text-center"><?= number_format($data['direct']['acc']['verification']['target']); ?></td>
+            <td class="text-center"><?= $data['direct']['acc']['verification']['target'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['verification']['target']), '#', ['style' => 'color: white; font-weight: bold;', 'id' => 'direct-acc-target']); ?></td>
             <td class="text-center"><?= $data['direct']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['verification']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'direct-balance-3']); ?></td>
             <td class="text-center"><?= number_format($data['direct']['acc']['paid']['target']); ?></td>
             <td class="text-center"><?= $data['direct']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['direct']['acc']['paid']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'direct-balance-4']); ?></td>
@@ -172,7 +174,7 @@ echo '</pre>';*/
             <td class="text-center"><?= $data['indirect']['pch']['received']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['received']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'indirect-balance-1']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['pch']['verification']['target']); ?></td>
             <td class="text-center"><?= $data['indirect']['pch']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['pch']['verification']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'indirect-balance-2']); ?></td>
-            <td class="text-center"><?= number_format($data['indirect']['acc']['verification']['target']); ?></td>
+            <td class="text-center"><?= $data['indirect']['acc']['verification']['target'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['verification']['target']), '#', ['style' => 'color: white; font-weight: bold;', 'id' => 'indirect-acc-target']); ?></td>
             <td class="text-center"><?= $data['indirect']['acc']['verification']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['verification']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'indirect-balance-3']); ?></td>
             <td class="text-center"><?= number_format($data['indirect']['acc']['paid']['target']); ?></td>
             <td class="text-center"><?= $data['indirect']['acc']['paid']['balance'] == 0 ? '0' : Html::a(number_format($data['indirect']['acc']['paid']['balance']), '#', ['style' => 'color: red; font-weight: bold;', 'id' => 'indirect-balance-4']); ?></td>

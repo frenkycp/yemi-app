@@ -659,6 +659,9 @@ class DisplayController extends Controller
                     if ($value['finance_transfer_minus'] == 1) {
                         $modal_data['direct']['balance-4'][] = $value;
                     }
+                    if ($value['finance_rcv_done'] == 1) {
+                        $modal_data['direct']['acc-target'][] = $value;
+                    }
                     
                 } else {
                     $data['indirect']['kanban_doc']++;
@@ -681,6 +684,9 @@ class DisplayController extends Controller
                     }
                     if ($value['finance_transfer_minus'] == 1) {
                         $modal_data['indirect']['balance-4'][] = $value;
+                    }
+                    if ($value['finance_rcv_done'] == 1) {
+                        $modal_data['indirect']['acc-target'][] = $value;
                     }
                 }
             }
