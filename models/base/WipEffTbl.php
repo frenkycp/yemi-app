@@ -174,6 +174,7 @@ use Yii;
  * @property integer $carriage_total
  * @property integer $carriage_finish
  * @property integer $carriage_open
+ * @property double $ng_qty
  * @property string $aliasModel
  */
 abstract class WipEffTbl extends \yii\db\ActiveRecord
@@ -204,7 +205,7 @@ abstract class WipEffTbl extends \yii\db\ActiveRecord
     {
         return [
             [['lot_id'], 'required'],
-            [['act_qty_01', 'std_time_01', 'act_qty_02', 'std_time_02', 'act_qty_03', 'std_time_03', 'act_qty_04', 'std_time_04', 'act_qty_05', 'std_time_05', 'act_qty_06', 'std_time_06', 'act_qty_07', 'std_time_07', 'act_qty_08', 'std_time_08', 'act_qty_09', 'std_time_09', 'act_qty_10', 'std_time_10', 'qty_all', 'std_all', 'lt_gross', 'lt_loss', 'lt_nett', 'lt_std', 'efisiensi_gross', 'efisiensi', 'long01', 'long02', 'long03', 'long04', 'long05', 'long06', 'long07', 'long08', 'long09', 'long10', 'long11', 'long12', 'long13', 'long14', 'long15', 'long16', 'long17', 'long18', 'long19', 'long20', 'long21', 'long_total', 'break_time', 'nozzle_maintenance', 'change_schedule', 'air_pressure_problem', 'power_failure', 'part_shortage', 'set_up_1st_time_running_tp', 'part_arrangement_dcn', 'meeting', 'dandori', 'porgram_error', 'm_c_problem', 'feeder_problem', 'quality_problem', 'pcb_transfer_problem', 'profile_problem', 'pick_up_error', 'other', 'machine_warming_up', 'engineering_sample', 'service_parts', 'plan_qty', 'plan_balance', 'slip_count'], 'number'],
+            [['act_qty_01', 'std_time_01', 'act_qty_02', 'std_time_02', 'act_qty_03', 'std_time_03', 'act_qty_04', 'std_time_04', 'act_qty_05', 'std_time_05', 'act_qty_06', 'std_time_06', 'act_qty_07', 'std_time_07', 'act_qty_08', 'std_time_08', 'act_qty_09', 'std_time_09', 'act_qty_10', 'std_time_10', 'qty_all', 'std_all', 'lt_gross', 'lt_loss', 'lt_nett', 'lt_std', 'efisiensi_gross', 'efisiensi', 'long01', 'long02', 'long03', 'long04', 'long05', 'long06', 'long07', 'long08', 'long09', 'long10', 'long11', 'long12', 'long13', 'long14', 'long15', 'long16', 'long17', 'long18', 'long19', 'long20', 'long21', 'long_total', 'break_time', 'nozzle_maintenance', 'change_schedule', 'air_pressure_problem', 'power_failure', 'part_shortage', 'set_up_1st_time_running_tp', 'part_arrangement_dcn', 'meeting', 'dandori', 'porgram_error', 'm_c_problem', 'feeder_problem', 'quality_problem', 'pcb_transfer_problem', 'profile_problem', 'pick_up_error', 'other', 'machine_warming_up', 'engineering_sample', 'service_parts', 'plan_qty', 'plan_balance', 'slip_count', 'ng_qty'], 'number'],
             [['start_date', 'end_date', 'post_date', 'LAST_UPDATE', 'post_date_original', 'plan_date', 'ext_dandori_start', 'ext_dandori_end', 'ext_dandori_handover', 'ext_dandori_last_update'], 'safe'],
             [['ext_dandori_status', 'ext_dandori_lt', 'carriage_total', 'carriage_finish', 'carriage_open'], 'integer'],
             [['lot_id', 'child_analyst_desc', 'KELOMPOK', 'child_desc_01', 'child_desc_02', 'child_desc_03', 'child_desc_04', 'child_desc_05', 'child_desc_06', 'child_desc_07', 'child_desc_08', 'child_desc_09', 'child_desc_10', 'child_desc_all', 'USER_DESC', 'mesin_id', 'jenis_mesin', 'model_group', 'ext_dandori_name', 'ext_dandori_end_name', 'ext_dandori_handover_name'], 'string', 'max' => 50],
@@ -392,6 +393,7 @@ abstract class WipEffTbl extends \yii\db\ActiveRecord
             'carriage_total' => 'Carriage Total',
             'carriage_finish' => 'Carriage Finish',
             'carriage_open' => 'Carriage Open',
+            'ng_qty' => 'Ng Qty',
         ];
     }
 

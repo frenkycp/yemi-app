@@ -351,9 +351,11 @@ class MachineRunningController extends Controller
 		$this->layout = 'clean';
 		date_default_timezone_set('Asia/Jakarta');
     	$model = new \yii\base\DynamicModel([
-	        'next_process'
+	        'next_process', 'ng_qty'
 	    ]);
-	    $model->addRule('next_process', 'required');
+	    $model->addRule(['ng_qty'], 'number')
+	    ->addRule(['next_process', 'ng_qty'], 'required');
+	    $model->ng_qty = 0;
 
 	    $current_data = ServerMachineIotCurrent::find()
     	->where([
@@ -421,6 +423,12 @@ class MachineRunningController extends Controller
 	    		if ($next_process == 'END') {
 	    			$tmp_beacon_tbl->next_process = null;
 	    			$lot_data->end_date = date('Y-m-d H:i:s');
+	    			$total_ng = MachineIotOutput::find()->select([
+	    				'ng_qty' => 'SUM(ng_qty)'
+	    			])
+	    			->where(['lot_number' => $lot_id])
+	    			->one();
+	    			$lot_data->ng_qty = $total_ng->ng_qty;
 	    			
 	    			$lot_data->plan_stats = 'C';
 	    			$slip_id_arr = [

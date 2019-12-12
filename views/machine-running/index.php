@@ -70,15 +70,6 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-if (isset($current_data['lot_id'])) {
-    $this->registerJs("$(function() {
-       $('#btn-complete').click(function(e) {
-         e.preventDefault();
-         //$('#common-modal').modal('show');
-       });
-    });");
-}
-
 
 /*echo '<pre>';
 print_r($current_data);
@@ -142,7 +133,7 @@ echo $data['name'];*/
                             $btn_end_class = 'btn btn-danger btn-block btn-lg disabled';
                             echo '<tr><td colspan=7 style="text-align: left;">Machine is idling ...</td></tr>';
                         } else {
-                            $btn_end_class = 'showModalButton btn btn-danger btn-block btn-lg';
+                            $btn_end_class = 'btn btn-danger btn-block btn-lg';
                             echo '<tr class="">
                                 <td class="text-center" style="vertical-align: middle;">' . $output_data['lot_number'] . '</td>
                                 <td style="text-align: center; vertical-align: middle;">' . $output_data['model_group'] . '</td>

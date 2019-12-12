@@ -199,8 +199,14 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
         ]);
         $model->addRule(['from_date', 'to_date'], 'required');
 
-        $model->from_date = date('Y-m-d', strtotime(date('Y-m-26') . '-1 month'));
-        $model->to_date = date('Y-m-d', strtotime(date('Y-m-25')));
+        if (date('d') < 26) {
+            $model->from_date = date('Y-m-d', strtotime(date('Y-m-26') . '-1 month'));
+            $model->to_date = date('Y-m-d', strtotime(date('Y-m-25')));
+        } else {
+            $model->from_date = date('Y-m-d', strtotime(date('Y-m-26')));
+            $model->to_date = date('Y-m-d', strtotime(date('Y-m-25') . '+1 month'));
+        }
+        
 
         if ($model->load($_GET)) {}
 
