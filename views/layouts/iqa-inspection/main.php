@@ -38,6 +38,18 @@ $this->registerCss(".japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-s
      
     ?></title>
     <?php $this->head() ?>
+    <style type="text/css">
+        .content-header>.breadcrumb>li>a, .breadcrumb > .active {
+            color: silver;
+        }
+        .japanesse {
+            font-family: 'MS PGothic', Osaka, Arial, sans-serif;
+            font-weight: bold;
+        }
+        .light-green {
+            color: <?= \Yii::$app->params['green_color_j']; ?> !important;
+        }
+    </style>
 </head>
 <body class="hold-transition skin-blue layout-top-nav">
 <?php $this->beginBody() ?>

@@ -9,16 +9,12 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => null,
-    'tab_title' => 'IQA Daily Inspection',
-    'breadcrumbs_title' => 'IQA Daily Inspection'
+    'page_title' => 'IQC Monitoring List <span class="japanesse light-green">材料受け入れ管理表</span>',
+    'tab_title' => 'IQC Monitoring List',
+    'breadcrumbs_title' => 'IQC Monitoring List'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
-
-$this->registerCss("
-    .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; color: #82b964;}
-");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -57,9 +53,10 @@ echo '</pre>';*/
 ]); ?>
 
 <div style="float: right;">
+    <span>Lot Out Target Ratio : <b><?= $target_ng_rate; ?>%</b></span>
     <div class="box box-warning box-solid">
         <div class="box-body no-padding">
-            <span class="" style="font-size: 7em; font-family: Arial, Helvetica, sans-serif; font-weight: bold;">IQC Ratio : <span class="<?= $ng_rate > $target_ng_rate ? 'text-red' : ''; ?>"><?= $ng_rate; ?>%</span></span>
+            <span class="" style="font-size: 6em; font-family: Arial, Helvetica, sans-serif; font-weight: bold;">Lot Out Ratio : <span class=""><?= $ng_rate; ?>%</span></span>
         </div>
     </div>
 </div>
@@ -114,13 +111,8 @@ echo '</pre>';*/
                 ],
                 'xAxis' => [
                     'type' => 'datetime',
-                    //'categories' => $value['category'],
                 ],
                 'yAxis' => [
-                    /*'stackLabels' => [
-                        'enabled' => true
-                    ],*/
-                    //'min' => 0,
                     'title' => [
                         'text' => null
                     ],
@@ -133,21 +125,12 @@ echo '</pre>';*/
                 'tooltip' => [
                     'enabled' => true,
                     'xDateFormat' => '%A, %b %e %Y',
-                    //'valueSuffix' => ' min'
-                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                 ],
                 'plotOptions' => [
                     'column' => [
                         'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,
-                            //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
-                            //'color' => 'black',
-                            //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                            /*'style' => [
-                                'textOutline' => '0px',
-                                'fontWeight' => '0'
-                            ],*/
                         ],
                     ],
                     'series' => [
@@ -155,7 +138,6 @@ echo '</pre>';*/
                         'point' => [
                             'events' => [
                                 'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                //'click' => new JsExpression('function(){ window.open(this.options.url); }')
                             ]
                         ]
                     ]

@@ -188,7 +188,7 @@ echo $data['name'];*/
         <?php
         if (!$lot_data) {
             echo '<tr>
-                <td colspan=8 style="font-size: 20px;">There is no plan for this machine ...</td>
+                <td colspan=10 style="font-size: 20px;">There is no plan for this machine ...</td>
             </tr>';
         } else {
             foreach ($lot_data as $key => $value) {

@@ -4,7 +4,7 @@ use dmstr\widgets\Alert;
 ?>
 <div class="content-wrapper">
     <div class="container">
-        <section class="content-header">
+        <section class="content-header" style="background-color: <?= \Yii::$app->params['purple_color']; ?>; color: white; padding: 10px; margin: 0px 15px; border-radius: 0px 0px 15px 15px;">
             <?php if (isset($this->blocks['content-header'])) { ?>
                 <h1><?= $this->blocks['content-header'] ?></h1>
             <?php } else { ?>
