@@ -59,7 +59,7 @@ echo '</pre>';*/
 <div style="float: right;">
     <div class="box box-warning box-solid">
         <div class="box-body no-padding">
-            <span class="" style="font-size: 7em; font-family: Arial, Helvetica, sans-serif; font-weight: bold;">IQC Ratio : <span class="<?= $ng_rate > $target_ng_rate ? 'text-red' : ''; ?>"><?= $ng_rate; ?></span></span>
+            <span class="" style="font-size: 7em; font-family: Arial, Helvetica, sans-serif; font-weight: bold;">IQC Ratio : <span class="<?= $ng_rate > $target_ng_rate ? 'text-red' : ''; ?>"><?= $ng_rate; ?>%</span></span>
         </div>
     </div>
 </div>
