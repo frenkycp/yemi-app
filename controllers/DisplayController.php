@@ -94,12 +94,45 @@ use app\models\DrossStock;
 use app\models\CrusherInput;
 use app\models\CrusherTbl;
 use app\models\SernoMaster;
+use app\models\DataRepair;
 
 class DisplayController extends Controller
 {
-    public function actionMitaUrl($value='')
+    public function actionRepairKpi()
     {
-        return $this->render('mita-url');
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        //$today = date('Y-m-d');
+        $today = '2019-12-11';
+
+        $total_open = DataRepair::find()->where(['status' => 'OPEN'])->count();
+
+        $tmp_total = DataRepair::find()->select([
+            'out_date',
+            'total_return' => 'SUM(CASE WHEN status = \'Return\' THEN 1 ELSE 0 END)',
+            'total_scrap' => 'SUM(CASE WHEN status = \'Scrap\' THEN 1 ELSE 0 END)',
+            'total_ok' => 'SUM(CASE WHEN status = \'OK\' THEN 1 ELSE 0 END)',
+        ])
+        ->where([
+            'out_date' => $today
+        ])
+        ->groupBy('out_date')
+        ->one();
+
+        $data_open = DataRepair::find()
+        ->where([
+            'status' => 'OPEN'
+        ])
+        ->orderBy('in_date')
+        ->all();
+
+        return $this->render('repair-kpi', [
+            'total_open' => $total_open,
+            'total_return' => (int)$tmp_total->total_return,
+            'total_scrap' => (int)$tmp_total->total_scrap,
+            'total_ok' => (int)$tmp_total->total_ok,
+            'data_open' => $data_open
+        ]);
     }
 
     public function actionSensorLog()
@@ -2567,14 +2600,19 @@ class DisplayController extends Controller
 
         foreach ($data_dummy as $value) {
             $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
-            $tmp_data_temperature[] = [
-                'x' => $proddate,
-                'y' => (int)$value['temparature']
-            ];
-            $tmp_data_humidity[] = [
-                'x' => $proddate,
-                'y' => (int)$value['humidity']
-            ];
+            if ($value['temparature'] > 0) {
+                $tmp_data_temperature[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value['temparature']
+                ];
+            }
+            if ($value['humidity'] > 0) {
+                $tmp_data_humidity[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value['humidity']
+                ];
+            }
+            
         }
 
         $data = [
