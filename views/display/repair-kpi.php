@@ -85,7 +85,7 @@ $this->registerJs($script, View::POS_HEAD );
     <div class="col-md-3">
         <div class="small-box bg-red">
             <div class="inner text-center">
-                <span style="font-size: 10em;"><?= $total_open > 0 ? '<span style="color: #ff1c00;">- ' . number_format($total_open) . '</span>' : '0'; ?></span>
+                <span style="font-size: 10em;"><?= $total_open > 0 ? '<span style="color: #ff1c00;">-' . number_format($total_open) . '</span>' : '0'; ?></span>
             </div>
             <a class="small-box-footer" href="#" style="font-size: 2em;">OPEN</a>
         </div>
@@ -136,7 +136,7 @@ $this->registerJs($script, View::POS_HEAD );
             foreach ($data_open as $key => $value) {
                 ?>
                 <tr>
-                    <td class="text-center"><?= $value->in_date; ?></td>
+                    <td class="text-center"><?= date('d M\' Y', strtotime($value->in_date)); ?></td>
                     <td class="text-center"><?= $value->section; ?></td>
                     <td class="text-center"><?= $value->model; ?></td>
                     <td class="text-center"><?= $value->dest; ?></td>
