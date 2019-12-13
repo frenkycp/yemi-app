@@ -120,6 +120,7 @@ $this->registerJs($script, View::POS_HEAD );
 <table class="table table-responsive table-bordered table-striped" id="detail-tbl">
     <thead>
         <tr>
+            <th class="text-center">No.</th>
             <th class="text-center">In Date</th>
             <th class="text-center">Section</th>
             <th class="text-center">Model</th>
@@ -133,9 +134,11 @@ $this->registerJs($script, View::POS_HEAD );
     <tbody>
         <?php
         if (count($data_open) > 0) {
+            $no = 1;
             foreach ($data_open as $key => $value) {
                 ?>
                 <tr>
+                    <td class="text-center"><?= $no++; ?></td>
                     <td class="text-center"><?= date('d M\' Y', strtotime($value->in_date)); ?></td>
                     <td class="text-center"><?= $value->section; ?></td>
                     <td class="text-center"><?= $value->model; ?></td>

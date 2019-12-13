@@ -105,23 +105,28 @@ class DisplayController extends Controller
         $today = date('Y-m-d');
         //$today = '2019-12-11';
 
-        $total_open = DataRepair::find()->where(['status' => 'OPEN'])->count();
+        $total_open = DataRepair::find()->where([
+            'status' => 'OPEN',
+            'flag' => 1
+        ])->count();
 
         $tmp_total = DataRepair::find()->select([
             'out_date',
             'total_return' => 'SUM(CASE WHEN status = \'Return\' THEN 1 ELSE 0 END)',
-            'total_scrap' => 'SUM(CASE WHEN status = \'Scrap\' THEN 1 ELSE 0 END)',
+            'total_scrap' => 'SUM(CASE WHEN status = \'Scrap\' OR status = \'EX-PE\' THEN 1 ELSE 0 END)',
             'total_ok' => 'SUM(CASE WHEN status = \'OK\' THEN 1 ELSE 0 END)',
         ])
         ->where([
-            'out_date' => $today
+            'out_date' => $today,
+            'flag' => 1
         ])
         ->groupBy('out_date')
         ->one();
 
         $data_open = DataRepair::find()
         ->where([
-            'status' => 'OPEN'
+            'status' => 'OPEN',
+            'flag' => 1
         ])
         ->orderBy('in_date')
         ->all();
