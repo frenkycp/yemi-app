@@ -102,8 +102,8 @@ class DisplayController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        //$today = date('Y-m-d');
-        $today = '2019-12-11';
+        $today = date('Y-m-d');
+        //$today = '2019-12-11';
 
         $total_open = DataRepair::find()->where(['status' => 'OPEN'])->count();
 
