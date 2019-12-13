@@ -6,9 +6,9 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Repair Information <span class="japanesse light-green"></span>',
-    'tab_title' => 'Repair Information ',
-    'breadcrumbs_title' => 'Repair Information ',
+    'page_title' => 'PCB repair status <span class="japanesse light-green">基板修理の管理表</span>',
+    'tab_title' => 'PCB repair status ',
+    'breadcrumbs_title' => 'PCB repair status ',
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -66,7 +66,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 3000000); // milliseconds
+      setTimeout(\"refreshPage();\", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
