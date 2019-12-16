@@ -533,6 +533,9 @@ $this->registerCss("
                     <div class="list-group">
                         <a class="list-group-item" href="http://172.17.144.2/repair" target="_blank">PCB Repair Database <span class="japanesse-word"></span></a>
                     </div>
+                    <div class="list-group">
+                        <?= Html::a('PCB repair status <span class="japanesse-word">基板修理の管理表</span>', ['/display/repair-kpi'], ['class' => 'list-group-item']); ?>
+                    </div>
                 </div>
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Display Monitor<br/><span class="japanesse-word"></span></div>

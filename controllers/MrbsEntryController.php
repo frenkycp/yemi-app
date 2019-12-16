@@ -203,8 +203,8 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 		    		$new_member->room_id = $room_tbl->room_id;
 		    		$new_member->room_desc = $room_tbl->room_desc;
 		    		$new_member->room_event = $room_tbl->room_event;
-		    		$new_member->start_time = date('Y-m-d H:i:s', $room_tbl->start_time);
-		    		$new_member->end_time = date('Y-m-d H:i:s', $room_tbl->end_time);
+		    		$new_member->start_time = $room_tbl->start_time;
+		    		$new_member->end_time = $room_tbl->end_time;
 		    		$new_member->NIK = $karyawan->NIK_SUN_FISH;
 		    		$new_member->NAMA_KARYAWAN = $karyawan->NAMA_KARYAWAN;
 		    		$new_member->user_id = $user_id;
