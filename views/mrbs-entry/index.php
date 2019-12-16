@@ -40,9 +40,9 @@ $gridColumns = [
                 ];
                 $url = ['start-meeting', 'id' => $model->id];
 
-                if ($room_tbl->room_status != null && $room_tbl->room_status == 'NOT AVAILABLE' && date('Y-m-d', strtotime($room_tbl->start_time)) == date('Y-m-d')) {
+                if ($room_tbl->room_status != null && ($room_tbl->room_status == 'NOT AVAILABLE' && date('Y-m-d', $room_tbl->start_time) == date('Y-m-d'))) {
                     $options[] = ['disabled' => true];
-                    return Html::a('<span class="glyphicon glyphicon-log-in text-muted" style="color: #c3c1c1; cursor: not-allowed;"></span>', null);
+                    return Html::a('<span class="glyphicon glyphicon-log-in text-muted" style="color: #c3c1c1;"></span>', null);
                 }
 
                 $room_event_tbl = app\models\RoomEventTbl::find()

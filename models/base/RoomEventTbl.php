@@ -19,7 +19,6 @@ use Yii;
  * @property integer $member_category
  * @property string $company
  * @property string $NIK
- * @property string $NIK_SUN_FISH
  * @property string $NAMA_KARYAWAN
  * @property string $CC_ID
  * @property string $DEPARTEMEN
@@ -62,7 +61,7 @@ abstract class RoomEventTbl extends \yii\db\ActiveRecord
             [['room_id', 'CC_ID'], 'string', 'max' => 10],
             [['room_desc', 'company', 'NAMA_KARYAWAN', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'user_id'], 'string', 'max' => 50],
             [['room_event'], 'string', 'max' => 100],
-            [['NIK', 'NIK_SUN_FISH'], 'string', 'max' => 20],
+            [['NIK'], 'string', 'max' => 20],
             [['user_desc'], 'string', 'max' => 150]
         ];
     }
@@ -83,7 +82,6 @@ abstract class RoomEventTbl extends \yii\db\ActiveRecord
             'member_category' => 'Member Category',
             'company' => 'Company',
             'NIK' => 'Nik',
-            'NIK_SUN_FISH' => 'Nik Sun Fish',
             'NAMA_KARYAWAN' => 'Nama Karyawan',
             'CC_ID' => 'Cc ID',
             'DEPARTEMEN' => 'Departemen',
