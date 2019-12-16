@@ -71,11 +71,11 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
         if($model->load(\Yii::$app->request->post())){
             $karyawan = Karyawan::find()
             ->where([
-                'NIK' => $model->username,
+                'NIK_SUN_FISH' => $model->username,
                 'PASSWORD' => $model->password,
             ])
             ->one();
-            if ($karyawan->NIK !== null) {
+            if ($karyawan->NIK_SUN_FISH !== null) {
                 $session['mrbs_user'] = $model->username;
                 $session['mrbs_name'] = $karyawan->NAMA_KARYAWAN;
                 $room_tbl = RoomTbl::find()
@@ -178,21 +178,22 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 		])->one();
 
     	if($model->load(\Yii::$app->request->post())){
+    		$tmp_nik = strtoupper($model->nik);
     		$room_event_tbl = RoomEventTbl::find()->where([
-    			'nik' => $model->nik,
+    			'nik' => $tmp_nik,
     			'room_id' => $room_id,
     			'event_id' => $event_id
     		])->one();
 
     		if ($room_event_tbl->seq != null) {
-    			\Yii::$app->session->setFlash("warning", 'NIK : ' . $model->nik . ' is already a member...');
+    			\Yii::$app->session->setFlash("warning", 'NIK : ' . $tmp_nik . ' is already a member...');
     		} else {
     			$karyawan = Karyawan::find()
-    			->where(['NIK' => $model->nik])
+    			->where(['NIK_SUN_FISH' => $tmp_nik])
     			->one();
 
-    			if ($karyawan->NIK == null) {
-    				\Yii::$app->session->setFlash("warning", 'NIK : ' . $model->nik . ' is not found...');
+    			if ($karyawan->NIK_SUN_FISH == null) {
+    				\Yii::$app->session->setFlash("warning", 'NIK : ' . $tmp_nik . ' is not found...');
     			} else {
     				$user_id = $session['mrbs_user'];
     				$user_desc = $session['mrbs_name'];
@@ -204,14 +205,14 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 		    		$new_member->room_event = $room_tbl->room_event;
 		    		$new_member->start_time = date('Y-m-d H:i:s', $room_tbl->start_time);
 		    		$new_member->end_time = date('Y-m-d H:i:s', $room_tbl->end_time);
-		    		$new_member->NIK = $karyawan->NIK;
+		    		$new_member->NIK = $karyawan->NIK_SUN_FISH;
 		    		$new_member->NAMA_KARYAWAN = $karyawan->NAMA_KARYAWAN;
 		    		$new_member->user_id = $user_id;
 		    		$new_member->user_desc = $user_desc;
 		    		$new_member->last_update = date('Y-m-d H:i:s');
 
 		    		if ($new_member->save()) {
-		    			\Yii::$app->session->setFlash("success", 'NIK : ' . $model->nik . ' has been added...');
+		    			\Yii::$app->session->setFlash("success", 'NIK : ' . $tmp_nik . ' has been added...');
 		    		} else {
 		    			\Yii::$app->session->setFlash("danger", 'Failed : ' . json_encode($model->errors()));
 		    		}
