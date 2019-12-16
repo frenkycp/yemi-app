@@ -55,8 +55,8 @@ $this->registerCss("
     .target, .actual {font-size: 4em !important; font-weight: bold !important;}
     .description {font-size: 2.2em; padding-left: 10px;}
     .text-red{color: #ff1c00 !important;}
-    .small-box {background-color: #dd4b3900 !important; border: 1px solid white; font-family: Impact, Charcoal, sans-serif !important;}
-    .small-box>.inner {padding: 0px;}
+    .small-box {background-color: #dd4b3900 !important; border: 1px solid white;}
+    .small-box>.inner {padding: 0px; font-family: Impact, Charcoal, sans-serif !important;}
 ");
 
 
@@ -87,7 +87,7 @@ $this->registerJs($script, View::POS_HEAD );
             <div class="inner text-center">
                 <span style="font-size: 10em;"><?= $total_open > 0 ? '<span style="color: #ff1c00;">-' . number_format($total_open) . '</span>' : '0'; ?></span>
             </div>
-            <a class="small-box-footer" href="#" style="font-size: 2em;">OPEN</a>
+            <span class="small-box-footer" href="#" style="font-size: 2em;">Waiting <span class="japanesse light-green">修理待ち</span></span>
         </div>
     </div>
     <div class="col-md-3">
@@ -95,7 +95,7 @@ $this->registerJs($script, View::POS_HEAD );
             <div class="inner text-center">
                 <span style="font-size: 10em;"><?= number_format($total_return); ?></span>
             </div>
-            <a class="small-box-footer" href="#" style="font-size: 2em;">RETURN</a>
+            <span class="small-box-footer" href="#" style="font-size: 2em;">Return <span class="japanesse light-green">返却</span></span>
         </div>
     </div>
     <div class="col-md-3">
@@ -103,7 +103,7 @@ $this->registerJs($script, View::POS_HEAD );
             <div class="inner text-center">
                 <span style="font-size: 10em;"><?= number_format($total_scrap); ?></span>
             </div>
-            <a class="small-box-footer" href="#" style="font-size: 2em;">SCRAP</a>
+            <span class="small-box-footer" href="#" style="font-size: 2em;">Scrap <span class="japanesse light-green">廃却</span></span>
         </div>
     </div>
     <div class="col-md-3">
@@ -111,7 +111,7 @@ $this->registerJs($script, View::POS_HEAD );
             <div class="inner text-center">
                 <span style="font-size: 10em;"><?= number_format($total_ok); ?></span>
             </div>
-            <a class="small-box-footer" href="#" style="font-size: 2em;">REPAIRED</a>
+            <span class="small-box-footer" href="#" style="font-size: 2em;">Repaired <span class="japanesse light-green">修理済</span></span>
         </div>
     </div>
 </div>
