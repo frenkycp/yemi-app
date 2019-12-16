@@ -16,7 +16,10 @@ use Yii;
  * @property string $room_event
  * @property string $start_time
  * @property string $end_time
+ * @property integer $member_category
+ * @property string $company
  * @property string $NIK
+ * @property string $NIK_SUN_FISH
  * @property string $NAMA_KARYAWAN
  * @property string $CC_ID
  * @property string $DEPARTEMEN
@@ -54,9 +57,13 @@ abstract class RoomEventTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['event_id'], 'integer'],
-            [['room_id', 'room_desc', 'room_event', 'NIK', 'NAMA_KARYAWAN', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'user_id', 'user_desc'], 'string'],
-            [['start_time', 'end_time', 'last_update'], 'safe']
+            [['event_id', 'member_category'], 'integer'],
+            [['start_time', 'end_time', 'last_update'], 'safe'],
+            [['room_id', 'CC_ID'], 'string', 'max' => 10],
+            [['room_desc', 'company', 'NAMA_KARYAWAN', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'user_id'], 'string', 'max' => 50],
+            [['room_event'], 'string', 'max' => 100],
+            [['NIK', 'NIK_SUN_FISH'], 'string', 'max' => 20],
+            [['user_desc'], 'string', 'max' => 150]
         ];
     }
 
@@ -73,12 +80,15 @@ abstract class RoomEventTbl extends \yii\db\ActiveRecord
             'room_event' => 'Room Event',
             'start_time' => 'Start Time',
             'end_time' => 'End Time',
+            'member_category' => 'Member Category',
+            'company' => 'Company',
             'NIK' => 'Nik',
-            'NAMA_KARYAWAN' => 'Nama  Karyawan',
-            'CC_ID' => 'Cc  ID',
+            'NIK_SUN_FISH' => 'Nik Sun Fish',
+            'NAMA_KARYAWAN' => 'Nama Karyawan',
+            'CC_ID' => 'Cc ID',
             'DEPARTEMEN' => 'Departemen',
             'SECTION' => 'Section',
-            'SUB_SECTION' => 'Sub  Section',
+            'SUB_SECTION' => 'Sub Section',
             'user_id' => 'User ID',
             'user_desc' => 'User Desc',
             'last_update' => 'Last Update',

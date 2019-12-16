@@ -71,16 +71,18 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
         if($model->load(\Yii::$app->request->post())){
             $karyawan = Karyawan::find()
             ->where([
-                'NIK_SUN_FISH' => $model->username,
-                'PASSWORD' => $model->password,
+                'OR',
+                ['NIK_SUN_FISH' => $model->username],
+                ['NIK' => $model->username]
             ])
+            ->andWhere(['PASSWORD' => $model->password])
             ->one();
-            if ($karyawan->NIK_SUN_FISH !== null) {
-                $session['mrbs_user'] = $model->username;
+            if ($karyawan->NIK !== null) {
+                $session['mrbs_user'] = $karyawan->NIK;
                 $session['mrbs_name'] = $karyawan->NAMA_KARYAWAN;
                 $room_tbl = RoomTbl::find()
                 ->where([
-                	'user_id' => $model->username,
+                	'user_id' => $karyawan->NIK,
                 	'room_status' => 'NOT AVAILABLE'
                 ])
                 ->one();
@@ -205,7 +207,8 @@ class MrbsEntryController extends \app\controllers\base\MrbsEntryController
 		    		$new_member->room_event = $room_tbl->room_event;
 		    		$new_member->start_time = date('Y-m-d H:i:s', $room_tbl->start_time);
 		    		$new_member->end_time = date('Y-m-d H:i:s', $room_tbl->end_time);
-		    		$new_member->NIK = $karyawan->NIK_SUN_FISH;
+		    		$new_member->NIK = $karyawan->NIK;
+		    		$new_member->NIK_SUN_FISH = $karyawan->NIK_SUN_FISH;
 		    		$new_member->NAMA_KARYAWAN = $karyawan->NAMA_KARYAWAN;
 		    		$new_member->user_id = $user_id;
 		    		$new_member->user_desc = $user_desc;
