@@ -10,7 +10,7 @@ use dmstr\bootstrap\Tabs;
 use app\models\MachineMpPlanViewMaster02;
 use app\models\PlanReceivingPeriod;
 
-class MasterplanReportController extends Controller
+class AparWeeklyPreventiveController extends Controller
 {
 	public function behaviors()
     {
@@ -50,7 +50,7 @@ class MasterplanReportController extends Controller
 		->where([
 			'period' => $period
 		])
-		->andWhere(['like', 'mesin_id', 'MNT'])
+		->andWhere(['like', 'mesin_id', 'SHE'])
 		->orderBy('period, week, master_plan_maintenance')
 		->all();
 
@@ -90,7 +90,7 @@ class MasterplanReportController extends Controller
 					$presentase_open_arr[] = [
 						'y' => $presentase_open,
 						'qty' => $value2['total_open'],
-						'url' => Url::to(['mnt-preventive-data/index',
+						'url' => Url::to(['fire-equipment-preventive/index',
 							'master_plan_maintenance' => $key2,
 							'status' => 0
 						])
@@ -98,7 +98,7 @@ class MasterplanReportController extends Controller
 					$presentase_close_arr[] = [
 						'y' => $presentase_close,
 						'qty' => $value2['total_close'],
-						'url' => Url::to(['mnt-preventive-data/index',
+						'url' => Url::to(['fire-equipment-preventive/index',
 							'master_plan_maintenance' => $key2,
 							'status' => 1
 						])

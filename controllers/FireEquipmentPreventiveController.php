@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
-use app\models\search\PreventiveDataSearch;
+use app\models\search\FireEquipmentPreventiveSearch;
 use app\models\MesinCheckTbl;
 use app\models\AssetTbl;
 use yii\web\UploadedFile;
@@ -18,7 +18,7 @@ use app\models\MachineMpPlanViewMaster02;
 /**
 * This is the class for controller "MesinCheckDtrController".
 */
-class MntPreventiveDataController extends Controller
+class FireEquipmentPreventiveController extends Controller
 {
 	
 	public function behaviors()
@@ -30,7 +30,7 @@ class MntPreventiveDataController extends Controller
 	public function actionIndex()
 	{
 		ini_set('max_execution_time', 600);
-	    $searchModel  = new PreventiveDataSearch;
+	    $searchModel  = new FireEquipmentPreventiveSearch;
 	    if (\Yii::$app->request->get('master_plan_maintenance') !== null) {
 	    	$searchModel->master_plan_maintenance = \Yii::$app->request->get('master_plan_maintenance');
 	    }

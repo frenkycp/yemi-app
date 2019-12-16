@@ -12,9 +12,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Preventive Data (MNT) <span class="text-green">(予防データ)',
-    'tab_title' => 'Preventive Data (MNT)',
-    'breadcrumbs_title' => 'Preventive Data (MNT)'
+    'page_title' => 'Preventive Data (SHE) <span class="text-green">(予防データ)',
+    'tab_title' => 'Preventive Data (SHE)',
+    'breadcrumbs_title' => 'Preventive Data (SHE)'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -94,7 +94,7 @@ $grid_columns = [
     ],
     [
         'attribute' => 'mesin_id',
-        'label' => 'Machine ID',
+        'label' => 'Itemp ID',
         'value' => function($model){
             $filename = $model->mesin_id . '.jpg';
             $path = \Yii::$app->basePath . '\\web\\uploads\\MNT_MACHINE\\' . $filename;
@@ -148,7 +148,7 @@ $grid_columns = [
     ],
     [
         'attribute' => 'mesin_periode',
-        'label' => 'Machine Period',
+        'label' => 'Preventive Period',
         'vAlign' => 'middle',
         'width' => '100px',
         'filter' => [

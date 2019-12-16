@@ -8,9 +8,9 @@ use yii\bootstrap\ActiveForm;
 
 
 $this->title = [
-    'page_title' => 'Weekly Preventive (MNT) <span class="text-green japanesse">(週次予防保全)</span>',
-    'tab_title' => 'Weekly Preventive (MNT)',
-    'breadcrumbs_title' => 'Weekly Preventive (MNT)'
+    'page_title' => 'Weekly Preventive (SHE) <span class="text-green japanesse">(週次予防保全)</span>',
+    'tab_title' => 'Weekly Preventive (SHE)',
+    'breadcrumbs_title' => 'Weekly Preventive (SHE)'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

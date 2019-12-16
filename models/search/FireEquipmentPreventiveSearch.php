@@ -10,7 +10,7 @@ use app\models\MachineMpPlanViewMaster02;
 /**
 * MesinCheckDtrSearch represents the model behind the search form about `app\models\MachineMpPlanViewMaster02`.
 */
-class PreventiveDataSearch extends MachineMpPlanViewMaster02
+class FireEquipmentPreventiveSearch extends MachineMpPlanViewMaster02
 {
 /**
 * @inheritdoc
@@ -41,7 +41,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = MachineMpPlanViewMaster02::find()->where(['like', 'mesin_id', 'MNT']);
+$query = MachineMpPlanViewMaster02::find()->where(['like', 'mesin_id', 'SHE']);
 /*if (isset($_GET['status'])) {
       if ($_GET['status'] == 0) {
             $query = MachineMpPlanViewMaster02::find()->where(['not', ['master_plan_maintenance' => null]])->andWhere(['mesin_last_update' => null]);
