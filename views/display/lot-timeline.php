@@ -77,6 +77,12 @@ echo '</pre>';*/
         ]);?>
     </div>
     <div class="col-md-2">
+        <?= $form->field($model, 'wip_location')->dropDownList(ArrayHelper::map(\app\models\WipLocation::find()
+            ->select(['child_analyst', 'child_analyst_desc'])
+            ->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc')
+        ); ?>
+    </div>
+    <div class="col-md-2">
         <?= $form->field($model, 'model_group')->dropDownList(ArrayHelper::map(\app\models\SernoMaster::find()
             ->select(['line'])
             ->where(['line' => \Yii::$app->params['ww_wip_model']])
@@ -86,6 +92,7 @@ echo '</pre>';*/
             ]
         ); ?>
     </div>
+    
     <div class="form-group">
         <br/>
         <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
@@ -130,6 +137,7 @@ echo '</pre>';*/
                         'title' => [
                             'text' => 'Total Lot',
                         ],
+                        'allowDecimals' => false,
                         //'max' => 60,
                         //'tickInterval' => 10
                     ],
@@ -186,6 +194,7 @@ echo '</pre>';*/
                         'title' => [
                             'text' => 'Total Qty',
                         ],
+                        'allowDecimals' => false,
                         //'max' => 60,
                         //'tickInterval' => 10
                     ],

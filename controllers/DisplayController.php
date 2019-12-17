@@ -98,6 +98,45 @@ use app\models\DataRepair;
 
 class DisplayController extends Controller
 {
+    public function actionTodayAttendance($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+        $data = [];
+
+        $tmp_data1 = $tmp_data2 = [];
+        $tmp_attendance1 = ProdAttendanceData::find()
+        ->select([
+            'child_analyst', 'child_analyst_desc', 'posting_shift',
+            'total' => 'COUNT(nik)'
+        ])
+        ->where([
+            'posting_shift' => $today
+        ])
+        ->groupBy('child_analyst, child_analyst_desc, posting_shift')
+        ->orderBy('child_analyst_desc')
+        ->all();
+
+        $tmp_location = WipLocation::find()->where(['<>', 'child_analyst', 'WF01'])->orderBy('child_analyst_desc')->all();
+        foreach ($tmp_location as $key => $location) {
+            $actual_mp = 0;
+            foreach ($tmp_attendance1 as $key => $attendance1) {
+                if ($location->child_analyst == $attendance1->child_analyst) {
+                    $actual_mp = $attendance1->total;
+                }
+            }
+            $data[$location->child_analyst_desc] = [
+                'plan' => '???',
+                'actual' => $actual_mp
+            ];
+        }
+
+        return $this->render('today-attendance', [
+            'data' => $data
+        ]);
+    }
+
     public function actionRepairKpi()
     {
         $this->layout = 'clean';
@@ -1736,13 +1775,15 @@ class DisplayController extends Controller
         $data = [];
         date_default_timezone_set('Asia/Jakarta');
         $model = new \yii\base\DynamicModel([
-            'model_group', 'from_date', 'to_date'
+            'model_group', 'from_date', 'to_date', 'beacon_using', 'wip_location'
         ]);
         $model->addRule(['from_date', 'to_date'], 'required')
-        ->addRule(['model_group'], 'safe');
+        ->addRule(['model_group', 'beacon_using', 'wip_location'], 'safe');
 
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $model->beacon_using = 1;
+        $model->wip_location = 'WW02';
 
         if ($model->load($_GET)) {
             # code...
@@ -1755,38 +1796,81 @@ class DisplayController extends Controller
                 $gmc_arr[] = $value->gmc;
             }
 
-            $tmp_beacon_arr = BeaconTblTrack::find()
-            ->select([
-                'upload_date',
-                'total_lot' => 'COUNT(upload_date)',
-                'total_qty' => 'SUM(lot_qty)'
-            ])
-            ->where([
-                'AND',
-                ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
-                ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
-            ])
-            ->andWhere(['parent' => $gmc_arr])
-            ->andWhere('minor IS NOT NULL')
-            ->groupBy('upload_date')
-            ->orderBy('upload_date')
-            ->all();
+            if ($model->wip_location == 'WW02') {
+                $tmp_beacon_arr = BeaconTblTrack::find()
+                ->select([
+                    'upload_date',
+                    'total_lot' => 'COUNT(upload_date)',
+                    'total_qty' => 'SUM(lot_qty)'
+                ])
+                ->where([
+                    'AND',
+                    ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
+                    ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
+                ])
+                ->andWhere(['parent' => $gmc_arr])
+                ->andWhere('minor IS NOT NULL')
+                ->groupBy('upload_date')
+                ->orderBy('upload_date')
+                ->all();
+            } else {
+                $tmp_beacon_arr = BeaconTblTrack::find()
+                ->select([
+                    'upload_date',
+                    'total_lot' => 'COUNT(upload_date)',
+                    'total_qty' => 'SUM(lot_qty)'
+                ])
+                ->where([
+                    'AND',
+                    ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
+                    ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
+                ])
+                ->andWhere([
+                    'parent' => $gmc_arr,
+                    'mesin_id' => $model->wip_location
+                ])
+                ->groupBy('upload_date')
+                ->orderBy('upload_date')
+                ->all();
+            }
+            
         } else {
-            $tmp_beacon_arr = BeaconTblTrack::find()
-            ->select([
-                'upload_date',
-                'total_lot' => 'COUNT(upload_date)',
-                'total_qty' => 'SUM(lot_qty)'
-            ])
-            ->where([
-                'AND',
-                ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
-                ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
-            ])
-            ->andWhere('minor IS NOT NULL')
-            ->groupBy('upload_date')
-            ->orderBy('upload_date')
-            ->all();
+            if ($model->wip_location == 'WW02') {
+                $tmp_beacon_arr = BeaconTblTrack::find()
+                ->select([
+                    'upload_date',
+                    'total_lot' => 'COUNT(upload_date)',
+                    'total_qty' => 'SUM(lot_qty)'
+                ])
+                ->where([
+                    'AND',
+                    ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
+                    ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
+                ])
+                ->andWhere('minor IS NOT NULL')
+                ->groupBy('upload_date')
+                ->orderBy('upload_date')
+                ->all();
+            } else {
+                $tmp_beacon_arr = BeaconTblTrack::find()
+                ->select([
+                    'upload_date',
+                    'total_lot' => 'COUNT(upload_date)',
+                    'total_qty' => 'SUM(lot_qty)'
+                ])
+                ->where([
+                    'AND',
+                    ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
+                    ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
+                ])
+                ->andWhere([
+                    'mesin_id' => $model->wip_location
+                ])
+                ->groupBy('upload_date')
+                ->orderBy('upload_date')
+                ->all();
+            }
+            
         }
 
         
