@@ -139,6 +139,9 @@ echo '</pre>';*/
                                 'enabled' =>false
                             ],
                         ],
+                        'series' => [
+                            'turboThreshold' => 0
+                        ],
                     ],
                     'series' => $data_lot,
                 ],
@@ -191,6 +194,9 @@ echo '</pre>';*/
                             'marker' => [
                                 'enabled' =>false
                             ],
+                        ],
+                        'series' => [
+                            'turboThreshold' => 0
                         ],
                     ],
                     'series' => $data_qty,

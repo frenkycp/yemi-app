@@ -1767,6 +1767,7 @@ class DisplayController extends Controller
                 ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
             ])
             ->andWhere(['parent' => $gmc_arr])
+            ->andWhere('minor IS NOT NULL')
             ->groupBy('upload_date')
             ->orderBy('upload_date')
             ->all();
@@ -1782,6 +1783,7 @@ class DisplayController extends Controller
                 ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
                 ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
             ])
+            ->andWhere('minor IS NOT NULL')
             ->groupBy('upload_date')
             ->orderBy('upload_date')
             ->all();

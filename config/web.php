@@ -115,6 +115,7 @@ $config = [
         'db_spr' => require(__DIR__ . '/db_spr.php'),
         'db_iot' => require(__DIR__ . '/db_iot.php'),
         'db_rep' => require(__DIR__ . '/db_rep.php'),
+        'db_sun_fish' => require(__DIR__ . '/db_sun_fish.php'),
     ],
     'params' => $params,
     'modules' => [
