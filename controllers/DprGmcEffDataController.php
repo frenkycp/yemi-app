@@ -67,9 +67,9 @@ class DprGmcEffDataController extends Controller
 		->where([
 			'tgl' => $proddate,
 			'line' => $line,
-			'status' => 0
+			//'status' => 0
 		])
-		->orderBy('status DESC, cek_in DESC')
+		->orderBy('status ASC, cek_in DESC')
 		->all();
 		$data = '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
@@ -77,26 +77,31 @@ class DprGmcEffDataController extends Controller
 			<th class="text-center">No</th>
 			<th class="text-center">NIK</th>
 			<th>Name</th>
-			<th class="text-center">Check In</th>
-			<th class="text-center">Check Out</th>
+			<th class="text-center">IN</th>
+			<th class="text-center">OUT</th>
 			<th class="text-center">Status</th>
 		</tr>'
 		;
 
-		$data_karyawan_arr = ArrayHelper::map(Karyawan::find()->all(), 'NIK', 'NAMA_KARYAWAN');
+		//$data_karyawan_arr = ArrayHelper::map(Karyawan::find()->all(), 'NIK', 'NAMA_KARYAWAN');
 
 		$no = 1;
 		foreach ($mp_data_arr as $value) {
 			if ($value->status == 0) {
-				$status = 'IN';
+				$bg_class = '';
+				$no_string = $no;
+				$status = '<span class="badge bg-green" style="font-weight: normal;">CHECK-IN</span<';
 			} else {
-				$status = 'OUT';
+				$bg_class = 'danger';
+				$no_string = '';
+				$status = '<span class="badge bg-red" style="font-weight: normal;">CHECK-OUT</span>';
 			}
+
 			$data .= '
-			<tr>
-				<td class="text-center">' . $no . '</td>
+			<tr class="' . $bg_class . '">
+				<td class="text-center">' . $no_string . '</td>
 				<td class="text-center">' . $value->nik . '</td>
-				<td>' . $data_karyawan_arr[$value->nik] . '</td>
+				<td>' . $value->nama . '</td>
 				<td class="text-center">' . $value->cek_in . '</td>
 				<td class="text-center">' . $value->cek_out . '</td>
 				<td class="text-center">' . $status . '</td>

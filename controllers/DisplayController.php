@@ -1316,7 +1316,7 @@ class DisplayController extends Controller
         $stock_arr[] = $tmp_stock_delay3['total_stock'] - ($tmp_stock_delay1['total_stock'] + $tmp_stock_delay2['total_stock']);
 
         return $this->render('smt-stock-wip', [
-            'target_stock' => 5000,
+            'target_stock' => 6000,
             'total_stock' => $wip_stock_delay['total_stock'],
             'tgl_arr' => $tgl_arr,
             'loc' => $loc,
@@ -1530,8 +1530,7 @@ class DisplayController extends Controller
             ->where([
                 'child_analyst' => $location
             ])
-            ->andWhere(['<', 'due_date', date('Y-m-d')])
-            ->andWhere(['>=', 'due_date', '2019-11-01'])
+            ->andWhere(['>=', 'post_date', '2019-12-01'])
             ->groupBy('child_analyst')
             ->one();
         } else {
@@ -1549,7 +1548,7 @@ class DisplayController extends Controller
                 ])
                 ->andWhere(['>=', 'source_date', $tgl])
                 ->andWhere(['<', 'due_date', date('Y-m-d')])
-                ->andWhere(['>=', 'due_date', '2019-11-01'])
+                ->andWhere(['>=', 'post_date', '2019-12-01'])
                 ->groupBy('child_analyst')
                 ->one();
             } else {
@@ -1565,7 +1564,7 @@ class DisplayController extends Controller
                     'source_date' => $tgl
                 ])
                 ->andWhere(['<', 'due_date', date('Y-m-d')])
-                ->andWhere(['>=', 'due_date', '2019-11-01'])
+                ->andWhere(['>=', 'post_date', '2019-12-01'])
                 ->groupBy('child_analyst')
                 ->one();
             }
