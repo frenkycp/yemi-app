@@ -80,6 +80,22 @@ echo '</pre>';*/
     <div class="col-md-3">
         <div class="box box-primary box-solid">
             <div class="box-header">
+                <h3 class="box-title">Shift</h3>
+            </div>
+            <div class="box-body">
+                <?= $form->field($model, 'shift')->dropDownList([
+                    1 => 1,
+                    2 => 2,
+                    3 => 3
+                ], [
+                    'onchange'=>'this.form.submit()'
+                ])->label(false); ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="box box-primary box-solid">
+            <div class="box-header">
                 <h3 class="box-title">Line</h3>
             </div>
             <div class="box-body">
@@ -111,7 +127,7 @@ echo '</pre>';*/
     'inputOptions' => [
         'autofocus' => 'autofocus'
     ]
-])->textInput(['placeholder' => 'Input NIK Here', 'class' => 'text-center form-control'])->label(false); ?>
+])->textInput(['placeholder' => 'Input NIK (*NEW) Here', 'class' => 'text-center form-control'])->label(false); ?>
 
 <?php ActiveForm::end(); ?>
 

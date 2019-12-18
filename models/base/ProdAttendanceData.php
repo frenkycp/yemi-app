@@ -13,13 +13,16 @@ use Yii;
  * @property string $period
  * @property string $posting_date
  * @property string $posting_shift
+ * @property integer $shift
  * @property string $nik
+ * @property string $nik_sun_fish
  * @property string $name
  * @property string $check_in
  * @property string $check_out
  * @property string $child_analyst
  * @property string $child_analyst_desc
  * @property integer $line
+ * @property integer $mp_plan
  * @property string $machine_id
  * @property string $machine_desc
  * @property string $last_update
@@ -54,9 +57,16 @@ abstract class ProdAttendanceData extends \yii\db\ActiveRecord
     {
         return [
             [['att_data_id'], 'required'],
-            [['att_data_id', 'period', 'nik', 'name', 'child_analyst', 'child_analyst_desc', 'machine_id', 'machine_desc', 'current_status'], 'string'],
             [['posting_date', 'posting_shift', 'check_in', 'check_out', 'last_update'], 'safe'],
-            [['line'], 'integer'],
+            [['shift', 'line', 'mp_plan'], 'integer'],
+            [['machine_desc'], 'string'],
+            [['att_data_id'], 'string', 'max' => 30],
+            [['period'], 'string', 'max' => 6],
+            [['nik', 'nik_sun_fish', 'machine_id'], 'string', 'max' => 20],
+            [['name'], 'string', 'max' => 250],
+            [['child_analyst'], 'string', 'max' => 10],
+            [['child_analyst_desc'], 'string', 'max' => 50],
+            [['current_status'], 'string', 'max' => 1],
             [['att_data_id'], 'unique']
         ];
     }
@@ -71,13 +81,16 @@ abstract class ProdAttendanceData extends \yii\db\ActiveRecord
             'period' => 'Period',
             'posting_date' => 'Posting Date',
             'posting_shift' => 'Posting Shift',
+            'shift' => 'Shift',
             'nik' => 'Nik',
+            'nik_sun_fish' => 'Nik Sun Fish',
             'name' => 'Name',
             'check_in' => 'Check In',
             'check_out' => 'Check Out',
             'child_analyst' => 'Child Analyst',
             'child_analyst_desc' => 'Child Analyst Desc',
             'line' => 'Line',
+            'mp_plan' => 'Mp Plan',
             'machine_id' => 'Machine ID',
             'machine_desc' => 'Machine Desc',
             'last_update' => 'Last Update',

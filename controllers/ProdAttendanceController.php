@@ -17,14 +17,28 @@ class ProdAttendanceController extends Controller
 		$this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $posting_shift = date('Y-m-d');
+
+        Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
         $model = new \yii\base\DynamicModel([
-            'child_analyst', 'line', 'child_analyst_desc', 'nik'
+            'child_analyst', 'line', 'child_analyst_desc', 'nik', 'shift'
         ]);
         $model->addRule(['child_analyst_desc', 'nik', 'child_analyst'], 'string')
-        ->addRule(['line'], 'number');
+        ->addRule(['line', 'shift'], 'number');
 
         $model->child_analyst = $loc;
         $model->line = $line;
+        if (date('H:i:s') < '07:00:00') {
+        	if ($model->shift == 3) {
+        		$posting_shift = date('Y-m-d', strtotime(' -1 day'));
+        	} else {
+        		\Yii::$app->session->setFlash("danger", "If you Shift 3, please change shift. If you Shift 1, please input NIK after 07:00.");
+        		return $this->redirect(Url::previous());
+        	}
+        }
 
         if($model->load(\Yii::$app->request->post())){
         	if ($model->child_analyst == '') {
@@ -32,19 +46,21 @@ class ProdAttendanceController extends Controller
         	} else {
         		if ($model->nik != '') {
 	        		$karyawan = Karyawan::find()
-		            ->select('NIK, NAMA_KARYAWAN')
+		            ->select('NIK, NIK_SUN_FISH, NAMA_KARYAWAN')
 		            ->where([
-		                'NIK' => $model->nik
+		                'OR',
+		                ['NIK' => $model->nik],
+		                ['NIK_SUN_FISH' => $model->nik]
 		            ])
 		            ->one();
 
 		            if ($karyawan->NIK != null) {
 		            	$find_data = ProdAttendanceData::find()
 			            ->where([
-			                'nik' => $model->nik,
+			                'nik' => $karyawan->NIK_SUN_FISH,
 			                'child_analyst' => $model->child_analyst,
 			                'line' => $model->line,
-			                'posting_shift' => $posting_shift
+			                'posting_shift' => $posting_shift,
 			            ])
 			            ->one();
 			            $now = date('Y-m-d H:i:s');
@@ -54,8 +70,8 @@ class ProdAttendanceController extends Controller
 			                $insert_attendance->period = date('Ym', strtotime($posting_shift));
 			                $insert_attendance->posting_date = date('Y-m-d');
 			                $insert_attendance->posting_shift = $posting_shift;
-			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $model->nik;
-			                $insert_attendance->nik = $model->nik;
+			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $karyawan->NIK_SUN_FISH;
+			                $insert_attendance->nik = $karyawan->NIK_SUN_FISH;
 
 			                $insert_attendance->name = $karyawan->NAMA_KARYAWAN;
 			                $insert_attendance->check_in = $now;

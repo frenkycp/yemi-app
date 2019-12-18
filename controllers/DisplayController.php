@@ -95,14 +95,76 @@ use app\models\CrusherInput;
 use app\models\CrusherTbl;
 use app\models\SernoMaster;
 use app\models\DataRepair;
+use app\models\ClientLog;
+use app\models\WipMpPlan;
 
 class DisplayController extends Controller
 {
+    public function actionDailyClientNetwork($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = $tmp_data = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_networking = ClientLog::find()
+        ->select([
+            'mac_address', 'tanggal',
+            'count_merah' => 'SUM(count_merah)',
+            'count_all' => 'SUM(count_all)',
+        ])
+        ->where([
+            'AND',
+            ['>=', 'tanggal', date('Y-m-d', strtotime($model->from_date))],
+            ['<=', 'tanggal', date('Y-m-d', strtotime($model->to_date))]
+        ])
+        ->groupBy('mac_address, tanggal')
+        ->orderBy('mac_address, tanggal')
+        ->all();
+
+        foreach ($tmp_networking as $key => $value) {
+            $proddate = (strtotime($value->tanggal . " +7 hours") * 1000);
+            $pct = 0;
+            if ($value->count_all > 0) {
+                $pct = round((($value->count_all - $value->count_merah) / $value->count_all) * 100, 1);
+            }
+            $tmp_data[$value->mac_address][] = [
+                'x' => $proddate,
+                'y' => $pct
+            ];
+        }
+
+        foreach ($tmp_data as $key => $value) {
+            $data[] = [
+                'name' => $key,
+                'data' => $value,
+            ];
+        }
+
+        
+
+        return $this->render('daily-client-network', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
     public function actionTodayAttendance($value='')
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
+        $period = date('Ym');
         $data = [];
 
         $tmp_data1 = $tmp_data2 = [];
@@ -118,19 +180,29 @@ class DisplayController extends Controller
         ->orderBy('child_analyst_desc')
         ->all();
 
-        $tmp_location = WipLocation::find()->where(['<>', 'child_analyst', 'WF01'])->orderBy('child_analyst_desc')->all();
-        foreach ($tmp_location as $key => $location) {
+        $loc_selection = \Yii::$app->params['attendance_wip_arr'];
+        asort($loc_selection);
+        //$tmp_location = WipLocation::find()->where(['child_analyst' => $loc_selection])->orderBy('child_analyst_desc')->all();
+        $wip_mp_plan = ArrayHelper::map(WipMpPlan::find()->where(['period' => $period])->all(), 'child_analyst', 'mp_plan');
+        foreach ($loc_selection as $key1 => $location) {
             $actual_mp = 0;
-            foreach ($tmp_attendance1 as $key => $attendance1) {
-                if ($location->child_analyst == $attendance1->child_analyst) {
+            foreach ($tmp_attendance1 as $key2 => $attendance1) {
+                if ($key1 == $attendance1->child_analyst) {
                     $actual_mp = $attendance1->total;
                 }
             }
-            $data[$location->child_analyst_desc] = [
-                'plan' => '???',
+            $mp_plan = isset($wip_mp_plan[$key1]) ? $wip_mp_plan[$key1] : 0;
+            $data[$location] = [
+                'plan' => $mp_plan,
                 'actual' => $actual_mp
             ];
         }
+
+        $fa_mp_arr = FaMp02::find()
+        ->where(['tgl' => $today])
+        ->one();
+
+        $data['FINAL ASSY']['actual'] = (int)$fa_mp_arr->total_mp;
 
         return $this->render('today-attendance', [
             'data' => $data
