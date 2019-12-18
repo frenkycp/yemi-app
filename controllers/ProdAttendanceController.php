@@ -44,13 +44,14 @@ class ProdAttendanceController extends Controller
         	if ($model->child_analyst == '') {
         		\Yii::$app->session->setFlash("danger", "Location must be set ...");
         	} else {
-        		if ($model->nik != '') {
+        		$input_nik = strtoupper($model->nik);
+        		if ($input_nik != '') {
 	        		$karyawan = Karyawan::find()
 		            ->select('NIK, NIK_SUN_FISH, NAMA_KARYAWAN')
 		            ->where([
 		                'OR',
-		                ['NIK' => $model->nik],
-		                ['NIK_SUN_FISH' => $model->nik]
+		                ['NIK' => $input_nik],
+		                ['NIK_SUN_FISH' => $input_nik]
 		            ])
 		            ->one();
 
