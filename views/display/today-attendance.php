@@ -42,7 +42,7 @@ $this->registerCss("
     }
     .table > tbody > tr > td{
         border:1px solid #777474;
-        font-size: 2em;
+        font-size: 2.5em;
         //background-color: #B3E5FC;
         //font-weight: 1000;
         color: #FFF;
@@ -52,7 +52,7 @@ $this->registerCss("
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important;}
     .description {font-size: 2.2em; padding-left: 10px;}
-    .text-red{color: #ff1c00 !important;}
+    .text-red{color: #ff1c00 !important; font-weight: bold;}
 ");
 
 //$this->registerCssFile('@web/css/responsive.css');
@@ -63,7 +63,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 3600000); // milliseconds
+      setTimeout("refreshPage();", 600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -78,15 +78,28 @@ $this->registerJs($script, View::POS_HEAD );
         <tr>
             <th>Location</th>
             <th class="text-center">MP Plan</th>
-            <th class="text-center">MP Actual</th>
+            <th class="text-center">MP Total</th>
+            <th class="text-center">Balance</th>
+            <th class="text-center">MP<br/>(Shift 1)</th>
+            <th class="text-center">MP<br/>(Shift 2)</th>
+            <th class="text-center">MP<br/>(Shift 3)</th>
+            
         </tr>
     </thead>
     <tbody>
         <?php foreach ($data as $key => $value): ?>
+            <?php
+            $balance = $value['actual'] - $value['plan'];
+            ?>
             <tr>
                 <td><?= $key; ?></td>
                 <td class="text-center"><?= $value['plan']; ?></td>
                 <td class="text-center"><?= number_format($value['actual']); ?></td>
+                <td class="text-center<?= $balance != 0 ? ' text-red' : ''; ?>"><?= number_format($balance); ?></td>
+                <td class="text-center"><?= $data_by_shift[$value['key']]['1'] == 0 ? '' : number_format($data_by_shift[$value['key']]['1']); ?></td>
+                <td class="text-center"><?= $data_by_shift[$value['key']]['2'] == 0 ? '' : number_format($data_by_shift[$value['key']]['2']); ?></td>
+                <td class="text-center"><?= $data_by_shift[$value['key']]['3'] == 0 ? '' : number_format($data_by_shift[$value['key']]['3']); ?></td>
+                
             </tr>
         <?php endforeach ?>
     </tbody>

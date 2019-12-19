@@ -159,6 +159,37 @@ class DisplayController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function getWipShiftAttendance($loc_selection, $date)
+    {
+        $tmp_attendance = ProdAttendanceData::find()
+        ->select([
+            'child_analyst', 'child_analyst_desc', 'posting_shift', 'shift',
+            'total' => 'COUNT(nik)'
+        ])
+        ->where([
+            'posting_shift' => $date
+        ])
+        ->groupBy('child_analyst, child_analyst_desc, posting_shift, shift')
+        ->orderBy('child_analyst_desc')
+        ->all();
+
+        $mp_actual_arr = [];
+        foreach ($loc_selection as $key => $value) {
+            for ($i=1; $i <= 3; $i++) { 
+                $total_mp = 0;
+                foreach ($tmp_attendance as $key2 => $value2) {
+                    if ($value2->child_analyst == $key && $value2->shift == $i) {
+                        $total_mp = $value2->total;
+                    }
+                }
+                $mp_actual_arr[$key][$i . ''] = $total_mp;
+            }
+        }
+
+        return $mp_actual_arr;
+    }
+
     public function actionTodayAttendance($value='')
     {
         $this->layout = 'clean';
@@ -184,17 +215,38 @@ class DisplayController extends Controller
         asort($loc_selection);
         //$tmp_location = WipLocation::find()->where(['child_analyst' => $loc_selection])->orderBy('child_analyst_desc')->all();
         $wip_mp_plan = ArrayHelper::map(WipMpPlan::find()->where(['period' => $period])->all(), 'child_analyst', 'mp_plan');
+        $mp_arr = [];
         foreach ($loc_selection as $key1 => $location) {
-            $actual_mp = 0;
+            /*$actual_mp = 0;
             foreach ($tmp_attendance1 as $key2 => $attendance1) {
                 if ($key1 == $attendance1->child_analyst) {
                     $actual_mp = $attendance1->total;
                 }
-            }
+            }*/
             $mp_plan = isset($wip_mp_plan[$key1]) ? $wip_mp_plan[$key1] : 0;
-            $data[$location] = [
+            $mp_arr[$key1] = $mp_plan;
+            /*$data[$location] = [
                 'plan' => $mp_plan,
                 'actual' => $actual_mp
+            ];*/
+        }
+        if (count($mp_arr) > 0) {
+            arsort($mp_arr);
+        }
+
+        foreach ($mp_arr as $key => $value) {
+            $location_str = $loc_selection[$key];
+            $actual_mp = 0;
+            foreach ($tmp_attendance1 as $key2 => $attendance1) {
+                if ($key == $attendance1->child_analyst) {
+                    $actual_mp = $attendance1->total;
+                }
+            }
+
+            $data[$location_str] = [
+                'plan' => $value,
+                'actual' => $actual_mp,
+                'key' => $key
             ];
         }
 
@@ -203,9 +255,16 @@ class DisplayController extends Controller
         ->one();
 
         $data['FINAL ASSY']['actual'] = (int)$fa_mp_arr->total_mp;
+        $data_by_shift = $this->getWipShiftAttendance($loc_selection, $today);
+        $data_by_shift['WF01'] = [
+            '1' => (int)$fa_mp_arr->total_mp,
+            '2' => 0,
+            '3' => 0,
+        ];
 
         return $this->render('today-attendance', [
-            'data' => $data
+            'data' => $data,
+            'data_by_shift' => $data_by_shift,
         ]);
     }
 
