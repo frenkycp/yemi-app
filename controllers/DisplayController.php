@@ -5385,6 +5385,19 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function getReceivingCalendarArr($tmp_data, $color, $data, $column_name)
+    {
+        foreach ($tmp_data as $key => $value) {
+            $data[] = [
+                'title' => strtoupper($value['vendor_name']) . ' - ' . $value['total_qty'],
+                'start' => (strtotime($value[$column_name] . " +7 hours") * 1000),
+                'allDay' => true,
+                'color' => $color
+            ];
+        }
+        return $data;
+    }
+
     public function actionGetDailyReceiving($category)
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -5398,6 +5411,7 @@ class DisplayController extends Controller
             ->where('completed_time IS NULL')
             ->groupBy('receiving_date, vendor_name')
             ->orderBy('receiving_date, vendor_name')
+            ->asArray()
             ->all();
         } else {
             $tmp_data = PlanReceiving::find()
@@ -5409,17 +5423,63 @@ class DisplayController extends Controller
             ->andWhere(['vehicle' => $category])
             ->groupBy('receiving_date, vendor_name')
             ->orderBy('receiving_date, vendor_name')
+            ->asArray()
             ->all();
         }
-
+        #00c0ef
         $data = [];
-        foreach ($tmp_data as $key => $value) {
+        $data = $this->getReceivingCalendarArr($tmp_data, '#00a65a', $data, 'receiving_date');
+        /*foreach ($tmp_data as $key => $value) {
             $data[] = [
                 'title' => strtoupper($value->vendor_name) . ' - ' . $value->total_qty,
                 'start' => (strtotime($value->receiving_date . " +7 hours") * 1000),
                 'allDay' => true,
                 'color' => '#00a65a'
             ];
+        }*/
+
+        if ($category == 'Container') {
+            $tmp_cut_off = PlanReceiving::find()
+            ->select([
+                'cut_off_date', 'vendor_name',
+                'total_qty' => 'SUM(QTY)'
+            ])
+            ->where('completed_time IS NULL')
+            ->andWhere(['vehicle' => 'Container'])
+            ->andWhere('cut_off_date IS NOT NULL')
+            ->groupBy('cut_off_date, vendor_name')
+            ->orderBy('cut_off_date, vendor_name')
+            ->asArray()
+            ->all();
+            $data = $this->getReceivingCalendarArr($tmp_cut_off, '#00c0ef', $data, 'cut_off_date');
+
+            $tmp_etd_port = PlanReceiving::find()
+            ->select([
+                'etd_port_date', 'vendor_name',
+                'total_qty' => 'SUM(QTY)'
+            ])
+            ->where('completed_time IS NULL')
+            ->andWhere(['vehicle' => 'Container'])
+            ->andWhere('etd_port_date IS NOT NULL')
+            ->groupBy('etd_port_date, vendor_name')
+            ->orderBy('etd_port_date, vendor_name')
+            ->asArray()
+            ->all();
+            $data = $this->getReceivingCalendarArr($tmp_etd_port, '#605ca8', $data, 'etd_port_date');
+
+            $tmp_eta_port = PlanReceiving::find()
+            ->select([
+                'eta_port_date', 'vendor_name',
+                'total_qty' => 'SUM(QTY)'
+            ])
+            ->where('completed_time IS NULL')
+            ->andWhere(['vehicle' => 'Container'])
+            ->andWhere('eta_port_date IS NOT NULL')
+            ->groupBy('eta_port_date, vendor_name')
+            ->orderBy('eta_port_date, vendor_name')
+            ->asArray()
+            ->all();
+            $data = $this->getReceivingCalendarArr($tmp_eta_port, '#3c8dbc', $data, 'eta_port_date');
         }
 
         return json_encode($data);

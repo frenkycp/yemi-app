@@ -33,6 +33,9 @@ $this->registerCss("
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
+    .legend {padding-right: 20px;}
+    #legend-body {padding: 9px;}
+
 ");
 
 $this->registerCssFile('@web/css/fullcalendar.css');
@@ -50,7 +53,7 @@ $script = "
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay,listWeek'
             },
-            height: 870,
+            height: 800,
             navLinks: true, 
             editable: true,
             eventLimit: true, 
@@ -105,6 +108,28 @@ $this->registerJs($script2, View::POS_HEAD );
             'onchange' => 'this.form.submit()',
         ])->label(false); ?>
     </div>
+    <div class="col-md-10">
+        <div class="panel panel-info">
+            <div class="panel-body" id="legend-body">
+                <span class="legend">
+                    <a class="text-green" href="#"><i class="fa fa-square"></i></a> Plan Date
+                </span>
+                <span class="legend">
+                    <a class="text-light-blue" href="#"><i class="fa fa-square"></i></a> ETA Port Date
+                </span>
+                <span class="legend">
+                    <a class="text-purple" href="#"><i class="fa fa-square"></i></a> ETD Port Date
+                </span>
+                <span class="legend">
+                    <a class="text-aqua" href="#"><i class="fa fa-square"></i></a> Cut Off Date
+                </span>
+                
+                
+                
+                
+            </div>
+        </div>
+    </div>
 </div>
 
 <?php ActiveForm::end(); ?>
@@ -119,3 +144,12 @@ $this->registerJs($script2, View::POS_HEAD );
 
     </div>
 </div>
+
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    //'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>
