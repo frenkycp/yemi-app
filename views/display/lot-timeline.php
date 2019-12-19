@@ -77,10 +77,7 @@ echo '</pre>';*/
         ]);?>
     </div>
     <div class="col-md-2">
-        <?= $form->field($model, 'wip_location')->dropDownList(ArrayHelper::map(\app\models\WipLocation::find()
-            ->select(['child_analyst', 'child_analyst_desc'])
-            ->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc')
-        ); ?>
+        <?= $form->field($model, 'wip_location')->dropDownList($location_arr); ?>
     </div>
     <div class="col-md-2">
         <?= $form->field($model, 'model_group')->dropDownList(ArrayHelper::map(\app\models\SernoMaster::find()

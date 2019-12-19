@@ -135,7 +135,10 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.217/kaizen"><i class="fa fa-fw fa-tag"></i> E-Kaizen<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/line-performance-visual"><i class="fa fa-fw fa-tag"></i> Line Performance by Model<span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Line Performance by Model<span class="japanesse-word"></span>', ['/line-performance-visual'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_prd/index_prd_efficiency.php"><i class="fa fa-fw fa-tag"></i> Line Efficiency (MITA+)<span class="japanesse-word"></span></a>
@@ -153,13 +156,22 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/l-series-daily"><i class="fa fa-fw fa-tag"></i> Production Lead Time L-Series<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-kwh-report"><i class="fa fa-fw fa-tag"></i> Machine Operation Status<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Machine Operation Status<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/mnt-kwh-report'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/machine-status-range"><i class="fa fa-fw fa-tag"></i> Machine Operation Status (Long Range)<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Machine Operation Status (Long Range)<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/machine-status-range'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/machine-status-range-shift"><i class="fa fa-fw fa-tag"></i> Machine Operation Status (Shift)<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Machine Operation Status (Shift)<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/machine-status-range-shift'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-iot-utility"><i class="fa fa-fw fa-tag"></i> Machine Daily Utility<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>

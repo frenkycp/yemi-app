@@ -144,6 +144,9 @@ echo '</pre>';*/
                                 'format' => '{point.percentage:.0f}%',
                             ],
                         ],
+                        'series' => [
+                            'turboThreshold' => 0
+                        ],
                     ],
                     'series' => $data_iot_by_hours,
                 ],

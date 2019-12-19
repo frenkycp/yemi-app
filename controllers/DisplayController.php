@@ -1855,6 +1855,10 @@ class DisplayController extends Controller
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
         $model->beacon_using = 1;
         $model->wip_location = 'WW02';
+        $location_arr = \Yii::$app->params['wip_location_arr'];
+        if (count($location_arr) > 0) {
+            asort($location_arr);
+        }
 
         if ($model->load($_GET)) {
             # code...
@@ -1977,6 +1981,7 @@ class DisplayController extends Controller
 
         return $this->render('lot-timeline', [
             'model' => $model,
+            'location_arr' => $location_arr,
             'data_lot' => $data_lot,
             'data_qty' => $data_qty,
         ]);
