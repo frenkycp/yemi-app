@@ -131,6 +131,18 @@ return [
     'purple_color' => '#61258e',
     'green_color_j' => '#5aff00',
     'ww_wip_model' => ['HS', 'L85', 'P40', 'XXX'],
+    'attendance_wip_arr' => [
+        'WI02' => 'INJ LARGE',
+        'WI03' => 'INJ MEDIUM',
+        'WI01' => 'INJ SMALL',
+        'WP01' => 'PAINTING',
+        'WM02' => 'PCB AUTO INS.',
+        'WM01' => 'PCB MANUAL INS.',
+        'WM03' => 'SMT',
+        'WU01' => 'SPEAKER PROJECT',
+        'WW02' => 'WW PROCESS',
+        'WF01' => 'FINAL ASSY'
+    ],
 ];
 
 function getYearArray()
