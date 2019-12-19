@@ -1934,7 +1934,7 @@ class DisplayController extends Controller
                 $tmp_beacon_arr = BeaconTblTrack::find()
                 ->select([
                     'upload_date',
-                    'total_lot' => 'COUNT(upload_date)',
+                    'total_lot' => 'SUM(CASE WHEN lot_qty > 0 THEN 1 ELSE 0 END)',
                     'total_qty' => 'SUM(lot_qty)'
                 ])
                 ->where([
@@ -1951,7 +1951,7 @@ class DisplayController extends Controller
                 $tmp_beacon_arr = BeaconTblTrack::find()
                 ->select([
                     'upload_date',
-                    'total_lot' => 'COUNT(upload_date)',
+                    'total_lot' => 'SUM(CASE WHEN lot_qty > 0 THEN 1 ELSE 0 END)',
                     'total_qty' => 'SUM(lot_qty)'
                 ])
                 ->where([
@@ -1973,7 +1973,7 @@ class DisplayController extends Controller
                 $tmp_beacon_arr = BeaconTblTrack::find()
                 ->select([
                     'upload_date',
-                    'total_lot' => 'COUNT(upload_date)',
+                    'total_lot' => 'SUM(CASE WHEN lot_qty > 0 THEN 1 ELSE 0 END)',
                     'total_qty' => 'SUM(lot_qty)'
                 ])
                 ->where([
@@ -1989,7 +1989,7 @@ class DisplayController extends Controller
                 $tmp_beacon_arr = BeaconTblTrack::find()
                 ->select([
                     'upload_date',
-                    'total_lot' => 'COUNT(upload_date)',
+                    'total_lot' => 'SUM(CASE WHEN lot_qty > 0 THEN 1 ELSE 0 END)',
                     'total_qty' => 'SUM(lot_qty)'
                 ])
                 ->where([
