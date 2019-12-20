@@ -23,7 +23,7 @@ $this->registerCss("
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}',
+        'template' => '{update} {delete}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [

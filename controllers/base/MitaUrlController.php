@@ -74,7 +74,7 @@ $model = new MitaUrl;
 
 try {
 if ($model->load($_POST) && $model->save()) {
-return $this->redirect(['view', 'id' => $model->id]);
+return $this->redirect(Url::previous());
 } elseif (!\Yii::$app->request->isPost) {
 $model->load($_GET);
 }

@@ -15,7 +15,7 @@ $copyParams = $model->attributes;
 
 $this->title = Yii::t('models', 'Mita Url');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Mita Urls'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => (string)$model->title, 'url' => ['view', 'url_id' => $model->url_id]];
+$this->params['breadcrumbs'][] = ['label' => (string)$model->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'View';
 ?>
 <div class="giiant-crud mita-url-view">
@@ -43,12 +43,12 @@ $this->params['breadcrumbs'][] = 'View';
         <div class='pull-left'>
             <?= Html::a(
             '<span class="glyphicon glyphicon-pencil"></span> ' . 'Edit',
-            [ 'update', 'url_id' => $model->url_id],
+            [ 'update', 'id' => $model->id],
             ['class' => 'btn btn-info']) ?>
 
             <?= Html::a(
             '<span class="glyphicon glyphicon-copy"></span> ' . 'Copy',
-            ['create', 'url_id' => $model->url_id, 'MitaUrl'=>$copyParams],
+            ['create', 'id' => $model->id, 'MitaUrl'=>$copyParams],
             ['class' => 'btn btn-success']) ?>
 
             <?= Html::a(
@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = 'View';
     
     <hr/>
 
-    <?= Html::a('<span class="glyphicon glyphicon-trash"></span> ' . 'Delete', ['delete', 'url_id' => $model->url_id],
+    <?= Html::a('<span class="glyphicon glyphicon-trash"></span> ' . 'Delete', ['delete', 'id' => $model->id],
     [
     'class' => 'btn btn-danger',
     'data-confirm' => '' . 'Are you sure to delete this item?' . '',
@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = 'View';
                      'encodeLabels' => false,
                      'items' => [
  [
-    'label'   => '<b class=""># '.Html::encode($model->url_id).'</b>',
+    'label'   => '<b class=""># '.Html::encode($model->id).'</b>',
     'content' => $this->blocks['app\models\MitaUrl'],
     'active'  => true,
 ],
