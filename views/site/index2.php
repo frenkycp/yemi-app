@@ -552,35 +552,27 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Display Monitor<br/><span class="japanesse-word"></span></div>
                     <div class="list-group">
-                        <div class="list-group-item">
-                            <p>PCB</p>
-                            <ol style="padding-left: 1em">
-                                <li>
-                                    <?= Html::a('Solder Dross Recycle Monitoring <span class="japanesse-word">はんだドロスのリサイクル管理</span>', ['/display/dross-input-daily']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('Plastic Crusher Recycle Monitoring <span class="japanesse-word">プラクラッシャーのリサイクル管理</span>', ['/display/crusher-input-daily']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('YEMI - SMT TODAY (Line 1)', ['/display/smt-inj-today', 'line' => '01']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('YEMI - SMT TODAY (Line 2)', ['/display/smt-inj-today', 'line' => '02']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('YEMI - INJ LARGE TODAY <span class="japanesse-word">(本日のプラ成形)</span>', ['/display/smt-inj-today', 'loc' => 'WI02']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('YEMI - INJ SMALL TODAY <span class="japanesse-word">(本日のプラ成形))</span>', ['/display/smt-inj-today', 'loc' => 'WI01']); ?>
-                                </li>
-                                <li>
-                                    <?= Html::a('SMT WIP Stock <span class="japanesse-word">(仕掛り在庫)</span>', ['/display/smt-stock-wip']); ?>
-                                </li>
-                                <li style="display: none;">
-                                    <?= Html::a('SPU WIP Stock <span class="japanesse-word"></span>', ['/display/smt-stock-wip', 'loc' => 'WU01']); ?>
-                                </li>
-                            </ol>
-                        </div>
+                        <?php
+                        $tmp_url = app\models\MitaUrl::find()->where(['flag' => 1])->orderBy('location, title')->all();
+                        $url_arr = [];
+                        foreach ($tmp_url as $key => $value) {
+                            $url_arr[$value->location][] = Html::a($value->title, $value->url, ['target' => '_blank']);
+                        }
+
+                        foreach ($url_arr as $location => $link) {
+                            echo '<div class="list-group-item">
+                                <p>' . $location . '</p>
+                                <ol style="padding-left: 1em">
+                            ';
+                            foreach ($link as $key => $value) {
+                                echo '<li>
+                                    ' . $value . '
+                                </li>';
+                            }
+                            echo '</ol></div>';
+                        }
+                        ?>
+                        
                     </div>
                 </div>
     	   </div>
