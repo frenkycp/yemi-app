@@ -2,11 +2,13 @@
 use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use kartik\date\DatePicker;
+use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Today\'s Attendance <span class="japanesse light-green"></span>',
-    'tab_title' => 'Today\'s Attendance',
-    'breadcrumbs_title' => 'Today\'s Attendance'
+    'page_title' => 'Production\'s Attendance <span class="japanesse light-green"></span>',
+    'tab_title' => 'Production\'s Attendance',
+    'breadcrumbs_title' => 'Production\'s Attendance'
 ];
 $color = 'ForestGreen';
 
@@ -72,7 +74,29 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['today-attendance']),
+]); ?>
 
+<div class="row">
+    <div class="col-md-2">
+        <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
+            'options' => [
+                'type' => DatePicker::TYPE_INPUT,
+                'onchange'=>'this.form.submit()'
+            ],
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd'
+            ]
+        ])->label(false); ?>
+        
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
 <table class="table">
     <thead>
         <tr>
@@ -83,7 +107,6 @@ $this->registerJs($script, View::POS_HEAD );
             <th class="text-center">MP<br/>(Shift 1)</th>
             <th class="text-center">MP<br/>(Shift 2)</th>
             <th class="text-center">MP<br/>(Shift 3)</th>
-            
         </tr>
     </thead>
     <tbody>
@@ -95,7 +118,7 @@ $this->registerJs($script, View::POS_HEAD );
                 <td><?= $key; ?></td>
                 <td class="text-center"><?= $value['plan']; ?></td>
                 <td class="text-center"><?= number_format($value['actual']); ?></td>
-                <td class="text-center<?= $balance != 0 ? ' text-red' : ''; ?>"><?= number_format($balance); ?></td>
+                <td class="text-center<?= $balance != 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($balance); ?></td>
                 <td class="text-center"><?= $data_by_shift[$value['key']]['1'] == 0 ? '' : number_format($data_by_shift[$value['key']]['1']); ?></td>
                 <td class="text-center"><?= $data_by_shift[$value['key']]['2'] == 0 ? '' : number_format($data_by_shift[$value['key']]['2']); ?></td>
                 <td class="text-center"><?= $data_by_shift[$value['key']]['3'] == 0 ? '' : number_format($data_by_shift[$value['key']]['3']); ?></td>

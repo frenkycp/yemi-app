@@ -198,6 +198,16 @@ class DisplayController extends Controller
         $period = date('Ym');
         $data = [];
 
+        $model = new \yii\base\DynamicModel([
+            'post_date'
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = $today;
+
+        if ($model->load($_GET)) {
+
+        }
+
         $tmp_data1 = $tmp_data2 = [];
         $tmp_attendance1 = ProdAttendanceData::find()
         ->select([
@@ -205,7 +215,7 @@ class DisplayController extends Controller
             'total' => 'COUNT(nik)'
         ])
         ->where([
-            'posting_shift' => $today
+            'posting_shift' => $model->post_date
         ])
         ->groupBy('child_analyst, child_analyst_desc, posting_shift')
         ->orderBy('child_analyst_desc')
@@ -251,11 +261,11 @@ class DisplayController extends Controller
         }
 
         $fa_mp_arr = FaMp02::find()
-        ->where(['tgl' => $today])
+        ->where(['tgl' => $model->post_date])
         ->one();
 
         $data['FINAL ASSY']['actual'] = (int)$fa_mp_arr->total_mp;
-        $data_by_shift = $this->getWipShiftAttendance($loc_selection, $today);
+        $data_by_shift = $this->getWipShiftAttendance($loc_selection, $model->post_date);
         $data_by_shift['WF01'] = [
             '1' => (int)$fa_mp_arr->total_mp,
             '2' => 0,
@@ -264,6 +274,7 @@ class DisplayController extends Controller
 
         return $this->render('today-attendance', [
             'data' => $data,
+            'model' => $model,
             'data_by_shift' => $data_by_shift,
         ]);
     }
@@ -1899,6 +1910,7 @@ class DisplayController extends Controller
             'tmp_data' => $tmp_data,
         ]);
     }
+
     public function actionLotTimeline()
     {
         $this->layout = 'clean';
