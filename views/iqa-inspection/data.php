@@ -73,12 +73,11 @@ $gridColumns = [
         'width' => '90px',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 85px;'
         ],
     ],
     [
         'attribute' => 'LAST_UPDATE',
-        'mergeHeader' => true,
         'value' => function($model){
             if ($model->LAST_UPDATE == null) {
                 return '-';
@@ -90,7 +89,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 85px;'
         ],
     ],
     [

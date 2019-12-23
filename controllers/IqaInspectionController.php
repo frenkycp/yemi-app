@@ -86,11 +86,11 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 		$this->layout = 'iqa-inspection\main';
 	    $searchModel  = new IqaInspectionSearch;
 	    $searchModel->TRANS_ID = '11';
-	    $searchModel->POST_DATE = date('Y-m-d');
+	    $searchModel->LAST_UPDATE = date('Y-m-d');
 
-	    if(\Yii::$app->request->get('POST_DATE') !== null)
+	    if(\Yii::$app->request->get('LAST_UPDATE') !== null)
 	    {
-	    	$searchModel->POST_DATE = \Yii::$app->request->get('POST_DATE');
+	    	$searchModel->LAST_UPDATE = \Yii::$app->request->get('LAST_UPDATE');
 	    }/**/
         if(\Yii::$app->request->get('Judgement') !== null)
         {
@@ -212,7 +212,7 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 
     	$in_out_data = StoreInOutWsus::find()
     	->select([
-    		'POST_DATE',
+    		'LAST_UPDATE' => 'FORMAT(LAST_UPDATE, \'yyyy-MM-dd\')',
     		'TOTAL_ITEM' => 'COUNT(SEQ_LOG)',
     		'TOTAL_OK' => 'SUM(CASE WHEN Judgement = \'OK\' THEN 1 ELSE 0 END)',
     		'TOTAL_NG' => 'SUM(CASE WHEN Judgement = \'NG\' THEN 1 ELSE 0 END)',
@@ -220,33 +220,35 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
     	])
     	->where([
     		'AND',
-    		['>=', 'POST_DATE', $model->from_date],
-    		['<=', 'POST_DATE', $model->to_date],
+    		['>=', 'LAST_UPDATE', $model->from_date],
+    		['<=', 'LAST_UPDATE', $model->to_date],
     	])
     	->andWhere(['TRANS_ID' => 11])
-    	->groupBy('POST_DATE')
-    	->orderBy('POST_DATE')
+    	->groupBy(['FORMAT(LAST_UPDATE, \'yyyy-MM-dd\')'])
+    	->orderBy('LAST_UPDATE')
     	->all();
 
         $tmp_total_ok = $tmp_total_ng = 0;
+        $tgl_arr = [];
     	foreach ($in_out_data as $key => $value) {
-    		$post_date = (strtotime($value->POST_DATE . " +7 hours") * 1000);
+    		$post_date = (strtotime($value->LAST_UPDATE . " +7 hours") * 1000);
+            $tgl_arr[] = $value->LAST_UPDATE;
             $tmp_total_ok += (int)$value->TOTAL_OK;
             $tmp_total_ng += (int)$value->TOTAL_NG;
 			$tmp_data_open[] = [
 				'x' => $post_date,
 				'y' => $value->TOTAL_OPEN == 0 ? null : (int)$value->TOTAL_OPEN,
-				'url' => Url::to(['data', 'POST_DATE' => date('Y-m-d', strtotime($value->POST_DATE)), 'Judgement' => 'PENDING']),
+				'url' => Url::to(['data', 'LAST_UPDATE' => date('Y-m-d', strtotime($value->LAST_UPDATE)), 'Judgement' => 'PENDING']),
 			];
 			$tmp_data_ok[] = [
 				'x' => $post_date,
 				'y' => $value->TOTAL_OK == 0 ? null : (int)$value->TOTAL_OK,
-				'url' => Url::to(['data', 'POST_DATE' => date('Y-m-d', strtotime($value->POST_DATE)), 'Judgement' => 'OK']),
+				'url' => Url::to(['data', 'LAST_UPDATE' => date('Y-m-d', strtotime($value->LAST_UPDATE)), 'Judgement' => 'OK']),
 			];
 			$tmp_data_ng[] = [
 				'x' => $post_date,
 				'y' => $value->TOTAL_NG == 0 ? null : (int)$value->TOTAL_NG,
-				'url' => Url::to(['data', 'POST_DATE' => date('Y-m-d', strtotime($value->POST_DATE)), 'Judgement' => 'NG']),
+				'url' => Url::to(['data', 'LAST_UPDATE' => date('Y-m-d', strtotime($value->LAST_UPDATE)), 'Judgement' => 'NG']),
 			];
     	}
 
@@ -276,8 +278,8 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
         $ng_data_arr = StoreInOutWsus::find()
         ->where([
             'AND',
-            ['>=', 'POST_DATE', $model->from_date],
-            ['<=', 'POST_DATE', $model->to_date],
+            ['>=', 'LAST_UPDATE', $model->from_date],
+            ['<=', 'LAST_UPDATE', $model->to_date],
         ])
         ->andWhere([
             'TRANS_ID' => 11,
@@ -290,6 +292,7 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 
         return $this->render('daily-inspection', [
         	'data' => $data,
+            'tgl_arr' => $tgl_arr,
         	'model' => $model,
             'ng_data_arr' => $ng_data_arr,
             'tmp_total_ng' => $tmp_total_ng,

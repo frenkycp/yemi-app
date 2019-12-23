@@ -117,7 +117,7 @@ echo '</pre>';*/
                         'text' => null
                     ],
                     //'gridLineWidth' => 0,
-                    'max' => 1500
+                    //'max' => 1500
                 ],
                 'credits' => [
                     'enabled' =>false

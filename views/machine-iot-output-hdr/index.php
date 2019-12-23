@@ -114,7 +114,14 @@ $gridColumns = [
     [
         'attribute' => 'start_date',
         'label' => 'Start Time',
-        'format' => ['date', 'php:Y-m-d H:i'],
+        'value' => function($model){
+        	if ($model->start_date == null) {
+        		return '-';
+        	} else {
+        		return date('Y-m-d H:i:s', strtotime($model->start_date));
+        	}
+        },
+        //'format' => ['date', 'php:Y-m-d H:i'],
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -125,7 +132,14 @@ $gridColumns = [
     [
         'attribute' => 'end_date',
         'label' => 'End Time',
-        'format' => ['date', 'php:Y-m-d H:i'],
+        'value' => function($model){
+        	if ($model->end_date == null) {
+        		return '-';
+        	} else {
+        		return date('Y-m-d H:i:s', strtotime($model->end_date));
+        	}
+        },
+        //'format' => ['date', 'php:Y-m-d H:i'],
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
