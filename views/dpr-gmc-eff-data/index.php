@@ -41,7 +41,11 @@ $gridColumns = [
         'contentOptions' => ['class' => 'kartik-sheet-style'],
         'width' => '36px',
         'header' => '',
-        'headerOptions' => ['class' => 'kartik-sheet-style']
+        'headerOptions' => ['class' => 'kartik-sheet-style'],
+        'pageSummary' => 'Total',
+        'pageSummaryOptions' => ['colspan' => 5],
+        'header' => '',
+        'headerOptions' => ['class'=>'kartik-sheet-style'],
     ],
     [
         'attribute' => 'proddate',
@@ -76,14 +80,7 @@ $gridColumns = [
         'label' => 'Manpower',
         'hAlign' => 'center',
         'value' => function($model){
-            $total_mp = app\models\SernoMp::find()
-            ->where([
-                'tgl' => $model->proddate,
-                'line' => $model->line,
-                'status' => 0
-            ])
-            ->count();
-            return Html::a($total_mp, ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
+            return Html::a($model->totalMp, ['get-mp-list', 'proddate' => $model->proddate, 'line' => $model->line], ['class' => 'modal_mp btn btn-success btn-sm', 'data-pjax' => '0',]);
         },
         'format' => 'raw',
         'mergeHeader' => true,
@@ -117,12 +114,27 @@ $gridColumns = [
         'mergeHeader' => true,
     ],
     [
+        'attribute' => 'working_time',
+        'value' => function($model){
+            $working_time = 0;
+            if ($model->totalMp > 0) {
+                $working_time = round($model->mp_time / $model->totalMp, 2);
+            }
+            return $working_time;
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+        'pageSummary' => true
+    ],
+    [
         'attribute' => 'qty_time',
         'label' => 'Qty Time<br/>(A)',
         'encodeLabel' => false,
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'pageSummary' => true
         //'width'=>'100px',
     ],
     [
@@ -132,6 +144,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'mergeHeader' => true,
+        'pageSummary' => true
         //'width'=>'100px',
     ],
     [

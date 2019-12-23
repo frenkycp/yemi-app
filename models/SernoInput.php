@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoInput extends BaseSernoInput
 {
-    public $etd_ship, $destination, $week_no, $total, $status, $pdf_file, $total_ng, $invoice, $vms, $port, $so, $description, $speaker_model, $dst, $prod_output_qty, $in_transit_qty, $finish_goods_qty, $stock_qty, $total_kubikasi, $period, $qty_product, $efficiency, $total_data, $total_check, $total_no_check, $total_ok, $total_lot_out, $total_repair, $fa_output_qty, $fa_output_ok_qty, $finish_good_ok_qty, $rfid_no, $start_time, $end_time, $mp_time_single, $cntr, $days_diff;
+    public $etd_ship, $destination, $week_no, $total, $status, $pdf_file, $total_ng, $invoice, $vms, $port, $so, $description, $speaker_model, $dst, $prod_output_qty, $in_transit_qty, $finish_goods_qty, $stock_qty, $total_kubikasi, $period, $qty_product, $efficiency, $total_data, $total_check, $total_no_check, $total_ok, $total_lot_out, $total_repair, $fa_output_qty, $fa_output_ok_qty, $finish_good_ok_qty, $rfid_no, $start_time, $end_time, $mp_time_single, $cntr, $days_diff, $mp, $working_time;
 
     public function behaviors()
     {
@@ -99,5 +99,18 @@ class SernoInput extends BaseSernoInput
     public function getSernoRfid()
     {
         return $this->hasOne(SernoRfid::className(), ['flo' => 'flo']);
+    }
+
+    public function getTotalMp()
+    {
+        $total_mp = SernoMp::find()
+        ->where([
+            'tgl' => $this->proddate,
+            'line' => $this->line,
+            'status' => 0
+        ])
+        ->count();
+
+        return $total_mp;
     }
 }

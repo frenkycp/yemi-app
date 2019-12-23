@@ -44,7 +44,6 @@ public function search($params)
 $query = SernoInput::find()
 ->select([
     'proddate', 'line', 'gmc',
-    'mp' => 'MAX(mp)',
     'qty_product' => 'COUNT(gmc)',
     'qty_time' => 'ROUND(SUM(qty_time),2)',
     'mp_time' => 'ROUND(SUM(mp_time),2)',

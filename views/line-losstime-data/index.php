@@ -46,6 +46,8 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
         ],
+        'pageSummary' => 'Total',
+        'pageSummaryOptions' => ['colspan' => 6],
     ],
     [
         'attribute' => 'line',
@@ -158,6 +160,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 75px; font-size: 12px;'
         ],
+        'pageSummary' => true,
     ],
     [
         'attribute' => 'losstime',
@@ -181,13 +184,14 @@ $gridColumns = [
     
     <?php \yii\widgets\Pjax::begin(['id' => 'pjax-main', 'enableReplaceState' => false, 'linkSelector' => '#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success' => 'function(){alert("yo")}']]) ?>
 
-    <div class="table-responsive">
+    <div class="">
     <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => $gridColumns,
             'hover' => true,
             'showPageSummary' => true,
+            'bordered' => true,
             //'condensed' => true,
             'striped' => true,
             //'floatHeader'=>true,
