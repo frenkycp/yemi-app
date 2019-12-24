@@ -62,6 +62,7 @@ class ProdAttendanceController extends Controller
 			                'child_analyst' => $model->child_analyst,
 			                'line' => $model->line,
 			                'posting_shift' => $posting_shift,
+			                'shift' => $model->shift,
 			            ])
 			            ->one();
 			            $now = date('Y-m-d H:i:s');
@@ -71,7 +72,7 @@ class ProdAttendanceController extends Controller
 			                $insert_attendance->period = date('Ym', strtotime($posting_shift));
 			                $insert_attendance->posting_date = date('Y-m-d');
 			                $insert_attendance->posting_shift = $posting_shift;
-			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $karyawan->NIK_SUN_FISH;
+			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . $model->shift . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $karyawan->NIK_SUN_FISH;
 			                $insert_attendance->nik = $karyawan->NIK_SUN_FISH;
 			                $insert_attendance->shift = $model->shift;
 

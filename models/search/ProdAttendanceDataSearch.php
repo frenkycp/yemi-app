@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\ProdAttendanceData;
+use app\models\ProdAttendanceView01;
 
 /**
 * ProdAttendanceDataSearch represents the model behind the search form about `app\models\ProdAttendanceData`.
 */
-class ProdAttendanceDataSearch extends ProdAttendanceData
+class ProdAttendanceDataSearch extends ProdAttendanceView01
 {
 /**
 * @inheritdoc
@@ -18,8 +18,7 @@ class ProdAttendanceDataSearch extends ProdAttendanceData
 public function rules()
 {
 return [
-[['att_data_id', 'period', 'posting_date', 'posting_shift', 'nik', 'name', 'check_in', 'check_out', 'child_analyst', 'child_analyst_desc', 'machine_id', 'machine_desc', 'last_update', 'current_status'], 'safe'],
-            [['line'], 'integer'],
+    [['period', 'posting_shift', 'nik', 'name', 'child_analyst', 'child_analyst_desc'], 'safe'],
 ];
 }
 
@@ -41,10 +40,16 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = ProdAttendanceData::find();
+$query = ProdAttendanceView01::find();
 
 $dataProvider = new ActiveDataProvider([
-'query' => $query,
+    'query' => $query,
+    'sort' => [
+        'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'name' => SORT_ASC,
+        ]
+    ],
 ]);
 
 $this->load($params);
@@ -56,23 +61,14 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'posting_date' => $this->posting_date,
             'posting_shift' => $this->posting_shift,
-            'check_in' => $this->check_in,
-            'check_out' => $this->check_out,
-            'line' => $this->line,
-            'last_update' => $this->last_update,
         ]);
 
-        $query->andFilterWhere(['like', 'att_data_id', $this->att_data_id])
-            ->andFilterWhere(['like', 'period', $this->period])
+        $query->andFilterWhere(['like', 'period', $this->period])
             ->andFilterWhere(['like', 'nik', $this->nik])
             ->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'child_analyst', $this->child_analyst])
-            ->andFilterWhere(['like', 'child_analyst_desc', $this->child_analyst_desc])
-            ->andFilterWhere(['like', 'machine_id', $this->machine_id])
-            ->andFilterWhere(['like', 'machine_desc', $this->machine_desc])
-            ->andFilterWhere(['like', 'current_status', $this->current_status]);
+            ->andFilterWhere(['like', 'child_analyst_desc', $this->child_analyst_desc]);
 
 return $dataProvider;
 }

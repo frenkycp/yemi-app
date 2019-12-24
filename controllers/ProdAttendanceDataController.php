@@ -13,7 +13,7 @@ class ProdAttendanceDataController extends \app\controllers\base\ProdAttendanceD
 	{
 		$this->layout = 'clean';
 	    $searchModel  = new ProdAttendanceDataSearch;
-	    $searchModel ->current_status = 'I';
+	    //$searchModel ->current_status = 'I';
 	    $searchModel->posting_shift = date('Y-m-d');
 	    if (\Yii::$app->request->get('posting_shift') !== null) {
 	    	$searchModel->posting_shift = \Yii::$app->request->get('posting_shift');

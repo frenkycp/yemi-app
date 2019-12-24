@@ -35,22 +35,11 @@ $this->registerCss("
 
 $gridColumns = [
     [
-        'attribute' => 'period',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center;'
-        ],
-    ],
-    [
-        'attribute' => 'posting_shift',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center;'
-        ],
+        'class' => 'kartik\grid\SerialColumn',
+        'contentOptions' => ['class' => 'kartik-sheet-style'],
+        'width' => '36px',
+        'header' => '',
+        'headerOptions' => ['class' => 'kartik-sheet-style']
     ],
     [
         'attribute' => 'child_analyst',
@@ -65,7 +54,7 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'line',
+        'attribute' => 'posting_shift',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -91,16 +80,6 @@ $gridColumns = [
         ],
     ],
     /*[
-        'attribute' => 'check_in',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'format' => ['date', 'php:Y-m-d H:i:s'],
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center;'
-        ],
-    ],
-    [
         'attribute' => 'check_out',
         'vAlign' => 'middle',
         'hAlign' => 'center',

@@ -97,6 +97,7 @@ use app\models\SernoMaster;
 use app\models\DataRepair;
 use app\models\ClientLog;
 use app\models\WipMpPlan;
+use app\models\ProdAttendanceView01;
 
 class DisplayController extends Controller
 {
@@ -162,7 +163,7 @@ class DisplayController extends Controller
 
     public function getWipShiftAttendance($loc_selection, $date)
     {
-        $tmp_attendance = ProdAttendanceData::find()
+        $tmp_attendance = ProdAttendanceView01::find()
         ->select([
             'child_analyst', 'child_analyst_desc', 'posting_shift', 'shift',
             'total' => 'COUNT(nik)'
@@ -209,7 +210,7 @@ class DisplayController extends Controller
         }
 
         $tmp_data1 = $tmp_data2 = [];
-        $tmp_attendance1 = ProdAttendanceData::find()
+        $tmp_attendance1 = ProdAttendanceView01::find()
         ->select([
             'child_analyst', 'child_analyst_desc', 'posting_shift',
             'total' => 'COUNT(nik)'
@@ -227,18 +228,8 @@ class DisplayController extends Controller
         $wip_mp_plan = ArrayHelper::map(WipMpPlan::find()->where(['period' => $period])->all(), 'child_analyst', 'mp_plan');
         $mp_arr = [];
         foreach ($loc_selection as $key1 => $location) {
-            /*$actual_mp = 0;
-            foreach ($tmp_attendance1 as $key2 => $attendance1) {
-                if ($key1 == $attendance1->child_analyst) {
-                    $actual_mp = $attendance1->total;
-                }
-            }*/
             $mp_plan = isset($wip_mp_plan[$key1]) ? $wip_mp_plan[$key1] : 0;
             $mp_arr[$key1] = $mp_plan;
-            /*$data[$location] = [
-                'plan' => $mp_plan,
-                'actual' => $actual_mp
-            ];*/
         }
         if (count($mp_arr) > 0) {
             arsort($mp_arr);

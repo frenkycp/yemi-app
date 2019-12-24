@@ -62,7 +62,7 @@ echo '</pre>';*/
 ?>
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="box box-primary box-solid">
             <div class="box-header">
                 <h3 class="box-title">Location</h3>
@@ -77,7 +77,7 @@ echo '</pre>';*/
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="box box-primary box-solid">
             <div class="box-header">
                 <h3 class="box-title">Shift</h3>
@@ -93,7 +93,7 @@ echo '</pre>';*/
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="box box-primary box-solid">
             <div class="box-header">
                 <h3 class="box-title">Line</h3>
@@ -111,7 +111,7 @@ echo '</pre>';*/
             </div>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" style="display: none;">
         <div class="box box-primary box-solid">
             <div class="box-header">
                 <h3 class="box-title">Total MP</h3>
