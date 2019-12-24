@@ -62,7 +62,7 @@ echo '</pre>';*/
 ?>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="box box-primary box-solid">
             <div class="box-header">
                 <h3 class="box-title">Location</h3>
@@ -77,23 +77,7 @@ echo '</pre>';*/
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="box box-primary box-solid">
-            <div class="box-header">
-                <h3 class="box-title">Shift</h3>
-            </div>
-            <div class="box-body">
-                <?= $form->field($model, 'shift')->dropDownList([
-                    1 => 1,
-                    2 => 2,
-                    3 => 3
-                ], [
-                    'onchange'=>'this.form.submit()'
-                ])->label(false); ?>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="box box-primary box-solid">
             <div class="box-header">
                 <h3 class="box-title">Line</h3>
@@ -143,6 +127,7 @@ echo '</pre>';*/
                 <tr style="font-size: 2em;">
                     <th class="text-center">NIK</th>
                     <th>Name</th>
+                    <th class="text-center">Shift</th>
                     <th class="text-center">Status</th>
                     <th class="text-center">Datetime</th>
                 </tr>
@@ -178,6 +163,7 @@ echo '</pre>';*/
                     echo '<tr class="' . $tr_class . '" style="font-size: ' . $font_size . ';">
                         <td class="text-center" style="width: 110px;">' . $attendance->nik . '</td>
                         <td>' . $attendance->name . '</td>
+                        <td class="text-center" style="width: 110px;">' . $attendance->shift . '</td>
                         <td class="' . $status_class . '" style="width: 110px;">' . $current_status . '</td>
                         <td class="text-center" style="width: 270px;">' . date('Y-m-d H:i:s', strtotime($attendance->last_update)) . '</td>
                     </tr>';

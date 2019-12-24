@@ -101,9 +101,9 @@ $this->registerJs($script, View::POS_HEAD );
                     echo '<li><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
                 }
             }
-            if ((int)date('n') == 12 && date('j') > 20) {
+            /*if ((int)date('n') == 12 && date('j') > 20) {
                 echo '<li><a href="#tab_1_0" data-toggle="tab">Week 2</a></li>';
-            }
+            }*/
         }
         
         ?>

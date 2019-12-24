@@ -21,6 +21,8 @@ class ProdAttendanceController extends Controller
 		$this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $posting_shift = date('Y-m-d');
+        //$time_now = date('H:i:s');
+        //$time_now = '21:45:00';
 
         Tabs::clearLocalStorage();
 
@@ -31,7 +33,7 @@ class ProdAttendanceController extends Controller
             'child_analyst', 'line', 'child_analyst_desc', 'nik', 'shift'
         ]);
         $model->addRule(['child_analyst_desc', 'nik', 'child_analyst'], 'string')
-        ->addRule(['line', 'shift'], 'number');
+        ->addRule(['line'], 'number');
 
         $model->child_analyst = $loc;
         $model->line = $line;
@@ -52,29 +54,37 @@ class ProdAttendanceController extends Controller
 		            ->one();
 
 		            if ($karyawan->NIK != null) {
-				        if (date('H:i:s') < '07:00:00' && $model->shift == 3) {
-				        	$posting_shift = date('Y-m-d', strtotime(' -1 day'));
-				        }
-		            	
 	            		$find_data = ProdAttendanceData::find()
 			            ->where([
 			                'nik' => $karyawan->NIK_SUN_FISH,
 			                'child_analyst' => $model->child_analyst,
 			                'line' => $model->line,
 			                'posting_shift' => $posting_shift,
-			                'shift' => $model->shift,
 			            ])
 			            ->one();
 			            $now = date('Y-m-d H:i:s');
+			            $time_now = date('H:i:s', strtotime($now));
 
 			            if ($find_data->nik == null) {
+			            	$shift = 1;
+			            	if ($time_now > '06:00:00' && $time_now <= '13:00:00') {
+			            		$shift = 1;
+			            	} elseif ($time_now > '13:00:00' && $time_now <= '21:00:00') {
+			            		$shift = 2;
+			            	} elseif ($time_now > '21:00:00' && $time_now < '06:00:00') {
+			            		$shift = 3;
+			            		if ($time_now > '00:00:00') {
+			            			$posting_shift = date('Y-m-d', strtotime(' -1 day'));
+			            		}
+			            	}
+
 			                $insert_attendance = new ProdAttendanceData;
 			                $insert_attendance->period = date('Ym', strtotime($posting_shift));
 			                $insert_attendance->posting_date = date('Y-m-d');
 			                $insert_attendance->posting_shift = $posting_shift;
-			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . $model->shift . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $karyawan->NIK_SUN_FISH;
+			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $karyawan->NIK_SUN_FISH;
 			                $insert_attendance->nik = $karyawan->NIK_SUN_FISH;
-			                $insert_attendance->shift = $model->shift;
+			                $insert_attendance->shift = $shift;
 
 			                $insert_attendance->name = $karyawan->NAMA_KARYAWAN;
 			                $insert_attendance->check_in = $now;
@@ -136,19 +146,9 @@ class ProdAttendanceController extends Controller
         	
         }
 
-        $attendance_data = ProdAttendanceData::find()
-        ->where([
-            'child_analyst' => $model->child_analyst,
-            'line' => $model->line,
-            'posting_shift' => $posting_shift
-        ])
-        ->orderBy('last_update DESC')
-        ->limit(10)
-        ->all();
-
         $attendance_log = ProdAttendanceLog::find()
         ->select([
-        	'nik' => 'PROD_ATTENDANCE_DATA.nik', 'name' => 'PROD_ATTENDANCE_DATA.name', 'att_type', 'PROD_ATTENDANCE_LOG.last_update'
+        	'nik' => 'PROD_ATTENDANCE_DATA.nik', 'name' => 'PROD_ATTENDANCE_DATA.name', 'att_type', 'PROD_ATTENDANCE_LOG.last_update', 'shift' => 'PROD_ATTENDANCE_DATA.shift'
         ])
         ->joinWith('prodAttendanceData')
         ->where([

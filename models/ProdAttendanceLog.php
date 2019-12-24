@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ProdAttendanceLog extends BaseProdAttendanceLog
 {
-    public $nik, $name;
+    public $nik, $name, $shift;
 
     public function behaviors()
     {
