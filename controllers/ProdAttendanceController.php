@@ -52,10 +52,8 @@ class ProdAttendanceController extends Controller
 		            ->one();
 
 		            if ($karyawan->NIK != null) {
-				        if (date('H:i:s') < '07:00:00') {
-				        	if ($model->shift == 3) {
-				        		$posting_shift = date('Y-m-d', strtotime(' -1 day'));
-				        	}
+				        if (date('H:i:s') < '07:00:00' && $model->shift == 3) {
+				        	$posting_shift = date('Y-m-d', strtotime(' -1 day'));
 				        }
 		            	
 	            		$find_data = ProdAttendanceData::find()
@@ -75,6 +73,7 @@ class ProdAttendanceController extends Controller
 			                $insert_attendance->posting_shift = $posting_shift;
 			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $karyawan->NIK_SUN_FISH;
 			                $insert_attendance->nik = $karyawan->NIK_SUN_FISH;
+			                $insert_attendance->shift = $model->shift;
 
 			                $insert_attendance->name = $karyawan->NAMA_KARYAWAN;
 			                $insert_attendance->check_in = $now;
@@ -157,7 +156,7 @@ class ProdAttendanceController extends Controller
             'PROD_ATTENDANCE_DATA.posting_shift' => $posting_shift
         ])
         ->orderBy('PROD_ATTENDANCE_LOG.last_update DESC')
-        ->limit(10)
+        //->limit(10)
         ->all();
 
         $total_mp = ProdAttendanceData::find()
