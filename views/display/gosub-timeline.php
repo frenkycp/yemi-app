@@ -102,7 +102,7 @@ echo Highcharts::widget([
             'enabled' => false
         ],
         'title' => [
-            'text' => 'Operator Timeline',
+            'text' => $_GET['terminal'],
         ],
         'xAxis' => [
             'type' => 'datetime',

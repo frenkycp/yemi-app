@@ -112,7 +112,11 @@ echo '</pre>';*/
                 <u><?= Html::a('DRIVER UTILITY (MONTHLY)', ['gosub-operation-ratio/index'], ['style' => 'color: white;', 'target' => '_blank']); ?></u>
             </li>
             <li>
-                <u><?= Html::a('DRIVER TIMELINE (DAILY)', ['display/gosub-timeline'], ['style' => 'color: white;', 'target' => '_blank']); ?></u>
+                DRIVER TIMELINE (DAILY)
+                <ol>
+                    <li><u><?= Html::a('NETWORK ASSY', ['display/gosub-timeline', 'terminal' => 'NETWORK ASSY'], ['style' => 'color: white;', 'target' => '_blank']); ?></u></li>
+                    <li><u><?= Html::a('FRONT GRILLE ASSY', ['display/gosub-timeline', 'terminal' => 'FRONT GRILLE ASSY'], ['style' => 'color: white;', 'target' => '_blank']); ?></u></li>
+                </ol>
             </li>
         </ul>
         

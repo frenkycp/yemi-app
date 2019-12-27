@@ -98,9 +98,59 @@ use app\models\DataRepair;
 use app\models\ClientLog;
 use app\models\WipMpPlan;
 use app\models\ProdAttendanceView01;
+use app\models\SmtWorkingRatioByDayResult;
 
 class DisplayController extends Controller
 {
+	public function actionSmtWorkingRatioByDay()
+	{
+		$this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_working_ratio = SmtWorkingRatioByDayResult::find()
+        ->where([
+        	'AND',
+            ['>=', 'shift_date', date('Y-m-d', strtotime($model->from_date))],
+            ['<=', 'shift_date', date('Y-m-d', strtotime($model->to_date))]
+        ])
+        ->orderBy('shift_date, mounter_stage')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_working_ratio as $key => $value) {
+        	$proddate = (strtotime($value->shift_date . " +7 hours") * 1000);
+        	$tmp_data[$value->mounter_stage][] = [
+        		'x' => $proddate,
+                'y' => round($value->working_ratio_by_day)
+        	];
+        }
+
+        $data = [];
+        foreach ($tmp_data as $key => $value) {
+        	$data[] = [
+        		'name' => $key,
+        		'data' => $value
+        	];
+        }
+
+		return $this->render('smt-working-ratio-by-day', [
+			'model' => $model,
+			'data' => $data,
+		]);
+	}
+
     public function actionDailyClientNetwork($value='')
     {
         $this->layout = 'clean';
@@ -3131,7 +3181,7 @@ class DisplayController extends Controller
             'location_arr' => $location_arr,
         ]);
     }
-    public function actionGosubTimeline()
+    public function actionGosubTimeline($terminal = 'NETWORK ASSY')
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
@@ -3151,11 +3201,13 @@ class DisplayController extends Controller
         $today_name = date('D', strtotime($model->posting_date));
 
         $max_x = (strtotime($model->posting_date . ' 24:00:00' . " +7 hours") * 1000);
-        $min_x = (strtotime($model->posting_date . ' 07:00:00' . " +7 hours") * 1000);
+        $min_x = (strtotime($model->posting_date . ' 00:00:00' . " +7 hours") * 1000);
         $tmp_operator = GojekTbl::find()
         ->where([
-            'SOURCE' => 'SUB'
+            'SOURCE' => 'SUB',
+            'TERMINAL' => $terminal
         ])
+        ->andWhere(['<>', 'HADIR', 'M'])
         ->all();
 
         $tmp_order = GojekOrderTbl::find()
@@ -3763,8 +3815,14 @@ class DisplayController extends Controller
                         $diff_min = $this->getMinutes($value->LAST_UPDATE, date('Y-m-d H:i:s'));
                         if ($diff_min > 7) {
                             if ($value->LAST_UPDATE == date('Y-m-d')) {
-                                $bg_class = ' bg-light-blue';
-                                $text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value->LAST_UPDATE)) . ' ]';
+                            	if ($diff_min > 60) {
+		                        	$bg_class = ' bg-light-blue';
+                                	$text_remark = 'STANDBY';
+		                        } else {
+		                        	$bg_class = ' bg-light-blue';
+                                	$text_remark = 'IDLING > 2 MIN [ SINCE - ' . date('H:i', strtotime($value->LAST_UPDATE)) . ' ]';
+		                        }
+                                
                             } else {
                                 $bg_class = ' bg-light-blue';
                                 $text_remark = 'STANDBY';
@@ -3777,8 +3835,8 @@ class DisplayController extends Controller
                                 $txt_new_order = '<span class="pull-right label label-default" style="position: absolute; top: 65px; right: 10px;">New Order!</span>';
                             }
                         }
-                        
-                        
+
+
                     } else {
                         $bg_class = ' bg-aqua';
                         $text_remark = 'NO INFORMATION';

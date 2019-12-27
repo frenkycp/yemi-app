@@ -21,6 +21,10 @@ class ProdAttendanceController extends Controller
 		$this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $posting_shift = date('Y-m-d');
+        //$now = '2019-12-26 21:45:06';
+        $now = date('Y-m-d H:i:s');
+        $time_now = date('H:i:s', strtotime($now));
+        $today = date('Y-m-d', strtotime($now));
         //$time_now = date('H:i:s');
         //$time_now = '21:45:00';
 
@@ -62,16 +66,15 @@ class ProdAttendanceController extends Controller
 			                'posting_shift' => $posting_shift,
 			            ])
 			            ->one();
-			            $now = date('Y-m-d H:i:s');
-			            $time_now = date('H:i:s', strtotime($now));
+			            
+			            
 
 			            if ($find_data->nik == null) {
 			            	$shift = 1;
-			            	if ($time_now > '06:00:00' && $time_now <= '13:00:00') {
-			            		$shift = 1;
-			            	} elseif ($time_now > '13:00:00' && $time_now <= '21:00:00') {
+			            	if (strtotime($time_now) > strtotime('13:00:00') && strtotime($time_now) <= strtotime('21:00:00')) {
 			            		$shift = 2;
-			            	} elseif ($time_now > '21:00:00' && $time_now < '06:00:00') {
+			            	}
+			            	if ((strtotime($time_now) > strtotime('21:00:00') && strtotime($time_now) <= strtotime('24:00:00')) || strtotime($time_now) > strtotime('00:00:00') && strtotime($time_now) <= strtotime('06:00:00')) {
 			            		$shift = 3;
 			            		if ($time_now > '00:00:00') {
 			            			$posting_shift = date('Y-m-d', strtotime(' -1 day'));
@@ -80,7 +83,7 @@ class ProdAttendanceController extends Controller
 
 			                $insert_attendance = new ProdAttendanceData;
 			                $insert_attendance->period = date('Ym', strtotime($posting_shift));
-			                $insert_attendance->posting_date = date('Y-m-d');
+			                $insert_attendance->posting_date = $today;
 			                $insert_attendance->posting_shift = $posting_shift;
 			                $insert_attendance->att_data_id = $model->child_analyst . '-' . $model->line . '-' . date('Ymd', strtotime($posting_shift)) . '-' . $karyawan->NIK_SUN_FISH;
 			                $insert_attendance->nik = $karyawan->NIK_SUN_FISH;
@@ -174,6 +177,9 @@ class ProdAttendanceController extends Controller
             'attendance_data' => $attendance_data,
             'attendance_log' => $attendance_log,
             'total_mp' => $total_mp,
+            'now' => $now,
+            'time_now' => $time_now,
+            'today' => $today,
         ]);
 	}
 }
