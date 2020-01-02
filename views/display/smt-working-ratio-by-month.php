@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'SMT Working Ratio by Day',
-    'tab_title' => 'SMT Working Ratio by Day',
-    'breadcrumbs_title' => 'SMT Working Ratio by Day'
+    'page_title' => 'SMT Working Ratio by Month',
+    'tab_title' => 'SMT Working Ratio by Month',
+    'breadcrumbs_title' => 'SMT Working Ratio by Month'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -56,7 +56,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['smt-working-ratio-by-day']),
+    'action' => Url::to(['smt-working-ratio-by-month']),
 ]); ?>
 
 <div class="row">
@@ -110,7 +110,7 @@ echo '</pre>';*/
                         'text' => null,
                     ],
                     'xAxis' => [
-                        'type' => 'datetime',
+                        'categories' => $categories,
                         'gridLineWidth' => 0
                     ],
                     'yAxis' => [

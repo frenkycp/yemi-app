@@ -99,9 +99,113 @@ use app\models\ClientLog;
 use app\models\WipMpPlan;
 use app\models\ProdAttendanceView01;
 use app\models\SmtWorkingRatioByDayResult;
+use app\models\SmtWorkingRatioByHourResult;
+use app\models\SmtWorkingRatioByMonthResult;
 
 class DisplayController extends Controller
 {
+    public function actionSmtWorkingRatioByMonth()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $categories = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d', strtotime('-1 year'))));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_working_ratio = SmtWorkingRatioByMonthResult::find()
+        ->where([
+            'AND',
+            ['>=', 'start_period', date('Ym', strtotime($model->from_date))],
+            ['<=', 'start_period', date('Ym', strtotime($model->to_date))]
+        ])
+        ->orderBy('start_period, mounter_stage')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_working_ratio as $key => $value) {
+            $start_period = $value->start_period;
+            if (!in_array($start_period, $categories)) {
+                $categories[] = $start_period;
+            }
+            $tmp_data[$value->machine . '-' . $value->stage][] = [
+                'y' => round($value->Working_Ratio_By_Month, 2)
+            ];
+        }
+
+        $data = [];
+        foreach ($tmp_data as $key => $value) {
+            $data[] = [
+                'name' => $key,
+                'data' => $value
+            ];
+        }
+
+        return $this->render('smt-working-ratio-by-month', [
+            'model' => $model,
+            'data' => $data,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function actionSmtWorkingRatioByHour($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-d');
+        $model->to_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_working_ratio = SmtWorkingRatioByHourResult::find()
+        ->where([
+            'AND',
+            ['>=', 'shift_date', date('Y-m-d', strtotime($model->from_date))],
+            ['<=', 'shift_date', date('Y-m-d', strtotime($model->to_date))]
+        ])
+        ->orderBy('start_time_hour, mounter_stage')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_working_ratio as $key => $value) {
+            $proddate = (strtotime($value->start_time_hour . " +7 hours") * 1000);
+            $tmp_data[$value->machine . '-' . $value->stage][] = [
+                'x' => $proddate,
+                'y' => round($value->working_ratio_by_hour, 2)
+            ];
+        }
+
+        $data = [];
+        foreach ($tmp_data as $key => $value) {
+            $data[] = [
+                'name' => $key,
+                'data' => $value
+            ];
+        }
+
+        return $this->render('smt-working-ratio-by-hour', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
+
 	public function actionSmtWorkingRatioByDay()
 	{
 		$this->layout = 'clean';
@@ -131,9 +235,9 @@ class DisplayController extends Controller
         $tmp_data = [];
         foreach ($tmp_working_ratio as $key => $value) {
         	$proddate = (strtotime($value->shift_date . " +7 hours") * 1000);
-        	$tmp_data[$value->mounter_stage][] = [
+        	$tmp_data[$value->machine . '-' . $value->stage][] = [
         		'x' => $proddate,
-                'y' => round($value->working_ratio_by_day)
+                'y' => round($value->working_ratio_by_day, 2)
         	];
         }
 

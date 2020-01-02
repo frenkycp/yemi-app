@@ -7,18 +7,18 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.SMT_PCB_LOG_WORKING_RATIO_BY_DAY_RESULT".
+ * This is the base-model class for table "db_owner.SMT_PCB_LOG_WORKING_RATIO_BY_DAY_YCJ_MONTH_REPORT".
  *
- * @property string $shift_period
- * @property string $shift_date
+ * @property string $start_period
  * @property string $machine
  * @property string $mounter_stage
- * @property integer $day_on_second
- * @property double $working_ratio_by_day
+ * @property double $tot_mount_ct_markrec_ct_transfer_ct
+ * @property integer $day_count
+ * @property double $Working_Ratio_By_Month
  * @property string $stage
  * @property string $aliasModel
  */
-abstract class SmtWorkingRatioByDayResult extends \yii\db\ActiveRecord
+abstract class SmtWorkingRatioByMonthResult extends \yii\db\ActiveRecord
 {
 
 
@@ -28,7 +28,7 @@ abstract class SmtWorkingRatioByDayResult extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.SMT_PCB_LOG_WORKING_RATIO_BY_DAY_RESULT';
+        return 'db_owner.SMT_PCB_LOG_WORKING_RATIO_BY_DAY_YCJ_MONTH_REPORT';
     }
 
     /**
@@ -45,11 +45,9 @@ abstract class SmtWorkingRatioByDayResult extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shift_date'], 'safe'],
-            [['day_on_second'], 'required'],
-            [['day_on_second'], 'integer'],
-            [['working_ratio_by_day'], 'number'],
-            [['shift_period'], 'string', 'max' => 6],
+            [['tot_mount_ct_markrec_ct_transfer_ct', 'Working_Ratio_By_Month'], 'number'],
+            [['day_count'], 'integer'],
+            [['start_period'], 'string', 'max' => 6],
             [['machine', 'mounter_stage', 'stage'], 'string', 'max' => 50]
         ];
     }
@@ -60,12 +58,12 @@ abstract class SmtWorkingRatioByDayResult extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'shift_period' => 'Shift Period',
-            'shift_date' => 'Shift Date',
+            'start_period' => 'Start Period',
             'machine' => 'Machine',
             'mounter_stage' => 'Mounter Stage',
-            'day_on_second' => 'Day On Second',
-            'working_ratio_by_day' => 'Working Ratio By Day',
+            'tot_mount_ct_markrec_ct_transfer_ct' => 'Tot Mount Ct Markrec Ct Transfer Ct',
+            'day_count' => 'Day Count',
+            'Working_Ratio_By_Month' => 'Working Ratio By Month',
             'stage' => 'Stage',
         ];
     }
