@@ -140,6 +140,7 @@ return [
         'WM01' => 'PCB MANUAL INS.',
         'WM03' => 'SMT',
         'WU01' => 'SPEAKER PROJECT',
+        'WS01' => 'SUB ASSY',
         'WW02' => 'WW PROCESS',
         'WF01' => 'FINAL ASSY',
     ],

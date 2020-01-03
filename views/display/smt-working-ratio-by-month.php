@@ -64,10 +64,6 @@ echo '</pre>';*/
         <?= $form->field($model, 'line')->dropDownList([
             'LINE-01' => 'LINE-01',
             'LINE-02' => 'LINE-02',
-        ], [
-            'options' => [
-                'LINE-01' => ['disabled' => true]
-            ],
         ]); ?>
     </div>
     <div class="col-md-4">

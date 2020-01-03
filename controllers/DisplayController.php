@@ -102,9 +102,120 @@ use app\models\SmtWorkingRatioByDayResult;
 use app\models\SmtWorkingRatioByHourResult;
 use app\models\SmtWorkingRatioByMonthResult;
 use app\models\SmtPcbLog;
+use app\models\SmtLogLineBalance;
+use app\models\SmtLogLineBalanceReport;
 
 class DisplayController extends Controller
 {
+    public function actionSmtLogLineBalance($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $categories = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'line'
+        ]);
+        $model->addRule(['from_date', 'to_date', 'line'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d', strtotime('-1 year'))));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $model->line = 'LINE-02';
+
+        $tmp_shift_date = SmtPcbLog::find()
+        ->select(['shift_date' => 'MAX(shift_date)'])
+        ->where(['line' => $model->line])
+        ->one();
+        $max_shift_date = $tmp_shift_date->shift_date;
+
+        
+
+        if (strtotime($max_shift_date) < strtotime($model->to_date)) {
+            $model->to_date = date('Y-m-t', strtotime($max_shift_date));
+            $model->from_date = date('Y-m-01', strtotime($max_shift_date . ' -1 year'));
+        }
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_mounter = SmtPcbLog::find()
+        ->select(['mounter_stage', 'machine', 'stage'])
+        ->where(['line' => $model->line])
+        ->groupBy('mounter_stage, machine, stage')
+        ->orderBy('mounter_stage')
+        ->all();
+
+        $tmp_lb_report = SmtLogLineBalanceReport::find()
+        ->where([
+            'AND',
+            ['>=', 'start_period', date('Ym', strtotime($model->from_date))],
+            ['<=', 'start_period', date('Ym', strtotime($model->to_date))]
+        ])
+        ->andWhere(['line' => $model->line])
+        ->orderBy('start_period')
+        ->all();
+
+        $tmp_lb = SmtLogLineBalance::find()
+        ->where([
+            'AND',
+            ['>=', 'start_period', date('Ym', strtotime($model->from_date))],
+            ['<=', 'start_period', date('Ym', strtotime($model->to_date))]
+        ])
+        ->andWhere(['line' => $model->line])
+        ->orderBy('start_period, mounter_stage')
+        ->all();
+
+        $tmp_data = [];
+        $tmp_data_line = [];
+        foreach ($tmp_lb_report as $lb_report) {
+            $start_period = $lb_report->start_period;
+            $categories[] = $start_period;
+            $tmp_data_line[] = $lb_report->LINE_BALANCE;
+            foreach ($tmp_mounter as $mounter) {
+                $tmp_value = null;
+                foreach ($tmp_lb as $key => $value) {
+                    
+                    if ($mounter->mounter_stage == $value->mounter_stage && $value->start_period == $start_period) {
+                        $tmp_value = round($value->mount_ct_total_avg, 2);
+                    }
+                }
+                $tmp_data[$mounter->machine . '-' . $mounter->stage][] = $tmp_value;
+            }
+            
+        }
+
+        $data = [];
+        foreach ($tmp_data as $key => $value) {
+            $data[] = [
+                'name' => $key,
+                'type' => 'column',
+                'dataLabels' => [
+                    'enabled' => true,
+                    'format' => '{point.y:,.0f}',
+                ],
+                'data' => $value,
+                'showInLegend' => false
+            ];
+        }
+        $data[] = [
+            'name' => 'Line Balance',
+            'type' => 'line',
+            'yAxis' => 1,
+            'dataLabels' => [
+                'enabled' => true,
+                'format' => '{point.y:,.0f}',
+            ],
+            'data' => $tmp_data_line,
+            'showInLegend' => false
+        ];
+
+        return $this->render('smt-log-line-balance', [
+            'model' => $model,
+            'data' => $data,
+            'categories' => $categories,
+        ]);
+    }
     public function actionSmtWorkingRatioByMonth()
     {
         $this->layout = 'clean';
@@ -122,6 +233,7 @@ class DisplayController extends Controller
 
         $tmp_shift_date = SmtPcbLog::find()
         ->select(['shift_date' => 'MAX(shift_date)'])
+        ->where(['line' => $model->line])
         ->one();
         $max_shift_date = $tmp_shift_date->shift_date;
 
@@ -140,6 +252,7 @@ class DisplayController extends Controller
             ['>=', 'start_period', date('Ym', strtotime($model->from_date))],
             ['<=', 'start_period', date('Ym', strtotime($model->to_date))]
         ])
+        ->andWhere(['line' => $model->line])
         ->orderBy('start_period, mounter_stage')
         ->all();
 
@@ -185,6 +298,7 @@ class DisplayController extends Controller
 
         $tmp_shift_date = SmtPcbLog::find()
         ->select(['shift_date' => 'MAX(shift_date)'])
+        ->where(['line' => $model->line])
         ->one();
         $max_shift_date = $tmp_shift_date->shift_date;
 
@@ -202,6 +316,7 @@ class DisplayController extends Controller
             ['>=', 'shift_date', date('Y-m-d', strtotime($model->from_date))],
             ['<=', 'shift_date', date('Y-m-d', strtotime($model->to_date))]
         ])
+        ->andWhere(['line' => $model->line])
         ->orderBy('start_time_hour, mounter_stage')
         ->all();
 
@@ -244,6 +359,7 @@ class DisplayController extends Controller
 
         $tmp_shift_date = SmtPcbLog::find()
         ->select(['shift_date' => 'MAX(shift_date)'])
+        ->where(['line' => $model->line])
         ->one();
         $max_shift_date = $tmp_shift_date->shift_date;
 
@@ -262,6 +378,7 @@ class DisplayController extends Controller
             ['>=', 'shift_date', date('Y-m-d', strtotime($model->from_date))],
             ['<=', 'shift_date', date('Y-m-d', strtotime($model->to_date))]
         ])
+        ->andWhere(['line' => $model->line])
         ->orderBy('shift_date, mounter_stage')
         ->all();
 

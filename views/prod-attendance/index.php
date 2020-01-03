@@ -68,7 +68,7 @@ echo '</pre>';*/
                 <h3 class="box-title">Location</h3>
             </div>
             <div class="box-body">
-                <?= $form->field($model, 'child_analyst')->dropDownList(ArrayHelper::map(app\models\WipLocation::find()->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'), [
+                <?= $form->field($model, 'child_analyst')->dropDownList(ArrayHelper::map(app\models\WipLocation::find()->where(['<>', 'child_analyst', 'WF01'])->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'), [
                     'class' => 'form-control',
                     'onchange'=>'this.form.submit()',
                     'prompt' => '-Select Location-'

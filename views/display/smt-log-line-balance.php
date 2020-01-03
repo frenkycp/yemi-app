@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'SMT Mounter Working Ratio <span class="japanesse light-green">(マウンター稼働率)</span> | Filter by Hour',
-    'tab_title' => 'SMT Mounter Working Ratio by Hour',
-    'breadcrumbs_title' => 'SMT Mounter Working Ratio by Hour'
+    'page_title' => 'SMT Mounter Line Balance',
+    'tab_title' => 'SMT Mounter Line Balance',
+    'breadcrumbs_title' => 'SMT Mounter Line Balance'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -48,7 +48,7 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($fix_data);
+print_r($data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
@@ -56,7 +56,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['smt-working-ratio-by-hour']),
+    'action' => Url::to(['smt-log-line-balance']),
 ]); ?>
 
 <div class="row">
@@ -94,61 +94,54 @@ echo '</pre>';*/
 <div class="box box-primary box-solid">
     <div class="box-body">
         <?php
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    //'themes/grid-light',
-                    'themes/dark-unica',
-                    //'themes/sand-signika',
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/grid-light',
+                'themes/dark-unica',
+                //'themes/sand-signika',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
+                    'zoomType' => 'x'
                 ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'column',
-                        'style' => [
-                            'fontFamily' => 'sans-serif',
-                        ],
-                        'zoomType' => 'x'
-                    ],
-                    'credits' => [
-                        'enabled' => false
-                    ],
-                    'title' => [
-                        'text' => null,
-                    ],
-                    'xAxis' => [
-                        'type' => 'datetime',
-                        'gridLineWidth' => 0
-                    ],
-                    'yAxis' => [
+                'credits' => [
+                    'enabled' => false
+                ],
+                'title' => [
+                    'text' => null,
+                ],
+                'xAxis' => [
+                    'categories' => $categories,
+                    'crosshair' => true,
+                ],
+                'yAxis' => [
+                    [
                         'title' => [
-                            'text' => 'Working Ratio (%)',
+                            'text' => 'Average of Mount CT'
                         ],
-                        //'max' => 60,
-                        //'tickInterval' => 10
+                        'max' => 50,
                     ],
-                    'tooltip' => [
-                        'enabled' => true,
-                        'valueSuffix' => '%',
-                        'shared' => true,
-                    ],
-                    'plotOptions' => [
-                        'column' => [
-                            //'pointPadding' => 0.1,
-                            'borderWidth' => 0
+                    [
+                        'title' => [
+                            'text' => 'Line Balance'
                         ],
-                        'series' => [
-                            'dataLabels' => [
-                                'enabled' => true,
-                                'format' => '{point.y:,.0f}',
-                                'allowOverlap' => false
-                            ],
-                            'turboThreshold' => 0
-                        ],
-                    ],
-                    'series' => $data,
+                        'opposite' => true,
+                        'min' => 0,
+                        'max' => 100,
+                    ]
                 ],
-            ]);
+                'tooltip' => [
+                    'shared' => true,
+                ],
+                'series' => $data,
+            ],
+        ]);
 
-            ?>
+        ?>
     </div>
 </div>
