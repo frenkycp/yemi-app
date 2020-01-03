@@ -71,12 +71,12 @@ class ProdAttendanceController extends Controller
 
 			            if ($find_data->nik == null) {
 			            	$shift = 1;
-			            	if (strtotime($time_now) > strtotime('13:00:00') && strtotime($time_now) <= strtotime('21:00:00')) {
+			            	if (strtotime($time_now) > strtotime('13:30:00') && strtotime($time_now) <= strtotime('15:30:00')) {
 			            		$shift = 2;
 			            	}
-			            	if ((strtotime($time_now) > strtotime('21:00:00') && strtotime($time_now) <= strtotime('24:00:00')) || strtotime($time_now) > strtotime('00:00:00') && strtotime($time_now) <= strtotime('06:00:00')) {
+			            	if ((strtotime($time_now) > strtotime('22:00:00') && strtotime($time_now) <= strtotime('23:59:59')) || strtotime($time_now) > strtotime('00:00:00') && strtotime($time_now) <= strtotime('06:00:00')) {
 			            		$shift = 3;
-			            		if ($time_now > '00:00:00') {
+			            		if (strtotime($time_now) > strtotime('00:00:00') && strtotime($time_now) <= strtotime('06:00:00')) {
 			            			$posting_shift = date('Y-m-d', strtotime(' -1 day'));
 			            		}
 			            	}
