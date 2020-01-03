@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'SMT Working Ratio by Month',
-    'tab_title' => 'SMT Working Ratio by Month',
-    'breadcrumbs_title' => 'SMT Working Ratio by Month'
+    'page_title' => 'SMT Mounter Working Ratio by Month',
+    'tab_title' => 'SMT Mounter Working Ratio by Month',
+    'breadcrumbs_title' => 'SMT Mounter Working Ratio by Month'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
