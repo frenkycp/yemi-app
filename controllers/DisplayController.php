@@ -101,6 +101,7 @@ use app\models\ProdAttendanceView01;
 use app\models\SmtWorkingRatioByDayResult;
 use app\models\SmtWorkingRatioByHourResult;
 use app\models\SmtWorkingRatioByMonthResult;
+use app\models\SmtPcbLog;
 
 class DisplayController extends Controller
 {
@@ -111,12 +112,23 @@ class DisplayController extends Controller
         $categories = [];
 
         $model = new \yii\base\DynamicModel([
-            'from_date', 'to_date'
+            'from_date', 'to_date', 'line'
         ]);
-        $model->addRule(['from_date', 'to_date'], 'required');
+        $model->addRule(['from_date', 'to_date', 'line'], 'required');
 
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d', strtotime('-1 year'))));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $model->line = 'LINE-02';
+
+        $tmp_shift_date = SmtPcbLog::find()
+        ->select(['shift_date' => 'MAX(shift_date)'])
+        ->one();
+        $max_shift_date = $tmp_shift_date->shift_date;
+
+        if (strtotime($max_shift_date) < strtotime($model->to_date)) {
+            $model->to_date = date('Y-m-t', strtotime($max_shift_date));
+            $model->from_date = date('Y-m-01', strtotime($max_shift_date . ' -1 year'));
+        }
 
         if ($model->load($_GET)) {
 
@@ -163,12 +175,22 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
 
         $model = new \yii\base\DynamicModel([
-            'from_date', 'to_date'
+            'from_date', 'to_date', 'line'
         ]);
-        $model->addRule(['from_date', 'to_date'], 'required');
+        $model->addRule(['from_date', 'to_date', 'line'], 'required');
 
         $model->from_date = date('Y-m-d');
         $model->to_date = date('Y-m-d');
+        $model->line = 'LINE-02';
+
+        $tmp_shift_date = SmtPcbLog::find()
+        ->select(['shift_date' => 'MAX(shift_date)'])
+        ->one();
+        $max_shift_date = $tmp_shift_date->shift_date;
+
+        if (strtotime($max_shift_date) < strtotime($model->to_date)) {
+            $model->from_date = $model->to_date = date('Y-m-d', strtotime($max_shift_date));
+        }
 
         if ($model->load($_GET)) {
 
@@ -212,12 +234,23 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
 
         $model = new \yii\base\DynamicModel([
-            'from_date', 'to_date'
+            'from_date', 'to_date', 'line'
         ]);
-        $model->addRule(['from_date', 'to_date'], 'required');
+        $model->addRule(['from_date', 'to_date', 'line'], 'required');
 
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $model->line = 'LINE-02';
+
+        $tmp_shift_date = SmtPcbLog::find()
+        ->select(['shift_date' => 'MAX(shift_date)'])
+        ->one();
+        $max_shift_date = $tmp_shift_date->shift_date;
+
+        if (strtotime($max_shift_date) < strtotime($model->to_date)) {
+            $model->to_date = date('Y-m-t', strtotime($max_shift_date));
+            $model->from_date = date('Y-m-01', strtotime($max_shift_date));
+        }
 
         if ($model->load($_GET)) {
 

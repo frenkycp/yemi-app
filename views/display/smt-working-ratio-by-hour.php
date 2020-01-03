@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'SMT Working Ratio by Hour',
-    'tab_title' => 'SMT Working Ratio by Hour',
-    'breadcrumbs_title' => 'SMT Working Ratio by Hour'
+    'page_title' => 'SMT Working Ratio by Hour (Log)',
+    'tab_title' => 'SMT Working Ratio by Hour (Log)',
+    'breadcrumbs_title' => 'SMT Working Ratio by Hour (Log)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -39,7 +39,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 3600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -60,6 +60,16 @@ echo '</pre>';*/
 ]); ?>
 
 <div class="row">
+    <div class="col-md-2">
+        <?= $form->field($model, 'line')->dropDownList([
+            'LINE-01' => 'LINE-01',
+            'LINE-02' => 'LINE-02',
+        ], [
+            'options' => [
+                'LINE-01' => ['disabled' => true]
+            ],
+        ]); ?>
+    </div>
     <div class="col-md-4">
         <?php echo '<label class="control-label">Select date range</label>';
         echo DatePicker::widget([

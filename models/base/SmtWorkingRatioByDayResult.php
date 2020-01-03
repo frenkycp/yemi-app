@@ -16,6 +16,7 @@ use Yii;
  * @property integer $day_on_second
  * @property double $working_ratio_by_day
  * @property string $stage
+ * @property string $line
  * @property string $aliasModel
  */
 abstract class SmtWorkingRatioByDayResult extends \yii\db\ActiveRecord
@@ -50,7 +51,7 @@ abstract class SmtWorkingRatioByDayResult extends \yii\db\ActiveRecord
             [['day_on_second'], 'integer'],
             [['working_ratio_by_day'], 'number'],
             [['shift_period'], 'string', 'max' => 6],
-            [['machine', 'mounter_stage', 'stage'], 'string', 'max' => 50]
+            [['machine', 'mounter_stage', 'stage', 'line'], 'string', 'max' => 50]
         ];
     }
 
@@ -67,6 +68,7 @@ abstract class SmtWorkingRatioByDayResult extends \yii\db\ActiveRecord
             'day_on_second' => 'Day On Second',
             'working_ratio_by_day' => 'Working Ratio By Day',
             'stage' => 'Stage',
+            'line' => 'Line',
         ];
     }
 

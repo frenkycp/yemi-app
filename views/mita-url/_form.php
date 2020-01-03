@@ -40,13 +40,13 @@ use yii\helpers\StringHelper;
         <p>
             
 <!-- attribute location -->
-            <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'location')->textInput(['maxlength' => true]); ?>
 
 <!-- attribute title -->
-            <?= $form->field($model, 'title')->textInput() ?>
+            <?= $form->field($model, 'title')->textInput(); ?>
 
 <!-- attribute url -->
-			<?= $form->field($model, 'url')->textInput() ?>
+			<?= $model->isNewRecord ? $form->field($model, 'url')->textInput() : $form->field($model, 'url')->textInput(['readonly' => true]); ?>
 
 
         </p>

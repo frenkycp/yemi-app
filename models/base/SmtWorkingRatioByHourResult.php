@@ -15,6 +15,8 @@ use Yii;
  * @property double $working_ratio_by_hour
  * @property string $stage
  * @property string $shift_date
+ * @property string $machine
+ * @property string $line
  * @property string $aliasModel
  */
 abstract class SmtWorkingRatioByHourResult extends \yii\db\ActiveRecord
@@ -46,7 +48,7 @@ abstract class SmtWorkingRatioByHourResult extends \yii\db\ActiveRecord
         return [
             [['start_time_hour', 'shift_date'], 'safe'],
             [['tot_mount_ct_markrec_ct_transfer_ct', 'working_ratio_by_hour'], 'number'],
-            [['mounter_stage', 'stage'], 'string', 'max' => 50]
+            [['mounter_stage', 'stage', 'machine', 'line'], 'string', 'max' => 50]
         ];
     }
 
@@ -62,6 +64,8 @@ abstract class SmtWorkingRatioByHourResult extends \yii\db\ActiveRecord
             'working_ratio_by_hour' => 'Working Ratio By Hour',
             'stage' => 'Stage',
             'shift_date' => 'Shift Date',
+            'machine' => 'Machine',
+            'line' => 'Line',
         ];
     }
 

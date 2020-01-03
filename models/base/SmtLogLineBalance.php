@@ -7,19 +7,17 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.SMT_PCB_LOG_WORKING_RATIO_BY_DAY_YCJ_MONTH_REPORT".
+ * This is the base-model class for table "db_owner.SMT_PCB_LOG_LINE_BALANCE".
  *
  * @property string $start_period
  * @property string $machine
  * @property string $mounter_stage
- * @property double $tot_mount_ct_markrec_ct_transfer_ct
- * @property integer $day_count
- * @property double $Working_Ratio_By_Month
  * @property string $stage
+ * @property double $mount_ct_total_avg
  * @property string $line
  * @property string $aliasModel
  */
-abstract class SmtWorkingRatioByMonthResult extends \yii\db\ActiveRecord
+abstract class SmtLogLineBalance extends \yii\db\ActiveRecord
 {
 
 
@@ -29,7 +27,7 @@ abstract class SmtWorkingRatioByMonthResult extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.SMT_PCB_LOG_WORKING_RATIO_BY_DAY_YCJ_MONTH_REPORT';
+        return 'db_owner.SMT_PCB_LOG_LINE_BALANCE';
     }
 
     /**
@@ -46,8 +44,7 @@ abstract class SmtWorkingRatioByMonthResult extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tot_mount_ct_markrec_ct_transfer_ct', 'Working_Ratio_By_Month'], 'number'],
-            [['day_count'], 'integer'],
+            [['mount_ct_total_avg'], 'number'],
             [['start_period'], 'string', 'max' => 6],
             [['machine', 'mounter_stage', 'stage', 'line'], 'string', 'max' => 50]
         ];
@@ -62,10 +59,8 @@ abstract class SmtWorkingRatioByMonthResult extends \yii\db\ActiveRecord
             'start_period' => 'Start Period',
             'machine' => 'Machine',
             'mounter_stage' => 'Mounter Stage',
-            'tot_mount_ct_markrec_ct_transfer_ct' => 'Tot Mount Ct Markrec Ct Transfer Ct',
-            'day_count' => 'Day Count',
-            'Working_Ratio_By_Month' => 'Working Ratio By Month',
             'stage' => 'Stage',
+            'mount_ct_total_avg' => 'Mount Ct Total Avg',
             'line' => 'Line',
         ];
     }

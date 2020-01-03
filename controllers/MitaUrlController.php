@@ -59,15 +59,10 @@ class MitaUrlController extends \app\controllers\base\MitaUrlController
 		$model = $this->findModel($id);
 
 		if ($model->load($_POST)) {
-			$tmp_url = MitaUrl::find()->where(['url' => $model->url])->one();
-			if ($tmp_url) {
-				\Yii::$app->session->setFlash("danger", "Url already exist ...");
+			if ($model->save()) {
+				return $this->redirect(Url::previous());
 			} else {
-				if ($model->save()) {
-					return $this->redirect(Url::previous());
-				} else {
-					return json_encode($model->errors);
-				}
+				return json_encode($model->errors);
 			}
 		} else {
 			return $this->render('update', [
