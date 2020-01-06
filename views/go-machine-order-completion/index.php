@@ -73,7 +73,14 @@ echo '</pre>';*/
                 'TANGGAL' => date('Y-m-d')
             ])->one();
 
-            if ($karyawan_aktif->NIK == null) {
+            $karyawan_aktif2 = app\models\Karyawan::find()
+            ->where([
+                'NIK' => $key,
+                'AKTIF' => 'Y'
+            ])
+            ->one();
+
+            if ($karyawan_aktif->NIK == null && $karyawan_aktif2->NIK == null) {
                 $panel_class = ' box-default';
                 $text_status = 'END CONTRACT';
             }
