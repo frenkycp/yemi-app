@@ -42,15 +42,15 @@ $this->registerCss("
     }
     .table > tbody > tr > td{
         border:1px solid #777474;
-        font-size: 2em;
+        font-size: 1.9em;
         //background-color: #B3E5FC;
         //font-weight: 1000;
         color: #FFF;
         vertical-align: middle;
-        height: 100px;
+        min-height: 80px;
     }
     .icon-status {font-size : 3em;}
-    .target, .actual {font-size: 4em !important;}
+    .target, .actual {font-size: 3.8em !important;}
     .description {font-size: 2.2em; padding-left: 10px;}
     .text-red{color: #ff1c00 !important;}
 ");

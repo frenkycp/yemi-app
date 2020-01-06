@@ -645,14 +645,19 @@ class DisplayController extends Controller
 
         foreach ($data_dummy as $value) {
             $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
-            $tmp_data_temperature[$value['area']][] = [
-                'x' => $proddate,
-                'y' => (int)$value['temparature']
-            ];
-            $tmp_data_humidity[$value['area']][] = [
-                'x' => $proddate,
-                'y' => (int)$value['humidity']
-            ];
+            if ($value['temparature'] > 0) {
+                $tmp_data_temperature[$value['area']][] = [
+                    'x' => $proddate,
+                    'y' => (int)$value['temparature']
+                ];
+            }
+            if ($value['humidity'] > 0) {
+                $tmp_data_humidity[$value['area']][] = [
+                    'x' => $proddate,
+                    'y' => (int)$value['humidity']
+                ];
+            }
+            
         }
         foreach ($tmp_data_temperature as $key => $value) {
             $data['temperature'][] = [
@@ -925,7 +930,7 @@ class DisplayController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $sensor_data = SensorTbl::find()
         ->where([
-            'map_no' => [12, 13, 7, 8, 17, 18]
+            'map_no' => [12, 13, 7, 8, 17, 18, 40, 41]
         ])
         ->orderBy('area')
         ->all();
@@ -937,6 +942,8 @@ class DisplayController extends Controller
             '17' => '4. Oven Room 2<br/><span class="japanesse light-green">(強制乾燥室 2)</span>',
             '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
             '12' => '6. Inwax Piano 13&14<br/><span class="japanesse light-green">(インワックスのピアノ塗装 13&14)</span>',
+            '40' => '7. Server Room Factory 1',
+            '41' => '8. Electric Room Factory 1',
         ];
 
         $tbody = '';
@@ -986,7 +993,7 @@ class DisplayController extends Controller
 
         $data = SensorTbl::find()
         ->where([
-            'map_no' => [12, 13, 7, 8, 17, 18]
+            'map_no' => [12, 13, 7, 8, 17, 18, 40, 41]
         ])
         ->orderBy('area')
         ->all();
@@ -998,6 +1005,8 @@ class DisplayController extends Controller
             '17' => '4. Oven Room 2<br/><span class="japanesse light-green">(強制乾燥室 2)</span>',
             '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
             '12' => '6. Inwax Piano 13&14<br/><span class="japanesse light-green">(インワックスのピアノ塗装 13&14)</span>',
+            '40' => '7. Server Room Factory 1',
+            '41' => '8. Electric Room Factory 1',
         ];
 
         return $this->render('critical-temp-monitoring', [
@@ -1298,44 +1307,67 @@ class DisplayController extends Controller
         }
 
         if ($model->absolute_or_reference == 'ABSOLUTE') {
-            if ($model->production_or_warehouse == 'PRODUCTION') {
+            if ($model->production_or_warehouse == 'SERVER' || $model->production_or_warehouse == 'SUBSTATION') {
                 $tmp_tbl = SensorLog::find()
-                ->select([
-                    'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
-                    'total_freq' => 'SUM(temp_over)',
-                    'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
-                    'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
-                    'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
-                ])
-                ->where([
-                    'ref_abs' => 'ABSOLUTE',
-                    'range_24_jam' => 'N',
-                    'temp_over' => 1,
-                    'period' => $model->period
-                ])
-                ->andWhere('day_name NOT IN (\'Saturday\', \'Sunday\')')
-                ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
-                ->orderBy('area')
-                ->all();
+                    ->select([
+                        'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
+                        'total_freq' => 'SUM(temp_over)',
+                        'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
+                        'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
+                        'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
+                    ])
+                    ->where([
+                        'ref_abs' => 'ABSOLUTE',
+                        'wh_prod' => $model->production_or_warehouse,
+                        'temp_over' => 1,
+                        'period' => $model->period
+                    ])
+                    ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
+                    ->orderBy('area')
+                    ->all();
             } else {
-                $tmp_tbl = SensorLog::find()
-                ->select([
-                    'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
-                    'total_freq' => 'SUM(temp_over)',
-                    'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
-                    'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
-                    'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
-                ])
-                ->where([
-                    'ref_abs' => 'ABSOLUTE',
-                    'range_24_jam' => 'Y',
-                    'temp_over' => 1,
-                    'period' => $model->period
-                ])
-                ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
-                ->orderBy('area')
-                ->all();
+                if ($model->production_or_warehouse == 'PRODUCTION') {
+                    $tmp_tbl = SensorLog::find()
+                    ->select([
+                        'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
+                        'total_freq' => 'SUM(temp_over)',
+                        'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
+                        'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
+                        'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
+                    ])
+                    ->where([
+                        'ref_abs' => 'ABSOLUTE',
+                        'range_24_jam' => 'N',
+                        'temp_over' => 1,
+                        'period' => $model->period
+                    ])
+                    ->andWhere('day_name NOT IN (\'Saturday\', \'Sunday\')')
+                    ->andWhere('wh_prod NOT IN(\'SERVER\', \'SUBSTATION\')')
+                    ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
+                    ->orderBy('area')
+                    ->all();
+                } else {
+                    $tmp_tbl = SensorLog::find()
+                    ->select([
+                        'map_no', 'loc_no', 'factory', 'location', 'area', 'wh_prod',
+                        'total_freq' => 'SUM(temp_over)',
+                        'freq_shift1' => 'sum(CASE WHEN shift = 1 THEN temp_over ELSE 0 END)',
+                        'freq_shift2' => 'sum(CASE WHEN shift = 2 THEN temp_over ELSE 0 END)',
+                        'freq_shift3' => 'sum(CASE WHEN shift = 3 THEN temp_over ELSE 0 END)',
+                    ])
+                    ->where([
+                        'ref_abs' => 'ABSOLUTE',
+                        'range_24_jam' => 'Y',
+                        'temp_over' => 1,
+                        'period' => $model->period
+                    ])
+                    ->andWhere('wh_prod NOT IN(\'SERVER\', \'SUBSTATION\')')
+                    ->groupBy('map_no, loc_no , factory , location, area, wh_prod')
+                    ->orderBy('area')
+                    ->all();
+                }
             }
+            
         } else {
             $tmp_tbl = SensorLog::find()
             ->select([

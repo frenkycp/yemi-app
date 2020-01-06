@@ -99,7 +99,9 @@ echo '</pre>';*/
     <div class="col-md-3" id="wh-prod">
         <?= $form->field($model, 'production_or_warehouse')->dropDownList([
             'PRODUCTION' => 'PRODUCTION',
-            'WAREHOUSE' => 'WAREHOUSE'
+            'WAREHOUSE' => 'WAREHOUSE',
+            'SERVER' => 'SERVER',
+            'SUBSTATION' => 'SUBSTATION',
         ]); ?>
     </div>
     <div class="col-md-2">
