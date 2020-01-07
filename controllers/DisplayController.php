@@ -1505,7 +1505,7 @@ class DisplayController extends Controller
                     $hs_series_qty1 += $value->lot_qty;
                 } elseif ($tmp_model_group->line == 'L85') {
                     $l_series_qty1 += $value->lot_qty;
-                } elseif ($tmp_model_group->line == 'P-40') {
+                } elseif ($tmp_model_group->line == 'P40') {
                     $p40_series_qty1 += $value->lot_qty;
                 } elseif ($tmp_model_group->line == 'XXX') {
                     $xxx_series_qty1 += $value->lot_qty;
