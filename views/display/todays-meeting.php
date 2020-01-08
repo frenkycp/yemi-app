@@ -20,7 +20,7 @@ date_default_timezone_set('Asia/Jakarta');
 $this->registerCss("
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .form-control {font-size: 20px; height: 40px;}
-    .content-header {color: white;}
+    .content-header {color: white; display: none;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title, .control-label{font-size: 2em;}
@@ -28,7 +28,7 @@ $this->registerCss("
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     //body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #000;}
+    body, .content-wrapper {background-color: #0b0b0b; overflow-y: hidden;}
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
