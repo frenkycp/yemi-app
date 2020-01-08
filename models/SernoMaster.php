@@ -40,4 +40,14 @@ class SernoMaster extends BaseSernoMaster
         //return $this->model . ' // ' . $this->color . ' // ' . $this->dest;
         return $description;
     }
+
+    public function getFullDescription()
+    {
+        $description = $this->gmc . ' | ';
+        $description .= $this->model;
+        $description .= $this->color == '' ? '' : ' // ' . $this->color;
+        $description .= $this->dest == '' ? '' : ' // ' . $this->dest;
+        //return $this->model . ' // ' . $this->color . ' // ' . $this->dest;
+        return $description;
+    }
 }
