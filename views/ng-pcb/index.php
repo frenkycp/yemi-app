@@ -74,6 +74,9 @@ $gridColumns = [
     ],
     [
         'attribute' => 'created_time',
+        'value' => function($model){
+            return date('Y-m-d H:i:s', strtotime($model->created_time));
+        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
