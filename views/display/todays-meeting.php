@@ -28,7 +28,7 @@ $this->registerCss("
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     //body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #0b0b0b; overflow-y: hidden;}
+    body, .content-wrapper {background-color: #000; overflow-y: hidden;}
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
@@ -51,7 +51,7 @@ $this->registerJs("
                 $('#meeting-content').html(tmp_data.meeting_content);
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 1000);
+                setTimeout(function(){update_data();}, 3000);
             }
         });
     }
