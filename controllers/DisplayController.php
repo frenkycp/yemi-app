@@ -3667,7 +3667,7 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
         if ($room_id == 9) {
-            $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO GUEST TODAY</span><br/>' . Html::img('@web/uploads/OTHERS/equalizer_001.jpg', ['width' => '100%']);
+            $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO GUEST TODAY</span>';
         } elseif ($room_id == 13){
             $meeting_content = '<span style="font-size: 10em; color: rgba(255, 235, 59, 1)">NO PATROL TODAY</span>';
         } else {
