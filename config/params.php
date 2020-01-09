@@ -211,7 +211,7 @@ return [
         'MAN' => 'MAN',
         'MATERIAL' => 'MATERIAL',
         'METHOD' => 'METHOD',
-        'ENVIRONMENT' => 'ENVIRONMENT',
+        'MEASUREMENT' => 'MEASUREMENT',
     ],
 ];
 

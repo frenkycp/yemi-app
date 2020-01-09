@@ -101,7 +101,6 @@ $this->registerJs($script, View::POS_HEAD );
     <thead>
         <tr>
             <th>Location</th>
-            <th class="text-center">MP Plan</th>
             <th class="text-center">MP Total</th>
             <th class="text-center">Balance</th>
             <th class="text-center">MP<br/>(Shift 1)</th>
@@ -116,9 +115,8 @@ $this->registerJs($script, View::POS_HEAD );
             ?>
             <tr>
                 <td><?= $key; ?></td>
-                <td class="text-center"><?= $value['plan']; ?></td>
-                <td class="text-center"><?= number_format($value['actual']); ?></td>
-                <td class="text-center<?= $balance != 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($balance); ?></td>
+                <td class="text-center"><?= number_format($value['actual']) . ' <span style="font-size: 0.5em; color: gray;">of</span> ' . number_format($value['plan']); ?></td>
+                <td class="text-center<?= $balance != 0 ? ' text-red' : ' text-green'; ?>"><?= Html::a(number_format($balance), ['today-attendance-detail', 'child_analyst' => $value['key'], 'post_date' => $model->post_date], ['target' => '_blank']); ?></td>
                 <td class="text-center"><?= $data_by_shift[$value['key']]['1'] == 0 ? '' : number_format($data_by_shift[$value['key']]['1']); ?></td>
                 <td class="text-center"><?= $data_by_shift[$value['key']]['2'] == 0 ? '' : number_format($data_by_shift[$value['key']]['2']); ?></td>
                 <td class="text-center"><?= $data_by_shift[$value['key']]['3'] == 0 ? '' : number_format($data_by_shift[$value['key']]['3']); ?></td>

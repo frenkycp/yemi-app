@@ -104,6 +104,7 @@ use app\models\SmtWorkingRatioByMonthResult;
 use app\models\SmtPcbLog;
 use app\models\SmtLogLineBalance;
 use app\models\SmtLogLineBalanceReport;
+use app\models\ProdAttendanceMpPlan;
 
 class DisplayController extends Controller
 {
@@ -495,6 +496,55 @@ class DisplayController extends Controller
         return $mp_actual_arr;
     }
 
+    public function actionTodayAttendanceDetail($child_analyst, $shift = 0, $post_date = '2020-01-09')
+    {
+        $this->layout = 'clean';
+        $location_arr = \Yii::$app->params['wip_location_arr'];
+        $mp_plan = ProdAttendanceMpPlan::find()
+        ->select('nik, name, shift')
+        ->where([
+            'AND',
+            ['<=', 'from_date', $post_date],
+            ['>=', 'to_date', $post_date]
+        ])
+        ->andWhere(['child_analyst' => $child_analyst, 'is_enable' => 1])
+        ->orderBy('shift, name')
+        ->all();
+
+        $mp_actual = ProdAttendanceView01::find()
+        ->where([
+            'child_analyst' => $child_analyst,
+            'posting_shift' => $post_date
+        ])
+        ->all();
+
+        $data = [];
+        foreach ($mp_plan as $plan) {
+            $data[$plan->shift][$plan->nik]['name'] = $plan->name;
+            $data[$plan->shift][$plan->nik]['plan'] = 1;
+            $data[$plan->shift][$plan->nik]['actual'] = 0;
+            foreach ($mp_actual as $actual) {
+                if ($plan->shift == $actual->shift && $plan->nik == $actual->nik) {
+                    $data[$plan->shift][$plan->nik]['actual'] = 1;
+                }
+            }
+        }
+
+        foreach ($mp_actual as $value) {
+            if (!isset($data[$value->shift][$value->nik]['name'])) {
+                $data[$value->shift][$value->nik]['name'] = $value->name;
+                $data[$value->shift][$value->nik]['plan'] = 0;
+                $data[$value->shift][$value->nik]['actual'] = 1;
+            }
+        }
+
+        return $this->render('today-attendance-detail', [
+            'data' => $data,
+            'location' => $location_arr[$child_analyst],
+            'post_date' => $post_date
+        ]);
+    }
+
     public function actionTodayAttendance($value='')
     {
         $this->layout = 'clean';
@@ -502,6 +552,7 @@ class DisplayController extends Controller
         $today = date('Y-m-d');
         $period = date('Ym');
         $data = [];
+        $location_arr = \Yii::$app->params['wip_location_arr'];
 
         $model = new \yii\base\DynamicModel([
             'post_date'
@@ -530,10 +581,23 @@ class DisplayController extends Controller
         asort($loc_selection);
         //$tmp_location = WipLocation::find()->where(['child_analyst' => $loc_selection])->orderBy('child_analyst_desc')->all();
         $wip_mp_plan = ArrayHelper::map(WipMpPlan::find()->where(['period' => $period])->all(), 'child_analyst', 'mp_plan');
+
         $mp_arr = [];
         foreach ($loc_selection as $key1 => $location) {
-            $mp_plan = isset($wip_mp_plan[$key1]) ? $wip_mp_plan[$key1] : 0;
-            $mp_arr[$key1] = $mp_plan;
+            $mp_plan = ProdAttendanceMpPlan::find()
+            ->select([
+                'total_shift1' => 'SUM(CASE WHEN shift = 1 THEN 1 ELSE 0 END)',
+                'total_shift2' => 'SUM(CASE WHEN shift = 2 THEN 1 ELSE 0 END)',
+                'total_shift3' => 'SUM(CASE WHEN shift = 3 THEN 1 ELSE 0 END)',
+            ])
+            ->where([
+                'AND',
+                ['<=', 'from_date', $model->post_date],
+                ['>=', 'to_date', $model->post_date]
+            ])
+            ->andWhere(['child_analyst' => $key1, 'is_enable' => 1])
+            ->one();
+            $mp_arr[$key1] = $mp_plan->total_shift1 + $mp_plan->total_shift2 + $mp_plan->total_shift3;
         }
         if (count($mp_arr) > 0) {
             arsort($mp_arr);
@@ -571,6 +635,7 @@ class DisplayController extends Controller
             'data' => $data,
             'model' => $model,
             'data_by_shift' => $data_by_shift,
+            'location_arr' => $location_arr,
         ]);
     }
 

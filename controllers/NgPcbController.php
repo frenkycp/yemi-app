@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 use app\models\search\ProdNgDataSearch;
 use app\models\ProdNgData;
+use app\models\ProdNgCategory;
 use app\models\SernoMaster;
 use app\models\Karyawan;
 
@@ -16,11 +17,11 @@ use app\models\Karyawan;
  */
 class NgPcbController extends Controller
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
     
 	public function actionIndex($value='')
 	{
@@ -73,7 +74,7 @@ class NgPcbController extends Controller
 				$model->gmc_color = $serno_master->color;
 				$model->gmc_dest = $serno_master->dest;
 				$model->gmc_line = $serno_master->line;
-				$model->gmc_desc = $serno_master->fullDescription;
+				$model->gmc_desc = $serno_master->description;
 
 				$detected_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->detected_by_id])->one();
 				$model->detected_by_name = $detected_karyawan->NAMA_KARYAWAN;
@@ -88,6 +89,10 @@ class NgPcbController extends Controller
 				])->one();
 				$model->created_by_id = $created_karyawan->NIK_SUN_FISH;
 				$model->created_by_name = $created_karyawan->NAMA_KARYAWAN;
+
+				$ng_category = ProdNgCategory::find()->where(['id' => $model->ng_category_id])->one();
+				$model->ng_category_desc = $ng_category->category_name;
+				$model->ng_category_detail = $ng_category->category_detail;
 
 				if ($model->save()) {
 					return $this->redirect(Url::previous());

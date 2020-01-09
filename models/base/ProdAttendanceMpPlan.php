@@ -16,17 +16,18 @@ use Yii;
  * @property string $name
  * @property string $from_date
  * @property string $to_date
+ * @property integer $shift
  * @property string $created_date
  * @property string $created_by_id
  * @property string $last_update
  * @property string $updated_by_id
- * @property integer $flag
+ * @property integer $is_enable
  * @property string $aliasModel
  */
 abstract class ProdAttendanceMpPlan extends \yii\db\ActiveRecord
 {
 
-
+    public $total_shift1, $total_shift2, $total_shift3;
 
     /**
      * @inheritdoc
@@ -51,7 +52,7 @@ abstract class ProdAttendanceMpPlan extends \yii\db\ActiveRecord
     {
         return [
             [['from_date', 'to_date', 'created_date', 'last_update'], 'safe'],
-            [['flag'], 'integer'],
+            [['shift', 'is_enable'], 'integer'],
             [['child_analyst'], 'string', 'max' => 10],
             [['child_analyst_desc'], 'string', 'max' => 50],
             [['nik', 'created_by_id', 'updated_by_id'], 'string', 'max' => 20],
@@ -72,11 +73,12 @@ abstract class ProdAttendanceMpPlan extends \yii\db\ActiveRecord
             'name' => 'Name',
             'from_date' => 'From Date',
             'to_date' => 'To Date',
+            'shift' => 'Shift',
             'created_date' => 'Created Date',
             'created_by_id' => 'Created By ID',
             'last_update' => 'Last Update',
             'updated_by_id' => 'Updated By ID',
-            'flag' => 'Flag',
+            'is_enable' => 'Is Enable',
         ];
     }
 

@@ -35,9 +35,9 @@ class SernoMaster extends BaseSernoMaster
     public function getDescription()
     {
         $description = $this->model;
-        $description .= $this->color == '' ? '' : ' // ' . $this->color;
-        $description .= $this->dest == '' ? '' : ' // ' . $this->dest;
-        //return $this->model . ' // ' . $this->color . ' // ' . $this->dest;
+        $description .= $this->color == '' ? '' : ' | ' . $this->color;
+        $description .= $this->dest == '' ? '' : ' | ' . $this->dest;
+        //return $this->model . ' | ' . $this->color . ' | ' . $this->dest;
         return $description;
     }
 
@@ -45,8 +45,8 @@ class SernoMaster extends BaseSernoMaster
     {
         $description = $this->gmc . ' | ';
         $description .= $this->model;
-        $description .= $this->color == '' ? '' : ' // ' . $this->color;
-        $description .= $this->dest == '' ? '' : ' // ' . $this->dest;
+        $description .= $this->color == '' ? '' : ' | ' . $this->color;
+        $description .= $this->dest == '' ? '' : ' | ' . $this->dest;
         //return $this->model . ' // ' . $this->color . ' // ' . $this->dest;
         return $description;
     }

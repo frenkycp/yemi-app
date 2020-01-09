@@ -30,6 +30,8 @@ use Yii;
  * @property double $ng_qty
  * @property double $total_output
  * @property integer $ng_category_id
+ * @property string $ng_category_desc
+ * @property string $ng_category_detail
  * @property integer $ng_shift
  * @property string $ng_location
  * @property string $ng_root_cause
@@ -94,10 +96,10 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
             [['post_date', 'created_time', 'updated_time'], 'safe'],
             [['ng_qty', 'total_output', 'ww_total_price'], 'number'],
             [['ng_category_id', 'ng_shift', 'inj_set_parameter'], 'integer'],
-            [['document_no', 'loc_desc', 'gmc_desc', 'ng_location', 'ng_root_cause', 'attachment', 'pcb_name', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_pic_aoi', 'smt_group_pic'], 'string', 'max' => 50],
+            [['document_no', 'loc_desc', 'ng_category_desc', 'ng_category_detail', 'ng_location', 'ng_root_cause', 'attachment', 'pcb_name', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_pic_aoi', 'smt_group_pic'], 'string', 'max' => 50],
             [['period', 'loc_id', 'fa_status'], 'string', 'max' => 10],
-            [['line', 'emp_id', 'model_group', 'gmc_no', 'gmc_model', 'gmc_color', 'gmc_dest', 'gmc_line', 'part_no', 'ng_cause_category', 'created_by_id', 'updated_by_id', 'detected_by_id', 'fa_area_detec'], 'string', 'max' => 20],
-            [['emp_name', 'ng_detail', 'created_by_name', 'updated_by_name', 'detected_by_name'], 'string', 'max' => 150],
+            [['line', 'emp_id', 'model_group', 'gmc_no', 'gmc_color', 'gmc_dest', 'gmc_line', 'part_no', 'ng_cause_category', 'created_by_id', 'updated_by_id', 'detected_by_id', 'fa_area_detec'], 'string', 'max' => 20],
+            [['emp_name', 'gmc_desc', 'gmc_model', 'ng_detail', 'created_by_name', 'updated_by_name', 'detected_by_name'], 'string', 'max' => 150],
             [['part_desc'], 'string', 'max' => 250],
             [['fa_serno', 'ww_unit_each'], 'string', 'max' => 30],
             [['smt_group'], 'string', 'max' => 5]
@@ -131,6 +133,8 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
             'ng_qty' => 'Ng Qty',
             'total_output' => 'Total Output',
             'ng_category_id' => 'Ng Category ID',
+            'ng_category_desc' => 'Ng Category Desc',
+            'ng_category_detail' => 'Ng Category Detail',
             'ng_shift' => 'Ng Shift',
             'ng_location' => 'Ng Location',
             'ng_root_cause' => 'Ng Root Cause',

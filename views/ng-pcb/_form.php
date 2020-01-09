@@ -66,7 +66,7 @@ $this->registerCss("
                         'data' => ArrayHelper::map(app\models\SernoMaster::find()->select([
                             'gmc', 'model', 'color', 'dest'
                         ])
-                        ->all(), 'gmc', 'fullDescription'),
+                        ->all(), 'gmc', 'description'),
                         'options' => [
                             'placeholder' => 'Select Model ...',
                         ],
@@ -90,11 +90,21 @@ $this->registerCss("
 
                     <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
 
-                    <?= $form->field($model, 'pcb_problem')->textArea(['style' => 'resize: vertical;', 'onkeyup' => 'this.value=this.value.toUpperCase()']); ?>
+                    <?= $form->field($model, 'ng_category_id')->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(app\models\ProdNgCategory::find()->select([
+                            'id', 'category_name', 'category_detail'
+                        ])
+                        ->orderBy('category_name, category_detail')
+                        ->all(), 'id', 'description'),
+                        'options' => [
+                            'placeholder' => 'Choose...',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ])->label('Problem'); ?>
 
-                    <?= $form->field($model, 'ng_root_cause')->dropDownList($ng_pcb_cause_dropdown, [
-                        'prompt' => 'Choose...'
-                    ]); ?>
+                    <?= $form->field($model, 'ng_detail')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()'])->label('NG Detail'); ?>
 
                     <?= $form->field($model, 'pcb_occu')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()']); ?>
 
@@ -122,7 +132,9 @@ $this->registerCss("
 
                     <?= $form->field($model, 'part_desc')->widget(TypeaheadBasic::classname(), [
                         'data' => $part_arr,
-                        //'options' => ['placeholder' => 'Input GMC'],
+                        'options' => [
+                            'onkeyup' => 'this.value=this.value.toUpperCase()',
+                        ],
                         'pluginOptions' => ['highlight'=>true],
                     ])->label('Part Name'); ?>
 
@@ -135,7 +147,8 @@ $this->registerCss("
                             'NIK_SUN_FISH', 'NAMA_KARYAWAN'
                         ])
                         ->where([
-                            'AKTIF' => 'Y'
+                            'AKTIF' => 'Y',
+                            'DEPARTEMEN' => 'PRODUCTION'
                         ])
                         ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
                         'options' => [
@@ -152,44 +165,51 @@ $this->registerCss("
 
                     <?= $form->field($model, 'ng_cause_category')->dropDownList($ng_pcb_cause_category_dropdown, [
                         'prompt' => 'Choose...',
+                        'id' => 'cause-category-id',
                         'onchange' => '
-                            var id_emp = $("#emp_id").select2("data")[0].id;
-                            if($(this).val() == "MAN"){
-                                if(id_emp == ""){
-                                    $("#btn-submit").attr("disabled", true);
-                                }
-                            } else {
-                                $("#btn-submit").removeAttr("disabled");
-                            }
                             
-                            $("#emp_id").val("").trigger("change");
-                        ',
-                    ])->label('Root Cause Category'); ?>
-
-                    <?= $form->field($model, 'emp_id')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
-                            'NIK_SUN_FISH', 'NAMA_KARYAWAN'
-                        ])
-                        ->where([
-                            'AKTIF' => 'Y'
-                        ])
-                        ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
-                        'options' => [
-                            'placeholder' => '- SELECT -',
-                            'id' => 'emp_id',
-                            'onchange' => '
+                            if($(this).val() == "MAN"){
+                                $("#ng-emp-text").show();
                                 var id_emp = $("#emp_id").select2("data")[0].id;
                                 if(id_emp == ""){
                                     $("#btn-submit").attr("disabled", true);
-                                } else {
-                                    $("#btn-submit").removeAttr("disabled");
                                 }
-                            ',
-                        ],
-                        'pluginOptions' => [
-                            'allowClear' => true,
-                        ],
-                    ])->label('PIC (NG)'); ?>
+                                
+                            } else {
+                                $("#btn-submit").removeAttr("disabled");
+                                $("#ng-emp-text").hide();
+                            }
+                        ',
+                    ])->label('Root Cause Category'); ?>
+
+                    <div id="ng-emp-text" style="display: none;">
+                        <?= $form->field($model, 'emp_id')->widget(Select2::classname(), [
+                            'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
+                                'NIK_SUN_FISH', 'NAMA_KARYAWAN'
+                            ])
+                            ->where([
+                                'AKTIF' => 'Y',
+                                'DEPARTEMEN' => 'PRODUCTION'
+                            ])
+                            ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
+                            'options' => [
+                                'placeholder' => '- SELECT -',
+                                'id' => 'emp_id',
+                                'onchange' => '
+                                    var id_emp = $("#emp_id").select2("data")[0].id;
+                                    var cause_id = $("#cause-category-id").val();
+                                    if(id_emp == "" && cause-category-id == "MAN"){
+                                        $("#btn-submit").attr("disabled", true);
+                                    } else {
+                                        $("#btn-submit").removeAttr("disabled");
+                                    }
+                                ',
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                            ],
+                        ])->label('PIC (NG) <em><span class="text-red">*Must be set if "MAN" category was selected!</span></em>'); ?>
+                    </div>
                 </div>
             </div>
             
