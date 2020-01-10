@@ -34,6 +34,6 @@ class SapItemTbl extends BaseSapItemTbl
 
     public function getFullDescription()
     {
-        return $this->material . ' - ' . $this->material_description;
+        return $this->material . ' | ' . $this->material_description;
     }
 }

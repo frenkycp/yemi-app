@@ -200,10 +200,10 @@ return [
     ],
     'ng_pcb_repair_dropdown' => [
         'Change Part' => 'Change Part',
-        'Cleaning Part' => 'Cleaning Part',
+        //'Cleaning Part' => 'Cleaning Part',
         'Reinsert' => 'Reinsert',
         'Remount' => 'Remount',
-        'Reprocess' => 'Reprocess',
+        //'Reprocess' => 'Reprocess',
         'Resolder' => 'Resolder',
     ],
     'ng_pcb_cause_category_dropdown' => [
@@ -213,6 +213,14 @@ return [
         'METHOD' => 'METHOD',
         'MEASUREMENT' => 'MEASUREMENT',
     ],
+    'ng_pcb_occurance_dropdown' => [
+        'FORMING' => 'FORMING',
+        'INSERT' => 'INSERT',
+        'TOUCH UP' => 'TOUCH UP',
+        'BONDING' => 'BONDING',
+        'FORMING' => 'FORMING',
+        'MACHINE' => 'MACHINE',
+    ], 
 ];
 
 function getYearArray()

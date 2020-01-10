@@ -29,6 +29,9 @@ ksort($ng_pcb_repair_dropdown);
 $ng_pcb_cause_category_dropdown = \Yii::$app->params['ng_pcb_cause_category_dropdown'];
 ksort($ng_pcb_cause_category_dropdown);
 
+$ng_pcb_occurance_dropdown = \Yii::$app->params['ng_pcb_occurance_dropdown'];
+ksort($ng_pcb_occurance_dropdown);
+
 $tmp_part = app\models\SapItemTbl::find()
 ->select(['material', 'material_description'])
 ->where([
@@ -75,7 +78,21 @@ $this->registerCss("
                         ],
                     ]); ?>
 
-                    <?= $form->field($model, 'pcb_name')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()']); ?>
+                    <?= $form->field($model, 'pcb_id')->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(app\models\SapItemTbl::find()->select([
+                            'material', 'material_description'
+                        ])
+                        ->where([
+                            'sloc' => ['WM01', 'WM02', 'WM03']
+                        ])
+                        ->all(), 'fullDescription', 'fullDescription'),
+                        'options' => [
+                            'placeholder' => 'Choose PCB...',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ])->label('PCB'); ?>
 
                     <?= $form->field($model, 'pcb_ng_found')->dropDownList($ng_found_dropdown, [
                         'prompt' => 'Choose...'
@@ -104,9 +121,11 @@ $this->registerCss("
                         ],
                     ])->label('Problem'); ?>
 
-                    <?= $form->field($model, 'ng_detail')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()'])->label('NG Detail'); ?>
+                    <?= $form->field($model, 'ng_detail')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()', 'onfocusout' => 'this.value=this.value.toUpperCase()'])->label('NG Detail'); ?>
 
-                    <?= $form->field($model, 'pcb_occu')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()']); ?>
+                    <?= $form->field($model, 'pcb_occu')->dropDownList($ng_pcb_occurance_dropdown, [
+                        'prompt' => 'Choose...'
+                    ])->label('Occu'); ?>
 
                     <?= $form->field($model, 'pcb_process')->dropDownList($ng_pcb_process_dropdown, [
                         'prompt' => 'Choose...'
@@ -134,11 +153,12 @@ $this->registerCss("
                         'data' => $part_arr,
                         'options' => [
                             'onkeyup' => 'this.value=this.value.toUpperCase()',
+                            'onfocusout' => 'this.value=this.value.toUpperCase()'
                         ],
                         'pluginOptions' => ['highlight'=>true],
                     ])->label('Part Name'); ?>
 
-                    <?= $form->field($model, 'ng_location')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()'])->label('Location'); ?>
+                    <?= $form->field($model, 'ng_location')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()', 'onfocusout' => 'this.value=this.value.toUpperCase()'])->label('Location'); ?>
 
                     <?= $form->field($model, 'created_by_name')->textInput(['readonly' => true])->label('PIC'); ?>
 

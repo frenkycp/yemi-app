@@ -20,6 +20,27 @@ $this->title = [
 date_default_timezone_set('Asia/Jakarta');
 
 $gridColumns = [
+    [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => '{update}',
+        'buttons' => [
+            'view' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'View'),
+                    'aria-label' => Yii::t('cruds', 'View'),
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, $options);
+            }
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
+    ],
 	[
         'attribute' => 'document_no',
         'label' => 'Report No.',
@@ -76,7 +97,11 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'ng_category_detail',
+        'attribute' => 'ng_category_id',
+        'value' => function($model)
+        {
+            return $model->ng_category_desc . ' | ' . $model->ng_category_detail;
+        },
         'label' => 'Problem',
         'vAlign' => 'middle',
         'filterInputOptions' => [

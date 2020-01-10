@@ -17,11 +17,11 @@ use app\models\Karyawan;
  */
 class NgPcbController extends Controller
 {
-	/*public function behaviors()
+	public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }*/
+    }
     
 	public function actionIndex($value='')
 	{
@@ -66,6 +66,7 @@ class NgPcbController extends Controller
 
 		try {
 			if ($model->load($_POST)) {
+				$model->period = date('Ym');
 				$model->document_no = $this->getDocumentNo();
 				$serno_master = SernoMaster::find()->where([
 					'gmc' => $model->gmc_no
@@ -94,6 +95,14 @@ class NgPcbController extends Controller
 				$model->ng_category_desc = $ng_category->category_name;
 				$model->ng_category_detail = $ng_category->category_detail;
 
+				$pcb_split_arr = explode(' | ', $model->pcb_id);
+				$model->pcb_id = $pcb_split_arr[0];
+				$model->pcb_name = $pcb_split_arr[1];
+
+				$model->ng_detail = strtoupper($model->ng_detail);
+				$model->part_desc = strtoupper($model->part_desc);
+				$model->ng_location = strtoupper($model->ng_location);
+
 				if ($model->save()) {
 					return $this->redirect(Url::previous());
 				} else {
@@ -109,4 +118,80 @@ class NgPcbController extends Controller
 		}
 		return $this->render('create', ['model' => $model]);
 	}
+
+	public function actionView($id)
+	{
+		\Yii::$app->session['__crudReturnUrl'] = Url::previous();
+		Url::remember();
+		Tabs::rememberActiveState();
+
+		return $this->render('view', [
+			'model' => $this->findModel($id),
+		]);
+	}
+
+	public function actionUpdate($id)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($id);
+
+		if ($model->load($_POST)) {
+			$serno_master = SernoMaster::find()->where([
+				'gmc' => $model->gmc_no
+			])->one();
+			$model->gmc_model = $serno_master->model;
+			$model->gmc_color = $serno_master->color;
+			$model->gmc_dest = $serno_master->dest;
+			$model->gmc_line = $serno_master->line;
+			$model->gmc_desc = $serno_master->description;
+
+			$detected_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->detected_by_id])->one();
+			$model->detected_by_name = $detected_karyawan->NAMA_KARYAWAN;
+
+			$ng_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->emp_id])->one();
+			$model->emp_name = $ng_karyawan->NAMA_KARYAWAN;
+
+			$model->updated_time = date('Y-m-d H:i:s');
+			$updated_karyawan = Karyawan::find()->where([
+				'OR',
+				['NIK_SUN_FISH' => \Yii::$app->user->identity->username],
+				['NIK' => \Yii::$app->user->identity->username]
+			])->one();
+			$model->updated_by_id = $updated_karyawan->NIK_SUN_FISH;
+			$model->updated_by_name = $updated_karyawan->NAMA_KARYAWAN;
+
+			$ng_category = ProdNgCategory::find()->where(['id' => $model->ng_category_id])->one();
+			$model->ng_category_desc = $ng_category->category_name;
+			$model->ng_category_detail = $ng_category->category_detail;
+
+			$pcb_split_arr = explode(' | ', $model->pcb_id);
+			$model->pcb_id = $pcb_split_arr[0];
+			$model->pcb_name = $pcb_split_arr[1];
+
+			$model->ng_detail = strtoupper($model->ng_detail);
+			$model->part_desc = strtoupper($model->part_desc);
+			$model->ng_location = strtoupper($model->ng_location);
+
+			if ($model->save()) {
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($model->errors);
+			}
+			
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+			]);
+		}
+	}
+
+	protected function findModel($id)
+	{
+		if (($model = ProdNgData::findOne($id)) !== null) {
+			return $model;
+		} else {
+			throw new HttpException(404, 'The requested page does not exist.');
+		}
+	}
+
 }

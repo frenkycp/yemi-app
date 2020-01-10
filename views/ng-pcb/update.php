@@ -8,9 +8,9 @@ use yii\helpers\Html;
 */
 
 $this->title = Yii::t('models', 'Edit NG Information');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Klinik Input'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => (string)$model->pk, 'url' => ['view', 'pk' => $model->pk]];
-$this->params['breadcrumbs'][] = 'Edit';
+//$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Klinik Input'), 'url' => ['index']];
+//$this->params['breadcrumbs'][] = ['label' => (string)$model->pk, 'url' => ['view', 'pk' => $model->pk]];
+//$this->params['breadcrumbs'][] = 'Edit';
 ?>
 <div class="giiant-crud klinik-input-update">
 
