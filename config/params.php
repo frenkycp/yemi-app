@@ -220,7 +220,16 @@ return [
         'BONDING' => 'BONDING',
         'FORMING' => 'FORMING',
         'MACHINE' => 'MACHINE',
-    ], 
+    ],
+    'ng_spu_line_dropdown' => [
+        'WOOFER HS' => 'WOOFER HS',
+        'WOOFER EF' => 'WOOFER EF',
+        'TWEETER' => 'TWEETER',
+        'DXS-18' => 'DXS-18',
+        'CONE ASSY' => 'CONE ASSY',
+        'SURROUND' => 'SURROUND',
+        'PACKING DMI' => 'PACKING DMI',
+    ],
 ];
 
 function getYearArray()

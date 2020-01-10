@@ -7,30 +7,17 @@ use yii\helpers\StringHelper;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
-use kartik\typeahead\TypeaheadBasic;
 
 /**
 * @var yii\web\View $this
 * @var app\models\KlinikInput $model
 * @var yii\widgets\ActiveForm $form
 */
-
-$ng_found_dropdown = \Yii::$app->params['ng_found_dropdown'];
-ksort($ng_found_dropdown);
-
-$ng_pcb_cause_dropdown = \Yii::$app->params['ng_pcb_cause_dropdown'];
-
-$ng_pcb_process_dropdown = \Yii::$app->params['ng_pcb_process_dropdown'];
-ksort($ng_pcb_process_dropdown);
-
-$ng_pcb_repair_dropdown = \Yii::$app->params['ng_pcb_repair_dropdown'];
-ksort($ng_pcb_repair_dropdown);
-
 $ng_pcb_cause_category_dropdown = \Yii::$app->params['ng_pcb_cause_category_dropdown'];
 ksort($ng_pcb_cause_category_dropdown);
 
-$ng_pcb_occurance_dropdown = \Yii::$app->params['ng_pcb_occurance_dropdown'];
-ksort($ng_pcb_occurance_dropdown);
+$ng_spu_line_dropdown = \Yii::$app->params['ng_spu_line_dropdown'];
+ksort($ng_spu_line_dropdown);
 
 $tmp_part = app\models\SapItemTbl::find()
 ->select(['material', 'material_description'])
@@ -65,11 +52,27 @@ $this->registerCss("
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
+                    <?= $form->field($model, 'part_desc')->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(app\models\SapItemTbl::find()->select([
+                            'material', 'material_description'
+                        ])
+                        ->where([
+                            'sloc' => 'WU01'
+                        ])
+                        ->all(), 'fullDescription', 'fullDescription'),
+                        'options' => [
+                            'placeholder' => 'Choose...',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ]); ?>
+
                     <?= $form->field($model, 'gmc_no')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\SernoMaster::find()->select([
                             'gmc', 'model', 'color', 'dest'
                         ])
-                        ->all(), 'gmc', 'description'),
+                        ->all(), 'gmc', 'fullDescription'),
                         'options' => [
                             'placeholder' => 'Select Model ...',
                         ],
@@ -77,35 +80,6 @@ $this->registerCss("
                             'allowClear' => true
                         ],
                     ]); ?>
-
-                    <?= $form->field($model, 'pcb_id')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\SapItemTbl::find()->select([
-                            'material', 'material_description'
-                        ])
-                        ->where([
-                            'sloc' => ['WM01', 'WM02', 'WM03']
-                        ])
-                        ->all(), 'fullDescription', 'fullDescription'),
-                        'options' => [
-                            'placeholder' => 'Choose PCB...',
-                        ],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
-                    ])->label('PCB'); ?>
-
-                    <?= $form->field($model, 'pcb_ng_found')->dropDownList($ng_found_dropdown, [
-                        'prompt' => 'Choose...'
-                    ])->label('NG Found'); ?>
-
-                    <?= $form->field($model, 'pcb_side')->dropDownList([
-                        'A' => 'A',
-                        'B' => 'B',
-                    ], [
-                        'prompt' => 'Choose...'
-                    ]); ?>
-
-                    <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
 
                     <?= $form->field($model, 'ng_category_id')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\ProdNgCategory::find()->select([
@@ -119,70 +93,27 @@ $this->registerCss("
                         'pluginOptions' => [
                             'allowClear' => true
                         ],
-                    ])->label('Problem'); ?>
+                    ]); ?>
 
-                    <?= $form->field($model, 'ng_detail')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()', 'onfocusout' => 'this.value=this.value.toUpperCase()'])->label('NG Detail'); ?>
+                    <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
 
-                    <?= $form->field($model, 'pcb_occu')->dropDownList($ng_pcb_occurance_dropdown, [
-                        'prompt' => 'Choose...'
-                    ])->label('Occu'); ?>
+                    <?= $form->field($model, 'total_output')->textInput(['type' => 'number']); ?>
 
-                    <?= $form->field($model, 'pcb_process')->dropDownList($ng_pcb_process_dropdown, [
-                        'prompt' => 'Choose...'
-                    ])->label('Process'); ?>
-                </div>
-                <div class="col-md-6">
-                    <?= $form->field($model, 'line')->dropDownList([
-                        'Line 1' => 'Line 1',
-                        'Line 2' => 'Line 2',
-                        'Line 3' => 'Line 3',
-                        'Line 4' => 'Line 4',
-                    ], [
+                    <?= $form->field($model, 'line')->dropDownList($ng_spu_line_dropdown, [
                         'prompt' => 'Choose...'
                     ]); ?>
 
-                    <?= $form->field($model, 'pcb_part_section')->dropDownList([
-                        'SMT' => 'SMT',
-                        'AUTO INSERT' => 'AUTO INSERT',
-                        'MANUAL INSERT' => 'MANUAL INSERT',
-                    ], [
-                        'prompt' => 'Choose...'
-                    ]); ?>
-
-                    <?= $form->field($model, 'part_desc')->widget(TypeaheadBasic::classname(), [
-                        'data' => $part_arr,
+                    <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
                         'options' => [
-                            'onkeyup' => 'this.value=this.value.toUpperCase()',
-                            'onfocusout' => 'this.value=this.value.toUpperCase()'
-                        ],
-                        'pluginOptions' => ['highlight'=>true],
-                    ])->label('Part Name'); ?>
-
-                    <?= $form->field($model, 'ng_location')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()', 'onfocusout' => 'this.value=this.value.toUpperCase()'])->label('Location'); ?>
-
-                    <?= $form->field($model, 'created_by_name')->textInput(['readonly' => true])->label('PIC'); ?>
-
-                    <?= $form->field($model, 'detected_by_id')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
-                            'NIK_SUN_FISH', 'NAMA_KARYAWAN'
-                        ])
-                        ->where([
-                            'AKTIF' => 'Y',
-                            'DEPARTEMEN' => 'PRODUCTION'
-                        ])
-                        ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
-                        'options' => [
-                            'placeholder' => 'Choose...',
+                            'type' => DatePicker::TYPE_INPUT,
                         ],
                         'pluginOptions' => [
-                            'allowClear' => true,
-                        ],
-                    ])->label('DETECTED'); ?>
-
-                    <?= $form->field($model, 'pcb_repair')->dropDownList($ng_pcb_repair_dropdown, [
-                        'prompt' => 'Choose...'
-                    ])->label('Repair'); ?>
-
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd'
+                        ]
+                    ]); ?>
+                </div>
+                <div class="col-md-6">
                     <?= $form->field($model, 'ng_cause_category')->dropDownList($ng_pcb_cause_category_dropdown, [
                         'prompt' => 'Choose...',
                         'id' => 'cause-category-id',

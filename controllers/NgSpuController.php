@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 use app\models\search\ProdNgDataSearch;
 use app\models\ProdNgData;
-use app\models\NgPcbModel;
+use app\models\NgSpuModel;
 use app\models\ProdNgCategory;
 use app\models\SernoMaster;
 use app\models\Karyawan;
@@ -16,7 +16,7 @@ use app\models\Karyawan;
 /**
  * 
  */
-class NgPcbController extends Controller
+class NgSpuController extends Controller
 {
 	public function behaviors()
     {
@@ -27,7 +27,7 @@ class NgPcbController extends Controller
 	public function actionIndex($value='')
 	{
 		$searchModel  = new ProdNgDataSearch;
-		$searchModel->loc_id = 'WM01';
+		$searchModel->loc_id = 'WU01';
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
@@ -41,33 +41,33 @@ class NgPcbController extends Controller
 		]);
 	}
 
-	public function getDocumentNo($post_date)
+	public function getDocumentNo()
 	{
 		$total_today = ProdNgData::find()
 		->where([
-			'loc_id' => 'WU01',
-			'post_date' => $post_date
+			'loc_id' => 'WM01',
+			'post_date' => date('Y-m-d')
 		])
 		->count();
 		$total_today++;
-		$document_no = 'SPU' . date('Ymd') . str_pad($total_today, 3, '0', STR_PAD_LEFT);
+		$document_no = 'PCB' . date('Ymd') . str_pad($total_today, 3, '0', STR_PAD_LEFT);
 		return $document_no;
 	}
 
 	public function actionCreate()
 	{
 		date_default_timezone_set('Asia/Jakarta');
-		$model = new NgPcbModel;
+		$model = new NgSpuModel;
+		$model->loc_id = 'WU01';
+		$model->ng_qty = $model->total_output = 1;
 		$model->post_date = date('Y-m-d');
-		$model->created_time = date('Y-m-d H:i:s');
-		$model->loc_id = 'WM01';
-		$model->ng_qty = 1;
-		$model->created_by_id = strtoupper(\Yii::$app->user->identity->username);
-		$model->created_by_name = strtoupper(\Yii::$app->user->identity->name);
+		//$model->created_by_id = strtoupper(\Yii::$app->user->identity->username);
+		//$model->created_by_name = strtoupper(\Yii::$app->user->identity->name);
 
 		try {
 			if ($model->load($_POST)) {
-				$model->period = date('Ym');
+				$model->created_time = date('Y-m-d H:i:s');
+				$model->period = date('Ym', strtotime($model->post_date));
 				$model->document_no = $this->getDocumentNo();
 				$serno_master = SernoMaster::find()->where([
 					'gmc' => $model->gmc_no
@@ -77,9 +77,6 @@ class NgPcbController extends Controller
 				$model->gmc_dest = $serno_master->dest;
 				$model->gmc_line = $serno_master->line;
 				$model->gmc_desc = $serno_master->description;
-
-				$detected_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->detected_by_id])->one();
-				$model->detected_by_name = $detected_karyawan->NAMA_KARYAWAN;
 
 				$ng_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->emp_id])->one();
 				$model->emp_name = $ng_karyawan->NAMA_KARYAWAN;
@@ -96,13 +93,7 @@ class NgPcbController extends Controller
 				$model->ng_category_desc = $ng_category->category_name;
 				$model->ng_category_detail = $ng_category->category_detail;
 
-				$pcb_split_arr = explode(' | ', $model->pcb_id);
-				$model->pcb_id = $pcb_split_arr[0];
-				$model->pcb_name = $pcb_split_arr[1];
-
-				$model->ng_detail = strtoupper($model->ng_detail);
 				$model->part_desc = strtoupper($model->part_desc);
-				$model->ng_location = strtoupper($model->ng_location);
 
 				$part_desc_split = explode(' | ', $model->part_desc);
 				if (count($part_desc_split) >= 2) {
@@ -155,16 +146,12 @@ class NgPcbController extends Controller
 			$model->gmc_line = $serno_master->line;
 			$model->gmc_desc = $serno_master->description;
 
-			$detected_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->detected_by_id])->one();
-			$model->detected_by_name = $detected_karyawan->NAMA_KARYAWAN;
-
 			if ($model->ng_cause_category == 'MAN') {
 				$ng_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->emp_id])->one();
 				$model->emp_name = $ng_karyawan->NAMA_KARYAWAN;
 			} else {
 				$model->emp_id = $model->emp_name = null;
 			}
-			
 
 			$model->updated_time = date('Y-m-d H:i:s');
 			$updated_karyawan = Karyawan::find()->where([
@@ -177,15 +164,8 @@ class NgPcbController extends Controller
 
 			$ng_category = ProdNgCategory::find()->where(['id' => $model->ng_category_id])->one();
 			$model->ng_category_desc = $ng_category->category_name;
-			$model->ng_category_detail = $ng_category->category_detail;
 
-			$pcb_split_arr = explode(' | ', $model->pcb_id);
-			$model->pcb_id = $pcb_split_arr[0];
-			$model->pcb_name = $pcb_split_arr[1];
-
-			$model->ng_detail = strtoupper($model->ng_detail);
 			$model->part_desc = strtoupper($model->part_desc);
-			$model->ng_location = strtoupper($model->ng_location);
 
 			$part_desc_split = explode(' | ', $model->part_desc);
 			if (count($part_desc_split) >= 2) {
@@ -210,7 +190,7 @@ class NgPcbController extends Controller
 
 	protected function findModel($id)
 	{
-		if (($model = NgPcbModel::findOne($id)) !== null) {
+		if (($model = NgSpuModel::findOne($id)) !== null) {
 			return $model;
 		} else {
 			throw new HttpException(404, 'The requested page does not exist.');
