@@ -50,7 +50,7 @@ class NgPcbController extends Controller
 		])
 		->count();
 		$total_today++;
-		$document_no = 'SPU' . date('Ymd') . str_pad($total_today, 3, '0', STR_PAD_LEFT);
+		$document_no = 'PCB' . date('Ymd') . str_pad($total_today, 3, '0', STR_PAD_LEFT);
 		return $document_no;
 	}
 
