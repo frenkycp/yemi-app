@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 /**
 * @var yii\web\View $this
@@ -81,9 +82,13 @@ $gridColumns = [
         'attribute' => 'pcb_side',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filter' => [
+            'A' => 'A',
+            'B' => 'B',
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; width: 40px;'
+            'style' => 'text-align: center; font-size: 12px; width: 60px;'
         ],
     ],
     [
@@ -104,6 +109,7 @@ $gridColumns = [
         },
         'label' => 'Problem',
         'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\ProdNgCategory::find()->orderBy('category_name, category_detail')->all(), 'id', 'description'),
         'filterInputOptions' => [
             'class' => 'form-control',
         ],

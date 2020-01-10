@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 use app\models\search\ProdNgDataSearch;
 use app\models\ProdNgData;
+use app\models\NgPcbModel;
 use app\models\ProdNgCategory;
 use app\models\SernoMaster;
 use app\models\Karyawan;
@@ -56,7 +57,7 @@ class NgPcbController extends Controller
 	public function actionCreate()
 	{
 		date_default_timezone_set('Asia/Jakarta');
-		$model = new ProdNgData;
+		$model = new NgPcbModel;
 		$model->post_date = date('Y-m-d');
 		$model->created_time = date('Y-m-d H:i:s');
 		$model->loc_id = 'WM01';
@@ -103,6 +104,12 @@ class NgPcbController extends Controller
 				$model->part_desc = strtoupper($model->part_desc);
 				$model->ng_location = strtoupper($model->ng_location);
 
+				$part_desc_split = explode(' | ', $model->part_desc);
+				if (count($part_desc_split) >= 2) {
+					$model->part_no = $part_desc_split[0];
+					$model->part_desc = $part_desc_split[1];
+				}
+
 				if ($model->save()) {
 					return $this->redirect(Url::previous());
 				} else {
@@ -134,6 +141,9 @@ class NgPcbController extends Controller
 	{
 		date_default_timezone_set('Asia/Jakarta');
 		$model = $this->findModel($id);
+		if ($model->part_no != null) {
+			$model->part_desc = $model->part_no . ' | ' . $model->part_desc;
+		}
 
 		if ($model->load($_POST)) {
 			$serno_master = SernoMaster::find()->where([
@@ -172,6 +182,14 @@ class NgPcbController extends Controller
 			$model->part_desc = strtoupper($model->part_desc);
 			$model->ng_location = strtoupper($model->ng_location);
 
+			$part_desc_split = explode(' | ', $model->part_desc);
+			if (count($part_desc_split) >= 2) {
+				$model->part_no = $part_desc_split[0];
+				$model->part_desc = $part_desc_split[1];
+			} else {
+				$model->part_no = null;
+			}
+
 			if ($model->save()) {
 				return $this->redirect(Url::previous());
 			} else {
@@ -187,7 +205,7 @@ class NgPcbController extends Controller
 
 	protected function findModel($id)
 	{
-		if (($model = ProdNgData::findOne($id)) !== null) {
+		if (($model = NgPcbModel::findOne($id)) !== null) {
 			return $model;
 		} else {
 			throw new HttpException(404, 'The requested page does not exist.');
