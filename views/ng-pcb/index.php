@@ -19,6 +19,11 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
+$ng_found_dropdown = \Yii::$app->params['ng_found_dropdown'];
+ksort($ng_found_dropdown);
+
+$ng_pcb_cause_category_dropdown = \Yii::$app->params['ng_pcb_cause_category_dropdown'];
+ksort($ng_pcb_cause_category_dropdown);
 
 $gridColumns = [
     [
@@ -73,6 +78,7 @@ $gridColumns = [
         'attribute' => 'pcb_ng_found',
         'label' => 'NG Found',
         'vAlign' => 'middle',
+        'filter' => $ng_found_dropdown,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px;'
@@ -127,8 +133,19 @@ $gridColumns = [
         'label' => 'Category',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filter' => $ng_pcb_cause_category_dropdown,
         'filterInputOptions' => [
             'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'emp_name',
+        'label' => 'PIC (NG)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [

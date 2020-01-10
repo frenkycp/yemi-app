@@ -41,12 +41,12 @@ class NgSpuController extends Controller
 		]);
 	}
 
-	public function getDocumentNo()
+	public function getDocumentNo($post_date)
 	{
 		$total_today = ProdNgData::find()
 		->where([
-			'loc_id' => 'WM01',
-			'post_date' => date('Y-m-d')
+			'loc_id' => 'WU01',
+			'post_date' => $post_date
 		])
 		->count();
 		$total_today++;
@@ -68,7 +68,7 @@ class NgSpuController extends Controller
 			if ($model->load($_POST)) {
 				$model->created_time = date('Y-m-d H:i:s');
 				$model->period = date('Ym', strtotime($model->post_date));
-				$model->document_no = $this->getDocumentNo();
+				$model->document_no = $this->getDocumentNo($model->post_date);
 				$serno_master = SernoMaster::find()->where([
 					'gmc' => $model->gmc_no
 				])->one();

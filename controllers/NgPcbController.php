@@ -45,7 +45,7 @@ class NgPcbController extends Controller
 	{
 		$total_today = ProdNgData::find()
 		->where([
-			'loc_id' => 'WU01',
+			'loc_id' => 'WM01',
 			'post_date' => $post_date
 		])
 		->count();
@@ -68,7 +68,7 @@ class NgPcbController extends Controller
 		try {
 			if ($model->load($_POST)) {
 				$model->period = date('Ym');
-				$model->document_no = $this->getDocumentNo();
+				$model->document_no = $this->getDocumentNo($model->post_date);
 				$serno_master = SernoMaster::find()->where([
 					'gmc' => $model->gmc_no
 				])->one();
@@ -144,6 +144,7 @@ class NgPcbController extends Controller
 		if ($model->part_no != null) {
 			$model->part_desc = $model->part_no . ' | ' . $model->part_desc;
 		}
+		$model->pcb_id = $model->pcb_id . ' | ' . $model->pcb_name;
 
 		if ($model->load($_POST)) {
 			$serno_master = SernoMaster::find()->where([
