@@ -29,7 +29,7 @@ class GoPickingOrderCompletionController extends Controller
 		->where([
 			'SOURCE' => 'MAT'
 		])
-		->orderBy('TERMINAL DESC, GOJEK_DESC ASC')
+		->orderBy('HADIR DESC, GOJEK_DESC ASC')
 		->all();
 
 		$tmp_data = [];
