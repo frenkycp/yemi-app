@@ -230,6 +230,14 @@ return [
         'SURROUND' => 'SURROUND',
         'PACKING DMI' => 'PACKING DMI',
     ],
+    'ng_inj_line_dropdown' => [
+        '1600 Ton' => 'WI02',
+        '850 Ton' => 'WI02',
+        '350 Ton' => 'WI03',
+        '180 Ton' => 'WI01',
+        '125 Ton' => 'WI01',
+        '100 Ton' => 'WI01',
+    ],
 ];
 
 function getYearArray()

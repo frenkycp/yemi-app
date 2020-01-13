@@ -16,8 +16,12 @@ use kartik\date\DatePicker;
 $ng_pcb_cause_category_dropdown = \Yii::$app->params['ng_pcb_cause_category_dropdown'];
 ksort($ng_pcb_cause_category_dropdown);
 
-$ng_spu_line_dropdown = \Yii::$app->params['ng_spu_line_dropdown'];
-ksort($ng_spu_line_dropdown);
+$line_arr = [];
+$tmp_line = \Yii::$app->params['ng_inj_line_dropdown'];
+foreach ($tmp_line as $key => $value) {
+    $line_arr[$key] = $key;
+}
+
 
 $tmp_part = app\models\SapItemTbl::find()
 ->select(['material', 'material_description'])
@@ -97,23 +101,6 @@ $this->registerCss("
 
                     <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
 
-                    <?= $form->field($model, 'total_output')->textInput(['type' => 'number']); ?>
-
-                    <?= $form->field($model, 'line')->dropDownList($ng_spu_line_dropdown, [
-                        'prompt' => 'Choose...'
-                    ]); ?>
-
-                    <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
-                        'options' => [
-                            'type' => DatePicker::TYPE_INPUT,
-                        ],
-                        'pluginOptions' => [
-                            'autoclose'=>true,
-                            'format' => 'yyyy-mm-dd'
-                        ]
-                    ]); ?>
-                </div>
-                <div class="col-md-6">
                     <?= $form->field($model, 'ng_cause_category')->dropDownList($ng_pcb_cause_category_dropdown, [
                         'prompt' => 'Choose...',
                         'id' => 'cause-category-id',
@@ -161,6 +148,33 @@ $this->registerCss("
                             ],
                         ])->label('PIC (NG) <em><span class="text-red">*Must be set if "MAN" category was selected!</span></em>'); ?>
                     </div>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'total_output')->textInput(['type' => 'number']); ?>
+
+                    <?= $form->field($model, 'line')->dropDownList($line_arr, [
+                        'prompt' => 'Choose...'
+                    ]); ?>
+
+                    <?= $form->field($model, 'ng_shift')->dropDownList([
+                        1 => 1,
+                        2 => 2,
+                        3 => 3,
+                    ], [
+                        'prompt' => 'Choose...'
+                    ]); ?>
+
+                    <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
+                        'options' => [
+                            'type' => DatePicker::TYPE_INPUT,
+                        ],
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd'
+                        ]
+                    ]); ?>
+
+                    <?= $form->field($model, 'inj_set_parameter')->textInput(['type' => 'number']); ?>
                 </div>
             </div>
             

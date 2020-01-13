@@ -12,16 +12,13 @@ use yii\helpers\ArrayHelper;
 */
 
 $this->title = [
-    'page_title' => 'NG SPU Data Table <span class="japanesse text-green"></span>',
-    'tab_title' => 'NG SPU Data Table',
-    'breadcrumbs_title' => 'NG SPU Data Table'
+    'page_title' => 'NG Injection Data Table <span class="japanesse text-green"></span>',
+    'tab_title' => 'NG Injection Data Table',
+    'breadcrumbs_title' => 'NG Injection Data Table'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
-
-$ng_pcb_cause_category_dropdown = \Yii::$app->params['ng_pcb_cause_category_dropdown'];
-ksort($ng_pcb_cause_category_dropdown);
 
 $gridColumns = [
     [
@@ -89,7 +86,7 @@ $gridColumns = [
         {
             return $model->ng_category_desc . ' | ' . $model->ng_category_detail;
         },
-        'label' => 'Problem',
+        'label' => 'NG- Name',
         'vAlign' => 'middle',
         'filter' => ArrayHelper::map(app\models\ProdNgCategory::find()->orderBy('category_name, category_detail')->all(), 'id', 'description'),
         'filterInputOptions' => [
@@ -138,7 +135,16 @@ $gridColumns = [
     ],
     [
         'attribute' => 'line',
-        'label' => 'Line',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 40px;'
+        ],
+    ],
+    [
+        'attribute' => 'ng_shift',
+        'label' => 'Shift',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -148,7 +154,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'post_date',
-        'label' => 'Process',
+        'label' => 'Process Date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -160,6 +166,7 @@ $gridColumns = [
         'value' => function($model){
             return date('Y-m-d H:i:s', strtotime($model->created_time));
         },
+        'label' => 'Input Date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [

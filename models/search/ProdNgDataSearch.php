@@ -64,6 +64,7 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'id' => $this->id,
+            'loc_id' => $this->loc_id,
             'post_date' => $this->post_date,
             'ng_shift' => $this->ng_shift,
             'ng_qty' => $this->ng_qty,
@@ -78,7 +79,6 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'period', $this->period])
             ->andFilterWhere(['like', 'ng_category_detail', $this->ng_category_detail])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),created_time,120)', $this->created_time])
-            ->andFilterWhere(['like', 'loc_id', $this->loc_id])
             ->andFilterWhere(['like', 'loc_desc', $this->loc_desc])
             ->andFilterWhere(['like', 'line', $this->line])
             ->andFilterWhere(['like', 'emp_id', $this->emp_id])
