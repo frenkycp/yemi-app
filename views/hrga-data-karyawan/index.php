@@ -81,6 +81,24 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'NIK_SUN_FISH',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'AKTIF',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'NAMA_KARYAWAN',
         'vAlign' => 'middle',
         'filterInputOptions' => [
