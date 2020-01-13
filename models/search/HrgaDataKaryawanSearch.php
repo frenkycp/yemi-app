@@ -18,7 +18,7 @@ class HrgaDataKaryawanSearch extends Karyawan
 public function rules()
 {
 return [
-[['NIK', 'NAMA_KARYAWAN', 'TGL_LAHIR', 'JENIS_KELAMIN', 'STATUS_PERKAWINAN', 'ALAMAT', 'ALAMAT_SEMENTARA', 'TELP', 'NPWP', 'KTP', 'BPJS_KESEHATAN', 'BPJS_KETENAGAKERJAAN', 'TGL_MASUK_YEMI', 'STATUS_KARYAWAN', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'JABATAN_SR', 'JABATAN_SR_GROUP', 'GRADE', 'DIRECT_INDIRECT', 'JENIS_PEKERJAAN', 'SERIKAT_PEKERJA', 'K1_START', 'K1_END', 'K2_START', 'K2_END', 'ACTIVE_STAT', 'PASSWORD'], 'safe'],
+[['NIK', 'NAMA_KARYAWAN', 'TGL_LAHIR', 'JENIS_KELAMIN', 'STATUS_PERKAWINAN', 'ALAMAT', 'ALAMAT_SEMENTARA', 'TELP', 'NPWP', 'KTP', 'BPJS_KESEHATAN', 'BPJS_KETENAGAKERJAAN', 'TGL_MASUK_YEMI', 'STATUS_KARYAWAN', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'JABATAN_SR', 'JABATAN_SR_GROUP', 'GRADE', 'DIRECT_INDIRECT', 'JENIS_PEKERJAAN', 'SERIKAT_PEKERJA', 'K1_START', 'K1_END', 'K2_START', 'K2_END', 'ACTIVE_STAT', 'PASSWORD', 'NIK_SUN_FISH', 'AKTIF'], 'safe'],
             [['SKILL', 'KONTRAK_KE'], 'integer'],
 ];
 }
@@ -64,10 +64,12 @@ $query->andFilterWhere([
             'K1_END' => $this->K1_END,
             'K2_START' => $this->K2_START,
             'K2_END' => $this->K2_END,
+            'AKTIF' => $this->AKTIF,
         ]);
 
         $query->andFilterWhere(['like', 'NIK', $this->NIK])
             ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])
+            ->andFilterWhere(['like', 'NIK_SUN_FISH', $this->NIK_SUN_FISH])
             ->andFilterWhere(['like', 'JENIS_KELAMIN', $this->JENIS_KELAMIN])
             ->andFilterWhere(['like', 'STATUS_PERKAWINAN', $this->STATUS_PERKAWINAN])
             ->andFilterWhere(['like', 'ALAMAT', $this->ALAMAT])
