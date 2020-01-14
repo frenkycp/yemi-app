@@ -53,8 +53,17 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'part_no',
-        'label' => 'Part No.',
+        'attribute' => 'gmc_desc',
+        'label' => 'Model',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'pcb_id',
+        'label' => 'Part No. (WIP/Assy)',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -63,17 +72,8 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'part_desc',
-        'label' => 'Part Name',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'gmc_desc',
-        'label' => 'Model',
+        'attribute' => 'pcb_name',
+        'label' => 'Part Name (WIP/Assy)',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',

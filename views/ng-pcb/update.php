@@ -7,7 +7,7 @@ use yii\helpers\Html;
 * @var app\models\KlinikInput $model
 */
 
-$this->title = Yii::t('models', 'Edit NG Information');
+$this->title = Yii::t('models', 'Edit NG Information (PCB)');
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Klinik Input'), 'url' => ['index']];
 //$this->params['breadcrumbs'][] = ['label' => (string)$model->pk, 'url' => ['view', 'pk' => $model->pk]];
 //$this->params['breadcrumbs'][] = 'Edit';

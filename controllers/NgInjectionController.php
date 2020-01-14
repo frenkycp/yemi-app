@@ -14,11 +14,11 @@ use app\models\Karyawan;
 
 class NgInjectionController extends Controller
 {
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 	
 	public function actionIndex($value='')
 	{
@@ -90,6 +90,10 @@ class NgInjectionController extends Controller
 				$model->ng_category_desc = $ng_category->category_name;
 				$model->ng_category_detail = $ng_category->category_detail;
 
+				$pcb_split_arr = explode(' | ', $model->pcb_id);
+				$model->pcb_id = $pcb_split_arr[0];
+				$model->pcb_name = $pcb_split_arr[1];
+
 				$model->part_desc = strtoupper($model->part_desc);
 
 				$part_desc_split = explode(' | ', $model->part_desc);
@@ -121,6 +125,7 @@ class NgInjectionController extends Controller
 		if ($model->part_no != null) {
 			$model->part_desc = $model->part_no . ' | ' . $model->part_desc;
 		}
+		$model->pcb_id = $model->pcb_id . ' | ' . $model->pcb_name;
 
 		if ($model->load($_POST)) {
 			$serno_master = SernoMaster::find()->where([
@@ -153,6 +158,10 @@ class NgInjectionController extends Controller
 
 			$ng_category = ProdNgCategory::find()->where(['id' => $model->ng_category_id])->one();
 			$model->ng_category_desc = $ng_category->category_name;
+
+			$pcb_split_arr = explode(' | ', $model->pcb_id);
+			$model->pcb_id = $pcb_split_arr[0];
+			$model->pcb_name = $pcb_split_arr[1];
 
 			$model->part_desc = strtoupper($model->part_desc);
 

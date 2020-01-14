@@ -7,7 +7,7 @@ use yii\helpers\Html;
 * @var app\models\KlinikInput $model
 */
 
-$this->title = Yii::t('models', 'Input NG Data');
+$this->title = Yii::t('models', 'Input NG Data (Injection)');
 //$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Klinik Inputs'), 'url' => ['index']];
 //$this->params['breadcrumbs'][] = $this->title;
 ?>

@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\ProdNgData as BaseProdNgData;
+use \app\models\ProdNgData as BaseProdNgData;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -27,7 +27,7 @@ class NgSpuModel extends BaseProdNgData
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['ng_qty', 'part_desc', 'gmc_no', 'ng_category_id', 'line', 'post_date', 'ng_cause_category'], 'required'],
+                [['ng_qty', 'pcb_id', 'gmc_no', 'ng_category_id', 'line', 'post_date', 'ng_cause_category'], 'required'],
             ]
         );
     }
@@ -37,7 +37,8 @@ class NgSpuModel extends BaseProdNgData
         return ArrayHelper::merge(
             parent::rules(),
             [
-                'part_desc' => 'Part Number',
+                'part_desc' => 'NG Material',
+                'pcb_id' => 'Part Number (WIP/Assy)',
                 'ng_detail' => 'Remark',
                 'gmc_no' => 'Model',
                 'ng_category_id' => 'NG Name',

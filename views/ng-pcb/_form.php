@@ -160,8 +160,6 @@ $this->registerCss("
 
                     <?= $form->field($model, 'ng_location')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()', 'onfocusout' => 'this.value=this.value.toUpperCase()'])->label('Location'); ?>
 
-                    <?= $form->field($model, 'created_by_name')->textInput(['readonly' => true])->label('PIC'); ?>
-
                     <?= $form->field($model, 'detected_by_id')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
                             'NIK_SUN_FISH', 'NAMA_KARYAWAN'

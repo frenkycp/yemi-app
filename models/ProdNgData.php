@@ -49,4 +49,112 @@ class ProdNgData extends BaseProdNgData
             ]
         );
     }
+
+    public function beforeSave($insert){
+        if(parent::beforeSave($insert)){
+            date_default_timezone_set('Asia/Jakarta');
+            $now = date('Y-m-d H:i:s');
+
+            $serno_master = SernoMaster::find()->where([
+                'gmc' => $this->gmc_no
+            ])->one();
+            $this->gmc_model = $serno_master->model;
+            $this->gmc_color = $serno_master->color;
+            $this->gmc_dest = $serno_master->dest;
+            $this->gmc_line = $serno_master->line;
+            $this->gmc_desc = $serno_master->description;
+
+            if ($this->ng_cause_category == 'MAN') {
+                $ng_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $this->emp_id])->one();
+                $this->emp_name = $ng_karyawan->NAMA_KARYAWAN;
+            } else {
+                $this->emp_id = $this->emp_name = null;
+            }
+
+            $this->period = date('Ym', strtotime($this->post_date));
+
+            $ng_category = ProdNgCategory::find()->where(['id' => $this->ng_category_id])->one();
+            $this->ng_category_desc = $ng_category->category_name;
+            $this->ng_category_detail = $ng_category->category_detail;
+
+            if ($this->pcb_id != null) {
+                $pcb_split_arr = explode(' | ', $this->pcb_id);
+                if (count($pcb_split_arr) >= 2) {
+                    $this->pcb_id = $pcb_split_arr[0];
+                    $this->pcb_name = $pcb_split_arr[1];
+                } else {
+                    $this->pcb_name = $this->pcb_id;
+                    $this->pcb_id = null;
+                }
+                
+            }
+            
+            $this->part_desc = strtoupper($this->part_desc);
+
+            if ($this->part_desc != null) {
+                $part_desc_split = explode(' | ', $this->part_desc);
+                if (count($part_desc_split) >= 2) {
+                    $this->part_no = $part_desc_split[0];
+                    $this->part_desc = $part_desc_split[1];
+                }
+            }
+            
+
+            if ($this->detected_by_id != null) {
+                $detected_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $this->detected_by_id])->one();
+                $this->detected_by_name = $detected_karyawan->NAMA_KARYAWAN;
+            }
+
+            if ($this->ng_detail != null) {
+                $this->ng_detail = strtoupper($this->ng_detail);
+            }
+            if ($this->ng_location != null) {
+                $this->ng_location = strtoupper($this->ng_location);
+            }
+            
+
+            if($this->isNewRecord)
+            {
+                if (in_array($this->loc_id, ['WI01', 'WI02', 'WI03'])) {
+                    $count = ProdNgData::find()->where([
+                        'post_date' => $this->post_date,
+                        'loc_id' => ['WI01', 'WI02', 'WI03']
+                    ])->count();
+                    $count++;
+                    $this->document_no = 'INJ' . date('Ymd', strtotime($this->post_date)) . $count;
+                } else {
+                    $count = ProdNgData::find()->where([
+                        'post_date' => $this->post_date,
+                        'loc_id' => $this->loc_id
+                    ])->count();
+                    $count++;
+                    $arr_loc_doc = [
+                        'WM01' => 'PCB',
+                        'WU01' => 'SPU',
+                    ];
+                    $this->document_no = $arr_loc_doc[$this->loc_id] . date('Ymd', strtotime($this->post_date)) . str_pad($count, 3, '0', STR_PAD_LEFT);
+                }
+
+                $created_karyawan = Karyawan::find()->where([
+                    'OR',
+                    ['NIK_SUN_FISH' => \Yii::$app->user->identity->username],
+                    ['NIK' => \Yii::$app->user->identity->username]
+                ])->one();
+                $this->created_time = $now;
+                $this->created_by_id = $created_karyawan->NIK_SUN_FISH;
+                $this->created_by_name = $created_karyawan->NAMA_KARYAWAN;
+
+            } else {
+                $updated_karyawan = Karyawan::find()->where([
+                    'OR',
+                    ['NIK_SUN_FISH' => \Yii::$app->user->identity->username],
+                    ['NIK' => \Yii::$app->user->identity->username]
+                ])->one();
+                $this->updated_time = $now;
+                $this->updated_by_id = $updated_karyawan->NIK_SUN_FISH;
+                $this->updated_by_name = $updated_karyawan->NAMA_KARYAWAN;
+            }
+            return true;
+        }
+    }
 }

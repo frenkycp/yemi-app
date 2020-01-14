@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\ProdNgData as BaseProdNgData;
+use \app\models\ProdNgData as BaseProdNgData;
 use yii\helpers\ArrayHelper;
 
 /**

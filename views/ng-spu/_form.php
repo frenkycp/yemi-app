@@ -7,6 +7,7 @@ use yii\helpers\StringHelper;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
+use kartik\typeahead\TypeaheadBasic;
 
 /**
 * @var yii\web\View $this
@@ -52,7 +53,20 @@ $this->registerCss("
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?= $form->field($model, 'part_desc')->widget(Select2::classname(), [
+                    <?= $form->field($model, 'gmc_no')->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(app\models\SernoMaster::find()->select([
+                            'gmc', 'model', 'color', 'dest'
+                        ])
+                        ->all(), 'gmc', 'fullDescription'),
+                        'options' => [
+                            'placeholder' => 'Select Model ...',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ]); ?>
+
+                    <?= $form->field($model, 'pcb_id')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\SapItemTbl::find()->select([
                             'material', 'material_description'
                         ])
@@ -68,17 +82,14 @@ $this->registerCss("
                         ],
                     ]); ?>
 
-                    <?= $form->field($model, 'gmc_no')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\SernoMaster::find()->select([
-                            'gmc', 'model', 'color', 'dest'
-                        ])
-                        ->all(), 'gmc', 'fullDescription'),
+                    <?= $form->field($model, 'part_desc')->widget(TypeaheadBasic::classname(), [
+                        'data' => $part_arr,
                         'options' => [
-                            'placeholder' => 'Select Model ...',
+                            'onkeyup' => 'this.value=this.value.toUpperCase()',
+                            'onfocusout' => 'this.value=this.value.toUpperCase()',
+                            'placeholder' => 'Please type part number or name to search. Leave empty if not neccessary...',
                         ],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
+                        'pluginOptions' => ['highlight'=>true],
                     ]); ?>
 
                     <?= $form->field($model, 'ng_category_id')->widget(Select2::classname(), [
