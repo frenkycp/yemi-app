@@ -124,16 +124,6 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'total_output',
-        'label' => 'Output',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; width: 40px;'
-        ],
-    ],
-    [
         'attribute' => 'line',
         'hAlign' => 'center',
         'vAlign' => 'middle',

@@ -59,7 +59,6 @@ class NgSpuController extends Controller
 		date_default_timezone_set('Asia/Jakarta');
 		$model = new NgSpuModel;
 		$model->loc_id = 'WU01';
-		$model->ng_qty = $model->total_output = 1;
 		$model->post_date = date('Y-m-d');
 		//$model->created_by_id = strtoupper(\Yii::$app->user->identity->username);
 		//$model->created_by_name = strtoupper(\Yii::$app->user->identity->name);

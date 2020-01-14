@@ -97,8 +97,6 @@ $this->registerCss("
 
                     <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
 
-                    <?= $form->field($model, 'total_output')->textInput(['type' => 'number']); ?>
-
                     <?= $form->field($model, 'line')->dropDownList($ng_spu_line_dropdown, [
                         'prompt' => 'Choose...'
                     ]); ?>
@@ -161,6 +159,8 @@ $this->registerCss("
                             ],
                         ])->label('PIC (NG) <em><span class="text-red">*Must be set if "MAN" category was selected!</span></em>'); ?>
                     </div>
+
+                    <?= $form->field($model, 'ng_detail')->textInput(['placeholder' => 'Leave empty if not neccessary...']); ?>
                 </div>
             </div>
             

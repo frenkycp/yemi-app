@@ -27,7 +27,7 @@ class NgSpuModel extends BaseProdNgData
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['ng_qty', 'part_desc', 'gmc_no', 'ng_category_id', 'total_output', 'line', 'post_date', 'ng_cause_category'], 'required'],
+                [['ng_qty', 'part_desc', 'gmc_no', 'ng_category_id', 'line', 'post_date', 'ng_cause_category'], 'required'],
             ]
         );
     }
@@ -38,6 +38,7 @@ class NgSpuModel extends BaseProdNgData
             parent::rules(),
             [
                 'part_desc' => 'Part Number',
+                'ng_detail' => 'Remark',
                 'gmc_no' => 'Model',
                 'ng_category_id' => 'NG Name',
                 'ng_qty' => 'NG Qty',
