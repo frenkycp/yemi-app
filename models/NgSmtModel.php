@@ -51,6 +51,7 @@ class NgSmtModel extends BaseProdNgData
                 'smt_pic_aoi' => 'PIC AOI',
                 'smt_group_pic' => 'PIC Group',
                 'ng_location' => 'Location',
+                'pcb_repair' => 'Repair (Action)'
             ]
         );
     }

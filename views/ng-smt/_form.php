@@ -144,8 +144,7 @@ $this->registerCss("
                     ], [
                         'prompt' => 'Choose...'
                     ]); ?>
-                </div>
-                <div class="col-md-6">
+
                     <?= $form->field($model, 'smt_group_pic')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
                             'NIK_SUN_FISH', 'NAMA_KARYAWAN'
@@ -162,7 +161,9 @@ $this->registerCss("
                             'allowClear' => true,
                         ],
                     ]); ?>
-
+                </div>
+                <div class="col-md-6">
+                    
                     <?= $form->field($model, 'ng_category_id')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\ProdNgCategory::find()->select([
                             'id', 'category_name', 'category_detail'
@@ -230,6 +231,10 @@ $this->registerCss("
                     <?= $form->field($model, 'ng_location')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()', 'onfocusout' => 'this.value=this.value.toUpperCase()']); ?>
 
                     <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
+
+                    <?= $form->field($model, 'pcb_repair')->dropDownList($ng_pcb_repair_dropdown, [
+                        'prompt' => 'Choose...'
+                    ]); ?>
                 </div>
             </div>
             
