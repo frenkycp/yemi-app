@@ -7,6 +7,7 @@ use yii\helpers\StringHelper;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
+use kartik\typeahead\TypeaheadBasic;
 
 /**
 * @var yii\web\View $this
