@@ -131,7 +131,7 @@ class ProdNgData extends BaseProdNgData
                         'loc_id' => ['WI01', 'WI02', 'WI03']
                     ])->count();
                     $count++;
-                    $this->document_no = 'INJ' . date('Ymd', strtotime($this->post_date)) .  . str_pad($count, 3, '0', STR_PAD_LEFT);
+                    $this->document_no = 'INJ' . date('Ymd', strtotime($this->post_date)) . str_pad($count, 3, '0', STR_PAD_LEFT);
                 } else {
                     $count = ProdNgData::find()->where([
                         'post_date' => $this->post_date,
