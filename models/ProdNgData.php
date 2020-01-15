@@ -105,6 +105,16 @@ class ProdNgData extends BaseProdNgData
                 $this->detected_by_name = $detected_karyawan->NAMA_KARYAWAN;
             }
 
+            if ($this->smt_pic_aoi != null) {
+                $smt_pic_aoi = Karyawan::find()->where(['NIK_SUN_FISH' => $this->smt_pic_aoi])->one();
+                $this->smt_pic_aoi_name = $smt_pic_aoi->NAMA_KARYAWAN;
+            }
+
+            if ($this->smt_group_pic != null) {
+                $smt_group_pic = Karyawan::find()->where(['NIK_SUN_FISH' => $this->smt_group_pic])->one();
+                $this->smt_group_pic_name = $smt_group_pic->NAMA_KARYAWAN;
+            }
+
             if ($this->ng_detail != null) {
                 $this->ng_detail = strtoupper($this->ng_detail);
             }
@@ -131,6 +141,7 @@ class ProdNgData extends BaseProdNgData
                     $arr_loc_doc = [
                         'WM01' => 'PCB',
                         'WU01' => 'SPU',
+                        'WM03' => 'SMT'
                     ];
                     $this->document_no = $arr_loc_doc[$this->loc_id] . date('Ymd', strtotime($this->post_date)) . str_pad($count, 3, '0', STR_PAD_LEFT);
                 }

@@ -62,7 +62,9 @@ use Yii;
  * @property string $pcb_repair
  * @property string $smt_group
  * @property string $smt_pic_aoi
+ * @property string $smt_pic_aoi_name
  * @property string $smt_group_pic
+ * @property string $smt_group_pic_name
  * @property string $ww_unit_each
  * @property double $ww_total_price
  * @property string $aliasModel
@@ -100,7 +102,7 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
             [['document_no', 'loc_desc', 'ng_category_desc', 'ng_category_detail', 'ng_location', 'ng_root_cause', 'attachment', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_pic_aoi', 'smt_group_pic'], 'string', 'max' => 50],
             [['period', 'loc_id', 'fa_status'], 'string', 'max' => 10],
             [['line', 'emp_id', 'model_group', 'gmc_no', 'gmc_color', 'gmc_dest', 'gmc_line', 'part_no', 'ng_cause_category', 'created_by_id', 'updated_by_id', 'detected_by_id', 'fa_area_detec'], 'string', 'max' => 20],
-            [['emp_name', 'gmc_desc', 'gmc_model', 'ng_detail', 'created_by_name', 'updated_by_name', 'detected_by_name'], 'string', 'max' => 150],
+            [['emp_name', 'gmc_desc', 'gmc_model', 'ng_detail', 'created_by_name', 'updated_by_name', 'detected_by_name', 'smt_pic_aoi_name', 'smt_group_pic_name'], 'string', 'max' => 150],
             [['part_desc'], 'string', 'max' => 250],
             [['fa_serno', 'ww_unit_each'], 'string', 'max' => 30],
             [['pcb_id', 'pcb_name'], 'string', 'max' => 200],
@@ -167,7 +169,9 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
             'pcb_repair' => 'Pcb Repair',
             'smt_group' => 'Smt Group',
             'smt_pic_aoi' => 'Smt Pic Aoi',
+            'smt_pic_aoi_name' => 'Smt Pic Aoi Name',
             'smt_group_pic' => 'Smt Group Pic',
+            'smt_group_pic_name' => 'Smt Group Pic Name',
             'ww_unit_each' => 'Ww Unit Each',
             'ww_total_price' => 'Ww Total Price',
         ];
