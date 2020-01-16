@@ -37,7 +37,7 @@ $this->registerCss("
     .table > thead > tr > th{
         border:1px solid #8b8c8d;
         background-color: " . \Yii::$app->params['purple_color'] . ";
-        color: white;
+        color: yellow;
         font-size: 24px;
         border-bottom: 7px solid #797979;
         vertical-align: middle;

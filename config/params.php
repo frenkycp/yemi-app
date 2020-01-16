@@ -238,6 +238,11 @@ return [
         '125 Ton' => 'WI01',
         '100 Ton' => 'WI01',
     ],
+    'emp_shift_dropdown' => [
+        1 => 1,
+        2 => 2,
+        3 => 3,
+    ],
 ];
 
 function getYearArray()
