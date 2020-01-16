@@ -63,9 +63,11 @@ abstract class MpInOut extends \yii\db\ActiveRecord
     {
         return [
             [['MP_ID'], 'required'],
-            [['MP_ID', 'NIK', 'NAMA_KARYAWAN', 'JENIS_KELAMIN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'CC_ID', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'PERIOD', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT', 'GRADE', 'JABATAN_SR_GROUP', 'JABATAN_SR'], 'string'],
             [['KONTRAK_KE', 'SKILL', 'JUMLAH', 'LAMA_KONTRAK'], 'integer'],
             [['TANGGAL', 'KONTRAK_START', 'KONTRAK_END'], 'safe'],
+            [['MP_ID', 'NAMA_KARYAWAN', 'STATUS_KARYAWAN', 'DIRECT_INDIRECT', 'DEPARTEMEN', 'SECTION', 'SUB_SECTION', 'TINGKATAN', 'AKHIR_BULAN', 'PKWT', 'GRADE', 'JABATAN_SR_GROUP', 'JABATAN_SR'], 'string', 'max' => 50],
+            [['NIK', 'CC_ID', 'PERIOD'], 'string', 'max' => 10],
+            [['JENIS_KELAMIN'], 'string', 'max' => 1],
             [['MP_ID'], 'unique']
         ];
     }
@@ -76,30 +78,30 @@ abstract class MpInOut extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'MP_ID' => 'Mp  ID',
+            'MP_ID' => 'Mp ID',
             'NIK' => 'Nik',
-            'NAMA_KARYAWAN' => 'Nama  Karyawan',
-            'JENIS_KELAMIN' => 'Jenis  Kelamin',
-            'STATUS_KARYAWAN' => 'Status  Karyawan',
-            'DIRECT_INDIRECT' => 'Direct  Indirect',
-            'CC_ID' => 'Cc  ID',
+            'NAMA_KARYAWAN' => 'Nama Karyawan',
+            'JENIS_KELAMIN' => 'Jenis Kelamin',
+            'STATUS_KARYAWAN' => 'Status Karyawan',
+            'DIRECT_INDIRECT' => 'Direct Indirect',
+            'CC_ID' => 'Cc ID',
             'DEPARTEMEN' => 'Departemen',
             'SECTION' => 'Section',
-            'SUB_SECTION' => 'Sub  Section',
-            'KONTRAK_KE' => 'Kontrak  Ke',
+            'SUB_SECTION' => 'Sub Section',
+            'KONTRAK_KE' => 'Kontrak Ke',
             'PERIOD' => 'Period',
             'TANGGAL' => 'Tanggal',
-            'KONTRAK_START' => 'Kontrak  Start',
-            'KONTRAK_END' => 'Kontrak  End',
+            'KONTRAK_START' => 'Kontrak Start',
+            'KONTRAK_END' => 'Kontrak End',
             'SKILL' => 'Skill',
             'JUMLAH' => 'Jumlah',
             'TINGKATAN' => 'Tingkatan',
-            'AKHIR_BULAN' => 'Akhir  Bulan',
-            'LAMA_KONTRAK' => 'Lama  Kontrak',
+            'AKHIR_BULAN' => 'Akhir Bulan',
+            'LAMA_KONTRAK' => 'Lama Kontrak',
             'PKWT' => 'Pkwt',
             'GRADE' => 'Grade',
-            'JABATAN_SR_GROUP' => 'Jabatan  Sr  Group',
-            'JABATAN_SR' => 'Jabatan  Sr',
+            'JABATAN_SR_GROUP' => 'Jabatan Sr Group',
+            'JABATAN_SR' => 'Jabatan Sr',
         ];
     }
 

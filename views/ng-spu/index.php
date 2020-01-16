@@ -46,15 +46,6 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],
     [
-        'attribute' => 'gmc_desc',
-        'label' => 'Model',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px;'
-        ],
-    ],
-	[
         'attribute' => 'document_no',
         'label' => 'Report No.',
         'hAlign' => 'center',
@@ -62,6 +53,15 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'gmc_desc',
+        'label' => 'Model',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
         ],
     ],
     [

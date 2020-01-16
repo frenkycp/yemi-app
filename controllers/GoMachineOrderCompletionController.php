@@ -48,7 +48,7 @@ class GoMachineOrderCompletionController extends Controller
 		->all(), 'GOJEK_ID', 'total_point');*/
 
 		foreach ($driver_arr as $value) {
-			$nik = $value->GOJEK_ID;
+			$nik = strval($value->GOJEK_ID);
 			$order_data_arr = GojekOrderView01::find()
 			->select([
 				'GOJEK_ID',
