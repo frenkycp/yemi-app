@@ -21,6 +21,27 @@ date_default_timezone_set('Asia/Jakarta');
 
 $gridColumns = [
     [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => '{delete}',
+        'buttons' => [
+            'view' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'View'),
+                    'aria-label' => Yii::t('cruds', 'View'),
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, $options);
+            }
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
+    ],
+    [
         'attribute' => 'child_analyst',
         'label' => 'Location',
         'value' => function($model){
@@ -31,7 +52,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -41,7 +62,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
@@ -54,30 +75,22 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'from_date',
+        'attribute' => 'att_date',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
     [
-        'attribute' => 'to_date',
+        'attribute' => 'emp_shift',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filter' => \Yii::$app->params['emp_shift_dropdown'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'shift',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+            'style' => 'text-align: center;'
         ],
     ],
 ];
@@ -101,7 +114,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' => [

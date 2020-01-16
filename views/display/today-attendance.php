@@ -44,7 +44,7 @@ $this->registerCss("
     }
     .table > tbody > tr > td{
         border:1px solid #777474;
-        font-size: 2.5em;
+        font-size: 1.5em;
         //background-color: #B3E5FC;
         //font-weight: 1000;
         color: #FFF;
@@ -100,12 +100,22 @@ $this->registerJs($script, View::POS_HEAD );
 <table class="table">
     <thead>
         <tr>
-            <th>Location</th>
-            <th class="text-center">MP Total</th>
-            <th class="text-center">Balance</th>
-            <th class="text-center">MP<br/>(Shift 1)</th>
-            <th class="text-center">MP<br/>(Shift 2)</th>
-            <th class="text-center">MP<br/>(Shift 3)</th>
+            <th rowspan="2">Location</th>
+            <th colspan="2" class="text-center">Shift 1</th>
+            <th colspan="2" class="text-center">Shift 2</th>
+            <th colspan="2" class="text-center">Shift 3</th>
+            <th colspan="2" class="text-center">MP Total</th>
+            <th rowspan="2" class="text-center">Balance</th>
+        </tr>
+        <tr>
+            <th class="text-center">Plan</th>
+            <th class="text-center">Actual</th>
+            <th class="text-center">Plan</th>
+            <th class="text-center">Actual</th>
+            <th class="text-center">Plan</th>
+            <th class="text-center">Actual</th>
+            <th class="text-center">Plan</th>
+            <th class="text-center">Actual</th>
         </tr>
     </thead>
     <tbody>
@@ -115,12 +125,15 @@ $this->registerJs($script, View::POS_HEAD );
             ?>
             <tr>
                 <td><?= $key; ?></td>
-                <td class="text-center"><?= number_format($value['actual']) . ' <span style="font-size: 0.5em; color: gray;">of</span> ' . number_format($value['plan']); ?></td>
+                <td class="text-center"><?= number_format($value['plan_1']); ?></td>
+                <td class="text-center"><?= number_format($data_by_shift[$value['key']]['1']); ?></td>
+                <td class="text-center"><?= number_format($value['plan_2']); ?></td>
+                <td class="text-center"><?= number_format($data_by_shift[$value['key']]['2']); ?></td>
+                <td class="text-center"><?= number_format($value['plan_3']); ?></td>
+                <td class="text-center"><?= number_format($data_by_shift[$value['key']]['3']); ?></td>
+                <td class="text-center"><?= number_format($value['plan']); ?></td>
+                <td class="text-center"><?= number_format($value['actual']); ?></td>
                 <td class="text-center<?= $balance != 0 ? ' text-red' : ' text-green'; ?>"><?= Html::a(number_format($balance), ['today-attendance-detail', 'child_analyst' => $value['key'], 'post_date' => $model->post_date], ['target' => '_blank']); ?></td>
-                <td class="text-center"><?= $data_by_shift[$value['key']]['1'] == 0 ? '' : number_format($data_by_shift[$value['key']]['1']); ?></td>
-                <td class="text-center"><?= $data_by_shift[$value['key']]['2'] == 0 ? '' : number_format($data_by_shift[$value['key']]['2']); ?></td>
-                <td class="text-center"><?= $data_by_shift[$value['key']]['3'] == 0 ? '' : number_format($data_by_shift[$value['key']]['3']); ?></td>
-                
             </tr>
         <?php endforeach ?>
     </tbody>

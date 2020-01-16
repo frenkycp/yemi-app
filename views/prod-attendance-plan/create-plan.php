@@ -35,51 +35,39 @@ $this->registerCss("
     <div class="panel panel-primary">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-6">
+                    <?= $form->field($model, 'manpower')->textArea(['style' => 'resize: none;', 'rows' => 20]); ?>
+                </div>
+                <div class="col-md-6">
+
                     <?= $form->field($model, 'location')->dropDownList($location_arr, [
                         'prompt' => 'Choose location...'
                     ]); ?>
-                </div>
-                <div class="col-md-6">
-                    <?php echo '<label class="control-label">Select date range</label>';
-                    echo DatePicker::widget([
-                        'model' => $model,
-                        'attribute' => 'from_date',
-                        'attribute2' => 'to_date',
-                        'options' => ['placeholder' => 'Start date'],
-                        'options2' => ['placeholder' => 'End date'],
-                        'type' => DatePicker::TYPE_RANGE,
-                        'form' => $form,
-                        'pluginOptions' => [
-                            'format' => 'yyyy-mm-dd',
-                            'autoclose' => true,
-                        ]
-                    ]);?>
-                </div>
-                <div class="col-md-2">
+
                     <?= $form->field($model, 'shift')->dropDownList([
                         1 => 1,
                         2 => 2,
                         3 => 3,
-                    ], [
-                        'prompt' => 'Choose location...'
                     ]); ?>
+                    
+                    <div class="form-group">
+                        <?php echo '<label class="control-label">Select date range</label>';
+                        echo DatePicker::widget([
+                            'model' => $model,
+                            'attribute' => 'from_date',
+                            'attribute2' => 'to_date',
+                            'options' => ['placeholder' => 'Start date'],
+                            'options2' => ['placeholder' => 'End date'],
+                            'type' => DatePicker::TYPE_RANGE,
+                            'form' => $form,
+                            'pluginOptions' => [
+                                'format' => 'yyyy-mm-dd',
+                                'autoclose' => true,
+                            ]
+                        ]);?>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <?= $form->field($model, 'manpower')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(app\models\Karyawan::find()->select(['NIK_SUN_FISH', 'NAMA_KARYAWAN'])->where([
-                        'AKTIF' => 'Y',
-                        'DEPARTEMEN' => 'PRODUCTION'
-                    ])->andWhere('NIK_SUN_FISH IS NOT NULL')->orderBy('NAMA_KARYAWAN')->all(), 'nikSunfishNama', 'nikSunfishNama'),
-                    'options' => ['placeholder' => 'Select manpower ...'],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'multiple' => true
-                    ],
-                ]); ?>
-                </div>
+                
             </div>
             
 

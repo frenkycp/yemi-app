@@ -104,7 +104,7 @@ use app\models\SmtWorkingRatioByMonthResult;
 use app\models\SmtPcbLog;
 use app\models\SmtLogLineBalance;
 use app\models\SmtLogLineBalanceReport;
-use app\models\ProdAttendanceMpPlan;
+use app\models\ProdAttendanceDailyPlan;
 
 class DisplayController extends Controller
 {
@@ -500,43 +500,68 @@ class DisplayController extends Controller
     {
         $this->layout = 'clean';
         $location_arr = \Yii::$app->params['wip_location_arr'];
-        $mp_plan = ProdAttendanceMpPlan::find()
-        ->select('nik, name, shift')
-        ->where([
-            'AND',
-            ['<=', 'from_date', $post_date],
-            ['>=', 'to_date', $post_date]
-        ])
-        ->andWhere(['child_analyst' => $child_analyst, 'is_enable' => 1])
-        ->orderBy('shift, name')
-        ->all();
-
-        $mp_actual = ProdAttendanceView01::find()
-        ->where([
-            'child_analyst' => $child_analyst,
-            'posting_shift' => $post_date
-        ])
-        ->all();
-
         $data = [];
-        foreach ($mp_plan as $plan) {
-            $data[$plan->shift][$plan->nik]['name'] = $plan->name;
-            $data[$plan->shift][$plan->nik]['plan'] = 1;
-            $data[$plan->shift][$plan->nik]['actual'] = 0;
-            foreach ($mp_actual as $actual) {
-                if ($plan->shift == $actual->shift && $plan->nik == $actual->nik) {
-                    $data[$plan->shift][$plan->nik]['actual'] = 1;
+        
+        $mp_plan = ProdAttendanceDailyPlan::find()
+        ->select('nik, name, emp_shift')
+        ->where([
+            'att_date' => $post_date,
+            'child_analyst' => $child_analyst,
+            'flag' => 1
+        ])
+        ->orderBy('emp_shift, name')
+        ->all();
+
+        if ($child_analyst == 'WF01') {
+            $fa_mp_arr = FaMp01::find()->where(['tgl' => $post_date])->orderBy('nama')->all();
+
+            foreach ($mp_plan as $plan) {
+                $data[1][$plan->nik]['name'] = $plan->name;
+                $data[1][$plan->nik]['plan'] = 1;
+                $data[1][$plan->nik]['actual'] = 0;
+                foreach ($fa_mp_arr as $actual) {
+                    if ($plan->nik == $actual->nik) {
+                        $data[$plan->emp_shift][$plan->nik]['actual'] = 1;
+                    }
+                }
+            }
+
+            foreach ($fa_mp_arr as $value) {
+                if (!isset($data[1][$value->nik]['name'])) {
+                    $data[1][$value->nik]['name'] = $value->nama;
+                    $data[1][$value->nik]['plan'] = 0;
+                    $data[1][$value->nik]['actual'] = 1;
+                }
+            }
+        } else {
+            $mp_actual = ProdAttendanceView01::find()
+            ->where([
+                'child_analyst' => $child_analyst,
+                'posting_shift' => $post_date
+            ])
+            ->all();
+
+            foreach ($mp_plan as $plan) {
+                $data[$plan->emp_shift][$plan->nik]['name'] = $plan->name;
+                $data[$plan->emp_shift][$plan->nik]['plan'] = 1;
+                $data[$plan->emp_shift][$plan->nik]['actual'] = 0;
+                foreach ($mp_actual as $actual) {
+                    if ($plan->emp_shift == $actual->shift && $plan->nik == $actual->nik) {
+                        $data[$plan->emp_shift][$plan->nik]['actual'] = 1;
+                    }
+                }
+            }
+
+            foreach ($mp_actual as $value) {
+                if (!isset($data[$value->shift][$value->nik]['name'])) {
+                    $data[$value->shift][$value->nik]['name'] = $value->name;
+                    $data[$value->shift][$value->nik]['plan'] = 0;
+                    $data[$value->shift][$value->nik]['actual'] = 1;
                 }
             }
         }
 
-        foreach ($mp_actual as $value) {
-            if (!isset($data[$value->shift][$value->nik]['name'])) {
-                $data[$value->shift][$value->nik]['name'] = $value->name;
-                $data[$value->shift][$value->nik]['plan'] = 0;
-                $data[$value->shift][$value->nik]['actual'] = 1;
-            }
-        }
+        
 
         return $this->render('today-attendance-detail', [
             'data' => $data,
@@ -583,21 +608,26 @@ class DisplayController extends Controller
         $wip_mp_plan = ArrayHelper::map(WipMpPlan::find()->where(['period' => $period])->all(), 'child_analyst', 'mp_plan');
 
         $mp_arr = [];
+        $tmp_mp_arr = [];
         foreach ($loc_selection as $key1 => $location) {
-            $mp_plan = ProdAttendanceMpPlan::find()
+            $mp_plan = ProdAttendanceDailyPlan::find()
             ->select([
-                'total_shift1' => 'SUM(CASE WHEN shift = 1 THEN 1 ELSE 0 END)',
-                'total_shift2' => 'SUM(CASE WHEN shift = 2 THEN 1 ELSE 0 END)',
-                'total_shift3' => 'SUM(CASE WHEN shift = 3 THEN 1 ELSE 0 END)',
+                'total_shift1' => 'SUM(CASE WHEN emp_shift = 1 THEN 1 ELSE 0 END)',
+                'total_shift2' => 'SUM(CASE WHEN emp_shift = 2 THEN 1 ELSE 0 END)',
+                'total_shift3' => 'SUM(CASE WHEN emp_shift = 3 THEN 1 ELSE 0 END)',
             ])
             ->where([
-                'AND',
-                ['<=', 'from_date', $model->post_date],
-                ['>=', 'to_date', $model->post_date]
+                'att_date' => $model->post_date,
+                'child_analyst' => $key1,
+                'flag' => 1
             ])
-            ->andWhere(['child_analyst' => $key1, 'is_enable' => 1])
             ->one();
             $mp_arr[$key1] = $mp_plan->total_shift1 + $mp_plan->total_shift2 + $mp_plan->total_shift3;
+            $tmp_mp_arr[$key1] = [
+                $mp_plan->total_shift1,
+                $mp_plan->total_shift2,
+                $mp_plan->total_shift3
+            ];
         }
         if (count($mp_arr) > 0) {
             arsort($mp_arr);
@@ -615,7 +645,10 @@ class DisplayController extends Controller
             $data[$location_str] = [
                 'plan' => $value,
                 'actual' => $actual_mp,
-                'key' => $key
+                'key' => $key,
+                'plan_1' => $tmp_mp_arr[$key][0],
+                'plan_2' => $tmp_mp_arr[$key][1],
+                'plan_3' => $tmp_mp_arr[$key][2],
             ];
         }
 
