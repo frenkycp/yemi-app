@@ -243,6 +243,16 @@ return [
         2 => 2,
         3 => 3,
     ],
+    'ng_fa_location_dropdown' => [
+        'TOP' => 'TOP',
+        'SIDE' => 'SIDE',
+        'BAFFLE' => 'BAFFLE',
+        'BACK' => 'BACK',
+        'BOTTOM' => 'BOTTOM',
+        'WOOFER' => 'WOOFER',
+        'TWEETER' => 'TWEETER',
+        'RPA' => 'RPA',
+    ],
 ];
 
 function getYearArray()

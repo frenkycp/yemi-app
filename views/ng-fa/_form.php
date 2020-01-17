@@ -15,8 +15,9 @@ use kartik\typeahead\TypeaheadBasic;
 * @var yii\widgets\ActiveForm $form
 */
 
-$ng_pcb_repair_dropdown = \Yii::$app->params['ng_pcb_repair_dropdown'];
-ksort($ng_pcb_repair_dropdown);
+$ng_fa_location_dropdown = \Yii::$app->params['ng_fa_location_dropdown'];
+ksort($ng_fa_location_dropdown);
+$ng_fa_location_dropdown['OTHER'] = 'OTHER';
 
 $ng_pcb_cause_category_dropdown = \Yii::$app->params['ng_pcb_cause_category_dropdown'];
 ksort($ng_pcb_cause_category_dropdown);
@@ -72,16 +73,16 @@ $this->registerCss("
                             'material', 'material_description'
                         ])
                         ->where([
-                            'sloc' => ['WM01', 'WM02', 'WM03']
+                            'valcl' => '9030'
                         ])
                         ->all(), 'fullDescription', 'fullDescription'),
                         'options' => [
-                            'placeholder' => 'Choose PCB...',
+                            'placeholder' => 'Choose...',
                         ],
                         'pluginOptions' => [
                             'allowClear' => true
                         ],
-                    ])->label('PCB'); ?>
+                    ]); ?>
 
                     <?= $form->field($model, 'part_desc')->widget(TypeaheadBasic::classname(), [
                         'data' => $part_arr,
@@ -93,66 +94,6 @@ $this->registerCss("
                         'pluginOptions' => ['highlight'=>true],
                     ]); ?>
 
-                    <?= $form->field($model, 'pcb_side')->dropDownList([
-                        'A' => 'A',
-                        'B' => 'B',
-                    ], [
-                        'prompt' => 'Choose...'
-                    ]); ?>
-
-                    <?= $form->field($model, 'smt_group')->dropDownList([
-                        'A' => 'A',
-                        'B' => 'B',
-                        'C' => 'C',
-                        'D' => 'D',
-                    ], [
-                        'prompt' => 'Choose...'
-                    ]); ?>
-
-                    <?= $form->field($model, 'smt_pic_aoi')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
-                            'NIK_SUN_FISH', 'NAMA_KARYAWAN'
-                        ])
-                        ->where([
-                            'AKTIF' => 'Y',
-                            'DEPARTEMEN' => 'PRODUCTION'
-                        ])
-                        ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
-                        'options' => [
-                            'placeholder' => 'Choose...',
-                        ],
-                        'pluginOptions' => [
-                            'allowClear' => true,
-                        ],
-                    ]); ?>
-
-                    <?= $form->field($model, 'line')->dropDownList([
-                        'SMT 1' => 'SMT 1',
-                        'SMT 2' => 'SMT 2',
-                        'AI' => 'AI',
-                    ], [
-                        'prompt' => 'Choose...'
-                    ]); ?>
-
-                    <?= $form->field($model, 'smt_group_pic')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
-                            'NIK_SUN_FISH', 'NAMA_KARYAWAN'
-                        ])
-                        ->where([
-                            'AKTIF' => 'Y',
-                            'DEPARTEMEN' => 'PRODUCTION'
-                        ])
-                        ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
-                        'options' => [
-                            'placeholder' => 'Choose...',
-                        ],
-                        'pluginOptions' => [
-                            'allowClear' => true,
-                        ],
-                    ]); ?>
-                </div>
-                <div class="col-md-6">
-                    
                     <?= $form->field($model, 'ng_category_id')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\ProdNgCategory::find()->select([
                             'id', 'category_name', 'category_detail'
@@ -167,6 +108,24 @@ $this->registerCss("
                         ],
                     ]); ?>
 
+                    <?= $form->field($model, 'ng_location')->dropDownList($ng_fa_location_dropdown, [
+                        'prompt' => 'Choose...'
+                    ]); ?>
+
+                    <?= $form->field($model, 'fa_area_detec')->dropDownList([
+                        'PQC' => 'PQC',
+                        'AVMT' => 'AVMT',
+                        'SOUND' => 'SOUND',
+                        'OQC' => 'OQC',
+                    ], [
+                        'prompt' => 'Choose...'
+                    ]); ?>
+                </div>
+                <div class="col-md-6">
+                    <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
+
+                    <?= $form->field($model, 'total_output')->textInput(['type' => 'number']); ?>
+                    
                     <?= $form->field($model, 'ng_cause_category')->dropDownList($ng_pcb_cause_category_dropdown, [
                         'prompt' => 'Choose...',
                         'id' => 'cause-category-id',
@@ -215,15 +174,7 @@ $this->registerCss("
                         ])->label('PIC (NG) <em><span class="text-red">*Must be set if "MAN" category was selected!</span></em>'); ?>
                     </div>
 
-                    <?= $form->field($model, 'ng_detail')->textInput(['placeholder' => 'Leave empty if not neccessary...']); ?>
-
-                    <?= $form->field($model, 'ng_location')->textInput(['onkeyup' => 'this.value=this.value.toUpperCase()', 'onfocusout' => 'this.value=this.value.toUpperCase()']); ?>
-
-                    <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
-
-                    <?= $form->field($model, 'pcb_repair')->dropDownList($ng_pcb_repair_dropdown, [
-                        'prompt' => 'Choose...'
-                    ]); ?>
+                    <?= $form->field($model, 'ng_detail')->textArea(['placeholder' => 'Leave empty if not neccessary...', 'rows' => 3]); ?>
                 </div>
             </div>
             

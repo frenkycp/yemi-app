@@ -141,7 +141,8 @@ class ProdNgData extends BaseProdNgData
                     $arr_loc_doc = [
                         'WM01' => 'PCB',
                         'WU01' => 'SPU',
-                        'WM03' => 'SMT'
+                        'WM03' => 'SMT',
+                        'WF01' => 'FA'
                     ];
                     $this->document_no = $arr_loc_doc[$this->loc_id] . date('Ymd', strtotime($this->post_date)) . str_pad($count, 3, '0', STR_PAD_LEFT);
                 }
