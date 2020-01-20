@@ -253,6 +253,17 @@ return [
         'TWEETER' => 'TWEETER',
         'RPA' => 'RPA',
     ],
+    'ng_fa_root_cause_dropdown' => [
+        'WW' => 'WW',
+        'HANDLAM' => 'HANDLAM',
+        'PAINTING' => 'PAINTING',
+        'MATERIAL' => 'MATERIAL',
+        'WAREHOUSE' => 'WAREHOUSE',
+        'SPU' => 'SPU',
+        'PCB' => 'PCB',
+        'Sub Assy' => 'Sub Assy',
+        'FA' => 'FA',
+    ]
 ];
 
 function getYearArray()

@@ -27,7 +27,7 @@ class NgFaModel extends BaseProdNgData
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['ng_qty', 'pcb_id', 'gmc_no', 'ng_category_id', 'ng_cause_category', 'ng_location', 'fa_area_detec'], 'required'],
+                [['ng_qty', 'pcb_id', 'gmc_no', 'ng_category_id', 'ng_cause_category', 'ng_location', 'fa_area_detec', 'ng_root_cause'], 'required'],
             ]
         );
     }
@@ -52,7 +52,9 @@ class NgFaModel extends BaseProdNgData
                 'smt_group_pic' => 'PIC Group',
                 'ng_location' => 'Location',
                 'pcb_repair' => 'Repair (Action)',
-                'fa_area_detec' => 'Detected Area'
+                'fa_area_detec' => 'Detected Area',
+                'ng_root_cause' => 'Root Cause',
+                'fa_status' => 'Status',
             ]
         );
     }

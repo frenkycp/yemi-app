@@ -22,6 +22,9 @@ $ng_fa_location_dropdown['OTHER'] = 'OTHER';
 $ng_pcb_cause_category_dropdown = \Yii::$app->params['ng_pcb_cause_category_dropdown'];
 ksort($ng_pcb_cause_category_dropdown);
 
+$ng_fa_root_cause_dropdown = \Yii::$app->params['ng_fa_root_cause_dropdown'];
+ksort($ng_fa_root_cause_dropdown);
+
 $tmp_part = app\models\SapItemTbl::find()
 ->select(['material', 'material_description'])
 ->where([
@@ -124,7 +127,9 @@ $this->registerCss("
                 <div class="col-md-6">
                     <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
 
-                    <?= $form->field($model, 'total_output')->textInput(['type' => 'number']); ?>
+                    <?= $form->field($model, 'ng_root_cause')->dropDownList($ng_fa_root_cause_dropdown, [
+                        'prompt' => 'Choose...'
+                    ]); ?>
                     
                     <?= $form->field($model, 'ng_cause_category')->dropDownList($ng_pcb_cause_category_dropdown, [
                         'prompt' => 'Choose...',
@@ -174,7 +179,14 @@ $this->registerCss("
                         ])->label('PIC (NG) <em><span class="text-red">*Must be set if "MAN" category was selected!</span></em>'); ?>
                     </div>
 
-                    <?= $form->field($model, 'ng_detail')->textArea(['placeholder' => 'Leave empty if not neccessary...', 'rows' => 3]); ?>
+                    <?= $form->field($model, 'ng_detail')->textInput(['placeholder' => 'Leave empty if not neccessary...']); ?>
+
+                    <?= $form->field($model, 'fa_status')->dropDownList([
+                        'REPAIR' => 'REPAIR',
+                        'SCRAP' => 'SCRAP',
+                    ], [
+                        'prompt' => 'Choose...'
+                    ]); ?>
                 </div>
             </div>
             
