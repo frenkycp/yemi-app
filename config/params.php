@@ -263,7 +263,12 @@ return [
         'PCB' => 'PCB',
         'Sub Assy' => 'Sub Assy',
         'FA' => 'FA',
-    ]
+    ], 
+    'ng_ptg_part_dropdown' => [
+        'CAB PTG' => 'CAB PTG',
+        'XXX/PART SERIES' => 'XXX/PART SERIES',
+        'DSR' => 'DSR'
+    ],
 ];
 
 function getYearArray()
