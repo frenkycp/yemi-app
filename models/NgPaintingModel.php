@@ -27,7 +27,7 @@ class NgPaintingModel extends BaseProdNgData
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['ng_qty', 'gmc_no', 'ng_category_id', 'post_date', 'ng_cause_category', 'model_group', 'total_output'], 'required'],
+                [['ng_qty', 'gmc_no', 'ng_category_id', 'post_date', 'ng_cause_category', 'model_group', 'pcb_ng_found'], 'required'],
             ]
         );
     }
@@ -46,7 +46,8 @@ class NgPaintingModel extends BaseProdNgData
                 'total_output' => 'Output',
                 'post_date' => 'Process Date',
                 'ng_cause_category' => 'Root Cause Category',
-                'model_group' => 'Model Part'
+                'model_group' => 'Model Part',
+                'pcb_ng_found' => 'NG Detected',
             ]
         );
     }

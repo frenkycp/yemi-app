@@ -50,6 +50,22 @@ class ProdNgData extends BaseProdNgData
         );
     }
 
+    public function getDiffMonth($date1, $date2)
+    {
+        $ts1 = strtotime($date1);
+        $ts2 = strtotime($date2);
+
+        $year1 = date('Y', $ts1);
+        $year2 = date('Y', $ts2);
+
+        $month1 = date('m', $ts1);
+        $month2 = date('m', $ts2);
+
+        $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+
+        return $diff;
+    }
+
     public function beforeSave($insert){
         if(parent::beforeSave($insert)){
             date_default_timezone_set('Asia/Jakarta');
@@ -65,8 +81,13 @@ class ProdNgData extends BaseProdNgData
             $this->gmc_desc = $serno_master->description;
 
             if ($this->ng_cause_category == 'MAN') {
-                $ng_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $this->emp_id])->one();
-                $this->emp_name = $ng_karyawan->NAMA_KARYAWAN;
+                //$ng_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $this->emp_id])->one();
+                $ng_karyawan = SunfishViewEmp::find()->where(['Emp_no' => $this->emp_id])->one();
+                $this->emp_name = strtoupper($ng_karyawan->Full_name);
+                $this->emp_gender = $ng_karyawan->gender;
+                $this->emp_join_date = date('Y-m-d', strtotime($ng_karyawan->start_date));
+                $this->emp_working_month = $this->getDiffMonth(date('Y-m-d', strtotime($ng_karyawan->start_date)), $this->post_date);
+                $this->emp_status_code = $ng_karyawan->employ_code;
             } else {
                 $this->emp_id = $this->emp_name = null;
             }

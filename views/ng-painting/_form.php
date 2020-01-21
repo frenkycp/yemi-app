@@ -89,7 +89,12 @@ $this->registerCss("
 
                     <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
 
-                    <?= $form->field($model, 'total_output')->textInput(['type' => 'number']); ?>
+                    <?= $form->field($model, 'pcb_ng_found')->dropDownList([
+                        'OQC' => 'OQC',
+                        'PROCESS' => 'PROCESS',
+                    ], [
+                        'prompt' => 'Choose...'
+                    ]); ?>
                 </div>
                 <div class="col-md-6">
                     

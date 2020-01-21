@@ -61,17 +61,6 @@ class NgPcbController extends Controller
 		return $this->render('create', ['model' => $model]);
 	}
 
-	public function actionView($id)
-	{
-		\Yii::$app->session['__crudReturnUrl'] = Url::previous();
-		Url::remember();
-		Tabs::rememberActiveState();
-
-		return $this->render('view', [
-			'model' => $this->findModel($id),
-		]);
-	}
-
 	public function actionUpdate($id)
 	{
 		date_default_timezone_set('Asia/Jakarta');

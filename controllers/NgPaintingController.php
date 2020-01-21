@@ -58,17 +58,6 @@ class NgPaintingController extends Controller
 		
 	}
 
-	public function actionView($id)
-	{
-		\Yii::$app->session['__crudReturnUrl'] = Url::previous();
-		Url::remember();
-		Tabs::rememberActiveState();
-
-		return $this->render('view', [
-			'model' => $this->findModel($id),
-		]);
-	}
-
 	public function actionUpdate($id)
 	{
 		$model = $this->findModel($id);
