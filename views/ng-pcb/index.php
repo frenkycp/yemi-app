@@ -141,6 +141,25 @@ $gridColumns = [
     [
         'attribute' => 'emp_name',
         'label' => 'PIC (NG)',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'emp_working_month',
+        'label' => 'Working (Month)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'emp_status_code',
+        'label' => 'Status',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
