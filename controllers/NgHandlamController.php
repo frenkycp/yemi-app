@@ -8,7 +8,7 @@ use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 use app\models\search\ProdNgDataSearch;
 use app\models\ProdNgData;
-use app\models\NgSpuModel;
+use app\models\NgHandlamModel;
 use app\models\ProdNgCategory;
 use app\models\SernoMaster;
 use app\models\Karyawan;
@@ -16,7 +16,7 @@ use app\models\Karyawan;
 /**
  * 
  */
-class NgSpuController extends Controller
+class NgHandlamController extends Controller
 {
 	public function behaviors()
     {
@@ -27,7 +27,7 @@ class NgSpuController extends Controller
 	public function actionIndex($value='')
 	{
 		$searchModel  = new ProdNgDataSearch;
-		$searchModel->loc_id = 'WU01';
+		$searchModel->loc_id = 'WW03';
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
@@ -43,8 +43,8 @@ class NgSpuController extends Controller
 
 	public function actionCreate()
 	{
-		$model = new NgSpuModel;
-		$model->loc_id = 'WU01';
+		$model = new NgHandlamModel;
+		$model->loc_id = 'WW03';
 		$model->post_date = date('Y-m-d');
 
 		try {
@@ -80,7 +80,7 @@ class NgSpuController extends Controller
 
 	protected function findModel($id)
 	{
-		if (($model = NgSpuModel::findOne($id)) !== null) {
+		if (($model = NgHandlamModel::findOne($id)) !== null) {
 			return $model;
 		} else {
 			throw new HttpException(404, 'The requested page does not exist.');

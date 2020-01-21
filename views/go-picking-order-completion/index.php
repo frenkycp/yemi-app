@@ -69,13 +69,13 @@ echo '</pre>';*/
             }
 
             $karyawan_aktif = app\models\MpInOut::find()->where([
-                'NIK' => $key,
+                'NIK' => strval($key),
                 'TANGGAL' => date('Y-m-d')
             ])->one();
 
             $karyawan_aktif2 = app\models\Karyawan::find()
             ->where([
-                'NIK' => '' . $key,
+                'NIK' => '' . strval($key),
                 'AKTIF' => 'Y'
             ])
             ->one();
