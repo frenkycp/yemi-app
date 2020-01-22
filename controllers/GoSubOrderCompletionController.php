@@ -33,7 +33,7 @@ class GoSubOrderCompletionController extends Controller
 		$tmp_data = [];
 
 		foreach ($driver_arr as $value) {
-			$nik = $value->GOJEK_ID;
+			$nik = strval($value->GOJEK_ID);
 			$order_data_arr = GojekOrderView01::find()
 			->select([
 				'GOJEK_ID',

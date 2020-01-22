@@ -51,7 +51,7 @@ class PalletOrderCompletionController extends Controller
 
 		$tmp_data = [];
 		foreach ($driver_arr_data as $key => $value) {
-			$nik = $value->nik;
+			$nik = strval($value->nik);
 
 			$data_arr = SernoSlipLog::find()
 			->select([

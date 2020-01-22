@@ -25,18 +25,58 @@ ksort($ng_found_dropdown);
 $ng_pcb_cause_category_dropdown = \Yii::$app->params['ng_pcb_cause_category_dropdown'];
 ksort($ng_pcb_cause_category_dropdown);
 
+$this->registerJs("$(function() {
+    $('.detail-btn').click(function(e) {
+        e.preventDefault();
+        $('#modal-detail').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+    });
+});");
+
+$this->registerCss("
+    .btn-block {margin: 3px;}
+");
+
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}',
+        'template' => '{update} {detail} {next-actions}',
+        'header' => "",
         'buttons' => [
-            'view' => function ($url, $model, $key) {
+            'detail' => function($url, $model, $key){
                 $options = [
-                    'title' => Yii::t('cruds', 'View'),
-                    'aria-label' => Yii::t('cruds', 'View'),
                     'data-pjax' => '0',
+                    'id' => 'btn-detail',
+                    'title' => 'Detail Information',
+                    'class' => 'detail-btn btn btn-primary btn-xs btn-block'
                 ];
-                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, $options);
+                $url = ['detail','id' => $model->id];
+                return Html::a('<i class="fa fa-fw fa-search"></i> View', $url, $options);
+            }, 'update' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'Edit'),
+                    'aria-label' => Yii::t('cruds', 'Edit'),
+                    'data-pjax' => '0',
+                    'class' => 'btn btn-primary btn-xs btn-block'
+                ];
+                //$url = ['update','id' => $model->id];
+                return Html::a('<i class="fa fa-fw fa-edit"></i> Edit', $url, $options);
+            }, 'next-actions' => function($url, $model, $key){
+                $url = [
+                    'value' => Url::to(['next-action','id' => $model->id]),
+                    'title' => 'Edit Actions',
+                    'class' => 'showModalButton btn btn-xs btn-primary btn-block'
+                ];
+                $options = [
+                    'data-pjax' => '0',
+                    'id' => 'btn-actions'
+                ];
+
+                if ($model->ng_cause_category == 'MAN') {
+                    return Html::button('<i class="fa fa-tasks"></i> Action', $url, $options);
+                } else {
+                    return '<button class="btn btn-xs btn-primary btn-block disabled"><i class="fa fa-fw fa-tasks"></i> Action</button>';
+                }
+                
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -45,7 +85,7 @@ $gridColumns = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap']
+        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'max-width: 90px;']
     ],
 	[
         'attribute' => 'document_no',
@@ -148,6 +188,16 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'next_action',
+        'label' => 'Next Action',
+        'vAlign' => 'middle',
+        'filter' => \Yii::$app->params['ng_next_action_dropdown'],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'emp_working_month',
         'label' => 'Working (Month)',
         'hAlign' => 'center',
@@ -188,6 +238,7 @@ $gridColumns = [
         ],
     ],
 ];
+
 ?>
 <div class="giiant-crud pabx-log-index">
 
@@ -234,3 +285,11 @@ $gridColumns = [
 <?php \yii\widgets\Pjax::end() ?>
 
 
+<?php
+    yii\bootstrap\Modal::begin([
+        'id' =>'modal-detail',
+        'header' => '<h3>Detail </h3>',
+        'size' => 'modal-lg',
+    ]);
+    yii\bootstrap\Modal::end();
+?>

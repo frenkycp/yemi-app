@@ -220,6 +220,8 @@ return [
         'BONDING' => 'BONDING',
         'FORMING' => 'FORMING',
         'MACHINE' => 'MACHINE',
+        'FA' => 'FA',
+        'RPA' => 'RPA',
     ],
     'ng_spu_line_dropdown' => [
         'WOOFER HS' => 'WOOFER HS',
@@ -268,6 +270,11 @@ return [
         'CAB PTG' => 'CAB PTG',
         'XXX/PART SERIES' => 'XXX/PART SERIES',
         'DSR' => 'DSR'
+    ],
+    'ng_next_action_dropdown' => [
+        'TRAINING' => 'TRAINING',
+        'CHANGE JOB' => 'CHANGE JOB',
+        'CHANGE SECTION' => 'CHANGE SECTION'
     ],
 ];
 

@@ -66,6 +66,31 @@ class ProdNgData extends BaseProdNgData
         return $diff;
     }
 
+    public function getWipName()
+    {
+        $wip_name = '';
+        if ($this->pcb_id != null) {
+            $wip_name = $this->pcb_id . ' | ' . $this->pcb_name;
+        } else {
+            $wip_name = $this->pcb_name;
+        }
+        return $wip_name;
+    }
+
+    public function getNgCategory()
+    {
+        return $this->ng_category_desc . ' | ' . $this->ng_category_detail;
+    }
+
+    public function getEmpDesc($value='')
+    {
+        if ($this->emp_id == null) {
+            return '-';
+        } else {
+            return $this->emp_id . ' | ' . $this->emp_name;
+        }
+    }
+
     public function beforeSave($insert){
         if(parent::beforeSave($insert)){
             date_default_timezone_set('Asia/Jakarta');
@@ -188,6 +213,19 @@ class ProdNgData extends BaseProdNgData
                 $this->updated_time = $now;
                 $this->updated_by_id = $updated_karyawan->NIK_SUN_FISH;
                 $this->updated_by_name = $updated_karyawan->NAMA_KARYAWAN;
+
+                if ($this->ng_cause_category == 'MAN') {
+                    //$ng_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $this->emp_id])->one();
+                    $ng_karyawan = SunfishViewEmp::find()->where(['Emp_no' => $this->emp_id])->one();
+                    $this->emp_name = strtoupper($ng_karyawan->Full_name);
+                    $this->emp_gender = $ng_karyawan->gender;
+                    $this->emp_join_date = date('Y-m-d', strtotime($ng_karyawan->start_date));
+                    $this->emp_working_month = $this->getDiffMonth(date('Y-m-d', strtotime($ng_karyawan->start_date)), $this->post_date);
+                    $this->emp_status_code = $ng_karyawan->employ_code;
+                } else {
+                    $this->emp_id = $this->emp_name = $this->emp_gender = $this->emp_join_date = $this->emp_working_month = $this->emp_status_code = null;
+                    $this->next_action = null;
+                }
             }
             return true;
         }

@@ -71,6 +71,7 @@ use Yii;
  * @property string $smt_group_pic_name
  * @property string $ww_unit_each
  * @property double $ww_total_price
+ * @property string $next_action
  * @property string $aliasModel
  */
 abstract class ProdNgData extends \yii\db\ActiveRecord
@@ -100,7 +101,7 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['document_no', 'period', 'loc_id', 'loc_desc', 'line', 'emp_id', 'emp_name', 'emp_gender', 'emp_status_code', 'model_group', 'gmc_no', 'gmc_desc', 'gmc_model', 'gmc_color', 'gmc_dest', 'gmc_line', 'part_no', 'part_desc', 'ng_category_desc', 'ng_category_detail', 'ng_location', 'ng_root_cause', 'ng_detail', 'ng_cause_category', 'created_by_id', 'created_by_name', 'updated_by_id', 'updated_by_name', 'detected_by_id', 'detected_by_name', 'attachment', 'fa_area_detec', 'fa_serno', 'fa_status', 'pcb_id', 'pcb_name', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_group', 'smt_pic_aoi', 'smt_pic_aoi_name', 'smt_group_pic', 'smt_group_pic_name', 'ww_unit_each'], 'string'],
+            [['document_no', 'period', 'loc_id', 'loc_desc', 'line', 'emp_id', 'emp_name', 'emp_gender', 'emp_status_code', 'model_group', 'gmc_no', 'gmc_desc', 'gmc_model', 'gmc_color', 'gmc_dest', 'gmc_line', 'part_no', 'part_desc', 'ng_category_desc', 'ng_category_detail', 'ng_location', 'ng_root_cause', 'ng_detail', 'ng_cause_category', 'created_by_id', 'created_by_name', 'updated_by_id', 'updated_by_name', 'detected_by_id', 'detected_by_name', 'attachment', 'fa_area_detec', 'fa_serno', 'fa_status', 'pcb_id', 'pcb_name', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_group', 'smt_pic_aoi', 'smt_pic_aoi_name', 'smt_group_pic', 'smt_group_pic_name', 'ww_unit_each', 'next_action'], 'string'],
             [['post_date', 'emp_join_date', 'created_time', 'updated_time'], 'safe'],
             [['emp_working_month', 'ng_category_id', 'ng_shift', 'inj_set_parameter'], 'integer'],
             [['ng_qty', 'total_output', 'ww_total_price'], 'number']
@@ -175,6 +176,7 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
             'smt_group_pic_name' => 'Smt Group Pic Name',
             'ww_unit_each' => 'Ww Unit Each',
             'ww_total_price' => 'Ww Total Price',
+            'next_action' => 'Next Action',
         ];
     }
 

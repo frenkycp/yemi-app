@@ -76,6 +76,33 @@ class NgSmtController extends Controller
 		}
 	}
 
+	public function actionNextAction($id)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($id);
+
+		$model_action = new \yii\base\DynamicModel([
+	        'countermeasure'
+	    ]);
+	    $model_action->addRule(['countermeasure'], 'required');
+	    $model_action->countermeasure = $model->next_action;
+
+		if ($model_action->load(\Yii::$app->request->post())) {
+			$model->next_action = $model_action->countermeasure;
+			
+			if (!$model->save()) {
+				return json_encode($model->errors);
+			}
+			
+			return $this->redirect(Url::previous());
+		} else {
+			return $this->renderAjax('next-action', [
+				'model' => $model,
+				'model_action' => $model_action,
+			]);
+		}
+	}
+
 	protected function findModel($id)
 	{
 		if (($model = NgSmtModel::findOne($id)) !== null) {

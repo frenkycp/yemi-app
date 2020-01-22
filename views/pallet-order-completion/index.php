@@ -100,7 +100,7 @@ echo '</pre>';*/
                 }
 
                 $karyawan_aktif = app\models\MpInOut::find()->where([
-                    'NIK' => $key,
+                    'NIK' => strval($key),
                     'TANGGAL' => date('Y-m-d')
                 ])->one();
 
