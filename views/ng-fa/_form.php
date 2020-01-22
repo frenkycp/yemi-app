@@ -36,6 +36,17 @@ foreach ($tmp_part as $key => $value) {
     $part_arr[] = $value['material'] . ' | ' . $value['material_description'];
 }
 
+$tmp_wip = app\models\SapItemTbl::find()
+->select(['material', 'material_description'])
+->where([
+    'valcl' => '9030'
+])
+->asArray()->all();
+$wip_arr = [];
+foreach ($tmp_wip as $key => $value) {
+    $wip_arr[] = $value['material'] . ' | ' . $value['material_description'];
+}
+
 $this->registerCss("
     .form-group {
         margin-bottom: 0px;
@@ -71,20 +82,14 @@ $this->registerCss("
                         ],
                     ]); ?>
 
-                    <?= $form->field($model, 'pcb_id')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\SapItemTbl::find()->select([
-                            'material', 'material_description'
-                        ])
-                        ->where([
-                            'valcl' => '9030'
-                        ])
-                        ->all(), 'fullDescription', 'fullDescription'),
+                    <?= $form->field($model, 'pcb_id')->widget(TypeaheadBasic::classname(), [
+                        'data' => $wip_arr,
                         'options' => [
-                            'placeholder' => 'Choose...',
+                            'onkeyup' => 'this.value=this.value.toUpperCase()',
+                            'onfocusout' => 'this.value=this.value.toUpperCase()',
+                            'placeholder' => 'Please type part number or name to search. Leave empty if not neccessary...',
                         ],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
+                        'pluginOptions' => ['highlight'=>true],
                     ]); ?>
 
                     <?= $form->field($model, 'part_desc')->widget(TypeaheadBasic::classname(), [

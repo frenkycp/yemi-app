@@ -27,7 +27,7 @@ class NgFaModel extends BaseProdNgData
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['ng_qty', 'pcb_id', 'gmc_no', 'ng_category_id', 'ng_cause_category', 'ng_location', 'fa_area_detec', 'ng_root_cause'], 'required'],
+                [['ng_qty', 'gmc_no', 'ng_category_id', 'ng_cause_category', 'ng_location', 'fa_area_detec', 'ng_root_cause'], 'required'],
             ]
         );
     }
@@ -38,7 +38,7 @@ class NgFaModel extends BaseProdNgData
             parent::rules(),
             [
                 'pcb_id' => 'Part No (WIP/Assy)',
-                'part_desc' => 'Part Name',
+                'part_desc' => 'Part Name (Raw Material)',
                 'smt_group' => 'Group',
                 'pcb_side' => 'Side',
                 'ng_detail' => 'Remark',
