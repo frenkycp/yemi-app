@@ -105,9 +105,198 @@ use app\models\SmtPcbLog;
 use app\models\SmtLogLineBalance;
 use app\models\SmtLogLineBalanceReport;
 use app\models\ProdAttendanceDailyPlan;
+use app\models\ProdNgData;
 
 class DisplayController extends Controller
 {
+    public function actionNgChart($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $wip_location_arr = \Yii::$app->params['wip_location_arr'];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'location'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required')
+        ->addRule('location', 'string');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+
+        }
+
+        if ($model->location == null || $model->location == '') {
+            $filter = [
+                'ng_cause_category' => 'MAN',
+            ];
+        } else {
+            $filter = [
+                'ng_cause_category' => 'MAN',
+                'loc_id' => $model->location
+            ];
+        }
+        
+
+        $tmp_ng_daily = ProdNgData::find()
+        ->select([
+            'post_date', 'loc_id',
+            'ng_total' => 'SUM(ng_qty)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'post_date', $model->from_date],
+            ['<=', 'post_date', $model->to_date]
+        ])
+        ->andWhere($filter)
+        ->groupBy('post_date, loc_id')
+        ->orderBy('post_date, loc_id')
+        ->all();
+
+        $ng_data_daily = $tmp_data_daily = $tmp_data_section = $tmp_data_section2 = $ng_data_section = [];
+        $total_ng = 0;
+        foreach ($tmp_ng_daily as $key => $value) {
+            $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
+            $total_ng += $value->ng_total;
+            if (!isset($tmp_data_section[$value->loc_id])) {
+                $tmp_data_section[$value->loc_id] = 0;
+            }
+            $tmp_data_section[$value->loc_id] += $value->ng_total;
+            $tmp_data_daily[$value->loc_id][] = [
+                'x' => $proddate,
+                'y' => (int)$value->ng_total
+            ];
+        }
+
+        foreach ($tmp_data_section as $key => $value) {
+            $tmp_data_section2[] = [
+                'name' => $wip_location_arr[$key],
+                'y' => $value
+            ];
+        }
+        if (count($tmp_data_section2) > 0) {
+            $ng_data_section[] = [
+                'name' => 'Percentage',
+                'data' => $tmp_data_section2
+            ];
+        }
+        
+
+        foreach ($tmp_data_daily as $key => $value) {
+            $ng_data_daily[] = [
+                'name' => $wip_location_arr[$key],
+                'data' => $value
+            ];
+        }
+
+        //by contract status
+        $tmp_ng_by_contract = ProdNgData::find()
+        ->select([
+            'qty_ng_contract1' => 'SUM(CASE WHEN emp_status_code = \'CONTRACT1\' THEN ng_qty ELSE 0 END)',
+            'qty_ng_contract2' => 'SUM(CASE WHEN emp_status_code = \'CONTRACT2\' THEN ng_qty ELSE 0 END)',
+            'qty_ng_permanent' => 'SUM(CASE WHEN emp_status_code = \'PERMANENT\' THEN ng_qty ELSE 0 END)',
+        ])
+        ->where([
+            'AND',
+            ['>=', 'post_date', $model->from_date],
+            ['<=', 'post_date', $model->to_date]
+        ])
+        ->andWhere($filter)
+        ->one();
+
+        if ($tmp_ng_by_contract->qty_ng_contract1 > 0 && $tmp_ng_by_contract->qty_ng_contract2 > 0 && $tmp_ng_by_contract->qty_ng_permanent) {
+            $tmp_data_contract = [
+                [
+                    'name' => 'Contract 1',
+                    'y' => (int)$tmp_ng_by_contract->qty_ng_contract1
+                ],
+                [
+                    'name' => 'Contract 2',
+                    'y' => (int)$tmp_ng_by_contract->qty_ng_contract2
+                ],
+                [
+                    'name' => 'Permanent',
+                    'y' => (int)$tmp_ng_by_contract->qty_ng_permanent
+                ],
+            ];
+        }
+        
+        if (count($tmp_data_contract) > 0) {
+            $ng_data_contract = [
+                [
+                    'name' => 'Percentage',
+                    'data' => $tmp_data_contract
+                ],
+            ];
+        }
+        
+
+        //by years of service
+        $tmp_ng_by_yos = ProdNgData::find()
+        ->select([
+            'ng_qty_1y_less' => 'SUM(CASE WHEN emp_working_month < 12 THEN ng_qty ELSE 0 END)',
+            'ng_qty_1y_5y' => 'SUM(CASE WHEN emp_working_month >= 12 AND emp_working_month <= 60 THEN ng_qty ELSE 0 END)',
+            'ng_qty_5y_over' => 'SUM(CASE WHEN emp_working_month > 60 THEN ng_qty ELSE 0 END)',
+        ])
+        ->where([
+            'AND',
+            ['>=', 'post_date', $model->from_date],
+            ['<=', 'post_date', $model->to_date]
+        ])
+        ->andWhere($filter)
+        ->one();
+
+        $tmp_data_yos = [
+            [
+                'name' => 'Less than 1 Year',
+                'y' => (int)$tmp_ng_by_yos->ng_qty_1y_less
+            ],
+            [
+                'name' => '1 to 5 Years',
+                'y' => (int)$tmp_ng_by_yos->ng_qty_1y_5y
+            ],
+            [
+                'name' => 'More than 5 Years',
+                'y' => (int)$tmp_ng_by_yos->ng_qty_5y_over
+            ],
+        ];
+
+        $ng_data_yos = [
+            [
+                'name' => 'Percentage',
+                'data' => $tmp_data_yos
+            ],
+        ];
+
+        $ng_data_pic = ProdNgData::find()
+        ->select([
+            'loc_id', 'emp_id', 'emp_name',
+            'ng_total' => 'SUM(ng_qty)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'post_date', $model->from_date],
+            ['<=', 'post_date', $model->to_date]
+        ])
+        ->andWhere($filter)
+        ->groupBy('loc_id, emp_id, emp_name')
+        ->orderBy('SUM(ng_qty) DESC')
+        ->all();
+
+        return $this->render('ng-chart', [
+            'model' => $model,
+            'ng_data_daily' => $ng_data_daily,
+            'ng_data_contract' => $ng_data_contract,
+            'ng_data_yos' => $ng_data_yos,
+            'ng_data_section' => $ng_data_section,
+            'total_ng' => $total_ng,
+            'wip_location_arr' => $wip_location_arr,
+            'ng_data_pic' => $ng_data_pic,
+        ]);
+    }
+
     public function actionSmtLogLineBalance($value='')
     {
         $this->layout = 'clean';

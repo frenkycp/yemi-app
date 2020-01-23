@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ProdNgData extends BaseProdNgData
 {
+    public $qty_ng_contract1, $qty_ng_contract2, $qty_ng_permanent, $ng_qty_1y_less, $ng_qty_1y_5y, $ng_qty_5y_over, $ng_total;
 
     public function behaviors()
     {
@@ -89,6 +90,11 @@ class ProdNgData extends BaseProdNgData
         } else {
             return $this->emp_id . ' | ' . $this->emp_name;
         }
+    }
+
+    public function getSunfishEmp()
+    {
+        return $this->hasOne(SunfishViewEmp::className(), ['Emp_no' => 'emp_id']);
     }
 
     public function beforeSave($insert){

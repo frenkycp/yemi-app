@@ -82,13 +82,15 @@ class NgSmtController extends Controller
 		$model = $this->findModel($id);
 
 		$model_action = new \yii\base\DynamicModel([
-	        'countermeasure'
+	        'countermeasure', 'remark'
 	    ]);
 	    $model_action->addRule(['countermeasure'], 'required');
 	    $model_action->countermeasure = $model->next_action;
+	    $model_action->remark = $model->action_remark;
 
 		if ($model_action->load(\Yii::$app->request->post())) {
 			$model->next_action = $model_action->countermeasure;
+			$model->action_remark = $model_action->remark;
 			
 			if (!$model->save()) {
 				return json_encode($model->errors);

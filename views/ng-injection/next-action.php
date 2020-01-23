@@ -49,6 +49,7 @@ date_default_timezone_set('Asia/Jakarta');
 				<?= $form->field($model_action, 'countermeasure')->dropDownList(\Yii::$app->params['ng_next_action_dropdown'], [
 					'prompt' => 'Choose...'
 				]); ?>
+				<?= $form->field($model_action, 'remark')->textArea(['style' => 'resize: vertical;']); ?>
 			</div>
 		</div>
 	</div>

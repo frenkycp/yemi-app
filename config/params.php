@@ -273,8 +273,8 @@ return [
     ],
     'ng_next_action_dropdown' => [
         'TRAINING' => 'TRAINING',
-        'CHANGE JOB' => 'CHANGE JOB',
-        'CHANGE SECTION' => 'CHANGE SECTION'
+        'CHANGE JOB (IN SECTION)' => 'CHANGE JOB (IN SECTION)',
+        'CHANGE JOB (OUT SECTION)' => 'CHANGE JOB (OUT SECTION)'
     ],
 ];
 
