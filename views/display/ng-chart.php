@@ -214,7 +214,7 @@ echo '</pre>';*/
                                     'enabled' =>false
                                 ],
                                 'tooltip' => [
-                                    'pointFormat' => '{series.name}: <b>{point.y:.0f}</b>',
+                                    'pointFormat' => '{series.name}: <b>{point.percentage:.0f}% ({point.y} NG)</b>',
                                 ],
                                 'plotOptions' => [
                                     'pie' => [
@@ -222,7 +222,7 @@ echo '</pre>';*/
                                         // 'cursor' => 'pointer',
                                         'dataLabels' => [
                                             'enabled' => true,
-                                            'format' => '<b>{point.name}</b>: {point.y:.0f}'
+                                            'format' => '<b>{point.name}</b>: {point.percentage:.0f}% ({point.y} NG)'
                                         ],
                                     ],
                                 ],
@@ -264,7 +264,7 @@ echo '</pre>';*/
                                     'enabled' =>false
                                 ],
                                 'tooltip' => [
-                                    'pointFormat' => '{series.name}: <b>{point.y:.0f}</b>',
+                                    'pointFormat' => '{series.name}: <b>{point.percentage:.0f}% ({point.y} NG)</b>',
                                 ],
                                 'plotOptions' => [
                                     'pie' => [
@@ -272,7 +272,7 @@ echo '</pre>';*/
                                         // 'cursor' => 'pointer',
                                         'dataLabels' => [
                                             'enabled' => true,
-                                            'format' => '<b>{point.name}</b>: {point.y:.0f}'
+                                            'format' => '<b>{point.name}</b>: {point.percentage:.0f}% ({point.y} NG)'
                                         ],
                                     ],
                                 ],

@@ -206,7 +206,7 @@ class DisplayController extends Controller
         ->andWhere($filter)
         ->one();
 
-        if ($tmp_ng_by_contract->qty_ng_contract1 > 0 && $tmp_ng_by_contract->qty_ng_contract2 > 0 && $tmp_ng_by_contract->qty_ng_permanent) {
+        if ($tmp_ng_by_contract->qty_ng_contract1 > 0 || $tmp_ng_by_contract->qty_ng_contract2 > 0 || $tmp_ng_by_contract->qty_ng_permanent) {
             $tmp_data_contract = [
                 [
                     'name' => 'Contract 1',
