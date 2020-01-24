@@ -61,9 +61,13 @@ $this->registerJsFile('@web/js/jquery.dataTables.min.js');
 $this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
 
 $this->registerJs("$(function() {
-   $('#myTable').DataTable({
+    $('#myTable').DataTable({
         'pageLength': 15,
         'order': [[ 4, 'desc' ]]
+    });
+    $('.popupModal').click(function(e) {
+        e.preventDefault();
+        $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
     });
 });");
 
@@ -303,9 +307,16 @@ echo '</pre>';*/
                     </thead>
                     <tbody>
                         <?php foreach ($ng_data_pic as $key => $value): ?>
+                            <?php
+                            $options = [
+                                'title' => 'Detail Information',
+                                'class' => 'popupModal',
+                            ];
+                            $url = ['pic-ng-detail', 'nik' => $value->emp_id, 'from_date' => $model->from_date, 'to_date' => $model->to_date, 'loc_id' => $value->loc_id];
+                            ?>
                             <tr style="font-size: 0.84em;">
                                 <td><?= $wip_location_arr[$value->loc_id]; ?></td>
-                                <td><?= $value->emp_id; ?></td>
+                                <td><?= Html::a($value->emp_id, $url, $options); ?></td>
                                 <td><?= $value->emp_name; ?></td>
                                 <td><?= $value->sunfishEmp->employ_code; ?></td>
                                 <td><?= number_format($value->ng_total); ?></td>
@@ -318,3 +329,11 @@ echo '</pre>';*/
     </div>
 </div>
 
+<?php
+    yii\bootstrap\Modal::begin([
+        'id' =>'modal',
+        'header' => '<h3>Detail Information</h3>',
+        'size' => 'modal-lg',
+    ]);
+    yii\bootstrap\Modal::end();
+?>

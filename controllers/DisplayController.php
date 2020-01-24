@@ -109,6 +109,70 @@ use app\models\ProdNgData;
 
 class DisplayController extends Controller
 {
+    public function actionPicNgDetail($nik, $from_date, $to_date, $loc_id)
+    {
+        $tmp_data_ng = ProdNgData::find()
+        ->where([
+            'AND',
+            ['>=', 'post_date', $from_date],
+            ['<=', 'post_date', $to_date]
+        ])
+        ->andWhere([
+            'emp_id' => $nik,
+            'loc_id' => $loc_id
+        ])
+        ->orderBy('post_date')
+        ->all();
+
+        $data = '<div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">NG By PIC</h3>
+            </div>
+            <div class="panel-body no-padding">
+        ';
+        $data .= '<table class="table table-bordered table-striped table-hover">';
+        $data .= '
+        <tr>
+            <th class="text-center">Date</th>
+            <th>Model</th>
+            <th>NG Name</th>
+            <th>NG Detail</th>
+            <th class="text-center">NG Qty</th>
+        </tr>
+        ';
+
+        foreach ($tmp_data_ng as $value) {
+            $data .= '
+            <tr>
+                <td class="text-center">' . $value->post_date . '</td>
+                <td>' . $value->gmc_desc . '</td>
+                <td>' . $value->ng_category_desc . ' | ' . $value->ng_category_detail . '</td>
+                <td>' . $value->ng_detail . '</td>
+                <td class="text-center">' . $value->ng_qty . '</td>
+            </tr>
+            ';
+        }
+
+        $data .= '</table>';
+        $data .= '
+            </div>
+        </div>';
+
+        $data .= '<div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Skill Map</h3>
+            </div>
+            <div class="panel-body no-padding">
+            <span style="padding-left: 10px; font-size: 2em;"><em>On Progress...</em></span>
+        ';
+
+        $data .= '
+            </div>
+        </div>';
+
+        return $data;
+    }
+
     public function actionNgChart($value='')
     {
         $this->layout = 'clean';
