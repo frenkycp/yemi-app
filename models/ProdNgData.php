@@ -197,6 +197,7 @@ class ProdNgData extends BaseProdNgData
                         'WF01' => 'FA',
                         'WP01' => 'PTG',
                         'WW03' => 'HL',
+                        'WW02' => 'WW',
                     ];
                     $this->document_no = $arr_loc_doc[$this->loc_id] . date('Ymd', strtotime($this->post_date)) . str_pad($count, 3, '0', STR_PAD_LEFT);
                 }
