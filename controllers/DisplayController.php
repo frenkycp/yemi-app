@@ -1040,6 +1040,9 @@ class DisplayController extends Controller
         }
 
         $data_dummy = SensorLog::find()
+        ->select([
+            'map_no', 'area', 'system_date_time', 'temparature', 'humidity'
+        ])
         ->where([
             'AND',
             ['>=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->from_date . ' 00:00:01'))],

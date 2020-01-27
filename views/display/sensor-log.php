@@ -134,7 +134,8 @@ echo '</pre>';*/
                             ],
                         ],
                         'series' => [
-                            'lineWidth' => 1
+                            'lineWidth' => 1,
+                            'turboThreshold' => 0,
                         ],
                     ],
                     'series' => $data['temperature'],
