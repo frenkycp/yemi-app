@@ -106,6 +106,7 @@ use app\models\SmtLogLineBalance;
 use app\models\SmtLogLineBalanceReport;
 use app\models\ProdAttendanceDailyPlan;
 use app\models\ProdNgData;
+use app\models\SkillMasterKaryawan;
 
 class DisplayController extends Controller
 {
@@ -158,13 +159,67 @@ class DisplayController extends Controller
             </div>
         </div>';
 
+        $skillmap_master = SkillMasterKaryawan::find()
+        ->where([
+            'NIK' => $nik
+        ])
+        ->asArray()
+        ->all();
+
+        $skill = [];
+        $skill_desc_arr = [];
+        foreach ($skillmap_master as $key => $value) {
+            if ($value[$loc_id] != null) {
+                $skill[$loc_id][$value['skill_id']]['target'] = (int)$value[$loc_id];
+                $skill[$loc_id][$value['skill_id']]['actual'] = (int)$value['skill_value'];
+                $skill[$loc_id][$value['skill_id']]['group'] = $value['skill_group_desc'];
+            }
+            $skill_desc_arr[$value['skill_id']] = $value['skill_desc'];
+        }
+
         $data .= '<div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Skill Map</h3>
             </div>
             <div class="panel-body no-padding">
-            <span style="padding-left: 10px; font-size: 2em;"><em>On Progress...</em></span>
+            
         ';
+        if (!isset($skill[$loc_id])) {
+            $data .= '<em style="font-size: 1.2em; padding: 10px;">Skill Map Data Not Found...</em>';
+        } else {
+            $data .= '<table class="table table-bordered table-hover table-condensed" style="margin-bottom: 0px;">';
+            $data .= '
+            <tr>
+                
+                <th class="text-center">Skill ID</th>
+                <th>Skill Group</th>
+                <th>Skill Description</th>
+                <th class="text-center">Requirement</th>
+                <th class="text-center">Actual</th>
+            </tr>
+            ';
+            foreach ($skill[$loc_id] as $key => $value) {
+                $tr_class = '';
+                if ($value['actual'] < $value['target']) {
+                    $tr_class = 'danger';
+                }
+                if ($value['actual'] == 0) {
+                    $value['actual'] = '-';
+                }
+                $data .= '
+                <tr class="' . $tr_class . '">
+                    
+                    <td class="text-center">' . $key . '</td>
+                    <td>' . $value['group'] . '</td>
+                    <td>' . $skill_desc_arr[$key] . '</td>
+                    <td class="text-center">' . $value['target'] . '</td>
+                    <td class="text-center">' . $value['actual'] . '</td>
+                </tr>
+                ';
+            }
+            $data .= '</table>';
+        }
+        
 
         $data .= '
             </div>
@@ -180,10 +235,10 @@ class DisplayController extends Controller
         $wip_location_arr = \Yii::$app->params['wip_location_arr'];
 
         $model = new \yii\base\DynamicModel([
-            'from_date', 'to_date', 'location'
+            'from_date', 'to_date', 'location', 'category'
         ]);
         $model->addRule(['from_date', 'to_date'], 'required')
-        ->addRule('location', 'string');
+        ->addRule(['location', 'category'], 'string');
 
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));

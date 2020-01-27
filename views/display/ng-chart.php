@@ -60,15 +60,15 @@ $this->registerCssFile('@web/css/dataTables.bootstrap.css');
 $this->registerJsFile('@web/js/jquery.dataTables.min.js');
 $this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
 
-$this->registerJs("$(function() {
+$this->registerJs("$(document).ready(function() {
     $('#myTable').DataTable({
         'pageLength': 15,
         'order': [[ 4, 'desc' ]]
     });
-    $('.popupModal').click(function(e) {
+    $('#myTable').on('click', '.popupModal', function (e) {
         e.preventDefault();
         $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
-    });
+    } );
 });");
 
 /*echo '<pre>';
