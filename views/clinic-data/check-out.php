@@ -41,7 +41,7 @@ $this->title = [
     <div class="">
 
 <!-- attribute NIK -->
-			<?= $form->field($model, 'nik')->textInput(['placeholder' => 'Input NIK here...'])->label('NIK'); ?>
+			<?= $form->field($model, 'nik_sun_fish')->textInput(['placeholder' => 'Input NIK here...', 'id' => 'nik_sun_fish'])->label('NIK'); ?>
         <hr/>
 
         <?php echo $form->errorSummary($model); ?>

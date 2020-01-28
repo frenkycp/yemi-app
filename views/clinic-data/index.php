@@ -372,13 +372,13 @@ $gridColumns = [
 
 if (!$is_clinic) {
     unset($gridColumns[0]);
-    unset($gridColumns[7]);
     unset($gridColumns[8]);
-    unset($gridColumns[11]);
-} else {
     unset($gridColumns[9]);
-    unset($gridColumns[10]);
     unset($gridColumns[12]);
+} else {
+    unset($gridColumns[10]);
+    unset($gridColumns[11]);
+    unset($gridColumns[13]);
 }
 
 ?>

@@ -130,31 +130,31 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 	{
 		date_default_timezone_set('Asia/Jakarta');
 		$model = new \yii\base\DynamicModel([
-	        'nik'
+	        'nik_sun_fish'
 	    ]);
-	    $model->addRule(['nik'], 'required');
+	    $model->addRule(['nik_sun_fish'], 'required');
 
 	    if($model->load(\Yii::$app->request->post())){
-	        $nik = $model->nik;
+	        $nik_sun_fish = $model->nik_sun_fish;
 
 	        $tmp_data = KlinikInput::find()
 	        ->where([
-	        	'nik' => $nik,
+	        	'nik_sun_fish' => $nik_sun_fish,
 	        	'DATE(pk)' => date('Y-m-d')
 	        ])
 	        ->orderBy('pk DESC')
 	        ->limit(1)
 	        ->one();
 
-	        if ($tmp_data->nik == 0) {
-	        	\Yii::$app->session->setFlash("warning", "NIK : $nik tidak ada di klinik ...");
+	        if ($tmp_data->nik_sun_fish == null) {
+	        	\Yii::$app->session->setFlash("warning", "NIK : $nik_sun_fish tidak ada di klinik ...");
 	        	return $this->redirect(Url::previous());
 	        } else {
 	        	$tmp_data->keluar = date('H:i:s');
 	        	if (!$tmp_data->save()) {
 		        	return json_encode($model->errors());
 		        } else {
-		        	\Yii::$app->session->setFlash("success", "NIK : $nik berhasil cek out ...");
+		        	\Yii::$app->session->setFlash("success", "NIK : $nik_sun_fish berhasil cek out ...");
 		        }
 	        }
 	        
