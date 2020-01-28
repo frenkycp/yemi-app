@@ -28,12 +28,12 @@ use kartik\select2\Select2;
     <div class="panel panel-primary">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-2">
-                    <?= $form->field($model, 'nik')->widget(Select2::classname(), [
+                <div class="col-md-4">
+                    <?= $form->field($model, 'nik_sun_fish')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
-                            'NIK', 'NAMA_KARYAWAN'
+                            'NIK_SUN_FISH', 'NAMA_KARYAWAN'
                         ])
-                        ->all(), 'NIK', 'NIK'),
+                        ->all(), 'NIK_SUN_FISH', 'nikSunfishNama'),
                         'options' => [
                             'placeholder' => 'Select NIK ...',
                             'onchange' => '
@@ -53,12 +53,8 @@ use kartik\select2\Select2;
                             'allowClear' => true
                         ],
                     ]); ?>
-                </div>
-                <div class="col-md-1">
-                    <?= $form->field($model, 'CC_ID')->textInput(['readonly' => true, 'id' => 'cc_id'])->label('CC ID'); ?>
-                </div>
-                <div class="col-md-3">
-                    <?= $form->field($model, 'nama')->textInput(['readonly' => true, 'id' => 'txt_name']); ?>
+                    <?= $form->field($model, 'CC_ID')->hiddenInput(['readonly' => true, 'id' => 'cc_id'])->label(false); ?>
+                    <?= $form->field($model, 'nama')->hiddenInput(['readonly' => true, 'id' => 'txt_name'])->label(false); ?>
                 </div>
                 <div class="col-md-4">
                     <?= $form->field($model, 'dept')->textInput(['readonly' => true, 'id' => 'txt_dept']); ?>

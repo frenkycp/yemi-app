@@ -110,6 +110,16 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'nik_sun_fish',
+        'label' => 'NIK (New)',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 70px;'
+        ],
+    ],
+    [
         'attribute' => 'nama',
         'vAlign' => 'middle',
         'filterInputOptions' => [

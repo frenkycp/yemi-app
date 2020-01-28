@@ -28,7 +28,7 @@ class KlinikInput extends BaseKlinikInput
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['nik'], 'required'],
+                [['nik_sun_fish'], 'required'],
             ]
         );
     }
@@ -39,6 +39,7 @@ class KlinikInput extends BaseKlinikInput
             parent::attributeLabels(),
             [
                 'nik' => 'NIK',
+                'nik_sun_fish' => 'Employee',
                 'dept' => 'Departemen',
                 'opsi' => 'Keperluan',
                 'anamnesa' => 'Gejala',
@@ -51,5 +52,23 @@ class KlinikInput extends BaseKlinikInput
                 'handleby' => 'Paramedis'
             ]
         );
+    }
+
+    public function beforeSave($insert){
+        if(parent::beforeSave($insert)){
+            $tmp_karyawan = Karyawan::find()->where([
+                'NIK_SUN_FISH' => $this->nik_sun_fish
+            ])->one();
+            $this->nik = $tmp_karyawan->NIK;
+            
+
+            // if($this->isNewRecord)
+            // {
+                
+            // } else {
+                
+            // }
+            return true;
+        }
     }
 }

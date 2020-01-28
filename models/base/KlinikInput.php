@@ -30,6 +30,7 @@ use Yii;
  * @property string $handleby
  * @property integer $confirm
  * @property string $last_status
+ * @property string $nik_sun_fish
  * @property string $aliasModel
  */
 abstract class KlinikInput extends \yii\db\ActiveRecord
@@ -62,7 +63,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             [['pk'], 'required'],
             [['pk', 'masuk', 'keluar'], 'safe'],
             [['opsi', 'confirm'], 'integer'],
-            [['nik', 'status_karyawan'], 'string', 'max' => 20],
+            [['nik', 'status_karyawan', 'nik_sun_fish'], 'string', 'max' => 20],
             [['nama', 'dept', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'string', 'max' => 255],
             [['CC_ID'], 'string', 'max' => 10],
             [['section'], 'string', 'max' => 50],
@@ -80,7 +81,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'pk' => 'Pk',
             'nik' => 'Nik',
             'nama' => 'Nama',
-            'CC_ID' => 'Cc ID',
+            'CC_ID' => 'Cc  ID',
             'dept' => 'Dept',
             'section' => 'Section',
             'status_karyawan' => 'Status Karyawan',
@@ -98,6 +99,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'handleby' => 'Handleby',
             'confirm' => 'Confirm',
             'last_status' => 'Last Status',
+            'nik_sun_fish' => 'Nik Sun Fish',
         ];
     }
 

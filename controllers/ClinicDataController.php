@@ -187,7 +187,7 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 
 	public function actionEmpInfo($nik)
 	{
-		$emp = Karyawan::findOne(['NIK' => $nik]);
+		$emp = Karyawan::findOne(['NIK_SUN_FISH' => $nik]);
 		$data = [
 			'name' => $emp->NAMA_KARYAWAN,
 			'dept' => $emp->DEPARTEMEN,
