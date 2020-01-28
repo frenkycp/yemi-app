@@ -18,7 +18,8 @@ class ClinicController extends controller
 
 		$data = KlinikInput::find()
 		->where([
-			'date(pk)' => date('Y-m-d')
+			'date(pk)' => date('Y-m-d'),
+			'opsi' => [1, 2]
 		])
 		->orderBy('confirm, masuk DESC')
 		//->limit(5)
@@ -39,10 +40,16 @@ class ClinicController extends controller
 		$bed_used = KlinikInput::find()
 		->where('keluar IS NULL')
 		->andWhere([
-			'date(pk)' => date('Y-m-d')
+			'date(pk)' => date('Y-m-d'),
+			'opsi' => 2,
 		])
+		->count();
+
+		$laktasi = KlinikInput::find()
+		->where('keluar IS NULL')
 		->andWhere([
-			'opsi' => 2
+			'date(pk)' => date('Y-m-d'),
+			'opsi' => 3,
 		])
 		->count();
 
@@ -82,6 +89,7 @@ class ClinicController extends controller
 			'doctor_data' => $doctor_data,
 			'nurse_data' => $nurse_data,
 			'data' => $data,
+			'laktasi' => $laktasi,
 		]);
 	}
 
@@ -94,7 +102,8 @@ class ClinicController extends controller
 
 		$data_clinic = KlinikInput::find()
 		->where([
-			'date(pk)' => date('Y-m-d')
+			'date(pk)' => date('Y-m-d'),
+			'opsi' => [1, 2]
 		])
 		->orderBy('confirm, masuk DESC')
 		//->limit(5)
@@ -115,10 +124,16 @@ class ClinicController extends controller
 		$bed_used = KlinikInput::find()
 		->where('keluar IS NULL')
 		->andWhere([
-			'date(pk)' => date('Y-m-d')
-		])
-		->andWhere([
+			'date(pk)' => date('Y-m-d'),
 			'opsi' => 2
+		])
+		->count();
+
+		$laktasi = KlinikInput::find()
+		->where('keluar IS NULL')
+		->andWhere([
+			'date(pk)' => date('Y-m-d'),
+			'opsi' => 3,
 		])
 		->count();
 
@@ -244,7 +259,7 @@ class ClinicController extends controller
 
 	    if (count($data_clinic) == 0) {
 	        $table_container = '<tr>
-	        <td colspan="7">No Visitor Today</td>
+	        <td colspan="8">No Visitor Today</td>
 	        </tr>';
 	    }
 
@@ -255,6 +270,7 @@ class ClinicController extends controller
 			'doctor_content' => $doctor_content,
 			'nurse_content' => $nurse_content,
 			'table_container' => $table_container,
+			'laktasi' => $laktasi,
 		];
 
 		return json_encode($data, JSON_UNESCAPED_UNICODE);

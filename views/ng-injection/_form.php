@@ -100,6 +100,7 @@ $this->registerCss("
                         'data' => ArrayHelper::map(app\models\ProdNgCategory::find()->select([
                             'id', 'category_name', 'category_detail'
                         ])
+                        ->where(['<>', 'id', 28])
                         ->orderBy('category_name, category_detail')
                         ->all(), 'id', 'description'),
                         'options' => [

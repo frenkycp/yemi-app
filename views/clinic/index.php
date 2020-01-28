@@ -72,6 +72,7 @@ $this->registerJs("
                 $('#doctor-content').html(tmp_data.doctor_content);
                 $('#nurse-content').html(tmp_data.nurse_content);
                 $('#table-container').html(tmp_data.table_container);
+                $('#laktasi-id').html(tmp_data.laktasi);
             },
             complete: function(){
                 setTimeout(function(){update_data();}, 3000);
@@ -120,7 +121,7 @@ echo '</pre>';*/
     <div class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box bg-purple">
             <div class="inner">
-                <h3><span id="available-beds"><?= $available_beds; ?></span>/3</h3>
+                <h3><span id="available-beds"><?= $available_beds; ?></span></h3>
                 <p>Ruangan Tersedia</p>
             </div>
             <div class="icon">
@@ -129,7 +130,19 @@ echo '</pre>';*/
             <a class="small-box-footer"></a>
         </div>
     </div>
-    <div id="doctor-content" class="col-lg-2 col-lg-offset-2 col-md-offset-2 col-xs-6 col-md-3">
+    <div class="col-lg-2 col-xs-6 col-md-3">
+        <div class="small-box bg-purple">
+            <div class="inner">
+                <h3><span id="laktasi-id"><?= $laktasi; ?></span></h3>
+                <p>Sedang Laktasi</p>
+            </div>
+            <div class="icon">
+                <i class="glyphicon glyphicon-tint"></i>
+            </div>
+            <a class="small-box-footer"></a>
+        </div>
+    </div>
+    <div id="doctor-content" class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box <?= $doctor_data['bg_color']; ?>">
             <div class="inner">
                 <h3>dokter</h3>
@@ -147,6 +160,7 @@ echo '</pre>';*/
             <a class="small-box-footer"></a>
         </div>
     </div>
+
 </div>
 
 <table class="table table-bordered table-condensed" id="clinic-tbl">
@@ -250,7 +264,7 @@ echo '</pre>';*/
 
         if (count($data) == 0) {
             echo '<tr>
-            <td colspan="7">No Visitor Today</td>
+            <td colspan="8">No Visitor Today</td>
             </tr>';
         }
         ?>
