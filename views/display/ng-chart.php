@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'NG Summary (Cause by Man)',
-    'tab_title' => 'NG Chart (Cause by Man)',
-    'breadcrumbs_title' => 'NG Chart (Cause by Man)'
+    'page_title' => 'NG Summary',
+    'tab_title' => 'NG Chart',
+    'breadcrumbs_title' => 'NG Chart'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -102,12 +102,18 @@ echo '</pre>';*/
     </div>
     <div class="col-md-2">
         <?= $form->field($model, 'location')->dropDownList(\Yii::$app->params['wip_location_arr'], [
-            'prompt' => 'Choose Location...'
+            'prompt' => 'Choose...'
+        ]); ?>
+    </div>
+    <div class="col-md-2">
+        <?= $form->field($model, 'category')->dropDownList([
+            'MAN' => 'MAN',
+            'MATERIAL' => 'MATERIAL'
         ]); ?>
     </div>
     <div class="form-group">
         <br/>
-        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-success', 'style' => 'margin-top: 5px;']); ?>
     </div>
     
 </div>
@@ -115,7 +121,7 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 <br/>
 <div class="row">
-    <div class="col-md-8">
+    <div class="<?= $model->category == 'MAN' ? 'col-md-8' : 'col-md-12' ?>">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Daily NG (Total NG : <?= number_format($total_ng); ?>)</h3>
@@ -186,7 +192,7 @@ echo '</pre>';*/
                 ?>
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="<?= $model->category == 'MAN' ? '' : 'display: none;'; ?>">
             <div class="col-md-6">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -289,7 +295,7 @@ echo '</pre>';*/
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4" style="<?= $model->category == 'MAN' ? '' : 'display: none;'; ?>">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">NG By PIC</h3>
@@ -324,6 +330,87 @@ echo '</pre>';*/
                         <?php endforeach ?>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="<?= $model->category == 'MAN' ? 'display: none;' : ''; ?>">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">NG by Problem</h3>
+            </div>
+            <div class="panel-body">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        'modules/drilldown',
+                        //'themes/grid-light',
+                        'themes/dark-unica',
+                        //'themes/sand-signika',
+                    ],
+                    'options' => [
+                        'chart' => [
+                            'type' => 'column',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
+                            ],
+                            'height' => 300,
+                        ],
+                        'credits' => [
+                            'enabled' => false
+                        ],
+                        'accessibility' => [
+                            'announceNewData' => [
+                                'enabled' => true,
+                            ],
+                        ],
+                        'title' => [
+                            'text' => null,
+                        ],
+                        'xAxis' => [
+                            'type' => 'category',
+                            'labels' => [
+                                'style' => [
+                                    'color' => 'yellow'
+                                ],
+                            ],
+                        ],
+                        'yAxis' => [
+                            'title' => [
+                                'text' => 'Total NG',
+                            ],
+                            //'max' => 60,
+                            //'tickInterval' => 10
+                        ],
+                        'legend' => [
+                            'enabled' => false
+                        ],
+                        'tooltip' => [
+                            'enabled' => true,
+                        ],
+                        'plotOptions' => [
+                            'series' => [
+                                'borderWidth' => 0
+                            ],
+                            'column' => [
+                                'maxPointWidth' => 50,
+                                'dataLabels' => [
+                                    'enabled' => true,
+                                ],
+                            ],
+                        ],
+                        'series' => $ng_data_desc,
+                        'drilldown' => [
+                            'activeAxisLabelStyle' => [
+                                'textDecoration' => 'none',
+                                'color' => 'yellow',
+                            ],
+                            'series' => $ng_data_desc_drilldown,
+                        ],
+                    ],
+                ]);
+                ?>
             </div>
         </div>
     </div>

@@ -276,6 +276,18 @@ return [
         'CHANGE JOB (IN SECTION)' => 'CHANGE JOB (IN SECTION)',
         'CHANGE JOB (OUT SECTION)' => 'CHANGE JOB (OUT SECTION)'
     ],
+    'e_ng_location_arr' => [
+        'WF01' => 'FINAL ASSY',
+        'WW03' => 'HANDY LAMINATE',
+        'WI02' => 'INJ LARGE',
+        'WI03' => 'INJ MEDIUM',
+        'WI01' => 'INJ SMALL',
+        'WP01' => 'PAINTING',
+        'WM01' => 'PCB MANUAL INS.',
+        'WM03' => 'SMT',
+        'WU01' => 'SPEAKER PROJECT',
+        'WW02' => 'WW PROCESS',
+    ],
 ];
 
 function getYearArray()
