@@ -119,6 +119,84 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionNgContractDetail($contract_status, $from_date, $to_date, $loc_id = '')
+    {
+        $wip_location_arr = \Yii::$app->params['wip_location_arr'];
+        if ($loc_id != '' && $loc_id != null) {
+            $tmp_data_ng = ProdNgData::find()
+            ->select([
+                'loc_id', 'emp_id', 'emp_name',
+                'ng_total' => 'SUM(ng_qty)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'post_date', $from_date],
+                ['<=', 'post_date', $to_date]
+            ])
+            ->andWhere([
+                'emp_status_code' => $contract_status,
+                'ng_cause_category' => 'MAN',
+                'loc_id' => $loc_id
+            ])
+            ->groupBy('loc_id, emp_id, emp_name')
+            ->orderBy('SUM(ng_qty) DESC')
+            ->all();
+        } else {
+            $tmp_data_ng = ProdNgData::find()
+            ->select([
+                'loc_id', 'emp_id', 'emp_name',
+                'ng_total' => 'SUM(ng_qty)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'post_date', $from_date],
+                ['<=', 'post_date', $to_date]
+            ])
+            ->andWhere([
+                'emp_status_code' => $contract_status,
+                'ng_cause_category' => 'MAN'
+            ])
+            ->groupBy('loc_id, emp_id, emp_name')
+            ->orderBy('SUM(ng_qty) DESC')
+            ->all();
+        }
+        
+
+        $data = '<div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">' . $contract_status . '</h3>
+            </div>
+            <div class="panel-body no-padding">
+        ';
+        $data .= '<table class="table table-bordered table-striped table-hover">';
+        $data .= '
+        <tr>
+            <th class="text-center">Location</th>
+            <th class="text-center">NIK</th>
+            <th>Name</th>
+            <th class="text-center">NG Qty</th>
+        </tr>
+        ';
+
+        foreach ($tmp_data_ng as $value) {
+            $data .= '
+            <tr>
+                <td class="text-center">' . $wip_location_arr[$value->loc_id] . '</td>
+                <td class="text-center">' . $value->emp_id . '</td>
+                <td>' . $value->emp_name . '</td>
+                <td class="text-center">' . number_format($value->ng_total) . '</td>
+            </tr>
+            ';
+        }
+
+        $data .= '</table>';
+        $data .= '
+            </div>
+        </div>';
+
+        return $data;
+    }
+
     public function actionPicNgDetail($nik, $from_date, $to_date, $loc_id)
     {
         $tmp_data_ng = ProdNgData::find()
@@ -356,15 +434,18 @@ class DisplayController extends Controller
                 $tmp_data_contract = [
                     [
                         'name' => 'Contract 1',
-                        'y' => (int)$tmp_ng_by_contract->qty_ng_contract1
+                        'y' => (int)$tmp_ng_by_contract->qty_ng_contract1,
+                        'url' => Url::to(['ng-contract-detail', 'contract_status' => 'CONTRACT1', 'from_date' => $model->from_date, 'to_date' => $model->to_date, 'loc_id' => $model->location]),
                     ],
                     [
                         'name' => 'Contract 2',
-                        'y' => (int)$tmp_ng_by_contract->qty_ng_contract2
+                        'y' => (int)$tmp_ng_by_contract->qty_ng_contract2,
+                        'url' => Url::to(['ng-contract-detail', 'contract_status' => 'CONTRACT2', 'from_date' => $model->from_date, 'to_date' => $model->to_date, 'loc_id' => $model->location]),
                     ],
                     [
                         'name' => 'Permanent',
-                        'y' => (int)$tmp_ng_by_contract->qty_ng_permanent
+                        'y' => (int)$tmp_ng_by_contract->qty_ng_permanent,
+                        'url' => Url::to(['ng-contract-detail', 'contract_status' => 'PERMANENT', 'from_date' => $model->from_date, 'to_date' => $model->to_date, 'loc_id' => $model->location]),
                     ],
                 ];
             }

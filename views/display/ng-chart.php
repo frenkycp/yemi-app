@@ -235,6 +235,19 @@ echo '</pre>';*/
                                             'format' => '<b>{point.name}</b>: {point.percentage:.0f}% ({point.y} NG)'
                                         ],
                                     ],
+                                    'series' => [
+                                        'cursor' => 'pointer',
+                                        'point' => [
+                                            'events' => [
+                                                'click' => new JsExpression("
+                                                    function(e){
+                                                        e.preventDefault();
+                                                        $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                                    }
+                                                "),
+                                            ]
+                                        ]
+                                    ],
                                 ],
                                 'series' => $ng_data_contract
                             ],
