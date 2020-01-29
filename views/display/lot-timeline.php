@@ -48,7 +48,8 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($data);
+//print_r($splited_loc_id);
+echo $kondisi;
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>

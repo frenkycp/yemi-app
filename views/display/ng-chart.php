@@ -340,7 +340,7 @@ echo '</pre>';*/
             <div class="panel-heading">
                 <h3 class="panel-title">NG by Problem</h3>
             </div>
-            <div class="panel-body">
+            <div class="panel-body no-padding">
                 <?php
                 echo Highcharts::widget([
                     'scripts' => [

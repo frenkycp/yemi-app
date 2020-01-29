@@ -35,7 +35,11 @@ class ProductionSchedulerController extends Controller
 
 		$location_dropdown = ArrayHelper::map(WipLocation::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc');
 
-		$jenis_mesin_dropdown = ArrayHelper::map(MachineIotCurrent::find()->select(['kelompok'])->groupBy('kelompok')->orderBy('kelompok')->all(), 'kelompok', 'kelompok');
+		$jenis_mesin_dropdown = [];
+		if ($searchModel->child_analyst != null) {
+			$jenis_mesin_dropdown = ArrayHelper::map(MachineIotCurrent::find()->select(['kelompok'])->where(['child_analyst' => $searchModel->child_analyst])->groupBy('kelompok')->orderBy('kelompok')->all(), 'kelompok', 'kelompok');
+		}
+		
 
     	return $this->render('index', [
 			'dataProvider' => $dataProvider,

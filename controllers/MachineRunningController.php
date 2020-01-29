@@ -2,7 +2,7 @@
 namespace app\controllers;
 
 use yii\web\Controller;
-use app\models\ServerMachineIotCurrent;
+use app\models\MachineIotCurrent;
 use app\models\WipEffTbl;
 use app\models\MachineIotOutput;
 use app\models\Karyawan;
@@ -91,7 +91,7 @@ class MachineRunningController extends Controller
 
         if ($model->load($_GET)) {
         	$mesin_id = $model->mesin_id;
-        	$tmp_data = ServerMachineIotCurrent::find()
+        	$tmp_data = MachineIotCurrent::find()
         	->where([
         		'mesin_id' => $mesin_id
         	])
@@ -167,7 +167,7 @@ class MachineRunningController extends Controller
 	    if ($model->load($_POST)) {
 	    	$beacon_id_current = $tmp_mio->minor;
 
-	    	$current_data = ServerMachineIotCurrent::find()
+	    	$current_data = MachineIotCurrent::find()
 	    	->where([
 	    		'mesin_id' => $mesin_id
 	    	])
@@ -357,7 +357,7 @@ class MachineRunningController extends Controller
 	    ->addRule(['next_process', 'ng_qty'], 'required');
 	    $model->ng_qty = 0;
 
-	    $current_data = ServerMachineIotCurrent::find()
+	    $current_data = MachineIotCurrent::find()
     	->where([
     		'mesin_id' => $mesin_id
     	])
@@ -375,7 +375,7 @@ class MachineRunningController extends Controller
 	    	if ($model->load(\Yii::$app->request->post())) {
 		    	$next_process = $model->next_process;
 
-	    		/*$current_data = ServerMachineIotCurrent::find()
+	    		/*$current_data = MachineIotCurrent::find()
 		    	->where([
 		    		'mesin_id' => $mesin_id
 		    	])

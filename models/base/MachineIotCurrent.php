@@ -11,13 +11,19 @@ use Yii;
  *
  * @property string $mesin_id
  * @property string $mesin_description
+ * @property string $child_analyst
  * @property string $status_warna
+ * @property string $start_date_time
  * @property string $system_date_time
+ * @property double $status_warna_second
  * @property string $kelompok
  * @property string $lot_number
  * @property string $gmc
  * @property string $gmc_desc
+ * @property string $parent
+ * @property string $parent_desc
  * @property double $lot_qty
+ * @property string $model_group
  * @property string $product_name
  * @property string $aliasModel
  */
@@ -49,9 +55,9 @@ abstract class MachineIotCurrent extends \yii\db\ActiveRecord
     {
         return [
             [['mesin_id'], 'required'],
-            [['mesin_id', 'mesin_description', 'status_warna', 'kelompok', 'lot_number', 'gmc', 'gmc_desc', 'product_name'], 'string'],
-            [['system_date_time'], 'safe'],
-            [['lot_qty'], 'number'],
+            [['mesin_id', 'mesin_description', 'child_analyst', 'status_warna', 'kelompok', 'lot_number', 'gmc', 'gmc_desc', 'parent', 'parent_desc', 'model_group', 'product_name'], 'string'],
+            [['start_date_time', 'system_date_time'], 'safe'],
+            [['status_warna_second', 'lot_qty'], 'number'],
             [['mesin_id'], 'unique']
         ];
     }
@@ -64,13 +70,19 @@ abstract class MachineIotCurrent extends \yii\db\ActiveRecord
         return [
             'mesin_id' => 'Mesin ID',
             'mesin_description' => 'Mesin Description',
+            'child_analyst' => 'Child Analyst',
             'status_warna' => 'Status Warna',
+            'start_date_time' => 'Start Date Time',
             'system_date_time' => 'System Date Time',
+            'status_warna_second' => 'Status Warna Second',
             'kelompok' => 'Kelompok',
             'lot_number' => 'Lot Number',
             'gmc' => 'Gmc',
             'gmc_desc' => 'Gmc Desc',
+            'parent' => 'Parent',
+            'parent_desc' => 'Parent Desc',
             'lot_qty' => 'Lot Qty',
+            'model_group' => 'Model Group',
             'product_name' => 'Product Name',
         ];
     }

@@ -2760,8 +2760,10 @@ class DisplayController extends Controller
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
         $model->beacon_using = 1;
-        $model->wip_location = 'WW02';
+        $model->wip_location = 'WW02_BEACON';
         $location_arr = \Yii::$app->params['wip_location_arr'];
+        $location_arr['WW02_BEACON'] = $location_arr['WW02'] . ' (BEACON)';
+        //$location_arr['WU01_BEACON'] = $location_arr['WU01'] . ' (BEACON)';
         if (count($location_arr) > 0) {
             asort($location_arr);
         }
@@ -2770,6 +2772,7 @@ class DisplayController extends Controller
             # code...
         }
 
+        $splited_loc_id = explode("_", $model->wip_location);
         if ($model->model_group != '' && $model->model_group != null) {
             $tmp_model_wip = SernoMaster::find()->select('gmc')->where(['line' => $model->model_group])->all();
             $gmc_arr = [];
@@ -2777,7 +2780,7 @@ class DisplayController extends Controller
                 $gmc_arr[] = $value->gmc;
             }
 
-            if ($model->wip_location == 'WW02') {
+            if (count($splited_loc_id) > 1) {
                 $tmp_beacon_arr = BeaconTblTrack::find()
                 ->select([
                     'upload_date',
@@ -2789,7 +2792,10 @@ class DisplayController extends Controller
                     ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
                     ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
                 ])
-                ->andWhere(['parent' => $gmc_arr])
+                ->andWhere([
+                    'parent' => $gmc_arr,
+                    'analyst' => $splited_loc_id[0]
+                ])
                 ->andWhere('minor IS NOT NULL')
                 ->groupBy('upload_date')
                 ->orderBy('upload_date')
@@ -2810,13 +2816,14 @@ class DisplayController extends Controller
                     'parent' => $gmc_arr,
                     'mesin_id' => $model->wip_location
                 ])
+                ->andWhere('minor IS NULL')
                 ->groupBy('upload_date')
                 ->orderBy('upload_date')
                 ->all();
             }
             
         } else {
-            if ($model->wip_location == 'WW02') {
+            if (count($splited_loc_id) > 1) {
                 $tmp_beacon_arr = BeaconTblTrack::find()
                 ->select([
                     'upload_date',
@@ -2827,6 +2834,9 @@ class DisplayController extends Controller
                     'AND',
                     ['>=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->from_date],
                     ['<=', 'FORMAT(upload_date, \'yyyy-MM-dd\')', $model->to_date]
+                ])
+                ->andWhere([
+                    'analyst' => $splited_loc_id[0]
                 ])
                 ->andWhere('minor IS NOT NULL')
                 ->groupBy('upload_date')
@@ -2847,6 +2857,7 @@ class DisplayController extends Controller
                 ->andWhere([
                     'mesin_id' => $model->wip_location
                 ])
+                ->andWhere('minor IS NULL')
                 ->groupBy('upload_date')
                 ->orderBy('upload_date')
                 ->all();
@@ -2890,6 +2901,7 @@ class DisplayController extends Controller
             'location_arr' => $location_arr,
             'data_lot' => $data_lot,
             'data_qty' => $data_qty,
+            'splited_loc_id' => $splited_loc_id,
         ]);
     }
 
