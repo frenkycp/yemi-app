@@ -2000,6 +2000,9 @@ class DisplayController extends Controller
             $waktu2 = strtotime($now);
             $waktu_balance_s = $waktu2 - $waktu1;
             $limit_s = 24 * 3600;
+            if ($tmp_model_group->line == 'XXX') {
+                $limit_s = 36 * 3600;
+            }
             $tmp_time_arr[] = [
                 'beacon_id' => $value->minor,
                 'start' => $value->start_date,

@@ -6,9 +6,9 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Abnormal LT control (Max 24h) <span class="japanesse light-green">リードタイム異常管理</span>',
-    'tab_title' => 'Abnormal LT control (Max 24h) ',
-    'breadcrumbs_title' => 'Abnormal LT control (Max 24h) ',
+    'page_title' => 'Abnormal LT control <span class="japanesse light-green">リードタイム異常管理</span>',
+    'tab_title' => 'Abnormal LT control ',
+    'breadcrumbs_title' => 'Abnormal LT control ',
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -103,6 +103,18 @@ $this->registerJs($script, View::POS_HEAD );
             <td class="text-center actual"><?= number_format($data['p40_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
             <td class="text-center actual<?= $data['p40_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['p40_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
         </tr>
+    </tbody>
+</table>
+
+<table class="table table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th></th>
+            <th class="text-center" width="25%">LT ≤ 36H</th>
+            <th class="text-center" width="25%">LT > 36H</th>
+        </tr>
+    </thead>
+    <tbody>
         <tr>
             <td style="">XXX - Series</td>
             <td class="text-center actual"><?= number_format($data['xxx_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
