@@ -56,7 +56,7 @@ $this->registerCss("
     }
 ");
 
-$dropdown = ArrayHelper::map(app\models\MachineIotCurrent::find()->select(['kelompok'])->groupBy('kelompok')->orderBy('kelompok')->all(), 'kelompok', 'kelompok');
+$dropdown = ArrayHelper::map(app\models\MachineIotCurrent::find()->select(['kelompok'])->where(['child_analyst' => $loc_id])->groupBy('kelompok')->orderBy('kelompok')->all(), 'kelompok', 'kelompok');
 $dropdown['END'] = '--END PROCESS--';
 ?>
 <div class="giiant-crud cuti-tbl-update">

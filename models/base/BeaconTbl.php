@@ -32,6 +32,8 @@ use Yii;
  * @property string $current_machine_start
  * @property string $next_process
  * @property string $lot_status
+ * @property string $analyst
+ * @property string $analyst_desc
  * @property string $aliasModel
  */
 abstract class BeaconTbl extends \yii\db\ActiveRecord
@@ -62,14 +64,9 @@ abstract class BeaconTbl extends \yii\db\ActiveRecord
     {
         return [
             [['id'], 'required'],
+            [['id', 'uuid', 'major', 'minor', 'lot_number', 'lokasi', 'reader', 'mesin_id', 'mesin_description', 'kelompok', 'model_group', 'parent', 'parent_desc', 'gmc', 'gmc_desc', 'next_process', 'lot_status', 'analyst', 'analyst_desc'], 'string'],
             [['start_date', 'distance_last_update', 'review_date', 'current_machine_start'], 'safe'],
             [['distance', 'lot_qty'], 'number'],
-            [['id', 'uuid', 'major', 'minor', 'lot_number', 'lokasi', 'reader', 'mesin_id', 'kelompok', 'model_group'], 'string', 'max' => 50],
-            [['mesin_description'], 'string', 'max' => 100],
-            [['parent', 'gmc'], 'string', 'max' => 20],
-            [['parent_desc', 'gmc_desc'], 'string', 'max' => 250],
-            [['next_process'], 'string', 'max' => 5],
-            [['lot_status'], 'string', 'max' => 1],
             [['id'], 'unique']
         ];
     }
@@ -103,6 +100,8 @@ abstract class BeaconTbl extends \yii\db\ActiveRecord
             'current_machine_start' => 'Current Machine Start',
             'next_process' => 'Next Process',
             'lot_status' => 'Lot Status',
+            'analyst' => 'Analyst',
+            'analyst_desc' => 'Analyst Desc',
         ];
     }
 

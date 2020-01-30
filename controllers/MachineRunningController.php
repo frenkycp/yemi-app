@@ -70,6 +70,74 @@ class MachineRunningController extends Controller
 		return $seconds;
 	}
 
+	public function actionIndexCurrent($loc_id = 'WW02')
+	{
+		$session = \Yii::$app->session;
+        if (!$session->has('mcr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['mcr_user'];
+		$this->layout = 'clean';
+		Url::remember();
+		$mesin_id = '';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = $lot_data = null;
+        $mesin_description = '';
+        //$current_data = [];
+        $model = new \yii\base\DynamicModel([
+            'mesin_id', 'loc_id'
+        ]);
+        $model->addRule(['mesin_id', 'loc_id'], 'required');
+        $model->loc_id = $loc_id;
+
+        if ($model->load($_GET)) {
+        	$mesin_id = $model->mesin_id;
+        	$tmp_data = MachineIotCurrent::find()
+        	->where([
+        		'mesin_id' => $mesin_id
+        	])
+        	->one();
+        	$current_data = [
+        		'lot_id' => $tmp_data->lot_number,
+        		'gmc' => $tmp_data->gmc,
+        		'gmc_desc' => $tmp_data->gmc_desc,
+        		'lot_qty' => $tmp_data->lot_qty
+        	];
+        	$mesin_description = $mesin_id . ' - ' . $tmp_data->mesin_description;
+        	$lot_data = WipEffTbl::find()
+        	->where([
+        		'child_analyst' => $model->loc_id,
+        		'plan_stats' => 'O',
+        		'jenis_mesin' => $tmp_data->kelompok
+        	])
+        	->orderBy('start_date, plan_date')
+        	->asArray()
+        	->all();
+
+        	$output_data = MachineIotOutput::find()
+        	->where([
+        		'mesin_id' => $mesin_id,
+        		'lot_number' => $tmp_data->lot_number
+        	])
+        	->andWhere('end_date IS NULL')
+        	->one();
+
+        	$beacon_tbl = BeaconTbl::find()->where('lot_number IS NOT NULL')->asArray()->all();
+        }
+
+		return $this->render('index-current', [
+			'data' => $data,
+			'model' => $model,
+			'output_data' => $output_data,
+			'current_data' => $current_data,
+			'lot_data' => $lot_data,
+			'mesin_description' => $mesin_description,
+			'mesin_id' => $mesin_id,
+			'mcr_name' => $session['mcr_name'],
+			'beacon_tbl' => $beacon_tbl,
+		]);
+	}
+
 	public function actionIndex()
 	{
 		$session = \Yii::$app->session;
@@ -339,7 +407,7 @@ class MachineRunningController extends Controller
 		return $return_data;
 	}
 
-	public function actionFinish($mesin_id)
+	public function actionFinish($mesin_id, $loc_id)
 	{
 		$session = \Yii::$app->session;
         if (!$session->has('mcr_user')) {
@@ -512,6 +580,7 @@ class MachineRunningController extends Controller
 
     	return $this->render('finish', [
     		'model' => $model,
+    		'loc_id' => $loc_id,
     		'current_kelompok' => $current_kelompok
     	]);
 	}

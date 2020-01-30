@@ -145,7 +145,7 @@ $this->registerJs("
                 return false;
             }
 
-            if(loc_val == 'WW02'){
+            if(loc_val == 'WW02' || loc_val == 'WU01'){
                 if(is_multiple_model == true){
                     alert('There is multiple model in your selection...! (1 lot 1 model)');
                     return false;
