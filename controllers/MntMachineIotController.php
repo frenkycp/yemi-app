@@ -8,7 +8,7 @@ class MntMachineIotController extends Controller
 {
 	public function actionCurrentStatus()
 	{
-		$tmp_data = MachineIotCurrent::find()->orderBy('mesin_description')->asArray()->all();
+		$tmp_data = MachineIotCurrent::find()->where(['is_iot' => 'Y'])->orderBy('mesin_description')->asArray()->all();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		return $tmp_data;
 	}
@@ -16,7 +16,7 @@ class MntMachineIotController extends Controller
 	public function actionMachinePerformance()
 	{
 		$this->layout = 'clean';
-		$data = MachineIotCurrent::find()->orderBy('mesin_description')->all();
+		$data = MachineIotCurrent::find()->where(['is_iot' => 'Y'])->orderBy('mesin_description')->all();
 		return $this->render('machine-performance', [
 			'data' => $data
 		]);

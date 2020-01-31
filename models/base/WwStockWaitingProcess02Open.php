@@ -29,6 +29,8 @@ use Yii;
  * @property string $plan_run
  * @property string $jenis_mesin
  * @property string $minor
+ * @property string $child_analyst
+ * @property string $child_analyst_desc
  * @property string $aliasModel
  */
 abstract class WwStockWaitingProcess02Open extends \yii\db\ActiveRecord
@@ -59,15 +61,10 @@ abstract class WwStockWaitingProcess02Open extends \yii\db\ActiveRecord
     {
         return [
             [['mesin_id', 'plan_run'], 'required'],
+            [['mesin_id', 'mesin_description', 'kelompok', 'lot_number', 'model_group', 'parent', 'parent_desc', 'gmc', 'gmc_desc', 'plan_stats', 'plan_run', 'jenis_mesin', 'minor', 'child_analyst', 'child_analyst_desc'], 'string'],
             [['lot_qty', 'days_waiting', 'hours_waiting'], 'number'],
             [['start_date', 'end_date', 'next_process_date'], 'safe'],
-            [['total_next_process'], 'integer'],
-            [['mesin_id', 'kelompok', 'lot_number', 'model_group', 'gmc_desc', 'jenis_mesin', 'minor'], 'string', 'max' => 50],
-            [['mesin_description'], 'string', 'max' => 100],
-            [['parent'], 'string', 'max' => 20],
-            [['parent_desc'], 'string', 'max' => 250],
-            [['gmc'], 'string', 'max' => 11],
-            [['plan_stats', 'plan_run'], 'string', 'max' => 1]
+            [['total_next_process'], 'integer']
         ];
     }
 
@@ -97,6 +94,8 @@ abstract class WwStockWaitingProcess02Open extends \yii\db\ActiveRecord
             'plan_run' => 'Plan Run',
             'jenis_mesin' => 'Jenis Mesin',
             'minor' => 'Minor',
+            'child_analyst' => 'Child Analyst',
+            'child_analyst_desc' => 'Child Analyst Desc',
         ];
     }
 
