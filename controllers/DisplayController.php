@@ -107,9 +107,41 @@ use app\models\SmtLogLineBalanceReport;
 use app\models\ProdAttendanceDailyPlan;
 use app\models\ProdNgData;
 use app\models\SkillMasterKaryawan;
+use app\models\FlexiStorage;
 
 class DisplayController extends Controller
 {
+    public function actionFlexiStorage($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $tmp_flexi_storage = FlexiStorage::find()->select([
+            'kubikasi_m3' => 'SUM(kubikasi_m3)',
+            'kubikasi_m3_act' => 'SUM(kubikasi_m3_act)',
+            'balance' => 'SUM(kubikasi_m3) - SUM(kubikasi_m3_act)'
+        ])->one();
+
+        $tmp_data = [
+            [
+                'name' => 'TERPAKAI',
+                'y' => (float)$tmp_flexi_storage->kubikasi_m3_act
+            ],
+            [
+                'name' => 'KOSONG',
+                'y' => (float)$tmp_flexi_storage->balance
+            ],
+        ];
+        $data[] = [
+            'name' => 'Storage Capacity',
+            'data' => $tmp_data
+        ];
+
+        return $this->render('flexi-storage', [
+            'data' => $data
+        ]);
+    }
+
     public function actionNgToday($loc_id = '')
     {
         $this->layout = 'clean';
