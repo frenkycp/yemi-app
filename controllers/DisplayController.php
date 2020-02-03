@@ -3339,6 +3339,9 @@ class DisplayController extends Controller
             ['<>', 'kelompok', 'CHM'],
             ['<>', 'kelompok', 'INJ']
         ])
+        ->andWhere([
+            'child_analyst' => 'WW02'
+        ])
         ->groupBy('kelompok')
         ->orderBy('kelompok')
         ->all();
