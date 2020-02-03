@@ -34,6 +34,6 @@ class MachineIotCurrent extends BaseMachineIotCurrent
 
     public function getAssetName($value='')
     {
-        return $this->mesin_id . ' - ' . $this->mesin_description;
+        return $this->kelompok . ' - ' . $this->mesin_description . "($this->mesin_id)";
     }
 }

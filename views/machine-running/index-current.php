@@ -86,6 +86,9 @@ echo $data['name'];*/
     </div>
     <div class="col-md-12" style="padding-top: 5px;">
         <div class="pull-right">
+            <?= Html::a('Back', ['index'], [
+                'class' => 'btn btn-primary'
+            ]) ?>
             <?= Html::a('Log Out', ['logout'], [
                 'class' => 'btn btn-danger'
             ]) ?>
@@ -101,7 +104,7 @@ echo $data['name'];*/
 ]); ?>
 
 <?= $form->field($model, 'mesin_id')->widget(Select2::classname(), [
-    'data' => ArrayHelper::map(app\models\MachineIotCurrent::find()->where(['child_analyst' => $model->loc_id])->orderBy('mesin_description')->all(), 'mesin_id', 'assetName'),
+    'data' => ArrayHelper::map(app\models\MachineIotCurrent::find()->where(['child_analyst' => $model->loc_id])->orderBy('kelompok, mesin_description')->all(), 'mesin_id', 'assetName'),
     'options' => [
         'placeholder' => 'Select a machine ...',
         'onchange' => 'this.form.submit()'
