@@ -61,7 +61,7 @@ echo '</pre>';*/
 <div class="row">
     <div class="col-md-2 col-sm-4 col-xs-4">
         <?= $form->field($model, 'location')->dropDownList([
-            //'WP01' => 'PAINTING',
+            'WP01' => 'PAINTING',
             'WU01' => 'SPEAKER PROJECT',
             'WW02' => 'WW PROCESS',
         ], [

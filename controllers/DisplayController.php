@@ -2952,7 +2952,7 @@ class DisplayController extends Controller
         $model->wip_location = 'WW02_BEACON';
         $location_arr = \Yii::$app->params['wip_location_arr'];
         $location_arr['WW02_BEACON'] = $location_arr['WW02'] . ' (BEACON)';
-        //$location_arr['WU01_BEACON'] = $location_arr['WU01'] . ' (BEACON)';
+        $location_arr['WU01_BEACON'] = $location_arr['WU01'] . ' (BEACON)';
         if (count($location_arr) > 0) {
             asort($location_arr);
         }
@@ -3429,11 +3429,6 @@ class DisplayController extends Controller
 
         $kelompok_machine = MachineIotCurrent::find()
         ->select('kelompok')
-        ->where([
-            'AND',
-            ['<>', 'kelompok', 'CHM'],
-            ['<>', 'kelompok', 'INJ']
-        ])
         ->andWhere([
             'child_analyst' => $model->location
         ])

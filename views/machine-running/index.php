@@ -106,6 +106,8 @@ echo $data['name'];*/
         ]); ?>
     </div>
     <div class="col-md-4">
-        <button class="btn btn-primary btn-lg btn-block disabled">PAINTING</button>
+        <?= Html::a('PAINTING', ['index-current', 'loc_id' => 'WP01'], [
+            'class' => 'btn btn-primary btn-lg btn-block',
+        ]); ?>
     </div>
 </div>
