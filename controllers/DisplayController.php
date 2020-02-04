@@ -111,6 +111,24 @@ use app\models\FlexiStorage;
 
 class DisplayController extends Controller
 {
+    public function actionPartsUncountableChart($value='')
+    {
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'part_no'
+        ]);
+        $model->addRule(['from_date', 'to_date', 'part_no'], 'required');
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) {
+
+        }
+
+        return $this->render('parts-uncountable-chart',[
+            'model' => $model
+        ]);
+    }
+
     public function actionFlexiStorage($value='')
     {
         $this->layout = 'clean';
