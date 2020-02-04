@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Wood Working Lot Location Mapping <span class="japanesse light-green"></span>',
-    'tab_title' => 'Wood Working Lot Location Mapping',
-    'breadcrumbs_title' => 'Wood Working Lot Location Mapping'
+    'page_title' => 'WIP (Beacon) Lot Location Mapping <span class="japanesse light-green"></span>',
+    'tab_title' => 'WIP (Beacon) Lot Location Mapping',
+    'breadcrumbs_title' => 'WIP (Beacon) Lot Location Mapping'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -62,6 +62,26 @@ $this->registerJs("$(function() {
     });
 });");
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['ww-beacon-loc']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-3 col-sm-4 col-xs-4">
+        <?= $form->field($model, 'location')->dropDownList([
+            //'WP01' => 'PAINTING',
+            'WU01' => 'SPEAKER PROJECT',
+            'WW02' => 'WW PROCESS',
+        ], [
+            'onchange'=>'this.form.submit()',
+        ]); ?>
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
+
 <span style="color: white; font-size: 1.5em;">Last Update : <?= date('Y-m-d H:i:s'); ?></span>
 <div class="row" id="beacon-container">
     <?php
@@ -75,7 +95,7 @@ $this->registerJs("$(function() {
         $total_qty = 0;
         $total_lot = 0;
         foreach ($data as $key => $value_beacon) {
-            if ($value_beacon['lokasi'] == $loc) {
+            if ($value_beacon['lokasi'] == $key) {
                 $total_qty += $value_beacon['lot_qty'];
                 $total_lot++;
             }
@@ -84,7 +104,7 @@ $this->registerJs("$(function() {
         <div class="col-md-3">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><?= $loc_title_arr[$loc]; ?></h3>
+                    <h3 class="panel-title"><?= $loc; ?></h3>
                 </div>
                 <div class="panel-body" style="min-height: 300px;">
                     <div class="row">
@@ -108,7 +128,7 @@ $this->registerJs("$(function() {
                                 <div class="panel-body">
                                     <?php
                                     foreach ($data as $key => $value_beacon) {
-                                        if ($value_beacon['lokasi'] == $loc && $value_beacon['jenis_mesin'] == $kelompok_data->kelompok) {
+                                        if ($value_beacon['lokasi'] == $key && $value_beacon['jenis_mesin'] == $kelompok_data->kelompok) {
 
                                             
                                             //$date1 = new \DateTime();
@@ -135,7 +155,7 @@ $this->registerJs("$(function() {
                         <?php }
                     } else {
                         foreach ($data as $key => $value_beacon) {
-                            if ($value_beacon['lokasi'] == $loc) {
+                            if ($value_beacon['lokasi'] == $key) {
 
                                 
                                 //$date1 = new \DateTime();

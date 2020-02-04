@@ -77,48 +77,70 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['wip-control3']),
+]); ?>
 
+<div class="row">
+    <div class="col-md-3 col-sm-4 col-xs-4">
+        <?= $form->field($model, 'location')->dropDownList([
+            //'WP01' => 'PAINTING',
+            'WU01' => 'SPEAKER PROJECT',
+            'WW02' => 'WW PROCESS',
+        ], [
+            'onchange'=>'this.form.submit()',
+        ]); ?>
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
 <span style="color: white">Last Update : <?= date('Y-m-d H:i'); ?></span>
-<table class="table table-responsive table-bordered">
-    <thead>
-        <tr>
-            <th></th>
-            <th class="text-center" width="25%">LT ≤ 24H</th>
-            <th class="text-center" width="25%">LT > 24H</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td style="">L - Series</td>
-            <td class="text-center actual"><?= number_format($data['l1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $data['l2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['l2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-        </tr>
-        <tr>
-            <td style="">HS - Series</td>
-            <td class="text-center actual"><?= number_format($data['hs1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $data['hs2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['hs2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-        </tr>
-        <tr>
-            <td style="">P40 - Series</td>
-            <td class="text-center actual"><?= number_format($data['p40_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $data['p40_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['p40_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-        </tr>
-    </tbody>
-</table>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="text-center" width="25%">LT ≤ 24H</th>
+                    <th class="text-center" width="25%">LT > 24H</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="">L - Series</td>
+                    <td class="text-center actual"><?= number_format($data['l1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                    <td class="text-center actual<?= $data['l2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['l2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                </tr>
+                <tr>
+                    <td style="">HS - Series</td>
+                    <td class="text-center actual"><?= number_format($data['hs1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                    <td class="text-center actual<?= $data['hs2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['hs2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                </tr>
+                <tr>
+                    <td style="">P40 - Series</td>
+                    <td class="text-center actual"><?= number_format($data['p40_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                    <td class="text-center actual<?= $data['p40_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['p40_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                </tr>
+            </tbody>
+        </table>
 
-<table class="table table-responsive table-bordered">
-    <thead>
-        <tr>
-            <th></th>
-            <th class="text-center" width="25%">LT ≤ 36H</th>
-            <th class="text-center" width="25%">LT > 36H</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td style="">XXX - Series</td>
-            <td class="text-center actual"><?= number_format($data['xxx_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $data['xxx_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['xxx_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-        </tr>
-    </tbody>
-</table>
+        <table class="table table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th class="text-center" width="25%">LT ≤ 36H</th>
+                    <th class="text-center" width="25%">LT > 36H</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="">XXX - Series</td>
+                    <td class="text-center actual"><?= number_format($data['xxx_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                    <td class="text-center actual<?= $data['xxx_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['xxx_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -8,9 +8,9 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
 $this->title = [
-    'page_title' => 'Wood Working Lot LT <span class="japanesse light-green">(木工製造LT)</span>',
-    'tab_title' => 'Wood Working Lot LT',
-    'breadcrumbs_title' => 'Wood Working Lot LT'
+    'page_title' => 'WIP (Beacon) Lot LT <span class="japanesse light-green">(木工製造LT)</span>',
+    'tab_title' => 'WIP (Beacon) Lot LT',
+    'breadcrumbs_title' => 'WIP (Beacon) Lot LT'
 ];
 $color = 'ForestGreen';
 
@@ -59,6 +59,15 @@ echo '</pre>';*/
 ]); ?>
 
 <div class="row">
+    <div class="col-md-2 col-sm-4 col-xs-4">
+        <?= $form->field($model, 'location')->dropDownList([
+            //'WP01' => 'PAINTING',
+            'WU01' => 'SPEAKER PROJECT',
+            'WW02' => 'WW PROCESS',
+        ], [
+            'onchange'=>'this.form.submit()',
+        ]); ?>
+    </div>
     <div class="col-md-2">
         <?= $form->field($model, 'line')->dropDownList(ArrayHelper::map(\app\models\SernoMaster::find()
             ->select(['line'])

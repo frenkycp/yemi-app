@@ -77,6 +77,26 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['wip-control2']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-3 col-sm-4 col-xs-4">
+        <?= $form->field($model, 'location')->dropDownList([
+            //'WP01' => 'PAINTING',
+            'WU01' => 'SPEAKER PROJECT',
+            'WW02' => 'WW PROCESS',
+        ], [
+            'onchange'=>'this.form.submit()',
+        ]); ?>
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
+
 <span style="color: white; font-size: 1.5em;">Last Update : <?= date('Y-m-d H:i'); ?></span>
 <table class="table table-responsive table-bordered">
     <thead>
@@ -88,10 +108,9 @@ $this->registerJs($script, View::POS_HEAD );
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <?php foreach ($data as $key => $value): ?>
             <?php
-            $target_total = 6000;
-            if ($data['total_wip'] >= $target_total) {
+            if ($value['actual'] >= $value['target']) {
                 $total_txt_class = ' text-red';
                 $total_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
             } else {
@@ -99,59 +118,13 @@ $this->registerJs($script, View::POS_HEAD );
                 $total_src_img = '<i style="font-size: 2.5em;" class="fa fa-circle-o text-green"></i>';
             }
             ?>
-            <td>Jumlah WIP WW</td>
-            <td class="text-center target">< <?= number_format($target_total); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $total_txt_class; ?>"><?= number_format($data['total_wip']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center"><?= $total_src_img; ?></td>
-        </tr>
-        <tr>
-            <?php
-            $target_rsaw = 2000;
-            if ($data['running_saw'] >= $target_rsaw) {
-                $rsaw_txt_class = ' text-red';
-                $rsaw_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
-            } else {
-                $rsaw_txt_class = ' text-green';
-                $rsaw_src_img = '<i style="font-size: 2.5em;" class="fa fa-circle-o text-green"></i>';
-            }
-            ?>
-            <td>WIP - Running Saw</td>
-            <td class="text-center target">< <?= number_format($target_rsaw); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $rsaw_txt_class; ?>"><?= number_format($data['running_saw']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center"><?= $rsaw_src_img; ?></td>
-        </tr>
-        <tr>
-            <?php
-            $target_det = 2000;
-            if ($data['det'] >= $target_det) {
-                $det_txt_class = ' text-red';
-                $det_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
-            } else {
-                $det_txt_class = ' text-green';
-                $det_src_img = '<i style="font-size: 2.5em;" class="fa fa-circle-o text-green"></i>';
-            }
-            ?>
-            <td>WIP - DET</td>
-            <td class="text-center target">< <?= number_format($target_det); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $det_txt_class; ?>"><?= number_format($data['det']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center"><?= $det_src_img; ?></td>
-        </tr>
-        <tr>
-            <?php
-            $target_end = 4000;
-            if ($data['end'] >= $target_end) {
-                $end_txt_class = ' text-red';
-                $end_src_img = '<i style="font-size: 2.5em;" class="fa fa-close text-red blinked"></i>';
-            } else {
-                $end_txt_class = ' text-green';
-                $end_src_img = '<i style="font-size: 2.5em;" class="fa fa-circle-o text-green"></i>';
-            }
-            ?>
-            <td>WIP - End</td>
-            <td class="text-center target">< <?= number_format($target_end); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center actual<?= $end_txt_class; ?>"><?= number_format($data['end']); ?> <span style="font-size: 0.3em;">PCS</span></td>
-            <td class="text-center"><?= $end_src_img; ?></td>
-        </tr>
+            <tr>
+                <td><?= $value['title']; ?></td>
+                <td class="text-center target"><?= $value['target']; ?></td>
+                <td class="text-center actual<?= $total_txt_class; ?>"><?= $value['actual']; ?></td>
+                <td class="text-center"><?= $total_src_img; ?></td>
+            </tr>
+        <?php endforeach ?>
     </tbody>
 </table>
 

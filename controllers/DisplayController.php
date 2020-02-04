@@ -2027,9 +2027,10 @@ class DisplayController extends Controller
         $line_arr = \Yii::$app->params['ww_wip_model'];
 
         $model = new \yii\base\DynamicModel([
-            'line'
+            'line', 'location'
         ]);
-        $model->addRule(['line'], 'safe');
+        $model->addRule(['line', 'location'], 'safe');
+        $model->location = 'WW02';
 
         if ($model->load($_GET)) {
             # code...
@@ -2044,12 +2045,18 @@ class DisplayController extends Controller
 
             $tmp_beacon_tbl = BeaconTbl::find()
             ->where('lot_number IS NOT NULL')
-            ->andWhere(['parent' => $gmc_arr])
+            ->andWhere([
+                'parent' => $gmc_arr,
+                'analyst' => $model->location
+            ])
             ->orderBy('start_date')
             ->all();
         } else {
             $tmp_beacon_tbl = BeaconTbl::find()
             ->where('lot_number IS NOT NULL')
+            ->andWhere([
+                'analyst' => $model->location
+            ])
             ->orderBy('start_date')
             ->all();
         }
@@ -2101,8 +2108,17 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
+        $model = new \yii\base\DynamicModel([
+            'location'
+        ]);
+        $model->addRule(['location'], 'required');
+        $model->location = 'WW02';
+
+        if ($model->load($_GET)) { }
+
         $tmp_beacon = BeaconTbl::find()
         ->where('lot_number IS NOT NULL')
+        ->andWhere(['analyst' => $model->location])
         ->all();
         $now = date('Y-m-d H:i:s');
 
@@ -2166,6 +2182,7 @@ class DisplayController extends Controller
 
         return $this->render('wip-control3', [
             'data' => $data,
+            'model' => $model,
             'tmp_time_arr' => $tmp_time_arr
         ]);
     }
@@ -2174,9 +2191,20 @@ class DisplayController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $total_wip = 0;
 
+         $model = new \yii\base\DynamicModel([
+            'location'
+        ]);
+        $model->addRule(['location'], 'required');
+        $model->location = 'WW02';
+
+        if ($model->load($_GET)) {}
+
+        $total_wip = 0;
         $tmp_qty = WwStockWaitingProcess02Open::find()
+        ->where([
+            'child_analyst' => $model->location
+        ])
         ->all();
 
         $tmp_qty_arr = [];
@@ -2207,7 +2235,7 @@ class DisplayController extends Controller
 
         $tmp_ewip = WipEffTbl::find()
         ->where([
-            'child_analyst' => 'WW02',
+            'child_analyst' => $model->location,
             'jenis_mesin' => 'END',
         ])
         ->andWhere(['>', 'plan_date', date('Y-m-d', strtotime(' -15 days'))])
@@ -2215,7 +2243,7 @@ class DisplayController extends Controller
 
         $tmp_hdr_dtr = WipHdrDtr::find()
         ->where([
-            'child_analyst' => 'WW02',
+            'child_analyst' => $model->location,
             'stage' => '03-COMPLETED'
         ])
         ->andWhere(['>=', 'source_date', date('Y-m-d', strtotime(' -1 month'))])
@@ -2262,16 +2290,61 @@ class DisplayController extends Controller
             }
         }
 
-        $data = [
-            'running_saw' => isset($tmp_qty_arr['RSAW']) ? $tmp_qty_arr['RSAW'] : 0,
-            //'running_saw' => 2000,
-            'det' => isset($tmp_qty_arr['DET']) ? $tmp_qty_arr['DET'] : 0,
-            'end' => $tmp_qty,
-            'total_wip' => $total_wip
+        $new_data = [
+            'WW02' => [
+                [
+                    'title' => 'Jumlah WIP',
+                    'target' => 6000,
+                    'actual' => $total_wip
+                ],
+                [
+                    'title' => 'WIP - Running Saw',
+                    'target' => 2000,
+                    'actual' => isset($tmp_qty_arr['RSAW']) ? $tmp_qty_arr['RSAW'] : 0,
+                ],
+                [
+                    'title' => 'WIP - DET',
+                    'target' => 2000,
+                    'actual' => isset($tmp_qty_arr['DET']) ? $tmp_qty_arr['DET'] : 0,
+                ],
+                [
+                    'title' => 'WIP - END',
+                    'target' => 4000,
+                    'actual' => $tmp_qty,
+                ]
+            ],
+            'WU01' => [
+                [
+                    'title' => 'Jumlah WIP',
+                    'target' => 6000,
+                    'actual' => $total_wip
+                ],
+                [
+                    'title' => 'WIP - Cone Assy 1',
+                    'target' => 2000,
+                    'actual' => isset($tmp_qty_arr['CONE-ASSY-1']) ? $tmp_qty_arr['CONE-ASSY-1'] : 0,
+                ],
+                [
+                    'title' => 'WIP - Cone Assy 2',
+                    'target' => 2000,
+                    'actual' => isset($tmp_qty_arr['CONE-ASSY-2']) ? $tmp_qty_arr['CONE-ASSY-2'] : 0,
+                ],
+                [
+                    'title' => 'WIP - END',
+                    'target' => 4000,
+                    'actual' => $tmp_qty,
+                ]
+            ],
         ];
+
+        $data = [];
+        if (isset($new_data[$model->location])) {
+            $data = $new_data[$model->location];
+        }
 
         return $this->render('wip-control2', [
             'data' => $data,
+            'model' => $model,
             'qty_series' => $qty_series,
         ]);
     }
@@ -3309,15 +3382,36 @@ class DisplayController extends Controller
     public function actionWwBeaconLoc()
     {
         $this->layout = 'clean';
-        $loc_arr = [
-            'PILAR-16I',
-            'PILAR-12I',
-            'PILAR-10I',
-            'PILAR-6I',
+
+        $model = new \yii\base\DynamicModel([
+            'location'
+        ]);
+        $model->addRule(['location'], 'required');
+        $model->location = 'WW02';
+
+        if ($model->load($_GET)) { };
+
+        $loc_arr = [];
+        $tmp_loc_arr = [
+            'WW02' => [
+                'PILAR-16I' => 'PILAR-16I (Running Saw, Edge Bander, NCB, Panel Saw)',
+                'PILAR-12I' => 'PILAR-12I (DET 3)',
+                'PILAR-10I' => 'PILAR-10I (DET 3)',
+                'PILAR-6I' => 'PILAR-6I (HVC 3, NCR 6, NCR 7)',
+            ],
+            'WU01' => [
+                'CONE-ASSY-1' => 'CONE-ASSY-1',
+                'CONE-ASSY-2' => 'CONE-ASSY-2',
+                'SPU' => 'SPU',
+            ],
         ];
+        if (isset($tmp_loc_arr[$model->location])) {
+            $loc_arr = $tmp_loc_arr[$model->location];
+        }
 
         $tmp_beacon = BeaconWipView::find()
         ->where('lot_number IS NOT NULL')
+        ->andWhere(['analyst' => $model->location])
         ->orderBy('lot_qty DESC')
         ->asArray()
         ->all();
@@ -3328,6 +3422,7 @@ class DisplayController extends Controller
         }
 
         $beacon_data = BeaconWipView::find()
+        ->where(['analyst' => $model->location])
         ->orderBy('minor')
         ->asArray()
         ->all();
@@ -3340,7 +3435,7 @@ class DisplayController extends Controller
             ['<>', 'kelompok', 'INJ']
         ])
         ->andWhere([
-            'child_analyst' => 'WW02'
+            'child_analyst' => $model->location
         ])
         ->groupBy('kelompok')
         ->orderBy('kelompok')
@@ -3354,6 +3449,7 @@ class DisplayController extends Controller
 
         return $this->render('ww-beacon-loc', [
             'data' => $tmp_beacon,
+            'model' => $model,
             'loc_arr' => $loc_arr,
             'beacon_data' => $beacon_data,
             'kelompok_machine' => $kelompok_machine,
