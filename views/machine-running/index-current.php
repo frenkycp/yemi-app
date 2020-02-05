@@ -119,35 +119,48 @@ echo $data['name'];*/
 <div class="row">
     <div class="col-md-12">
         <div class="box box-success box-solid text-center">
+            <div class="box-header">
+                <h3 class="box-title">Currently Running</h3>
+            </div>
             <div class="box-body no-padding">
-                <table class="table table-responsive table-stripped" style="font-size: 24px;">
+                <table class="table table-responsive table-stripped table-bordered" style="font-size: 24px;">
                     <thead>
                         <tr class="">
+                            <th class="text-center">Action</th>
                             <th class="text-center" style="vertical-align: middle;">Lot Number</th>
+                            <th class="text-center" style="vertical-align: middle;">Beacon ID</th>
                             <th class="text-center" style="vertical-align: middle;">Model</th>
                             <th class="text-center" style="vertical-align: middle;">Qty</th>
                             <th class="text-center" style="vertical-align: middle;">GMC</th>
                             <th style="vertical-align: middle;">Description</th>
-                            <th style="vertical-align: middle;">Man Power<?= ' (' . $output_data['man_power_qty'] . ')'; ?></th>
+                            <th style="vertical-align: middle;">Man Power</th>
                             <th width="150" class="text-center" style="vertical-align: middle;">Start Time</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        if (!isset($output_data['lot_number'])) {
+                        if (count($output_data) == 0) {
                             $btn_end_class = 'btn btn-danger btn-block btn-lg disabled';
-                            echo '<tr><td colspan=7 style="text-align: left;">Machine is idling ...</td></tr>';
+                            echo '<tr><td colspan=9 style="text-align: left;">Machine is idling ...</td></tr>';
                         } else {
                             $btn_end_class = 'btn btn-danger btn-block btn-lg';
-                            echo '<tr class="">
-                                <td class="text-center" style="vertical-align: middle;">' . $output_data['lot_number'] . '</td>
-                                <td style="text-align: center; vertical-align: middle;">' . $output_data['model_group'] . '</td>
-                                <td class="text-center" style="vertical-align: middle;">' . $output_data['lot_qty'] . '</td>
-                                <td class="text-center" style="vertical-align: middle;">' . $output_data['gmc'] . '</td>
-                                <td style="text-align: left; vertical-align: middle;">' . $output_data['gmc_desc'] . '</td>
-                                <td style="text-align: left; vertical-align: middle;">' . $output_data['man_power_name'] . '</td>
-                                <td class="text-center" style="vertical-align: middle;">' . date('Y-m-d H:i', strtotime($output_data['start_date'])) . '</td>
-                            </tr>';
+                            
+                            foreach ($output_data as $key => $value) {
+                                $action = Html::a('FINISH', ['finish', 'mesin_id' => $mesin_id, 'loc_id' => $model->loc_id, 'lot_number' => $value->lot_number], [
+                                    'class' => 'btn btn-danger btn-block btn-lg'
+                                ]);
+                                echo '<tr class="">
+                                    <td class="text-center" style="vertical-align: middle;">' . $action . '</td>
+                                    <td class="text-center" style="vertical-align: middle;">' . $value->lot_number . '</td>
+                                    <td class="text-center" style="vertical-align: middle;">' . $value->minor . '</td>
+                                    <td style="text-align: center; vertical-align: middle;">' . $value->model_group . '</td>
+                                    <td class="text-center" style="vertical-align: middle;">' . $value->lot_qty . '</td>
+                                    <td class="text-center" style="vertical-align: middle;">' . $value->gmc . '</td>
+                                    <td style="text-align: left; vertical-align: middle;">' . $value->gmc_desc . '</td>
+                                    <td style="text-align: left; vertical-align: middle;">' . $value->man_power_name . '</td>
+                                    <td class="text-center" style="vertical-align: middle;">' . date('Y-m-d H:i', strtotime($value->start_date)) . '</td>
+                                </tr>';
+                            }
                         }
                         ?>
                         <tr>
@@ -155,19 +168,6 @@ echo $data['name'];*/
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="box-footer text-right">
-                <?= Html::a('FINISH', ['finish', 'mesin_id' => $mesin_id, 'loc_id' => $model->loc_id], [
-                            'class' => $btn_end_class,
-                            /*'data' => [
-                                'confirm' => 'Are you sure to start lot number ' . $value['lot_id'] . ' ?',
-                            ],*/
-                        ]); /*Html::button('FINISH', [
-                    'id' => 'btn-complete',
-                    'class' => $btn_end_class,
-                    'title' => 'Finish Machine Process',
-                    'value' => !isset($current_data['lot_id']) ? '#' : Url::to(['finish', 'mesin_id' => $mesin_id]),
-                ]);*/ ?>
             </div>
         </div>
     </div>
@@ -213,7 +213,7 @@ echo $data['name'];*/
                             ]);
                         } else {
                             if (!isset($output_data['lot_number'])) {
-                                echo Html::a('START', ['start-machine', 'mesin_id' => $mesin_id, 'lot_id' => $value['lot_id']], [
+                                echo Html::a('START', ['start-machine', 'mesin_id' => $mesin_id, 'lot_id' => $value['lot_id'], 'loc_id' => $model->loc_id], [
                                     'class' => 'btn btn-success btn-block',
                                     'data' => [
                                         'confirm' => 'Are you sure to start lot number ' . $value['lot_id'] . ' ?',

@@ -28,12 +28,16 @@ class MachineRunningController extends Controller
         if($model->load(\Yii::$app->request->post())){
             $karyawan = Karyawan::find()
             ->where([
-                'NIK' => $model->username,
-                'PASSWORD' => $model->password,
+            	'OR',
+                ['NIK' => $model->username],
+                ['NIK_SUN_FISH' => $model->username],
+            ])
+            ->andWhere([
+            	'PASSWORD' => $model->password,
             ])
             ->one();
-            if ($karyawan->NIK !== null) {
-                $session['mcr_user'] = $model->username;
+            if ($karyawan->NIK_SUN_FISH !== null) {
+                $session['mcr_user'] = $karyawan->NIK_SUN_FISH;
                 $session['mcr_name'] = $karyawan->NAMA_KARYAWAN;
                 return $this->redirect(['index']);
             } else {
@@ -117,10 +121,10 @@ class MachineRunningController extends Controller
         	$output_data = MachineIotOutput::find()
         	->where([
         		'mesin_id' => $mesin_id,
-        		'lot_number' => $tmp_data->lot_number
+        		//'lot_number' => $tmp_data->lot_number
         	])
         	->andWhere('end_date IS NULL')
-        	->one();
+        	->all();
 
         	$beacon_tbl = BeaconTbl::find()->where('lot_number IS NOT NULL')->asArray()->all();
         }
@@ -205,7 +209,7 @@ class MachineRunningController extends Controller
 		]);
 	}
 
-	public function actionStartMachine($mesin_id='', $lot_id = '')
+	public function actionStartMachine($mesin_id='', $lot_id = '', $loc_id = '')
 	{
 		$session = \Yii::$app->session;
         if (!$session->has('mcr_user')) {
@@ -255,22 +259,31 @@ class MachineRunningController extends Controller
 	    		$isNewRecord = true;
 
 		    	if ($beacon_tbl->id == null) {
-		    		\Yii::$app->session->setFlash("warning", "Beacon ID not found! Please input the correct ID.");
+		    		\Yii::$app->session->setFlash("danger", "Beacon ID not found! Please input the correct ID.");
 		    		return $this->render('start', [
 			    		'model' => $model,
 			    		'isNewRecord' => true,
 			    	]);
 		    	} else {
 		    		if ($beacon_tbl->lot_number != null) {
-		    			\Yii::$app->session->setFlash("warning", "Beacon was being used! Please select another one.");
+		    			\Yii::$app->session->setFlash("danger", "Beacon was being used! Please select another one.");
 			    		return $this->render('start', [
 				    		'model' => $model,
 				    		'isNewRecord' => true,
 				    	]);
 		    		} else {
-		    			$beacon_tbl->lot_number = $lot_id;
-		    			$beacon_tbl->start_date = date('Y-m-d H:i:s');
-		    			$beacon_id_current = $beacon_tbl->minor;
+		    			if ($beacon_tbl->analyst != $loc_id) {
+		    				\Yii::$app->session->setFlash("danger", "Beacon ID : <b>" . $model->beacon_id . "</b> can't be used here! This beacon is for location : <b>" . $beacon_tbl->analyst_desc . '</b>');
+				    		return $this->render('start', [
+					    		'model' => $model,
+					    		'isNewRecord' => true,
+					    	]);
+		    			} else {
+		    				$beacon_tbl->lot_number = $lot_id;
+			    			$beacon_tbl->start_date = date('Y-m-d H:i:s');
+			    			$beacon_id_current = $beacon_tbl->minor;
+		    			}
+		    			
 		    		}
 		    	}
 	    	} else {
@@ -407,7 +420,7 @@ class MachineRunningController extends Controller
 		return $return_data;
 	}
 
-	public function actionFinish($mesin_id, $loc_id)
+	public function actionFinish($mesin_id, $loc_id, $lot_number)
 	{
 		$session = \Yii::$app->session;
         if (!$session->has('mcr_user')) {
@@ -425,44 +438,30 @@ class MachineRunningController extends Controller
 	    ->addRule(['next_process', 'ng_qty'], 'required');
 	    $model->ng_qty = 0;
 
-	    $current_data = MachineIotCurrent::find()
-    	->where([
-    		'mesin_id' => $mesin_id
-    	])
-    	->one();
-    	$lot_id = $current_data->lot_number;
-
-    	$lot_data = WipEffTbl::find()
-    	->where([
-    		'lot_id' => $lot_id,
-    	])
-    	->one();
-    	$current_kelompok = $lot_data->jenis_mesin;
-
+    	$lot_id = $lot_number;
+    	
 	    try{
 	    	if ($model->load(\Yii::$app->request->post())) {
 		    	$next_process = $model->next_process;
-
-	    		/*$current_data = MachineIotCurrent::find()
+		    	$current_data = MachineIotCurrent::find()
 		    	->where([
 		    		'mesin_id' => $mesin_id
 		    	])
 		    	->one();
-		    	$lot_id = $current_data->lot_number;
+		    	/*$current_data->lot_number = null;
+		    	$current_data->gmc = null;
+		    	$current_data->gmc_desc = null;
+		    	$current_data->lot_qty = null;*/
 
 		    	$lot_data = WipEffTbl::find()
 		    	->where([
 		    		'lot_id' => $lot_id,
 		    	])
-		    	->one();*/
+		    	->one();
+
 		    	$lot_data->mesin_id = null;
 		    	$lot_data->mesin_description = null;
 		    	$lot_data->plan_run = 'E';
-
-		    	$current_data->lot_number = null;
-		    	$current_data->gmc = null;
-		    	$current_data->gmc_desc = null;
-		    	$current_data->lot_qty = null;
 
 		    	$iot_output = MachineIotOutput::find()
 		    	->where([
@@ -581,7 +580,6 @@ class MachineRunningController extends Controller
     	return $this->render('finish', [
     		'model' => $model,
     		'loc_id' => $loc_id,
-    		'current_kelompok' => $current_kelompok
     	]);
 	}
 }

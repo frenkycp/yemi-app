@@ -90,9 +90,6 @@ $dropdown['END'] = '--END PROCESS--';
                         $dropdown,           // Flat array ('id'=>'label')
                         [
                             'prompt' => '-- Select a group --',
-                            'options' => [
-                                $current_kelompok => ['disabled' => true]
-                            ]
                         ]    // options
                     )->label('Next Process'); ?>
                 </div>
