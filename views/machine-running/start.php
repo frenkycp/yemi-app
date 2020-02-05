@@ -79,6 +79,15 @@ $this->registerCss("
                 ]); ?>
             </div>
 		</div>
+        <div class="row" style="<?= $kelompok != 'OVEN' ? 'display: none;' : ''; ?>">
+            <div class="col-md-12">
+                <?=
+                $form->field($model, 'oven_time')->textInput([
+                    'type' => 'number',
+                ]);
+                ?>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <?=

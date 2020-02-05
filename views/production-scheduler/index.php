@@ -145,7 +145,11 @@ $this->registerJs("
                 return false;
             }
 
-            if(loc_val == 'WW02' || loc_val == 'WU01'){
+            if(loc_val == 'WW02' || loc_val == 'WU01' || loc_val == 'WP01'){
+                if(jenis_mesin_val == ''){
+                    alert('Please select the machine...!');
+                    return false;
+                }
                 if(is_multiple_model == true){
                     alert('There is multiple model in your selection...! (1 lot 1 model)');
                     return false;

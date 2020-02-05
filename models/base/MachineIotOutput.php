@@ -33,6 +33,7 @@ use Yii;
  * @property string $end_by_id
  * @property string $end_by_name
  * @property string $minor
+ * @property integer $oven_time
  * @property string $aliasModel
  */
 abstract class MachineIotOutput extends \yii\db\ActiveRecord
@@ -63,15 +64,10 @@ abstract class MachineIotOutput extends \yii\db\ActiveRecord
     {
         return [
             [['mesin_id'], 'required'],
+            [['mesin_id', 'mesin_description', 'kelompok', 'lot_number', 'model_group', 'parent', 'parent_desc', 'gmc', 'gmc_desc', 'man_power_name', 'start_by_id', 'start_by_name', 'end_by_id', 'end_by_name', 'minor'], 'string'],
             [['lot_qty', 'ng_qty'], 'number'],
             [['start_date', 'end_date', 'posting_shift'], 'safe'],
-            [['shift', 'lama_proses', 'man_power_qty'], 'integer'],
-            [['man_power_name'], 'string'],
-            [['mesin_id', 'kelompok', 'lot_number', 'model_group', 'gmc_desc', 'minor'], 'string', 'max' => 50],
-            [['mesin_description'], 'string', 'max' => 100],
-            [['parent', 'start_by_id', 'end_by_id'], 'string', 'max' => 20],
-            [['parent_desc', 'start_by_name', 'end_by_name'], 'string', 'max' => 250],
-            [['gmc'], 'string', 'max' => 11]
+            [['shift', 'lama_proses', 'man_power_qty', 'oven_time'], 'integer']
         ];
     }
 
@@ -105,6 +101,7 @@ abstract class MachineIotOutput extends \yii\db\ActiveRecord
             'end_by_id' => 'End By ID',
             'end_by_name' => 'End By Name',
             'minor' => 'Minor',
+            'oven_time' => 'Oven Time',
         ];
     }
 

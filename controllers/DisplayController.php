@@ -111,6 +111,39 @@ use app\models\FlexiStorage;
 
 class DisplayController extends Controller
 {
+    public function actionPtgOvenMonitoring($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_oven_machine = ArrayHelper::map(MachineIotCurrent::find()->where([
+            'child_analyst' => 'WP01',
+            'kelompok' => 'OVEN'
+        ])
+        ->orderBy('mesin_description')
+        ->all(), 'mesin_id', 'mesin_description');
+
+        $tmp_data = MachineIotOutput::find()
+        ->where([
+            'kelompok' => 'OVEN'
+        ])
+        ->andWhere('end_date IS NULL')
+        ->all();
+
+        $data = [];
+        foreach ($tmp_oven_machine as $mesin_id => $mesin_description) {
+            foreach ($tmp_data as $key => $value) {
+                $data[$mesin_id]['description'] = $mesin_description;
+                if ($mesin_id == $value->mesin_id) {
+                    $data[$mesin_id]['data'][] = $value;
+                }
+            }
+        }
+
+        return $this->render('ptg-oven-monitoring',[
+            'data' => $data
+        ]);
+    }
     public function actionPartsUncountableChart($value='')
     {
         $model = new \yii\base\DynamicModel([

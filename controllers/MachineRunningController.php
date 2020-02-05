@@ -221,9 +221,10 @@ class MachineRunningController extends Controller
 		$this->layout = 'clean';
 		date_default_timezone_set('Asia/Jakarta');
 		$model = new \yii\base\DynamicModel([
-	        'man_power', 'beacon_id'
+	        'man_power', 'beacon_id', 'oven_time'
 	    ]);
-	    $model->addRule(['man_power', 'beacon_id'], 'required');
+	    $model->addRule(['man_power', 'beacon_id'], 'required')
+	    ->addRule(['oven_time'], 'number');
 
 	    $tmp_mio = MachineIotOutput::find()
     	->where([
@@ -232,18 +233,21 @@ class MachineRunningController extends Controller
     	->orderBy('seq DESC')
     	->one();
 
+    	$current_data = MachineIotCurrent::find()
+    	->where([
+    		'mesin_id' => $mesin_id
+    	])
+    	->one();
+
     	$isNewRecord = true;
 
     	$model->beacon_id = $tmp_mio->minor;
+    	$model->oven_time = 0;
 	    //\Yii::$app->getSession()->addFlash('error', $msg);
 	    if ($model->load($_POST)) {
 	    	$beacon_id_current = $tmp_mio->minor;
 
-	    	$current_data = MachineIotCurrent::find()
-	    	->where([
-	    		'mesin_id' => $mesin_id
-	    	])
-	    	->one();
+	    	
 
 	    	$lot_data = WipEffTbl::find()
 	    	->where([
@@ -382,6 +386,7 @@ class MachineRunningController extends Controller
 	    		$iot_output->man_power_qty = $man_power_qty;
 	    		$iot_output->man_power_name = $man_power_name;
 	    		$iot_output->minor = $beacon_id_current;
+	    		$iot_output->oven_time = $model->oven_time;
 	    		if (!$iot_output->save()) {
 	    			return json_encode($iot_output->errors);
 	    		}
@@ -394,6 +399,7 @@ class MachineRunningController extends Controller
 
     	return $this->render('start', [
     		'model' => $model,
+    		'kelompok' => $current_data->kelompok,
     		'isNewRecord' => $isNewRecord,
     	]);
     	
