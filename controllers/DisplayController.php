@@ -149,10 +149,20 @@ class DisplayController extends Controller
         ->andWhere('end_date IS NULL')
         ->all();
 
+        $oven_room_1 = SensorTbl::find()->where([
+            'map_no' => 18
+        ])->one();
+
+        $oven_room_2 = SensorTbl::find()->where([
+            'map_no' => 17
+        ])->one();
+
         $data = [];
         foreach ($tmp_oven_machine as $mesin_id => $mesin_description) {
+            $data[$mesin_id]['data'] = [];
+            $data[$mesin_id]['description'] = $mesin_description;
             foreach ($tmp_data as $key => $value) {
-                $data[$mesin_id]['description'] = $mesin_description;
+                
                 if ($mesin_id == $value->mesin_id) {
                     $data[$mesin_id]['data'][] = $value;
                 }
@@ -160,7 +170,9 @@ class DisplayController extends Controller
         }
 
         return $this->render('ptg-oven-monitoring',[
-            'data' => $data
+            'data' => $data,
+            'oven_room_1' => $oven_room_1,
+            'oven_room_2' => $oven_room_2,
         ]);
     }
     public function actionPartsUncountableChart($value='')
