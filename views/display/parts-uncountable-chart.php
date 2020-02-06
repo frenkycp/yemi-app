@@ -21,7 +21,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -37,19 +37,19 @@ $this->registerJs($script, View::POS_HEAD );
 ]); ?>
 
 <div class="row">
-    <div class="col-md-4">
-        <?= $form->field($model, 'part_no')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(app\models\ItemUncounttableList::find()->select([
-                'ITEM', 'ITEM_DESC'
-            ])
-            ->orderBy('ITEM')
-            ->all(), 'ITEM', 'fullDesc'),
-            'options' => [
-                'placeholder' => 'Choose...',
-            ],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
+    <div class="col-md-2">
+        <?= $form->field($model, 'type')->dropDownList(ArrayHelper::map(app\models\ItemUncounttableList::find()->select('TIPE')->where('TIPE IS NOT NULL')->groupBy('TIPE')->orderBy('TIPE')->all(), 'TIPE', 'TIPE'), [
+            'prompt' => 'Choose...',
+            'onchange'=>'
+                $.post( "'.Yii::$app->urlManager->createUrl('display/uncountable-by-type?type=').'"+$(this).val(), function( data ) {
+                  $( "select#part_no" ).html( data );
+                });
+            '
+        ]) ?>
+    </div>
+    <div class="col-md-4" style="display: none;">
+        <?= $form->field($model, 'part_no')->dropDownList([], [
+            'id' => 'part_no'
         ]); ?>
     </div>
     <div class="col-md-4">
@@ -70,15 +70,80 @@ $this->registerJs($script, View::POS_HEAD );
     </div>
     <div class="form-group">
         <br/>
-        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
     </div>
     
 </div>
 
 <?php ActiveForm::end(); ?>
-<br/>
-<div class="panel panel-primary">
-  <div class="panel-body">
+<div class="box box-solid">
+    <div class="box-header with-border">
+        <h3 class="box-title">Stock Take Monitoring</h3>
+    </div>
+    <div class="box-body">
+        <div class="box-group" id="accordion">
+            <?php foreach ($data as $key => $value): ?>
+                <div class="panel box box-solid box-primary">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?= $key; ?>">
+                                <?= $key . ' - ' . $list_item_arr[$key]; ?>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse<?= $key; ?>" class="panel-collapse collapse">
+                        <div class="box-body">
+                            <?php
+                            echo Highcharts::widget([
+                                'scripts' => [
+                                    //'modules/exporting',
+                                    //'themes/sand-signika',
+                                ],
+                                'options' => [
+                                    'chart' => [
+                                        'zoomType' => 'x',
+                                        //'height' => $height,
+                                        'style' => [
+                                            'fontFamily' => 'Source Sans Pro'
+                                        ],
+                                    ],
+                                    'title' => [
+                                        'text' => null,
+                                    ],
+                                    'credits' => [
+                                        'enabled' => false
+                                    ],
+                                    'xAxis' => [
+                                        'type' => 'datetime',
+                                        //'categories' => $value['categories']
+                                    ],
+                                    'yAxis' => [
+                                        'title' => [
+                                            'enabled' => true,
+                                            //'text' => $value['uom'],
+                                        ],
+                                        //'plotBands' => $plotBands,
+                                    ],
+                                    'tooltip' => [
+                                        'shared' => true,
+                                        'crosshairs' => true,
+                                        'xDateFormat' => '%Y-%m-%d',
+                                        //'valueSuffix' => ' ' . $value['uom'],
+                                    ],
+                                    /**/'plotOptions' => [
+                                        'areaspline' => [
+                                            'fillOpacity' => 0.2
+                                        ],
+                                    ],
+                                    'series' => $value,
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach ?>
+        </div>
     
-  </div>
+    </div>
 </div>

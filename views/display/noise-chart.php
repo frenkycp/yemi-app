@@ -127,6 +127,7 @@ echo '</pre>';*/
                             'text' => 'NOISE',
                         ],
                         'max' => 100,
+                        'min' => 0,
                         /*'plotBands' => [
                             [
                                 'from' => $sensor_data->temp_min,
@@ -146,7 +147,7 @@ echo '</pre>';*/
                                 'color' => 'red',
                                 'dashStyle' => 'longdashdot',
                                 'value' => $sensor_data->noise_max,
-                                'width' => 2,
+                                'width' => 1,
                                 'label' => [
                                     'text' => 'MAX',
                                     'align' => 'right',

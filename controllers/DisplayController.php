@@ -168,9 +168,10 @@ class DisplayController extends Controller
         $model = new \yii\base\DynamicModel([
             'from_date', 'to_date', 'part_no', 'type'
         ]);
-        $model->addRule(['from_date', 'to_date', 'part_no', 'type'], 'required');
+        $model->addRule(['from_date', 'to_date', 'type'], 'required')
+        ->addRule(['part_no'], 'string');
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
-        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-d');
 
         $tmp_series = [];
         if ($model->load($_GET)) {
@@ -178,6 +179,7 @@ class DisplayController extends Controller
             ->where([
                 'TIPE' => $model->type
             ])
+            ->orderBy('ITEM')
             ->all();
 
             $tmp_data = ItemUncounttable::find()
@@ -193,27 +195,35 @@ class DisplayController extends Controller
             ->all();
 
             $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
-            $end   = new \DateTime(date('Y-m-t', strtotime($model->to_date)));
-            $qty_sap = $qty_pi = null;
+            $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
             
+            
+            $list_item_arr = [];
             for($i = $begin; $i <= $end; $i->modify('+1 day')){
                 $tgl = $i->format("Y-m-d");
                 $proddate = (strtotime($tgl . " +7 hours") * 1000);
                 foreach ($tmp_data_list as $list) {
+                    $list_item_arr[$list->ITEM] = $list->ITEM_DESC;
+                    $qty_sap = $qty_pi = null;
                     foreach ($tmp_data as $value) {
-                        if ($value->ITEM == $list->ITEM && $value->POST_DATE == $tgl) {
+                        if ($value->ITEM == $list->ITEM && date('Y-m-d', strtotime($value->POST_DATE)) == $tgl) {
                             $qty_sap = $value->WIP_SAP;
                             $qty_pi = $value->WIP_PI;
                         }
                     }
-                    $tmp_series[$list->ITEM]['sap'][] = [
-                        'x' => $proddate,
-                        'y' => (float)$qty_sap
-                    ];
-                    $tmp_series[$list->ITEM]['pi'][] = [
-                        'x' => $proddate,
-                        'y' => (float)$qty_pi
-                    ];
+                    if ($qty_sap > 0) {
+                        $tmp_series[$list->ITEM]['sap'][] = [
+                            'x' => $proddate,
+                            'y' => (float)$qty_sap
+                        ];
+                    }
+                    if ($qty_pi > 0) {
+                        $tmp_series[$list->ITEM]['pi'][] = [
+                            'x' => $proddate,
+                            'y' => (float)$qty_pi
+                        ];
+                    }
+                    
                 }
             }
         }
@@ -234,7 +244,8 @@ class DisplayController extends Controller
 
         return $this->render('parts-uncountable-chart',[
             'model' => $model,
-            'data' => $data
+            'data' => $data,
+            'list_item_arr' => $list_item_arr
         ]);
     }
 
@@ -3527,8 +3538,8 @@ class DisplayController extends Controller
                 'PILAR-6I' => 'PILAR-6I (HVC 3, NCR 6, NCR 7)',
             ],
             'WU01' => [
-                'CONE-ASSY-1' => 'CONE-ASSY-1',
-                'CONE-ASSY-2' => 'CONE-ASSY-2',
+                'CONE-ASSY-1' => 'SURROUND-1',
+                'CONE-ASSY-2' => 'SURROUND-2',
                 'SPU' => 'SPU',
             ],
         ];
