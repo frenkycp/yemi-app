@@ -91,6 +91,12 @@ echo '</pre>';*/
             if ($params_val < $value->humi_min || $params_val > $value->humi_max) {
                 $temp_class = ' bg-red-active';
             }
+        } elseif ($category == 3) {
+            //$params_val = $value->humidity . '<small>%</small>';
+            $params_val = $value->noise;
+            if ($params_val > $value->noise_max) {
+                $temp_class = ' bg-red-active';
+            }
         }
 
         $widget_class = 'temp-widget';
@@ -99,7 +105,12 @@ echo '</pre>';*/
         }
 
         $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . $params_val . '</div></div>';
-        echo $params_val == null ? '' : Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+        if ($category == 3) {
+            echo $params_val == null ? '' : Html::a($content, ['noise-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+        } else {
+            echo $params_val == null ? '' : Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+        }
+        
     }
     ?>
     <div id="custom-title" class="text-center"><?= $custom_title; ?></div>

@@ -108,9 +108,28 @@ use app\models\ProdAttendanceDailyPlan;
 use app\models\ProdNgData;
 use app\models\SkillMasterKaryawan;
 use app\models\FlexiStorage;
+use app\models\ItemUncounttableList;
+use app\models\ItemUncounttable;
 
 class DisplayController extends Controller
 {
+    public function actionUncountableByType($type)
+    {
+        $tmp_data = ItemUncounttableList::find()
+        ->where(['TIPE' => $type])
+        ->orderBy('ITEM')
+        ->all();
+
+        if (!empty($tmp_data)) {
+            foreach ($tmp_data as $key => $value) {
+                echo "<option value='" . $value->ITEM . "'>" . $value->fullDesc . "</option>";
+            }
+        } else {
+            echo "<option></option>";
+        }
+        
+    }
+
     public function actionPtgOvenMonitoring($value='')
     {
         $this->layout = 'clean';
@@ -147,18 +166,75 @@ class DisplayController extends Controller
     public function actionPartsUncountableChart($value='')
     {
         $model = new \yii\base\DynamicModel([
-            'from_date', 'to_date', 'part_no'
+            'from_date', 'to_date', 'part_no', 'type'
         ]);
-        $model->addRule(['from_date', 'to_date', 'part_no'], 'required');
+        $model->addRule(['from_date', 'to_date', 'part_no', 'type'], 'required');
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
 
+        $tmp_series = [];
         if ($model->load($_GET)) {
+            $tmp_data_list = ItemUncounttableList::find()
+            ->where([
+                'TIPE' => $model->type
+            ])
+            ->all();
 
+            $tmp_data = ItemUncounttable::find()
+            ->where([
+                'AND',
+                ['>=', 'post_date', $model->from_date],
+                ['<=', 'post_date', $model->to_date]
+            ])
+            ->andWhere([
+                'TIPE' => $model->type
+            ])
+            ->orderBy('post_date')
+            ->all();
+
+            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+            $end   = new \DateTime(date('Y-m-t', strtotime($model->to_date)));
+            $qty_sap = $qty_pi = null;
+            
+            for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $tgl = $i->format("Y-m-d");
+                $proddate = (strtotime($tgl . " +7 hours") * 1000);
+                foreach ($tmp_data_list as $list) {
+                    foreach ($tmp_data as $value) {
+                        if ($value->ITEM == $list->ITEM && $value->POST_DATE == $tgl) {
+                            $qty_sap = $value->WIP_SAP;
+                            $qty_pi = $value->WIP_PI;
+                        }
+                    }
+                    $tmp_series[$list->ITEM]['sap'][] = [
+                        'x' => $proddate,
+                        'y' => (float)$qty_sap
+                    ];
+                    $tmp_series[$list->ITEM]['pi'][] = [
+                        'x' => $proddate,
+                        'y' => (float)$qty_pi
+                    ];
+                }
+            }
+        }
+
+        $data = [];
+        foreach ($tmp_series as $key => $value) {
+            $data[$key] = [
+                [
+                    'name' => 'SAP',
+                    'data' => $value['sap']
+                ],
+                [
+                    'name' => 'STOCK TAKE',
+                    'data' => $value['pi']
+                ],
+            ];
         }
 
         return $this->render('parts-uncountable-chart',[
-            'model' => $model
+            'model' => $model,
+            'data' => $data
         ]);
     }
 
@@ -3993,6 +4069,70 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionNoiseChart()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'map_no', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $data = $tmp_data_noise = [];
+
+        $model->map_no = $_GET['map_no'];
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $data_dummy = SensorLog::find()
+        ->where([
+            'AND',
+            ['>=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->from_date . ' 00:00:01'))],
+            ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
+        ])
+        ->andWhere(['map_no' => $model->map_no])
+        ->asArray()
+        ->all();
+
+        foreach ($data_dummy as $value) {
+            $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
+            if ($value['noise'] > 0) {
+                $tmp_data_noise[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value['noise']
+                ];
+            }
+            
+        }
+
+        $data = [
+            'noise' => [
+                [
+                    'name' => 'NOISE',
+                    'data' => $tmp_data_noise,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    //'color' => 'white'
+                ],
+            ],
+        ];
+
+        $sensor_data = SensorTbl::find()
+        ->where([
+            'map_no' => $model->map_no
+        ])
+        ->one();
+
+        return $this->render('noise-chart', [
+            'data' => $data,
+            'model' => $model,
+            'sensor_data' => $sensor_data,
+        ]);
+    }
+
     public function ationTempHumiData($value='')
     {
         # code...
@@ -4018,6 +4158,14 @@ class DisplayController extends Controller
                 'breadcrumbs_title' => 'Humidity Monitoring'
             ];
             $custom_title = 'Humidity<br/>Monitoring';
+        } elseif ($category == 3) {
+            $title = [
+                //'page_title' => 'Humidity Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                'page_title' => null,
+                'tab_title' => 'Noise Monitoring',
+                'breadcrumbs_title' => 'Noise Monitoring'
+            ];
+            $custom_title = 'Noise<br/>Monitoring';
         }
         
         $data = SensorTbl::find()->where([
