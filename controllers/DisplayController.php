@@ -2458,16 +2458,6 @@ class DisplayController extends Controller
                     'actual' => $total_wip
                 ],
                 [
-                    'title' => 'WIP - Cone Assy 1',
-                    'target' => 2000,
-                    'actual' => isset($tmp_qty_arr['CONE-ASSY-1']) ? $tmp_qty_arr['CONE-ASSY-1'] : 0,
-                ],
-                [
-                    'title' => 'WIP - Cone Assy 2',
-                    'target' => 2000,
-                    'actual' => isset($tmp_qty_arr['CONE-ASSY-2']) ? $tmp_qty_arr['CONE-ASSY-2'] : 0,
-                ],
-                [
                     'title' => 'WIP - END',
                     'target' => 4000,
                     'actual' => $tmp_qty,
@@ -3538,9 +3528,9 @@ class DisplayController extends Controller
                 'PILAR-6I' => 'PILAR-6I (HVC 3, NCR 6, NCR 7)',
             ],
             'WU01' => [
-                'CONE-ASSY-1' => 'SURROUND-1',
-                'CONE-ASSY-2' => 'SURROUND-2',
-                'SPU' => 'SPU',
+                'CONE-ASSY-2' => 'CONE ASSY',
+                'SPU' => 'SPEAKER ASSY',
+                'CONE-ASSY-1' => 'FINISH ASSY',
             ],
         ];
         if (isset($tmp_loc_arr[$model->location])) {

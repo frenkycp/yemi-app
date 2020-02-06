@@ -5,11 +5,15 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 
+$wip_location_arr = \Yii::$app->params['wip_location_arr'];
 $this->title = [
-    'page_title' => 'Wood Working WIP <span class="japanesse light-green">– 木工仕掛り在庫管理</span>',
-    'tab_title' => 'Wood Working WIP ',
-    'breadcrumbs_title' => 'Wood Working WIP ',
+    'page_title' => $wip_location_arr[$model->location] . ' (WIP) ',
+    'tab_title' => $wip_location_arr[$model->location] . ' (WIP) ',
+    'breadcrumbs_title' => $wip_location_arr[$model->location] . ' (WIP) ',
 ];
+if ($model->location == 'WW02') {
+    $this->title['page_title'] .= '<span class="japanesse light-green">– 木工仕掛り在庫管理</span>';
+}
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
