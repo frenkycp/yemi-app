@@ -150,10 +150,10 @@ $this->registerJs("
                     alert('Please select the machine...!');
                     return false;
                 }
-                if(is_multiple_model == true){
-                    alert('There is multiple model in your selection...! (1 lot 1 model)');
-                    return false;
-                }
+                // if(is_multiple_model == true){
+                //     alert('There is multiple model in your selection...! (1 lot 1 model)');
+                //     return false;
+                // }
             }
 
             if (confirm('Are you sure to continue?')) {
