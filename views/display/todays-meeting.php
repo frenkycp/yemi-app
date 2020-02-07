@@ -40,6 +40,30 @@ $this->registerCss("
 ");
 
 $this->registerJs("
+    function cek_tamu() 
+    {
+        $.ajax
+        ({ 
+            url: 'http://172.17.144.6:99/plus/display/visitor_coridor.php?cek&room_id=" . $_GET['room_id'] . "',
+            success: function (result) 
+            {
+                var json = result, 
+                //obj = JSON.parse(json);
+                obj = json;
+
+                console.log(obj);
+
+                if (obj.datang < 2 && obj.visitor_comp != null) 
+                {
+                    window.location = 'http://172.17.144.6:99/plus/display/visitor_coridor.php?room_id=" . $_GET['room_id'] . "';
+                }
+                else
+                {
+                    setTimeout(function(){cek_tamu();}, 1500);
+                }
+            }
+        });
+    };
     function update_data(){
         $.ajax({
             type: 'POST',
@@ -57,6 +81,7 @@ $this->registerJs("
     }
     $(document).ready(function() {
         update_data();
+        cek_tamu();
     });
 ");
 

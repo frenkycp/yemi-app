@@ -64,7 +64,7 @@ $this->registerJs($script, View::POS_HEAD );
 <div class="row">
     <?php foreach ($data as $key => $value): ?>
         <div class="col-md-6">
-            <div class="box box-success box-solid">
+            <div class="box box-default box-solid">
                 <div class="box-header" style="vertical-align: middle;">
                     <h3 class="box-title"><?= $value['description'] ?></h3>
                     <div class="pull-right" style="color: white;">
@@ -83,7 +83,7 @@ $this->registerJs($script, View::POS_HEAD );
                         }
                         ?>
                         
-                        <div class="bg-purple text-center" style="padding: 3px 10px; border-radius: 5px; letter-spacing: 2px;">
+                        <div class="bg-light-blue text-center" style="padding: 3px 10px; border-radius: 5px; letter-spacing: 2px;">
                             <span style="font-size: 16px;">Temperature : <?= $temperature; ?>&deg;</span><br/>
                             <span style="color: silver;">(Normal : <?= $temp_min; ?>&deg; - <?= $temp_max; ?>&deg;)</span>
                         </div>
@@ -118,7 +118,7 @@ $this->registerJs($script, View::POS_HEAD );
                                 ?>
                                 <div class="col-md-4">
                                     <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
-                                        <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 20px; letter-spacing: 3px; font-weight: bold;"><?= $value2->minor; ?></div>
+                                        <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 20px; letter-spacing: 3px; font-weight: bold;">ID : <?= $value2->minor; ?></div>
                                         <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 16px;"><?= number_format($minutes); ?></span> min <small>( max : <?= number_format($value2->oven_time); ?> )</small></div>
                                     </div>
                                 </div>
