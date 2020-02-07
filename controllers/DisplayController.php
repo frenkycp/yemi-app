@@ -113,6 +113,26 @@ use app\models\ItemUncounttable;
 
 class DisplayController extends Controller
 {
+    public function actionUncountableStockTakeSummary($value='')
+    {
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'part_no', 'type'
+        ]);
+        $model->addRule(['from_date', 'to_date', 'type'], 'required')
+        ->addRule(['part_no'], 'string');
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+            
+        }
+
+        return $this->render('parts-uncountable-chart',[
+            'model' => $model,
+            'data' => $data,
+            'list_item_arr' => $list_item_arr
+        ]);
+    }
     public function actionUncountableByType($type)
     {
         $tmp_data = ItemUncounttableList::find()
@@ -128,6 +148,23 @@ class DisplayController extends Controller
             echo "<option></option>";
         }
         
+    }
+
+    public function actionFinishProductMonitoring($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = MachineIotOutput::find()
+        ->where([
+            'mesin_id' => 'MNTFP001'
+        ])
+        ->andWhere('end_date IS NULL')
+        ->all();
+
+        return $this->render('finish-product-monitoring',[
+            'data' => $data,
+        ]);
     }
 
     public function actionPtgOvenMonitoring($value='')
@@ -175,6 +212,7 @@ class DisplayController extends Controller
             'oven_room_2' => $oven_room_2,
         ]);
     }
+
     public function actionPartsUncountableChart($value='')
     {
         $model = new \yii\base\DynamicModel([
@@ -408,6 +446,7 @@ class DisplayController extends Controller
             <th>NG Name</th>
             <th>NG Detail</th>
             <th class="text-center">NG Qty</th>
+            <th class="text-center">Action</th>
         </tr>
         ';
 
@@ -419,6 +458,7 @@ class DisplayController extends Controller
                 <td>' . $value->ng_category_desc . ' | ' . $value->ng_category_detail . '</td>
                 <td>' . $value->ng_detail . '</td>
                 <td class="text-center">' . $value->ng_qty . '</td>
+                <td class="text-center">' . $value->next_action . '</td>
             </tr>
             ';
         }

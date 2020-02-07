@@ -24,7 +24,7 @@ $this->registerCss("
     .content-header {color: white;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
-    .box-header .box-title{font-size: 2em;}
+    //.box-header .box-title{font-size: 2em;}
     //.container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; text-align: center;}
     body {background-color: #ecf0f5;}
@@ -55,6 +55,11 @@ $this->registerCss("
         vertical-align: middle;
     }
 ");
+
+$oven_time_display = '';
+if ($kelompok != 'OVEN' && $kelompok != 'FINISH PRODUCT') {
+    $oven_time_display = 'display: none;';
+}
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -79,19 +84,49 @@ $this->registerCss("
                 ]); ?>
             </div>
 		</div>
-        <div class="row" style="<?= $kelompok != 'OVEN' ? 'display: none;' : ''; ?>">
+        <div class="row">
             <div class="col-md-12">
-                <?=
-                $form->field($model, 'oven_time')->textInput([
-                    'type' => 'number',
-                ]);
-                ?>
+                <div class="box box-primary box-solid" style="<?= $oven_time_display; ?>">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            <?php
+                            if ($kelompok == 'OVEN') {
+                                echo "Oven Time";
+                            }
+                            if ($kelompok == 'FINISH PRODUCT') {
+                                echo "Seasoning Time";
+                            }
+                            ?>
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <?= $form->field($model, 'oven_day')->textInput([
+                                    'type' => 'number',
+                                ])->label('Days (Total Hari)');
+                                ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?= $form->field($model, 'oven_hour')->textInput([
+                                    'type' => 'number',
+                                ])->label('Hours (Total Jam)');
+                                ?>
+                            </div>
+                            <div class="col-md-4">
+                                <?= $form->field($model, 'oven_min')->textInput([
+                                    'type' => 'number',
+                                ])->label('Minutes (Total Menit)');
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <?=
-                $form->field($model, 'beacon_id')->textInput([
+                <?= $form->field($model, 'beacon_id')->textInput([
                     'readonly' => $isNewRecord == true ? false : true,
                 ]);
                 ?>

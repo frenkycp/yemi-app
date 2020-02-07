@@ -130,8 +130,17 @@ $gridColumns = [
     [
         'attribute' => 'emp_name',
         'label' => 'PIC (NG)',
-        'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'next_action',
+        'label' => 'Next Action',
+        'vAlign' => 'middle',
+        'filter' => \Yii::$app->params['ng_next_action_dropdown'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'

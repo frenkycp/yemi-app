@@ -14,6 +14,39 @@ $this->title = [
 
 date_default_timezone_set('Asia/Jakarta');
 
+function convertMinute($minutes)
+{
+    $data = [
+        'unit' => 'minute',
+        'value' => 0
+    ];
+    if ($minutes >= 2) {
+        $data['unit'] = 'minutes';
+    }
+
+    if ($minutes >= 60 && $minutes < (24 * 60)) {
+        $data = [
+            'unit' => 'hour',
+            'value' => round(($minutes / 60))
+        ];
+        if (($minutes / 60) >= 2) {
+            $data['unit'] = 'hours';
+        }
+    }
+
+    if ($minutes >= (24 * 60)) {
+        $data = [
+            'unit' => 'day',
+            'value' => round(($minutes / (24 * 60)))
+        ];
+        if (($minutes / (24 * 60)) >= 2) {
+            $data['unit'] = 'days';
+        }
+    }
+
+    return $data;
+}
+
 $this->registerCss("
     .control-label {color: white;}
     //.form-control {font-size: 30px; height: 52px;}
@@ -115,10 +148,13 @@ $this->registerJs($script, View::POS_HEAD );
                                 if ($minutes > $value2->oven_time) {
                                     $bg_class = ' bg-red';
                                 }
+
+                                //$target_oven_time = convertMinute();
                                 ?>
                                 <div class="col-md-4">
                                     <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
-                                        <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 20px; letter-spacing: 3px; font-weight: bold;">ID : <?= $value2->minor; ?></div>
+                                        <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value2->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value2->lot_qty); ?> PCS)</small></div>
+                                        <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value2->minor; ?></div>
                                         <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 16px;"><?= number_format($minutes); ?></span> min <small>( max : <?= number_format($value2->oven_time); ?> )</small></div>
                                     </div>
                                 </div>
