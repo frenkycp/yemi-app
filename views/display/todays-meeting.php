@@ -39,51 +39,74 @@ $this->registerCss("
     //tr:nth-child(odd) {background-color: rgba(255, 255, 255, 0.1);}
 ");
 
-$this->registerJs("
-    function cek_tamu() 
-    {
-        $.ajax
-        ({ 
-            url: 'http://172.17.144.6:99/plus/display/visitor_coridor.php?cek&room_id=" . $_GET['room_id'] . "',
-            success: function (result) 
-            {
-                var json = result, 
-                //obj = JSON.parse(json);
-                obj = json;
-
-                console.log(obj);
-
-                if (obj.datang < 2 && obj.visitor_comp != null) 
+if ($_GET['room_id'] == 6) {
+    $this->registerJs("
+        function cek_tamu() 
+        {
+            $.ajax
+            ({ 
+                url: 'http://172.17.144.6:99/plus/display/visitor_coridor.php?cek&room_id=" . $_GET['room_id'] . "',
+                success: function (result) 
                 {
-                    window.location = 'http://172.17.144.6:99/plus/display/visitor_coridor.php?room_id=" . $_GET['room_id'] . "';
+                    var json = result, 
+                    //obj = JSON.parse(json);
+                    obj = json;
+
+                    console.log(obj);
+
+                    if (obj.datang < 2 && obj.visitor_comp != null) 
+                    {
+                        window.location = 'http://172.17.144.6:99/plus/display/visitor_coridor.php?room_id=" . $_GET['room_id'] . "';
+                    }
+                    else
+                    {
+                        setTimeout(function(){cek_tamu();}, 1500);
+                    }
                 }
-                else
-                {
-                    setTimeout(function(){cek_tamu();}, 1500);
+            });
+        };
+        function update_data(){
+            $.ajax({
+                type: 'POST',
+                url: '" . Url::to(['todays-meeting-data', 'room_id' => $_GET['room_id']]) . "',
+                success: function(data){
+                    var tmp_data = JSON.parse(data);
+                    $('#room-name').html(tmp_data.room_name);
+                    $('#todays-date').html(tmp_data.today);
+                    $('#meeting-content').html(tmp_data.meeting_content);
+                },
+                complete: function(){
+                    setTimeout(function(){update_data();}, 3000);
                 }
-            }
+            });
+        }
+        $(document).ready(function() {
+            update_data();
+            cek_tamu();
         });
-    };
-    function update_data(){
-        $.ajax({
-            type: 'POST',
-            url: '" . Url::to(['todays-meeting-data', 'room_id' => $_GET['room_id']]) . "',
-            success: function(data){
-                var tmp_data = JSON.parse(data);
-                $('#room-name').html(tmp_data.room_name);
-                $('#todays-date').html(tmp_data.today);
-                $('#meeting-content').html(tmp_data.meeting_content);
-            },
-            complete: function(){
-                setTimeout(function(){update_data();}, 3000);
-            }
+    ");
+} else {
+    $this->registerJs("
+        function update_data(){
+            $.ajax({
+                type: 'POST',
+                url: '" . Url::to(['todays-meeting-data', 'room_id' => $_GET['room_id']]) . "',
+                success: function(data){
+                    var tmp_data = JSON.parse(data);
+                    $('#room-name').html(tmp_data.room_name);
+                    $('#todays-date').html(tmp_data.today);
+                    $('#meeting-content').html(tmp_data.meeting_content);
+                },
+                complete: function(){
+                    setTimeout(function(){update_data();}, 3000);
+                }
+            });
+        }
+        $(document).ready(function() {
+            update_data();
         });
-    }
-    $(document).ready(function() {
-        update_data();
-        cek_tamu();
-    });
-");
+    ");
+}
 
 //$this->registerCssFile('@web/adminty_assets/css/bootstrap.min.css');
 //$this->registerCssFile('@web/adminty_assets/css/component.css');
