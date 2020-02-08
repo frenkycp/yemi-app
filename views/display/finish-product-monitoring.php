@@ -93,43 +93,87 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 ?>
-
-<div class="box box-solid box-primary">
-    <div class="box-header">
-        <h3 class="box-title">Finish Product (Seasoning)</h3>
-    </div>
-    <div class="box-body" style="background-color: black;">
-        <div class="row">
-            <?php
-            if (count($data) > 0) {
-                ?>
-                <?php foreach ($data as $key => $value): ?>
+<div class="row">
+    <div class="col-md-6">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Finish Product (Seasoning)</h3>
+            </div>
+            <div class="box-body" style="background-color: black;">
+                <div class="row">
                     <?php
+                    if (count($data) > 0) {
+                        ?>
+                        <?php foreach ($data as $key => $value): ?>
+                            <?php
 
-                    $datetime1 = new \DateTime(date('Y-m-d H:i:s', strtotime($value->start_date)));
-                    $datetime2 = new \DateTime(date('Y-m-d H:i:s'));
-                    $interval = $datetime1->diff($datetime2);
-                    $minutes = $interval->days * 24 * 60;
-                    $minutes += $interval->h * 60;
-                    $minutes += $interval->i;
+                            $datetime1 = new \DateTime(date('Y-m-d H:i:s', strtotime($value->start_date)));
+                            $datetime2 = new \DateTime(date('Y-m-d H:i:s'));
+                            $interval = $datetime1->diff($datetime2);
+                            $minutes = $interval->days * 24 * 60;
+                            $minutes += $interval->h * 60;
+                            $minutes += $interval->i;
 
-                    $bg_class = ' bg-green';
-                    if ($minutes > $value->oven_time) {
-                        $bg_class = ' bg-red';
-                    }
+                            $bg_class = ' bg-green';
+                            if ($minutes > $value->oven_time) {
+                                $bg_class = ' bg-red';
+                            }
 
-                    //$target_oven_time = convertMinute();
+                            //$target_oven_time = convertMinute();
+                            ?>
+                            <div class="col-md-4">
+                                <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
+                                    <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value->act_qty); ?> PCS)</small></div>
+                                    <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
+                                    <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 16px;"><?= number_format($minutes); ?></span> minutes <small>( TARGET > <?= number_format($value->oven_time); ?> )</small></div>
+                                </div>
+                            </div>
+                        <?php endforeach ?>
+                    <?php }
                     ?>
-                    <div class="col-md-4">
-                        <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
-                            <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value->lot_qty); ?> PCS)</small></div>
-                            <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
-                            <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 16px;"><?= number_format($minutes); ?></span> min <small>( max : <?= number_format($value->oven_time); ?> )</small></div>
-                        </div>
-                    </div>
-                <?php endforeach ?>
-            <?php }
-            ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">Finish Product (Waiting Final Assy)</h3>
+            </div>
+            <div class="box-body" style="background-color: black;">
+                <div class="row">
+                    <?php
+                    if (count($data2) > 0) {
+                        ?>
+                        <?php foreach ($data2 as $key => $value): ?>
+                            <?php
+
+                            $datetime1 = new \DateTime(date('Y-m-d H:i:s', strtotime($value->start_date)));
+                            $datetime2 = new \DateTime(date('Y-m-d H:i:s'));
+                            $interval = $datetime1->diff($datetime2);
+                            $minutes = $interval->days * 24 * 60;
+                            $minutes += $interval->h * 60;
+                            $minutes += $interval->i;
+
+                            $bg_class = ' bg-green';
+                            if ($minutes > $value->oven_time) {
+                                $bg_class = ' bg-red';
+                            }
+
+                            //$target_oven_time = convertMinute();
+                            ?>
+                            <div class="col-md-4">
+                                <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
+                                    <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value->act_qty); ?> PCS)</small></div>
+                                    <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
+                                    <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 16px;"><?= number_format($minutes); ?></span> minutes <small>( TARGET < <?= number_format($value->oven_time); ?> )</small></div>
+                                </div>
+                            </div>
+                        <?php endforeach ?>
+                    <?php }
+                    ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>

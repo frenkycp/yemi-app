@@ -57,6 +57,13 @@ $this->registerCss("
 ");
 
 $oven_time_display = '';
+$oven_hidden = $seasoning_hidden = '';
+if ($kelompok != 'OVEN') {
+    $oven_hidden = 'display: none;';
+}
+if ($kelompok != 'FINISH PRODUCT') {
+    $seasoning_hidden = 'display: none;';
+}
 if ($kelompok != 'OVEN' && $kelompok != 'FINISH PRODUCT') {
     $oven_time_display = 'display: none;';
 }
@@ -122,6 +129,22 @@ if ($kelompok != 'OVEN' && $kelompok != 'FINISH PRODUCT') {
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row" style="<?= $seasoning_hidden; ?>">
+            <div class="col-md-12">
+                <?= $form->field($model, 'is_seasoning')->dropDownList([
+                    0 => 'WITHOUT SEASONING',
+                    1 => 'SEASONING'
+                ])->label('Seasoning Type'); ?>
+            </div>
+        </div>
+        <div class="row" style="<?= $oven_time_display; ?>">
+            <div class="col-md-12">
+                <?= $form->field($model, 'actual_qty')->textInput([
+                    'type' => 'number',
+                ]);
+                ?>
             </div>
         </div>
         <div class="row">

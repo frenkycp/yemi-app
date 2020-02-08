@@ -56,7 +56,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['temp-humidity-chart']),
+    'action' => Url::to(['noise-chart']),
 ]); ?>
 
 <div class="row">

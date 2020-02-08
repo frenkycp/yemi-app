@@ -157,13 +157,23 @@ class DisplayController extends Controller
 
         $data = MachineIotOutput::find()
         ->where([
-            'mesin_id' => 'MNTFP001'
+            'mesin_id' => 'MNTFP001',
+            'is_seasoning' => 1
+        ])
+        ->andWhere('end_date IS NULL')
+        ->all();
+
+        $data2 = MachineIotOutput::find()
+        ->where([
+            'mesin_id' => 'MNTFP001',
+            'is_seasoning' => 0
         ])
         ->andWhere('end_date IS NULL')
         ->all();
 
         return $this->render('finish-product-monitoring',[
             'data' => $data,
+            'data2' => $data2,
         ]);
     }
 

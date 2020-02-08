@@ -221,10 +221,11 @@ class MachineRunningController extends Controller
 		$this->layout = 'clean';
 		date_default_timezone_set('Asia/Jakarta');
 		$model = new \yii\base\DynamicModel([
-	        'man_power', 'beacon_id', 'oven_time', 'oven_day', 'oven_hour', 'oven_min'
+	        'man_power', 'beacon_id', 'oven_time', 'oven_day', 'oven_hour', 'oven_min', 'actual_qty', 'is_seasoning'
 	    ]);
 	    $model->addRule(['man_power', 'beacon_id'], 'required')
-	    ->addRule(['oven_time', 'oven_day', 'oven_hour', 'oven_min'], 'number');
+	    ->addRule(['oven_time', 'oven_day', 'oven_hour', 'oven_min', 'actual_qty'], 'number')
+	    ->addRule(['is_seasoning'], 'string');
 
 	    $tmp_mio = MachineIotOutput::find()
     	->where([
@@ -242,6 +243,7 @@ class MachineRunningController extends Controller
     	$isNewRecord = true;
 
     	$model->beacon_id = $tmp_mio->minor;
+    	$model->actual_qty = $tmp_mio->lot_qty;
     	$model->oven_time = $model->oven_day = $model->oven_hour = $model->oven_min = 0;
 	    //\Yii::$app->getSession()->addFlash('error', $msg);
 	    if ($model->load($_POST)) {
@@ -369,7 +371,7 @@ class MachineRunningController extends Controller
 	    	$current_data->parent = $lot_data->parent;
 	    	$current_data->parent_desc = $lot_data->parent_desc;
 	    	if ($current_data->save()) {
-	    		
+
 	    		$iot_output = new MachineIotOutput;
 	    		$iot_output->mesin_id = $mesin_id;
 	    		$iot_output->mesin_description = $current_data->mesin_description;
