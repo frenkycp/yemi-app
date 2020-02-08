@@ -113,26 +113,6 @@ use app\models\ItemUncounttable;
 
 class DisplayController extends Controller
 {
-    public function actionUncountableStockTakeSummary($value='')
-    {
-        $model = new \yii\base\DynamicModel([
-            'from_date', 'to_date', 'part_no', 'type'
-        ]);
-        $model->addRule(['from_date', 'to_date', 'type'], 'required')
-        ->addRule(['part_no'], 'string');
-        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
-        $model->to_date = date('Y-m-d');
-
-        if ($model->load($_GET)) {
-            
-        }
-
-        return $this->render('parts-uncountable-chart',[
-            'model' => $model,
-            'data' => $data,
-            'list_item_arr' => $list_item_arr
-        ]);
-    }
     public function actionUncountableByType($type)
     {
         $tmp_data = ItemUncounttableList::find()

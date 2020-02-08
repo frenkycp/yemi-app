@@ -240,22 +240,21 @@ class MachineRunningController extends Controller
     	])
     	->one();
 
+    	$lot_data = WipEffTbl::find()
+    	->where([
+    		'lot_id' => $lot_id,
+    	])
+    	->one();
+
     	$isNewRecord = true;
 
     	$model->beacon_id = $tmp_mio->minor;
-    	$model->actual_qty = $tmp_mio->lot_qty;
+    	$model->actual_qty = $lot_data->qty_all;
     	$model->oven_time = $model->oven_day = $model->oven_hour = $model->oven_min = 0;
 	    //\Yii::$app->getSession()->addFlash('error', $msg);
 	    if ($model->load($_POST)) {
 	    	$beacon_id_current = $tmp_mio->minor;
 	    	$model->oven_time = ((int)$model->oven_day * 24 * 60) + ((int)$model->oven_hour * 60) + (int)$model->oven_min;
-	    	
-
-	    	$lot_data = WipEffTbl::find()
-	    	->where([
-	    		'lot_id' => $lot_id,
-	    	])
-	    	->one();
 
 	    	$beacon_tbl = BeaconTbl::find()
 	    	->where(['minor' => $model->beacon_id])
