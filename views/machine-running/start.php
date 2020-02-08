@@ -101,7 +101,7 @@ if ($kelompok != 'OVEN' && $kelompok != 'FINISH PRODUCT') {
                                 echo "Oven Time";
                             }
                             if ($kelompok == 'FINISH PRODUCT') {
-                                echo "Seasoning Time";
+                                echo "Seasoning Time / Waiting Time";
                             }
                             ?>
                         </h3>

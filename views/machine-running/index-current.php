@@ -146,6 +146,10 @@ echo $data['name'];*/
                             $btn_end_class = 'btn btn-danger btn-block btn-lg';
                             
                             foreach ($output_data as $key => $value) {
+                                $qty = $value->act_qty;
+                                if ($qty == 0 || $qty == null) {
+                                    $qty = $value->lot_qty;
+                                }
                                 $action = Html::a('FINISH', ['finish', 'mesin_id' => $mesin_id, 'loc_id' => $model->loc_id, 'lot_number' => $value->lot_number], [
                                     'class' => 'btn btn-danger btn-block btn-lg'
                                 ]);
