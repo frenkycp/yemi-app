@@ -4213,6 +4213,83 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionPowerConsumptionChart()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'map_no', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $data = $tmp_data_pct = $tmp_data_kwh = [];
+
+        $model->map_no = $_GET['map_no'];
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $data_dummy = SensorLog::find()
+        ->where([
+            'AND',
+            ['>=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->from_date . ' 00:00:01'))],
+            ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
+        ])
+        ->andWhere(['map_no' => $model->map_no])
+        ->asArray()
+        ->all();
+
+        foreach ($data_dummy as $value) {
+            $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
+            //if ($value['power_consumption'] > 0) {
+                $tmp_data_pct[] = [
+                    'x' => $proddate,
+                    'y' => (float)$value['power_consumption']
+                ];
+            //}
+            if ($value['kw'] > 0) {
+                $tmp_data_kwh[] = [
+                    'x' => $proddate,
+                    'y' => (float)$value['kw']
+                ];
+            }
+        }
+
+        $data = [
+            'pct' => [
+                [
+                    'name' => 'Percentage',
+                    'data' => $tmp_data_pct,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    //'color' => 'white'
+                ],
+            ],
+            'kwh' => [
+                [
+                    'name' => 'kWh',
+                    'data' => $tmp_data_kwh,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    //'color' => 'white'
+                ],
+            ],
+        ];
+
+        $sensor_data = SensorTbl::find()
+        ->where([
+            'map_no' => $model->map_no
+        ])
+        ->one();
+
+        return $this->render('power-consumption-chart', [
+            'data' => $data,
+            'model' => $model,
+            'sensor_data' => $sensor_data,
+        ]);
+    }
+
     public function actionNoiseChart()
     {
         $this->layout = 'clean';
@@ -4310,6 +4387,14 @@ class DisplayController extends Controller
                 'breadcrumbs_title' => 'Noise Monitoring'
             ];
             $custom_title = 'Noise<br/>Monitoring';
+        } elseif ($category == 4) {
+            $title = [
+                //'page_title' => 'Humidity Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                'page_title' => null,
+                'tab_title' => 'Power Consumption Monitoring',
+                'breadcrumbs_title' => 'Power Consumption Monitoring'
+            ];
+            $custom_title = 'Power Consumption<br/>Monitoring';
         }
         
         $data = SensorTbl::find()->where([

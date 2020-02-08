@@ -15,23 +15,34 @@ $this->title = $title;
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-$this->registerCss("
-    .container {width: auto;}
-    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
-    body, .content-wrapper {background-color: #000;}
-    .temp-widget {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
-    .temp-widget-refrigerator {border-radius: 15px 15px 0px 0px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
-    #main-body {overflow: auto;}
-    #custom-title {position: absolute; top: 40px; left: 40px; font-size: 1.5em; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: rgba(0, 255, 0, 0.4);}
-");
-
+if ($_GET['category'] == 4) {
+    $this->registerCss("
+        .container {width: auto;}
+        .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
+        body, .content-wrapper {background-color: #000;}
+        .temp-widget {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 60px; letter-spacing: 1.1px;}
+        .temp-widget-refrigerator {border-radius: 15px 15px 0px 0px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
+        #main-body {overflow: auto;}
+        #custom-title {position: absolute; top: 40px; left: 40px; font-size: 1.5em; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: rgba(0, 255, 0, 0.4);}
+    ");
+} else {
+    $this->registerCss("
+        .container {width: auto;}
+        .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
+        body, .content-wrapper {background-color: #000;}
+        .temp-widget {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
+        .temp-widget-refrigerator {border-radius: 15px 15px 0px 0px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
+        #main-body {overflow: auto;}
+        #custom-title {position: absolute; top: 40px; left: 40px; font-size: 1.5em; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: rgba(0, 255, 0, 0.4);}
+    ");
+}
 
 
 $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 6000000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -97,6 +108,12 @@ echo '</pre>';*/
             if ($params_val > $value->noise_max) {
                 $temp_class = ' bg-red-active';
             }
+        } elseif ($category == 4) {
+            //$params_val = $value->humidity . '<small>%</small>';
+            $params_val = $value->power_consumption;
+            // if ($params_val > $value->noise_max) {
+            //     $temp_class = ' bg-red-active';
+            // }
         }
 
         $widget_class = 'temp-widget';
@@ -107,6 +124,9 @@ echo '</pre>';*/
         $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . $params_val . '</div></div>';
         if ($category == 3) {
             echo $params_val == null ? '' : Html::a($content, ['noise-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+        } elseif ($category == 4) {
+            $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px; border-bottom: 1px solid white;">' . $params_val . '%</div><div style="padding: 0px 4px;">' . $value->kw . ' kWh</div></div>';
+            echo $params_val == null ? '' : Html::a($content, ['power-consumption-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         } else {
             echo $params_val == null ? '' : Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         }
