@@ -151,7 +151,7 @@ $this->registerJs($script, View::POS_HEAD );
 
                                 //$target_oven_time = convertMinute();
                                 ?>
-                                <div class="col-md-4">
+                                <div class="col-md-4" style="margin-bottom: 10px;">
                                     <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
                                         <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value2->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value2->act_qty); ?> PCS)</small></div>
                                         <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value2->minor; ?></div>

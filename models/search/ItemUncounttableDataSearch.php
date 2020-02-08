@@ -18,7 +18,7 @@ class ItemUncounttableDataSearch extends ItemUncounttable
 public function rules()
 {
 return [
-[['POST_DATE_ITEM', 'POST_DATE', 'ITEM', 'ITEM_DESC', 'ITEM_UM', 'SUPPLIER', 'SUPPLIER_DESC', 'KELOMPOK', 'TIPE'], 'safe'],
+[['POST_DATE_ITEM', 'POST_DATE', 'ITEM', 'ITEM_DESC', 'ITEM_UM', 'SUPPLIER', 'SUPPLIER_DESC', 'KELOMPOK', 'TIPE', 'SHOW'], 'safe'],
             [['MAT_SAP', 'MAT_WSUS', 'MAT_DIFF', 'WIP_SAP', 'WIP_PI', 'WIP_DIFF', 'TOT_SAP', 'TOT_WSUS_PI', 'TOT_DIFF'], 'number'],
 ];
 }
@@ -44,7 +44,14 @@ public function search($params)
 $query = ItemUncounttable::find();
 
 $dataProvider = new ActiveDataProvider([
-'query' => $query,
+      'query' => $query,
+      'sort' => [
+        'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'POST_DATE' => SORT_DESC,
+            'SHOW' => SORT_DESC
+        ]
+    ],
 ]);
 
 $this->load($params);
@@ -66,6 +73,7 @@ $query->andFilterWhere([
             'TOT_SAP' => $this->TOT_SAP,
             'TOT_WSUS_PI' => $this->TOT_WSUS_PI,
             'TOT_DIFF' => $this->TOT_DIFF,
+            'SHOW' => $this->SHOW,
         ]);
 
         $query->andFilterWhere(['like', 'POST_DATE_ITEM', $this->POST_DATE_ITEM])

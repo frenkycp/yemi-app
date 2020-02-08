@@ -33,6 +33,16 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'TIPE',
+        'label' => 'Type',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'ITEM',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -137,6 +147,19 @@ $gridColumns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'SHOW',
+        'label' => 'Critical',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            'Y' => 'Yes'
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center;'

@@ -24,9 +24,16 @@ use Yii;
  * @property double $WIP_SAP
  * @property double $WIP_PI
  * @property double $WIP_DIFF
+ * @property double $WIP_DIFF_ABS
  * @property double $TOT_SAP
  * @property double $TOT_WSUS_PI
  * @property double $TOT_DIFF
+ * @property double $STD_PRICE
+ * @property double $WIP_SAP_AMT
+ * @property double $WIP_PI_AMT
+ * @property double $WIP_DIFF_AMT
+ * @property double $WIP_DIFF_ABS_AMT
+ * @property string $SHOW
  * @property string $aliasModel
  */
 abstract class ItemUncounttable extends \yii\db\ActiveRecord
@@ -57,9 +64,9 @@ abstract class ItemUncounttable extends \yii\db\ActiveRecord
     {
         return [
             [['POST_DATE_ITEM'], 'required'],
-            [['POST_DATE_ITEM', 'ITEM', 'ITEM_DESC', 'ITEM_UM', 'SUPPLIER', 'SUPPLIER_DESC', 'KELOMPOK', 'TIPE'], 'string'],
+            [['POST_DATE_ITEM', 'ITEM', 'ITEM_DESC', 'ITEM_UM', 'SUPPLIER', 'SUPPLIER_DESC', 'KELOMPOK', 'TIPE', 'SHOW'], 'string'],
             [['POST_DATE'], 'safe'],
-            [['MAT_SAP', 'MAT_WSUS', 'MAT_DIFF', 'WIP_SAP', 'WIP_PI', 'WIP_DIFF', 'TOT_SAP', 'TOT_WSUS_PI', 'TOT_DIFF'], 'number'],
+            [['MAT_SAP', 'MAT_WSUS', 'MAT_DIFF', 'WIP_SAP', 'WIP_PI', 'WIP_DIFF', 'WIP_DIFF_ABS', 'TOT_SAP', 'TOT_WSUS_PI', 'TOT_DIFF', 'STD_PRICE', 'WIP_SAP_AMT', 'WIP_PI_AMT', 'WIP_DIFF_AMT', 'WIP_DIFF_ABS_AMT'], 'number'],
             [['POST_DATE_ITEM'], 'unique']
         ];
     }
@@ -85,9 +92,16 @@ abstract class ItemUncounttable extends \yii\db\ActiveRecord
             'WIP_SAP' => 'Wip  Sap',
             'WIP_PI' => 'Wip  Pi',
             'WIP_DIFF' => 'Wip  Diff',
+            'WIP_DIFF_ABS' => 'Wip  Diff  Abs',
             'TOT_SAP' => 'Tot  Sap',
             'TOT_WSUS_PI' => 'Tot  Wsus  Pi',
             'TOT_DIFF' => 'Tot  Diff',
+            'STD_PRICE' => 'Std  Price',
+            'WIP_SAP_AMT' => 'Wip  Sap  Amt',
+            'WIP_PI_AMT' => 'Wip  Pi  Amt',
+            'WIP_DIFF_AMT' => 'Wip  Diff  Amt',
+            'WIP_DIFF_ABS_AMT' => 'Wip  Diff  Abs  Amt',
+            'SHOW' => 'Show',
         ];
     }
 

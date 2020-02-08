@@ -390,6 +390,7 @@ class MachineRunningController extends Controller
 	    		$iot_output->minor = $beacon_id_current;
 	    		$iot_output->oven_time = $model->oven_time;
 	    		$iot_output->act_qty = $model->actual_qty;
+	    		$iot_output->is_seasoning = $model->is_seasoning;
 	    		if (!$iot_output->save()) {
 	    			return json_encode($iot_output->errors);
 	    		}
