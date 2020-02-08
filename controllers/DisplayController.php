@@ -110,9 +110,110 @@ use app\models\SkillMasterKaryawan;
 use app\models\FlexiStorage;
 use app\models\ItemUncounttableList;
 use app\models\ItemUncounttable;
+use app\models\ItemUncountableSummaryReport2;
 
 class DisplayController extends Controller
 {
+    public function actionUncountableTopVariance($value='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $data1 = $data2 = $data3 = [];
+        $tmp_summary_data1 = $tmp_summary_data2 = $tmp_summary_data3 = [];
+
+        $model = new \yii\base\DynamicModel([
+            'post_date',
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = '2020-02-07';
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_data1 = ItemUncountableSummaryReport2::find()
+        ->where([
+            'POST_DATE' => $model->post_date
+        ])
+        ->andWhere([
+            '>', 'WIP_PI_AMT', 0
+        ])
+        ->orderBy('WIP_DIFF_ABS_AMT DESC')
+        ->limit(10)
+        ->all();
+
+        foreach ($tmp_data1 as $key => $value) {
+            $tmp_summary_data1[] = [
+                $value->ITEM_DESC,
+                round($value->WIP_DIFF_ABS_AMT)
+            ];
+        }
+
+        $data1[] = [
+            'name' => 'Variance',
+            'data' => $tmp_summary_data1,
+            'showInLegend' => false,
+            'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
+        ];
+
+        $tmp_data2 = ItemUncountableSummaryReport2::find()
+        ->where([
+            'POST_DATE' => $model->post_date
+        ])
+        ->andWhere([
+            '>', 'WIP_PI_AMT', 0
+        ])
+        ->orderBy('WIP_DIFF_AMT DESC')
+        ->limit(10)
+        ->all();
+
+        foreach ($tmp_data2 as $key => $value) {
+            $tmp_summary_data2[] = [
+                $value->ITEM_DESC,
+                round($value->WIP_DIFF_AMT)
+            ];
+        }
+
+        $data2[] = [
+            'name' => 'Variance',
+            'data' => $tmp_summary_data2,
+            'showInLegend' => false,
+            'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
+
+        ];
+
+        $tmp_data3 = ItemUncountableSummaryReport2::find()
+        ->where([
+            'POST_DATE' => $model->post_date
+        ])
+        ->andWhere([
+            '>', 'WIP_PI_AMT', 0
+        ])
+        ->orderBy('WIP_DIFF_AMT ASC')
+        ->limit(10)
+        ->all();
+
+        foreach ($tmp_data3 as $key => $value) {
+            $tmp_summary_data3[] = [
+                $value->ITEM_DESC,
+                round($value->WIP_DIFF_AMT)
+            ];
+        }
+
+        $data3[] = [
+            'name' => 'Variance',
+            'data' => $tmp_summary_data3,
+            'showInLegend' => false,
+            'color' => new JsExpression('Highcharts.getOptions().colors[5]'),
+        ];
+
+        return $this->render('uncountable-top-variance', [
+            'data' => $data,
+            'data1' => $data1,
+            'data2' => $data2,
+            'data3' => $data3,
+            'model' => $model,
+        ]);
+    }
     public function actionUncountableByType($type)
     {
         $tmp_data = ItemUncounttableList::find()

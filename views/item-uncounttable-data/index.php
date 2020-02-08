@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Uncountable Parts Stock Take',
-    'tab_title' => 'Uncountable Parts Stock Take',
-    'breadcrumbs_title' => 'Uncountable Parts Stock Take'
+    'page_title' => 'Uncountable Parts Stock',
+    'tab_title' => 'Uncountable Parts Stock',
+    'breadcrumbs_title' => 'Uncountable Parts Stock'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -179,7 +179,7 @@ $gridColumns = [
         'mergeHeader' => true,
         'encodeLabel' => false,
         'value' => function($model){
-            return round($model->WIP_DIFF_ABS_AMT, 4);
+            return number_format(round($model->WIP_DIFF_ABS_AMT, 4));
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
