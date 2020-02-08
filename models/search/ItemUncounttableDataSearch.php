@@ -49,7 +49,8 @@ $dataProvider = new ActiveDataProvider([
         'defaultOrder' => [
             //'cust_desc' => SORT_ASC,
             'POST_DATE' => SORT_DESC,
-            'SHOW' => SORT_DESC
+            'SHOW' => SORT_DESC,
+            'WIP_DIFF_ABS_AMT' => SORT_DESC
         ]
     ],
 ]);

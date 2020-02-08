@@ -78,6 +78,9 @@ $this->registerCss("
     .box-body {
         min-height: 450px;
     }
+    .col-md-4 {
+        margin-bottom: 10px;
+    }
 ");
 
 $script = "
@@ -124,7 +127,7 @@ $this->registerJs($script, View::POS_HEAD );
                             <div class="col-md-4">
                                 <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
                                     <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value->act_qty); ?> PCS)</small></div>
-                                    <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
+                                    <div title="<?= $value->seq; ?>" style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
                                     <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 16px;"><?= number_format($minutes); ?></span> minutes <small>( TARGET > <?= number_format($value->oven_time); ?> )</small></div>
                                 </div>
                             </div>
@@ -162,10 +165,10 @@ $this->registerJs($script, View::POS_HEAD );
 
                             //$target_oven_time = convertMinute();
                             ?>
-                            <div class="col-md-4" style="margin-bottom: 10px;">
+                            <div class="col-md-4">
                                 <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
                                     <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value->act_qty); ?> PCS)</small></div>
-                                    <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
+                                    <div title="<?= $value->seq; ?>" style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
                                     <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 16px;"><?= number_format($minutes); ?></span> minutes <small>( TARGET < <?= number_format($value->oven_time); ?> )</small></div>
                                 </div>
                             </div>

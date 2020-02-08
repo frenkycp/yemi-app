@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Uncountable Data',
-    'tab_title' => 'Uncountable Data',
-    'breadcrumbs_title' => 'Uncountable Data'
+    'page_title' => 'Uncountable Parts Stock Take',
+    'tab_title' => 'Uncountable Parts Stock Take',
+    'breadcrumbs_title' => 'Uncountable Parts Stock Take'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -71,6 +71,7 @@ $gridColumns = [
     [
         'attribute' => 'MAT_SAP',
         'label' => 'Material<br/>(SAP)',
+        'mergeHeader' => true,
         'encodeLabel' => false,
         'value' => function($model){
             return round($model->MAT_SAP, 4);
@@ -85,6 +86,7 @@ $gridColumns = [
     [
         'attribute' => 'MAT_WSUS',
         'label' => 'Material<br/>(WSUS)',
+        'mergeHeader' => true,
         'encodeLabel' => false,
         'value' => function($model){
             return round($model->MAT_WSUS, 4);
@@ -99,6 +101,7 @@ $gridColumns = [
     [
         'attribute' => 'MAT_DIFF',
         'label' => 'Material<br/>(Selisih)',
+        'mergeHeader' => true,
         'encodeLabel' => false,
         'value' => function($model){
             return round($model->MAT_DIFF, 4);
@@ -113,6 +116,7 @@ $gridColumns = [
     [
         'attribute' => 'WIP_SAP',
         'label' => 'WIP<br/>(SAP)',
+        'mergeHeader' => true,
         'encodeLabel' => false,
         'value' => function($model){
             return round($model->WIP_SAP, 4);
@@ -127,6 +131,7 @@ $gridColumns = [
     [
         'attribute' => 'WIP_PI',
         'label' => 'WIP<br/>(Stocktake)',
+        'mergeHeader' => true,
         'encodeLabel' => false,
         'value' => function($model){
             return round($model->WIP_PI, 4);
@@ -141,9 +146,40 @@ $gridColumns = [
     [
         'attribute' => 'WIP_DIFF',
         'label' => 'WIP<br/>(Selisih)',
+        'mergeHeader' => true,
         'encodeLabel' => false,
         'value' => function($model){
             return round($model->WIP_DIFF, 4);
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'WIP_DIFF_ABS',
+        'label' => 'WIP<br/>(Selisih Abs.)',
+        'mergeHeader' => true,
+        'encodeLabel' => false,
+        'value' => function($model){
+            return round($model->WIP_DIFF_ABS, 4);
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'WIP_DIFF_ABS_AMT',
+        'label' => 'WIP<br/>(Selisih Amount Abs.)',
+        'mergeHeader' => true,
+        'encodeLabel' => false,
+        'value' => function($model){
+            return round($model->WIP_DIFF_ABS_AMT, 4);
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
