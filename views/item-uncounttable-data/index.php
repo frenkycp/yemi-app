@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Uncountable Parts Stock',
-    'tab_title' => 'Uncountable Parts Stock',
-    'breadcrumbs_title' => 'Uncountable Parts Stock'
+    'page_title' => 'Uncountable Parts Stock Take (Weekly)',
+    'tab_title' => 'Uncountable Parts Stock Take (Weekly)',
+    'breadcrumbs_title' => 'Uncountable Parts Stock Take (Weekly)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

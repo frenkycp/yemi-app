@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Parts (Uncountable) Stock Take <span class="japanesse light-green"></span>',
-    'tab_title' => 'Parts (Uncountable) Stock Take',
-    'breadcrumbs_title' => 'Parts (Uncountable) Stock Take'
+    'page_title' => 'Uncountable Parts Stock Take (Weekly) <span class="japanesse light-green"></span>',
+    'tab_title' => 'Uncountable Parts Stock Take (Weekly)',
+    'breadcrumbs_title' => 'Uncountable Parts Stock Take (Weekly)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
