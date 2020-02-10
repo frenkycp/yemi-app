@@ -148,7 +148,7 @@ $this->registerJs($script, View::POS_HEAD );
                                 if ($minutes > $value2->oven_time) {
                                     $bg_class = ' bg-green';
                                 }
-                                if (($minutes - $value2->oven_time)) {
+                                if (($minutes - $value2->oven_time) > 60) {
                                     $bg_class = ' bg-red';
                                 }
 
