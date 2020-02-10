@@ -85,7 +85,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'MAT_WSUS',
-        'label' => 'Material<br/>(WSUS)',
+        'label' => 'Material<br/>(MITA)',
         'mergeHeader' => true,
         'encodeLabel' => false,
         'value' => function($model){
