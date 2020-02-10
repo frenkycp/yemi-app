@@ -252,9 +252,14 @@ class DisplayController extends Controller
         ->andWhere('end_date IS NULL')
         ->all();
 
+        $spu_room = SensorTbl::find()->where([
+            'map_no' => 35
+        ])->one();
+
         return $this->render('finish-product-monitoring',[
             'data' => $data,
             'data2' => $data2,
+            'spu_room' => $spu_room,
         ]);
     }
 
@@ -1845,7 +1850,7 @@ class DisplayController extends Controller
             '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
             '12' => '6. Inwax Piano 13&14<br/><span class="japanesse light-green">(インワックスのピアノ塗装 13&14)</span>',
             '40' => '7. Server Room Factory 1',
-            '41' => '8. Electric Room Factory 1',
+            //'41' => '8. Electric Room Factory 1',
         ];
 
         $tbody = '';
@@ -1908,7 +1913,7 @@ class DisplayController extends Controller
             '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
             '12' => '6. Inwax Piano 13&14<br/><span class="japanesse light-green">(インワックスのピアノ塗装 13&14)</span>',
             '40' => '7. Server Room Factory 1',
-            '41' => '8. Electric Room Factory 1',
+            //'41' => '8. Electric Room Factory 1',
         ];
 
         return $this->render('critical-temp-monitoring', [

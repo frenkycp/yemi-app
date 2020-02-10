@@ -98,6 +98,25 @@ $this->registerJs($script, View::POS_HEAD );
 ?>
 <div class="row">
     <div class="col-md-6">
+        <div class="pull-right">
+            <div class="bg-light-blue text-center" style="padding: 3px 10px; border-radius: 5px; letter-spacing: 2px;">
+                <span style="font-size: 16px;">Temperature : <?= $spu_room->temparature; ?>&deg;</span><br/>
+                <span style="color: silver;">(Normal : <?= $spu_room->temp_min; ?>&deg; - <?= $spu_room->temp_max; ?>&deg;)</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="pull-left">
+            <div class="bg-light-blue text-center" style="padding: 3px 10px; border-radius: 5px; letter-spacing: 2px;">
+                <span style="font-size: 16px;">Humidity : <?= $spu_room->humidity; ?>%</span><br/>
+                <span style="color: silver;">(Normal : <?= $spu_room->humi_min; ?>% - <?= $spu_room->humi_max; ?>%)</span>
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-md-6">
         <div class="box box-solid box-primary">
             <div class="box-header">
                 <h3 class="box-title">Finish Product (Seasoning)</h3>
