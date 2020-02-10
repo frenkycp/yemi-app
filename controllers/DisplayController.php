@@ -4269,7 +4269,7 @@ class DisplayController extends Controller
             ],
             'kwh' => [
                 [
-                    'name' => 'kWh',
+                    'name' => 'kw',
                     'data' => $tmp_data_kwh,
                     'color' => new JsExpression('Highcharts.getOptions().colors[1]')
                     //'color' => 'white'

@@ -212,7 +212,7 @@ echo '</pre>';*/
                     ],
                     'yAxis' => [
                         'title' => [
-                            'text' => 'kWh',
+                            'text' => 'kw',
                         ],
                         //'max' => 100,
                         //'min' => 0,
@@ -250,7 +250,7 @@ echo '</pre>';*/
                     ],
                     'tooltip' => [
                         'enabled' => true,
-                        'valueSuffix' => ' kWh'
+                        'valueSuffix' => ' kw'
                     ],
                     'plotOptions' => [
                         'line' => [

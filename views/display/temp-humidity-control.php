@@ -110,7 +110,7 @@ echo '</pre>';*/
             }
         } elseif ($category == 4) {
             //$params_val = $value->humidity . '<small>%</small>';
-            $params_val = $value->power_consumption;
+            $params_val = round($value->power_consumption);
             // if ($params_val > $value->noise_max) {
             //     $temp_class = ' bg-red-active';
             // }
@@ -125,7 +125,7 @@ echo '</pre>';*/
         if ($category == 3) {
             echo $params_val == null ? '' : Html::a($content, ['noise-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         } elseif ($category == 4) {
-            $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px; border-bottom: 1px solid white;">' . $params_val . '%</div><div style="padding: 0px 4px;">' . $value->kw . ' kWh</div></div>';
+            $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px; border-bottom: 1px solid white;">' . $params_val . '%</div><div style="padding: 0px 4px;">' . $value->kw . ' kw</div></div>';
             echo $params_val == null ? '' : Html::a($content, ['power-consumption-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         } else {
             echo $params_val == null ? '' : Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
