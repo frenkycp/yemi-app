@@ -216,6 +216,7 @@ echo '</pre>';*/
                         'series' => [
                             'pointPadding' => 0.05,
                             'groupPadding' => 0,
+                            'turboThreshold' => 0
                         ],
                     ],
                     'series' => $data_iot
