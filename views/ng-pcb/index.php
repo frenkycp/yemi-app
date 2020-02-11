@@ -125,6 +125,20 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'line',
+        'vAlign' => 'middle',
+        'filter' => [
+            'Line 1' => 'Line 1',
+            'Line 2' => 'Line 2',
+            'Line 3' => 'Line 3',
+            'Line 4' => 'Line 4',
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'pcb_side',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -135,6 +149,15 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; width: 60px;'
+        ],
+    ],
+    [
+        'attribute' => 'line',
+        'vAlign' => 'middle',
+        'filter' => $ng_found_dropdown,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
         ],
     ],
     [
@@ -169,6 +192,74 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'pcb_occu',
+        'label' => 'Occurance',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'pcb_process',
+        'label' => 'Process',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'pcb_part_section',
+        'label' => 'Part Section',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'part_no',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'part_desc',
+        'label' => 'Part Description',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'ng_location',
+        'label' => 'Location',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'pcb_repair',
+        'label' => 'Repair',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
         'attribute' => 'ng_cause_category',
         'label' => 'Category',
         'vAlign' => 'middle',
@@ -176,6 +267,15 @@ $gridColumns = [
         'filter' => $ng_pcb_cause_category_dropdown,
         'filterInputOptions' => [
             'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'emp_id',
+        'label' => 'NIK PIC (NG)',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
@@ -227,6 +327,16 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; width: 80px; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'detected_by_id',
+        'label' => 'By (NIK)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
         ],
     ],
     [
