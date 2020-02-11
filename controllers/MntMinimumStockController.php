@@ -93,7 +93,7 @@ class MntMinimumStockController extends \app\controllers\base\MntMinimumStockCon
 					];
 				}
 			} catch (Exception $ex) {
-				$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+				$msg = (isset($ex->errorInfo[2]))?$ex->errorInfo[2]:$ex->getMessage();
 				$response = [
 					'success' => false,
 					'message' => $msg,
