@@ -96,7 +96,8 @@ class MntMinimumStockController extends \app\controllers\base\MntMinimumStockCon
 				$msg = (isset($ex->errorInfo[2]))?$ex->errorInfo[2]:$ex->getMessage();
 				$response = [
 					'success' => false,
-					'message' => $msg,
+					'message' => 'Create order failed... ' . $msg,
+					//'message' => $msg,
 				];
 			}
 			
