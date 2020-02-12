@@ -16,17 +16,28 @@ use Yii;
  * @property string $area
  * @property double $temparature
  * @property double $humidity
+ * @property double $noise
+ * @property double $kw
+ * @property double $pf
+ * @property double $kva
+ * @property double $capacity
+ * @property double $power_consumption
  * @property string $system_date_time
  * @property integer $temp_min
  * @property integer $temp_max
  * @property integer $humi_min
  * @property integer $humi_max
+ * @property double $noise_max
+ * @property integer $power_max
  * @property integer $top_pos
  * @property integer $left_pos
  * @property integer $is_showing
  * @property string $layout
  * @property integer $is_refrigerator
  * @property integer $priority_no
+ * @property string $ref_abs
+ * @property string $wh_prod
+ * @property string $range_24_jam
  * @property string $aliasModel
  */
 abstract class SensorTbl extends \yii\db\ActiveRecord
@@ -57,12 +68,10 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
     {
         return [
             [['map_no'], 'required'],
-            [['map_no', 'temparature', 'humidity'], 'number'],
+            [['map_no', 'temparature', 'humidity', 'noise', 'kw', 'pf', 'kva', 'capacity', 'power_consumption', 'noise_max'], 'number'],
+            [['loc_no', 'Factory', 'location', 'area', 'layout', 'ref_abs', 'wh_prod', 'range_24_jam'], 'string'],
             [['system_date_time'], 'safe'],
-            [['temp_min', 'temp_max', 'humi_min', 'humi_max', 'top_pos', 'left_pos', 'is_showing', 'is_refrigerator', 'priority_no'], 'integer'],
-            [['loc_no'], 'string', 'max' => 6],
-            [['Factory', 'location', 'area'], 'string', 'max' => 100],
-            [['layout'], 'string', 'max' => 1],
+            [['temp_min', 'temp_max', 'humi_min', 'humi_max', 'power_max', 'top_pos', 'left_pos', 'is_showing', 'is_refrigerator', 'priority_no'], 'integer'],
             [['map_no'], 'unique']
         ];
     }
@@ -80,17 +89,28 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
             'area' => 'Area',
             'temparature' => 'Temparature',
             'humidity' => 'Humidity',
+            'noise' => 'Noise',
+            'kw' => 'Kw',
+            'pf' => 'Pf',
+            'kva' => 'Kva',
+            'capacity' => 'Capacity',
+            'power_consumption' => 'Power Consumption',
             'system_date_time' => 'System Date Time',
             'temp_min' => 'Temp Min',
             'temp_max' => 'Temp Max',
             'humi_min' => 'Humi Min',
             'humi_max' => 'Humi Max',
+            'noise_max' => 'Noise Max',
+            'power_max' => 'Power Max',
             'top_pos' => 'Top Pos',
             'left_pos' => 'Left Pos',
             'is_showing' => 'Is Showing',
             'layout' => 'Layout',
             'is_refrigerator' => 'Is Refrigerator',
             'priority_no' => 'Priority No',
+            'ref_abs' => 'Ref Abs',
+            'wh_prod' => 'Wh Prod',
+            'range_24_jam' => 'Range 24 Jam',
         ];
     }
 

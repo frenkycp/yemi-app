@@ -111,9 +111,9 @@ echo '</pre>';*/
         } elseif ($category == 4) {
             //$params_val = $value->humidity . '<small>%</small>';
             $params_val = round($value->power_consumption);
-            // if ($params_val > $value->noise_max) {
-            //     $temp_class = ' bg-red-active';
-            // }
+            if ($params_val > $value->power_max) {
+                $temp_class = ' bg-red-active';
+            }
         }
 
         $widget_class = 'temp-widget';
