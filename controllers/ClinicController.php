@@ -5,6 +5,7 @@ use yii\web\Controller;
 use yii\helpers\ArrayHelper;
 use app\models\KlinikInput;
 use app\models\KlinikHandle;
+use app\models\User;
 
 class ClinicController extends controller
 {
@@ -82,6 +83,13 @@ class ClinicController extends controller
 			];
 		}
 
+		$last_perawat = User::find()
+		->where([
+			'role_id' => 31
+		])
+		->orderBy('last_login DESC')
+		->one();
+
 		return $this->render('index', [
 			'today_visitor' => $today_visitor,
 			'monthly_visitor' => $monthly_visitor,
@@ -90,6 +98,7 @@ class ClinicController extends controller
 			'nurse_data' => $nurse_data,
 			'data' => $data,
 			'laktasi' => $laktasi,
+			'last_perawat' => $last_perawat,
 		]);
 	}
 
@@ -154,15 +163,24 @@ class ClinicController extends controller
 			];
 		}
 
+		$last_perawat = User::find()
+		->where([
+			'role_id' => 31
+		])
+		->orderBy('last_login DESC')
+		->one();
+
 		if ($nurse_status == 1) {
 			$nurse_data = [
 				'status' => 'ADA',
-				'bg_color' => 'bg-green'
+				'bg_color' => 'bg-green',
+				'name' => $last_perawat->name,
 			];
 		} else {
 			$nurse_data = [
 				'status' => 'TIDAK ADA',
-				'bg_color' => 'bg-orange'
+				'bg_color' => 'bg-orange',
+				'name' => $last_perawat->name,
 			];
 		}
 
@@ -176,7 +194,8 @@ class ClinicController extends controller
 
         $nurse_content = '<div class="small-box ' . $nurse_data['bg_color'] . '">
             <div class="inner">
-                <h3>Perawat</h3>
+                <span style="font-size: 22px; font-weight: bold; letter-spacing: 2px;">Perawat</span><br/>
+                <em><span style="letter-spacing: 1px;">[ ' . ucfirst(strtolower($last_perawat->name)) . ' ]</span></em>
                 <p>&nbsp;' . $nurse_data['status'] . '</p>
             </div>
             <a class="small-box-footer"></a>

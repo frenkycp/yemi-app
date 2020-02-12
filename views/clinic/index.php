@@ -154,7 +154,8 @@ echo '</pre>';*/
     <div id="nurse-content" class="col-lg-2 col-xs-6 col-md-3">
         <div class="small-box <?= $nurse_data['bg_color']; ?>">
             <div class="inner">
-                <h3>Perawat</h3>
+                <span style="font-size: 22px; font-weight: bold; letter-spacing: 2px;">Perawat</span><br/>
+                <em><span style="letter-spacing: 1px;"><?= '[ ' . ucfirst(strtolower($last_perawat->name)) . ' ]'; ?></span></em>
                 <p>&nbsp;<?= $nurse_data['status']; ?></p>
             </div>
             <a class="small-box-footer"></a>
