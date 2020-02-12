@@ -135,8 +135,11 @@ class ProdNgData extends BaseProdNgData
                     $this->pcb_id = $pcb_split_arr[0];
                     $this->pcb_name = $pcb_split_arr[1];
                 } else {
-                    $this->pcb_name = $this->pcb_id;
-                    $this->pcb_id = null;
+                    if ($this->pcb_name == null) {
+                        $this->pcb_name = $this->pcb_id;
+                        $this->pcb_id = null;
+                    }
+                    
                 }
                 
             }

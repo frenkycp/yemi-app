@@ -194,7 +194,7 @@ class ClinicController extends controller
 
         $nurse_content = '<div class="small-box ' . $nurse_data['bg_color'] . '">
             <div class="inner">
-                <h3>Perawat <small style="color: white;">[ ' . $last_perawat->name . ' ]</small></h3>
+                <h3>Perawat (' . $last_perawat->name . ')</h3>
                 <p>&nbsp;' . $nurse_data['status'] . '</p>
             </div>
             <a class="small-box-footer"></a>
