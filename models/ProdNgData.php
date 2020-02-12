@@ -135,7 +135,12 @@ class ProdNgData extends BaseProdNgData
                     $this->pcb_id = $pcb_split_arr[0];
                     $this->pcb_name = $pcb_split_arr[1];
                 } else {
-                    if ($this->pcb_name == null) {
+                    $tmp_sap = SapItem::find()
+                    ->where([
+                        'material' => $this->pcb_id
+                    ])
+                    ->one();
+                    if ($tmp_sap->material == null) {
                         $this->pcb_name = $this->pcb_id;
                         $this->pcb_id = null;
                     }
