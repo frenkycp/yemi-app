@@ -236,7 +236,8 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th class="text-center">Dandori</th>
 	    	<th class="text-center">Break Down</th>
 	    	<th class="text-center">Operating Loss</th>
-	    	<th class="text-center">Operation Ratio(%)<br/>((D-E) / 1440)</th>
+	    	<th class="text-center">Working Time<br/>(G)</th>
+	    	<th class="text-center">Operation Ratio(%)<br/>((G-E-F) / 1440)</th>
 	    	<th class="text-center">Working Ratio(%)<br/>(C / (D-E-F))</th>
 	    </tr>';
 
@@ -265,6 +266,7 @@ class SmtDailyUtilityReportController extends Controller
 	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->dandori_minute, 2) . '</td>
 	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->break_down_minute, 2) . '</td>
 	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->operating_loss_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->working_time, 2) . '</td>
 	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->operating_ratio, 2) . '</td>
 	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->working_ratio, 2) . '</td>
 	    	</tr>';

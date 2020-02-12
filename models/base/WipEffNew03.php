@@ -26,6 +26,7 @@ use Yii;
  * @property double $dandori_minute
  * @property double $break_down_minute
  * @property double $operating_loss_minute
+ * @property double $working_time
  * @property double $operating_ratio
  * @property double $working_ratio
  * @property string $aliasModel
@@ -59,7 +60,7 @@ abstract class WipEffNew03 extends \yii\db\ActiveRecord
         return [
             [['child_analyst', 'child_analyst_desc', 'period', 'LINE', 'SMT_SHIFT', 'child_all', 'child_desc_all'], 'string'],
             [['post_date'], 'safe'],
-            [['qty_all', 'std_all', 'lt_std', 'lt_gross', 'planed_loss_minute', 'out_section_minute', 'dandori_minute', 'break_down_minute', 'operating_loss_minute', 'operating_ratio', 'working_ratio'], 'number']
+            [['qty_all', 'std_all', 'lt_std', 'lt_gross', 'planed_loss_minute', 'out_section_minute', 'dandori_minute', 'break_down_minute', 'operating_loss_minute', 'working_time', 'operating_ratio', 'working_ratio'], 'number']
         ];
     }
 
@@ -86,6 +87,7 @@ abstract class WipEffNew03 extends \yii\db\ActiveRecord
             'dandori_minute' => 'Dandori Minute',
             'break_down_minute' => 'Break Down Minute',
             'operating_loss_minute' => 'Operating Loss Minute',
+            'working_time' => 'Working Time',
             'operating_ratio' => 'Operating Ratio',
             'working_ratio' => 'Working Ratio',
         ];
