@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Karyawan;
+use app\models\SkillMasterKaryawan;
 /**
 * This is the class for controller "SkillMapDataController".
 */
@@ -33,8 +34,29 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
         	->one();
 
         	if ($tmp_karyawan->NIK_SUN_FISH != null) {
-        		
-	        	$sql = "{CALL SKILL_UPDATE(:NIK, :skill_id, :skill_value, :USER_ID, :USER_DESC)}";
+        		$tmp_skill_master = SkillMasterKaryawan::find()
+        		->where([
+        			'NIK' => $tmp_karyawan->NIK_SUN_FISH
+        		])
+        		->one();
+
+        		if ($tmp_skill_master->NIK == null) {
+        			$sql = "{CALL SKILL_CREATE(:NIK, :USER_ID, :USER_DESC)}";
+		        	$params = [
+						':NIK' => $model->nik,
+						':USER_ID' => $tmp_karyawan->NIK_SUN_FISH,
+						':USER_DESC' => $tmp_karyawan->NAMA_KARYAWAN,
+					];
+
+					try {
+					    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
+					    \Yii::$app->session->setFlash("warning", $model->nik . ' - ' . $tmp_karyawan->NAMA_KARYAWAN . ' doesn\'t have skill map data. Default skill map has been added for this user.');
+					    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
+					} catch (Exception $ex) {
+						\Yii::$app->session->setFlash('danger', "Error : $ex");
+					}
+        		}
+        		$sql = "{CALL SKILL_UPDATE(:NIK, :skill_id, :skill_value, :USER_ID, :USER_DESC)}";
 	        	$params = [
 					':NIK' => $model->nik,
 					':skill_id' => $model->gmc,
@@ -48,8 +70,9 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
 				    \Yii::$app->session->setFlash("success", 'Skill for ' . $model->nik . ' - ' . $tmp_karyawan->NAMA_KARYAWAN . ' has been updated...');
 				    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
 				} catch (Exception $ex) {
-					\Yii::$app->session->setFlash('danger', "Error : $ex, $lot_id aaaaaaa");
+					\Yii::$app->session->setFlash('danger', "Error : $ex");
 				}
+	        	
         	}
 
         	
