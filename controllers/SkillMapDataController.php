@@ -36,7 +36,7 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
         	if ($tmp_karyawan->NIK_SUN_FISH != null) {
         		$tmp_skill_master = SkillMasterKaryawan::find()
         		->where([
-        			'NIK' => $tmp_karyawan->NIK_SUN_FISH
+        			'NIK' => $model->nik
         		])
         		->one();
 
