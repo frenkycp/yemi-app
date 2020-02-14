@@ -3417,7 +3417,7 @@ class DisplayController extends Controller
 
         $tmp_hdr_dtr = WipHdrDtr::find()
         ->where([
-            'child_analyst' => 'WW02',
+            //'child_analyst' => 'WW02',
             'slip_id' => $tmp_slip_id
         ])
         ->asArray()
