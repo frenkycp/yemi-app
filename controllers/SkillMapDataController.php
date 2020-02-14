@@ -50,7 +50,7 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
 
 					try {
 					    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
-					    \Yii::$app->session->setFlash("warning", $model->nik . ' - ' . $tmp_karyawan->NAMA_KARYAWAN . ' doesn\'t have skill map data. Default skill map has been added for this user.');
+					    \Yii::$app->session->setFlash("warning", $model->nik . ' - ' . $tmp_skill_master->NAMA_KARYAWAN . ' doesn\'t have skill map data. Default skill map has been added for this user.');
 					    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
 					} catch (Exception $ex) {
 						\Yii::$app->session->setFlash('danger', "Error : $ex");
@@ -67,7 +67,7 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
 
 				try {
 				    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
-				    \Yii::$app->session->setFlash("success", 'Skill for ' . $model->nik . ' - ' . $tmp_karyawan->NAMA_KARYAWAN . ' has been updated...');
+				    \Yii::$app->session->setFlash("success", 'Skill for ' . $model->nik . ' - ' . $tmp_skill_master->NAMA_KARYAWAN . ' has been updated...');
 				    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
 				} catch (Exception $ex) {
 					\Yii::$app->session->setFlash('danger', "Error : $ex");
