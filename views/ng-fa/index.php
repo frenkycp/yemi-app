@@ -122,8 +122,18 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'emp_id',
+        'label' => 'PIC NG (NIK)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'emp_name',
-        'label' => 'PIC (NG)',
+        'label' => 'PIC NG (Name)',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
@@ -187,6 +197,24 @@ $gridColumns = [
     [
         'attribute' => 'gmc_line',
         'label' => 'By',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 60px; min-width: 60px;',
+        ],
+    ],
+    [
+        'attribute' => 'created_by_id',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 60px; min-width: 60px;',
+        ],
+    ],
+    [
+        'attribute' => 'created_by_name',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [

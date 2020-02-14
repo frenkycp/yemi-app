@@ -212,6 +212,24 @@ $gridColumns = [
             'class' => 'form-control',
         ],
     ],
+    [
+        'attribute' => 'created_by_id',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 60px; min-width: 60px;',
+        ],
+    ],
+    [
+        'attribute' => 'created_by_name',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 60px; min-width: 60px;',
+        ],
+    ],
 ];
 ?>
 <div class="giiant-crud pabx-log-index">
