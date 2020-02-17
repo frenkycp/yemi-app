@@ -95,16 +95,15 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'close_open_note',
+        'attribute' => 'close_open',
         'label' => 'Order Status',
         'value' => function($model){
-            if ($model->close_open_note == null) {
+            if ($model->close_open == 'O') {
                 return 'OPEN';
             }
-            if ($model->close_open_note == 'NORMAL') {
+            if ($model->close_open == 'C') {
                 return 'CLOSE';
             }
-            return $model->close_open_note;
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',

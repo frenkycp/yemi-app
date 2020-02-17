@@ -53,10 +53,9 @@ $this->registerCss(".form-group { margin-bottom: 0px; }");
                 	])->label('Department/Section'); ?>
                 </div>
                 <div class="col-md-4">
-                	<?= $form->field($model, 'order_status')->dropDownList([
-                		'OPEN' => 'OPEN',
-                		'CLOSE' => 'CLOSE',
-                		'CANCEL' => 'CANCEL',
+                	<?= $form->field($model, 'close_open')->dropDownList([
+                		'O' => 'OPEN',
+                		'C' => 'CLOSE',
                 	], [
                 		'prompt' => 'Choose...'
                 	])->label('Order Status'); ?>

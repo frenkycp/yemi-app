@@ -86,22 +86,9 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'type', $this->type])
             ->andFilterWhere(['like', 'USER_ID', $this->USER_ID])
             ->andFilterWhere(['like', 'USER_DESC', $this->USER_DESC])
+            ->andFilterWhere(['IS', 'close_open_note', new \yii\db\Expression('null')])
             ->andFilterWhere(['>=', 'post_date', $this->from_date])
             ->andFilterWhere(['<=', 'post_date', $this->to_date]);
-
-            if ($this->order_status == 'OPEN') {
-                  $query->andFilterWhere([
-                        'is', 'close_open_note', new \yii\db\Expression('null')
-                    ]);
-            } elseif ($this->order_status == 'CLOSE') {
-                  $query->andFilterWhere([
-                        'close_open_note' => 'NORMAL',
-                    ]);
-            } elseif ($this->order_status == 'CANCEL') {
-                  $query->andFilterWhere([
-                        'close_open_note' => 'CANCEL',
-                    ]);
-            } 
 
 return $dataProvider;
 }
