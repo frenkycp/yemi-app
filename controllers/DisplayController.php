@@ -111,9 +111,120 @@ use app\models\FlexiStorage;
 use app\models\ItemUncounttableList;
 use app\models\ItemUncounttable;
 use app\models\ItemUncountableSummaryReport2;
+use app\models\LiveCookingRequest;
+use app\models\LiveCookingMenuSchedule;
 
 class DisplayController extends Controller
 {
+    public function actionLiveCookingData($now)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+        //$today = '2020-02-13';
+
+        $now2 = date('Y-m-d H:i:s');
+        $diff_s = strtotime($now2) - strtotime($now);
+
+        $today_request = LiveCookingRequest::find()
+        ->select([
+            'qty_diff' => 'SUM(qty_diff)'
+        ])
+        ->where([
+            'post_date' => $today
+        ])
+        ->one();
+
+        $data = [
+            'remaining_qty' => $today_request->qty_diff,
+            'diff_s' => $diff_s,
+            'now' => $now,
+            'now2' => $now2,
+        ];
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function actionLiveCooking()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+        //$today = '2020-02-13';
+
+        $model = new \yii\base\DynamicModel([
+            'nik',
+        ]);
+        $model->addRule(['nik'], 'string');
+        
+        if ($model->load($_GET)) {
+
+        }
+
+        $pesan = [
+            'category' => 0,
+            'data' => '',
+        ];
+
+        if ($model->nik != null && $model->nik != '') {
+            $tmp_karyawan = Karyawan::find()
+            ->where([
+                'OR',
+                ['NIK' => $model->nik],
+                ['NIK_SUN_FISH' => $model->nik]
+            ])
+            ->one();
+
+            $sql = "{CALL LIVE_COOKING_REQUEST_UPDATE(:NIK)}";
+            $params = [
+                ':NIK' => $model->nik
+            ];
+            try {
+                $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->queryOne();
+                if (strpos($result['hasil'], 'TIDAK TERSEDIA')) {
+                    $pesan['category'] = 2;
+                    $pesan['data'] = 'YOUR ORDER NOT FOUND, '. $tmp_karyawan->NAMA_KARYAWAN;
+                }
+                if (strpos($result['hasil'], 'SILAHKAN')) {
+                    $pesan['category'] = 1;
+                    $pesan['data'] = 'PLEASE ENJOY YOUR MEAL, ' . $tmp_karyawan->NAMA_KARYAWAN;
+                }
+                //\Yii::$app->session->setFlash('success', 'Hasil : ' . $result['hasil']);
+            } catch (Exception $ex) {
+                echo 'Caught exception: ',  $ex->getMessage(), "\n";
+            }
+        }
+        $model->nik = null;
+
+        $today_request = LiveCookingRequest::find()
+        ->select([
+            'qty_diff' => 'SUM(qty_diff)'
+        ])
+        ->where([
+            'post_date' => $today
+        ])
+        ->one();
+
+        $today_menu = LiveCookingMenuSchedule::find()
+        ->where([
+            'DATE' => $today,
+        ])
+        ->one();
+        $today_menu_txt = '';
+        if ($today_menu->MENU != null) {
+            $today_menu_txt = $today_menu->MENU;
+        }
+
+        $now = date('Y-m-d H:i:s');
+
+        return $this->render('live-cooking', [
+            'model' => $model,
+            'remaining_qty' => $today_request->qty_diff,
+            'pesan' => $pesan,
+            'now' => $now,
+            'today' => $today,
+            'today_menu_txt' => $today_menu_txt
+        ]);
+    }
+
     public function actionUncountableTopVariance($value='')
     {
         date_default_timezone_set('Asia/Jakarta');
