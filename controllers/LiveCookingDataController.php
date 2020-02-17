@@ -20,7 +20,7 @@ class LiveCookingDataController extends \app\controllers\base\LiveCookingDataCon
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 	    $searchModel  = new LiveCookingDataSearch;
@@ -75,6 +75,7 @@ class LiveCookingDataController extends \app\controllers\base\LiveCookingDataCon
 				echo 'Caught exception: ',  $ex->getMessage(), "\n";
 			}
 		}
+		return $this->redirect(Url::previous());
 	}
 
 	public function actionCreate()
