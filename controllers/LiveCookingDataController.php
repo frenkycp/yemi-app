@@ -41,6 +41,7 @@ class LiveCookingDataController extends \app\controllers\base\LiveCookingDataCon
 	{
 		$model = $this->findModel($seq);
 		$user_id = \Yii::$app->user->identity->username;
+		$user_id = str_replace('LC', '', $user_id);
 		$user_data = Karyawan::find()
 		->where([
 			'OR',
@@ -99,6 +100,7 @@ class LiveCookingDataController extends \app\controllers\base\LiveCookingDataCon
 				} else {
 					if (($tmp_budget->balance - count($model->employee)) >= 0) {
 						$user_id = \Yii::$app->user->identity->username;
+						$user_id = str_replace('LC', '', $user_id);
 						$user_data = Karyawan::find()
 						->where([
 							'OR',
