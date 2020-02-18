@@ -116,6 +116,75 @@ use app\models\LiveCookingMenuSchedule;
 
 class DisplayController extends Controller
 {
+    public function actionFixLotStuck()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'beacon_id'
+        ]);
+        $model->addRule(['beacon_id'], 'required');
+
+        if ($model->load($_GET)) {
+            $tmp_beacon = BeaconTbl::find()->where(['minor' => $model->beacon_id])->one();
+
+            if ($tmp_beacon) {
+                $lot_number = $tmp_beacon->lot_number;
+                $tmp_beacon->lot_number = $tmp_beacon->start_date = $tmp_beacon->mesin_id = $tmp_beacon->mesin_description = $tmp_beacon->kelompok = $tmp_beacon->model_group = $tmp_beacon->parent = $tmp_beacon->parent_desc = $tmp_beacon->gmc = $tmp_beacon->gmc_desc = $tmp_beacon->lot_qty = $tmp_beacon->current_machine_start = $tmp_beacon->next_process = $tmp_beacon->lot_status = null;
+
+                $mio = MachineIotOutput::find()->where(['lot_number' => $lot_number])->orderBy('seq DESC')->one();
+                $end_date = date('Y-m-d H:i:s');
+                if ($mio->end_date != null) {
+                    $end_date = $mio->end_date;
+                }
+                $wet = WipEffTbl::find()->where(['lot_id' => $lot_number])->one();
+                if ($wet->end_date == null) {
+                    $wet->end_date = $end_date;
+                }
+                $wet->plan_run = 'E';
+                $wet->plan_stats = 'C';
+                
+                if (!$wet->save()) {
+                    return json_encode($wet->errors);
+                }
+
+                if (!$tmp_beacon->save()) {
+                    return json_encode($tmp_beacon->errors);
+                }
+
+                \Yii::$app->session->setFlash('success', 'Beacon ID : ' . $model->beacon_id . ' with lot number : ' . $lot_number . ' has been fixed...');
+            } else {
+                \Yii::$app->session->setFlash('danger', 'Beacon ID not found...');
+            }
+        }
+        $model->beacon_id = null;
+
+        return $this->render('fix-lot-stuck', [
+            'model' => $model,
+        ]);
+    }
+    public function actionSectionAttendance()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'section', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','section'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . '-1 year'));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        $section_arr = ArrayHelper::map(CostCenter::find()->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC');
+
+        return $this->render('section-attendance', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
+
     public function actionLiveCookingData($now)
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -139,6 +208,8 @@ class DisplayController extends Controller
             'diff_s' => $diff_s,
             'now' => $now,
             'now2' => $now2,
+            'today' => strtoupper(date('l, j M\' Y', strtotime($today))),
+            'this_time' => date('H:i:s')
         ];
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
