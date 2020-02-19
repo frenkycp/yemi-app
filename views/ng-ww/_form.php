@@ -71,7 +71,7 @@ $this->registerCss("
                             'material', 'material_description'
                         ])
                         ->where([
-                            'sloc' => ['WI01', 'WI02', 'WI03', 'WU00', 'WU01']
+                            'sloc' => ['WW01', 'WW02', 'WW03', 'WW04', 'WW06']
                         ])
                         ->all(), 'fullDescription', 'fullDescription'),
                         'options' => [
