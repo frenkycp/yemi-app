@@ -2,6 +2,8 @@
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
 
 $this->title = [
     'page_title' => 'STOCK TAKING FIXED ASSET ' . date('d M Y') . '<span class="japanesse light-green"></span>',
@@ -178,7 +180,17 @@ $this->registerCss("
 								<?= $form->field($model, 'from_loc')->textInput(['readonly' => true]); ?>
 							</div>
 							<div class="col-md-6">
-								<?= $form->field($model, 'to_loc')->textInput(['placeholder' => 'Leave empty if location doesn\'t change ...']); ?>
+								<?= $form->field($model, 'to_loc')->widget(Select2::classname(), [
+			                        'data' => ArrayHelper::map(app\models\AssetLocTbl::find()
+			                        	->orderBy('LOC_TYPE, LOC_GROUP_DESC, LOC_DESC')
+				                        ->all(), 'LOC', 'fullDesc'),
+				                        'options' => [
+				                            'placeholder' => 'Leave empty if location doesn\'t change...',
+				                        ],
+				                        'pluginOptions' => [
+				                            'allowClear' => true
+				                        ],
+			                    ]); ?>
 							</div>
 						</div>
 					</div>

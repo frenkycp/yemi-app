@@ -85,7 +85,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         $nik = $session['fix_asset_user'];
 		$this->layout = 'fixed-asset/main';
 	    $searchModel  = new FixAssetDataSearch;
-	    $searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
+	    //$searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
@@ -150,9 +150,12 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 
 		if ($model->load($_POST)) {
 			if ($model->to_loc != '' && $model->to_loc != null) {
-				$fixed_asset_data->location = $model->to_loc;
+				$tmp_asset_loc = AssetLocTbl::find()->where(['LOC' => $model->to_loc])->one();
+				$fixed_asset_data->LOC = $model->to_loc;
+				$fixed_asset_data->location = $tmp_asset_loc->LOC_DESC;
+				$model->to_loc = $tmp_asset_loc->LOC_DESC;
 			} else {
-				$model->to_loc = '-';
+				$model->to_loc = NULL;
 			};
 			$fixed_asset_data->status = $model->status;
 			$fixed_asset_data->label = $model->label;

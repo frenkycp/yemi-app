@@ -99,6 +99,24 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'ng_root_cause',
+        'label' => 'Root Cause',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'ng_detail',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'ng_category_id',
         'value' => function($model)
         {

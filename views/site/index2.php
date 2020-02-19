@@ -57,6 +57,9 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Weekly JIT Parts <span class="japanesse-word">（週次JIT部品納入)</span>', ['/parts-jit-weekly']); ?>
                                 </li>
+                                <li>
+                                    <?= Html::a('Weekly Import Parts <span class="japanesse-word"></span>', ['/parts-import-weekly']); ?>
+                                </li>
                             </ol>
                         </div>
                         <div class="list-group-item">

@@ -113,6 +113,8 @@ use app\models\ItemUncounttable;
 use app\models\ItemUncountableSummaryReport2;
 use app\models\LiveCookingRequest;
 use app\models\LiveCookingMenuSchedule;
+use app\models\AbsensiTbl;
+use app\models\WorkDayTbl;
 
 class DisplayController extends Controller
 {
@@ -166,22 +168,65 @@ class DisplayController extends Controller
     }
     public function actionSectionAttendance()
     {
-        $this->layout = 'clean';
+        //$this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
+        $data = $tmp_data = [];
 
         $model = new \yii\base\DynamicModel([
             'section', 'from_date', 'to_date'
         ]);
         $model->addRule(['from_date', 'to_date','section'], 'required');
 
-        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . '-1 year'));
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . ' -1 year'));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
 
         $section_arr = ArrayHelper::map(CostCenter::find()->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC');
 
+        if ($model->load($_GET)) {
+            $tmp_attendance = AbsensiTbl::find()
+            ->select([
+                'DATE',
+                'total' => 'SUM(BONUS)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'DATE', $model->from_date],
+                ['<=', 'DATE', $model->to_date]
+            ])
+            ->andWhere(['CC_ID' => $model->section])
+            ->groupBy('DATE')
+            ->orderBy('DATE')
+            ->all();
+
+            $tmp_work_day = ArrayHelper::map(WorkDayTbl::find()->where([
+                'AND',
+                ['>=', 'cal_date', $model->from_date],
+                ['<=', 'cal_date', $model->to_date]
+            ])->andWhere('holiday IS NULL')->all(), 'cal_date', 'wrk_no');
+
+            foreach ($tmp_attendance as $key => $value) {
+                if (isset($tmp_work_day[$value->DATE])) {
+                    $post_date = (strtotime($value->DATE . " +7 hours") * 1000);
+                    $tmp_data[] = [
+                        'x' => $post_date,
+                        'y' => (int)$value->total,
+                        //'url' => Url::to(['defect-daily-pcb-get-remark', 'post_date' => $value->post_date, 'line_pcb' => $model->line_pcb]),
+                    ];
+                }
+                
+            }
+        }
+
+        $data[] = [
+            'name' => 'Daily Attendance',
+            'data' => $tmp_data,
+            'showInLegend' => false
+        ];
+
         return $this->render('section-attendance', [
             'data' => $data,
             'model' => $model,
+            'section_arr' => $section_arr,
         ]);
     }
 
@@ -209,7 +254,7 @@ class DisplayController extends Controller
             'now' => $now,
             'now2' => $now2,
             'today' => strtoupper(date('l, j M\' Y', strtotime($today))),
-            'this_time' => date('H:i:s')
+            'this_time' => date('H:i')
         ];
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }

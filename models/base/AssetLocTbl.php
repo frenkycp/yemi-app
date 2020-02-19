@@ -11,8 +11,12 @@ use Yii;
  *
  * @property string $LOC
  * @property string $LOC_DESC
+ * @property string $LOC_GROUP
+ * @property string $LOC_GROUP_DESC
  * @property string $LOC_AREA
  * @property string $LOC_TYPE
+ * @property string $NIK_SUN_FISH
+ * @property string $NAMA_KARYAWAN
  * @property string $aliasModel
  */
 abstract class AssetLocTbl extends \yii\db\ActiveRecord
@@ -43,7 +47,7 @@ abstract class AssetLocTbl extends \yii\db\ActiveRecord
     {
         return [
             [['LOC'], 'required'],
-            [['LOC', 'LOC_DESC', 'LOC_AREA', 'LOC_TYPE'], 'string'],
+            [['LOC', 'LOC_DESC', 'LOC_GROUP', 'LOC_GROUP_DESC', 'LOC_AREA', 'LOC_TYPE', 'NIK_SUN_FISH', 'NAMA_KARYAWAN'], 'string'],
             [['LOC'], 'unique']
         ];
     }
@@ -56,8 +60,12 @@ abstract class AssetLocTbl extends \yii\db\ActiveRecord
         return [
             'LOC' => 'Loc',
             'LOC_DESC' => 'Loc  Desc',
+            'LOC_GROUP' => 'Loc  Group',
+            'LOC_GROUP_DESC' => 'Loc  Group  Desc',
             'LOC_AREA' => 'Loc  Area',
             'LOC_TYPE' => 'Loc  Type',
+            'NIK_SUN_FISH' => 'Nik  Sun  Fish',
+            'NAMA_KARYAWAN' => 'Nama  Karyawan',
         ];
     }
 

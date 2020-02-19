@@ -149,16 +149,16 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
-    [
-        'attribute' => 'department_name',
-        'label' => 'Department',
-        'vAlign' => 'middle',
-        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('department_name')->where(['FINANCE_ASSET' => 'Y'])->andWhere('department_name IS NOT NULL')->groupBy('department_name')->orderBy('department_name')->all(), 'department_name', 'department_name'),
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
+    // [
+    //     'attribute' => 'department_name',
+    //     'label' => 'Department',
+    //     'vAlign' => 'middle',
+    //     'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('department_name')->where(['FINANCE_ASSET' => 'Y'])->andWhere('department_name IS NOT NULL')->groupBy('department_name')->orderBy('department_name')->all(), 'department_name', 'department_name'),
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
     [
         'attribute' => 'section_name',
         'label' => 'Section',
@@ -221,15 +221,15 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
-    [
-        'attribute' => 'area',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
+    // [
+    //     'attribute' => 'area',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
     [
         'attribute' => 'Discontinue',
         'vAlign' => 'middle',
