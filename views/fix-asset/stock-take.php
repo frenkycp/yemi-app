@@ -25,7 +25,14 @@ $this->registerCss("
 ?>
 
 <span id="dept-text">DEPARTMENT<span style="padding: 0px 30px;">:&nbsp;&nbsp;&nbsp;&nbsp;<i><?= $fixed_asset_data->cost_centre; ?></span><?= $fixed_asset_data->section_name; ?></i></span>
-
+<?php $form = ActiveForm::begin([
+			'id' => 'AssetTbl',
+			//'layout' => 'horizontal',
+			'enableClientValidation' => true,
+			'errorSummaryCssClass' => 'error-summary alert alert-danger',
+		]
+		);
+		?>
 <div class="row">
 	<div class="col-md-12">
 		<div class="box box-primary box-solid">
@@ -37,24 +44,58 @@ $this->registerCss("
 			<div class="box-body" id="prod-info-body">
 				<div class="row">
 					<div class="col-md-4">
-						<div id="">
-							<?php
-							$filename = $fixed_asset_data->primary_picture . '.jpg';
-							$path1 = \Yii::$app->basePath . '\\web\\uploads\\ASSET_IMG\\' . $filename;
-							if (file_exists($path1)) {
-								echo Html::img('@web/uploads/ASSET_IMG/' . $fixed_asset_data->primary_picture . '.jpg', [
-									'class' => 'media-object img-rounded img-content',
-									'width' => '100%',
-									//'height' => '300'
-								]);
-							} else {
-								echo Html::img('@web/uploads/image-not-available.png', [
-									'class' => 'media-object img-rounded img-content',
-									'width' => '100%',
-									//'height' => '350'
-								]);
-							}
-							?>
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<h3 class="panel-title">Image</h3>
+							</div>
+							<div class="panel-body">
+								<?php
+								$filename = $fixed_asset_data->primary_picture . '.jpg';
+								$path1 = \Yii::$app->basePath . '\\web\\uploads\\ASSET_IMG\\' . $filename;
+								if (file_exists($path1)) {
+									echo $form->field($model, 'upload_file')->widget(\kartik\file\FileInput::className(), [
+							            'options' => ['accept' => 'image/*'],
+							            'pluginOptions' => [
+							                'allowedFileExtensions' => ['jpg'],
+							                //'showCaption' => false,
+									        //'showRemove' => false,
+									        //'showUpload' => false,
+									        //'browseClass' => 'btn btn-primary btn-block',
+									        //'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
+									        //'browseLabel' =>  ' Select Photo',
+									        'initialPreview'=>[
+									            Html::img('@web/uploads/ASSET_IMG/' . $filename, ['width' => '100%'])
+									        ],
+									        'initialPreviewConfig' => [
+									            ['caption' => 'Fix Asset Image'],
+									        ],
+									        //'initialPreviewAsData'=>true,
+							            ],
+							        ])->label(false);
+								} else {
+									echo $form->field($model, 'upload_file')->widget(\kartik\file\FileInput::className(), [
+							            'options' => ['accept' => 'image/*'],
+							            'pluginOptions' => [
+							                'allowedFileExtensions' => ['jpg'],
+							                //'showCaption' => false,
+									        //'showRemove' => false,
+									        //'showUpload' => false,
+									        //'browseClass' => 'btn btn-primary btn-block',
+									        //'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
+									        //'browseLabel' =>  ' Select Photo',
+									        // 'initialPreview'=>[
+									        //     Html::img('@web/uploads/image-not-available.png', ['width' => '100%'])
+									        // ],
+									        // 'initialPreviewConfig' => [
+									        //     ['caption' => 'No Image Found'],
+									        // ],
+									        //'initialPreviewAsData'=>true,
+							            ],
+							        ])->label(false);
+								}
+								?>
+							</div>
+							
 						</div>
 					</div>
 					<div class="col-md-8">
@@ -156,14 +197,7 @@ $this->registerCss("
 
 <div class="row">
 	<div class="col-md-12">
-		<?php $form = ActiveForm::begin([
-			'id' => 'AssetTbl',
-			//'layout' => 'horizontal',
-			'enableClientValidation' => true,
-			'errorSummaryCssClass' => 'error-summary alert alert-danger',
-		]
-		);
-		?>
+		
 
 		<div class="box box-success box-solid">
 			<div class="box-header with-border">

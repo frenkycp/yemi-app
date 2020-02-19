@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class AssetLogTbl extends BaseAssetLogTbl
 {
-    public $propose_scrap_dd;
+    public $propose_scrap_dd, $upload_file;
 
     public function behaviors()
     {
@@ -28,7 +28,7 @@ class AssetLogTbl extends BaseAssetLogTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                ['upload_file', 'file']
             ]
         );
     }

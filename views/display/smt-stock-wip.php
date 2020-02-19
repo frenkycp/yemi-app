@@ -11,12 +11,14 @@ use kartik\select2\Select2;
 
 $title = 'WIP Stock';
 $tab_title = 'WIP Stock';
-if ($loc == 'WM03') {
+$target_stock = 6000;
+if (strtoupper($loc) == 'WM03') {
     $title = 'SMT WIP Stock <span class="japanesse light-green">(仕掛り在庫)</span>';
     $tab_title = 'SMT WIP Stock ';
-} elseif ($loc == 'WU01') {
+} elseif (strtoupper($loc) == 'WU01') {
     $title = 'SPU WIP Stock <span class="japanesse light-green"></span>';
     $tab_title = 'SMT WIP Stock ';
+    $target_stock = 9500;
 }
 
 $this->title = [

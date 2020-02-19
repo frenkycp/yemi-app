@@ -12,6 +12,8 @@ use app\models\Karyawan;
 use app\models\AssetLocTbl;
 use app\models\AssetLogTbl;
 use app\models\AssetDtrTbl;
+use app\models\ImageFile;
+use yii\web\UploadedFile;
 
 class FixAssetController extends \app\controllers\base\FixAssetController
 {
@@ -127,6 +129,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         $name = $session['fix_asset_name'];
 
 		$this->layout = 'fixed-asset/main';
+
 		$fixed_asset_data = $this->findModel($asset_id);
 		$model = new AssetLogTbl;
 		//$model->from_loc = $model->to_loc = $fixed_asset_data->location;
@@ -161,6 +164,20 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 			$fixed_asset_data->label = $model->label;
 			$fixed_asset_data->propose_scrap = $model->propose_scrap;
 			$fixed_asset_data->NBV = $model->NBV;
+
+			$model->upload_file = UploadedFile::getInstance($model, 'upload_file');
+	        $new_filename = $asset_id . '.' . $model->upload_file->extension;
+
+	        if ($model->validate()) {
+	        	if ($model->upload_file) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/ASSET_IMG/") . $new_filename;
+	        		if ($model->upload_file->saveAs($filePath)) {
+	                    ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
+	                    $fixed_asset_data->primary_picture = $asset_id;
+	                }
+	                
+	        	}
+	        }
 
 			if ($model->save()) {
 				if (!$fixed_asset_data->save()) {

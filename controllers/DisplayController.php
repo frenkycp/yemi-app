@@ -2985,7 +2985,6 @@ class DisplayController extends Controller
         $stock_arr[] = $tmp_stock_delay3['total_stock'] - ($tmp_stock_delay1['total_stock'] + $tmp_stock_delay2['total_stock']);
 
         return $this->render('smt-stock-wip', [
-            'target_stock' => 6000,
             'total_stock' => $wip_stock_delay['total_stock'],
             'tgl_arr' => $tgl_arr,
             'loc' => $loc,
