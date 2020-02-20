@@ -20,7 +20,7 @@ if ($_GET['category'] == 4) {
         .container {width: auto;}
         .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
         body, .content-wrapper {background-color: #000;}
-        .temp-widget {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 60px; letter-spacing: 1.1px;}
+        .temp-widget {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 1.4em; width: 90px; letter-spacing: 1.1px;}
         .temp-widget-refrigerator {border-radius: 15px 15px 0px 0px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
         #main-body {overflow: auto;}
         #custom-title {position: absolute; top: 40px; left: 40px; font-size: 1.5em; border: 1px solid black; border-radius: 5px; padding: 10px; background-color: rgba(0, 255, 0, 0.4);}

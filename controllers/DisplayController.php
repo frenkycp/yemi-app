@@ -253,10 +253,29 @@ class DisplayController extends Controller
             'diff_s' => $diff_s,
             'now' => $now,
             'now2' => $now2,
-            'today' => strtoupper(date('l, j M\' Y', strtotime($today))),
+            'today' => $this->getTodayIndo(),
             'this_time' => date('H:i')
         ];
         return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function getTodayIndo()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $today = strtoupper(date('l, j M\' Y'));
+        $day_arr = [
+            'SUNDAY' => 'MINGGU',
+            'MONDAY' => 'SENIN',
+            'TUESDAY' => 'SELASA',
+            'WEDNESDAY' => 'RABU',
+            'THURSDAY' => 'KAMIS',
+            'FRIDAY' => 'JUMAT',
+            'SATURDAY' => 'SABTU'
+        ];
+        $tmp_day = strtoupper(date('l'));
+        $today_indo = $day_arr[$tmp_day];
+        $today = str_replace($tmp_day, $today_indo, $today);
+        return $today;
     }
 
     public function actionLiveCooking()
@@ -264,6 +283,7 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
+        $today_str = $this->getTodayIndo();
         //$today = '2020-02-13';
 
         $model = new \yii\base\DynamicModel([
@@ -337,6 +357,7 @@ class DisplayController extends Controller
             'pesan' => $pesan,
             'now' => $now,
             'today' => $today,
+            'today_str' => $today_str,
             'today_menu_txt' => $today_menu_txt
         ]);
     }

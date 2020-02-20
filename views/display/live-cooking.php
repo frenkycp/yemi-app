@@ -111,7 +111,7 @@ $menu_arr = [
     <div class="col-md-12 text-center">
         <div class="pull-left">
             <span id="today" style="color: white; font-size: 7em; font-weight: bold; letter-spacing: 2px;">
-                <?= strtoupper(date('l, j M\' Y', strtotime($today))); ?>
+                <?= $today_str; ?>
             </span>
         </div>
         <div class="pull-right">

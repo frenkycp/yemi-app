@@ -414,6 +414,8 @@ $this->registerCss("
                             <ol style="padding-left: 1em">
                                 <li><?= Html::a('Daily Attendance Control <span class="japanesse-word">(日常勤怠管理)</span>', ['/hrga-attendance-report/index']); ?>
                                 </li>
+                                <li><?= Html::a('Daily Attendance by Section <span class="japanesse-word"></span>', ['/display/section-attendance']); ?>
+                                </li>
                                 <li><?= Html::a('Monthly Overtime Control <span class="japanesse-word">(月次残業管理)</span>', ['/hrga-spl-report-daily/index']); ?>
                                 </li>
                                 <li><?= Html::a('Overtime Monthly Monitor <span class="japanesse-word">（月次残業モニター)</span>', ['/hrga-spl-yearly-report/index']); ?>
