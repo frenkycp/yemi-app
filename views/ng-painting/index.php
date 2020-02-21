@@ -147,6 +147,27 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'action_status',
+        'value' => function($model)
+        {
+            if ($model->action_status == 0) {
+                return 'OPEN';
+            } else {
+                return 'CLOSE';
+            }
+        },
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            'O' => 'OPEN',
+            'CLOSE' => 'CLOSE'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'ng_qty',
         'label' => 'QTY',
         'hAlign' => 'center',
