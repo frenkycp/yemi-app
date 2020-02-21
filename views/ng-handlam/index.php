@@ -159,7 +159,7 @@ $gridColumns = [
         'attribute' => 'action_status',
         'value' => function($model)
         {
-            if ($model->action_status == 0) {
+            if ($model->action_status == 'O') {
                 return 'OPEN';
             } else {
                 return 'CLOSE';
