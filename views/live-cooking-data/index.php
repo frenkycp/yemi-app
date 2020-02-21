@@ -149,7 +149,7 @@ $gridColumns = [
 <div class="giiant-crud live-cooking-request-index">
 
     <?php
-             echo $this->render('_search', ['model' =>$searchModel]);
+             echo $this->render('_search', ['model' =>$searchModel, 'today_menu_txt' => $today_menu_txt]);
         ?>
 
     

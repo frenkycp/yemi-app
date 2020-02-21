@@ -119,8 +119,14 @@ class ProdNgData extends BaseProdNgData
                 $this->emp_join_date = date('Y-m-d', strtotime($ng_karyawan->start_date));
                 $this->emp_working_month = $this->getDiffMonth(date('Y-m-d', strtotime($ng_karyawan->start_date)), $this->post_date);
                 $this->emp_status_code = $ng_karyawan->employ_code;
+                if ($this->next_action == null) {
+                    $this->action_status = 'O';
+                } else {
+                    $this->action_status = 'C';
+                }
             } else {
                 $this->emp_id = $this->emp_name = null;
+                $this->action_status = 'C';
             }
 
             $this->period = date('Ym', strtotime($this->post_date));

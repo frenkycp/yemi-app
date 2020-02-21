@@ -9,6 +9,7 @@ use app\models\search\LiveCookingDataSearch;
 use app\models\LiveCookingRequest;
 use app\models\LiveCookingBgt;
 use app\models\Karyawan;
+use app\models\LiveCookingMenuSchedule;
 
 /**
 * This is the class for controller "LiveCookingDataController".
@@ -25,15 +26,27 @@ class LiveCookingDataController extends \app\controllers\base\LiveCookingDataCon
 	{
 	    $searchModel  = new LiveCookingDataSearch;
 	    $dataProvider = $searchModel->search($_GET);
+	    $today = date('Y-m-d');
 
 		Tabs::clearLocalStorage();
 
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
+		$today_menu = LiveCookingMenuSchedule::find()
+        ->where([
+            'DATE' => $today,
+        ])
+        ->one();
+        $today_menu_txt = '';
+        if ($today_menu->MENU != null) {
+            $today_menu_txt = $today_menu->MENU;
+        }
+
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
+		    'today_menu_txt' => $today_menu_txt,
 		]);
 	}
 
