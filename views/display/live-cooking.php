@@ -72,7 +72,10 @@ $this->registerJs("
 ");
 
 $script = "
-    window.onload = setupRefresh;
+    $(document).ready(function() {
+        setupRefresh();
+        news();
+    });
 
     function setupRefresh() {
       setTimeout(\"refreshPage();\", 3600000); // milliseconds
@@ -80,6 +83,34 @@ $script = "
     function refreshPage() {
        window.location = location.href;
     }
+
+    function news() 
+    {
+        $.ajax
+        ({ 
+            url: '" . Url::to(['live-cooking-news']) . "',
+            type: 'get',
+            data: 
+            {
+                'news':'on'
+            },
+            success: function (result) 
+            {
+                var json = result, 
+                obj = JSON.parse(json);
+
+                $('#berita').html(`
+                    <marquee scrollamount=\"30\" style=\"background-color: transparent; color: #0008ff; text-align: center; font-size: 5em; font-weight: bold; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
+                        `+ obj.news +`
+                    </marquee> 
+                `);
+
+                setTimeout(function(){news();}, 15000);
+
+                // console.log(obj);
+            }
+        });
+    };
 ";
 $this->registerJs($script, View::POS_HEAD );
 
@@ -146,6 +177,7 @@ $menu_arr = [
         
     </div>
 </div>
+<div id="berita"></div>
 <div class="row">
     <div class="col-md-12 text-center">
         <div style="margin: 0px 10px; border-radius: 20px;" class="<?= $pesan['category'] == 1 ? 'bg-green' : 'bg-red'; ?>">

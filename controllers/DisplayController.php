@@ -230,6 +230,25 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionLiveCookingNews()
+    {
+        $feeds = array("http://rss.detik.com/index.php/detikcom");
+        $entries = array();
+        foreach($feeds as $feed) 
+        {
+            $xml = simplexml_load_file($feed);
+            $entries = array_merge($entries, $xml->xpath("//item"));
+        }
+        
+        shuffle($entries);
+        $tampil = $entries[0]->title.' - '."news.detik";
+
+        $berita = array('news' => $tampil);
+
+        $data = json_encode($berita);
+        return $data;
+    }
+
     public function actionLiveCookingData($now)
     {
         date_default_timezone_set('Asia/Jakarta');
