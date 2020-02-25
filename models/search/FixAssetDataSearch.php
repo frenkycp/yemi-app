@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\AssetTbl;
+use app\models\AssetTblView;
 
 /**
-* FixAssetDataSearch represents the model behind the search form about `app\models\AssetTbl`.
+* FixAssetDataSearch represents the model behind the search form about `app\models\AssetTblView`.
 */
-class FixAssetDataSearch extends AssetTbl
+class FixAssetDataSearch extends AssetTblView
 {
 /**
 * @inheritdoc
@@ -42,7 +42,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = AssetTbl::find()->where(['FINANCE_ASSET' => 'Y']);
+$query = AssetTblView::find()->where(['FINANCE_ASSET' => 'Y']);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,

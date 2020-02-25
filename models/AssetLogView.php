@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\AssetLogTbl as BaseAssetLogTbl;
+use \app\models\base\AssetLogView as BaseAssetLogView;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.ASSET_LOG_TBL".
+ * This is the model class for table "db_owner.ASSET_LOG_VIEW".
  */
-class AssetLogTbl extends BaseAssetLogTbl
+class AssetLogView extends BaseAssetLogView
 {
-    public $propose_scrap_dd, $upload_file;
 
     public function behaviors()
     {
@@ -28,13 +27,8 @@ class AssetLogTbl extends BaseAssetLogTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                ['upload_file', 'file']
+                # custom validation rules
             ]
         );
-    }
-
-    public function getFixAsset()
-    {
-        return $this->hasOne(AssetTbl::className(), ['asset_id' => 'asset_id']);
     }
 }

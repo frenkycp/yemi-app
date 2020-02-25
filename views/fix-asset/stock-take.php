@@ -4,12 +4,22 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
+use kartik\date\DatePicker;
 
-$this->title = [
-    'page_title' => 'STOCK TAKING FIXED ASSET ' . date('d M Y') . '<span class="japanesse light-green"></span>',
-    'tab_title' => 'STOCK TAKING FIXED ASSET',
-    'breadcrumbs_title' => 'STOCK TAKING FIXED ASSET'
-];
+if ($model->schedule_id == null) {
+	$this->title = [
+	    'page_title' => 'STOCK TAKING FIXED ASSET ' . date('d M\' Y') . '<span class="japanesse light-green"></span>',
+	    'tab_title' => 'STOCK TAKING FIXED ASSET',
+	    'breadcrumbs_title' => 'STOCK TAKING FIXED ASSET'
+	];
+} else {
+	$this->title = [
+	    'page_title' => 'STOCK TAKING FIXED ASSET PERIOD (' . date('d M\' Y', strtotime($model->schedule_start)) . ' - ' . date('d M\' Y', strtotime($model->schedule_end)) . ')<span class="japanesse light-green"></span>',
+	    'tab_title' => 'STOCK TAKING FIXED ASSET',
+	    'breadcrumbs_title' => 'STOCK TAKING FIXED ASSET'
+	];
+}
+
 
 //$this->registerCssFile("@web/css/data_table.css");
 $this->registerCss("
@@ -20,7 +30,12 @@ $this->registerCss("
 	.img-content {border: 1px solid Silver;}
 	");
 
-
+$this->registerJs("$(function() {
+   $('#btn-mapping').click(function(e) {
+     e.preventDefault();
+     $('#modal').modal('show');
+   });
+});");
 
 ?>
 
@@ -210,10 +225,10 @@ $this->registerCss("
 					</div>
 					<div class="panel-body">
 						<div class="row">
-							<div class="col-md-6">
+							<div class="col-md-5">
 								<?= $form->field($model, 'from_loc')->textInput(['readonly' => true]); ?>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-5">
 								<?= $form->field($model, 'to_loc')->widget(Select2::classname(), [
 			                        'data' => ArrayHelper::map(app\models\AssetLocTbl::find()
 			                        	->orderBy('LOC_TYPE, LOC_GROUP_DESC, LOC_DESC')
@@ -226,10 +241,27 @@ $this->registerCss("
 				                        ],
 			                    ]); ?>
 							</div>
+							<div class="col-md-2">
+								<br/>
+								<?= Html::button('<i class="fa fa-map-marker">&nbsp;</i> Mapping', ['class' => 'btn btn-primary btn-block', 'id' => 'btn-mapping', 'style' => 'margin-top: 4px;']); ?>
+							</div>
 						</div>
 					</div>
 				</div>
 				<hr>
+				<div class="row">
+					<div class="col-md-6">
+				        <?= $form->field($model, 'posting_date')->widget(DatePicker::classname(), [
+				        'options' => [
+				            'type' => DatePicker::TYPE_INPUT,
+				        ],
+				        'pluginOptions' => [
+				            'autoclose'=>true,
+				            'format' => 'yyyy-mm-dd'
+				        ]
+				    ]); ?>
+				    </div>
+				</div>
 				<div class="row">
 					<div class="col-md-2">
 						<?= $form->field($model, 'status')->dropDownList(\Yii::$app->params['fixed_asset_status'], [
@@ -292,3 +324,12 @@ $this->registerCss("
 		<?php ActiveForm::end(); ?>
 	</div>
 </div>
+<?php
+    yii\bootstrap\Modal::begin([
+        'id' =>'modal',
+        'header' => '<h3>Mapping Location</h3>',
+        'size' => 'modal-lg',
+    ]);
+    echo Html::img('@web/uploads/IMAGES/fix_asset_mapping_01.jpg', ['width' => '100%']);
+    yii\bootstrap\Modal::end();
+?>

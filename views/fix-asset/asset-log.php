@@ -64,6 +64,8 @@ $this->title = [
     'tab_title' => 'Fixed Asset History Data Table',
     'breadcrumbs_title' => 'Fixed Asset History Data Table'
 ];
+
+date_default_timezone_set('Asia/Jakarta');
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
@@ -80,17 +82,31 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
 
 $gridColumns = [
     [
-        'attribute' => 'posting_date',
-        'label' => 'Date',
-        'format' => ['date', 'php:Y-m-d'],
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        'class' => 'kartik\grid\ActionColumn',
+        //'hidden' => !$is_clinic ? true : false,
+        'template' => '{stock-take}',
+        'buttons' => [
+            'stock-take' => function($url, $model, $key){
+                if ($model->schedule_status == 'C') {
+                    return '';
+                }
+                $url = ['stock-take', 'asset_id' => $model->asset_id, 'trans_id' => $model->trans_id];
+                $options = [
+                    'title' => 'Stock Take',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="fa fa-cubes"></span>', $url, $options);
+            }
         ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
     ],
-    [
+    /*[
         'attribute' => 'trans_type',
         'label' => 'Trans. Type',
         'vAlign' => 'middle',
@@ -99,10 +115,10 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'asset_id',
-        'label' => 'Fixed Asset ID',
+        'label' => 'Asset ID',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -112,7 +128,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'computer_name',
-        'label' => 'Fixed Asset Description',
+        'label' => 'Asset Name',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
         'filterInputOptions' => [
@@ -121,7 +137,108 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'jenis',
+        'label' => 'Type',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => $dropdown_type,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    [
+        'attribute' => 'cost_centre',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->all(), 'CC_ID', 'CC_ID'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    // [
+    //     'attribute' => 'department_name',
+    //     'label' => 'Department',
+    //     'vAlign' => 'middle',
+    //     'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('department_name')->where(['FINANCE_ASSET' => 'Y'])->andWhere('department_name IS NOT NULL')->groupBy('department_name')->orderBy('department_name')->all(), 'department_name', 'department_name'),
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
+    [
+        'attribute' => 'section_name',
+        'label' => 'Section',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('section_name')->where(['FINANCE_ASSET' => 'Y'])->andWhere('section_name IS NOT NULL')->groupBy('section_name')->orderBy('section_name')->all(), 'section_name', 'section_name'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    [
+        'attribute' => 'purchase_date',
+        'label' => 'Acquisition Date',
+        'value' => function($model){
+            if ($model->purchase_date == null) {
+                return '-';
+            } else {
+                return date('Y-m-d', strtotime($model->purchase_date));
+            }
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    [
+        'attribute' => 'qty',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    [
+        'attribute' => 'schedule_status',
+        'label' => 'Closing Status',
+        'value' => function($model){
+            if ($model->schedule_status == 'O') {
+                return 'OPEN';
+            }
+            if ($model->schedule_status == 'C') {
+                return 'CLOSE';
+            }
+            return '???';
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            'O' => 'OPEN',
+            'C' => 'CLOSE',
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    [
+        'attribute' => 'posting_date',
+        'label' => 'Date',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    [
         'attribute' => 'status',
+        'label' => 'Asset Status',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -151,15 +268,15 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
-    [
-        'attribute' => 'NBV',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
+    // [
+    //     'attribute' => 'NBV',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
     [
         'attribute' => 'note',
         'label' => 'Remark',
@@ -213,7 +330,7 @@ $gridColumns = [
 <div class="giiant-crud asset-tbl-index">
 
     <?php
-//             echo $this->render('_search', ['model' =>$searchModel]);
+             echo $this->render('log_search', ['model' =>$searchModel]);
         ?>
 
     
@@ -222,7 +339,7 @@ $gridColumns = [
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => $gridColumns,
             'hover' => true,
             //'condensed' => true,

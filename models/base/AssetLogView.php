@@ -7,7 +7,7 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.ASSET_LOG_TBL".
+ * This is the base-model class for table "db_owner.ASSET_LOG_VIEW".
  *
  * @property integer $trans_id
  * @property integer $schedule_id
@@ -27,9 +27,18 @@ use Yii;
  * @property double $NBV
  * @property string $propose_scrap
  * @property string $schedule_status
+ * @property string $is_scheduled
+ * @property string $cost_centre
+ * @property string $department_name
+ * @property string $jenis
+ * @property string $purchase_date
+ * @property double $qty
+ * @property string $Discontinue
+ * @property string $section_name
+ * @property string $department_pic
  * @property string $aliasModel
  */
-abstract class AssetLogTbl extends \yii\db\ActiveRecord
+abstract class AssetLogView extends \yii\db\ActiveRecord
 {
 
 
@@ -39,7 +48,7 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.ASSET_LOG_TBL';
+        return 'db_owner.ASSET_LOG_VIEW';
     }
 
     /**
@@ -56,10 +65,11 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['schedule_id'], 'integer'],
-            [['schedule_start', 'schedule_end', 'posting_date'], 'safe'],
-            [['trans_type', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap', 'schedule_status'], 'string'],
-            [['NBV'], 'number']
+            [['trans_id'], 'required'],
+            [['trans_id', 'schedule_id'], 'integer'],
+            [['schedule_start', 'schedule_end', 'posting_date', 'purchase_date'], 'safe'],
+            [['trans_type', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap', 'schedule_status', 'is_scheduled', 'cost_centre', 'department_name', 'jenis', 'Discontinue', 'section_name', 'department_pic'], 'string'],
+            [['NBV', 'qty'], 'number']
         ];
     }
 
@@ -74,7 +84,7 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
             'schedule_start' => 'Schedule Start',
             'schedule_end' => 'Schedule End',
             'trans_type' => 'Trans Type',
-            'posting_date' => 'Date',
+            'posting_date' => 'Posting Date',
             'asset_id' => 'Asset ID',
             'computer_name' => 'Computer Name',
             'from_loc' => 'From Loc',
@@ -87,6 +97,15 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
             'NBV' => 'Nbv',
             'propose_scrap' => 'Propose Scrap',
             'schedule_status' => 'Schedule Status',
+            'is_scheduled' => 'Is Scheduled',
+            'cost_centre' => 'Cost Centre',
+            'department_name' => 'Department Name',
+            'jenis' => 'Jenis',
+            'purchase_date' => 'Purchase Date',
+            'qty' => 'Qty',
+            'Discontinue' => 'Discontinue',
+            'section_name' => 'Section Name',
+            'department_pic' => 'Department Pic',
         ];
     }
 

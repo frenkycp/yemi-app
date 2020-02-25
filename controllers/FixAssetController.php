@@ -13,7 +13,9 @@ use app\models\AssetLocTbl;
 use app\models\AssetLogTbl;
 use app\models\AssetDtrTbl;
 use app\models\ImageFile;
+use app\models\AssetStockTakeSchedule;
 use yii\web\UploadedFile;
+use yii\web\JsExpression;
 
 class FixAssetController extends \app\controllers\base\FixAssetController
 {
@@ -68,6 +70,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 
         return $this->redirect(['login']);
     }
+
 	public function actionIndex()
 	{
 		$session = \Yii::$app->session;
@@ -78,6 +81,62 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		$this->layout = 'fixed-asset/main';
 		return $this->render('index');
 	}
+
+	public function actionProgress()
+	{
+		$session = \Yii::$app->session;
+        if (!$session->has('fix_asset_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['fix_asset_user'];
+		$this->layout = 'fixed-asset/main';
+		date_default_timezone_set('Asia/Jakarta');
+
+		$model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+
+        $data_completion = $tmp_data = [];
+        $total_ng = $total_no_label = $total_propose_scrap = 0;
+        if ($model->load($_GET)) {
+        	$tmp_schedule = AssetStockTakeSchedule::find()->where(['schedule_id' => $model->period])->one();
+        	$total_ng = $tmp_schedule->total_ng;
+        	$total_no_label = $tmp_schedule->total_label_n;
+        	$total_propose_scrap = $tmp_schedule->total_scrap_y;
+        	$tmp_data = [
+        		[
+        			'name' => 'OPEN',
+        			'y' => (int) $tmp_schedule->total_open,
+        			'url' => Url::to(['asset-log', 'schedule_id' => $model->period, 'schedule_status' => 'O']),
+        			'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
+        		],
+        		[
+        			'name' => 'CLOSE',
+        			'y' => (int) $tmp_schedule->total_close,
+        			'url' => Url::to(['asset-log', 'schedule_id' => $model->period, 'schedule_status' => 'C']),
+        			'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+        		],
+        	];
+        }
+
+        $data_completion[] = [
+        	'name' => 'Percentage',
+        	'data' => $tmp_data
+        ];
+
+        $period_arr = ArrayHelper::map(AssetStockTakeSchedule::find()->orderBy('end_date DESC, start_date DESC')->all(), 'schedule_id', 'period');
+
+		return $this->render('progress', [
+			'model' => $model,
+			'period_arr' => $period_arr,
+			'data_completion' => $data_completion,
+			'total_ng' => $total_ng,
+			'total_no_label' => $total_no_label,
+			'total_propose_scrap' => $total_propose_scrap,
+		]);
+	}
+
 	public function actionData()
 	{
 		$session = \Yii::$app->session;
@@ -86,6 +145,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         }
         $nik = $session['fix_asset_user'];
 		$this->layout = 'fixed-asset/main';
+		date_default_timezone_set('Asia/Jakarta');
 	    $searchModel  = new FixAssetDataSearch;
 	    //$searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
 	    $dataProvider = $searchModel->search($_GET);
@@ -119,7 +179,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		]);
 	}
 
-	public function actionStockTake($asset_id = '')
+	public function actionStockTake($asset_id = '', $trans_id = null)
 	{
 		$session = \Yii::$app->session;
         if (!$session->has('fix_asset_user')) {
@@ -129,9 +189,17 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         $name = $session['fix_asset_name'];
 
 		$this->layout = 'fixed-asset/main';
+		date_default_timezone_set('Asia/Jakarta');
 
 		$fixed_asset_data = $this->findModel($asset_id);
 		$model = new AssetLogTbl;
+		if ($trans_id != null) {
+			$model = AssetLogTbl::find()->where(['trans_id' => $trans_id])->one();
+			if ($model->schedule_status == 'C') {
+				\Yii::$app->session->setFlash("warning", "Stock take for asset ID : $model->asset_id had been done by $model->user_id - $model->user_desc on $model->posting_date");
+				return $this->redirect(Url::previous());
+			}
+		}
 		//$model->from_loc = $model->to_loc = $fixed_asset_data->location;
 		$model->from_loc = $fixed_asset_data->location;
 		$model->NBV = $fixed_asset_data->NBV;
@@ -152,6 +220,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		->all();
 
 		if ($model->load($_POST)) {
+			$model->schedule_status = 'C';
 			if ($model->to_loc != '' && $model->to_loc != null) {
 				$tmp_asset_loc = AssetLocTbl::find()->where(['LOC' => $model->to_loc])->one();
 				$fixed_asset_data->LOC = $model->to_loc;
@@ -183,6 +252,36 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 				if (!$fixed_asset_data->save()) {
 					return json_encode($fixed_asset_data->errors);
 				}
+				if ($model->schedule_id != null) {
+					$tmp_schedule = AssetStockTakeSchedule::find()->where(['schedule_id' => $model->schedule_id])->one();
+					$tmp_schedule->total_open = $tmp_schedule->total_open - 1;
+					$tmp_schedule->total_close = $tmp_schedule->total_close + 1;
+					$tmp_schedule->update_by_id = $nik;
+					$tmp_schedule->update_by_name = $name;
+					$tmp_schedule->update_time = date('Y-m-d H:i:s');
+
+					if ($model->status == 'OK') {
+						$tmp_schedule->total_ok = $tmp_schedule->total_ok + 1;
+					} else {
+						$tmp_schedule->total_ng = $tmp_schedule->total_ng + 1;
+					}
+
+					if ($model->label == 'Y') {
+						$tmp_schedule->total_label_y = $tmp_schedule->total_label_y + 1;
+					} else {
+						$tmp_schedule->total_label_n = $tmp_schedule->total_label_n + 1;
+					}
+
+					if ($model->propose_scrap == 'Y') {
+						$tmp_schedule->total_scrap_y = $tmp_schedule->total_scrap_y + 1;
+					} else {
+						$tmp_schedule->total_scrap_n = $tmp_schedule->total_scrap_n + 1;
+					}
+
+					if (!$tmp_schedule->save()) {
+						return json_encode($tmp_schedule->errors);
+					}
+				}
 			} else {
 				return json_encode($model->errors);
 			}
@@ -205,7 +304,36 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         }
         $nik = $session['fix_asset_user'];
 		$this->layout = 'fixed-asset/main';
+		date_default_timezone_set('Asia/Jakarta');
+
 	    $searchModel  = new AssetLogTblSearch;
+
+	    if(\Yii::$app->request->get('label') !== null)
+	    {
+	    	$searchModel->label = \Yii::$app->request->get('label');
+	    }
+	    if(\Yii::$app->request->get('propose_scrap') !== null)
+	    {
+	    	$searchModel->propose_scrap = \Yii::$app->request->get('propose_scrap');
+	    }
+	    if(\Yii::$app->request->get('schedule_id') !== null)
+	    {
+	    	$searchModel->schedule_id = \Yii::$app->request->get('schedule_id');
+	    }
+	    if(\Yii::$app->request->get('status') !== null)
+	    {
+	    	$searchModel->status = \Yii::$app->request->get('status');
+	    }
+	    if(\Yii::$app->request->get('cost_centre') !== null)
+	    {
+	    	$searchModel->cost_centre = \Yii::$app->request->get('cost_centre');
+	    }
+	    if(\Yii::$app->request->get('schedule_status') !== null)
+	    {
+	    	$searchModel->schedule_status = \Yii::$app->request->get('schedule_status');
+	    }
+	    $searchModel->trans_type = 'PI';
+
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
@@ -213,9 +341,22 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
+		$dropdown_type = ArrayHelper::map(AssetTbl::find()
+		->select([
+			'jenis'
+		])
+		->where([
+			'FINANCE_ASSET' => 'Y'
+		])
+		->andWhere('jenis IS NOT NULL')
+		->groupBy('jenis')
+		->orderBy('jenis')
+		->all(), 'jenis', 'jenis');
+
 		return $this->render('asset-log', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
+		    'dropdown_type' => $dropdown_type,
 		]);
 	}
 

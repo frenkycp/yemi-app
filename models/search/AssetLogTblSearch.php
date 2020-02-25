@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\AssetLogTbl;
+use app\models\AssetLogView;
 
 /**
 * AssetLogTblSearch represents the model behind the search form about `app\models\AssetLogTbl`.
 */
-class AssetLogTblSearch extends AssetLogTbl
+class AssetLogTblSearch extends AssetLogView
 {
 /**
 * @inheritdoc
@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['trans_id'], 'integer'],
-            [['trans_type', 'posting_date', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap'], 'safe'],
+            [['trans_type', 'posting_date', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap', 'schedule_id', 'schedule_status', 'jenis', 'cost_centre', 'section_name'], 'safe'],
             [['NBV'], 'number'],
 ];
 }
@@ -42,7 +42,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = AssetLogTbl::find();
+$query = AssetLogView::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -61,6 +61,11 @@ $query->andFilterWhere([
             'posting_date' => $this->posting_date,
             'NBV' => $this->NBV,
             'propose_scrap' => $this->propose_scrap,
+            'schedule_id' => $this->schedule_id,
+            'schedule_status' => $this->schedule_status,
+            'jenis' => $this->jenis,
+            'cost_centre' => $this->cost_centre,
+            'section_name' => $this->section_name,
         ]);
 
         $query->andFilterWhere(['like', 'trans_type', $this->trans_type])

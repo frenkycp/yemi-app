@@ -32,7 +32,7 @@ $this->registerJs($script, View::POS_HEAD );
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['parts-uncountable-chart']),
+    'action' => Url::to(['uncountable-top-variance']),
 ]); ?>
 
 <div class="row">

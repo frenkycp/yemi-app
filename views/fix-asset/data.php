@@ -66,18 +66,6 @@ $this->title = [
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-$this->registerCss("
-");
-
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
-
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -267,7 +255,7 @@ $gridColumns = [
 <div class="giiant-crud asset-tbl-index">
 
     <?php
-//             echo $this->render('_search', ['model' =>$searchModel]);
+            echo $this->render('data_search', ['model' =>$searchModel]);
         ?>
 
     

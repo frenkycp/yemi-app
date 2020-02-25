@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\AssetLogTbl as BaseAssetLogTbl;
+use \app\models\base\AssetStockTakeSchedule as BaseAssetStockTakeSchedule;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.ASSET_LOG_TBL".
+ * This is the model class for table "db_owner.ASSET_STOCK_TAKE_SCHEDULE".
  */
-class AssetLogTbl extends BaseAssetLogTbl
+class AssetStockTakeSchedule extends BaseAssetStockTakeSchedule
 {
-    public $propose_scrap_dd, $upload_file;
 
     public function behaviors()
     {
@@ -28,13 +27,13 @@ class AssetLogTbl extends BaseAssetLogTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                ['upload_file', 'file']
+                # custom validation rules
             ]
         );
     }
 
-    public function getFixAsset()
+    public function getPeriod($value='')
     {
-        return $this->hasOne(AssetTbl::className(), ['asset_id' => 'asset_id']);
+        return date('d M\' Y', strtotime($this->start_date)) . ' - ' . date('d M\' Y', strtotime($this->end_date));
     }
 }

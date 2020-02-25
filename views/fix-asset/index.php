@@ -67,6 +67,28 @@ $this->title = [
 
 $this->registerCss("
 ");
+
+$this->registerCssFile('@web/css/dataTables.bootstrap.css');
+$this->registerJsFile('@web/js/jquery.dataTables.min.js');
+$this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
 ?>
 
-<h1>Welcome to the Fixed Asset Application</h1>
+<h1>
+	<?php
+	if ($schedule_data->schedule_id == null) {
+		echo 'There is no stock take schedule...';
+	} else {
+		echo 'Stock Taking Progress (' . date('d M\' Y', strtotime($schedule_data->start_date)) . ' - ' . date('d M\' Y', strtotime($schedule_data->end_date)) . ')';
+	}
+	?>
+</h1>
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			
+		</h3>
+	</div>
+	<div class="panel-body">
+		
+	</div>
+</div>
