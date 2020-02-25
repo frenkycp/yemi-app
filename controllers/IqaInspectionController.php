@@ -220,8 +220,8 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
     	])
     	->where([
     		'AND',
-    		['>=', 'LAST_UPDATE', $model->from_date],
-    		['<=', 'LAST_UPDATE', $model->to_date],
+    		['>=', 'LAST_UPDATE', $model->from_date . ' 00:00:00'],
+    		['<=', 'LAST_UPDATE', $model->to_date . ' 23:59:59'],
     	])
     	->andWhere(['TRANS_ID' => 11])
     	->groupBy(['FORMAT(LAST_UPDATE, \'yyyy-MM-dd\')'])
