@@ -54,7 +54,7 @@ if ($_GET['room_id'] == 6) {
 
                     console.log(obj);
 
-                    if (obj.datang < 2 && obj.visitor_comp != null) 
+                    if (obj.datang < 1.35 && obj.visitor_comp != null) 
                     {
                         window.location = 'http://172.17.144.6:99/plus/display/visitor_coridor.php?room_id=" . $_GET['room_id'] . "';
                     }
