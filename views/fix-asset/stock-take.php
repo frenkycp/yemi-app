@@ -28,6 +28,9 @@ $this->registerCss("
 	.date-format {min-width: 90px;}
 	#stock-take-container {padding: 10px 0px 20px 0px;}
 	.img-content {border: 1px solid Silver;}
+	.file-zoom-content {
+		height: unset !important;
+	}
 	");
 
 $this->registerJs("$(function() {

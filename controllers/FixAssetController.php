@@ -220,70 +220,80 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		->all();
 
 		if ($model->load($_POST)) {
-			$model->schedule_status = 'C';
-			if ($model->to_loc != '' && $model->to_loc != null) {
-				$tmp_asset_loc = AssetLocTbl::find()->where(['LOC' => $model->to_loc])->one();
-				$fixed_asset_data->LOC = $model->to_loc;
-				$fixed_asset_data->location = $tmp_asset_loc->LOC_DESC;
-				$model->to_loc = $tmp_asset_loc->LOC_DESC;
-			} else {
-				$model->to_loc = NULL;
-			};
-			$fixed_asset_data->status = $model->status;
-			$fixed_asset_data->label = $model->label;
-			$fixed_asset_data->propose_scrap = $model->propose_scrap;
-			$fixed_asset_data->NBV = $model->NBV;
+			$tmp_karyawan = Karyawan::find()->where([
+				'OR',
+				['NIK' => $nik],
+				['NIK_SUN_FISH' => $nik]
+			])->one();
+			
+			if ($tmp_karyawan->NIK_SUN_FISH != null) {
+				$model->schedule_status = 'C';
+				if ($model->to_loc != '' && $model->to_loc != null) {
+					$tmp_asset_loc = AssetLocTbl::find()->where(['LOC' => $model->to_loc])->one();
+					$fixed_asset_data->LOC = $model->to_loc;
+					$fixed_asset_data->location = $tmp_asset_loc->LOC_DESC;
+					$model->to_loc = $tmp_asset_loc->LOC_DESC;
+				} else {
+					$model->to_loc = NULL;
+				};
+				$fixed_asset_data->status = $model->status;
+				$fixed_asset_data->label = $model->label;
+				$fixed_asset_data->propose_scrap = $model->propose_scrap;
+				$fixed_asset_data->NBV = $model->NBV;
 
-			$model->upload_file = UploadedFile::getInstance($model, 'upload_file');
-	        $new_filename = $asset_id . '.' . $model->upload_file->extension;
+				$model->upload_file = UploadedFile::getInstance($model, 'upload_file');
+		        $new_filename = $asset_id . '.' . $model->upload_file->extension;
 
-	        if ($model->validate()) {
-	        	if ($model->upload_file) {
-	        		$filePath = \Yii::getAlias("@app/web/uploads/ASSET_IMG/") . $new_filename;
-	        		if ($model->upload_file->saveAs($filePath)) {
-	                    ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
-	                    $fixed_asset_data->primary_picture = $asset_id;
-	                }
-	                
-	        	}
-	        }
+		        if ($model->validate()) {
+		        	if ($model->upload_file) {
+		        		$filePath = \Yii::getAlias("@app/web/uploads/ASSET_IMG/") . $new_filename;
+		        		if ($model->upload_file->saveAs($filePath)) {
+		                    //ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
+		                    $fixed_asset_data->primary_picture = $asset_id;
+		                }
+		                
+		        	}
+		        }
 
-			if ($model->save()) {
-				if (!$fixed_asset_data->save()) {
-					return json_encode($fixed_asset_data->errors);
+				if ($model->save()) {
+					if (!$fixed_asset_data->save()) {
+						return json_encode($fixed_asset_data->errors);
+					}
+					if ($model->schedule_id != null) {
+						$tmp_schedule = AssetStockTakeSchedule::find()->where(['schedule_id' => $model->schedule_id])->one();
+						$tmp_schedule->total_open = $tmp_schedule->total_open - 1;
+						$tmp_schedule->total_close = $tmp_schedule->total_close + 1;
+						$tmp_schedule->update_by_id = $nik;
+						$tmp_schedule->update_by_name = $name;
+						$tmp_schedule->update_time = date('Y-m-d H:i:s');
+
+						if ($model->status == 'OK') {
+							$tmp_schedule->total_ok = $tmp_schedule->total_ok + 1;
+						} else {
+							$tmp_schedule->total_ng = $tmp_schedule->total_ng + 1;
+						}
+
+						if ($model->label == 'Y') {
+							$tmp_schedule->total_label_y = $tmp_schedule->total_label_y + 1;
+						} else {
+							$tmp_schedule->total_label_n = $tmp_schedule->total_label_n + 1;
+						}
+
+						if ($model->propose_scrap == 'Y') {
+							$tmp_schedule->total_scrap_y = $tmp_schedule->total_scrap_y + 1;
+						} else {
+							$tmp_schedule->total_scrap_n = $tmp_schedule->total_scrap_n + 1;
+						}
+
+						if (!$tmp_schedule->save()) {
+							return json_encode($tmp_schedule->errors);
+						}
+					}
+				} else {
+					return json_encode($model->errors);
 				}
-				if ($model->schedule_id != null) {
-					$tmp_schedule = AssetStockTakeSchedule::find()->where(['schedule_id' => $model->schedule_id])->one();
-					$tmp_schedule->total_open = $tmp_schedule->total_open - 1;
-					$tmp_schedule->total_close = $tmp_schedule->total_close + 1;
-					$tmp_schedule->update_by_id = $nik;
-					$tmp_schedule->update_by_name = $name;
-					$tmp_schedule->update_time = date('Y-m-d H:i:s');
-
-					if ($model->status == 'OK') {
-						$tmp_schedule->total_ok = $tmp_schedule->total_ok + 1;
-					} else {
-						$tmp_schedule->total_ng = $tmp_schedule->total_ng + 1;
-					}
-
-					if ($model->label == 'Y') {
-						$tmp_schedule->total_label_y = $tmp_schedule->total_label_y + 1;
-					} else {
-						$tmp_schedule->total_label_n = $tmp_schedule->total_label_n + 1;
-					}
-
-					if ($model->propose_scrap == 'Y') {
-						$tmp_schedule->total_scrap_y = $tmp_schedule->total_scrap_y + 1;
-					} else {
-						$tmp_schedule->total_scrap_n = $tmp_schedule->total_scrap_n + 1;
-					}
-
-					if (!$tmp_schedule->save()) {
-						return json_encode($tmp_schedule->errors);
-					}
-				}
 			} else {
-				return json_encode($model->errors);
+				\Yii::$app->getSession()->setFlash('error', 'Your NIK Sunfish not found. Please contact administrator');
 			}
 
 			return $this->redirect(Url::previous());
