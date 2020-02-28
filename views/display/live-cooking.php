@@ -128,15 +128,7 @@ if ($pesan['category'] == 1) {
     $audio_url = Url::to('@web/uploads/AUDIO/wrong_01.mp3');
 }
 //$audio_url = Url::to('@web/uploads/AUDIO/okay-1.wav');
-$menu_arr = [
-    'BAKSO' => 'bakso_01.jpg',
-    'GADO-GADO' => 'gado_gado_01.jpg',
-    'LALAPAN' => 'lalapan_01.jpg',
-    'NASI-GORENG' => 'nasi_goreng_01.jpg',
-    'NASI-PECEL' => 'nasi_pecel_01.jpg',
-    'RAWON' => 'rawon_01.jpg',
-    'SOTO-AYAM' => 'soto_ayam_01.jpg'
-];
+$menu_arr = \Yii::$app->params['live_cooking_photo_arr'];
 ?>
 <audio id="myAudio" src="<?= $audio_url; ?>" autoplay="autoplay" hidden="hidden"></audio>
 <div class="row" style="background-color: #61258e;">

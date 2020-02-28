@@ -288,6 +288,16 @@ return [
         'WU01' => 'SPEAKER PROJECT',
         'WW02' => 'WW PROCESS',
     ],
+    'live_cooking_photo_arr' => [
+        'BAKSO' => 'bakso_01.jpg',
+        'GADO-GADO' => 'gado_gado_01.jpg',
+        'LALAPAN' => 'lalapan_01.jpg',
+        'NASI-GORENG' => 'nasi_goreng_01.jpg',
+        'NASI-PECEL' => 'nasi_pecel_01.jpg',
+        'RAWON' => 'rawon_01.jpg',
+        'SOTO-AYAM' => 'soto_ayam_01.jpg',
+        'AYAM-GEPREK' => 'ayam_geprek_01.jpg',
+    ],
 ];
 
 function getYearArray()

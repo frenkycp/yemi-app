@@ -13,15 +13,7 @@ use yii\helpers\ArrayHelper;
 
 $this->registerCss(".form-group { margin-bottom: 0px; }");
 
-$menu_arr = [
-    'BAKSO' => 'bakso_01.jpg',
-    'GADO-GADO' => 'gado_gado_01.jpg',
-    'LALAPAN' => 'lalapan_01.jpg',
-    'NASI-GORENG' => 'nasi_goreng_01.jpg',
-    'NASI-PECEL' => 'nasi_pecel_01.jpg',
-    'RAWON' => 'rawon_01.jpg',
-    'SOTO-AYAM' => 'soto_ayam_01.jpg'
-];
+$menu_arr = \Yii::$app->params['live_cooking_photo_arr'];
 $img_filename = $menu_arr[$today_menu_txt];
 ?>
 
