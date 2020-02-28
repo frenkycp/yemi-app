@@ -115,9 +115,98 @@ use app\models\LiveCookingRequest;
 use app\models\LiveCookingMenuSchedule;
 use app\models\AbsensiTbl;
 use app\models\WorkDayTbl;
+use app\models\SernoCnt;
+use app\models\ServerStatus;
 
 class DisplayController extends Controller
 {
+    public function actionServerStatus($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $server_status = ServerStatus::find()->all();
+        
+        return $this->render('server-status',[
+            'server_status' => $server_status,
+        ]);
+    }
+
+    public function actionLastShippingDaily()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-d', strtotime(date('Y-m-d') . ' -1 day'));
+
+        $tmp_data_red = $tmp_data_green = $data = [];
+        if ($model->load($_GET)) {
+            $tmp_shipping = SernoCnt::find()->select([
+                'tgl' => 'DATE(tgl)',
+                'last_shipping' => 'MAX(tgl)'
+            ])
+            ->where(['status' => 2])
+            ->andWhere([
+                'AND',
+                ['>=', 'DATE(tgl)', $model->from_date],
+                ['<=', 'DATE(tgl)', $model->to_date]
+            ])
+            ->groupBy('DATE(tgl)')
+            ->all();
+
+            foreach ($tmp_shipping as $key => $value) {
+                $post_date = (strtotime($value->tgl . " +7 hours") * 1000);
+                $datetime1 = strtotime($value->tgl . ' 00:00:00');
+                $datetime2 = strtotime($value->last_shipping);
+                $selisih_s = $datetime2 - $datetime1;
+                $selisih_h = round(($selisih_s / 3600), 1);
+                $tmp_green = $selisih_h;
+                $tmp_red = 0;
+                if ($tmp_green > 16) {
+                    $tmp_red = $tmp_green - 16;
+                    $tmp_green = 16;
+                    $tmp_data_red[] = [
+                        'x' => $post_date,
+                        'y' => (float)$tmp_red,
+                    ];
+                }
+                $tmp_data_green[] = [
+                    'x' => $post_date,
+                    'y' => (float)$tmp_green,
+                    
+                ];
+
+            }
+            //$post_date = (strtotime($value->DATE . " +7 hours") * 1000);
+        }
+
+        $data = [
+            [
+                'name' => 'Overtime',
+                'data' => $tmp_data_red,
+                //'showInLegend' => false,
+                'color' => new JsExpression('Highcharts.getOptions().colors[8]')
+            ],
+            [
+                'name' => 'Normal shipping',
+                'data' => $tmp_data_green,
+                //'showInLegend' => false,
+                'color' => new JsExpression('Highcharts.getOptions().colors[2]')
+            ],
+            
+        ];
+
+        return $this->render('last-shipping-daily',[
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
     public function actionFixLotStuck()
     {
         $this->layout = 'clean';

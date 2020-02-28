@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoCnt extends BaseSernoCnt
 {
+    public $last_shipping;
 
     public function behaviors()
     {

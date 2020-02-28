@@ -505,6 +505,9 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Shipping Container Data <span class="japanesse-word">(出荷コンテナーデータ）</span>', ['/serno-output/index']); ?>
                                 </li>
+                                <li>
+                                    <?= Html::a('Daily Shipping Completion Time <span class="japanesse-word"></span>', ['/serno-output/index']); ?>
+                                </li>
                             </ol>
                         </div>
                         <div class="list-group-item">
