@@ -132,6 +132,56 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionShippingCompletionData($post_date)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $tmp_data_arr = SernoCnt::find()->where(['DATE(tgl)' => $post_date])->orderBy('tgl')->all();
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Shipping Daily Completion on ' . $post_date . '</h3>
+        </div>
+        <div class="modal-body">
+        ';
+        $data .= '<table class="table table-bordered table-hover">';
+        $data .= 
+        '<thead style=""><tr class="info">
+            <th class="text-center">NO</th>
+            <th class="text-center">CONTAINER</th>
+            <th class="text-center">PORT</th>
+            <th class="text-center">START</th>
+            <th class="text-center">END</th>
+        </tr></thead>';
+        $data .= '<tbody style="">';
+
+        $no = 1;
+        foreach ($tmp_data_arr as $value) {
+            $time_limit = $post_date . ' 16:00:00';
+            $time_end = $value['tgl'];
+            $selisih = strtotime($time_end) - strtotime($time_limit);
+            $txt_class = $bg_class = '';
+            if ($selisih >= 60) {
+                $txt_class = ' text-red';
+                //$bg_class = 'danger';
+            }
+            $data .= '
+                <tr class="' . $bg_class . '">
+                    <td class="text-center">' . $no . '</td>
+                    <td class="text-center">' . $value['cnt'] . '</td>
+                    <td class="text-center">' . $value['dst'] . '</td>
+                    <td class="text-center">' . date('H:i', strtotime($value['start'])) . '</td>
+                    <td class="text-center' . $txt_class . '">' . date('H:i', strtotime($value['tgl'])) . '</td>
+                </tr>
+            ';
+            $no++;
+        }
+        $data .= '</tbody>';
+
+        $data .= '</table>';
+        $data .= '<tbody>';
+        return $data;
+    }
+
     public function actionLastShippingDaily()
     {
         $this->layout = 'clean';
@@ -174,11 +224,13 @@ class DisplayController extends Controller
                 $tmp_data_red[] = [
                     'x' => $post_date,
                     'y' => (float)$tmp_red,
+                    'url' => Url::to(['shipping-completion-data', 'post_date' => $value->tgl]),
                 ];
             }
             $tmp_data_green[] = [
                 'x' => $post_date,
                 'y' => (float)$tmp_green,
+                'url' => Url::to(['shipping-completion-data', 'post_date' => $value->tgl]),
                 
             ];
 

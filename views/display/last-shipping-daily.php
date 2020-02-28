@@ -31,6 +31,8 @@ $this->registerCss("
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
+    .text-red {font-weight: bold;}
+    table {letter-spacing: 2px; font-size: 16px;}
 
     #progress-tbl{
         //border:1px solid #29B6F6;
@@ -136,7 +138,7 @@ $this->registerJs($script, View::POS_HEAD );
                     //'categories' => $value['category'],
                 ],
                 'yAxis' => [
-                    /**/'stackLabels' => [
+                    'stackLabels' => [
                         'enabled' => true
                     ],
                     //'min' => 0,
@@ -144,7 +146,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'text' => null
                     ],
                     'allowDecimals' => false,
-                    'min' => 7,
+                    //'min' => 7,
                     'max' => 24
                     //'gridLineWidth' => 0,
                 ],
@@ -173,7 +175,7 @@ $this->registerJs($script, View::POS_HEAD );
                         //'borderWidth' => 1,
                         //'borderColor' => $color,
                     ],
-                    /*'series' => [
+                    'series' => [
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [
@@ -185,7 +187,7 @@ $this->registerJs($script, View::POS_HEAD );
                                 "),
                             ]
                         ]
-                    ]*/
+                    ]
                 ],
                 'series' => $data
             ],
@@ -193,3 +195,12 @@ $this->registerJs($script, View::POS_HEAD );
         ?>
     </div>
 </div>
+
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>
