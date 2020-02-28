@@ -146,44 +146,42 @@ class DisplayController extends Controller
         $model->to_date = date('Y-m-d', strtotime(date('Y-m-d') . ' -1 day'));
 
         $tmp_data_red = $tmp_data_green = $data = [];
-        if ($model->load($_GET)) {
-            $tmp_shipping = SernoCnt::find()->select([
-                'tgl' => 'DATE(tgl)',
-                'last_shipping' => 'MAX(tgl)'
-            ])
-            ->where(['status' => 2])
-            ->andWhere([
-                'AND',
-                ['>=', 'DATE(tgl)', $model->from_date],
-                ['<=', 'DATE(tgl)', $model->to_date]
-            ])
-            ->groupBy('DATE(tgl)')
-            ->all();
+        if ($model->load($_GET)) { }
+        $tmp_shipping = SernoCnt::find()->select([
+            'tgl' => 'DATE(tgl)',
+            'last_shipping' => 'MAX(tgl)'
+        ])
+        ->where(['status' => 2])
+        ->andWhere([
+            'AND',
+            ['>=', 'DATE(tgl)', $model->from_date],
+            ['<=', 'DATE(tgl)', $model->to_date]
+        ])
+        ->groupBy('DATE(tgl)')
+        ->all();
 
-            foreach ($tmp_shipping as $key => $value) {
-                $post_date = (strtotime($value->tgl . " +7 hours") * 1000);
-                $datetime1 = strtotime($value->tgl . ' 00:00:00');
-                $datetime2 = strtotime($value->last_shipping);
-                $selisih_s = $datetime2 - $datetime1;
-                $selisih_h = round(($selisih_s / 3600), 1);
-                $tmp_green = $selisih_h;
-                $tmp_red = 0;
-                if ($tmp_green > 16) {
-                    $tmp_red = $tmp_green - 16;
-                    $tmp_green = 16;
-                    $tmp_data_red[] = [
-                        'x' => $post_date,
-                        'y' => (float)$tmp_red,
-                    ];
-                }
-                $tmp_data_green[] = [
+        foreach ($tmp_shipping as $key => $value) {
+            $post_date = (strtotime($value->tgl . " +7 hours") * 1000);
+            $datetime1 = strtotime($value->tgl . ' 00:00:00');
+            $datetime2 = strtotime($value->last_shipping);
+            $selisih_s = $datetime2 - $datetime1;
+            $selisih_h = round(($selisih_s / 3600), 1);
+            $tmp_green = $selisih_h;
+            $tmp_red = 0;
+            if ($tmp_green > 16) {
+                $tmp_red = $tmp_green - 16;
+                $tmp_green = 16;
+                $tmp_data_red[] = [
                     'x' => $post_date,
-                    'y' => (float)$tmp_green,
-                    
+                    'y' => (float)$tmp_red,
                 ];
-
             }
-            //$post_date = (strtotime($value->DATE . " +7 hours") * 1000);
+            $tmp_data_green[] = [
+                'x' => $post_date,
+                'y' => (float)$tmp_green,
+                
+            ];
+
         }
 
         $data = [
