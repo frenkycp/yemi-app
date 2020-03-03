@@ -78,6 +78,7 @@ class ProdAttendancePlanController extends Controller
 	        				$nama_karyawan = $karyawan_arr[$nik];
 	        			}
 
+	        			$tmp_arr = [];
 	        			if ($model->from_date == $model->to_date) {
 	        				$id = $model->from_date . $emp_shift . $nik;
 	        				$period = date('Ym', strtotime($model->from_date));
@@ -93,9 +94,13 @@ class ProdAttendancePlanController extends Controller
 						    	$tmp_find->emp_shift = $emp_shift;
 						    	$tmp_find->save();
         					} else {
-        						$bulkInsertArray[] = [
-					    			$id, $period, $child_analyst, $child_analyst_desc, $nik, $nama_karyawan, $model->from_date, $now, $creator->NIK_SUN_FISH, $emp_shift
-					    		];
+        						if (!in_array($id, $tmp_arr)) {
+        							$bulkInsertArray[] = [
+						    			$id, $period, $child_analyst, $child_analyst_desc, $nik, $nama_karyawan, $model->from_date, $now, $creator->NIK_SUN_FISH, $emp_shift
+						    		];
+						    		$tmp_arr[] = $id;
+        						}
+        						
         					}
 	        				
 	        			} else {
@@ -120,9 +125,13 @@ class ProdAttendancePlanController extends Controller
 							    	$tmp_find->emp_shift = $emp_shift;
 							    	$tmp_find->save();
 							    } else {
-							    	$bulkInsertArray[] = [
-						    			$id, $period, $child_analyst, $child_analyst_desc, $nik, $nama_karyawan, $att_date, $now, $creator->NIK_SUN_FISH, $emp_shift
-						    		];
+							    	if (!in_array($id, $tmp_arr)) {
+							    		$bulkInsertArray[] = [
+							    			$id, $period, $child_analyst, $child_analyst_desc, $nik, $nama_karyawan, $att_date, $now, $creator->NIK_SUN_FISH, $emp_shift
+							    		];
+							    		$tmp_arr[] = $id;
+							    	}
+							    	
 							    }
 							    
 							}
