@@ -34,13 +34,10 @@ date_default_timezone_set('Asia/Jakarta');
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-4">
-				<?= $form->field($model, 'gmc')->widget(Select2::classname(), [
-	                'data' => ArrayHelper::map(app\models\SernoMaster::find()->select([
-	                    'gmc', 'model', 'color', 'dest'
-	                ])
-	                ->all(), 'gmc', 'fullDescription'),
+				<?= $form->field($model, 'skill')->widget(Select2::classname(), [
+	                'data' => $skill_dropdown_arr,
 	                'options' => [
-	                    'placeholder' => 'Select Model ...',
+	                    'placeholder' => 'Choose...',
 	                ],
 	                'pluginOptions' => [
 	                    'allowClear' => true

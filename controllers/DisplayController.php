@@ -151,6 +151,7 @@ class DisplayController extends Controller
             <th class="text-center">PORT</th>
             <th class="text-center">START</th>
             <th class="text-center">END</th>
+            <th class="">Remark</th>
         </tr></thead>';
         $data .= '<tbody style="">';
 
@@ -171,6 +172,7 @@ class DisplayController extends Controller
                     <td class="text-center">' . $value['dst'] . '</td>
                     <td class="text-center">' . date('H:i', strtotime($value['start'])) . '</td>
                     <td class="text-center' . $txt_class . '">' . date('H:i', strtotime($value['tgl'])) . '</td>
+                    <td class="">' . $value['remark'] . '</td>
                 </tr>
             ';
             $no++;

@@ -3,7 +3,10 @@
 namespace app\controllers;
 
 use app\models\Karyawan;
+use app\models\SkillMaster;
 use app\models\SkillMasterKaryawan;
+use app\models\SernoMaster;
+use yii\helpers\ArrayHelper;
 /**
 * This is the class for controller "SkillMapDataController".
 */
@@ -18,10 +21,14 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
 	public function actionSkillUpdate()
 	{
 		$model = new \yii\base\DynamicModel([
-            'gmc', 'nik', 'skill_value', 'category'
+            'skill', 'nik', 'skill_value', 'category'
         ]);
-        $model->addRule(['gmc', 'nik', 'skill_value'], 'required');
+        $model->addRule(['skill', 'nik', 'skill_value'], 'required');
         $model->skill_value = 3;
+
+        $tmp_arr1 = ArrayHelper::map(SernoMaster::find()->select(['gmc', 'model', 'color', 'dest'])->all(), 'gmc', 'fullDescription');
+        $tmp_arr2 = ArrayHelper::map(SkillMaster::find()->select(['skill_id', 'skill_desc'])->where(['<>', 'skill_group', 'Z'])->all(), 'skill_id', 'description');
+        $skill_dropdown_arr = array_merge($tmp_arr2, $tmp_arr1);
 
         if ($model->load($_POST)) {
         	$id = \Yii::$app->user->identity->username;
@@ -59,7 +66,7 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
         		$sql = "{CALL SKILL_UPDATE(:NIK, :skill_id, :skill_value, :USER_ID, :USER_DESC)}";
 	        	$params = [
 					':NIK' => $model->nik,
-					':skill_id' => $model->gmc,
+					':skill_id' => $model->skill,
 					':skill_value' => $model->skill_value,
 					':USER_ID' => $tmp_karyawan->NIK_SUN_FISH,
 					':USER_DESC' => $tmp_karyawan->NAMA_KARYAWAN,
@@ -80,7 +87,8 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
         $model->nik = null;
 
 		return $this->render('skill-update', [
-			'model' => $model
+			'model' => $model,
+			'skill_dropdown_arr' => $skill_dropdown_arr,
 		]);
 	}
 }

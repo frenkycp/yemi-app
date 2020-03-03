@@ -3,13 +3,13 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\SkillMaster as BaseSkillMaster;
+use \app\models\base\SkillMasterKaryawanLog as BaseSkillMasterKaryawanLog;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.SKILL_MASTER".
+ * This is the model class for table "db_owner.SKILL_MASTER_KARYAWAN_LOG".
  */
-class SkillMaster extends BaseSkillMaster
+class SkillMasterKaryawanLog extends BaseSkillMasterKaryawanLog
 {
 
     public function behaviors()
@@ -30,10 +30,5 @@ class SkillMaster extends BaseSkillMaster
                 # custom validation rules
             ]
         );
-    }
-
-    public function getDescription()
-    {
-        return $this->skill_id . ' | ' . $this->skill_desc;
     }
 }

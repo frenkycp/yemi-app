@@ -32,7 +32,7 @@ $this->registerCss("
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .text-red {font-weight: bold;}
-    table {letter-spacing: 2px; font-size: 16px;}
+    table {letter-spacing: 1.2px; font-size: 14px;}
 
     #progress-tbl{
         //border:1px solid #29B6F6;

@@ -53,8 +53,8 @@ $gridColumns = [
                     'id' => 'btn-actions'
                 ];
 
-                if ($model->ng_cause_category == 'MAN') {
-                    return Html::button('<i class="fa fa-tasks"></i> Action', $url, $options);
+                if ($model->ng_cause_category == 'MAN' && $model->action_status == 'O') {
+                    return Html::a('<i class="fa fa-tasks"></i> Action', ['countermeasure', 'id' => $model->id], ['class' => 'btn btn-xs btn-primary btn-block']);
                 } else {
                     return '<button class="btn btn-xs btn-primary btn-block disabled"><i class="fa fa-fw fa-tasks"></i> Action</button>';
                 }
