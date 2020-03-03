@@ -187,6 +187,23 @@ class NgPaintingController extends Controller
 						'skill_dropdown_arr' => $skill_dropdown_arr,
 					]);
         		} else {
+        			$skill_count = SkillMasterKaryawan::find()->where(['NIK' => $nik])->count();
+        			if ($skill_count == 0) {
+        				$sql = "{CALL SKILL_CREATE(:NIK, :USER_ID, :USER_DESC)}";
+			        	$params = [
+							':NIK' => $nik,
+							':USER_ID' => $user_id,
+							':USER_DESC' => $user_desc,
+						];
+
+						try {
+						    $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->execute();
+						    \Yii::$app->session->setFlash("success", 'New skill master added...');
+						    //\Yii::$app->session->setFlash('success', 'Slip number : ' . $value . ' has been completed ...');
+						} catch (Exception $ex) {
+							\Yii::$app->session->setFlash('danger', "Error : $ex");
+						}
+        			}
         			foreach ($tmp_arr as $key => $value) {
         				$sql = "{CALL SKILL_UPDATE_NEW(:NIK, :skill_id, :skill_value, :category, :document_no, :NOTE, :USER_ID, :USER_DESC)}";
 			        	$params = [
