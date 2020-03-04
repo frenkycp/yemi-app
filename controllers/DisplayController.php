@@ -117,6 +117,7 @@ use app\models\AbsensiTbl;
 use app\models\WorkDayTbl;
 use app\models\SernoCnt;
 use app\models\ServerStatus;
+use app\models\SkillMasterLogView;
 
 class DisplayController extends Controller
 {
@@ -265,43 +266,68 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
 
         $model = new \yii\base\DynamicModel([
-            'beacon_id'
+            'lot_number', 'next_process'
         ]);
-        $model->addRule(['beacon_id'], 'required');
+        $model->addRule(['lot_number', 'next_process'], 'required');
 
         if ($model->load($_GET)) {
-            $tmp_beacon = BeaconTbl::find()->where(['minor' => $model->beacon_id])->one();
+            $lot_number = $model->lot_number;
+            $tmp_beacon = BeaconTbl::find()->where(['lot_number' => $model->lot_number])->one();
+            $wet = WipEffTbl::find()->where(['lot_id' => $lot_number])->one();
+            if ($model->next_process == 'END') {
+                if ($tmp_beacon) {
+                    if ($tmp_beacon->analyst != $wet->child_analyst) {
+                        \Yii::$app->session->setFlash('danger', 'Lot area and next process area is different...!');
+                        return $this->render('fix-lot-stuck', [
+                            'model' => $model,
+                        ]);
+                    }
+                    $tmp_beacon->lot_number = $tmp_beacon->start_date = $tmp_beacon->mesin_id = $tmp_beacon->mesin_description = $tmp_beacon->kelompok = $tmp_beacon->model_group = $tmp_beacon->parent = $tmp_beacon->parent_desc = $tmp_beacon->gmc = $tmp_beacon->gmc_desc = $tmp_beacon->lot_qty = $tmp_beacon->current_machine_start = $tmp_beacon->next_process = $tmp_beacon->lot_status = null;
 
-            if ($tmp_beacon) {
-                $lot_number = $tmp_beacon->lot_number;
-                $tmp_beacon->lot_number = $tmp_beacon->start_date = $tmp_beacon->mesin_id = $tmp_beacon->mesin_description = $tmp_beacon->kelompok = $tmp_beacon->model_group = $tmp_beacon->parent = $tmp_beacon->parent_desc = $tmp_beacon->gmc = $tmp_beacon->gmc_desc = $tmp_beacon->lot_qty = $tmp_beacon->current_machine_start = $tmp_beacon->next_process = $tmp_beacon->lot_status = null;
+                    if (!$tmp_beacon->save()) {
+                        return json_encode($tmp_beacon->errors);
+                    }
+
+                    //\Yii::$app->session->setFlash('success', 'Beacon ID : ' . $model->lot_number . ' with lot number : ' . $lot_number . ' has been fixed...');
+                }
 
                 $mio = MachineIotOutput::find()->where(['lot_number' => $lot_number])->orderBy('seq DESC')->one();
                 $end_date = date('Y-m-d H:i:s');
                 if ($mio->end_date != null) {
                     $end_date = $mio->end_date;
                 }
-                $wet = WipEffTbl::find()->where(['lot_id' => $lot_number])->one();
+                
                 if ($wet->end_date == null) {
                     $wet->end_date = $end_date;
                 }
                 $wet->plan_run = 'E';
                 $wet->plan_stats = 'C';
-                
-                if (!$wet->save()) {
-                    return json_encode($wet->errors);
-                }
 
-                if (!$tmp_beacon->save()) {
-                    return json_encode($tmp_beacon->errors);
-                }
-
-                \Yii::$app->session->setFlash('success', 'Beacon ID : ' . $model->beacon_id . ' with lot number : ' . $lot_number . ' has been fixed...');
             } else {
-                \Yii::$app->session->setFlash('danger', 'Beacon ID not found...');
+                if ($tmp_beacon) {
+                    if ($tmp_beacon->analyst != $wet->child_analyst) {
+                        \Yii::$app->session->setFlash('danger', 'Lot area and next process area is different...!');
+                        return $this->render('fix-lot-stuck', [
+                            'model' => $model,
+                        ]);
+                    }
+                    $tmp_beacon->lot_status = 'E';
+                    $tmp_beacon->next_process = $model->next_process;
+                    if (!$tmp_beacon->save()) {
+                        return json_encode($tmp_beacon->errors);
+                    }
+                }
+                $wet->plan_run = 'E';
+                $wet->mesin_id = $wet->mesin_description = null;
+                $wet->jenis_mesin = $model->next_process;
             }
+            
+            if (!$wet->save()) {
+                return json_encode($wet->errors);
+            }
+            \Yii::$app->session->setFlash('success', 'Success');
         }
-        $model->beacon_id = null;
+        $model->lot_number = null;
 
         return $this->render('fix-lot-stuck', [
             'model' => $model,
@@ -1068,12 +1094,43 @@ class DisplayController extends Controller
                 'ng_cause_category' => $model->category,
                 'flag' => 1,
             ];
+            $tmp_log_skill = SkillMasterLogView::find()
+            ->select([
+                'POST_DATE',
+                'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
+                'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'POST_DATE', $model->from_date],
+                ['<=', 'POST_DATE', $model->to_date]
+            ])
+            ->groupBy('POST_DATE')
+            ->orderBy('POST_DATE')
+            ->all();
         } else {
             $filter = [
                 'ng_cause_category' => $model->category,
                 'flag' => 1,
                 'loc_id' => $model->location
             ];
+            $tmp_log_skill = SkillMasterLogView::find()
+            ->select([
+                'POST_DATE',
+                'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
+                'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'POST_DATE', $model->from_date],
+                ['<=', 'POST_DATE', $model->to_date]
+            ])
+            ->andWhere([
+                'loc_id' => $model->location
+            ])
+            ->groupBy('POST_DATE')
+            ->orderBy('POST_DATE')
+            ->all();
         }
         
 
@@ -1094,6 +1151,21 @@ class DisplayController extends Controller
 
         $ng_data_daily = $tmp_data_daily = $tmp_data_section = $tmp_data_section2 = $ng_data_section = [];
         $total_ng = 0;
+
+        
+
+        $tmp_total_training = $tmp_total_retraining = [];
+        foreach ($tmp_log_skill as $key => $value) {
+            $proddate = (strtotime($value->POST_DATE . " +7 hours") * 1000);
+            $tmp_total_training[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total_training
+            ];
+            $tmp_total_retraining[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total_retraining
+            ];
+        }
         
         foreach ($tmp_ng_daily as $key => $value) {
             $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
@@ -1134,9 +1206,20 @@ class DisplayController extends Controller
         foreach ($tmp_data_daily as $key => $value) {
             $ng_data_daily[] = [
                 'name' => $wip_location_arr[$key],
-                'data' => $value
+                'data' => $value,
+                'type' => 'column'
             ];
         }
+        $ng_data_daily[] = [
+            'name' => 'TRAINING',
+            'data' => $tmp_total_training,
+            'type' => 'line'
+        ];
+        $ng_data_daily[] = [
+            'name' => 'RE-TRAINING',
+            'data' => $tmp_total_retraining,
+            'type' => 'line'
+        ];
 
         $ng_data_pic = [];
         $tmp_problem_desc = $tmp_problem_desc_drilldown = $ng_data_desc = $ng_data_desc_drilldown = [];

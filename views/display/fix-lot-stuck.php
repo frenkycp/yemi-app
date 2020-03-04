@@ -16,7 +16,7 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
-    .control-label {color: white;}
+    //.control-label {color: white;}
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 20px; height: 40px;}
     .content-header {color: white; text-align: center;}
@@ -36,6 +36,9 @@ $this->registerCss("
 ");
 
 date_default_timezone_set('Asia/Jakarta');
+
+$dropdown = ArrayHelper::map(app\models\MachineIotCurrent::find()->select(['kelompok', 'child_analyst'])->where(['child_analyst' => ['WW02', 'WP01', 'WU01']])->groupBy('kelompok, child_analyst')->orderBy('kelompok')->all(), 'kelompok', 'kelompok', 'location');
+$dropdown['END'] = '--END PROCESS--';
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -46,10 +49,18 @@ date_default_timezone_set('Asia/Jakarta');
 <div class="panel panel-primary">
     <div class="panel-body">
         <div class="row">
-            <div class="col-md-12">
-                <?= $form->field($model, 'beacon_id')->textInput([
+            <div class="col-md-6">
+                <?= $form->field($model, 'lot_number')->textInput([
                     'style' => 'text-align: center;'
-                ])->label(false); ?>
+                ]); ?>
+            </div>
+            <div class="col-md-6">
+                <?= $form->field($model, 'next_process')->dropDownList(
+                    $dropdown,
+                    [
+                        'prompt' => '-- Select a group --',
+                    ]
+                )->label('Next Process'); ?>
             </div>
         </div>
         <div class="row">

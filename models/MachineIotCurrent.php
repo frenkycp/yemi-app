@@ -36,4 +36,10 @@ class MachineIotCurrent extends BaseMachineIotCurrent
     {
         return $this->kelompok . ' - ' . $this->mesin_description . "($this->mesin_id)";
     }
+
+    public function getLocation($value='')
+    {
+        $loc_arr = \Yii::$app->params['wip_location_arr'];
+        return $loc_arr[$this->child_analyst];
+    }
 }
