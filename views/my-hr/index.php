@@ -5,6 +5,7 @@ use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
 use miloschuman\highcharts\Highcharts;
 use yii\web\JsExpression;
+use app\models\SunfishEmpAttendance;
 
 /* @var $this yii\web\View */
 
@@ -22,6 +23,8 @@ $this->registerCss('
     .content-header {
         display: none;
     }
+    .badge {font-weight: unset;}
+    th, td {vertical-align: middle !important;}
 ');
 
 $profpic = "";
@@ -155,28 +158,38 @@ echo '</pre>';*/
                         $total_alpa = $total_ijin = $total_sakit = $total_dl = $total_pc = $total_cuti = $grand_total_lembur = 0;
                         $grade = substr($model_karyawan->GRADE, 0, 1);
                         foreach ($absensi_data as $value) {
-                            $data_lembur = SplView::find()
+                            // $data_lembur = SplView::find()
+                            // ->select([
+                            //     'PERIOD',
+                            //     'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+                            // ])
+                            // ->where([
+                            //     'NIK' => $value->NIK,
+                            //     'PERIOD' => $value->PERIOD
+                            // ])
+                            // ->groupBy('PERIOD')
+                            // ->one();
+                            $data_lembur = SunfishEmpAttendance::find()
                             ->select([
-                                'PERIOD',
-                                'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
+                                'total_ot' => 'SUM(total_ot)'
                             ])
                             ->where([
-                                'NIK' => $value->NIK,
-                                'PERIOD' => $value->PERIOD
+                                'emp_no' => $model_karyawan->NIK_SUN_FISH,
+                                'FORMAT(shiftstarttime, \'yyyyMM\')' => $value->PERIOD
                             ])
-                            ->groupBy('PERIOD')
                             ->one();
+
                             $disiplin_icon = '<i class="fa fa-circle-o text-green"></i>';
                             if ($value->NO_DISIPLIN > 0 || in_array($grade, ['L', 'M', 'D'])) {
                                 $disiplin_icon = Html::a('<i class="fa fa-close text-red"></i>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
                             }
                             //$disiplin_icon = (int)$value->DISIPLIN;
 
-                            $total_lembur = $data_lembur->NILAI_LEMBUR_ACTUAL !== null && $data_lembur->NILAI_LEMBUR_ACTUAL > 0 ? $data_lembur->NILAI_LEMBUR_ACTUAL : '-';
+                            $total_lembur = $data_lembur->total_ot > 0 ? round(($data_lembur->total_ot / 60), 2) : '-';
 
                             if ($total_lembur != '-') {
-                                $total_lembur = Html::a('<span class="badge bg-green">' . $data_lembur->NILAI_LEMBUR_ACTUAL . '</span>', ['get-lembur-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
-                                $grand_total_lembur += $data_lembur->NILAI_LEMBUR_ACTUAL;
+                                $total_lembur = Html::a('<span class="badge bg-green">' . $total_lembur . '</span>', ['get-lembur-detail','nik' => $model_karyawan->NIK_SUN_FISH, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
+                                $grand_total_lembur += round(($data_lembur->total_ot / 60), 2);
                             }
 
                             $alpha_val = '-';
@@ -240,14 +253,14 @@ echo '</pre>';*/
 
                         echo '<tr class="info" style="font-weight: bold;">';
                         echo '<td style="text-align: center;">Total :</td>';
-                        echo '<td style="text-align: center;"><span class="badge">' . $total_alpa . '</span></td>';
-                        echo '<td style="text-align: center;"><span class="badge">' . $total_ijin . '</span></td>';
-                        echo '<td style="text-align: center;"><span class="badge">' . $total_sakit . '</span></td>';
-                        echo '<td style="text-align: center;"><span class="badge">' . $total_dl . '</span></td>';
-                        echo '<td style="text-align: center;"><span class="badge">' . $total_pc . '</span></td>';
-                        echo '<td style="text-align: center;"><span class="badge">' . $total_cuti . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="">' . $total_alpa . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="">' . $total_ijin . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="">' . $total_sakit . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="">' . $total_dl . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="">' . $total_pc . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="">' . $total_cuti . '</span></td>';
                         echo '<td style="text-align: center;"></td>';
-                        echo '<td style="text-align: center;"><span class="badge">' . $lembur_str . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="">' . $lembur_str . '</span></td>';
                         echo '<td style="text-align: center;"></td>';
                         echo '<td style="text-align: center;"></td>';
                         echo '<td style="text-align: center;"></td>';

@@ -18,6 +18,7 @@ use dmstr\bootstrap\Tabs;
 use app\models\ImageFile;
 use yii\web\UploadedFile;
 use yii\web\JsExpression;
+use app\models\SunfishEmpAttendance;
 
 class MyHrController extends Controller
 {
@@ -443,12 +444,15 @@ class MyHrController extends Controller
         if($model->load(\Yii::$app->request->post())){
             $karyawan = Karyawan::find()
             ->where([
-                'NIK' => $model->username,
-                'PASSWORD' => $model->password,
+                'OR',
+                ['NIK' => strtoupper($model->username)],
+                ['NIK_SUN_FISH' => strtoupper($model->username)],
             ])
+            ->andWhere(['PASSWORD' => $model->password,])
             ->one();
             if ($karyawan->NIK !== null) {
-                $session['my_hr_user'] = $model->username;
+                $session['my_hr_user'] = $karyawan->NIK;
+                $session['my_hr_user_sunfish'] = $karyawan->NIK_SUN_FISH;
                 $session['my_hr_name'] = $karyawan->NAMA_KARYAWAN;
                 $hr_log = HrLoginLog::find()->where([
                     'nik' => $karyawan->NIK,
@@ -537,12 +541,21 @@ class MyHrController extends Controller
 
 	public function actionGetLemburDetail($nik, $nama_karyawan, $period)
     {
-        $spl_data_arr = SplView::find()
+        // $spl_data_arr = SplView::find()
+        // ->where([
+        //     'NIK' => $nik,
+        //     'PERIOD' => $period
+        // ])
+        // ->orderBy('TGL_LEMBUR')
+        // ->all();
+
+        $spl_data_arr = SunfishEmpAttendance::find()
         ->where([
-            'NIK' => $nik,
-            'PERIOD' => $period
+            'emp_no' => $nik,
+            'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
         ])
-        ->orderBy('TGL_LEMBUR')
+        ->andWhere('total_ot IS NOT NULL')
+        ->orderBy('shiftstarttime')
         ->all();
 
         $data = '<div class="modal-header">
@@ -554,26 +567,37 @@ class MyHrController extends Controller
 
         $data .= '<table class="table table-bordered table-striped table-hover">';
         $data .= 
-        '<thead><tr>
-            <th style="text-align: center;">SPL Num.</th>
-            <th style="text-align: center;">Workday/Holiday</th>
-            <th style="text-align: center;">Date</th>
-            <th style="text-align: center;">Overtime Plan</th>
-            <th style="text-align: center;">Overtime Actual</th>
-            <th>Reason</th>
-        </tr></thead>'
+        '<thead>
+        <tr>
+            <th rowspan="2" class="text-center">SPL Num.</th>
+            <th rowspan="2" class="text-center">Workday/Holiday</th>
+            <th rowspan="2" class="text-center">Date</th>
+            <th colspan="2" class="text-center">Overtime Plan</th>
+            <th colspan="2" class="text-center">Overtime Actual</th>
+            <th rowspan="2" class="text-center">Total (Hour)</th>
+        </tr>
+        <tr>
+            <th class="text-center">From</th>
+            <th class="text-center">To</th>
+            <th class="text-center">From</th>
+            <th class="text-center">To</th>
+        </tr>
+        </thead>'
         ;
         $data .= '<tbody>';
         foreach ($spl_data_arr as $key => $value) {
-            $hari_kerja = $value->JENIS_LEMBUR == 'HARI KERJA' ? 'WORKDAY' : 'HOLIDAY';
+            $hari_kerja = $value->shiftdaily_code == 'OFF' ? 'HOLIDAY' : 'WORKDAY';
+            $total_ot = round($value->total_ot / 60, 2);
             $data .= '
             <tr>
-                <td style="text-align: center;">' . $value->SPL_HDR_ID . '</td>
-                <td style="text-align: center;">' . $hari_kerja . '</td>
-                <td style="text-align: center;">' . date('l, d M\' Y', strtotime($value->TGL_LEMBUR)) . '</td>
-                <td style="text-align: center;">' . date('H:i', strtotime($value->END_LEMBUR_PLAN)) . ' (' . $value->NILAI_LEMBUR_PLAN . ' jam)</td>
-                <td style="text-align: center;">' . date('H:i', strtotime($value->END_LEMBUR_ACTUAL)) . ' (' . $value->NILAI_LEMBUR_ACTUAL . ' jam)</td>
-                <td>' . $value->URAIAN_LEMBUR . '</td>
+                <td class="text-center">' . $value->ovtrequest_no . '</td>
+                <td class="text-center">' . $hari_kerja . '</td>
+                <td class="text-center">' . date('l, d M\' Y', strtotime($value->shiftstarttime)) . '</td>
+                <td class="text-center">' . date('Y-m-d H:i', strtotime($value->ovtplanfrom)) . '</td>
+                <td class="text-center">' . date('Y-m-d H:i', strtotime($value->ovtplanto)) . '</td>
+                <td class="text-center">' . date('Y-m-d H:i', strtotime($value->ovtactfrom)) . '</td>
+                <td class="text-center">' . date('Y-m-d H:i', strtotime($value->ovtactto)) . '</td>
+                <td class="text-center">' . $total_ot . '</td>
             </tr>
             ';
         }

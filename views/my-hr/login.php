@@ -11,7 +11,11 @@ $this->title = 'Sign In';
 
 $fieldOptions1 = [
     'options' => ['class' => 'form-group has-feedback'],
-    'inputOptions' => ['autofocus' => 'autofocus', 'class' => 'form-control'],
+    'inputOptions' => [
+        'autofocus' => 'autofocus',
+        'class' => 'form-control',
+        'onkeyup' => 'this.value=this.value.toUpperCase()',
+        'onfocusout' => 'this.value=this.value.toUpperCase()',],
     //'inputTemplate' => "{input}<span class='glyphicon glyphicon-envelope form-control-feedback'></span>"
 ];
 ?>
