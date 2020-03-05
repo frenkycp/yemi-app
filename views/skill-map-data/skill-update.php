@@ -48,11 +48,23 @@ date_default_timezone_set('Asia/Jakarta');
 				<?= $form->field($model, 'skill_value')->textInput(['type' => 'number']); ?>
 			</div>
 			<div class="col-md-4">
-				<?= $form->field($model, 'nik')->textInput([
-					'autofocus' => 'autofocus',
-					'onkeyup' => 'this.value=this.value.toUpperCase()',
-                    'onfocusout' => 'this.value=this.value.toUpperCase()',
-				]); ?>
+				<?= $form->field($model, 'nik')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
+                        'NIK_SUN_FISH', 'NAMA_KARYAWAN'
+                    ])
+                    ->where([
+                        'AKTIF' => 'Y',
+                    ])
+                    ->andWhere(['<>', 'DEPARTEMEN', 'ADMINISTRATION'])
+                    ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
+                    'options' => [
+                        'placeholder' => 'Choose...',
+                        'id' => 'emp_id',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ],
+                ])->label('NIK'); ?>
 			</div>
 		</div>
 	</div>
