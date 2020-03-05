@@ -54,6 +54,7 @@ $this->registerCss("
         color: #FFF;
         vertical-align: middle;
     }
+    .text-red {color: rgb(223, 83, 83) !important;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -100,11 +101,15 @@ $this->registerJs($script, View::POS_HEAD );
             ]
         ]);?>
     </div>
+    <div class="pull-right" style="text-align: right; font-size: 2em; color: white;">
+        <div style="border: 1px solid white; border-radius: 5px; padding: 10px 20px; margin-right: 15px;">
+            <span >Total <span class="text-red">Over</span> : <?= $total_red; ?> <?= $total_red <= 1 ? ' hour' : ' hours' ?></span>
+        </div>
+    </div>
     <div class="form-group">
         <br/>
         <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
     </div>
-    
 </div>
 <?php ActiveForm::end(); ?>
 
@@ -195,6 +200,8 @@ $this->registerJs($script, View::POS_HEAD );
         ?>
     </div>
 </div>
+
+
 
 <?php
 yii\bootstrap\Modal::begin([

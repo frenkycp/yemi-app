@@ -213,6 +213,7 @@ class DisplayController extends Controller
         ->groupBy('DATE(tgl)')
         ->all();
 
+        $total_red = 0;
         foreach ($tmp_shipping as $key => $value) {
             $post_date = (strtotime($value->tgl . " +7 hours") * 1000);
             $datetime1 = strtotime($value->tgl . ' 00:00:00');
@@ -230,6 +231,7 @@ class DisplayController extends Controller
                     'url' => Url::to(['shipping-completion-data', 'post_date' => $value->tgl]),
                 ];
             }
+            $total_red += $tmp_red;
             $tmp_data_green[] = [
                 'x' => $post_date,
                 'y' => (float)$tmp_green,
@@ -258,6 +260,7 @@ class DisplayController extends Controller
         return $this->render('last-shipping-daily',[
             'model' => $model,
             'data' => $data,
+            'total_red' => $total_red,
         ]);
     }
     public function actionFixLotStuck()
