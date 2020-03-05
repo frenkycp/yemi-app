@@ -26,9 +26,10 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
         $model->addRule(['skill', 'nik', 'skill_value'], 'required');
         $model->skill_value = 3;
 
-        $tmp_arr1 = ArrayHelper::map(SernoMaster::find()->select(['gmc', 'model', 'color', 'dest'])->all(), 'gmc', 'fullDescription');
-        $tmp_arr2 = ArrayHelper::map(SkillMaster::find()->select(['skill_id', 'skill_desc'])->where(['<>', 'skill_group', 'Z'])->all(), 'skill_id', 'description');
-        $skill_dropdown_arr = array_merge($tmp_arr2, $tmp_arr1);
+        // $tmp_arr1 = ArrayHelper::map(SernoMaster::find()->select(['gmc', 'model', 'color', 'dest'])->all(), 'gmc', 'fullDescription');
+        // $tmp_arr2 = ArrayHelper::map(SkillMaster::find()->select(['skill_id', 'skill_desc'])->where(['<>', 'skill_group', 'Z'])->all(), 'skill_id', 'description');
+        // $skill_dropdown_arr = array_merge($tmp_arr2, $tmp_arr1);
+        $skill_dropdown_arr = ArrayHelper::map(SkillMaster::find()->select(['skill_id', 'skill_desc'])->all(), 'skill_id', 'description');
 
         if ($model->load($_POST)) {
         	$id = \Yii::$app->user->identity->username;
