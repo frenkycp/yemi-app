@@ -118,9 +118,141 @@ use app\models\WorkDayTbl;
 use app\models\SernoCnt;
 use app\models\ServerStatus;
 use app\models\SkillMasterLogView;
+use app\models\SkillMasterDailyTraining;
 
 class DisplayController extends Controller
 {
+    public function actionTrainingDailyReport($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'location'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required')
+        ->addRule(['location'], 'string');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        if ($model->load($_GET)) { }
+
+        if ($model->location == null || $model->location == '') {
+            $tmp_log_skill = SkillMasterLogView::find()
+            ->select([
+                'POST_DATE',
+                'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
+                'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'POST_DATE', $model->from_date],
+                ['<=', 'POST_DATE', $model->to_date]
+            ])
+            ->groupBy('POST_DATE')
+            ->orderBy('POST_DATE')
+            ->all();
+
+            $tmp_daily_training = SkillMasterDailyTraining::find()
+            ->select([
+                'POST_DATE',
+                'total' => 'COUNT(NIK)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'POST_DATE', $model->from_date],
+                ['<=', 'POST_DATE', $model->to_date]
+            ])
+            ->groupBy('POST_DATE')
+            ->orderBy('POST_DATE')
+            ->all();
+        } else {
+            $tmp_log_skill = SkillMasterLogView::find()
+            ->select([
+                'POST_DATE',
+                'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
+                'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'POST_DATE', $model->from_date],
+                ['<=', 'POST_DATE', $model->to_date]
+            ])
+            ->andWhere([
+                'loc_id' => $model->location
+            ])
+            ->groupBy('POST_DATE')
+            ->orderBy('POST_DATE')
+            ->all();
+
+            $tmp_daily_training = SkillMasterDailyTraining::find()
+            ->select([
+                'POST_DATE',
+                'total' => 'COUNT(NIK)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'POST_DATE', $model->from_date],
+                ['<=', 'POST_DATE', $model->to_date]
+            ])
+            ->andWhere([
+                'loc_id' => $model->location
+            ])
+            ->groupBy('POST_DATE')
+            ->orderBy('POST_DATE')
+            ->all();
+        }
+
+        $tmp_total_training = $tmp_total_retraining = [];
+        foreach ($tmp_log_skill as $key => $value) {
+            $proddate = (strtotime($value->POST_DATE . " +7 hours") * 1000);
+            $tmp_total_training[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total_training
+            ];
+            $tmp_total_retraining[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total_retraining
+            ];
+        }
+
+        $tmp_daily_arr = [];
+        foreach ($tmp_daily_training as $key => $value) {
+            $proddate = (strtotime($value->POST_DATE . " +7 hours") * 1000);
+            $tmp_daily_arr[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total
+            ];
+        }
+
+        $data_training = [
+            [
+                'name' => 'TOTAL STAFF (TRAINED)',
+                'data' => $tmp_daily_arr,
+                'type' => 'column',
+                'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
+            ],
+            [
+                'name' => 'TRAINING',
+                'data' => $tmp_total_training,
+                'type' => 'line',
+                'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
+            ],
+            [
+                'name' => 'RE-TRAINING',
+                'data' => $tmp_total_retraining,
+                'type' => 'line',
+                'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+            ],
+        ];
+
+        return $this->render('training-daily-report',[
+            'model' => $model,
+            'data_training' => $data_training,
+        ]);
+    }
+
     public function actionServerStatus($value='')
     {
         $this->layout = 'clean';
@@ -1097,43 +1229,43 @@ class DisplayController extends Controller
                 'ng_cause_category' => $model->category,
                 'flag' => 1,
             ];
-            $tmp_log_skill = SkillMasterLogView::find()
-            ->select([
-                'POST_DATE',
-                'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
-                'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
-            ])
-            ->where([
-                'AND',
-                ['>=', 'POST_DATE', $model->from_date],
-                ['<=', 'POST_DATE', $model->to_date]
-            ])
-            ->groupBy('POST_DATE')
-            ->orderBy('POST_DATE')
-            ->all();
+            // $tmp_log_skill = SkillMasterLogView::find()
+            // ->select([
+            //     'POST_DATE',
+            //     'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
+            //     'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
+            // ])
+            // ->where([
+            //     'AND',
+            //     ['>=', 'POST_DATE', $model->from_date],
+            //     ['<=', 'POST_DATE', $model->to_date]
+            // ])
+            // ->groupBy('POST_DATE')
+            // ->orderBy('POST_DATE')
+            // ->all();
         } else {
             $filter = [
                 'ng_cause_category' => $model->category,
                 'flag' => 1,
                 'loc_id' => $model->location
             ];
-            $tmp_log_skill = SkillMasterLogView::find()
-            ->select([
-                'POST_DATE',
-                'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
-                'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
-            ])
-            ->where([
-                'AND',
-                ['>=', 'POST_DATE', $model->from_date],
-                ['<=', 'POST_DATE', $model->to_date]
-            ])
-            ->andWhere([
-                'loc_id' => $model->location
-            ])
-            ->groupBy('POST_DATE')
-            ->orderBy('POST_DATE')
-            ->all();
+            // $tmp_log_skill = SkillMasterLogView::find()
+            // ->select([
+            //     'POST_DATE',
+            //     'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
+            //     'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
+            // ])
+            // ->where([
+            //     'AND',
+            //     ['>=', 'POST_DATE', $model->from_date],
+            //     ['<=', 'POST_DATE', $model->to_date]
+            // ])
+            // ->andWhere([
+            //     'loc_id' => $model->location
+            // ])
+            // ->groupBy('POST_DATE')
+            // ->orderBy('POST_DATE')
+            // ->all();
         }
         
 
@@ -1157,18 +1289,18 @@ class DisplayController extends Controller
 
         
 
-        $tmp_total_training = $tmp_total_retraining = [];
-        foreach ($tmp_log_skill as $key => $value) {
-            $proddate = (strtotime($value->POST_DATE . " +7 hours") * 1000);
-            $tmp_total_training[] = [
-                'x' => $proddate,
-                'y' => (int)$value->total_training
-            ];
-            $tmp_total_retraining[] = [
-                'x' => $proddate,
-                'y' => (int)$value->total_retraining
-            ];
-        }
+        // $tmp_total_training = $tmp_total_retraining = [];
+        // foreach ($tmp_log_skill as $key => $value) {
+        //     $proddate = (strtotime($value->POST_DATE . " +7 hours") * 1000);
+        //     $tmp_total_training[] = [
+        //         'x' => $proddate,
+        //         'y' => (int)$value->total_training
+        //     ];
+        //     $tmp_total_retraining[] = [
+        //         'x' => $proddate,
+        //         'y' => (int)$value->total_retraining
+        //     ];
+        // }
         
         foreach ($tmp_ng_daily as $key => $value) {
             $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
@@ -1213,16 +1345,16 @@ class DisplayController extends Controller
                 'type' => 'column'
             ];
         }
-        $ng_data_daily[] = [
-            'name' => 'TRAINING',
-            'data' => $tmp_total_training,
-            'type' => 'line'
-        ];
-        $ng_data_daily[] = [
-            'name' => 'RE-TRAINING',
-            'data' => $tmp_total_retraining,
-            'type' => 'line'
-        ];
+        // $ng_data_daily[] = [
+        //     'name' => 'TRAINING',
+        //     'data' => $tmp_total_training,
+        //     'type' => 'line'
+        // ];
+        // $ng_data_daily[] = [
+        //     'name' => 'RE-TRAINING',
+        //     'data' => $tmp_total_retraining,
+        //     'type' => 'line'
+        // ];
 
         $ng_data_pic = [];
         $tmp_problem_desc = $tmp_problem_desc_drilldown = $ng_data_desc = $ng_data_desc_drilldown = [];
