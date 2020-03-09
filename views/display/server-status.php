@@ -475,7 +475,7 @@ $server_arr = [
                             ?>
                         </div>
                     </div>
-                    <div id="timer_<?= $value->server_mac_address; ?>" class="row" style="font-size: 7em; line-height: 200px; color: red; text-shadow: -1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF; letter-spacing: 4px;">
+                    <div id="timer_<?= $value->server_mac_address; ?>" class="row" style="font-size: 7em; line-height: 195px; color: red; text-shadow: -1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF; letter-spacing: 4px;">
                         
                     </div>
                 </div>

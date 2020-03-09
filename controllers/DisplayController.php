@@ -138,7 +138,9 @@ class DisplayController extends Controller
                 $second_date = new \DateTime($now);
                 $first_date = new \DateTime($value->last_update);
                 $interval = $first_date->diff($second_date);
-                $timer_txt = str_pad($interval->h, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->i, 2, '0', STR_PAD_LEFT);
+                $txt_hour = $interval->h > 1 ? 'hours' : 'hour';
+                $txt_minutes = $interval->i > 1 ? 'minutes' : 'minute';
+                $timer_txt = $interval->h . ' <small>' . $txt_hour . ' </small>' . $interval->i . ' <small>' . $txt_minutes . '</small>';
             }
             $tmp_data[$value->server_mac_address] = [
                 'timer_txt' => $timer_txt,
