@@ -122,6 +122,16 @@ use app\models\SkillMasterDailyTraining;
 
 class DisplayController extends Controller
 {
+    public function actionServerStatusData($mac_address)
+    {
+        $server_status = ServerStatus::find()->where(['server_mac_address' => $mac_address])->one();
+
+        $data = [
+            'memory_usage' => [$server_status->memory_used]
+        ];
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
     public function actionTrainingDailyReport($value='')
     {
         $this->layout = 'clean';

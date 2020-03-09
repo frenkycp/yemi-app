@@ -60,7 +60,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 30000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -72,6 +72,14 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($tmp_data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
+
+$server_arr = [
+    '172.17.144.65' => 'MITA - DATABASE',
+    '172.17.144.5' => 'WSUS',
+    '172.17.144.211' => 'BEA CUKAI',
+    '174.17.144.109' => 'IOT MACHINE',
+    '172.17.144.6' => 'MITA - APPLICATION',
+];
 ?>
 <div class="row">
     <?php foreach ($server_status as $key => $value): ?>
@@ -81,7 +89,7 @@ echo '</pre>';*/
             [
                 'name' => 'Used',
                 'y' => $value->memory_used,
-                'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
+                'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
             ],
             [
                 'name' => 'Free',
@@ -101,7 +109,7 @@ echo '</pre>';*/
             [
                 'name' => 'Used',
                 'y' => $value->c_driveinfo_used,
-                'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
+                'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
             ],
             [
                 'name' => 'Free',
@@ -121,7 +129,7 @@ echo '</pre>';*/
             [
                 'name' => 'Used',
                 'y' => $value->d_driveinfo_used,
-                'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
+                'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
             ],
             [
                 'name' => 'Free',
@@ -131,12 +139,316 @@ echo '</pre>';*/
         ];
         $data_d = [
             [
-                'name' => 'Drive C Usage',
+                'name' => 'Drive D Usage',
                 'data' => $tmp_data_d
             ]
         ];
         ?>
-        <div class="col-md-2">
+        <div class="col-md-6" style="margin-bottom: 20px;">
+            <div class="text-center<?= $value->server_on_off == 'ON-LINE' ? ' bg-green' : ' bg-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 2em;">
+                <?= isset($server_arr[$value->server_ip]) ? $server_arr[$value->server_ip] : $value->server_name; ?>
+            </div>
+            
+            <div style="border: 1px solid white; min-height: 40px; border-radius: 0px 0px 10px 10px; border-top: unset;">
+                <div class="text-center" style="width: 100%; padding: 10px;">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <?=
+                            Highcharts::widget([
+                                'scripts' => [
+                                    'highcharts-more',
+                                    //'modules/exporting',
+                                    //'themes/sand-signika',
+                                    'modules/solid-gauge',
+                                    //'themes/dark-unica',
+                                    'themes/grid-light',
+                                ],
+                                'options' => [
+                                    'chart' => [
+                                        'type' => 'solidgauge',
+                                        'height' => '200',
+                                        'backgroundColor' => '#000',
+                                        'style' => [
+                                            'fontFamily' => 'sans-serif',
+                                        ],
+                                        // 'events' => [
+                                        //     'load' => new JsExpression("function () {
+                                        //         var series = this.series[0];
+                                        //         setInterval(function () {
+                                        //             $.getJSON('" . Url::to(['display/server-status-data', 'mac_address' => $value->server_mac_address]) . "', function (jsondata) {
+                                        //                 series.data = JSON.parse(jsondata.memory_usage);
+                                        //                 //alert(series.data);
+                                        //             });
+                                        //         }, 1000);}"),
+                                        // ],
+                                    ],
+                                    'title' => null,
+                                    'pane' => [
+                                        'center' => ['50%', '85%'],
+                                        'size' => '130%',
+                                        'startAngle' => -90,
+                                        'endAngle' => 90,
+                                        'background' => [
+
+                                            'innerRadius' => '60%',
+                                            'outerRadius' => '100%',
+                                            'shape' => 'arc'
+                                        ]
+                                    ],
+                                    'exporting' => [
+                                        'enabled' =>false
+                                    ],
+                                    'credits' => [
+                                        'enabled' =>false
+                                    ],
+                                    'tooltip' => [
+                                        'enabled' => false,
+                                    ],
+                                    'yAxis' => [
+                                        'stops' => [
+                                            [0.1, '#55BF3B'], // green
+                                            [0.5, '#DDDF0D'], // yellow
+                                            [0.9, '#DF5353'] // red
+                                        ],
+                                        'lineWidth' => 0,
+                                        'tickWidth' => 0,
+                                        'minorTickInterval' => null,
+                                        'tickAmount' => 2,
+                                        'title' => [
+                                            'text' => 'Memory Usage',
+                                            'y' => -75,
+                                            'style' => [
+                                                'color' => 'white',
+                                                'letter-spacing' => '2px'
+                                            ]
+                                        ],
+                                        'labels' => [
+                                            'y' => 16,
+                                            'style' => [
+                                                'color' => 'white'
+                                            ]
+                                        ],
+                                        'min' => 0,
+                                        'max' => 100,
+                                    ],
+                                    'plotOptions' => [
+                                        'solidgauge' => [
+                                            'dataLabels' => [
+                                                'y' => 5,
+                                                'borderWidth' => 0,
+                                                'useHTML' => true
+                                            ]
+                                        ],
+                                    ],
+                                    'series' => [
+                                        [
+                                            'name' => 'Memory Usage',
+                                            'data' => [round($value->memory_used)],
+                                            'tooltip' => [
+                                                'valueSuffix' => ' %',
+                                            ],
+                                            'dataLabels' => [
+                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?=
+                            Highcharts::widget([
+                                'scripts' => [
+                                    'highcharts-more',
+                                    //'modules/exporting',
+                                    //'themes/sand-signika',
+                                    'modules/solid-gauge',
+                                    //'themes/dark-unica',
+                                    'themes/grid-light',
+                                ],
+                                'options' => [
+                                    'chart' => [
+                                        'type' => 'solidgauge',
+                                        'height' => '200',
+                                        'backgroundColor' => '#000',
+                                        'style' => [
+                                            'fontFamily' => 'sans-serif',
+                                        ],
+                                    ],
+                                    'title' => null,
+                                    'pane' => [
+                                        'center' => ['50%', '85%'],
+                                        'size' => '130%',
+                                        'startAngle' => -90,
+                                        'endAngle' => 90,
+                                        'background' => [
+
+                                            'innerRadius' => '60%',
+                                            'outerRadius' => '100%',
+                                            'shape' => 'arc'
+                                        ]
+                                    ],
+                                    'exporting' => [
+                                        'enabled' =>false
+                                    ],
+                                    'credits' => [
+                                        'enabled' =>false
+                                    ],
+                                    'tooltip' => [
+                                        'enabled' => false,
+                                    ],
+                                    'yAxis' => [
+                                        'stops' => [
+                                            [0.1, '#55BF3B'], // green
+                                            [0.5, '#DDDF0D'], // yellow
+                                            [0.9, '#DF5353'] // red
+                                        ],
+                                        'lineWidth' => 0,
+                                        'tickWidth' => 0,
+                                        'minorTickInterval' => null,
+                                        'tickAmount' => 2,
+                                        'title' => [
+                                            'text' => 'Drive Usage (C:)',
+                                            'y' => -75,
+                                            'style' => [
+                                                'color' => 'white',
+                                                'letter-spacing' => '2px'
+                                            ]
+                                        ],
+                                        'labels' => [
+                                            'y' => 16,
+                                            'style' => [
+                                                'color' => 'white'
+                                            ]
+                                        ],
+                                        'min' => 0,
+                                        'max' => 100,
+                                    ],
+                                    'plotOptions' => [
+                                        'solidgauge' => [
+                                            'dataLabels' => [
+                                                'y' => 5,
+                                                'borderWidth' => 0,
+                                                'useHTML' => true
+                                            ]
+                                        ],
+                                    ],
+                                    'series' => [
+                                        [
+                                            'name' => 'Drive Usage (C:)',
+                                            'data' => [round($value->c_driveinfo_used_pct)],
+                                            'tooltip' => [
+                                                'valueSuffix' => ' %',
+                                            ],
+                                            'dataLabels' => [
+                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                        <div class="col-md-4">
+                            <?=
+                            Highcharts::widget([
+                                'scripts' => [
+                                    'highcharts-more',
+                                    //'modules/exporting',
+                                    //'themes/sand-signika',
+                                    'modules/solid-gauge',
+                                    //'themes/dark-unica',
+                                    'themes/grid-light',
+                                ],
+                                'options' => [
+                                    'chart' => [
+                                        'type' => 'solidgauge',
+                                        'height' => '200',
+                                        'backgroundColor' => '#000',
+                                        'style' => [
+                                            'fontFamily' => 'sans-serif',
+                                        ],
+                                    ],
+                                    'title' => null,
+                                    'pane' => [
+                                        'center' => ['50%', '85%'],
+                                        'size' => '130%',
+                                        'startAngle' => -90,
+                                        'endAngle' => 90,
+                                        'background' => [
+
+                                            'innerRadius' => '60%',
+                                            'outerRadius' => '100%',
+                                            'shape' => 'arc'
+                                        ]
+                                    ],
+                                    'exporting' => [
+                                        'enabled' =>false
+                                    ],
+                                    'credits' => [
+                                        'enabled' =>false
+                                    ],
+                                    'tooltip' => [
+                                        'enabled' => false,
+                                    ],
+                                    'yAxis' => [
+                                        'stops' => [
+                                            [0.1, '#55BF3B'], // green
+                                            [0.5, '#DDDF0D'], // yellow
+                                            [0.9, '#DF5353'] // red
+                                        ],
+                                        'lineWidth' => 0,
+                                        'tickWidth' => 0,
+                                        'minorTickInterval' => null,
+                                        'tickAmount' => 2,
+                                        'title' => [
+                                            'text' => 'Drive Usage (D:)',
+                                            'y' => -75,
+                                            'style' => [
+                                                'color' => 'white',
+                                                'letter-spacing' => '2px'
+                                            ]
+                                        ],
+                                        'labels' => [
+                                            'y' => 16,
+                                            'style' => [
+                                                'color' => 'white'
+                                            ]
+                                        ],
+                                        'min' => 0,
+                                        'max' => 100,
+                                    ],
+                                    'plotOptions' => [
+                                        'solidgauge' => [
+                                            'dataLabels' => [
+                                                'y' => 5,
+                                                'borderWidth' => 0,
+                                                'useHTML' => true
+                                            ]
+                                        ],
+                                    ],
+                                    'series' => [
+                                        [
+                                            'name' => 'Drive Usage (D:)',
+                                            'data' => [round($value->d_driveinfo_used_pct)],
+                                            'tooltip' => [
+                                                'valueSuffix' => ' %',
+                                            ],
+                                            'dataLabels' => [
+                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2" style="display: none;">
             <div class="text-center" style="color: white; font-size: 2em;"><?= $value->server_name; ?></div>
             <br/>
             <div class="box box-primary box-solid">
@@ -150,7 +462,8 @@ echo '</pre>';*/
                             //'modules/exporting',
                             //'themes/sand-signika',
                             'highcharts-more',
-                            'themes/grid-light',
+                            //'themes/dark-unica',
+                            //'themes/grid-light',
                         ],
                         'options' => [
                             'chart' => [
@@ -206,7 +519,7 @@ echo '</pre>';*/
                             //'modules/exporting',
                             //'themes/sand-signika',
                             'highcharts-more',
-                            'themes/grid-light',
+                            //'themes/grid-light',
                         ],
                         'options' => [
                             'chart' => [
@@ -262,7 +575,7 @@ echo '</pre>';*/
                             //'modules/exporting',
                             //'themes/sand-signika',
                             'highcharts-more',
-                            'themes/grid-light',
+                            //'themes/grid-light',
                         ],
                         'options' => [
                             'chart' => [
