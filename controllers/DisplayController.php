@@ -122,12 +122,41 @@ use app\models\SkillMasterDailyTraining;
 
 class DisplayController extends Controller
 {
+    public function actionServerStatusOnline($value='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $now = date('Y-m-d H:i:s');
+        //$now = '2019-08-14 09:25:00';
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $server_status = ServerStatus::find()->all();
+
+        $tmp_data = [];
+        foreach ($server_status as $key => $value) {
+            $timer_txt = '';
+            if ($value->server_on_off == 'OFF-LINE') {
+                $second_date = new \DateTime($now);
+                $first_date = new \DateTime($value->last_update);
+                $interval = $first_date->diff($second_date);
+                $timer_txt = str_pad($interval->h, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->i, 2, '0', STR_PAD_LEFT);
+            }
+            $tmp_data[$value->server_mac_address] = [
+                'timer_txt' => $timer_txt,
+                'status' => $value->server_on_off
+            ];
+        }
+        $data = [
+            'server_data_arr' => $tmp_data
+        ];
+
+        return $data;
+    }
     public function actionServerStatusData($mac_address)
     {
         $server_status = ServerStatus::find()->where(['server_mac_address' => $mac_address])->one();
 
         $data = [
-            'memory_usage' => [$server_status->memory_used]
+            'memory_usage' => $server_status->memory_used
         ];
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }

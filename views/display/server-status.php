@@ -60,13 +60,42 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 30000); // milliseconds
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
+
+$this->registerJs("
+    function update_data(){
+        $.ajax({
+            type: 'POST',
+            url: '" . Url::to(['server-status-online']) . "',
+            success: function(data){
+                $.each(data.server_data_arr , function(index, val) {
+                    $('#timer_' + index).html(val.timer_txt);
+                    if(val.status == 'ON-LINE'){
+                        $('#timer_' + index).css('display', 'none');
+                        $('#usage_' + index).css('display', '');
+                        $('#header_' + index).attr('class', 'bg-green')
+                    } else {
+                        $('#timer_' + index).css('display', '');
+                        $('#usage_' + index).css('display', 'none');
+                        $('#header_' + index).attr('class', 'bg-red')
+                    }
+                });
+            },
+            complete: function(){
+                setTimeout(function(){update_data();}, 5000);
+            }
+        });
+    }
+    $(document).ready(function() {
+        update_data();
+    });
+");
 
 /*echo '<pre>';
 print_r($tmp_data);
@@ -144,14 +173,14 @@ $server_arr = [
             ]
         ];
         ?>
-        <div class="col-md-6" style="margin-bottom: 20px;">
-            <div class="text-center<?= $value->server_on_off == 'ON-LINE' ? ' bg-green' : ' bg-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 2em;">
+        <div class="col-md-6 text-center" style="margin-bottom: 20px;">
+            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? ' bg-green' : ' bg-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 2em; padding-left: 10px;">
                 <?= isset($server_arr[$value->server_ip]) ? $server_arr[$value->server_ip] : $value->server_name; ?>
             </div>
             
-            <div style="border: 1px solid white; min-height: 40px; border-radius: 0px 0px 10px 10px; border-top: unset;">
+            <div style="border: 1px solid white; min-height: 221px; border-radius: 0px 0px 10px 10px; border-top: unset;">
                 <div class="text-center" style="width: 100%; padding: 10px;">
-                    <div class="row">
+                    <div id="usage_<?= $value->server_mac_address; ?>" class="row" style="<?= $value->server_on_off == 'ON-LINE' ? '' : 'display: none;'; ?>">
                         <div class="col-md-4">
                             <?=
                             Highcharts::widget([
@@ -171,16 +200,17 @@ $server_arr = [
                                         'style' => [
                                             'fontFamily' => 'sans-serif',
                                         ],
-                                        // 'events' => [
-                                        //     'load' => new JsExpression("function () {
-                                        //         var series = this.series[0];
-                                        //         setInterval(function () {
-                                        //             $.getJSON('" . Url::to(['display/server-status-data', 'mac_address' => $value->server_mac_address]) . "', function (jsondata) {
-                                        //                 series.data = JSON.parse(jsondata.memory_usage);
-                                        //                 //alert(series.data);
-                                        //             });
-                                        //         }, 1000);}"),
-                                        // ],
+                                        'events' => [
+                                            'load' => new JsExpression("function () {
+                                                var series = this.series[0].points[0];
+                                                setInterval(function () {
+                                                    $.getJSON('" . Url::to(['display/server-status-data', 'mac_address' => $value->server_mac_address]) . "', function (jsondata) {
+                                                        //series.data = JSON.parse(jsondata.memory_usage);
+                                                        series.update(jsondata.memory_usage);
+                                                        //alert(series.data);
+                                                    });
+                                                }, 5000);}"),
+                                        ],
                                     ],
                                     'title' => null,
                                     'pane' => [
@@ -243,12 +273,12 @@ $server_arr = [
                                     'series' => [
                                         [
                                             'name' => 'Memory Usage',
-                                            'data' => [round($value->memory_used)],
+                                            'data' => [($value->memory_used)],
                                             'tooltip' => [
                                                 'valueSuffix' => ' %',
                                             ],
                                             'dataLabels' => [
-                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
+                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px; letter-spacing: 1.5px;">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
                                             ],
                                         ],
                                     ],
@@ -342,7 +372,7 @@ $server_arr = [
                                                 'valueSuffix' => ' %',
                                             ],
                                             'dataLabels' => [
-                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
+                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px; letter-spacing: 1.5px;">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
                                             ],
                                         ],
                                     ],
@@ -436,7 +466,7 @@ $server_arr = [
                                                 'valueSuffix' => ' %',
                                             ],
                                             'dataLabels' => [
-                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
+                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px; letter-spacing: 1.5px;">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
                                             ],
                                         ],
                                     ],
@@ -445,179 +475,9 @@ $server_arr = [
                             ?>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2" style="display: none;">
-            <div class="text-center" style="color: white; font-size: 2em;"><?= $value->server_name; ?></div>
-            <br/>
-            <div class="box box-primary box-solid">
-                <div class="box-header text-center">
-                    <h3 class="box-title">Memory Usage</h3>
-                </div>
-                <div class="box-body">
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            //'modules/exporting',
-                            //'themes/sand-signika',
-                            'highcharts-more',
-                            //'themes/dark-unica',
-                            //'themes/grid-light',
-                        ],
-                        'options' => [
-                            'chart' => [
-                                'type' => 'pie',
-                                'height' => 150,
-                                'style' => [
-                                    'fontFamily' => 'sans-serif',
-                                ],
-                                'options3d' => [
-                                    'enabled' => trus,
-                                    'alpha' => 45,
-                                    'beta' => 0
-                                ],
-                                'plotBackgroundColor' => null,
-                                'plotBackgroundImage' => null,
-                                'plotBorderWidth' => null,
-                                'plotShadow' => false,
-                            ],
-                            'title' => [
-                                'text' => null
-                            ],
-                            'credits' => [
-                                'enabled' =>false
-                            ],
-                            'tooltip' => [
-                                'pointFormat' => '{series.name}: <b>{point.percentage:.2f}%</b>'
-                            ],
-                            'plotOptions' => [
-                                'pie' => [
-                                    'allowPointSelect' => true,
-                                    'cursor' => 'pointer',
-                                    'depth' => 35,
-                                    'dataLabels' => [
-                                        'enabled' => false,
-                                        'format' => '{point.name}'
-                                    ]
-                                ],
-                            ],
-                            'series' => $data_memory
-                        ],
-                    ]);
-                    ?>
-                </div>
-            </div>
-            <div class="box box-info box-solid">
-                <div class="box-header text-center">
-                    <h3 class="box-title">Drive C</h3>
-                </div>
-                <div class="box-body">
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            //'modules/exporting',
-                            //'themes/sand-signika',
-                            'highcharts-more',
-                            //'themes/grid-light',
-                        ],
-                        'options' => [
-                            'chart' => [
-                                'type' => 'pie',
-                                'height' => 150,
-                                'style' => [
-                                    'fontFamily' => 'sans-serif',
-                                ],
-                                'options3d' => [
-                                    'enabled' => trus,
-                                    'alpha' => 45,
-                                    'beta' => 0
-                                ],
-                                'plotBackgroundColor' => null,
-                                'plotBackgroundImage' => null,
-                                'plotBorderWidth' => null,
-                                'plotShadow' => false,
-                            ],
-                            'title' => [
-                                'text' => null
-                            ],
-                            'credits' => [
-                                'enabled' =>false
-                            ],
-                            'tooltip' => [
-                                'pointFormat' => '{series.name}: <b>{point.percentage:.2f}%</b>'
-                            ],
-                            'plotOptions' => [
-                                'pie' => [
-                                    'allowPointSelect' => true,
-                                    'cursor' => 'pointer',
-                                    'depth' => 35,
-                                    'dataLabels' => [
-                                        'enabled' => false,
-                                        'format' => '{point.name}'
-                                    ]
-                                ],
-                            ],
-                            'series' => $data_c
-                        ],
-                    ]);
-                    ?>
-                </div>
-            </div>
-            <div class="box box-success box-solid">
-                <div class="box-header text-center">
-                    <h3 class="box-title">Drive D</h3>
-                </div>
-                <div class="box-body">
-                    <?=
-                    Highcharts::widget([
-                        'scripts' => [
-                            //'modules/exporting',
-                            //'themes/sand-signika',
-                            'highcharts-more',
-                            //'themes/grid-light',
-                        ],
-                        'options' => [
-                            'chart' => [
-                                'type' => 'pie',
-                                'height' => 150,
-                                'style' => [
-                                    'fontFamily' => 'sans-serif',
-                                ],
-                                'options3d' => [
-                                    'enabled' => trus,
-                                    'alpha' => 45,
-                                    'beta' => 0
-                                ],
-                                'plotBackgroundColor' => null,
-                                'plotBackgroundImage' => null,
-                                'plotBorderWidth' => null,
-                                'plotShadow' => false,
-                            ],
-                            'title' => [
-                                'text' => null
-                            ],
-                            'credits' => [
-                                'enabled' =>false
-                            ],
-                            'tooltip' => [
-                                'pointFormat' => '{series.name}: <b>{point.percentage:.2f}%</b>'
-                            ],
-                            'plotOptions' => [
-                                'pie' => [
-                                    'allowPointSelect' => true,
-                                    'cursor' => 'pointer',
-                                    'depth' => 35,
-                                    'dataLabels' => [
-                                        'enabled' => false,
-                                        'format' => '{point.name}'
-                                    ]
-                                ],
-                            ],
-                            'series' => $data_d
-                        ],
-                    ]);
-                    ?>
+                    <div id="timer_<?= $value->server_mac_address; ?>" class="row" style="font-size: 7em; line-height: 200px; color: red; text-shadow: -1px -1px 0 #FFF, 1px -1px 0 #FFF, -1px 1px 0 #FFF, 1px 1px 0 #FFF; letter-spacing: 4px;">
+                        
+                    </div>
                 </div>
             </div>
         </div>
