@@ -6,6 +6,7 @@ use kartik\grid\GridView;
 use yii\bootstrap\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
+use kartik\typeahead\TypeaheadBasic;
 
 /**
 * @var yii\web\View $this
@@ -34,7 +35,16 @@ date_default_timezone_set('Asia/Jakarta');
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-4">
-				<?= $form->field($model, 'skill')->widget(Select2::classname(), [
+                <?= $form->field($model, 'skill')->widget(TypeaheadBasic::classname(), [
+                        'data' => $skill_dropdown_arr,
+                        'options' => [
+                            'onkeyup' => 'this.value=this.value.toUpperCase()',
+                            'onfocusout' => 'this.value=this.value.toUpperCase()',
+                            'placeholder' => 'Choose',
+                        ],
+                        'pluginOptions' => ['highlight'=>true],
+                    ]); ?>
+				<?= ''; /*$form->field($model, 'skill')->widget(Select2::classname(), [
 	                'data' => $skill_dropdown_arr,
 	                'options' => [
 	                    'placeholder' => 'Choose...',
@@ -42,7 +52,7 @@ date_default_timezone_set('Asia/Jakarta');
 	                'pluginOptions' => [
 	                    'allowClear' => true
 	                ],
-	            ]); ?>
+	            ]);*/ ?>
 			</div>
 			<div class="col-md-4">
 				<?= $form->field($model, 'skill_value')->textInput(['type' => 'number']); ?>

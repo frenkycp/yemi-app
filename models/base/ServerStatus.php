@@ -7,7 +7,7 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.SERVER_STATUS".
+ * This is the base-model class for table "dbo.SERVER_STATUS".
  *
  * @property string $server_mac_address
  * @property string $server_ip
@@ -44,7 +44,7 @@ abstract class ServerStatus extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.SERVER_STATUS';
+        return 'dbo.SERVER_STATUS';
     }
 
     /**
@@ -52,7 +52,7 @@ abstract class ServerStatus extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('db_sql_server');
+        return Yii::$app->get('db_server_status');
     }
 
     /**

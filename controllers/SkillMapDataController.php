@@ -29,9 +29,23 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
         // $tmp_arr1 = ArrayHelper::map(SernoMaster::find()->select(['gmc', 'model', 'color', 'dest'])->all(), 'gmc', 'fullDescription');
         // $tmp_arr2 = ArrayHelper::map(SkillMaster::find()->select(['skill_id', 'skill_desc'])->where(['<>', 'skill_group', 'Z'])->all(), 'skill_id', 'description');
         // $skill_dropdown_arr = array_merge($tmp_arr2, $tmp_arr1);
-        $skill_dropdown_arr = ArrayHelper::map(SkillMaster::find()->select(['skill_id', 'skill_desc'])->all(), 'skill_id', 'description');
+        $tmp_skill_dropdown_arr = SkillMaster::find()->select(['skill_id', 'skill_desc'])->asArray()->all();
+        $skill_dropdown_arr = [];
+        foreach ($tmp_skill_dropdown_arr as $key => $value) {
+        	$skill_dropdown_arr[] = $value['skill_id'] . ' | ' . $value['skill_desc'];
+        }
 
         if ($model->load($_POST)) {
+        	$splitted_skill = explode(' | ', $model->skill);
+        	$tmp_skill = SkillMaster::find()->where(['skill_id' => $splitted_skill[0]])->one();
+        	if ($tmp_skill->skill_id == null) {
+        		\Yii::$app->session->setFlash('danger', "Skill : $model->skill not found...Please input the correct skill...");
+        		return $this->render('skill-update', [
+					'model' => $model,
+					'skill_dropdown_arr' => $skill_dropdown_arr,
+				]);
+        	}
+        	//return $model->skill;
         	$id = \Yii::$app->user->identity->username;
         	$tmp_karyawan = Karyawan::find()
         	->where([
@@ -67,7 +81,7 @@ class SkillMapDataController extends \app\controllers\base\SkillMapDataControlle
         		$sql = "{CALL SKILL_UPDATE(:NIK, :skill_id, :skill_value, :USER_ID, :USER_DESC)}";
 	        	$params = [
 					':NIK' => $model->nik,
-					':skill_id' => $model->skill,
+					':skill_id' => $splitted_skill[0],
 					':skill_value' => $model->skill_value,
 					':USER_ID' => $tmp_karyawan->NIK_SUN_FISH,
 					':USER_DESC' => $tmp_karyawan->NAMA_KARYAWAN,

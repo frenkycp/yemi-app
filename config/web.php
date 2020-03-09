@@ -116,6 +116,7 @@ $config = [
         'db_iot' => require(__DIR__ . '/db_iot.php'),
         'db_rep' => require(__DIR__ . '/db_rep.php'),
         'db_sun_fish' => require(__DIR__ . '/db_sun_fish.php'),
+        'db_server_status' => require(__DIR__ . '/db_server_status.php'),
     ],
     'params' => $params,
     'modules' => [
