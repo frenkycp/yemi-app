@@ -36,12 +36,14 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         if($model->load(\Yii::$app->request->post())){
             $karyawan = Karyawan::find()
             ->where([
-                'NIK' => $model->username,
-                'PASSWORD' => $model->password,
+            	'OR',
+                ['NIK' => $model->username],
+                ['NIK_SUN_FISH' => $model->username],
             ])
+            ->andWhere(['PASSWORD' => $model->password,])
             ->one();
             if ($karyawan->NIK !== null) {
-                $session['fix_asset_user'] = $model->username;
+                $session['fix_asset_user'] = $karyawan->NIK_SUN_FISH;
                 $session['fix_asset_name'] = $karyawan->NAMA_KARYAWAN;
                 $session['fix_asset_cc_id'] = $karyawan->CC_ID;
                 $session['fix_asset_department'] = $karyawan->DEPARTEMEN;
@@ -146,6 +148,10 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         $nik = $session['fix_asset_user'];
 		$this->layout = 'fixed-asset/main';
 		date_default_timezone_set('Asia/Jakarta');
+
+		\Yii::$app->session->setFlash("warning", "This options is temporarily disabled...");
+		return $this->redirect(['index']);
+
 	    $searchModel  = new FixAssetDataSearch;
 	    //$searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
 	    $dataProvider = $searchModel->search($_GET);
@@ -190,6 +196,10 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 
 		$this->layout = 'fixed-asset/main';
 		date_default_timezone_set('Asia/Jakarta');
+
+		\Yii::$app->session->setFlash("warning", "This options is temporarily disabled...");
+		return $this->redirect(['index']);
+
 
 		$fixed_asset_data = $this->findModel($asset_id);
 		$model = new AssetLogTbl;

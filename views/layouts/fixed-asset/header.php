@@ -23,7 +23,7 @@ $model_karyawan = Karyawan::find()->where([
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="<?= \Yii::$app->controller->id == 'fix-asset' && in_array(\Yii::$app->controller->action->id, ['data']) ? 'active' : ''; ?>">
+            <li style="display: none;"> class="<?= \Yii::$app->controller->id == 'fix-asset' && in_array(\Yii::$app->controller->action->id, ['data']) ? 'active' : ''; ?>">
                 <?= Html::a('Data', ['data']) ?>
             </li>
             <li class="<?= \Yii::$app->controller->id == 'fix-asset' && \Yii::$app->controller->action->id == 'asset-log' ? 'active' : ''; ?>">
