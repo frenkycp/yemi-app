@@ -14,6 +14,7 @@ use app\models\AssetLogTbl;
 use app\models\AssetDtrTbl;
 use app\models\ImageFile;
 use app\models\AssetStockTakeSchedule;
+use app\models\AssetStockTakeScheduleView;
 use yii\web\UploadedFile;
 use yii\web\JsExpression;
 
@@ -102,10 +103,10 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         $data_completion = $tmp_data = [];
         $total_ng = $total_no_label = $total_propose_scrap = 0;
         if ($model->load($_GET)) {
-        	$tmp_schedule = AssetStockTakeSchedule::find()->where(['schedule_id' => $model->period])->one();
+        	$tmp_schedule = AssetStockTakeScheduleView::find()->where(['schedule_id' => $model->period])->one();
         	$total_ng = $tmp_schedule->total_ng;
-        	$total_no_label = $tmp_schedule->total_label_n;
-        	$total_propose_scrap = $tmp_schedule->total_scrap_y;
+        	$total_no_label = $tmp_schedule->total_no_label;
+        	$total_propose_scrap = $tmp_schedule->total_propose_scrap;
         	$tmp_data = [
         		[
         			'name' => 'OPEN',
@@ -127,7 +128,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         	'data' => $tmp_data
         ];
 
-        $period_arr = ArrayHelper::map(AssetStockTakeSchedule::find()->orderBy('end_date DESC, start_date DESC')->all(), 'schedule_id', 'period');
+        $period_arr = ArrayHelper::map(AssetStockTakeScheduleView::find()->orderBy('end_date DESC, start_date DESC')->all(), 'schedule_id', 'period');
 
 		return $this->render('progress', [
 			'model' => $model,
