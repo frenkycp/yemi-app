@@ -198,8 +198,8 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		$this->layout = 'fixed-asset/main';
 		date_default_timezone_set('Asia/Jakarta');
 
-		\Yii::$app->session->setFlash("warning", "This options is temporarily disabled...");
-		return $this->redirect(['index']);
+		//\Yii::$app->session->setFlash("warning", "This options is temporarily disabled...");
+		//return $this->redirect(['index']);
 
 
 		$fixed_asset_data = $this->findModel($asset_id);
