@@ -60,7 +60,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -174,7 +174,7 @@ $server_arr = [
         ];
         ?>
         <div class="col-md-6 text-center" style="margin-bottom: 20px;">
-            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? ' bg-green' : ' bg-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 2em; padding-left: 10px;">
+            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? ' bg-green' : ' bg-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 2em; padding-left: 10px; letter-spacing: 5px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
                 <?= isset($server_arr[$value->server_ip]) ? $server_arr[$value->server_ip] : $value->server_name; ?>
             </div>
             
@@ -209,7 +209,7 @@ $server_arr = [
                                                         series.update(jsondata.memory_usage);
                                                         //alert(series.data);
                                                     });
-                                                }, 5000);}"),
+                                                }, 20000);}"),
                                         ],
                                     ],
                                     'title' => null,
@@ -278,7 +278,7 @@ $server_arr = [
                                                 'valueSuffix' => ' %',
                                             ],
                                             'dataLabels' => [
-                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px; letter-spacing: 1.5px;">{y}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
+                                                'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px; letter-spacing: 1.5px;">{point.y:.1f}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
                                             ],
                                         ],
                                     ],
@@ -286,7 +286,145 @@ $server_arr = [
                             ]);
                             ?>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-8">
+                            <?=
+                            Highcharts::widget([
+                                'scripts' => [
+                                    'highcharts-more',
+                                    //'modules/exporting',
+                                    //'themes/sand-signika',
+                                    'modules/solid-gauge',
+                                    //'themes/dark-unica',
+                                    'themes/grid-light',
+                                ],
+                                'options' => [
+                                    'chart' => [
+                                        'type' => 'spline',
+                                        'height' => '200',
+                                        'backgroundColor' => '#000',
+                                        'style' => [
+                                            'fontFamily' => 'sans-serif',
+                                        ],
+                                        'marginRight' => 10,
+                                        'events' => [
+                                            'load' => new JsExpression("function () {
+                                                // set up the updating of the chart each second
+                                                var series = this.series[0];
+                                                setInterval(function () {
+                                                    $.getJSON('" . Url::to(['display/server-status-data', 'mac_address' => $value->server_mac_address]) . "', function (jsondata) {
+                                                        var x = (new Date()).getTime(), // current time
+                                                        y = jsondata.ping;
+                                                        if(y > 100){
+                                                            series.addPoint({x: x, y: y, color: 'red'}, true, true);
+                                                        } else {
+                                                            series.addPoint({x: x, y: y}, true, true);
+                                                        }
+                                                    });
+                                                }, 5000);
+                                            }"),
+                                        ],
+                                    ],
+                                    'time' => [
+                                        'useUTC' => false
+                                    ],
+                                    'title' => [
+                                        'text' => 'Reply Round Trip Time',
+                                        'style' => [
+                                            'color' => 'white'
+                                        ],
+                                    ],
+                                    'accessibility' => [
+                                        'announceNewData' => [
+                                            'enabled' => true,
+                                            'minAnnounceInterval' => 15000,
+                                            'announcementFormatter' => new JsExpression("function (allSeries, newSeries, newPoint) {
+                                                if (newPoint) {
+                                                    return 'New point added. Value: ' + newPoint.y;
+                                                }
+                                                return false;
+                                            }"),
+                                        ],
+                                    ],
+                                    'xAxis' => [
+                                        'type' => 'datetime',
+                                        'tickPixelInterval' => 150,
+                                        'lineWidth' => 1,
+                                        'gridLineColor' => '#1b1b1b',
+                                        // 'plotLines' => [
+                                        //     'color' => '#FF0000'
+                                        // ],
+                                        //'visible' => false
+                                    ],
+                                    'yAxis' => [
+                                        'gridLineColor' => '#1b1b1b',
+                                        'minorGridLineWidth' => 0,
+                                        'title' => [
+                                            'enabled' => false
+                                        ],
+                                        'plotLines' => [
+                                            [
+                                                'value' => 0,
+                                                'width' => 1,
+                                                'color' => '#808080'
+                                            ]
+                                        ],
+                                        'allowDecimals' => false,
+                                    ],
+                                    'tooltip' => [
+                                        'headerFormat' => '<b>{series.name}</b><br/>',
+                                        'pointFormat' => '{point.x:%Y-%m-%d %H:%M:%S}<br/>{point.y:.2f}'
+                                    ],
+                                    'legend' => [
+                                        'enabled' => false
+                                    ],
+                                    'credits' => [
+                                        'enabled' => false
+                                    ],
+                                    'exporting' => [
+                                        'enabled' => false
+                                    ],
+                                    'plotOptions' => [
+                                        'spline' => [
+                                            'marker' => [
+                                                'radius' => 2
+                                            ],
+                                        ],
+                                        
+                                    ],
+                                    'series' => [
+                                        [
+                                            'name' => 'Random Data',
+                                            'data' => new JsExpression("(function () {
+                                                // generate an array of random data
+                                                var data = [], rnd,
+                                                    time = (new Date()).getTime(),
+                                                    i;
+
+                                                for (i = -39; i <= 0; i += 1) {
+                                                    rnd = null;
+                                                    if(rnd > 0.75){
+                                                        data.push({
+                                                            x: time + i * 1000,
+                                                            y: rnd,
+                                                            color: 'red'
+                                                        });
+                                                    } else {
+                                                        data.push({
+                                                            x: time + i * 1000,
+                                                            y: rnd
+                                                        });
+                                                    }
+                                                    
+                                                }
+                                                return data;
+                                            }())"),
+                                        ],
+                                    ],
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                        <div class="col-md-4" style="display: none;">
                             <?=
                             Highcharts::widget([
                                 'scripts' => [
@@ -380,7 +518,7 @@ $server_arr = [
                             ]);
                             ?>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" style="display: none;">
                             <?=
                             Highcharts::widget([
                                 'scripts' => [

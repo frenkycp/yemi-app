@@ -158,7 +158,8 @@ class DisplayController extends Controller
         $server_status = ServerStatus::find()->where(['server_mac_address' => $mac_address])->one();
 
         $data = [
-            'memory_usage' => $server_status->memory_used
+            'memory_usage' => $server_status->memory_used,
+            'ping' => $server_status->reply_roundtriptime
         ];
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
