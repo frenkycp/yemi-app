@@ -11,6 +11,7 @@ use app\models\AssetTbl;
 use app\models\Karyawan;
 use app\models\AssetLocTbl;
 use app\models\AssetLogTbl;
+use app\models\AssetLogView;
 use app\models\AssetDtrTbl;
 use app\models\ImageFile;
 use app\models\AssetStockTakeSchedule;
@@ -45,6 +46,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
             ->one();
             if ($karyawan->NIK !== null) {
                 $session['fix_asset_user'] = $karyawan->NIK_SUN_FISH;
+                $session['fix_asset_nik'] = $karyawan->NIK;
                 $session['fix_asset_name'] = $karyawan->NAMA_KARYAWAN;
                 $session['fix_asset_cc_id'] = $karyawan->CC_ID;
                 $session['fix_asset_department'] = $karyawan->DEPARTEMEN;
@@ -100,7 +102,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         ]);
         $model->addRule(['period'], 'required');
 
-        $data_completion = $tmp_data = [];
+        $data_completion = $tmp_data = $tmp_data_section_open = $tmp_data_section_close = $data_section = $section_categories = [];
         $total_ng = $total_no_label = $total_propose_scrap = 0;
         if ($model->load($_GET)) {
         	$tmp_schedule = AssetStockTakeScheduleView::find()->where(['schedule_id' => $model->period])->one();
@@ -121,7 +123,50 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         			'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
         		],
         	];
+
+        	//by section
+        	$tmp_asset_log = AssetLogView::find()
+        	->select([
+        		'cost_centre', 'section_name',
+        		'total_open' => 'SUM(CASE WHEN schedule_status = \'O\' THEN 1 ELSE 0 END)',
+        		'total_close' => 'SUM(CASE WHEN schedule_status = \'C\' THEN 1 ELSE 0 END)',
+        		'total' => 'COUNT(*)'
+        		//'total_open' => 'COUNT(*)'
+        	])
+        	->where([
+	        	//'schedule_status' => 'O',
+	        	'schedule_id' => $model->period
+	        ])
+	        ->andWhere('cost_centre IS NOT NULL')
+	        ->groupBy('cost_centre, section_name')
+	        ->orderBy('section_name')
+	        ->all();
+
+	        foreach ($tmp_asset_log as $key => $value) {
+	        	$section_categories[] = $value->section_name;
+	        	$tmp_data_section_open[] = [
+	        		'y' => (int)$value->total_open,
+	        		'url' => Url::to(['asset-log', 'schedule_id' => $model->period, 'schedule_status' => 'O', 'cost_centre' => $value->cost_centre]),
+	        	];
+	        	$tmp_data_section_close[] = [
+	        		'y' => (int)$value->total_close,
+	        		'url' => Url::to(['asset-log', 'schedule_id' => $model->period, 'schedule_status' => 'C', 'cost_centre' => $value->cost_centre]),
+	        	];
+	        }
         }
+
+        $data_section = [
+        	[
+        		'name' => 'OPEN',
+        		'data' => $tmp_data_section_open,
+        		'color' => new JsExpression('Highcharts.getOptions().colors[8]'),
+        	],
+        	[
+        		'name' => 'CLOSE',
+        		'data' => $tmp_data_section_close,
+        		'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+        	],
+        ];
 
         $data_completion[] = [
         	'name' => 'Percentage',
@@ -137,6 +182,8 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 			'total_ng' => $total_ng,
 			'total_no_label' => $total_no_label,
 			'total_propose_scrap' => $total_propose_scrap,
+			'section_categories' => $section_categories,
+			'data_section' => $data_section,
 		]);
 	}
 

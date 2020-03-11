@@ -159,5 +159,71 @@ $this->registerJs($script, View::POS_HEAD );
                 ?>
             </div>
         </div>
+        <div class="box box-warning box-solid">
+            <div class="box-header">
+                <h3 class="box-title">By Section</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <?=
+                        Highcharts::widget([
+                            'scripts' => [
+                                //'modules/exporting',
+                                //'themes/sand-signika',
+                                'themes/grid-light',
+                            ],
+                            'options' => [
+                                'chart' => [
+                                    'type' => 'column',
+                                    'style' => [
+                                        'fontFamily' => 'sans-serif',
+                                    ],
+                                ],
+                                'title' => [
+                                    'text' => null
+                                ],
+                                'credits' => [
+                                    'enabled' =>false
+                                ],
+                                'xAxis' => [
+                                    'categories' => $section_categories
+                                ],
+                                'yAxis' => [
+                                    'min' => 0,
+                                    'stackLabels' => [
+                                        'enabled' =>true
+                                    ],
+                                ],
+                                'tooltip' => [
+                                    'pointFormat' => '{series.name}: <b>{point.percentage:.2f}% ({point.y})</b>',
+                                ],
+                                'plotOptions' => [
+                                    'column' => [
+                                        // 'allowPointSelect' => true,
+                                        // 'cursor' => 'pointer',
+                                        'stacking' => 'percent',
+                                        'dataLabels' => [
+                                            'enabled' => false,
+                                            //'format' => '<b>{point.name}</b>: {point.percentage:.2f}% ({point.y})'
+                                        ],
+                                    ],
+                                    'series' => [
+                                        'cursor' => 'pointer',
+                                        'point' => [
+                                            'events' => [
+                                                'click' => new JsExpression('function(){ location.href = this.options.url; }'),
+                                            ]
+                                        ]
+                                    ],
+                                ],
+                                'series' => $data_section
+                            ],
+                        ]);
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
