@@ -110,6 +110,10 @@ $server_arr = [
     '172.17.144.6' => 'MITA - APPLICATION',
 ];
 ?>
+<div class="text-center" style="border-bottom: 1px solid grey;">
+    <span class="" style="color: white; font-size: 5em; letter-spacing: 3px;">SERVER STATUS</span>
+</div>
+<br/>
 <div class="row">
     <?php foreach ($server_status as $key => $value): ?>
         <?php
