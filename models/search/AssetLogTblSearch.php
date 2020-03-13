@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['trans_id'], 'integer'],
-            [['trans_type', 'posting_date', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap', 'schedule_id', 'schedule_status', 'jenis', 'cost_centre', 'section_name'], 'safe'],
+            [['trans_type', 'posting_date', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap', 'schedule_id', 'schedule_status', 'jenis', 'cost_centre', 'section_name', 'CC_DESC'], 'safe'],
             [['NBV'], 'number'],
 ];
 }

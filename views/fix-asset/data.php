@@ -148,10 +148,9 @@ $gridColumns = [
     //     ],
     // ],
     [
-        'attribute' => 'section_name',
+        'attribute' => 'CC_DESC',
         'label' => 'Section',
         'vAlign' => 'middle',
-        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('section_name')->where(['FINANCE_ASSET' => 'Y'])->andWhere('section_name IS NOT NULL')->groupBy('section_name')->orderBy('section_name')->all(), 'section_name', 'section_name'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'

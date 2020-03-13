@@ -127,7 +127,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
         	//by section
         	$tmp_asset_log = AssetLogView::find()
         	->select([
-        		'cost_centre', 'section_name',
+        		'cost_centre', 'CC_DESC',
         		'total_open' => 'SUM(CASE WHEN schedule_status = \'O\' THEN 1 ELSE 0 END)',
         		'total_close' => 'SUM(CASE WHEN schedule_status = \'C\' THEN 1 ELSE 0 END)',
         		'total' => 'COUNT(*)'
@@ -138,12 +138,12 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 	        	'schedule_id' => $model->period
 	        ])
 	        ->andWhere('cost_centre IS NOT NULL')
-	        ->groupBy('cost_centre, section_name')
-	        ->orderBy('section_name')
+	        ->groupBy('cost_centre, CC_DESC')
+	        ->orderBy('CC_DESC')
 	        ->all();
 
 	        foreach ($tmp_asset_log as $key => $value) {
-	        	$section_categories[] = $value->section_name;
+	        	$section_categories[] = $value->CC_DESC;
 	        	$tmp_data_section_open[] = [
 	        		'y' => (int)$value->total_open,
 	        		'url' => Url::to(['asset-log', 'schedule_id' => $model->period, 'schedule_status' => 'O', 'cost_centre' => $value->cost_centre]),

@@ -28,14 +28,18 @@ use Yii;
  * @property string $propose_scrap
  * @property string $schedule_status
  * @property string $is_scheduled
- * @property string $cost_centre
- * @property string $department_name
  * @property string $jenis
  * @property string $purchase_date
+ * @property string $department_pic
+ * @property string $cost_centre
+ * @property string $department_name
+ * @property string $section_name
+ * @property string $nik
+ * @property string $NAMA_KARYAWAN
  * @property double $qty
  * @property string $Discontinue
- * @property string $section_name
- * @property string $department_pic
+ * @property string $CC_GROUP
+ * @property string $CC_DESC
  * @property string $aliasModel
  */
 abstract class AssetLogView extends \yii\db\ActiveRecord
@@ -68,7 +72,7 @@ abstract class AssetLogView extends \yii\db\ActiveRecord
             [['trans_id'], 'required'],
             [['trans_id', 'schedule_id'], 'integer'],
             [['schedule_start', 'schedule_end', 'posting_date', 'purchase_date'], 'safe'],
-            [['trans_type', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap', 'schedule_status', 'is_scheduled', 'cost_centre', 'department_name', 'jenis', 'Discontinue', 'section_name', 'department_pic'], 'string'],
+            [['trans_type', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap', 'schedule_status', 'is_scheduled', 'jenis', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'Discontinue', 'CC_GROUP', 'CC_DESC'], 'string'],
             [['NBV', 'qty'], 'number']
         ];
     }
@@ -98,14 +102,18 @@ abstract class AssetLogView extends \yii\db\ActiveRecord
             'propose_scrap' => 'Propose Scrap',
             'schedule_status' => 'Schedule Status',
             'is_scheduled' => 'Is Scheduled',
-            'cost_centre' => 'Cost Centre',
-            'department_name' => 'Department Name',
             'jenis' => 'Jenis',
             'purchase_date' => 'Purchase Date',
+            'department_pic' => 'Department Pic',
+            'cost_centre' => 'Cost Centre',
+            'department_name' => 'Department Name',
+            'section_name' => 'Section Name',
+            'nik' => 'Nik',
+            'NAMA_KARYAWAN' => 'Nama  Karyawan',
             'qty' => 'Qty',
             'Discontinue' => 'Discontinue',
-            'section_name' => 'Section Name',
-            'department_pic' => 'Department Pic',
+            'CC_GROUP' => 'Cc  Group',
+            'CC_DESC' => 'Cc  Desc',
         ];
     }
 

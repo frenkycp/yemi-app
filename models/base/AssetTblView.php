@@ -57,10 +57,12 @@ use Yii;
  * @property string $propose_scrap
  * @property string $expired_date
  * @property string $img_filename
- * @property string $Expr1
+ * @property string $LOC_CATEGORY
  * @property string $LOC_GROUP
  * @property string $LOC_GROUP_DESC
  * @property string $LOC_AREA
+ * @property string $CC_GROUP
+ * @property string $CC_DESC
  * @property string $aliasModel
  */
 abstract class AssetTblView extends \yii\db\ActiveRecord
@@ -91,7 +93,7 @@ abstract class AssetTblView extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id'], 'required'],
-            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'loc_type', 'LOC', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label', 'propose_scrap', 'img_filename', 'Expr1', 'LOC_GROUP', 'LOC_GROUP_DESC', 'LOC_AREA'], 'string'],
+            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'loc_type', 'LOC', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label', 'propose_scrap', 'img_filename', 'LOC_CATEGORY', 'LOC_GROUP', 'LOC_GROUP_DESC', 'LOC_AREA', 'CC_GROUP', 'CC_DESC'], 'string'],
             [['purchase_date', 'LAST_UPDATE', 'DateDisc', 'expired_date'], 'safe'],
             [['report_type'], 'integer'],
             [['price', 'price_usd', 'qty', 'AtCost', 'NBV'], 'number']
@@ -152,10 +154,12 @@ abstract class AssetTblView extends \yii\db\ActiveRecord
             'propose_scrap' => 'Propose Scrap',
             'expired_date' => 'Expired Date',
             'img_filename' => 'Img Filename',
-            'Expr1' => 'Expr1',
+            'LOC_CATEGORY' => 'Loc  Category',
             'LOC_GROUP' => 'Loc  Group',
             'LOC_GROUP_DESC' => 'Loc  Group  Desc',
             'LOC_AREA' => 'Loc  Area',
+            'CC_GROUP' => 'Cc  Group',
+            'CC_DESC' => 'Cc  Desc',
         ];
     }
 
