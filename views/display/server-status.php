@@ -88,7 +88,7 @@ $this->registerJs("
                 });
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 5000);
+                setTimeout(function(){update_data();}, 1000);
             }
         });
     }
@@ -213,7 +213,7 @@ $server_arr = [
                                                         series.update(jsondata.memory_usage);
                                                         //alert(series.data);
                                                     });
-                                                }, 20000);}"),
+                                                }, 1000);}"),
                                         ],
                                     ],
                                     'title' => null,
@@ -324,7 +324,7 @@ $server_arr = [
                                                             series.addPoint({x: x, y: y}, true, true);
                                                         }
                                                     });
-                                                }, 5000);
+                                                }, 1000);
                                             }"),
                                         ],
                                     ],
@@ -373,6 +373,8 @@ $server_arr = [
                                             ]
                                         ],
                                         'allowDecimals' => false,
+                                        'max' => 20,
+                                        'tickInterval' => 5
                                     ],
                                     'tooltip' => [
                                         'headerFormat' => '<b>{series.name}</b><br/>',
