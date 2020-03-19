@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class FlexiStorage extends BaseFlexiStorage
 {
-    public $balance;
+    public $balance, $storage_status;
 
     public function behaviors()
     {
