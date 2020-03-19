@@ -122,6 +122,36 @@ use app\models\SkillMasterDailyTraining;
 
 class DisplayController extends Controller
 {
+    public function actionVisitorTemp()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-d');
+        $model->to_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $visitor_data = Visitor::find()
+        ->where([
+            'AND',
+            ['>=', 'DATE(tgl)', $model->from_date],
+            ['<=', 'DATE(tgl)', $model->to_date]
+        ])
+        ->all();
+
+        return $this->render('visitor-temp', [
+            'visitor_data' => $visitor_data,
+            'model' => $model,
+        ]);
+    }
     public function actionServerStatusOnline($value='')
     {
         date_default_timezone_set('Asia/Jakarta');

@@ -32,7 +32,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; min-width: 70px;'
         ],
     ],
     [
@@ -41,7 +41,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; min-width: 70px;'
         ],
     ],
     [
@@ -50,7 +50,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; min-width: 70px;'
         ],
     ],
     [
@@ -59,7 +59,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; min-width: 70px;'
         ],
     ],
     [
@@ -68,86 +68,95 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; min-width: 70px;'
         ],
     ],
     [
-        'attribute' => 'panjang_cm',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
-    [
-        'attribute' => 'lebar_cm',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
-    [
-        'attribute' => 'tinggi_cm',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
-    [
-        'attribute' => 'kubikasi_m3',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
-    [
-        'attribute' => 'kubikasi_m3_act',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'format'=> ['decimal', 2],
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
-    [
-        'attribute' => 'kubikasi_m3_balance',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'format'=> ['decimal', 2],
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],
-    [
-        'attribute' => 'percent_used',
+        'attribute' => 'storage_status',
+        'label' => 'Status',
         'value' => function($model){
-            if ($model->percent_used < 30) {
-                return '<span class="badge bg-green" style="font-weight: normal; letter-spacing: 1px;">' . $model->percent_used .'</span>';
+            if ($model->percent_used == 0) {
+                return '<span class="badge bg-green" style="font-weight: normal; letter-spacing: 1px; color: rgb(124, 181, 236);">KOSONG</span>';
+            } else {
+                return '<span class="badge bg-orange" style="font-weight: normal; letter-spacing: 1px; color: rgb(255, 188, 117);">TERPAKAI</span>';
             }
-            if ($model->percent_used < 80) {
-                return '<span class="badge bg-orange" style="font-weight: normal; letter-spacing: 1px;">' . $model->percent_used .'</span>';
-            }
-            return '<span class="badge bg-red" style="font-weight: normal; letter-spacing: 1px;">' . $model->percent_used .'</span>';
         },
         'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; min-width: 70px;'
         ],
     ],
+    // [
+    //     'attribute' => 'panjang_cm',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
+    // [
+    //     'attribute' => 'lebar_cm',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
+    // [
+    //     'attribute' => 'tinggi_cm',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
+    // [
+    //     'attribute' => 'kubikasi_m3',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
+    // [
+    //     'attribute' => 'kubikasi_m3_act',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'format'=> ['decimal', 2],
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
+    // [
+    //     'attribute' => 'kubikasi_m3_balance',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'format'=> ['decimal', 2],
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
     [
-        'attribute' => 'storage_type',
+        'attribute' => 'percent_used',
+        // 'value' => function($model){
+        //     if ($model->percent_used < 30) {
+        //         return '<span class="badge bg-green" style="font-weight: normal; letter-spacing: 1px;">' . $model->percent_used .'</span>';
+        //     }
+        //     if ($model->percent_used < 80) {
+        //         return '<span class="badge bg-orange" style="font-weight: normal; letter-spacing: 1px;">' . $model->percent_used .'</span>';
+        //     }
+        //     return '<span class="badge bg-red" style="font-weight: normal; letter-spacing: 1px;">' . $model->percent_used .'</span>';
+        // },
+        // 'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -155,6 +164,15 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
         ],
     ],
+    // [
+    //     'attribute' => 'storage_type',
+    //     'vAlign' => 'middle',
+    //     'hAlign' => 'center',
+    //     'filterInputOptions' => [
+    //         'class' => 'form-control',
+    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //     ],
+    // ],
 ];
 ?>
 <div class="giiant-crud flexi-storage-index">
@@ -176,7 +194,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' =>  [

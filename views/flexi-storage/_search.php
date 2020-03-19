@@ -47,6 +47,14 @@ use yii\widgets\ActiveForm;
     					'prompt' => 'Choose...',
     				]); ?>
     			</div>
+                <div class="col-md-2">
+                    <?= $form->field($model, 'storage_status')->dropDownList([
+                        0 => 'KOSONG',
+                        1 => 'TERPAKAI'
+                    ], [
+                        'prompt' => 'Choose...',
+                    ]); ?>
+                </div>
     		</div>
     		
 
@@ -77,7 +85,6 @@ use yii\widgets\ActiveForm;
     	<div class="panel-footer">
     		<div class="form-group">
 		        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-		        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
 		    </div>
     	</div>
     </div>

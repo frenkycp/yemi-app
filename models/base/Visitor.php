@@ -24,6 +24,9 @@ use Yii;
  * @property string $status_date
  * @property string $card
  * @property integer $status_card
+ * @property integer $loct
+ * @property string $loct_time
+ * @property string $suhu
  * @property string $aliasModel
  */
 abstract class Visitor extends \yii\db\ActiveRecord
@@ -54,9 +57,10 @@ abstract class Visitor extends \yii\db\ActiveRecord
     {
         return [
             [['pk'], 'required'],
-            [['tgl', 'status_date'], 'safe'],
-            [['emp_nik', 'visitor_tot', 'meet', 'status', 'status_card'], 'integer'],
+            [['tgl', 'status_date', 'loct_time'], 'safe'],
+            [['emp_nik', 'visitor_tot', 'meet', 'status', 'status_card', 'loct'], 'integer'],
             [['pk', 'emp_name', 'emp_dept', 'visitor_id', 'visitor_name', 'visitor_comp', 'visitor_reason', 'card'], 'string', 'max' => 255],
+            [['suhu'], 'string', 'max' => 20],
             [['pk'], 'unique']
         ];
     }
@@ -82,7 +86,20 @@ abstract class Visitor extends \yii\db\ActiveRecord
             'status_date' => 'Status Date',
             'card' => 'Card',
             'status_card' => 'Status Card',
+            'loct' => 'Loct',
+            'loct_time' => 'Loct Time',
+            'suhu' => 'Suhu',
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeHints()
+    {
+        return array_merge(parent::attributeHints(), [
+            'status_card' => '0=visitor; 1=subcont; 2=yamaha visitor',
+        ]);
     }
 
 
