@@ -37,6 +37,7 @@ use Yii;
  * @property string $ng_category_desc
  * @property string $ng_category_detail
  * @property integer $ng_shift
+ * @property string $ng_location_id
  * @property string $ng_location
  * @property string $ng_root_cause
  * @property string $ng_detail
@@ -104,10 +105,19 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['document_no', 'period', 'loc_id', 'loc_desc', 'line', 'emp_id', 'emp_name', 'emp_gender', 'emp_status_code', 'model_group', 'gmc_no', 'gmc_desc', 'gmc_model', 'gmc_color', 'gmc_dest', 'gmc_line', 'part_no', 'part_desc', 'ng_category_desc', 'ng_category_detail', 'ng_location', 'ng_root_cause', 'ng_detail', 'ng_cause_category', 'created_by_id', 'created_by_name', 'updated_by_id', 'updated_by_name', 'detected_by_id', 'detected_by_name', 'attachment', 'fa_area_detec', 'fa_serno', 'fa_status', 'pcb_id', 'pcb_name', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_group', 'smt_pic_aoi', 'smt_pic_aoi_name', 'smt_group_pic', 'smt_group_pic_name', 'ww_unit_each', 'next_action', 'action_remark', 'action_status'], 'string'],
             [['post_date', 'emp_join_date', 'created_time', 'updated_time'], 'safe'],
             [['emp_working_month', 'ng_category_id', 'ng_shift', 'inj_set_parameter', 'flag'], 'integer'],
-            [['ng_qty', 'total_output', 'ww_total_price'], 'number']
+            [['ng_qty', 'total_output', 'ww_total_price'], 'number'],
+            [['action_remark'], 'string'],
+            [['document_no', 'loc_desc', 'ng_category_desc', 'ng_category_detail', 'ng_location_id', 'ng_location', 'ng_root_cause', 'attachment', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_pic_aoi', 'smt_group_pic', 'next_action'], 'string', 'max' => 50],
+            [['period', 'loc_id', 'fa_status'], 'string', 'max' => 10],
+            [['line', 'emp_id', 'emp_status_code', 'model_group', 'gmc_no', 'gmc_color', 'gmc_dest', 'gmc_line', 'part_no', 'ng_cause_category', 'created_by_id', 'updated_by_id', 'detected_by_id', 'fa_area_detec'], 'string', 'max' => 20],
+            [['emp_name', 'gmc_desc', 'gmc_model', 'ng_detail', 'created_by_name', 'updated_by_name', 'detected_by_name', 'smt_pic_aoi_name', 'smt_group_pic_name'], 'string', 'max' => 150],
+            [['emp_gender', 'action_status'], 'string', 'max' => 1],
+            [['part_desc'], 'string', 'max' => 250],
+            [['fa_serno', 'ww_unit_each'], 'string', 'max' => 30],
+            [['pcb_id', 'pcb_name'], 'string', 'max' => 200],
+            [['smt_group'], 'string', 'max' => 5]
         ];
     }
 
@@ -145,6 +155,7 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
             'ng_category_desc' => 'Ng Category Desc',
             'ng_category_detail' => 'Ng Category Detail',
             'ng_shift' => 'Ng Shift',
+            'ng_location_id' => 'Ng Location ID',
             'ng_location' => 'Ng Location',
             'ng_root_cause' => 'Ng Root Cause',
             'ng_detail' => 'Ng Detail',

@@ -18,7 +18,7 @@ class FlexiStorageSearch extends FlexiStorage
 public function rules()
 {
 return [
-[['kode_area', 'area', 'rack', 'kolom_level', 'posisi', 'storage_type'], 'safe'],
+[['kode_area', 'area', 'rack', 'kolom_level', 'posisi', 'storage_type', 'storage_status'], 'safe'],
             [['panjang_cm', 'lebar_cm', 'tinggi_cm', 'kubikasi_m3', 'kubikasi_m3_act', 'kubikasi_m3_balance', 'percent_used'], 'number'],
 ];
 }
@@ -64,6 +64,14 @@ $query->andFilterWhere([
             'kubikasi_m3_balance' => $this->kubikasi_m3_balance,
             'percent_used' => $this->percent_used,
         ]);
+
+if ($this->storage_status == 0) {
+    $query->andFilterWhere([
+            'percent_used' => 0,
+        ]);
+} elseif ($this->storage_status == 1) {
+    $query->andFilterWhere(['<>', 'percent_used', 0]);
+}
 
         $query->andFilterWhere(['like', 'kode_area', $this->kode_area])
             ->andFilterWhere(['like', 'area', $this->area])
