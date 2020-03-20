@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use \app\models\base\ProdNgData as BaseProdNgData;
+use app\models\ProdNgPositionView;
 use yii\helpers\ArrayHelper;
 
 /**
@@ -186,6 +187,14 @@ class ProdNgData extends BaseProdNgData
             }
             if ($this->ng_location != null) {
                 $this->ng_location = strtoupper($this->ng_location);
+            }
+
+            if ($this->ng_location_id != null) {
+                $tmp_ng_position = ProdNgPositionView::find()->where(['ng_loc_id' => $this->ng_location_id])->one();
+                $this->ng_location = $tmp_ng_position->position;
+                $this->ng_category_id = $tmp_ng_position->ng_category_id;
+                $this->ng_category_desc = $tmp_ng_position->category_name;
+                $this->ng_category_detail = $tmp_ng_position->category_detail;
             }
             
 

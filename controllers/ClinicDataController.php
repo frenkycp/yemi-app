@@ -96,6 +96,9 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 				} else {
 					$model->keluar = date('H:i:s', strtotime('+1 hour'));
 				}*/
+				if (in_array($model->CC_ID, ['250', '251'])) {
+					$model->dept = 'PDC';
+				}
 
 				$count_status = KlinikHandle::find()
 				->where(['status' => 1])

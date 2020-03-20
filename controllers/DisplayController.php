@@ -132,7 +132,7 @@ class DisplayController extends Controller
         ]);
         $model->addRule(['from_date', 'to_date'], 'required');
 
-        $model->from_date = date('Y-m-d');
+        $model->from_date = date('Y-m-d', strtotime(' -1 day'));
         $model->to_date = date('Y-m-d');
 
         if ($model->load($_GET)) {

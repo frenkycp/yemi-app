@@ -26,7 +26,11 @@ $this->registerCss("
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
     .form-horizontal .control-label {padding-top: 0px;}
-    #myTable {font-size: 1em; letter-spacing: 1px;}
+    #myTable {font-size: 1.3em; letter-spacing: 1px; color: white;}
+    #myTable > tbody > tr:nth-child(odd) > td {background-color: #2f2f2f; color: white;}
+    #myTable > tbody > tr:nth-child(even) > td {background-color: #121213; color: white;}
+    #myTable > thead > tr > th {background-color: #61258e; color: #ffeb3b;}
+    .dataTables_wrapper {color: white;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -49,7 +53,7 @@ $this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
 
 $this->registerJs("$(document).ready(function() {
     $('#myTable').DataTable({
-        'pageLength': 10,
+        'pageLength': 15,
         'order': [[ 0, 'desc' ]]
     });
 });");
@@ -92,7 +96,7 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 <br/>
-<div class="panel panel-primary">
+<div class="panel panel-primary" style="background-color: black;">
     <div class="panel-heading">
         <h3 class="panel-title">Visitor Temperature Data</h3>
     </div>
