@@ -27,7 +27,7 @@ class NgHandlamModel extends BaseProdNgData
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['ng_qty', 'pcb_id', 'gmc_no', 'ng_category_id', 'post_date', 'ng_cause_category'], 'required'],
+                [['ng_qty', 'pcb_id', 'gmc_no', 'ng_location_id', 'post_date', 'ng_cause_category'], 'required'],
             ]
         );
     }
@@ -46,6 +46,7 @@ class NgHandlamModel extends BaseProdNgData
                 'total_output' => 'Output',
                 'post_date' => 'Created Proses',
                 'ng_cause_category' => 'Root Cause Category',
+                'ng_location_id' => 'NG Name/Location'
             ]
         );
     }

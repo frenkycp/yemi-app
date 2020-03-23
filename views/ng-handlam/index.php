@@ -127,6 +127,15 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'ng_location',
+        'label' => 'Location',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
         'attribute' => 'ng_cause_category',
         'label' => 'Category',
         'vAlign' => 'middle',

@@ -49,10 +49,13 @@ class NgHandlamController extends Controller
 		$model = new NgHandlamModel;
 		$model->loc_id = 'WW03';
 		$model->post_date = date('Y-m-d');
+		$model->ng_qty = 1;
 
 		try {
 			if ($model->load($_POST) && $model->save()) {
-				return $this->redirect(Url::previous());
+				$model->part_desc = $model->ng_location_id = $model->ng_detail = $model->ng_cause_category = $model->emp_id = null;
+				$model->pcb_id = $model->pcb_id . ' | ' . $model->pcb_name;
+				return $this->render('create', ['model' => $model]);
 			} elseif (!\Yii::$app->request->isPost) {
 				$model->load($_GET);
 			}

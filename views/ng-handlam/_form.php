@@ -37,6 +37,12 @@ $this->registerCss("
     }
 ");
 
+$this->registerJs("
+    $(document).ready(function() {
+        $('#ng_location_id').select2('open');
+    });
+");
+
 ?>
 
 <div class="klinik-input-form">
@@ -92,20 +98,6 @@ $this->registerCss("
                         'pluginOptions' => ['highlight'=>true],
                     ]); ?>
 
-                    <?= $form->field($model, 'ng_category_id')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\ProdNgCategory::find()->select([
-                            'id', 'category_name', 'category_detail'
-                        ])
-                        ->orderBy('category_name, category_detail')
-                        ->all(), 'id', 'description'),
-                        'options' => [
-                            'placeholder' => 'Choose...',
-                        ],
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
-                    ]); ?>
-
                     <?= $form->field($model, 'ng_qty')->textInput(['type' => 'number']); ?>
 
                     <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
@@ -119,7 +111,57 @@ $this->registerCss("
                     ]); ?>
                 </div>
                 <div class="col-md-6">
-                    <?= $form->field($model, 'ng_cause_category')->dropDownList($ng_pcb_cause_category_dropdown, [
+                    <?= $form->field($model, 'ng_location_id')->widget(Select2::classname(), [
+                        'data' => ArrayHelper::map(app\models\ProdNgPositionView::find()
+                        ->orderBy('ng_loc_id')
+                        ->all(), 'ng_loc_id', 'description'),
+                        'options' => [
+                            'placeholder' => 'Choose...',
+                            'id' => 'ng_location_id',
+                            //'onchange' => 'alert("OK")'
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                        'pluginEvents' => [
+                            "select2:close" => "function() {
+                                $('#ng_cause_category').select2('open');
+                            }",
+                        ],
+                    ]); ?>
+                    
+                    <?= $form->field($model, 'ng_cause_category')->widget(Select2::classname(), [
+                        'data' => [
+                            'MACHINE' => 'MACHINE',
+                            'MAN' => 'MAN',
+                            'MATERIAL' => 'MATERIAL',
+                            'MEASUREMENT' => 'MEASUREMENT',
+                            'METHOD' => 'METHOD',
+                        ],
+                        'options' => [
+                            'placeholder' => 'Choose...',
+                            'id' => 'ng_cause_category'
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                        'pluginEvents' => [
+                            'select2:close' => 'function() {
+                                if($(this).val() == "MAN"){
+                                    $("#ng-emp-text").show();
+                                    var id_emp = $("#emp_id").select2("data")[0].id;
+                                    if(id_emp == ""){
+                                        $("#btn-submit").attr("disabled", true);
+                                    }
+                                    $("#emp_id").select2("open");
+                                } else {
+                                    $("#btn-submit").removeAttr("disabled");
+                                    $("#ng-emp-text").hide();
+                                }
+                            }',
+                        ],
+                    ]); ?>
+                    <?= '';/*$form->field($model, 'ng_cause_category')->dropDownList($ng_pcb_cause_category_dropdown, [
                         'prompt' => 'Choose...',
                         'id' => 'cause-category-id',
                         'onchange' => '
@@ -136,7 +178,7 @@ $this->registerCss("
                                 $("#ng-emp-text").hide();
                             }
                         ',
-                    ])->label('Root Cause Category'); ?>
+                    ])->label('Root Cause Category');*/ ?>
 
                     <div id="ng-emp-text" style="<?= !$model->isNewRecord && $model->ng_cause_category == 'MAN' ? '' : 'display: none;'; ?>">
                         <?= $form->field($model, 'emp_id')->widget(Select2::classname(), [
@@ -186,7 +228,7 @@ $this->registerCss("
             ?>
             <?= Html::a(
             'Cancel',
-            \yii\helpers\Url::previous(),
+            \yii\helpers\Url::to(['index']),
             ['class' => 'btn btn-warning']) ?>
         </div>
     </div>
