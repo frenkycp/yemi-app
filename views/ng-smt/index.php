@@ -134,6 +134,16 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'ng_location',
+        'label' => 'NG Location',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'ng_qty',
         'label' => 'QTY',
         'hAlign' => 'center',
@@ -167,8 +177,42 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'ng_detail',
+        'label' => 'Remark',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'pcb_repair',
+        'label' => 'Action (Repair)',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
         'attribute' => 'emp_name',
         'label' => 'PIC (NG)',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'smt_pic_aoi_name',
+        'label' => 'PIC (AOI)',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'smt_group_pic_name',
+        'label' => 'PIC (Group)',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
