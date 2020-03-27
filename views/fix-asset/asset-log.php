@@ -80,6 +80,13 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+$this->registerJs("$(document).ready(function() {
+    $('.imageModal').click(function(e) {
+        e.preventDefault();
+        $('#image-modal').modal('show').find('.modal-body').load($(this).attr('href'));
+    });
+});");
+
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
@@ -106,16 +113,32 @@ $gridColumns = [
         },
         'contentOptions' => ['nowrap'=>'nowrap']
     ],
-    /*[
-        'attribute' => 'trans_type',
-        'label' => 'Trans. Type',
-        'vAlign' => 'middle',
+    [
+        'attribute' => 'asset_image',
+        'label' => 'Image',
+        'value' => function($model){
+            $tmp_file1 = \Yii::$app->basePath . '\\web\\uploads\\ASSET_IMG\\' . $model->schedule_id . '\\' . $model->asset_id . '.jpg';
+            $tmp_file2 = \Yii::$app->basePath . '\\web\\uploads\\ASSET_IMG\\' . $model->asset_id . '.jpg';
+            if (file_exists($tmp_file1)) {
+                $filepath = \Yii::getAlias("@web/uploads/ASSET_IMG/") . $model->schedule_id . '/' . $model->asset_id . '.jpg';
+            } elseif (file_exists($tmp_file2)) {
+                $filepath = \Yii::getAlias("@web/uploads/ASSET_IMG/") . $model->asset_id . '.jpg';
+            } else {
+                $filepath = \Yii::getAlias("@web/uploads/image-not-available.png");
+            }
+            return Html::img($filepath, [
+                'height' => '50px',
+                'alt' => '-'
+            ]);
+            /*return Html::a(Html::img($filepath, [
+                'height' => '50px',
+                'alt' => '-'
+            ]), ['get-image-preview', 'asset_id' => $model->asset_id, 'schedule_id' => $model->schedule_id], ['class' => 'imageModal', 'data-pjax' => '0',]);*/
+        },
+        'format' => 'html',
         'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
-        ],
-    ],*/
+        'vAlign' => 'middle',
+    ],
     [
         'attribute' => 'asset_id',
         'label' => 'Asset ID',
@@ -123,7 +146,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -133,7 +156,7 @@ $gridColumns = [
         //'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -144,7 +167,7 @@ $gridColumns = [
         'filter' => $dropdown_type,
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -154,7 +177,7 @@ $gridColumns = [
         'filter' => ArrayHelper::map(app\models\CostCenter::find()->all(), 'CC_ID', 'CC_ID'),
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     // [
@@ -164,7 +187,7 @@ $gridColumns = [
     //     'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('department_name')->where(['FINANCE_ASSET' => 'Y'])->andWhere('department_name IS NOT NULL')->groupBy('department_name')->orderBy('department_name')->all(), 'department_name', 'department_name'),
     //     'filterInputOptions' => [
     //         'class' => 'form-control',
-    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //         'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
     //     ],
     // ],
     [
@@ -173,7 +196,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -190,7 +213,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -199,7 +222,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -222,7 +245,7 @@ $gridColumns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -232,7 +255,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -242,7 +265,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -255,7 +278,7 @@ $gridColumns = [
         ],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -264,7 +287,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     // [
@@ -273,7 +296,7 @@ $gridColumns = [
     //     'hAlign' => 'center',
     //     'filterInputOptions' => [
     //         'class' => 'form-control',
-    //         'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+    //         'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
     //     ],
     // ],
     [
@@ -283,7 +306,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -292,7 +315,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -301,7 +324,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -311,7 +334,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
     [
@@ -321,8 +344,36 @@ $gridColumns = [
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+            'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
+    ],
+    [
+        'attribute' => 'signature',
+        //'label' => 'Image',
+        'value' => function($model){
+            $dept_sign = \Yii::$app->params['department_signature'];
+            if ($model->schedule_status == 'O') {
+                return '';
+            } else {
+                if ($model->cost_centre == null) {
+                    $filepath = \Yii::getAlias("@web/uploads/image-not-available.png");
+                } else {
+                    $filepath = \Yii::getAlias("@web/uploads/TTD/") . $dept_sign[$model->cost_centre];
+                }
+                return Html::img($filepath, [
+                    'height' => '50px',
+                    'alt' => '-'
+                ]);
+            }
+            
+            /*return Html::a(Html::img($filepath, [
+                'height' => '50px',
+                'alt' => '-'
+            ]), ['get-image-preview', 'asset_id' => $model->asset_id, 'schedule_id' => $model->schedule_id], ['class' => 'imageModal', 'data-pjax' => '0',]);*/
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
     ],
 ];
 ?>
@@ -345,7 +396,7 @@ $gridColumns = [
             'striped' => true,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
-            'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
+            'containerOptions' => ['style' => 'overflow: auto; font-size: 10px;'], // only set when $responsive = false
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' =>  [
@@ -370,3 +421,11 @@ $gridColumns = [
 <?php \yii\widgets\Pjax::end() ?>
 
 
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'image-modal',
+    //'header' => '',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>

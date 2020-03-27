@@ -10,6 +10,7 @@ $config = [
     'components' => [
 		'session' => [
 			'name' => 'yemi-apps',
+            'cookieParams' => ['lifetime' => 24 * 3600]
         ],
         'i18n' => [
             'translations' => [

@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class AssetLogView extends BaseAssetLogView
 {
-    public $total_open, $total_close, $total;
+    public $total_open, $total_close, $total, $asset_img, $signature;
 
     public function behaviors()
     {

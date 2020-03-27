@@ -298,6 +298,37 @@ return [
         'SOTO-AYAM' => 'soto_ayam_01.jpg',
         'AYAM-GEPREK' => 'ayam_geprek_01.jpg',
     ],
+    'department_signature' => [
+        '110A' => 'HELMI.png', //HRGA
+        '110B' => 'HELMI.png', //HRGA
+        '110C' => 'HELMI.png', //HRGA
+        '110D' => 'HELMI.png', //HRGA
+        '120' => 'NUNUNG.png', //FINANCE & ACCOUNTING
+        '130' => 'ARY H.png', //LOGISTIC
+        '130A' => 'ARY H.png', //LOGISTIC
+        '220A' => 'BAGUS.png', //MAINTENANCE
+        '110E' => 'FREDY.png', //MIS
+        '250' => 'SHIOJIMA.png', //PDC
+        '251' => 'SHIOJIMA.png', //PDC
+        '320' => 'YUNAN.png', //PRODUCTION
+        '240' => 'YUNAN.png', //PRODUCTION
+        '371' => 'YUNAN.png', //PRODUCTION
+        '370' => 'YUNAN.png', //PRODUCTION
+        '330' => 'YUNAN.png', //PRODUCTION
+        '340A' => 'YUNAN.png', //PRODUCTION
+        '340M' => 'YUNAN.png', //PRODUCTION
+        '360' => 'YUNAN.png', //PRODUCTION
+        '399' => 'YUNAN.png', //PRODUCTION
+        '350' => 'YUNAN.png', //PRODUCTION
+        '310' => 'YUNAN.png', //PRODUCTION
+        '300' => 'YUNAN.png', //PRODUCTION
+        '210' => 'HEMY.png', //PC
+        '131' => 'HEMY.png', //PC
+        '220' => 'ZAMRONI.png', //PE
+        '200' => 'SOLEH.png', //PURCHASING
+        '200A' => 'SOLEH.png', //PURCHASING
+        '230' => 'ROSA.png', //QUALITY ASSURANCE
+    ],
 ];
 
 function getYearArray()

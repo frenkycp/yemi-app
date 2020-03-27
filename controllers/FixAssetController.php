@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use yii\helpers\Url;
+use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 use app\models\search\FixAssetDataSearch;
@@ -18,6 +19,10 @@ use app\models\AssetStockTakeSchedule;
 use app\models\AssetStockTakeScheduleView;
 use yii\web\UploadedFile;
 use yii\web\JsExpression;
+use yii\imagine\Image;
+use Imagine\Gd;
+use Imagine\Image\Box;
+use Imagine\Image\BoxInterface;
 
 class FixAssetController extends \app\controllers\base\FixAssetController
 {
@@ -233,6 +238,26 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		]);
 	}
 
+	public function actionGetImagePreview($asset_id, $schedule_id)
+	{
+		//return \Yii::$app->urlManager->createUrl('uploads/NG_MNT/' . $urutan . '.jpg');
+		//$src = \Yii::$app->request->BaseUrl . '/uploads/NG_MNT/' . $urutan . '.jpg';
+		//$src = \Yii::$app->basePath. '\uploads\NG_MNT\\' . $urutan . '.jpg';
+		$src = Html::img(\Yii::getAlias("@web/uploads/ASSET_IMG/") . $model->schedule_id . '/' . $model->asset_id . '.jpg', ['width' => '100%']);
+		$tmp_item = AssetLogView::find()
+		->where([
+			'asset_id' => $asset_id,
+			'schedule_id' => $schedule_id
+		])
+		->one();
+		//return $src;
+		return '<div class="text-center"><span><b>' . $tmp_item->computer_name . '</b></span><br/>' . Html::img(\Yii::getAlias("@web/uploads/ASSET_IMG/") . $tmp_item->schedule_id . '/' . $tmp_item->asset_id . '.jpg',
+			[
+				'width' => '100%',
+				'alt' => $tmp_item->asset_id . '.jpg not found.'
+			]) . '</div>';
+	}
+
 	public function actionStockTake($asset_id = '', $trans_id = null)
 	{
 		$session = \Yii::$app->session;
@@ -307,6 +332,13 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		        		$filePath = \Yii::getAlias("@app/web/uploads/ASSET_IMG/") . $new_filename;
 		        		if ($model->upload_file->saveAs($filePath)) {
 		                    //ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
+		                    ImageFile::imagine_resize($filePath);
+		                    $log_folder = \Yii::getAlias("@app/web/uploads/ASSET_IMG/" . $model->schedule_id . '/');
+		                    if (!file_exists($log_folder)) {
+		                    	mkdir($log_folder);
+		                    }
+		                    copy($filePath, $log_folder . $new_filename);
+
 		                    $fixed_asset_data->primary_picture = $asset_id;
 		                }
 		                

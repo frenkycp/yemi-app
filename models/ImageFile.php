@@ -3,6 +3,10 @@
 namespace app\models;
 
 use yii\base\Model;
+use yii\imagine\Image;
+use Imagine\Gd;
+use Imagine\Image\Box;
+use Imagine\Image\BoxInterface;
 
 class ImageFile extends Model
 {
@@ -71,5 +75,29 @@ class ImageFile extends Model
 
 	    if($dst_img)imagedestroy($dst_img);
 	    if($src_img)imagedestroy($src_img);
+	}
+
+	public static function imagine_resize($filePath, $width = 600, $height = 600, $quality = 80)
+	{
+		$tmp_img = Image::getImagine()->open($filePath);
+        $exif = exif_read_data($filePath);
+
+        $orientation = $exif['Orientation'];
+       	switch($orientation) {
+
+           	case 6: // rotate 90 degrees CW
+           		$tmp_img->rotate(90);
+           	break;
+
+           	case 8: // rotate 90 degrees CCW
+              	$tmp_img->rotate(-90);
+           	break;
+       	}
+
+       	if ($tmp_width_old > $tmp_height_old) {
+			$tmp_img->thumbnail(new Box($width, $height))->save($filePath , ['quality' => $quality]);
+		} else {
+			$tmp_img->thumbnail(new Box($height, $width))->save($filePath , ['quality' => $quality]);
+		}
 	}
 }
