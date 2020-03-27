@@ -94,9 +94,9 @@ $gridColumns = [
         'template' => '{stock-take}',
         'buttons' => [
             'stock-take' => function($url, $model, $key){
-                if ($model->schedule_status == 'C') {
-                    return '';
-                }
+                // if ($model->schedule_status == 'C') {
+                //     return '';
+                // }
                 $url = ['stock-take', 'asset_id' => $model->asset_id, 'trans_id' => $model->trans_id];
                 $options = [
                     'title' => 'Stock Take',
@@ -347,9 +347,8 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 10px; min-width: 70px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'signature',
-        //'label' => 'Image',
         'value' => function($model){
             $dept_sign = \Yii::$app->params['department_signature'];
             if ($model->schedule_status == 'O') {
@@ -365,16 +364,11 @@ $gridColumns = [
                     'alt' => '-'
                 ]);
             }
-            
-            /*return Html::a(Html::img($filepath, [
-                'height' => '50px',
-                'alt' => '-'
-            ]), ['get-image-preview', 'asset_id' => $model->asset_id, 'schedule_id' => $model->schedule_id], ['class' => 'imageModal', 'data-pjax' => '0',]);*/
         },
         'format' => 'html',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-    ],
+    ],*/
 ];
 ?>
 <div class="giiant-crud asset-tbl-index">
@@ -404,6 +398,13 @@ $gridColumns = [
                 '{export}',
                 '{toggleData}',
             ],
+            'rowOptions' => function($model){
+                if ($model->schedule_status == 'O') {
+                    return ['class' => 'danger'];
+                } else {
+                    return ['class' => 'success'];
+                }
+            },
             // set export properties
             'export' => [
                 'fontAwesome' => true
