@@ -80,6 +80,8 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 }
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
+
+
 $this->registerJs("$(document).ready(function() {
     $('.imageModal').click(function(e) {
         e.preventDefault();
@@ -94,9 +96,10 @@ $gridColumns = [
         'template' => '{stock-take}',
         'buttons' => [
             'stock-take' => function($url, $model, $key){
-                // if ($model->schedule_status == 'C') {
-                //     return '';
-                // }
+                $session = \Yii::$app->session;
+                if ($model->schedule_status == 'C' && $model->user_id != $session['fix_asset_user'] && $model->user_id != $session['fix_asset_nik']) {
+                    return '';
+                }
                 $url = ['stock-take', 'asset_id' => $model->asset_id, 'trans_id' => $model->trans_id];
                 $options = [
                     'title' => 'Stock Take',

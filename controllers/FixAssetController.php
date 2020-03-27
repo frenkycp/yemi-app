@@ -278,10 +278,10 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		$model = new AssetLogTbl;
 		if ($trans_id != null) {
 			$model = AssetLogTbl::find()->where(['trans_id' => $trans_id])->one();
-			if ($model->schedule_status == 'C') {
-				\Yii::$app->session->setFlash("warning", "Stock take for asset ID : $model->asset_id had been done by $model->user_id - $model->user_desc on $model->posting_date");
-				return $this->redirect(Url::previous());
-			}
+			// if ($model->schedule_status == 'C') {
+			// 	\Yii::$app->session->setFlash("warning", "Stock take for asset ID : $model->asset_id had been done by $model->user_id - $model->user_desc on $model->posting_date");
+			// 	return $this->redirect(Url::previous());
+			// }
 		}
 		//$model->from_loc = $model->to_loc = $fixed_asset_data->location;
 		$model->from_loc = $fixed_asset_data->location;
