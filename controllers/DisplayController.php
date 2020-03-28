@@ -122,6 +122,89 @@ use app\models\SkillMasterDailyTraining;
 
 class DisplayController extends Controller
 {
+    public function actionClinicMonthlyTopVisitor($opsi)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $period = date('Ym');
+
+        $data = KlinikInput::find()
+        ->select([
+            'nik_sun_fish', 'nama', 'dept',
+            'total_visit' => 'COUNT(pk)'
+        ])
+        ->where([
+            'opsi' => $opsi,
+            'EXTRACT(YEAR_MONTH FROM pk)' => $period
+        ])
+        ->groupBy('nik_sun_fish, nama, dept')
+        ->orderBy('COUNT(pk) DESC')
+        ->all();
+
+        return $this->render('clinic-monthly-top-visitor', [
+            'data' => $data,
+            'opsi' => $opsi,
+        ]);
+    }
+
+    public function actionHandlamTopNg()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-d');
+        $model->to_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_ng = ProdNgData::find()
+        ->select([
+            'ng_category_id', 'ng_category_desc', 'ng_category_detail', 'ng_location_id', 'ng_location',
+            'ng_total' => 'SUM(ng_qty)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'DATE(tgl)', $model->from_date],
+            ['<=', 'DATE(tgl)', $model->to_date]
+        ])
+        ->andWhere([
+            'loc_id' => 'WW03'
+        ])
+        ->andWhere('ng_location_id IS NOT NULL')
+        ->orderBy('SUM(ng_qty) DESC')
+        ->limit(5)
+        ->all();
+
+        $tmp_data_arr = [];
+        foreach ($tmp_ng as $value) {
+            $category_name = $value->ng_category_detail;
+            if ($value->ng_location != '') {
+                $category_name = $value->ng_location;
+            }
+            $tmp_data_arr[] = [
+                'name' => $category_name,
+                'y' => $value->ng_total
+            ];
+        }
+
+        $data[] = [
+            'name' => 'NG By Location',
+            'data' => $tmp_data_arr
+        ];
+
+        return $this->render('handlam-top-ng', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
+
     public function actionVisitorTemp()
     {
         $this->layout = 'clean';
