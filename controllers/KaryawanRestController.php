@@ -12,12 +12,12 @@ class KaryawanRestController extends Controller
 
         if ($nik == '') {
             $tmp_karyawan = Karyawan::find()
-            ->select(['NIK', 'NIK_SUN_FISH', 'NAMA_KARYAWAN', 'DEPARTEMEN', 'SECTION'])
+            ->select(['NIK', 'NIK_SUN_FISH', 'NAMA_KARYAWAN', 'DEPARTEMEN', 'SECTION', 'CC_ID'])
             ->where(['AKTIF' => 'Y'])
             ->all();
         } else {
             $tmp_karyawan = Karyawan::find()
-            ->select(['NIK', 'NIK_SUN_FISH', 'NAMA_KARYAWAN', 'DEPARTEMEN', 'SECTION'])
+            ->select(['NIK', 'NIK_SUN_FISH', 'NAMA_KARYAWAN', 'DEPARTEMEN', 'SECTION', 'CC_ID'])
             ->where(['OR', ['NIK_SUN_FISH' => $nik], ['NIK' => $nik]])->one();
         }
     	
