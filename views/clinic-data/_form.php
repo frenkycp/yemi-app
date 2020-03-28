@@ -1,11 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+//use yii\bootstrap\ActiveForm;
+use kartik\widgets\ActiveForm;
 use \dmstr\bootstrap\Tabs;
 use yii\helpers\StringHelper;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
+use kartik\widgets\TouchSpin;
 
 /**
 * @var yii\web\View $this
@@ -67,6 +69,31 @@ use kartik\select2\Select2;
                         2 => 'ISTIRAHAT SAKIT',
                         3 => 'LAKTASI'
                     ]) ?>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <?= $form->field($model, 'sistolik', [
+                        'addon' => [
+                            'prepend' => ['content'=>'<i class="fa fa-stethoscope"></i>'],
+                            'append' => ['content'=>'mmHg']
+                        ]
+                    ])->textInput(['type' => 'number']); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $form->field($model, 'diastolik', [
+                        'addon' => [
+                            'prepend' => ['content'=>'<i class="fa fa-stethoscope"></i>'],
+                            'append' => ['content'=>'mmHg']
+                        ]
+                    ])->textInput(['type' => 'number']); ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $form->field($model, 'temperature', [
+                        'addon' => [
+                            'append' => ['content'=>'&deg;C']
+                        ]
+                    ])->textInput(); ?>
                 </div>
             </div>
             <div class="row">

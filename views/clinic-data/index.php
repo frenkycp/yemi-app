@@ -300,6 +300,39 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'sistolik',
+        'encodeLabel' => false,
+        'label' => 'Sistolik<br/>(mmHg)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 100px;'
+        ],
+    ],
+    [
+        'attribute' => 'diastolik',
+        'encodeLabel' => false,
+        'label' => 'Diastolik<br/>(mmHg)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 100px;'
+        ],
+    ],
+    [
+        'attribute' => 'temperature',
+        'encodeLabel' => false,
+        'label' => 'Temp.<br/>(&deg;C)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 100px;'
+        ],
+    ],
+    [
         'attribute' => 'anamnesa',
         'vAlign' => 'middle',
         'filterInputOptions' => [
