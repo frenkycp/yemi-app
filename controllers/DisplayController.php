@@ -119,9 +119,31 @@ use app\models\SernoCnt;
 use app\models\ServerStatus;
 use app\models\SkillMasterLogView;
 use app\models\SkillMasterDailyTraining;
+use app\models\MaskerTransaksi;
 
 class DisplayController extends Controller
 {
+    public function actionMaskUsingMonthly()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $period = date('Ym');
+
+        $data = MaskerTransaksi::find()
+        ->select([
+            'nik', 'nama', 'dept',
+            'qty' => 'SUM(qty)'
+        ])
+        ->where(['EXTRACT(YEAR_MONTH FROM datetime)' => $period])
+        ->groupBY('nik, nama, dept')
+        ->orderBy('SUM(qty) DESC')
+        ->all();
+
+        return $this->render('mask-using-monthly', [
+            'data' => $data,
+        ]);
+    }
+
     public function actionClinicMonthlyTopVisitor($opsi)
     {
         $this->layout = 'clean';
@@ -2618,7 +2640,7 @@ class DisplayController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $sensor_data = SensorTbl::find()
         ->where([
-            'map_no' => [12, 13, 7, 8, 17, 18, 40, 41]
+            'map_no' => [12, 13, 7, 8, 17, 18, 40, 41, 45, 46]
         ])
         ->orderBy('area')
         ->all();
@@ -2631,6 +2653,8 @@ class DisplayController extends Controller
             '13' => '5. Inwax Piano 1<br/><span class="japanesse light-green">(インワックスのピアノ塗装 1)</span>',
             '12' => '6. Inwax Piano 13&14<br/><span class="japanesse light-green">(インワックスのピアノ塗装 13&14)</span>',
             '40' => '7. Server Room Factory 1',
+            '45' => '8. ELECTRIC ROOM FACTORY 2 (KWH)',
+            '46' => '9. ELECTRIC ROOM FACTORY 2.5 (KWH)',
             //'41' => '8. Electric Room Factory 1',
         ];
 

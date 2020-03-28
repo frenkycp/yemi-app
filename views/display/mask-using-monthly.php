@@ -6,19 +6,11 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
-if ($opsi == 1) {
-    $this->title = [
-        'page_title' => 'This Month Top Visitor (Check Up)',
-        'tab_title' => 'This Month Top Visitor (Check Up)',
-        'breadcrumbs_title' => 'This Month Top Visitor (Check Up)'
-    ];
-} else {
-    $this->title = [
-        'page_title' => 'This Month Top Visitor (Bed Rest)',
-        'tab_title' => 'This Month Top Visitor (Bed Rest)',
-        'breadcrumbs_title' => 'This Month Top Visitor (Bed Rest)'
-    ];
-}
+$this->title = [
+    'page_title' => 'Masker Using (This Month)',
+    'tab_title' => 'Masker Using (This Month)',
+    'breadcrumbs_title' => 'Masker Using (This Month)'
+];
 
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -78,16 +70,16 @@ echo '</pre>';*/
                     <th class="text-center">NIK</th>
                     <th>Name</th>
                     <th>Department</th>
-                    <th class="text-center">Total Visit</th>
+                    <th class="text-center">Total Qty</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($data as $key => $value): ?>
                     <tr style="font-size: 0.84em;">
-                        <td class="text-center"><?= $value->nik_sun_fish; ?></td>
+                        <td class="text-center"><?= $value->nik; ?></td>
                         <td><?= $value->nama; ?></td>
                         <td><?= $value->dept; ?></td>
-                        <td class="text-center"><?= $value->total_visit; ?></td>
+                        <td class="text-center"><?= $value->qty; ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
