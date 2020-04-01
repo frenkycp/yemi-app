@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
 
 /**
 * @var yii\web\View $this
@@ -43,9 +44,15 @@ $img_filename = $menu_arr[$today_menu_txt];
 		        <div class="panel-body">
 		            <div class="row">
 		                <div class="col-md-4">
-		                	<?= $form->field($model, 'schedule_id')->dropDownList(ArrayHelper::map(app\models\AssetStockTakeSchedule::find()->orderBy('create_time DESC')->all(), 'schedule_id', 'period'), [
-		                		'prompt' => 'Choose...'
-		                	])->label('Stock Take Period'); ?>
+		                	<?= $form->field($model, 'schedule_id')->widget(Select2::classname(), [
+					            'data' => ArrayHelper::map(app\models\AssetStockTakeSchedule::find()->orderBy('end_date DESC, start_date DESC')->all(), 'schedule_id', 'period'),
+					            'options' => [
+					                'placeholder' => 'Choose...',
+					            ],
+					            'pluginOptions' => [
+					                'allowClear' => true
+					            ],
+					        ])->label('Stock Take Period'); ?>
 		                </div>
 		                <div class="col-md-4">
 					        <?= $form->field($model, 'posting_date')->widget(DatePicker::classname(), [

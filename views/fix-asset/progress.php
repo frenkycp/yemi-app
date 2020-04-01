@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
 
 $this->title = [
     'page_title' => 'Stock Taking Progress',
@@ -46,8 +47,14 @@ $this->registerJs($script, View::POS_HEAD );
 
 <div class="row">
     <div class="col-md-6">
-        <?= $form->field($model, 'period')->dropDownList($period_arr, [
-            'prompt' => 'Choose period...'
+        <?= $form->field($model, 'period')->widget(Select2::classname(), [
+            'data' => $period_arr,
+            'options' => [
+                'placeholder' => 'Choose...',
+            ],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
         ]); ?>
     </div>
     <div class="form-group">
