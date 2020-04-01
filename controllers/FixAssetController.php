@@ -23,6 +23,7 @@ use yii\imagine\Image;
 use Imagine\Gd;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
+use app\models\AssetStockTakeSummary;
 
 class FixAssetController extends \app\controllers\base\FixAssetController
 {
@@ -92,6 +93,26 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		return $this->render('index');
 	}
 
+	public function actionPrintSummary($schedule_id, $department_name)
+	{
+		$session = \Yii::$app->session;
+        if (!$session->has('fix_asset_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['fix_asset_user'];
+		$this->layout = 'clean';
+
+		$summary_data = AssetStockTakeSummary::find()
+        ->where(['schedule_id' => $schedule_id, 'department_name' => $department_name])
+        ->orderBy('department_name')
+        ->one();
+
+		return $this->render('print-summary', [
+			'summary_data' => $summary_data,
+			'department_name' => $department_name,
+		]);
+	}
+
 	public function actionProgress()
 	{
 		$session = \Yii::$app->session;
@@ -109,6 +130,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 
         $data_completion = $tmp_data = $tmp_data_section_open = $tmp_data_section_close = $data_section = $section_categories = [];
         $total_ng = $total_no_label = $total_propose_scrap = 0;
+        $tmp_summary = null;
         if ($model->load($_GET)) {
         	$tmp_schedule = AssetStockTakeScheduleView::find()->where(['schedule_id' => $model->period])->one();
         	$total_ng = $tmp_schedule->total_ng;
@@ -158,6 +180,12 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 	        		'url' => Url::to(['asset-log', 'schedule_id' => $model->period, 'schedule_status' => 'C', 'cost_centre' => $value->cost_centre]),
 	        	];
 	        }
+
+	        //summary
+	        $tmp_summary = AssetStockTakeSummary::find()
+	        ->where(['schedule_id' => $model->period])
+	        ->orderBy('department_name')
+	        ->all();
         }
 
         $data_section = [
@@ -175,7 +203,8 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 
         $data_completion[] = [
         	'name' => 'Percentage',
-        	'data' => $tmp_data
+        	'data' => $tmp_data,
+        	
         ];
 
         $period_arr = ArrayHelper::map(AssetStockTakeScheduleView::find()->orderBy('end_date DESC, start_date DESC')->all(), 'schedule_id', 'period');
@@ -189,6 +218,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 			'total_propose_scrap' => $total_propose_scrap,
 			'section_categories' => $section_categories,
 			'data_section' => $data_section,
+			'summary_data' => $tmp_summary,
 		]);
 	}
 

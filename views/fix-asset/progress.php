@@ -159,7 +159,7 @@ $this->registerJs($script, View::POS_HEAD );
                 ?>
             </div>
         </div>
-        <div class="box box-warning box-solid">
+        <div class="box box-primary box-solid">
             <div class="box-header">
                 <h3 class="box-title">By Section</h3>
             </div>
@@ -223,6 +223,59 @@ $this->registerJs($script, View::POS_HEAD );
                         ?>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="box box-primary box-solid">
+            <div class="box-header">
+                <h3 class="box-title">
+                    Summary by Department
+                </h3>
+            </div>
+            <div class="box-body">
+                <table class="table table-responsive table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th width="50px" rowspan="2"></th>
+                            <th style="vertical-align: middle;" rowspan="2">DEPARTEMEN</th>
+                            <th class="text-center" colspan="5">STATUS</th>
+                            <th class="text-center" colspan="2">LABEL</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center" width="100px;">OK</th>
+                            <th class="text-center" width="100px;">NG (No Scrap)</th>
+                            <th class="text-center" width="100px;">NG (Propose Scrap)</th>
+                            <th class="text-center" width="100px;">REPAIR</th>
+                            <th class="text-center" width="100px;">STANDBY</th>
+                            <th class="text-center" width="100px;">ADA</th>
+                            <th class="text-center" width="100px;">TIDAK ADA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($summary_data != null) {
+                            ?>
+
+                            <?php foreach ($summary_data as $value): ?>
+                                <tr>
+                                    <td class="text-center">
+                                        <?= Html::a('<i class="fa fa-print"></i>', ['print-summary', 'schedule_id' => $value->schedule_id, 'department_name' => $value->department_name], ['target' => '_blank']); ?>
+                                    </td>
+                                    <td class=""><?= $value->department_name; ?></td>
+                                    <td class="text-center"><?= number_format($value->total_ok); ?></td>
+                                    <td class="text-center"><?= number_format($value->total_ng); ?></td>
+                                    <td class="text-center"><?= number_format($value->ng_plan_scrap); ?></td>
+                                    <td class="text-center"><?= number_format($value->total_repair); ?></td>
+                                    <td class="text-center"><?= number_format($value->total_standby); ?></td>
+                                    <td class="text-center"><?= number_format($value->label_y); ?></td>
+                                    <td class="text-center"><?= number_format($value->label_n); ?></td>
+                                </tr>
+                            <?php endforeach ?>
+
+                        <?php }
+                        ?>
+                        
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
