@@ -110,7 +110,7 @@ echo '</pre>';*/
 
             $karyawan_aktif2 = app\models\Karyawan::find()
             ->where([
-                'NIK' => $key,
+                'NIK' => strval($key),
                 'AKTIF' => 'Y'
             ])
             ->one();

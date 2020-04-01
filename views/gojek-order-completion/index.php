@@ -44,7 +44,7 @@ echo '</pre>';*/
         <?php
         foreach ($fix_data as $key => $value) {
             $karyawan_aktif = app\models\Karyawan::find()->where([
-                'NIK' => $key,
+                'NIK' => strval($key),
                 //'TANGGAL' => date('Y-m-d')
             ])->one();
             $last_update = date('Y-m-d H:i:s', strtotime($value['last_update']));
