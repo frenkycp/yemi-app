@@ -3225,7 +3225,7 @@ class DisplayController extends Controller
             if ($balance_d >= 5) {
                 $color = 'rgb(255, 0, 0)';
             }
-            $categories[] = $value->model_group . ' - ' . $value->gmc_desc . ' (' . $value->gmc . ') ' . $value->lot_qty . ' PCS [Beacon ID : ' . $value->minor . ']';
+            $categories[] = $value->model_group . ' - ' . $value->gmc_desc . ' (' . $value->gmc . ') ' . $value->lot_qty . ' PCS [Beacon ID : ' . $value->minor . ', Lot : ' . $value->lot_number . ']';
             $tmp_data[] = [
                 'y' => (float)$balance_d,
                 'color' => $color
