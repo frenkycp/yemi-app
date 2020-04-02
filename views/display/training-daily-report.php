@@ -157,7 +157,7 @@ echo '</pre>';*/
                         ],
                         'plotOptions' => [
                             'series' => [
-                                'lineWidth' => 1,
+                                'lineWidth' => 1.5,
                                 //'showInLegend' => false,
                                 //'color' => new JsExpression('Highcharts.getOptions().colors[0]')
                             ],

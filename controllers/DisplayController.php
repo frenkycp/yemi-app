@@ -364,7 +364,7 @@ class DisplayController extends Controller
             ->select([
                 'POST_DATE',
                 'total_training' => 'SUM(CASE WHEN CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)',
-                'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' THEN 1 ELSE 0 END)'
+                'total_retraining' => 'SUM(CASE WHEN CATEGORY = \'RE-TRAINING\' OR CATEGORY = \'TRAINING\' THEN 1 ELSE 0 END)'
             ])
             ->where([
                 'AND',
@@ -453,12 +453,12 @@ class DisplayController extends Controller
                     'type' => 'column',
                     'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
                 ],
-                [
-                    'name' => 'TRAINING',
-                    'data' => $tmp_total_training,
-                    'type' => 'line',
-                    'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
-                ],
+                // [
+                //     'name' => 'TRAINING',
+                //     'data' => $tmp_total_training,
+                //     'type' => 'line',
+                //     'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
+                // ],
                 [
                     'name' => 'RE-TRAINING',
                     'data' => $tmp_total_retraining,
