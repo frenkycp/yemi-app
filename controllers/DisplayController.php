@@ -299,7 +299,7 @@ class DisplayController extends Controller
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
-    public function actionTrainingDailyReport($value='')
+    public function actionTrainingDailyReport($type = 1)
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
@@ -310,8 +310,8 @@ class DisplayController extends Controller
         $model->addRule(['from_date', 'to_date'], 'required')
         ->addRule(['location'], 'string');
 
-        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
-        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $model->from_date = date('Y-m-d', strtotime(' -1 month'));
+        $model->to_date = date('Y-m-d');
 
         if ($model->load($_GET)) { }
 
@@ -343,6 +343,21 @@ class DisplayController extends Controller
             ])
             ->groupBy('POST_DATE')
             ->orderBy('POST_DATE')
+            ->all();
+
+            $tmp_ng_daily = ProdNgData::find()
+            ->select([
+                'post_date',
+                'ng_total' => 'SUM(ng_qty)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'post_date', $model->from_date],
+                ['<=', 'post_date', $model->to_date]
+            ])
+            ->andWhere(['ng_cause_category' => 'MAN'])
+            ->groupBy('post_date')
+            ->orderBy('post_date')
             ->all();
         } else {
             $tmp_log_skill = SkillMasterLogView::find()
@@ -379,6 +394,24 @@ class DisplayController extends Controller
             ->groupBy('POST_DATE')
             ->orderBy('POST_DATE')
             ->all();
+
+            $tmp_ng_daily = ProdNgData::find()
+            ->select([
+                'post_date',
+                'ng_total' => 'SUM(ng_qty)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'post_date', $model->from_date],
+                ['<=', 'post_date', $model->to_date]
+            ])
+            ->andWhere([
+                'loc_id' => $model->location,
+                'ng_cause_category' => 'MAN'
+            ])
+            ->groupBy('post_date')
+            ->orderBy('post_date')
+            ->all();
         }
 
         $tmp_total_training = $tmp_total_retraining = [];
@@ -403,30 +436,58 @@ class DisplayController extends Controller
             ];
         }
 
-        $data_training = [
-            [
-                'name' => 'TOTAL STAFF (TRAINED)',
-                'data' => $tmp_daily_arr,
-                'type' => 'column',
-                'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
-            ],
-            [
-                'name' => 'TRAINING',
-                'data' => $tmp_total_training,
-                'type' => 'line',
-                'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
-            ],
-            [
-                'name' => 'RE-TRAINING',
-                'data' => $tmp_total_retraining,
-                'type' => 'line',
-                'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
-            ],
-        ];
+        $tmp_ng_daily_arr = [];
+        foreach ($tmp_ng_daily as $value) {
+            $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
+            $tmp_ng_daily_arr[] = [
+                'x' => $proddate,
+                'y' => (int)$value->ng_total
+            ];
+        }
+
+        if ($type == 1) {
+            $data_training = [
+                [
+                    'name' => 'TOTAL STAFF (TRAINED)',
+                    'data' => $tmp_daily_arr,
+                    'type' => 'column',
+                    'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
+                ],
+                [
+                    'name' => 'TRAINING',
+                    'data' => $tmp_total_training,
+                    'type' => 'line',
+                    'color' => new JsExpression('Highcharts.getOptions().colors[6]'),
+                ],
+                [
+                    'name' => 'RE-TRAINING',
+                    'data' => $tmp_total_retraining,
+                    'type' => 'line',
+                    'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+                ],
+            ];
+        } else {
+            $data_training = [
+                [
+                    'name' => 'TOTAL NG',
+                    'data' => $tmp_ng_daily_arr,
+                    'type' => 'column',
+                    'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
+                ],
+                [
+                    'name' => 'RE-TRAINING',
+                    'data' => $tmp_total_retraining,
+                    'type' => 'line',
+                    'color' => new JsExpression('Highcharts.getOptions().colors[2]'),
+                ],
+            ];
+        }
+
 
         return $this->render('training-daily-report',[
             'model' => $model,
             'data_training' => $data_training,
+            'type' => $type,
         ]);
     }
 

@@ -8,11 +8,20 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
-$this->title = [
-    'page_title' => 'Training Daily Report',
-    'tab_title' => 'Training Daily Report',
-    'breadcrumbs_title' => 'Training Daily Report'
-];
+if ($type == 1) {
+    $this->title = [
+        'page_title' => 'Training Daily Report',
+        'tab_title' => 'Training Daily Report',
+        'breadcrumbs_title' => 'Training Daily Report'
+    ];
+} else {
+    $this->title = [
+        'page_title' => 'Total NG V.S Re-Training',
+        'tab_title' => 'Total NG V.S Re-Training',
+        'breadcrumbs_title' => 'Total NG V.S Re-Training'
+    ];
+}
+
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $this->registerCss("
@@ -65,7 +74,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['training-daily-report']),
+    'action' => Url::to(['training-daily-report', 'type' => $type]),
 ]); ?>
 
 <div class="row">

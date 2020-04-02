@@ -166,30 +166,40 @@ class NgInjectionController extends Controller
         	foreach ($model_action->skill_value as $key => $value) {
         		$tmp_skill = $model_action->skill_name[$key];
         		if ($value != '' && $tmp_skill != '') {
-        			$tmp_log = SkillMasterKaryawanLog::find()->where(['NIK' => $model_action->nik, 'skill_id' => $tmp_skill])->one();
-        			if ($tmp_log->SEQ != null) {
-        				$tmp_arr[] = [
-        					'nik' => $nik,
-        					'skill_id' => $tmp_skill,
-        					'skill_value' => $value,
-        					'category' => 'RE-TRAINING',
-        					'document_no' => $model->document_no,
-        					'note' => $model->ng_detail,
-        					'user_id' => $user_id,
-        					'user_desc' => $user_desc,
-        				];
-        			} else {
-        				$tmp_arr[] = [
-        					'nik' => $nik,
-        					'skill_id' => $tmp_skill,
-        					'skill_value' => $value,
-        					'category' => 'TRAINING',
-        					'document_no' => $model->document_no,
-        					'note' => $model->ng_detail,
-        					'user_id' => $user_id,
-        					'user_desc' => $user_desc,
-        				];
-        			}
+        			$tmp_arr[] = [
+    					'nik' => $nik,
+    					'skill_id' => $tmp_skill,
+    					'skill_value' => $value,
+    					'category' => 'RE-TRAINING',
+    					'document_no' => $model->document_no,
+    					'note' => $model->ng_detail,
+    					'user_id' => $user_id,
+    					'user_desc' => $user_desc,
+    				];
+        			// $tmp_log = SkillMasterKaryawanLog::find()->where(['NIK' => $model_action->nik, 'skill_id' => $tmp_skill])->one();
+        			// if ($tmp_log->SEQ != null) {
+        			// 	$tmp_arr[] = [
+        			// 		'nik' => $nik,
+        			// 		'skill_id' => $tmp_skill,
+        			// 		'skill_value' => $value,
+        			// 		'category' => 'RE-TRAINING',
+        			// 		'document_no' => $model->document_no,
+        			// 		'note' => $model->ng_detail,
+        			// 		'user_id' => $user_id,
+        			// 		'user_desc' => $user_desc,
+        			// 	];
+        			// } else {
+        			// 	$tmp_arr[] = [
+        			// 		'nik' => $nik,
+        			// 		'skill_id' => $tmp_skill,
+        			// 		'skill_value' => $value,
+        			// 		'category' => 'TRAINING',
+        			// 		'document_no' => $model->document_no,
+        			// 		'note' => $model->ng_detail,
+        			// 		'user_id' => $user_id,
+        			// 		'user_desc' => $user_desc,
+        			// 	];
+        			// }
         			$count++;
         		}
         	}
