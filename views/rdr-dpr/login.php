@@ -31,10 +31,14 @@ $fieldOptions1 = [
                 <div style="margin: 20px auto 0 auto; max-width: 450px;">
                     <?= Alert::widget() ?>
                 </div>
+                <div class="text-center">
+                    <span class="badge bg-primary" style="font-size: 3em; padding: 10px 20px;">RDR - DPR Application</span>
+                </div>
+                
                 <div class="auth-box card">
                     <div class="card-block">
                         <div class="text-center">
-                            <?= Html::img('@web/uploads/ICON/stock_take_03.png', [
+                            <?= Html::img('@web/uploads/ICON/form_02.png', [
                                 'style' => 'width: 100px;'
                             ]); ?>
                         </div>

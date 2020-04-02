@@ -24,11 +24,14 @@ $this->registerCss("
         }
     }
     #table-content {padding-left: 50px; width: 400px;}
-    table, th, td {border: 1px solid black !important;}
+    #table-content tr th, #table-content tr td {border: 1px solid black !important;}
     table {margin-bottom: unset !important;}
     .signature-title, .signature-content {border: 1px solid black; text-align: center;}
     .signature-content {min-height: 100px;}
-    .signature {width: 180px; margin: 50px;}
+    .signature {width: 160px; margin: 10px;}
+    #sing-table tr td {
+        border: 0px;
+    }
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -100,7 +103,7 @@ Telah melaksanakan kegiatan Stock Taking Fix Asset terhadap fixed asset dengan h
             </tr>
             <tr>
                 <td class="text-center">6</td>
-                <td>NOT FUND</td>
+                <td>NOT FOUND</td>
                 <td class="text-center"><?= number_format($summary_data->total_open); ?></td>
             </tr>
         </tbody>
@@ -146,16 +149,27 @@ Telah melaksanakan kegiatan Stock Taking Fix Asset terhadap fixed asset dengan h
 <div id="close-content">
     Demikian berita acara pemeriksaaan Stock Taking Fixed Asset ini dibuat, agar dapat dipergunakan sebagaimana mestinya.
 </div>
-
-<div class="pull-left" width="50%">
-    <div class="signature">
-        <div class="signature-title">PIC Stock Taking</div>
-        <div class="signature-content"></div>
-    </div>
-</div>
-<div class="pull-right" width="50%">
-    <div class="signature">
-        <div class="signature-title">Approved by</div>
-        <div class="signature-content"></div>
-    </div>
+<div style="width: 100%; padding: 20px;">
+    <table style="width: 100%;" id="sing-table">
+        <tr>
+            <td width="30%" class="text-center">
+                <div class="signature">
+                    <div class="signature-title">PIC Stock Taking</div>
+                    <div class="signature-content"></div>
+                </div>
+            </td>
+            <td width="30%" class="text-center">
+                <div class="signature">
+                    <div class="signature-title">Verified by Acc.</div>
+                    <div class="signature-content"></div>
+                </div>
+            </td>
+            <td width="30%" class="text-center">
+                <div class="signature">
+                    <div class="signature-title">Approved by</div>
+                    <div class="signature-content"></div>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>

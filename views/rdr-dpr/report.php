@@ -44,22 +44,56 @@ date_default_timezone_set('Asia/Jakarta');
 
 <div class="box box-primary">
 	<div class="box-body">
-		<?= $form->field($model, 'POST_DATE')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'ITEM')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'ITEM_DESC')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'LOC')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'LOC_DESC')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'QTY_IN')->textInput(['readonly' => 'readonly']); ?>
 		<div class="row">
 			<div class="col-md-3">
-                <?= $form->field($model_judgement, 'judgement')->dropDownList([
-                	'OK' => 'OK',
-                	'NG' => 'NG',
+				<?= $form->field($model, 'ITEM')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+			<div class="col-md-6">
+				<?= $form->field($model, 'ITEM_DESC')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+			<div class="col-md-3">
+				<?= $form->field($model, 'QTY_IN')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-3">
+				<?= $form->field($model, 'LOC')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+			<div class="col-md-9">
+				<?= $form->field($model, 'LOC_DESC')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-3">
+				<?= $form->field($model_judgement, 'type')->dropDownList([
+                	'RDR' => 'RDR',
+                	'DPR' => 'DPR',
+                ], [
+                	'prompt' => 'Choose...'
                 ]); ?>
-            </div>
-            <div class="col-md-9">
-                <?= $form->field($model_judgement, 'remark')->textInput(['placeholder' => 'Input Remark Here ...']); ?>
-            </div>
+			</div>
+			<div class="col-md-3">
+				<?= $form->field($model_judgement, 'category')->dropDownList([
+                	'SHORTAGE' => 'SHORTAGE',
+                	'OVER' => 'OVER',
+                	'WRONG PART' => 'WRONG PART',
+                	'NO PART NUMBER' => 'NO PART NUMBER',
+                ], [
+                	'prompt' => 'Choose...'
+                ]); ?>
+			</div>
+			<div class="col-md-3">
+				<?= $form->field($model_judgement, 'urgency')->dropDownList([
+                	'NORMAL' => 'NORMAL',
+                	'URGENT' => 'URGENT',
+                ], [
+                	'prompt' => 'Choose...'
+                ]); ?>
+			</div>
+			<div class="col-md-3">
+				<?= $form->field($model_judgement, 'actual_qty')->textInput(); ?>
+			</div>
 		</div>
 	</div>
 	<div class="panel-footer">

@@ -23,34 +23,37 @@ class RdrDprController extends \app\controllers\base\IqaInspectionController
 		//$model->POST_DATE = date('Y-m-d', strtotime($model->POST_DATE));
 
 		$model_judgement = new \yii\base\DynamicModel([
-	        'judgement', 'remark'
+	        'type', 'category', 'urgency', 'actual_qty'
 	    ]);
-	    $model_judgement->addRule(['judgement'], 'required')
-	    ->addRule(['remark'], 'string');
-
-	    if ($model->Judgement != null) {
-			$model_judgement->judgement = $model->Judgement;
-		}
-
-		if ($model->Remark != null) {
-			$model_judgement->remark = $model->Remark;
-		}
+	    $model_judgement->addRule(['type', 'category', 'urgency', 'actual_qty'], 'required');
+        $model_judgement->actual_qty = $model->QTY_IN;
 
 		if ($model_judgement->load(\Yii::$app->request->post())) {
-			$model->Judgement = $model_judgement->judgement;
-			if ($model_judgement->remark != '') {
-				$model->Remark = $model_judgement->remark;
-			}
-			$model->inspect_by_id = $nik;
-			$model->inspect_by_name = $name;
-			$model->inspect_datetime = date('Y-m-d H:i:s');
-			$model->inspect_period = date('Ym');
+			$params = [
+                ':material_document_number' => $SEQ_LOG,
+                ':rdr_dpr' => $model_judgement->type,
+                ':category' => $model_judgement->category,
+                ':normal_urgent' => $model_judgement->urgency,
+                ':act_rcv_qty' => $model_judgement->actual_qty,
+                ':user_id' => $nik,
+                ':user_desc' => $name,
+            ];
 
-			if (!$model->save()) {
-				return json_encode($model->errors);
-			}
+            $sql = "{CALL RDR_DPR_CREATE(:material_document_number, :rdr_dpr, :category, :normal_urgent, :act_rcv_qty, :user_id, :user_desc)}";
 
-			return $this->redirect(Url::previous());
+			try {
+                $result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryOne();
+                $hasil = $result['HASIL'];
+                if ($hasil == 'SUKSES') {
+                    \Yii::$app->session->setFlash('success', 'RDR/DPR form created successfully...');
+                } elseif ($hasil == 'NOMER SLIP SUDAH TERDAFTAR') {
+                    \Yii::$app->session->setFlash('warning', 'This slip number already registered...!');
+                }
+            } catch (Exception $ex) {
+                return json_encode($ex);
+            }
+            
+            return $this->redirect(Url::previous());
 		} else {
 			return $this->renderAjax('report', [
 				'model' => $model,
@@ -69,7 +72,6 @@ class RdrDprController extends \app\controllers\base\IqaInspectionController
 		$this->layout = 'rdr-dpr\main';
 	    $searchModel  = new IqaInspectionSearch;
 	    $searchModel->TRANS_ID = '11';
-	    $searchModel->LAST_UPDATE = date('Y-m-d');
 
 	    if(\Yii::$app->request->get('LAST_UPDATE') !== null)
 	    {
