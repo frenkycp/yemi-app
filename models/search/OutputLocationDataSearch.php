@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['flo', 'adv'], 'integer'],
-            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'so', 'loct', 'speaker_model', 'rfid_no', 'cntr'], 'safe'],
+            [['pk', 'gmc', 'proddate', 'sernum', 'qa_ok', 'qa_ok_date', 'plan', 'status', 'invoice', 'vms', 'etd_ship', 'line', 'port', 'so', 'loct', 'speaker_model', 'rfid_no', 'cntr', 'loct_time'], 'safe'],
 ];
 }
 
@@ -91,6 +91,7 @@ $query->andFilterWhere([
             ->andFilterWhere(['like', 'model', $this->speaker_model])
             ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
+            ->andFilterWhere(['like', 'loct_time', $this->loct_time])
             ->andFilterWhere(['like', 'qa_ng_date', $this->qa_ng_date])
             ->andFilterWhere(['like', 'qa_ok_date', $this->qa_ok_date])
             ->andFilterWhere(['like', 'plan', $this->plan]);
