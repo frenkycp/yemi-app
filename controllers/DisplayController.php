@@ -120,9 +120,29 @@ use app\models\ServerStatus;
 use app\models\SkillMasterLogView;
 use app\models\SkillMasterDailyTraining;
 use app\models\MaskerTransaksi;
+use app\models\MaskerIn;
 
 class DisplayController extends Controller
 {
+    public function actionMaskerInfo()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $masker_in_qty = MaskerIn::find()->select(['total' => 'SUM(qty)'])->where(['idmasker' => 1])->one();
+        $masker_out_qty = MaskerTransaksi::find()->select(['total' => 'SUM(qty)'])->where(['idmasker' => 1])->one();
+        $stock = $masker_in_qty->total - $masker_out_qty->total;
+
+        $masker_in = MaskerIn::find()->all();
+        $masker_out = MaskerTransaksi::find()->all();
+
+        return $this->render('masker-info', [
+            'stock' => $stock,
+            'masker_in' => $masker_in,
+            'masker_out' => $masker_out,
+        ]);
+    }
+
     public function actionMaskUsingMonthly()
     {
         $this->layout = 'clean';
