@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use app\models\BookingShipTrackView;
 use app\models\BookingShipTrack02;
+use yii\web\JsExpression;
 
 class PartsImportWeeklyController extends Controller
 {
@@ -76,34 +77,56 @@ class PartsImportWeeklyController extends Controller
     		$tmp_data = [];
     		$tmp_data_open = [];
             $tmp_data_open2 = [];
+            $tmp_data_open3 = [];
     		$tmp_data_close = [];
     		foreach ($booking_data_arr as $booking_data) {
     			if ($week_no == $booking_data->WEEK) {
     				$tmp_category[] = $booking_data->DATE;
     				$open_qty = (int)$booking_data->total_open;
                     $open_qty2 = (int)$booking_data->total_open2;
+                    $open_qty3 = (int)$booking_data->total_open + (int)$booking_data->total_open2;
     				$close_qty = (int)$booking_data->total_close;
     				$order_qty = $open_qty + $close_qty;
+                    $datetime1 = new \DateTime(date('Y-m-d'));
+                    $datetime2 = new \DateTime($booking_data->DATE);
+                    $interval = $datetime1->diff($datetime2);
 
-    				$tmp_data_open[] = [
-    					'y' => $open_qty == 0 ? null : $open_qty,
-    					//'y' => $open_qty == 0 ? null : $open_qty,
-    					'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID NOT IN (3, 4)', $booking_data->DATE, $trans_method, 0)
-    				];
+                    if ($interval->format('%a') > 7) {
+                        $open_qty = $open_qty2 = 0;
+                    } else {
+                        $open_qty3 = 0;
+                    }
+
+                    $tmp_data_open[] = [
+                        'y' => $open_qty == 0 ? null : $open_qty,
+                        //'y' => $open_qty == 0 ? null : $open_qty,
+                        'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID NOT IN (3, 4)', $booking_data->DATE, $trans_method, 0)
+                    ];
                     $tmp_data_open2[] = [
                         'y' => $open_qty2 == 0 ? null : $open_qty2,
                         'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID IN (3, 4)', $booking_data->DATE, $trans_method, 0)
                     ];
-    				$tmp_data_close[] = [
-    					'y' => $close_qty == 0 ? null : $close_qty,
-    					//'y' => $close_qty == 0 ? null : $close_qty,
-    					'remark' => $this->getRemark('STAT_02 = \'C\'', $booking_data->DATE, $trans_method, 0)
-    				];
+                    $tmp_data_open3[] = [
+                        'y' => $open_qty3 == 0 ? null : $open_qty3,
+                        //'y' => $open_qty == 0 ? null : $open_qty,
+                        'remark' => $this->getRemark('STAT_02 = \'O\'', $booking_data->DATE, $trans_method, 0)
+                    ];
+                    $tmp_data_close[] = [
+                        'y' => $close_qty == 0 ? null : $close_qty,
+                        //'y' => $close_qty == 0 ? null : $close_qty,
+                        'remark' => $this->getRemark('STAT_02 = \'C\'', $booking_data->DATE, $trans_method, 0)
+                    ];
     			}
     		}
     		$data[$week_no][] = [
     			'category' => $tmp_category,
     			'data' => [
+                    [
+                        'name' => 'Cancel',
+                        'data' => $tmp_data_open3,
+                        'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+                        //'showInLegend' => false,
+                    ],
     				[
     					'name' => 'Prepared',
     					'data' => $tmp_data_open,

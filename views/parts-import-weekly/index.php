@@ -106,7 +106,7 @@ echo '</pre>';*/
             echo Highcharts::widget([
                 'scripts' => [
                     'modules/exporting',
-                    'themes/grid-light',
+                    //'themes/grid-light',
                 ],
                 'options' => [
                     'chart' => [
