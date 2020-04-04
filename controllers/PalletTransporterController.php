@@ -128,9 +128,6 @@ class PalletTransporterController extends Controller
 	public function actionProcessArrival($line, $nik)
 	{
 		date_default_timezone_set('Asia/Jakarta');
-		if ($line = 'L85') {
-			return $this->redirect('index');
-		}
 		
 		$log = SernoSlipLog::find()->where([
 			'line' => $line, 
@@ -172,10 +169,14 @@ class PalletTransporterController extends Controller
 			    ['loct_time' => $log->pk],
 			];
 
-			SernoInput::updateAll([
-				'loct' => 1,
-				'loct_time' => date('Y-m-d H:i:s'),
-			], $condition);
+			if ($line != 'L85') {
+				SernoInput::updateAll([
+					'loct' => 1,
+					'loct_time' => date('Y-m-d H:i:s'),
+				], $condition);
+			}
+
+			
 		}
 		\Yii::$app->getSession()->setFlash('info', 'You have finished order from line ' . $line . '...');
 
