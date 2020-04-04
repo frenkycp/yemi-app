@@ -25,13 +25,12 @@ $this->registerCss("
     .box-header .box-title{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
-    body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
-    .panel-body {background-color: black;}
+    .panel-body {background-color: #2a2a2b;}
 
     .table {font-size: 1em; letter-spacing: 1px; color: white;}
     .table > tbody > tr:nth-child(odd) > td {background-color: #2f2f2f; color: white;}
