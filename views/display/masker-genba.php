@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Mask (Medic) Stock & Using',
-    'tab_title' => 'Mask (Medic) Stock & Using',
-    'breadcrumbs_title' => 'Mask (Medic) Stock & Using'
+    'page_title' => 'Mask (GENBA) Stock & Using',
+    'tab_title' => 'Mask (GENBA) Stock & Using',
+    'breadcrumbs_title' => 'Mask (GENBA) Stock & Using'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
@@ -63,7 +63,7 @@ echo '</pre>';*/
 <div class="row">
     <div class="col-md-6">
         <div class="pull-left" id="my-header">
-            <span style="font-size: 2.5em; color: white;"><u>MASK (MEDIC) STOCK & USING</u></span><br/>
+            <span style="font-size: 2.5em; color: white;"><u>MASK (GENBA) STOCK & USING</u></span><br/>
             <span style="font-size: 1em; color: grey;">Last Update : <?= date('Y-m-d H:i:s'); ?>
         </div>
     </div>
@@ -77,10 +77,15 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['masker-info']),
+    'action' => Url::to(['masker-genba']),
 ]); ?>
 
 <div class="row">
+    <div class="col-md-5">
+        <?= $form->field($model, 'item')->dropDownList($item_dropdownlist, [
+            'prompt' => 'Choose item...'
+        ]); ?>
+    </div>
     <div class="col-md-4">
         <?php echo '<label class="control-label">Select date range</label>';
         echo DatePicker::widget([
@@ -116,7 +121,7 @@ echo '</pre>';*/
         <div class="row" style="padding: 15px;">
             <div class="col-md-12">
             <?php
-            echo Highcharts::widget([
+            echo !$model->load($_GET) ? '<span style="color: white;">No item selected...</span>' : Highcharts::widget([
                 'scripts' => [
                     'themes/dark-unica',
                 ],

@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\MaskerIn as BaseMaskerIn;
+use \app\models\base\MaskerPrdStock as BaseMaskerPrdStock;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "tb_masker_in".
+ * This is the model class for table "barang_in".
  */
-class MaskerIn extends BaseMaskerIn
+class MaskerPrdStock extends BaseMaskerPrdStock
 {
-    public $total, $post_date;
 
     public function behaviors()
     {

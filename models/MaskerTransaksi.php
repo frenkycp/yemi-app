@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MaskerTransaksi extends BaseMaskerTransaksi
 {
-    public $total;
+    public $total, $post_date;
 
     public function behaviors()
     {

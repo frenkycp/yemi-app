@@ -121,25 +121,173 @@ use app\models\SkillMasterLogView;
 use app\models\SkillMasterDailyTraining;
 use app\models\MaskerTransaksi;
 use app\models\MaskerIn;
+use app\models\MaskerPrdData;
+use app\models\MaskerPrdStock;
+use app\models\MaskerPrdIn;
+use app\models\MaskerPrdOut;
 
 class DisplayController extends Controller
 {
+    public function actionMaskerGenba()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $tmp_data_in = $tmp_data_out = $data = [];
+        $masker_genba_arr = \Yii::$app->params['masker_genba_partno'];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'item'
+        ]);
+        $model->addRule(['from_date', 'to_date', 'item'], 'required');
+
+        $model->from_date = date('Y-m-d', strtotime(' -1 month'));
+        $model->to_date = date('Y-m-d');
+
+        $item_dropdownlist = ArrayHelper::map(MaskerPrdData::find()->where(['part_no' => $masker_genba_arr])->orderBy('part_name')->all(), 'part_no', 'part_name');
+
+        if ($model->load($_GET)) {
+            $tmp_stock = MaskerPrdStock::find()->where(['part_no' => $model->item])->one();
+            $stock = $tmp_stock->qty;
+
+            $masker_in = MaskerPrdIn::find()
+            ->select([
+                'post_date' => 'DATE(tgl)',
+                'total' => 'SUM(qty)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'DATE(tgl)', $model->from_date],
+                ['<=', 'DATE(tgl)', $model->to_date]
+            ])
+            ->andWhere(['part_number' => $model->item])
+            ->groupBy('DATE(tgl)')
+            ->orderBy('DATE(tgl)')
+            ->all();
+            foreach ($masker_in as $key => $value) {
+                $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
+                $tmp_data_in[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value->total
+                ];
+            }
+            $data[] = [
+                'name' => 'IN',
+                'data' => $tmp_data_in
+            ];
+
+            $masker_out = MaskerPrdOut::find()
+            ->select([
+                'post_date' => 'DATE(time)',
+                'total' => 'SUM(jml_kb)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'DATE(time)', $model->from_date],
+                ['<=', 'DATE(time)', $model->to_date]
+            ])
+            ->andWhere(['part_no' => $model->item])
+            ->groupBy('DATE(time)')
+            ->orderBy('DATE(time)')
+            ->all();
+            foreach ($masker_out as $key => $value) {
+                $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
+                $tmp_data_out[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value->total
+                ];
+            }
+            $data[] = [
+                'name' => 'OUT',
+                'data' => $tmp_data_out
+            ];
+        }
+
+        return $this->render('masker-genba', [
+            'stock' => $stock,
+            'model' => $model,
+            'data' => $data,
+            'item_dropdownlist' => $item_dropdownlist,
+        ]);
+    }
+
     public function actionMaskerInfo()
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
+        $tmp_data_in = $tmp_data_out = $data = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-d', strtotime(' -1 month'));
+        $model->to_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
 
         $masker_in_qty = MaskerIn::find()->select(['total' => 'SUM(qty)'])->where(['idmasker' => 1])->one();
         $masker_out_qty = MaskerTransaksi::find()->select(['total' => 'SUM(qty)'])->where(['idmasker' => 1])->one();
         $stock = $masker_in_qty->total - $masker_out_qty->total;
 
-        $masker_in = MaskerIn::find()->all();
-        $masker_out = MaskerTransaksi::find()->all();
+        $masker_in = MaskerIn::find()
+        ->select([
+            'post_date' => 'DATE(datetime)',
+            'total' => 'SUM(qty)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'DATE(datetime)', $model->from_date],
+            ['<=', 'DATE(datetime)', $model->to_date]
+        ])
+        ->andWhere(['idmasker' => 1])
+        ->groupBy('DATE(datetime)')
+        ->orderBy('DATE(datetime)')
+        ->all();
+        foreach ($masker_in as $key => $value) {
+            $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
+            $tmp_data_in[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total
+            ];
+        }
+        $data[] = [
+            'name' => 'IN',
+            'data' => $tmp_data_in
+        ];
+
+        $masker_out = MaskerTransaksi::find()
+        ->select([
+            'post_date' => 'DATE(datetime)',
+            'total' => 'SUM(qty)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'DATE(datetime)', $model->from_date],
+            ['<=', 'DATE(datetime)', $model->to_date]
+        ])
+        ->andWhere(['idmasker' => 1])
+        ->groupBy('DATE(datetime)')
+        ->orderBy('DATE(datetime)')
+        ->all();
+        foreach ($masker_out as $key => $value) {
+            $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
+            $tmp_data_out[] = [
+                'x' => $proddate,
+                'y' => (int)$value->total
+            ];
+        }
+        $data[] = [
+            'name' => 'OUT',
+            'data' => $tmp_data_out
+        ];
 
         return $this->render('masker-info', [
             'stock' => $stock,
-            'masker_in' => $masker_in,
-            'masker_out' => $masker_out,
+            'model' => $model,
+            'data' => $data,
         ]);
     }
 
