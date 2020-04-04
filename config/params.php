@@ -329,6 +329,16 @@ return [
         '200A' => 'SOLEH.png', //PURCHASING
         '230' => 'ROSA.png', //QUALITY ASSURANCE
     ],
+    'masker_genba_partno' => [
+        'BPM007011',
+        'BPM007012',
+        'BPS118013',
+        'BPS118015',
+        'BPS118016',
+        'BPS118017',
+        'N000634',
+        'N002754'
+    ],
 ];
 
 function getYearArray()
