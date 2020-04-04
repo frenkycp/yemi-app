@@ -128,6 +128,9 @@ class PalletTransporterController extends Controller
 	public function actionProcessArrival($line, $nik)
 	{
 		date_default_timezone_set('Asia/Jakarta');
+		if ($line = 'L85') {
+			return $this->redirect('index');
+		}
 		
 		$log = SernoSlipLog::find()->where([
 			'line' => $line, 
