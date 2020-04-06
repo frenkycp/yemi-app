@@ -125,6 +125,7 @@ use app\models\MaskerPrdData;
 use app\models\MaskerPrdStock;
 use app\models\MaskerPrdIn;
 use app\models\MaskerPrdOut;
+use app\models\MaskerStock;
 
 class DisplayController extends Controller
 {
@@ -228,9 +229,10 @@ class DisplayController extends Controller
 
         }
 
-        $masker_in_qty = MaskerIn::find()->select(['total' => 'SUM(qty)'])->where(['idmasker' => 1])->one();
-        $masker_out_qty = MaskerTransaksi::find()->select(['total' => 'SUM(qty)'])->where(['idmasker' => 1])->one();
-        $stock = $masker_in_qty->total - $masker_out_qty->total;
+        $tmp_stock = MaskerStock::find()->where(['id' => 1])->one();
+        //$masker_in_qty = MaskerIn::find()->select(['total' => 'SUM(qty)'])->where(['idmasker' => 1])->one();
+        //$masker_out_qty = MaskerTransaksi::find()->select(['total' => 'SUM(qty)'])->where(['idmasker' => 1])->one();
+        $stock = $tmp_stock->qty;
 
         $masker_in = MaskerIn::find()
         ->select([
