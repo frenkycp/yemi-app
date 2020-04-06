@@ -181,3 +181,12 @@ echo '</pre>';*/
         </div>
     </div>
 </div>
+
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>

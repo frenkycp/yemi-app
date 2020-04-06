@@ -129,6 +129,49 @@ use app\models\MaskerStock;
 
 class DisplayController extends Controller
 {
+    public function actionMaskerGenbaDetail($post_date, $part_no)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $item = MaskerPrdData::find()->where(['part_no' => $part_no])->one();
+        $tmp_data_arr = MaskerPrdOut::find()->where(['DATE(time)' => $post_date, 'part_no' => $part_no])->orderBy('time')->all();
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $item->part_name . ' using on ' . $post_date . '</h3>
+        </div>
+        <div class="modal-body">
+        ';
+        $data .= '<table class="table table-bordered table-hover">';
+        $data .= 
+        '<thead style=""><tr>
+            <th class="text-center">No</th>
+            <th class="text-center">Time</th>
+            <th class="text-center">Qty</th>
+            <th>Requestor</th>
+            <th>Remark</th>
+        </tr></thead>';
+        $data .= '<tbody style="">';
+
+        $no = 1;
+        foreach ($tmp_data_arr as $value) {
+            $data .= '
+                <tr class="' . $bg_class . '">
+                    <td class="text-center">' . $no . '</td>
+                    <td class="text-center">' . $value->time . '</td>
+                    <td class="text-center">' . $value->jml_kb . '</td>
+                    <td>' . $value->line . '</td>
+                    <td>' . $value->ket_kb . '</td>
+                </tr>
+            ';
+            $no++;
+        }
+        $data .= '</tbody>';
+
+        $data .= '</table>';
+        $data .= '<tbody>';
+        return $data;
+    }
+
     public function actionMaskerGenba()
     {
         $this->layout = 'clean';
@@ -194,12 +237,24 @@ class DisplayController extends Controller
                 $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
                 $tmp_data_out[] = [
                     'x' => $proddate,
-                    'y' => (int)$value->total
+                    'y' => (int)$value->total,
+                    'url' => Url::to(['masker-genba-detail', 'post_date' => $value->post_date, 'part_no' => $model->item])
                 ];
             }
             $data[] = [
                 'name' => 'OUT',
-                'data' => $tmp_data_out
+                'data' => $tmp_data_out,
+                'cursor' => 'pointer',
+                'point' => [
+                    'events' => [
+                        'click' => new JsExpression("
+                            function(e){
+                                e.preventDefault();
+                                $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                            }
+                        "),
+                    ]
+                ]
             ];
         }
 
@@ -209,6 +264,52 @@ class DisplayController extends Controller
             'data' => $data,
             'item_dropdownlist' => $item_dropdownlist,
         ]);
+    }
+
+    public function actionMaskerInfoDetail($post_date)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $tmp_data_arr = MaskerTransaksi::find()->where(['DATE(datetime)' => $post_date, 'idmasker' => 1])->orderBy('datetime')->all();
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Masker (MEDIC) using on ' . $post_date . '</h3>
+        </div>
+        <div class="modal-body">
+        ';
+        $data .= '<table class="table table-bordered table-hover">';
+        $data .= 
+        '<thead><tr>
+            <th class="text-center">No</th>
+            <th class="text-center">Time</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">Requestor ID</th>
+            <th>Requestor Name</th>
+            <th>Requestor Dept.</th>
+            <th>Remark</th>
+        </tr></thead>';
+        $data .= '<tbody>';
+
+        $no = 1;
+        foreach ($tmp_data_arr as $value) {
+            $data .= '
+                <tr>
+                    <td class="text-center">' . $no . '</td>
+                    <td class="text-center">' . $value->datetime . '</td>
+                    <td class="text-center">' . $value->qty . '</td>
+                    <td class="text-center">' . $value->nik . '</td>
+                    <td>' . $value->nama . '</td>
+                    <td>' . $value->dept . '</td>
+                    <td>' . $value->keperluan . '</td>
+                </tr>
+            ';
+            $no++;
+        }
+        $data .= '</tbody>';
+
+        $data .= '</table>';
+        $data .= '<tbody>';
+        return $data;
     }
 
     public function actionMaskerInfo()
@@ -278,12 +379,24 @@ class DisplayController extends Controller
             $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
             $tmp_data_out[] = [
                 'x' => $proddate,
-                'y' => (int)$value->total
+                'y' => (int)$value->total,
+                'url' => Url::to(['masker-info-detail', 'post_date' => $value->post_date])
             ];
         }
         $data[] = [
             'name' => 'OUT',
-            'data' => $tmp_data_out
+            'data' => $tmp_data_out,
+            'cursor' => 'pointer',
+            'point' => [
+                'events' => [
+                    'click' => new JsExpression("
+                        function(e){
+                            e.preventDefault();
+                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                        }
+                    "),
+                ]
+            ]
         ];
 
         return $this->render('masker-info', [
