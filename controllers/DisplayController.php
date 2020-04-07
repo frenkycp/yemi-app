@@ -126,9 +126,32 @@ use app\models\MaskerPrdStock;
 use app\models\MaskerPrdIn;
 use app\models\MaskerPrdOut;
 use app\models\MaskerStock;
+use app\models\AbsensiWfh;
 
 class DisplayController extends Controller
 {
+    public function actionWfhDailyReport()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'part_no', 'type'
+        ]);
+        $model->addRule(['from_date', 'to_date', 'type'], 'required')
+        ->addRule(['part_no'], 'string');
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+        $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+        
+        
+        $list_item_arr = [];
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){}
+
+        $this->render('wfh-daily-report');
+    }
     public function actionMaskerGenbaDetail($post_date, $part_no)
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -3559,14 +3582,14 @@ class DisplayController extends Controller
         ->all();
         $now = date('Y-m-d H:i:s');
 
-        $l_series_qty1 = $l_series_qty2 = $hs_series_qty1 = $hs_series_qty2 = $p40_series_qty1 = $p40_series_qty2 = $others_qty1 = $others_qty2 = $xxx_series_qty1 = $xxx_series_qty2 = 0;
+        $l_series_qty1 = $l_series_qty2 = $hs_series_qty1 = $hs_series_qty2 = $p40_series_qty1 = $p40_series_qty2 = $others_qty1 = $others_qty2 = $xxx_series_qty1 = $xxx_series_qty2 = $dsr_series_qty1 = $dsr_series_qty2 = 0;
         $tmp_time_arr = [];
         foreach ($tmp_beacon as $key => $value) {
             $waktu1 = strtotime($value->start_date);
             $waktu2 = strtotime($now);
             $waktu_balance_s = $waktu2 - $waktu1;
             $limit_s = 24 * 3600;
-            if ($tmp_model_group->line == 'XXX') {
+            if ($tmp_model_group->line == 'XXX' || $tmp_model_group->line == 'DSR') {
                 $limit_s = 36 * 3600;
             }
             $tmp_time_arr[] = [
@@ -3586,6 +3609,8 @@ class DisplayController extends Controller
                     $p40_series_qty1 += $value->lot_qty;
                 } elseif ($tmp_model_group->line == 'XXX') {
                     $xxx_series_qty1 += $value->lot_qty;
+                } elseif ($tmp_model_group->line == 'DSR') {
+                    $dsr_series_qty1 += $value->lot_qty;
                 } else {
                     $others_qty1 += $value->lot_qty;
                 }
@@ -3598,6 +3623,8 @@ class DisplayController extends Controller
                     $p40_series_qty2 += $value->lot_qty;
                 } elseif ($tmp_model_group->line == 'XXX') {
                     $xxx_series_qty2 += $value->lot_qty;
+                } elseif ($tmp_model_group->line == 'DSR') {
+                    $dsr_series_qty2 += $value->lot_qty;
                 } else {
                     $others_qty2 += $value->lot_qty;
                 }
@@ -3615,6 +3642,8 @@ class DisplayController extends Controller
             'others2' => $others_qty2,
             'xxx_1' => $xxx_series_qty1,
             'xxx_2' => $xxx_series_qty2,
+            'dsr1' => $dsr_series_qty1,
+            'dsr2' => $dsr_series_qty2,
         ];
 
         return $this->render('wip-control3', [

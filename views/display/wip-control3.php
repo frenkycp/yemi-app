@@ -140,6 +140,11 @@ $this->registerJs($script, View::POS_HEAD );
                     <td class="text-center actual"><?= number_format($data['xxx_1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
                     <td class="text-center actual<?= $data['xxx_2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['xxx_2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
                 </tr>
+                <tr>
+                    <td style="">DSR - Series</td>
+                    <td class="text-center actual"><?= number_format($data['dsr1']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                    <td class="text-center actual<?= $data['dsr2'] > 0 ? ' text-red' : ' text-green'; ?>"><?= number_format($data['dsr2']); ?> <span style="font-size: 0.3em;">PCS</span></td>
+                </tr>
             </tbody>
         </table>
     </div>
