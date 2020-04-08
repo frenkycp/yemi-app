@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SunfishEmpAttendance extends BaseSunfishEmpAttendance
 {
-    public $post_date, $period, $name, $shift_filter, $present;
+    public $post_date, $period, $name, $shift_filter, $present, $total_absent, $total_present, $total_permit, $total_sick, $total_cuti, $total_late, $total_early_out, $total_shift1, $total_shift2, $total_shift3, $total_shift4, $total_ck_no_disiplin, $total_ck;
 
     public function behaviors()
     {

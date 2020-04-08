@@ -58,7 +58,7 @@ echo '</pre>';*/
 
                 <h3 class="profile-username text-center" style="font-size: 16px;"><?= $model_karyawan->NAMA_KARYAWAN ?></h3>
 
-                <p class="text-muted text-center" style="font-size: 14px;"><?= $model_karyawan->NIK; ?></p>
+                <p class="text-muted text-center" style="font-size: 14px;"><?= $model_karyawan->NIK_SUN_FISH; ?></p>
 
                 <ul class="list-group list-group-unbordered" style="">
                     <li class="list-group-item">
@@ -146,6 +146,7 @@ echo '</pre>';*/
                             <th style="text-align: center; vertical-align: middle; width: 100px;">Come Late</th>
                             <th style="text-align: center; vertical-align: middle; width: 100px;">Home Early</th>
                             <th style="text-align: center; vertical-align: middle; width: 100px;">Personal Leave</th>
+                            <th style="text-align: center; vertical-align: middle; width: 100px;">Special Leave</th>
                             <th style="text-align: center; vertical-align: middle; width: 100px;">Disciplinary<br/>Allowance</th>
                             <th style="text-align: center; vertical-align: middle; width: 100px;">Overtime (hour)</th>
                             <th style="text-align: center; vertical-align: middle; width: 100px;">Total<br/>Shift II</th>
@@ -155,17 +156,17 @@ echo '</pre>';*/
                     </thead>
                     <tbody>
                         <?php
-                        $total_alpa = $total_ijin = $total_sakit = $total_dl = $total_pc = $total_cuti = $grand_total_lembur = 0;
+                        $total_alpa = $total_ijin = $total_sakit = $total_dl = $total_pc = $total_cuti = $grand_total_lembur = $total_ck = 0;
                         $grade = substr($model_karyawan->GRADE, 0, 1);
-                        foreach ($absensi_data as $value) {
+                        foreach ($absensi_data_sunfish as $value) {
                             // $data_lembur = SplView::find()
                             // ->select([
                             //     'PERIOD',
                             //     'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
                             // ])
                             // ->where([
-                            //     'NIK' => $value->NIK,
-                            //     'PERIOD' => $value->PERIOD
+                            //     'NIK' => $value->emp_no,
+                            //     'PERIOD' => $value->period
                             // ])
                             // ->groupBy('PERIOD')
                             // ->one();
@@ -175,60 +176,72 @@ echo '</pre>';*/
                             ])
                             ->where([
                                 'emp_no' => $model_karyawan->NIK_SUN_FISH,
-                                'FORMAT(shiftstarttime, \'yyyyMM\')' => $value->PERIOD
+                                'FORMAT(shiftstarttime, \'yyyyMM\')' => $value->period
                             ])
                             ->one();
 
                             $disiplin_icon = '<i class="fa fa-circle-o text-green"></i>';
-                            if ($value->NO_DISIPLIN > 0 || in_array($grade, ['L', 'M', 'D'])) {
-                                $disiplin_icon = Html::a('<i class="fa fa-close text-red"></i>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
+                            if (($value->total_absent > 0
+                                || $value->total_permit > 0
+                                || $value->total_sick > 0
+                                || $value->total_late > 0
+                                || $value->total_early_out > 0
+                                || $value->total_ck_no_disiplin > 0) || in_array($grade, ['L', 'M', 'D'])) {
+                                //$disiplin_icon = Html::a('<i class="fa fa-close text-red"></i>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period], ['class' => 'popup_btn']);
+                                $disiplin_icon = '<i class="fa fa-close text-red"></i>';
                             }
                             //$disiplin_icon = (int)$value->DISIPLIN;
 
                             $total_lembur = $data_lembur->total_ot > 0 ? round(($data_lembur->total_ot / 60), 2) : '-';
 
                             if ($total_lembur != '-') {
-                                $total_lembur = Html::a('<span class="badge bg-green">' . $total_lembur . '</span>', ['get-lembur-detail','nik' => $model_karyawan->NIK_SUN_FISH, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->PERIOD], ['class' => 'popup_btn']);
+                                $total_lembur = Html::a('<span class="badge bg-green">' . $total_lembur . '</span>', ['get-lembur-detail','nik' => $model_karyawan->NIK_SUN_FISH, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period], ['class' => 'popup_btn']);
                                 $grand_total_lembur += round(($data_lembur->total_ot / 60), 2);
                             }
 
                             $alpha_val = '-';
-                            if ($value->ALPHA > 0) {
-                                $alpha_val = Html::a('<span class="badge bg-yellow">' . $value->ALPHA . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'A'], ['class' => 'popup_btn']);
-                                $total_alpa += $value->ALPHA;
+                            if ($value->total_absent > 0) {
+                                $alpha_val = Html::a('<span class="badge bg-yellow">' . $value->total_absent . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'A'], ['class' => 'popup_btn']);
+                                $total_alpa += $value->total_absent;
                             }
 
                             $ijin_val = '-';
-                            if ($value->IJIN > 0) {
-                                $ijin_val = Html::a('<span class="badge bg-yellow">' . $value->IJIN . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'I'], ['class' => 'popup_btn']);
-                                $total_ijin += $value->IJIN;
+                            if ($value->total_permit > 0) {
+                                $ijin_val = Html::a('<span class="badge bg-yellow">' . $value->total_permit . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'I'], ['class' => 'popup_btn']);
+                                $total_ijin += $value->total_permit;
                             }
 
                             $sakit_val = '-';
-                            if ($value->SAKIT > 0) {
-                                $sakit_val = Html::a('<span class="badge bg-yellow">' . $value->SAKIT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'S'], ['class' => 'popup_btn']);
-                                $total_sakit += $value->SAKIT;
+                            if ($value->total_sick > 0) {
+                                $sakit_val = Html::a('<span class="badge bg-yellow">' . $value->total_sick . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'S'], ['class' => 'popup_btn']);
+                                $total_sakit += $value->total_sick;
                             }
 
                             $dl_val = '-';
-                            if ($value->DATANG_TERLAMBAT > 0) {
-                                $dl_val = Html::a('<span class="badge bg-yellow">' . $value->DATANG_TERLAMBAT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'DL'], ['class' => 'popup_btn']);
-                                $total_dl += $value->DATANG_TERLAMBAT;
+                            if ($value->total_late > 0) {
+                                $dl_val = Html::a('<span class="badge bg-yellow">' . $value->total_late . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'DL'], ['class' => 'popup_btn']);
+                                $total_dl += $value->total_late;
                             }
 
                             $pc_val = '-';
-                            if ($value->PULANG_CEPAT > 0) {
-                                $pc_val = Html::a('<span class="badge bg-yellow">' . $value->PULANG_CEPAT . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'PC'], ['class' => 'popup_btn']);
-                                $total_pc += $value->PULANG_CEPAT;
+                            if ($value->total_early_out > 0) {
+                                $pc_val = Html::a('<span class="badge bg-yellow">' . $value->total_early_out . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'PC'], ['class' => 'popup_btn']);
+                                $total_pc += $value->total_early_out;
                             }
 
                             $cuti_val = '-';
-                            if ($value->CUTI > 0) {
-                                $cuti_val = Html::a('<span class="badge bg-yellow">' . $value->CUTI . '</span>', ['get-disiplin-detail','nik'=>$value->NIK, 'nama_karyawan' => $value->NAMA_KARYAWAN, 'period' => $value->PERIOD, 'note' => 'C'], ['class' => 'popup_btn']);
-                                $total_cuti += $value->CUTI;
+                            if ($value->total_cuti > 0) {
+                                $cuti_val = Html::a('<span class="badge bg-yellow">' . $value->total_cuti . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'C'], ['class' => 'popup_btn']);
+                                $total_cuti += $value->total_cuti;
                             }
 
-                            $period = date('M\' Y', strtotime($value->PERIOD . '01'));
+                            $ck_val = '-';
+                            if ($value->total_ck > 0) {
+                                $ck_val = Html::a('<span class="badge bg-yellow">' . $value->total_ck . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'CK'], ['class' => 'popup_btn']);
+                                $total_ck += $value->total_ck;
+                            }
+
+                            $period = date('M\' Y', strtotime($value->period . '01'));
                             
                             echo '<tr>';
                             echo '<td style="text-align: center;">' . $period . '</td>';
@@ -238,11 +251,12 @@ echo '</pre>';*/
                             echo '<td style="text-align: center;">' . $dl_val . '</td>';
                             echo '<td style="text-align: center;">' . $pc_val . '</td>';
                             echo '<td style="text-align: center;">' . $cuti_val . '</td>';
+                            echo '<td style="text-align: center;">' . $ck_val . '</td>';
                             echo '<td style="text-align: center;">' . $disiplin_icon . '</td>';
                             echo '<td style="text-align: center;">' . $total_lembur . '</td>';
-                            echo '<td style="text-align: center;">' . $value->SHIFT2 . '</td>';
-                            echo '<td style="text-align: center;">' . $value->SHIFT3 . '</td>';
-                            echo '<td style="text-align: center;">' . $value->SHIFT4 . '</td>';
+                            echo '<td style="text-align: center;">' . $value->total_shift2 . '</td>';
+                            echo '<td style="text-align: center;">' . $value->total_shift3 . '</td>';
+                            echo '<td style="text-align: center;">' . $value->total_shift4 . '</td>';
                             echo '</tr>';
                         }
 
@@ -259,6 +273,7 @@ echo '</pre>';*/
                         echo '<td style="text-align: center;"><span class="">' . $total_dl . '</span></td>';
                         echo '<td style="text-align: center;"><span class="">' . $total_pc . '</span></td>';
                         echo '<td style="text-align: center;"><span class="">' . $total_cuti . '</span></td>';
+                        echo '<td style="text-align: center;"><span class="">' . $total_ck . '</span></td>';
                         echo '<td style="text-align: center;"></td>';
                         echo '<td style="text-align: center;"><span class="">' . $lembur_str . '</span></td>';
                         echo '<td style="text-align: center;"></td>';
@@ -271,100 +286,82 @@ echo '</pre>';*/
                 </table>
             </div>
         </div>
-        <div class="box box-primary box-solid">
+        <div class="box box-primary box-solid" style="display: none;">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fa fa-user"></i> <?= 'OT Management by Section (' . $section . ')' ?></h3>
             </div>
             <div class="box-body">
                 <?php
-                echo Highcharts::widget([
-                    'scripts' => [
-                        //'modules/exporting',
-                        'themes/grid-light',
-                        //'themes/dark-unica',
-                    ],
-                    'options' => [
-                        'chart' => [
-                            'type' => 'spline',
-                            'style' => [
-                                'fontFamily' => 'sans-serif',
-                            ],
-                            'zoomType' => 'x',
-                            //'height' => 290
-                        ],
-                        'credits' => [
-                            'enabled' => false
-                        ],
-                        'title' => [
-                            'text' => null,
-                        ],
-                        'subtitle' => [
-                            'text' => '',
-                        ],
-                        'xAxis' => [
-                            'categories' => $categories,
+                // echo Highcharts::widget([
+                //     'scripts' => [
+                //         'themes/grid-light',
+                //     ],
+                //     'options' => [
+                //         'chart' => [
+                //             'type' => 'spline',
+                //             'style' => [
+                //                 'fontFamily' => 'sans-serif',
+                //             ],
+                //             'zoomType' => 'x',
+                //         ],
+                //         'credits' => [
+                //             'enabled' => false
+                //         ],
+                //         'title' => [
+                //             'text' => null,
+                //         ],
+                //         'subtitle' => [
+                //             'text' => '',
+                //         ],
+                //         'xAxis' => [
+                //             'categories' => $categories,
 
-                        ],
-                        'yAxis' => [
-                            'title' => [
-                                'text' => 'HOURS'
-                            ],
-                            'min' => 0,
-                            'max' => 100,
-                            'plotLines' => [
-                                [
-                                    'value' => 10,
-                                    'color' => 'orange',
-                                    'dashStyle' => 'shortdash',
-                                    'width' => 2,
-                                    'label' => [
-                                        'text' => 'NORMAL (10)',
-                                        'align' => 'left',
-                                    ],
-                                    //'zIndex' => 5
-                                ], [
-                                    'value' => 20,
-                                    'color' => 'red',
-                                    'dashStyle' => 'shortdash',
-                                    'width' => 2,
-                                    'label' => [
-                                        'text' => 'MAXIMUM (20)',
-                                        'align' => 'left',
-                                    ],
-                                    //'zIndex' => 5
-                                ]
-                            ]
-                        ],
-                        'plotOptions' => [
-                            'spline' => [
-                                'dataLabels' => [
-                                    'enabled' => true,
-                                ],
-                            ],
-                            'series' => [
-                                'cursor' => 'pointer',
-                                'marker' => [
-                                    'enabled' => false
-                                ],
-                                'dataLabels' => [
-                                    //'allowOverlap' => true
-                                    //'enabled' => true
-                                ],
-                                /*'point' => [
-                                    'events' => [
-                                        'click' => new JsExpression("
-                                            function(e){
-                                                e.preventDefault();
-                                                $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                            }
-                                        "),
-                                    ]
-                                ]*/
-                            ]
-                        ],
-                        'series' => $data,
-                    ],
-                ]);
+                //         ],
+                //         'yAxis' => [
+                //             'title' => [
+                //                 'text' => 'HOURS'
+                //             ],
+                //             'min' => 0,
+                //             'max' => 100,
+                //             'plotLines' => [
+                //                 [
+                //                     'value' => 10,
+                //                     'color' => 'orange',
+                //                     'dashStyle' => 'shortdash',
+                //                     'width' => 2,
+                //                     'label' => [
+                //                         'text' => 'NORMAL (10)',
+                //                         'align' => 'left',
+                //                     ],
+                //                     //'zIndex' => 5
+                //                 ], [
+                //                     'value' => 20,
+                //                     'color' => 'red',
+                //                     'dashStyle' => 'shortdash',
+                //                     'width' => 2,
+                //                     'label' => [
+                //                         'text' => 'MAXIMUM (20)',
+                //                         'align' => 'left',
+                //                     ],
+                //                 ]
+                //             ]
+                //         ],
+                //         'plotOptions' => [
+                //             'spline' => [
+                //                 'dataLabels' => [
+                //                     'enabled' => true,
+                //                 ],
+                //             ],
+                //             'series' => [
+                //                 'cursor' => 'pointer',
+                //                 'marker' => [
+                //                     'enabled' => false
+                //                 ],
+                //             ]
+                //         ],
+                //         'series' => $data,
+                //     ],
+                // ]);
                 ?>
             </div>
         </div>
