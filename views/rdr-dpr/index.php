@@ -60,8 +60,8 @@ use kartik\grid\GridView;
 
 $this->title = [
     'page_title' => null,
-    'tab_title' => 'Fixed Asset',
-    'breadcrumbs_title' => 'Fixed Asset'
+    'tab_title' => 'RDR - DPR Application',
+    'breadcrumbs_title' => 'RDR - DPR Application'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 

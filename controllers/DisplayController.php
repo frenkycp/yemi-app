@@ -136,21 +136,34 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
 
         $model = new \yii\base\DynamicModel([
-            'from_date', 'to_date', 'part_no', 'type'
+            'from_date', 'to_date', 'in_out'
         ]);
-        $model->addRule(['from_date', 'to_date', 'type'], 'required')
-        ->addRule(['part_no'], 'string');
+        $model->addRule(['from_date', 'to_date', 'in_out'], 'required');
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
-        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-d');
+
+        if ($model->load($_GET)) { }
 
         $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
         $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
-        
+
+        $tmp_absensi_wfh = AbsensiWfh::find()
+        ->select([
+            'TANGGAL' => 'FORMAT(TANGGAL, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'TANGGAL', $model->from_date . ' 00:00:00'],
+            ['<=', 'TANGGAL', $model->to_date . ' 11:59:59']
+        ])
+        ->all();
         
         $list_item_arr = [];
         for($i = $begin; $i <= $end; $i->modify('+1 day')){}
 
-        $this->render('wfh-daily-report');
+        return $this->render('wfh-daily-report', [
+            'model' => $model
+        ]);
     }
     public function actionMaskerGenbaDetail($post_date, $part_no)
     {

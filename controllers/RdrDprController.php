@@ -7,9 +7,57 @@ use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 use app\models\Karyawan;
 use app\models\search\IqaInspectionSearch;
+use app\models\search\RdrDprDataSearch;
+use app\models\RdrDprData;
 
 class RdrDprController extends \app\controllers\base\IqaInspectionController
 {
+    public function actionKorlapApprove($material_document_number)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('rdr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['rdr_user'];
+        $name = $session['rdr_name'];
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_model = RdrDprData::find()->where(['material_document_number' => $material_document_number])->one();
+        $tmp_model->korlap = $nik;
+        $tmp_model->korlap_desc = $name;
+        $tmp_model->korlap_confirm_date = date('Y-m-d H:i:s');
+
+        if ($tmp_model->save()) {
+            return $this->redirect(Url::previous());
+        } else {
+            return json_encode($model->errors);
+        }
+    }
+
+    public function actionKorlapApprovalData($value='')
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('rdr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['rdr_user'];
+        $this->layout = 'rdr-dpr\main';
+
+        $searchModel  = new RdrDprDataSearch;
+        $_GET['approval_type'] = 'korlap';
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('korlap-approval-data', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
 	public function actionReport($SEQ_LOG)
 	{
 		$session = \Yii::$app->session;
