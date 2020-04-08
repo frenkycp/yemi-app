@@ -49,7 +49,7 @@ echo '</pre>';*/
                         'style' => 'object-fit: cover; height: 120px; width: 120px;'
                     ]);
                 } else {
-                    echo Html::img('@web/uploads/profpic_02.png', [
+                    echo Html::img('@web/uploads/profpic_03.png', [
                         'class' => 'profile-user-img img-responsive img-circle',
                         'style' => 'object-fit: cover; height: 120px; width: 120px;'
                     ]);

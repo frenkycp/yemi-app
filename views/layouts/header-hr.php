@@ -73,7 +73,7 @@ $current_action = \Yii::$app->controller->action->id;
                             'class' => 'user-image',
                         ]);
                     } else {
-                        echo Html::img('@web/uploads/profpic_02.png', [
+                        echo Html::img('@web/uploads/profpic_03.png', [
                             'class' => 'user-image',
                         ]);
                     }
@@ -93,14 +93,14 @@ $current_action = \Yii::$app->controller->action->id;
                                 'class' => 'img-circle',
                             ]);
                         } else {
-                            echo Html::img('@web/uploads/profpic_02.png', [
+                            echo Html::img('@web/uploads/profpic_03.png', [
                                 'class' => 'img-circle',
                             ]);
                         }
                     ?>
 
                   <p style="font-size: 15px;">
-                    <?= ucwords(strtolower($model_karyawan->NAMA_KARYAWAN)); ?> - <?= ucwords(strtolower($model_karyawan->DEPARTEMEN)); ?>
+                    <?= ucwords(strtolower($model_karyawan->NAMA_KARYAWAN)); ?><br/><?= ucwords(strtolower($model_karyawan->DEPARTEMEN)); ?>
                     <small>Member since : <?= date('d M\' Y', strtotime($model_karyawan->TGL_MASUK_YEMI)); ?></small>
                   </p>
                 </li>
