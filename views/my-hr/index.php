@@ -158,15 +158,15 @@ echo '</pre>';*/
                         <?php
                         $total_alpa = $total_ijin = $total_sakit = $total_dl = $total_pc = $total_cuti = $grand_total_lembur = $total_ck = 0;
                         $grade = substr($model_karyawan->GRADE, 0, 1);
-                        foreach ($absensi_data_sunfish as $value) {
+                        foreach ($data_attendance_arr as $value) {
                             // $data_lembur = SplView::find()
                             // ->select([
                             //     'PERIOD',
                             //     'NILAI_LEMBUR_ACTUAL' => 'SUM(NILAI_LEMBUR_ACTUAL)'
                             // ])
                             // ->where([
-                            //     'NIK' => $value->emp_no,
-                            //     'PERIOD' => $value->period
+                            //     'NIK' => $value['emp_no'],
+                            //     'PERIOD' => $value['period']
                             // ])
                             // ->groupBy('PERIOD')
                             // ->one();
@@ -176,72 +176,72 @@ echo '</pre>';*/
                             ])
                             ->where([
                                 'emp_no' => $model_karyawan->NIK_SUN_FISH,
-                                'FORMAT(shiftstarttime, \'yyyyMM\')' => $value->period
+                                'FORMAT(shiftstarttime, \'yyyyMM\')' => $value['period']
                             ])
                             ->one();
 
                             $disiplin_icon = '<i class="fa fa-circle-o text-green"></i>';
-                            if (($value->total_absent > 0
-                                || $value->total_permit > 0
-                                || $value->total_sick > 0
-                                || $value->total_late > 0
-                                || $value->total_early_out > 0
-                                || $value->total_ck_no_disiplin > 0) || in_array($grade, ['L', 'M', 'D'])) {
-                                //$disiplin_icon = Html::a('<i class="fa fa-close text-red"></i>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period], ['class' => 'popup_btn']);
+                            if (($value['total_absent'] > 0
+                                || $value['total_permit'] > 0
+                                || $value['total_sick'] > 0
+                                || $value['total_late'] > 0
+                                || $value['total_early_out'] > 0
+                                || $value['total_ck_no_disiplin'] > 0) || in_array($grade, ['L', 'M', 'D'])) {
+                                //$disiplin_icon = Html::a('<i class="fa fa-close text-red"></i>', ['get-disiplin-detail','nik'=>$value['emp_no'], 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period']], ['class' => 'popup_btn']);
                                 $disiplin_icon = '<i class="fa fa-close text-red"></i>';
                             }
-                            //$disiplin_icon = (int)$value->DISIPLIN;
+                            //$disiplin_icon = (int)$value['DISIPLIN'];
 
                             $total_lembur = $data_lembur->total_ot > 0 ? round(($data_lembur->total_ot / 60), 2) : '-';
 
                             if ($total_lembur != '-') {
-                                $total_lembur = Html::a('<span class="badge bg-green">' . $total_lembur . '</span>', ['get-lembur-detail','nik' => $model_karyawan->NIK_SUN_FISH, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period], ['class' => 'popup_btn']);
+                                $total_lembur = Html::a('<span class="badge bg-green">' . $total_lembur . '</span>', ['get-lembur-detail','nik' => $model_karyawan->NIK_SUN_FISH, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period']], ['class' => 'popup_btn']);
                                 $grand_total_lembur += round(($data_lembur->total_ot / 60), 2);
                             }
 
                             $alpha_val = '-';
-                            if ($value->total_absent > 0) {
-                                $alpha_val = Html::a('<span class="badge bg-yellow">' . $value->total_absent . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'A'], ['class' => 'popup_btn']);
-                                $total_alpa += $value->total_absent;
+                            if ($value['total_absent'] > 0) {
+                                $alpha_val = Html::a('<span class="badge bg-yellow">' . $value['total_absent'] . '</span>', ['get-disiplin-detail','nik'=>$value['emp_no'], 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period'], 'source' => $value['source'], 'note' => 'A'], ['class' => 'popup_btn']);
+                                $total_alpa += $value['total_absent'];
                             }
 
                             $ijin_val = '-';
-                            if ($value->total_permit > 0) {
-                                $ijin_val = Html::a('<span class="badge bg-yellow">' . $value->total_permit . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'I'], ['class' => 'popup_btn']);
-                                $total_ijin += $value->total_permit;
+                            if ($value['total_permit'] > 0) {
+                                $ijin_val = Html::a('<span class="badge bg-yellow">' . $value['total_permit'] . '</span>', ['get-disiplin-detail','nik'=>$value['emp_no'], 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period'], 'source' => $value['source'], 'note' => 'I'], ['class' => 'popup_btn']);
+                                $total_ijin += $value['total_permit'];
                             }
 
                             $sakit_val = '-';
-                            if ($value->total_sick > 0) {
-                                $sakit_val = Html::a('<span class="badge bg-yellow">' . $value->total_sick . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'S'], ['class' => 'popup_btn']);
-                                $total_sakit += $value->total_sick;
+                            if ($value['total_sick'] > 0) {
+                                $sakit_val = Html::a('<span class="badge bg-yellow">' . $value['total_sick'] . '</span>', ['get-disiplin-detail','nik'=>$value['emp_no'], 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period'], 'source' => $value['source'], 'note' => 'S'], ['class' => 'popup_btn']);
+                                $total_sakit += $value['total_sick'];
                             }
 
                             $dl_val = '-';
-                            if ($value->total_late > 0) {
-                                $dl_val = Html::a('<span class="badge bg-yellow">' . $value->total_late . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'DL'], ['class' => 'popup_btn']);
-                                $total_dl += $value->total_late;
+                            if ($value['total_late'] > 0) {
+                                $dl_val = Html::a('<span class="badge bg-yellow">' . $value['total_late'] . '</span>', ['get-disiplin-detail','nik'=>$value['emp_no'], 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period'], 'source' => $value['source'], 'note' => 'DL'], ['class' => 'popup_btn']);
+                                $total_dl += $value['total_late'];
                             }
 
                             $pc_val = '-';
-                            if ($value->total_early_out > 0) {
-                                $pc_val = Html::a('<span class="badge bg-yellow">' . $value->total_early_out . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'PC'], ['class' => 'popup_btn']);
-                                $total_pc += $value->total_early_out;
+                            if ($value['total_early_out'] > 0) {
+                                $pc_val = Html::a('<span class="badge bg-yellow">' . $value['total_early_out'] . '</span>', ['get-disiplin-detail','nik'=>$value['emp_no'], 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period'], 'source' => $value['source'], 'note' => 'PC'], ['class' => 'popup_btn']);
+                                $total_pc += $value['total_early_out'];
                             }
 
                             $cuti_val = '-';
-                            if ($value->total_cuti > 0) {
-                                $cuti_val = Html::a('<span class="badge bg-yellow">' . $value->total_cuti . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'C'], ['class' => 'popup_btn']);
-                                $total_cuti += $value->total_cuti;
+                            if ($value['total_cuti'] > 0) {
+                                $cuti_val = Html::a('<span class="badge bg-yellow">' . $value['total_cuti'] . '</span>', ['get-disiplin-detail','nik'=>$value['emp_no'], 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period'], 'source' => $value['source'], 'note' => 'C'], ['class' => 'popup_btn']);
+                                $total_cuti += $value['total_cuti'];
                             }
 
                             $ck_val = '-';
-                            if ($value->total_ck > 0) {
-                                $ck_val = Html::a('<span class="badge bg-yellow">' . $value->total_ck . '</span>', ['get-disiplin-detail','nik'=>$value->emp_no, 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value->period, 'note' => 'CK'], ['class' => 'popup_btn']);
-                                $total_ck += $value->total_ck;
+                            if ($value['total_ck'] > 0) {
+                                $ck_val = Html::a('<span class="badge bg-yellow">' . $value['total_ck'] . '</span>', ['get-disiplin-detail','nik'=>$value['emp_no'], 'nama_karyawan' => $model_karyawan->NAMA_KARYAWAN, 'period' => $value['period'], 'source' => $value['source'], 'note' => 'CK'], ['class' => 'popup_btn']);
+                                $total_ck += $value['total_ck'];
                             }
 
-                            $period = date('M\' Y', strtotime($value->period . '01'));
+                            $period = date('M\' Y', strtotime($value['period'] . '01'));
                             
                             echo '<tr>';
                             echo '<td style="text-align: center;">' . $period . '</td>';
@@ -254,9 +254,9 @@ echo '</pre>';*/
                             echo '<td style="text-align: center;">' . $ck_val . '</td>';
                             echo '<td style="text-align: center;">' . $disiplin_icon . '</td>';
                             echo '<td style="text-align: center;">' . $total_lembur . '</td>';
-                            echo '<td style="text-align: center;">' . $value->total_shift2 . '</td>';
-                            echo '<td style="text-align: center;">' . $value->total_shift3 . '</td>';
-                            echo '<td style="text-align: center;">' . $value->total_shift4 . '</td>';
+                            echo '<td style="text-align: center;">' . $value['total_shift2'] . '</td>';
+                            echo '<td style="text-align: center;">' . $value['total_shift3'] . '</td>';
+                            echo '<td style="text-align: center;">' . $value['total_shift4'] . '</td>';
                             echo '</tr>';
                         }
 

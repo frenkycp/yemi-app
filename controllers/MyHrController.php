@@ -48,6 +48,7 @@ class MyHrController extends Controller
         ])->one();
 
         $section = $model_karyawan->SECTION;
+        $data_attendance_arr = [];
 
         /*$model_rekap_absensi = RekapAbsensiView::find()->where([
             'NIK' => $nik,
@@ -56,31 +57,53 @@ class MyHrController extends Controller
         ->orderBy('PERIOD')
         ->all(); */
 
-        // $absensi_data = AbsensiTbl::find()
-        // ->select([
-        //     'PERIOD',
-        //     'NIK',
-        //     'NAMA_KARYAWAN',
-        //     'ALPHA' => 'SUM(CASE WHEN NOTE = \'A\' THEN 1 ELSE 0 END)',
-        //     'IJIN' => 'SUM(CASE WHEN NOTE = \'I\' THEN 1 ELSE 0 END)',
-        //     'SAKIT' => 'SUM(CASE WHEN NOTE = \'S\' THEN 1 ELSE 0 END)',
-        //     'CUTI' => 'SUM(CASE WHEN NOTE = \'C\' THEN 1 ELSE 0 END)',
-        //     'CUTI_KHUSUS' => 'SUM(CASE WHEN NOTE IN (\'CK\', \'CK1\', \'CK3\', \'CK5\', \'CK7\', \'CK10\', \'CK11\') THEN 1 ELSE 0 END)',
-        //     'NO_DISIPLIN' => 'SUM(CASE WHEN DISIPLIN = 0 AND CATEGORY != \'WAIT\' THEN 1 ELSE 0 END)',
-        //     'DATANG_TERLAMBAT' => 'SUM(CASE WHEN NOTE = \'DL\' THEN 1 ELSE 0 END)',
-        //     'PULANG_CEPAT' => 'SUM(CASE WHEN NOTE = \'PC\' THEN 1 ELSE 0 END)',
-        //     'SHIFT1' => 'SUM(CASE WHEN SHIFT = \'I\' THEN 1 ELSE 0 END)',
-        //     'SHIFT2' => 'SUM(CASE WHEN SHIFT = \'II\' THEN 1 ELSE 0 END)',
-        //     'SHIFT3' => 'SUM(CASE WHEN SHIFT = \'III\' THEN 1 ELSE 0 END)',
-        //     'SHIFT4' => 'SUM(CASE WHEN SHIFT = \'IV.1\' THEN 1 WHEN SHIFT = \'IV.2\' THEN 1 WHEN SHIFT = \'IV.3\' THEN 1 ELSE 0 END)'
-        // ])
-        // ->where([
-        //     'NIK' => $nik,
-        //     'YEAR' => $this_year
-        // ])
-        // ->groupBy('PERIOD, NIK, NAMA_KARYAWAN')
-        // ->orderBy('PERIOD')
-        // ->all();
+        $absensi_data = AbsensiTbl::find()
+        ->select([
+            'PERIOD',
+            'NIK',
+            'NAMA_KARYAWAN',
+            'ALPHA' => 'SUM(CASE WHEN NOTE = \'A\' THEN 1 ELSE 0 END)',
+            'IJIN' => 'SUM(CASE WHEN NOTE = \'I\' THEN 1 ELSE 0 END)',
+            'SAKIT' => 'SUM(CASE WHEN NOTE = \'S\' THEN 1 ELSE 0 END)',
+            'CUTI' => 'SUM(CASE WHEN NOTE = \'C\' THEN 1 ELSE 0 END)',
+            'CUTI_KHUSUS' => 'SUM(CASE WHEN PATINDEX(\'%CK%\', NOTE) > 0 THEN 1 ELSE 0 END)',
+            'CUTI_KHUSUS_ND' => 'SUM(CASE WHEN NOTE IN (\'CK9\', \'CK10\', \'CK11\') THEN 1 ELSE 0 END)',
+            'NO_DISIPLIN' => 'SUM(CASE WHEN DISIPLIN = 0 AND CATEGORY != \'WAIT\' THEN 1 ELSE 0 END)',
+            'DATANG_TERLAMBAT' => 'SUM(CASE WHEN NOTE = \'DL\' THEN 1 ELSE 0 END)',
+            'PULANG_CEPAT' => 'SUM(CASE WHEN NOTE = \'PC\' THEN 1 ELSE 0 END)',
+            'SHIFT1' => 'SUM(CASE WHEN SHIFT = \'I\' THEN 1 ELSE 0 END)',
+            'SHIFT2' => 'SUM(CASE WHEN SHIFT = \'II\' THEN 1 ELSE 0 END)',
+            'SHIFT3' => 'SUM(CASE WHEN SHIFT = \'III\' THEN 1 ELSE 0 END)',
+            'SHIFT4' => 'SUM(CASE WHEN SHIFT = \'IV.1\' THEN 1 WHEN SHIFT = \'IV.2\' THEN 1 WHEN SHIFT = \'IV.3\' THEN 1 ELSE 0 END)'
+        ])
+        ->where([
+            'NIK' => $nik,
+            'YEAR' => $this_year
+        ])
+        ->andWhere(['<', 'PERIOD', '202004'])
+        ->groupBy('PERIOD, NIK, NAMA_KARYAWAN')
+        ->orderBy('PERIOD')
+        ->all();
+
+        foreach ($absensi_data as $key => $value) {
+            $data_attendance_arr[$value['PERIOD']] = [
+                'emp_no' => $value->NIK,
+                'period' => $value->PERIOD,
+                'source' => 1,
+                'total_absent' => $value->ALPHA,
+                'total_present' => 0,
+                'total_permit' => $value->IJIN,
+                'total_sick' => $value->SAKIT,
+                'total_late' => $value->DATANG_TERLAMBAT,
+                'total_early_out' => $value->PULANG_CEPAT,
+                'total_shift2' => $value->SHIFT2,
+                'total_shift3' => $value->SHIFT3,
+                'total_shift4' => $value->SHIFT4,
+                'total_cuti' => $value->CUTI,
+                'total_ck' => $value->CUTI_KHUSUS,
+                'total_ck_no_disiplin' => $value->CUTI_KHUSUS_ND,
+            ];
+        }
 
         $absensi_data_sunfish = SunfishEmpAttendance::find()
         ->select([
@@ -105,9 +128,30 @@ class MyHrController extends Controller
             'emp_no' => $model_karyawan->NIK_SUN_FISH,
         ])
         ->andWhere(['<>', 'shiftdaily_code', 'OFF'])
+        ->andWhere(['>=', 'FORMAT(shiftstarttime, \'yyyyMM\')', '202004'])
         ->groupBy(['emp_no', 'FORMAT(shiftstarttime, \'yyyyMM\')'])
         ->orderBy('period')
         ->all();
+
+        foreach ($absensi_data_sunfish as $key => $value) {
+            $data_attendance_arr[$value['period']] = [
+                'emp_no' => $value->emp_no,
+                'period' => $value->period,
+                'source' => 2,
+                'total_absent' => $value->total_absent,
+                'total_present' => $value->total_present,
+                'total_permit' => $value->total_permit,
+                'total_sick' => $value->total_sick,
+                'total_late' => $value->total_late,
+                'total_early_out' => $value->total_early_out,
+                'total_shift2' => $value->total_shift2,
+                'total_shift3' => $value->total_shift3,
+                'total_shift4' => $value->total_shift4,
+                'total_cuti' => $value->total_cuti,
+                'total_ck' => $value->total_ck,
+                'total_ck_no_disiplin' => $value->total_ck_no_disiplin,
+            ];
+        }
 
         /*$rekap_cuti_arr = CutiRekapView02::find()
         ->where([
@@ -221,7 +265,8 @@ class MyHrController extends Controller
             'year' => $this_year,
             'section' => $section,
             'categories' => $categories,
-            'data' => $data
+            'data' => $data,
+            'data_attendance_arr' => $data_attendance_arr,
 		]);
 	}
 
@@ -645,16 +690,67 @@ class MyHrController extends Controller
         return $data;
     }
 
-    public function actionGetDisiplinDetail($nik, $nama_karyawan, $period, $note = 'DISIPLIN')
+    public function getCodeDescription($note = '', $attend_code = '')
     {
-        if ($note == 'DISIPLIN') {
-            // $abensi_data_arr = AbsensiTbl::find()->where([
-            //     'NIK' => $nik,
-            //     'PERIOD' => $period,
-            //     'DISIPLIN' => 0
-            // ])
-            // ->orderBy('DATE')
-            // ->all();
+        if ($note == 'S') {
+            $keterangan = 'SICK';
+        } elseif ($note == 'I') {
+            $keterangan = 'PERMIT';
+        } elseif ($note == 'A') {
+            $keterangan = 'ABSENT';
+        } elseif ($note == 'C') {
+            $keterangan = 'ON LEAVE';
+        } elseif ($note == 'DL') {
+            $keterangan = 'COME LATE';
+        } elseif ($note == 'PC') {
+            $keterangan = 'GO HOME EARLY';
+        } else {
+            $keterangan = '-';
+        }
+        
+        if (strpos($attend_code, 'CK15')) {
+            $keterangan = 'Saudara Kandung Menikah';
+        } elseif (strpos($attend_code, 'CK13')) {
+            $keterangan = 'Musibah';
+        } elseif (strpos($attend_code, 'CK12')) {
+            $keterangan = 'Ibadah Haji / Ziarah Keagamaan';
+        } elseif (strpos($attend_code, 'CK11')) {
+            $keterangan = 'Keguguran';
+        } elseif (strpos($attend_code, 'CK10')) {
+            $keterangan = 'Melahirkan';
+        } elseif (strpos($attend_code, 'CK1')) {
+            $keterangan = 'Keluarga Meninggal';
+        } elseif (strpos($attend_code, 'CK2')) {
+            $keterangan = 'Keluarga Serumah Meninggal';
+        } elseif (strpos($attend_code, 'CK3')) {
+            $keterangan = 'Menikah';
+        } elseif (strpos($attend_code, 'CK4')) {
+            $keterangan = 'Menikahkan';
+        } elseif (strpos($attend_code, 'CK5')) {
+            $keterangan = 'Menghitankan';
+        } elseif (strpos($attend_code, 'CK6')) {
+            $keterangan = 'Membaptiskan';
+        } elseif (strpos($attend_code, 'CK7')) {
+            $keterangan = 'Istri Keguguran / Melahirkan';
+        } elseif (strpos($attend_code, 'CK8')) {
+            $keterangan = 'Tugas Negara';
+        } elseif (strpos($attend_code, 'CK9')) {
+            $keterangan = 'Haid';
+        }
+
+        return $keterangan;
+    }
+
+    public function actionGetDisiplinDetail($nik, $nama_karyawan, $period, $source, $note = 'DISIPLIN')
+    {
+        /*if ($note == 'DISIPLIN') {
+            $abensi_data_arr = AbsensiTbl::find()->where([
+                'NIK' => $nik,
+                'PERIOD' => $period,
+                'DISIPLIN' => 0
+            ])
+            ->orderBy('DATE')
+            ->all();
             $abensi_data_arr = SunfishEmpAttendance::find()
             ->where([
                 'emp_no' => $nik,
@@ -662,71 +758,8 @@ class MyHrController extends Controller
             ])
             ->all();
         } else {
-            if ($note == 'A') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
-                ->where([
-                    'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
-                ])
-                ->andWhere('PATINDEX(\'%ABS%\', Attend_Code) > 0')
-                ->orderBy('shiftstarttime')
-                ->all();
-            } elseif ($note == 'I') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
-                ->where([
-                    'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
-                ])
-                ->andWhere('PATINDEX(\'%Izin%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
-                ->orderBy('shiftstarttime')
-                ->all();
-            } elseif ($note == 'S') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
-                ->where([
-                    'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
-                ])
-                ->andWhere('PATINDEX(\'%SAKIT%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
-                ->orderBy('shiftstarttime')
-                ->all();
-            } elseif ($note == 'DL') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
-                ->where([
-                    'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
-                ])
-                ->andWhere('PATINDEX(\'%LTI%\', Attend_Code) > 0')
-                ->orderBy('shiftstarttime')
-                ->all();
-            } elseif ($note == 'PC') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
-                ->where([
-                    'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
-                ])
-                ->andWhere('PATINDEX(\'%EAO%\', Attend_Code) > 0')
-                ->orderBy('shiftstarttime')
-                ->all();
-            } elseif ($note == 'C') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
-                ->where([
-                    'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
-                ])
-                ->andWhere('PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
-                ->orderBy('shiftstarttime')
-                ->all();
-            } elseif ($note == 'CK') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
-                ->where([
-                    'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
-                ])
-                ->andWhere('PATINDEX(\'%CK%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0')
-                ->orderBy('shiftstarttime')
-                ->all();
-            }
-            /*if ($note == 'CK') {
+            
+            if ($note == 'CK') {
                 $abensi_data_arr = AbsensiTbl::find()->where([
                     'NIK' => $nik,
                     'PERIOD' => $period,
@@ -742,8 +775,123 @@ class MyHrController extends Controller
                 ])
                 ->orderBy('DATE')
                 ->all();
-            }*/
+            }
             
+        }*/
+        $summary_data_arr = [];
+        if ($source == 1) {
+            if ($note == 'CK') {
+                $abensi_data_arr = AbsensiTbl::find()
+                ->where([
+                    'NIK' => $nik,
+                    'PERIOD' => $period,
+                ])
+                ->andWhere('PATINDEX(\'%CK%\', NOTE) > 0')
+                ->orderBy('DATE')
+                ->all();
+            } else {
+                $abensi_data_arr = AbsensiTbl::find()->where([
+                    'NIK' => $nik,
+                    'PERIOD' => $period,
+                    'NOTE' => $note
+                ])
+                ->orderBy('DATE')
+                ->all();
+            }
+
+            foreach ($abensi_data_arr as $key => $value) {
+                $keterangan = $this->getCodeDescription($note, $note);
+
+                $summary_data_arr[] = [
+                    'starttime' => $value->CHECK_IN,
+                    'endtime' => $value->CHECK_OUT,
+                    'keterangan' => $keterangan,
+                    'shiftstarttime' => date('Y-m-d', strtotime($value->DATE)),
+                ];
+            }
+        } else {
+            if ($note == 'A') {
+                $abensi_data_arr = SunfishEmpAttendance::find()
+                ->where([
+                    'emp_no' => $nik,
+                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                ])
+                ->andWhere('PATINDEX(\'%ABS%\', Attend_Code) > 0')
+                ->orderBy('shiftstarttime')
+                ->all();
+                
+            } elseif ($note == 'I') {
+                $abensi_data_arr = SunfishEmpAttendance::find()
+                ->where([
+                    'emp_no' => $nik,
+                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                ])
+                ->andWhere('PATINDEX(\'%Izin%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
+                ->orderBy('shiftstarttime')
+                ->all();
+                
+            } elseif ($note == 'S') {
+                $abensi_data_arr = SunfishEmpAttendance::find()
+                ->where([
+                    'emp_no' => $nik,
+                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                ])
+                ->andWhere('PATINDEX(\'%SAKIT%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
+                ->orderBy('shiftstarttime')
+                ->all();
+                
+            } elseif ($note == 'DL') {
+                $abensi_data_arr = SunfishEmpAttendance::find()
+                ->where([
+                    'emp_no' => $nik,
+                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                ])
+                ->andWhere('PATINDEX(\'%LTI%\', Attend_Code) > 0')
+                ->orderBy('shiftstarttime')
+                ->all();
+                
+            } elseif ($note == 'PC') {
+                $abensi_data_arr = SunfishEmpAttendance::find()
+                ->where([
+                    'emp_no' => $nik,
+                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                ])
+                ->andWhere('PATINDEX(\'%EAO%\', Attend_Code) > 0')
+                ->orderBy('shiftstarttime')
+                ->all();
+                
+            } elseif ($note == 'C') {
+                $abensi_data_arr = SunfishEmpAttendance::find()
+                ->where([
+                    'emp_no' => $nik,
+                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                ])
+                ->andWhere('PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
+                ->orderBy('shiftstarttime')
+                ->all();
+                
+            } elseif ($note == 'CK') {
+                $abensi_data_arr = SunfishEmpAttendance::find()
+                ->where([
+                    'emp_no' => $nik,
+                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                ])
+                ->andWhere('PATINDEX(\'%CK%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0')
+                ->orderBy('shiftstarttime')
+                ->all();
+                
+            }
+
+            foreach ($abensi_data_arr as $key => $value) {
+                $keterangan = $this->getCodeDescription($note, $value->Attend_Code);
+
+                $summary_data_arr[] = [
+                    'starttime' => $value->starttime,
+                    'endtime' => $value->endtime,
+                    'keterangan' => $keterangan,
+                    'shiftstarttime' => date('Y-m-d', strtotime($value->shiftstarttime)),
+                ];
+            }
         }
         
         $data = '<div class="modal-header">
@@ -763,23 +911,7 @@ class MyHrController extends Controller
         </tr></thead>'
         ;
         $data .= '<tbody>';
-        foreach ($abensi_data_arr as $key => $value) {
-            $keterangan = '-';
-            if ($note == 'S') {
-                $keterangan = 'SICK';
-            } elseif ($note == 'I') {
-                $keterangan = 'PERMIT';
-            } elseif ($note == 'A') {
-                $keterangan = 'ABSENT';
-            } elseif ($note == 'C') {
-                $keterangan = 'ON LEAVE';
-            } elseif ($note == 'DL') {
-                $keterangan = 'COME LATE';
-            } elseif ($note == 'PC') {
-                $keterangan = 'GO HOME EARLY';
-            } else {
-                $keterangan = '-';
-            }
+        foreach ($summary_data_arr as $key => $value) {
 
             // $check_in = $value['starttime'];
             // $check_out = $value['endtime'];
@@ -792,40 +924,12 @@ class MyHrController extends Controller
             $check_in = $value['starttime'] == null ? '-' : date('H:i:s', strtotime($value['starttime']));
             $check_out = $value['endtime'] == null ? '-' : date('H:i:s', strtotime($value['endtime']));
 
-            if (strpos($value['Attend_Code'], 'CK15')) {
-                $keterangan = 'Saudara Kandung Menikah';
-            } elseif (strpos($value['Attend_Code'], 'CK13')) {
-                $keterangan = 'Musibah';
-            } elseif (strpos($value['Attend_Code'], 'CK12')) {
-                $keterangan = 'Ibadah Haji / Ziarah Keagamaan';
-            } elseif (strpos($value['Attend_Code'], 'CK11')) {
-                $keterangan = 'Keguguran';
-            } elseif (strpos($value['Attend_Code'], 'CK10')) {
-                $keterangan = 'Melahirkan';
-            } elseif (strpos($value['Attend_Code'], 'CK1')) {
-                $keterangan = 'Keluarga Meninggal';
-            } elseif (strpos($value['Attend_Code'], 'CK2')) {
-                $keterangan = 'Keluarga Serumah Meninggal';
-            } elseif (strpos($value['Attend_Code'], 'CK3')) {
-                $keterangan = 'Menikah';
-            } elseif (strpos($value['Attend_Code'], 'CK4')) {
-                $keterangan = 'Menikahkan';
-            } elseif (strpos($value['Attend_Code'], 'CK5')) {
-                $keterangan = 'Menghitankan';
-            } elseif (strpos($value['Attend_Code'], 'CK6')) {
-                $keterangan = 'Membaptiskan';
-            } elseif (strpos($value['Attend_Code'], 'CK7')) {
-                $keterangan = 'Istri Keguguran / Melahirkan';
-            } elseif (strpos($value['Attend_Code'], 'CK8')) {
-                $keterangan = 'Tugas Negara';
-            } elseif (strpos($value['Attend_Code'], 'CK9')) {
-                $keterangan = 'Haid';
-            }
+            
 
             $data .= '
             <tr>
                 <td class="text-center">' . date('d M\' Y', strtotime($value['shiftstarttime'])) . '</td>
-                <td class="text-center">' . strtoupper($keterangan) . '</td>
+                <td class="text-center">' . strtoupper($value['keterangan']) . '</td>
                 <td class="text-center">' . $check_in . '</td>
                 <td class="text-center">' . $check_out . '</td>
             </tr>
