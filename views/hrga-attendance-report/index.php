@@ -37,23 +37,20 @@ echo '</pre>';*/
 ?>
 
 <?php $form = ActiveForm::begin([
-    'id' => 'form_index',
+    'method' => 'get',
     'layout' => 'horizontal',
-    'enableClientValidation' => true,
-    'errorSummaryCssClass' => 'error-summary alert alert-danger',
+    'action' => Url::to(['index']),
     'fieldConfig' => [
-             'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
-             'horizontalCssClasses' => [
-                 //'label' => 'col-sm-2',
-                 #'offset' => 'col-sm-offset-4',
-                 'wrapper' => 'col-sm-7',
-                 'error' => '',
-                 'hint' => '',
-             ],
-         ],
-    ]
-    );
-    ?>
+        'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
+        'horizontalCssClasses' => [
+            //'label' => 'col-sm-2',
+            #'offset' => 'col-sm-offset-4',
+            'wrapper' => 'col-sm-7',
+            'error' => '',
+            'hint' => '',
+        ],
+    ],
+]); ?>
 
     <div class="row">
         <div class="col-md-3">
@@ -80,7 +77,7 @@ echo '</pre>';*/
         <?php
         echo Highcharts::widget([
             'scripts' => [
-                'modules/exporting',
+                //'modules/exporting',
                 'themes/grid-light',
             ],
             'options' => [
@@ -100,28 +97,28 @@ echo '</pre>';*/
                     'text' => $subtitle
                 ],
                 'xAxis' => [
-                    'type' => 'category',
-                    'categories' => $category,
+                    'type' => 'datetime',
+                    //'categories' => $category,
                     'title' => [
                         'text' => 'Date'
                     ],
-                    'labels' => [
+                    /*'labels' => [
                         'formatter' => new JsExpression('function(){ return \'<a href="' . Yii::$app->request->baseUrl . '/serno-output/container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
-                    ],
+                    ],*/
                 ],
                 'yAxis' => [
                     'title' => [
                         'text' => 'Attendance Percentage (%)'
                     ],
-                    'stackLabels' => [
+                    /*'stackLabels' => [
                         'enabled' => true,
-                        'formatter' => new JsExpression('function(){ return this.y; }'),
-                    ]
+                        //'formatter' => new JsExpression('function(){ return this.y; }'),
+                    ]*/
                 ],
                 'tooltip' => [
                     'enabled' => true,
-                    'pointFormat' => '{series.name}: <b>{point.y}%</b> ({point.qty} employees)<br/>',
-                    'headerFormat' => null//'{point.key}-{point.year_month}<br/>'
+                    'pointFormat' => '{series.name}: <b>{point.percentage:.0f}%</b> ({point.y} employees)<br/>',
+                    //'headerFormat' => null//'{point.key}-{point.year_month}<br/>'
                 ],
                 'plotOptions' => [
                     'column' => [

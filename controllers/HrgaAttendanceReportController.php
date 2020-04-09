@@ -6,6 +6,7 @@ use app\models\PlanReceivingPeriod;
 use app\models\AbsensiTbl;
 use yii\web\JsExpression;
 use yii\Helpers\Url;
+use app\models\SunfishEmpAttendance;
 
 class HrgaAttendanceReportController extends Controller
 {
@@ -40,92 +41,124 @@ class HrgaAttendanceReportController extends Controller
             $year_arr[$year] = $year;
         }
 
-    	$model = new PlanReceivingPeriod();
-		$model->month = date('m');
-		$model->year = date('Y');
+		$model = new \yii\base\DynamicModel([
+            'month', 'year'
+        ]);
+        $model->addRule(['month', 'year'], 'required');
+        $model->month = date('m');
+        $model->year = date('Y');
 
-		if ($model->load($_POST))
+		if ($model->load($_GET))
 		{
 
 		}
 
 		$period = $model->year . $model->month;
 
-		$attendance_report_arr = AbsensiTbl::find()
-		->select([
-			'DATE' => 'DATE',
-			'total_karyawan' => 'SUM(TOTAL_KARYAWAN)',
-			'total_kehadiran' => 'SUM(CASE WHEN CATEGORY IN (\'SHIFT-01\', \'SHIFT-02\', \'SHIFT-03\', \'PULANG TIDAK ABSEN\', \'PULANG CEPAT\', \'DATANG TERLAMBAT\', \'DINAS\') THEN 1 ELSE 0 END)',
-			'total_cuti' => 'SUM(CASE WHEN CATEGORY IN (\'CUTI\', \'CUTI KHUSUS\', \'KELUARGA MENINGGAL\', \'MELAHIRKAN\', \'KEGUGURAN\', \'MENIKAH\', \'MENGHITANKAN\', \'ISTRI KEGUGURAN/MELAHIRKAN\', \'CUTI KHUSUS IJIN\') THEN 1 ELSE 0 END)'
-			//'total_cuti' => 'SUM(CASE WHEN CATEGORY=\'CUTI\' OR CATEGORY=\'CUTI KHUSUS\' OR CATEGORY=\'KELUARGA MENINGGAL\' OR CATEGORY=\'CUTI KHUSUS IJIN\' THEN 1 ELSE 0 END)'
-		])
-		->where([
-			'PERIOD' => $period
-		])
-		->groupBy('DATE')
-		->orderBy('DATE')
-		->all();
+		if ($period <= '202003') {
+			$attendance_report_arr = AbsensiTbl::find()
+			->select([
+				'DATE' => 'DATE',
+				'total_karyawan' => 'SUM(TOTAL_KARYAWAN)',
+				'total_kehadiran' => 'SUM(CASE WHEN CATEGORY IN (\'SHIFT-01\', \'SHIFT-02\', \'SHIFT-03\', \'PULANG TIDAK ABSEN\', \'PULANG CEPAT\', \'DATANG TERLAMBAT\', \'DINAS\') THEN 1 ELSE 0 END)',
+				'total_cuti' => 'SUM(CASE WHEN CATEGORY IN (\'CUTI\', \'CUTI KHUSUS\', \'KELUARGA MENINGGAL\', \'MELAHIRKAN\', \'KEGUGURAN\', \'MENIKAH\', \'MENGHITANKAN\', \'ISTRI KEGUGURAN/MELAHIRKAN\', \'CUTI KHUSUS IJIN\') THEN 1 ELSE 0 END)'
+				//'total_cuti' => 'SUM(CASE WHEN CATEGORY=\'CUTI\' OR CATEGORY=\'CUTI KHUSUS\' OR CATEGORY=\'KELUARGA MENINGGAL\' OR CATEGORY=\'CUTI KHUSUS IJIN\' THEN 1 ELSE 0 END)'
+			])
+			->where([
+				'PERIOD' => $period
+			])
+			->groupBy('DATE')
+			->orderBy('DATE')
+			->all();
 
-		$tmp_data_absen = [];
-		$tmp_data_hadir = [];
-		$tmp_data_cuti = [];
-		foreach ($attendance_report_arr as $attendance_report) {
+			$tmp_data_absen = [];
+			$tmp_data_hadir = [];
+			$tmp_data_cuti = [];
+			foreach ($attendance_report_arr as $attendance_report) {
+				$total_absent = $attendance_report->total_karyawan - ($attendance_report->total_kehadiran + $attendance_report->total_cuti);
+				/*$presentase_hadir = 0;
+				$presentase_cuti = 0;
+				if ($attendance_report->total_karyawan > 0) {
+					$presentase_hadir = floor((($attendance_report->total_kehadiran / $attendance_report->total_karyawan) * 100));
+					$presentase_cuti = round((($attendance_report->total_cuti / $attendance_report->total_karyawan) * 100));
+				}*/
 
-			$presentase_hadir = 0;
-			$presentase_cuti = 0;
-			if ($attendance_report->total_karyawan > 0) {
-				$presentase_hadir = floor((($attendance_report->total_kehadiran / $attendance_report->total_karyawan) * 100));
-				$presentase_cuti = round((($attendance_report->total_cuti / $attendance_report->total_karyawan) * 100));
+				//$category[] = date('j', strtotime($attendance_report->DATE));
+				$proddate = (strtotime($attendance_report->DATE . " +7 hours") * 1000);
+				//$presentase_absent = 100 - ($presentase_hadir + $presentase_cuti);
+				$tmp_data_absen[] = [
+					'x' => $proddate,
+					//'y' => $presentase_absent == 0 ? null : $presentase_absent,
+					'y' => (int)$total_absent,
+					//'remark' => $this->getRemark($attendance_report->DATE, 0),
+					//'qty' => $attendance_report->total_karyawan - ($attendance_report->total_kehadiran + $attendance_report->total_cuti),
+					'year_month' => date('M Y', strtotime($period)),
+					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 0]),
+				];
+				$tmp_data_cuti[] = [
+					'x' => $proddate,
+					//'y' => $presentase_cuti == 0 ? null : $presentase_cuti,
+					'y' => (int)$attendance_report->total_cuti,
+					//'remark' => $this->getRemark($attendance_report->DATE, 2),
+					//'qty' => $attendance_report->total_cuti,
+					'year_month' => date('M Y', strtotime($period)),
+					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 2]),
+				];
+				$tmp_data_hadir[] = [
+					'x' => $proddate,
+					//'y' => $presentase_hadir == 0 ? null : $presentase_hadir,
+					'y' => (int)$attendance_report->total_kehadiran,
+					//'remark' => $this->getRemark($attendance_report->DATE, 1),
+					//'qty' => $attendance_report->total_kehadiran,
+					'year_month' => date('M Y', strtotime($period)),
+					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 1]),
+				];
+				
+				
 			}
-
-			$category[] = date('j', strtotime($attendance_report->DATE));
-			$presentase_absent = 100 - ($presentase_hadir + $presentase_cuti);
-			$tmp_data_absen[] = [
-				'y' => $presentase_absent == 0 ? null : $presentase_absent,
-				//'remark' => $this->getRemark($attendance_report->DATE, 0),
-				'qty' => $attendance_report->total_karyawan - ($attendance_report->total_kehadiran + $attendance_report->total_cuti),
-				'year_month' => date('M Y', strtotime($period)),
-				'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 0]),
-			];
-			$tmp_data_cuti[] = [
-				'y' => $presentase_cuti == 0 ? null : $presentase_cuti,
-				//'remark' => $this->getRemark($attendance_report->DATE, 2),
-				'qty' => $attendance_report->total_cuti,
-				'year_month' => date('M Y', strtotime($period)),
-				'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 2]),
-			];
-			$tmp_data_hadir[] = [
-				'y' => $presentase_hadir == 0 ? null : $presentase_hadir,
-				//'remark' => $this->getRemark($attendance_report->DATE, 1),
-				'qty' => $attendance_report->total_kehadiran,
-				'year_month' => date('M Y', strtotime($period)),
-				'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 1]),
-			];
-			
-			
+		} else {
+			$tmp_attendance_data = SunfishEmpAttendance::find()
+			->select([
+				'post_date' => 'FORMAT(shiftstarttime, \'yyyy-MM-dd\')',
+				'total_present' => 'SUM(CASE WHEN PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+				'total_cuti' => 'SUM(CASE WHEN PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+			])
+			->groupBy(['FORMAT(shiftstarttime, \'yyyy-MM-dd\')'])
+			->all();
 		}
+
+		
 
 		$data = [
     		[
     			'name' => 'ABSENT',
     			'data' => $tmp_data_absen,
     			'dataLabels' => [
-    				'enabled' => false
+    				'enabled' => true,
+    				'format' => '{point.percentage:.0f}',
     			],
     			'color' => 'rgba(200, 200, 200, 0.4)',
-    			'showInLegend' => false,
+    			//'showInLegend' => false,
     		],
     		[
     			'name' => 'ON LEAVE',
     			'data' => $tmp_data_cuti,
+    			'dataLabels' => [
+    				'enabled' => true,
+    				'format' => '{point.percentage:.0f}',
+    			],
     			'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
-    			'showInLegend' => false,
+    			//'showInLegend' => false,
     		],
     		[
     			'name' => 'PRESENT',
     			'data' => $tmp_data_hadir,
+    			'dataLabels' => [
+    				'enabled' => true,
+    				'format' => '{point.percentage:.0f}',
+    			],
     			'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
-    			'showInLegend' => false,
+    			//'showInLegend' => false,
     		]
     	];
 
