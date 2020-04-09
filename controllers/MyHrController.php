@@ -80,7 +80,7 @@ class MyHrController extends Controller
             'NIK' => $nik,
             'YEAR' => $this_year
         ])
-        ->andWhere(['<', 'PERIOD', '202004'])
+        ->andWhere(['<', 'PERIOD', '202003'])
         ->groupBy('PERIOD, NIK, NAMA_KARYAWAN')
         ->orderBy('PERIOD')
         ->all();
@@ -128,7 +128,7 @@ class MyHrController extends Controller
             'emp_no' => $model_karyawan->NIK_SUN_FISH,
         ])
         ->andWhere(['<>', 'shiftdaily_code', 'OFF'])
-        ->andWhere(['>=', 'FORMAT(shiftstarttime, \'yyyyMM\')', '202004'])
+        ->andWhere(['>=', 'FORMAT(shiftstarttime, \'yyyyMM\')', '202003'])
         ->groupBy(['emp_no', 'FORMAT(shiftstarttime, \'yyyyMM\')'])
         ->orderBy('period')
         ->all();
