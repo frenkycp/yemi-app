@@ -264,12 +264,13 @@ class ClinicController extends controller
 	            <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
 	        </tr>';*/
 	        $table_container .= '<tr style="letter-spacing: 2px;">
-	            <td class="text-center">' . $value->nik . '</td>
+	            <td class="text-center">' . $value->nik_sun_fish . '</td>
 	            <td>' . $value->nama . '</td>
 	            <td>' . $value->dept . '</td>
 	            <td class="text-center">' . $category . '</td>
 	            <td class="text-center">' . $masuk . '</td>
 	            <td class="text-center">' . $keluar . '</td>
+	            <td class="text-center">' . $value->temperature . '</td>
 	            <td class="text-center">' . $value->last_status . '</td>
 	            <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
 	        </tr>';
@@ -277,7 +278,7 @@ class ClinicController extends controller
 
 	    if (count($data_clinic) == 0) {
 	        $table_container = '<tr>
-	        <td colspan="8">No Visitor Today</td>
+	        <td colspan="9">No Visitor Today</td>
 	        </tr>';
 	    }
 
