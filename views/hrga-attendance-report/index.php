@@ -31,7 +31,7 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($category);
+print_r($data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
