@@ -55,7 +55,10 @@ class HrgaAttendanceReportController extends Controller
 
 		$period = $model->year . $model->month;
 
-		if ($period <= '202003') {
+		$tmp_data_absen = [];
+		$tmp_data_hadir = [];
+		$tmp_data_cuti = [];
+		if ($period < '202003') {
 			$attendance_report_arr = AbsensiTbl::find()
 			->select([
 				'DATE' => 'DATE',
@@ -71,9 +74,6 @@ class HrgaAttendanceReportController extends Controller
 			->orderBy('DATE')
 			->all();
 
-			$tmp_data_absen = [];
-			$tmp_data_hadir = [];
-			$tmp_data_cuti = [];
 			foreach ($attendance_report_arr as $attendance_report) {
 				$total_absent = $attendance_report->total_karyawan - ($attendance_report->total_kehadiran + $attendance_report->total_cuti);
 				/*$presentase_hadir = 0;
@@ -93,7 +93,7 @@ class HrgaAttendanceReportController extends Controller
 					//'remark' => $this->getRemark($attendance_report->DATE, 0),
 					//'qty' => $attendance_report->total_karyawan - ($attendance_report->total_kehadiran + $attendance_report->total_cuti),
 					'year_month' => date('M Y', strtotime($period)),
-					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 0]),
+					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 0, 'sunfish' => false]),
 				];
 				$tmp_data_cuti[] = [
 					'x' => $proddate,
@@ -102,7 +102,7 @@ class HrgaAttendanceReportController extends Controller
 					//'remark' => $this->getRemark($attendance_report->DATE, 2),
 					//'qty' => $attendance_report->total_cuti,
 					'year_month' => date('M Y', strtotime($period)),
-					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 2]),
+					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 2, 'sunfish' => false]),
 				];
 				$tmp_data_hadir[] = [
 					'x' => $proddate,
@@ -111,7 +111,7 @@ class HrgaAttendanceReportController extends Controller
 					//'remark' => $this->getRemark($attendance_report->DATE, 1),
 					//'qty' => $attendance_report->total_kehadiran,
 					'year_month' => date('M Y', strtotime($period)),
-					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 1]),
+					'url' => Url::to(['get-remark', 'date' => $attendance_report->DATE, 'category' => 1, 'sunfish' => false]),
 				];
 				
 				
@@ -120,11 +120,60 @@ class HrgaAttendanceReportController extends Controller
 			$tmp_attendance_data = SunfishEmpAttendance::find()
 			->select([
 				'post_date' => 'FORMAT(shiftstarttime, \'yyyy-MM-dd\')',
-				'total_present' => 'SUM(CASE WHEN PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-				'total_cuti' => 'SUM(CASE WHEN PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+				'total_absent' => 'SUM(CASE WHEN PATINDEX(\'%ABS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+	            'total_present' => 'SUM(CASE WHEN PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+	            'total_permit' => 'SUM(CASE WHEN PATINDEX(\'%Izin%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+	            'total_sick' => 'SUM(CASE WHEN PATINDEX(\'%SAKIT%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+	            'total_cuti' => 'SUM(CASE WHEN PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+	            'total_late' => 'SUM(CASE WHEN PATINDEX(\'%LTI%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+	            'total_early_out' => 'SUM(CASE WHEN PATINDEX(\'%EAO%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+	            'total_shift2' => 'SUM(CASE WHEN shiftdaily_code = \'Shift_2\' AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+	            'total_shift3' => 'SUM(CASE WHEN shiftdaily_code = \'Shift_3\' AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+	            'total_shift4' => 'SUM(CASE WHEN PATINDEX(\'4G_Shift%\', shiftdaily_code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+	            'total_ck' => 'SUM(CASE WHEN PATINDEX(\'%CK%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)'
 			])
+			->where([
+	            'FORMAT(shiftstarttime, \'yyyyMM\')' => $period,
+	        ])
+	        ->andWhere(['<=', 'shiftstarttime', date('Y-m-d 23:59:59')])
 			->groupBy(['FORMAT(shiftstarttime, \'yyyy-MM-dd\')'])
+			->orderBy('post_date')
 			->all();
+
+			foreach ($tmp_attendance_data as $value) {
+				$proddate = (strtotime($value->post_date . " +7 hours") * 1000);
+				$total_absent = $value->total_absent + $value->total_permit + $value->total_sick;
+				$total_cuti = $value->total_cuti + $value->total_ck;
+				$total_hadir = $value->total_present;
+				//$presentase_absent = 100 - ($presentase_hadir + $presentase_cuti);
+				$tmp_data_absen[] = [
+					'x' => $proddate,
+					//'y' => $presentase_absent == 0 ? null : $presentase_absent,
+					'y' => (int)$total_absent,
+					//'remark' => $this->getRemark($attendance_report->DATE, 0),
+					//'qty' => $attendance_report->total_karyawan - ($attendance_report->total_kehadiran + $attendance_report->total_cuti),
+					'year_month' => date('M Y', strtotime($period)),
+					'url' => Url::to(['get-remark', 'date' => $value->post_date, 'category' => 0, 'sunfish' => true]),
+				];
+				$tmp_data_cuti[] = [
+					'x' => $proddate,
+					//'y' => $presentase_cuti == 0 ? null : $presentase_cuti,
+					'y' => (int)$total_cuti,
+					//'remark' => $this->getRemark($attendance_report->DATE, 2),
+					//'qty' => $attendance_report->total_cuti,
+					'year_month' => date('M Y', strtotime($period)),
+					'url' => Url::to(['get-remark', 'date' => $value->post_date, 'category' => 2, 'sunfish' => true]),
+				];
+				$tmp_data_hadir[] = [
+					'x' => $proddate,
+					//'y' => $presentase_hadir == 0 ? null : $presentase_hadir,
+					'y' => (int)$total_hadir,
+					//'remark' => $this->getRemark($attendance_report->DATE, 1),
+					//'qty' => $attendance_report->total_kehadiran,
+					'year_month' => date('M Y', strtotime($period)),
+					'url' => Url::to(['get-remark', 'date' => $value->post_date, 'category' => 1, 'sunfish' => true]),
+				];
+			}
 		}
 
 		
@@ -173,19 +222,58 @@ class HrgaAttendanceReportController extends Controller
     	]);
     }
 
-    public function actionGetRemark($date, $category)
+    public function getAttendCodeDescription($attend_code)
     {
-    	
-    	$attendance_report_arr = AbsensiTbl::find()->where([
-			'DATE' => $date,
-		])
-		->orderBy('SECTION, NIK')
-		->all();
+    	if (strpos($attend_code, 'CK15')) {
+            $keterangan = 'Saudara Kandung Menikah';
+        } elseif (strpos($attend_code, 'CK13')) {
+            $keterangan = 'Musibah';
+        } elseif (strpos($attend_code, 'CK12')) {
+            $keterangan = 'Ibadah Haji / Ziarah Keagamaan';
+        } elseif (strpos($attend_code, 'CK11')) {
+            $keterangan = 'Keguguran';
+        } elseif (strpos($attend_code, 'CK10')) {
+            $keterangan = 'Melahirkan';
+        } elseif (strpos($attend_code, 'CK1')) {
+            $keterangan = 'Keluarga Meninggal';
+        } elseif (strpos($attend_code, 'CK2')) {
+            $keterangan = 'Keluarga Serumah Meninggal';
+        } elseif (strpos($attend_code, 'CK3')) {
+            $keterangan = 'Menikah';
+        } elseif (strpos($attend_code, 'CK4')) {
+            $keterangan = 'Menikahkan';
+        } elseif (strpos($attend_code, 'CK5')) {
+            $keterangan = 'Menghitankan';
+        } elseif (strpos($attend_code, 'CK6')) {
+            $keterangan = 'Membaptiskan';
+        } elseif (strpos($attend_code, 'CK7')) {
+            $keterangan = 'Istri Keguguran / Melahirkan';
+        } elseif (strpos($attend_code, 'CK8')) {
+            $keterangan = 'Tugas Negara';
+        } elseif (strpos($attend_code, 'CK9')) {
+            $keterangan = 'Haid';
+        } elseif (strpos($attend_code, 'ABS')) {
+            $keterangan = 'Alpa';
+        } elseif (strpos($attend_code, 'Izin') && !strpos($attend_code, 'PRS')) {
+            $keterangan = 'Ijin';
+        } elseif (strpos($attend_code, 'SAKIT') && !strpos($attend_code, 'PRS')) {
+            $keterangan = 'Sakit';
+        } elseif (strpos($attend_code, 'CUTI') && !strpos($attend_code, 'PRS') && !strpos($attend_code, 'Izin')) {
+            $keterangan = 'Cuti Tahunan';
+        }
 
-		if ($category == 1) {
+        return $keterangan;
+    }
+
+    public function actionGetRemark($date, $category, $sunfish)
+    {
+    	if ($category == 1) {
 			$filter_arr = $this->category_masuk;
+			$filter_sunfish = 'PATINDEX(\'%PRS%\', Attend_Code) > 0';
 		} elseif ($category == 2) {
 			$filter_arr = $this->category_cuti;
+			$filter_sunfish = '(PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0)
+			OR (PATINDEX(\'%CK%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0)';
 		} else {
 			$tmp = AbsensiTbl::find()->select('DISTINCT(CATEGORY)')->where([
 				'DATE' => $date,
@@ -199,140 +287,92 @@ class HrgaAttendanceReportController extends Controller
 				}
 			}
 			$filter_arr = $tmp_arr;
+
+			$filter_sunfish = '(PATINDEX(\'%ABS%\', Attend_Code) > 0)
+			OR (PATINDEX(\'%Izin%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0)
+			OR (PATINDEX(\'%SAKIT%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0)';
 		}
 
-		$total_shift_arr = AbsensiTbl::find()
-		->select([
-			'SHIFT',
-			'total_karyawan' => 'COUNT(NIK)'
-		])
-		->where([
-			'DATE' => $date,
-			'CATEGORY' => $filter_arr
-		])
-		->groupBy('SHIFT')
-		->orderBy('SHIFT')
-		->all();
-
-		$data = '<p><b>Date : ' . date('Y-m-d', strtotime($date)) . '</b></p>';
-
-		foreach ($total_shift_arr as $total_shift) {
-			$shift_name = $total_shift->SHIFT != '' ? $total_shift->SHIFT : '[?]';
-			$data .= '<p>Total Shift ' . $shift_name . ' : ' . $total_shift->total_karyawan . '</p>';
-		}
-
-		$data .= '<table class="table table-bordered table-striped table-hover">';
-		$data .= 
-		'<tr style="font-size: 12px;">
-			<th class="text-center">NO</th>
-			<th class="text-center">NIK</th>
-			<th>Nama Karyawan</th>
-			<th class="text-center">Section</th>
-			<th class="text-center">Shift</th>
-			<th class="text-center">Keterangan</th>
-			<th class="text-center">Cek In</th>
-			<th class="text-center">Cek Out</th>
-            <th class="text-center">Bonus</th>
-            <th class="text-center">Disiplin</th>
-            <th class="text-center" style="width: 100px;">Hari Kerja/<br/>Libur</th>
-		</tr>'
-		;
-
-		$i = 1;
-		foreach ($attendance_report_arr as $attendance_report) {
-			if (in_array($attendance_report->CATEGORY, $filter_arr)) {
-
-				$check_in = $attendance_report['CHECK_IN'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_IN']));
-				$check_out = $attendance_report['CHECK_OUT'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_OUT']));
-
-				if (date('Y-m-d') == date('Y-m-d', strtotime($attendance_report['DATE'])) && $check_out == $check_in) {
-					$check_out = '-';
-				}
-
-				$bonus = '<i class="fa fa-fw fa-close text-red"></i>';
-				if ($attendance_report['BONUS'] == 1) {
-					$bonus = '<i class="fa fa-fw fa-check text-green"></i>';
-				}
-
-				$disiplin = '<i class="fa fa-fw fa-close text-red"></i>';
-				if ($attendance_report['DISIPLIN'] == 1) {
-					$disiplin = '<i class="fa fa-fw fa-check text-green"></i>';
-				}
-				$data .= '
-					<tr style="font-size: 12px;">
-						<td class="text-center">' . $i . '</td>
-						<td class="text-center">' . $attendance_report['NIK'] . '</td>
-						<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
-						<td class="text-center">' . $attendance_report['SECTION'] . '</td>
-						<td class="text-center">' . $attendance_report['SHIFT'] . '</td>
-	                    <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
-	                    <td class="text-center">' . $check_in . '</td>
-	                    <td class="text-center">' . $check_out . '</td>
-						<td class="text-center">' . $bonus . '</td>
-						<td class="text-center">' . $disiplin . '</td>
-						<td class="text-center">' . $attendance_report['DAY_STAT'] . '</td>
-					</tr>
-				';
-				$i++;
-			}
-			
-		}
-
-		$data .= '</table>';
-
-		return $data;
-    }
-
-    public function getRemark($date, $category)
-    {
-    	
-    	$attendance_report_arr = AbsensiTbl::find()->where([
-			'DATE' => $date,
-		])
-		->orderBy('SECTION, NIK')
-		->all();
-
-		if ($category == 1) {
-			$filter_arr = $this->category_masuk;
-		} elseif ($category == 2) {
-			$filter_arr = $this->category_cuti;
-		} else {
-			$tmp = AbsensiTbl::find()->select('DISTINCT(CATEGORY)')->where([
+		$attendance_report_arr = [];
+		if (!$sunfish) {
+    		$tmp_attendance_report_arr = AbsensiTbl::find()->where([
 				'DATE' => $date,
-			])->all();
+			])
+			->andWhere(['CATEGORY' => $filter_arr])
+			->orderBy('SECTION, NIK')
+			->all();
 
-			$tmp_arr = [];
-			$arr_merge = array_merge($this->category_masuk, $this->category_cuti);
-			foreach ($tmp as $value) {
-				if (!in_array($value->CATEGORY, $arr_merge)) {
-					$tmp_arr[] = $value->CATEGORY;
-				}
+			$total_shift_arr = AbsensiTbl::find()
+			->select([
+				'SHIFT',
+				'total_karyawan' => 'COUNT(NIK)'
+			])
+			->where([
+				'DATE' => $date,
+				'CATEGORY' => $filter_arr
+			])
+			->groupBy('SHIFT')
+			->orderBy('SHIFT')
+			->all();
+
+			foreach ($tmp_attendance_report_arr as $value) {
+				$attendance_report_arr[] = [
+					'CHECK_IN' => $value->CHECK_IN,
+					'CHECK_OUT' => $value->CHECK_OUT,
+					'DATE' => $value->DATE,
+					'NIK' => $value->NIK,
+					'NAMA_KARYAWAN' => $value->NAMA_KARYAWAN,
+					'SECTION' => $value->SECTION,
+					'SHIFT' => $value->SHIFT,
+					'CATEGORY' => $value->CATEGORY,
+				];
 			}
-			$filter_arr = $tmp_arr;
-		}
+    	} else {
+    		$tmp_attendance_report_arr = SunfishEmpAttendance::find()
+    		->where([
+	            'FORMAT(shiftstarttime, \'yyyy-MM-dd\')' => $date,
+	        ])
+	        ->andWhere($filter_sunfish)
+			->all();
 
-		$total_shift_arr = AbsensiTbl::find()
-		->select([
-			'SHIFT',
-			'total_karyawan' => 'COUNT(NIK)'
-		])
-		->where([
-			'DATE' => $date,
-			'CATEGORY' => $filter_arr
-		])
-		->groupBy('SHIFT')
-		->orderBy('SHIFT')
-		->all();
+			foreach ($tmp_attendance_report_arr as $value) {
+				$keterangan = $this->getAttendCodeDescription($value->Attend_Code);
+				$attendance_report_arr[] = [
+					'CHECK_IN' => $value->starttime,
+					'CHECK_OUT' => $value->endtime,
+					'DATE' => date('Y-m-d', strtotime($value->shiftstarttime)),
+					'NIK' => $value->emp_no,
+					'NAMA_KARYAWAN' => $value->empData->Full_name,
+					'SECTION' => $value->cost_center,
+					'SHIFT' => $value->shiftdaily_code,
+					'CATEGORY' => $keterangan,
+				];
+			}
+    	}
+
+    	
 
 		$data = '<p><b>Date : ' . date('Y-m-d', strtotime($date)) . '</b></p>';
 
-		foreach ($total_shift_arr as $total_shift) {
+		/*foreach ($total_shift_arr as $total_shift) {
 			$shift_name = $total_shift->SHIFT != '' ? $total_shift->SHIFT : '[?]';
 			$data .= '<p>Total Shift ' . $shift_name . ' : ' . $total_shift->total_karyawan . '</p>';
-		}
+		}*/
 
 		$data .= '<table class="table table-bordered table-striped table-hover">';
 		$data .= 
+		'<tr style="font-size: 12px;">
+			<th class="text-center">NO</th>
+			<th class="text-center">NIK</th>
+			<th>Nama Karyawan</th>
+			<th class="text-center">Section</th>
+			<th class="text-center">Shift</th>
+			<th class="text-center">Keterangan</th>
+			<th class="text-center">Cek In</th>
+			<th class="text-center">Cek Out</th>
+		</tr>'
+		;
+		/*$data .= 
 		'<tr style="font-size: 12px;">
 			<th class="text-center">NO</th>
 			<th class="text-center">NIK</th>
@@ -346,50 +386,60 @@ class HrgaAttendanceReportController extends Controller
             <th class="text-center">Disiplin</th>
             <th class="text-center" style="width: 100px;">Hari Kerja/<br/>Libur</th>
 		</tr>'
-		;
+		;*/
 
 		$i = 1;
 		foreach ($attendance_report_arr as $attendance_report) {
-			if (in_array($attendance_report->CATEGORY, $filter_arr)) {
+			$check_in = $attendance_report['CHECK_IN'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_IN']));
+			$check_out = $attendance_report['CHECK_OUT'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_OUT']));
 
-				$check_in = $attendance_report['CHECK_IN'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_IN']));
-				$check_out = $attendance_report['CHECK_OUT'] == null ? '-' : date('H:i', strtotime($attendance_report['CHECK_OUT']));
-
-				if (date('Y-m-d') == date('Y-m-d', strtotime($attendance_report['DATE'])) && $check_out == $check_in) {
-					$check_out = '-';
-				}
-
-				$bonus = '<i class="fa fa-fw fa-close text-red"></i>';
-				if ($attendance_report['BONUS'] == 1) {
-					$bonus = '<i class="fa fa-fw fa-check text-green"></i>';
-				}
-
-				$disiplin = '<i class="fa fa-fw fa-close text-red"></i>';
-				if ($attendance_report['DISIPLIN'] == 1) {
-					$disiplin = '<i class="fa fa-fw fa-check text-green"></i>';
-				}
-				$data .= '
-					<tr style="font-size: 12px;">
-						<td class="text-center">' . $i . '</td>
-						<td class="text-center">' . $attendance_report['NIK'] . '</td>
-						<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
-						<td class="text-center">' . $attendance_report['SECTION'] . '</td>
-						<td class="text-center">' . $attendance_report['SHIFT'] . '</td>
-	                    <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
-	                    <td class="text-center">' . $check_in . '</td>
-	                    <td class="text-center">' . $check_out . '</td>
-						<td class="text-center">' . $bonus . '</td>
-						<td class="text-center">' . $disiplin . '</td>
-						<td class="text-center">' . $attendance_report['DAY_STAT'] . '</td>
-					</tr>
-				';
-				$i++;
+			/*if (date('Y-m-d') == date('Y-m-d', strtotime($attendance_report['DATE'])) && $check_out == $check_in) {
+				$check_out = '-';
 			}
-			
+
+			$bonus = '<i class="fa fa-fw fa-close text-red"></i>';
+			if ($attendance_report['BONUS'] == 1) {
+				$bonus = '<i class="fa fa-fw fa-check text-green"></i>';
+			}
+
+			$disiplin = '<i class="fa fa-fw fa-close text-red"></i>';
+			if ($attendance_report['DISIPLIN'] == 1) {
+				$disiplin = '<i class="fa fa-fw fa-check text-green"></i>';
+			}*/
+
+			$data .= '
+				<tr style="font-size: 12px;">
+					<td class="text-center">' . $i . '</td>
+					<td class="text-center">' . $attendance_report['NIK'] . '</td>
+					<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
+					<td class="text-center">' . $attendance_report['SECTION'] . '</td>
+					<td class="text-center">' . $attendance_report['SHIFT'] . '</td>
+                    <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
+                    <td class="text-center">' . $check_in . '</td>
+                    <td class="text-center">' . $check_out . '</td>
+				</tr>
+			';
+			/*$data .= '
+				<tr style="font-size: 12px;">
+					<td class="text-center">' . $i . '</td>
+					<td class="text-center">' . $attendance_report['NIK'] . '</td>
+					<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
+					<td class="text-center">' . $attendance_report['SECTION'] . '</td>
+					<td class="text-center">' . $attendance_report['SHIFT'] . '</td>
+                    <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
+                    <td class="text-center">' . $check_in . '</td>
+                    <td class="text-center">' . $check_out . '</td>
+					<td class="text-center">' . $bonus . '</td>
+					<td class="text-center">' . $disiplin . '</td>
+					<td class="text-center">' . $attendance_report['DAY_STAT'] . '</td>
+				</tr>
+			';*/
+			$i++;
 		}
 
 		$data .= '</table>';
 
 		return $data;
     }
+
 }

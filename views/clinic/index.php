@@ -32,13 +32,13 @@ $this->registerCss("
         border:1px solid #8b8c8d;
         background-color: #858689;
         color: white;
-        font-size: 2.5em;
+        font-size: 2em;
         border-bottom: 7px solid #ddd;
         vertical-align: middle;
     }
     #clinic-tbl > tbody > tr > td{
         border:1px solid #ddd;
-        font-size: 2em;
+        font-size: 1.5em;
         background-color: #000;
         //font-weight: 1000;
         color: rgba(255, 235, 59, 1);
@@ -172,6 +172,7 @@ echo '</pre>';*/
             <th class="text-center">Kategori</th>
             <th class="text-center">Masuk</th>
             <th class="text-center">Keluar</th>
+            <th class="text-center">Suhu<br/>( &deg;C )</th>
             <th class="text-center">Status</th>
             <!--<th class="text-center">Kunjungan Bulan Ini<br/>(Periksa/Istirahat Sakit/Laktasi)</th>-->
             <th class="text-center">Konfirmasi<br/>Manager</th>
@@ -251,12 +252,13 @@ echo '</pre>';*/
                 <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
             </tr>';*/
             echo '<tr style="letter-spacing: 2px;">
-                <td class="text-center">' . $value->nik . '</td>
+                <td class="text-center">' . $value->nik_sun_fish . '</td>
                 <td>' . $value->nama . '</td>
                 <td>' . $value->dept . '</td>
                 <td class="text-center">' . $category . '</td>
                 <td class="text-center">' . $masuk . '</td>
                 <td class="text-center">' . $keluar . '</td>
+                <td class="text-center">' . $value->temperature . '</td>
                 <td class="text-center">' . $value->last_status . '</td>
                 <td class="text-center ' . $konfirmasi['class'] . '">' . $konfirmasi['text'] . '</td>
             </tr>';
@@ -264,7 +266,7 @@ echo '</pre>';*/
 
         if (count($data) == 0) {
             echo '<tr>
-            <td colspan="8">No Visitor Today</td>
+            <td colspan="9">No Visitor Today</td>
             </tr>';
         }
         ?>
