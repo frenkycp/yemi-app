@@ -290,6 +290,8 @@ $columns = [
         'value' => function($model){
             if ($model->remark != null) {
                 return '<abbr class="text-danger" title="' . $model->remark . '">' . $model->getWeekPercentageExport() . '</abbr>';
+            } else {
+                return $model->getWeekPercentageExport();
             }
             return '-';
         },
