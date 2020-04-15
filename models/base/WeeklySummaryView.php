@@ -23,6 +23,8 @@ use Yii;
  * @property integer $balance_export
  * @property string $remark
  * @property integer $flag
+ * @property string $completion_status
+ * @property string $email_sent_datetime
  * @property string $aliasModel
  */
 abstract class WeeklySummaryView extends \yii\db\ActiveRecord
@@ -55,7 +57,9 @@ abstract class WeeklySummaryView extends \yii\db\ActiveRecord
             [['period', 'week', 'week_no', 'plan_export', 'actual_export', 'balance_export', 'flag'], 'integer'],
             [['plan_qty', 'actual_qty', 'balance_qty', 'total_delay', 'on_time_completion'], 'number'],
             [['remark'], 'string'],
-            [['category'], 'string', 'max' => 20]
+            [['email_sent_datetime'], 'safe'],
+            [['category'], 'string', 'max' => 20],
+            [['completion_status'], 'string', 'max' => 5]
         ];
     }
 
@@ -79,6 +83,8 @@ abstract class WeeklySummaryView extends \yii\db\ActiveRecord
             'balance_export' => 'Balance Export',
             'remark' => 'Remark',
             'flag' => 'Flag',
+            'completion_status' => 'Completion Status',
+            'email_sent_datetime' => 'Email Sent Datetime',
         ];
     }
 

@@ -156,6 +156,8 @@ class DisplayController extends Controller
             ['>=', 'TANGGAL', $model->from_date . ' 00:00:00'],
             ['<=', 'TANGGAL', $model->to_date . ' 11:59:59']
         ])
+        ->groupBy('TANGGAL')
+        ->orderBy('TANGGAL')
         ->all();
         
         $list_item_arr = [];

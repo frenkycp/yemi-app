@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class WeeklySummaryView extends BaseWeeklySummaryView
 {
+    public $total_target, $total_close, $total_sent;
 
     public function behaviors()
     {

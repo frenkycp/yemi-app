@@ -6,17 +6,17 @@ use dmstr\bootstrap\Tabs;
 use yii\helpers\Url;
 use app\models\search\WeeklyPlanSearch;
 use app\models\WeeklyPlan;
-
+use app\models\WeeklySummaryView;
 /**
 * This is the class for controller "WeeklyPlanController".
 */
 class WeeklyPlanController extends \app\controllers\base\WeeklyPlanController
 {
-    public function behaviors()
+    /*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
 
     public function actionIndex()
 	{
@@ -35,6 +35,22 @@ class WeeklyPlanController extends \app\controllers\base\WeeklyPlanController
 		'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
 		]);
+	}
+
+	public function actionSendEmail($period)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$now = date('Y-m-d H:i:s');
+
+		$update_all = WeeklyPlan::updateAll([
+			'email_sent_datetime' => $now
+		], [
+			'period' => $period
+		]);
+
+		\Yii::$app->session->setFlash("success", "Email has been sent successfully...");
+
+		return $this->redirect(Url::previous());
 	}
 
 	public function actionCreate()

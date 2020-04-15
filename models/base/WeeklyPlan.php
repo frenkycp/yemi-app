@@ -21,6 +21,7 @@ use Yii;
  * @property integer $balance_export
  * @property string $remark
  * @property integer $flag
+ * @property string $email_sent_datetime
  * @property string $aliasModel
  */
 abstract class WeeklyPlan extends \yii\db\ActiveRecord
@@ -52,6 +53,7 @@ abstract class WeeklyPlan extends \yii\db\ActiveRecord
         return [
             [['week', 'plan_qty', 'actual_qty', 'balance_qty', 'plan_export', 'actual_export', 'balance_export', 'flag'], 'integer'],
             [['remark'], 'string'],
+            [['email_sent_datetime'], 'safe'],
             [['category'], 'string', 'max' => 20],
             [['period'], 'string', 'max' => 6]
         ];
@@ -75,6 +77,7 @@ abstract class WeeklyPlan extends \yii\db\ActiveRecord
             'balance_export' => 'Balance Export',
             'remark' => 'Remark',
             'flag' => 'Flag',
+            'email_sent_datetime' => 'Email Sent Datetime',
         ];
     }
 

@@ -306,6 +306,28 @@ $columns = [
         'contentOptions' => [
             'class' => 'info'
         ],
+    ], [
+        'attribute' => 'completion_status',
+        'label' => 'Status',
+        'hAlign' => 'center',
+        'enableSorting' => false,
+        'filter' => false,
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+        /*'contentOptions' => [
+            'class' => 'info'
+        ],*/
+    ], [
+        'attribute' => 'email_sent_datetime',
+        'label' => 'Email Sent',
+        'hAlign' => 'center',
+        'enableSorting' => false,
+        'filter' => false,
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+        'contentOptions' => [
+            'style' => 'min-width: 90px;'
+        ],
     ],
 ];
 
@@ -320,6 +342,47 @@ $columns = [
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
     <div class="">
+        <?php
+        if (!isset($searchModel->period) || $searchModel->period == '' || $searchModel->period == null) {
+            $toolbar = [
+                //Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
+                '<button class="btn btn-primary disabled" title="Please select the period first...!"><span class="fa fa-envelope"></span> ' . ' Sent Email</button>',
+                '{export}',
+                '{toggleData}',
+            ];
+        } else {
+            $tmp_summary = app\models\WeeklySummaryView::find()
+            ->select([
+                'period',
+                'total_target' => 'COUNT(period)',
+                'total_close' => 'SUM(CASE WHEN completion_status = \'CLOSE\' THEN 1 ELSE 0 END)',
+                'total_sent' => 'SUM(CASE WHEN email_sent_datetime IS NOT NULL THEN 1 ELSE 0 END)',
+            ])
+            ->where(['period' => $searchModel->period])
+            ->one();
+
+            $toolbar = [
+            Html::a('<span class="fa fa-envelope"></span> ' . ' Sent Email', ['send-email', 'period' => $searchModel->period], ['class' => 'btn btn-primary', 'data-confirm' => 'Are you sure to sent email for this period ?',]),
+                '{export}',
+                '{toggleData}',
+            ];
+
+            $toolbar = [
+            Html::a('<span class="fa fa-envelope"></span> ' . ' Sent Email', ['send-email', 'period' => $searchModel->period], ['class' => 'btn btn-primary', 'data-confirm' => 'Are you sure to sent email for this period ?',]),
+                '{export}',
+                '{toggleData}',
+            ];
+
+            if ($tmp_summary->total_sent == $tmp_summary->total_target) {
+                $toolbar[0] = '<button class="btn btn-primary disabled" title="Email has been sent for this period...!"><span class="fa fa-envelope"></span> ' . ' Sent Email</button>';
+            }
+
+            if ($tmp_summary->total_target != $tmp_summary->total_close) {
+                $toolbar[0] = '<button class="btn btn-primary disabled" title="Please close summary on this period before send an email...!"><span class="fa fa-envelope"></span> ' . ' Sent Email</button>';
+            }
+            
+        }
+        ?>
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
@@ -329,11 +392,7 @@ $columns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'pjax' => true, // pjax is set to always true for this demo
             'showPageSummary' => true,
-            'toolbar' =>  [
-                //Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
-                '{export}',
-                '{toggleData}',
-            ],
+            'toolbar' => $toolbar,
             // set export properties
             'export' => [
                 'fontAwesome' => true
