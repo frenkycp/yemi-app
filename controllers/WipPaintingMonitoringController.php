@@ -50,6 +50,10 @@ class WipPaintingMonitoringController extends Controller
     	}
 
     	if ($model->loc != null) {
+            $model_loc = $model->loc;
+            if ($model->loc == 'KD') {
+                $model_loc = ['WS01', 'WP00', 'WU00', 'WM00'];
+            }
     		$wip_painting_data_arr = WipPlanActualReport::find()
 	    	->select([
 	    		'week',
@@ -63,7 +67,7 @@ class WipPaintingMonitoringController extends Controller
 	    	])
 	    	->where([
 	    		'period' => $period,
-	    		'child_analyst_desc' => $model->loc
+	    		'child_analyst' => $model_loc
 	    	])
             ->andWhere($str_where)
             ->andWhere($str_where2)
@@ -175,7 +179,15 @@ class WipPaintingMonitoringController extends Controller
 			];
 		}
 
-        $dropdown_loc = ArrayHelper::map(WipLocation::find()->select('child_analyst_desc')->groupBy('child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');
+        /*$dropdown_loc = ArrayHelper::map(WipLocation::find()->select('child_analyst_desc')->groupBy('child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');*/
+        $dropdown_loc = \Yii::$app->params['wip_location_arr'];
+
+        unset($dropdown_loc['WS01']);
+        unset($dropdown_loc['WP00']);
+        unset($dropdown_loc['WU00']);
+        unset($dropdown_loc['WM00']);
+        $dropdown_loc['KD'] = 'KD PART';
+        asort($dropdown_loc);
 
     	return $this->render('index', [
     		'data' => $data,
@@ -222,29 +234,34 @@ class WipPaintingMonitoringController extends Controller
             $str_where = "delay_category IS NOT NULL AND delay_category != ''";
         }
         $str_where2 = '';
-        if ($loc == 'FINAL ASSY' && $line != null) {
+        if ($loc == 'WF01' && $line != null) {
             $str_where2 = "LINE = '$line'";
         }
 
-        $remark_data_arr = WipPlanActualReport::find()
-        ->select($selected_column)
-        ->where([
-            'due_date' => $due_date,
-            'stage' => $stage_arr,
-            //'urut' => '02'
-        ])
-        ->andWhere($str_where)
-        ->andWhere($str_where2)
-        ->orderBy('child_analyst_desc, model_group, parent, child')
-        ->asArray()->all();
+        
 
         if ($loc != null) {
-             $remark_data_arr = WipPlanActualReport::find()
+            if ($loc == 'KD') {
+                $loc = ['WS01', 'WP00', 'WU00', 'WM00'];
+            }
+            $remark_data_arr = WipPlanActualReport::find()
             ->select($selected_column)
             ->where([
                 'due_date' => $due_date,
                 'stage' => $stage_arr,
-                'child_analyst_desc' => $loc
+                'child_analyst' => $loc
+            ])
+            ->andWhere($str_where)
+            ->andWhere($str_where2)
+            ->orderBy('child_analyst_desc, model_group, parent, child')
+            ->asArray()->all();
+        } else {
+            $remark_data_arr = WipPlanActualReport::find()
+            ->select($selected_column)
+            ->where([
+                'due_date' => $due_date,
+                'stage' => $stage_arr,
+                //'urut' => '02'
             ])
             ->andWhere($str_where)
             ->andWhere($str_where2)
