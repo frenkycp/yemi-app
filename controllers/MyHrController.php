@@ -184,6 +184,16 @@ class MyHrController extends Controller
         $sisa_cuti = (int)$cuti_summary->remaining;
         $kuota_cuti = (int)$cuti_summary->entitlement;
 
+        $cuti_panjang_summary = SunfishLeaveSummary::find()
+        ->where([
+            'emp_no' => $model_karyawan->NIK_SUN_FISH,
+            'leave_code' => 'LONGN2YEMI',
+            'FORMAT(startvaliddate, \'yyyy\')' => $this_year
+        ])
+        ->one();
+        $sisa_cuti_panjang = (int)$cuti_panjang_summary->remaining;
+        $kuota_cuti_panjang = (int)$cuti_panjang_summary->entitlement;
+
         $from_date = date('Y-m-01', strtotime(date('Y-m-d') . '-1 year'));
         $to_date = date('Y-m-t', strtotime(date('Y-m-d')));
         // $tmp_categories = SplView::find()
@@ -262,6 +272,9 @@ class MyHrController extends Controller
             'using_cuti' => $using_cuti,
             'kuota_cuti' => $kuota_cuti,
             'sisa_cuti' => $sisa_cuti,
+            'using_cuti_panjang' => $using_cuti_panjang,
+            'kuota_cuti_panjang' => $kuota_cuti_panjang,
+            'sisa_cuti_panjang' => $sisa_cuti_panjang,
             'year' => $this_year,
             'section' => $section,
             'categories' => $categories,
