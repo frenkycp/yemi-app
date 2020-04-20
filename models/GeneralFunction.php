@@ -72,4 +72,20 @@ class GeneralFunction extends Model
         
         return $period_arr;
     }
+
+    public function getPeriodBetweenDates($start_date, $end_date)
+    {
+        $tmp_arr = [];
+        $start    = (new \DateTime($start_date))->modify('first day of this month');
+        $end      = (new \DateTime($end_date))->modify('first day of next month');
+        $interval = \DateInterval::createFromDateString('1 month');
+        $period   = new \DatePeriod($start, $interval, $end);
+
+        foreach ($period as $dt) {
+            $tmp_arr[] = $dt->format("Ym");
+            //echo $dt->format("Y-m") . "<br>\n";
+        }
+
+        return $tmp_arr;
+    }
 }

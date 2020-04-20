@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SunfishLeaveSummary extends BaseSunfishLeaveSummary
 {
+    public $valid_date, $name;
 
     public function behaviors()
     {
@@ -30,5 +31,10 @@ class SunfishLeaveSummary extends BaseSunfishLeaveSummary
                 # custom validation rules
             ]
         );
+    }
+
+    public function getEmpData()
+    {
+        return $this->hasOne(SunfishViewEmp::className(), ['Emp_no' => 'emp_no']);
     }
 }
