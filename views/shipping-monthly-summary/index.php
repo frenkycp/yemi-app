@@ -19,20 +19,42 @@ $this->title = [
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
+$this->registerCss(".disabled-link {color: DarkGrey; cursor: not-allowed;}");
+
 date_default_timezone_set('Asia/Jakarta');
 
 $columns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}',
+        'template' => '{update}&nbsp;&nbsp;&nbsp;&nbsp;{sent-email}',
         'buttons' => [
-            'view' => function ($url, $model, $key) {
+            'update' => function ($url, $model, $key) {
                 $options = [
-                    'title' => Yii::t('cruds', 'View'),
-                    'aria-label' => Yii::t('cruds', 'View'),
+                    'title' => Yii::t('cruds', 'Update'),
+                    'aria-label' => Yii::t('cruds', 'Update'),
                     'data-pjax' => '0',
                 ];
-                return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+                if ($model->sent_email_datetime == null) {
+                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, $options);
+                } else {
+                    return '<i class="glyphicon glyphicon-pencil disabled-link"></i>';
+                }
+                
+            }, 'sent-email' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'Send Email'),
+                    'aria-label' => Yii::t('cruds', 'Send Email'),
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to send email for this period ?'
+                ];
+                return '<i class="fa fa-envelope disabled-link"></i>';
+                if ($model->sent_email_datetime == null) {
+                    return Html::a('<span class="fa fa-envelope"></span>', ['send-email', 'period' => $model->period], $options);
+                } else {
+                    $options['class'] = 'disabled';
+                    return '<i class="fa fa-envelope disabled-link"></i>';
+                }
+                
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {

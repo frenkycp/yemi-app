@@ -45,6 +45,12 @@ $query = ShippingMonthlySummary::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+        'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'period' => SORT_DESC,
+        ]
+    ],
 ]);
 
 $this->load($params);
