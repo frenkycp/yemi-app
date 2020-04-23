@@ -285,8 +285,11 @@ class SiteController extends Controller
     {
         //log last login column
         $user = Yii::$app->user->identity;
-        $user->last_logout = new Expression("NOW()");
-        $user->save();
+        if ($user) {
+            $user->last_logout = new Expression("NOW()");
+            $user->save();
+        }
+        
 
         Yii::$app->user->logout();
 
