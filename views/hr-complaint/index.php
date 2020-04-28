@@ -59,6 +59,17 @@ $grid_columns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],
     [
+        'attribute' => 'id',
+        'label' => 'Doc. Number',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '90px;',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'period',
         'vAlign' => 'middle',
         'hAlign' => 'center',

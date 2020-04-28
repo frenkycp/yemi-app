@@ -45,6 +45,17 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],*/
     [
+        'attribute' => 'id',
+        'label' => 'Doc. Number',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '130px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'input_datetime',
         'label' => 'Input Datetime',
         'vAlign' => 'middle',
