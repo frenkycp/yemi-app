@@ -367,6 +367,7 @@ class MyHrController extends Controller
             return $this->redirect(['login']);
         }
         $nik = $session['my_hr_user'];
+        $nik_sunfish = $session['my_hr_user_sunfish'];
         $this->layout = 'my-hr';
         date_default_timezone_set('Asia/Jakarta');
         $model = new HrComplaint;
@@ -378,7 +379,7 @@ class MyHrController extends Controller
                 ->where(['NIK' => $nik])
                 ->one();
 
-                $model->nik = '' . $nik;
+                $model->nik = '' . $nik_sunfish;
                 $model->emp_name = $karyawan->NAMA_KARYAWAN;
                 $model->department = $karyawan->DEPARTEMEN;
                 $model->section = $karyawan->SECTION;
@@ -406,6 +407,7 @@ class MyHrController extends Controller
             return $this->redirect(['login']);
         }
         $nik = $session['my_hr_user'];
+        $nik_sunfish = $session['my_hr_user_sunfish'];
         $this->layout = 'my-hr';
         date_default_timezone_set('Asia/Jakarta');
         $model = new HrComplaint;
@@ -416,7 +418,7 @@ class MyHrController extends Controller
                 ->where(['NIK' => $nik])
                 ->one();
 
-                $model->nik = '' . $nik;
+                $model->nik = '' . $nik_sunfish;
                 $model->emp_name = $karyawan->NAMA_KARYAWAN;
                 $model->department = $karyawan->DEPARTEMEN;
                 $model->section = $karyawan->SECTION;
@@ -445,6 +447,7 @@ class MyHrController extends Controller
             return $this->redirect(['login']);
         }
         $nik = $session['my_hr_user'];
+        $nik_sunfish = $session['my_hr_user_sunfish'];
         $this->layout = 'my-hr';
         $model = new HrFacility;
         $model->scenario = HrFacility::SCENARIO_CREATE;
@@ -455,7 +458,7 @@ class MyHrController extends Controller
                 ->where(['NIK' => $nik])
                 ->one();
 
-                $model->nik = '' . $nik;
+                $model->nik = '' . $nik_sunfish;
                 $model->emp_name = $karyawan->NAMA_KARYAWAN;
                 $model->cc_id = $karyawan->CC_ID;
                 $model->dept = $karyawan->DEPARTEMEN;
