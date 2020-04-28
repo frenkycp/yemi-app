@@ -294,9 +294,10 @@ class MyHrController extends Controller
             return $this->redirect(['login']);
         }
         $nik = $session['my_hr_user'];
+        $nik_sunfish = $session['my_hr_user_sunfish'];
         $this->layout = 'my-hr';
         $searchModel  = new HrComplaintSearch;
-        $searchModel->nik = $nik;
+        $searchModel->nik = [$nik, $nik_sunfish];
         $searchModel->category = $_GET['category'];
         $_GET['hr_sort'] = 'hr_sort';
         $dataProvider = $searchModel->search($_GET);
@@ -319,9 +320,10 @@ class MyHrController extends Controller
             return $this->redirect(['login']);
         }
         $nik = $session['my_hr_user'];
+        $nik_sunfish = $session['my_hr_user_sunfish'];
         $this->layout = 'my-hr';
         $searchModel  = new HrComplaintSearch;
-        $searchModel->nik = $nik;
+        $searchModel->nik = [$nik, $nik_sunfish];
         $searchModel->category = 'BPJS';
         $_GET['hr_sort'] = 'hr_sort';
         $dataProvider = $searchModel->search($_GET);
@@ -344,10 +346,11 @@ class MyHrController extends Controller
             return $this->redirect(['login']);
         }
         $nik = $session['my_hr_user'];
+        $nik_sunfish = $session['my_hr_user_sunfish'];
         $this->layout = 'my-hr';
 
         $searchModel  = new HrFacilitySearch;
-        $searchModel->nik = $nik;
+        $searchModel->nik = [$nik, $nik_sunfish];
         $dataProvider = $searchModel->search($_GET);
         return $this->render('index-facility', [
             'dataProvider' => $dataProvider,

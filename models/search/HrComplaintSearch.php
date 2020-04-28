@@ -72,12 +72,12 @@ $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
             'category' => $this->category,
+            'nik' => $this->nik,
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),input_datetime,120)', $this->input_datetime])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),response_datetime,120)', $this->response_datetime])
-            ->andFilterWhere(['like', 'nik', $this->nik])
             ->andFilterWhere(['like', 'emp_name', $this->emp_name])
             ->andFilterWhere(['like', 'department', $this->department])
             ->andFilterWhere(['like', 'section', $this->section])
