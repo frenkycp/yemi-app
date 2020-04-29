@@ -177,8 +177,12 @@ class MyHrController extends Controller
         $cuti_summary = SunfishLeaveSummary::find()
         ->where([
             'emp_no' => $model_karyawan->NIK_SUN_FISH,
-            'leave_code' => 'ANL',
-            'FORMAT(startvaliddate, \'yyyy\')' => $this_year
+            'leave_code' => 'ANL'
+        ])
+        ->andWHere([
+            'OR',
+            ['FORMAT(startvaliddate, \'yyyy\')' => $this_year],
+            ['FORMAT(endvaliddate, \'yyyy\')' => $this_year]
         ])
         ->one();
         $sisa_cuti = (int)$cuti_summary->remaining;
@@ -187,8 +191,14 @@ class MyHrController extends Controller
         $cuti_panjang_summary = SunfishLeaveSummary::find()
         ->where([
             'emp_no' => $model_karyawan->NIK_SUN_FISH,
-            'leave_code' => 'LONGN2YEMI',
-            'FORMAT(startvaliddate, \'yyyy\')' => $this_year
+            //'leave_code' => 'LONGN2YEMI',
+            //'FORMAT(endvaliddate, \'yyyy\')' => $this_year
+        ])
+        ->andWhere('PATINDEX(\'%LONG%\', leave_code) > 0')
+        ->andWHere([
+            'OR',
+            ['FORMAT(startvaliddate, \'yyyy\')' => $this_year],
+            ['FORMAT(endvaliddate, \'yyyy\')' => $this_year]
         ])
         ->one();
         $sisa_cuti_panjang = (int)$cuti_panjang_summary->remaining;
