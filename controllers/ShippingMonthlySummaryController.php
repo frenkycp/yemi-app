@@ -42,10 +42,25 @@ class ShippingMonthlySummaryController extends \app\controllers\base\ShippingMon
 		$now = date('Y-m-d H:i:s');
 
 		$model->sent_email_datetime = $now;
-		if ($model->save()) {
-			return $this->redirect(Url::previous());
-		} else {
-			return json_encode($model->errors);
+
+		$sql = "{CALL SEND_SHIPPING_MONTHLY(:period)}";
+		$params = [
+			':period' => $period
+		];
+
+		try{
+			$result = \Yii::$app->db_211->createCommand($sql, $params)->execute();
+
+			if ($model->save()) {
+				\Yii::$app->session->setFlash("success", "Email has been sent...");
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($model->errors);
+			}
+			
+		} catch (\Exception $e) {
+			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+			\Yii::$app->session->setFlash("danger", $msg);
 		}
 	}
 }

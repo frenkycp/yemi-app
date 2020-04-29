@@ -47,7 +47,7 @@ $columns = [
                     'data-pjax' => '0',
                     'data-confirm' => 'Are you sure to send email for this period ?'
                 ];
-                return '<i class="fa fa-envelope disabled-link"></i>';
+                //return '<i class="fa fa-envelope disabled-link"></i>';
                 if ($model->sent_email_datetime == null) {
                     return Html::a('<span class="fa fa-envelope"></span>', ['send-email', 'period' => $model->period], $options);
                 } else {

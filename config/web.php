@@ -120,6 +120,7 @@ $config = [
         'db_server_status' => require(__DIR__ . '/db_server_status.php'),
         'db_recordmasker' => require(__DIR__ . '/db_recordmasker.php'),
         'db_cbsupplement' => require(__DIR__ . '/db_cbsupplement.php'),
+        'db_211' => require(__DIR__ . '/db_211.php'),
     ],
     'params' => $params,
     'modules' => [
