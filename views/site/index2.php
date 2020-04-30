@@ -110,16 +110,24 @@ $this->registerCss("
                                         ]) ?>
                                     </li>
                                     <li>
-                                        <a target="_blank" href="http://172.17.144.6:86/clinic-daily-visit">Clinic Monthly Visit <span class="japanesse-word"></span></a>
+                                        <?= Html::a('Clinic Monthly Visit <span class="japanesse-word"></span>', ['/clinic-daily-visit'], [
+                                            'target' => '_blank'
+                                        ]) ?>
                                     </li>
                                     <li>
-                                        <a target="_blank" href="http://172.17.144.6:86/clinic-data">Clinic Data <span class="japanesse-word"></span></a>
+                                        <?= Html::a('Clinic Data <span class="japanesse-word"></span>', ['/clinic-data'], [
+                                            'target' => '_blank'
+                                        ]) ?>
                                     </li>
                                     <li>
-                                        <a target="_blank" href="http://172.17.144.6:86/display/clinic-by-freq">Clinic FY Visit by Freq. <span class="japanesse-word"></span></a>
+                                        <?= Html::a('Clinic FY Visit by Freq. <span class="japanesse-word"></span>', ['/display/clinic-by-freq'], [
+                                            'target' => '_blank'
+                                        ]) ?>
                                     </li>
                                     <li>
-                                        <a target="_blank" href="http://172.17.144.6:86/display/clinic-by-min">Clinic FY Visit by Total Minutes <span class="japanesse-word"></span></a>
+                                        <?= Html::a('Clinic FY Visit by Total Minutes <span class="japanesse-word"></span>', ['/display/clinic-by-min'], [
+                                            'target' => '_blank'
+                                        ]) ?>
                                     </li>
                                 </ol>
                             </div>
@@ -129,7 +137,10 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/driver/display.php">Company Car Monitoring <span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-shift-display">Shift Maintenance <span class="japanesse-word"></span></a>
+                        <?= Html::a('Shift Maintenance <span class="japanesse-word"></span>', ['/mnt-shift-display'], [
+                            'target' => '_blank',
+                            'class' => 'list-group-item'
+                        ]) ?>
                     </div>
                 </div>
                 <div class="panel panel-success">
@@ -153,10 +164,16 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_fg/display.php"><i class="fa fa-fw fa-tag"></i> FGS Loading Status (MITA+)<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/container-loading"><i class="fa fa-fw fa-tag"></i> Container Loading by Group <span class="japanesse-word">(グループ別コンテナー積み込み作業表)</span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i>Container Loading by Group<span class="japanesse-word"></span>', ['/display/container-loading'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/l-series-daily"><i class="fa fa-fw fa-tag"></i> Production Lead Time L-Series<span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i>Production Lead Time L-Series<span class="japanesse-word"></span>', ['/display/l-series-daily'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
                         <?= Html::a('<i class="fa fa-fw fa-tag"></i> Machine Operation Status<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/mnt-kwh-report'], [
@@ -177,16 +194,28 @@ $this->registerCss("
                         ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/mnt-iot-utility"><i class="fa fa-fw fa-tag"></i> Machine Daily Utility<span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i>Machine Daily Utility <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/mnt-iot-utility'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/shift-patrol-tbl"><i class="fa fa-fw fa-tag"></i> Shift Daily Patrol<span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Shift Daily Patrol<span class="japanesse-word"></span>', ['/shift-patrol-tbl'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/new-model-progress"><i class="fa fa-fw fa-tag"></i> Model Monthly Progress<span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Model Monthly Progress<span class="japanesse-word"></span>', ['/new-model-progress'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/crusher-chart"><i class="fa fa-fw fa-tag"></i> Crusher Chart<span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Crusher Chart<span class="japanesse-word"></span>', ['/crusher-chart'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/monitor.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Monitor <span class="japanesse-word">( ダイレクトバンニング進捗表 )</span></a>
@@ -195,16 +224,25 @@ $this->registerCss("
                         <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/summary.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Summary<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/fgs-stock"><i class="fa fa-fw fa-tag"></i> FGS Stock (Group by Days)<span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> FGS Stock (Group by Days)<span class="japanesse-word"></span>', ['/display/fgs-stock'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/chourei"><i class="fa fa-fw fa-tag"></i> Chourei Menu<span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Chourei Menu<span class="japanesse-word"></span>', ['/display/chourei'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                 </div>
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Production Defect (Daily)<br/><span class="japanesse-word"></span></div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:86/display/defect-daily-pcb"><i class="fa fa-fw fa-tag"></i> PCB<span class="japanesse-word"></span></a>
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> PCB<span class="japanesse-word"></span>', ['/display/defect-daily-pcb'], [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
                     </div>
                 </div>
     		</div>

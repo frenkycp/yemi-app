@@ -58,7 +58,7 @@ class ProductionMonthlyInspectionController extends Controller
         $inspection_data_arr = SernoInput::find()
         ->select([
             'period' => 'extract(year_month from proddate)',
-            'week_no' => 'week(proddate, 4)',
+            //'week_no' => 'week(proddate, 4)',
             'proddate',
             'total_data' => 'COUNT(proddate)',
             'total_no_check' => 'SUM((CASE WHEN ((qa_ng = \'\') and (qa_ok = \'\')) then 1 ELSE 0 END))',
@@ -69,10 +69,7 @@ class ProductionMonthlyInspectionController extends Controller
         ->where([
             'extract(year_month from proddate)' => $periode
         ])
-        ->groupBy('week_no, proddate')
-        ->having([
-
-        ])
+        ->groupBy('proddate')
         ->all();
 
     	$tmp_data = [];
