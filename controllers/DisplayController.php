@@ -127,9 +127,101 @@ use app\models\MaskerPrdIn;
 use app\models\MaskerPrdOut;
 use app\models\MaskerStock;
 use app\models\AbsensiWfh;
+use app\models\ScanTemperatureDaily01;
 
 class DisplayController extends Controller
 {
+    public function actionDailyEmpTemperature()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'section'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required')
+        ->addRule(['section'], 'string');
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+            if ($model->section == 'ALL') {
+                $tmp_scan = ScanTemperatureDaily01::find()
+                ->where([
+                    'AND',
+                    ['>=', 'POST_DATE', $model->from_date],
+                    ['<=', 'POST_DATE', $model->to_date]
+                ])
+                ->orderBy('POST_DATE')
+                ->all();
+            } else {
+                $tmp_scan = ScanTemperatureDaily01::find()
+                ->where([
+                    'AND',
+                    ['>=', 'POST_DATE', $model->from_date],
+                    ['<=', 'POST_DATE', $model->to_date]
+                ])
+                ->andWhere([
+                    'COST_CENTER' => $model->section
+                ])
+                ->orderBy('POST_DATE')
+                ->all();
+            }
+            
+
+            $tmp_data = $data = $data_karyawan = [];
+            foreach ($tmp_scan as $key => $value) {
+                $data_karyawan[$value->NIK] = [
+                    'name' => $value->NAMA_KARYAWAN,
+                    'dept' => $value->COST_CENTER_DESC
+                ];
+                
+            }
+
+            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+            $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+
+            
+            for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $tgl = $i->format("Y-m-d");
+                $proddate = (strtotime($tgl . " +7 hours") * 1000);
+                foreach ($data_karyawan as $key => $value) {
+                    $suhu = 0;
+                    foreach ($tmp_scan as $scan) {
+                        if ($scan->NIK == $key && $scan->POST_DATE == $tgl) {
+                            $suhu = $scan->SUHU;
+                        }
+                    }
+                    $tmp_data[$key][] = [
+                        'x' => $proddate,
+                        'y' => $suhu,
+                        //'y' => $suhu == null ? null : (float)$suhu,
+                    ];
+                }
+            }
+
+            foreach ($tmp_data as $key => $value) {
+                $data[] = [
+                    'name' => $key . ' - ' . $data_karyawan[$key]['name'],
+                    'data' => $value,
+                    'lineWidth' => 0.8,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
+                    'showInLegend' => false,
+                ];
+            }
+        }
+
+        
+
+        $section_arr = ArrayHelper::map(CostCenter::find()->select('CC_ID, CC_DESC')->groupBy('CC_ID, CC_DESC')->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC');
+        $section_arr['ALL'] = '-- ALL SECTIONS --';
+
+        return $this->render('daily-emp-temperature', [
+            'model' => $model,
+            'data' => $data,
+            'section_arr' => $section_arr,
+        ]);
+    }
     public function actionWfhDailyReport()
     {
         $this->layout = 'clean';
