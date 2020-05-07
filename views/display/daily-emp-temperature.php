@@ -165,7 +165,7 @@ echo '</pre>';*/
                         ],
                     ],
                     'series' => [
-                        'cursor' => 'pointer',
+                        //'cursor' => 'pointer',
                         'marker' => [
                             'enabled' => false
                         ],

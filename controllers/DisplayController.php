@@ -202,7 +202,7 @@ class DisplayController extends Controller
 
             foreach ($tmp_data as $key => $value) {
                 $data[] = [
-                    'name' => $key . ' - ' . $data_karyawan[$key]['name'],
+                    'name' => $key . ' - ' . $data_karyawan[$key]['name'] . ' [' . $data_karyawan[$key]['dept'] . ']',
                     'data' => $value,
                     'lineWidth' => 0.8,
                     'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
