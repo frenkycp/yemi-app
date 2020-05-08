@@ -23,6 +23,8 @@ use Yii;
  * @property string $response_datetime
  * @property integer $status
  * @property string $category
+ * @property string $client_ip
+ * @property string $whatsapp
  * @property string $aliasModel
  */
 abstract class HrComplaint extends \yii\db\ActiveRecord
@@ -52,9 +54,15 @@ abstract class HrComplaint extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'response', 'category'], 'string'],
             [['input_datetime', 'response_datetime'], 'safe'],
-            [['status'], 'integer']
+            [['remark', 'response'], 'string'],
+            [['status'], 'integer'],
+            [['period'], 'string', 'max' => 6],
+            [['nik'], 'string', 'max' => 10],
+            [['emp_name'], 'string', 'max' => 150],
+            [['department', 'section', 'sub_section', 'remark_category', 'category'], 'string', 'max' => 50],
+            [['client_ip'], 'string', 'max' => 250],
+            [['whatsapp'], 'string', 'max' => 1]
         ];
     }
 
@@ -72,12 +80,14 @@ abstract class HrComplaint extends \yii\db\ActiveRecord
             'department' => 'Department',
             'section' => 'Section',
             'sub_section' => 'Sub Section',
-            'remark' => 'Question',
+            'remark' => 'Remark',
             'remark_category' => 'Remark Category',
-            'response' => 'Answer',
+            'response' => 'Response',
             'response_datetime' => 'Response Datetime',
             'status' => 'Status',
             'category' => 'Category',
+            'client_ip' => 'Client Ip',
+            'whatsapp' => 'Whatsapp',
         ];
     }
 

@@ -80,6 +80,26 @@ $grid_columns = [
         ],
     ],
     [
+        'class' => 'kartik\grid\EnumColumn',
+        'label' => 'Sent Using',
+        'attribute' => 'whatsapp',
+        'enum' => [
+            'Y' => 'WhatsApp',
+            'N' => 'PC',
+         ],
+         'filter' => [
+            'Y' => 'WhatsApp',
+            'N' => 'PC',
+         ],
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '90px;',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'input_datetime',
         'label' => 'Question<br/>Datetime',
         'value' => function($model){

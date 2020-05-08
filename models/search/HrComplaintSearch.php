@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['id', 'status'], 'integer'],
-            [['period', 'input_datetime', 'response_datetime','nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'response', 'category'], 'safe'],
+            [['period', 'input_datetime', 'response_datetime','nik', 'emp_name', 'department', 'section', 'sub_section', 'remark', 'remark_category', 'response', 'category', 'whatsapp'], 'safe'],
 ];
 }
 
@@ -73,6 +73,7 @@ $query->andFilterWhere([
             'status' => $this->status,
             'category' => $this->category,
             'nik' => $this->nik,
+            'whatsapp' => $this->whatsapp,
         ]);
 
         $query->andFilterWhere(['like', 'period', $this->period])
