@@ -69,6 +69,15 @@ $this->registerCss("
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
+                    <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
+                        'options' => [
+                            'type' => DatePicker::TYPE_INPUT,
+                        ],
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd'
+                        ]
+                    ]); ?>
                     <?= $form->field($model, 'gmc_no')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\SernoMaster::find()->select([
                             'gmc', 'model', 'color', 'dest'

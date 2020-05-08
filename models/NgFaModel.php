@@ -27,7 +27,7 @@ class NgFaModel extends BaseProdNgData
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['ng_qty', 'gmc_no', 'ng_category_id', 'ng_cause_category', 'ng_location', 'fa_area_detec', 'ng_root_cause'], 'required'],
+                [['ng_qty', 'gmc_no', 'ng_category_id', 'ng_cause_category', 'ng_location', 'fa_area_detec', 'ng_root_cause', 'post_date'], 'required'],
             ]
         );
     }
@@ -46,7 +46,7 @@ class NgFaModel extends BaseProdNgData
                 'ng_category_id' => 'Cause',
                 'ng_qty' => 'NG Qty',
                 'total_output' => 'Output',
-                'post_date' => 'Created Proses',
+                'post_date' => 'Prod. Date',
                 'ng_cause_category' => 'Root Cause Category',
                 'smt_pic_aoi' => 'PIC AOI',
                 'smt_group_pic' => 'PIC Group',

@@ -70,6 +70,19 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'max-width: 90px;'],
     ],
     [
+        'attribute' => 'post_date',
+        'label' => 'Prod. Date',
+        /*'value' => function($model){
+            return date('Y-m-d', strtotime($model->post_date));
+        },*/
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; width: 80px; min-width: 80px;'
+        ],
+    ],
+    [
         'attribute' => 'document_no',
         'label' => 'Report No.',
         'hAlign' => 'center',
@@ -222,7 +235,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'created_time',
-        'label' => 'Date',
+        'label' => 'Input Datetime',
         'value' => function($model){
             return date('Y-m-d H:i:s', strtotime($model->created_time));
         },
