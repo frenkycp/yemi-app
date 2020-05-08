@@ -84,9 +84,10 @@ $grid_columns = [
         'label' => 'Sent Using',
         'attribute' => 'whatsapp',
         'enum' => [
-            'Y' => 'WhatsApp',
-            'N' => 'PC',
+            'Y' => Html::img('@web/uploads/ICON/wa_001.png', ['alt' => 'No Image Found', 'width' => '40px', 'title' => 'WhatsApp']),
+            'N' => Html::img('@web/uploads/ICON/pc_001.png', ['alt' => 'No Image Found', 'width' => '40px', 'title' => 'PC']),
          ],
+         'format' => 'html',
          'filter' => [
             'Y' => 'WhatsApp',
             'N' => 'PC',

@@ -84,6 +84,24 @@ $grid_columns = [
         ],
     ],*/
     [
+        'class' => 'kartik\grid\EnumColumn',
+        'attribute' => 'whatsapp',
+        'label' => 'Sent<br/>Using',
+        'enum' => [
+            'Y' => Html::img('@web/uploads/ICON/wa_001.png', ['alt' => 'No Image Found', 'width' => '40px', 'title' => 'WhatsApp']),
+            'N' => Html::img('@web/uploads/ICON/pc_001.png', ['alt' => 'No Image Found', 'width' => '40px', 'title' => 'PC']),
+         ],
+        'encodeLabel' => false,
+        'format' => 'html',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'width' => '80px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; '
+        ],
+    ],
+    [
         'attribute' => 'input_datetime',
         'label' => 'Question<br/>Datetime',
         'encodeLabel' => false,
