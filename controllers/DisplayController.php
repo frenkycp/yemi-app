@@ -136,7 +136,7 @@ class DisplayController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $data = [];
+        $data = $data2 = [];
 
         $model = new \yii\base\DynamicModel([
             'from_date', 'to_date', 'section'
@@ -159,6 +159,7 @@ class DisplayController extends Controller
         $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
         $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
         
+        $total_plan = $total_act = $total_balance = 0;
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
             $tgl = $i->format("Y-m-d");
             $tgl_single = $i->format('j');
@@ -171,16 +172,26 @@ class DisplayController extends Controller
                     $balance_qty = $value->balance_qty;
                 }
             }
+            $total_plan += $plan_qty;
+            $total_act += $act_qty;
+            $total_balance = $total_act - $total_plan;
             $data[$tgl_single] = [
                 'plan_qty' => $plan_qty,
                 'act_qty' => $act_qty,
                 'balance_qty' => $balance_qty,
             ];
+            $data2[$tgl_single] = [
+                'plan_qty' => $total_plan,
+                'act_qty' => $total_act,
+                'balance_qty' => $total_balance
+            ];
+
         }
 
         return $this->render('daily-prod-schedule', [
             'model' => $model,
             'data' => $data,
+            'data2' => $data2,
         ]);
     }
 

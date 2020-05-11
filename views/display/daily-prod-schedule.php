@@ -26,7 +26,7 @@ $this->registerCss("
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
     .form-horizontal .control-label {padding-top: 0px;}
-    #myTable {font-size: 1.3em; letter-spacing: 1px; color: white;}
+    #myTable {font-size: 0.9em; color: white;}
     //#myTable > tbody > tr:nth-child(odd) > td {background-color: #2f2f2f; color: white;}
     //#myTable > tbody > tr:nth-child(even) > td {background-color: #121213; color: white;}
     #myTable > thead > tr > th {background-color: #61258e; color: #ffeb3b;}
@@ -98,46 +98,82 @@ $total_plan = $total_act = $total_balance = 0;
 
 <?php ActiveForm::end(); ?>
 <br/>
-<table id="myTable" class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Date</th>
-            <?php foreach ($data as $key => $value): ?>
-                <th class="text-center"><?= $key; ?></th>
-            <?php endforeach ?>
-            <th class="text-center">Total</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Plan</td>
-            <?php foreach ($data as $key => $value): ?>
-                <td class="text-center"><?= number_format($value['plan_qty']); ?></td>
+<div class="table-responsive">
+    <table id="myTable" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <?php foreach ($data as $key => $value): ?>
+                    <th class="text-center"><?= $key; ?></th>
+                <?php endforeach ?>
+                <th class="text-center">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Plan</td>
+                <?php foreach ($data as $key => $value): ?>
+                    <td class="text-center"><?= number_format($value['plan_qty']); ?></td>
+                    <?php
+                    $total_plan += $value['plan_qty'];
+                    ?>
+                <?php endforeach ?>
+                <td class="text-center"><?= number_format($total_plan); ?></td>
+            </tr>
+            <tr>
+                <td>Output</td>
+                <?php foreach ($data as $key => $value): ?>
+                    <td class="text-center"><?= number_format($value['act_qty']); ?></td>
+                    <?php
+                    $total_act += $value['act_qty'];
+                    ?>
+                <?php endforeach ?>
+                <td class="text-center"><?= number_format($total_act); ?></td>
+            </tr>
+            <tr>
+                <td class="bg-gray-active color-palette">Balance</td>
+                <?php foreach ($data as $key => $value): ?>
+                    <td class="text-center bg-gray-active color-palette<?= $value['balance_qty'] < 0 ? ' text-red' : ''; ?>"><?= number_format($value['balance_qty']); ?></td>
+                <?php endforeach ?>
                 <?php
-                $total_plan += $value['plan_qty'];
+                $total_balance = $total_act - $total_plan;
                 ?>
-            <?php endforeach ?>
-            <td class="text-center"><?= number_format($total_plan); ?></td>
-        </tr>
+                <td class="text-center bg-gray-active color-palette<?= $total_balance < 0 ? ' text-red' : ''; ?>"><?= number_format($total_balance); ?></td>
+            </tr>
+        </tbody>
         <tr>
-            <td>Output</td>
-            <?php foreach ($data as $key => $value): ?>
-                <td class="text-center"><?= number_format($value['act_qty']); ?></td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black;" colspan="<?= count($data) + 1; ?>"><br/></td>
+        </tr>
+        <tbody>
+            <tr>
+                <td>Plan</td>
+                <?php foreach ($data2 as $key => $value): ?>
+                    <td class="text-center"><?= number_format($value['plan_qty']); ?></td>
+                    <?php
+                    $total_plan += $value['plan_qty'];
+                    ?>
+                <?php endforeach ?>
+            </tr>
+            <tr>
+                <td>Output</td>
+                <?php foreach ($data2 as $key => $value): ?>
+                    <td class="text-center"><?= number_format($value['act_qty']); ?></td>
+                    <?php
+                    $total_act += $value['act_qty'];
+                    ?>
+                <?php endforeach ?>
+                
+            </tr>
+            <tr>
+                <td class="bg-gray-active color-palette">Balance</td>
+                <?php foreach ($data2 as $key => $value): ?>
+                    <td class="text-center bg-gray-active color-palette<?= $value['balance_qty'] < 0 ? ' text-red' : ''; ?>"><?= number_format($value['balance_qty']); ?></td>
+                <?php endforeach ?>
                 <?php
-                $total_act += $value['act_qty'];
+                $total_balance = $total_act - $total_plan;
                 ?>
-            <?php endforeach ?>
-            <td class="text-center"><?= number_format($total_act); ?></td>
-        </tr>
-        <tr>
-            <td class="bg-gray-active color-palette">Balance</td>
-            <?php foreach ($data as $key => $value): ?>
-                <td class="text-center bg-gray-active color-palette<?= $value['balance_qty'] < 0 ? ' text-red' : ''; ?>"><?= number_format($value['balance_qty']); ?></td>
-            <?php endforeach ?>
-            <?php
-            $total_balance = $total_act - $total_plan;
-            ?>
-            <td class="text-center bg-gray-active color-palette<?= $total_balance < 0 ? ' text-red' : ''; ?>"><?= number_format($total_balance); ?></td>
-        </tr>
-    </tbody>
-</table>
+                
+            </tr>
+        </tbody>
+    </table>
+</div>
