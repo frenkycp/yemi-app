@@ -7,19 +7,16 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "tb_serno_input_plan".
+ * This is the base-model class for table "prod_daily_progress_01".
  *
- * @property string $pk
- * @property integer $nik
- * @property string $line
- * @property string $gmc
+ * @property integer $period
  * @property string $plan
- * @property integer $qty
- * @property integer $act_qty
- * @property integer $balance_qty
+ * @property string $qty
+ * @property string $act_qty
+ * @property string $balance_qty
  * @property string $aliasModel
  */
-abstract class SernoInputPlan extends \yii\db\ActiveRecord
+abstract class ProdDailyProgress01 extends \yii\db\ActiveRecord
 {
 
 
@@ -29,7 +26,7 @@ abstract class SernoInputPlan extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tb_serno_input_plan';
+        return 'prod_daily_progress_01';
     }
 
     /**
@@ -46,11 +43,9 @@ abstract class SernoInputPlan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pk', 'nik', 'line', 'gmc', 'plan', 'qty'], 'required'],
-            [['nik', 'qty', 'act_qty', 'balance_qty'], 'integer'],
+            [['period'], 'integer'],
             [['plan'], 'safe'],
-            [['pk', 'line', 'gmc'], 'string', 'max' => 255],
-            [['pk'], 'unique']
+            [['qty', 'act_qty', 'balance_qty'], 'number']
         ];
     }
 
@@ -60,10 +55,7 @@ abstract class SernoInputPlan extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'pk' => 'Pk',
-            'nik' => 'Nik',
-            'line' => 'Line',
-            'gmc' => 'Gmc',
+            'period' => 'Period',
             'plan' => 'Plan',
             'qty' => 'Qty',
             'act_qty' => 'Act Qty',

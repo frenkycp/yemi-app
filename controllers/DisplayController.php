@@ -128,9 +128,62 @@ use app\models\MaskerPrdOut;
 use app\models\MaskerStock;
 use app\models\AbsensiWfh;
 use app\models\ScanTemperatureDaily01;
+use app\models\ProdDailyProgress01;
 
 class DisplayController extends Controller
 {
+    public function actionDailyProdSchedule()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'section'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required')
+        ->addRule(['section'], 'string');
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t');
+
+        if ($model->load($_GET)) {}
+
+        $tmp_progress = ProdDailyProgress01::find()
+        ->where([
+            'AND',
+            ['>=', 'plan', $model->from_date],
+            ['<=', 'plan', $model->to_date]
+        ])
+        ->all();
+
+        $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+        $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+        
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){
+            $tgl = $i->format("Y-m-d");
+            $tgl_single = $i->format('j');
+            //$proddate = (strtotime($tgl . " +7 hours") * 1000);
+            $plan_qty = $act_qty = $balance_qty = 0;
+            foreach ($tmp_progress as $value) {
+                if ($value->plan == $tgl) {
+                    $plan_qty = $value->qty;
+                    $act_qty = $value->act_qty;
+                    $balance_qty = $value->balance_qty;
+                }
+            }
+            $data[$tgl_single] = [
+                'plan_qty' => $plan_qty,
+                'act_qty' => $act_qty,
+                'balance_qty' => $balance_qty,
+            ];
+        }
+
+        return $this->render('daily-prod-schedule', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
+
     public function actionDailyEmpTemperature()
     {
         $this->layout = 'clean';
