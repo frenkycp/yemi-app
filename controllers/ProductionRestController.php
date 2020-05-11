@@ -80,7 +80,7 @@ class ProductionRestController extends Controller
         if ($today == '') {
             $today = date('Y-m-d');
         }
-        
+        $last_update = date('Y-m-d H:i:s');
 
         $tmp_plan = SernoInputPlan::find()
         ->where([
@@ -112,6 +112,7 @@ class ProductionRestController extends Controller
                 $serno_input_plan = SernoInputPlan::find()->where(['pk' => $pk_plan])->one();
                 $serno_input_plan->act_qty = $value_act->total;
                 $serno_input_plan->balance_qty = $serno_input_plan->act_qty - $serno_input_plan->qty;
+                $serno_input_plan->last_update_output = $last_update;
                 if (!$serno_input_plan->save()) {
                     return json_encode($serno_input_plan->errors);
                 }

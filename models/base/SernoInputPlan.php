@@ -17,6 +17,7 @@ use Yii;
  * @property integer $qty
  * @property integer $act_qty
  * @property integer $balance_qty
+ * @property string $last_update_output
  * @property string $aliasModel
  */
 abstract class SernoInputPlan extends \yii\db\ActiveRecord
@@ -48,7 +49,7 @@ abstract class SernoInputPlan extends \yii\db\ActiveRecord
         return [
             [['pk', 'nik', 'line', 'gmc', 'plan', 'qty'], 'required'],
             [['nik', 'qty', 'act_qty', 'balance_qty'], 'integer'],
-            [['plan'], 'safe'],
+            [['plan', 'last_update_output'], 'safe'],
             [['pk', 'line', 'gmc'], 'string', 'max' => 255],
             [['pk'], 'unique']
         ];
@@ -68,6 +69,7 @@ abstract class SernoInputPlan extends \yii\db\ActiveRecord
             'qty' => 'Qty',
             'act_qty' => 'Act Qty',
             'balance_qty' => 'Balance Qty',
+            'last_update_output' => 'Last Update Output',
         ];
     }
 
