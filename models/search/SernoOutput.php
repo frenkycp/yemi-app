@@ -18,7 +18,7 @@ class SernoOutput extends SernoOutputModel
 public function rules()
 {
 return [
-[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst', 'etd_old', 'so'], 'safe'],
+[['pk', 'stc', 'gmc', 'etd', 'category', 'description', 'line', 'vms', 'dst', 'etd_old', 'so', 'bu'], 'safe'],
             [['id', 'num', 'adv', 'cntr', 'back_order', 'week_no'], 'integer'],
 ];
 }
@@ -139,6 +139,7 @@ $query->andFilterWhere([
             'adv' => $this->adv,
             'cntr' => $this->cntr,
             'week(ship, 4)' => $this->week_no,
+            'tb_serno_master.hpl_desc' => $this->bu,
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])

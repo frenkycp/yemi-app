@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
 use yii\web\View;
 
@@ -164,6 +165,19 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 110px; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'bu',
+        'label' => 'Business<br/>Unit',
+        'value' => 'sernoMaster.hpl_desc',
+        'encodeLabel' => false,
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\SernoMaster::find()->select('hpl_desc')->groupBy('hpl_desc')->orderBy('hpl_desc')->all(), 'hpl_desc', 'hpl_desc'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 80px; font-size: 12px;'
         ],
     ],
     [
