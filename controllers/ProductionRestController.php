@@ -133,6 +133,7 @@ class ProductionRestController extends Controller
             } else {
                 $dpo = DailyProductionOutput::findOne($tmp_pk);
             }
+            $dpo->last_update = $last_update;
             $dpo->act_qty = $value_act->total;
             if (!$dpo->save()) {
                 return json_encode($serno_input_plan->errors);
@@ -149,6 +150,7 @@ class ProductionRestController extends Controller
         if ($period == '') {
             $period = date('Ym');
         }
+        $last_update = date('Y-m-d H:i:s');
 
         $tmp_act = SernoInput::find()
         ->select([
@@ -176,7 +178,7 @@ class ProductionRestController extends Controller
         $arr_output = ArrayHelper::map(DailyProductionOutput::find()->where(['period' => $period])->all(), 'id', 'id');
 
         $bulkInsertArray = array();
-        $columnNameArray = ['id', 'period', 'proddate', 'gmc', 'act_qty'];
+        $columnNameArray = ['id', 'period', 'proddate', 'gmc', 'act_qty', 'last_update'];
         foreach ($tmp_plan as $value) {
             if (!isset($arr_output[$value->pk])) {
                 $id = $value->pk;
@@ -185,7 +187,7 @@ class ProductionRestController extends Controller
                 $gmc = $value->gmc;
                 $act_qty = 0;
                 $bulkInsertArray[] = [
-                    $id, $period_data, $proddate, $gmc, $act_qty
+                    $id, $period_data, $proddate, $gmc, $act_qty, $last_update
                 ];
             }
         }
@@ -214,6 +216,7 @@ class ProductionRestController extends Controller
                 $output->gmc = $value_act->gmc;
             }
             $output->act_qty = $value_act->total;
+            $output->last_update = $last_update;
             if (!$output->save()) {
                 return json_encode($models->errors);
             }
