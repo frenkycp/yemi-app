@@ -2,10 +2,12 @@
 namespace app\controllers;
 
 use yii\rest\Controller;
+use yii\helpers\ArrayHelper;
 use app\models\SernoInput;
 use app\models\ProdNgData;
 use app\models\ProdNgRatio;
 use app\models\SernoInputPlan;
+use app\models\DailyProductionOutput;
 
 class ProductionRestController extends Controller
 {
@@ -90,18 +92,21 @@ class ProductionRestController extends Controller
 
         $tmp_act = SernoInput::find()
         ->select([
-            'line', 'gmc',
+            'gmc',
             'total' => 'COUNT(gmc)'
         ])
         ->where([
             'proddate' => $today
         ])
-        ->groupBy('line, gmc')
+        ->groupBy('gmc')
         ->all();
+
+        $arr_output = ArrayHelper::map(DailyProductionOutput::find()->where(['proddate' => $today])->all(), 'id', 'id');
 
         foreach ($tmp_act as $value_act) {
             $is_update = false;
             $pk_plan = '';
+            
             foreach ($tmp_plan as $value_plan) {
                 if ($value_act->line == $value_plan->line && $value_act->gmc == $value_plan->gmc) {
                     $is_update = true;
@@ -116,27 +121,105 @@ class ProductionRestController extends Controller
                 if (!$serno_input_plan->save()) {
                     return json_encode($serno_input_plan->errors);
                 }
-            }/* else {
-                $tmp_pic = SernoInputPlan::find()->where([
-                    '<=', 'plan', $today
-                ])
-                ->andWhere([
-                    'line' => $value_act->line
-                ])
-                ->orderBy('plan DESC')
-                ->one();
-                $serno_input_plan = new SernoInputPlan;
-                $serno_input_plan->pk = $value_act->gmc . date('Ymd');
-                $serno_input_plan->nik = $tmp_pic->nik;
-                $serno_input_plan->line = $value_act->line;
-                $serno_input_plan->gmc = $value_act->gmc;
-                $serno_input_plan->plan = date('Y-m-d 00:00:00');
-                $serno_input_plan->qty = 0;
-            }*/
-            
+            }
+
+            $tmp_pk = $value_act->gmc . date('Ymd', strtotime($today));
+            if (!isset($arr_output[$tmp_pk])) {
+                $dpo = new DailyProductionOutput;
+                $dpo->id = $tmp_pk;
+                $dpo->period = date('Ym', strtotime($today));
+                $dpo->proddate = $today;
+                $dpo->gmc = $value_act->gmc;
+            } else {
+                $dpo = DailyProductionOutput::findOne($tmp_pk);
+            }
+            $dpo->act_qty = $value_act->total;
+            if (!$dpo->save()) {
+                return json_encode($serno_input_plan->errors);
+            }
         }
 
         return 'Finished ' . $today;
+    }
+
+    public function actionDailyProductionUpdateMonthly($period = '')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if ($period == '') {
+            $period = date('Ym');
+        }
+
+        $tmp_act = SernoInput::find()
+        ->select([
+            'proddate', 'gmc',
+            'total' => 'COUNT(gmc)'
+        ])
+        ->where([
+            'EXTRACT(year_month FROM proddate)' => $period
+        ])
+        ->groupBy('proddate, gmc')
+        ->all();
+
+        $tmp_output = DailyProductionOutput::find()
+        ->where([
+            'period' => $period
+        ])
+        ->all();
+
+        $tmp_plan = SernoInputPlan::find()
+        ->where([
+            'EXTRACT(year_month FROM plan)' => $period
+        ])
+        ->all();
+
+        $arr_output = ArrayHelper::map(DailyProductionOutput::find()->where(['period' => $period])->all(), 'id', 'id');
+
+        $bulkInsertArray = array();
+        $columnNameArray = ['id', 'period', 'proddate', 'gmc', 'act_qty'];
+        foreach ($tmp_plan as $value) {
+            if (!isset($arr_output[$value->pk])) {
+                $id = $value->pk;
+                $period_data = date('Ym', strtotime($value->plan));
+                $proddate = date('Y-m-d', strtotime($value->plan));
+                $gmc = $value->gmc;
+                $act_qty = 0;
+                $bulkInsertArray[] = [
+                    $id, $period_data, $proddate, $gmc, $act_qty
+                ];
+            }
+        }
+
+        if(count($bulkInsertArray) > 0){
+            try {
+                $insertCount = \Yii::$app->db_mis7->createCommand()
+                ->batchInsert(DailyProductionOutput::getTableSchema()->fullName, $columnNameArray, $bulkInsertArray)
+                ->execute();
+            } catch (\Exception $e) {
+                $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+                return $msg;
+            }
+        }
+
+        foreach ($tmp_act as $value_act) {
+            $output = DailyProductionOutput::find()->where([
+                'proddate' => $value_act->proddate,
+                'gmc' => $value_act->gmc
+            ])->one();
+            if (!$output) {
+                $output = new DailyProductionOutput;
+                $output->id = $value_act->gmc . date('Ymd', strtotime($value_act->proddate));
+                $output->period = date('Ym', strtotime($value_act->proddate));
+                $output->proddate = $value_act->proddate;
+                $output->gmc = $value_act->gmc;
+            }
+            $output->act_qty = $value_act->total;
+            if (!$output->save()) {
+                return json_encode($models->errors);
+            }
+        }
+
+        return 'Update Success ';
     }
 
 }
