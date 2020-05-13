@@ -128,7 +128,7 @@ use app\models\MaskerPrdOut;
 use app\models\MaskerStock;
 use app\models\AbsensiWfh;
 use app\models\ScanTemperatureDaily01;
-use app\models\ProdDailyProgress01;
+use app\models\DailyProductionOutput01;
 
 class DisplayController extends Controller
 {
@@ -148,26 +148,35 @@ class DisplayController extends Controller
 
         if ($model->load($_GET)) {}
 
-        $tmp_progress = ProdDailyProgress01::find()
+        $tmp_progress = DailyProductionOutput01::find()
+        ->select([
+            'proddate',
+            'plan_qty' => 'SUM(plan_qty)',
+            'act_qty' => 'SUM(act_qty)',
+            'balance_qty' => 'SUM(balance_qty)',
+        ])
         ->where([
             'AND',
-            ['>=', 'plan', $model->from_date],
-            ['<=', 'plan', $model->to_date]
+            ['>=', 'proddate', $model->from_date],
+            ['<=', 'proddate', $model->to_date]
         ])
+        ->groupBy('proddate')
         ->all();
 
         $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
         $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
         
         $total_plan = $total_act = $total_balance = 0;
+        $tmp_data_plan = $tmp_data_act = $data_chart = [];
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
             $tgl = $i->format("Y-m-d");
             $tgl_single = $i->format('j');
             //$proddate = (strtotime($tgl . " +7 hours") * 1000);
+            $post_date = (strtotime($tgl . " +7 hours") * 1000);
             $plan_qty = $act_qty = $balance_qty = 0;
             foreach ($tmp_progress as $value) {
-                if ($value->plan == $tgl) {
-                    $plan_qty = $value->qty;
+                if ($value->proddate == $tgl) {
+                    $plan_qty = $value->plan_qty;
                     $act_qty = $value->act_qty;
                     $balance_qty = $value->balance_qty;
                 }
@@ -186,12 +195,32 @@ class DisplayController extends Controller
                 'balance_qty' => $total_balance
             ];
 
+            $tmp_data_plan[] = [
+                'x' => $post_date,
+                'y' => $total_plan
+            ];
+            $tmp_data_act[] = [
+                'x' => $post_date,
+                'y' => $total_act
+            ];
+
         }
+        $data_chart = [
+            [
+                'name' => 'Plan Qty',
+                'data' => $tmp_data_plan,
+            ],
+            [
+                'name' => 'Actual Qty',
+                'data' => $tmp_data_act,
+            ],
+        ];
 
         return $this->render('daily-prod-schedule', [
             'model' => $model,
             'data' => $data,
             'data2' => $data2,
+            'data_chart' => $data_chart,
         ]);
     }
 

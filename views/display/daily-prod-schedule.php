@@ -26,12 +26,13 @@ $this->registerCss("
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
     .form-horizontal .control-label {padding-top: 0px;}
-    #myTable {font-size: 0.9em; color: white;}
-    //#myTable > tbody > tr:nth-child(odd) > td {background-color: #2f2f2f; color: white;}
-    //#myTable > tbody > tr:nth-child(even) > td {background-color: #121213; color: white;}
-    #myTable > thead > tr > th {background-color: #61258e; color: #ffeb3b;}
-    #myTable > tbody > tr > td {font-size: 0.8em;}
+    .myTable {font-size: 1em; color: white; letter-spacing: 1px;}
+    //.myTable > tbody > tr:nth-child(odd) > td {background-color: #2f2f2f; color: white;}
+    //.myTable > tbody > tr:nth-child(even) > td {background-color: #121213; color: white;}
+    .myTable > thead > tr > th {background-color: #61258e; color: #ffeb3b;}
+    .myTable > tbody > tr > td {font-size: 0.8em;}
     .dataTables_wrapper {color: white;}
+    .table-title {font-size: 1.5em;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -98,8 +99,15 @@ $total_plan = $total_act = $total_balance = 0;
 
 <?php ActiveForm::end(); ?>
 <br/>
+<table class="table myTable" style="margin-bottom: 0px;">
+    <tbody>
+        <tr>
+            <td style="border-top: unset;"><span class="table-title">Daily Basis</span></td>
+        </tr>
+    </tbody>
+</table>
 <div class="table-responsive">
-    <table id="myTable" class="table table-bordered">
+    <table class="table table-bordered myTable">
         <thead>
             <tr>
                 <th>Date</th>
@@ -133,16 +141,16 @@ $total_plan = $total_act = $total_balance = 0;
             <tr>
                 <td class="bg-gray-active color-palette">Balance</td>
                 <?php foreach ($data as $key => $value): ?>
-                    <td class="text-center bg-gray-active color-palette<?= $value['balance_qty'] < 0 ? ' text-red' : ''; ?>"><?= number_format($value['balance_qty']); ?></td>
+                    <td class="text-center bg-gray-active color-palette<?= $value['balance_qty'] < 0 ? '' : ''; ?>"><?= number_format($value['balance_qty']); ?></td>
                 <?php endforeach ?>
                 <?php
                 $total_balance = $total_act - $total_plan;
                 ?>
-                <td class="text-center bg-gray-active color-palette<?= $total_balance < 0 ? ' text-red' : ''; ?>"><?= number_format($total_balance); ?></td>
+                <td class="text-center bg-gray-active color-palette<?= $total_balance < 0 ? '' : ''; ?>"><?= number_format($total_balance); ?></td>
             </tr>
         </tbody>
         <tr>
-            <td style="border-left: 1px solid black; border-right: 1px solid black;" colspan="<?= count($data) + 1; ?>"><br/></td>
+            <td style="border-left: 1px solid black; border-right: 1px solid black;" colspan="<?= count($data) + 1; ?>"><br/><span style="color: white;" class="table-title">Monthly Basis</span></td>
         </tr>
         <tbody>
             <tr>
@@ -167,7 +175,7 @@ $total_plan = $total_act = $total_balance = 0;
             <tr>
                 <td class="bg-gray-active color-palette">Balance</td>
                 <?php foreach ($data2 as $key => $value): ?>
-                    <td class="text-center bg-gray-active color-palette<?= $value['balance_qty'] < 0 ? ' text-red' : ''; ?>"><?= number_format($value['balance_qty']); ?></td>
+                    <td class="text-center bg-gray-active color-palette<?= $value['balance_qty'] < 0 ? '' : ''; ?>"><?= number_format($value['balance_qty']); ?></td>
                 <?php endforeach ?>
                 <?php
                 $total_balance = $total_act - $total_plan;
@@ -176,4 +184,77 @@ $total_plan = $total_act = $total_balance = 0;
             </tr>
         </tbody>
     </table>
+</div>
+
+<br/>
+
+<div class="box box-primary">
+    <div class="box-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/sand-signika',
+                //'themes/grid-light',
+                'themes/dark-unica',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'line',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
+                    'height' => 800
+                ],
+                'title' => [
+                    'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
+                ],
+                'subtitle' => [
+                    'text' => ''
+                ],
+                'xAxis' => [
+                    'type' => 'datetime',
+                    //'categories' => $value['category'],
+                ],
+                'yAxis' => [
+                    //'min' => 0,
+                    'title' => [
+                        'text' => null
+                    ],
+                    'allowDecimals' => false,
+                    //'gridLineWidth' => 0,
+                ],
+                'credits' => [
+                    'enabled' =>false
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    //'xDateFormat' => '%A, %b %e %Y',
+                    //'valueSuffix' => ' min'
+                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                ],
+                'plotOptions' => [
+                    'series' => [
+                        'lineWidth' => 1,
+                        'marker' => [
+                            'radius' => 2,
+                        ],
+                        /*'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ]*/
+                    ]
+                ],
+                'series' => $data_chart
+            ],
+        ]);
+        ?>
+    </div>
 </div>

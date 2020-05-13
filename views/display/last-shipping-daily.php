@@ -151,7 +151,7 @@ $this->registerJs($script, View::POS_HEAD );
                         'text' => null
                     ],
                     'allowDecimals' => false,
-                    //'min' => 7,
+                    'min' => 7,
                     'max' => 24
                     //'gridLineWidth' => 0,
                 ],

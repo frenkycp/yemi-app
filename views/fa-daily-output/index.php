@@ -63,6 +63,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
+        'pageSummary' => true,
     ],
     [
         'attribute' => 'act_qty',
@@ -72,6 +73,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
+        'pageSummary' => true,
     ],
     [
         'attribute' => 'balance_qty',
@@ -81,6 +83,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center;'
         ],
+        'pageSummary' => true,
     ],
     [
         'attribute' => 'last_update',
@@ -108,6 +111,7 @@ $gridColumns = [
             'filterModel' => $searchModel,
             'columns' => $gridColumns,
             'hover' => true,
+            'showPageSummary' => true,
             //'condensed' => true,
             'striped' => true,
             //'floatHeader'=>true,
