@@ -108,7 +108,7 @@ class ProductionRestController extends Controller
             $pk_plan = '';
             
             foreach ($tmp_plan as $value_plan) {
-                if ($value_act->line == $value_plan->line && $value_act->gmc == $value_plan->gmc) {
+                if ($value_act->gmc == $value_plan->gmc) {
                     $is_update = true;
                     $pk_plan = $value_plan->pk;
                 }
