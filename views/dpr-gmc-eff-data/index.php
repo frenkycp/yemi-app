@@ -37,13 +37,37 @@ $this->registerJs("$(function() {
 
 $gridColumns = [
     [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => '{detail-info}',
+        'buttons' => [
+            'detail-info' => function($url, $model, $key){
+                $url = [
+                    'value' => Url::to(['get-product-list', 'proddate' => $model->proddate, 'line' => $model->line, 'gmc' => $model->gmc]),
+                    'title' => 'Detail Product',
+                    'class' => 'modal_mp'
+                ];
+                $options = [
+                    'title' => 'Detail Product',
+                    'data-pjax' => '0',
+                    'id' => 'btn-complete'
+                ];
+                return Html::a('<i class="fa fa-cubes"></i>', ['get-product-list', 'proddate' => $model->proddate, 'line' => $model->line, 'gmc' => $model->gmc], ['class' => 'modal_mp', 'data-pjax' => '0', 'title' => 'Detail Product']);
+            },
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
+    ],
+    [
         'class' => 'kartik\grid\SerialColumn',
         'contentOptions' => ['class' => 'kartik-sheet-style'],
         'width' => '36px',
         'header' => '',
         'headerOptions' => ['class' => 'kartik-sheet-style'],
-        'pageSummary' => 'Total',
-        'pageSummaryOptions' => ['colspan' => 5],
         'header' => '',
         'headerOptions' => ['class'=>'kartik-sheet-style'],
     ],
@@ -69,10 +93,14 @@ $gridColumns = [
         'width'=>'120px',
     ],
     [
-        'attribute' => 'partName',
+        'attribute' => 'part_name',
         'label' => 'Description',
+        'value' => function($model){
+            return $model->partName;
+        },
         'vAlign' => 'middle',
-        'mergeHeader' => true,
+        'pageSummary' => 'Total',
+        //'mergeHeader' => true,
         //'width'=>'100px',
     ],
     [
@@ -87,13 +115,14 @@ $gridColumns = [
     ],
     [
         'attribute' => 'qty_product',
-        'value' => function($model){
+        /*'value' => function($model){
             return Html::a('<span class="badge bg-light-blue">' . $model->qty_product . '</span>', ['get-product-list', 'proddate' => $model->proddate, 'line' => $model->line, 'gmc' => $model->gmc], ['class' => 'modal_mp', 'data-pjax' => '0',]);
-        },
+        },*/
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'format' => 'raw',
         'mergeHeader' => true,
+        'pageSummary' => true
         //'width'=>'100px',
     ],
     [

@@ -18,7 +18,7 @@ class DprGmcEffDataSearch extends SernoInput
 public function rules()
 {
 return [
-            [['proddate', 'line', 'gmc'], 'safe'],
+            [['proddate', 'line', 'gmc', 'part_name'], 'safe'],
         ];
 }
 
@@ -43,15 +43,16 @@ public function search($params)
 //$query = DprGmcEffView::find();
 $query = SernoInput::find()
 ->select([
-    'proddate', 'line', 'gmc',
-    'qty_product' => 'COUNT(gmc)',
+    'proddate', 'tb_serno_input.line', 'tb_serno_input.gmc',
+    'qty_product' => 'COUNT(tb_serno_input.gmc)',
     'qty_time' => 'ROUND(SUM(qty_time),2)',
     'mp_time' => 'ROUND(SUM(mp_time),2)',
     'mp_time_single' => 'mp_time',
     'start_time' => 'MIN(waktu)',
     'end_time' => 'MAX(waktu)',
 ])
-->groupBy('proddate, line, gmc');
+->groupBy('proddate, line, tb_serno_input.gmc');
+$query->joinWith('sernoMaster');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -67,23 +68,13 @@ return $dataProvider;
 
 $query->andFilterWhere([
             //'proddate' => $this->proddate,
-            'line' => $this->line,
-            'gmc' => $this->gmc,
+            'tb_serno_input.line' => $this->line,
+            'tb_serno_input.gmc' => $this->gmc,
         ]);
 
 $query->andFilterWhere(['like', 'proddate', $this->proddate]);
 
-/*$query->andFilterWhere(['like', 'NIK_DATE_ID', $this->NIK_DATE_ID])
-            ->andFilterWhere(['like', 'NO', $this->NO])
-            ->andFilterWhere(['like', 'NIK', $this->NIK])
-            ->andFilterWhere(['like', 'CC_ID', $this->CC_ID])
-            ->andFilterWhere(['like', 'SECTION', $this->SECTION])
-            ->andFilterWhere(['like', 'DIRECT_INDIRECT', $this->DIRECT_INDIRECT])
-            ->andFilterWhere(['like', 'NAMA_KARYAWAN', $this->NAMA_KARYAWAN])
-            ->andFilterWhere(['like', 'PERIOD', $this->PERIOD])
-            ->andFilterWhere(['like', 'NOTE', $this->NOTE])
-            ->andFilterWhere(['like', 'DAY_STAT', $this->DAY_STAT])
-            ->andFilterWhere(['like', 'CATEGORY', $this->CATEGORY]);*/
+$query->andFilterWhere(['like', 'tb_serno_master.model', $this->part_name]);
 
 return $dataProvider;
 }
