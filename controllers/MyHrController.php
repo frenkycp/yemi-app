@@ -117,9 +117,9 @@ class MyHrController extends Controller
             'total_cuti' => 'SUM(CASE WHEN PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
             'total_late' => 'SUM(CASE WHEN PATINDEX(\'%LTI%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
             'total_early_out' => 'SUM(CASE WHEN PATINDEX(\'%EAO%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-            'total_shift2' => 'SUM(CASE WHEN shiftdaily_code = \'Shift_2\' AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-            'total_shift3' => 'SUM(CASE WHEN shiftdaily_code = \'Shift_3\' AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-            'total_shift4' => 'SUM(CASE WHEN PATINDEX(\'4G_Shift%\', shiftdaily_code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+            'total_shift2' => 'SUM(CASE WHEN PATINDEX(\'%SHIFT_2%\', UPPER(shiftdaily_code)) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+            'total_shift3' => 'SUM(CASE WHEN PATINDEX(\'%SHIFT_3%\', UPPER(shiftdaily_code)) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
+            'total_shift4' => 'SUM(CASE WHEN PATINDEX(\'%4G_SHIFT%\', UPPER(shiftdaily_code)) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
             'total_ck' => 'SUM(CASE WHEN PATINDEX(\'%CK%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
             'total_ck_no_disiplin' => 'SUM(CASE WHEN Attend_Code IN (\'CK9\', \'CK10\', \'CK11\') AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
         ])
