@@ -3,7 +3,7 @@ use dmstr\widgets\Alert;
 
 ?>
 <div class="content-wrapper">
-    <div class="container">
+    <!-- <div class="container"> -->
         <section class="content-header">
             <?php if (isset($this->blocks['content-header'])) { ?>
                 <h1><?= $this->blocks['content-header'] ?></h1>
@@ -35,6 +35,6 @@ use dmstr\widgets\Alert;
             <?= Alert::widget() ?>
             <?= $content ?>
         </section>
-    </div>
+    <!-- </div> -->
     
 </div>

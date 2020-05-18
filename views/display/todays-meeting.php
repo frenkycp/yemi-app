@@ -32,15 +32,29 @@ $this->registerCss("
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
-    .content {padding-top: 0px;}
+    .content {padding: 0px;}
     .table tr {border-collapse:separate; border-spacing:0 5px;}
     .table > tbody > tr > td {padding: 0px;}
     //tr:nth-child(even) {background-color: rgba(255, 255, 255, 0.15);}
     //tr:nth-child(odd) {background-color: rgba(255, 255, 255, 0.1);}
 ");
+$this->registerCssFile('@web/css/component.css');
+$this->registerJsFile('@web/js/snap.svg-min.js');
+$this->registerJsFile('@web/js/classie.js');
+$this->registerJsFile('@web/js/svgLoader.js');
+
 
 if ($_GET['room_id'] == 6) {
     $this->registerJs("
+        window.onload = setupRefresh;
+
+        function setupRefresh() {
+          setTimeout(\"refreshPage();\", 600000); // milliseconds
+        }
+        function refreshPage() {
+           window.location = location.href;
+        }
+
         function cek_tamu() 
         {
             $.ajax
@@ -80,9 +94,21 @@ if ($_GET['room_id'] == 6) {
                 }
             });
         }
+        function animation_page(){
+            loader = new SVGLoader( document.getElementById( 'loader' ), { speedIn : 700, easingIn : mina.easeinout } ); //------------------- ANIMASI -------------------------
+            function init() //------------------- ANIMASI -------------------------
+            { //------------------- ANIMASI -------------------------
+                loader.show(); //------------------- ANIMASI -------------------------
+                setTimeout( function() { loader.hide(); }, 700 ); //------------------- ANIMASI -------------------------
+            } //------------------- ANIMASI -------------------------
+
+            init(); //------------------- ANIMASI -------------------------
+            //setInterval(animation_page, 5000);
+        };
         $(document).ready(function() {
             update_data();
             cek_tamu();
+            animation_page();
         });
     ");
 } else {
@@ -102,11 +128,37 @@ if ($_GET['room_id'] == 6) {
                 }
             });
         }
+
+        function animation_page(){
+            loader = new SVGLoader( document.getElementById( 'loader' ), { speedIn : 700, easingIn : mina.easeinout } ); //------------------- ANIMASI -------------------------
+            function init() //------------------- ANIMASI -------------------------
+            { //------------------- ANIMASI -------------------------
+                loader.show(); //------------------- ANIMASI -------------------------
+                setTimeout( function() { loader.hide(); }, 700 ); //------------------- ANIMASI -------------------------
+            } //------------------- ANIMASI -------------------------
+
+            init(); //------------------- ANIMASI -------------------------
+            //setInterval(animation_page, 60000);
+        };
         $(document).ready(function() {
             update_data();
+            animation_page();
         });
+        
     ");
 }
+
+$script = "
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+";
+$this->registerJs($script, View::POS_HEAD );
 
 //$this->registerCssFile('@web/adminty_assets/css/bootstrap.min.css');
 //$this->registerCssFile('@web/adminty_assets/css/component.css');
@@ -115,28 +167,38 @@ if ($_GET['room_id'] == 6) {
 print_r($vms_data);
 echo '</pre>';*/
 ?>
+<div id="pagewrap" class="pagewrap">
+    <div class="container show">
+        <div class="row" style="background-color: #21005a; color: white; font-size: 7em; border-top: 1px solid white; border-bottom: 1px solid white; letter-spacing: 3px;">
+            <div class="col-md-12">
+                <span id="room-name">
+                    <?php
+                    $room_name = strtoupper($room_info->room_name);
+                    if ($room_id == 1 || $room_id == 6) {
+                        $room_name = strtoupper($room_info->room_name . ' ROOM');
+                    }
+                    echo $room_info->id == null ? '' : $room_name;
+                    ?>
+                </span>
 
-<div class="row" style="background-color: #21005a; color: white; font-size: 7em; border-top: 1px solid white; border-bottom: 1px solid white; letter-spacing: 3px;">
-    <div class="col-md-12">
-        <span id="room-name">
-            <?php
-            $room_name = strtoupper($room_info->room_name);
-            if ($room_id == 1 || $room_id == 6) {
-                $room_name = strtoupper($room_info->room_name . ' ROOM');
-            }
-            echo $room_info->id == null ? '' : $room_name;
-            ?>
-        </span>
-
-        <span id="todays-date" class="pull-right">
-            <?= strtoupper(date('d M\' Y')) . ' <small style="color: #D58936;">' . date('H:i') . '</small>'; ?>
-        </span>
-    </div>
-</div>
-<br/>
-<div class="row">
-    
-        <div id="meeting-content" style="font-family: 'MS PGothic', Osaka, Arial, sans-serif; text-transform: uppercase;">
+                <span id="todays-date" class="pull-right">
+                    <?= strtoupper(date('d M\' Y')) . ' <small style="color: #D58936;">' . date('H:i') . '</small>'; ?>
+                </span>
+            </div>
         </div>
+
+        <br/>
+        <div class="row">
+            
+                <div id="meeting-content" style="font-family: 'MS PGothic', Osaka, Arial, sans-serif; text-transform: uppercase;">
+                </div>
+            
+        </div>
+    </div>
     
+    <div id="loader" class="pageload-overlay" data-opening="m -5,-5 0,70 90,0 0,-70 z m 5,35 c 0,0 15,20 40,0 25,-20 40,0 40,0 l 0,0 C 80,30 65,10 40,30 15,50 0,30 0,30 z"> <!------------------- ANIMASI ------------------------->
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 80 60" preserveAspectRatio="none" > <!------------------- ANIMASI ------------------------->
+            <path d="m -5,-5 0,70 90,0 0,-70 z m 5,5 c 0,0 7.9843788,0 40,0 35,0 40,0 40,0 l 0,60 c 0,0 -3.944487,0 -40,0 -30,0 -40,0 -40,0 z"/> <!------------------- ANIMASI ------------------------->
+        </svg> <!------------------- ANIMASI ------------------------->
+    </div>
 </div>
