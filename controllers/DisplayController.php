@@ -129,9 +129,105 @@ use app\models\MaskerStock;
 use app\models\AbsensiWfh;
 use app\models\ScanTemperatureDaily01;
 use app\models\DailyProductionOutput01;
+use app\models\SunfishEmpAttendance;
+use app\models\SunfishViewEmp;
 
 class DisplayController extends Controller
 {
+    public function actionDailyNoChecklog()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'post_date',
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_karyawan_sunfish = SunfishEmpAttendance::find()
+        ->where([
+            'FORMAT(shiftstarttime, \'yyyy-MM-dd\')' => $model->post_date
+        ])
+        ->all();
+
+        $tmp_karyawan = Karyawan::find()
+        ->where([
+            'AKTIF' => 'Y',
+        ])
+        ->andWhere('(PATINDEX(\'M%\', GRADE) = 0 AND PATINDEX(\'D%\', GRADE) = 0)')
+        ->andWhere(['<>', 'DEPARTEMEN', 'ADMINISTRATION'])
+        ->all();
+
+        $tmp_karyawan2 = SunfishViewEmp::find()
+        ->where([
+            'status' => 1
+        ])
+        ->andWhere('((PATINDEX(\'M%\', grade_code) = 0 AND PATINDEX(\'D%\', grade_code) = 0))')
+        ->andWhere('cost_center_code <> \'10\'')
+        ->andWhere('cost_center_code <> \'110X\'')
+        ->all();
+
+        $tmp_group_arr = ArrayHelper::map(Karyawan::find()
+        ->where([
+            'AKTIF' => 'Y',
+        ])
+        ->andWhere('GROUP_AB IS NOT NULL')
+        ->all(), 'NIK_SUN_FISH', 'GROUP_AB');
+
+        $total_nolog_a = $total_nolog_b = 0;
+        $data_nolog = [];
+
+        $ketemu = 0;
+        foreach ($tmp_karyawan2 as $value1) {
+            $is_checklog = false;
+            foreach ($tmp_karyawan_sunfish as $value2) {
+                if ($value2->emp_no == $value1->Emp_no) {
+                    $ketemu++;
+                    if ($value2->starttime != null) {
+                        $is_checklog = true;
+                    }
+                }
+            }
+            if ($is_checklog == false) {
+                if (isset($tmp_group_arr[$value1->Emp_no])) {
+                    $group_code = $tmp_group_arr[$value1->Emp_no];
+                } else {
+                    $group_code = 'O';
+                }
+                $data_nolog[$group_code][] = [
+                    'nik' => $value1->Emp_no,
+                    'name' => $value1->Full_name,
+                    'section' => $value1->cost_center_name
+                ];
+                /*if ($value1->GROUP_AB == null) {
+                    $data_nolog['O'][] = [
+                        'nik' => $value1->Emp_no,
+                        'name' => $value1->Full_name,
+                        'section' => $value1->cost_center_name
+                    ];
+                } else {
+                    $data_nolog[$value1->GROUP_AB][] = [
+                        'nik' => $value1->NIK_SUN_FISH,
+                        'name' => $value1->Full_name,
+                        'section' => $value1->cost_center_name
+                    ];
+                }*/
+            }
+            
+        }
+
+        return $this->render('daily-no-checklog', [
+            'data_nolog' => $data_nolog,
+            'model' => $model,
+            'ketemu' => $ketemu,
+        ]);
+    }
+
     public function actionDailyProdSchedule()
     {
         $this->layout = 'clean';
