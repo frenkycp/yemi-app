@@ -288,7 +288,7 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
         ->asArray()
         ->all();
 
-        $target_ng_rate = 0.25;
+        $target_ng_rate = 0.11;
 
         return $this->render('daily-inspection', [
         	'data' => $data,
