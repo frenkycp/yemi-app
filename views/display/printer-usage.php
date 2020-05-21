@@ -18,7 +18,10 @@ $this->title = [
 
 date_default_timezone_set('Asia/Jakarta');
 
-
+$this->registerCssFile('@web/css/component.css');
+$this->registerJsFile('@web/js/snap.svg-min.js');
+$this->registerJsFile('@web/js/classie.js');
+$this->registerJsFile('@web/js/svgLoader.js');
 
 $this->registerCss("
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
@@ -45,13 +48,13 @@ $this->registerCss("
         border:1px solid #8b8c8d;
         background-color: #518469;
         color: white;
-        font-size: 14px;
+        font-size: 18px;
         border-bottom: 7px solid #797979;
         vertical-align: middle;
     }
     .table > tbody > tr > td{
         border:1px solid #777474;
-        //font-size: 14px;
+        font-size: 16px;
         //background-color: #B3E5FC;
         //font-weight: 1000;
         color: #FFF;
@@ -77,6 +80,20 @@ $script = "
     function refreshPage() {
        window.location = location.href;
     }
+
+    function animation_page(){
+        loader = new SVGLoader( document.getElementById( 'loader' ), { speedIn : 700, easingIn : mina.easeinout } ); //------------------- ANIMASI -------------------------
+        function init() //------------------- ANIMASI -------------------------
+        { //------------------- ANIMASI -------------------------
+            loader.show(); //------------------- ANIMASI -------------------------
+            setTimeout( function() { loader.hide(); }, 700 ); //------------------- ANIMASI -------------------------
+        } //------------------- ANIMASI -------------------------
+
+        init(); //------------------- ANIMASI -------------------------
+    };
+    $(document).ready(function() {
+        animation_page();
+    });
 ";
 if ($is_admin != 1) {
     $this->registerJs($script, View::POS_HEAD );
@@ -88,35 +105,44 @@ print_r($data_nolog);
 echo '</pre>';*/
 
 ?>
-<span style="color: white;">Last Update : <?= date('Y-m-d H:i:s'); ?></span>
-<table class="table table-responsive">
-    <thead>
-        <tr>
-            <th class="text-center" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>">Act.</th>
-            <th class="text-center">No.</th>
-            <th class="text-center" width="120px">Machine IP</th>
-            <th class="text-center" width="100px">Job Type</th>
-            <th class="text-center" width="140px">Username</th>
-            <th class="text-center" width="160px">Completed Time</th>
-            <th>Job Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($tmp_list as $value): 
-            $no++;
-            ?>
-            <tr>
-                <td class="text-center" width="50px" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>"><?= Html::a('<i class="glyphicon glyphicon-check"></i>', ['printer-usage-close', 'seq' => $value->seq], [
-                    'title' => 'Close Job',
-                    'data-confirm' => 'Are you sure to close this job ?'
-                    ]); ?></td>
-                <td class="text-center" width="50px"><?= $no; ?></td>
-                <td class="text-center"><?= $value->machine_ip; ?></td>
-                <td class="text-center"><?= $value->job_type; ?></td>
-                <td class="text-center"><?= $value->user_name; ?></td>
-                <td class="text-center"><?= date('Y-m-d H:i:s', strtotime($value->completed_time)); ?></td>
-                <td><?= $value->job_name; ?></td>
-            </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
+<div id="pagewrap" class="pagewrap">
+    <div class="container show">
+        <span style="color: white;">Last Update : <?= date('Y-m-d H:i:s'); ?></span>
+        <table class="table table-responsive">
+            <thead>
+                <tr>
+                    <th class="text-center" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>">Act.</th>
+                    <th class="text-center">No.</th>
+                    <th class="text-center" width="120px">Machine IP</th>
+                    <th class="text-center" width="100px">Job Type</th>
+                    <th class="text-center" width="140px">Username</th>
+                    <th class="text-center" width="160px">Completed Time</th>
+                    <th>Job Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($tmp_list as $value): 
+                    $no++;
+                    ?>
+                    <tr>
+                        <td class="text-center" width="50px" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>"><?= Html::a('<i class="glyphicon glyphicon-check"></i>', ['printer-usage-close', 'seq' => $value->seq], [
+                            'title' => 'Close Job',
+                            'data-confirm' => 'Are you sure to close this job ?'
+                            ]); ?></td>
+                        <td class="text-center" width="50px"><?= $no; ?></td>
+                        <td class="text-center"><?= $value->machine_ip; ?></td>
+                        <td class="text-center"><?= $value->job_type; ?></td>
+                        <td class="text-center"><?= $value->user_name; ?></td>
+                        <td class="text-center"><?= date('Y-m-d H:i:s', strtotime($value->completed_time)); ?></td>
+                        <td><?= $value->job_name; ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
+    <div id="loader" class="pageload-overlay" data-opening="m -5,-5 0,70 90,0 0,-70 z m 5,35 c 0,0 15,20 40,0 25,-20 40,0 40,0 l 0,0 C 80,30 65,10 40,30 15,50 0,30 0,30 z"> <!------------------- ANIMASI ------------------------->
+        <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 80 60" preserveAspectRatio="none" > <!------------------- ANIMASI ------------------------->
+            <path d="m -5,-5 0,70 90,0 0,-70 z m 5,5 c 0,0 7.9843788,0 40,0 35,0 40,0 40,0 l 0,60 c 0,0 -3.944487,0 -40,0 -30,0 -40,0 -40,0 z"/> <!------------------- ANIMASI ------------------------->
+        </svg> <!------------------- ANIMASI ------------------------->
+    </div>
+</div>
