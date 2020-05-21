@@ -131,9 +131,40 @@ use app\models\ScanTemperatureDaily01;
 use app\models\DailyProductionOutput01;
 use app\models\SunfishEmpAttendance;
 use app\models\SunfishViewEmp;
+use app\models\FotocopyTbl;
 
 class DisplayController extends Controller
 {
+    public function actionPrinterUsageClose($seq)
+    {
+        $data = FotocopyTbl::findOne($seq);
+        $data->close_open = 'C';
+        if (!$data->save()) {
+            return json_encode($model->errors);
+        }
+
+        return $this->redirect(Url::to(['printer-usage', 'is_admin' => 1]));
+    }
+
+    public function actionPrinterUsage($is_admin = 0)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_list = FotocopyTbl::find()
+        ->where([
+            'close_open' => 'O'
+        ])
+        ->orderBy('completed_time DESC')
+        ->all();
+
+        return $this->render('printer-usage', [
+            'model' => $model,
+            'tmp_list' => $tmp_list,
+            'is_admin' => $is_admin,
+        ]);
+    }
+
     public function actionDailyNoChecklog()
     {
         $this->layout = 'clean';
@@ -149,27 +180,18 @@ class DisplayController extends Controller
 
         }
 
-        $tmp_karyawan_sunfish = SunfishEmpAttendance::find()
-        ->where([
-            'FORMAT(shiftstarttime, \'yyyy-MM-dd\')' => $model->post_date
+        $tmp_emp_att = SunfishViewEmp::find()
+        ->select([
+            'Emp_no' => 'VIEW_YEMI_Emp_OrgUnit.Emp_no', 'Full_name',
+            'cost_center_name' => 'VIEW_YEMI_Emp_Attendance.cost_center'
         ])
-        ->all();
-
-        $tmp_karyawan = Karyawan::find()
+        ->joinWith('attendanceData')
         ->where([
-            'AKTIF' => 'Y',
-        ])
-        ->andWhere('(PATINDEX(\'M%\', GRADE) = 0 AND PATINDEX(\'D%\', GRADE) = 0)')
-        ->andWhere(['<>', 'DEPARTEMEN', 'ADMINISTRATION'])
-        ->all();
-
-        $tmp_karyawan2 = SunfishViewEmp::find()
-        ->where([
+            'FORMAT(VIEW_YEMI_Emp_Attendance.shiftstarttime, \'yyyy-MM-dd\')' => $model->post_date,
             'status' => 1
         ])
-        ->andWhere('((PATINDEX(\'M%\', grade_code) = 0 AND PATINDEX(\'D%\', grade_code) = 0))')
-        ->andWhere('cost_center_code <> \'10\'')
-        ->andWhere('cost_center_code <> \'110X\'')
+        ->andWhere('PATINDEX(\'M%\', grade_code) = 0 AND PATINDEX(\'D%\', grade_code) = 0 AND cost_center_code NOT IN (\'10\', \'110X\', \'110D\') AND VIEW_YEMI_Emp_Attendance.starttime IS NULL AND VIEW_YEMI_Emp_Attendance.shiftdaily_code <> \'OFF\' AND (PATINDEX(\'%ABS%\', VIEW_YEMI_Emp_Attendance.Attend_Code) > 0 OR PATINDEX(\'%NSI%\', VIEW_YEMI_Emp_Attendance.Attend_Code) > 0)')
+        ->orderBy('VIEW_YEMI_Emp_Attendance.cost_center, Full_name')
         ->all();
 
         $tmp_group_arr = ArrayHelper::map(Karyawan::find()
@@ -179,52 +201,27 @@ class DisplayController extends Controller
         ->andWhere('GROUP_AB IS NOT NULL')
         ->all(), 'NIK_SUN_FISH', 'GROUP_AB');
 
-        $total_nolog_a = $total_nolog_b = 0;
         $data_nolog = [];
+        $total = 0;
+        foreach ($tmp_emp_att as $value) {
+            $total++;
+            $group_code = 'O';
+            if (isset($tmp_group_arr[$value->Emp_no])) {
+                $group_code = $tmp_group_arr[$value->Emp_no];
+            }
 
-        $ketemu = 0;
-        foreach ($tmp_karyawan2 as $value1) {
-            $is_checklog = false;
-            foreach ($tmp_karyawan_sunfish as $value2) {
-                if ($value2->emp_no == $value1->Emp_no) {
-                    $ketemu++;
-                    if ($value2->starttime != null) {
-                        $is_checklog = true;
-                    }
-                }
-            }
-            if ($is_checklog == false) {
-                if (isset($tmp_group_arr[$value1->Emp_no])) {
-                    $group_code = $tmp_group_arr[$value1->Emp_no];
-                } else {
-                    $group_code = 'O';
-                }
-                $data_nolog[$group_code][] = [
-                    'nik' => $value1->Emp_no,
-                    'name' => $value1->Full_name,
-                    'section' => $value1->cost_center_name
-                ];
-                /*if ($value1->GROUP_AB == null) {
-                    $data_nolog['O'][] = [
-                        'nik' => $value1->Emp_no,
-                        'name' => $value1->Full_name,
-                        'section' => $value1->cost_center_name
-                    ];
-                } else {
-                    $data_nolog[$value1->GROUP_AB][] = [
-                        'nik' => $value1->NIK_SUN_FISH,
-                        'name' => $value1->Full_name,
-                        'section' => $value1->cost_center_name
-                    ];
-                }*/
-            }
-            
+            $data_nolog[$group_code][] = [
+                'nik' => $value->Emp_no,
+                'name' => $value->Full_name,
+                'section' => $value->cost_center_name
+            ];
         }
 
         return $this->render('daily-no-checklog', [
             'data_nolog' => $data_nolog,
             'model' => $model,
-            'ketemu' => $ketemu,
+            'total' => $total,
+            'tmp_emp_att' => $tmp_emp_att,
         ]);
     }
 

@@ -26,7 +26,7 @@ $this->registerCss("
     .content-header {color: white; font-size: 0.4em; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
-    .box-header .box-title{font-size: 2em;}
+    //.box-header .box-title{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
@@ -61,7 +61,8 @@ $this->registerCss("
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important;}
     .bg-black {background-color: black; color: yellow !important;}
-    .total-nolog {font-size: 8em;}
+    .total-nolog {font-size: 20em;}
+    li, .panel-title, .box-title {letter-spacing: 1.2px;}
 ");
 
 /*$script = "
@@ -86,82 +87,201 @@ $this->registerJs("$(document).ready(function() {
     });
 });");
 
+$tmp_section_A = $tmp_section_B = $tmp_section_O = [];
+
 /*echo '<pre>';
-print_r($data_nolog['B']);
+print_r($data_nolog);
 echo '</pre>';*/
 ?>
 
 <?php $form = ActiveForm::begin([
     'method' => 'get',
-    'layout' => 'horizontal',
+    //'layout' => 'horizontal',
     'action' => Url::to(['daily-no-checklog']),
 ]); ?>
 
-<div class="row">
-    <div class="col-md-2">
-        <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
-            'type' => DatePicker::TYPE_INPUT,
-            'options' => [
-                'placeholder' => 'Enter date ...',
-                'class' => 'form-control',
-                'onchange'=>'this.form.submit()',
-            ],
-            'pluginOptions' => [
-                'autoclose'=>true,
-                'format' => 'yyyy-mm-dd'
-            ]
-        ])->label('Date'); ?>
-    </div>
+<div class="" style="margin: auto; width: 100px;">
+    <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
+        'type' => DatePicker::TYPE_INPUT,
+        'options' => [
+            'placeholder' => 'Enter date ...',
+            'class' => 'form-control text-center',
+            'onchange'=>'this.form.submit()',
+        ],
+        'pluginOptions' => [
+            'autoclose'=>true,
+            'format' => 'yyyy-mm-dd'
+        ]
+    ])->label(false); ?>
 </div>
 
 <?php ActiveForm::end(); ?>
 
+<div style="width: 60%; margin: auto;">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title text-center">
+                TOTAL
+            </h3>
+        </div>
+        <div class="panel-body bg-black text-center">
+            <span class="total-nolog">
+                <?= number_format($total); ?>
+            </span>
+        </div>
+    </div>
+</div>
+<br/>
 <div class="row">
     <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title text-center">
-                    GROUP A
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">
+                    GROUP A ( <?= count($data_nolog['A']); ?> )
                 </h3>
             </div>
-            <div class="panel-body bg-black text-center">
-                <span class="total-nolog">
-                    <?= count($data_nolog['A']); ?>
-                </span>
+            <div class="panel-body bg-black">
+                <?php foreach ($data_nolog['A'] as $value): 
+                    $tmp_section_A[$value['section']][] = [
+                        'nik' => $value['nik'],
+                        'name' => $value['name']
+                    ];
+                    ksort($tmp_section_A);
+                    ?>
+                    
+                <?php endforeach ?>
+                <div class="box-group" id="accordion-a">
+                    <?php
+                    $no = 0;
+                    ?>
+                    <?php foreach ($tmp_section_A as $key => $emp_arr): 
+                        $no++;
+                        ?>
+                        <div class="panel box box-primary">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">
+                                    <a data-toggle="collapse" data-parent="#accordion-a" href="#collapse-a<?= $no; ?>" aria-expanded="false" class="collapsed">
+                                    <?= strtoupper($key); ?> (<?= count($emp_arr); ?>)
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse-a<?= $no; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body bg-black">
+                                    <ol>
+                                        <?php foreach ($emp_arr as $emp): ?>
+                                            <li>
+                                                <?= strtoupper($emp['name']); ?> (<?= $emp['nik']; ?>)
+                                            </li>
+                                        <?php endforeach ?>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title text-center">
-                    GROUP B
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">
+                    GROUP B ( <?= count($data_nolog['B']); ?> )
                 </h3>
             </div>
-            <div class="panel-body bg-black text-center">
-                <span class="total-nolog">
-                    <?= count($data_nolog['B']); ?>
-                </span>
+            <div class="panel-body bg-black">
+                <?php foreach ($data_nolog['B'] as $value): 
+                    $tmp_section_B[$value['section']][] = [
+                        'nik' => $value['nik'],
+                        'name' => $value['name']
+                    ];
+                    ksort($tmp_section_B);
+                    ?>
+                    
+                <?php endforeach ?>
+                <div class="box-group" id="accordion-b">
+                    <?php
+                    $no = 0;
+                    ?>
+                    <?php foreach ($tmp_section_B as $key => $emp_arr): 
+                        $no++;
+                        ?>
+                        <div class="panel box box-primary">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">
+                                    <a data-toggle="collapse" data-parent="#accordion-b" href="#collapse-b<?= $no; ?>" aria-expanded="false" class="collapsed">
+                                    <?= strtoupper($key); ?> (<?= count($emp_arr); ?>)
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse-b<?= $no; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body bg-black">
+                                    <ol>
+                                        <?php foreach ($emp_arr as $emp): ?>
+                                            <li>
+                                                <?= strtoupper($emp['name']); ?> (<?= $emp['nik']; ?>)
+                                            </li>
+                                        <?php endforeach ?>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title text-center">
-                    OTHERS
+        <div class="panel panel-primary">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">
+                    NO SET GROUP ( <?= count($data_nolog['O']); ?> )
                 </h3>
             </div>
-            <div class="panel-body bg-black text-center">
-                <span class="total-nolog">
-                    <?= count($data_nolog['O']); ?>
-                </span>
+            <div class="panel-body bg-black">
+                <?php foreach ($data_nolog['O'] as $value): 
+                    $tmp_section_O[$value['section']][] = [
+                        'nik' => $value['nik'],
+                        'name' => $value['name']
+                    ];
+                    ksort($tmp_section_O);
+                    ?>
+                    
+                <?php endforeach ?>
+                <div class="box-group" id="accordion-o">
+                    <?php
+                    $no = 0;
+                    ?>
+                    <?php foreach ($tmp_section_O as $key => $emp_arr): 
+                        $no++;
+                        ?>
+                        <div class="panel box box-primary">
+                            <div class="box-header with-border">
+                                <h4 class="box-title">
+                                    <a data-toggle="collapse" data-parent="#accordion-o" href="#collapse-o<?= $no; ?>" aria-expanded="false" class="collapsed">
+                                    <?= strtoupper($key); ?> (<?= count($emp_arr); ?>)
+                                    </a>
+                                </h4>
+                            </div>
+                            <div id="collapse-o<?= $no; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                                <div class="box-body bg-black">
+                                    <ol>
+                                        <?php foreach ($emp_arr as $emp): ?>
+                                            <li>
+                                                <?= strtoupper($emp['name']); ?> (<?= $emp['nik']; ?>)
+                                            </li>
+                                        <?php endforeach ?>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<hr>
-<div style="width: 50%; margin: auto;">
+<div style="width: 50%; margin: auto; display: none;">
     <div class="panel panel-primary">
         <div class="panel-body bg-black">
             <table class="table" id="nolog-tbl">

@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\SunfishViewEmp as BaseSunfishViewEmp;
+use \app\models\base\FotocopyTbl as BaseFotocopyTbl;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "dbo.VIEW_YEMI_Emp_OrgUnit".
+ * This is the model class for table "db_owner.FOTOCOPY".
  */
-class SunfishViewEmp extends BaseSunfishViewEmp
+class FotocopyTbl extends BaseFotocopyTbl
 {
-    public $attend_code;
 
     public function behaviors()
     {
@@ -31,15 +30,5 @@ class SunfishViewEmp extends BaseSunfishViewEmp
                 # custom validation rules
             ]
         );
-    }
-
-    public static function primaryKey()
-    {
-        return ["Emp_no"];
-    }
-
-    public function getAttendanceData()
-    {
-        return $this->hasMany(SunfishEmpAttendance::className(), ['emp_no' => 'Emp_no']);
     }
 }
