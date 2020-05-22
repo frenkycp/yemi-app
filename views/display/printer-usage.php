@@ -59,6 +59,7 @@ $css_string = "
         color: #FFF;
         vertical-align: middle;
         padding: 20px 10px;
+        letter-spacing: 1.1px;
         //height: 100px;
     }
     //tbody > tr > td { background: #33383d;}
@@ -69,7 +70,7 @@ $css_string = "
     .total-nolog {font-size: 20em;}
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
     if ($is_admin == 0) {
-        $css_string .= ' .top-tree {font-size: 2em !important; color : #333 !important; background-color: yellow !important; font-weight: bold;}';
+        $css_string .= ' .top-tree {font-size: 2em !important; color : yellow !important; font-weight: bold;}';
     }
 $this->registerCss($css_string);
 
@@ -140,7 +141,7 @@ echo '</pre>';*/
                     <th class="text-center" width="100px">Job Type</th>
                     <th class="text-center" width="100px">Ink Type</th>
                     <th class="text-center" width="200px">Username</th>
-                    <th class="text-center" width="160px">Completed Time</th>
+                    <th class="text-center" width="180px">Completed Time</th>
                     <th>Job Name</th>
                 </tr>
             </thead>
