@@ -65,27 +65,17 @@ $this->registerCss("
     li, .panel-title, .box-title {letter-spacing: 1.2px;}
 ");
 
-/*$script = "
+$script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 600000); // milliseconds
+      setTimeout(\"refreshPage();\", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
 ";
-$this->registerJs($script, View::POS_HEAD );*/
-$this->registerCssFile('@web/css/dataTables.bootstrap.css');
-$this->registerJsFile('@web/js/jquery.dataTables.min.js');
-$this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
-
-$this->registerJs("$(document).ready(function() {
-    $('#nolog-tbl').DataTable({
-        'pageLength': 25,
-        'order': [[ 0, 'asc' ], [ 2, 'asc' ]]
-    });
-});");
+$this->registerJs($script, View::POS_HEAD );
 
 $tmp_section_A = $tmp_section_B = $tmp_section_O = [];
 
@@ -128,6 +118,12 @@ echo '</pre>';*/
             <span class="total-nolog">
                 <?= number_format($total); ?>
             </span>
+            <br/>
+            <div class="row">
+                <div class="col-md-12 text-right" style="color: gray;">
+                    Last Update : <?= date('Y-m-d H:i:s'); ?>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -293,42 +289,6 @@ echo '</pre>';*/
                     <?php endforeach ?>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-<div style="width: 50%; margin: auto; display: none;">
-    <div class="panel panel-primary">
-        <div class="panel-body bg-black">
-            <table class="table" id="nolog-tbl">
-                <thead>
-                    <tr>
-                        <th>Section</th>
-                        <th>NIK</th>
-                        <th>Name</th>
-                        <th>Group</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($data_nolog as $key => $value): 
-                        if ($key == 'A') {
-                            $group_name = 'GROUP_A';
-                        } elseif ($key == 'B') {
-                            $group_name = 'GROUP_B';
-                        } else {
-                            $group_name = 'OTHERS';
-                        }
-                        ?>
-                        <?php foreach ($value as $key2 => $value2): ?>
-                            <tr>
-                                <td><?= $value2['section']; ?></td>
-                                <td><?= $value2['nik']; ?></td>
-                                <td><?= $value2['name']; ?></td>
-                                <td><?= $group_name; ?></td>
-                            </tr>
-                        <?php endforeach ?>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>

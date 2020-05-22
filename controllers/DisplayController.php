@@ -135,6 +135,17 @@ use app\models\FotocopyTbl;
 
 class DisplayController extends Controller
 {
+    public function actionPrinterUsageNew($seq = 10)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_fotocopy = FotocopyTbl::findOne($seq);
+
+        return $this->render('printer-usage-new', [
+            'tmp_fotocopy' => $tmp_fotocopy
+        ]);
+    }
     public function actionPrinterUsageClose($seq)
     {
         $data = FotocopyTbl::findOne($seq);
@@ -146,12 +157,79 @@ class DisplayController extends Controller
         return $this->redirect(Url::to(['printer-usage', 'is_admin' => 1]));
     }
 
+    public function actionPrinterUsageUpdate($is_admin)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $last_update = date('Y-m-d H:i:s');
+        
+        $tmp_fotocopy = FotocopyTbl::find()
+        ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update'])
+        ->where([
+            'close_open' => 'O'
+        ])
+        ->orderBy('completed_time DESC')
+        ->all();
+
+        $table_container = '';
+        $no = 0;
+        $colspan = 0;
+        foreach ($tmp_fotocopy as $key => $value) {
+            $no++;
+            $top_tree = '';
+            if ($no <= 3) {
+                $top_tree = ' top-tree';
+            }
+            if ($is_admin == 1) {
+                $colspan = 8;
+                $table_container .= '<tr>
+                    <td class="text-center ' . $top_tree . '" width="50px">' . Html::a('<i class="glyphicon glyphicon-check"></i>', ['printer-usage-close', 'seq' => $value->seq], [
+                        'title' => 'Close Job',
+                        'data-confirm' => 'Are you sure to close this job ?'
+                        ]) . '</td>
+                    <td class="text-center' . $top_tree . '" width="50px">' . $no . '</td>
+                    <td class="text-center' . $top_tree . '">' . $value->machine_ip . '</td>
+                    <td class="text-center' . $top_tree . '">' . $value->job_type . '</td>
+                    <td class="text-center' . $top_tree . '">' . $value->color . '</td>
+                    <td class="text-center' . $top_tree . '">' . $value->user_name . '</td>
+                    <td class="text-center' . $top_tree . '">' . date('Y-m-d H:i:s', strtotime($value->completed_time)) . '</td>
+                    <td class="' . $top-tree . '">' . $value->job_name . '</td>
+                </tr>';
+            } else {
+                $colspan = 7;
+                $table_container .= '<tr>
+                    <td class="text-center' . $top_tree . '" width="50px">' . $no . '</td>
+                    <td class="text-center' . $top_tree . '">' . $value->machine_ip . '</td>
+                    <td class="text-center' . $top_tree . '">' . $value->job_type . '</td>
+                    <td class="text-center' . $top_tree . '">' . $value->color . '</td>
+                    <td class="text-center' . $top_tree . '">' . $value->user_name . '</td>
+                    <td class="text-center' . $top_tree . '">' . date('Y-m-d H:i:s', strtotime($value->completed_time)) . '</td>
+                    <td class="' . $top_tree . '">' . $value->job_name . '</td>
+                </tr>';
+            }
+            
+        }
+
+        if (count($tmp_fotocopy) == 0) {
+            $table_container = '<tr>
+            <td colspan="' . $colspan . '">No Outstanding Printing Paper</td>
+            </tr>';
+        }
+
+        $data = [
+            'table_container' => $table_container,
+            'last_update' => 'Last Update : ' . $last_update,
+        ];
+
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
     public function actionPrinterUsage($is_admin = 0)
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
         $tmp_list = FotocopyTbl::find()
+        ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update'])
         ->where([
             'close_open' => 'O'
         ])
@@ -183,7 +261,7 @@ class DisplayController extends Controller
         $tmp_emp_att = SunfishViewEmp::find()
         ->select([
             'Emp_no' => 'VIEW_YEMI_Emp_OrgUnit.Emp_no', 'Full_name',
-            'cost_center_name' => 'VIEW_YEMI_Emp_Attendance.cost_center'
+            'cost_center_name'
         ])
         ->leftJoin('VIEW_YEMI_Emp_Attendance', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_Emp_Attendance.emp_no AND FORMAT(VIEW_YEMI_Emp_Attendance.shiftstarttime, \'yyyy-MM-dd\') = \'' . $model->post_date . '\' ')
         ->where([

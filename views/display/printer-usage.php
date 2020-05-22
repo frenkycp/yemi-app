@@ -26,7 +26,7 @@ $this->registerJsFile('@web/js/svgLoader.js');
 $this->registerCss("
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 0.4em; text-align: center;}
+    .content-header {color: white; font-size: 0.4em; text-align: center; display: none;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -68,14 +68,30 @@ $this->registerCss("
     .bg-black {background-color: black; color: yellow !important;}
     .total-nolog {font-size: 20em;}
     li, .panel-title, .box-title {letter-spacing: 1.2px;}
+    .top-tree {font-size: 2em !important; color : black !important; background-color: yellow !important;}
 ");
 
 $no = 0;
 $script = "
     window.onload = setupRefresh;
 
+    function update_data(){
+        $.ajax({
+            type: 'POST',
+            url: '" . Url::to(['printer-usage-update', 'is_admin' => $is_admin]) . "',
+            success: function(data){
+                var tmp_data = JSON.parse(data);
+                $('#table-container').html(tmp_data.table_container);
+                $('#last-update').html(tmp_data.last_update);
+            },
+            complete: function(){
+                setTimeout(function(){update_data();}, 3000);
+            }
+        });
+    }
+
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 10000); // milliseconds
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -92,11 +108,13 @@ $script = "
         init(); //------------------- ANIMASI -------------------------
     };
     $(document).ready(function() {
+        update_data();
         animation_page();
     });
 ";
+$this->registerJs($script, View::POS_HEAD );
 if ($is_admin != 1) {
-    $this->registerJs($script, View::POS_HEAD );
+    
 }
 
 
@@ -107,34 +125,39 @@ echo '</pre>';*/
 ?>
 <div id="pagewrap" class="pagewrap">
     <div class="container show">
-        <span style="color: white;">Last Update : <?= date('Y-m-d H:i:s'); ?></span>
+        <div id="marquee-container">
+            <marquee behavior="alternate" scrollamount="12" style="background-color: #61258e; color: yellow; font-size: 3em;"><?= strtoupper('Go Smart! Go Paperless! Print hanya yang dibutuhkan...') ?></marquee>
+        </div>
+        <span style="color: white;" id="last-update">Last Update : <?= date('Y-m-d H:i:s'); ?></span>
         <table class="table table-responsive">
             <thead>
                 <tr>
                     <th class="text-center" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>">Act.</th>
-                    <th class="text-center">No.</th>
-                    <th class="text-center" width="120px">Machine IP</th>
+                    <th class="text-center" width="50px">No.</th>
+                    <th class="text-center" width="120px">XEROX</th>
                     <th class="text-center" width="100px">Job Type</th>
-                    <th class="text-center" width="140px">Username</th>
+                    <th class="text-center" width="100px">Ink Type</th>
+                    <th class="text-center" width="200px">Username</th>
                     <th class="text-center" width="160px">Completed Time</th>
                     <th>Job Name</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="table-container">
                 <?php foreach ($tmp_list as $value): 
                     $no++;
                     ?>
                     <tr>
-                        <td class="text-center" width="50px" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>"><?= Html::a('<i class="glyphicon glyphicon-check"></i>', ['printer-usage-close', 'seq' => $value->seq], [
+                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>" width="50px" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>"><?= Html::a('<i class="glyphicon glyphicon-check"></i>', ['printer-usage-close', 'seq' => $value->seq], [
                             'title' => 'Close Job',
                             'data-confirm' => 'Are you sure to close this job ?'
                             ]); ?></td>
-                        <td class="text-center" width="50px"><?= $no; ?></td>
-                        <td class="text-center"><?= $value->machine_ip; ?></td>
-                        <td class="text-center"><?= $value->job_type; ?></td>
-                        <td class="text-center"><?= $value->user_name; ?></td>
-                        <td class="text-center"><?= date('Y-m-d H:i:s', strtotime($value->completed_time)); ?></td>
-                        <td><?= $value->job_name; ?></td>
+                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $no; ?></td>
+                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->machine_ip; ?></td>
+                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->job_type; ?></td>
+                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->color; ?></td>
+                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->user_name; ?></td>
+                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= date('Y-m-d H:i:s', strtotime($value->completed_time)); ?></td>
+                        <td class="<?= $no <= 3 ? 'top-tree' : ''; ?>"><?= $value->job_name; ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
