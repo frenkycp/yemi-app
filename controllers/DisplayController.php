@@ -163,7 +163,7 @@ class DisplayController extends Controller
         $last_update = date('Y-m-d H:i:s');
         
         $tmp_fotocopy = FotocopyTbl::find()
-        ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update'])
+        ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
         ->where([
             'close_open' => 'O'
         ])
@@ -192,7 +192,7 @@ class DisplayController extends Controller
                     <td class="text-center' . $top_tree . '">' . $value->color . '</td>
                     <td class="text-center' . $top_tree . '">' . $value->user_name . '</td>
                     <td class="text-center' . $top_tree . '">' . date('Y-m-d H:i:s', strtotime($value->completed_time)) . '</td>
-                    <td class="' . $top-tree . '">' . $value->job_name . '</td>
+                    <td class="' . $top_tree . '">' . $value->job_name . '</td>
                 </tr>';
             } else {
                 $colspan = 7;
@@ -229,7 +229,7 @@ class DisplayController extends Controller
         date_default_timezone_set('Asia/Jakarta');
 
         $tmp_list = FotocopyTbl::find()
-        ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update'])
+        ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
         ->where([
             'close_open' => 'O'
         ])

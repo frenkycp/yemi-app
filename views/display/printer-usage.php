@@ -23,7 +23,7 @@ $this->registerJsFile('@web/js/snap.svg-min.js');
 $this->registerJsFile('@web/js/classie.js');
 $this->registerJsFile('@web/js/svgLoader.js');
 
-$this->registerCss("
+$css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
     .content-header {color: white; font-size: 0.4em; text-align: center; display: none;}
@@ -67,9 +67,11 @@ $this->registerCss("
     .target, .actual {font-size: 4em !important;}
     .bg-black {background-color: black; color: yellow !important;}
     .total-nolog {font-size: 20em;}
-    li, .panel-title, .box-title {letter-spacing: 1.2px;}
-    .top-tree {font-size: 2em !important; color : black !important; background-color: yellow !important;}
-");
+    li, .panel-title, .box-title {letter-spacing: 1.2px;}";
+    if ($is_admin == 0) {
+        $css_string .= ' .top-tree {font-size: 2em !important; color : #333 !important; background-color: yellow !important; font-weight: bold;}';
+    }
+$this->registerCss($css_string);
 
 $no = 0;
 $script = "
@@ -91,7 +93,7 @@ $script = "
     }
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 120000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -143,23 +145,28 @@ echo '</pre>';*/
                 </tr>
             </thead>
             <tbody id="table-container">
-                <?php foreach ($tmp_list as $value): 
-                    $no++;
-                    ?>
-                    <tr>
-                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>" width="50px" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>"><?= Html::a('<i class="glyphicon glyphicon-check"></i>', ['printer-usage-close', 'seq' => $value->seq], [
-                            'title' => 'Close Job',
-                            'data-confirm' => 'Are you sure to close this job ?'
-                            ]); ?></td>
-                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $no; ?></td>
-                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->machine_ip; ?></td>
-                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->job_type; ?></td>
-                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->color; ?></td>
-                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->user_name; ?></td>
-                        <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= date('Y-m-d H:i:s', strtotime($value->completed_time)); ?></td>
-                        <td class="<?= $no <= 3 ? 'top-tree' : ''; ?>"><?= $value->job_name; ?></td>
-                    </tr>
-                <?php endforeach ?>
+                <?php
+                if (count($tmp_list) > 0) { ?>
+                    <?php foreach ($tmp_list as $value): 
+                        $no++;
+                        ?>
+                        <tr>
+                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>" width="50px" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>"><?= Html::a('<i class="glyphicon glyphicon-check"></i>', ['printer-usage-close', 'seq' => $value->seq], [
+                                'title' => 'Close Job',
+                                'data-confirm' => 'Are you sure to close this job ?'
+                                ]); ?></td>
+                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $no; ?></td>
+                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->machine_ip; ?></td>
+                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->job_type; ?></td>
+                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->color; ?></td>
+                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->user_name; ?></td>
+                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= date('Y-m-d H:i:s', strtotime($value->completed_time)); ?></td>
+                            <td class="<?= $no <= 3 ? 'top-tree' : ''; ?>"><?= $value->job_name; ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php }
+                ?>
+                
             </tbody>
         </table>
     </div>
