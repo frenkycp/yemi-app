@@ -55,13 +55,13 @@ $css_string = "
     .table > tbody > tr > td{
         border:1px solid #777474;
         font-size: 16px;
-        //background-color: #B3E5FC;
-        //font-weight: 1000;
+        background: #33383d;
         color: #FFF;
         vertical-align: middle;
+        padding: 20px 10px;
         //height: 100px;
     }
-    tbody > tr > td { background: #33383d;}
+    //tbody > tr > td { background: #33383d;}
     tbody > tr:nth-child(odd) > td {background: #454B52;}
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important;}
