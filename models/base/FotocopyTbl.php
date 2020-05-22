@@ -13,8 +13,12 @@ use Yii;
  * @property string $machine_ip
  * @property string $job_type
  * @property string $user_name
+ * @property string $color
  * @property string $job_name
+ * @property string $completed_period
+ * @property string $completed_date
  * @property string $completed_time
+ * @property string $last_update
  * @property string $close_open
  * @property string $aliasModel
  */
@@ -45,10 +49,8 @@ abstract class FotocopyTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['completed_time'], 'safe'],
-            [['machine_ip', 'job_type', 'user_name'], 'string', 'max' => 50],
-            [['job_name'], 'string', 'max' => 150],
-            [['close_open'], 'string', 'max' => 1]
+            [['machine_ip', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open'], 'string'],
+            [['completed_date', 'completed_time', 'last_update'], 'safe']
         ];
     }
 
@@ -62,8 +64,12 @@ abstract class FotocopyTbl extends \yii\db\ActiveRecord
             'machine_ip' => 'Machine Ip',
             'job_type' => 'Job Type',
             'user_name' => 'User Name',
+            'color' => 'Color',
             'job_name' => 'Job Name',
+            'completed_period' => 'Completed Period',
+            'completed_date' => 'Completed Date',
             'completed_time' => 'Completed Time',
+            'last_update' => 'Last Update',
             'close_open' => 'Close Open',
         ];
     }

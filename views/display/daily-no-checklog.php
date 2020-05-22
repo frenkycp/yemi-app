@@ -141,15 +141,20 @@ echo '</pre>';*/
                 </h3>
             </div>
             <div class="panel-body bg-black">
-                <?php foreach ($data_nolog['A'] as $value): 
-                    $tmp_section_A[$value['section']][] = [
-                        'nik' => $value['nik'],
-                        'name' => $value['name']
-                    ];
-                    ksort($tmp_section_A);
-                    ?>
-                    
-                <?php endforeach ?>
+                <?php
+                if (count($data_nolog['A']) > 0) { ?>
+                    <?php foreach ($data_nolog['A'] as $value): 
+                        $tmp_section_A[$value['section']][] = [
+                            'nik' => $value['nik'],
+                            'name' => $value['name']
+                        ];
+                        ksort($tmp_section_A);
+                        ?>
+                        
+                    <?php endforeach ?>
+                <?php }
+                ?>
+                
                 <div class="box-group" id="accordion-a">
                     <?php
                     $no = 0;
@@ -190,15 +195,20 @@ echo '</pre>';*/
                 </h3>
             </div>
             <div class="panel-body bg-black">
-                <?php foreach ($data_nolog['B'] as $value): 
-                    $tmp_section_B[$value['section']][] = [
-                        'nik' => $value['nik'],
-                        'name' => $value['name']
-                    ];
-                    ksort($tmp_section_B);
-                    ?>
-                    
-                <?php endforeach ?>
+                <?php
+                if (count($data_nolog['B']) > 0) { ?>
+                    <?php foreach ($data_nolog['B'] as $value): 
+                        $tmp_section_B[$value['section']][] = [
+                            'nik' => $value['nik'],
+                            'name' => $value['name']
+                        ];
+                        ksort($tmp_section_B);
+                        ?>
+                        
+                    <?php endforeach ?>
+                <?php }
+                ?>
+                
                 <div class="box-group" id="accordion-b">
                     <?php
                     $no = 0;
@@ -239,15 +249,20 @@ echo '</pre>';*/
                 </h3>
             </div>
             <div class="panel-body bg-black">
-                <?php foreach ($data_nolog['O'] as $value): 
-                    $tmp_section_O[$value['section']][] = [
-                        'nik' => $value['nik'],
-                        'name' => $value['name']
-                    ];
-                    ksort($tmp_section_O);
-                    ?>
-                    
-                <?php endforeach ?>
+                <?php
+                if (count($data_nolog['O']) > 0) { ?>
+                    <?php foreach ($data_nolog['O'] as $value): 
+                        $tmp_section_O[$value['section']][] = [
+                            'nik' => $value['nik'],
+                            'name' => $value['name']
+                        ];
+                        ksort($tmp_section_O);
+                        ?>
+                        
+                    <?php endforeach ?>
+                <?php }
+                ?>
+                
                 <div class="box-group" id="accordion-o">
                     <?php
                     $no = 0;

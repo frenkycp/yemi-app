@@ -185,11 +185,12 @@ class DisplayController extends Controller
             'Emp_no' => 'VIEW_YEMI_Emp_OrgUnit.Emp_no', 'Full_name',
             'cost_center_name' => 'VIEW_YEMI_Emp_Attendance.cost_center'
         ])
-        ->joinWith('attendanceData')
+        ->leftJoin('VIEW_YEMI_Emp_Attendance', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_Emp_Attendance.emp_no AND FORMAT(VIEW_YEMI_Emp_Attendance.shiftstarttime, \'yyyy-MM-dd\') = \'' . $model->post_date . '\' ')
         ->where([
-            'FORMAT(VIEW_YEMI_Emp_Attendance.shiftstarttime, \'yyyy-MM-dd\')' => $model->post_date,
+            //'FORMAT(VIEW_YEMI_Emp_Attendance.shiftstarttime, \'yyyy-MM-dd\')' => $model->post_date,
             'status' => 1
         ])
+        /*->andWhere('PATINDEX(\'M%\', grade_code) = 0 AND PATINDEX(\'D%\', grade_code) = 0 AND cost_center_code NOT IN (\'10\', \'110X\', \'110D\') AND VIEW_YEMI_Emp_Attendance.starttime IS NULL AND VIEW_YEMI_Emp_Attendance.shiftdaily_code <> \'OFF\' AND (PATINDEX(\'%ABS%\', VIEW_YEMI_Emp_Attendance.Attend_Code) > 0 OR PATINDEX(\'%NSI%\', VIEW_YEMI_Emp_Attendance.Attend_Code) > 0)')*/
         ->andWhere('PATINDEX(\'M%\', grade_code) = 0 AND PATINDEX(\'D%\', grade_code) = 0 AND cost_center_code NOT IN (\'10\', \'110X\', \'110D\') AND VIEW_YEMI_Emp_Attendance.starttime IS NULL AND VIEW_YEMI_Emp_Attendance.shiftdaily_code <> \'OFF\' AND (PATINDEX(\'%ABS%\', VIEW_YEMI_Emp_Attendance.Attend_Code) > 0 OR PATINDEX(\'%NSI%\', VIEW_YEMI_Emp_Attendance.Attend_Code) > 0)')
         ->orderBy('VIEW_YEMI_Emp_Attendance.cost_center, Full_name')
         ->all();
