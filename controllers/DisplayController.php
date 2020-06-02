@@ -132,9 +132,22 @@ use app\models\DailyProductionOutput01;
 use app\models\SunfishEmpAttendance;
 use app\models\SunfishViewEmp;
 use app\models\FotocopyTbl;
+use app\models\MenuTree;
 
 class DisplayController extends Controller
 {
+    public function actionGetTreeUrl($id)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $menu = MenuTree::findOne($id);
+        return $menu->url;
+    }
+
+    public function actionIndexTree()
+    {
+        return $this->render('index-tree');
+    }
+
     public function actionPrinterUsageNew($seq = 10)
     {
         $this->layout = 'clean';

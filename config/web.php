@@ -127,6 +127,9 @@ $config = [
         'gridview' => [
             'class' => '\kartik\grid\Module',
         ],
+        'treemanager' => [
+            'class' => '\kartik\tree\Module',
+        ],
     ],
 ];
 
