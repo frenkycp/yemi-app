@@ -161,13 +161,16 @@ class DisplayController extends Controller
     {
         date_default_timezone_set('Asia/Jakarta');
         $last_update = date('Y-m-d H:i:s');
+        $today = date('Y-m-d');
         
         $tmp_fotocopy = FotocopyTbl::find()
         ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
         ->where([
-            'close_open' => 'O'
+            'close_open' => 'O',
+            //'completed_date' => $today,
         ])
         ->orderBy('completed_time DESC')
+        ->limit(500)
         ->all();
 
         $table_container = '';
@@ -227,13 +230,16 @@ class DisplayController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
 
         $tmp_list = FotocopyTbl::find()
         ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
         ->where([
-            'close_open' => 'O'
+            'close_open' => 'O',
+            //'completed_date' => $today,
         ])
         ->orderBy('completed_time DESC')
+        ->limit(500)
         ->all();
 
         return $this->render('printer-usage', [
