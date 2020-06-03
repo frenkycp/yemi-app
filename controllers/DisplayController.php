@@ -133,9 +133,35 @@ use app\models\SunfishEmpAttendance;
 use app\models\SunfishViewEmp;
 use app\models\FotocopyTbl;
 use app\models\MenuTree;
+use app\models\SunfishAttendanceData;
 
 class DisplayController extends Controller
 {
+    public function actionRekapAbsensiHarian()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'post_date',
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        //$tmp_data = SunfishEmpAttendance::instance()->getTotalMp($model->post_date);
+        $data = SunfishAttendanceData::instance()->getDailyAttendance($model->post_date);
+
+        return $this->render('rekap-absensi-harian', [
+            'model' => $model,
+            //'tmp_data' => $tmp_data,
+            'data' => $data,
+        ]);
+    }
+
     public function actionGetTreeUrl($id)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
