@@ -134,7 +134,7 @@ $total_plan = $total_act = $total_balance = 0;
                                 'style' => [
                                     'fontFamily' => 'sans-serif',
                                 ],
-                                'height' => 600,
+                                'height' => 800,
                                 //'zoomType' => 'x'
                             ],
                             'credits' => [
