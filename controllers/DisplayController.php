@@ -153,6 +153,7 @@ class DisplayController extends Controller
         }
 
         //$tmp_data = SunfishEmpAttendance::instance()->getTotalMp($model->post_date);
+        
         $data = SunfishAttendanceData::instance()->getDailyAttendance($model->post_date);
 
         return $this->render('rekap-absensi-harian', [

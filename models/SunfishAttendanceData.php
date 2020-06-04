@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SunfishAttendanceData extends BaseSunfishAttendanceData
 {
+    public $post_date, $period, $shift;
 
     public function behaviors()
     {
@@ -72,7 +73,14 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
         ->where([
             'FORMAT(shiftendtime, \'yyyy-MM-dd\')' => $post_date
         ])
-        ->andWhere('PATINDEX(\'M%\', grade_code) = 0 AND PATINDEX(\'D%\', grade_code) = 0 AND cost_center_code NOT IN (\'10\', \'110X\', \'110D\') AND VIEW_YEMI_ATTENDANCE.shiftdaily_code <> \'OFF\'')
+        ->andWhere('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'')
+        ->andWhere([
+            'OR',
+            'end_date IS NULL',
+            ['>=', 'end_date', $post_date]
+        ])
+        ->andWhere(['<=', 'start_date', $post_date])
+        //->andWhere('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center_code NOT IN (\'10\', \'110X\', \'110D\') AND VIEW_YEMI_ATTENDANCE.shiftdaily_code <> \'OFF\'')
         ->asArray()->one();
 
         $total_mp = ($tmp_data['total_mp_s1'] + $tmp_data['total_mp_s2'] + $tmp_data['total_mp_s3']);
@@ -85,6 +93,7 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
         $data = [
             [
                 'title' => 'MP',
+                'code' => '',
                 'shift1' => $tmp_data['total_mp_s1'],
                 'shift2' => $tmp_data['total_mp_s2'],
                 'shift3' => $tmp_data['total_mp_s3'],
@@ -93,6 +102,7 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
             ],
             [
                 'title' => 'MP Hadir',
+                'code' => 'P',
                 'shift1' => $tmp_data['total_hadir_s1'],
                 'shift2' => $tmp_data['total_hadir_s2'],
                 'shift3' => $tmp_data['total_hadir_s3'],
@@ -101,6 +111,7 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
             ],
             [
                 'title' => 'Cuti',
+                'code' => 'C_ALL',
                 'shift1' => $tmp_data['total_cuti_s1'],
                 'shift2' => $tmp_data['total_cuti_s2'],
                 'shift3' => $tmp_data['total_cuti_s3'],
@@ -109,6 +120,7 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
             ],
             [
                 'title' => 'Ijin',
+                'code' => 'I',
                 'shift1' => $tmp_data['total_ijin_s1'],
                 'shift2' => $tmp_data['total_ijin_s2'],
                 'shift3' => $tmp_data['total_ijin_s3'],
@@ -117,6 +129,7 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
             ],
             [
                 'title' => 'Alpa',
+                'code' => 'A',
                 'shift1' => $tmp_data['total_alpa_s1'],
                 'shift2' => $tmp_data['total_alpa_s2'],
                 'shift3' => $tmp_data['total_alpa_s3'],
@@ -125,6 +138,7 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
             ],
             [
                 'title' => 'Sakit',
+                'code' => 'S',
                 'shift1' => $tmp_data['total_sakit_s1'],
                 'shift2' => $tmp_data['total_sakit_s2'],
                 'shift3' => $tmp_data['total_sakit_s3'],

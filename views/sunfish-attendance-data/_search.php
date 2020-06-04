@@ -36,34 +36,32 @@ echo '</pre>';*/
     <div class="panel panel-primary">
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-4">
-                    <?= $form->field($model, 'period')->textInput()->label('Period'); ?>
+                <div class="col-md-2">
+                    <?= $form->field($model, 'post_date')->textInput()->label('Tanggal'); ?>
                 </div>
-                <div class="col-md-4">
-                    <?= $form->field($model, 'post_date')->textInput()->label('Date'); ?>
+                <div class="col-md-2">
+                    <?= $form->field($model, 'shift')->dropDownList([
+                        1 => 1,
+                        2 => 2,
+                        3 => 3,
+                    ], [
+                        'prompt' => 'Pilih...'
+                    ])->label('Shift'); ?>
                 </div>
-                <div class="col-md-4">
+                
+                <div class="col-md-2">
+                    <?= $form->field($model, 'attend_judgement')->dropDownList([
+                        'A' => 'Alpa',
+                        'I' => 'Ijin',
+                        'S' => 'Sakit',
+                        'P' => 'Hadir',
+                        'C_ALL' => 'Cuti',
+                    ], [
+                        'prompt' => 'Pilih...'
+                    ])->label('Kehadiran'); ?>
+                </div>
+                <div class="col-md-3">
                     <?= $form->field($model, 'emp_no')->textInput()->label('NIK'); ?>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <?= $form->field($model, 'shiftdaily_code')->widget(Select2::classname(), [
-                        'data' => [
-                            'Shift_1' => 'Shift_1',
-                            'Shift_1_Jumat' => 'Shift_1_Jumat',
-                            'Shift_2' => 'Shift_2',
-                            'Shift_3' => 'Shift_3',
-                            '4G_Shift_1' => '4G_Shift_1',
-                            '4G_Shift_2' => '4G_Shift_2',
-                            '4G_Shift_3' => '4G_Shift_3',
-                            'OFF' => 'OFF',
-                        ],
-                        'options' => [
-                            'placeholder' => 'Choose...',
-                            'multiple' => true,
-                        ],
-                    ])->label('Shift Code'); ?>
                 </div>
             </div>
         </div>
