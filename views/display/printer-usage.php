@@ -94,10 +94,10 @@ $script = "
     }
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 120000); // milliseconds
+      setTimeout(\"refreshPage();\", 60000); // milliseconds
     }
     function refreshPage() {
-       window.location = location.href;
+       window.location = '" . Url::to(['display/printer-monthly-usage']) . "';
     }
 
     function animation_page(){
@@ -137,7 +137,7 @@ echo '</pre>';*/
                 <tr>
                     <th class="text-center" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>">Act.</th>
                     <th class="text-center" width="50px">No.</th>
-                    <th class="text-center" width="120px">XEROX</th>
+                    <th class="text-center" width="100px">XEROX</th>
                     <th class="text-center" width="100px">Job Type</th>
                     <th class="text-center" width="100px">Ink Type</th>
                     <th class="text-center" width="200px">Username</th>
@@ -150,6 +150,7 @@ echo '</pre>';*/
                 if (count($tmp_list) > 0) { ?>
                     <?php foreach ($tmp_list as $value): 
                         $no++;
+                        $machine_ip = substr($value->machine_ip, -2);
                         ?>
                         <tr>
                             <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>" width="50px" style="<?= $is_admin == 1 ? '' : 'display: none;'; ?>"><?= Html::a('<i class="glyphicon glyphicon-check"></i>', ['printer-usage-close', 'seq' => $value->seq], [
@@ -157,7 +158,7 @@ echo '</pre>';*/
                                 'data-confirm' => 'Are you sure to close this job ?'
                                 ]); ?></td>
                             <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $no; ?></td>
-                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->machine_ip; ?></td>
+                            <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $machine_ip; ?></td>
                             <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->job_type; ?></td>
                             <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->color; ?></td>
                             <td class="text-center<?= $no <= 3 ? ' top-tree' : ''; ?>"><?= $value->user_name; ?></td>

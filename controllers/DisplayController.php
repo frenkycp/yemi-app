@@ -134,9 +134,65 @@ use app\models\SunfishViewEmp;
 use app\models\FotocopyTbl;
 use app\models\MenuTree;
 use app\models\SunfishAttendanceData;
+use app\models\FotocopyLogTbl;
 
 class DisplayController extends Controller
 {
+    public function actionPrinterMonthlyUsage()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = $categories = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'section'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required')
+        ->addRule(['section'], 'string');
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t');
+
+        if ($model->load($_GET)) {}
+
+        $tmp_log = FotocopyLogTbl::find()
+        ->select([
+            'COST_CENTER', 'COST_CENTER_DESC',
+            'total_pages' => 'SUM(total_pages)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'post_date', $model->from_date],
+            ['<=', 'post_date', $model->to_date]
+        ])
+        ->andWhere([
+            'job_type' => ['Print', 'Copy']
+        ])
+        ->andWhere('COST_CENTER IS NOT NULL')
+        ->groupBy('COST_CENTER, COST_CENTER_DESC')
+        ->orderBy('total_pages DESC')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_log as $key => $value) {
+            $categories[] = $value->COST_CENTER_DESC;
+            $tmp_data[] = [
+                'y' => $value->total_pages
+            ];
+        }
+
+        $data[] = [
+            'name' => 'Paper Used',
+            'data' => $tmp_data,
+            'showInLegend' => false
+        ];
+
+        return $this->render('printer-monthly-usage', [
+            'data' => $data,
+            'model' => $model,
+            'categories' => $categories,
+        ]);
+    }
+
     public function actionRekapAbsensiHarian()
     {
         $this->layout = 'clean';
@@ -153,7 +209,7 @@ class DisplayController extends Controller
         }
 
         //$tmp_data = SunfishEmpAttendance::instance()->getTotalMp($model->post_date);
-        
+
         $data = SunfishAttendanceData::instance()->getDailyAttendance($model->post_date);
 
         return $this->render('rekap-absensi-harian', [
@@ -204,13 +260,13 @@ class DisplayController extends Controller
         $today = date('Y-m-d');
         
         $tmp_fotocopy = FotocopyTbl::find()
-        ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
+        ->select(['machine_ip', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
         ->where([
             'close_open' => 'O',
-            //'completed_date' => $today,
+            'completed_date' => $today,
         ])
         ->orderBy('completed_time DESC')
-        ->limit(500)
+        ->limit(50)
         ->all();
 
         $table_container = '';
@@ -219,6 +275,7 @@ class DisplayController extends Controller
         foreach ($tmp_fotocopy as $key => $value) {
             $no++;
             $top_tree = '';
+            $machine_ip = substr($value->machine_ip, -2);
             if ($no <= 3) {
                 $top_tree = ' top-tree';
             }
@@ -230,7 +287,7 @@ class DisplayController extends Controller
                         'data-confirm' => 'Are you sure to close this job ?'
                         ]) . '</td>
                     <td class="text-center' . $top_tree . '" width="50px">' . $no . '</td>
-                    <td class="text-center' . $top_tree . '">' . $value->machine_ip . '</td>
+                    <td class="text-center' . $top_tree . '">' . $machine_ip . '</td>
                     <td class="text-center' . $top_tree . '">' . $value->job_type . '</td>
                     <td class="text-center' . $top_tree . '">' . $value->color . '</td>
                     <td class="text-center' . $top_tree . '">' . $value->user_name . '</td>
@@ -241,7 +298,7 @@ class DisplayController extends Controller
                 $colspan = 7;
                 $table_container .= '<tr>
                     <td class="text-center' . $top_tree . '" width="50px">' . $no . '</td>
-                    <td class="text-center' . $top_tree . '">' . $value->machine_ip . '</td>
+                    <td class="text-center' . $top_tree . '">' . $machine_ip . '</td>
                     <td class="text-center' . $top_tree . '">' . $value->job_type . '</td>
                     <td class="text-center' . $top_tree . '">' . $value->color . '</td>
                     <td class="text-center' . $top_tree . '">' . $value->user_name . '</td>
@@ -273,7 +330,7 @@ class DisplayController extends Controller
         $today = date('Y-m-d');
 
         $tmp_list = FotocopyTbl::find()
-        ->select(['machine_ip' => 'RIGHT(machine_ip, 4)', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
+        ->select(['machine_ip', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
         ->where([
             'close_open' => 'O',
             //'completed_date' => $today,
