@@ -106,6 +106,19 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'cost_center',
+        'value' => function($model){
+            return $model->cost_center;
+        },
+        'label' => 'Section',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'emp_no',
         'label' => 'NIK',
         'vAlign' => 'middle',
@@ -118,7 +131,6 @@ $gridColumns = [
     [
         'attribute' => 'full_name',
         'label' => 'Nama',
-        'mergeHeader' => true,
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
@@ -127,7 +139,19 @@ $gridColumns = [
     ],
     [
         'attribute' => 'shiftdaily_code',
-        'label' => 'Kode Shift',
+        'label' => 'Shift',
+        'value' => function($model){
+            //return $model->shiftdaily_code;
+            if (strpos(strtoupper($model->shiftdaily_code), '_1')) {
+                return 1;
+            } elseif (strpos(strtoupper($model->shiftdaily_code), '_2') || strpos(strtoupper($model->shiftdaily_code), 'MAIN')) {
+                return 2;
+            } elseif (strpos(strtoupper($model->shiftdaily_code), '_3')) {
+                return 3;
+            } else {
+                return '-';
+            }
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -138,7 +162,6 @@ $gridColumns = [
     [
         'attribute' => 'starttime',
         'label' => 'Start Time',
-        'mergeHeader' => true,
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -149,7 +172,6 @@ $gridColumns = [
     [
         'attribute' => 'endtime',
         'label' => 'End Time',
-        'mergeHeader' => true,
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -158,8 +180,43 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'come_late',
+        'label' => 'Terlambat',
+        'value' => function($model){
+            if ($model->come_late == 1) {
+                return 'Y';
+            } else {
+                return 'N';
+            }
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 110px; text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'attend_judgement',
         'label' => 'Kehadiran',
+        'value' => function($model){
+            if ($model->attend_judgement == 'A' || $model->attend_judgement == null) {
+                return 'Alpa';
+            } elseif ($model->attend_judgement == 'P') {
+                return 'Hadir';
+            } elseif ($model->attend_judgement == 'I') {
+                return 'Ijin';
+            } elseif ($model->attend_judgement == 'S') {
+                return 'Sakit';
+            } elseif ($model->attend_judgement == 'C') {
+                return 'Cuti';
+            } elseif ($model->attend_judgement == 'CKX') {
+                $keterangan_khusus = app\models\SunfishAttendanceData::instance()->getCutiKhususDesc($model->Attend_Code);
+                return 'Cuti Khusus (' . $keterangan_khusus . ')';
+            } else {
+                return $model->attend_judgement;
+            }
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [

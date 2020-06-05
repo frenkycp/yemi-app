@@ -116,8 +116,10 @@ $script = "
     });
 ";
 $this->registerJs($script, View::POS_HEAD );
-if ($is_admin != 1) {
-    
+if ($is_admin == 1) {
+    $colspan = 8;
+} else {
+    $colspan = 7;
 }
 
 
@@ -166,6 +168,10 @@ echo '</pre>';*/
                             <td class="<?= $no <= 3 ? 'top-tree' : ''; ?>"><?= $value->job_name; ?></td>
                         </tr>
                     <?php endforeach ?>
+                <?php } else { ?>
+                    <tr>
+                        <td colspan="<?= $colspan; ?>">No Paper Used Today...</td>
+                    </tr>';
                 <?php }
                 ?>
                 

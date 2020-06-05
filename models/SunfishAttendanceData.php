@@ -38,9 +38,40 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
         );
     }
 
-    public function getAttendanceDetail($post_date, $shift, $category)
+    public function getCutiKhususDesc($attend_code)
     {
-        # code...
+        $keterangan = '';
+        if (strpos($attend_code, 'CK15')) {
+            $keterangan = 'Saudara Kandung Menikah';
+        } elseif (strpos($attend_code, 'CK13')) {
+            $keterangan = 'Musibah';
+        } elseif (strpos($attend_code, 'CK12')) {
+            $keterangan = 'Ibadah Haji / Ziarah Keagamaan';
+        } elseif (strpos($attend_code, 'CK11')) {
+            $keterangan = 'Keguguran';
+        } elseif (strpos($attend_code, 'CK10')) {
+            $keterangan = 'Melahirkan';
+        } elseif (strpos($attend_code, 'CK1')) {
+            $keterangan = 'Keluarga Meninggal';
+        } elseif (strpos($attend_code, 'CK2')) {
+            $keterangan = 'Keluarga Serumah Meninggal';
+        } elseif (strpos($attend_code, 'CK3')) {
+            $keterangan = 'Menikah';
+        } elseif (strpos($attend_code, 'CK4')) {
+            $keterangan = 'Menikahkan';
+        } elseif (strpos($attend_code, 'CK5')) {
+            $keterangan = 'Menghitankan';
+        } elseif (strpos($attend_code, 'CK6')) {
+            $keterangan = 'Membaptiskan';
+        } elseif (strpos($attend_code, 'CK7')) {
+            $keterangan = 'Istri Keguguran / Melahirkan';
+        } elseif (strpos($attend_code, 'CK8')) {
+            $keterangan = 'Tugas Negara';
+        } elseif (strpos($attend_code, 'CK9')) {
+            $keterangan = 'Haid';
+        }
+
+        return $keterangan;
     }
 
     public function getDailyAttendance($post_date)
@@ -54,19 +85,19 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
             'total_hadir_s1' => 'SUM(CASE WHEN attend_judgement = \'P\' AND ' . $filter_shift1 . ' THEN 1 ELSE 0 END)',
             'total_cuti_s1' => 'SUM(CASE WHEN (attend_judgement = \'C\' OR attend_judgement = \'CKX\') AND ' . $filter_shift1 . ' THEN 1 ELSE 0 END)',
             'total_ijin_s1' => 'SUM(CASE WHEN attend_judgement = \'I\' AND ' . $filter_shift1 . ' THEN 1 ELSE 0 END)',
-            'total_alpa_s1' => 'SUM(CASE WHEN attend_judgement = \'A\' AND ' . $filter_shift1 . ' THEN 1 ELSE 0 END)',
+            'total_alpa_s1' => 'SUM(CASE WHEN (attend_judgement = \'A\' OR attend_judgement IS NULL) AND ' . $filter_shift1 . ' THEN 1 ELSE 0 END)',
             'total_sakit_s1' => 'SUM(CASE WHEN attend_judgement = \'S\' AND ' . $filter_shift1 . ' THEN 1 ELSE 0 END)',
             'total_mp_s2' => 'SUM(CASE WHEN ' . $filter_shift2 . ' THEN 1 ELSE 0 END)',
             'total_hadir_s2' => 'SUM(CASE WHEN attend_judgement = \'P\' AND ' . $filter_shift2 . ' THEN 1 ELSE 0 END)',
             'total_cuti_s2' => 'SUM(CASE WHEN (attend_judgement = \'C\' OR attend_judgement = \'CKX\') AND ' . $filter_shift2 . ' THEN 1 ELSE 0 END)',
             'total_ijin_s2' => 'SUM(CASE WHEN attend_judgement = \'I\' AND ' . $filter_shift2 . ' THEN 1 ELSE 0 END)',
-            'total_alpa_s2' => 'SUM(CASE WHEN attend_judgement = \'A\' AND ' . $filter_shift2 . ' THEN 1 ELSE 0 END)',
+            'total_alpa_s2' => 'SUM(CASE WHEN (attend_judgement = \'A\' OR attend_judgement IS NULL) AND ' . $filter_shift2 . ' THEN 1 ELSE 0 END)',
             'total_sakit_s2' => 'SUM(CASE WHEN attend_judgement = \'S\' AND ' . $filter_shift2 . ' THEN 1 ELSE 0 END)',
             'total_mp_s3' => 'SUM(CASE WHEN ' . $filter_shift3 . ' THEN 1 ELSE 0 END)',
             'total_hadir_s3' => 'SUM(CASE WHEN attend_judgement = \'P\' AND ' . $filter_shift3 . ' THEN 1 ELSE 0 END)',
             'total_cuti_s3' => 'SUM(CASE WHEN (attend_judgement = \'C\' OR attend_judgement = \'CKX\') AND ' . $filter_shift3 . ' THEN 1 ELSE 0 END)',
             'total_ijin_s3' => 'SUM(CASE WHEN attend_judgement = \'I\' AND ' . $filter_shift3 . ' THEN 1 ELSE 0 END)',
-            'total_alpa_s3' => 'SUM(CASE WHEN attend_judgement = \'A\' AND ' . $filter_shift3 . ' THEN 1 ELSE 0 END)',
+            'total_alpa_s3' => 'SUM(CASE WHEN (attend_judgement = \'A\' OR attend_judgement IS NULL) AND ' . $filter_shift3 . ' THEN 1 ELSE 0 END)',
             'total_sakit_s3' => 'SUM(CASE WHEN attend_judgement = \'S\' AND ' . $filter_shift3 . ' THEN 1 ELSE 0 END)',
         ])
         ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')

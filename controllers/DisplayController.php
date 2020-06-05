@@ -272,6 +272,11 @@ class DisplayController extends Controller
         $table_container = '';
         $no = 0;
         $colspan = 0;
+        if ($is_admin == 1) {
+            $colspan = 8;
+        } else {
+            $colspan = 7;
+        }
         foreach ($tmp_fotocopy as $key => $value) {
             $no++;
             $top_tree = '';
@@ -311,7 +316,7 @@ class DisplayController extends Controller
 
         if (count($tmp_fotocopy) == 0) {
             $table_container = '<tr>
-            <td colspan="' . $colspan . '">No Outstanding Printing Paper</td>
+            <td colspan="' . $colspan . '">No Paper Used Today...</td>
             </tr>';
         }
 
@@ -333,7 +338,7 @@ class DisplayController extends Controller
         ->select(['machine_ip', 'job_type', 'user_name', 'color', 'job_name', 'completed_period', 'close_open', 'completed_date', 'completed_time', 'last_update', 'seq'])
         ->where([
             'close_open' => 'O',
-            //'completed_date' => $today,
+            'completed_date' => $today,
         ])
         ->orderBy('completed_time DESC')
         ->limit(500)

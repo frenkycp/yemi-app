@@ -18,7 +18,7 @@ class SunfishAttendanceDataSearch extends SunfishAttendanceData
 public function rules()
 {
 return [
-[['emp_no', 'post_date', 'period', 'shift', 'attend_judgement'], 'safe'],
+[['emp_no', 'post_date', 'period', 'shift', 'attend_judgement', 'come_late'], 'safe'],
 ];
 }
 
@@ -77,10 +77,9 @@ if (!$this->validate()) {
 return $dataProvider;
 }
 
-/*$query->andFilterWhere([
-            'Attend_Code' => $this->Attend_Code,
-            'shiftdaily_code' => $this->shiftdaily_code
-        ]);*/
+$query->andFilterWhere([
+            'come_late' => $this->come_late,
+        ]);
 
         $query->andFilterWhere(['like', 'CONVERT(VARCHAR(10), shiftendtime, 120)', $this->post_date])
         ->andFilterWhere(['like', 'VIEW_YEMI_ATTENDANCE.emp_no', $this->emp_no])
@@ -90,6 +89,8 @@ return $dataProvider;
         	$query->andFilterWhere([
 	            'attend_judgement' => ['C', 'CKX'],
 	        ]);
+        } elseif ($this->attend_judgement == 'A') {
+        	$query->andWhere('attend_judgement = \'A\' OR attend_judgement IS NULL');
         } else {
         	if ($this->attend_judgement != null && $this->attend_judgement != '') {
         		$query->andFilterWhere([

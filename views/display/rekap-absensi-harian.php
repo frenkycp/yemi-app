@@ -152,13 +152,19 @@ echo '</pre>';*/
                         $total_shift1 += $row['shift1'];
                         $total_shift2 += $row['shift2'];
                         $total_shift3 += $row['shift3'];
+
+                        if ($row['code'] == 'P') {
+                            $style_label = 'color: white; text-shadow: -1px -1px 0 #0F0';
+                        } else {
+                            $style_label = 'color: white; text-shadow: -1px -1px 0 #F00, 1px -1px 0 #F00, -1px 1px 0 #F00, 1px 1px 0 #F00;';
+                        }
                         ?>
                         <tr>
                             <td class="text-center"><?= $no; ?></td>
                             <td><?= $row['title']; ?></td>
-                            <td class="text-center"><?= $row['shift3'] == 0 || $row['code'] == 'P' ? $row['shift3'] : Html::a(number_format($row['shift3']), ['/sunfish-attendance-data', 'post_date' => $model->post_date, 'shift' => 3, 'attend_judgement' => $row['code']], ['target' => '_blank', 'style' => 'color: white; text-shadow: -1px -1px 0 #F00, 1px -1px 0 #F00, -1px 1px 0 #F00, 1px 1px 0 #F00;']); ?></td>
-                            <td class="text-center"><?= $row['shift1'] == 0 || $row['code'] == 'P' ? $row['shift1'] : Html::a(number_format($row['shift1']), ['/sunfish-attendance-data', 'post_date' => $model->post_date, 'shift' => 1, 'attend_judgement' => $row['code']], ['target' => '_blank', 'style' => 'color: white; text-shadow: -1px -1px 0 #F00, 1px -1px 0 #F00, -1px 1px 0 #F00, 1px 1px 0 #F00;']); ?></td>
-                            <td class="text-center"><?= $row['shift2'] == 0 || $row['code'] == 'P' ? $row['shift2'] : Html::a(number_format($row['shift2']), ['/sunfish-attendance-data', 'post_date' => $model->post_date, 'shift' => 2, 'attend_judgement' => $row['code']], ['target' => '_blank', 'style' => 'color: white; text-shadow: -1px -1px 0 #F00, 1px -1px 0 #F00, -1px 1px 0 #F00, 1px 1px 0 #F00;']); ?></td>
+                            <td class="text-center"><?= $row['shift3'] == 0 ? $row['shift3'] : Html::a(number_format($row['shift3']), ['/sunfish-attendance-data', 'post_date' => $model->post_date, 'shift' => 3, 'attend_judgement' => $row['code']], ['target' => '_blank', 'style' => $style_label]); ?></td>
+                            <td class="text-center"><?= $row['shift1'] == 0 ? $row['shift1'] : Html::a(number_format($row['shift1']), ['/sunfish-attendance-data', 'post_date' => $model->post_date, 'shift' => 1, 'attend_judgement' => $row['code']], ['target' => '_blank', 'style' => $style_label]); ?></td>
+                            <td class="text-center"><?= $row['shift2'] == 0 ? $row['shift2'] : Html::a(number_format($row['shift2']), ['/sunfish-attendance-data', 'post_date' => $model->post_date, 'shift' => 2, 'attend_judgement' => $row['code']], ['target' => '_blank', 'style' => $style_label]); ?></td>
                             <td class="text-center"><?= number_format($row['total']); ?></td>
                             <td class="text-center"><?= $row['title'] == 'MP' ? '' : $row['percentage'] . '%'; ?></td>
                         </tr>

@@ -60,6 +60,14 @@ echo '</pre>';*/
                         'prompt' => 'Pilih...'
                     ])->label('Kehadiran'); ?>
                 </div>
+                <div class="col-md-2">
+                    <?= $form->field($model, 'come_late')->dropDownList([
+                        1 => 'Y',
+                        0 => 'N'
+                    ], [
+                        'prompt' => 'Pilih...'
+                    ])->label('Terlambat'); ?>
+                </div>
                 <div class="col-md-3">
                     <?= $form->field($model, 'emp_no')->textInput()->label('NIK'); ?>
                 </div>
