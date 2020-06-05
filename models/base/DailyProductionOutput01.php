@@ -13,6 +13,7 @@ use Yii;
  * @property string $period
  * @property string $proddate
  * @property string $line
+ * @property string $model
  * @property string $gmc
  * @property string $description
  * @property integer $plan_qty
@@ -50,10 +51,11 @@ abstract class DailyProductionOutput01 extends \yii\db\ActiveRecord
         return [
             [['id'], 'required'],
             [['proddate', 'last_update'], 'safe'],
+            [['description'], 'string'],
             [['plan_qty', 'act_qty', 'balance_qty'], 'integer'],
-            [['id', 'line', 'gmc'], 'string', 'max' => 30],
+            [['id', 'gmc'], 'string', 'max' => 30],
             [['period'], 'string', 'max' => 10],
-            [['description'], 'string', 'max' => 63]
+            [['line', 'model'], 'string', 'max' => 255]
         ];
     }
 
@@ -67,6 +69,7 @@ abstract class DailyProductionOutput01 extends \yii\db\ActiveRecord
             'period' => 'Period',
             'proddate' => 'Proddate',
             'line' => 'Line',
+            'model' => 'Model',
             'gmc' => 'Gmc',
             'description' => 'Description',
             'plan_qty' => 'Plan Qty',

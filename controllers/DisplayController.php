@@ -138,6 +138,114 @@ use app\models\FotocopyLogTbl;
 
 class DisplayController extends Controller
 {
+    public function actionDailyProductionByLine()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = $data_daily = $categories = [];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'line'
+        ]);
+        $model->addRule(['from_date', 'to_date', 'line'], 'required');
+        $model->from_date = date('Y-m-d', strtotime(' -1 month'));
+        $model->to_date = date('Y-m-d');
+
+        $line_arr = ArrayHelper::map(SernoMaster::find()
+        ->select('line')
+        ->where('line != \'\'AND line != \'MIS\'')
+        ->groupBy('line')
+        ->all(), 'line', 'line');
+
+        $tmp_data = $tmp_data2 = $tmp_data_total = $tmp_data_daily = [];
+        if ($model->load($_GET)) {
+            $tmp_prod = DailyProductionOutput01::find()
+            ->where([
+                'AND',
+                ['>=', 'proddate', $model->from_date],
+                ['<=', 'proddate', $model->to_date]
+            ])
+            ->andWhere([
+                'line' => $model->line
+            ])
+            ->all();
+
+            foreach ($tmp_prod as $key => $value) {
+                $tmp_data[$value->gmc][$value->proddate] = $value->act_qty;
+            }
+
+            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+            $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+            
+            for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $tgl = $i->format("Y-m-d");
+                $tgl_single = $i->format('j');
+                //$proddate = (strtotime($tgl . " +7 hours") * 1000);
+                //$post_date = (strtotime($tgl . " +7 hours") * 1000);
+                foreach ($tmp_data as $key => $value) {
+                    if (!isset($value[$tgl])) {
+                        $tmp_data[$key][$tgl] = 0;
+                    }
+                }
+            }
+
+            foreach ($tmp_data as $key => $value) {
+                ksort($tmp_data[$key]);
+            }
+
+            foreach ($tmp_data as $gmc => $value) {
+                foreach ($value as $index_tgl => $value2) {
+                    $post_date = (strtotime($index_tgl . " +7 hours") * 1000);
+                    if (!isset($tmp_data_total[$index_tgl])) {
+                        $tmp_data_total[$index_tgl] = 0;
+                    }
+                    $tmp_data_total[$index_tgl . ''] += $value2;
+                    
+                    $tmp_data2[$gmc][] = [
+                        'x' => $post_date,
+                        'y' => $value2
+                    ];
+                }
+            }
+
+            ksort($tmp_data_total);
+            foreach ($tmp_data_total as $key => $value) {
+                $post_date = (strtotime($key . " +7 hours") * 1000);
+                $tmp_data_daily[] = [
+                    'x' => $post_date,
+                    'y' => $value
+                ];
+            }
+            $data[] = [
+                'name' => 'Total Daily',
+                'data' => $tmp_data_daily,
+                'type' => 'column',
+                'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+            ];
+
+            foreach ($tmp_data2 as $key => $value) {
+                $data[] = [
+                    'name' => $key,
+                    'data' => $value,
+                    'showInLegend' => false,
+                    'lineWidth' => 0.8,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[0]')
+                ];
+            }
+
+
+        }
+
+        return $this->render('daily-production-by-line', [
+            'data' => $data,
+            'tmp_data' => $tmp_data,
+            'model' => $model,
+            'line_arr' => $line_arr,
+        ]);
+
+        //DailyProductionOutput01::find()->all();
+    }
+
     public function actionPrinterMonthlyUsage()
     {
         $this->layout = 'clean';

@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoInputAll extends BaseSernoInputAll
 {
+    public $total;
 
     public function behaviors()
     {

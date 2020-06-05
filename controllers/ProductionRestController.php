@@ -4,6 +4,7 @@ namespace app\controllers;
 use yii\rest\Controller;
 use yii\helpers\ArrayHelper;
 use app\models\SernoInput;
+use app\models\SernoInputAll;
 use app\models\ProdNgData;
 use app\models\ProdNgRatio;
 use app\models\SernoInputPlan;
@@ -152,7 +153,7 @@ class ProductionRestController extends Controller
         }
         $last_update = date('Y-m-d H:i:s');
 
-        $tmp_act = SernoInput::find()
+        $tmp_act = SernoInputAll::find()
         ->select([
             'proddate', 'gmc',
             'total' => 'COUNT(gmc)'
@@ -199,7 +200,7 @@ class ProductionRestController extends Controller
                 ->execute();
             } catch (\Exception $e) {
                 $msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
-                return $msg;
+                return json_encode('error bulk insert' . $e);
             }
         }
 
@@ -218,7 +219,7 @@ class ProductionRestController extends Controller
             $output->act_qty = $value_act->total;
             $output->last_update = $last_update;
             if (!$output->save()) {
-                return json_encode($models->errors);
+                return json_encode('error proddate : ' . $value_act->proddate . ', GMC : ' . $value_act->gmc . '. ' . $models->errors);
             }
         }
 
