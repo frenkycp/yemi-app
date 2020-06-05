@@ -107,7 +107,11 @@ class SernoOutputController extends base\SernoOutputController
         $total_airshipment = 0;
 
 		foreach ($container as $key => $value) {
-			$close_percentage = (int)floor(($value->output / $value->qty) * 100);
+            $close_percentage = 0;
+            if ($value->qty > 0) {
+                $close_percentage = (int)floor(($value->output / $value->qty) * 100);
+            }
+			
 			$open_percentage = (int)(100 - $close_percentage);
 			$dataOpen[] = [
 				'y' => $open_percentage > 0 ? $open_percentage : null,
