@@ -142,6 +142,7 @@ $total_plan = $total_act = $total_balance = 0;
                             'style' => [
                                 'fontFamily' => 'sans-serif',
                             ],
+                            'zoomType' => 'x',
                             //'height' => 800
                         ],
                         'title' => [
@@ -158,9 +159,6 @@ $total_plan = $total_act = $total_balance = 0;
                             //'min' => 0,
                             'title' => [
                                 'text' => null
-                            ],
-                            'stackLabels' => [
-                                'enabled' => true
                             ],
                             'allowDecimals' => false,
                             //'gridLineWidth' => 0,
@@ -179,6 +177,9 @@ $total_plan = $total_act = $total_balance = 0;
                                 'marker' => [
                                     'enabled' => false
                                 ],
+                                /*'dataLabels' => [
+                                    'enabled' => true
+                                ],*/
                                 /*'lineWidth' => 1,
                                 'marker' => [
                                     'radius' => 2,

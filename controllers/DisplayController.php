@@ -157,7 +157,7 @@ class DisplayController extends Controller
         ->groupBy('line')
         ->all(), 'line', 'line');
 
-        $tmp_data = $tmp_data2 = $tmp_data_total = $tmp_data_daily = [];
+        $tmp_data = $tmp_data2 = $tmp_data_total = $tmp_data_daily = $tmp_model_arr = [];
         if ($model->load($_GET)) {
             $tmp_prod = DailyProductionOutput01::find()
             ->where([
@@ -172,6 +172,7 @@ class DisplayController extends Controller
 
             foreach ($tmp_prod as $key => $value) {
                 $tmp_data[$value->gmc][$value->proddate] = $value->act_qty;
+                $tmp_model_arr[$value->gmc] = $value->description;
             }
 
             $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
@@ -220,16 +221,16 @@ class DisplayController extends Controller
                 'name' => 'Total Daily',
                 'data' => $tmp_data_daily,
                 'type' => 'column',
-                'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                'color' => new JsExpression('Highcharts.getOptions().colors[3]')
             ];
 
             foreach ($tmp_data2 as $key => $value) {
                 $data[] = [
-                    'name' => $key,
+                    'name' => $tmp_model_arr[$key],
                     'data' => $value,
                     'showInLegend' => false,
-                    'lineWidth' => 0.8,
-                    'color' => new JsExpression('Highcharts.getOptions().colors[0]')
+                    'lineWidth' => 0.9,
+                    'color' => 'yellow'
                 ];
             }
 
