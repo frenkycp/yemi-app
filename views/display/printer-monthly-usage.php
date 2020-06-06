@@ -134,14 +134,14 @@ $total_plan = $total_act = $total_balance = 0;
                                 'style' => [
                                     'fontFamily' => 'sans-serif',
                                 ],
-                                'height' => 800,
+                                'height' => 400,
                                 //'zoomType' => 'x'
                             ],
                             'credits' => [
                                 'enabled' => false
                             ],
                             'title' => [
-                                'text' => null,
+                                'text' => 'Total Paper Used',
                             ],
                             'xAxis' => [
                                 'categories' => $categories,
@@ -179,6 +179,69 @@ $total_plan = $total_act = $total_balance = 0;
                     ?>
             </div>
         </div>
+
+        <div class="box box-primary box-solid">
+            <div class="box-body">
+                <?php
+                    echo Highcharts::widget([
+                        'scripts' => [
+                            //'modules/exporting',
+                            //'themes/grid-light',
+                            'themes/dark-unica',
+                            //'themes/sand-signika',
+                        ],
+                        'options' => [
+                            'chart' => [
+                                'type' => 'column',
+                                'style' => [
+                                    'fontFamily' => 'sans-serif',
+                                ],
+                                'height' => 400,
+                                //'zoomType' => 'x'
+                            ],
+                            'credits' => [
+                                'enabled' => false
+                            ],
+                            'title' => [
+                                'text' => 'Total Different Use With Last Month',
+                            ],
+                            'xAxis' => [
+                                'categories' => $categories,
+                                'gridLineWidth' => 0
+                            ],
+                            'yAxis' => [
+                                'title' => [
+                                    'text' => 'Total Different (PCS)',
+                                ],
+                                //'max' => 60,
+                                //'tickInterval' => 10
+                            ],
+                            'tooltip' => [
+                                'enabled' => true,
+                                //'valueSuffix' => '%',
+                                'shared' => true,
+                            ],
+                            'plotOptions' => [
+                                'column' => [
+                                    //'pointPadding' => 0.1,
+                                    'borderWidth' => 0
+                                ],
+                                'series' => [
+                                    'dataLabels' => [
+                                        'enabled' => true,
+                                        //'format' => '{point.y:,.0f}',
+                                    ],
+                                    'turboThreshold' => 0
+                                ],
+                            ],
+                            'series' => $data2,
+                        ],
+                    ]);
+
+                    ?>
+            </div>
+        </div>
+
     </div>
     <div id="loader" class="pageload-overlay" data-opening="m -5,-5 0,70 90,0 0,-70 z m 5,35 c 0,0 15,20 40,0 25,-20 40,0 40,0 l 0,0 C 80,30 65,10 40,30 15,50 0,30 0,30 z"> <!------------------- ANIMASI ------------------------->
         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 80 60" preserveAspectRatio="none" > <!------------------- ANIMASI ------------------------->

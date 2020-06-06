@@ -135,6 +135,7 @@ use app\models\FotocopyTbl;
 use app\models\MenuTree;
 use app\models\SunfishAttendanceData;
 use app\models\FotocopyLogTbl;
+use app\models\FotocopyUserTbl;
 
 class DisplayController extends Controller
 {
@@ -266,7 +267,7 @@ class DisplayController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $data = $categories = [];
+        $data = $data2 = $categories = [];
 
         $model = new \yii\base\DynamicModel([
             'from_date', 'to_date', 'section'
@@ -296,22 +297,81 @@ class DisplayController extends Controller
         ->orderBy('total_pages DESC')
         ->all();
 
-        $tmp_data = [];
-        foreach ($tmp_log as $key => $value) {
-            $categories[] = $value->COST_CENTER_DESC;
-            $tmp_data[] = [
+        $last_month_from_date = date('Y-m-01', strtotime(' -1 month'));
+        $last_month_to_date = date('Y-m-t', strtotime(' -1 month'));
+        $tmp_log_last_mont = ArrayHelper::map(FotocopyLogTbl::find()
+        ->select([
+            'COST_CENTER', 'COST_CENTER_DESC',
+            'total_pages' => 'SUM(total_pages)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'post_date', $last_month_from_date],
+            ['<=', 'post_date', $last_month_to_date]
+        ])
+        ->andWhere([
+            'job_type' => ['Print', 'Copy']
+        ])
+        ->andWhere('COST_CENTER IS NOT NULL')
+        ->groupBy('COST_CENTER, COST_CENTER_DESC')
+        ->orderBy('total_pages DESC')
+        ->all(), 'COST_CENTER_DESC', 'total_pages');
+
+        $tmp_cost_center = FotocopyUserTbl::find()
+        ->select('COST_CENTER_DESC')
+        ->where(['<>', 'COST_CENTER_DESC', 'WAIT'])
+        ->groupBy('COST_CENTER_DESC')
+        ->orderBy('COST_CENTER_DESC')
+        ->all();
+
+        $tmp_data = $tmp_data2 = $tmp_last_minus = [];
+
+        foreach ($tmp_cost_center as $value_cc) {
+            $tmp_total = 0;
+            foreach ($tmp_log as $key => $value) {
+                //$categories[] = $value->COST_CENTER_DESC;
+                if ($value->COST_CENTER_DESC == $value_cc->COST_CENTER_DESC) {
+                    $tmp_total = $value->total_pages;
+                }
+            }
+            $tmp_data[$value_cc->COST_CENTER_DESC] = $tmp_total;
+            /*$tmp_data[] = [
                 'y' => $value->total_pages
+            ];*/
+        }
+        arsort($tmp_data);
+        foreach ($tmp_data as $key => $value) {
+            $categories[] = $key;
+            $tmp_data2[] = [
+                'y' => $value
+            ];
+            $tmp_diff = 0;
+            if (isset($tmp_log_last_mont[$key])) {
+                $tmp_diff = $value - $tmp_log_last_mont[$key];
+            } else {
+                $tmp_diff = $value;
+            }
+            $tmp_last_minus[] = [
+                'y' => $tmp_diff
             ];
         }
 
         $data[] = [
             'name' => 'Paper Used',
-            'data' => $tmp_data,
+            'data' => $tmp_data2,
             'showInLegend' => false
+        ];
+
+        $data2[] = [
+            'name' => 'Diff. With Last Month',
+            'data' => $tmp_last_minus,
+            'showInLegend' => false,
+            'color' => new JsExpression('Highcharts.getOptions().colors[1]')
         ];
 
         return $this->render('printer-monthly-usage', [
             'data' => $data,
+            'data2' => $data2,
             'model' => $model,
             'categories' => $categories,
         ]);
