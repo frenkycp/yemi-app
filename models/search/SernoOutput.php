@@ -61,7 +61,7 @@ $query = SernoOutputModel::find()
     'week_no' => 'week(ship, 4)'
 ])
 ->where(['<>', 'stc', 'ADVANCE'])
-->groupBy('uniq, cntr');
+->groupBy('uniq, cntr, so');
 
 if(isset($params['index_type']))
 {
