@@ -143,7 +143,7 @@ $total_plan = $total_act = $total_balance = 0;
                                 'fontFamily' => 'sans-serif',
                             ],
                             'zoomType' => 'x',
-                            //'height' => 800
+                            'height' => 800
                         ],
                         'title' => [
                             //'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
@@ -161,6 +161,47 @@ $total_plan = $total_act = $total_balance = 0;
                                 'text' => null
                             ],
                             'allowDecimals' => false,
+                            'plotLines' => [
+                                [
+                                    'color' => 'white',
+                                    'width' => 2,
+                                    'value' => $max_val,
+                                    'label' => [
+                                        'text' => 'Total Production (MAX) : ' . number_format($max_val) . ' pcs',
+                                        'align' => 'left',
+                                        'style' => [
+                                            'color' => 'white'
+                                        ],
+                                    ],
+                                    'zIndex' => 10,
+                                ],
+                                [
+                                    'color' => 'white',
+                                    'width' => 2,
+                                    'value' => $min_val,
+                                    'label' => [
+                                        'text' => 'Total Production (MIN) : ' . number_format($min_val) . ' pcs',
+                                        'align' => 'left',
+                                        'style' => [
+                                            'color' => 'white'
+                                        ],
+                                    ],
+                                    'zIndex' => 10,
+                                ],
+                                [
+                                    'color' => 'white',
+                                    'width' => 2,
+                                    'value' => $avg_val,
+                                    'label' => [
+                                        'text' => 'Total Production (AVG) : ' . number_format($avg_val) . ' pcs',
+                                        'align' => 'left',
+                                        'style' => [
+                                            'color' => 'white'
+                                        ],
+                                    ],
+                                    'zIndex' => 10,
+                                ]
+                            ],
                             //'gridLineWidth' => 0,
                         ],
                         'credits' => [

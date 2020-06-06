@@ -143,6 +143,7 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $data = $data_daily = $categories = [];
+        $max_val = $min_val = $avg_val = 0;
 
         $model = new \yii\base\DynamicModel([
             'from_date', 'to_date', 'line'
@@ -157,7 +158,7 @@ class DisplayController extends Controller
         ->groupBy('line')
         ->all(), 'line', 'line');
 
-        $tmp_data = $tmp_data2 = $tmp_data_total = $tmp_data_daily = $tmp_model_arr = [];
+        $tmp_data = $tmp_data2 = $tmp_data_total = $tmp_data_daily = $tmp_model_arr = $value_arr = [];
         if ($model->load($_GET)) {
             $tmp_prod = DailyProductionOutput01::find()
             ->where([
@@ -216,12 +217,23 @@ class DisplayController extends Controller
                     'x' => $post_date,
                     'y' => $value
                 ];
+
+                if ($value > 0) {
+                    $value_arr[] = $value;
+                }
             }
+
+            $max_val = max($value_arr);
+            $min_val = min($value_arr);
+            if (count($value_arr) > 0) {
+                $avg_val = round(array_sum($value_arr) / count($value_arr));
+            }
+
             $data[] = [
                 'name' => 'Total Daily',
                 'data' => $tmp_data_daily,
                 'type' => 'column',
-                'color' => new JsExpression('Highcharts.getOptions().colors[3]')
+                'color' => new JsExpression('Highcharts.getOptions().colors[0]')
             ];
 
             foreach ($tmp_data2 as $key => $value) {
@@ -242,6 +254,9 @@ class DisplayController extends Controller
             'tmp_data' => $tmp_data,
             'model' => $model,
             'line_arr' => $line_arr,
+            'max_val' => $max_val,
+            'min_val' => $min_val,
+            'avg_val' => $avg_val,
         ]);
 
         //DailyProductionOutput01::find()->all();
