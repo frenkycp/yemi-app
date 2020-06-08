@@ -90,7 +90,7 @@ $query->andFilterWhere([
 	            'attend_judgement' => ['C', 'CKX'],
 	        ]);
         } elseif ($this->attend_judgement == 'A') {
-        	$query->andWhere('attend_judgement = \'A\' OR attend_judgement IS NULL');
+        	$query->andWhere('attend_judgement = \'A\' OR attend_judgement IS NULL OR attend_judgement = \'OFF\'');
         } else {
         	if ($this->attend_judgement != null && $this->attend_judgement != '') {
         		$query->andFilterWhere([

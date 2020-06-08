@@ -200,7 +200,7 @@ $gridColumns = [
         'attribute' => 'attend_judgement',
         'label' => 'Kehadiran',
         'value' => function($model){
-            if ($model->attend_judgement == 'A' || $model->attend_judgement == null) {
+            if ($model->attend_judgement == 'A' || $model->attend_judgement == null || $model->attend_judgement == 'OFF') {
                 return 'Alpa';
             } elseif ($model->attend_judgement == 'P') {
                 return 'Hadir';
