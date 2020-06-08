@@ -16,6 +16,7 @@ use Yii;
  * @property string $start_date
  * @property string $end_date
  * @property double $lt_second
+ * @property string $tipe
  * @property string $aliasModel
  */
 abstract class Toilet extends \yii\db\ActiveRecord
@@ -49,7 +50,7 @@ abstract class Toilet extends \yii\db\ActiveRecord
             [['room_value'], 'integer'],
             [['last_update', 'start_date', 'end_date'], 'safe'],
             [['lt_second'], 'number'],
-            [['room_id', 'room_desc'], 'string', 'max' => 50],
+            [['room_id', 'room_desc', 'tipe'], 'string', 'max' => 50],
             [['room_id'], 'unique']
         ];
     }
@@ -67,6 +68,7 @@ abstract class Toilet extends \yii\db\ActiveRecord
             'start_date' => 'Start Date',
             'end_date' => 'End Date',
             'lt_second' => 'Lt Second',
+            'tipe' => 'Tipe',
         ];
     }
 

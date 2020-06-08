@@ -391,15 +391,89 @@ class DisplayController extends Controller
         if ($model->load($_GET)) {
 
         }
+        $from_date = date('Y-m-01', strtotime($model->post_date));
+        $to_date = date('Y-m-t', strtotime($model->post_date));
 
-        //$tmp_data = SunfishEmpAttendance::instance()->getTotalMp($model->post_date);
+        //$data = SunfishAttendanceData::instance()->getDailyAttendance($model->post_date);
+        $data2 = SunfishAttendanceData::instance()->getDailyAttendanceRange($from_date, $to_date);
+        $tmp_daily_arr = $data_daily_arr = [];
+        foreach ($data2 as $key => $value) {
+            $post_date = (strtotime($key . " +7 hours") * 1000);
+            $tmp_daily_arr[] = [
+                'x' => $post_date,
+                'y' => count($value),
+                'url' => Url::to(['sunfish-attendance-data/index', 'post_date' => $key]),
+            ];
+        }
+        $data_daily_arr[] = [
+            'name' => 'Total Employees',
+            'data' => $tmp_daily_arr,
+            'showInLegend' => false
+        ];
 
-        $data = SunfishAttendanceData::instance()->getDailyAttendance($model->post_date);
+        $tmp_today_arr = [
+            'P' => [
+                'title' => 'MP',
+                1 => 0,
+                2 => 0,
+                3 => 0,
+            ],
+            'C' => [
+                'title' => 'Cuti',
+                1 => 0,
+                2 => 0,
+                3 => 0,
+            ],
+            'I' => [
+                'title' => 'Ijin',
+                1 => 0,
+                2 => 0,
+                3 => 0,
+            ],
+            'A' => [
+                'title' => 'Alpa',
+                1 => 0,
+                2 => 0,
+                3 => 0,
+            ],
+            'S' => [
+                'title' => 'Sakit',
+                1 => 0,
+                2 => 0,
+                3 => 0,
+            ],
+        ];
+
+        $total_plan_arr = $total_actual_arr = [
+            1 => 0,
+            2 => 0,
+            3 => 0,
+        ];
+
+        if (isset($data2[$model->post_date])) {
+            foreach ($data2[$model->post_date] as $key => $value) {
+                $tmp_today_arr[$value['attend_judgement']][$value['shift']]++;
+                $total_plan_arr[$value['shift']]++;
+                //$tmp_today_arr[$value['attend_judgement']]['total_plan']++;
+            }
+        }
+
+        foreach ($tmp_today_arr as $key => $value) {
+            foreach ($value as $key2 => $value2) {
+                if (isset($total_actual_arr[$key2])) {
+                    $total_actual_arr[$key2] += $value2;
+                }
+            }
+        }
 
         return $this->render('rekap-absensi-harian', [
             'model' => $model,
             //'tmp_data' => $tmp_data,
-            'data' => $data,
+            //'data' => $data,
+            'data_daily_arr' => $data_daily_arr,
+            'tmp_today_arr' => $tmp_today_arr,
+            'total_plan_arr' => $total_plan_arr,
+            'total_actual_arr' => $total_actual_arr,
         ]);
     }
 
@@ -5831,7 +5905,11 @@ class DisplayController extends Controller
     public function actionToiletStatus($value='')
     {
         $this->layout = 'clean';
-        $data = Toilet::find()->asArray()->all();
+        $data = Toilet::find()
+        ->where([
+            'tipe' => 'TOILET-ROOM'
+        ])
+        ->asArray()->all();
         return $this->render('toilet-status', [
             'data' => $data
         ]);

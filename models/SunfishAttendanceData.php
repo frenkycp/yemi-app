@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SunfishAttendanceData extends BaseSunfishAttendanceData
 {
-    public $post_date, $period, $shift;
+    public $post_date, $period, $shift, $start_date, $end_date;
 
     public function behaviors()
     {
@@ -72,6 +72,58 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
         }
 
         return $keterangan;
+    }
+
+    public function getDailyAttendanceRange($from_date, $to_date)
+    {
+        $return_data = [];
+        $tmp_data = $this::find()
+        ->select([
+            'shiftendtime' => 'FORMAT(shiftendtime, \'yyyy-MM-dd\')',
+            'VIEW_YEMI_ATTENDANCE.emp_no', 'VIEW_YEMI_ATTENDANCE.full_name', 'shiftdaily_code',
+            'start_date' => 'FORMAT(VIEW_YEMI_Emp_OrgUnit.start_date, \'yyyy-MM-dd\')',
+            'end_date' => 'FORMAT(VIEW_YEMI_Emp_OrgUnit.end_date, \'yyyy-MM-dd\')',
+            'shiftdaily_code', 'Attend_Code', 'attend_judgement'
+        ])
+        ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
+        ->where('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'')
+        ->andWhere([
+            'AND',
+            ['>=', 'FORMAT(shiftendtime, \'yyyy-MM-dd\')', $from_date],
+            ['<=', 'FORMAT(shiftendtime, \'yyyy-MM-dd\')', $to_date],
+        ])
+        ->orderBy('shiftendtime, emp_no')
+        ->all();
+
+        foreach ($tmp_data as $value) {
+            if ($value->start_date <= $value->shiftendtime && ($value->end_date == null || $value->end_date >= $value->shiftendtime)) {
+                if (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_1') !== false) {
+                    $shift =  1;
+                } elseif (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_2') !== false || strpos(strtoupper($value->shiftdaily_code), 'MAINTENANCE') !== false) {
+                    $shift =  2;
+                } elseif (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_3') !== false) {
+                    $shift =  3;
+                } else {
+                    $shift =  '-';
+                }
+
+                $attend_judgement = $value->attend_judgement;
+                if ($attend_judgement == 'CKX') {
+                    $attend_judgement = 'C';
+                } elseif ($attend_judgement == null || $attend_judgement == 'OFF') {
+                    $attend_judgement = 'A';
+                }
+
+                $data[$value->shiftendtime][] = [
+                    'nik' => $value->emp_no,
+                    'name' => $value->full_name,
+                    'shift' => $shift,
+                    'attend_judgement' => $attend_judgement
+                ];
+            }
+        }
+
+        return $data;
     }
 
     public function getDailyAttendance($post_date)
