@@ -8,10 +8,98 @@ use app\models\SernoInputAll;
 use app\models\ProdNgData;
 use app\models\ProdNgRatio;
 use app\models\SernoInputPlan;
+use app\models\SernoOutput;
 use app\models\DailyProductionOutput;
+use app\models\IjazahPlanActual;
 
 class ProductionRestController extends Controller
 {
+    public function actionIjazahUpdateActual($period = '')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if ($period == '') {
+            $period[] = date('Ym', strtotime(date('Y-m-01')));
+            $period[] = date('Ym', strtotime(date('Y-m-01', strtotime(' -1 month'))));
+            $period[] = date('Ym', strtotime(date('Y-m-01', strtotime(' -2 month'))));
+            sort($period);
+        }
+        //return $period;
+
+        $tmp_output = SernoOutput::find()
+        ->select([
+            'id' ,'gmc', 'output' => 'SUM(output)'
+        ])
+        ->where([
+            'id' => $period
+        ])
+        ->andWhere(['>', 'output', 0])
+        ->groupBy('id, gmc')
+        ->all();
+
+        $tmp_plan = ArrayHelper::map(IjazahPlanActual::find()->where([
+            'PERIOD' => $period
+        ])->all(), 'ID', 'PLAN_QTY');
+
+        $insert_arr = $minus = [];
+        //$insert_gmc = [];
+        $bulkInsertArray = [];
+        $columnNameArray = ['ID', 'PRODUCT_TYPE', 'BU', 'MODEL', 'PERIOD', 'ITEM', 'ITEM_DESC', 'DESTINATION', 'PLAN_QTY', 'ACTUAL_QTY', 'BALANCE_QTY', 'FORECAST_NAME', 'ACT_LAST_UPDATE'];
+        $total_insert = $total_update = 0;
+        foreach ($tmp_output as $key => $value) {
+            $index = $value->gmc . '-' . $value->id;
+            if (isset($tmp_plan[$index])) {
+                $balance = $tmp_plan[$index] - $value->output;
+                $tmp_update = IjazahPlanActual::findOne($index);
+                $tmp_update->ACTUAL_QTY = $value->output;
+                $tmp_update->BALANCE_QTY = $balance;
+                $tmp_update->ACT_LAST_UPDATE = $this_time;
+                if (!$tmp_update->save()) {
+                    return $tmp_update->errors;
+                }
+                $total_update++;
+            } else {
+                //$insert_gmc[] = $value->gmc;
+                $tmp_gmc = IjazahPlanActual::find()->where(['ITEM' => $value->gmc])->orderBy('PERIOD DESC')->one();
+                $balance = 0 - $value->output;
+                $tmp_insert = [
+                    'ID' => $index,
+                    'PRODUCT_TYPE' => $tmp_gmc->PRODUCT_TYPE,
+                    'BU' => $tmp_gmc->BU,
+                    'MODEL' => $tmp_gmc->MODEL,
+                    'PERIOD' => $value->id,
+                    'ITEM' => $value->gmc,
+                    'ITEM_DESC' => $tmp_gmc->ITEM_DESC,
+                    'DESTINATION' => $tmp_gmc->DESTINATION,
+                    'PLAN_QTY' => 0,
+                    'ACTUAL_QTY' => $value->output,
+                    'BALANCE_QTY' => $balance,
+                    'FORECAST_NAME' => 'WAIT',
+                    'ACT_LAST_UPDATE' => $this_time
+                ];
+                $bulkInsertArray[] = [
+                    $tmp_insert['ID'], $tmp_insert['PRODUCT_TYPE'], $tmp_insert['BU'], $tmp_insert['MODEL'], $tmp_insert['PERIOD'], $tmp_insert['ITEM'], $tmp_insert['ITEM_DESC'], $tmp_insert['DESTINATION'], $tmp_insert['PLAN_QTY'], $tmp_insert['ACTUAL_QTY'], $tmp_insert['BALANCE_QTY'], $tmp_insert['FORECAST_NAME'], $tmp_insert['ACT_LAST_UPDATE']
+                ];
+            }
+        }
+
+        $total_insert = count($bulkInsertArray);
+        if($total_insert > 0){
+            $insertCount = \Yii::$app->db_sql_server->createCommand()
+            ->batchInsert(IjazahPlanActual::getTableSchema()->fullName, $columnNameArray, $bulkInsertArray)
+            ->execute();
+        }
+
+        //print_r($minus);
+
+
+        return [
+            'Total Update' => $total_update,
+            'Total Insert' => $total_insert
+        ];
+    }
+
     public function actionNgRateInsert()
     {
         date_default_timezone_set('Asia/Jakarta');
