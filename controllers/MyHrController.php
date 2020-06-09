@@ -191,6 +191,7 @@ class MyHrController extends Controller
         $cuti_panjang_summary = SunfishLeaveSummary::find()
         ->where([
             'emp_no' => $model_karyawan->NIK_SUN_FISH,
+            'active_status' => 1
             //'leave_code' => 'LONGN2YEMI',
             //'FORMAT(endvaliddate, \'yyyy\')' => $this_year
         ])

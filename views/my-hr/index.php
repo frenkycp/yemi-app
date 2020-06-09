@@ -62,10 +62,10 @@ echo '</pre>';*/
 
                 <ul class="list-group list-group-unbordered" style="">
                     <li class="list-group-item">
-                        <b>Personal Leave</b> <a class="pull-right badge bg-red"><b><?= $sisa_cuti; ?></b> / <?= $kuota_cuti; ?></a>
+                        <b>Personal Leave</b> <i>(Balance / Quota)</i> <a class="pull-right badge bg-red"><b><?= $sisa_cuti; ?></b> / <?= $kuota_cuti; ?></a>
                     </li>
                     <li class="list-group-item">
-                        <b>Long Leave</b> <a class="pull-right badge bg-red"><b><?= $sisa_cuti_panjang; ?></b> / <?= $kuota_cuti_panjang; ?></a>
+                        <b>Long Leave</b> <i>(Balance / Quota)</i> <a class="pull-right badge bg-red"><b><?= $sisa_cuti_panjang; ?></b> / <?= $kuota_cuti_panjang; ?></a>
                     </li>
                 </ul>
             </div>
