@@ -161,7 +161,7 @@ echo '</pre>';*/
                                 <?= ''; //$pct; ?>
                                 <div class="progress-group">
                                     <span class="progress-text" style="color: rgba(0, 0, 0, 0);">.</span>
-                                    <span class="progress-number" style="font-size: 0.7em;"><b><?= $value2['actual_qty']; ?></b>/<?= $value2['plan_qty']; ?></span>
+                                    <span class="progress-number" style="font-size: 0.7em;"><?= number_format($value2['actual_qty']); ?>/<?= number_format($value2['plan_qty']); ?></span>
 
                                     <div class="progress" style="margin-top: 0px;">
                                         <div class="progress-bar<?= $progress_bar; ?><?= $pct < 100 ? ' progress-bar-striped active' : '' ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $pct > 100 ? 100 : $pct; ?>%"><?= $pct; ?>%</div>
