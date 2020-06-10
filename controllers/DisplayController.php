@@ -140,7 +140,8 @@ use app\models\IjazahPlanActual;
 
 class DisplayController extends Controller
 {
-    public function actionIjazahProgress()
+
+    public function actionIjazahProgressShipping()
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
@@ -152,20 +153,33 @@ class DisplayController extends Controller
         ->all(), 'line', 'line');
 
         $model = new \yii\base\DynamicModel([
-            'line'
+            'line', 'fiscal_year'
         ]);
-        $model->addRule(['line'], 'string');
+        $model->addRule(['line'], 'string')
+        ->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
 
         if ($model->load($_GET)) { }
 
-        $start_period = date('Ym', strtotime(date('Y-m-01', strtotime(' -4 months'))));
-        $end_period = date('Ym');
-        $period_arr = [
-            //date('Ym', strtotime(date('Y-m-01', strtotime(' -3 months')))),
-            date('Ym', strtotime(date('Y-m-01', strtotime(' -2 months')))),
-            date('Ym', strtotime(date('Y-m-01', strtotime(' -1 month')))),
-            date('Ym')
-        ];
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
 
         if ($model->line != null && $model->line != '') {
             $gmc_filter = SernoMaster::find()
@@ -223,6 +237,137 @@ class DisplayController extends Controller
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['percentage'] = $pct;
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['plan_qty'] = $value->PLAN_QTY;
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['actual_qty'] = $value->ACTUAL_QTY;
+        }
+        foreach ($tmp_gmc_arr as $key => $tmp_gmc) {
+            foreach ($period_arr as $period) {
+                if (!isset($tmp_data_arr[$key][$period])) {
+                    $tmp_data_arr[$key][$period]['percentage'] = '';
+                }
+            }
+            ksort($tmp_data_arr[$key]);
+        }
+
+        foreach ($tmp_data_arr as $key => $value) {
+            //$tmp_data_arr[$key] = ksort($value);
+        }
+
+        return $this->render('ijazah-progress-shipping', [
+            'start_period' => $start_period,
+            'end_period' => $end_period,
+            'period_arr' => $period_arr,
+            'tmp_data_arr' => $tmp_data_arr,
+            'tmp_gmc_arr' => $tmp_gmc_arr,
+            'model' => $model,
+            'line_arr' => $line_arr,
+        ]);
+    }
+
+    public function actionIjazahProgress()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $line_arr = ArrayHelper::map(SernoMaster::find()
+        ->select('line')
+        ->where('line != \'\'AND line != \'MIS\'')
+        ->groupBy('line')
+        ->all(), 'line', 'line');
+
+        $model = new \yii\base\DynamicModel([
+            'line', 'fiscal_year'
+        ]);
+        $model->addRule(['line'], 'string')
+        ->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) { }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        /*$start_period = date('Ym', strtotime(date('Y-m-01', strtotime(' -4 months'))));
+        $end_period = date('Ym');
+        $period_arr = [
+            //date('Ym', strtotime(date('Y-m-01', strtotime(' -3 months')))),
+            date('Ym', strtotime(date('Y-m-01', strtotime(' -2 months')))),
+            date('Ym', strtotime(date('Y-m-01', strtotime(' -1 month')))),
+            date('Ym')
+        ];*/
+
+        if ($model->line != null && $model->line != '') {
+            $gmc_filter = SernoMaster::find()
+            ->where([
+                'line' => $model->line
+            ])
+            ->all();
+
+            $gmc_filter_arr = [];
+            foreach ($gmc_filter as $key => $value) {
+                $gmc_filter_arr[] = $value->gmc;
+            }
+
+            $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
+            ->select('ITEM, ITEM_DESC')
+            ->where([
+                'PERIOD' => $period_arr,
+                'ITEM' => $gmc_filter_arr
+            ])
+            ->andWhere('ITEM IS NOT NULL')
+            ->groupBy('ITEM, ITEM_DESC')
+            ->orderBy('ITEM')
+            ->all(), 'ITEM', 'ITEM_DESC');
+
+            $tmp_ijazah_arr = IjazahPlanActual::find()
+            ->where([
+                'PERIOD' => $period_arr,
+                'ITEM' => $gmc_filter_arr
+            ])
+            ->all();
+        } else {
+            $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
+            ->select('ITEM, ITEM_DESC')
+            ->where([
+                'PERIOD' => $period_arr
+            ])
+            ->andWhere('ITEM IS NOT NULL')
+            ->groupBy('ITEM, ITEM_DESC')
+            ->orderBy('ITEM')
+            ->all(), 'ITEM', 'ITEM_DESC');
+
+            $tmp_ijazah_arr = IjazahPlanActual::find()
+            ->where([
+                'PERIOD' => $period_arr
+            ])
+            ->all();
+        }
+
+        $tmp_data_arr = [];
+        foreach ($tmp_ijazah_arr as $key => $value) {
+            $pct = 0;
+            if ($value->PLAN_QTY > 0) {
+                $pct = round(($value->ACTUAL_QTY / $value->PLAN_QTY) * 100, 1);
+            }
+            $tmp_data_arr[$value->ITEM][$value->PERIOD]['percentage'] = $pct;
+            $tmp_data_arr[$value->ITEM][$value->PERIOD]['plan_qty'] = $value->PLAN_QTY;
+            $tmp_data_arr[$value->ITEM][$value->PERIOD]['actual_qty'] = $value->ACTUAL_QTY;
+            $tmp_data_arr[$value->ITEM]['total_actual'] += $value->ACTUAL_QTY;
         }
         foreach ($tmp_gmc_arr as $key => $tmp_gmc) {
             foreach ($period_arr as $period) {

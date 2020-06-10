@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'VMS Monthly Progress (Versus FLO) <span class="japanesse light-green"></span>',
-    'tab_title' => 'VMS Monthly Progress (Versus FLO)',
-    'breadcrumbs_title' => 'VMS Monthly Progress (Versus FLO)'
+    'page_title' => 'VMS Monthly Progress (Versus FLO)<span class="japanesse light-green"> - Shipping </span>',
+    'tab_title' => 'VMS Monthly Progress (Versus FLO) - Shipping',
+    'breadcrumbs_title' => 'VMS Monthly Progress (Versus FLO) - Shipping'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -129,10 +129,10 @@ echo '</pre>';*/
 <table class="table" id="summary-tbl">
     <thead>
         <tr>
-            <th class="text-center" width="120px">ITEM</th>
-            <th width="200px">ITEM DESC.</th>
+            <th class="text-center" width="150px">ITEM</th>
+            <th>ITEM DESC.</th>
             <?php foreach ($period_arr as $key => $value): ?>
-                <th class="text-center" width="150px;"><?= $value; ?></th>
+                <th class="text-center" width="300px;"><?= $value; ?></th>
             <?php endforeach ?>
         </tr>
     </thead>
@@ -141,45 +141,22 @@ echo '</pre>';*/
         if (count($tmp_data_arr) > 0) {
             ?>
 
-            <?php foreach ($tmp_data_arr as $key => $value): 
-                $total_actual = $value['total_actual'];
-                unset($value['total_actual']);
-                ?>
+            <?php foreach ($tmp_data_arr as $key => $value): ?>
                 <tr>
                     <td class="text-center"><?= $key; ?></td>
-                    <td><?=
-                    //$tmp_gmc_arr[$key] . ' (Total Actual Qty : ' . $total_actual . ')';
-                    $tmp_gmc_arr[$key];
-                    ?></td>
+                    <td><?= $tmp_gmc_arr[$key]; ?></td>
                     <?php
                     $total_period = count($value);
                     $index = 0;
-                    
                     foreach ($value as $key2 => $value2):
-                        //$pct = $value2['percentage'];
-                        //
+                        $pct = $value2['percentage'];
                         ?>
                         <?php
-                        $actual_qty = 0;
-                        if (isset($value2['plan_qty'])) {
-                            $plan_qty = $value2['plan_qty'];
-                            if ($total_actual >= $plan_qty) {
-                                $total_actual -= $plan_qty;
-                                $actual_qty = $plan_qty;
-                            } else {
-                                $actual_qty = $total_actual;
-                                $total_actual = 0;
-                            }
-
-                            $pct = 0;
-                            if ($plan_qty > 0) {
-                                $pct = round(($actual_qty / $plan_qty) * 100, 1);
-                            }
-
+                        if ($pct !== '') {
                             if ($pct >= 100) {
                                 $progress_bar = ' progress-bar-green';
                             } else {
-                                if ($key2 < date('Ym')) {
+                                if ($index != ($total_period - 1)) {
                                     $progress_bar = ' progress-bar-red';
                                 } else {
                                     $progress_bar = ' progress-bar-yellow';
@@ -190,7 +167,7 @@ echo '</pre>';*/
                                 <?= ''; //$pct; ?>
                                 <div class="progress-group">
                                     <span class="progress-text" style="color: rgba(0, 0, 0, 0);">.</span>
-                                    <span class="progress-number" style="font-size: 0.7em;"><?= number_format($actual_qty); ?>/<?= number_format($plan_qty); ?></span>
+                                    <span class="progress-number" style="font-size: 0.7em;"><?= number_format($value2['actual_qty']); ?>/<?= number_format($value2['plan_qty']); ?></span>
 
                                     <div class="progress" style="margin-top: 0px;">
                                         <div class="progress-bar<?= $progress_bar; ?><?= $pct < 100 ? ' progress-bar-striped active' : '' ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $pct > 100 ? 100 : $pct; ?>%; font-size: 11px;"><?= $pct; ?>%</div>
