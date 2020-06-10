@@ -220,12 +220,14 @@ class DisplayController extends Controller
             if ($value->PLAN_QTY > 0) {
                 $pct = round(($value->ACTUAL_QTY / $value->PLAN_QTY) * 100, 1);
             }
-            $tmp_data_arr[$value->ITEM][$value->PERIOD] = $pct;
+            $tmp_data_arr[$value->ITEM][$value->PERIOD]['percentage'] = $pct;
+            $tmp_data_arr[$value->ITEM][$value->PERIOD]['plan_qty'] = $value->PLAN_QTY;
+            $tmp_data_arr[$value->ITEM][$value->PERIOD]['actual_qty'] = $value->ACTUAL_QTY;
         }
         foreach ($tmp_gmc_arr as $key => $tmp_gmc) {
             foreach ($period_arr as $period) {
                 if (!isset($tmp_data_arr[$key][$period])) {
-                    $tmp_data_arr[$key][$period] = '';
+                    $tmp_data_arr[$key][$period]['percentage'] = '';
                 }
             }
             ksort($tmp_data_arr[$key]);

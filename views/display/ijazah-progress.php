@@ -143,11 +143,11 @@ echo '</pre>';*/
                     $total_period = count($value);
                     $index = 0;
                     foreach ($value as $key2 => $value2):
-                        
+                        $pct = $value2['percentage'];
                         ?>
                         <?php
-                        if ($value2 !== '') {
-                            if ($value2 >= 100) {
+                        if ($pct !== '') {
+                            if ($pct >= 100) {
                                 $progress_bar = ' progress-bar-green';
                             } else {
                                 if ($index != ($total_period - 1)) {
@@ -158,12 +158,13 @@ echo '</pre>';*/
                             }
                             ?>
                             <td class="text-center">
-                                <?= ''; //$value2; ?>
+                                <?= ''; //$pct; ?>
                                 <div class="progress-group">
-                                    <span class="progress-number"></span>
+                                    <span class="progress-text" style="color: rgba(0, 0, 0, 0);">.</span>
+                                    <span class="progress-number" style="font-size: 0.7em;"><b><?= $value2['actual_qty']; ?></b>/<?= $value2['plan_qty']; ?></span>
 
-                                    <div class="progress">
-                                        <div class="progress-bar<?= $progress_bar; ?><?= $value2 < 100 ? ' progress-bar-striped active' : '' ?>" style="width: <?= $value2; ?>%"><?= $value2; ?>%</div>
+                                    <div class="progress" style="margin-top: 0px;">
+                                        <div class="progress-bar<?= $progress_bar; ?><?= $pct < 100 ? ' progress-bar-striped active' : '' ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $pct > 100 ? 100 : $pct; ?>%"><?= $pct; ?>%</div>
                                     </div>
                                 </div>
                             </td>
