@@ -92,7 +92,7 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
-print_r($tmp_data_arr);
+print_r($actual_by_period);
 echo '</pre>';*/
 ?>
 <br/>
@@ -117,9 +117,13 @@ echo '</pre>';*/
             ]
         ); ?>
     </div>
+    
     <div class="form-group">
         <br/>
         <?= Html::submitButton('GENERATE DATA', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
+    </div>
+    <div class="col-md-1">
+        <?= $form->field($model, 'category')->hiddenInput()->label(false); ?>
     </div>
     
 </div>
@@ -137,13 +141,20 @@ echo '</pre>';*/
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td colspan="2" class="bg-black text-center">Total</td>
+            <?php foreach ($actual_by_period as $key => $value): ?>
+                <td class="text-center bg-black"><?= number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
         <?php
         if (count($tmp_data_arr) > 0) {
             ?>
 
             <?php foreach ($tmp_data_arr as $key => $value): 
-                $total_actual = $value['total_actual'];
-                unset($value['total_actual']);
+                if (isset($value['total_actual'])) {
+                    unset($value['total_actual']);
+                }
                 ?>
                 <tr>
                     <td class="text-center"><?= $key; ?></td>
@@ -163,13 +174,7 @@ echo '</pre>';*/
                         $actual_qty = 0;
                         if (isset($value2['plan_qty'])) {
                             $plan_qty = $value2['plan_qty'];
-                            if ($total_actual >= $plan_qty) {
-                                $total_actual -= $plan_qty;
-                                $actual_qty = $plan_qty;
-                            } else {
-                                $actual_qty = $total_actual;
-                                $total_actual = 0;
-                            }
+                            $actual_qty = $value2['actual_qty'];
 
                             $pct = 0;
                             if ($plan_qty > 0) {

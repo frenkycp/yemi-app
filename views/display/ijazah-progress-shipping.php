@@ -99,7 +99,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['ijazah-progress']),
+    'action' => Url::to(['ijazah-progress-shipping']),
 ]); ?>
 
 <div class="row">

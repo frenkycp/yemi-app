@@ -262,7 +262,7 @@ class DisplayController extends Controller
         ]);
     }
 
-    public function actionIjazahProgress()
+    public function actionIjazahProgress($category = '')
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
@@ -274,10 +274,11 @@ class DisplayController extends Controller
         ->all(), 'line', 'line');
 
         $model = new \yii\base\DynamicModel([
-            'line', 'fiscal_year'
+            'line', 'fiscal_year', 'category'
         ]);
-        $model->addRule(['line'], 'string')
+        $model->addRule(['line', 'category'], 'string')
         ->addRule(['fiscal_year'], 'required');
+        $model->category = $category;
 
         $current_fiscal = FiscalTbl::find()->where([
             'PERIOD' => date('Ym')
@@ -378,8 +379,36 @@ class DisplayController extends Controller
             ksort($tmp_data_arr[$key]);
         }
 
+        $actual_by_period = [];
         foreach ($tmp_data_arr as $key => $value) {
-            //$tmp_data_arr[$key] = ksort($value);
+            $total_actual = $value['total_actual'];
+            unset($value['total_actual']);
+            foreach ($value as $key2 => $value2) {
+                $plan_qty = $value2['plan_qty'];
+                if ($model->category == 'ori') {
+                    $actual_qty = $value2['actual_qty'];
+                } else {
+                    if ($total_actual >= $plan_qty) {
+                        $total_actual -= $plan_qty;
+                        $actual_qty = $plan_qty;
+                    } else {
+                        $actual_qty = $total_actual;
+                        $total_actual = 0;
+                    }
+                }
+                
+
+                $pct = 0;
+                if ($plan_qty > 0) {
+                    $pct = round(($actual_qty / $plan_qty) * 100, 1);
+                }
+
+                $tmp_data_arr[$key][$key2]['percentage'] = $pct;
+                $tmp_data_arr[$key][$key2]['plan_qty'] = $plan_qty;
+                $tmp_data_arr[$key][$key2]['actual_qty'] = $actual_qty;
+
+                $actual_by_period[$key2] += $actual_qty;
+            }
         }
 
         return $this->render('ijazah-progress', [
@@ -390,6 +419,7 @@ class DisplayController extends Controller
             'tmp_gmc_arr' => $tmp_gmc_arr,
             'model' => $model,
             'line_arr' => $line_arr,
+            'actual_by_period' => $actual_by_period,
         ]);
     }
 
