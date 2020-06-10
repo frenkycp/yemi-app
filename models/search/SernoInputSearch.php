@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SernoInput;
+use app\models\SernoInputAll;
 
 /**
 * SernoInputSearch represents the model behind the search form about `app\models\SernoInput`.
 */
-class SernoInputSearch extends SernoInput
+class SernoInputSearch extends SernoInputAll
 {
 /**
 * @inheritdoc
@@ -41,7 +41,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = SernoInput::find()
+$query = SernoInputAll::find()
 ->joinWith('sernoOutput')
 ->joinWith('sernoMaster')
 ->where('flo <> 0');

@@ -87,6 +87,17 @@ $grid_columns = [
         ],
     ],
     [
+        'attribute' => 'cntr',
+        'value' => 'sernoOutput.cntr',
+        'label' => 'Container No.',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'line',
         'hAlign' => 'center',
         'vAlign' => 'middle',
