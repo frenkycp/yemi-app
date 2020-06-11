@@ -137,6 +137,7 @@ use app\models\SunfishAttendanceData;
 use app\models\FotocopyLogTbl;
 use app\models\FotocopyUserTbl;
 use app\models\IjazahPlanActual;
+use app\models\WorkingDaysView;
 
 class DisplayController extends Controller
 {
@@ -262,7 +263,7 @@ class DisplayController extends Controller
         ]);
     }
 
-    public function actionIjazahProgress($category = '')
+    public function actionIjazahProgress($code = '')
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
@@ -274,11 +275,12 @@ class DisplayController extends Controller
         ->all(), 'line', 'line');
 
         $model = new \yii\base\DynamicModel([
-            'line', 'fiscal_year', 'category'
+            'line', 'fiscal_year', 'code', 'category'
         ]);
-        $model->addRule(['line', 'category'], 'string')
+        $model->addRule(['line', 'code', 'category'], 'string')
         ->addRule(['fiscal_year'], 'required');
-        $model->category = $category;
+        $model->code = $code;
+        $model->category = 'ALL';
 
         $current_fiscal = FiscalTbl::find()->where([
             'PERIOD' => date('Ym')
@@ -302,6 +304,26 @@ class DisplayController extends Controller
         foreach ($tmp_fiscal_period as $key => $value) {
             $period_arr[] = $value->PERIOD;
         }
+
+        $tmp_work_day = ArrayHelper::map(WorkingDaysView::find()
+            ->where([
+            'period' => $period_arr
+        ])
+        ->all(), 'period', 'working_days');
+
+        $bu_dropdown_arr = ArrayHelper::map(IjazahPlanActual::find()->select('BU')->groupBY('BU')->orderBy('BU')->all(), 'BU', 'BU');
+        $bu_filter_arr = [];
+        foreach ($bu_dropdown_arr as $key => $value) {
+            $bu_filter_arr[] = $value;
+        }
+
+        if ($model->category == 'ALL') {
+            $tmp_filter_category = $bu_filter_arr;
+        } else {
+            $tmp_filter_category = $model->category;
+        }
+        $bu_dropdown_arr['ALL'] = '-ALL CATEGORY-';
+        ksort($bu_filter_arr);
 
         /*$start_period = date('Ym', strtotime(date('Y-m-01', strtotime(' -4 months'))));
         $end_period = date('Ym');
@@ -328,7 +350,8 @@ class DisplayController extends Controller
             ->select('ITEM, ITEM_DESC')
             ->where([
                 'PERIOD' => $period_arr,
-                'ITEM' => $gmc_filter_arr
+                'ITEM' => $gmc_filter_arr,
+                'BU' => $tmp_filter_category
             ])
             ->andWhere('ITEM IS NOT NULL')
             ->groupBy('ITEM, ITEM_DESC')
@@ -338,14 +361,16 @@ class DisplayController extends Controller
             $tmp_ijazah_arr = IjazahPlanActual::find()
             ->where([
                 'PERIOD' => $period_arr,
-                'ITEM' => $gmc_filter_arr
+                'ITEM' => $gmc_filter_arr,
+                'BU' => $tmp_filter_category
             ])
             ->all();
         } else {
             $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
             ->select('ITEM, ITEM_DESC')
             ->where([
-                'PERIOD' => $period_arr
+                'PERIOD' => $period_arr,
+                'BU' => $tmp_filter_category
             ])
             ->andWhere('ITEM IS NOT NULL')
             ->groupBy('ITEM, ITEM_DESC')
@@ -354,7 +379,8 @@ class DisplayController extends Controller
 
             $tmp_ijazah_arr = IjazahPlanActual::find()
             ->where([
-                'PERIOD' => $period_arr
+                'PERIOD' => $period_arr,
+                'BU' => $tmp_filter_category
             ])
             ->all();
         }
@@ -368,6 +394,7 @@ class DisplayController extends Controller
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['percentage'] = $pct;
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['plan_qty'] = $value->PLAN_QTY;
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['actual_qty'] = $value->ACTUAL_QTY;
+            $tmp_data_arr[$value->ITEM][$value->PERIOD]['std_price'] = $value->STD_PRICE;
             $tmp_data_arr[$value->ITEM]['total_actual'] += $value->ACTUAL_QTY;
         }
         foreach ($tmp_gmc_arr as $key => $tmp_gmc) {
@@ -379,35 +406,43 @@ class DisplayController extends Controller
             ksort($tmp_data_arr[$key]);
         }
 
-        $actual_by_period = [];
+        $actual_by_period = $plan_by_period = $price_by_period = [];
         foreach ($tmp_data_arr as $key => $value) {
             $total_actual = $value['total_actual'];
             unset($value['total_actual']);
             foreach ($value as $key2 => $value2) {
-                $plan_qty = $value2['plan_qty'];
-                if ($model->category == 'ori') {
-                    $actual_qty = $value2['actual_qty'];
+                if (strpos($key2, 'total') !== false) {
+                    # code...
                 } else {
-                    if ($total_actual >= $plan_qty) {
-                        $total_actual -= $plan_qty;
-                        $actual_qty = $plan_qty;
+                    $plan_qty = $value2['plan_qty'];
+                    $std_price = $value2['std_price'];
+                    if ($model->code == 'ori') {
+                        $actual_qty = $value2['actual_qty'];
                     } else {
-                        $actual_qty = $total_actual;
-                        $total_actual = 0;
+                        if ($total_actual >= $plan_qty) {
+                            $total_actual -= $plan_qty;
+                            $actual_qty = $plan_qty;
+                        } else {
+                            $actual_qty = $total_actual;
+                            $total_actual = 0;
+                        }
                     }
+                    $total_price = $actual_qty * $std_price;
+
+                    $pct = 0;
+                    if ($plan_qty > 0) {
+                        $pct = round(($actual_qty / $plan_qty) * 100, 1);
+                    }
+
+                    $tmp_data_arr[$key][$key2]['percentage'] = $pct;
+                    $tmp_data_arr[$key][$key2]['plan_qty'] = $plan_qty;
+                    $tmp_data_arr[$key][$key2]['actual_qty'] = $actual_qty;
+                    //$tmp_data_arr[$key][$key2]['total_price'] = $total_price;
+
+                    $actual_by_period[$key2] += $actual_qty;
+                    $plan_by_period[$key2] += $plan_qty;
+                    $price_by_period[$key2] += $total_price;
                 }
-                
-
-                $pct = 0;
-                if ($plan_qty > 0) {
-                    $pct = round(($actual_qty / $plan_qty) * 100, 1);
-                }
-
-                $tmp_data_arr[$key][$key2]['percentage'] = $pct;
-                $tmp_data_arr[$key][$key2]['plan_qty'] = $plan_qty;
-                $tmp_data_arr[$key][$key2]['actual_qty'] = $actual_qty;
-
-                $actual_by_period[$key2] += $actual_qty;
             }
         }
 
@@ -420,6 +455,10 @@ class DisplayController extends Controller
             'model' => $model,
             'line_arr' => $line_arr,
             'actual_by_period' => $actual_by_period,
+            'plan_by_period' => $plan_by_period,
+            'price_by_period' => $price_by_period,
+            'tmp_work_day' => $tmp_work_day,
+            'bu_dropdown_arr' => $bu_dropdown_arr
         ]);
     }
 

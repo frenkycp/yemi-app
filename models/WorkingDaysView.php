@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\WorkDayTbl as BaseWorkDayTbl;
+use \app\models\base\WorkingDaysView as BaseWorkingDaysView;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.work_day_tbl".
+ * This is the model class for table "db_owner.WORKING_DAYS_VIEW".
  */
-class WorkDayTbl extends BaseWorkDayTbl
+class WorkingDaysView extends BaseWorkingDaysView
 {
-    public $period, $total;
 
     public function behaviors()
     {

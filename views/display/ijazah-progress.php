@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'VMS Monthly Progress (Versus FLO) <span class="japanesse light-green"></span>',
-    'tab_title' => 'VMS Monthly Progress (Versus FLO)',
-    'breadcrumbs_title' => 'VMS Monthly Progress (Versus FLO)'
+    'page_title' => 'SCM Monthly Progress (SCM Versus FLO) <span class="japanesse light-green"></span>',
+    'tab_title' => 'SCM Monthly Progress (SCM Versus FLO)',
+    'breadcrumbs_title' => 'SCM Monthly Progress (SCM Versus FLO)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -42,14 +42,6 @@ $css_string = "
         //border:1px solid #29B6F6;
         border-top: 0;
     }
-    #summary-tbl > thead > tr > th{
-        border:1px solid #8b8c8d;
-        background-color: #518469;
-        color: white;
-        font-size: 16px;
-        border-bottom: 7px solid #797979;
-        vertical-align: middle;
-    }
     #summary-tbl > tbody > tr > td{
         border:1px solid #777474;
         font-size: 14px;
@@ -59,6 +51,22 @@ $css_string = "
         padding: 10px 10px;
         letter-spacing: 1.1px;
         //height: 100px;
+    }
+    #summary-tbl > thead > tr > th{
+        border:1px solid #8b8c8d;
+        background-color: #518469;
+        color: white;
+        font-size: 16px;
+        border-bottom: 7px solid #797979;
+        vertical-align: middle;
+    }
+     .tbl-header{
+        border:1px solid #8b8c8d !important;
+        background-color: #518469 !important;
+        color: white !important;
+        font-size: 16px !important;
+        border-bottom: 7px solid #797979 !important;
+        vertical-align: middle !important;
     }
     #summary-tbl > tfoot > tr > td{
         border:1px solid #777474;
@@ -92,7 +100,7 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
-print_r($actual_by_period);
+print_r($tmp_data_arr);
 echo '</pre>';*/
 ?>
 <br/>
@@ -110,6 +118,11 @@ echo '</pre>';*/
         ); ?>
     </div>
     <div class="col-md-2">
+        <?= $form->field($model, 'category')->dropDownList(
+            $bu_dropdown_arr, []
+        ); ?>
+    </div>
+    <div class="col-md-2">
         <?= $form->field($model, 'line')->dropDownList(
             $line_arr,
             [
@@ -123,28 +136,69 @@ echo '</pre>';*/
         <?= Html::submitButton('GENERATE DATA', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
     </div>
     <div class="col-md-1">
-        <?= $form->field($model, 'category')->hiddenInput()->label(false); ?>
+        <?= $form->field($model, 'code')->hiddenInput()->label(false); ?>
     </div>
     
 </div>
 
 <?php ActiveForm::end(); ?>
-
+<br/>
 <table class="table" id="summary-tbl">
     <thead>
-        <tr>
-            <th class="text-center" width="120px">ITEM</th>
-            <th width="200px">ITEM DESC.</th>
+        <tr style="display: none;">
+            <th class="text-center" colspan="2">Description</th>
             <?php foreach ($period_arr as $key => $value): ?>
-                <th class="text-center" width="150px;"><?= $value; ?></th>
+                <th class="text-center"><?= $value; ?></th>
             <?php endforeach ?>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td colspan="2" class="bg-black text-center">Total</td>
+            <td colspan="2" class="bg-black text-center">Actual Qty (Total)</td>
             <?php foreach ($actual_by_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td colspan="2" class="bg-black text-center">Plan Qty (Total)</td>
+            <?php foreach ($plan_by_period as $key => $value): ?>
+                <td class="text-center bg-black"><?= number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td colspan="2" class="bg-black text-center">Working Days</td>
+            <?php foreach ($plan_by_period as $key => $value):
+                if (isset($tmp_work_day[$key])) {
+                    $working_days = $tmp_work_day[$key];
+                } else {
+                    $working_days = '-';
+                }
+                ?>
+                <td class="text-center bg-black"><?= $working_days; ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td colspan="2" class="bg-black text-center">Percentage</td>
+            <?php foreach ($actual_by_period as $key => $value):
+                $tmp_pct = 0;
+                if ($plan_by_period[$key] > 0) {
+                    $tmp_pct = round(($value / $plan_by_period[$key]) * 100, 1);
+                }
+                ?>
+                <td class="text-center bg-black"><?= $tmp_pct; ?>%</td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td colspan="2" class="bg-black text-center">Total Price</td>
+            <?php foreach ($price_by_period as $key => $value): ?>
+                <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr class="" style="">
+            <td class="text-center tbl-header" width="120px">ITEM</td>
+            <td class="tbl-header" width="200px">ITEM DESC.</td>
+            <?php foreach ($period_arr as $key => $value): ?>
+                <td class="text-center tbl-header" width="100px;"><?= $value; ?></td>
             <?php endforeach ?>
         </tr>
         <?php
