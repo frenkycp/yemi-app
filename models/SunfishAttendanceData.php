@@ -69,6 +69,8 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
             $keterangan = 'Tugas Negara';
         } elseif (strpos($attend_code, 'CK9')) {
             $keterangan = 'Haid';
+        } elseif (strpos($attend_code, 'UPL')) {
+            $keterangan = 'Tambahan Cuti Melahirkan';
         }
 
         return $keterangan;

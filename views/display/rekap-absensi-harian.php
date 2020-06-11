@@ -152,6 +152,9 @@ echo '</pre>';*/
                         $style_label = 'color: white; text-shadow: -1px -1px 0 #0F0';
                     } else {
                         $style_label = 'color: white; text-shadow: -1px -1px 0 #F00, 1px -1px 0 #F00, -1px 1px 0 #F00, 1px 1px 0 #F00;';
+                        if ($key == 'C') {
+                            $key = 'C_ALL';
+                        }
                     }
                     $tmp_total = 0;
                     $tmp_total = $row[3] + $row[1] + $row[2];
