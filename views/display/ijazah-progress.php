@@ -78,6 +78,7 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
+    .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
     #summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .icon-status {font-size : 3em;}
@@ -154,31 +155,19 @@ echo '</pre>';*/
     </thead>
     <tbody>
         <tr>
-            <td colspan="2" class="bg-black text-center">Actual Qty (Total)</td>
-            <?php foreach ($actual_by_period as $key => $value): ?>
-                <td class="text-center bg-black"><?= number_format($value); ?></td>
-            <?php endforeach ?>
-        </tr>
-        <tr>
-            <td colspan="2" class="bg-black text-center">Plan Qty (Total)</td>
+            <td colspan="2" class="bg-black"><span class="desc-number">A. </span>PLAN Qty</td>
             <?php foreach ($plan_by_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format($value); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black text-center">Price Total (Actual)</td>
-            <?php foreach ($price_by_period as $key => $value): ?>
-                <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
+            <td colspan="2" class="bg-black"><span class="desc-number">B. </span>ACTUAL Qty</td>
+            <?php foreach ($actual_by_period as $key => $value): ?>
+                <td class="text-center bg-black"><?= number_format($value); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black text-center">Price Total (Plan)</td>
-            <?php foreach ($price_by_period_plan as $key => $value): ?>
-                <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
-            <?php endforeach ?>
-        </tr>
-        <tr>
-            <td colspan="2" class="bg-black text-center">Percentage (Qty)</td>
+            <td colspan="2" class="bg-black"><span class="desc-number">C. </span>RATIO B/A</td>
             <?php foreach ($actual_by_period as $key => $value):
                 $tmp_pct = 0;
                 if ($plan_by_period[$key] > 0) {
@@ -189,7 +178,19 @@ echo '</pre>';*/
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black text-center">Percentage (Price)</td>
+            <td colspan="2" class="bg-black"><span class="desc-number">E. </span>ACTUAL Amount</td>
+            <?php foreach ($price_by_period as $key => $value): ?>
+                <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td colspan="2" class="bg-black"><span class="desc-number">D. </span>PLAN Amount</td>
+            <?php foreach ($price_by_period_plan as $key => $value): ?>
+                <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td colspan="2" class="bg-black"><span class="desc-number">F. </span>RATIO E/D</td>
             <?php foreach ($price_by_period as $key => $value):
                 $tmp_pct = 0;
                 if ($price_by_period_plan[$key] > 0) {
@@ -200,7 +201,7 @@ echo '</pre>';*/
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black text-center">Working Days</td>
+            <td colspan="2" class="bg-black"><span class="desc-number">G. </span>Working Days</td>
             <?php foreach ($plan_by_period as $key => $value):
                 if (isset($tmp_work_day[$key])) {
                     $working_days = $tmp_work_day[$key];
