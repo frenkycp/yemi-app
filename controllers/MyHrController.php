@@ -120,7 +120,7 @@ class MyHrController extends Controller
             'total_shift2' => 'SUM(CASE WHEN (PATINDEX(\'%SHIFT_2%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%MAINTENANCE%\', UPPER(shiftdaily_code)) > 0) AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
             'total_shift3' => 'SUM(CASE WHEN PATINDEX(\'%SHIFT_3%\', UPPER(shiftdaily_code)) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
             'total_shift4' => 'SUM(CASE WHEN PATINDEX(\'%4G_SHIFT%\', UPPER(shiftdaily_code)) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-            'total_ck' => '(SUM(CASE WHEN PATINDEX(\'%CK%\', Attend_Code) > 0 OR SUM(CASE WHEN PATINDEX(\'%UPL%\', Attend_Code) > 0) AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+            'total_ck' => 'SUM(CASE WHEN (PATINDEX(\'%CK%\', Attend_Code) > 0 OR PATINDEX(\'%UPL%\', Attend_Code) > 0) AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
             'total_ck_no_disiplin' => 'SUM(CASE WHEN Attend_Code IN (\'CK9\', \'CK10\', \'CK11\') AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
         ])
         ->where([
