@@ -166,19 +166,19 @@ echo '</pre>';*/
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black text-center">Working Days</td>
-            <?php foreach ($plan_by_period as $key => $value):
-                if (isset($tmp_work_day[$key])) {
-                    $working_days = $tmp_work_day[$key];
-                } else {
-                    $working_days = '-';
-                }
-                ?>
-                <td class="text-center bg-black"><?= $working_days; ?></td>
+            <td colspan="2" class="bg-black text-center">Price Total (Actual)</td>
+            <?php foreach ($price_by_period as $key => $value): ?>
+                <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black text-center">Percentage</td>
+            <td colspan="2" class="bg-black text-center">Price Total (Plan)</td>
+            <?php foreach ($price_by_period_plan as $key => $value): ?>
+                <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td colspan="2" class="bg-black text-center">Percentage (Qty)</td>
             <?php foreach ($actual_by_period as $key => $value):
                 $tmp_pct = 0;
                 if ($plan_by_period[$key] > 0) {
@@ -189,9 +189,26 @@ echo '</pre>';*/
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black text-center">Total Price</td>
-            <?php foreach ($price_by_period as $key => $value): ?>
-                <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
+            <td colspan="2" class="bg-black text-center">Percentage (Price)</td>
+            <?php foreach ($price_by_period as $key => $value):
+                $tmp_pct = 0;
+                if ($price_by_period_plan[$key] > 0) {
+                    $tmp_pct = round(($value / $price_by_period_plan[$key]) * 100, 1);
+                }
+                ?>
+                <td class="text-center bg-black"><?= $tmp_pct; ?>%</td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td colspan="2" class="bg-black text-center">Working Days</td>
+            <?php foreach ($plan_by_period as $key => $value):
+                if (isset($tmp_work_day[$key])) {
+                    $working_days = $tmp_work_day[$key];
+                } else {
+                    $working_days = '-';
+                }
+                ?>
+                <td class="text-center bg-black"><?= $working_days; ?></td>
             <?php endforeach ?>
         </tr>
         <tr class="" style="">

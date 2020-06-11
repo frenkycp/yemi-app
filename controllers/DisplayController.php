@@ -406,7 +406,7 @@ class DisplayController extends Controller
             ksort($tmp_data_arr[$key]);
         }
 
-        $actual_by_period = $plan_by_period = $price_by_period = [];
+        $actual_by_period = $plan_by_period = $price_by_period = $price_by_period_plan = [];
         foreach ($tmp_data_arr as $key => $value) {
             $total_actual = $value['total_actual'];
             unset($value['total_actual']);
@@ -428,6 +428,7 @@ class DisplayController extends Controller
                         }
                     }
                     $total_price = $actual_qty * $std_price;
+                    $total_price_plan = $plan_qty * $std_price;
 
                     $pct = 0;
                     if ($plan_qty > 0) {
@@ -442,6 +443,7 @@ class DisplayController extends Controller
                     $actual_by_period[$key2] += $actual_qty;
                     $plan_by_period[$key2] += $plan_qty;
                     $price_by_period[$key2] += $total_price;
+                    $price_by_period_plan[$key2] += $total_price_plan;
                 }
             }
         }
@@ -457,6 +459,7 @@ class DisplayController extends Controller
             'actual_by_period' => $actual_by_period,
             'plan_by_period' => $plan_by_period,
             'price_by_period' => $price_by_period,
+            'price_by_period_plan' => $price_by_period_plan,
             'tmp_work_day' => $tmp_work_day,
             'bu_dropdown_arr' => $bu_dropdown_arr
         ]);
