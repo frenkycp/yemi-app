@@ -24,14 +24,14 @@ class MntMinimumStockController extends \app\controllers\base\MntMinimumStockCon
 		//return \Yii::$app->urlManager->createUrl('uploads/NG_MNT/' . $urutan . '.jpg');
 		//$src = \Yii::$app->request->BaseUrl . '/uploads/NG_MNT/' . $urutan . '.jpg';
 		//$src = \Yii::$app->basePath. '\uploads\NG_MNT\\' . $urutan . '.jpg';
-		$src = Html::img('http://172.17.144.5:81/product_image/' . $urutan . '.jpg', ['width' => '100%']);
+		$src = Html::img('http://172.17.144.5/product_image/' . $urutan . '.jpg', ['width' => '100%']);
 		$tmp_item = MinimumStockView02::find()
 		->where([
 			'ITEM' => $urutan
 		])
 		->one();
 		//return $src;
-		return '<div class="text-center"><span><b>' . $tmp_item->ITEM_EQ_DESC_01 . '</b></span><br/>' . Html::img('http://172.17.144.5:81/product_image/' . $urutan . '.jpg',
+		return '<div class="text-center"><span><b>' . $tmp_item->ITEM_EQ_DESC_01 . '</b></span><br/>' . Html::img('http://172.17.144.5/product_image/' . $urutan . '.jpg',
 			[
 				'width' => '100%',
 				'alt' => $urutan . '.jpg not found.'

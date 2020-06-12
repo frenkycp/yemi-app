@@ -11,20 +11,104 @@ use app\models\SernoInputPlan;
 use app\models\SernoOutput;
 use app\models\DailyProductionOutput;
 use app\models\IjazahPlanActual;
+use app\models\FiscalTbl;
 
 class ProductionRestController extends Controller
 {
-    public function actionIjazahUpdateActual($period = '')
+    public function getPeriodArr($post_date='')
+    {
+        if ($post_date == '') {
+            $current_period = date('Ym');
+        } else {
+            $current_period = date('Ym', strtotime($post_date));
+        }
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => $current_period
+        ])->one();
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $current_fiscal->FISCAL
+        ])
+        ->andWhere(['<=', 'PERIOD', $current_period])
+        ->orderBy('PERIOD')
+        ->all();
+
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        return $period_arr;
+    }
+
+    public function actionIjazahAlloc($post_date='')
     {
         date_default_timezone_set('Asia/Jakarta');
         $this_time = date('Y-m-d H:i:s');
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        if ($period == '') {
-            $period[] = date('Ym', strtotime(date('Y-m-01')));
-            $period[] = date('Ym', strtotime(date('Y-m-01', strtotime(' -1 month'))));
-            $period[] = date('Ym', strtotime(date('Y-m-01', strtotime(' -2 month'))));
-            sort($period);
+
+        $period_arr = $this->getPeriodArr($period_arr);
+
+        $tmp_ijazah_arr = IjazahPlanActual::find()
+        ->where([
+            'PERIOD' => $period_arr
+        ])
+        ->orderBy('ITEM, PERIOD')
+        ->all();
+
+        $tmp_total_actual_arr = IjazahPlanActual::find()
+        ->select([
+            'ITEM', 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+        ])
+        ->where([
+            'PERIOD' => $period_arr
+        ])
+        ->andWhere(['>', 'ACTUAL_QTY', 0])
+        ->groupBy('ITEM')
+        ->all();
+
+        $data_update = 0;
+        foreach ($tmp_total_actual_arr as $tmp_total_actual) {
+            $total_alloc = $tmp_total_actual->ACTUAL_QTY;
+            foreach ($tmp_ijazah_arr as $tmp_ijazah) {
+                if ($tmp_total_actual->ITEM == $tmp_ijazah->ITEM) {
+                    $tmp_period = $tmp_ijazah->PERIOD;
+                    $plan_qty = $tmp_ijazah->PLAN_QTY;
+                    if ($total_alloc > $plan_qty) {
+                        $actual_qty_alloc = $plan_qty;
+                        $total_alloc -= $plan_qty;
+                    } else {
+                        $actual_qty_alloc = $total_alloc;
+                        $total_alloc = 0;
+                    }
+
+                    if ($actual_qty_alloc != $tmp_ijazah->ACTUAL_QTY_ALLOC) {
+                        $update_ijazah = IjazahPlanActual::findOne($tmp_ijazah->ITEM . '-' . $tmp_ijazah->PERIOD);
+                        $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;
+                        $update_ijazah->BALANCE_QTY_ALLOC = $plan_qty - $actual_qty_alloc;
+                        $update_ijazah->ACT_ALLOC_LAST_UPDATE = $this_time;
+                        if (!$update_ijazah->save()) {
+                            return $update_ijazah->errors;
+                        }
+                        $data_update++;
+                    }
+                    
+                }
+            }
         }
+        $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+        $total_minutes = round($process_time / 60, 1);
+        return 'Update ' . $data_update . ' data(s) Success...(' . $total_minutes . ' minute(s))';
+    }
+
+    public function actionIjazahUpdateActual($post_date = '')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $period = $this->getPeriodArr($period_arr);
         //return $period;
 
         $tmp_output = SernoOutput::find()
@@ -42,6 +126,10 @@ class ProductionRestController extends Controller
             'PERIOD' => $period
         ])->all(), 'ID', 'PLAN_QTY');
 
+        $tmp_plan2 = IjazahPlanActual::find()->where([
+            'PERIOD' => $period
+        ])->all();
+
         $insert_arr = $minus = [];
         //$insert_gmc = [];
         $bulkInsertArray = [];
@@ -49,7 +137,50 @@ class ProductionRestController extends Controller
         $total_insert = $total_update = 0;
         foreach ($tmp_output as $key => $value) {
             $index = $value->gmc . '-' . $value->id;
-            if (isset($tmp_plan[$index])) {
+            $found = false;
+            $tmp_act_qty = 0;
+            foreach ($tmp_plan2 as $plan2) {
+                if ($plan2->ID == $index) {
+                    $found = true;
+                    $tmp_act_qty = $plan2->ACTUAL_QTY;
+                    $tmp_plan_qty = $plan2->PLAN_QTY;
+                }
+            }
+            if ($found) {
+                if ($value->output != $tmp_act_qty) {
+                    $balance = $tmp_plan_qty - $value->output;
+                    $tmp_update = IjazahPlanActual::findOne($index);
+                    $tmp_update->ACTUAL_QTY = $value->output;
+                    $tmp_update->BALANCE_QTY = $balance;
+                    $tmp_update->ACT_LAST_UPDATE = $this_time;
+                    if (!$tmp_update->save()) {
+                        return $tmp_update->errors;
+                    }
+                    $total_update++;
+                }
+            } else {
+                $tmp_gmc = IjazahPlanActual::find()->where(['ITEM' => $value->gmc])->orderBy('PERIOD DESC')->one();
+                $balance = 0 - $value->output;
+                $tmp_insert = [
+                    'ID' => $index,
+                    'PRODUCT_TYPE' => $tmp_gmc->PRODUCT_TYPE,
+                    'BU' => $tmp_gmc->BU,
+                    'MODEL' => $tmp_gmc->MODEL,
+                    'PERIOD' => $value->id,
+                    'ITEM' => $value->gmc,
+                    'ITEM_DESC' => $tmp_gmc->ITEM_DESC,
+                    'DESTINATION' => $tmp_gmc->DESTINATION,
+                    'PLAN_QTY' => 0,
+                    'ACTUAL_QTY' => $value->output,
+                    'BALANCE_QTY' => $balance,
+                    'FORECAST_NAME' => 'WAIT',
+                    'ACT_LAST_UPDATE' => $this_time
+                ];
+                $bulkInsertArray[] = [
+                    $tmp_insert['ID'], $tmp_insert['PRODUCT_TYPE'], $tmp_insert['BU'], $tmp_insert['MODEL'], $tmp_insert['PERIOD'], $tmp_insert['ITEM'], $tmp_insert['ITEM_DESC'], $tmp_insert['DESTINATION'], $tmp_insert['PLAN_QTY'], $tmp_insert['ACTUAL_QTY'], $tmp_insert['BALANCE_QTY'], $tmp_insert['FORECAST_NAME'], $tmp_insert['ACT_LAST_UPDATE']
+                ];
+            }
+            /*if (isset($tmp_plan[$index])) {
                 $balance = $tmp_plan[$index] - $value->output;
                 $tmp_update = IjazahPlanActual::findOne($index);
                 $tmp_update->ACTUAL_QTY = $value->output;
@@ -81,7 +212,7 @@ class ProductionRestController extends Controller
                 $bulkInsertArray[] = [
                     $tmp_insert['ID'], $tmp_insert['PRODUCT_TYPE'], $tmp_insert['BU'], $tmp_insert['MODEL'], $tmp_insert['PERIOD'], $tmp_insert['ITEM'], $tmp_insert['ITEM_DESC'], $tmp_insert['DESTINATION'], $tmp_insert['PLAN_QTY'], $tmp_insert['ACTUAL_QTY'], $tmp_insert['BALANCE_QTY'], $tmp_insert['FORECAST_NAME'], $tmp_insert['ACT_LAST_UPDATE']
                 ];
-            }
+            }*/
         }
 
         $total_insert = count($bulkInsertArray);
@@ -93,10 +224,12 @@ class ProductionRestController extends Controller
 
         //print_r($minus);
 
-
+        $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+        $total_minutes = round($process_time / 60, 1);
         return [
             'Total Update' => $total_update,
-            'Total Insert' => $total_insert
+            'Total Insert' => $total_insert,
+            'Total Time' => $total_minutes
         ];
     }
 

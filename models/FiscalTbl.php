@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class FiscalTbl extends BaseFiscalTbl
 {
+    public $min_period, $max_period;
 
     public function behaviors()
     {
