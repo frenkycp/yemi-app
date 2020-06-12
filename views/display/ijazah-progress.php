@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'SCM Monthly Progress (SCM Versus FLO) <span class="japanesse light-green"></span>',
-    'tab_title' => 'SCM Monthly Progress (SCM Versus FLO)',
-    'breadcrumbs_title' => 'SCM Monthly Progress (SCM Versus FLO)'
+    'page_title' => 'Monthly Progress (SCM Versus FLO) <span class="japanesse light-green"></span>',
+    'tab_title' => 'Monthly Progress (SCM Versus FLO)',
+    'breadcrumbs_title' => 'Monthly Progress (SCM Versus FLO)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
