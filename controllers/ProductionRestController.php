@@ -71,7 +71,7 @@ class ProductionRestController extends Controller
         foreach ($tmp_serno_master as $serno_master) {
             foreach ($tmp_ijazah as $ijazah) {
                 if ($serno_master->gmc == $ijazah->ITEM && $serno_master->line != $ijazah->LINE) {
-                    IjazahPlanActual::updateAll(['LINE' => $value->line, 'LINE_LAST_UPDATE' => $this_time], ['ITEM' => $value->gmc]);
+                    IjazahPlanActual::updateAll(['LINE' => $serno_master->line, 'LINE_LAST_UPDATE' => $this_time], ['ITEM' => $serno_master->gmc]);
                     $count++;
                 }
             }
