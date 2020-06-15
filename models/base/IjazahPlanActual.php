@@ -12,19 +12,28 @@ use Yii;
  * @property string $ID
  * @property string $PRODUCT_TYPE
  * @property string $BU
+ * @property string $BU_SAP
+ * @property string $FG_KD
  * @property string $MODEL
+ * @property string $LINE
  * @property string $PERIOD
  * @property string $ITEM
  * @property string $ITEM_DESC
  * @property string $DESTINATION
+ * @property double $STD_PRICE
  * @property double $PLAN_QTY
  * @property double $ACTUAL_QTY
  * @property double $BALANCE_QTY
+ * @property double $ACTUAL_QTY_ALLOC
+ * @property double $BALANCE_QTY_ALLOC
+ * @property double $TOTAL_PRICE_ALLOC
  * @property string $FORECAST_NAME
  * @property string $FORECAST_ISSUE_DATE
  * @property integer $SEESION_NO
  * @property string $SESSION_DATE
  * @property string $ACT_LAST_UPDATE
+ * @property string $ACT_ALLOC_LAST_UPDATE
+ * @property string $LINE_LAST_UPDATE
  * @property string $aliasModel
  */
 abstract class IjazahPlanActual extends \yii\db\ActiveRecord
@@ -55,10 +64,11 @@ abstract class IjazahPlanActual extends \yii\db\ActiveRecord
     {
         return [
             [['ID'], 'required'],
-            [['PLAN_QTY', 'ACTUAL_QTY', 'BALANCE_QTY'], 'number'],
-            [['FORECAST_ISSUE_DATE', 'SESSION_DATE', 'ACT_LAST_UPDATE'], 'safe'],
+            [['STD_PRICE', 'PLAN_QTY', 'ACTUAL_QTY', 'BALANCE_QTY', 'ACTUAL_QTY_ALLOC', 'BALANCE_QTY_ALLOC', 'TOTAL_PRICE_ALLOC'], 'number'],
+            [['FORECAST_ISSUE_DATE', 'SESSION_DATE', 'ACT_LAST_UPDATE', 'ACT_ALLOC_LAST_UPDATE', 'LINE_LAST_UPDATE'], 'safe'],
             [['SEESION_NO'], 'integer'],
-            [['ID', 'PRODUCT_TYPE', 'BU', 'MODEL', 'PERIOD', 'ITEM_DESC', 'DESTINATION', 'FORECAST_NAME'], 'string', 'max' => 50],
+            [['ID', 'PRODUCT_TYPE', 'BU', 'BU_SAP', 'FG_KD', 'MODEL', 'PERIOD', 'ITEM_DESC', 'DESTINATION', 'FORECAST_NAME'], 'string', 'max' => 50],
+            [['LINE'], 'string', 'max' => 20],
             [['ITEM'], 'string', 'max' => 11],
             [['ID'], 'unique']
         ];
@@ -73,19 +83,28 @@ abstract class IjazahPlanActual extends \yii\db\ActiveRecord
             'ID' => 'ID',
             'PRODUCT_TYPE' => 'Product Type',
             'BU' => 'Bu',
+            'BU_SAP' => 'Bu Sap',
+            'FG_KD' => 'Fg Kd',
             'MODEL' => 'Model',
+            'LINE' => 'Line',
             'PERIOD' => 'Period',
             'ITEM' => 'Item',
             'ITEM_DESC' => 'Item Desc',
             'DESTINATION' => 'Destination',
+            'STD_PRICE' => 'Std Price',
             'PLAN_QTY' => 'Plan Qty',
             'ACTUAL_QTY' => 'Actual Qty',
             'BALANCE_QTY' => 'Balance Qty',
+            'ACTUAL_QTY_ALLOC' => 'Actual Qty Alloc',
+            'BALANCE_QTY_ALLOC' => 'Balance Qty Alloc',
+            'TOTAL_PRICE_ALLOC' => 'Total Price Alloc',
             'FORECAST_NAME' => 'Forecast Name',
             'FORECAST_ISSUE_DATE' => 'Forecast Issue Date',
             'SEESION_NO' => 'Seesion No',
             'SESSION_DATE' => 'Session Date',
             'ACT_LAST_UPDATE' => 'Act Last Update',
+            'ACT_ALLOC_LAST_UPDATE' => 'Act Alloc Last Update',
+            'LINE_LAST_UPDATE' => 'Line Last Update',
         ];
     }
 

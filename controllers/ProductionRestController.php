@@ -12,6 +12,7 @@ use app\models\SernoOutput;
 use app\models\DailyProductionOutput;
 use app\models\IjazahPlanActual;
 use app\models\FiscalTbl;
+use app\models\SernoMaster;
 
 class ProductionRestController extends Controller
 {
@@ -41,6 +42,45 @@ class ProductionRestController extends Controller
         }
 
         return $period_arr;
+    }
+
+    public function actionIjazahUpdateLine()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $tmp_ijazah = IjazahPlanActual::find()
+        ->select('ITEM, LINE')
+        //->where('LINE IS NULL')
+        ->groupBy('ITEM, LINE')
+        ->all();
+
+        $tmp_item = [];
+        foreach ($tmp_ijazah as $key => $value) {
+            $tmp_item[] = $value->ITEM;
+        }
+
+        $tmp_serno_master = SernoMaster::find()
+        ->where([
+            'gmc' => $tmp_item
+        ])
+        ->all();
+
+        $count = 0;
+        foreach ($tmp_serno_master as $serno_master) {
+            foreach ($tmp_ijazah as $ijazah) {
+                if ($serno_master->gmc == $ijazah->ITEM && $serno_master->line != $ijazah->LINE) {
+                    IjazahPlanActual::updateAll(['LINE' => $value->line, 'LINE_LAST_UPDATE' => $this_time], ['ITEM' => $value->gmc]);
+                    $count++;
+                }
+            }
+        }
+
+        $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+        $total_minutes = round($process_time / 60, 1);
+
+        return 'Update Success...(' . $count . '/' . count($tmp_item) . ') - ' . $total_minutes . ' minute(s)';
     }
 
     public function actionIjazahAlloc($post_date='')
