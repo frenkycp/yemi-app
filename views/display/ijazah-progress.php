@@ -120,7 +120,11 @@ echo '</pre>';*/
     </div>
     <div class="col-md-2">
         <?= $form->field($model, 'category')->dropDownList(
-            $bu_dropdown_arr, []
+            $bu_dropdown_arr, [
+                'prompt' => 'Choose...',
+                'id' => 'category-select',
+                'onchange' => '$("#line-select").val(""); $("#kd-select").val("");'
+            ]
         ); ?>
     </div>
     <div class="col-md-2">
@@ -128,13 +132,28 @@ echo '</pre>';*/
             $line_arr,
             [
                 'prompt' => 'Choose...',
+                'id' => 'line-select',
+                'onchange' => '$("#category-select").val(""); $("#kd-select").val("");'
             ]
         ); ?>
+    </div>
+    <div class="col-md-2">
+        <?= $form->field($model, 'kd_part')->dropDownList(
+            [
+                'KD' => 'KD',
+                'PRODUCT' => 'PRODUCT',
+            ],
+            [
+                'prompt' => 'Choose...',
+                'id' => 'kd-select',
+                'onchange' => '$("#category-select").val(""); $("#line-select").val("");'
+            ]
+        )->label('KD Part/Product'); ?>
     </div>
     
     <div class="form-group">
         <br/>
-        <?= Html::submitButton('GENERATE DATA', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
+        <?= Html::submitButton('GENERATE', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
     </div>
     <div class="col-md-1">
         <?= $form->field($model, 'code')->hiddenInput()->label(false); ?>
@@ -155,19 +174,19 @@ echo '</pre>';*/
     </thead>
     <tbody>
         <tr>
-            <td colspan="2" class="bg-black"><span class="desc-number">A. </span>PLAN Qty</td>
+            <td colspan="4" class="bg-black"><span class="desc-number">A. </span>PLAN Qty</td>
             <?php foreach ($plan_by_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format($value); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black"><span class="desc-number">B. </span>ACTUAL Qty</td>
+            <td colspan="4" class="bg-black"><span class="desc-number">B. </span>ACTUAL Qty</td>
             <?php foreach ($actual_by_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format($value); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black"><span class="desc-number">C. </span>RATIO B/A</td>
+            <td colspan="4" class="bg-black"><span class="desc-number">C. </span>RATIO B/A</td>
             <?php foreach ($actual_by_period as $key => $value):
                 $tmp_pct = 0;
                 if ($plan_by_period[$key] > 0) {
@@ -178,19 +197,19 @@ echo '</pre>';*/
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black"><span class="desc-number">E. </span>ACTUAL Amount</td>
+            <td colspan="4" class="bg-black"><span class="desc-number">E. </span>ACTUAL Amount</td>
             <?php foreach ($price_by_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black"><span class="desc-number">D. </span>PLAN Amount</td>
+            <td colspan="4" class="bg-black"><span class="desc-number">D. </span>PLAN Amount</td>
             <?php foreach ($price_by_period_plan as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black"><span class="desc-number">F. </span>RATIO E/D</td>
+            <td colspan="4" class="bg-black"><span class="desc-number">F. </span>RATIO E/D</td>
             <?php foreach ($price_by_period as $key => $value):
                 $tmp_pct = 0;
                 if ($price_by_period_plan[$key] > 0) {
@@ -201,7 +220,7 @@ echo '</pre>';*/
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="2" class="bg-black"><span class="desc-number">G. </span>Working Days</td>
+            <td colspan="4" class="bg-black"><span class="desc-number">G. </span>Working Days</td>
             <?php foreach ($plan_by_period as $key => $value):
                 if (isset($tmp_work_day[$key])) {
                     $working_days = $tmp_work_day[$key];
@@ -213,10 +232,12 @@ echo '</pre>';*/
             <?php endforeach ?>
         </tr>
         <tr class="" style="">
+            <td class="text-center tbl-header" width="100px">BU</td>
+            <td class="text-center tbl-header" width="100px">LINE</td>
             <td class="text-center tbl-header" width="120px">ITEM</td>
-            <td class="tbl-header" width="200px">ITEM DESC.</td>
+            <td class="tbl-header">ITEM DESC.</td>
             <?php foreach ($period_arr as $key => $value): ?>
-                <td class="text-center tbl-header" width="100px;"><?= $value; ?></td>
+                <td class="text-center tbl-header" width="110px;"><?= $value; ?></td>
             <?php endforeach ?>
         </tr>
         <?php
@@ -229,6 +250,8 @@ echo '</pre>';*/
                 }
                 ?>
                 <tr>
+                    <td class="text-center"><?= $tmp_bu_line[$key]['bu']; ?></td>
+                    <td class="text-center"><?= $tmp_bu_line[$key]['line']; ?></td>
                     <td class="text-center"><?= $key; ?></td>
                     <td><?=
                     //$tmp_gmc_arr[$key] . ' (Total Actual Qty : ' . $total_actual . ')';
@@ -244,7 +267,7 @@ echo '</pre>';*/
                         ?>
                         <?php
                         $actual_qty = 0;
-                        if (isset($value2['plan_qty'])) {
+                        if (isset($value2['plan_qty']) && $value2['plan_qty'] > 0) {
                             $plan_qty = $value2['plan_qty'];
                             $actual_qty = $value2['actual_qty'];
 

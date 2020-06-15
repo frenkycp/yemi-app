@@ -26,7 +26,9 @@ use Yii;
  * @property double $BALANCE_QTY
  * @property double $ACTUAL_QTY_ALLOC
  * @property double $BALANCE_QTY_ALLOC
- * @property double $TOTAL_PRICE_ALLOC
+ * @property double $PLAN_AMT
+ * @property double $ACTUAL_AMT_ALLOC
+ * @property double $BALANCE_AMT_ALLOC
  * @property string $FORECAST_NAME
  * @property string $FORECAST_ISSUE_DATE
  * @property integer $SEESION_NO
@@ -64,7 +66,7 @@ abstract class IjazahPlanActual extends \yii\db\ActiveRecord
     {
         return [
             [['ID'], 'required'],
-            [['STD_PRICE', 'PLAN_QTY', 'ACTUAL_QTY', 'BALANCE_QTY', 'ACTUAL_QTY_ALLOC', 'BALANCE_QTY_ALLOC', 'TOTAL_PRICE_ALLOC'], 'number'],
+            [['STD_PRICE', 'PLAN_QTY', 'ACTUAL_QTY', 'BALANCE_QTY', 'ACTUAL_QTY_ALLOC', 'BALANCE_QTY_ALLOC', 'PLAN_AMT', 'ACTUAL_AMT_ALLOC', 'BALANCE_AMT_ALLOC'], 'number'],
             [['FORECAST_ISSUE_DATE', 'SESSION_DATE', 'ACT_LAST_UPDATE', 'ACT_ALLOC_LAST_UPDATE', 'LINE_LAST_UPDATE'], 'safe'],
             [['SEESION_NO'], 'integer'],
             [['ID', 'PRODUCT_TYPE', 'BU', 'BU_SAP', 'FG_KD', 'MODEL', 'PERIOD', 'ITEM_DESC', 'DESTINATION', 'FORECAST_NAME'], 'string', 'max' => 50],
@@ -97,7 +99,9 @@ abstract class IjazahPlanActual extends \yii\db\ActiveRecord
             'BALANCE_QTY' => 'Balance Qty',
             'ACTUAL_QTY_ALLOC' => 'Actual Qty Alloc',
             'BALANCE_QTY_ALLOC' => 'Balance Qty Alloc',
-            'TOTAL_PRICE_ALLOC' => 'Total Price Alloc',
+            'PLAN_AMT' => 'Plan Amt',
+            'ACTUAL_AMT_ALLOC' => 'Actual Amt Alloc',
+            'BALANCE_AMT_ALLOC' => 'Balance Amt Alloc',
             'FORECAST_NAME' => 'Forecast Name',
             'FORECAST_ISSUE_DATE' => 'Forecast Issue Date',
             'SEESION_NO' => 'Seesion No',

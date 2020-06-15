@@ -141,6 +141,98 @@ use app\models\WorkingDaysView;
 
 class DisplayController extends Controller
 {
+    public function actionScmMonthlyRatio($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $period = date('Ym');
+        $data = $data_qty = [];
+
+        $model = new \yii\base\DynamicModel([
+            'period', 'group_by'
+        ]);
+        $model->addRule(['period', 'group_by'], 'required');
+        $model->period = $period;
+        $model->group_by = 'bu';
+
+        $period_dropdown = ArrayHelper::map(IjazahPlanActual::find()
+        ->select(['PERIOD'])
+        ->where(['<=', 'PERIOD', $period])
+        ->groupBy('PERIOD')
+        ->orderBy('PERIOD DESC')
+        ->all(), 'PERIOD', 'PERIOD');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_data = $tmp_data2 = $tmp_data_qty = $tmp_data_qty2 = $categories = $categories_qty = [];
+        if ($model->group_by == 'bu') {
+            $tmp_ijazah = IjazahPlanActual::find()
+            ->select([
+                'BU',
+                'PLAN_AMT' => 'SUM(PLAN_AMT)',
+                'ACTUAL_AMT_ALLOC' => 'SUM(ACTUAL_AMT_ALLOC)',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY_ALLOC' => 'SUM(ACTUAL_QTY_ALLOC)',
+            ])
+            ->where([
+                'PERIOD' => $model->period
+            ])
+            ->andWhere('BU IS NOT NULL')
+            ->groupBy('BU')
+            ->all();
+
+            foreach ($tmp_ijazah as $key => $value) {
+                $tmp_pct = 0;
+                if ($value->PLAN_AMT > 0) {
+                    $tmp_pct = round(($value->ACTUAL_AMT_ALLOC / $value->PLAN_AMT) * 100, 1);
+                }
+
+                $tmp_pct_qty = 0;
+                if ($value->PLAN_QTY > 0) {
+                    $tmp_pct_qty = round(($value->ACTUAL_QTY_ALLOC / $value->PLAN_QTY) * 100, 1);
+                }
+                
+                $tmp_data[$value->BU] = $tmp_pct;
+                $tmp_data_qty[$value->BU] = $tmp_pct_qty;
+            }
+            arsort($tmp_data);
+            foreach ($tmp_data as $key => $value) {
+                $categories[] = $key;
+                $tmp_data2[] = [
+                    'y' => $value
+                ];
+            }
+            arsort($tmp_data_qty);
+            foreach ($tmp_data_qty as $key => $value) {
+                $categories_qty[] = $key;
+                $tmp_data_qty2[] = [
+                    'y' => $value
+                ];
+            }
+        }
+
+        $data[] = [
+            'name' => 'Amount Ratio',
+            'data' => $tmp_data2,
+            'showInLegend' => false
+        ];
+        $data_qty[] = [
+            'name' => 'Qty Ratio',
+            'data' => $tmp_data_qty2,
+            'showInLegend' => false
+        ];
+
+        return $this->render('scm-monthly-ratio', [
+            'model' => $model,
+            'period_dropdown' => $period_dropdown,
+            'categories' => $categories,
+            'categories_qty' => $categories_qty,
+            'data' => $data,
+            'data_qty' => $data_qty,
+        ]);
+    }
 
     public function actionIjazahProgressShipping()
     {
@@ -275,12 +367,12 @@ class DisplayController extends Controller
         ->all(), 'line', 'line');
 
         $model = new \yii\base\DynamicModel([
-            'line', 'fiscal_year', 'code', 'category'
+            'line', 'fiscal_year', 'code', 'category', 'kd_part'
         ]);
-        $model->addRule(['line', 'code', 'category'], 'string')
+        $model->addRule(['line', 'code', 'category', 'kd_part'], 'string')
         ->addRule(['fiscal_year'], 'required');
         $model->code = $code;
-        $model->category = 'ALL';
+        //$model->category = 'ALL';
 
         $current_fiscal = FiscalTbl::find()->where([
             'PERIOD' => date('Ym')
@@ -317,13 +409,87 @@ class DisplayController extends Controller
             $bu_filter_arr[] = $value;
         }
 
-        if ($model->category == 'ALL') {
-            $tmp_filter_category = $bu_filter_arr;
+        if ($model->line != null && $model->line != '') {
+            $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
+            ->select('ITEM, ITEM_DESC, BU, LINE')
+            ->where([
+                'PERIOD' => $period_arr,
+                'LINE' => $model->line
+            ])
+            ->andWhere('ITEM IS NOT NULL')
+            ->groupBy('ITEM, ITEM_DESC, BU, LINE')
+            ->orderBy('BU, LINE, ITEM')
+            ->all(), 'ITEM', 'ITEM_DESC');
+
+            $tmp_ijazah_arr = IjazahPlanActual::find()
+            ->where([
+                'PERIOD' => $period_arr,
+                'LINE' => $model->line
+            ])
+            ->orderBy('BU, LINE, ITEM')
+            ->all();
         } else {
-            $tmp_filter_category = $model->category;
+            if ($model->category != null && $model->category != '') {
+                $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
+                ->select('ITEM, ITEM_DESC, BU, LINE')
+                ->where([
+                    'PERIOD' => $period_arr,
+                    'BU' => $model->category
+                ])
+                ->andWhere('ITEM IS NOT NULL')
+                ->groupBy('ITEM, ITEM_DESC, BU, LINE')
+                ->orderBy('BU, LINE, ITEM')
+                ->all(), 'ITEM', 'ITEM_DESC');
+
+                $tmp_ijazah_arr = IjazahPlanActual::find()
+                ->where([
+                    'PERIOD' => $period_arr,
+                    'BU' => $model->category
+                ])
+                ->orderBy('BU, LINE, ITEM')
+                ->all();
+            } else {
+                if ($model->kd_part != null && $model->kd_part != '') {
+                    $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
+                    ->select('ITEM, ITEM_DESC, BU, LINE')
+                    ->where([
+                        'PERIOD' => $period_arr,
+                        'FG_KD' => $model->kd_part
+                    ])
+                    ->andWhere('ITEM IS NOT NULL')
+                    ->groupBy('ITEM, ITEM_DESC, BU, LINE')
+                    ->orderBy('BU, LINE, ITEM')
+                    ->all(), 'ITEM', 'ITEM_DESC');
+
+                    $tmp_ijazah_arr = IjazahPlanActual::find()
+                    ->where([
+                        'PERIOD' => $period_arr,
+                        'FG_KD' => $model->kd_part
+                    ])
+                    ->orderBy('BU, LINE, ITEM')
+                    ->all();
+                } else {
+                    $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
+                    ->select('ITEM, ITEM_DESC, BU, LINE')
+                    ->where([
+                        'PERIOD' => $period_arr,
+                    ])
+                    ->andWhere('ITEM IS NOT NULL')
+                    ->groupBy('ITEM, ITEM_DESC, BU, LINE')
+                    ->orderBy('BU, LINE, ITEM')
+                    ->all(), 'ITEM', 'ITEM_DESC');
+
+                    $tmp_ijazah_arr = IjazahPlanActual::find()
+                    ->where([
+                        'PERIOD' => $period_arr,
+                    ])
+                    ->orderBy('BU, LINE, ITEM')
+                    ->all();
+                }
+            }
         }
-        $bu_dropdown_arr['ALL'] = '-ALL CATEGORY-';
-        ksort($bu_filter_arr);
+        /*$bu_dropdown_arr['ALL'] = '-ALL CATEGORY-';
+        ksort($bu_filter_arr);*/
 
         /*$start_period = date('Ym', strtotime(date('Y-m-01', strtotime(' -4 months'))));
         $end_period = date('Ym');
@@ -334,7 +500,7 @@ class DisplayController extends Controller
             date('Ym')
         ];*/
 
-        if ($model->line != null && $model->line != '') {
+        /*if ($model->line != null && $model->line != '') {
             $gmc_filter = SernoMaster::find()
             ->where([
                 'line' => $model->line
@@ -347,15 +513,15 @@ class DisplayController extends Controller
             }
 
             $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
-            ->select('ITEM, ITEM_DESC')
+            ->select('ITEM, ITEM_DESC, BU, LINE')
             ->where([
                 'PERIOD' => $period_arr,
                 'ITEM' => $gmc_filter_arr,
                 'BU' => $tmp_filter_category
             ])
             ->andWhere('ITEM IS NOT NULL')
-            ->groupBy('ITEM, ITEM_DESC')
-            ->orderBy('ITEM')
+            ->groupBy('ITEM, ITEM_DESC, BU, LINE')
+            ->orderBy('BU, LINE, ITEM')
             ->all(), 'ITEM', 'ITEM_DESC');
 
             $tmp_ijazah_arr = IjazahPlanActual::find()
@@ -364,17 +530,18 @@ class DisplayController extends Controller
                 'ITEM' => $gmc_filter_arr,
                 'BU' => $tmp_filter_category
             ])
+            ->orderBy('BU, LINE, ITEM')
             ->all();
         } else {
             $tmp_gmc_arr = ArrayHelper::map(IjazahPlanActual::find()
-            ->select('ITEM, ITEM_DESC')
+            ->select('ITEM, ITEM_DESC, BU, LINE')
             ->where([
                 'PERIOD' => $period_arr,
                 'BU' => $tmp_filter_category
             ])
             ->andWhere('ITEM IS NOT NULL')
-            ->groupBy('ITEM, ITEM_DESC')
-            ->orderBy('ITEM')
+            ->groupBy('ITEM, ITEM_DESC, BU, LINE')
+            ->orderBy('BU, LINE, ITEM')
             ->all(), 'ITEM', 'ITEM_DESC');
 
             $tmp_ijazah_arr = IjazahPlanActual::find()
@@ -382,10 +549,11 @@ class DisplayController extends Controller
                 'PERIOD' => $period_arr,
                 'BU' => $tmp_filter_category
             ])
+            ->orderBy('BU, LINE, ITEM')
             ->all();
-        }
+        }*/
 
-        $tmp_data_arr = [];
+        $tmp_data_arr = $tmp_bu_line = [];
         foreach ($tmp_ijazah_arr as $key => $value) {
             $pct = 0;
             if ($value->PLAN_QTY > 0) {
@@ -396,6 +564,10 @@ class DisplayController extends Controller
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['actual_qty'] = $value->ACTUAL_QTY;
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['std_price'] = $value->STD_PRICE;
             $tmp_data_arr[$value->ITEM]['total_actual'] += $value->ACTUAL_QTY;
+            $tmp_bu_line[$value->ITEM] = [
+                'bu' => $value->BU,
+                'line' => $value->LINE,
+            ];
         }
         foreach ($tmp_gmc_arr as $key => $tmp_gmc) {
             foreach ($period_arr as $period) {
@@ -461,7 +633,8 @@ class DisplayController extends Controller
             'price_by_period' => $price_by_period,
             'price_by_period_plan' => $price_by_period_plan,
             'tmp_work_day' => $tmp_work_day,
-            'bu_dropdown_arr' => $bu_dropdown_arr
+            'bu_dropdown_arr' => $bu_dropdown_arr,
+            'tmp_bu_line' => $tmp_bu_line
         ]);
     }
 

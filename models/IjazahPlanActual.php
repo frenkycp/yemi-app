@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class IjazahPlanActual extends BaseIjazahPlanActual
 {
+    public $amt_ratio, $qty_ratio;
 
     public function behaviors()
     {

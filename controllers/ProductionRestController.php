@@ -105,7 +105,7 @@ class ProductionRestController extends Controller
         ->where([
             'PERIOD' => $period_arr
         ])
-        ->andWhere(['>', 'ACTUAL_QTY', 0])
+        //->andWhere(['>', 'ACTUAL_QTY', 0])
         ->groupBy('ITEM')
         ->all();
 
@@ -123,12 +123,21 @@ class ProductionRestController extends Controller
                         $actual_qty_alloc = $total_alloc;
                         $total_alloc = 0;
                     }
+                    $tmp_balance_qty_alloc = $plan_qty - $actual_qty_alloc;
+                    $amt_ratio = 0;
+                    if ($plan_qty > 0) {
+                        $amt_ratio = round(($actual_qty_alloc / $plan_qty) * 100, 1);
+                    }
 
-                    if ($actual_qty_alloc != $tmp_ijazah->ACTUAL_QTY_ALLOC) {
+                    if ($actual_qty_alloc != $tmp_ijazah->ACTUAL_QTY_ALLOC || $tmp_ijazah->BALANCE_QTY_ALLOC != $tmp_balance_qty_alloc) {
                         $update_ijazah = IjazahPlanActual::findOne($tmp_ijazah->ITEM . '-' . $tmp_ijazah->PERIOD);
                         $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;
-                        $update_ijazah->BALANCE_QTY_ALLOC = $plan_qty - $actual_qty_alloc;
+                        $update_ijazah->BALANCE_QTY_ALLOC = $tmp_balance_qty_alloc;
                         $update_ijazah->ACT_ALLOC_LAST_UPDATE = $this_time;
+                        $update_ijazah->PLAN_AMT = $tmp_ijazah->PLAN_QTY * $tmp_ijazah->STD_PRICE;
+                        $update_ijazah->ACTUAL_AMT_ALLOC = $tmp_ijazah->ACTUAL_QTY_ALLOC * $tmp_ijazah->STD_PRICE;
+                        $update_ijazah->BALANCE_AMT_ALLOC = $tmp_balance_qty_alloc * $tmp_ijazah->STD_PRICE;
+                        $update_ijazah->AMT_RATIO = $amt_ratio;
                         if (!$update_ijazah->save()) {
                             return $update_ijazah->errors;
                         }
@@ -177,18 +186,21 @@ class ProductionRestController extends Controller
         $total_insert = $total_update = 0;
         foreach ($tmp_output as $key => $value) {
             $index = $value->gmc . '-' . $value->id;
+            $index = strtoupper($index);
             $found = false;
-            $tmp_act_qty = 0;
+            $tmp_act_qty = $tmp_plan_qty = $tmp_balance_qty = 0;
             foreach ($tmp_plan2 as $plan2) {
                 if ($plan2->ID == $index) {
                     $found = true;
                     $tmp_act_qty = $plan2->ACTUAL_QTY;
                     $tmp_plan_qty = $plan2->PLAN_QTY;
+                    $tmp_balance_qty = $plan2->BALANCE_QTY;
                 }
             }
             if ($found) {
-                if ($value->output != $tmp_act_qty) {
-                    $balance = $tmp_plan_qty - $value->output;
+                $balance = $tmp_plan_qty - $value->output;
+                if ($value->output != $tmp_act_qty || $tmp_balance_qty != $balance) {
+                    
                     $tmp_update = IjazahPlanActual::findOne($index);
                     $tmp_update->ACTUAL_QTY = $value->output;
                     $tmp_update->BALANCE_QTY = $balance;
