@@ -180,9 +180,7 @@ class MyHrController extends Controller
             'leave_code' => 'ANL'
         ])
         ->andWHere([
-            'OR',
-            ['FORMAT(startvaliddate, \'yyyy\')' => $this_year],
-            ['FORMAT(endvaliddate, \'yyyy\')' => $this_year]
+            'FORMAT(startvaliddate, \'yyyy\')' => $this_year
         ])
         ->one();
         $sisa_cuti = (int)$cuti_summary->remaining;
