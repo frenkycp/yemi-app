@@ -195,9 +195,7 @@ class MyHrController extends Controller
         ])
         ->andWhere('PATINDEX(\'%LONG%\', leave_code) > 0')
         ->andWHere([
-            'OR',
-            ['FORMAT(startvaliddate, \'yyyy\')' => $this_year],
-            ['FORMAT(endvaliddate, \'yyyy\')' => $this_year]
+            'FORMAT(startvaliddate, \'yyyy\')' => $this_year
         ])
         ->one();
         $sisa_cuti_panjang = (int)$cuti_panjang_summary->remaining;
