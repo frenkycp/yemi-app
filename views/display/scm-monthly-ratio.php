@@ -154,7 +154,7 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'height' => 300,
+                        'height' => 400,
                         //'zoomType' => 'x'
                     ],
                     'credits' => [
@@ -215,7 +215,7 @@ echo '</pre>';*/
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
-                        'height' => 300,
+                        'height' => 400,
                         //'zoomType' => 'x'
                     ],
                     'credits' => [

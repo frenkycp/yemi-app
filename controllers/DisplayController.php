@@ -186,16 +186,60 @@ class DisplayController extends Controller
             foreach ($tmp_ijazah as $key => $value) {
                 $tmp_pct = 0;
                 if ($value->PLAN_AMT > 0) {
-                    $tmp_pct = round(($value->ACTUAL_AMT_ALLOC / $value->PLAN_AMT) * 100, 1);
+                    $tmp_pct = round(($value->ACTUAL_AMT_ALLOC / $value->PLAN_AMT) * 100, 2);
                 }
 
                 $tmp_pct_qty = 0;
                 if ($value->PLAN_QTY > 0) {
-                    $tmp_pct_qty = round(($value->ACTUAL_QTY_ALLOC / $value->PLAN_QTY) * 100, 1);
+                    $tmp_pct_qty = round(($value->ACTUAL_QTY_ALLOC / $value->PLAN_QTY) * 100, 2);
                 }
                 
                 $tmp_data[$value->BU] = $tmp_pct;
                 $tmp_data_qty[$value->BU] = $tmp_pct_qty;
+            }
+            arsort($tmp_data);
+            foreach ($tmp_data as $key => $value) {
+                $categories[] = $key;
+                $tmp_data2[] = [
+                    'y' => $value
+                ];
+            }
+            arsort($tmp_data_qty);
+            foreach ($tmp_data_qty as $key => $value) {
+                $categories_qty[] = $key;
+                $tmp_data_qty2[] = [
+                    'y' => $value
+                ];
+            }
+        } elseif ($model->group_by == 'line') {
+            $tmp_ijazah = IjazahPlanActual::find()
+            ->select([
+                'LINE',
+                'PLAN_AMT' => 'SUM(PLAN_AMT)',
+                'ACTUAL_AMT_ALLOC' => 'SUM(ACTUAL_AMT_ALLOC)',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY_ALLOC' => 'SUM(ACTUAL_QTY_ALLOC)',
+            ])
+            ->where([
+                'PERIOD' => $model->period
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->groupBy('LINE')
+            ->all();
+
+            foreach ($tmp_ijazah as $key => $value) {
+                $tmp_pct = 0;
+                if ($value->PLAN_AMT > 0) {
+                    $tmp_pct = round(($value->ACTUAL_AMT_ALLOC / $value->PLAN_AMT) * 100, 2);
+                }
+
+                $tmp_pct_qty = 0;
+                if ($value->PLAN_QTY > 0) {
+                    $tmp_pct_qty = round(($value->ACTUAL_QTY_ALLOC / $value->PLAN_QTY) * 100, 2);
+                }
+                
+                $tmp_data[$value->LINE] = $tmp_pct;
+                $tmp_data_qty[$value->LINE] = $tmp_pct_qty;
             }
             arsort($tmp_data);
             foreach ($tmp_data as $key => $value) {
