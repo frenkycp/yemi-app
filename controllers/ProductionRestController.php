@@ -167,7 +167,7 @@ class ProductionRestController extends Controller
         ->where([
             'id' => $period
         ])
-        ->andWhere(['>', 'output', 0])
+        //->andWhere(['>', 'output', 0])
         ->groupBy('id, gmc')
         ->all();
 
