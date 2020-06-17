@@ -16,6 +16,24 @@ use app\models\SernoMaster;
 
 class ProductionRestController extends Controller
 {
+    public function actionIjazahUpdateAll($post_date='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $tmp_1 = $this->actionIjazahUpdateActual($post_date);
+        $tmp_2 = $this->actionIjazahAlloc($post_date);
+        $tmp_3 = $this->actionIjazahUpdateLine();
+        $return_msg = [
+            'Update Original' => $tmp_1,
+            'Update Allocation' => $tmp_2,
+            'Update Line' => $tmp_3
+        ];
+
+        return $return_msg;
+    }
+
     public function getPeriodArr($post_date='')
     {
         if ($post_date == '') {
@@ -200,7 +218,7 @@ class ProductionRestController extends Controller
             if ($found) {
                 $balance = $tmp_plan_qty - $value->output;
                 if ($value->output != $tmp_act_qty || $tmp_balance_qty != $balance) {
-                    
+                    $total_update++;
                     $tmp_update = IjazahPlanActual::findOne($index);
                     $tmp_update->ACTUAL_QTY = $value->output;
                     $tmp_update->BALANCE_QTY = $balance;
@@ -208,7 +226,7 @@ class ProductionRestController extends Controller
                     if (!$tmp_update->save()) {
                         return $tmp_update->errors;
                     }
-                    $total_update++;
+                    
                 }
             } else {
                 $tmp_gmc = IjazahPlanActual::find()->where(['ITEM' => $value->gmc])->orderBy('PERIOD DESC')->one();
