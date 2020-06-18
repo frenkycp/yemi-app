@@ -14,9 +14,137 @@ use app\models\IjazahPlanActual;
 use app\models\FiscalTbl;
 use app\models\SernoMaster;
 use app\models\IjazahProgress;
+use app\models\VmsPlanActual;
 
 class ProductionRestController extends Controller
 {
+    public function actionVmsPlanActualUpdate($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        $current_timestamp = strtotime($this_time);
+        $post_date = date('Y-m-d');
+        $current_period = date('Ym');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => $current_period
+        ])->one();
+        $fiscal = $current_fiscal->FISCAL;
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $current_fiscal->FISCAL
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_output = SernoOutput::find()
+        ->select([
+            'id', 'gmc', 'output' => 'SUM(output)'
+        ])
+        ->where([
+            'id' => $period_arr
+        ])
+        ->groupBy('id, gmc')
+        ->orderBy('id, gmc')
+        ->all();
+
+        $tmp_vms_plan = VmsPlanActual::find()
+        ->select([
+            'VMS_PERIOD', 'ITEM',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+        ])
+        ->where([
+            'VMS_PERIOD' => $period_arr
+        ])
+        ->groupBy('VMS_PERIOD, ITEM')
+        ->orderBy('VMS_PERIOD, ITEM')
+        ->all();
+
+        $tmp_result = [];
+        $data = [];
+        foreach ($tmp_output as $output) {
+            foreach ($tmp_vms_plan as $vms_plan) {
+                if ($output->gmc == $vms_plan->ITEM && $output->id == $vms_plan->VMS_PERIOD) {
+                    if ($vms_plan->ACTUAL_QTY != $output->output) {
+                        $update_return_val = $this->vmsQtyUpdate($output->id, $output->gmc, $output->output);
+                        $tmp_result[] = $update_return_val;
+                        $data['total_update'] += $update_return_val[$output->id][$output->gmc];
+                    }
+                }
+            }
+        }
+
+        $total_minutes = $this->getTotalMinutes($this_time, date('Y-m-d H:i:s'));
+        $data['total_minutes'] = $total_minutes;
+
+        $data['result'] = $tmp_result;
+
+        return $data;
+    }
+
+    public function getTotalMinutes($start_time, $end_time)
+    {
+        $process_time = strtotime($end_time) - strtotime($start_time);
+        $total_minutes = round($process_time / 60, 1);
+
+        return $total_minutes;
+    }
+
+    public function vmsQtyUpdate($period = '202005', $gmc = 'VAS0420', $total_qty = 0)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $last_update = date('Y-m-d H:i:s');
+        $tmp_arr = VmsPlanActual::find()
+        ->where([
+            'VMS_PERIOD' => $period,
+            'ITEM' => $gmc,
+        ])
+        ->orderBy('VMS_DATE')
+        ->all();
+        $total_data = count($tmp_arr);
+
+        $no = $total_update = 0;
+        foreach ($tmp_arr as $key => $value) {
+            $no++;
+            $plan_qty = $value->PLAN_QTY;
+            if ($no == $total_data) {
+                $actual_qty = $total_qty;
+            } else {
+                if ($total_qty > $plan_qty) {
+                    $actual_qty = $plan_qty;
+                    $total_qty -= $plan_qty;
+                } else {
+                    $actual_qty = $total_qty;
+                    $total_qty = 0;
+                }
+            }
+            $balance_qty = $plan_qty - $actual_qty;
+            if ($value->ACTUAL_QTY != $actual_qty || $value->BALANCE_QTY != $balance_qty) {
+                $data_to_update = VmsPlanActual::findOne($value->ID);
+                $data_to_update->ACTUAL_QTY = $actual_qty;
+                $data_to_update->BALANCE_QTY = $balance_qty;
+                $data_to_update->ACT_QTY_LAST_UPDATE = $last_update;
+                $total_update++;
+                if (!$data_to_update->save()) {
+                    return json_encode($model->errors);
+                }
+            }
+        }
+
+        return [
+            $period => [
+                $gmc => $total_update
+            ]
+        ];
+    }
+
     public function actionIjazahUpdateProgress($value='')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -25,10 +153,7 @@ class ProductionRestController extends Controller
         $current_timestamp = strtotime($this_time);
         $post_date = date('Y-m-d');
         $current_period = date('Ym');
-        $current_fiscal = FiscalTbl::find()->where([
-            'PERIOD' => $current_period
-        ])->one();
-        $fiscal = $current_fiscal->FISCAL;
+        
         $bulkInsertArray = [];
         $columnNameArray = ['ID', 'LINE', 'FY', 'PERIOD', 'DATE', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR', 'APR_PCT', 'MAY_PCT', 'JUN_PCT', 'JUL_PCT', 'AUG_PCT', 'SEP_PCT', 'OCT_PCT', 'NOV_PCT', 'DEC_PCT', 'JAN_PCT', 'FEB_PCT', 'MAR_PCT', 'LAST_UPDATE'];
 
@@ -41,6 +166,7 @@ class ProductionRestController extends Controller
         $current_fiscal = FiscalTbl::find()->where([
             'PERIOD' => $current_period
         ])->one();
+        $fiscal = $current_fiscal->FISCAL;
 
         $tmp_fiscal_period = FiscalTbl::find()
         ->where([

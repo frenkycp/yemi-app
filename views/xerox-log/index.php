@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Data Sparepart Maintenance <span class="text-green japanesse"></span>',
-    'tab_title' => 'Data Sparepart Maintenance',
-    'breadcrumbs_title' => 'Data Sparepart Maintenance'
+    'page_title' => 'Xerox Data Log <span class="text-green japanesse"></span>',
+    'tab_title' => 'Xerox Data Log',
+    'breadcrumbs_title' => 'Xerox Data Log'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 date_default_timezone_set('Asia/Jakarta');
