@@ -197,14 +197,14 @@ echo '</pre>';*/
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="4" class="bg-black"><span class="desc-number">E. </span>ACTUAL Amount</td>
-            <?php foreach ($price_by_period as $key => $value): ?>
+            <td colspan="4" class="bg-black"><span class="desc-number">D. </span>PLAN Amount</td>
+            <?php foreach ($price_by_period_plan as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
-            <td colspan="4" class="bg-black"><span class="desc-number">D. </span>PLAN Amount</td>
-            <?php foreach ($price_by_period_plan as $key => $value): ?>
+            <td colspan="4" class="bg-black"><span class="desc-number">E. </span>ACTUAL Amount</td>
+            <?php foreach ($price_by_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
             <?php endforeach ?>
         </tr>

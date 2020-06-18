@@ -597,7 +597,7 @@ class DisplayController extends Controller
             ->all();
         }*/
 
-        $tmp_data_arr = $tmp_bu_line = [];
+        $tmp_data_arr = $tmp_bu_line = $std_price_arr = [];
         foreach ($tmp_ijazah_arr as $key => $value) {
             $pct = 0;
             if ($value->PLAN_QTY > 0) {
@@ -608,6 +608,7 @@ class DisplayController extends Controller
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['actual_qty'] = $value->ACTUAL_QTY;
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['std_price'] = $value->STD_PRICE;
             $tmp_data_arr[$value->ITEM]['total_actual'] += $value->ACTUAL_QTY;
+            $std_price_arr[$value->ITEM] = $value->STD_PRICE;
             $tmp_bu_line[$value->ITEM] = [
                 'bu' => $value->BU,
                 'line' => $value->LINE,
@@ -631,18 +632,16 @@ class DisplayController extends Controller
                     # code...
                 } else {
                     $plan_qty = $value2['plan_qty'];
-                    $std_price = $value2['std_price'];
-                    if ($model->code == 'ori') {
-                        $actual_qty = $value2['actual_qty'];
+                    $std_price = $std_price_arr[$key];
+
+                    if ($total_actual >= $plan_qty) {
+                        $total_actual -= $plan_qty;
+                        $actual_qty = $plan_qty;
                     } else {
-                        if ($total_actual >= $plan_qty) {
-                            $total_actual -= $plan_qty;
-                            $actual_qty = $plan_qty;
-                        } else {
-                            $actual_qty = $total_actual;
-                            $total_actual = 0;
-                        }
+                        $actual_qty = $total_actual;
+                        $total_actual = 0;
                     }
+
                     $total_price = $actual_qty * $std_price;
                     $total_price_plan = $plan_qty * $std_price;
 

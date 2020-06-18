@@ -13,9 +13,171 @@ use app\models\DailyProductionOutput;
 use app\models\IjazahPlanActual;
 use app\models\FiscalTbl;
 use app\models\SernoMaster;
+use app\models\IjazahProgress;
 
 class ProductionRestController extends Controller
 {
+    public function actionIjazahUpdateProgress($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        $current_timestamp = strtotime($this_time);
+        $post_date = date('Y-m-d');
+        $current_period = date('Ym');
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => $current_period
+        ])->one();
+        $fiscal = $current_fiscal->FISCAL;
+        $bulkInsertArray = [];
+        $columnNameArray = ['ID', 'LINE', 'FY', 'PERIOD', 'DATE', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR', 'APR_PCT', 'MAY_PCT', 'JUN_PCT', 'JUL_PCT', 'AUG_PCT', 'SEP_PCT', 'OCT_PCT', 'NOV_PCT', 'DEC_PCT', 'JAN_PCT', 'FEB_PCT', 'MAR_PCT', 'LAST_UPDATE'];
+
+        $line_arr = ArrayHelper::map(SernoMaster::find()
+        ->select('line')
+        ->where('line != \'\'AND line != \'MIS\'')
+        ->groupBy('line')
+        ->all(), 'line', 'line');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => $current_period
+        ])->one();
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $current_fiscal->FISCAL
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_progress = IjazahPlanActual::find()
+        ->select([
+            'LINE', 'PERIOD',
+            'PLAN_AMT' => 'SUM(PLAN_AMT)',
+            'ACTUAL_AMT_ALLOC' => 'SUM(ACTUAL_AMT_ALLOC)',
+        ])
+        ->where([
+            'PERIOD' => $period_arr
+        ])
+        //->andWhere(['>', 'PLAN_QTY', 0])
+        ->andWhere('LINE IS NOT NULL')
+        ->groupBy('LINE, PERIOD')
+        ->orderBy('LINE, PERIOD')
+        ->all();
+
+        $tmp_data_arr = [];
+        /*$period_custom_arr = [
+            '04' => 'APR',
+            '05' => 'MAY',
+            '06' => 'JUN',
+            '07' => 'JUL',
+            '08' => 'AUG',
+            '09' => 'SEP',
+            '10' => 'OCT',
+            '11' => 'NOV',
+            '12' => 'DEC',
+            '01' => 'JAN',
+            '02' => 'FEB',
+            '03' => 'MAR',
+        ];*/
+
+        $progress_check = IjazahProgress::find()->where([
+            'FORMAT(DATE, \'yyyy-MM-dd\')' => $post_date
+        ])
+        ->count();
+        if ($progress_check == 0) {
+            foreach ($line_arr as $line) {
+                foreach ($period_arr as $period) {
+                    $tmp_plan_amt = $tmp_act_amt = 0;
+                    foreach ($tmp_progress as $progress) {
+                        if ($progress->LINE == $line && $progress->PERIOD == $period) {
+                            $tmp_plan_amt = $progress->PLAN_AMT;
+                            $tmp_act_amt = $progress->ACTUAL_AMT_ALLOC;
+                        }
+                    }
+                    $tmp_pct = 0;
+                    if ($tmp_plan_amt > 0) {
+                        $tmp_pct = round(($tmp_act_amt / $tmp_plan_amt) * 100, 2);
+                    }
+                    /*$custom_period_index = substr($period, -2);
+                    $custom_period = $period_custom_arr[$custom_period_index];*/
+                    $tmp_data_arr[$line][] = $tmp_pct;
+                }
+            }
+
+            
+
+            foreach ($tmp_data_arr as $key => $value) {
+                $ID = $current_timestamp . '_' . $key;
+                $LINE = $key;
+                $FY = $fiscal;
+                $PERIOD = $current_period;
+                $DATE = $post_date;
+                $APR = $value[0];
+                $MAY = $value[1];
+                $JUN = $value[2];
+                $JUL = $value[3];
+                $AUG = $value[4];
+                $SEP = $value[5];
+                $OCT = $value[6];
+                $NOV = $value[7];
+                $DEC = $value[8];
+                $JAN = $value[9];
+                $FEB = $value[10];
+                $MAR = $value[11];
+
+                $last_progress = IjazahProgress::find()
+                ->where([
+                    'LINE' => $key
+                ])
+                ->one();
+                $APR_PCT = 0;
+                $MAY_PCT = 0;
+                $JUN_PCT = 0;
+                $JUL_PCT = 0;
+                $AUG_PCT = 0;
+                $SEP_PCT = 0;
+                $OCT_PCT = 0;
+                $NOV_PCT = 0;
+                $DEC_PCT = 0;
+                $JAN_PCT = 0;
+                $FEB_PCT = 0;
+                $MAR_PCT = 0;
+                if ($last_progress) {
+                    $APR_PCT = $value[0] - $last_progress->APR;
+                    $MAY_PCT = $value[1] - $last_progress->MAY;
+                    $JUN_PCT = $value[2] - $last_progress->JUN;
+                    $JUL_PCT = $value[3] - $last_progress->JUL;
+                    $AUG_PCT = $value[4] - $last_progress->AUG;
+                    $SEP_PCT = $value[5] - $last_progress->SEP;
+                    $OCT_PCT = $value[6] - $last_progress->OCT;
+                    $NOV_PCT = $value[7] - $last_progress->NOV;
+                    $DEC_PCT = $value[8] - $last_progress->DEC;
+                    $JAN_PCT = $value[9] - $last_progress->JAN;
+                    $FEB_PCT = $value[10] - $last_progress->FEB;
+                    $MAR_PCT = $value[11] - $last_progress->MAR;
+                }
+
+                $bulkInsertArray[] = [
+                    $ID, $LINE, $FY, $PERIOD, $DATE, $APR, $MAY, $JUN, $JUL, $AUG, $SEP, $OCT, $NOV, $DEC, $JAN, $FEB, $MAR, $APR_PCT, $MAY_PCT, $JUN_PCT, $JUL_PCT, $AUG_PCT, $SEP_PCT, $OCT_PCT, $NOV_PCT, $DEC_PCT, $JAN_PCT, $FEB_PCT, $MAR_PCT, $this_time];
+            }
+        }
+        
+
+        $total_insert = count($bulkInsertArray);
+        if($total_insert > 0){
+            $insertCount = \Yii::$app->db_sql_server->createCommand()
+            ->batchInsert(IjazahProgress::getTableSchema()->fullName, $columnNameArray, $bulkInsertArray)
+            ->execute();
+        }
+
+        return $total_insert . ' data(s) inserted...';
+    }
+
     public function actionIjazahUpdateAll($post_date='')
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -146,14 +308,16 @@ class ProductionRestController extends Controller
                     if ($plan_qty > 0) {
                         $amt_ratio = round(($actual_qty_alloc / $plan_qty) * 100, 1);
                     }
+                    $ACTUAL_AMT_ALLOC = $tmp_ijazah->ACTUAL_QTY_ALLOC * $tmp_ijazah->STD_PRICE;
+                    $ACTUAL_AMT_ALLOC_NEW = $actual_qty_alloc * $tmp_ijazah->STD_PRICE;
 
-                    if ($actual_qty_alloc != $tmp_ijazah->ACTUAL_QTY_ALLOC || $tmp_ijazah->BALANCE_QTY_ALLOC != $tmp_balance_qty_alloc) {
+                    if ($actual_qty_alloc != $tmp_ijazah->ACTUAL_QTY_ALLOC || $tmp_ijazah->BALANCE_QTY_ALLOC != $tmp_balance_qty_alloc || $ACTUAL_AMT_ALLOC != $ACTUAL_AMT_ALLOC_NEW) {
                         $update_ijazah = IjazahPlanActual::findOne($tmp_ijazah->ITEM . '-' . $tmp_ijazah->PERIOD);
                         $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;
                         $update_ijazah->BALANCE_QTY_ALLOC = $tmp_balance_qty_alloc;
                         $update_ijazah->ACT_ALLOC_LAST_UPDATE = $this_time;
                         $update_ijazah->PLAN_AMT = $tmp_ijazah->PLAN_QTY * $tmp_ijazah->STD_PRICE;
-                        $update_ijazah->ACTUAL_AMT_ALLOC = $tmp_ijazah->ACTUAL_QTY_ALLOC * $tmp_ijazah->STD_PRICE;
+                        $update_ijazah->ACTUAL_AMT_ALLOC = $ACTUAL_AMT_ALLOC;
                         $update_ijazah->BALANCE_AMT_ALLOC = $tmp_balance_qty_alloc * $tmp_ijazah->STD_PRICE;
                         $update_ijazah->AMT_RATIO = $amt_ratio;
                         if (!$update_ijazah->save()) {
@@ -189,9 +353,9 @@ class ProductionRestController extends Controller
         ->groupBy('id, gmc')
         ->all();
 
-        $tmp_plan = ArrayHelper::map(IjazahPlanActual::find()->where([
+        /*$tmp_plan = ArrayHelper::map(IjazahPlanActual::find()->where([
             'PERIOD' => $period
-        ])->all(), 'ID', 'PLAN_QTY');
+        ])->all(), 'ID', 'PLAN_QTY');*/
 
         $tmp_plan2 = IjazahPlanActual::find()->where([
             'PERIOD' => $period
