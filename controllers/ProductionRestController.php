@@ -155,7 +155,7 @@ class ProductionRestController extends Controller
         $current_period = date('Ym');
         
         $bulkInsertArray = [];
-        $columnNameArray = ['ID', 'LINE', 'FY', 'PERIOD', 'DATE', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR', 'APR_PCT', 'MAY_PCT', 'JUN_PCT', 'JUL_PCT', 'AUG_PCT', 'SEP_PCT', 'OCT_PCT', 'NOV_PCT', 'DEC_PCT', 'JAN_PCT', 'FEB_PCT', 'MAR_PCT', 'LAST_UPDATE'];
+        $columnNameArray = ['ID', 'LINE', 'FY', 'PERIOD', 'DATE', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC', 'JAN', 'FEB', 'MAR', 'APR_PLAN_QTY', 'MAY_PLAN_QTY', 'JUN_PLAN_QTY', 'JUL_PLAN_QTY', 'AUG_PLAN_QTY', 'SEP_PLAN_QTY', 'OCT_PLAN_QTY', 'NOV_PLAN_QTY', 'DEC_PLAN_QTY', 'JAN_PLAN_QTY', 'FEB_PLAN_QTY', 'MAR_PLAN_QTY', 'APR_ACT_QTY', 'MAY_ACT_QTY', 'JUN_ACT_QTY', 'JUL_ACT_QTY', 'AUG_ACT_QTY', 'SEP_ACT_QTY', 'OCT_ACT_QTY', 'NOV_ACT_QTY', 'DEC_ACT_QTY', 'JAN_ACT_QTY', 'FEB_ACT_QTY', 'MAR_ACT_QTY', 'APR_PCT', 'MAY_PCT', 'JUN_PCT', 'JUL_PCT', 'AUG_PCT', 'SEP_PCT', 'OCT_PCT', 'NOV_PCT', 'DEC_PCT', 'JAN_PCT', 'FEB_PCT', 'MAR_PCT', 'LAST_UPDATE'];
 
         $line_arr = ArrayHelper::map(SernoMaster::find()
         ->select('line')
@@ -185,6 +185,8 @@ class ProductionRestController extends Controller
             'LINE', 'PERIOD',
             'PLAN_AMT' => 'SUM(PLAN_AMT)',
             'ACTUAL_AMT_ALLOC' => 'SUM(ACTUAL_AMT_ALLOC)',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY_ALLOC' => 'SUM(ACTUAL_QTY_ALLOC)',
         ])
         ->where([
             'PERIOD' => $period_arr
@@ -218,11 +220,13 @@ class ProductionRestController extends Controller
         if ($progress_check == 0) {
             foreach ($line_arr as $line) {
                 foreach ($period_arr as $period) {
-                    $tmp_plan_amt = $tmp_act_amt = 0;
+                    $tmp_plan_amt = $tmp_act_amt = $tmp_plan_qty = $tmp_act_qty = 0;
                     foreach ($tmp_progress as $progress) {
                         if ($progress->LINE == $line && $progress->PERIOD == $period) {
                             $tmp_plan_amt = $progress->PLAN_AMT;
                             $tmp_act_amt = $progress->ACTUAL_AMT_ALLOC;
+                            $tmp_plan_qty = $progress->PLAN_QTY;
+                            $tmp_act_qty = $progress->ACTUAL_QTY_ALLOC;
                         }
                     }
                     $tmp_pct = 0;
@@ -231,7 +235,11 @@ class ProductionRestController extends Controller
                     }
                     /*$custom_period_index = substr($period, -2);
                     $custom_period = $period_custom_arr[$custom_period_index];*/
-                    $tmp_data_arr[$line][] = $tmp_pct;
+                    $tmp_data_arr[$line][] = [
+                        'pct' => $tmp_pct,
+                        'plan_qty' => $tmp_plan_qty,
+                        'act_qty' => $tmp_act_qty,
+                    ];
                 }
             }
 
@@ -243,18 +251,45 @@ class ProductionRestController extends Controller
                 $FY = $fiscal;
                 $PERIOD = $current_period;
                 $DATE = $post_date;
-                $APR = $value[0];
-                $MAY = $value[1];
-                $JUN = $value[2];
-                $JUL = $value[3];
-                $AUG = $value[4];
-                $SEP = $value[5];
-                $OCT = $value[6];
-                $NOV = $value[7];
-                $DEC = $value[8];
-                $JAN = $value[9];
-                $FEB = $value[10];
-                $MAR = $value[11];
+
+                $APR = $value[0]['pct'];
+                $MAY = $value[1]['pct'];
+                $JUN = $value[2]['pct'];
+                $JUL = $value[3]['pct'];
+                $AUG = $value[4]['pct'];
+                $SEP = $value[5]['pct'];
+                $OCT = $value[6]['pct'];
+                $NOV = $value[7]['pct'];
+                $DEC = $value[8]['pct'];
+                $JAN = $value[9]['pct'];
+                $FEB = $value[10]['pct'];
+                $MAR = $value[11]['pct'];
+
+                $APR_PLAN_QTY = $value[0]['plan_qty'];
+                $MAY_PLAN_QTY = $value[1]['plan_qty'];
+                $JUN_PLAN_QTY = $value[2]['plan_qty'];
+                $JUL_PLAN_QTY = $value[3]['plan_qty'];
+                $AUG_PLAN_QTY = $value[4]['plan_qty'];
+                $SEP_PLAN_QTY = $value[5]['plan_qty'];
+                $OCT_PLAN_QTY = $value[6]['plan_qty'];
+                $NOV_PLAN_QTY = $value[7]['plan_qty'];
+                $DEC_PLAN_QTY = $value[8]['plan_qty'];
+                $JAN_PLAN_QTY = $value[9]['plan_qty'];
+                $FEB_PLAN_QTY = $value[10]['plan_qty'];
+                $MAR_PLAN_QTY = $value[11]['plan_qty'];
+
+                $APR_ACT_QTY = $value[0]['act_qty'];
+                $MAY_ACT_QTY = $value[1]['act_qty'];
+                $JUN_ACT_QTY = $value[2]['act_qty'];
+                $JUL_ACT_QTY = $value[3]['act_qty'];
+                $AUG_ACT_QTY = $value[4]['act_qty'];
+                $SEP_ACT_QTY = $value[5]['act_qty'];
+                $OCT_ACT_QTY = $value[6]['act_qty'];
+                $NOV_ACT_QTY = $value[7]['act_qty'];
+                $DEC_ACT_QTY = $value[8]['act_qty'];
+                $JAN_ACT_QTY = $value[9]['act_qty'];
+                $FEB_ACT_QTY = $value[10]['act_qty'];
+                $MAR_ACT_QTY = $value[11]['act_qty'];
 
                 $last_progress = IjazahProgress::find()
                 ->where([
@@ -274,22 +309,22 @@ class ProductionRestController extends Controller
                 $FEB_PCT = 0;
                 $MAR_PCT = 0;
                 if ($last_progress) {
-                    $APR_PCT = $value[0] - $last_progress->APR;
-                    $MAY_PCT = $value[1] - $last_progress->MAY;
-                    $JUN_PCT = $value[2] - $last_progress->JUN;
-                    $JUL_PCT = $value[3] - $last_progress->JUL;
-                    $AUG_PCT = $value[4] - $last_progress->AUG;
-                    $SEP_PCT = $value[5] - $last_progress->SEP;
-                    $OCT_PCT = $value[6] - $last_progress->OCT;
-                    $NOV_PCT = $value[7] - $last_progress->NOV;
-                    $DEC_PCT = $value[8] - $last_progress->DEC;
-                    $JAN_PCT = $value[9] - $last_progress->JAN;
-                    $FEB_PCT = $value[10] - $last_progress->FEB;
-                    $MAR_PCT = $value[11] - $last_progress->MAR;
+                    $APR_PCT = $value[0]['pct'] - $last_progress->APR;
+                    $MAY_PCT = $value[1]['pct'] - $last_progress->MAY;
+                    $JUN_PCT = $value[2]['pct'] - $last_progress->JUN;
+                    $JUL_PCT = $value[3]['pct'] - $last_progress->JUL;
+                    $AUG_PCT = $value[4]['pct'] - $last_progress->AUG;
+                    $SEP_PCT = $value[5]['pct'] - $last_progress->SEP;
+                    $OCT_PCT = $value[6]['pct'] - $last_progress->OCT;
+                    $NOV_PCT = $value[7]['pct'] - $last_progress->NOV;
+                    $DEC_PCT = $value[8]['pct'] - $last_progress->DEC;
+                    $JAN_PCT = $value[9]['pct'] - $last_progress->JAN;
+                    $FEB_PCT = $value[10]['pct'] - $last_progress->FEB;
+                    $MAR_PCT = $value[11]['pct'] - $last_progress->MAR;
                 }
 
                 $bulkInsertArray[] = [
-                    $ID, $LINE, $FY, $PERIOD, $DATE, $APR, $MAY, $JUN, $JUL, $AUG, $SEP, $OCT, $NOV, $DEC, $JAN, $FEB, $MAR, $APR_PCT, $MAY_PCT, $JUN_PCT, $JUL_PCT, $AUG_PCT, $SEP_PCT, $OCT_PCT, $NOV_PCT, $DEC_PCT, $JAN_PCT, $FEB_PCT, $MAR_PCT, $this_time];
+                    $ID, $LINE, $FY, $PERIOD, $DATE, $APR, $MAY, $JUN, $JUL, $AUG, $SEP, $OCT, $NOV, $DEC, $JAN, $FEB, $MAR, $APR_PLAN_QTY, $MAY_PLAN_QTY, $JUN_PLAN_QTY, $JUL_PLAN_QTY, $AUG_PLAN_QTY, $SEP_PLAN_QTY, $OCT_PLAN_QTY, $NOV_PLAN_QTY, $DEC_PLAN_QTY, $JAN_PLAN_QTY, $FEB_PLAN_QTY, $MAR_PLAN_QTY, $APR_ACT_QTY, $MAY_ACT_QTY, $JUN_ACT_QTY, $JUL_ACT_QTY, $AUG_ACT_QTY, $SEP_ACT_QTY, $OCT_ACT_QTY, $NOV_ACT_QTY, $DEC_ACT_QTY, $JAN_ACT_QTY, $FEB_ACT_QTY, $MAR_ACT_QTY, $APR_PCT, $MAY_PCT, $JUN_PCT, $JUL_PCT, $AUG_PCT, $SEP_PCT, $OCT_PCT, $NOV_PCT, $DEC_PCT, $JAN_PCT, $FEB_PCT, $MAR_PCT, $this_time];
             }
         }
         
