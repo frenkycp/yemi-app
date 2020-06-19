@@ -127,6 +127,16 @@ echo '</pre>';*/
         } elseif ($category == 4) {
             $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px; border-bottom: 1px solid white;">' . $params_val . '%</div><div style="padding: 0px 4px;">' . $value->kw . ' kw</div></div>';
             echo $params_val == null ? '' : Html::a($content, ['power-consumption-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+            if ($value->map_no == 44) {
+                $tmp_temperature = app\models\SensorTbl::findOne(41);
+                $temparature_class = ' bg-green-active';
+                if ($tmp_temperature->temparature > $tmp_temperature->temp_max) {
+                    $temparature_class = ' bg-red-active';
+                }
+
+                $content_temp = '<div class="' . $widget_class . ' text-center' . $temparature_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . ($value->left_pos - 90) . 'px;"><div style="padding: 0px 4px;">' . $tmp_temperature->temparature . '&deg;</div></div>';
+                echo $params_val == null ? '' : Html::a($content_temp, ['power-consumption-chart', 'map_no' => 41], ['title' => strtoupper($value->area)]);
+            }
         } else {
             echo $params_val == null ? '' : Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         }
