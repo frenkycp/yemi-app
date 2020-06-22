@@ -138,9 +138,122 @@ use app\models\FotocopyLogTbl;
 use app\models\FotocopyUserTbl;
 use app\models\IjazahPlanActual;
 use app\models\WorkingDaysView;
+use app\models\PabxLog;
 
 class DisplayController extends Controller
 {
+    public function actionPabxDailyDetail($tanggal, $phone_line)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $tmp_data_arr = PabxLog::find()->where([
+            'tanggal' => $tanggal,
+            'phone_line' => $phone_line
+        ])->orderBy('total_durasi_detik DESC')->all();
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $phone_line . ' on ' . $tanggal . '</h3>
+        </div>
+        <div class="modal-body">
+        ';
+        $data .= '<table class="table table-bordered table-hover">';
+        $data .= 
+        '<thead style=""><tr>
+            <th class="">Department</th>
+            <th class="">Destination</th>
+            <th class="text-center">Duration</th>
+            <th class="text-center">End Time</th>
+        </tr></thead>';
+        $data .= '<tbody style="">';
+
+        $no = 1;
+        foreach ($tmp_data_arr as $value) {
+            $minutes = round(($value->total_durasi_detik / 60), 1);
+            if ($value->registered_name != null && $value->registered_name != '-') {
+                $destination = $value->registered_name;
+            } else {
+                $destination = $value->phone;
+            }
+            $data .= '
+                <tr class="">
+                    <td class="">' . $value->departemen . '</td>
+                    <td class="">' . $destination . '</td>
+                    <td class="text-center">' . $minutes . '</td>
+                    <td class="text-center">' . date('H:i:s', strtotime($value->last_update)) . '</td>
+                </tr>
+            ';
+            $no++;
+        }
+        $data .= '</tbody>';
+
+        $data .= '</table>';
+        $data .= '<tbody>';
+        return $data;
+    }
+
+    public function actionPabxDailyUsage($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_pabx_arr = PabxLog::find()
+        ->select([
+            'tanggal' => 'FORMAT(tanggal, \'yyyy-MM-dd\')',
+            'total_seluler' => 'SUM(CASE WHEN phone_line = \'SELULER\' THEN total_durasi_detik ELSE 0 END)',
+            'total_fixed_line' => 'SUM(CASE WHEN phone_line = \'FIXED-LINE\' THEN total_durasi_detik ELSE 0 END)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'tanggal', $model->from_date],
+            ['<=', 'tanggal', $model->to_date]
+        ])
+        ->groupBy('tanggal')
+        ->orderBy('tanggal')
+        ->all();
+
+        $tmp_data_seluler = $tmp_data_fixed_line = $data = [];
+        foreach ($tmp_pabx_arr as $key => $value) {
+            $proddate = (strtotime($value->tanggal . " +7 hours") * 1000);
+            $tmp_data_seluler[] = [
+                'x' => $proddate,
+                'y' => round(($value->total_seluler / 60), 1),
+                'url' => Url::to(['pabx-daily-detail', 'tanggal' => $value->tanggal, 'phone_line' => 'SELULER'])
+            ];
+            $tmp_data_fixed_line[] = [
+                'x' => $proddate,
+                'y' => round(($value->total_fixed_line / 60), 1),
+                'url' => Url::to(['pabx-daily-detail', 'tanggal' => $value->tanggal, 'phone_line' => 'FIXED-LINE'])
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'Seluler',
+                'data' => $tmp_data_seluler,
+            ],
+            [
+                'name' => 'Fixed Line',
+                'data' => $tmp_data_fixed_line,
+            ],
+        ];
+
+        return $this->render('pabx-daily-usage', [
+            'model' => $model,
+            'data' => $data
+        ]);
+    }
+
     public function actionScmMonthlyRatio($value='')
     {
         $this->layout = 'clean';

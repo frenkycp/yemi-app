@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class PabxLog extends BasePabxLog
 {
+    public $total_seluler, $total_fixed_line;
 
     public function behaviors()
     {

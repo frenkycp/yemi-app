@@ -10,7 +10,11 @@ use Yii;
  * This is the base-model class for table "db_owner.PABX_LOG".
  *
  * @property integer $seq
+ * @property string $period
  * @property string $tanggal
+ * @property string $hari
+ * @property integer $jam_no
+ * @property string $jam
  * @property string $ext
  * @property string $line
  * @property string $nik
@@ -20,11 +24,14 @@ use Yii;
  * @property string $password
  * @property string $phone
  * @property string $durasi
+ * @property double $total_durasi_detik
+ * @property string $phone_line
  * @property string $provider_type
  * @property string $provider
  * @property string $provider_name
  * @property string $registered_name
  * @property string $note
+ * @property string $last_update
  * @property string $aliasModel
  */
 abstract class PabxLog extends \yii\db\ActiveRecord
@@ -54,12 +61,14 @@ abstract class PabxLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tanggal', 'durasi'], 'safe'],
+            [['tanggal', 'jam', 'durasi', 'last_update'], 'safe'],
+            [['jam_no'], 'integer'],
+            [['total_durasi_detik'], 'number'],
             [['note'], 'string'],
+            [['period', 'nik'], 'string', 'max' => 10],
+            [['hari', 'nama_karyawan', 'departemen', 'jabatan', 'phone_line', 'provider_type'], 'string', 'max' => 50],
             [['ext'], 'string', 'max' => 5],
             [['line'], 'string', 'max' => 2],
-            [['nik'], 'string', 'max' => 10],
-            [['nama_karyawan', 'departemen', 'jabatan', 'provider_type'], 'string', 'max' => 50],
             [['password'], 'string', 'max' => 1],
             [['phone'], 'string', 'max' => 32],
             [['provider'], 'string', 'max' => 4],
@@ -75,7 +84,11 @@ abstract class PabxLog extends \yii\db\ActiveRecord
     {
         return [
             'seq' => 'Seq',
+            'period' => 'Period',
             'tanggal' => 'Tanggal',
+            'hari' => 'Hari',
+            'jam_no' => 'Jam No',
+            'jam' => 'Jam',
             'ext' => 'Ext',
             'line' => 'Line',
             'nik' => 'Nik',
@@ -85,11 +98,14 @@ abstract class PabxLog extends \yii\db\ActiveRecord
             'password' => 'Password',
             'phone' => 'Phone',
             'durasi' => 'Durasi',
+            'total_durasi_detik' => 'Total Durasi Detik',
+            'phone_line' => 'Phone Line',
             'provider_type' => 'Provider Type',
             'provider' => 'Provider',
             'provider_name' => 'Provider Name',
             'registered_name' => 'Registered Name',
             'note' => 'Note',
+            'last_update' => 'Last Update',
         ];
     }
 
