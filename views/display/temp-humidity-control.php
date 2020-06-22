@@ -134,7 +134,7 @@ echo '</pre>';*/
                     $temparature_class = ' bg-red-active';
                 }
 
-                $content_temp = '<div class="' . $widget_class . ' text-center' . $temparature_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . ($value->left_pos - 90) . 'px;"><div style="padding: 0px 4px;">' . $tmp_temperature->temparature . '&deg;</div></div>';
+                $content_temp = '<div class="' . $widget_class . ' text-center' . $temparature_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . ($value->left_pos - 90) . 'px;"><div style="padding: 0px 4px;">' . $tmp_temperature->temparature . '&deg; C</div></div>';
                 echo $params_val == null ? '' : Html::a($content_temp, ['power-consumption-chart', 'map_no' => 41], ['title' => strtoupper($value->area)]);
             }
         } else {

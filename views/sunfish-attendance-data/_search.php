@@ -48,7 +48,11 @@ echo '</pre>';*/
                         'prompt' => 'Pilih...'
                     ])->label('Shift'); ?>
                 </div>
-                
+                <div class="col-md-2">
+                    <?= $form->field($model, 'cost_center')->dropDownList(\Yii::$app->params['sunfish_cost_center'], [
+                        'prompt' => 'Pilih...'
+                    ])->label('Section'); ?>
+                </div>
                 <div class="col-md-2">
                     <?= $form->field($model, 'attend_judgement')->dropDownList([
                         'A' => 'Alpa',
@@ -68,7 +72,7 @@ echo '</pre>';*/
                         'prompt' => 'Pilih...'
                     ])->label('Terlambat'); ?>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <?= $form->field($model, 'emp_no')->textInput()->label('NIK'); ?>
                 </div>
             </div>

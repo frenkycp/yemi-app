@@ -18,7 +18,7 @@ class SunfishAttendanceDataSearch extends SunfishAttendanceData
 public function rules()
 {
 return [
-[['emp_no', 'post_date', 'period', 'shift', 'attend_judgement', 'come_late'], 'safe'],
+[['emp_no', 'post_date', 'period', 'shift', 'attend_judgement', 'come_late', 'cost_center'], 'safe'],
 ];
 }
 
@@ -83,6 +83,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'CONVERT(VARCHAR(10), shiftendtime, 120)', $this->post_date])
         ->andFilterWhere(['like', 'VIEW_YEMI_ATTENDANCE.emp_no', $this->emp_no])
+        ->andFilterWhere(['like', 'cost_center', $this->cost_center])
         ->andFilterWhere(['like', 'FORMAT(shiftendtime, \'yyyyMM\')', $this->period]);
 
         if ($this->attend_judgement == 'C_ALL') {
