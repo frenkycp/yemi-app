@@ -139,9 +139,67 @@ use app\models\FotocopyUserTbl;
 use app\models\IjazahPlanActual;
 use app\models\WorkingDaysView;
 use app\models\PabxLog;
+use app\models\DnsStatus;
 
 class DisplayController extends Controller
 {
+    public function actionNetworkStatus($no = 1)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        if ($no == 1) {
+            $title = 'VPN';
+            $vpn1 = DnsStatus::findOne('133.176.54.20');
+            $vpn2 = DnsStatus::findOne('133.176.54.22');
+
+            if ($vpn1->server_on_off == 'ON-LINE' || $vpn2->server_on_off == 'ON-LINE') {
+                $status = 1;
+                $bg_class = 'bg-green-active';
+
+                $speed_mbps = round($vpn1->download_speed_Mbps, 1);
+                if ($vpn2->download_speed_Mbps < $vpn1->download_speed_Mbps) {
+                    $speed_mbps = round($vpn2->download_speed_Mbps, 1);
+                }
+            } else {
+                $status = 0;
+                $bg_class = 'bg-red-active';
+                $speed_mbps = 0;
+            }
+        } elseif ($no == 2) {
+            $title = 'INTERNET';
+            $vpn1 = DnsStatus::findOne('google.com');
+            if ($vpn1->server_on_off == 'ON-LINE') {
+                $status = 1;
+                $bg_class = 'bg-green-active';
+                $speed_mbps = round($vpn1->download_speed_Mbps, 1);
+            } else {
+                $status = 0;
+                $bg_class = 'bg-red-active';
+                $speed_mbps = 0;
+            }
+        }
+        //$status = $speed_mbps = 0;
+
+        $info = '<i class="fa fa-circle-o text-green"></i>';
+        if ($speed_mbps < 1) {
+            $info = '<i class="fa fa-warning text-yellow"></i>';
+            if ($speed_mbps == 0) {
+                $bg_class = 'bg-red-active';
+                $info = '<span class="text-red">STOP</span>';
+            }
+        }
+
+        return $this->render('network-status', [
+            'status' => $status,
+            'bg_class' => $bg_class,
+            'speed_mbps' => $speed_mbps,
+            'info' => $info,
+            'title' => $title,
+            'no' => $no,
+        ]);
+    }
+
     public function actionPabxDailyDetail($tanggal, $phone_line)
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -867,6 +925,7 @@ class DisplayController extends Controller
             }
 
             ksort($tmp_data_total);
+            $count_4_avg = 0;
             foreach ($tmp_data_total as $key => $value) {
                 $post_date = (strtotime($key . " +7 hours") * 1000);
                 $tmp_data_daily[] = [
@@ -876,13 +935,16 @@ class DisplayController extends Controller
 
                 if ($value > 0) {
                     $value_arr[] = $value;
+                    if ($value > 100) {
+                        $count_4_avg++;
+                    }
                 }
             }
 
             $max_val = max($value_arr);
             $min_val = min($value_arr);
             if (count($value_arr) > 0) {
-                $avg_val = round(array_sum($value_arr) / count($value_arr));
+                $avg_val = round(array_sum($value_arr) / $count_4_avg);
             }
 
             $data[] = [
