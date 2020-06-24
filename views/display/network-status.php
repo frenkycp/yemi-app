@@ -14,17 +14,15 @@ $this->title = [
     'breadcrumbs_title' => 'Network Status'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
-
+/*
 $this->registerCssFile('@web/css/component.css');
 $this->registerJsFile('@web/js/snap.svg-min.js');
 $this->registerJsFile('@web/js/classie.js');
-$this->registerJsFile('@web/js/svgLoader.js');
+$this->registerJsFile('@web/js/svgLoader.js');*/
 
 $this->registerCss("
     .control-label {color: white;}
-    //.form-control {font-size: 30px; height: 52px;}
     .content-header {color: white; text-align: center; display: none;}
-    //.box-body {background-color: #000;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5; font-family: Arial, Helvetica, sans-serif; line-height: unset;}
@@ -33,7 +31,7 @@ $this->registerCss("
     .form-horizontal .control-label {padding-top: 0px;}
     .border-white {border: 1px solid white;}
     .widget-header {border: 1px solid grey; padding: 10px; font-size: 3em; letter-spacing: 1.5px; color: white;}
-    .widget-content {border: 1px solid grey; font-size: 3em; height: 400px; line-height: 400px; color: black;}
+    .widget-content {border: 1px solid grey; font-size: 3em; height: 400px; color: black;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -103,7 +101,7 @@ echo '</pre>';*/
 <div class="row" style="padding: 0px 20px;">
     <div class="col-md-5 text-center" style="padding: 0px;">
         <div id="bg-mbps" class="widget-content <?= $bg_reply_time; ?>">
-            <div style="font-size: 7em; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000;" id="speed"><?= $reply_time ?></div><br/>
+            <div style="font-size: 8em; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000;" id="speed"><?= $reply_time ?></div><br/>
         </div>
     </div>
     <div class="col-md-7 text-center" style="padding: 0px;">
@@ -146,7 +144,7 @@ echo '</pre>';*/
                                             $('#speed').html(jsondata.reply_roundtriptime);
                                             $('#bg-mbps').attr('class', 'widget-content ' + jsondata.bg_reply_time);
                                         });
-                                    }, 1000);
+                                    }, 3000);
                                 }"),
                             ],
                         ],
@@ -215,7 +213,7 @@ echo '</pre>';*/
                         'plotOptions' => [
                             'spline' => [
                                 'marker' => [
-                                    'radius' => 4
+                                    'radius' => 5
                                 ],
                             ],
                             
@@ -253,21 +251,6 @@ echo '</pre>';*/
                     ],
                 ]);
                 ?>
-            </div>
-        </div>
-    </div>
-</div>
-<div style="height: 97vh; display: none;">
-    <div class="row" style="height: 100%; border: 1px solid grey;">
-        <div class="col-md-7" style="height: 100%; text-align: center; vertical-align: middle;">
-            <span style="color: white; font-size: <?= $no == 1 ? '50vh' : '20vh'; ?>; line-height: 97vh;"><?= $title; ?></span>
-        </div>
-        <div class="col-md-5 text-center" style="height: 100%; padding: 0px;">
-            <div class="<?= $bg_class; ?>" style="height: 50%; color: white; border-width: 0px 0px 1px 1px; border-style: solid; border-color: grey;">
-                <span style="line-height: 48vh; font-size: 15em;"><?= $speed_mbps; ?> <span style="font-size: 0.5em;">Mbps</span></span>
-            </div>
-            <div style="height: 50%; color: white; border-width: 0px 0px 0px 1px; border-style: solid; border-color: grey;">
-                <span style="line-height: 48vh; font-size: 20em;"><?= $info; ?></span>
             </div>
         </div>
     </div>

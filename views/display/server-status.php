@@ -25,7 +25,7 @@ $this->registerCss("
     // .box-header .box-title{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
-    body {background-color: #ecf0f5;}
+    body {background-color: #ecf0f5; font-family: Arial, Helvetica, sans-serif;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
     .small-box .icon {top: 1px;}
@@ -110,7 +110,7 @@ $server_arr = [
     '172.17.144.6' => 'MITA - APPLICATION',
 ];
 ?>
-<div class="text-center" style="border-bottom: 1px solid grey;">
+<div class="text-center" style="border-bottom: 1px solid grey; display: none;">
     <span class="" style="color: white; font-size: 5em; letter-spacing: 3px;">SERVER STATUS</span>
 </div>
 <br/>
@@ -178,7 +178,7 @@ $server_arr = [
         ];
         ?>
         <div class="col-md-6 text-center" style="margin-bottom: 20px;">
-            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? ' bg-green' : ' bg-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 2em; padding-left: 10px; letter-spacing: 5px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
+            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? ' bg-green' : ' bg-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 5px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
                 <?= isset($server_arr[$value->server_ip]) ? $server_arr[$value->server_ip] : $value->server_name; ?>
             </div>
             
@@ -213,7 +213,7 @@ $server_arr = [
                                                         series.update(jsondata.memory_usage);
                                                         //alert(series.data);
                                                     });
-                                                }, 1000);}"),
+                                                }, 3000);}"),
                                         ],
                                     ],
                                     'title' => null,
@@ -321,10 +321,10 @@ $server_arr = [
                                                         if(y > 100){
                                                             series.addPoint({x: x, y: y, color: 'red'}, true, true);
                                                         } else {
-                                                            series.addPoint({x: x, y: y}, true, true);
+                                                            series.addPoint({x: x, y: y, color: 'green'}, true, true);
                                                         }
                                                     });
-                                                }, 1000);
+                                                }, 3000);
                                             }"),
                                         ],
                                     ],
@@ -424,6 +424,7 @@ $server_arr = [
                                                 }
                                                 return data;
                                             }())"),
+                                            'color' => 'white',
                                         ],
                                     ],
                                 ],
