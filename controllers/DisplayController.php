@@ -143,6 +143,63 @@ use app\models\DnsStatus;
 
 class DisplayController extends Controller
 {
+    public function actionNetworkStatusData($no)
+    {
+        if ($no == 1) {
+            $title = 'VPN';
+            $vpn1 = DnsStatus::findOne('133.176.54.20');
+            $vpn2 = DnsStatus::findOne('133.176.54.22');
+
+            if ($vpn1->server_on_off == 'ON-LINE' || $vpn2->server_on_off == 'ON-LINE') {
+                $status = 1;
+
+                $speed_mbps = round($vpn1->download_speed_Mbps, 1);
+                if ($vpn2->download_speed_Mbps < $vpn1->download_speed_Mbps) {
+                    $speed_mbps = round($vpn2->download_speed_Mbps, 1);
+                }
+
+                $reply_roundtriptime = round($vpn1->reply_roundtriptime);
+                if ($vpn1->reply_roundtriptime < $vpn2->reply_roundtriptime) {
+                    $reply_roundtriptime = round($vpn2->reply_roundtriptime);
+                }
+            } else {
+                $reply_roundtriptime = 0;
+                $status = 0;
+                $speed_mbps = 0;
+            }
+        } elseif ($no == 2) {
+            $title = 'INTERNET';
+            $vpn1 = DnsStatus::findOne('google.com');
+            if ($vpn1->server_on_off == 'ON-LINE') {
+                $status = 1;
+                $speed_mbps = round($vpn1->download_speed_Mbps, 1);
+                $reply_roundtriptime = round($vpn1->reply_roundtriptime);
+            } else {
+                $status = 0;
+                $speed_mbps = 0;
+                $reply_roundtriptime = 0;
+            }
+        }
+
+        if ($speed_mbps == 0) {
+            $bg_class = 'bg-red-active';
+        } else {
+            if ($speed_mbps < 2) {
+                $bg_class = 'bg-orange-active';
+            } else {
+                $bg_class = 'bg-green-active';
+            }
+        }
+
+        $data = [
+            'reply_roundtriptime' => $reply_roundtriptime,
+            'speed_mbps' => $speed_mbps,
+            'status' => $status,
+            'bg_class' => $bg_class,
+        ];
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
     public function actionNetworkStatus($no = 1)
     {
         $this->layout = 'clean';
@@ -180,10 +237,17 @@ class DisplayController extends Controller
             }
         }
         //$status = $speed_mbps = 0;
+        if ($speed_mbps == 0) {
+            $bg_class = 'bg-red-active';
+        } else {
+            if ($speed_mbps < 2) {
+                $bg_class = 'bg-orange-active';
+            } else {
+                $bg_class = 'bg-green-active';
+            }
+        }
 
-        $info = '<i class="fa fa-circle-o text-green"></i>';
         if ($speed_mbps < 1) {
-            $info = '<i class="fa fa-warning text-yellow"></i>';
             if ($speed_mbps == 0) {
                 $bg_class = 'bg-red-active';
                 $info = '<span class="text-red">STOP</span>';
@@ -2049,6 +2113,7 @@ class DisplayController extends Controller
 
         return $data;
     }
+
     public function actionServerStatusData($mac_address)
     {
         $server_status = ServerStatus::find()->where(['server_mac_address' => $mac_address])->one();
