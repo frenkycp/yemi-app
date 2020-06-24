@@ -32,8 +32,8 @@ $this->registerCss("
     body, .content-wrapper {background-color: #000;}
     .form-horizontal .control-label {padding-top: 0px;}
     .border-white {border: 1px solid white;}
-    .widget-header {border: 1px solid grey; margin: 0px 10px; padding: 10px; font-size: 3em; letter-spacing: 1.5px; color: white;}
-    .widget-content {border: 1px solid grey; margin: 0px 10px; font-size: 3em; height: 400px; line-height: 400px; color: black;}
+    .widget-header {border: 1px solid grey; padding: 10px; font-size: 3em; letter-spacing: 1.5px; color: white;}
+    .widget-content {border: 1px solid grey; font-size: 3em; height: 400px; line-height: 400px; color: black;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -50,34 +50,25 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-$this->registerJs("
+/*$this->registerJs("
     function update_data(){
         $.ajax({
             type: 'POST',
             url: '" . Url::to(['network-status-data', 'no' => $no]) . "',
             success: function(data){
                 var tmp_data = JSON.parse(data);
-                $('#speed').html(tmp_data.speed_mbps);
-                if(tmp_data.speed_mbps == 0){
-                    $('#bg-title').attr('class', 'col-md-12 text-center speed-danger');
-                } else {
-                    if(tmp_data.speed_mbps < 3){
-                        $('#bg-title').attr('class', 'col-md-12 text-center speed-warning');
-                    } else {
-                        $('#bg-title').attr('class', 'col-md-12 text-center speed-normal');
-                    }
-                }
-                $('#bg-mbps').attr('class', 'widget-content ' + tmp_data.bg_class);
+                //$('#speed').html(tmp_data.reply_roundtriptime);
+                //$('#bg-mbps').attr('class', 'widget-content ' + tmp_data.bg_reply_time);
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 2000);
+                setTimeout(function(){update_data();}, 1000);
             }
         });
     }
     $(document).ready(function() {
         update_data();
     });
-");
+");*/
 
 /*$this->registerCssFile('@web/css/dataTables.bootstrap.css');
 $this->registerJsFile('@web/js/jquery.dataTables.min.js');
@@ -97,24 +88,25 @@ echo '</pre>';*/
 ?>
 <div class="row" style="padding: 0px 20px;">
     <div class="col-md-12 text-center" style="background-color: rgba(255, 255, 255, 0.05); border: 2px solid grey; border-radius: 20px 20px 0px 0px;">
-        <span style="font-size: 25em; color: white;">
+        <span style="font-size: 22em; color: white;">
             <?= $title; ?>
         </span>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4 text-center" style="padding: 10px 0px 10px 10px;">
-        <div class="widget-header">
-            <span>SPEED (Mbps)</span>
-        </div>
-        <div id="bg-mbps" class="widget-content <?= $bg_class; ?>">
-            <div style="font-size: 8em; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000;" id="speed"><?= $speed_mbps ?></div><br/>
+    <div class="col-md-12" style="padding: 20px 20px 0px 20px;">
+        <div class="widget-header text-center">
+            <span>REPLY ROUND TRIP TIME (ms)</span>
         </div>
     </div>
-    <div class="col-md-8 text-center" style="padding: 10px 10px 10px 0px;">
-        <div class="widget-header">
-            <span>REPLY ROUND TRIP TIME</span>
+</div>
+<div class="row" style="padding: 0px 20px;">
+    <div class="col-md-5 text-center" style="padding: 0px;">
+        <div id="bg-mbps" class="widget-content <?= $bg_reply_time; ?>">
+            <div style="font-size: 7em; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000;" id="speed"><?= $reply_time ?></div><br/>
         </div>
+    </div>
+    <div class="col-md-7 text-center" style="padding: 0px;">
         <div class="widget-content">
             <div style="margin-top: 15px;">
                 <?=
@@ -144,11 +136,15 @@ echo '</pre>';*/
                                         $.getJSON('" . Url::to(['display/network-status-data', 'no' => $no]) . "', function (jsondata) {
                                             var x = (new Date()).getTime(), // current time
                                             y = jsondata.reply_roundtriptime;
-                                            if(y > 100){
-                                                series.addPoint({x: x, y: y, color: 'red'}, true, true);
-                                            } else {
+                                            if(y <= 100){
                                                 series.addPoint({x: x, y: y, color: 'green'}, true, true);
+                                            } else if (y <= 120){
+                                                series.addPoint({x: x, y: y, color: 'orange'}, true, true);
+                                            } else {
+                                                series.addPoint({x: x, y: y, color: 'red'}, true, true);
                                             }
+                                            $('#speed').html(jsondata.reply_roundtriptime);
+                                            $('#bg-mbps').attr('class', 'widget-content ' + jsondata.bg_reply_time);
                                         });
                                     }, 1000);
                                 }"),
@@ -219,7 +215,7 @@ echo '</pre>';*/
                         'plotOptions' => [
                             'spline' => [
                                 'marker' => [
-                                    'radius' => 5
+                                    'radius' => 4
                                 ],
                             ],
                             

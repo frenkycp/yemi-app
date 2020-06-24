@@ -163,7 +163,7 @@ class DisplayController extends Controller
                     $reply_roundtriptime = round($vpn2->reply_roundtriptime);
                 }
             } else {
-                $reply_roundtriptime = 0;
+                $reply_roundtriptime = 9999;
                 $status = 0;
                 $speed_mbps = 0;
             }
@@ -177,7 +177,7 @@ class DisplayController extends Controller
             } else {
                 $status = 0;
                 $speed_mbps = 0;
-                $reply_roundtriptime = 0;
+                $reply_roundtriptime = 9999;
             }
         }
 
@@ -191,11 +191,23 @@ class DisplayController extends Controller
             }
         }
 
+        if ($reply_roundtriptime <= 100) {
+            $bg_reply_time = 'bg-green-active';
+        } elseif ($reply_roundtriptime <= 120) {
+            $bg_reply_time = 'bg-orange-active';
+        } else {
+            $bg_reply_time = 'bg-red-active';
+            if ($reply_roundtriptime == 9999) {
+                $reply_roundtriptime = 'LOSS';
+            }
+        }
+
         $data = [
             'reply_roundtriptime' => $reply_roundtriptime,
             'speed_mbps' => $speed_mbps,
             'status' => $status,
             'bg_class' => $bg_class,
+            'bg_reply_time' => $bg_reply_time,
         ];
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
@@ -218,10 +230,16 @@ class DisplayController extends Controller
                 if ($vpn2->download_speed_Mbps < $vpn1->download_speed_Mbps) {
                     $speed_mbps = round($vpn2->download_speed_Mbps, 1);
                 }
+
+                $reply_time = round($vpn1->reply_roundtriptime, 1);
+                if ($vpn2->reply_roundtriptime > $vpn1->reply_roundtriptime) {
+                    $reply_time = round($vpn2->reply_roundtriptime, 1);
+                }
             } else {
                 $status = 0;
                 $bg_class = 'bg-red-active';
                 $speed_mbps = 0;
+                $reply_time = 9999;
             }
         } elseif ($no == 2) {
             $title = 'INTERNET';
@@ -230,10 +248,12 @@ class DisplayController extends Controller
                 $status = 1;
                 $bg_class = 'bg-green-active';
                 $speed_mbps = round($vpn1->download_speed_Mbps, 1);
+                $reply_time = round($vpn1->reply_roundtriptime, 1);
             } else {
                 $status = 0;
                 $bg_class = 'bg-red-active';
                 $speed_mbps = 0;
+                $reply_time = 9999;
             }
         }
         //$status = $speed_mbps = 0;
@@ -244,6 +264,17 @@ class DisplayController extends Controller
                 $bg_class = 'bg-orange-active';
             } else {
                 $bg_class = 'bg-green-active';
+            }
+        }
+
+        if ($reply_time <= 100) {
+            $bg_reply_time = 'bg-green-active';
+        } elseif ($reply_time <= 120) {
+            $bg_reply_time = 'bg-orange-active';
+        } else {
+            $bg_reply_time = 'bg-red-active';
+            if ($reply_time == 9999) {
+                $reply_time = 'LOSS';
             }
         }
 
@@ -261,6 +292,8 @@ class DisplayController extends Controller
             'info' => $info,
             'title' => $title,
             'no' => $no,
+            'bg_reply_time' => $bg_reply_time,
+            'reply_time' => $reply_time,
         ]);
     }
 
