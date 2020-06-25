@@ -52,6 +52,8 @@ $this->registerCss("
         color: #FFF;
         vertical-align: middle;
     }
+    .bg-green {background-color: #006400 !important;;}
+    .bg-red {background-color: #8B0000 !important;;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -103,11 +105,11 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 
 $server_arr = [
-    '172.17.144.65' => 'MITA - DATABASE',
+    '172.17.144.65' => 'MITA - DB',
     '172.17.144.5' => 'WSUS',
+    '172.17.144.6' => 'MITA - APP',
+    '174.17.144.109' => 'IoT',
     '172.17.144.211' => 'BEA CUKAI',
-    '174.17.144.109' => 'IOT MACHINE',
-    '172.17.144.6' => 'MITA - APPLICATION',
 ];
 ?>
 <div class="text-center" style="border-bottom: 1px solid grey; display: none;">

@@ -22,6 +22,7 @@ use Yii;
  * @property double $kva
  * @property double $capacity
  * @property double $power_consumption
+ * @property double $pressure
  * @property string $system_date_time
  * @property integer $temp_min
  * @property integer $temp_max
@@ -29,6 +30,8 @@ use Yii;
  * @property integer $humi_max
  * @property double $noise_max
  * @property integer $power_max
+ * @property double $pressure_min
+ * @property double $pressure_max
  * @property integer $top_pos
  * @property integer $left_pos
  * @property integer $is_showing
@@ -38,6 +41,11 @@ use Yii;
  * @property string $ref_abs
  * @property string $wh_prod
  * @property string $range_24_jam
+ * @property string $ip_plc
+ * @property integer $temp_over
+ * @property integer $temp_over_old
+ * @property integer $is_critical
+ * @property integer $flags
  * @property string $aliasModel
  */
 abstract class SensorTbl extends \yii\db\ActiveRecord
@@ -68,10 +76,13 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
     {
         return [
             [['map_no'], 'required'],
-            [['map_no', 'temparature', 'humidity', 'noise', 'kw', 'pf', 'kva', 'capacity', 'power_consumption', 'noise_max'], 'number'],
-            [['loc_no', 'Factory', 'location', 'area', 'layout', 'ref_abs', 'wh_prod', 'range_24_jam'], 'string'],
+            [['map_no', 'temparature', 'humidity', 'noise', 'kw', 'pf', 'kva', 'capacity', 'power_consumption', 'pressure', 'noise_max', 'pressure_min', 'pressure_max'], 'number'],
             [['system_date_time'], 'safe'],
-            [['temp_min', 'temp_max', 'humi_min', 'humi_max', 'power_max', 'top_pos', 'left_pos', 'is_showing', 'is_refrigerator', 'priority_no'], 'integer'],
+            [['temp_min', 'temp_max', 'humi_min', 'humi_max', 'power_max', 'top_pos', 'left_pos', 'is_showing', 'is_refrigerator', 'priority_no', 'temp_over', 'temp_over_old', 'is_critical', 'flags'], 'integer'],
+            [['loc_no'], 'string', 'max' => 6],
+            [['Factory', 'location', 'area'], 'string', 'max' => 100],
+            [['layout', 'range_24_jam'], 'string', 'max' => 1],
+            [['ref_abs', 'wh_prod', 'ip_plc'], 'string', 'max' => 50],
             [['map_no'], 'unique']
         ];
     }
@@ -95,6 +106,7 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
             'kva' => 'Kva',
             'capacity' => 'Capacity',
             'power_consumption' => 'Power Consumption',
+            'pressure' => 'Pressure',
             'system_date_time' => 'System Date Time',
             'temp_min' => 'Temp Min',
             'temp_max' => 'Temp Max',
@@ -102,6 +114,8 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
             'humi_max' => 'Humi Max',
             'noise_max' => 'Noise Max',
             'power_max' => 'Power Max',
+            'pressure_min' => 'Pressure Min',
+            'pressure_max' => 'Pressure Max',
             'top_pos' => 'Top Pos',
             'left_pos' => 'Left Pos',
             'is_showing' => 'Is Showing',
@@ -111,6 +125,11 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
             'ref_abs' => 'Ref Abs',
             'wh_prod' => 'Wh Prod',
             'range_24_jam' => 'Range 24 Jam',
+            'ip_plc' => 'Ip Plc',
+            'temp_over' => 'Temp Over',
+            'temp_over_old' => 'Temp Over Old',
+            'is_critical' => 'Is Critical',
+            'flags' => 'Flags',
         ];
     }
 

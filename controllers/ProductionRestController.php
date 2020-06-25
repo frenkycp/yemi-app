@@ -18,6 +18,61 @@ use app\models\VmsPlanActual;
 
 class ProductionRestController extends Controller
 {
+    public function actionVmsUpdateAll($post_date='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $tmp_1 = $this->actionVmsPlanActualUpdate();
+        $tmp_2 = $this->actionVmsUpdateLine();
+        $return_msg = [
+            'Update Actual' => $tmp_1,
+            'Update Line' => $tmp_2
+        ];
+
+        return $return_msg;
+    }
+
+    public function actionVmsUpdateLine()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $tmp_ijazah = VmsPlanActual::find()
+        ->select('ITEM, LINE')
+        //->where('LINE IS NULL')
+        ->groupBy('ITEM, LINE')
+        ->all();
+
+        $tmp_item = [];
+        foreach ($tmp_ijazah as $key => $value) {
+            $tmp_item[] = $value->ITEM;
+        }
+
+        $tmp_serno_master = SernoMaster::find()
+        ->where([
+            'gmc' => $tmp_item
+        ])
+        ->all();
+
+        $count = 0;
+        foreach ($tmp_serno_master as $serno_master) {
+            foreach ($tmp_ijazah as $ijazah) {
+                if ($serno_master->gmc == $ijazah->ITEM && $serno_master->line != $ijazah->LINE) {
+                    VmsPlanActual::updateAll(['LINE' => $serno_master->line, 'LINE_LAST_UPDATE' => $this_time], ['ITEM' => $serno_master->gmc]);
+                    $count++;
+                }
+            }
+        }
+
+        $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+        $total_minutes = round($process_time / 60, 1);
+
+        return 'Update Success...(' . $count . '/' . count($tmp_item) . ') - ' . $total_minutes . ' minute(s)';
+    }
+
     public function actionVmsPlanActualUpdate($value='')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

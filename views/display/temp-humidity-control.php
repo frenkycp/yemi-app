@@ -15,7 +15,7 @@ $this->title = $title;
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $color = 'ForestGreen';
 
-if ($_GET['category'] == 4) {
+if ($_GET['category'] == 4 || $_GET['category'] == 5) {
     $this->registerCss("
         .container {width: auto;}
         .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
@@ -114,6 +114,12 @@ echo '</pre>';*/
             if ($params_val > $value->power_max) {
                 $temp_class = ' bg-red-active';
             }
+        } elseif ($category == 5) {
+            //$params_val = $value->humidity . '<small>%</small>';
+            $params_val = round($value->pressure, 1);
+            if ($params_val < $value->pressure_min || $params_val > $value->pressure_max) {
+                $temp_class = ' bg-red-active';
+            }
         }
 
         $widget_class = 'temp-widget';
@@ -137,6 +143,9 @@ echo '</pre>';*/
                 $content_temp = '<div class="' . $widget_class . ' text-center' . $temparature_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . ($value->left_pos - 90) . 'px;"><div style="padding: 0px 4px;">' . $tmp_temperature->temparature . '&deg; C</div></div>';
                 echo $params_val == null ? '' : Html::a($content_temp, ['power-consumption-chart', 'map_no' => 41], ['title' => strtoupper($value->area)]);
             }
+        } elseif ($category == 5) {
+            $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . $params_val . ' <span style="font-size: 0.6em;">bar</span></div></div>';
+            echo $params_val == null ? '' : Html::a($content, ['air-pressure-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         } else {
             echo $params_val == null ? '' : Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         }

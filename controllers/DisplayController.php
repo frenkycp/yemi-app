@@ -140,9 +140,88 @@ use app\models\IjazahPlanActual;
 use app\models\WorkingDaysView;
 use app\models\PabxLog;
 use app\models\DnsStatus;
+use app\models\VmsPlanActual;
 
 class DisplayController extends Controller
 {
+    public function actionVmsDailyAccumulation()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $this_period = date('Ym');
+        $today = date('Y-m-d');
+
+        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
+        $model = new \yii\base\DynamicModel([
+            'period', 'line'
+        ]);
+        $model->addRule(['period', 'line'], 'required');
+        $model->period = $this_period;
+        $model->line = 'HS';
+
+        $line_dropdown = ArrayHelper::map(SernoMaster::find()
+        ->select('line')
+        ->where('line != \'\'AND line != \'MIS\'')
+        ->groupBy('line')
+        ->all(), 'line', 'line');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_vms = VmsPlanActual::find()
+        ->select([
+            'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+        ])
+        ->where([
+            'VMS_PERIOD' => $model->period,
+            'LINE' => $model->line
+        ])
+        ->groupBy('VMS_DATE')
+        ->orderBy('VMS_DATE')
+        ->all();
+
+        $tmp_data_plan = $tmp_data_actual = $data = [];
+        $tmp_total_plan = $tmp_total_actual = 0;
+        foreach ($tmp_vms as $key => $value) {
+            $proddate = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
+            $tmp_total_plan += $value->PLAN_QTY;
+            if ($value->VMS_DATE > $today) {
+                $tmp_total_actual += $value->PLAN_QTY;
+            } else {
+                $tmp_total_actual += $value->ACTUAL_QTY;
+            }
+            
+            $tmp_data_plan[] = [
+                'x' => $proddate,
+                'y' => $tmp_total_plan,
+            ];
+            $tmp_data_actual[] = [
+                'x' => $proddate,
+                'y' => $tmp_total_actual,
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'PLAN',
+                'data' => $tmp_data_plan
+            ], [
+                'name' => 'ACTUAL',
+                'data' => $tmp_data_actual
+            ],
+        ];
+
+        return $this->render('vms-daily-accumulation', [
+            'model' => $model,
+            'data' => $data,
+            'line_dropdown' => $line_dropdown,
+            'period_dropdown' => $period_dropdown,
+        ]);
+    }
+
     public function actionNetworkStatusData($no)
     {
         if ($no == 1) {
@@ -6954,6 +7033,70 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionAirPressureChart()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'map_no', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $data = $tmp_data_pressure = [];
+
+        $model->map_no = $_GET['map_no'];
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $data_dummy = SensorLog::find()
+        ->where([
+            'AND',
+            ['>=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->from_date . ' 00:00:01'))],
+            ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
+        ])
+        ->andWhere(['map_no' => $model->map_no])
+        ->asArray()
+        ->all();
+
+        foreach ($data_dummy as $value) {
+            $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
+            if ($value['pressure'] > 0) {
+                $tmp_data_pressure[] = [
+                    'x' => $proddate,
+                    'y' => (float)$value['pressure']
+                ];
+            }
+            
+        }
+
+        $data = [
+            'pressure' => [
+                [
+                    'name' => 'PRESSURE',
+                    'data' => $tmp_data_pressure,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    //'color' => 'white'
+                ],
+            ],
+        ];
+
+        $sensor_data = SensorTbl::find()
+        ->where([
+            'map_no' => $model->map_no
+        ])
+        ->one();
+
+        return $this->render('air-pressure-chart', [
+            'data' => $data,
+            'model' => $model,
+            'sensor_data' => $sensor_data,
+        ]);
+    }
+
     public function actionPowerConsumptionChart()
     {
         $this->layout = 'clean';
@@ -7136,6 +7279,14 @@ class DisplayController extends Controller
                 'breadcrumbs_title' => 'Power Consumption Monitoring'
             ];
             $custom_title = 'Power Consumption<br/>Monitoring';
+        } elseif ($category == 5) {
+            $title = [
+                //'page_title' => 'Humidity Monitoring <small style="color: white; opacity: 0.8;" id="last-update"> Last Update : ' . date('Y-m-d H:i:s') . '</small><span class="japanesse text-green"></span>',
+                'page_title' => null,
+                'tab_title' => 'Air Pressure Monitoring',
+                'breadcrumbs_title' => 'Air Pressure Monitoring'
+            ];
+            $custom_title = 'Air Pressure<br/>Monitoring';
         }
         
         $data = SensorTbl::find()->where([
