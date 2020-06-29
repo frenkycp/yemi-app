@@ -186,7 +186,7 @@ echo '</pre>';*/
                     'series' => [
                         
                         'dataLabels' => [
-                            'enabled' => true
+                            'enabled' => false
                         ],
                         /*'lineWidth' => 1,
                         'marker' => [

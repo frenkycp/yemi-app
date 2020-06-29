@@ -86,7 +86,7 @@ echo '</pre>';*/
 ?>
 <div class="row" style="padding: 0px 20px;">
     <div class="col-md-12 text-center" style="background-color: rgba(255, 255, 255, 0.05); border: 2px solid grey; border-radius: 20px 20px 0px 0px;">
-        <span style="font-size: 22em; color: white;">
+        <span style="font-size: 18em; color: white;">
             <?= $title; ?>
         </span>
     </div>
@@ -144,7 +144,7 @@ echo '</pre>';*/
                                             $('#speed').html(jsondata.reply_roundtriptime);
                                             $('#bg-mbps').attr('class', 'widget-content ' + jsondata.bg_reply_time);
                                         });
-                                    }, 3000);
+                                    }, 2000);
                                 }"),
                             ],
                         ],
@@ -193,8 +193,8 @@ echo '</pre>';*/
                                 ]
                             ],
                             'allowDecimals' => false,
-                            'max' => 150,
-                            'min' => 70,
+                            'max' => 130,
+                            'min' => 10,
                             'tickInterval' => 10
                         ],
                         'tooltip' => [
@@ -213,7 +213,7 @@ echo '</pre>';*/
                         'plotOptions' => [
                             'spline' => [
                                 'marker' => [
-                                    'radius' => 5
+                                    'radius' => 4
                                 ],
                             ],
                             

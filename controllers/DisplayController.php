@@ -258,6 +258,18 @@ class DisplayController extends Controller
                 $speed_mbps = 0;
                 $reply_roundtriptime = 9999;
             }
+        } elseif ($no == 3) {
+            $title = 'IT INVENTORY';
+            $vpn1 = DnsStatus::findOne('216.239.38.120');
+            if ($vpn1->server_on_off == 'ON-LINE') {
+                $status = 1;
+                $speed_mbps = round($vpn1->download_speed_Mbps, 1);
+                $reply_roundtriptime = round($vpn1->reply_roundtriptime);
+            } else {
+                $status = 0;
+                $speed_mbps = 0;
+                $reply_roundtriptime = 9999;
+            }
         }
 
         if ($speed_mbps == 0) {
@@ -323,6 +335,20 @@ class DisplayController extends Controller
         } elseif ($no == 2) {
             $title = 'INTERNET';
             $vpn1 = DnsStatus::findOne('google.com');
+            if ($vpn1->server_on_off == 'ON-LINE') {
+                $status = 1;
+                $bg_class = 'bg-green-active';
+                $speed_mbps = round($vpn1->download_speed_Mbps, 1);
+                $reply_time = round($vpn1->reply_roundtriptime, 1);
+            } else {
+                $status = 0;
+                $bg_class = 'bg-red-active';
+                $speed_mbps = 0;
+                $reply_time = 9999;
+            }
+        } elseif ($no == 3) {
+            $title = 'IT INVENTORY';
+            $vpn1 = DnsStatus::findOne('216.239.38.120');
             if ($vpn1->server_on_off == 'ON-LINE') {
                 $status = 1;
                 $bg_class = 'bg-green-active';
