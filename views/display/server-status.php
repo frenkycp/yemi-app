@@ -52,8 +52,9 @@ $this->registerCss("
         color: #FFF;
         vertical-align: middle;
     }
-    .bg-green {background-color: #006400 !important;;}
-    .bg-red {background-color: #8B0000 !important;;}
+    .bg-green {background-color: #006400 !important;}
+    .bg-red {background-color: #8B0000 !important;}
+    .text-red, .text-green {text-shadow: -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -81,11 +82,11 @@ $this->registerJs("
                     if(val.status == 'ON-LINE'){
                         $('#timer_' + index).css('display', 'none');
                         $('#usage_' + index).css('display', '');
-                        $('#header_' + index).attr('class', 'bg-green')
+                        $('#header_' + index).attr('class', 'text-green')
                     } else {
                         $('#timer_' + index).css('display', '');
                         $('#usage_' + index).css('display', 'none');
-                        $('#header_' + index).attr('class', 'bg-red')
+                        $('#header_' + index).attr('class', 'text-red')
                     }
                 });
             },
@@ -109,7 +110,7 @@ $server_arr = [
     '172.17.144.5' => 'WSUS',
     '172.17.144.6' => 'MITA - APP',
     '174.17.144.109' => 'IoT',
-    '172.17.144.211' => 'BEA CUKAI',
+    '172.17.144.211' => 'IT INVENTORY',
 ];
 ?>
 <div class="text-center" style="border-bottom: 1px solid grey; display: none;">
@@ -180,7 +181,7 @@ $server_arr = [
         ];
         ?>
         <div class="col-md-6 text-center" style="margin-bottom: 20px;">
-            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? ' bg-green' : ' bg-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 5px; font-weight: bold; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">
+            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? ' text-green' : ' text-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 10px; font-weight: bold;">
                 <?= isset($server_arr[$value->server_ip]) ? $server_arr[$value->server_ip] : $value->server_name; ?>
             </div>
             

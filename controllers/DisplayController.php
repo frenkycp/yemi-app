@@ -347,7 +347,7 @@ class DisplayController extends Controller
                 $reply_time = 9999;
             }
         } elseif ($no == 3) {
-            $title = 'IT INVENTORY';
+            $title = 'BEA CUKAI';
             $vpn1 = DnsStatus::findOne('216.239.38.120');
             if ($vpn1->server_on_off == 'ON-LINE') {
                 $status = 1;
