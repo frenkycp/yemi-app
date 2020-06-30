@@ -141,9 +141,27 @@ use app\models\WorkingDaysView;
 use app\models\PabxLog;
 use app\models\DnsStatus;
 use app\models\VmsPlanActual;
+use app\models\ServerBackupCurrent;
 
 class DisplayController extends Controller
 {
+    public function actionLastBackup()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $yesterday = date('Y-m-d', strtotime(' -1 day'));
+
+        $db_arr = ServerBackupCurrent::find()->select([
+            'database_name', 'last_backup',
+            'total' => 'SUM(CASE WHEN FORMAT(last_backup, \'yyyy-MM-dd\') = \'' . $yesterday . '\' THEN 1 ELSE 0 END)'
+        ])->groupBy('database_name, last_backup')->asArray()->all();
+
+
+        return $this->render('last-backup', [
+            'db_arr' => $db_arr
+        ]);
+    }
+
     public function actionVmsDailyAccumulation()
     {
         $this->layout = 'clean';
