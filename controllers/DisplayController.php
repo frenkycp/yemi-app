@@ -820,7 +820,7 @@ class DisplayController extends Controller
         ])
         ->all(), 'period', 'working_days');
 
-        $bu_dropdown_arr = ArrayHelper::map(IjazahPlanActual::find()->select('BU')->groupBY('BU')->orderBy('BU')->all(), 'BU', 'BU');
+        $bu_dropdown_arr = ArrayHelper::map(IjazahPlanActual::find()->select('BU')->where('BU IS NOT NULL')->groupBY('BU')->orderBy('BU')->all(), 'BU', 'BU');
         $bu_filter_arr = [];
         foreach ($bu_dropdown_arr as $key => $value) {
             $bu_filter_arr[] = $value;

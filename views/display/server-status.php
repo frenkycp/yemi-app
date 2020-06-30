@@ -63,7 +63,7 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 300000); // milliseconds
+      setTimeout(\"refreshPage();\", 600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -82,11 +82,11 @@ $this->registerJs("
                     if(val.status == 'ON-LINE'){
                         $('#timer_' + index).css('display', 'none');
                         $('#usage_' + index).css('display', '');
-                        $('#header_' + index).attr('class', 'text-green')
+                        //$('#header_' + index).attr('class', 'text-green')
                     } else {
                         $('#timer_' + index).css('display', '');
                         $('#usage_' + index).css('display', 'none');
-                        $('#header_' + index).attr('class', 'text-red')
+                        //$('#header_' + index).attr('class', 'text-red')
                     }
                 });
             },
@@ -181,7 +181,7 @@ $server_arr = [
         ];
         ?>
         <div class="col-md-6 text-center" style="margin-bottom: 20px;">
-            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? ' text-green' : ' text-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 10px; font-weight: bold;">
+            <div id="header_<?= $value->server_mac_address; ?>" class="<?= ''; //$value->server_on_off == 'ON-LINE' ? ' text-green' : ' text-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 10px; font-weight: bold; color: white;">
                 <?= isset($server_arr[$value->server_ip]) ? $server_arr[$value->server_ip] : $value->server_name; ?>
             </div>
             

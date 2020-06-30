@@ -15,9 +15,62 @@ use app\models\FiscalTbl;
 use app\models\SernoMaster;
 use app\models\IjazahProgress;
 use app\models\VmsPlanActual;
+use app\models\SunfishViewEmp;
+use app\models\LiveCookingMember;
 
 class ProductionRestController extends Controller
 {
+    public function actionPriorityModelUpdate($value='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        
+    }
+
+    public function actionUpdateLiveCookingMember()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $tmp_karyawan = SunfishViewEmp::find()
+        ->where(['status' => 1])
+        ->andWhere('PATINDEX(\'YE%\', Emp_no) > 0')
+        ->all();
+
+        $tmp_member = LiveCookingMember::find()->all();
+
+        $bulkInsertArray = [];
+        $columnNameArray = ['NIK', 'NAMA_KARYAWAN'];
+
+        foreach ($tmp_karyawan as $karyawan) {
+            $is_found = false;
+            $nik = $nama_karyawan = '';
+            foreach ($tmp_member as $member) {
+                if ($member->NIK == $karyawan->Emp_no) {
+                    $is_found = true;
+                }
+            }
+            if ($is_found == false) {
+                $bulkInsertArray[] = [$karyawan->Emp_no, strtoupper($karyawan->Full_name)];
+            }
+        }
+
+        $total_insert = count($bulkInsertArray);
+        if($total_insert > 0){
+            $insertCount = \Yii::$app->db_sql_server->createCommand()
+            ->batchInsert(LiveCookingMember::getTableSchema()->fullName, $columnNameArray, $bulkInsertArray)
+            ->execute();
+        }
+
+        $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+        $total_minutes = round($process_time / 60, 1);
+
+        return 'Update Success...(' . $total_insert . ' new data) - ' . $total_minutes . ' minute(s)';
+    }
+
     public function actionVmsUpdateAll($post_date='')
     {
         date_default_timezone_set('Asia/Jakarta');
