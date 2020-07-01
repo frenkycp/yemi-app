@@ -85,7 +85,7 @@ $this->registerJs("
                     if(val.status == 'ON-LINE'){
                         $('#timer_' + index).css('display', 'none');
                         $('#usage_' + index).css('display', '');
-                        $('#header_' + index).attr('class', 'text-white bg-red')
+                        $('#header_' + index).attr('class', '')
                     } else {
                         $('#timer_' + index).css('display', '');
                         $('#usage_' + index).css('display', 'none');
