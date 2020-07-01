@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Last Backup <span class="japanesse light-green"></span>',
-    'tab_title' => 'Last Backup',
-    'breadcrumbs_title' => 'Last Backup'
+    'page_title' => 'DATABASE BACKUP <span class="japanesse light-green"></span>',
+    'tab_title' => 'DATABASE BACKUP',
+    'breadcrumbs_title' => 'DATABASE BACKUP'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Jakarta');
 $this->registerCss("
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 0.4em; text-align: center; display: none;}
+    .content-header {color: white; font-size: 2em; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
