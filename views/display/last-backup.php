@@ -36,6 +36,9 @@ $this->registerCss("
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
+    .info-box {
+        color: white;
+    }
     .info-box-icon {
         font-size: 180px;
         height: 250px;
@@ -43,15 +46,18 @@ $this->registerCss("
         line-height: 270px;
     }
     .info-box-content {
-        line-height: 180px;
+        line-height: 250px;
         margin-left: 250px;
         height: 250px;
+        background-color: rgba(0, 0, 0, 0.8);
     }
     .info-box-text {
-        font-size: 80px;
-        text-align: center;
+        font-size: 120px;
+        //text-align: center;
         line-height: unset;
-        letter-spacing: 10px;
+        letter-spacing: 5px;
+        font-weight: bold;
+        padding-left: 30px;
     }
     .info-box-number {
         text-align: center;
@@ -59,6 +65,8 @@ $this->registerCss("
         font-weight: normal;
         vertical-align: bottom;
         line-height: 0px;
+        color: grey;
+        display: none;
     }
 ");
 
@@ -78,15 +86,21 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($db_arr);
 echo '</pre>';*/
 ?>
-<div class="row">
+<div class="row" style="padding: 30px;">
 <?php foreach ($db_arr as $key => $value): ?>
     
-    <div class="col-md-6">
+    <div class="col-md-12" style="padding-bottom: 30px;">
         <div class="info-box">
-            <span class="info-box-icon <?= $value['total'] > 0 ? 'bg-green' : 'bg-red'; ?>"><i class="glyphicon glyphicon-cloud-download"></i></span>
+            <?php
+            if ($value['total'] > 0) {
+                echo '<span class="info-box-icon bg-green"><i class="fa fa-calendar-check-o"></i></span>';
+            } else {
+                echo '<span class="info-box-icon bg-red"><i class="fa fa-calendar-times-o"></i></span>';
+            }
+            ?>
 
             <div class="info-box-content">
-                <span class="info-box-text"><?= $value['database_name']; ?></span>
+                <span class="info-box-text"><?= str_replace('-', ' ', $value['database_name']); ?></span>
                 <span class="info-box-number">Last Update : <?= date('Y-m-d H:i:s', strtotime($value['last_backup'])); ?></span>
             </div>
             <!-- /.info-box-content -->

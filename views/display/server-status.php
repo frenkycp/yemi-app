@@ -52,9 +52,12 @@ $this->registerCss("
         color: #FFF;
         vertical-align: middle;
     }
-    .bg-green {background-color: #006400 !important;}
-    .bg-red {background-color: #8B0000 !important;}
-    .text-red, .text-green {text-shadow: -2px -2px 0 #FFF, 2px -2px 0 #FFF, -2px 2px 0 #FFF, 2px 2px 0 #FFF;}
+    .text-green {color: #00ff8a !important;}
+    .text-red {color: #ff5a45 !important;}
+    .text-white {color: white;}
+    .text-black {color: white;}
+    .bg-red {background-color: #ab1300 !important;}
+    //.text-red, .text-green, {text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -82,11 +85,11 @@ $this->registerJs("
                     if(val.status == 'ON-LINE'){
                         $('#timer_' + index).css('display', 'none');
                         $('#usage_' + index).css('display', '');
-                        //$('#header_' + index).attr('class', 'text-green')
+                        $('#header_' + index).attr('class', 'text-white bg-red')
                     } else {
                         $('#timer_' + index).css('display', '');
                         $('#usage_' + index).css('display', 'none');
-                        //$('#header_' + index).attr('class', 'text-red')
+                        $('#header_' + index).attr('class', 'text-white bg-red')
                     }
                 });
             },
@@ -181,11 +184,11 @@ $server_arr = [
         ];
         ?>
         <div class="col-md-6 text-center" style="margin-bottom: 20px;">
-            <div id="header_<?= $value->server_mac_address; ?>" class="<?= ''; //$value->server_on_off == 'ON-LINE' ? ' text-green' : ' text-red'; ?>" style="border: 1px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 10px; font-weight: bold; color: white;">
+            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? '' : ' text-white bg-red'; ?>" style="border: 3px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 12px; font-weight: bold; color: white; background-color: rgba(0, 120, 0, 0.4);">
                 <?= isset($server_arr[$value->server_ip]) ? $server_arr[$value->server_ip] : $value->server_name; ?>
             </div>
             
-            <div style="border: 1px solid white; min-height: 221px; border-radius: 0px 0px 10px 10px; border-top: unset;">
+            <div style="border: 3px solid white; min-height: 221px; border-radius: 0px 0px 10px 10px; border-top: unset;">
                 <div class="text-center" style="width: 100%; padding: 10px;">
                     <div id="usage_<?= $value->server_mac_address; ?>" class="row" style="<?= $value->server_on_off == 'ON-LINE' ? '' : 'display: none;'; ?>">
                         <div class="col-md-4">

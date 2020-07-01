@@ -207,7 +207,7 @@ class DisplayController extends Controller
             $proddate = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
             $tmp_total_plan += $value->PLAN_QTY;
             if ($value->VMS_DATE > $today) {
-                $tmp_total_actual += $value->PLAN_QTY;
+                $tmp_total_actual = null;
             } else {
                 $tmp_total_actual += $value->ACTUAL_QTY;
             }

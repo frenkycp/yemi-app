@@ -8,7 +8,7 @@ use dmstr\bootstrap\Tabs;
 use app\models\search\DprGmcEffDataSearch;
 use app\models\SernoMp;
 use app\models\SernoInput;
-use app\models\HakAkses;
+use app\models\HakAksesPlus;
 use app\models\Karyawan;
 
 class DprGmcEffDataController extends Controller
@@ -47,9 +47,9 @@ class DprGmcEffDataController extends Controller
 
 	public function getLineArray()
 	{
-		$data_arr = HakAkses::find()
+		$data_arr = HakAksesPlus::find()
 		->where([
-			'level_akses' => '4'
+			'level_akses' => '1a'
 		])
 		->andWhere(['<>', 'hak_akses', 'MIS'])
 		->all();
