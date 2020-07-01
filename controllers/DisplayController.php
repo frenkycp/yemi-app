@@ -153,7 +153,7 @@ class DisplayController extends Controller
 
         $db_arr = ServerBackupCurrent::find()->select([
             'database_name', 'last_backup',
-            'total' => 'SUM(CASE WHEN FORMAT(last_backup, \'yyyy-MM-dd\') = \'' . $yesterday . '\' THEN 1 ELSE 0 END)'
+            'total' => 'SUM(CASE WHEN FORMAT(last_backup, \'yyyy-MM-dd\') >= \'' . $yesterday . '\' THEN 1 ELSE 0 END)'
         ])->groupBy('database_name, last_backup')->asArray()->all();
 
 

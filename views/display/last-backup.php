@@ -86,7 +86,7 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($db_arr);
 echo '</pre>';*/
 ?>
-<div class="row" style="padding: 30px;">
+<div class="row" style="padding: 20px;">
 <?php foreach ($db_arr as $key => $value): ?>
     
     <div class="col-md-12" style="padding-bottom: 30px;">
