@@ -25,7 +25,7 @@ $this->registerCss("
     // .box-header .box-title{font-size: 2em;}
     .container {width: auto;}
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
-    body {background-color: #ecf0f5; font-family: Arial, Helvetica, sans-serif;}
+    body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
     .small-box .icon {top: 1px;}
@@ -184,7 +184,7 @@ $server_arr = [
         ];
         ?>
         <div class="col-md-6 text-center" style="margin-bottom: 20px;">
-            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? '' : ' text-white bg-red'; ?>" style="border: 3px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 12px; font-weight: bold; color: white; background-color: rgba(0, 120, 0, 0.4);">
+            <div id="header_<?= $value->server_mac_address; ?>" class="<?= $value->server_on_off == 'ON-LINE' ? '' : ' text-white bg-red'; ?>" style="border: 3px solid white; border-radius: 10px 10px 0px 0px; font-size: 6em; padding-left: 10px; letter-spacing: 15px; color: white; background-color: rgba(0, 120, 0, 0.25);">
                 <?= isset($server_arr[$value->server_ip]) ? $server_arr[$value->server_ip] : $value->server_name; ?>
             </div>
             

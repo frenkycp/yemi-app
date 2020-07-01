@@ -23,12 +23,12 @@ date_default_timezone_set('Asia/Jakarta');
 $this->registerCss("
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 2em; text-align: center;}
     //.box-body {background-color: #000;}
+    .content-header {display: none;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
     .container {width: auto;}
-    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; text-align: center; color: white;}
     body {background-color: #ecf0f5; font-family: Arial, Helvetica, sans-serif;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
@@ -49,14 +49,13 @@ $this->registerCss("
         line-height: 250px;
         margin-left: 250px;
         height: 250px;
-        background-color: rgba(0, 0, 0, 0.8);
+        background-color: rgba(0, 0, 0, 0.95);
     }
     .info-box-text {
         font-size: 120px;
         //text-align: center;
         line-height: unset;
         letter-spacing: 5px;
-        font-weight: bold;
         padding-left: 30px;
     }
     .info-box-number {
@@ -86,10 +85,10 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($db_arr);
 echo '</pre>';*/
 ?>
-<div class="row" style="padding: 20px;">
+<div class="row" style="padding: 10px;">
 <?php foreach ($db_arr as $key => $value): ?>
     
-    <div class="col-md-12" style="padding-bottom: 30px;">
+    <div class="col-md-12" style="padding-bottom: 20px;">
         <div class="info-box">
             <?php
             if ($value['total'] > 0) {
