@@ -38,6 +38,8 @@ $this->registerCss("
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
     .info-box {
         color: white;
+        border: 2px solid white;
+        border-radius: 5px;
     }
     .info-box-icon {
         font-size: 180px;
@@ -49,13 +51,13 @@ $this->registerCss("
         line-height: 250px;
         margin-left: 250px;
         height: 250px;
-        background-color: rgba(0, 0, 0, 0.95);
+        background-color: rgba(0, 0, 0, 0.9);
     }
     .info-box-text {
         font-size: 120px;
         //text-align: center;
         line-height: unset;
-        letter-spacing: 5px;
+        letter-spacing: 10px;
         padding-left: 30px;
     }
     .info-box-number {
@@ -85,6 +87,11 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($db_arr);
 echo '</pre>';*/
 ?>
+<div class="row">
+    <div class="col-md-12 text-center">
+        <span class="" style="color: white; font-size: 10em; letter-spacing: 10px;"><u>BACKUP</u></span>
+    </div>
+</div>
 <div class="row" style="padding: 10px;">
 <?php foreach ($db_arr as $key => $value): ?>
     

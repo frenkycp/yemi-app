@@ -405,7 +405,7 @@ $server_arr = [
                                     ],
                                     'series' => [
                                         [
-                                            'name' => 'Random Data',
+                                            'name' => 'Reply Round Trip Time',
                                             'data' => new JsExpression("(function () {
                                                 // generate an array of random data
                                                 var data = [], rnd,
