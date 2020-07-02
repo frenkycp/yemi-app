@@ -42,7 +42,7 @@ return Model::scenarios();
 public function search($params)
 {
 $query = WipEffTbl::find()->where([
-      'child_analyst' => ['WM03', 'WI01', 'WI02']
+      'child_analyst' => ['WM03', 'WI01', 'WI02', 'WI03']
 ]);
 
 $dataProvider = new ActiveDataProvider([

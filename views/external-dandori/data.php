@@ -87,7 +87,7 @@ $columns = [
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filter' => ArrayHelper::map(app\models\WipLocation::find()->select('child_analyst, child_analyst_desc')->where(['child_analyst' => ['WM03', 'WI01', 'WI02']])->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'),
+        'filter' => ArrayHelper::map(app\models\WipLocation::find()->select('child_analyst, child_analyst_desc')->where(['child_analyst' => ['WM03', 'WI01', 'WI02', 'WI03']])->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
