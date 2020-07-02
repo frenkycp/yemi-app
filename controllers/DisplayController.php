@@ -1831,7 +1831,7 @@ class DisplayController extends Controller
     {
         date_default_timezone_set('Asia/Jakarta');
         $item = MaskerPrdData::find()->where(['part_no' => $part_no])->one();
-        $tmp_data_arr = MaskerPrdOut::find()->where(['DATE(time)' => $post_date, 'part_no' => $part_no])->orderBy('time')->all();
+        $tmp_data_arr = MaskerPrdOut::find()->where(['DATE(datetime_out)' => $post_date, 'part_no' => $part_no])->orderBy('datetime_out')->all();
 
         $data = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -1855,10 +1855,10 @@ class DisplayController extends Controller
             $data .= '
                 <tr class="' . $bg_class . '">
                     <td class="text-center">' . $no . '</td>
-                    <td class="text-center">' . $value->time . '</td>
-                    <td class="text-center">' . $value->jml_kb . '</td>
-                    <td>' . $value->line . '</td>
-                    <td>' . $value->ket_kb . '</td>
+                    <td class="text-center">' . $value->datetime_out . '</td>
+                    <td class="text-center">' . $value->jml_out . '</td>
+                    <td>' . $value->requestor_name . '</td>
+                    <td>' . $value->note_out . '</td>
                 </tr>
             ';
             $no++;
@@ -1889,22 +1889,23 @@ class DisplayController extends Controller
 
         if ($model->load($_GET)) {
             $tmp_stock = MaskerPrdStock::find()->where(['part_no' => $model->item])->one();
-            $stock = $tmp_stock->qty;
+            $stock = $tmp_stock->qty_stock;
 
             $masker_in = MaskerPrdIn::find()
             ->select([
-                'post_date' => 'DATE(tgl)',
+                'post_date' => 'DATE(datetime_incoming)',
                 'total' => 'SUM(qty)'
             ])
             ->where([
                 'AND',
-                ['>=', 'DATE(tgl)', $model->from_date],
-                ['<=', 'DATE(tgl)', $model->to_date]
+                ['>=', 'DATE(datetime_incoming)', $model->from_date],
+                ['<=', 'DATE(datetime_incoming)', $model->to_date]
             ])
-            ->andWhere(['part_number' => $model->item])
-            ->groupBy('DATE(tgl)')
-            ->orderBy('DATE(tgl)')
+            ->andWhere(['part_no' => $model->item])
+            ->groupBy('DATE(datetime_incoming)')
+            ->orderBy('DATE(datetime_incoming)')
             ->all();
+
             foreach ($masker_in as $key => $value) {
                 $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
                 $tmp_data_in[] = [
@@ -1919,18 +1920,19 @@ class DisplayController extends Controller
 
             $masker_out = MaskerPrdOut::find()
             ->select([
-                'post_date' => 'DATE(time)',
-                'total' => 'SUM(jml_kb)'
+                'post_date' => 'DATE(datetime_out)',
+                'total' => 'SUM(jml_out)'
             ])
             ->where([
                 'AND',
-                ['>=', 'DATE(time)', $model->from_date],
-                ['<=', 'DATE(time)', $model->to_date]
+                ['>=', 'DATE(datetime_out)', $model->from_date],
+                ['<=', 'DATE(datetime_out)', $model->to_date]
             ])
             ->andWhere(['part_no' => $model->item])
-            ->groupBy('DATE(time)')
-            ->orderBy('DATE(time)')
+            ->groupBy('DATE(datetime_out)')
+            ->orderBy('DATE(datetime_out)')
             ->all();
+
             foreach ($masker_out as $key => $value) {
                 $proddate = (strtotime($value->post_date . " +7 hours") * 1000);
                 $tmp_data_out[] = [

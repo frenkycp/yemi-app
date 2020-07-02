@@ -7,14 +7,17 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "tb_incoming".
+ * This is the base-model class for table "tbl_barang_incoming".
  *
- * @property integer $pk
- * @property string $tgl
- * @property string $part_number
+ * @property integer $id_barang_incoming
+ * @property string $datetime_incoming
+ * @property string $part_no
+ * @property string $part_name
+ * @property string $category
  * @property double $plan
  * @property double $qty
- * @property string $tgl_exp
+ * @property string $exp_date
+ * @property string $serno
  * @property string $aliasModel
  */
 abstract class MaskerPrdIn extends \yii\db\ActiveRecord
@@ -27,7 +30,7 @@ abstract class MaskerPrdIn extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'tb_incoming';
+        return 'tbl_barang_incoming';
     }
 
     /**
@@ -44,9 +47,10 @@ abstract class MaskerPrdIn extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tgl', 'tgl_exp'], 'safe'],
+            [['datetime_incoming', 'part_no', 'part_name', 'category', 'plan', 'qty', 'serno'], 'required'],
+            [['datetime_incoming', 'exp_date'], 'safe'],
             [['plan', 'qty'], 'number'],
-            [['part_number'], 'string', 'max' => 50]
+            [['part_no', 'part_name', 'category', 'serno'], 'string', 'max' => 100]
         ];
     }
 
@@ -56,12 +60,15 @@ abstract class MaskerPrdIn extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'pk' => 'Pk',
-            'tgl' => 'Tgl',
-            'part_number' => 'Part Number',
+            'id_barang_incoming' => 'Id Barang Incoming',
+            'datetime_incoming' => 'Datetime Incoming',
+            'part_no' => 'Part No',
+            'part_name' => 'Part Name',
+            'category' => 'Category',
             'plan' => 'Plan',
             'qty' => 'Qty',
-            'tgl_exp' => 'Tgl Exp',
+            'exp_date' => 'Exp Date',
+            'serno' => 'Serno',
         ];
     }
 

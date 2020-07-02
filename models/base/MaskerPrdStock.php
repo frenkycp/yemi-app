@@ -7,15 +7,17 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "barang_in".
+ * This is the base-model class for table "tbl_barang_in".
  *
  * @property integer $id_barang_in
- * @property string $pk
  * @property string $part_no
- * @property string $tggl_msk
- * @property string $tgl_exp
- * @property double $qty_incoming
- * @property double $qty
+ * @property string $part_name
+ * @property string $category
+ * @property string $exp_date
+ * @property string $serno
+ * @property double $qty_in
+ * @property double $qty_stock
+ * @property string $datetime_in
  * @property string $aliasModel
  */
 abstract class MaskerPrdStock extends \yii\db\ActiveRecord
@@ -28,7 +30,7 @@ abstract class MaskerPrdStock extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'barang_in';
+        return 'tbl_barang_in';
     }
 
     /**
@@ -45,11 +47,10 @@ abstract class MaskerPrdStock extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pk', 'part_no', 'tggl_msk', 'qty_incoming', 'qty'], 'required'],
-            [['tggl_msk', 'tgl_exp'], 'safe'],
-            [['qty_incoming', 'qty'], 'number'],
-            [['pk'], 'string', 'max' => 50],
-            [['part_no'], 'string', 'max' => 100]
+            [['part_no', 'part_name', 'category', 'serno', 'qty_in', 'qty_stock', 'datetime_in'], 'required'],
+            [['exp_date', 'datetime_in'], 'safe'],
+            [['qty_in', 'qty_stock'], 'number'],
+            [['part_no', 'part_name', 'category', 'serno'], 'string', 'max' => 100]
         ];
     }
 
@@ -60,12 +61,14 @@ abstract class MaskerPrdStock extends \yii\db\ActiveRecord
     {
         return [
             'id_barang_in' => 'Id Barang In',
-            'pk' => 'Pk',
             'part_no' => 'Part No',
-            'tggl_msk' => 'Tggl Msk',
-            'tgl_exp' => 'Tgl Exp',
-            'qty_incoming' => 'Qty Incoming',
-            'qty' => 'Qty',
+            'part_name' => 'Part Name',
+            'category' => 'Category',
+            'exp_date' => 'Exp Date',
+            'serno' => 'Serno',
+            'qty_in' => 'Qty In',
+            'qty_stock' => 'Qty Stock',
+            'datetime_in' => 'Datetime In',
         ];
     }
 

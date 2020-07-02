@@ -7,24 +7,31 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "detilkeluarbarang".
+ * This is the base-model class for table "tbl_barang_out".
  *
- * @property integer $kd_det_kb
- * @property string $kd_kb
+ * @property integer $id_barang_out
+ * @property string $slip_out
  * @property string $part_no
  * @property string $part_name
- * @property double $jml_kb
- * @property string $satuan_kb
- * @property string $ket_kb
- * @property string $line
- * @property integer $status
- * @property string $time
- * @property string $sec
- * @property integer $id_barang_in
- * @property string $tgl_exp
- * @property string $starttime
- * @property string $endtime
- * @property double $totaltime
+ * @property string $category
+ * @property string $exp_out
+ * @property string $serno_out
+ * @property double $jml_out
+ * @property string $satuan_out
+ * @property string $note_out
+ * @property string $datetime_out
+ * @property string $starttime_out
+ * @property string $endtime_out
+ * @property double $totaltime_out
+ * @property string $requestor_nik
+ * @property string $requestor_name
+ * @property string $requestor_dept
+ * @property string $requestor_sec
+ * @property string $requestor_before
+ * @property integer $stts_out
+ * @property integer $stts_outstanding
+ * @property string $approve_by
+ * @property string $datetime_approve
  * @property string $aliasModel
  */
 abstract class MaskerPrdOut extends \yii\db\ActiveRecord
@@ -37,7 +44,7 @@ abstract class MaskerPrdOut extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'detilkeluarbarang';
+        return 'tbl_barang_out';
     }
 
     /**
@@ -54,14 +61,11 @@ abstract class MaskerPrdOut extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['kd_kb', 'part_no', 'part_name', 'jml_kb', 'satuan_kb', 'line', 'status', 'time', 'id_barang_in'], 'required'],
-            [['jml_kb', 'totaltime'], 'number'],
-            [['status', 'id_barang_in'], 'integer'],
-            [['time', 'tgl_exp', 'starttime', 'endtime'], 'safe'],
-            [['kd_kb', 'part_no'], 'string', 'max' => 100],
-            [['part_name'], 'string', 'max' => 150],
-            [['satuan_kb', 'line'], 'string', 'max' => 30],
-            [['ket_kb', 'sec'], 'string', 'max' => 50]
+            [['slip_out', 'part_no', 'part_name', 'category', 'serno_out', 'jml_out', 'satuan_out', 'note_out', 'datetime_out', 'requestor_nik', 'requestor_name', 'requestor_dept', 'requestor_before', 'stts_out', 'stts_outstanding', 'approve_by'], 'required'],
+            [['exp_out', 'datetime_out', 'starttime_out', 'endtime_out', 'datetime_approve'], 'safe'],
+            [['jml_out', 'totaltime_out'], 'number'],
+            [['stts_out', 'stts_outstanding'], 'integer'],
+            [['slip_out', 'part_no', 'part_name', 'category', 'serno_out', 'satuan_out', 'note_out', 'requestor_nik', 'requestor_name', 'requestor_dept', 'requestor_sec', 'requestor_before', 'approve_by'], 'string', 'max' => 100]
         ];
     }
 
@@ -71,22 +75,29 @@ abstract class MaskerPrdOut extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'kd_det_kb' => 'Kd Det Kb',
-            'kd_kb' => 'Kd Kb',
+            'id_barang_out' => 'Id Barang Out',
+            'slip_out' => 'Slip Out',
             'part_no' => 'Part No',
             'part_name' => 'Part Name',
-            'jml_kb' => 'Jml Kb',
-            'satuan_kb' => 'Satuan Kb',
-            'ket_kb' => 'Ket Kb',
-            'line' => 'Line',
-            'status' => 'Status',
-            'time' => 'Time',
-            'sec' => 'Sec',
-            'id_barang_in' => 'Id Barang In',
-            'tgl_exp' => 'Tgl Exp',
-            'starttime' => 'Starttime',
-            'endtime' => 'Endtime',
-            'totaltime' => 'Totaltime',
+            'category' => 'Category',
+            'exp_out' => 'Exp Out',
+            'serno_out' => 'Serno Out',
+            'jml_out' => 'Jml Out',
+            'satuan_out' => 'Satuan Out',
+            'note_out' => 'Note Out',
+            'datetime_out' => 'Datetime Out',
+            'starttime_out' => 'Starttime Out',
+            'endtime_out' => 'Endtime Out',
+            'totaltime_out' => 'Totaltime Out',
+            'requestor_nik' => 'Requestor Nik',
+            'requestor_name' => 'Requestor Name',
+            'requestor_dept' => 'Requestor Dept',
+            'requestor_sec' => 'Requestor Sec',
+            'requestor_before' => 'Requestor Before',
+            'stts_out' => 'Stts Out',
+            'stts_outstanding' => 'Stts Outstanding',
+            'approve_by' => 'Approve By',
+            'datetime_approve' => 'Datetime Approve',
         ];
     }
 
