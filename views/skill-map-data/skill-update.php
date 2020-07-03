@@ -59,17 +59,19 @@ date_default_timezone_set('Asia/Jakarta');
 			</div>
 			<div class="col-md-4">
 				<?= $form->field($model, 'nik')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
-                        'NIK_SUN_FISH', 'NAMA_KARYAWAN'
+                    'data' => ArrayHelper::map(app\models\SunfishViewEmp::find()->select([
+                        'Emp_no', 'Full_name'
                     ])
                     ->where([
-                        'AKTIF' => 'Y',
+                        'status' => 1,
+                        'Division' => 'Production'
                     ])
-                    ->andWhere(['<>', 'DEPARTEMEN', 'ADMINISTRATION'])
-                    ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
+                    ->andWhere('PATINDEX(\'YE%\', Emp_no) > 0')
+                    ->all(), 'Emp_no', 'nikNama'),
                     'options' => [
                         'placeholder' => 'Choose...',
                         'id' => 'emp_id',
+                        'multiple' => true,
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,

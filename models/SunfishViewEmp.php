@@ -42,4 +42,9 @@ class SunfishViewEmp extends BaseSunfishViewEmp
     {
         return $this->hasMany(SunfishEmpAttendance::className(), ['emp_no' => 'Emp_no']);
     }
+
+    public function getNikNama()
+    {
+        return $this->Emp_no . ' - ' . $this->Full_name;
+    }
 }
