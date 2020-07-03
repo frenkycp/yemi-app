@@ -114,6 +114,7 @@ $server_arr = [
     '172.17.144.6' => 'MITA - APP',
     '174.17.144.109' => 'IoT',
     '172.17.144.211' => 'IT INVENTORY',
+    '172.17.144.11' => 'SUNFISH - DB',
 ];
 ?>
 <div class="text-center" style="border-bottom: 1px solid grey; display: none;">
