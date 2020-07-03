@@ -37,6 +37,7 @@ $css_string = "
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
+    .badge {font-weight: normal;}
 
     #summary-tbl{
         //border:1px solid #29B6F6;
@@ -85,6 +86,10 @@ $css_string = "
     .target, .actual {font-size: 4em !important;}
     .bg-black {background-color: black; color: yellow !important;}
     .total-nolog {font-size: 20em;}
+    td {vertical-align: middle !important;}
+    hr {
+        margin-bottom: 0px;
+    }
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
 $this->registerCss($css_string);
 
@@ -155,7 +160,7 @@ echo '</pre>';*/
                         'fontFamily' => 'sans-serif',
                     ],
                     'zoomType' => 'x',
-                    'height' => 600
+                    'height' => 500
                 ],
                 'title' => [
                     //'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
@@ -171,6 +176,16 @@ echo '</pre>';*/
                     'title' => [
                         'text' => 'Total Qty'
                     ],
+                    /*[
+                        'title' => [
+                            'text' => 'VMS v.s FLO'
+                        ],
+                    ], [
+                        'title' => [
+                            'text' => 'BALANCE'
+                        ],
+                        'opposite' => true,
+                    ],*/
                 ],
                 'credits' => [
                     'enabled' =>false
@@ -208,5 +223,74 @@ echo '</pre>';*/
             ],
         ]);
         ?>
+        <hr>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <?php foreach ($tmp_table['thead'] as $key => $value): ?>
+                        <th class="text-center"><?= $value; ?></th>
+                    <?php endforeach ?>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Plan</td>
+                    <?php foreach ($tmp_table['plan'] as $key => $value): ?>
+                        <td class="text-center"><?= $value; ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>Actual</td>
+                    <?php foreach ($tmp_table['actual'] as $key => $value): ?>
+                        <td class="text-center"><?= $value; ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>Balance</td>
+                    <?php foreach ($tmp_table['balance'] as $key => $value): 
+                        if ($value < 0) {
+                            echo '<td class="text-center">
+                                <span class="badge bg-red">' . $value . '</span>
+                            </td>';
+                        } else {
+                            if ($value == 0) {
+                                echo '<td class="text-center">
+                                    <span class="badge">' . $value . '</span>
+                                </td>';
+                            } else {
+                                echo '<td class="text-center">
+                                    <span class="badge bg-green">' . $value . '</span>
+                                </td>';
+                            }
+                        }
+                        ?>
+                        
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>Balance<br/>Accumulation</td>
+                    <?php foreach ($tmp_table['balance_acc'] as $key => $value): 
+                        if ($value < 0) {
+                            echo '<td class="text-center">
+                                <span class="badge bg-red">' . $value . '</span>
+                            </td>';
+                        } else {
+                            if ($value == 0) {
+                                echo '<td class="text-center">
+                                    <span class="badge">' . $value . '</span>
+                                </td>';
+                            } else {
+                                echo '<td class="text-center">
+                                    <span class="badge bg-green">' . $value . '</span>
+                                </td>';
+                            }
+                        }
+                        ?>
+                        
+                    <?php endforeach ?>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

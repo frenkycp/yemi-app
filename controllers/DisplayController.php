@@ -202,8 +202,11 @@ class DisplayController extends Controller
         ->all();
 
         $tmp_data_plan = $tmp_data_actual = $tmp_data_balance = $data = [];
+        $tmp_table = [];
         $tmp_total_plan = $tmp_total_actual = 0;
         foreach ($tmp_vms as $key => $value) {
+            $tmp_table['thead'][] = date('d M', strtotime($value->VMS_DATE));
+            $tmp_table['plan'][] = $value->PLAN_QTY;
             $proddate = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
             $tmp_total_plan += $value->PLAN_QTY;
             if ($value->VMS_DATE > $today) {
@@ -211,6 +214,20 @@ class DisplayController extends Controller
             } else {
                 $tmp_total_actual += $value->ACTUAL_QTY;
             }
+
+            $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
+            if ($value->VMS_DATE > $today) {
+                $tmp_total_balance = null;
+            } else {
+                $tmp_table['actual'][] = $value->ACTUAL_QTY;
+                $tmp_table['balance'][] = $value->ACTUAL_QTY - $value->PLAN_QTY;
+                $tmp_table['balance_acc'][] = $tmp_total_balance;
+            }
+
+            $tmp_data_balance[] = [
+                'x' => $proddate,
+                'y' => $tmp_total_balance,
+            ];
             
             if ($value->PLAN_QTY > 0) {
                 $tmp_data_plan[] = [
@@ -239,6 +256,14 @@ class DisplayController extends Controller
                 'data' => $tmp_data_actual,
                 'color' => 'lime'
             ],
+            [
+                'name' => 'BALANCE (ACCUMULATION)',
+                'data' => $tmp_data_balance,
+                'color' => 'orange',
+                'dataLabels' => [
+                    'enabled' => true
+                ],
+            ],
         ];
 
         return $this->render('vms-daily-accumulation', [
@@ -246,6 +271,7 @@ class DisplayController extends Controller
             'data' => $data,
             'line_dropdown' => $line_dropdown,
             'period_dropdown' => $period_dropdown,
+            'tmp_table' => $tmp_table
         ]);
     }
 
