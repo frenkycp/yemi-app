@@ -201,7 +201,7 @@ class DisplayController extends Controller
         ->orderBy('VMS_DATE')
         ->all();
 
-        $tmp_data_plan = $tmp_data_actual = $data = [];
+        $tmp_data_plan = $tmp_data_actual = $tmp_data_balance = $data = [];
         $tmp_total_plan = $tmp_total_actual = 0;
         foreach ($tmp_vms as $key => $value) {
             $proddate = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
@@ -212,23 +212,32 @@ class DisplayController extends Controller
                 $tmp_total_actual += $value->ACTUAL_QTY;
             }
             
-            $tmp_data_plan[] = [
-                'x' => $proddate,
-                'y' => $tmp_total_plan,
-            ];
-            $tmp_data_actual[] = [
-                'x' => $proddate,
-                'y' => $tmp_total_actual,
-            ];
+            if ($value->PLAN_QTY > 0) {
+                $tmp_data_plan[] = [
+                    'x' => $proddate,
+                    'y' => $tmp_total_plan,
+                    
+                ];
+            }
+            
+            if ($value->ACTUAL_QTY > 0) {
+                $tmp_data_actual[] = [
+                    'x' => $proddate,
+                    'y' => $tmp_total_actual,
+                    
+                ];
+            }
         }
 
         $data = [
             [
                 'name' => 'PLAN',
-                'data' => $tmp_data_plan
+                'data' => $tmp_data_plan,
+                'color' => 'white'
             ], [
                 'name' => 'ACTUAL',
-                'data' => $tmp_data_actual
+                'data' => $tmp_data_actual,
+                'color' => 'lime'
             ],
         ];
 

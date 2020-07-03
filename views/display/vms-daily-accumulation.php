@@ -184,14 +184,13 @@ echo '</pre>';*/
                 ],
                 'plotOptions' => [
                     'series' => [
-                        
                         'dataLabels' => [
                             'enabled' => false
                         ],
-                        /*'lineWidth' => 1,
+                        'lineWidth' => 1.5,
                         'marker' => [
                             'radius' => 2,
-                        ],*/
+                        ],
                         /*'cursor' => 'pointer',
                         'point' => [
                             'events' => [
