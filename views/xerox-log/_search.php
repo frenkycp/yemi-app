@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
 /**
@@ -20,17 +21,23 @@ use yii\widgets\ActiveForm;
 		<div class="panel panel-primary">
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-md-3">
-						<?= $form->field($model, 'period') ?>
+					<div class="col-md-2">
+						<?= $form->field($model, 'period'); ?>
+					</div>
+					<div class="col-md-2">
+						<?= $form->field($model, 'machine')->dropDownList(ArrayHelper::map(app\models\FotocopyLogTbl::find()->select('machine')->groupBy('machine')->orderBy('machine')->all(), 'machine', 'machine'), [
+							'prompt' => '- ALL -'
+						]); ?>
+					</div>
+					<div class="col-md-2">
+						<?= $form->field($model, 'post_date'); ?>
 					</div>
 					<div class="col-md-3">
-						<?= $form->field($model, 'machine') ?>
-					</div>
-					<div class="col-md-3">
-						<?= $form->field($model, 'post_date') ?>
-					</div>
-					<div class="col-md-3">
-						<?= $form->field($model, 'post_date') ?>
+						<?= $form->field($model, 'COST_CENTER')->dropDownList(ArrayHelper::map(app\models\FotocopyUserTbl::find()->select('COST_CENTER, COST_CENTER_DESC')->where([
+							'<>', 'COST_CENTER_DESC', 'WAIT'
+						])->groupBy('COST_CENTER, COST_CENTER_DESC')->orderBy('COST_CENTER_DESC')->all(), 'COST_CENTER', 'COST_CENTER_DESC'), [
+							'prompt' => '- ALL -'
+						])->label('Department'); ?>
 					</div>
 				</div>
 			</div>

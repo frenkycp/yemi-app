@@ -65,8 +65,8 @@ $grid_column = [
             'style' => 'font-size: 12px;'
         ],
     ],
-    /*[
-        'attribute' => 'COST_CENTER',
+    [
+        'attribute' => 'job_type',
         //'label' => 'Deskripsi',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -74,7 +74,7 @@ $grid_column = [
             'class' => 'form-control',
             'style' => 'font-size: 12px;'
         ],
-    ],*/
+    ],
     [
         'attribute' => 'COST_CENTER_DESC',
         //'label' => 'Deskripsi',
@@ -98,7 +98,7 @@ $grid_column = [
     [
         'attribute' => 'user_name',
         //'label' => 'Deskripsi',
-        'hAlign' => 'center',
+        //'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
@@ -151,7 +151,7 @@ $grid_column = [
         <?= GridView::widget([
             'id' => 'grid',
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => $grid_column,
             'hover' => true,
             'pager' => [

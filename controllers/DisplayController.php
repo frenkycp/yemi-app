@@ -142,6 +142,7 @@ use app\models\PabxLog;
 use app\models\DnsStatus;
 use app\models\VmsPlanActual;
 use app\models\ServerBackupCurrent;
+use app\models\HakAksesPlus;
 
 class DisplayController extends Controller
 {
@@ -177,29 +178,65 @@ class DisplayController extends Controller
         $model->period = $this_period;
         $model->line = 'HS';
 
-        $line_dropdown = ArrayHelper::map(SernoMaster::find()
+        /*$line_dropdown = ArrayHelper::map(SernoMaster::find()
         ->select('line')
         ->where('line != \'\'AND line != \'MIS\'')
         ->groupBy('line')
-        ->all(), 'line', 'line');
+        ->all(), 'line', 'line');*/
+        $line_dropdown = [];
+
+        $tmp_line = HakAksesPlus::find()
+        ->where([
+            'level_akses' => '1a'
+        ])
+        ->andWhere(['<>', 'hak_akses', 'MIS'])
+        ->all();
+        foreach ($tmp_line as $key => $value) {
+            if ($value->desc != null) {
+                $line_dropdown[$value->hak_akses] = $value->desc;
+            } else {
+                $line_dropdown[$value->hak_akses] = $value->hak_akses;
+            }
+            
+        }
+        asort($line_dropdown);
+
+        $line_dropdown['ALL'] = '- ALL LINE -';
 
         if ($model->load($_GET)) {
 
         }
 
-        $tmp_vms = VmsPlanActual::find()
-        ->select([
-            'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
-            'PLAN_QTY' => 'SUM(PLAN_QTY)',
-            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
-        ])
-        ->where([
-            'VMS_PERIOD' => $model->period,
-            'LINE' => $model->line
-        ])
-        ->groupBy('VMS_DATE')
-        ->orderBy('VMS_DATE')
-        ->all();
+        if ($model->line == 'ALL') {
+            $tmp_vms = VmsPlanActual::find()
+            ->select([
+                'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+            ])
+            ->where([
+                'VMS_PERIOD' => $model->period,
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->groupBy('VMS_DATE')
+            ->orderBy('VMS_DATE')
+            ->all();
+        } else {
+            $tmp_vms = VmsPlanActual::find()
+            ->select([
+                'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+            ])
+            ->where([
+                'VMS_PERIOD' => $model->period,
+                'LINE' => $model->line
+            ])
+            ->groupBy('VMS_DATE')
+            ->orderBy('VMS_DATE')
+            ->all();
+        }
+        
 
         $tmp_data_plan = $tmp_data_actual = $tmp_data_balance = $data = [];
         $tmp_table = [];

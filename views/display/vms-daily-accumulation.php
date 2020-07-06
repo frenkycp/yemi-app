@@ -228,7 +228,9 @@ echo '</pre>';*/
             <thead>
                 <tr>
                     <th></th>
-                    <?php foreach ($tmp_table['thead'] as $key => $value): ?>
+                    <?php
+                    if (isset($tmp_table['thead']))
+                    foreach ($tmp_table['thead'] as $key => $value): ?>
                         <th class="text-center"><?= $value; ?></th>
                     <?php endforeach ?>
                 </tr>
@@ -236,19 +238,25 @@ echo '</pre>';*/
             <tbody>
                 <tr>
                     <td>Plan</td>
-                    <?php foreach ($tmp_table['plan'] as $key => $value): ?>
+                    <?php
+                    if (isset($tmp_table['plan']))
+                    foreach ($tmp_table['plan'] as $key => $value): ?>
                         <td class="text-center"><?= $value; ?></td>
                     <?php endforeach ?>
                 </tr>
                 <tr>
                     <td>Actual</td>
-                    <?php foreach ($tmp_table['actual'] as $key => $value): ?>
+                    <?php
+                    if(isset($tmp_table['actual']))
+                    foreach ($tmp_table['actual'] as $key => $value): ?>
                         <td class="text-center"><?= $value; ?></td>
                     <?php endforeach ?>
                 </tr>
                 <tr>
                     <td>Balance</td>
-                    <?php foreach ($tmp_table['balance'] as $key => $value): 
+                    <?php
+                    if(isset($tmp_table['balance']))
+                    foreach ($tmp_table['balance'] as $key => $value): 
                         if ($value < 0) {
                             echo '<td class="text-center">
                                 <span class="badge bg-red">' . $value . '</span>
@@ -270,7 +278,9 @@ echo '</pre>';*/
                 </tr>
                 <tr>
                     <td>Balance<br/>Accumulation</td>
-                    <?php foreach ($tmp_table['balance_acc'] as $key => $value): 
+                    <?php
+                    if(isset($tmp_table['balance_acc']))
+                    foreach ($tmp_table['balance_acc'] as $key => $value): 
                         if ($value < 0) {
                             echo '<td class="text-center">
                                 <span class="badge bg-red">' . $value . '</span>
