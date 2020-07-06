@@ -246,6 +246,7 @@ class DisplayController extends Controller
             $tmp_table['plan'][] = $value->PLAN_QTY;
             $proddate = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
             $tmp_total_plan += $value->PLAN_QTY;
+            $tmp_table['plan_acc'][] = $tmp_total_plan;
             if ($value->VMS_DATE > $today) {
                 $tmp_total_actual = null;
             } else {
@@ -255,8 +256,13 @@ class DisplayController extends Controller
             $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
             if ($value->VMS_DATE > $today) {
                 $tmp_total_balance = null;
+                $tmp_table['actual'][] = null;
+                $tmp_table['actual_acc'][] = null;
+                $tmp_table['balance'][] = null;
+                $tmp_table['balance_acc'][] = null;
             } else {
                 $tmp_table['actual'][] = $value->ACTUAL_QTY;
+                $tmp_table['actual_acc'][] = $tmp_total_actual;
                 $tmp_table['balance'][] = $value->ACTUAL_QTY - $value->PLAN_QTY;
                 $tmp_table['balance_acc'][] = $tmp_total_balance;
             }

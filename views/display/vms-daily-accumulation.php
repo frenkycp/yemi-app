@@ -81,7 +81,10 @@ $css_string = "
     }
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
-    #summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
+    //#summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
+    .accumulation > td {
+        background: #454B52 !important;
+    }
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important;}
     .bg-black {background-color: black; color: yellow !important;}
@@ -224,14 +227,14 @@ echo '</pre>';*/
         ]);
         ?>
         <hr>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="summary-tbl">
             <thead>
                 <tr>
                     <th></th>
                     <?php
                     if (isset($tmp_table['thead']))
                     foreach ($tmp_table['thead'] as $key => $value): ?>
-                        <th class="text-center"><?= $value; ?></th>
+                        <th class="text-center" style="font-weight: normal;"><?= ($value); ?></th>
                     <?php endforeach ?>
                 </tr>
             </thead>
@@ -241,7 +244,7 @@ echo '</pre>';*/
                     <?php
                     if (isset($tmp_table['plan']))
                     foreach ($tmp_table['plan'] as $key => $value): ?>
-                        <td class="text-center"><?= $value; ?></td>
+                        <td class="text-center"><?= number_format($value); ?></td>
                     <?php endforeach ?>
                 </tr>
                 <tr>
@@ -249,7 +252,7 @@ echo '</pre>';*/
                     <?php
                     if(isset($tmp_table['actual']))
                     foreach ($tmp_table['actual'] as $key => $value): ?>
-                        <td class="text-center"><?= $value; ?></td>
+                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
                     <?php endforeach ?>
                 </tr>
                 <tr>
@@ -259,41 +262,69 @@ echo '</pre>';*/
                     foreach ($tmp_table['balance'] as $key => $value): 
                         if ($value < 0) {
                             echo '<td class="text-center">
-                                <span class="badge bg-red">' . $value . '</span>
+                                <span class="badge bg-red">' . number_format($value) . '</span>
                             </td>';
                         } else {
-                            if ($value == 0) {
+                            if ($value == null) {
                                 echo '<td class="text-center">
-                                    <span class="badge">' . $value . '</span>
-                                </td>';
+                                        
+                                    </td>';
                             } else {
-                                echo '<td class="text-center">
-                                    <span class="badge bg-green">' . $value . '</span>
-                                </td>';
+                                if ($value == 0) {
+                                    echo '<td class="text-center">
+                                        <span class="badge">' . number_format($value) . '</span>
+                                    </td>';
+                                } else {
+                                    echo '<td class="text-center">
+                                        <span class="badge bg-green">' . number_format($value) . '</span>
+                                    </td>';
+                                }
                             }
                         }
                         ?>
                         
                     <?php endforeach ?>
                 </tr>
-                <tr>
+                <tr class="accumulation">
+                    <td>Plan<br/>Accumulation</td>
+                    <?php
+                    if (isset($tmp_table['plan_acc']))
+                    foreach ($tmp_table['plan_acc'] as $key => $value): ?>
+                        <td class="text-center"><?= number_format($value); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr class="accumulation">
+                    <td>Actual<br/>Accumulation</td>
+                    <?php
+                    if(isset($tmp_table['actual_acc']))
+                    foreach ($tmp_table['actual_acc'] as $key => $value): ?>
+                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr class="accumulation">
                     <td>Balance<br/>Accumulation</td>
                     <?php
                     if(isset($tmp_table['balance_acc']))
                     foreach ($tmp_table['balance_acc'] as $key => $value): 
                         if ($value < 0) {
                             echo '<td class="text-center">
-                                <span class="badge bg-red">' . $value . '</span>
+                                <span class="badge bg-red">' . number_format($value) . '</span>
                             </td>';
                         } else {
-                            if ($value == 0) {
+                            if ($value == null) {
                                 echo '<td class="text-center">
-                                    <span class="badge">' . $value . '</span>
-                                </td>';
+                                        
+                                    </td>';
                             } else {
-                                echo '<td class="text-center">
-                                    <span class="badge bg-green">' . $value . '</span>
-                                </td>';
+                                if ($value == 0) {
+                                    echo '<td class="text-center">
+                                        <span class="badge">' . number_format($value) . '</span>
+                                    </td>';
+                                } else {
+                                    echo '<td class="text-center">
+                                        <span class="badge bg-green">' . number_format($value) . '</span>
+                                    </td>';
+                                }
                             }
                         }
                         ?>
