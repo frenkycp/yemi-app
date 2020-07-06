@@ -89,7 +89,7 @@ echo '</pre>';*/
 ?>
 <div class="row">
     <div class="col-md-12 text-center">
-        <span class="" style="color: white; font-size: 10em; letter-spacing: 10px;"><u>BACKUP</u></span>
+        <span class="" style="color: white; font-size: 10em; letter-spacing: 10px;">BACKUP</span>
     </div>
 </div>
 <div class="row" style="padding: 10px;">
