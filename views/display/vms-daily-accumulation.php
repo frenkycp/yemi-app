@@ -79,6 +79,10 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
+    #popup-tbl > tfoot > tr > td {
+        font-weight: bold;
+        background-color: rgba(0, 0, 150, 0.3);
+    }
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
     //#summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
@@ -107,6 +111,13 @@ $script = "
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
+
+$this->registerJs("$(function() {
+   $('.popup_btn').click(function(e) {
+     e.preventDefault();
+     $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+   });
+});");
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
 print_r($tmp_data_arr);
@@ -234,7 +245,7 @@ echo '</pre>';*/
                     <?php
                     if (isset($tmp_table['thead']))
                     foreach ($tmp_table['thead'] as $key => $value): ?>
-                        <th class="text-center" style="font-weight: normal;"><?= ($value); ?></th>
+                        <th class="text-center" style="font-weight: normal;"><?= date('d M', strtotime($value)); ?></th>
                     <?php endforeach ?>
                 </tr>
             </thead>
@@ -262,7 +273,7 @@ echo '</pre>';*/
                     foreach ($tmp_table['balance'] as $key => $value): 
                         if ($value < 0) {
                             echo '<td class="text-center">
-                                <span class="badge bg-red">' . number_format($value) . '</span>
+                                ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line], ['class' => 'popup_btn']) . '
                             </td>';
                         } else {
                             if ($value == null) {
@@ -308,7 +319,7 @@ echo '</pre>';*/
                     foreach ($tmp_table['balance_acc'] as $key => $value): 
                         if ($value < 0) {
                             echo '<td class="text-center">
-                                <span class="badge bg-red">' . number_format($value) . '</span>
+                                ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line, 'acc' => 1], ['class' => 'popup_btn']) . '
                             </td>';
                         } else {
                             if ($value == null) {
@@ -333,5 +344,14 @@ echo '</pre>';*/
                 </tr>
             </tbody>
         </table>
+        <span style="font-weight: bold;"><i>*VMS Version : <?= $vms_version; ?></i></span>
     </div>
 </div>
+<?php
+    yii\bootstrap\Modal::begin([
+        'id' =>'modal',
+        'header' => '<h3>Detail Info</h3>',
+        'size' => 'modal-lg',
+    ]);
+    yii\bootstrap\Modal::end();
+?>

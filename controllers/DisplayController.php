@@ -163,6 +163,134 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionGetVmsBalance($vms_date = '', $line = '', $acc = 0)
+    {
+        $period = date('Ym', strtotime($vms_date));
+        if ($acc == 0) {
+            if ($line == 'ALL') {
+                $tmp_vms_arr = VmsPlanActual::find()
+                ->select([
+                    'ITEM', 'ITEM_DESC',
+                    'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                    'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+                    'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+                ])
+                ->where([
+                    'VMS_DATE' => $vms_date,
+                ])
+                ->andWhere('LINE IS NOT NULL')
+                ->andWhere(['<>', 'LINE', 'SPC'])
+                ->groupBy('ITEM, ITEM_DESC')
+                ->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->all();
+            } else {
+                $tmp_vms_arr = VmsPlanActual::find()
+                ->select([
+                    'ITEM', 'ITEM_DESC',
+                    'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                    'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+                    'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+                ])
+                ->where([
+                    'VMS_DATE' => $vms_date,
+                    'LINE' => $line
+                ])
+                ->groupBy('ITEM, ITEM_DESC')
+                ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+                //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->all();
+            }
+        } else {
+            if ($line == 'ALL') {
+                $tmp_vms_arr = VmsPlanActual::find()
+                ->select([
+                    'ITEM', 'ITEM_DESC',
+                    'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                    'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+                    'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+                ])
+                ->where([
+                    'VMS_PERIOD' => $period,
+                ])
+                ->andWhere(['<=', 'VMS_DATE', $vms_date])
+                ->andWhere('LINE IS NOT NULL')
+                ->andWhere(['<>', 'LINE', 'SPC'])
+                ->groupBy('ITEM, ITEM_DESC')
+                ->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->all();
+            } else {
+                $tmp_vms_arr = VmsPlanActual::find()
+                ->select([
+                    'ITEM', 'ITEM_DESC',
+                    'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                    'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+                    'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+                ])
+                ->where([
+                    'VMS_PERIOD' => $period,
+                    'LINE' => $line
+                ])
+                ->andWhere(['<=', 'VMS_DATE', $vms_date])
+                ->groupBy('ITEM, ITEM_DESC')
+                ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+                //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->all();
+            }
+        }
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Line ' . $line . ' <small>(' . $vms_date . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $data .= '<table id="popup-tbl" class="table table-bordered table-striped table-hover">';
+        $data .= 
+        '<thead><tr>
+            <th class="text-center">Item</th>
+            <th class="text-center">Item Description</th>
+            <th class="text-center">Plan Qty</th>
+            <th class="text-center">Actual Qty</th>
+            <th class="text-center">Balance Qty</th>
+        </tr></thead>'
+        ;
+        $data .= '<tbody>';
+        $total_plan = $total_actual = $total_balance = 0;
+        foreach ($tmp_vms_arr as $key => $value) {
+            $total_plan += $value->PLAN_QTY;
+            $total_actual += $value->ACTUAL_QTY;
+            $total_balance += $value->BALANCE_QTY;
+            if ($value->BALANCE_QTY < 0) {
+                $txt_balance = '<span class="badge bg-red">' . $value->BALANCE_QTY . '</span>';
+                $bg_class = ' danger';
+            } else {
+                $txt_balance = $value->BALANCE_QTY;
+                $bg_class = '';
+            }
+            $data .= '
+            <tr>
+                <td class="text-center' . $bg_class . '">' . $value->ITEM . '</td>
+                <td class="text-center' . $bg_class . '">' . $value->ITEM_DESC . '</td>
+                <td class="text-center' . $bg_class . '">' . $value->PLAN_QTY . '</td>
+                <td class="text-center' . $bg_class . '">' . $value->ACTUAL_QTY . '</td>
+                <td class="text-center' . $bg_class . '">' . $txt_balance . '</td>
+            </tr>
+            ';
+        }
+        $data .= '</tbody>';
+        $data .= '<tfoot>
+            <tr>
+                <td class="text-center primary" colspan="2">Total</td>
+                <td class="text-center primary">' . number_format($total_plan) . '</td>
+                <td class="text-center primary">' . number_format($total_actual) . '</td>
+                <td class="text-center primary">' . number_format($total_balance) . '</td>
+            </tr>
+        </tfoot>';
+        $data .= '</table>';
+        return $data;
+    }
+
     public function actionVmsDailyAccumulation()
     {
         $this->layout = 'clean';
@@ -218,6 +346,7 @@ class DisplayController extends Controller
                 'VMS_PERIOD' => $model->period,
             ])
             ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
             ->groupBy('VMS_DATE')
             ->orderBy('VMS_DATE')
             ->all();
@@ -242,7 +371,7 @@ class DisplayController extends Controller
         $tmp_table = [];
         $tmp_total_plan = $tmp_total_actual = 0;
         foreach ($tmp_vms as $key => $value) {
-            $tmp_table['thead'][] = date('d M', strtotime($value->VMS_DATE));
+            $tmp_table['thead'][] = $value->VMS_DATE;
             $tmp_table['plan'][] = $value->PLAN_QTY;
             $proddate = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
             $tmp_total_plan += $value->PLAN_QTY;
@@ -254,7 +383,7 @@ class DisplayController extends Controller
             }
 
             $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
-            if ($value->VMS_DATE > $today) {
+            if (date('Y-m-d', strtotime($value->VMS_DATE)) > $today) {
                 $tmp_total_balance = null;
                 $tmp_table['actual'][] = null;
                 $tmp_table['actual_acc'][] = null;
