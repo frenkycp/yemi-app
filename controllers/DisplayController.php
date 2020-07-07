@@ -438,12 +438,16 @@ class DisplayController extends Controller
             ],
         ];
 
+        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $model->period])->orderBy('VMS_VERSION')->one();
+        $vms_version = $tmp_vms_version->VMS_VERSION;
+
         return $this->render('vms-daily-accumulation', [
             'model' => $model,
             'data' => $data,
             'line_dropdown' => $line_dropdown,
             'period_dropdown' => $period_dropdown,
-            'tmp_table' => $tmp_table
+            'tmp_table' => $tmp_table,
+            'vms_version' => $vms_version,
         ]);
     }
 
