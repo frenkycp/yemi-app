@@ -170,7 +170,7 @@ class DisplayController extends Controller
             if ($line == 'ALL') {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -180,14 +180,50 @@ class DisplayController extends Controller
                 ])
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
-                ->groupBy('ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+                //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->all();
+            } elseif ($line == 'KD') {
+                $tmp_vms_arr = VmsPlanActual::find()
+                ->select([
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                    'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+                    'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+                ])
+                ->where([
+                    'VMS_DATE' => $vms_date,
+                    'FG_KD' => 'KD'
+                ])
+                ->andWhere('LINE IS NOT NULL')
+                ->andWhere(['<>', 'LINE', 'SPC'])
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+                //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->all();
+            } elseif ($line == 'PRODUCT') {
+                $tmp_vms_arr = VmsPlanActual::find()
+                ->select([
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                    'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+                    'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+                ])
+                ->where([
+                    'VMS_DATE' => $vms_date,
+                    'FG_KD' => 'PRODUCT'
+                ])
+                ->andWhere('LINE IS NOT NULL')
+                ->andWhere(['<>', 'LINE', 'SPC'])
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } else {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -196,7 +232,7 @@ class DisplayController extends Controller
                     'VMS_DATE' => $vms_date,
                     'LINE' => $line
                 ])
-                ->groupBy('ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
@@ -205,7 +241,7 @@ class DisplayController extends Controller
             if ($line == 'ALL') {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -216,14 +252,52 @@ class DisplayController extends Controller
                 ->andWhere(['<=', 'VMS_DATE', $vms_date])
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
-                ->groupBy('ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+                //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->all();
+            } elseif ($line == 'KD') {
+                $tmp_vms_arr = VmsPlanActual::find()
+                ->select([
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                    'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+                    'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+                ])
+                ->where([
+                    'VMS_PERIOD' => $period,
+                    'FG_KD' => 'KD'
+                ])
+                ->andWhere(['<=', 'VMS_DATE', $vms_date])
+                ->andWhere('LINE IS NOT NULL')
+                ->andWhere(['<>', 'LINE', 'SPC'])
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+                //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->all();
+            } elseif ($line == 'PRODUCT') {
+                $tmp_vms_arr = VmsPlanActual::find()
+                ->select([
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                    'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+                    'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+                ])
+                ->where([
+                    'VMS_PERIOD' => $period,
+                    'FG_KD' => 'PRODUCT'
+                ])
+                ->andWhere(['<=', 'VMS_DATE', $vms_date])
+                ->andWhere('LINE IS NOT NULL')
+                ->andWhere(['<>', 'LINE', 'SPC'])
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } else {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -233,7 +307,7 @@ class DisplayController extends Controller
                     'LINE' => $line
                 ])
                 ->andWhere(['<=', 'VMS_DATE', $vms_date])
-                ->groupBy('ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
@@ -250,6 +324,8 @@ class DisplayController extends Controller
         $data .= '<table id="popup-tbl" class="table table-bordered table-striped table-hover">';
         $data .= 
         '<thead><tr>
+            <th class="text-center">Line</th>
+            <th class="text-center">Model</th>
             <th class="text-center">Item</th>
             <th class="text-center">Item Description</th>
             <th class="text-center">Plan Qty</th>
@@ -270,20 +346,27 @@ class DisplayController extends Controller
                 $txt_balance = $value->BALANCE_QTY;
                 $bg_class = '';
             }
-            $data .= '
-            <tr>
-                <td class="text-center' . $bg_class . '">' . $value->ITEM . '</td>
-                <td class="text-center' . $bg_class . '">' . $value->ITEM_DESC . '</td>
-                <td class="text-center' . $bg_class . '">' . $value->PLAN_QTY . '</td>
-                <td class="text-center' . $bg_class . '">' . $value->ACTUAL_QTY . '</td>
-                <td class="text-center' . $bg_class . '">' . $txt_balance . '</td>
-            </tr>
-            ';
+            if ($value->PLAN_QTY == 0 && $value->ACTUAL_QTY == 0) {
+                # code...
+            } else {
+                $data .= '
+                <tr>
+                    <td class="text-center' . $bg_class . '">' . $value->LINE . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->MODEL . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->ITEM . '</td>
+                    <td class="' . $bg_class . '">' . $value->ITEM_DESC . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->PLAN_QTY . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->ACTUAL_QTY . '</td>
+                    <td class="text-center' . $bg_class . '">' . $txt_balance . '</td>
+                </tr>
+                ';
+            }
+            
         }
         $data .= '</tbody>';
         $data .= '<tfoot>
             <tr>
-                <td class="text-center primary" colspan="2">Total</td>
+                <td class="text-center primary" colspan="4">Total</td>
                 <td class="text-center primary">' . number_format($total_plan) . '</td>
                 <td class="text-center primary">' . number_format($total_actual) . '</td>
                 <td class="text-center primary">' . number_format($total_balance) . '</td>
@@ -332,6 +415,8 @@ class DisplayController extends Controller
         asort($line_dropdown);
 
         $line_dropdown['ALL'] = '- ALL LINE -';
+        $line_dropdown['KD'] = '- KD ONLY -';
+        $line_dropdown['PRODUCT'] = '- PRODUCT ONLY -';
 
         if ($model->load($_GET)) {
 
@@ -346,6 +431,38 @@ class DisplayController extends Controller
             ])
             ->where([
                 'VMS_PERIOD' => $model->period,
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->groupBy('VMS_DATE')
+            ->orderBy('VMS_DATE')
+            ->all();
+        } elseif ($model->line == 'KD') {
+            $tmp_vms = VmsPlanActual::find()
+            ->select([
+                'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+            ])
+            ->where([
+                'VMS_PERIOD' => $model->period,
+                'FG_KD' => 'KD'
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->groupBy('VMS_DATE')
+            ->orderBy('VMS_DATE')
+            ->all();
+        } elseif ($model->line == 'PRODUCT') {
+            $tmp_vms = VmsPlanActual::find()
+            ->select([
+                'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+            ])
+            ->where([
+                'VMS_PERIOD' => $model->period,
+                'FG_KD' => 'PRODUCT'
             ])
             ->andWhere('LINE IS NOT NULL')
             ->andWhere(['<>', 'LINE', 'SPC'])
