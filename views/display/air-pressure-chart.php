@@ -56,12 +56,12 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['noise-chart']),
+    'action' => Url::to(['air-pressure-chart']),
 ]); ?>
 
 <div class="row">
     <div class="col-md-3">
-        <?= $form->field($model, 'map_no')->dropDownList(ArrayHelper::map(app\models\SensorTbl::find()->orderBy('location, area')->all(), 'map_no', 'locationArea'), [
+        <?= $form->field($model, 'map_no')->dropDownList(ArrayHelper::map(app\models\SensorTbl::find()->where(['map_no' => [47, 48]])->orderBy('location, area')->all(), 'map_no', 'locationArea'), [
             'class' => 'form-control',
             'prompt' => 'Select a location...'
         ]); ?>

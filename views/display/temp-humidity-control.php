@@ -145,7 +145,10 @@ echo '</pre>';*/
             }
         } elseif ($category == 5) {
             $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . $params_val . ' <span style="font-size: 0.6em;">bar</span></div></div>';
-            echo $params_val == null ? '' : Html::a($content, ['air-pressure-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+            if ($value->map_no == 47 || $value->map_no == 48) {
+                echo Html::a($content, ['air-pressure-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
+            }
+            //echo $params_val == null ? '0' : Html::a($content, ['air-pressure-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         } else {
             echo $params_val == null ? '' : Html::a($content, ['temp-humidity-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         }
