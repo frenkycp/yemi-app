@@ -181,7 +181,8 @@ class DisplayController extends Controller
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
                 ->groupBy('ITEM, ITEM_DESC')
-                ->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+                //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } else {
                 $tmp_vms_arr = VmsPlanActual::find()
@@ -216,7 +217,8 @@ class DisplayController extends Controller
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
                 ->groupBy('ITEM, ITEM_DESC')
-                ->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+                ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+                //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } else {
                 $tmp_vms_arr = VmsPlanActual::find()
@@ -376,7 +378,7 @@ class DisplayController extends Controller
             $proddate = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
             $tmp_total_plan += $value->PLAN_QTY;
             $tmp_table['plan_acc'][] = $tmp_total_plan;
-            if ($value->VMS_DATE > $today) {
+            if (date('Y-m-d', strtotime($value->VMS_DATE)) > $today) {
                 $tmp_total_actual = null;
             } else {
                 $tmp_total_actual += $value->ACTUAL_QTY;
@@ -390,10 +392,11 @@ class DisplayController extends Controller
                 $tmp_table['balance'][] = null;
                 $tmp_table['balance_acc'][] = null;
             } else {
-                $tmp_table['actual'][] = $value->ACTUAL_QTY;
-                $tmp_table['actual_acc'][] = $tmp_total_actual;
-                $tmp_table['balance'][] = $value->ACTUAL_QTY - $value->PLAN_QTY;
-                $tmp_table['balance_acc'][] = $tmp_total_balance;
+                $tmp_balance = $value->ACTUAL_QTY - $value->PLAN_QTY;
+                $tmp_table['actual'][] = $value->ACTUAL_QTY == null ? '0' : $value->ACTUAL_QTY;
+                $tmp_table['actual_acc'][] = $tmp_total_actual == null ? '0' : $tmp_total_actual;
+                $tmp_table['balance'][] = $tmp_balance == null ? '0' : $tmp_balance;
+                $tmp_table['balance_acc'][] = $tmp_total_balance == null ? '0' : $tmp_total_balance;
             }
 
             $tmp_data_balance[] = [
