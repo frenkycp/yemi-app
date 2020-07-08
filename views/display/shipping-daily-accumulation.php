@@ -142,7 +142,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['vms-daily-accumulation']),
+    'action' => Url::to(['shipping-daily-accumulation']),
 ]); ?>
 
 <div class="row">
