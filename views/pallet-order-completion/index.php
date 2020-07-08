@@ -99,15 +99,35 @@ echo '</pre>';*/
                     }
                 }
 
-                $karyawan_aktif = app\models\MpInOut::find()->where([
+                /*$karyawan_aktif = app\models\MpInOut::find()->where([
                     'NIK' => strval($key),
                     'TANGGAL' => date('Y-m-d')
-                ])->one();
+                ])->one();*/
 
-                if ($karyawan_aktif->NIK == null) {
+                $tmp_karyawan = app\models\Karyawan::find()
+                ->where([
+                    'OR',
+                    ['NIK' => strval($key)],
+                    ['NIK_SUN_FISH' => strval($key)]
+                ])
+                ->one();
+
+                if ($tmp_karyawan->NIK_SUN_FISH == null) {
                     $panel_class = ' box-default';
                     $text_status = 'END CONTRACT';
+                } else {
+                    $tmp_karyawan2 = app\models\SunfishViewEmp::find()
+                    ->where([
+                        'Emp_no' => $tmp_karyawan->NIK_SUN_FISH
+                    ])
+                    ->one();
+
+                    if ($tmp_karyawan2->status == 0 || $tmp_karyawan2->Emp_no == null) {
+                        $panel_class = ' box-default';
+                        $text_status = 'END CONTRACT';
+                    }
                 }
+                
                 ?>
                 <div class="panel box box-solid<?= $panel_class; ?>">
                     <div class="box-header with-border">

@@ -17,15 +17,55 @@ use app\models\IjazahProgress;
 use app\models\VmsPlanActual;
 use app\models\SunfishViewEmp;
 use app\models\LiveCookingMember;
+use app\models\VmsItem;
 
 class ProductionRestController extends Controller
 {
-    public function actionPriorityModelUpdate($value='')
+    public function actionSernoOutputUpdateSp($period = '')
     {
         date_default_timezone_set('Asia/Jakarta');
         $this_time = date('Y-m-d H:i:s');
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        if ($period == '') {
+            $period = date('Ym');
+        }
 
+        $tmp_so = SernoOutput::find()->select('gmc')->where([
+            'EXTRACT(year_month FROM etd)' => $period
+        ])->groupBy('gmc')->orderBy('gmc')->all();
+        $vms_item_arr = VmsItem::find()->asArray()->all();
+        $total_update = count($tmp_so);
+        foreach ($tmp_so as $so) {
+            $description = $destination = $bu = $line = $model = $fg_kd = $standard_price = null;
+            foreach ($vms_item_arr as $vms_item) {
+                if ($so['gmc'] == $vms_item['ITEM']) {
+                    $description = $vms_item['ITEM_DESC'];
+                    $destination = $vms_item['DESTINATION'];
+                    $bu = $vms_item['BU'];
+                    $line = $vms_item['LINE'];
+                    $model = $vms_item['MODEL'];
+                    $fg_kd = $vms_item['FG_KD'];
+                    $standard_price = $vms_item['STANDARD_PRICE'];
+                }
+            }
+            SernoOutput::updateAll([
+                'gmc_desc' => $description,
+                'gmc_destination' => $destination,
+                'bu' => $bu,
+                'line' => $line,
+                'model' => $model,
+                'fg_kd' => $fg_kd,
+                'standard_price' => $standard_price,
+            ], [
+                'EXTRACT(year_month FROM etd)' => $period,
+                'gmc' => $so['gmc']
+            ]);
+        }
+
+        $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+        $total_minutes = round($process_time / 60, 1);
+
+        return 'Update Success...(' . $total_update . ' data - ' . $total_minutes . ' minute(s)';
         
     }
 

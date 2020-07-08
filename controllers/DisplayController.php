@@ -146,6 +146,422 @@ use app\models\HakAksesPlus;
 
 class DisplayController extends Controller
 {
+    public function actionGetShippingBalance($etd = '', $line = '', $acc = 0)
+    {
+        $period = date('Ym', strtotime($etd));
+        if ($acc == 0) {
+            if ($line == 'ALL') {
+                $tmp_vms_arr = SernoOutput::find()
+                ->select([
+                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'qty' => 'SUM(qty)',
+                    'output' => 'SUM(output)',
+                    'balance' => 'SUM(output - qty)',
+                ])
+                ->where([
+                    'etd' => $etd,
+                ])
+                ->andWhere('line IS NOT NULL')
+                ->andWhere(['<>', 'line', 'SPC'])
+                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                //->having(['<', 'SUM(output - qty)', 0])
+                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->all();
+            } elseif ($line == 'KD') {
+                $tmp_vms_arr = SernoOutput::find()
+                ->select([
+                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'qty' => 'SUM(qty)',
+                    'output' => 'SUM(output)',
+                    'balance' => 'SUM(output - qty)',
+                ])
+                ->where([
+                    'etd' => $etd,
+                    'FG_KD' => 'KD'
+                ])
+                ->andWhere('line IS NOT NULL')
+                ->andWhere(['<>', 'line', 'SPC'])
+                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                //->having(['<', 'SUM(output - qty)', 0])
+                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->all();
+            } elseif ($line == 'PRODUCT') {
+                $tmp_vms_arr = SernoOutput::find()
+                ->select([
+                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'qty' => 'SUM(qty)',
+                    'output' => 'SUM(output)',
+                    'balance' => 'SUM(output - qty)',
+                ])
+                ->where([
+                    'etd' => $etd,
+                    'FG_KD' => 'PRODUCT'
+                ])
+                ->andWhere('line IS NOT NULL')
+                ->andWhere(['<>', 'line', 'SPC'])
+                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                //->having(['<', 'SUM(output - qty)', 0])
+                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->all();
+            } else {
+                $tmp_vms_arr = SernoOutput::find()
+                ->select([
+                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'qty' => 'SUM(qty)',
+                    'output' => 'SUM(output)',
+                    'balance' => 'SUM(output - qty)',
+                ])
+                ->where([
+                    'etd' => $etd,
+                    'line' => $line
+                ])
+                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                //->having(['<', 'SUM(output - qty)', 0])
+                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->all();
+            }
+        } else {
+            if ($line == 'ALL') {
+                $tmp_vms_arr = SernoOutput::find()
+                ->select([
+                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'qty' => 'SUM(qty)',
+                    'output' => 'SUM(output)',
+                    'balance' => 'SUM(output - qty)',
+                ])
+                ->where([
+                    'EXTRACT(year_month FROM etd)' => $period,
+                ])
+                ->andWhere(['<=', 'etd', $etd])
+                ->andWhere('line IS NOT NULL')
+                ->andWhere(['<>', 'line', 'SPC'])
+                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                //->having(['<', 'SUM(output - qty)', 0])
+                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->all();
+            } elseif ($line == 'KD') {
+                $tmp_vms_arr = SernoOutput::find()
+                ->select([
+                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'qty' => 'SUM(qty)',
+                    'output' => 'SUM(output)',
+                    'balance' => 'SUM(output - qty)',
+                ])
+                ->where([
+                    'EXTRACT(year_month FROM etd)' => $period,
+                    'FG_KD' => 'KD'
+                ])
+                ->andWhere(['<=', 'etd', $etd])
+                ->andWhere('line IS NOT NULL')
+                ->andWhere(['<>', 'line', 'SPC'])
+                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                //->having(['<', 'SUM(output - qty)', 0])
+                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->all();
+            } elseif ($line == 'PRODUCT') {
+                $tmp_vms_arr = SernoOutput::find()
+                ->select([
+                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'qty' => 'SUM(qty)',
+                    'output' => 'SUM(output)',
+                    'balance' => 'SUM(output - qty)',
+                ])
+                ->where([
+                    'EXTRACT(year_month FROM etd)' => $period,
+                    'FG_KD' => 'PRODUCT'
+                ])
+                ->andWhere(['<=', 'etd', $etd])
+                ->andWhere('line IS NOT NULL')
+                ->andWhere(['<>', 'line', 'SPC'])
+                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                //->having(['<', 'SUM(output - qty)', 0])
+                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->all();
+            } else {
+                $tmp_vms_arr = SernoOutput::find()
+                ->select([
+                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'qty' => 'SUM(qty)',
+                    'output' => 'SUM(output)',
+                    'balance' => 'SUM(output - qty)',
+                ])
+                ->where([
+                    'EXTRACT(year_month FROM etd)' => $period,
+                    'line' => $line
+                ])
+                ->andWhere(['<=', 'etd', $etd])
+                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                //->having(['<', 'SUM(output - qty)', 0])
+                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->all();
+            }
+        }
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Line ' . $line . ' <small>(' . $etd . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $data .= '<table id="popup-tbl" class="table table-bordered table-striped table-hover">';
+        $data .= 
+        '<thead><tr>
+            <th class="text-center">Line</th>
+            <th class="text-center">Model</th>
+            <th class="text-center">Item</th>
+            <th class="text-center">Item Description</th>
+            <th class="text-center">Plan Qty</th>
+            <th class="text-center">Actual Qty</th>
+            <th class="text-center">Balance Qty</th>
+        </tr></thead>'
+        ;
+        $data .= '<tbody>';
+        $total_plan = $total_actual = $total_balance = 0;
+        foreach ($tmp_vms_arr as $key => $value) {
+            $total_plan += $value->qty;
+            $total_actual += $value->output;
+            $total_balance += $value->balance;
+            if ($value->balance < 0) {
+                $txt_balance = '<span class="badge bg-red">' . $value->balance . '</span>';
+                $bg_class = ' danger';
+            } else {
+                $txt_balance = $value->balance;
+                $bg_class = '';
+            }
+            if ($value->qty == 0 && $value->output == 0) {
+                # code...
+            } else {
+                $data .= '
+                <tr>
+                    <td class="text-center' . $bg_class . '">' . $value->line . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->model . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->gmc . '</td>
+                    <td class="' . $bg_class . '">' . $value->gmc_desc . ' ' . $value->gmc_destination . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->qty . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->output . '</td>
+                    <td class="text-center' . $bg_class . '">' . $txt_balance . '</td>
+                </tr>
+                ';
+            }
+            
+        }
+        $data .= '</tbody>';
+        $data .= '<tfoot>
+            <tr>
+                <td class="text-center primary" colspan="4">Total</td>
+                <td class="text-center primary">' . number_format($total_plan) . '</td>
+                <td class="text-center primary">' . number_format($total_actual) . '</td>
+                <td class="text-center primary">' . number_format($total_balance) . '</td>
+            </tr>
+        </tfoot>';
+        $data .= '</table>';
+        return $data;
+    }
+
+    public function actionShippingDailyAccumulation($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $this_period = date('Ym');
+        $today = date('Y-m-d');
+
+        $period_dropdown = ArrayHelper::map(SernoOutput::find()
+        ->select([
+            'period' => 'EXTRACT(year_month FROM etd)'
+        ])
+        ->groupBy('EXTRACT(year_month FROM etd)')
+        ->orderBy('EXTRACT(year_month FROM etd) DESC')->all(), 'period', 'period');
+        $model = new \yii\base\DynamicModel([
+            'period', 'line'
+        ]);
+        $model->addRule(['period', 'line'], 'required');
+        $model->period = $this_period;
+        $model->line = 'HS';
+
+        /*$line_dropdown = ArrayHelper::map(SernoMaster::find()
+        ->select('line')
+        ->where('line != \'\'AND line != \'MIS\'')
+        ->groupBy('line')
+        ->all(), 'line', 'line');*/
+        $line_dropdown = [];
+
+        $tmp_line = HakAksesPlus::find()
+        ->where([
+            'level_akses' => '1a'
+        ])
+        ->andWhere(['<>', 'hak_akses', 'MIS'])
+        ->all();
+        foreach ($tmp_line as $key => $value) {
+            if ($value->desc != null) {
+                $line_dropdown[$value->hak_akses] = $value->desc;
+            } else {
+                $line_dropdown[$value->hak_akses] = $value->hak_akses;
+            }
+            
+        }
+        asort($line_dropdown);
+
+        $line_dropdown['ALL'] = '- ALL LINE -';
+        $line_dropdown['KD'] = '- KD ONLY -';
+        $line_dropdown['PRODUCT'] = '- PRODUCT ONLY -';
+
+        if ($model->load($_GET)) {
+
+        }
+
+        if ($model->line == 'ALL') {
+            $tmp_vms = SernoOutput::find()
+            ->select([
+                'etd',
+                'qty' => 'SUM(qty)',
+                'output' => 'SUM(output)'
+            ])
+            ->where([
+                'EXTRACT(year_month FROM etd)' => $model->period,
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->groupBy('etd')
+            ->orderBy('etd')
+            ->all();
+        } elseif ($model->line == 'KD') {
+            $tmp_vms = SernoOutput::find()
+            ->select([
+                'etd',
+                'qty' => 'SUM(qty)',
+                'output' => 'SUM(output)'
+            ])
+            ->where([
+                'EXTRACT(year_month FROM etd)' => $model->period,
+                'FG_KD' => 'KD'
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->groupBy('etd')
+            ->orderBy('etd')
+            ->all();
+        } elseif ($model->line == 'PRODUCT') {
+            $tmp_vms = SernoOutput::find()
+            ->select([
+                'etd',
+                'qty' => 'SUM(qty)',
+                'output' => 'SUM(output)'
+            ])
+            ->where([
+                'EXTRACT(year_month FROM etd)' => $model->period,
+                'FG_KD' => 'PRODUCT'
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->groupBy('etd')
+            ->orderBy('etd')
+            ->all();
+        } else {
+            $tmp_vms = SernoOutput::find()
+            ->select([
+                'etd',
+                'qty' => 'SUM(qty)',
+                'output' => 'SUM(output)'
+            ])
+            ->where([
+                'EXTRACT(year_month FROM etd)' => $model->period,
+                'LINE' => $model->line
+            ])
+            ->groupBy('etd')
+            ->orderBy('etd')
+            ->all();
+        }
+
+        $tmp_data_plan = $tmp_data_actual = $tmp_data_balance = $data = [];
+        $tmp_table = [];
+        $tmp_total_plan = $tmp_total_actual = 0;
+        foreach ($tmp_vms as $key => $value) {
+            $tmp_table['thead'][] = $value->etd;
+            $tmp_table['plan'][] = $value->qty;
+            $proddate = (strtotime($value->etd . " +7 hours") * 1000);
+            $tmp_total_plan += $value->qty;
+            $tmp_table['plan_acc'][] = $tmp_total_plan;
+            /*if (date('Y-m-d', strtotime($value->etd)) > $today) {
+                $tmp_total_actual = null;
+            } else {
+                $tmp_total_actual += $value->output;
+            }*/
+            $tmp_total_actual += $value->output;
+
+            $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
+            /*if (date('Y-m-d', strtotime($value->etd)) > $today) {
+                $tmp_total_balance = null;
+                $tmp_table['actual'][] = null;
+                $tmp_table['actual_acc'][] = null;
+                $tmp_table['balance'][] = null;
+                $tmp_table['balance_acc'][] = null;
+            } else {
+                $tmp_balance = $value->output - $value->qty;
+                $tmp_table['actual'][] = $value->output == null ? '0' : $value->output;
+                $tmp_table['actual_acc'][] = $tmp_total_actual == null ? '0' : $tmp_total_actual;
+                $tmp_table['balance'][] = $tmp_balance == null ? '0' : $tmp_balance;
+                $tmp_table['balance_acc'][] = $tmp_total_balance == null ? '0' : $tmp_total_balance;
+            }*/
+
+            $tmp_balance = $value->output - $value->qty;
+            $tmp_table['actual'][] = $value->output == null ? '0' : $value->output;
+            $tmp_table['actual_acc'][] = $tmp_total_actual == null ? '0' : $tmp_total_actual;
+            $tmp_table['balance'][] = $tmp_balance == null ? '0' : $tmp_balance;
+            $tmp_table['balance_acc'][] = $tmp_total_balance == null ? '0' : $tmp_total_balance;
+
+            $tmp_data_balance[] = [
+                'x' => $proddate,
+                'y' => $tmp_total_balance,
+            ];
+            
+            //if ($value->qty > 0) {
+            $tmp_data_plan[] = [
+                'x' => $proddate,
+                'y' => $tmp_total_plan,
+                
+            ];
+            //}
+            
+            //if ($value->output > 0) {
+            $tmp_data_actual[] = [
+                'x' => $proddate,
+                'y' => $tmp_total_actual,
+                
+            ];
+            //}
+        }
+
+        $data = [
+            [
+                'name' => 'PLAN',
+                'data' => $tmp_data_plan,
+                'color' => 'white'
+            ], [
+                'name' => 'ACTUAL',
+                'data' => $tmp_data_actual,
+                'color' => 'lime'
+            ],
+            [
+                'name' => 'BALANCE (ACCUMULATION)',
+                'data' => $tmp_data_balance,
+                'color' => 'orange',
+                'dataLabels' => [
+                    'enabled' => true
+                ],
+            ],
+        ];
+
+        return $this->render('shipping-daily-accumulation', [
+            'model' => $model,
+            'data' => $data,
+            'line_dropdown' => $line_dropdown,
+            'period_dropdown' => $period_dropdown,
+            'tmp_table' => $tmp_table,
+            'vms_version' => $vms_version,
+        ]);
+    }
+
     public function actionLastBackup()
     {
         $this->layout = 'clean';
@@ -383,7 +799,7 @@ class DisplayController extends Controller
         $this_period = date('Ym');
         $today = date('Y-m-d');
 
-        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
+        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
         $model = new \yii\base\DynamicModel([
             'period', 'line'
         ]);

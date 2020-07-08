@@ -20,6 +20,7 @@ use Yii;
  * @property integer $qty
  * @property integer $output
  * @property integer $adv
+ * @property integer $vanning
  * @property string $vms
  * @property string $etd
  * @property string $ship
@@ -32,6 +33,13 @@ use Yii;
  * @property integer $back_order
  * @property string $etd_old
  * @property integer $cntr_old
+ * @property string $gmc_desc
+ * @property string $gmc_destination
+ * @property string $bu
+ * @property string $line
+ * @property string $model
+ * @property string $fg_kd
+ * @property double $standard_price
  * @property string $aliasModel
  */
 abstract class SernoOutput extends \yii\db\ActiveRecord
@@ -62,9 +70,12 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
     {
         return [
             [['pk'], 'required'],
-            [['id', 'so', 'qty', 'output', 'adv', 'cntr', 'm3', 'back_order', 'cntr_old'], 'integer'],
+            [['id', 'so', 'qty', 'output', 'adv', 'vanning', 'cntr', 'm3', 'back_order', 'cntr_old'], 'integer'],
             [['vms', 'etd', 'ship'], 'safe'],
-            [['pk', 'uniq', 'stc', 'dst', 'num', 'gmc', 'category', 'remark', 'invo', 'cont', 'etd_old'], 'string', 'max' => 255],
+            [['standard_price'], 'number'],
+            [['pk', 'uniq', 'stc', 'dst', 'num', 'gmc', 'category', 'remark', 'invo', 'cont', 'etd_old', 'gmc_desc'], 'string', 'max' => 255],
+            [['gmc_destination', 'bu', 'model'], 'string', 'max' => 50],
+            [['line', 'fg_kd'], 'string', 'max' => 20],
             [['pk'], 'unique']
         ];
     }
@@ -86,6 +97,7 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'qty' => 'Qty',
             'output' => 'Output',
             'adv' => 'Adv',
+            'vanning' => 'Vanning',
             'vms' => 'Vms',
             'etd' => 'Etd',
             'ship' => 'Ship',
@@ -98,6 +110,13 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'back_order' => 'Back Order',
             'etd_old' => 'Etd Old',
             'cntr_old' => 'Cntr Old',
+            'gmc_desc' => 'Gmc Desc',
+            'gmc_destination' => 'Gmc Destination',
+            'bu' => 'Bu',
+            'line' => 'Line',
+            'model' => 'Model',
+            'fg_kd' => 'Fg Kd',
+            'standard_price' => 'Standard Price',
         ];
     }
 
