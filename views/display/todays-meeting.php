@@ -37,6 +37,13 @@ $this->registerCss("
     .table > tbody > tr > td {padding: 0px;}
     //tr:nth-child(even) {background-color: rgba(255, 255, 255, 0.15);}
     //tr:nth-child(odd) {background-color: rgba(255, 255, 255, 0.1);}
+    marquee span { 
+        margin-right: 100%; 
+    } 
+    marquee p { 
+        white-space:nowrap;
+        margin-right: 1000px; 
+    } 
 ");
 $this->registerCssFile('@web/css/component.css');
 $this->registerJsFile('@web/js/snap.svg-min.js');
@@ -148,16 +155,110 @@ if ($_GET['room_id'] == 6) {
     ");
 }
 
-$script = "
-    window.onload = setupRefresh;
+if ($room_info->id == 6 || $room_info->id == 1) {
+    $script = "
+        $(document).ready(function() {
+            setupRefresh();
+            news();
+        });
 
-    function setupRefresh() {
-      setTimeout(\"refreshPage();\", 30000); // milliseconds
-    }
-    function refreshPage() {
-       window.location = location.href;
-    }
-";
+        function setupRefresh() {
+          setTimeout(\"refreshPage();\", 180000); // milliseconds
+        }
+        function refreshPage() {
+           window.location = location.href;
+        }
+
+        function news() 
+        {
+            $.ajax
+            ({ 
+                url: '" . Url::to(['japan-news']) . "',
+                type: 'get',
+                data: 
+                {
+                    'news':'on'
+                },
+                success: function (result) 
+                {
+                    var json = result, 
+                    obj = JSON.parse(json);
+                    var tmp_str = '';
+                    $.each( obj.news, function( key, value ) {
+                        //alert( key + ': ' + value );
+                        if(tmp_str == ''){
+                            tmp_str = value;
+                        } else {
+                            tmp_str += ' <span> </span> ' + value;
+                        }
+                    });
+
+                    $('#berita').html(`
+                        <marquee scrollamount=\"20\" style=\"background-color: #2F4F4F; color: white; text-align: center; font-size: 5em; font-weight: bold; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
+                            `+ tmp_str +`
+                        </marquee> 
+                    `);
+
+                    setTimeout(function(){news();}, 180000);
+
+                    // console.log(obj);
+                }
+            });
+        };
+    ";
+} else {
+    $script = "
+        $(document).ready(function() {
+            setupRefresh();
+            news();
+        });
+
+        function setupRefresh() {
+          setTimeout(\"refreshPage();\", 180000); // milliseconds
+        }
+        function refreshPage() {
+           window.location = location.href;
+        }
+
+        function news() 
+        {
+            $.ajax
+            ({ 
+                url: '" . Url::to(['indo-news']) . "',
+                type: 'get',
+                data: 
+                {
+                    'news':'on'
+                },
+                success: function (result) 
+                {
+                    var json = result, 
+                    obj = JSON.parse(json);
+                    var tmp_str = '';
+                    $.each( obj.news, function( key, value ) {
+                        //alert( key + ': ' + value );
+                        if(tmp_str == ''){
+                            tmp_str = value;
+                        } else {
+                            tmp_str += ' <span> </span> ' + value;
+                        }
+                    });
+
+                    $('#berita').html(`
+                        <marquee scrollamount=\"20\" style=\"background-color: #2F4F4F; color: white; text-align: center; font-size: 5em; font-weight: bold; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
+                            `+ tmp_str +`
+                        </marquee> 
+                    `);
+
+                    setTimeout(function(){news();}, 180000);
+
+                    // console.log(obj);
+                }
+            });
+        };
+    ";
+}
+
 $this->registerJs($script, View::POS_HEAD );
 
 //$this->registerCssFile('@web/adminty_assets/css/bootstrap.min.css');
@@ -189,11 +290,10 @@ echo '</pre>';*/
 
         <br/>
         <div class="row">
-            
-                <div id="meeting-content" style="font-family: 'MS PGothic', Osaka, Arial, sans-serif; text-transform: uppercase;">
-                </div>
-            
+            <div id="meeting-content" style="font-family: 'MS PGothic', Osaka, Arial, sans-serif; text-transform: uppercase;">
+            </div>
         </div>
+        <div id="berita"></div>
     </div>
     
     <div id="loader" class="pageload-overlay" data-opening="m -5,-5 0,70 90,0 0,-70 z m 5,35 c 0,0 15,20 40,0 25,-20 40,0 40,0 l 0,0 C 80,30 65,10 40,30 15,50 0,30 0,30 z"> <!------------------- ANIMASI ------------------------->

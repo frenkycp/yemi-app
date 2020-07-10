@@ -3501,6 +3501,47 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionJapanNews()
+    {
+        $data = file_get_contents('http://newsapi.org/v2/top-headlines?country=jp&category=business&apiKey=b727b4ad1d0a493f8422e16e2391005a');
+        $menu = json_decode($data, true);
+            
+        $tampil_data = $menu["articles"];
+
+        shuffle($tampil_data);
+        $tmp_arr = [];
+        foreach ($tampil_data as $row) 
+        {
+            $entries = $row["title"];
+            $tmp_arr[] = $entries;
+        }
+
+        $tampil = array('news' => $tmp_arr);
+        return json_encode($tampil, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function actionIndoNews()
+    {
+        $feeds = array("http://rss.detik.com");
+        $entries = array();
+        $tmp_arr = [];
+        foreach($feeds as $feed) 
+        {
+            $xml = simplexml_load_file($feed);
+            $entries = array_merge($entries, $xml->xpath("//item"));
+        }
+
+        foreach ($entries as $row) 
+        {
+            $tmp = $row->title;
+            $tmp_arr[] = $tmp . ' - news.detik';
+        }
+        shuffle($tmp_arr);
+
+        $tampil = array('news' => $tmp_arr);
+        return json_encode($tampil, JSON_UNESCAPED_UNICODE);
+    }
+
     public function actionLiveCookingNews()
     {
         $feeds = array("http://rss.detik.com/index.php/detikcom");
