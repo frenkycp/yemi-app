@@ -194,7 +194,7 @@ if ($room_info->id == 6 || $room_info->id == 1) {
                     });
 
                     $('#berita').html(`
-                        <marquee scrollamount=\"20\" style=\"background-color: #2F4F4F; color: white; text-align: center; font-size: 5em; font-weight: bold; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
+                        <marquee scrollamount=\"25\" style=\"background-color: transparent; color: white; text-align: center; font-size: 5em; letter-spacing: 5px; font-weight: normal; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
                             `+ tmp_str +`
                         </marquee> 
                     `);
@@ -245,7 +245,7 @@ if ($room_info->id == 6 || $room_info->id == 1) {
                     });
 
                     $('#berita').html(`
-                        <marquee scrollamount=\"20\" style=\"background-color: #2F4F4F; color: white; text-align: center; font-size: 5em; font-weight: bold; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
+                        <marquee scrollamount=\"25\" style=\"background-color: transparent; color: white; text-align: center; font-size: 5em; letter-spacing: 5px; font-weight: normal; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
                             `+ tmp_str +`
                         </marquee> 
                     `);
