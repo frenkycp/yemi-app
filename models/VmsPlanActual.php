@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class VmsPlanActual extends BaseVmsPlanActual
 {
+    public $kd_plan, $kd_actual, $product_plan, $product_actual;
 
     public function behaviors()
     {

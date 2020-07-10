@@ -805,7 +805,7 @@ class DisplayController extends Controller
         ]);
         $model->addRule(['period', 'line'], 'required');
         $model->period = $this_period;
-        $model->line = 'HS';
+        $model->line = 'ALL';
 
         /*$line_dropdown = ArrayHelper::map(SernoMaster::find()
         ->select('line')
@@ -977,6 +977,39 @@ class DisplayController extends Controller
         $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $model->period])->orderBy('VMS_VERSION')->one();
         $vms_version = $tmp_vms_version->VMS_VERSION;
 
+        $yesterday_period = date('Ym', strtotime(' -1 day'));
+        $tmp_yesterday = VmsPlanActual::find()
+        ->select([
+            'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
+            'kd_actual' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN ACTUAL_QTY ELSE 0 END)',
+            'product_plan' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN PLAN_QTY ELSE 0 END)',
+            'product_actual' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN ACTUAL_QTY ELSE 0 END)'
+        ])
+        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere(['FORMAT(VMS_DATE, \'yyyyMM\')' => $yesterday_period])
+        ->one();
+
+        /*$tmp_yesterday = VmsPlanActual::find()
+        ->select([
+            'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+            'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
+            'kd_actual' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN ACTUAL_QTY ELSE 0 END)',
+            'product_plan' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN PLAN_QTY ELSE 0 END)',
+            'product_actual' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN ACTUAL_QTY ELSE 0 END)'
+        ])
+        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->groupBY('VMS_DATE')
+        ->orderBy('VMS_DATE DESC')
+        ->one();*/
+
+        $yesterday_data = [
+            'plan' => $tmp_yesterday->kd_plan + $tmp_yesterday->product_plan,
+            'actual' => $tmp_yesterday->kd_actual + $tmp_yesterday->product_actual,
+            'kd_balance' => $tmp_yesterday->kd_actual - $tmp_yesterday->kd_plan,
+            'product_balance' => $tmp_yesterday->product_actual - $tmp_yesterday->product_plan,
+        ];
+        $yesterday_data['balance'] = $yesterday_data['actual'] - $yesterday_data['plan'];
+
         return $this->render('vms-daily-accumulation', [
             'model' => $model,
             'data' => $data,
@@ -984,6 +1017,7 @@ class DisplayController extends Controller
             'period_dropdown' => $period_dropdown,
             'tmp_table' => $tmp_table,
             'vms_version' => $vms_version,
+            'yesterday_data' => $yesterday_data,
         ]);
     }
 

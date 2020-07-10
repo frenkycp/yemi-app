@@ -79,10 +79,21 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
+    #yesterday-tbl > tbody > tr > td{
+        border:1px solid #777474;
+        background: #33383d;
+        color: #FFF;
+        vertical-align: middle;
+        //padding: 10px 10px;
+        letter-spacing: 2px;
+        //height: 100px;
+    }
     #popup-tbl > tfoot > tr > td {
         font-weight: bold;
         background-color: rgba(0, 0, 150, 0.3);
     }
+    .label-tbl {padding-left: 20px !important;}
+    .text-red {color: #ff7564 !important;}
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
     //#summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
@@ -172,196 +183,238 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 <br/>
-<div class="box box-primary box-solid">
-    <div class="box-body">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                //'modules/exporting',
-                //'themes/sand-signika',
-                //'themes/grid-light',
-                'themes/dark-unica',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'line',
-                    'style' => [
-                        'fontFamily' => 'sans-serif',
+<div class="row">
+    <div class="col-md-8">
+        <div class="box box-primary box-solid">
+            <div class="box-body">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        //'modules/exporting',
+                        //'themes/sand-signika',
+                        //'themes/grid-light',
+                        'themes/dark-unica',
                     ],
-                    'zoomType' => 'x',
-                    'height' => 500
-                ],
-                'title' => [
-                    //'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
-                ],
-                'subtitle' => [
-                    'text' => ''
-                ],
-                'xAxis' => [
-                    'type' => 'datetime',
-                    //'categories' => $value['category'],
-                ],
-                'yAxis' => [
-                    'title' => [
-                        'text' => 'Total Qty'
-                    ],
-                    /*[
+                    'options' => [
+                        'chart' => [
+                            'type' => 'line',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
+                            ],
+                            'zoomType' => 'x',
+                            'height' => 580
+                        ],
                         'title' => [
-                            'text' => 'VMS v.s FLO'
+                            //'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
                         ],
-                    ], [
-                        'title' => [
-                            'text' => 'BALANCE'
+                        'subtitle' => [
+                            'text' => ''
                         ],
-                        'opposite' => true,
-                    ],*/
-                ],
-                'credits' => [
-                    'enabled' =>false
-                ],
-                'tooltip' => [
-                    'enabled' => true,
-                    'shared' => true,
-                    //'xDateFormat' => '%A, %b %e %Y',
-                    'valueSuffix' => ' pcs'
-                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
-                ],
-                'plotOptions' => [
-                    'series' => [
-                        'dataLabels' => [
-                            'enabled' => false
+                        'xAxis' => [
+                            'type' => 'datetime',
+                            //'categories' => $value['category'],
                         ],
-                        'lineWidth' => 1.5,
-                        'marker' => [
-                            'radius' => 2,
+                        'yAxis' => [
+                            'title' => [
+                                'text' => 'Total Qty'
+                            ],
+                            /*[
+                                'title' => [
+                                    'text' => 'VMS v.s FLO'
+                                ],
+                            ], [
+                                'title' => [
+                                    'text' => 'BALANCE'
+                                ],
+                                'opposite' => true,
+                            ],*/
                         ],
-                        /*'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression("
-                                    function(e){
-                                        e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                    }
-                                "),
+                        'credits' => [
+                            'enabled' =>false
+                        ],
+                        'tooltip' => [
+                            'enabled' => true,
+                            'shared' => true,
+                            //'xDateFormat' => '%A, %b %e %Y',
+                            'valueSuffix' => ' pcs'
+                            //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                        ],
+                        'plotOptions' => [
+                            'series' => [
+                                'dataLabels' => [
+                                    'enabled' => false
+                                ],
+                                'lineWidth' => 1.5,
+                                'marker' => [
+                                    'radius' => 2,
+                                ],
+                                /*'cursor' => 'pointer',
+                                'point' => [
+                                    'events' => [
+                                        'click' => new JsExpression("
+                                            function(e){
+                                                e.preventDefault();
+                                                $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                            }
+                                        "),
+                                    ]
+                                ]*/
                             ]
-                        ]*/
-                    ]
-                ],
-                'series' => $data
-            ],
-        ]);
-        ?>
-        <hr>
-        <table class="table table-bordered" id="summary-tbl">
-            <thead>
-                <tr>
-                    <th></th>
-                    <?php
-                    if (isset($tmp_table['thead']))
-                    foreach ($tmp_table['thead'] as $key => $value): ?>
-                        <th class="text-center" style="font-weight: normal;"><?= date('d M', strtotime($value)); ?></th>
-                    <?php endforeach ?>
-                </tr>
-            </thead>
+                        ],
+                        'series' => $data
+                    ],
+                ]);
+                ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <table class="table table-bordered" style="font-size: 73px; margin-bottom: 0px;" id="yesterday-tbl">
             <tbody>
                 <tr>
-                    <td>Plan</td>
-                    <?php
-                    if (isset($tmp_table['plan']))
-                    foreach ($tmp_table['plan'] as $key => $value): ?>
-                        <td class="text-center"><?= number_format($value); ?></td>
-                    <?php endforeach ?>
+                    <td width="45%" style="background-color: #454B52;" class="label-tbl">Plan</td>
+                    <td class="text-right"><?= number_format($yesterday_data['plan']); ?> <span style="font-size: 0.2em"> PCS</span></td>
                 </tr>
                 <tr>
-                    <td>Actual</td>
-                    <?php
-                    if(isset($tmp_table['actual']))
-                    foreach ($tmp_table['actual'] as $key => $value): ?>
-                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
-                    <?php endforeach ?>
+                    <td style="background-color: #454B52;" class="label-tbl">Actual</td>
+                    <td class="text-right"><?= number_format($yesterday_data['actual']); ?> <span style="font-size: 0.2em"> PCS</span></td>
                 </tr>
                 <tr>
-                    <td>Balance</td>
-                    <?php
-                    if(isset($tmp_table['balance']))
-                    foreach ($tmp_table['balance'] as $key => $value): 
-                        if ($value < 0) {
-                            echo '<td class="text-center">
-                                ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line], ['class' => 'popup_btn']) . '
-                            </td>';
-                        } else {
-                            if ($value == null) {
-                                echo '<td class="text-center">
-                                        
-                                    </td>';
-                            } else {
-                                if ($value == 0) {
-                                    echo '<td class="text-center">
-                                        <span class="badge">' . number_format($value) . '</span>
-                                    </td>';
-                                } else {
-                                    echo '<td class="text-center">
-                                        <span class="badge bg-green">' . number_format($value) . '</span>
-                                    </td>';
-                                }
-                            }
+                    <td style="background-color: #454B52;" class="label-tbl">Balance</td>
+                    <td class="text-right">
+                        <?php
+                        $tmp_balance = '<span class="">' . number_format($yesterday_data['balance']) . '</span>';
+                        if ($yesterday_data['balance'] < 0) {
+                            $tmp_balance = '<span class="text-red">' . number_format($yesterday_data['balance']) . '</span>';
                         }
+                        /*if ($yesterday_data['balance'] > 0) {
+                            $tmp_balance = '<span class="text-green">' . number_format($yesterday_data['balance']) . '</span>';
+                        }*/
+                        echo $tmp_balance . '<span style="font-size: 0.2em"> PCS</span>';
                         ?>
-                        
-                    <?php endforeach ?>
+                        <?= ''; //number_format($yesterday_data['balance']); ?>
+                    </td>
                 </tr>
-                <tr class="accumulation">
-                    <td>Plan<br/>Accumulation</td>
-                    <?php
-                    if (isset($tmp_table['plan_acc']))
-                    foreach ($tmp_table['plan_acc'] as $key => $value): ?>
-                        <td class="text-center"><?= number_format($value); ?></td>
-                    <?php endforeach ?>
+                <tr>
+                    <td style="background-color: #454B52;" class="label-tbl text-right"><span style="font-size: 0.7em; vertical-align: top;">↳ </span>KD</td>
+                    <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['kd_balance']); ?> <span style="font-size: 0.2em; color: white;"> PCS</span></td>
                 </tr>
-                <tr class="accumulation">
-                    <td>Actual<br/>Accumulation</td>
-                    <?php
-                    if(isset($tmp_table['actual_acc']))
-                    foreach ($tmp_table['actual_acc'] as $key => $value): ?>
-                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
-                    <?php endforeach ?>
-                </tr>
-                <tr class="accumulation">
-                    <td>Balance<br/>Accumulation</td>
-                    <?php
-                    if(isset($tmp_table['balance_acc']))
-                    foreach ($tmp_table['balance_acc'] as $key => $value): 
-                        if ($value < 0) {
-                            echo '<td class="text-center">
-                                ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line, 'acc' => 1], ['class' => 'popup_btn']) . '
-                            </td>';
-                        } else {
-                            if ($value == null) {
-                                echo '<td class="text-center">
-                                        
-                                    </td>';
-                            } else {
-                                if ($value == 0) {
-                                    echo '<td class="text-center">
-                                        <span class="badge">' . number_format($value) . '</span>
-                                    </td>';
-                                } else {
-                                    echo '<td class="text-center">
-                                        <span class="badge bg-green">' . number_format($value) . '</span>
-                                    </td>';
-                                }
-                            }
-                        }
-                        ?>
-                        
-                    <?php endforeach ?>
+                <tr>
+                    <td style="background-color: #454B52;" class="label-tbl text-right"><span style="font-size: 0.7em; vertical-align: top;">↳ </span>FG</td>
+                    <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['product_balance']); ?> <span style="font-size: 0.2em; color: white;"> PCS</span></td>
                 </tr>
             </tbody>
         </table>
-        <span style="font-weight: bold;"><i>*VMS Version : <?= $vms_version; ?></i></span>
     </div>
 </div>
+
+<table class="table table-bordered" id="summary-tbl">
+    <thead>
+        <tr>
+            <th></th>
+            <?php
+            if (isset($tmp_table['thead']))
+            foreach ($tmp_table['thead'] as $key => $value): ?>
+                <th class="text-center" style="font-weight: normal;"><?= date('d M', strtotime($value)); ?></th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Plan</td>
+            <?php
+            if (isset($tmp_table['plan']))
+            foreach ($tmp_table['plan'] as $key => $value): ?>
+                <td class="text-center"><?= number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td>Actual</td>
+            <?php
+            if(isset($tmp_table['actual']))
+            foreach ($tmp_table['actual'] as $key => $value): ?>
+                <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td>Balance</td>
+            <?php
+            if(isset($tmp_table['balance']))
+            foreach ($tmp_table['balance'] as $key => $value): 
+                if ($value < 0) {
+                    echo '<td class="text-center">
+                        ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line], ['class' => 'popup_btn']) . '
+                    </td>';
+                } else {
+                    if ($value == null) {
+                        echo '<td class="text-center">
+                                
+                            </td>';
+                    } else {
+                        if ($value == 0) {
+                            echo '<td class="text-center">
+                                <span class="badge">' . number_format($value) . '</span>
+                            </td>';
+                        } else {
+                            echo '<td class="text-center">
+                                <span class="badge bg-green">' . number_format($value) . '</span>
+                            </td>';
+                        }
+                    }
+                }
+                ?>
+                
+            <?php endforeach ?>
+        </tr>
+        <tr class="accumulation">
+            <td>Plan<br/>Accumulation</td>
+            <?php
+            if (isset($tmp_table['plan_acc']))
+            foreach ($tmp_table['plan_acc'] as $key => $value): ?>
+                <td class="text-center"><?= number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr class="accumulation">
+            <td>Actual<br/>Accumulation</td>
+            <?php
+            if(isset($tmp_table['actual_acc']))
+            foreach ($tmp_table['actual_acc'] as $key => $value): ?>
+                <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr class="accumulation">
+            <td>Balance<br/>Accumulation</td>
+            <?php
+            if(isset($tmp_table['balance_acc']))
+            foreach ($tmp_table['balance_acc'] as $key => $value): 
+                if ($value < 0) {
+                    echo '<td class="text-center">
+                        ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line, 'acc' => 1], ['class' => 'popup_btn']) . '
+                    </td>';
+                } else {
+                    if ($value == null) {
+                        echo '<td class="text-center">
+                                
+                            </td>';
+                    } else {
+                        if ($value == 0) {
+                            echo '<td class="text-center">
+                                <span class="badge">' . number_format($value) . '</span>
+                            </td>';
+                        } else {
+                            echo '<td class="text-center">
+                                <span class="badge bg-green">' . number_format($value) . '</span>
+                            </td>';
+                        }
+                    }
+                }
+                ?>
+                
+            <?php endforeach ?>
+        </tr>
+    </tbody>
+</table>
+<span style="font-weight: normal; color: white;"><i>*VMS Version : <?= $vms_version; ?></i></span>
 <?php
     yii\bootstrap\Modal::begin([
         'id' =>'modal',
