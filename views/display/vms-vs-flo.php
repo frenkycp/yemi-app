@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Production Progress <span class="japanesse light-green">(生産進捗)</span>',
+    'page_title' => 'Production Progress <span class="japanesse light-green">(生産進捗)</span> VMS',
     'tab_title' => 'Production Progress',
     'breadcrumbs_title' => 'Production Progress'
 ];
@@ -265,11 +265,12 @@ echo '</pre>';*/
                     ],
                 ]);
                 ?>
+                <span style="font-weight: bold; letter-spacing: 2px;"><i>*VMS Version : <?= $vms_version; ?></i></span>
             </div>
         </div>
     </div>
     <div class="col-md-5">
-        <table height="732px" class="table table-bordered" style="font-size: 90px; margin-bottom: 0px;" id="yesterday-tbl">
+        <table height="750px" class="table table-bordered" style="font-size: 90px; margin-bottom: 0px;" id="yesterday-tbl">
             <tbody>
                 <tr>
                     <td width="50%" style="background-color: #454B52;" class="label-tbl">Plan</td>
@@ -296,18 +297,18 @@ echo '</pre>';*/
                     </td>
                 </tr>
                 <tr>
-                    <td style="background-color: #454B52;" class="label-tbl text-right"><span style="font-size: 0.7em; vertical-align: top;">↳ </span>KD</td>
+                    <td style="background-color: #454B52;" class="label-tbl text-right">KD</td>
                     <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['kd_balance']); ?> <span style="font-size: 0.2em; color: white;"> PCS</span></td>
                 </tr>
                 <tr>
-                    <td style="background-color: #454B52;" class="label-tbl text-right"><span style="font-size: 0.7em; vertical-align: top;">↳ </span>FG</td>
+                    <td style="background-color: #454B52;" class="label-tbl text-right">FG</td>
                     <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['product_balance']); ?> <span style="font-size: 0.2em; color: white;"> PCS</span></td>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
-<hr>
+<hr style="margin-top: 0px;">
 <?php
 if (count($tmp_top_minus) == 0) { } else {
     ?>
