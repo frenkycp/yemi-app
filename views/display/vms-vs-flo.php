@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'VMS vs FLO <span class="japanesse light-green"></span>',
-    'tab_title' => 'VMS vs FLO',
-    'breadcrumbs_title' => 'VMS vs FLO'
+    'page_title' => 'Production Progress <span class="japanesse light-green">(生産進捗)</span>',
+    'tab_title' => 'Production Progress',
+    'breadcrumbs_title' => 'Production Progress'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Jakarta');
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 3em; text-align: center;}
+    .content-header {color: white; font-size: 1.5em; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -305,6 +305,39 @@ echo '</pre>';*/
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="panel panel-danger">
+    <div class="panel-heading text-center">
+        <h3 class="panel-title" style="font-size: 3em;">3 TOP MINUS (FG)</h3>
+    </div>
+    <div class="panel-body no-padding" style="font-size: 3em; letter-spacing: 3px;">
+        <?php
+        if (count($tmp_top_minus) == 0) {
+            echo '<span>No Minus...</span>';
+        } else {
+            ?>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">GMC</th>
+                        <th>Description</th>
+                        <th class="text-center">Balance Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($tmp_top_minus as $value): ?>
+                        <tr>
+                            <td class="text-center"><?= $value->ITEM; ?></td>
+                            <td><?= $value->ITEM_DESC . ' ' . $value->DESTINATION; ?></td>
+                            <td class="text-center"><?= $value->BALANCE_QTY; ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        <?php }
+        ?>
     </div>
 </div>
 

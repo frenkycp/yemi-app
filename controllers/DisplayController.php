@@ -364,6 +364,26 @@ class DisplayController extends Controller
         ];
         $yesterday_data['balance'] = $yesterday_data['actual'] - $yesterday_data['plan'];
 
+        $tmp_top_minus = VmsPlanActual::find()
+        ->select([
+            'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+        ])
+        ->where([
+            'VMS_PERIOD' => $yesterday_period,
+            'FG_KD' => 'PRODUCT'
+        ])
+        ->andWhere(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('MODEL, ITEM, ITEM_DESC, DESTINATION')
+        ->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+        ->limit(3)
+        ->all();
+
         return $this->render('vms-vs-flo', [
             'model' => $model,
             'data' => $data,
@@ -372,6 +392,7 @@ class DisplayController extends Controller
             'tmp_table' => $tmp_table,
             'vms_version' => $vms_version,
             'yesterday_data' => $yesterday_data,
+            'tmp_top_minus' => $tmp_top_minus,
         ]);
     }
 
