@@ -184,7 +184,7 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 <br/>
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-7">
         <div class="box box-primary box-solid">
             <div class="box-body">
                 <?php
@@ -202,7 +202,7 @@ echo '</pre>';*/
                                 'fontFamily' => 'sans-serif',
                             ],
                             'zoomType' => 'x',
-                            'height' => 580
+                            'height' => 710
                         ],
                         'title' => [
                             //'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
@@ -244,7 +244,7 @@ echo '</pre>';*/
                                 'dataLabels' => [
                                     'enabled' => false
                                 ],
-                                'lineWidth' => 1.5,
+                                'lineWidth' => 2,
                                 'marker' => [
                                     'radius' => 2,
                                 ],
@@ -268,11 +268,11 @@ echo '</pre>';*/
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <table class="table table-bordered" style="font-size: 73px; margin-bottom: 0px;" id="yesterday-tbl">
+    <div class="col-md-5">
+        <table height="732px" class="table table-bordered" style="font-size: 90px; margin-bottom: 0px;" id="yesterday-tbl">
             <tbody>
                 <tr>
-                    <td width="45%" style="background-color: #454B52;" class="label-tbl">Plan</td>
+                    <td width="50%" style="background-color: #454B52;" class="label-tbl">Plan</td>
                     <td class="text-right"><?= number_format($yesterday_data['plan']); ?> <span style="font-size: 0.2em"> PCS</span></td>
                 </tr>
                 <tr>
@@ -307,40 +307,19 @@ echo '</pre>';*/
         </table>
     </div>
 </div>
-
-<div class="panel panel-danger">
-    <div class="panel-heading text-center">
-        <h3 class="panel-title" style="font-size: 3em;">3 TOP MINUS (FG)</h3>
+<hr>
+<?php
+if (count($tmp_top_minus) == 0) { } else {
+    ?>
+    <div class="row">
+        <?php foreach ($tmp_top_minus as $value): ?>
+            <div class="text-center col-md-4" style="font-size: 3em; color: white;">
+                <?= $value->ITEM; ?> | <?= $value->ITEM_DESC . ' ' . $value->DESTINATION; ?> | <span class="text-red"><?= $value->BALANCE_QTY; ?></span>
+            </div>
+        <?php endforeach ?>
     </div>
-    <div class="panel-body no-padding" style="font-size: 3em; letter-spacing: 3px;">
-        <?php
-        if (count($tmp_top_minus) == 0) {
-            echo '<span>No Minus...</span>';
-        } else {
-            ?>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center">GMC</th>
-                        <th>Description</th>
-                        <th class="text-center">Balance Qty</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($tmp_top_minus as $value): ?>
-                        <tr>
-                            <td class="text-center"><?= $value->ITEM; ?></td>
-                            <td><?= $value->ITEM_DESC . ' ' . $value->DESTINATION; ?></td>
-                            <td class="text-center"><?= $value->BALANCE_QTY; ?></td>
-                        </tr>
-                    <?php endforeach ?>
-                </tbody>
-            </table>
-        <?php }
-        ?>
-    </div>
-</div>
-
+<?php }
+?>
 <?php
     yii\bootstrap\Modal::begin([
         'id' =>'modal',
