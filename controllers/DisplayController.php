@@ -146,6 +146,235 @@ use app\models\HakAksesPlus;
 
 class DisplayController extends Controller
 {
+    function actionVmsVsFlo($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $this_period = date('Ym');
+        $today = date('Y-m-d');
+
+        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
+        $model = new \yii\base\DynamicModel([
+            'period', 'line'
+        ]);
+        $model->addRule(['period', 'line'], 'required');
+        $model->period = $this_period;
+        $model->line = 'ALL';
+
+        /*$line_dropdown = ArrayHelper::map(SernoMaster::find()
+        ->select('line')
+        ->where('line != \'\'AND line != \'MIS\'')
+        ->groupBy('line')
+        ->all(), 'line', 'line');*/
+        $line_dropdown = [];
+
+        $tmp_line = HakAksesPlus::find()
+        ->where([
+            'level_akses' => '1a'
+        ])
+        ->andWhere(['<>', 'hak_akses', 'MIS'])
+        ->all();
+        foreach ($tmp_line as $key => $value) {
+            if ($value->desc != null) {
+                $line_dropdown[$value->hak_akses] = $value->desc;
+            } else {
+                $line_dropdown[$value->hak_akses] = $value->hak_akses;
+            }
+            
+        }
+        asort($line_dropdown);
+
+        $line_dropdown['ALL'] = '- ALL LINE -';
+        $line_dropdown['KD'] = '- KD ONLY -';
+        $line_dropdown['PRODUCT'] = '- PRODUCT ONLY -';
+
+        if ($model->load($_GET)) {
+
+        }
+
+        if ($model->line == 'ALL') {
+            $tmp_vms = VmsPlanActual::find()
+            ->select([
+                'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+            ])
+            ->where([
+                'VMS_PERIOD' => $model->period,
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->groupBy('VMS_DATE')
+            ->orderBy('VMS_DATE')
+            ->all();
+        } elseif ($model->line == 'KD') {
+            $tmp_vms = VmsPlanActual::find()
+            ->select([
+                'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+            ])
+            ->where([
+                'VMS_PERIOD' => $model->period,
+                'FG_KD' => 'KD'
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->groupBy('VMS_DATE')
+            ->orderBy('VMS_DATE')
+            ->all();
+        } elseif ($model->line == 'PRODUCT') {
+            $tmp_vms = VmsPlanActual::find()
+            ->select([
+                'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+            ])
+            ->where([
+                'VMS_PERIOD' => $model->period,
+                'FG_KD' => 'PRODUCT'
+            ])
+            ->andWhere('LINE IS NOT NULL')
+            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->groupBy('VMS_DATE')
+            ->orderBy('VMS_DATE')
+            ->all();
+        } else {
+            $tmp_vms = VmsPlanActual::find()
+            ->select([
+                'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+                'PLAN_QTY' => 'SUM(PLAN_QTY)',
+                'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
+            ])
+            ->where([
+                'VMS_PERIOD' => $model->period,
+                'LINE' => $model->line
+            ])
+            ->groupBy('VMS_DATE')
+            ->orderBy('VMS_DATE')
+            ->all();
+        }
+        
+
+        $tmp_data_plan = $tmp_data_actual = $tmp_data_balance = $data = [];
+        $tmp_table = [];
+        $tmp_total_plan = $tmp_total_actual = 0;
+        foreach ($tmp_vms as $key => $value) {
+            $tmp_table['thead'][] = $value->VMS_DATE;
+            $tmp_table['plan'][] = $value->PLAN_QTY;
+            $proddate = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
+            $tmp_total_plan += $value->PLAN_QTY;
+            $tmp_table['plan_acc'][] = $tmp_total_plan;
+            if (date('Y-m-d', strtotime($value->VMS_DATE)) > $today) {
+                $tmp_total_actual = null;
+            } else {
+                $tmp_total_actual += $value->ACTUAL_QTY;
+            }
+
+            $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
+            if (date('Y-m-d', strtotime($value->VMS_DATE)) > $today) {
+                $tmp_total_balance = null;
+                $tmp_table['actual'][] = null;
+                $tmp_table['actual_acc'][] = null;
+                $tmp_table['balance'][] = null;
+                $tmp_table['balance_acc'][] = null;
+            } else {
+                $tmp_balance = $value->ACTUAL_QTY - $value->PLAN_QTY;
+                $tmp_table['actual'][] = $value->ACTUAL_QTY == null ? '0' : $value->ACTUAL_QTY;
+                $tmp_table['actual_acc'][] = $tmp_total_actual == null ? '0' : $tmp_total_actual;
+                $tmp_table['balance'][] = $tmp_balance == null ? '0' : $tmp_balance;
+                $tmp_table['balance_acc'][] = $tmp_total_balance == null ? '0' : $tmp_total_balance;
+            }
+
+            $tmp_data_balance[] = [
+                'x' => $proddate,
+                'y' => $tmp_total_balance,
+            ];
+            
+            if ($value->PLAN_QTY > 0) {
+                $tmp_data_plan[] = [
+                    'x' => $proddate,
+                    'y' => $tmp_total_plan,
+                    
+                ];
+            }
+            
+            if ($value->ACTUAL_QTY > 0) {
+                $tmp_data_actual[] = [
+                    'x' => $proddate,
+                    'y' => $tmp_total_actual,
+                    
+                ];
+            }
+        }
+
+        $data = [
+            [
+                'name' => 'PLAN',
+                'data' => $tmp_data_plan,
+                'color' => 'white'
+            ], [
+                'name' => 'ACTUAL',
+                'data' => $tmp_data_actual,
+                'color' => 'lime'
+            ],
+            [
+                'name' => 'BALANCE (ACCUMULATION)',
+                'data' => $tmp_data_balance,
+                'color' => 'orange',
+                'dataLabels' => [
+                    'enabled' => true
+                ],
+            ],
+        ];
+
+        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $model->period])->orderBy('VMS_VERSION')->one();
+        $vms_version = $tmp_vms_version->VMS_VERSION;
+
+        $yesterday_period = date('Ym', strtotime(' -1 day'));
+        $tmp_yesterday = VmsPlanActual::find()
+        ->select([
+            'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
+            'kd_actual' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN ACTUAL_QTY ELSE 0 END)',
+            'product_plan' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN PLAN_QTY ELSE 0 END)',
+            'product_actual' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN ACTUAL_QTY ELSE 0 END)'
+        ])
+        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere(['FORMAT(VMS_DATE, \'yyyyMM\')' => $yesterday_period])
+        ->one();
+
+        /*$tmp_yesterday = VmsPlanActual::find()
+        ->select([
+            'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
+            'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
+            'kd_actual' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN ACTUAL_QTY ELSE 0 END)',
+            'product_plan' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN PLAN_QTY ELSE 0 END)',
+            'product_actual' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN ACTUAL_QTY ELSE 0 END)'
+        ])
+        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->groupBY('VMS_DATE')
+        ->orderBy('VMS_DATE DESC')
+        ->one();*/
+
+        $yesterday_data = [
+            'plan' => $tmp_yesterday->kd_plan + $tmp_yesterday->product_plan,
+            'actual' => $tmp_yesterday->kd_actual + $tmp_yesterday->product_actual,
+            'kd_balance' => $tmp_yesterday->kd_actual - $tmp_yesterday->kd_plan,
+            'product_balance' => $tmp_yesterday->product_actual - $tmp_yesterday->product_plan,
+        ];
+        $yesterday_data['balance'] = $yesterday_data['actual'] - $yesterday_data['plan'];
+
+        return $this->render('vms-vs-flo', [
+            'model' => $model,
+            'data' => $data,
+            'line_dropdown' => $line_dropdown,
+            'period_dropdown' => $period_dropdown,
+            'tmp_table' => $tmp_table,
+            'vms_version' => $vms_version,
+            'yesterday_data' => $yesterday_data,
+        ]);
+    }
+
     public function actionGetShippingBalance($etd = '', $line = '', $acc = 0)
     {
         $period = date('Ym', strtotime($etd));
@@ -9818,7 +10047,7 @@ class DisplayController extends Controller
             'status' => 'IFNULL(status, 1.5)',
             'start',
             'tgl',
-            'line',
+            'tb_serno_cnt.line',
             'gate',
             'remark' => 'tb_serno_cnt.remark',
         ])
@@ -9827,7 +10056,7 @@ class DisplayController extends Controller
         ])
         ->andWhere(['<>', 'back_order', 2])
         ->groupBy('cntr')
-        ->orderBy('status, tb_serno_cnt.remark DESC, gate, line')
+        ->orderBy('status, tb_serno_cnt.remark DESC, gate, tb_serno_cnt.line')
         ->asArray()
         ->all();
 
