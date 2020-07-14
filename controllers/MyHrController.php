@@ -112,7 +112,7 @@ class MyHrController extends Controller
             'total_work_days' => 'COUNT(emp_id)',
             'total_absent' => 'SUM(CASE WHEN PATINDEX(\'%ABS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
             'total_present' => 'SUM(CASE WHEN PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-            'total_permit' => 'SUM(CASE WHEN PATINDEX(\'%Izin%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+            'total_permit' => 'SUM(CASE WHEN (PATINDEX(\'%Izin%\', Attend_Code) > 0 OR PATINDEX(\'%IPU%\', Attend_Code) > 0) AND PATINDEX(\'%PRS%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
             'total_sick' => 'SUM(CASE WHEN PATINDEX(\'%SAKIT%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
             'total_cuti' => 'SUM(CASE WHEN PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
             'total_late' => 'SUM(CASE WHEN PATINDEX(\'%LTI%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
@@ -854,7 +854,7 @@ class MyHrController extends Controller
                     'emp_no' => $nik,
                     'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
                 ])
-                ->andWhere('PATINDEX(\'%Izin%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
+                ->andWhere('(PATINDEX(\'%Izin%\', Attend_Code) > 0 OR PATINDEX(\'%IPU%\', Attend_Code) > 0) AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
                 ->orderBy('shiftstarttime')
                 ->all();
                 
