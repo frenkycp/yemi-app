@@ -36,8 +36,8 @@ use Yii;
  * @property string $gmc_desc
  * @property string $gmc_destination
  * @property string $bu
- * @property string $line
- * @property string $model
+ * @property string $line_so
+ * @property string $model_so
  * @property string $fg_kd
  * @property double $standard_price
  * @property string $aliasModel
@@ -74,8 +74,8 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             [['vms', 'etd', 'ship'], 'safe'],
             [['standard_price'], 'number'],
             [['pk', 'uniq', 'stc', 'dst', 'num', 'gmc', 'category', 'remark', 'invo', 'cont', 'etd_old', 'gmc_desc'], 'string', 'max' => 255],
-            [['gmc_destination', 'bu', 'model'], 'string', 'max' => 50],
-            [['line', 'fg_kd'], 'string', 'max' => 20],
+            [['gmc_destination', 'bu', 'model_so'], 'string', 'max' => 50],
+            [['line_so', 'fg_kd'], 'string', 'max' => 20],
             [['pk'], 'unique']
         ];
     }
@@ -113,8 +113,8 @@ abstract class SernoOutput extends \yii\db\ActiveRecord
             'gmc_desc' => 'Gmc Desc',
             'gmc_destination' => 'Gmc Destination',
             'bu' => 'Bu',
-            'line' => 'Line',
-            'model' => 'Model',
+            'line_so' => 'Line So',
+            'model_so' => 'Model So',
             'fg_kd' => 'Fg Kd',
             'standard_price' => 'Standard Price',
         ];
