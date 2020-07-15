@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Production Progress <span class="japanesse light-green">(生産進捗)</span> VMS',
-    'tab_title' => 'Production Progress',
-    'breadcrumbs_title' => 'Production Progress'
+    'page_title' => 'Production Progress <span class="japanesse light-green">(生産進捗)</span> VMS (N-1)',
+    'tab_title' => 'Production Progress (N-1)',
+    'breadcrumbs_title' => 'Production Progress (N-1)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -81,7 +81,7 @@ $css_string = "
     }
     #yesterday-tbl > tbody > tr > td{
         border:1px solid #777474;
-        background: #33383d;
+        background: #000;
         color: #FFF;
         vertical-align: middle;
         //padding: 10px 10px;

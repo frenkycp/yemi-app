@@ -81,7 +81,7 @@ $css_string = "
     }
     #yesterday-tbl > tbody > tr > td{
         border:1px solid #777474;
-        background: #33383d;
+        background: #000;
         color: #FFF;
         vertical-align: middle;
         //padding: 10px 10px;
