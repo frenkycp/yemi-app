@@ -522,7 +522,7 @@ class DisplayController extends Controller
             if ($line == 'ALL') {
                 $tmp_vms_arr = SernoOutput::find()
                 ->select([
-                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'line_so', 'model_so', 'gmc', 'gmc_desc', 'gmc_destination',
                     'qty' => 'SUM(qty)',
                     'output' => 'SUM(output)',
                     'balance' => 'SUM(output - qty)',
@@ -530,16 +530,16 @@ class DisplayController extends Controller
                 ->where([
                     'etd' => $etd,
                 ])
-                ->andWhere('line IS NOT NULL')
-                ->andWhere(['<>', 'line', 'SPC'])
-                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                ->andWhere('line_so IS NOT NULL')
+                ->andWhere(['<>', 'line_so', 'SPC'])
+                ->groupBy('line_so, model_so, gmc, gmc_desc, gmc_destination')
                 //->having(['<', 'SUM(output - qty)', 0])
-                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->orderBy('SUM(output - qty), line_so, model_so, gmc')
                 ->all();
             } elseif ($line == 'KD') {
                 $tmp_vms_arr = SernoOutput::find()
                 ->select([
-                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'line_so', 'model_so', 'gmc', 'gmc_desc', 'gmc_destination',
                     'qty' => 'SUM(qty)',
                     'output' => 'SUM(output)',
                     'balance' => 'SUM(output - qty)',
@@ -548,16 +548,16 @@ class DisplayController extends Controller
                     'etd' => $etd,
                     'FG_KD' => 'KD'
                 ])
-                ->andWhere('line IS NOT NULL')
-                ->andWhere(['<>', 'line', 'SPC'])
-                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                ->andWhere('line_so IS NOT NULL')
+                ->andWhere(['<>', 'line_so', 'SPC'])
+                ->groupBy('line_so, model_so, gmc, gmc_desc, gmc_destination')
                 //->having(['<', 'SUM(output - qty)', 0])
-                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->orderBy('SUM(output - qty), line_so, model_so, gmc')
                 ->all();
             } elseif ($line == 'PRODUCT') {
                 $tmp_vms_arr = SernoOutput::find()
                 ->select([
-                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'line_so', 'model_so', 'gmc', 'gmc_desc', 'gmc_destination',
                     'qty' => 'SUM(qty)',
                     'output' => 'SUM(output)',
                     'balance' => 'SUM(output - qty)',
@@ -566,34 +566,34 @@ class DisplayController extends Controller
                     'etd' => $etd,
                     'FG_KD' => 'PRODUCT'
                 ])
-                ->andWhere('line IS NOT NULL')
-                ->andWhere(['<>', 'line', 'SPC'])
-                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                ->andWhere('line_so IS NOT NULL')
+                ->andWhere(['<>', 'line_so', 'SPC'])
+                ->groupBy('line_so, model_so, gmc, gmc_desc, gmc_destination')
                 //->having(['<', 'SUM(output - qty)', 0])
-                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->orderBy('SUM(output - qty), line_so, model_so, gmc')
                 ->all();
             } else {
                 $tmp_vms_arr = SernoOutput::find()
                 ->select([
-                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'line_so', 'model_so', 'gmc', 'gmc_desc', 'gmc_destination',
                     'qty' => 'SUM(qty)',
                     'output' => 'SUM(output)',
                     'balance' => 'SUM(output - qty)',
                 ])
                 ->where([
                     'etd' => $etd,
-                    'line' => $line
+                    'line_so' => $line
                 ])
-                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                ->groupBy('line_so, model_so, gmc, gmc_desc, gmc_destination')
                 //->having(['<', 'SUM(output - qty)', 0])
-                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->orderBy('SUM(output - qty), line_so, model_so, gmc')
                 ->all();
             }
         } else {
             if ($line == 'ALL') {
                 $tmp_vms_arr = SernoOutput::find()
                 ->select([
-                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'line_so', 'model_so', 'gmc', 'gmc_desc', 'gmc_destination',
                     'qty' => 'SUM(qty)',
                     'output' => 'SUM(output)',
                     'balance' => 'SUM(output - qty)',
@@ -602,16 +602,16 @@ class DisplayController extends Controller
                     'EXTRACT(year_month FROM etd)' => $period,
                 ])
                 ->andWhere(['<=', 'etd', $etd])
-                ->andWhere('line IS NOT NULL')
-                ->andWhere(['<>', 'line', 'SPC'])
-                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                ->andWhere('line_so IS NOT NULL')
+                ->andWhere(['<>', 'line_so', 'SPC'])
+                ->groupBy('line_so, model_so, gmc, gmc_desc, gmc_destination')
                 //->having(['<', 'SUM(output - qty)', 0])
-                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->orderBy('SUM(output - qty), line_so, model_so, gmc')
                 ->all();
             } elseif ($line == 'KD') {
                 $tmp_vms_arr = SernoOutput::find()
                 ->select([
-                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'line_so', 'model_so', 'gmc', 'gmc_desc', 'gmc_destination',
                     'qty' => 'SUM(qty)',
                     'output' => 'SUM(output)',
                     'balance' => 'SUM(output - qty)',
@@ -621,16 +621,16 @@ class DisplayController extends Controller
                     'FG_KD' => 'KD'
                 ])
                 ->andWhere(['<=', 'etd', $etd])
-                ->andWhere('line IS NOT NULL')
-                ->andWhere(['<>', 'line', 'SPC'])
-                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                ->andWhere('line_so IS NOT NULL')
+                ->andWhere(['<>', 'line_so', 'SPC'])
+                ->groupBy('line_so, model_so, gmc, gmc_desc, gmc_destination')
                 //->having(['<', 'SUM(output - qty)', 0])
-                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->orderBy('SUM(output - qty), line_so, model_so, gmc')
                 ->all();
             } elseif ($line == 'PRODUCT') {
                 $tmp_vms_arr = SernoOutput::find()
                 ->select([
-                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'line_so', 'model_so', 'gmc', 'gmc_desc', 'gmc_destination',
                     'qty' => 'SUM(qty)',
                     'output' => 'SUM(output)',
                     'balance' => 'SUM(output - qty)',
@@ -640,28 +640,28 @@ class DisplayController extends Controller
                     'FG_KD' => 'PRODUCT'
                 ])
                 ->andWhere(['<=', 'etd', $etd])
-                ->andWhere('line IS NOT NULL')
-                ->andWhere(['<>', 'line', 'SPC'])
-                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                ->andWhere('line_so IS NOT NULL')
+                ->andWhere(['<>', 'line_so', 'SPC'])
+                ->groupBy('line_so, model_so, gmc, gmc_desc, gmc_destination')
                 //->having(['<', 'SUM(output - qty)', 0])
-                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->orderBy('SUM(output - qty), line_so, model_so, gmc')
                 ->all();
             } else {
                 $tmp_vms_arr = SernoOutput::find()
                 ->select([
-                    'line', 'model', 'gmc', 'gmc_desc', 'gmc_destination',
+                    'line_so', 'model_so', 'gmc', 'gmc_desc', 'gmc_destination',
                     'qty' => 'SUM(qty)',
                     'output' => 'SUM(output)',
                     'balance' => 'SUM(output - qty)',
                 ])
                 ->where([
                     'EXTRACT(year_month FROM etd)' => $period,
-                    'line' => $line
+                    'line_so' => $line
                 ])
                 ->andWhere(['<=', 'etd', $etd])
-                ->groupBy('line, model, gmc, gmc_desc, gmc_destination')
+                ->groupBy('line_so, model_so, gmc, gmc_desc, gmc_destination')
                 //->having(['<', 'SUM(output - qty)', 0])
-                ->orderBy('SUM(output - qty), line, model, gmc')
+                ->orderBy('SUM(output - qty), line_so, model_so, gmc')
                 ->all();
             }
         }
@@ -703,8 +703,8 @@ class DisplayController extends Controller
             } else {
                 $data .= '
                 <tr>
-                    <td class="text-center' . $bg_class . '">' . $value->line . '</td>
-                    <td class="text-center' . $bg_class . '">' . $value->model . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->line_so . '</td>
+                    <td class="text-center' . $bg_class . '">' . $value->model_so . '</td>
                     <td class="text-center' . $bg_class . '">' . $value->gmc . '</td>
                     <td class="' . $bg_class . '">' . $value->gmc_desc . ' ' . $value->gmc_destination . '</td>
                     <td class="text-center' . $bg_class . '">' . $value->qty . '</td>
@@ -789,8 +789,8 @@ class DisplayController extends Controller
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
             ])
-            ->andWhere('LINE IS NOT NULL')
-            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->andWhere('line_so IS NOT NULL')
+            ->andWhere(['<>', 'line_so', 'SPC'])
             ->groupBy('etd')
             ->orderBy('etd')
             ->all();
@@ -805,8 +805,8 @@ class DisplayController extends Controller
                 'EXTRACT(year_month FROM etd)' => $model->period,
                 'FG_KD' => 'KD'
             ])
-            ->andWhere('LINE IS NOT NULL')
-            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->andWhere('line_so IS NOT NULL')
+            ->andWhere(['<>', 'line_so', 'SPC'])
             ->groupBy('etd')
             ->orderBy('etd')
             ->all();
@@ -821,8 +821,8 @@ class DisplayController extends Controller
                 'EXTRACT(year_month FROM etd)' => $model->period,
                 'FG_KD' => 'PRODUCT'
             ])
-            ->andWhere('LINE IS NOT NULL')
-            ->andWhere(['<>', 'LINE', 'SPC'])
+            ->andWhere('line_so IS NOT NULL')
+            ->andWhere(['<>', 'line_so', 'SPC'])
             ->groupBy('etd')
             ->orderBy('etd')
             ->all();
@@ -835,7 +835,7 @@ class DisplayController extends Controller
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
-                'LINE' => $model->line
+                'line_so' => $model->line
             ])
             ->groupBy('etd')
             ->orderBy('etd')
