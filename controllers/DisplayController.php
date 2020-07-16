@@ -159,6 +159,7 @@ class DisplayController extends Controller
         ->where([
             '<', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
         ])
+        ->andWhere('holiday IS NULL')
         ->orderBy('cal_date DESC')
         ->one();
         $yesterday = $tmp_yesterday->cal_date;
@@ -169,6 +170,7 @@ class DisplayController extends Controller
         ->where([
             '>', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
         ])
+        ->andWhere('holiday IS NULL')
         ->orderBy('cal_date')
         ->one();
         $tomorrow = $tmp_tomorrow->cal_date;
