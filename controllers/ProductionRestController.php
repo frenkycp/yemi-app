@@ -52,8 +52,8 @@ class ProductionRestController extends Controller
                 'gmc_desc' => $description,
                 'gmc_destination' => $destination,
                 'bu' => $bu,
-                'line' => $line,
-                'model' => $model,
+                'line_so' => $line,
+                'model_so' => $model,
                 'fg_kd' => $fg_kd,
                 'standard_price' => $standard_price,
             ], [
