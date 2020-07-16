@@ -308,7 +308,7 @@ echo '</pre>';*/
         </table>
     </div>
 </div>
-<hr style="margin-top: 0px;">
+<hr style="margin-top: 0px; margin-bottom: 20px;">
 <?php
 if (count($tmp_top_minus) == 0) { } else {
     ?>
@@ -321,6 +321,8 @@ if (count($tmp_top_minus) == 0) { } else {
     </div>
 <?php }
 ?>
+<hr>
+<span style="color: silver; font-size: 1.2em;"><i>Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
 <?php
     yii\bootstrap\Modal::begin([
         'id' =>'modal',

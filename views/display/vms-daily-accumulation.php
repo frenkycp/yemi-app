@@ -202,7 +202,7 @@ echo '</pre>';*/
                                 'fontFamily' => 'sans-serif',
                             ],
                             'zoomType' => 'x',
-                            'height' => 580
+                            'height' => 450
                         ],
                         'title' => [
                             //'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
@@ -269,7 +269,7 @@ echo '</pre>';*/
         </div>
     </div>
     <div class="col-md-4">
-        <table class="table table-bordered" style="font-size: 73px; margin-bottom: 0px;" id="yesterday-tbl">
+        <table height="472px" class="table table-bordered" style="font-size: 50px; margin-bottom: 0px;" id="yesterday-tbl">
             <tbody>
                 <tr>
                     <td width="45%" style="background-color: #454B52;" class="label-tbl">Plan</td>
@@ -296,11 +296,11 @@ echo '</pre>';*/
                     </td>
                 </tr>
                 <tr>
-                    <td style="background-color: #454B52;" class="label-tbl text-right"><span style="font-size: 0.7em; vertical-align: top;">↳ </span>KD</td>
+                    <td style="background-color: #454B52;" class="label-tbl text-right">KD</td>
                     <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['kd_balance']); ?> <span style="font-size: 0.2em; color: white;"> PCS</span></td>
                 </tr>
                 <tr>
-                    <td style="background-color: #454B52;" class="label-tbl text-right"><span style="font-size: 0.7em; vertical-align: top;">↳ </span>FG</td>
+                    <td style="background-color: #454B52;" class="label-tbl text-right">FG</td>
                     <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['product_balance']); ?> <span style="font-size: 0.2em; color: white;"> PCS</span></td>
                 </tr>
             </tbody>

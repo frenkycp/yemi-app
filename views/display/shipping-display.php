@@ -292,3 +292,18 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+<hr style="margin-top: 0px; margin-bottom: 20px;">
+<?php
+if (count($top_minus) == 0) { } else {
+    ?>
+    <div class="row">
+        <?php foreach ($top_minus as $value): ?>
+            <div class="text-center col-md-4" style="font-size: 3em; color: white;">
+                <?= $value->gmc; ?> | <?= $value->gmc_desc . ' ' . $value->gmc_destination; ?> | <span class="text-red"><?= $value->balance; ?></span>
+            </div>
+        <?php endforeach ?>
+    </div>
+<?php }
+?>
+<hr>
+<span style="color: silver; font-size: 1.2em;"><i>Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>

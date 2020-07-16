@@ -256,12 +256,31 @@ class DisplayController extends Controller
             $containerStr = $total_container . ' Containers || ' . $total_airshipment . ' Air Shipments';
         }
 
+        $top_minus = SernoOutput::find()
+        ->select([
+            'gmc', 'gmc_desc', 'gmc_destination',
+            'qty' => 'SUM(qty)',
+            'output' => 'SUM(output)',
+            'balance' => 'SUM(output - qty)',
+        ])
+        ->where([
+            'etd' => $etd,
+        ])
+        //->andWhere('line_so IS NOT NULL')
+        //->andWhere(['<>', 'line_so', 'SPC'])
+        ->groupBy('gmc, gmc_desc, gmc_destination')
+        ->having(['<', 'SUM(output - qty)', 0])
+        ->orderBy('SUM(output - qty)')
+        ->limit(3)
+        ->all();
+
         return $this->render('shipping-display', [
             'data_table' => $data_table,
             'dataOpen' => $dataOpen,
             'dataClose' => $dataClose,
             'dataName' => $dataName,
-            'containerStr' => $containerStr
+            'containerStr' => $containerStr,
+            'top_minus' => $top_minus,
         ]);
     }
 
