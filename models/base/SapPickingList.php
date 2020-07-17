@@ -74,6 +74,10 @@ use Yii;
  * @property string $VMS_PERIOD
  * @property string $VMS_DATE
  * @property string $hapus
+ * @property string $hand_scan
+ * @property string $hand_scan_datetime
+ * @property string $hand_scan_user
+ * @property string $hand_scan_desc
  * @property string $aliasModel
  */
 abstract class SapPickingList extends \yii\db\ActiveRecord
@@ -105,16 +109,16 @@ abstract class SapPickingList extends \yii\db\ActiveRecord
         return [
             [['barcode'], 'required'],
             [['Id'], 'integer'],
-            [['req_date', 'last_update', 'last_update1', 'add_date', 'posting_date', 'req_date_ori', 'last_update_pts', 'release_date', 'VMS_DATE'], 'safe'],
+            [['req_date', 'last_update', 'last_update1', 'add_date', 'posting_date', 'req_date_ori', 'last_update_pts', 'release_date', 'VMS_DATE', 'hand_scan_datetime'], 'safe'],
             [['plan_qty', 'qty', 'req_qty', 'compl_qty', 'bo_qty'], 'number'],
             [['barcode', 'division'], 'string', 'max' => 30],
-            [['set_list_no', 'parent_desc', 'child_desc', 'analyst_desc', 'user_desc', 'user_desc1', 'PUR_LOC_DESC', 'pic_delivery', 'eta_desc', 'eta_qty', 'eta_time', 'trans_mthd', 'stat_ok_ng', 'user_desc_pts', 'release_user_desc'], 'string', 'max' => 50],
+            [['set_list_no', 'parent_desc', 'child_desc', 'analyst_desc', 'user_desc', 'user_desc1', 'PUR_LOC_DESC', 'pic_delivery', 'eta_desc', 'eta_qty', 'eta_time', 'trans_mthd', 'stat_ok_ng', 'user_desc_pts', 'release_user_desc', 'hand_scan_desc'], 'string', 'max' => 50],
             [['no'], 'string', 'max' => 4],
             [['parent', 'parent_valcl', 'child', 'valcl', 'pic', 'rack_no', 'loc'], 'string', 'max' => 15],
             [['parent_um', 'child_um', 'storage'], 'string', 'max' => 5],
-            [['issue_type', 'status', 'add_slip', 'pts', 'pts_print', 'hand', 'sap_post_date_sinkron', 'mrp', 'wh_valid', 'hapus'], 'string', 'max' => 1],
+            [['issue_type', 'status', 'add_slip', 'pts', 'pts_print', 'hand', 'sap_post_date_sinkron', 'mrp', 'wh_valid', 'hapus', 'hand_scan'], 'string', 'max' => 1],
             [['analyst', 'VMS_PERIOD'], 'string', 'max' => 6],
-            [['user_id', 'user_id1', 'user_pts', 'release_user'], 'string', 'max' => 10],
+            [['user_id', 'user_id1', 'user_pts', 'release_user', 'hand_scan_user'], 'string', 'max' => 10],
             [['tahap'], 'string', 'max' => 2],
             [['barcode_label'], 'string', 'max' => 255],
             [['PUR_LOC'], 'string', 'max' => 13],
@@ -195,6 +199,10 @@ abstract class SapPickingList extends \yii\db\ActiveRecord
             'VMS_PERIOD' => 'Vms Period',
             'VMS_DATE' => 'Vms Date',
             'hapus' => 'Hapus',
+            'hand_scan' => 'Hand Scan',
+            'hand_scan_datetime' => 'Hand Scan Datetime',
+            'hand_scan_user' => 'Hand Scan User',
+            'hand_scan_desc' => 'Hand Scan Desc',
         ];
     }
 
