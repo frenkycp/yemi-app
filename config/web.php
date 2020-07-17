@@ -121,6 +121,7 @@ $config = [
         'db_recordmasker' => require(__DIR__ . '/db_recordmasker.php'),
         'db_cbsupplement' => require(__DIR__ . '/db_cbsupplement.php'),
         'db_211' => require(__DIR__ . '/db_211.php'),
+        'db_bentol' => require(__DIR__ . '/db_bentol.php'),
     ],
     'params' => $params,
     'modules' => [

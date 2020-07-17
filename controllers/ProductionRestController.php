@@ -18,9 +18,69 @@ use app\models\VmsPlanActual;
 use app\models\SunfishViewEmp;
 use app\models\LiveCookingMember;
 use app\models\VmsItem;
+use app\models\WorkDayTbl;
+use app\models\BentolKaryawan;
+use app\models\BentolManagerTripSummary;
 
 class ProductionRestController extends Controller
 {
+    public function actionUpdateBentolTripSummary($post_date = '')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        if ($post_date == '') {
+            $post_date = date('Y-m-d');
+        }
+
+        $tmp_workday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            'FORMAT(cal_date, \'yyyy-MM-dd\')' => $post_date
+        ])
+        ->andWhere('holiday IS NULL')
+        ->one();
+
+        if ($tmp_workday) {
+            $bentol_karyawan = BentolKaryawan::find()
+            ->where([
+                'hak_akses_karyawan' => 'MANAGER'
+            ])
+            ->all();
+
+            $bulkInsertArray = [];
+            $columnNameArray = ['id', 'period', 'post_date', 'emp_id', 'emp_name', 'account_type'];
+            $tmp_today_summary = ArrayHelper::map(BentolManagerTripSummary::find()->where([
+                'post_date' => $post_date
+            ])->all(), 'emp_id', 'emp_id');
+
+            foreach ($bentol_karyawan as $value) {
+                if (!isset($tmp_today_summary[$value->nik_karyawan])) {
+                    $id = $post_date . '_' . $value->nik_karyawan;
+                    $period = date('Ym', strtotime($post_date));
+                    $bulkInsertArray[] = [$id, $period, $post_date, $value->nik_karyawan, $value->nama_karyawan, $value->hak_akses_karyawan];
+                }
+            }
+
+            if (count($bulkInsertArray) > 0) {
+                $insertCount = \Yii::$app->db_bentol->createCommand()
+                ->batchInsert(BentolManagerTripSummary::getTableSchema()->fullName, $columnNameArray, $bulkInsertArray)
+                ->execute();
+                
+                $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+                $total_minutes = round($process_time / 60, 1);
+
+                return 'Add Success...(' . $insertCount . ' data - ' . $total_minutes . ' minute(s)';
+            } else {
+                return 'No data added ...';
+            }
+        } else {
+            return 'Holiday ...';
+        }
+    }
+
     public function actionSernoOutputUpdateSp($period = '')
     {
         date_default_timezone_set('Asia/Jakarta');
