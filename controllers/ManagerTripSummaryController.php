@@ -9,21 +9,34 @@ use yii\web\HttpException;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
+use app\models\WorkDayTbl;
 
 class ManagerTripSummaryController extends \app\controllers\base\ManagerTripSummaryController
 {
 	public function actionIndex()
 	{
 		$this->layout = 'clean';
+		$tmp_workday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+        	'<',
+            'FORMAT(cal_date, \'yyyy-MM-dd\')',
+            date('Y-m-d')
+        ])
+        ->andWhere('holiday IS NULL')
+        ->orderBy('cal_date DESC')
+        ->one();
 
 	    $searchModel  = new ManagerTripSummarySearch;
 
-	    $searchModel->post_date = date('Y-m-d', strtotime(' -1 day'));
+	    $searchModel->post_date = $tmp_workday->cal_date;
 	    if(\Yii::$app->request->get('post_date') !== null)
 	    {
 	    	$searchModel->post_date = \Yii::$app->request->get('post_date');
 	    }
-	    
+
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
