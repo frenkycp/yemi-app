@@ -150,7 +150,7 @@ $this->registerJs("$(function() {
 print_r($data_table);
 echo '</pre>';*/
 ?>
-<div class="text-right" style="color: white; font-size: 2em;"><?= date('Y-m-d H:i:s'); ?></div>
+<div class="text-right" style="color: white; font-size: 0.7em;"><?= date('Y-m-d H:i:s'); ?></div>
 <table class="table" id="summary-tbl">
     <thead>
         <tr>
@@ -166,27 +166,27 @@ echo '</pre>';*/
                 <span><b>SHIPPING PROGRESS (N-1)</b></span><br/>
                 <span class="japanesse light-green">先日の出荷分</span><span> KEMARIN</span>
             </td>
-            <td style="font-size: 8em; text-align: right;"><span><?= $data_table[0]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
-            <td style="font-size: 8em; text-align: right;"><span><?= number_format($data_table[0]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
-            <td style="font-size: 8em; text-align: right;"><span class="<?= $data_table[0]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[0]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= $data_table[0]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[0]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[0]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[0]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
         </tr>
         <tr>
             <td>
                 <span><b>SHIPPING PROGRESS (N)</b></span><br/>
                 <span class="japanesse light-green">本日の出荷分</span><span> HARI INI</span>
             </td>
-            <td style="font-size: 8em; text-align: right;"><span><?= $data_table[1]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
-            <td style="font-size: 8em; text-align: right;"><span><?= number_format($data_table[1]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
-            <td style="font-size: 8em; text-align: right;"><span class="<?= $data_table[1]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[1]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= $data_table[1]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[1]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[1]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[1]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
         </tr>
         <tr>
             <td>
                 <span><b>SHIPPING PROGRESS (N+1)</b></span><br/>
                 <span class="japanesse light-green">翌日の出荷分</span><span> BESOK</span>
             </td>
-            <td style="font-size: 8em; text-align: right;"><span><?= $data_table[2]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
-            <td style="font-size: 8em; text-align: right;"><span><?= number_format($data_table[2]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
-            <td style="font-size: 8em; text-align: right;"><span class="<?= $data_table[2]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[2]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= $data_table[2]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[2]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[2]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[2]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
         </tr>
     </tbody>
 </table>
@@ -206,7 +206,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 500,
+                    'height' => 400,
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
@@ -292,18 +292,18 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
-<hr style="margin-top: 0px; margin-bottom: 20px;">
+<hr style="margin-top: 0px;">
 <?php
 if (count($top_minus) == 0) { } else {
     ?>
-    <div class="row">
+    <div class="row" style="padding: 10px;">
         <?php foreach ($top_minus as $value): ?>
-            <div class="text-center col-md-4" style="font-size: 3em; color: white;">
+            <div class="text-center col-md-4" style="font-size: 2em; color: white;">
                 <?= $value->gmc; ?> | <?= $value->gmc_desc . ' ' . $value->gmc_destination; ?> | <span class="text-red"><?= $value->balance; ?></span>
             </div>
         <?php endforeach ?>
     </div>
 <?php }
 ?>
-<hr>
+<hr style="margin-top: 0px;">
 <span style="color: silver; font-size: 1.2em;"><i>Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
