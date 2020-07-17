@@ -89,14 +89,14 @@ class PickingListController extends Controller
 		$this->layout = 'picking-list/main';
 
 		$model = new \yii\base\DynamicModel([
-            'barcode', 'post_date'
+            'barcode'
         ]);
-        $model->addRule(['barcode', 'post_date'], 'required')
-        ->addRule(['barcode', 'post_date'], 'string');
-        $model->post_date = date('Y-m-d');
+        $model->addRule(['barcode'], 'required')
+        ->addRule(['barcode'], 'string');
 
         $total_setlist = $total_open = $total_close = 0;
         $setlist_data = $setlist_no = null;
+        //return $nik . $name;
         if ($model->load($_GET)) {
         	if ($model->barcode == '' || $model->barcode == null) {
         		return $this->render('update', [
@@ -110,12 +110,11 @@ class PickingListController extends Controller
         	if (!$tmp_setlist) {
         		\Yii::$app->session->setFlash('warning', 'Barcode not found...!');
         	} else {
-        		$sql = "{CALL UPDATE_PICKING_LIST_TEST(:barcode, :post_date_filter, :USER_ID, :USER_DESC)}";
+        		$sql = "{CALL UPDATE_PICKING_LIST_TEST(:barcode, :USER_ID, :USER_DESC)}";
                 $params = [
                     ':barcode' => $model->barcode,
-                    ':post_date_filter' => $model->post_date,
                     ':USER_ID' => $nik,
-                    ':USER_DESC' => $nama,
+                    ':USER_DESC' => $name,
                 ];
 
                 try {
@@ -135,9 +134,9 @@ class PickingListController extends Controller
 
         		$tmp_total = SapPickingList::find()
 	        	->select([
-	        		'total_setlist' => 'SUM(CASE WHEN wh_valid = \'Y\' THEN 1 ELSE 0 END)',
-	        		'total_open' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'D\' THEN 1 ELSE 0 END)',
-	        		'total_close' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status <> \'D\' THEN 1 ELSE 0 END)',
+	        		'total_setlist' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' THEN 1 ELSE 0 END)',
+	        		'total_open' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' AND hand_scan IS null THEN 1 ELSE 0 END)',
+	        		'total_close' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' AND hand_scan = \'Y\' THEN 1 ELSE 0 END)',
 	        	])
 	        	->where([
 	        		'set_list_no' => $tmp_setlist->set_list_no
@@ -154,8 +153,9 @@ class PickingListController extends Controller
 	        	->where([
 	        		'set_list_no' => $tmp_setlist->set_list_no,
 	        		'wh_valid' => 'Y',
-	        		'status' => 'D',
+	        		'status' => 'C'
 	        	])
+	        	->andWhere('hand_scan IS NULL')
 	        	->all();
 
 	        	\Yii::$app->session->setFlash('success', 'Barcode ' . $model->barcode . ' update success...');

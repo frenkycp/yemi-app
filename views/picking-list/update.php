@@ -49,17 +49,8 @@ $this->registerJs("$(document).ready(function() {
 		</div>
 	</div>
 	<br/>
-	<div class="row" style="border: 1px solid black; border-radius: 10px; padding: 10px;">
-		<div class="col-md-12">
-			<?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
-			    'options' => [
-			        'type' => DatePicker::TYPE_INPUT,
-			    ],
-			    'pluginOptions' => [
-			        'autoclose'=>true,
-			        'format' => 'yyyy-mm-dd'
-			    ]
-			]); ?>
+	<div class="panel panel-default">
+		<div class="panel-body">
 			<?= $form->field($model, 'barcode', [
 				'inputOptions' => [
 					'autofocus' => 'autofocus',
@@ -70,7 +61,6 @@ $this->registerJs("$(document).ready(function() {
 			<?= Html::submitButton('SUBMIT', ['class' => 'btn btn-primary btn-block', 'style' => 'margin-top: 5px; margin-bottom: 5px;']); ?>
 		</div>
 	</div>
-	<br/>
 	<div class="panel panel-primary">
 		<div class="panel-heading">
 			<h3 class="panel-title">
