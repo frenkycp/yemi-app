@@ -341,26 +341,24 @@ echo '</pre>';*/
             <?php
             if(isset($tmp_table['balance']))
             foreach ($tmp_table['balance'] as $key => $value): 
-                if ($value < 0) {
+                if ($value == null) {
                     echo '<td class="text-center">
-                        ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line], ['class' => 'popup_btn']) . '
+                        
                     </td>';
                 } else {
-                    if ($value == null) {
-                        echo '<td class="text-center">
-                                
-                            </td>';
-                    } else {
-                        if ($value == 0) {
-                            echo '<td class="text-center">
-                                <span class="badge">' . number_format($value) . '</span>
-                            </td>';
-                        } else {
-                            echo '<td class="text-center">
-                                <span class="badge bg-green">' . number_format($value) . '</span>
-                            </td>';
-                        }
+                    if ($value < 0) {
+                        $badge_class = 'badge bg-red';
                     }
+                    if ($value == 0) {
+                        $badge_class = 'badge';
+                    }
+                    if ($value > 0) {
+                        $badge_class = 'badge bg-green';
+                    }
+
+                    echo '<td class="text-center">
+                        ' . Html::a('<span class="' . $badge_class . '">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line], ['class' => 'popup_btn']) . '
+                    </td>';
                 }
                 ?>
                 

@@ -274,11 +274,11 @@ echo '</pre>';*/
             <tbody>
                 <tr>
                     <td width="50%" style="background-color: #454B52;" class="label-tbl">Plan</td>
-                    <td class="text-right"><?= number_format($yesterday_data['plan']); ?> <span style="font-size: 0.2em"> PCS</span></td>
+                    <td class="text-right"><?= number_format($yesterday_data['plan']); ?> <span style="font-size: 0.2em"> SET</span></td>
                 </tr>
                 <tr>
                     <td style="background-color: #454B52;" class="label-tbl">Actual</td>
-                    <td class="text-right"><?= number_format($yesterday_data['actual']); ?> <span style="font-size: 0.2em"> PCS</span></td>
+                    <td class="text-right"><?= number_format($yesterday_data['actual']); ?> <span style="font-size: 0.2em"> SET</span></td>
                 </tr>
                 <tr>
                     <td style="background-color: #454B52;" class="label-tbl">Balance</td>
@@ -291,18 +291,18 @@ echo '</pre>';*/
                         /*if ($yesterday_data['balance'] > 0) {
                             $tmp_balance = '<span class="text-green">' . number_format($yesterday_data['balance']) . '</span>';
                         }*/
-                        echo $tmp_balance . '<span style="font-size: 0.2em"> PCS</span>';
+                        echo $tmp_balance . '<span style="font-size: 0.2em"> SET</span>';
                         ?>
                         <?= ''; //number_format($yesterday_data['balance']); ?>
                     </td>
                 </tr>
                 <tr>
                     <td style="background-color: #454B52;" class="label-tbl text-right">KD</td>
-                    <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['kd_balance']); ?> <span style="font-size: 0.2em; color: white;"> PCS</span></td>
+                    <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['kd_balance']); ?> <span style="font-size: 0.2em; color: white;"> SET</span></td>
                 </tr>
                 <tr>
                     <td style="background-color: #454B52;" class="label-tbl text-right">FG</td>
-                    <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['product_balance']); ?> <span style="font-size: 0.2em; color: white;"> PCS</span></td>
+                    <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['product_balance']); ?> <span style="font-size: 0.2em; color: white;"> SET</span></td>
                 </tr>
             </tbody>
         </table>

@@ -144,6 +144,8 @@ use app\models\VmsPlanActual;
 use app\models\ServerBackupCurrent;
 use app\models\HakAksesPlus;
 use app\models\ContainerView;
+use app\models\VmsRemark;
+use app\models\VmsItem;
 
 class DisplayController extends Controller
 {
@@ -976,7 +978,7 @@ class DisplayController extends Controller
             if ($line == 'ALL') {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -986,14 +988,14 @@ class DisplayController extends Controller
                 ])
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
-                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC, DESTINATION')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } elseif ($line == 'KD') {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -1004,14 +1006,14 @@ class DisplayController extends Controller
                 ])
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
-                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC, DESTINATION')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } elseif ($line == 'PRODUCT') {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -1022,14 +1024,14 @@ class DisplayController extends Controller
                 ])
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
-                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC, DESTINATION')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } else {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -1038,7 +1040,7 @@ class DisplayController extends Controller
                     'VMS_DATE' => $vms_date,
                     'LINE' => $line
                 ])
-                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC, DESTINATION')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
@@ -1047,7 +1049,7 @@ class DisplayController extends Controller
             if ($line == 'ALL') {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -1058,14 +1060,14 @@ class DisplayController extends Controller
                 ->andWhere(['<=', 'VMS_DATE', $vms_date])
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
-                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC, DESTINATION')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } elseif ($line == 'KD') {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -1077,14 +1079,14 @@ class DisplayController extends Controller
                 ->andWhere(['<=', 'VMS_DATE', $vms_date])
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
-                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC, DESTINATION')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } elseif ($line == 'PRODUCT') {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -1096,14 +1098,14 @@ class DisplayController extends Controller
                 ->andWhere(['<=', 'VMS_DATE', $vms_date])
                 ->andWhere('LINE IS NOT NULL')
                 ->andWhere(['<>', 'LINE', 'SPC'])
-                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC, DESTINATION')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } else {
                 $tmp_vms_arr = VmsPlanActual::find()
                 ->select([
-                    'LINE', 'MODEL','ITEM', 'ITEM_DESC',
+                    'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
                     'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
                     'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -1113,12 +1115,14 @@ class DisplayController extends Controller
                     'LINE' => $line
                 ])
                 ->andWhere(['<=', 'VMS_DATE', $vms_date])
-                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC')
+                ->groupBy('LINE, MODEL, ITEM, ITEM_DESC, DESTINATION')
                 ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             }
         }
+
+        $tmp_remark_arr = ArrayHelper::map(VmsRemark::find()->where(['vms_date' => $vms_date])->all(), 'item', 'remark');
 
         $data = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -1131,12 +1135,12 @@ class DisplayController extends Controller
         $data .= 
         '<thead><tr>
             <th class="text-center">Line</th>
-            <th class="text-center">Model</th>
             <th class="text-center">Item</th>
             <th class="text-center">Item Description</th>
             <th class="text-center">Plan Qty</th>
             <th class="text-center">Actual Qty</th>
             <th class="text-center">Balance Qty</th>
+            <th class="">Remark</th>
         </tr></thead>'
         ;
         $data .= '<tbody>';
@@ -1152,18 +1156,25 @@ class DisplayController extends Controller
                 $txt_balance = $value->BALANCE_QTY;
                 $bg_class = '';
             }
+
+            if (isset($tmp_remark_arr[$value->ITEM])) {
+                $remark = $tmp_remark_arr[$value->ITEM];
+            } else {
+                $remark = Html::a('Add Remark', ['vms-add-remark', 'vms_date' => $vms_date, 'item' => $value->ITEM, 'plan_qty' => $value->PLAN_QTY, 'act_qty' => $value->ACTUAL_QTY], ['class' => 'btn btn-primary']);
+            }
+
             if ($value->PLAN_QTY == 0 && $value->ACTUAL_QTY == 0) {
                 # code...
             } else {
                 $data .= '
                 <tr>
                     <td class="text-center' . $bg_class . '">' . $value->LINE . '</td>
-                    <td class="text-center' . $bg_class . '">' . $value->MODEL . '</td>
                     <td class="text-center' . $bg_class . '">' . $value->ITEM . '</td>
-                    <td class="' . $bg_class . '">' . $value->ITEM_DESC . '</td>
+                    <td class="' . $bg_class . '">' . $value->ITEM_DESC . ' ' . $value->DESTINATION . '</td>
                     <td class="text-center' . $bg_class . '">' . $value->PLAN_QTY . '</td>
                     <td class="text-center' . $bg_class . '">' . $value->ACTUAL_QTY . '</td>
                     <td class="text-center' . $bg_class . '">' . $txt_balance . '</td>
+                    <td class="' . $bg_class . '">' . $remark . '</td>
                 </tr>
                 ';
             }
@@ -1172,14 +1183,65 @@ class DisplayController extends Controller
         $data .= '</tbody>';
         $data .= '<tfoot>
             <tr>
-                <td class="text-center primary" colspan="4">Total</td>
+                <td class="text-center primary" colspan="3">Total</td>
                 <td class="text-center primary">' . number_format($total_plan) . '</td>
                 <td class="text-center primary">' . number_format($total_actual) . '</td>
                 <td class="text-center primary">' . number_format($total_balance) . '</td>
+                <td class="text-center primary"></td>
             </tr>
         </tfoot>';
         $data .= '</table>';
         return $data;
+    }
+
+    public function actionVmsAddRemark($vms_date = '', $item = '', $plan_qty = 0, $act_qty = 0)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        $tmp_item = VmsItem::findOne($item);
+
+        $model = new VmsRemark;
+        $model->vms_date = $vms_date;
+        $model->vms_period = date('Ym', strtotime($vms_date));
+        $model->item = $item;
+        $model->item_description = $tmp_item->ITEM_DESC;
+        $model->item_destination = $tmp_item->DESTINATION;
+        $model->item_model = $tmp_item->MODEL;
+        $model->item_line = $tmp_item->LINE;
+        $model->plan_qty = $plan_qty;
+        $model->act_qty = $act_qty;
+        $model->balance_qty = $act_qty - $plan_qty;
+        $model->last_update = $this_time;
+        $model->id = date('Ymd', strtotime($vms_date)) . '_' . $item;
+
+        if ($model->load($_GET)) {
+            $tmp_karyawan = Karyawan::find()
+            ->where([
+                'OR',
+                ['NIK' => $model->user_id],
+                ['NIK_SUN_FISH' => $model->user_id]
+            ])
+            ->andWhere([
+                'PASSWORD' => $model->password
+            ])
+            ->one();
+            $model->user_name = $tmp_karyawan->NAMA_KARYAWAN;
+            
+            if (!$tmp_karyawan) {
+                \Yii::$app->session->setFlash('warning', 'Invalid Username/Password...');
+            } else {
+                $model->user_name = $tmp_karyawan->NAMA_KARYAWAN;
+                if (!$model->save()) {
+                    return json_encode($model->errors);
+                }
+                return $this->redirect(Url::previous());
+            }
+        }
+
+        return $this->render('vms-add-remark', [
+            'model' => $model,
+        ]);
     }
 
     public function actionVmsDailyAccumulation()

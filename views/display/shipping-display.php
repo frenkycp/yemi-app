@@ -167,8 +167,8 @@ echo '</pre>';*/
                 <span class="japanesse light-green">先日の出荷分</span><span> KEMARIN</span>
             </td>
             <td style="font-size: 5em; text-align: right;"><span><?= $data_table[0]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
-            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[0]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
-            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[0]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[0]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[0]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">SET</span></td>
+            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[0]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[0]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">SET</span></td>
         </tr>
         <tr>
             <td>
@@ -176,8 +176,8 @@ echo '</pre>';*/
                 <span class="japanesse light-green">本日の出荷分</span><span> HARI INI</span>
             </td>
             <td style="font-size: 5em; text-align: right;"><span><?= $data_table[1]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
-            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[1]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
-            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[1]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[1]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[1]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">SET</span></td>
+            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[1]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[1]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">SET</span></td>
         </tr>
         <tr>
             <td>
@@ -185,8 +185,8 @@ echo '</pre>';*/
                 <span class="japanesse light-green">翌日の出荷分</span><span> BESOK</span>
             </td>
             <td style="font-size: 5em; text-align: right;"><span><?= $data_table[2]['total_container']; ?></span> <span style="font-size: 0.2em; font-weight: bold;">CNT</span></td>
-            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[2]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
-            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[2]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[2]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">PCS</span></td>
+            <td style="font-size: 5em; text-align: right;"><span><?= number_format($data_table[2]['plan']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">SET</span></td>
+            <td style="font-size: 5em; text-align: right;"><span class="<?= $data_table[2]['balance'] < 0 ? 'text-red' : ''; ?>"><?= number_format($data_table[2]['balance']); ?></span> <span style="font-size: 0.2em; font-weight: bold;">SET</span></td>
         </tr>
     </tbody>
 </table>
