@@ -11,8 +11,8 @@ use kartik\select2\Select2;
 
 $this->title = [
     'page_title' => null,
-    'tab_title' => 'Picking List Update',
-    'breadcrumbs_title' => 'Picking List Update'
+    'tab_title' => 'Search Data',
+    'breadcrumbs_title' => 'Search Data'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -39,13 +39,13 @@ $this->registerJs("$(document).ready(function() {
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['update']),
+    'action' => Url::to(['search']),
 ]); ?>
 
 <div style="max-width: 500px; margin: auto;">
 	<div class="row">
 		<div class="col-md-12 text-center" style="font-size: 2em;">
-			<b><u>PICKING LIST UPDATE FORM</u></b>
+			<b><u>SEARCH FORM</u></b>
 		</div>
 	</div>
 	<br/>
@@ -58,10 +58,10 @@ $this->registerJs("$(document).ready(function() {
 					'class' => 'form-control',
 				]
 			])->textInput()->label(false); ?>
-			<?= Html::submitButton('SUBMIT', ['class' => 'btn btn-primary btn-block', 'style' => 'margin-top: 5px; margin-bottom: 5px;']); ?>
+			<?= Html::submitButton('SEARCH', ['class' => 'btn btn-success btn-block', 'style' => 'margin-top: 5px; margin-bottom: 5px;']); ?>
 		</div>
 	</div>
-	<div class="panel panel-primary">
+	<div class="panel panel-success">
 		<div class="panel-heading">
 			<h3 class="panel-title">
 				Setlist Number : <b style="letter-spacing: 5px;"><?= $setlist_no; ?></b>
@@ -87,7 +87,7 @@ $this->registerJs("$(document).ready(function() {
 		</div>
 	</div>
 </div>
-<div class="panel panel-primary">
+<div class="panel panel-success">
 	<div class="panel-body">
 		<table class="table table-bordered" id="setlist-tbl" style="font-size: 12px;">
 			<thead>

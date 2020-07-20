@@ -26,15 +26,12 @@ $model_karyawan = Karyawan::find()
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
-          <ul class="nav navbar-nav" style="display: none;">
-            <li style="display: none;"> class="<?= \Yii::$app->controller->id == 'fix-asset' && in_array(\Yii::$app->controller->action->id, ['data']) ? 'active' : ''; ?>">
-                <?= Html::a('Data', ['data']) ?>
+          <ul class="nav navbar-nav">
+            <li class="<?= \Yii::$app->controller->id == 'picking-list' && in_array(\Yii::$app->controller->action->id, ['update']) ? 'active' : ''; ?>">
+                <?= Html::a('Update Data', ['update']) ?>
             </li>
-            <li class="<?= \Yii::$app->controller->id == 'fix-asset' && \Yii::$app->controller->action->id == 'asset-log' ? 'active' : ''; ?>">
-                <?= Html::a('Stock Take', ['asset-log']) ?>
-            </li>
-            <li class="<?= \Yii::$app->controller->id == 'fix-asset' && \Yii::$app->controller->action->id == 'progress' ? 'active' : ''; ?>">
-                <?= Html::a('Progress', ['progress']) ?>
+            <li class="<?= \Yii::$app->controller->id == 'picking-list' && \Yii::$app->controller->action->id == 'search' ? 'active' : ''; ?>">
+                <?= Html::a('Search Data', ['search']) ?>
             </li>
           </ul>
         </div>

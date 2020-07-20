@@ -78,6 +78,76 @@ class PickingListController extends Controller
 		return $this->render('index');
 	}
 
+	public function actionSearch()
+	{
+		$session = \Yii::$app->session;
+        if (!$session->has('picking_list_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['picking_list_user'];
+        $name = $session['picking_list_name'];
+		$this->layout = 'picking-list/main';
+
+		$model = new \yii\base\DynamicModel([
+            'barcode'
+        ]);
+        $model->addRule(['barcode'], 'required')
+        ->addRule(['barcode'], 'string');
+
+        $total_setlist = $total_open = $total_close = 0;
+        $setlist_data = $setlist_no = null;
+
+        if ($model->load($_GET)) {
+        	$tmp_setlist = SapPickingList::findOne($model->barcode);
+
+        	if (!$tmp_setlist) {
+        		\Yii::$app->session->setFlash('warning', 'Barcode not found...!');
+        	} else {
+        		$tmp_total = SapPickingList::find()
+	        	->select([
+	        		'total_setlist' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' THEN 1 ELSE 0 END)',
+	        		'total_open' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' AND hand_scan IS null THEN 1 ELSE 0 END)',
+	        		'total_close' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' AND hand_scan = \'Y\' THEN 1 ELSE 0 END)',
+	        	])
+	        	->where([
+	        		'set_list_no' => $tmp_setlist->set_list_no
+	        	])
+	        	->one();
+
+	        	$total_setlist = $tmp_total->total_setlist;
+	        	$total_open = $tmp_total->total_open;
+	        	$total_close = $tmp_total->total_close;
+
+	        	$setlist_no = $tmp_setlist->set_list_no;
+
+	        	$setlist_data = SapPickingList::find()
+	        	->where([
+	        		'set_list_no' => $tmp_setlist->set_list_no,
+	        		'wh_valid' => 'Y',
+	        		'status' => 'C'
+	        	])
+	        	//->andWhere('hand_scan IS NULL')
+	        	->all();
+
+	        	\Yii::$app->session->setFlash('success', 'Barcode ' . $model->barcode . ' found...');
+        	}
+
+        	
+        }
+        
+
+        $model->barcode = null;
+
+		return $this->render('search', [
+			'model' => $model,
+			'total_setlist' => $total_setlist,
+			'total_open' => $total_open,
+			'total_close' => $total_close,
+			'setlist_data' => $setlist_data,
+			'setlist_no' => $setlist_no,
+		]);
+	}
+
 	public function actionUpdate()
 	{
 		$session = \Yii::$app->session;
@@ -155,7 +225,7 @@ class PickingListController extends Controller
 	        		'wh_valid' => 'Y',
 	        		'status' => 'C'
 	        	])
-	        	->andWhere('hand_scan IS NULL')
+	        	//->andWhere('hand_scan IS NULL')
 	        	->all();
 
 	        	\Yii::$app->session->setFlash('success', 'Barcode ' . $model->barcode . ' update success...');
