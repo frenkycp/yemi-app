@@ -1218,8 +1218,8 @@ class DisplayController extends Controller
             <th class="text-center">Item Description</th>
             <th class="text-center">Plan Qty</th>
             <th class="text-center">Actual Qty</th>
-            <th class="text-center">Balance Qty</th>
             <th class="">Remark</th>
+            <th class="">Created By</th>
         </tr></thead>'
         ;
         $data .= '<tbody>';
@@ -1238,8 +1238,8 @@ class DisplayController extends Controller
                 <td class="danger">' . $value->item_description . ' ' . $value->item_destination . '</td>
                 <td class="text-center danger">' . $value->plan_qty . '</td>
                 <td class="text-center danger">' . $value->act_qty . '</td>
-                <td class="text-center danger">' . $value->balance_qty . '</td>
                 <td class="danger">' . $value->remark . '</td>
+                <td class="danger">' . $value->user_id . ' - ' . $value->user_name . '</td>
             </tr>
             ';
         }
