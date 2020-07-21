@@ -28,7 +28,7 @@ class VmsRemark extends BaseVmsRemark
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                [['password', 'remark', 'user_id'], 'required'],
             ]
         );
     }

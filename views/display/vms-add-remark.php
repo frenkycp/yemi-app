@@ -42,7 +42,7 @@ date_default_timezone_set('Asia/Jakarta');
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['vms-add-remark']),
+    'action' => Url::to(['vms-add-remark', 'vms_date' => $vms_date, 'item' => $item, 'plan_qty' => $plan_qty, 'act_qty' => $act_qty]),
 ]); ?>
 
 <div style="margin: auto; max-width: 600px; padding-top: 50px;">
@@ -67,22 +67,41 @@ date_default_timezone_set('Asia/Jakarta');
                     <?= $form->field($model, 'item_destination')->textInput(['readonly' => 'readonly'])->label('Destination'); ?>
                 </div>
             </div>
-            
+            <div class="row">
+                <div class="col-sm-6">
+                    <?= $form->field($model, 'plan_qty')->textInput(['readonly' => 'readonly']); ?>
+                </div>
+                <div class="col-sm-6">
+                    <?= $form->field($model, 'act_qty')->textInput(['readonly' => 'readonly']); ?>
+                </div>
+            </div>
+
+            <?= $form->field($model, 'remark', [
+                'inputOptions' => [
+                    'autofocus' => 'autofocus',
+                    'placeholder' => 'Input remark here...'
+                ]
+            ])->textInput(); ?>
+
             <div class="row">
                 <div class="col-sm-6">
                     <?= $form->field($model, 'user_id', [
                         'inputOptions' => [
                             'onkeyup' => 'this.value=this.value.toUpperCase()',
                             'onfocusout' => 'this.value=this.value.toUpperCase()',
+                            'placeholder' => 'Input NIK here...'
                         ],
                     ])->textInput()->label('Username'); ?>
                 </div>
                 <div class="col-sm-6">
-                    <?= $form->field($model, 'password')->passwordInput(); ?>
+                    <?= $form->field($model, 'password', [
+                        'inputOptions' => [
+                            'placeholder' => 'Use My HR Password...'
+                        ]
+                    ])->passwordInput(); ?>
                 </div>
             </div>
             
-            <?= $form->field($model, 'remark')->textInput(); ?>
         </div>
         <div class="panel-footer">
             <div class="form-group">

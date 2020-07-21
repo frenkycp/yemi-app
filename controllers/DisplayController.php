@@ -1134,6 +1134,7 @@ class DisplayController extends Controller
         $data .= '<table id="popup-tbl" class="table table-bordered table-striped table-hover">';
         $data .= 
         '<thead><tr>
+            <th class="text-center"></th>
             <th class="text-center">Line</th>
             <th class="text-center">Item</th>
             <th class="text-center">Item Description</th>
@@ -1160,14 +1161,19 @@ class DisplayController extends Controller
             if (isset($tmp_remark_arr[$value->ITEM])) {
                 $remark = $tmp_remark_arr[$value->ITEM];
             } else {
-                $remark = Html::a('Add Remark', ['vms-add-remark', 'vms_date' => $vms_date, 'item' => $value->ITEM, 'plan_qty' => $value->PLAN_QTY, 'act_qty' => $value->ACTUAL_QTY], ['class' => 'btn btn-primary']);
+                //$remark = Html::a('Add Remark', ['vms-add-remark', 'vms_date' => $vms_date, 'item' => $value->ITEM, 'plan_qty' => $value->PLAN_QTY, 'act_qty' => $value->ACTUAL_QTY], ['class' => 'btn btn-primary']);
+                $remark = '';
             }
 
             if ($value->PLAN_QTY == 0 && $value->ACTUAL_QTY == 0) {
                 # code...
             } else {
+                $btn_remark = Html::a('<i class="fa fa-file-text-o"></i>', ['vms-add-remark', 'vms_date' => $vms_date, 'item' => $value->ITEM, 'plan_qty' => $value->PLAN_QTY, 'act_qty' => $value->ACTUAL_QTY], [
+                    'title' => 'Add/Edit Remark'
+                ]);
                 $data .= '
                 <tr>
+                    <td class="text-center' . $bg_class . '">' . $btn_remark . '</td>
                     <td class="text-center' . $bg_class . '">' . $value->LINE . '</td>
                     <td class="text-center' . $bg_class . '">' . $value->ITEM . '</td>
                     <td class="' . $bg_class . '">' . $value->ITEM_DESC . ' ' . $value->DESTINATION . '</td>
@@ -1183,7 +1189,7 @@ class DisplayController extends Controller
         $data .= '</tbody>';
         $data .= '<tfoot>
             <tr>
-                <td class="text-center primary" colspan="3">Total</td>
+                <td class="text-center primary" colspan="4">Total</td>
                 <td class="text-center primary">' . number_format($total_plan) . '</td>
                 <td class="text-center primary">' . number_format($total_actual) . '</td>
                 <td class="text-center primary">' . number_format($total_balance) . '</td>
@@ -1201,20 +1207,29 @@ class DisplayController extends Controller
         $this_time = date('Y-m-d H:i:s');
         $tmp_item = VmsItem::findOne($item);
 
-        $model = new VmsRemark;
-        $model->vms_date = $vms_date;
-        $model->vms_period = date('Ym', strtotime($vms_date));
-        $model->item = $item;
-        $model->item_description = $tmp_item->ITEM_DESC;
-        $model->item_destination = $tmp_item->DESTINATION;
-        $model->item_model = $tmp_item->MODEL;
-        $model->item_line = $tmp_item->LINE;
-        $model->plan_qty = $plan_qty;
-        $model->act_qty = $act_qty;
-        $model->balance_qty = $act_qty - $plan_qty;
-        $model->last_update = $this_time;
-        $model->id = date('Ymd', strtotime($vms_date)) . '_' . $item;
+        $tmp_id = date('Ymd', strtotime($vms_date)) . '_' . $item;
+        $model = VmsRemark::findOne($tmp_id);
+        if (!$model) {
+            $model = new VmsRemark;
+            $model->id = $tmp_id;
+            $model->vms_date = $vms_date;
+            $model->vms_period = date('Ym', strtotime($vms_date));
+            $model->item = $item;
+            $model->item_description = $tmp_item->ITEM_DESC;
+            $model->item_destination = $tmp_item->DESTINATION;
+            $model->item_model = $tmp_item->MODEL;
+            $model->item_line = $tmp_item->LINE;
+            $model->plan_qty = $plan_qty;
+            $model->act_qty = $act_qty;
+            $model->balance_qty = $act_qty - $plan_qty;
 
+            $success_msg = 'Remark has been added...';
+        } else {
+            $success_msg = 'Remark has been updated...';
+        }
+        
+        $model->last_update = $this_time;
+        
         if ($model->load($_GET)) {
             $tmp_karyawan = Karyawan::find()
             ->where([
@@ -1226,8 +1241,9 @@ class DisplayController extends Controller
                 'PASSWORD' => $model->password
             ])
             ->one();
+            $model->user_id = $tmp_karyawan->NIK_SUN_FISH;
             $model->user_name = $tmp_karyawan->NAMA_KARYAWAN;
-            
+
             if (!$tmp_karyawan) {
                 \Yii::$app->session->setFlash('warning', 'Invalid Username/Password...');
             } else {
@@ -1235,12 +1251,17 @@ class DisplayController extends Controller
                 if (!$model->save()) {
                     return json_encode($model->errors);
                 }
+                \Yii::$app->session->setFlash('success', $success_msg);
                 return $this->redirect(Url::previous());
             }
         }
 
         return $this->render('vms-add-remark', [
             'model' => $model,
+            'vms_date' => $vms_date,
+            'item' => $item,
+            'plan_qty' => $plan_qty,
+            'act_qty' => $act_qty,
         ]);
     }
 
@@ -1461,6 +1482,11 @@ class DisplayController extends Controller
             'product_balance' => $tmp_yesterday->product_actual - $tmp_yesterday->product_plan,
         ];
         $yesterday_data['balance'] = $yesterday_data['actual'] - $yesterday_data['plan'];
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
 
         return $this->render('vms-daily-accumulation', [
             'model' => $model,
