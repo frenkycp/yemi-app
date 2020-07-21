@@ -139,9 +139,11 @@ $this->registerJs("$(function() {
    $('.popup_btn').click(function(e) {
      e.preventDefault();
      $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
-     $('#popup-tbl').DataTable({
-        'order': [[ 6, 'desc' ]]
-    });
+   });
+
+   $('.popup_remark').click(function(e) {
+     e.preventDefault();
+     $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
    });
 });");
 // echo $start_period . ' - ' . $end_period;
@@ -308,110 +310,125 @@ echo '</pre>';*/
     </div>
 </div>
 
-<table class="table table-bordered" id="summary-tbl">
-    <thead>
-        <tr>
-            <th></th>
-            <?php
-            if (isset($tmp_table['thead']))
-            foreach ($tmp_table['thead'] as $key => $value): ?>
-                <th class="text-center" style="font-weight: normal;"><?= date('d M', strtotime($value)); ?></th>
-            <?php endforeach ?>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Plan</td>
-            <?php
-            if (isset($tmp_table['plan']))
-            foreach ($tmp_table['plan'] as $key => $value): ?>
-                <td class="text-center"><?= number_format($value); ?></td>
-            <?php endforeach ?>
-        </tr>
-        <tr>
-            <td>Actual</td>
-            <?php
-            if(isset($tmp_table['actual']))
-            foreach ($tmp_table['actual'] as $key => $value): ?>
-                <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
-            <?php endforeach ?>
-        </tr>
-        <tr>
-            <td>Balance</td>
-            <?php
-            if(isset($tmp_table['balance']))
-            foreach ($tmp_table['balance'] as $key => $value): 
-                if ($value == null) {
-                    echo '<td class="text-center">
-                        
-                    </td>';
-                } else {
-                    if ($value < 0) {
-                        $badge_class = 'badge bg-red';
-                    }
-                    if ($value == 0) {
-                        $badge_class = 'badge';
-                    }
-                    if ($value > 0) {
-                        $badge_class = 'badge bg-green';
-                    }
+<div class="panel panel-primary">
+    <div class="panel-body no-padding">
+        <div class="table-responsive">
+            <table class="table table-bordered table-responsiv" id="summary-tbl">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <?php
+                        if (isset($tmp_table['thead']))
+                        foreach ($tmp_table['thead'] as $key => $value):
+                            $total_remark = app\models\VmsRemark::find()->where(['vms_date' => $value])->count();
+                            $value_txt = date('d M', strtotime($value));
+                            if ($total_remark > 0) {
+                                $header_txt = Html::a('<u style="color: white;">' . $value_txt . '</u>', ['get-vms-remark', 'vms_date' => $value], ['class' => 'popup_remark']);
+                            } else {
+                                $header_txt = $value_txt;
+                            }
+                            ?>
+                            <th class="text-center" style="font-weight: normal;"><?= $header_txt; ?></th>
+                        <?php endforeach ?>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Plan</td>
+                        <?php
+                        if (isset($tmp_table['plan']))
+                        foreach ($tmp_table['plan'] as $key => $value): ?>
+                            <td class="text-center"><?= number_format($value); ?></td>
+                        <?php endforeach ?>
+                    </tr>
+                    <tr>
+                        <td>Actual</td>
+                        <?php
+                        if(isset($tmp_table['actual']))
+                        foreach ($tmp_table['actual'] as $key => $value): ?>
+                            <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
+                        <?php endforeach ?>
+                    </tr>
+                    <tr>
+                        <td>Balance</td>
+                        <?php
+                        if(isset($tmp_table['balance']))
+                        foreach ($tmp_table['balance'] as $key => $value): 
+                            if ($value == null) {
+                                echo '<td class="text-center">
+                                    
+                                </td>';
+                            } else {
+                                if ($value < 0) {
+                                    $badge_class = 'badge bg-red';
+                                }
+                                if ($value == 0) {
+                                    $badge_class = 'badge';
+                                }
+                                if ($value > 0) {
+                                    $badge_class = 'badge bg-green';
+                                }
 
-                    echo '<td class="text-center">
-                        ' . Html::a('<span class="' . $badge_class . '">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line], ['class' => 'popup_btn']) . '
-                    </td>';
-                }
-                ?>
-                
-            <?php endforeach ?>
-        </tr>
-        <tr class="accumulation">
-            <td>Plan<br/>Accumulation</td>
-            <?php
-            if (isset($tmp_table['plan_acc']))
-            foreach ($tmp_table['plan_acc'] as $key => $value): ?>
-                <td class="text-center"><?= number_format($value); ?></td>
-            <?php endforeach ?>
-        </tr>
-        <tr class="accumulation">
-            <td>Actual<br/>Accumulation</td>
-            <?php
-            if(isset($tmp_table['actual_acc']))
-            foreach ($tmp_table['actual_acc'] as $key => $value): ?>
-                <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
-            <?php endforeach ?>
-        </tr>
-        <tr class="accumulation">
-            <td>Balance<br/>Accumulation</td>
-            <?php
-            if(isset($tmp_table['balance_acc']))
-            foreach ($tmp_table['balance_acc'] as $key => $value): 
-                if ($value < 0) {
-                    echo '<td class="text-center">
-                        ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line, 'acc' => 1], ['class' => 'popup_btn']) . '
-                    </td>';
-                } else {
-                    if ($value == null) {
-                        echo '<td class="text-center">
-                                
-                            </td>';
-                    } else {
-                        if ($value == 0) {
-                            echo '<td class="text-center">
-                                <span class="badge">' . number_format($value) . '</span>
-                            </td>';
-                        } else {
-                            echo '<td class="text-center">
-                                <span class="badge bg-green">' . number_format($value) . '</span>
-                            </td>';
-                        }
-                    }
-                }
-                ?>
-                
-            <?php endforeach ?>
-        </tr>
-    </tbody>
-</table>
+                                echo '<td class="text-center">
+                                    ' . Html::a('<span class="' . $badge_class . '">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line], ['class' => 'popup_btn']) . '
+                                </td>';
+                            }
+                            ?>
+                            
+                        <?php endforeach ?>
+                    </tr>
+                    <tr class="accumulation">
+                        <td>Plan<br/>Accumulation</td>
+                        <?php
+                        if (isset($tmp_table['plan_acc']))
+                        foreach ($tmp_table['plan_acc'] as $key => $value): ?>
+                            <td class="text-center"><?= number_format($value); ?></td>
+                        <?php endforeach ?>
+                    </tr>
+                    <tr class="accumulation">
+                        <td>Actual<br/>Accumulation</td>
+                        <?php
+                        if(isset($tmp_table['actual_acc']))
+                        foreach ($tmp_table['actual_acc'] as $key => $value): ?>
+                            <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
+                        <?php endforeach ?>
+                    </tr>
+                    <tr class="accumulation">
+                        <td>Balance<br/>Accumulation</td>
+                        <?php
+                        if(isset($tmp_table['balance_acc']))
+                        foreach ($tmp_table['balance_acc'] as $key => $value): 
+                            if ($value < 0) {
+                                echo '<td class="text-center">
+                                    ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-vms-balance', 'vms_date' => $tmp_table['thead'][$key], 'line' => $model->line, 'acc' => 1], ['class' => 'popup_btn']) . '
+                                </td>';
+                            } else {
+                                if ($value == null) {
+                                    echo '<td class="text-center">
+                                            
+                                        </td>';
+                                } else {
+                                    if ($value == 0) {
+                                        echo '<td class="text-center">
+                                            <span class="badge">' . number_format($value) . '</span>
+                                        </td>';
+                                    } else {
+                                        echo '<td class="text-center">
+                                            <span class="badge bg-green">' . number_format($value) . '</span>
+                                        </td>';
+                                    }
+                                }
+                            }
+                            ?>
+                            
+                        <?php endforeach ?>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <span style="font-weight: normal; color: white;"><i>*VMS Version : <?= $vms_version; ?></i></span>
 <?php
     yii\bootstrap\Modal::begin([

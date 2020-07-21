@@ -1200,6 +1200,55 @@ class DisplayController extends Controller
         return $data;
     }
 
+    public function actionGetVmsRemark($vms_date = '')
+    {
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Remark on <small>(' . $vms_date . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $data .= '<table id="popup-tbl" class="table table-bordered table-striped table-hover">';
+        $data .= 
+        '<thead><tr>
+            <th class="text-center"></th>
+            <th class="text-center">Line</th>
+            <th class="text-center">Item</th>
+            <th class="text-center">Item Description</th>
+            <th class="text-center">Plan Qty</th>
+            <th class="text-center">Actual Qty</th>
+            <th class="text-center">Balance Qty</th>
+            <th class="">Remark</th>
+        </tr></thead>'
+        ;
+        $data .= '<tbody>';
+
+        $remark_arr = VmsRemark::find()->where(['vms_date' => $vms_date])->orderBy('item_line, item_model, item')->all();
+
+        foreach ($remark_arr as $key => $value) {
+            $btn_remark = Html::a('<i class="fa fa-file-text-o"></i>', ['vms-add-remark', 'vms_date' => $vms_date, 'item' => $value->item, 'plan_qty' => $value->plan_qty, 'act_qty' => $value->act_qty], [
+                'title' => 'Add/Edit Remark'
+            ]);
+            $data .= '
+            <tr>
+                <td class="text-center danger">' . $btn_remark . '</td>
+                <td class="text-center danger">' . $value->item_line . '</td>
+                <td class="text-center danger">' . $value->item . '</td>
+                <td class="danger">' . $value->item_description . ' ' . $value->item_destination . '</td>
+                <td class="text-center danger">' . $value->plan_qty . '</td>
+                <td class="text-center danger">' . $value->act_qty . '</td>
+                <td class="text-center danger">' . $value->balance_qty . '</td>
+                <td class="danger">' . $value->remark . '</td>
+            </tr>
+            ';
+        }
+
+        $data .= '</tbody>';
+        $data .= '</table>';
+        return $data;
+    }
+
     public function actionVmsAddRemark($vms_date = '', $item = '', $plan_qty = 0, $act_qty = 0)
     {
         $this->layout = 'clean';
