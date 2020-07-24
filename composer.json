@@ -21,7 +21,7 @@
         "dmstr/yii2-adminlte-asset": ">2",
         "schmunk42/yii2-giiant": "@dev",
         "kartik-v/yii2-widget-fileinput": "@dev",
-        "miloschuman/yii2-highcharts-widget": "*",
+        "miloschuman/yii2-highcharts-widget": "^8.0",
         "kartik-v/yii2-grid": "@dev",
         "kartik-v/yii2-mpdf": "*",
         "scotthuangzl/yii2-google-chart": "dev-master",
@@ -43,7 +43,9 @@
         "philippfrenzel/yii2fullcalendar": "*",
         "kartik-v/yii2-field-range": "*",
         "kartik-v/yii2-number": "@dev",
-        "mongosoft/yii2-soap-client": "*"
+        "mongosoft/yii2-soap-client": "*",
+        "yiisoft/yii2-imagine": "^2.2",
+        "kartik-v/yii2-tree-manager": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
