@@ -265,7 +265,7 @@ echo '</pre>';*/
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                <tr style="display: none;">
                     <td>Plan</td>
                     <?php
                     if (isset($tmp_table['plan']))
@@ -281,7 +281,7 @@ echo '</pre>';*/
                         <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
                     <?php endforeach ?>
                 </tr>
-                <tr>
+                <tr style="display: none;">
                     <td>Balance</td>
                     <?php
                     if(isset($tmp_table['balance']))
@@ -311,7 +311,7 @@ echo '</pre>';*/
                         
                     <?php endforeach ?>
                 </tr>
-                <tr class="accumulation">
+                <tr class="accumulation" style="display: none;">
                     <td>Plan<br/>Accumulation</td>
                     <?php
                     if (isset($tmp_table['plan_acc']))
@@ -327,7 +327,7 @@ echo '</pre>';*/
                         <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
                     <?php endforeach ?>
                 </tr>
-                <tr class="accumulation">
+                <tr class="accumulation" style="display: none;">
                     <td>Balance<br/>Accumulation</td>
                     <?php
                     if(isset($tmp_table['balance_acc']))
