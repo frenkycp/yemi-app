@@ -807,7 +807,8 @@ class DisplayController extends Controller
             ->select([
                 'etd',
                 'qty' => 'SUM(qty)',
-                'output' => 'SUM(output)'
+                'output' => 'SUM(output)',
+                'standard_price' => 'SUM(standard_price * output)'
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
@@ -822,7 +823,8 @@ class DisplayController extends Controller
             ->select([
                 'etd',
                 'qty' => 'SUM(qty)',
-                'output' => 'SUM(output)'
+                'output' => 'SUM(output)',
+                'standard_price' => 'SUM(standard_price * output)'
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
@@ -838,7 +840,8 @@ class DisplayController extends Controller
             ->select([
                 'etd',
                 'qty' => 'SUM(qty)',
-                'output' => 'SUM(output)'
+                'output' => 'SUM(output)',
+                'standard_price' => 'SUM(standard_price * output)'
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
@@ -854,7 +857,8 @@ class DisplayController extends Controller
             ->select([
                 'etd',
                 'qty' => 'SUM(qty)',
-                'output' => 'SUM(output)'
+                'output' => 'SUM(output)',
+                'standard_price' => 'SUM(standard_price * output)'
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
@@ -867,7 +871,7 @@ class DisplayController extends Controller
 
         $tmp_data_plan = $tmp_data_actual = $tmp_data_balance = $data = [];
         $tmp_table = [];
-        $tmp_total_plan = $tmp_total_actual = 0;
+        $tmp_total_plan = $tmp_total_actual = $tmp_total_amount_act = 0;
         foreach ($tmp_vms as $key => $value) {
             $tmp_table['thead'][] = $value->etd;
             $tmp_table['plan'][] = $value->qty;
@@ -880,6 +884,7 @@ class DisplayController extends Controller
                 $tmp_total_actual += $value->output;
             }*/
             $tmp_total_actual += $value->output;
+            $tmp_total_amount_act += $value->standard_price;
 
             $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
             /*if (date('Y-m-d', strtotime($value->etd)) > $today) {
@@ -898,7 +903,9 @@ class DisplayController extends Controller
 
             $tmp_balance = $value->output - $value->qty;
             $tmp_table['actual'][] = $value->output == null ? '0' : $value->output;
+            $tmp_table['actual_amount'][] = $value->standard_price == null ? '0' : $value->standard_price;
             $tmp_table['actual_acc'][] = $tmp_total_actual == null ? '0' : $tmp_total_actual;
+            $tmp_table['actual_amount_acc'][] = $tmp_total_amount_act == null ? '0' : $tmp_total_amount_act;
             $tmp_table['balance'][] = $tmp_balance == null ? '0' : $tmp_balance;
             $tmp_table['balance_acc'][] = $tmp_total_balance == null ? '0' : $tmp_total_balance;
 
