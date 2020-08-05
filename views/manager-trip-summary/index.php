@@ -164,6 +164,46 @@ $gridColumns = [
             'style' => 'text-align: center;'
         ],
     ],
+    [
+        'attribute' => 'in_datetime',
+        'value' => function($model){
+            $tmp_rfid_scan = app\models\RfidCarScan::find()->where([
+                'post_date' => $model->post_date,
+                'nik' => $model->emp_id
+            ])->one();
+            if ($tmp_rfid_scan->in_datetime != null) {
+                return date('H:i', strtotime($tmp_rfid_scan->in_datetime));
+            } else {
+                return null;
+            }
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            //'style' => 'text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'out_datetime',
+        'value' => function($model){
+            $tmp_rfid_scan = app\models\RfidCarScan::find()->where([
+                'post_date' => $model->post_date,
+                'nik' => $model->emp_id
+            ])->one();
+            if ($tmp_rfid_scan->out_datetime != null) {
+                return date('H:i', strtotime($tmp_rfid_scan->out_datetime));
+            } else {
+                return null;
+            }
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            //'style' => 'text-align: center;'
+        ],
+    ],
 ];
 ?>
 <div class="giiant-crud bentol-manager-trip-summary-index">

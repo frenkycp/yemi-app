@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SensorLog extends BaseSensorLog
 {
-    public $total_freq, $freq_shift1, $freq_shift2, $freq_shift3;
+    public $total_freq, $freq_shift1, $freq_shift2, $freq_shift3, $min_date, $max_date;
 
     public function behaviors()
     {

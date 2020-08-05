@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\BentolManagerTripSummary as BaseBentolManagerTripSummary;
+use \app\models\base\RfidCarScan as BaseRfidCarScan;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "tbl_manager_trip_summary".
+ * This is the model class for table "db_owner.RFID_CAR_SCAN".
  */
-class BentolManagerTripSummary extends BaseBentolManagerTripSummary
+class RfidCarScan extends BaseRfidCarScan
 {
-    public $in_datetime, $out_datetime;
 
     public function behaviors()
     {

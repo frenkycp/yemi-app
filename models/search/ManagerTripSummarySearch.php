@@ -41,7 +41,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = BentolManagerTripSummary::find();
+$query = BentolManagerTripSummary::find()->where(['<>', 'emp_id', 'YE9909002']);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,

@@ -8641,12 +8641,19 @@ class DisplayController extends Controller
             'map_no', 'from_date', 'to_date'
         ]);
         $model->addRule(['from_date', 'to_date','map_no'], 'required');
-
-        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
-        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
-        $data = $tmp_data_rh = [];
-
         $model->map_no = $_GET['map_no'];
+
+        $tmp_min_max = SensorLog::find()
+        ->select([
+            'min_date' => 'FORMAT(MIN(system_date_time), \'yyyy-MM-dd\')',
+            'max_date' => 'FORMAT(MAX(system_date_time), \'yyyy-MM-dd\')',
+        ])
+        ->where(['map_no' => $model->map_no])
+        ->one();
+
+        $model->from_date = $tmp_min_max->min_date;
+        $model->to_date = $tmp_min_max->max_date;
+        $data = $tmp_data_rh = [];
 
         if ($model->load($_GET)) {
 
