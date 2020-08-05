@@ -21,6 +21,7 @@ use app\models\VmsItem;
 use app\models\WorkDayTbl;
 use app\models\BentolKaryawan;
 use app\models\BentolManagerTripSummary;
+use app\models\SapItemTbl;
 
 class ProductionRestController extends Controller
 {
@@ -94,6 +95,9 @@ class ProductionRestController extends Controller
             'EXTRACT(year_month FROM etd)' => $period
         ])->groupBy('gmc')->orderBy('gmc')->all();
         $vms_item_arr = VmsItem::find()->asArray()->all();
+        $sap_item_arr = SapItemTbl::find()->where([
+            'analyst' => 'WF01'
+        ])->asArray()->all();
         $total_update = count($tmp_so);
         foreach ($tmp_so as $so) {
             $description = $destination = $bu = $line = $model = $fg_kd = $standard_price = null;
@@ -105,9 +109,16 @@ class ProductionRestController extends Controller
                     $line = $vms_item['LINE'];
                     $model = $vms_item['MODEL'];
                     $fg_kd = $vms_item['FG_KD'];
-                    $standard_price = $vms_item['STANDARD_PRICE'];
+                    //$standard_price = $vms_item['STANDARD_PRICE'];
                 }
             }
+
+            foreach ($sap_item_arr as $sap_item) {
+                if ($so['gmc'] == $sap_item['material']) {
+                    $standard_price = $sap_item['standard_price'];
+                }
+            }
+
             SernoOutput::updateAll([
                 'gmc_desc' => $description,
                 'gmc_destination' => $destination,
