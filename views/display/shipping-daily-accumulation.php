@@ -357,6 +357,22 @@ echo '</pre>';*/
                         
                     <?php endforeach ?>
                 </tr>
+                <tr>
+                    <td>Actual (Amount)</td>
+                    <?php
+                    if(isset($tmp_table['actual_amount']))
+                    foreach ($tmp_table['actual_amount'] as $key => $value): ?>
+                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr class="accumulation">
+                    <td>Actual (Amount)<br/>Accumulation</td>
+                    <?php
+                    if(isset($tmp_table['actual_amount_acc']))
+                    foreach ($tmp_table['actual_amount_acc'] as $key => $value): ?>
+                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
+                    <?php endforeach ?>
+                </tr>
             </tbody>
         </table>
     </div>
