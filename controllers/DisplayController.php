@@ -936,11 +936,12 @@ class DisplayController extends Controller
                 'name' => 'PLAN',
                 'data' => $tmp_data_plan,
                 'color' => 'white'
-            ], [
+            ],
+            /*[
                 'name' => 'ACTUAL',
                 'data' => $tmp_data_actual,
                 'color' => 'lime'
-            ],
+            ],*/
             [
                 'name' => 'BALANCE (ACCUMULATION)',
                 'data' => $tmp_data_balance,
