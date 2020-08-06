@@ -17,6 +17,7 @@ use Yii;
  * @property integer $down_time
  * @property integer $non_down_time
  * @property integer $down_time_number
+ * @property integer $working_days
  * @property string $aliasModel
  */
 abstract class MachinePerformanceView01 extends \yii\db\ActiveRecord
@@ -46,8 +47,11 @@ abstract class MachinePerformanceView01 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['period', 'mesin_id', 'mesin_nama', 'location', 'area'], 'string'],
-            [['down_time', 'non_down_time', 'down_time_number'], 'integer']
+            [['down_time', 'non_down_time', 'down_time_number', 'working_days'], 'integer'],
+            [['period'], 'string', 'max' => 4000],
+            [['mesin_id'], 'string', 'max' => 10],
+            [['mesin_nama'], 'string', 'max' => 100],
+            [['location', 'area'], 'string', 'max' => 50]
         ];
     }
 
@@ -65,6 +69,7 @@ abstract class MachinePerformanceView01 extends \yii\db\ActiveRecord
             'down_time' => 'Down Time',
             'non_down_time' => 'Non Down Time',
             'down_time_number' => 'Down Time Number',
+            'working_days' => 'Working Days',
         ];
     }
 

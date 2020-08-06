@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MachinePerformanceView01 extends BaseMachinePerformanceView01
 {
+    public $mttr, $mtbf;
 
     public function behaviors()
     {

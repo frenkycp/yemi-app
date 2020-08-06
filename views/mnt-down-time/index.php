@@ -109,6 +109,45 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'working_days',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'mttr',
+        'value' => function($model){
+            if ($model->down_time_number > 0) {
+                return round(($model->down_time / $model->down_time_number), 2);
+            }
+        },
+        'label' => 'MTTR',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 80px;'
+        ],
+    ],
+    [
+        'attribute' => 'mtbf',
+        'value' => function($model){
+            if ($model->down_time_number > 0) {
+                return round(((($model->working_days * 1220) - $model->down_time) / $model->down_time_number), 2);
+            }
+        },
+        'label' => 'MTBF',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 80px;'
+        ],
+    ],
+    [
         'attribute' => 'non_down_time',
         'label' => 'Non Down Time (min)',
         'vAlign' => 'middle',

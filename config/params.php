@@ -98,6 +98,7 @@ return [
         'WM03' => 'SMT',
         'WI01' => 'INJ SMALL',
         'WI02' => 'INJ LARGE',
+        'WI03' => 'INJ MEDIUM',
         'WM02' => 'PCB AUTO INS.',
     ],
     'bg-yellow' => 'rgba(243, 156, 18, 1)',
