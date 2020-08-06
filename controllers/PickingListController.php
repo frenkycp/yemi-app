@@ -204,9 +204,9 @@ class PickingListController extends Controller
 
         		$tmp_total = SapPickingList::find()
 	        	->select([
-	        		'total_setlist' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' THEN 1 ELSE 0 END)',
-	        		'total_open' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' AND hand_scan IS null THEN 1 ELSE 0 END)',
-	        		'total_close' => 'SUM(CASE WHEN wh_valid = \'Y\' AND status = \'C\' AND hand_scan = \'Y\' THEN 1 ELSE 0 END)',
+	        		'total_setlist' => 'SUM(CASE WHEN wh_valid = \'Y\' AND (status = \'C\' OR status = \'P\') THEN 1 ELSE 0 END)',
+	        		'total_open' => 'SUM(CASE WHEN wh_valid = \'Y\' AND (status = \'C\' OR status = \'P\') AND hand_scan IS null THEN 1 ELSE 0 END)',
+	        		'total_close' => 'SUM(CASE WHEN wh_valid = \'Y\' AND (status = \'C\' OR status = \'P\') AND hand_scan = \'Y\' THEN 1 ELSE 0 END)',
 	        	])
 	        	->where([
 	        		'set_list_no' => $tmp_setlist->set_list_no
@@ -223,7 +223,7 @@ class PickingListController extends Controller
 	        	->where([
 	        		'set_list_no' => $tmp_setlist->set_list_no,
 	        		'wh_valid' => 'Y',
-	        		'status' => 'C'
+	        		'status' => ['C', 'P']
 	        	])
 	        	//->andWhere('hand_scan IS NULL')
 	        	->all();

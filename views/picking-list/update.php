@@ -111,8 +111,18 @@ $this->registerJs("$(document).ready(function() {
 				<?php
 				if ($setlist_data) {
 					?>
-					<?php foreach ($setlist_data as $key => $value): ?>
-						<tr class="<?= $value->hand_scan == 'Y' ? 'bg-success text-green' : 'bg-danger text-red'; ?>">
+					<?php foreach ($setlist_data as $key => $value):
+						if ($value->hand_scan == 'Y') {
+							$bg_class = 'bg-success text-green';
+						} else {
+							if ($value->status == 'C') {
+								$bg_class = 'bg-danger text-red';
+							} else {
+								$bg_class = 'bg-warning text-yellow';
+							}
+						}
+						?>
+						<tr class="<?= $bg_class; ?>">
 							<td class="text-center"><?= $value->no; ?></td>
 							<td class="text-center"><?= $value->analyst_desc; ?></td>
 							<td class="text-center"><?= $value->parent; ?></td>
