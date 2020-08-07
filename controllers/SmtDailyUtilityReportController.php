@@ -10,6 +10,7 @@ use app\models\WipEffView;
 use app\models\WipEffNew07;
 use app\models\WipEffNew03;
 use app\models\WipLosstimeCategoryView;
+use app\models\WipEffTbl;
 
 class SmtDailyUtilityReportController extends Controller
 {
@@ -80,8 +81,6 @@ class SmtDailyUtilityReportController extends Controller
 			    	'url' => Url::to(['get-remark', 'proddate' => $i->format("Y-m-d"), 'line' => $line, 'loc' => $loc])
 		    	];
 			}
-		   	
-			
 		}
 		
 		$data = [
@@ -189,7 +188,8 @@ class SmtDailyUtilityReportController extends Controller
 			$categories[] = $key;
 			$tmp_losstime_category[] = [
 				'name' => $key,
-				'y' => round($value)
+				'y' => round($value),
+				'url' => Url::to(['get-loss-time-cat', 'period' => $period, 'child_analyst' => $loc, 'category' => $key])
 			];
 		}
 
@@ -213,62 +213,241 @@ class SmtDailyUtilityReportController extends Controller
 		]);
 	}
 
-	public function actionGetRemark($proddate, $line, $loc)
+	public function actionGetLossTimeCat($period, $child_analyst, $category)
 	{
+		$loc_desc = \Yii::$app->params['wip_location_arr'][$child_analyst];
 		$remark = '<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h3>Line : ' . $line . ' <small>(' . $proddate . ')</small></h3>
+			<h3>Lost Time by ' . $category . '<br/>Location : ' . $loc_desc . '</h3>
 		</div>
 		<div class="modal-body">
 		';
 		
 	    $remark .= '<table class="table table-bordered table-striped table-hover">';
 	    $remark .= '<tr style="font-size: 12px;">
-	    	<th class="text-center" style="min-width: 70px;">Shift</th>
-	    	<th class="text-center">Part No</th>
-	    	<th style="width: 100px;">Part Description</th>
-	    	<th class="text-center">Qty<br/>(A)</th>
-	    	<th class="text-center">ST<br/>(B)</th>
-	    	<th class="text-center">Total ST<br/>(C = A * B)</th>
-	    	<th class="text-center">Lead Time<br/>(D)</th>
-	    	<th class="text-center">Loss Time<br/>(Planned Loss)<br/>(E)</th>
-	    	<th class="text-center">Loss Time<br/>(Out Section)<br/>(F)</th>
-	    	<th class="text-center">Dandori</th>
-	    	<th class="text-center">Break Down</th>
-	    	<th class="text-center">Operating Loss</th>
-	    	<th class="text-center">Working Time<br/>(G)</th>
-	    	<th class="text-center">Operation Ratio(%)<br/>((G-E-F) / 1440)</th>
-	    	<th class="text-center">Working Ratio(%)<br/>(C / (D-E-F))</th>
+	    	<th class="text-center">Post Date</th>
+	    	<th class="">Note</th>
+	    	<th class="text-center">Total Time<br/>(min)</th>
 	    </tr>';
 
-	    $utility_data_arr = WipEffNew03::find()
-	    ->where([
-	    	'post_date' => $proddate,
-	    	'LINE' => $line,
-	    	'child_analyst' => $loc
-	    ])
-	    ->orderBy('SMT_SHIFT, LINE, child_all')
-	    ->all();
+		if ($category == 'Break Time') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'break_time', 0])
+		    ->all();
+		} elseif ($category == 'Nozzle Maintenance') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'nozzle_maintenance', 0])
+		    ->all();
+		} elseif ($category == 'Change Schedule') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'change_schedule', 0])
+		    ->all();
+		} elseif ($category == 'Air Pressure Problem') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'air_pressure_problem', 0])
+		    ->all();
+		} elseif ($category == 'Power Failure') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'power_failure', 0])
+		    ->all();
+		} elseif ($category == 'Part Shortage') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'part_shortage', 0])
+		    ->all();
+		} elseif ($category == 'Set Up 1st Time Running TP') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'set_up_1st_time_running_tp', 0])
+		    ->all();
+		} elseif ($category == 'Part Arrangement DCN') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'part_arrangement_dcn', 0])
+		    ->all();
+		} elseif ($category == 'Meeting') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'meeting', 0])
+		    ->all();
+		} elseif ($category == 'Dandori') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'dandori', 0])
+		    ->all();
+		} elseif ($category == 'Program Error') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'porgram_error', 0])
+		    ->all();
+		} elseif ($category == 'MC Problem') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'm_c_problem', 0])
+		    ->all();
+		} elseif ($category == 'Feeder Problem') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'feeder_problem', 0])
+		    ->all();
+		} elseif ($category == 'Quality Problem') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'quality_problem', 0])
+		    ->all();
+		} elseif ($category == 'PCB Transfer Problem') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'pcb_transfer_problem', 0])
+		    ->all();
+		} elseif ($category == 'Profile Problem') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'profile_problem', 0])
+		    ->all();
+		} elseif ($category == 'Pick Up Error') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'pick_up_error', 0])
+		    ->all();
+		} elseif ($category == 'Warming Up') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'machine_warming_up', 0])
+		    ->all();
+		} elseif ($category == 'Other') {
+			$utility_data_arr = WipEffTbl::find()
+		    ->where([
+		    	'period' => $period,
+		    	'child_analyst' => $child_analyst
+		    ])
+		    ->andWhere(['>', 'other', 0])
+		    ->all();
+		}
 
 	    $no = 1;
 	    foreach ($utility_data_arr as $key => $utility_data) {
-
+	    	if ($category == 'Break Time') {
+	    		$tmp_note = $utility_data->note01;
+	    		$total_time = $utility_data->break_time;
+			} elseif ($category == 'Nozzle Maintenance') {
+				$tmp_note = $utility_data->note02;
+				$total_time = $utility_data->nozzle_maintenance;
+			} elseif ($category == 'Change Schedule') {
+				$tmp_note = $utility_data->note03;
+				$total_time = $utility_data->change_schedule;
+			} elseif ($category == 'Air Pressure Problem') {
+				$tmp_note = $utility_data->note04;
+				$total_time = $utility_data->air_pressure_problem;
+			} elseif ($category == 'Power Failure') {
+				$tmp_note = $utility_data->note05;
+				$total_time = $utility_data->power_failure;
+			} elseif ($category == 'Part Shortage') {
+				$tmp_note = $utility_data->note06;
+				$total_time = $utility_data->part_shortage;
+			} elseif ($category == 'Set Up 1st Time Running TP') {
+				$tmp_note = $utility_data->note07;
+				$total_time = $utility_data->set_up_1st_time_running_tp;
+			} elseif ($category == 'Part Arrangement DCN') {
+				$tmp_note = $utility_data->note08;
+				$total_time = $utility_data->part_arrangement_dcn;
+			} elseif ($category == 'Meeting') {
+				$tmp_note = $utility_data->note09;
+				$total_time = $utility_data->meeting;
+			} elseif ($category == 'Dandori') {
+				$tmp_note = $utility_data->note10;
+				$total_time = $utility_data->dandori;
+			} elseif ($category == 'Program Error') {
+				$tmp_note = $utility_data->note11;
+				$total_time = $utility_data->porgram_error;
+			} elseif ($category == 'MC Problem') {
+				$tmp_note = $utility_data->note12;
+				$total_time = $utility_data->m_c_problem;
+			} elseif ($category == 'Feeder Problem') {
+				$tmp_note = $utility_data->note13;
+				$total_time = $utility_data->feeder_problem;
+			} elseif ($category == 'Quality Problem') {
+				$tmp_note = $utility_data->note14;
+				$total_time = $utility_data->quality_problem;
+			} elseif ($category == 'PCB Transfer Problem') {
+				$tmp_note = $utility_data->note15;
+				$total_time = $utility_data->pcb_transfer_problem;
+			} elseif ($category == 'Profile Problem') {
+				$tmp_note = $utility_data->note16;
+				$total_time = $utility_data->profile_problem;
+			} elseif ($category == 'Pick Up Error') {
+				$tmp_note = $utility_data->note17;
+				$total_time = $utility_data->pick_up_error;
+			} elseif ($category == 'Warming Up') {
+				$tmp_note = $utility_data->note18;
+				$total_time = $utility_data->machine_warming_up;
+			} elseif ($category == 'Other') {
+				$tmp_note = $utility_data->note19;
+				$total_time = $utility_data->other;
+			}
 	    	$remark .= '<tr style="font-size: 12px;">
-	    		<td class="text-center">' . $utility_data->SMT_SHIFT . '</td>
-	    		<td class="text-center">' . $utility_data->child_all . '</td>
-	    		<td>' . $utility_data->child_desc_all . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->qty_all, 0) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->std_all, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->lt_std, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->lt_gross, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->planed_loss_minute, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->out_section_minute, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->dandori_minute, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->break_down_minute, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->operating_loss_minute, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->working_time, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->operating_ratio, 2) . '</td>
-	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->working_ratio, 2) . '</td>
+	    		<td class="text-center">' . date('Y-m-d', strtotime($utility_data->post_date)) . '</td>
+	    		<td class="">' . $tmp_note . '</td>
+	    		<td class="text-center">' . number_format($total_time) . '</td>
 	    	</tr>';
 	    	$no++;
 	    }
@@ -317,7 +496,7 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th class="text-center">Other</th>
 	    </tr>';
 
-	    $wip_eff_view = WipEffView::find()
+	    $wip_eff_view = WipEffTbl::find()
 	    ->where([
 	    	'post_date' => $proddate,
 	    	'LINE' => $line,

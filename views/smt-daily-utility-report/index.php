@@ -279,7 +279,7 @@ echo '</pre>';*/
                                 //'allowOverlap' => true
                                 'enabled' => true
                             ],
-                            /**/'point' => [
+                            'point' => [
                                 'events' => [
                                     'click' => new JsExpression("
                                         function(e){
@@ -345,17 +345,17 @@ echo '</pre>';*/
                         ]
                     ],
                     'series' => [
-                        /*'cursor' => 'pointer',
+                        'cursor' => 'pointer',
                         'point' => [
                             'events' => [
                                 'click' => new JsExpression("
                                     function(e){
                                         e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
                                     }
                                 "),
                             ]
-                        ]*/
+                        ]
                     ]
                 ],
                 'series' => $data_losstime_category,
