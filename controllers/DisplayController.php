@@ -808,7 +808,8 @@ class DisplayController extends Controller
                 'etd',
                 'qty' => 'SUM(qty)',
                 'output' => 'SUM(output)',
-                'standard_price' => 'SUM(standard_price * output)'
+                'standard_price' => 'SUM(standard_price * output)',
+                'plan_standard_price' => 'SUM(standard_price * qty)'
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
@@ -824,7 +825,8 @@ class DisplayController extends Controller
                 'etd',
                 'qty' => 'SUM(qty)',
                 'output' => 'SUM(output)',
-                'standard_price' => 'SUM(standard_price * output)'
+                'standard_price' => 'SUM(standard_price * output)',
+                'plan_standard_price' => 'SUM(standard_price * qty)'
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
@@ -841,7 +843,8 @@ class DisplayController extends Controller
                 'etd',
                 'qty' => 'SUM(qty)',
                 'output' => 'SUM(output)',
-                'standard_price' => 'SUM(standard_price * output)'
+                'standard_price' => 'SUM(standard_price * output)',
+                'plan_standard_price' => 'SUM(standard_price * qty)'
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
@@ -858,7 +861,8 @@ class DisplayController extends Controller
                 'etd',
                 'qty' => 'SUM(qty)',
                 'output' => 'SUM(output)',
-                'standard_price' => 'SUM(standard_price * output)'
+                'standard_price' => 'SUM(standard_price * output)',
+                'plan_standard_price' => 'SUM(standard_price * qty)'
             ])
             ->where([
                 'EXTRACT(year_month FROM etd)' => $model->period,
@@ -871,7 +875,7 @@ class DisplayController extends Controller
 
         $tmp_data_plan = $tmp_data_actual = $tmp_data_balance = $data = [];
         $tmp_table = [];
-        $tmp_total_plan = $tmp_total_actual = $tmp_total_amount_act = 0;
+        $tmp_total_plan = $tmp_total_actual = $tmp_total_amount_act = $tmp_total_amount_plan = $tmp_total_amount_balance = 0;
         foreach ($tmp_vms as $key => $value) {
             $tmp_table['thead'][] = $value->etd;
             $tmp_table['plan'][] = $value->qty;
@@ -885,6 +889,8 @@ class DisplayController extends Controller
             }*/
             $tmp_total_actual += $value->output;
             $tmp_total_amount_act += $value->standard_price;
+            $tmp_total_amount_plan += $value->plan_standard_price;
+            $tmp_total_amount_balance = $tmp_total_amount_act - $tmp_total_amount_plan;
 
             $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
             /*if (date('Y-m-d', strtotime($value->etd)) > $today) {
@@ -911,13 +917,13 @@ class DisplayController extends Controller
 
             $tmp_data_balance[] = [
                 'x' => $proddate,
-                'y' => $tmp_total_balance,
+                'y' => round($tmp_total_amount_balance),
             ];
             
             //if ($value->qty > 0) {
             $tmp_data_plan[] = [
                 'x' => $proddate,
-                'y' => $tmp_total_plan,
+                'y' => round($tmp_total_amount_plan),
                 
             ];
             //}
@@ -925,7 +931,7 @@ class DisplayController extends Controller
             //if ($value->output > 0) {
             $tmp_data_actual[] = [
                 'x' => $proddate,
-                'y' => $tmp_total_actual,
+                'y' => round($tmp_total_amount_act),
                 
             ];
             //}
@@ -933,9 +939,12 @@ class DisplayController extends Controller
 
         $data = [
             [
-                'name' => 'PLAN',
+                'name' => 'PLAN (AMOUNT)',
                 'data' => $tmp_data_plan,
-                'color' => 'white'
+                'color' => 'white',
+                'dataLabels' => [
+                    'enabled' => true
+                ],
             ],
             /*[
                 'name' => 'ACTUAL',
@@ -943,7 +952,7 @@ class DisplayController extends Controller
                 'color' => 'lime'
             ],*/
             [
-                'name' => 'BALANCE (ACCUMULATION)',
+                'name' => 'BALANCE (AMOUNT ACCUMULATION)',
                 'data' => $tmp_data_balance,
                 'color' => 'orange',
                 'dataLabels' => [
