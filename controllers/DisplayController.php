@@ -146,6 +146,7 @@ use app\models\HakAksesPlus;
 use app\models\ContainerView;
 use app\models\VmsRemark;
 use app\models\VmsItem;
+use app\models\RunningHoursView01;
 
 class DisplayController extends Controller
 {
@@ -8676,7 +8677,7 @@ class DisplayController extends Controller
 
         }
 
-        $data_dummy = SensorLog::find()
+        /*$data_dummy = SensorLog::find()
         ->where([
             'AND',
             ['>=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->from_date . ' 00:00:01'))],
@@ -8684,16 +8685,29 @@ class DisplayController extends Controller
         ])
         ->andWhere(['map_no' => $model->map_no])
         ->asArray()
+        ->all();*/
+        $data_dummy = RunningHoursView01::find()
+        ->where([
+            'AND',
+            ['>=', 'post_date', $model->from_date],
+            ['<=', 'post_date', $model->to_date]
+        ])
+        ->andWhere(['map_no' => $model->map_no])
+        ->asArray()
         ->all();
 
         foreach ($data_dummy as $value) {
-            $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
-            if ($value['pressure'] > 0) {
+            $proddate = (strtotime($value['post_date'] . " +7 hours") * 1000);
+            $tmp_data_rh[] = [
+                'x' => $proddate,
+                'y' => (int)$value['total_hours']
+            ];
+            /*if ($value['pressure'] > 0) {
                 $tmp_data_rh[] = [
                     'x' => $proddate,
                     'y' => (int)$value['pressure']
                 ];
-            }
+            }*/
             
         }
 
@@ -8702,7 +8716,10 @@ class DisplayController extends Controller
                 [
                     'name' => 'RUNNING HOUR',
                     'data' => $tmp_data_rh,
-                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+                    'dataLabels' => [
+                        'enabled' => true
+                    ],
                     //'color' => 'white'
                 ],
             ],

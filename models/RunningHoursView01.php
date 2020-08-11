@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\SensorLog as BaseSensorLog;
+use \app\models\base\RunningHoursView01 as BaseRunningHoursView01;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.SENSOR_LOG".
+ * This is the model class for table "db_owner.RUNNING_HOURS_VIEW_01".
  */
-class SensorLog extends BaseSensorLog
+class RunningHoursView01 extends BaseRunningHoursView01
 {
-    public $total_freq, $freq_shift1, $freq_shift2, $freq_shift3, $min_date, $max_date, $post_date, $min_hour, $max_hour, $total_hours;
 
     public function behaviors()
     {
