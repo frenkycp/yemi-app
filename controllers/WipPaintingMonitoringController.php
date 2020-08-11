@@ -113,22 +113,22 @@ class WipPaintingMonitoringController extends Controller
     		$tmp_data[$wip_painting_data['week']]['order_percentage'][] = [
     			'y' => $order_percentage == 0 ? null : $order_percentage,
                 'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data['due_date'], 'loc' => $model->loc, 'stage' => '00-ORDER', 'category' => $model->category, 'line' => $model->line]),
-                'qty' => $wip_painting_data['total_order']
+                'qty' => round($wip_painting_data['total_order'])
     		];
     		$tmp_data[$wip_painting_data['week']]['started_percentage'][] = [
     			'y' => $started_percentage == 0 ? null : $started_percentage,
                 'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data['due_date'], 'loc' => $model->loc, 'stage' => '02-STARTED', 'category' => $model->category, 'line' => $model->line]),
-                'qty' => $wip_painting_data['total_started']
+                'qty' => round($wip_painting_data['total_started'])
     		];
     		$tmp_data[$wip_painting_data['week']]['completed_percentage'][] = [
     			'y' => $completed_percentage == 0 ? null : $completed_percentage,
                 'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data['due_date'], 'loc' => $model->loc, 'stage' => '03-COMPLETED', 'category' => $model->category, 'line' => $model->line]),
-                'qty' => $wip_painting_data['total_completed']
+                'qty' => round($wip_painting_data['total_completed'])
     		];
     		$tmp_data[$wip_painting_data['week']]['handover_percentage'][] = [
     			'y' => $handover_percentage <= 0 ? null : $handover_percentage,
                 'url' => Url::to(['get-remark', 'due_date' => $wip_painting_data['due_date'], 'loc' => $model->loc, 'stage' => '04-HAND OVER', 'category' => $model->category, 'line' => $model->line]),
-                'qty' => $wip_painting_data['total_handover']
+                'qty' => round($wip_painting_data['total_handover'])
     		];
 
     		$week_arr[] = $wip_painting_data['week'];

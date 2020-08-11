@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Shipping Progress <span class="japanesse light-green"></span>',
-    'tab_title' => 'Shipping Progress',
-    'breadcrumbs_title' => 'Shipping Progress'
+    'page_title' => 'WIP Daily Progress <span class="japanesse light-green"></span>',
+    'tab_title' => 'WIP Daily Progress',
+    'breadcrumbs_title' => 'WIP Daily Progress'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -135,14 +135,14 @@ $this->registerJs("$(function() {
 });");
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
-print_r($tmp_data_arr);
+print_r($data);
 echo '</pre>';*/
 ?>
-<br/>
+
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['shipping-daily-accumulation']),
+    'action' => Url::to(['wip-daily-accumulation']),
 ]); ?>
 
 <div class="row">
@@ -150,15 +150,15 @@ echo '</pre>';*/
         <?= $form->field($model, 'period')->dropDownList(
             $period_dropdown,
             [
-                //'prompt' => 'Choose...',
+                'prompt' => 'Choose...',
             ]
         ); ?>
     </div>
     <div class="col-md-2">
-        <?= $form->field($model, 'line')->dropDownList(
-            $line_dropdown,
+        <?= $form->field($model, 'location')->dropDownList(
+            $dropdown_loc,
             [
-                //'prompt' => 'Choose...',
+                'prompt' => 'Choose...',
             ]
         ); ?>
     </div>
@@ -171,7 +171,7 @@ echo '</pre>';*/
 </div>
 
 <?php ActiveForm::end(); ?>
-<br/>
+
 <div class="box box-primary box-solid">
     <div class="box-body">
         <?php
@@ -203,7 +203,7 @@ echo '</pre>';*/
                 ],
                 'yAxis' => [
                     'title' => [
-                        'text' => 'Total Amount'
+                        'text' => 'Total Qty'
                     ],
                     /*[
                         'title' => [
@@ -223,7 +223,7 @@ echo '</pre>';*/
                     'enabled' => true,
                     'shared' => true,
                     //'xDateFormat' => '%A, %b %e %Y',
-                    //'valueSuffix' => ' pcs'
+                    'valueSuffix' => ' pcs'
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                 ],
                 'plotOptions' => [
@@ -265,123 +265,23 @@ echo '</pre>';*/
                 </tr>
             </thead>
             <tbody>
-                <tr style="display: none;">
-                    <td>Plan</td>
+                <tr style="">
+                    <td>Plan Accumulation</td>
                     <?php
                     if (isset($tmp_table['plan']))
                     foreach ($tmp_table['plan'] as $key => $value): ?>
                         <td class="text-center"><?= number_format($value); ?></td>
                     <?php endforeach ?>
                 </tr>
-                <tr>
-                    <td>Actual</td>
+                <tr style="">
+                    <td>Actual Accumulation</td>
                     <?php
-                    if(isset($tmp_table['actual']))
+                    if (isset($tmp_table['plan']))
                     foreach ($tmp_table['actual'] as $key => $value): ?>
-                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
-                    <?php endforeach ?>
-                </tr>
-                <tr style="display: none;">
-                    <td>Balance</td>
-                    <?php
-                    if(isset($tmp_table['balance']))
-                    foreach ($tmp_table['balance'] as $key => $value): 
-                        if ($value < 0) {
-                            echo '<td class="text-center">
-                                ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-shipping-balance', 'etd' => $tmp_table['thead'][$key], 'line' => $model->line], ['class' => 'popup_btn']) . '
-                            </td>';
-                        } else {
-                            if ($value == null) {
-                                echo '<td class="text-center">
-                                        
-                                    </td>';
-                            } else {
-                                if ($value == 0) {
-                                    echo '<td class="text-center">
-                                        <span class="badge">' . number_format($value) . '</span>
-                                    </td>';
-                                } else {
-                                    echo '<td class="text-center">
-                                        <span class="badge bg-green">' . number_format($value) . '</span>
-                                    </td>';
-                                }
-                            }
-                        }
-                        ?>
-                        
-                    <?php endforeach ?>
-                </tr>
-                <tr class="accumulation">
-                    <td>Actual<br/>Accumulation</td>
-                    <?php
-                    if(isset($tmp_table['actual_acc']))
-                    foreach ($tmp_table['actual_acc'] as $key => $value): ?>
-                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
-                    <?php endforeach ?>
-                </tr>
-                <tr class="accumulation" style="display: none;">
-                    <td>Balance<br/>Accumulation</td>
-                    <?php
-                    if(isset($tmp_table['balance_acc']))
-                    foreach ($tmp_table['balance_acc'] as $key => $value): 
-                        if ($value < 0) {
-                            echo '<td class="text-center">
-                                ' . Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-shipping-balance', 'etd' => $tmp_table['thead'][$key], 'line' => $model->line, 'acc' => 1], ['class' => 'popup_btn']) . '
-                            </td>';
-                        } else {
-                            if ($value == null) {
-                                echo '<td class="text-center">
-                                        
-                                    </td>';
-                            } else {
-                                if ($value == 0) {
-                                    echo '<td class="text-center">
-                                        <span class="badge">' . number_format($value) . '</span>
-                                    </td>';
-                                } else {
-                                    echo '<td class="text-center">
-                                        <span class="badge bg-green">' . number_format($value) . '</span>
-                                    </td>';
-                                }
-                            }
-                        }
-                        ?>
-                        
-                    <?php endforeach ?>
-                </tr>
-                <tr>
-                    <td>Actual (Amount)</td>
-                    <?php
-                    if(isset($tmp_table['actual_amount']))
-                    foreach ($tmp_table['actual_amount'] as $key => $value): ?>
-                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
-                    <?php endforeach ?>
-                </tr>
-                <tr class="accumulation" style="">
-                    <td>Plan (Amount)<br/>Accumulation</td>
-                    <?php
-                    if (isset($tmp_table['plan_amount_acc']))
-                    foreach ($tmp_table['plan_amount_acc'] as $key => $value): ?>
                         <td class="text-center"><?= number_format($value); ?></td>
-                    <?php endforeach ?>
-                </tr>
-                <tr class="accumulation">
-                    <td>Actual (Amount)<br/>Accumulation</td>
-                    <?php
-                    if(isset($tmp_table['actual_amount_acc']))
-                    foreach ($tmp_table['actual_amount_acc'] as $key => $value): ?>
-                        <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
                     <?php endforeach ?>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
-<?php
-    yii\bootstrap\Modal::begin([
-        'id' =>'modal',
-        'header' => '<h3>Detail Info</h3>',
-        'size' => 'modal-lg',
-    ]);
-    yii\bootstrap\Modal::end();
-?>

@@ -147,6 +147,7 @@ use app\models\ContainerView;
 use app\models\VmsRemark;
 use app\models\VmsItem;
 use app\models\RunningHoursView01;
+use app\models\WipPlanActualReport;
 
 class DisplayController extends Controller
 {
@@ -750,6 +751,115 @@ class DisplayController extends Controller
         </tfoot>';
         $data .= '</table>';
         return $data;
+    }
+
+    public function actionWipDailyAccumulation($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $this_period = date('Ym');
+        $today = date('Y-m-d');
+
+        $model = new \yii\base\DynamicModel([
+            'period', 'location'
+        ]);
+        $model->addRule(['period', 'location'], 'required');
+
+        $period_dropdown = ArrayHelper::map(WipHdrDtr::find()->select('period')->groupBy('period')->orderBy('period DESC')->all(), 'period', 'period');
+        $dropdown_loc = \Yii::$app->params['wip_location_arr'];
+
+        unset($dropdown_loc['WS01']);
+        unset($dropdown_loc['WP00']);
+        unset($dropdown_loc['WU00']);
+        unset($dropdown_loc['WM00']);
+        $dropdown_loc['KD'] = 'KD PART';
+        asort($dropdown_loc);
+
+        $tmp_data_plan = $tmp_data_actual = $tmp_data_balance = $data = $tmp_table = [];
+        if ($model->load($_GET)) {
+            $model_loc = $model->location;
+            if ($model->location == 'KD') {
+                $model_loc = ['WS01', 'WP00', 'WU00', 'WM00'];
+            }
+
+            $wip_painting_data_arr = WipPlanActualReport::find()
+            ->select([
+                'due_date',
+                'total_plan' => 'SUM(summary_qty)',
+                'total_order' => 'SUM(CASE WHEN stage=\'00-ORDER\' OR stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
+                //'total_created' => 'SUM(CASE WHEN stage=\'01-CREATED\' THEN summary_qty ELSE 0 END)',
+                'total_started' => 'SUM(CASE WHEN stage=\'02-STARTED\' THEN summary_qty ELSE 0 END)',
+                'total_completed' => 'SUM(CASE WHEN stage=\'03-COMPLETED\' THEN summary_qty ELSE 0 END)',
+                'total_handover' => 'SUM(CASE WHEN stage=\'04-HAND OVER\' THEN summary_qty ELSE 0 END)'
+            ])
+            ->where([
+                'period' => $model->period,
+                'child_analyst' => $model_loc
+            ])
+            ->groupBy('due_date')
+            ->orderBy('due_date')
+            ->all();
+
+            $tmp_total_plan = $tmp_total_actual = 0;
+            foreach ($wip_painting_data_arr as $key => $value) {
+                $proddate = (strtotime($value->due_date . " +7 hours") * 1000);
+                
+                $tmp_total_plan += $value->total_plan;
+                $tmp_total_actual += $value->total_handover + $value->total_completed;
+                $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
+                $tmp_data_plan[] = [
+                    'x' => $proddate,
+                    'y' => round($tmp_total_plan),
+                ];
+                $tmp_data_actual[] = [
+                    'x' => $proddate,
+                    'y' => round($tmp_total_actual),
+                ];
+                $tmp_data_balance[] = [
+                    'x' => $proddate,
+                    'y' => round($tmp_total_balance),
+                ];
+
+                $tmp_table['thead'][] = $value->due_date;
+                $tmp_table['plan'][] = $tmp_total_plan;
+                $tmp_table['actual'][] = $tmp_total_actual;
+            }
+        }
+
+        $data = [
+            [
+                'name' => 'PLAN (ACCUMULATION)',
+                'data' => $tmp_data_plan,
+                'color' => 'white',
+                'dataLabels' => [
+                    'enabled' => true
+                ],
+            ],
+            [
+                'name' => 'ACTUAL (ACCUMULATION)',
+                'data' => $tmp_data_actual,
+                'color' => 'lime',
+                'dataLabels' => [
+                    'enabled' => true
+                ],
+            ],
+            [
+                'name' => 'BALANCE (ACCUMULATION)',
+                'data' => $tmp_data_balance,
+                'color' => 'orange',
+                'dataLabels' => [
+                    'enabled' => true
+                ],
+            ]
+        ];
+
+        return $this->render('wip-daily-accumulation', [
+            'model' => $model,
+            'data' => $data,
+            'tmp_table' => $tmp_table,
+            'period_dropdown' => $period_dropdown,
+            'dropdown_loc' => $dropdown_loc,
+        ]);
     }
 
     public function actionShippingDailyAccumulation($value='')
