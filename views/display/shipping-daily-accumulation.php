@@ -311,14 +311,6 @@ echo '</pre>';*/
                         
                     <?php endforeach ?>
                 </tr>
-                <tr class="accumulation" style="display: none;">
-                    <td>Plan<br/>Accumulation</td>
-                    <?php
-                    if (isset($tmp_table['plan_acc']))
-                    foreach ($tmp_table['plan_acc'] as $key => $value): ?>
-                        <td class="text-center"><?= number_format($value); ?></td>
-                    <?php endforeach ?>
-                </tr>
                 <tr class="accumulation">
                     <td>Actual<br/>Accumulation</td>
                     <?php
@@ -363,6 +355,14 @@ echo '</pre>';*/
                     if(isset($tmp_table['actual_amount']))
                     foreach ($tmp_table['actual_amount'] as $key => $value): ?>
                         <td class="text-center"><?= $value == null ? '' : number_format($value); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr class="accumulation" style="">
+                    <td>Plan (Amount)<br/>Accumulation</td>
+                    <?php
+                    if (isset($tmp_table['plan_amount_acc']))
+                    foreach ($tmp_table['plan_amount_acc'] as $key => $value): ?>
+                        <td class="text-center"><?= number_format($value); ?></td>
                     <?php endforeach ?>
                 </tr>
                 <tr class="accumulation">

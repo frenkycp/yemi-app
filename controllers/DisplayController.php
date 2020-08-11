@@ -892,6 +892,7 @@ class DisplayController extends Controller
             $tmp_total_amount_act += $value->standard_price;
             $tmp_total_amount_plan += $value->plan_standard_price;
             $tmp_total_amount_balance = $tmp_total_amount_act - $tmp_total_amount_plan;
+            $tmp_table['plan_amount_acc'][] = $tmp_total_amount_plan;
 
             $tmp_total_balance = $tmp_total_actual - $tmp_total_plan;
             /*if (date('Y-m-d', strtotime($value->etd)) > $today) {
@@ -940,7 +941,7 @@ class DisplayController extends Controller
 
         $data = [
             [
-                'name' => 'PLAN (AMOUNT)',
+                'name' => 'PLAN (AMOUNT) ACCUMULATION',
                 'data' => $tmp_data_plan,
                 'color' => 'white',
                 'dataLabels' => [
@@ -948,12 +949,12 @@ class DisplayController extends Controller
                 ],
             ],
             /*[
-                'name' => 'ACTUAL',
+                'name' => 'ACTUAL (AMOUNT) ACCUMULATION',
                 'data' => $tmp_data_actual,
                 'color' => 'lime'
             ],*/
             [
-                'name' => 'BALANCE (AMOUNT ACCUMULATION)',
+                'name' => 'BALANCE (AMOUNT) ACCUMULATION',
                 'data' => $tmp_data_balance,
                 'color' => 'orange',
                 'dataLabels' => [
