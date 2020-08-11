@@ -8698,10 +8698,13 @@ class DisplayController extends Controller
 
         foreach ($data_dummy as $value) {
             $proddate = (strtotime($value['post_date'] . " +7 hours") * 1000);
-            $tmp_data_rh[] = [
-                'x' => $proddate,
-                'y' => (int)$value['total_hours']
-            ];
+            if ($value['total_hours'] > 0) {
+                $tmp_data_rh[] = [
+                    'x' => $proddate,
+                    'y' => (int)$value['total_hours']
+                ];
+            }
+            
             /*if ($value['pressure'] > 0) {
                 $tmp_data_rh[] = [
                     'x' => $proddate,

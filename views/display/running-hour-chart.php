@@ -105,7 +105,7 @@ echo '</pre>';*/
                 ],
                 'options' => [
                     'chart' => [
-                        'type' => 'line',
+                        'type' => 'column',
                         'style' => [
                             'fontFamily' => 'sans-serif',
                         ],
