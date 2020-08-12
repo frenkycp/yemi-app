@@ -198,6 +198,7 @@ return [
         'PCB' => 'PCB',
         'RPA' => 'RPA',
         'SMT' => 'SMT',
+        'AI' => 'AI',
     ],
     'ng_pcb_repair_dropdown' => [
         'Change Part' => 'Change Part',
