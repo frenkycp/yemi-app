@@ -20,6 +20,7 @@ use yii\web\UploadedFile;
 use yii\web\JsExpression;
 use app\models\SunfishEmpAttendance;
 use app\models\SunfishLeaveSummary;
+use app\models\SunfishViewEmp;
 
 class MyHrController extends Controller
 {
@@ -271,10 +272,13 @@ class MyHrController extends Controller
         //     ];
         // }
 
+        $model_karyawan_sunfish = SunfishViewEmp::find()->where(['Emp_no' => $model_karyawan->NIK_SUN_FISH])->one();
+
 		return $this->render('index', [
             'absensi_data' => $absensi_data,
             'absensi_data_sunfish' => $absensi_data_sunfish,
 			'model_karyawan' => $model_karyawan,
+            'model_karyawan_sunfish' => $model_karyawan_sunfish,
             //'model_rekap_absensi' => $model_rekap_absensi,
             'using_cuti' => $using_cuti,
             'kuota_cuti' => $kuota_cuti,

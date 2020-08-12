@@ -175,7 +175,7 @@ echo '</pre>';*/
                             'stacking' => 'percent',
                             'dataLabels' => [
                                 'enabled' => true,
-                                'format' => '{point.percentage:.2f}% ({point.qty:.0f})',
+                                'format' => '{point.percentage:.2f}% ({point.qty})',
                                 'color' => 'black',
                                 //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
                                 'style' => [

@@ -103,7 +103,7 @@ echo '</pre>';*/
 
                 <strong><i class="fa fa-fw fa-star"></i> Grade</strong>
 
-                <p class="text-muted"><?= $model_karyawan->GRADE !== null ? $model_karyawan->GRADE : '-'; ?></p>
+                <p class="text-muted"><?= $model_karyawan_sunfish->grade_code !== null ? $model_karyawan_sunfish->grade_code : '-'; ?></p>
 
                 <br\>
 
