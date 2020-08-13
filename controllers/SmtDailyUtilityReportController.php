@@ -458,6 +458,72 @@ class SmtDailyUtilityReportController extends Controller
 	    return $remark;
 	}
 
+	public function actionGetRemark($proddate, $line, $loc)
+	{
+		$remark = '<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3>Line : ' . $line . ' <small>(' . $proddate . ')</small></h3>
+		</div>
+		<div class="modal-body">
+		';
+		
+	    $remark .= '<table class="table table-bordered table-striped table-hover">';
+	    $remark .= '<tr style="font-size: 12px;">
+	    	<th class="text-center" style="min-width: 70px;">Shift</th>
+	    	<th class="text-center">Part No</th>
+	    	<th style="width: 100px;">Part Description</th>
+	    	<th class="text-center">Qty<br/>(A)</th>
+	    	<th class="text-center">ST<br/>(B)</th>
+	    	<th class="text-center">Total ST<br/>(C = A * B)</th>
+	    	<th class="text-center">Lead Time<br/>(D)</th>
+	    	<th class="text-center">Loss Time<br/>(Planned Loss)<br/>(E)</th>
+	    	<th class="text-center">Loss Time<br/>(Out Section)<br/>(F)</th>
+	    	<th class="text-center">Dandori</th>
+	    	<th class="text-center">Break Down</th>
+	    	<th class="text-center">Operating Loss</th>
+	    	<th class="text-center">Working Time<br/>(G)</th>
+	    	<th class="text-center">Operation Ratio(%)<br/>((G-E-F) / 1440)</th>
+	    	<th class="text-center">Working Ratio(%)<br/>(C / (D-E-F))</th>
+	    </tr>';
+
+	    $utility_data_arr = WipEffNew03::find()
+	    ->where([
+	    	'post_date' => $proddate,
+	    	'LINE' => $line,
+	    	'child_analyst' => $loc
+	    ])
+	    ->orderBy('SMT_SHIFT, LINE, child_all')
+	    ->all();
+
+	    $no = 1;
+	    foreach ($utility_data_arr as $key => $utility_data) {
+
+	    	$remark .= '<tr style="font-size: 12px;">
+	    		<td class="text-center">' . $utility_data->SMT_SHIFT . '</td>
+	    		<td class="text-center">' . $utility_data->child_all . '</td>
+	    		<td>' . $utility_data->child_desc_all . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->qty_all, 0) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->std_all, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->lt_std, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->lt_gross, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->planed_loss_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->out_section_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->dandori_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->break_down_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->operating_loss_minute, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->working_time, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->operating_ratio, 2) . '</td>
+	    		<td class="text-center text">' . $this->thousandSeparatorFormatter($utility_data->working_ratio, 2) . '</td>
+	    	</tr>';
+	    	$no++;
+	    }
+
+	    $remark .= '</table>';
+	    $remark .= '</div>';
+
+	    return $remark;
+	}
+
 	function thousandSeparatorFormatter($value, $coma)
 	{
 		return number_format($value, $coma);
