@@ -126,7 +126,7 @@ echo '</pre>';*/
                         'title' => [
                             'text' => 'NOISE',
                         ],
-                        'max' => 130,
+                        //'max' => 200,
                         'min' => 0,
                         /*'plotBands' => [
                             [

@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class DrossOutput extends BaseDrossOutput
 {
+    public $period;
 
     public function behaviors()
     {

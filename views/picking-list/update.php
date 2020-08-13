@@ -134,7 +134,7 @@ $this->registerJs("$(document).ready(function() {
 							<td class="text-center"><?= $value->child; ?></td>
 							<td class=""><?= $value->child_desc; ?></td>
 							<td class="text-center"><?= $value->child_um; ?></td>
-							<td class="text-center"><?= $value->req_qty; ?></td>
+							<td class="text-center"><?= $value->compl_qty; ?></td>
 							<td class="text-center"><?= $value->hand_scan == 'Y' ? 'CLOSE' : 'OPEN'; ?></td>
 						</tr>
 					<?php endforeach ?>
