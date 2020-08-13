@@ -118,7 +118,6 @@ $this->registerJs("$(document).ready(function() {
 							} else {
 								$bg_class = 'bg-success text-green';
 							}
-							
 						} else {
 							if ($value->status == 'C') {
 								$bg_class = 'bg-danger text-red';
