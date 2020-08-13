@@ -113,7 +113,12 @@ $this->registerJs("$(document).ready(function() {
 					?>
 					<?php foreach ($setlist_data as $key => $value):
 						if ($value->hand_scan == 'Y') {
-							$bg_class = 'bg-success text-green';
+							if ($value->status == 'P') {
+								$bg_class = 'bg-success text-yellow';
+							} else {
+								$bg_class = 'bg-success text-green';
+							}
+							
 						} else {
 							if ($value->status == 'C') {
 								$bg_class = 'bg-danger text-red';
