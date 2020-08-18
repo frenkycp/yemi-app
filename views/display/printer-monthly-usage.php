@@ -46,10 +46,11 @@ $script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 60000); // milliseconds
+      setTimeout(\"refreshPage();\", 300000); // milliseconds
     }
     function refreshPage() {
-       window.location = '" . Url::to(['display/printer-usage']) . "';
+       //window.location = '" . Url::to(['display/printer-usage']) . "';
+        window.location = location.href;
     }
 
     function animation_page(){
@@ -88,7 +89,7 @@ $total_plan = $total_act = $total_balance = 0;
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['daily-prod-schedule']),
+    'action' => Url::to(['printer-monthly-usage']),
 ]); ?>
 <div id="pagewrap" class="pagewrap">
     <div class="container show">
