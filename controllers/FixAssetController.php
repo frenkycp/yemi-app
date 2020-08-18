@@ -463,6 +463,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 	    	$searchModel->schedule_status = \Yii::$app->request->get('schedule_status');
 	    }
 	    $searchModel->trans_type = 'PI';
+	    $searchModel->is_scheduled = 'Y';
 
 	    $dataProvider = $searchModel->search($_GET);
 

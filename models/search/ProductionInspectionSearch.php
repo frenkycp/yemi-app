@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SernoInput;
+use app\models\SernoInputAll;
 
 /**
 * ProductionInspectionSearch represents the model behind the search form about `app\models\SernoInput`.
 */
-class ProductionInspectionSearch extends SernoInput
+class ProductionInspectionSearch extends SernoInputAll
 {
     public $status;
 /**
@@ -42,7 +42,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = SernoInput::find()
+$query = SernoInputAll::find()
 ->select([
     'proddate' => 'proddate',
     'flo' => 'flo',
@@ -106,7 +106,7 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'pk', $this->pk])
-            ->andFilterWhere(['like', 'tb_serno_input.gmc', $this->gmc])
+            ->andFilterWhere(['like', 'tb_serno_input_all.gmc', $this->gmc])
             ->andFilterWhere(['like', 'line', $this->line])
             ->andFilterWhere(['like', 'proddate', $this->proddate])
             ->andFilterWhere(['like', 'sernum', $this->sernum])
