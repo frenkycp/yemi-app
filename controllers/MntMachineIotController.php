@@ -17,7 +17,7 @@ class MntMachineIotController extends Controller
 	public function actionMachinePerformance()
 	{
 		$this->layout = 'clean';
-		$data = MachineIotCurrentMnt::find()->orderBy('mesin_description')->all();
+		$data = MachineIotCurrentMnt::find()->where('status_warna_second IS NOT NULL')->orderBy('mesin_description')->all();
 		return $this->render('machine-performance', [
 			'data' => $data
 		]);
