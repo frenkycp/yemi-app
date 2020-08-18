@@ -53,4 +53,17 @@ class SernoInputAll extends BaseSernoInputAll
         $sernoMaster = SernoMaster::find()->where(['gmc' => $this->gmc])->one();
         return $sernoMaster->model . ' // ' . $sernoMaster->color . ' // ' . $sernoMaster->dest;
     }
+
+    public function getTotalMp()
+    {
+        $total_mp = SernoMp::find()
+        ->where([
+            'tgl' => $this->proddate,
+            'line' => $this->line,
+            'status' => 0
+        ])
+        ->count();
+
+        return $total_mp;
+    }
 }

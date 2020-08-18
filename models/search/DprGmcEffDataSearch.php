@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SernoInput;
+use app\models\SernoInputAll;
 
 /**
 * AbsensiTblSearch represents the model behind the search form about `app\models\AbsensiTbl`.
 */
-class DprGmcEffDataSearch extends SernoInput
+class DprGmcEffDataSearch extends SernoInputAll
 {
 /**
 * @inheritdoc
@@ -41,17 +41,17 @@ return Model::scenarios();
 public function search($params)
 {
 //$query = DprGmcEffView::find();
-$query = SernoInput::find()
+$query = SernoInputAll::find()
 ->select([
-    'proddate', 'tb_serno_input.line', 'tb_serno_input.gmc',
-    'qty_product' => 'COUNT(tb_serno_input.gmc)',
+    'proddate', 'tb_serno_input_all.line', 'tb_serno_input_all.gmc',
+    'qty_product' => 'COUNT(tb_serno_input_all.gmc)',
     'qty_time' => 'ROUND(SUM(qty_time),2)',
     'mp_time' => 'ROUND(SUM(mp_time),2)',
     'mp_time_single' => 'mp_time',
     'start_time' => 'MIN(waktu)',
     'end_time' => 'MAX(waktu)',
 ])
-->groupBy('proddate, line, tb_serno_input.gmc');
+->groupBy('proddate, line, tb_serno_input_all.gmc');
 $query->joinWith('sernoMaster');
 
 $dataProvider = new ActiveDataProvider([
@@ -68,8 +68,8 @@ return $dataProvider;
 
 $query->andFilterWhere([
             //'proddate' => $this->proddate,
-            'tb_serno_input.line' => $this->line,
-            'tb_serno_input.gmc' => $this->gmc,
+            'tb_serno_input_all.line' => $this->line,
+            'tb_serno_input_all.gmc' => $this->gmc,
         ]);
 
 $query->andFilterWhere(['like', 'proddate', $this->proddate]);
