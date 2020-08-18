@@ -32,6 +32,12 @@ $this->registerCss("
 date_default_timezone_set('Asia/Jakarta');
 
 $this->registerJs("
+	window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout(\"refreshPage();\", 300000); // milliseconds
+    }
+
 	function update_data(){
 		$.ajax({
 	        type: 'POST',
