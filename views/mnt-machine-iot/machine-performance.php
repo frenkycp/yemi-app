@@ -76,15 +76,17 @@ $this->registerJs("
 
 <div>
 	<div class="row">
-		<div class="col-md-12">
-				<?php
-				foreach ($data as $key => $value) {
-					?>
-					<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $value->mesin_id; ?>">
-						<?= $value->mesin_id . ' - ' . $value->mesin_description; ?>
-					</button>
-				<?php }
-				?>
-		</div>
+		
+		<?php
+		foreach ($data as $key => $value) {
+			?>
+			<div class="col-md-6" style="padding: 3px;">
+				<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $value->mesin_id; ?>">
+					<?= $value->mesin_description . ' - ' . $value->mesin_id; ?>
+				</button>
+			</div>
+		<?php }
+		?>
+		
 	</div>
 </div>

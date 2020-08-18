@@ -1744,7 +1744,7 @@ class DisplayController extends Controller
         } else {
             $bg_reply_time = 'bg-red-active';
             if ($reply_roundtriptime == 9999) {
-                $reply_roundtriptime = 'LOSS';
+                $reply_roundtriptime = 'L.o.S';
             }
         }
 

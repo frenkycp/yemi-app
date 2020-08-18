@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use app\models\MachineIotCurrent;
+use app\models\MachineIotCurrentMnt;
 
 class MntMachineIotController extends Controller
 {
@@ -16,7 +17,7 @@ class MntMachineIotController extends Controller
 	public function actionMachinePerformance()
 	{
 		$this->layout = 'clean';
-		$data = MachineIotCurrent::find()->where(['is_iot' => 'Y'])->orderBy('mesin_description')->all();
+		$data = MachineIotCurrentMnt::find()->orderBy('mesin_description')->all();
 		return $this->render('machine-performance', [
 			'data' => $data
 		]);

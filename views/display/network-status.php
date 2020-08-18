@@ -101,7 +101,7 @@ echo '</pre>';*/
 <div class="row" style="padding: 0px 20px;">
     <div class="col-md-5 text-center" style="padding: 0px;">
         <div id="bg-mbps" class="widget-content <?= $bg_reply_time; ?>">
-            <div style="font-size: 8em; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000;" id="speed"><?= $reply_time ?></div><br/>
+            <div style="font-size: 250px; line-height: 400px; text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000, 1px -1px 0 #000;" id="speed"><?= $reply_time ?></div><br/>
         </div>
     </div>
     <div class="col-md-7 text-center" style="padding: 0px;">
