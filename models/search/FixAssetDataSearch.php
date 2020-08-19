@@ -18,7 +18,7 @@ class FixAssetDataSearch extends AssetTblView
 public function rules()
 {
 return [
-[['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'purchase_date', 'LAST_UPDATE', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'DateDisc', 'status', 'label', 'loc_type', 'LOC'], 'safe'],
+[['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'purchase_date', 'LAST_UPDATE', 'network', 'display', 'camera', 'battery', 'note', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'DateDisc', 'status', 'label', 'loc_type', 'LOC', 'propose_scrap'], 'safe'],
             [['report_type'], 'integer'],
             [['price', 'price_usd', 'qty', 'AtCost'], 'number'],
 ];
@@ -67,6 +67,7 @@ $query->andFilterWhere([
             'DateDisc' => $this->DateDisc,
             'loc_type' => $this->loc_type,
             'LOC' => $this->LOC,
+            'propose_scrap' => $this->propose_scrap,
         ]);
 
         $query->andFilterWhere(['like', 'asset_id', $this->asset_id])

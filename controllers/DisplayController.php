@@ -151,6 +151,89 @@ use app\models\WipPlanActualReport;
 
 class DisplayController extends Controller
 {
+    public function actionMonthlyProgressSummary($type = 2)
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $line_arr = ArrayHelper::map(SernoMaster::find()
+        ->select('line')
+        ->where('line != \'\'AND line != \'MIS\'')
+        ->groupBy('line')
+        ->all(), 'line', 'line');
+
+        $model = new \yii\base\DynamicModel([
+            'line', 'fiscal_year', 'code', 'category', 'kd_part'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+        //$model->category = 'ALL';
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) { }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_bu_arr = IjazahPlanActual::find()->select('BU')->where('BU IS NOT NULL')->andWhere(['NOT IN', 'BU', ['OTHER', 'EL', 'MIPA']])->groupBy('BU')->orderBy('BU')->all();
+
+        $tmp_data_summary = IjazahPlanActual::find()->select([
+            'BU', 'PERIOD',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'ACTUAL_QTY_ALLOC' => 'SUM(ACTUAL_QTY_ALLOC)',
+        ])
+        ->where(['PERIOD' => $period_arr])
+        ->andWhere('BU IS NOT NULL')
+        ->groupBy('BU, PERIOD')
+        ->orderBy('BU, PERIOD')
+        ->all();
+
+        foreach ($tmp_bu_arr as $tmp_bu) {
+            foreach ($period_arr as $period) {
+                $tmp_pct = 0;
+                $plan_qty = $actual_qty = 0;
+                foreach ($tmp_data_summary as $tmp_summary) {
+                    if ($tmp_bu->BU == $tmp_summary->BU && $period == $tmp_summary->PERIOD) {
+                        $plan_qty = $tmp_summary->PLAN_QTY;
+                        if ($type == 1) {
+                            $actual_qty = $tmp_summary->ACTUAL_QTY;
+                        } else {
+                            $actual_qty = $tmp_summary->ACTUAL_QTY_ALLOC;
+                        }
+                    }
+                }
+                if ($plan_qty > 0) {
+                    $tmp_pct = round(($actual_qty / $plan_qty) * 100, 1);
+                }
+                $data[$tmp_bu->BU][] = $tmp_pct;
+            }
+            
+        }
+
+        return $this->render('monthly-progress-summary', [
+            'data' => $data,
+            'model' => $model,
+            'period_arr' => $period_arr,
+        ]);
+    }
+
     public function actionShippingDisplay($value='')
     {
         $this->layout = 'clean';

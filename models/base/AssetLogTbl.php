@@ -27,6 +27,9 @@ use Yii;
  * @property double $NBV
  * @property string $propose_scrap
  * @property string $schedule_status
+ * @property string $is_scheduled
+ * @property string $last_update
+ * @property string $slip_no
  * @property string $aliasModel
  */
 abstract class AssetLogTbl extends \yii\db\ActiveRecord
@@ -57,9 +60,14 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
     {
         return [
             [['schedule_id'], 'integer'],
-            [['schedule_start', 'schedule_end', 'posting_date'], 'safe'],
-            [['trans_type', 'asset_id', 'computer_name', 'from_loc', 'to_loc', 'user_id', 'user_desc', 'note', 'status', 'label', 'propose_scrap', 'schedule_status'], 'string'],
-            [['NBV'], 'number']
+            [['schedule_start', 'schedule_end', 'posting_date', 'last_update'], 'safe'],
+            [['NBV'], 'number'],
+            [['trans_type', 'asset_id', 'user_desc', 'status', 'label'], 'string', 'max' => 50],
+            [['computer_name'], 'string', 'max' => 400],
+            [['from_loc', 'to_loc', 'note'], 'string', 'max' => 100],
+            [['user_id'], 'string', 'max' => 10],
+            [['propose_scrap', 'schedule_status', 'is_scheduled'], 'string', 'max' => 1],
+            [['slip_no'], 'string', 'max' => 150]
         ];
     }
 
@@ -74,7 +82,7 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
             'schedule_start' => 'Schedule Start',
             'schedule_end' => 'Schedule End',
             'trans_type' => 'Trans Type',
-            'posting_date' => 'Date',
+            'posting_date' => 'Posting Date',
             'asset_id' => 'Asset ID',
             'computer_name' => 'Computer Name',
             'from_loc' => 'From Loc',
@@ -87,6 +95,9 @@ abstract class AssetLogTbl extends \yii\db\ActiveRecord
             'NBV' => 'Nbv',
             'propose_scrap' => 'Propose Scrap',
             'schedule_status' => 'Schedule Status',
+            'is_scheduled' => 'Is Scheduled',
+            'last_update' => 'Last Update',
+            'slip_no' => 'Slip No',
         ];
     }
 
