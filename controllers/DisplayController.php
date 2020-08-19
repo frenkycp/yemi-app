@@ -191,7 +191,7 @@ class DisplayController extends Controller
             $period_arr[] = $value->PERIOD;
         }
 
-        $tmp_bu_arr = IjazahPlanActual::find()->select('BU')->where('BU IS NOT NULL')->andWhere(['NOT IN', 'BU', ['OTHER', 'EL', 'MIPA']])->groupBy('BU')->orderBy('BU')->all();
+        $tmp_bu_arr = IjazahPlanActual::find()->select('BU')->where(['FG_KD' => 'PRODUCT'])->groupBy('BU')->orderBy('BU')->all();
 
         $tmp_data_summary = IjazahPlanActual::find()->select([
             'BU', 'PERIOD',
@@ -2358,7 +2358,7 @@ class DisplayController extends Controller
         ])
         ->all(), 'period', 'working_days');
 
-        $bu_dropdown_arr = ArrayHelper::map(IjazahPlanActual::find()->select('BU')->where('BU IS NOT NULL')->groupBY('BU')->orderBy('BU')->all(), 'BU', 'BU');
+        $bu_dropdown_arr = ArrayHelper::map(IjazahPlanActual::find()->select('BU')->where(['FG_KD' => 'PRODUCT'])->groupBY('BU')->orderBy('BU')->all(), 'BU', 'BU');
         $bu_filter_arr = [];
         foreach ($bu_dropdown_arr as $key => $value) {
             $bu_filter_arr[] = $value;
@@ -2389,7 +2389,8 @@ class DisplayController extends Controller
                 ->select('ITEM, ITEM_DESC, BU, LINE')
                 ->where([
                     'PERIOD' => $period_arr,
-                    'BU' => $model->category
+                    'BU' => $model->category,
+                    'FG_KD' => 'PRODUCT'
                 ])
                 ->andWhere('ITEM IS NOT NULL')
                 ->groupBy('ITEM, ITEM_DESC, BU, LINE')
@@ -2399,7 +2400,8 @@ class DisplayController extends Controller
                 $tmp_ijazah_arr = IjazahPlanActual::find()
                 ->where([
                     'PERIOD' => $period_arr,
-                    'BU' => $model->category
+                    'BU' => $model->category,
+                    'FG_KD' => 'PRODUCT'
                 ])
                 ->orderBy('BU, LINE, ITEM')
                 ->all();
@@ -2428,6 +2430,7 @@ class DisplayController extends Controller
                     ->select('ITEM, ITEM_DESC, BU, LINE')
                     ->where([
                         'PERIOD' => $period_arr,
+                        'FG_KD' => 'PRODUCT'
                     ])
                     ->andWhere('ITEM IS NOT NULL')
                     ->groupBy('ITEM, ITEM_DESC, BU, LINE')
@@ -2437,6 +2440,7 @@ class DisplayController extends Controller
                     $tmp_ijazah_arr = IjazahPlanActual::find()
                     ->where([
                         'PERIOD' => $period_arr,
+                        'FG_KD' => 'PRODUCT'
                     ])
                     ->orderBy('BU, LINE, ITEM')
                     ->all();
