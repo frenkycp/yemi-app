@@ -104,6 +104,7 @@ $this->registerJs("$(document).ready(function() {
 					<th class="">Desc</th>
 					<th class="text-center">UM</th>
 					<th class="text-center">Pick Qty</th>
+					<th class="text-center">Req. Qty</th>
 					<th class="text-center">Status</th>
 				</tr>
 			</thead>
@@ -139,6 +140,7 @@ $this->registerJs("$(document).ready(function() {
 							<td class=""><?= $value->child_desc; ?></td>
 							<td class="text-center"><?= $value->child_um; ?></td>
 							<td class="text-center"><?= $value->compl_qty; ?></td>
+							<td class="text-center"><?= $value->req_qty; ?></td>
 							<td class="text-center"><?= $value->hand_scan == 'Y' ? 'CLOSE' : 'OPEN'; ?></td>
 						</tr>
 					<?php endforeach ?>
