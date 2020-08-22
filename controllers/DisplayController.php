@@ -2205,9 +2205,6 @@ class DisplayController extends Controller
             ['>=', 'tanggal', $model->from_date],
             ['<=', 'tanggal', $model->to_date]
         ])
-        ->andWhere([
-            'phone_line' => 'SELULER'
-        ])
         ->orderBy('total_durasi_detik DESC')
         ->limit(50)
         ->all();
