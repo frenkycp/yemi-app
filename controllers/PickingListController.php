@@ -97,12 +97,14 @@ class PickingListController extends Controller
         $total_setlist = $total_open = $total_close = 0;
         $setlist_data = $setlist_no = null;
 
+        $plan_qty = 0;
         if ($model->load($_GET)) {
         	$tmp_setlist = SapPickingList::findOne($model->barcode);
 
         	if (!$tmp_setlist) {
         		\Yii::$app->session->setFlash('warning', 'Barcode not found...!');
         	} else {
+        		$plan_qty = $tmp_setlist->plan_qty;
         		$tmp_total = SapPickingList::find()
 	        	->select([
 	        		'total_setlist' => 'SUM(CASE WHEN (status = \'C\' OR status = \'P\') THEN 1 ELSE 0 END)',
@@ -145,6 +147,7 @@ class PickingListController extends Controller
 			'total_close' => $total_close,
 			'setlist_data' => $setlist_data,
 			'setlist_no' => $setlist_no,
+			'plan_qty' => $plan_qty,
 		]);
 	}
 
@@ -167,6 +170,7 @@ class PickingListController extends Controller
         $total_setlist = $total_open = $total_close = 0;
         $setlist_data = $setlist_no = null;
         //return $nik . $name;
+        $plan_qty = 0;
         if ($model->load($_GET)) {
         	if ($model->barcode == '' || $model->barcode == null) {
         		return $this->render('update', [
@@ -180,6 +184,7 @@ class PickingListController extends Controller
         	if (!$tmp_setlist) {
         		\Yii::$app->session->setFlash('warning', 'Barcode not found...!');
         	} else {
+        		$plan_qty = $tmp_setlist->plan_qty;
         		$sql = "{CALL UPDATE_PICKING_LIST_TEST(:barcode, :USER_ID, :USER_DESC)}";
                 $params = [
                     ':barcode' => $model->barcode,
@@ -241,6 +246,7 @@ class PickingListController extends Controller
 			'total_close' => $total_close,
 			'setlist_data' => $setlist_data,
 			'setlist_no' => $setlist_no,
+			'plan_qty' => $plan_qty,
 		]);
 	}
 
