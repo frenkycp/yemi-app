@@ -26,7 +26,7 @@ $this->registerCss("
     .content-header {color: white; text-align: center;}
     //.box-body {background-color: #000;}
     .container {width: auto;}
-    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    .content-header>h1 {font-size: 2.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
     body, .content-wrapper {background-color: #000;}
@@ -118,7 +118,7 @@ echo '</pre>';*/
                         'fontFamily' => 'sans-serif',
                     ],
                     'zoomType' => 'x',
-                    'height' => 600
+                    'height' => 350
                 ],
                 'title' => [
                     //'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
@@ -180,6 +180,90 @@ echo '</pre>';*/
                     ]
                 ],
                 'series' => $data
+            ],
+        ]);
+        ?>
+    </div>
+</div>
+
+<div class="box box-primary box-solid">
+    <div class="box-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/sand-signika',
+                //'themes/grid-light',
+                'themes/dark-unica',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
+                    'zoomType' => 'x',
+                    'height' => 350
+                ],
+                'title' => [
+                    'text' => 'Top (50) Call Duration'
+                ],
+                'subtitle' => [
+                    'text' => ''
+                ],
+                'xAxis' => [
+                    'categories' => $call_categories,
+                    'labels' => [
+                        'enabled' => false
+                    ],
+                ],
+                'yAxis' => [
+                    'title' => [
+                        'text' => 'Total Minute(s)'
+                    ],
+                    'stackLabels' => [
+                        'enabled' => true,
+                        'style' => [
+                            'textOutline' => 'unset',
+                            'color' => 'white',
+                        ]
+                    ],
+                ],
+                'credits' => [
+                    'enabled' =>false
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    //'xDateFormat' => '%A, %b %e %Y',
+                    'valueSuffix' => ' minute(s)'
+                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                ],
+                'plotOptions' => [
+                    'series' => [
+                        'marker' => [
+                            'enabled' => false
+                        ],
+                        'dataLabels' => [
+                            'enabled' => true
+                        ],
+                        /*'lineWidth' => 1,
+                        'marker' => [
+                            'radius' => 2,
+                        ],*/
+                        /*'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ]*/
+                    ]
+                ],
+                'series' => $data_call
             ],
         ]);
         ?>

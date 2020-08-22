@@ -2199,9 +2199,48 @@ class DisplayController extends Controller
             ],
         ];
 
+        $tmp_top_call = PabxLog::find()
+        ->where([
+            'AND',
+            ['>=', 'tanggal', $model->from_date],
+            ['<=', 'tanggal', $model->to_date]
+        ])
+        ->andWhere([
+            'phone_line' => 'SELULER'
+        ])
+        ->orderBy('total_durasi_detik DESC')
+        ->limit(50)
+        ->all();
+
+        $tmp_data_call = $call_categories = [];
+        foreach ($tmp_top_call as $key => $value) {
+            $tmp_min = 0;
+            $call_categories[] = 'Log ID : ' . (string)$value->seq . '<br/>' .
+            'Department : ' . $value->departemen . '<br/>' .
+            'Target : ' . $value->phone . '<br/>' .
+            'Call Ended : ' . date('d M\' Y H:i', strtotime($value->last_update)) . '<br/>'
+            ;
+            if ($value->total_durasi_detik > 0) {
+                $tmp_min = round($value->total_durasi_detik / 60, 1);
+            }
+            $tmp_data_call[] = [
+                //'x' => (string)$value->seq,
+                'y' => $tmp_min,
+            ];
+        }
+        $data_call = [
+            [
+                'name' => 'Call Duration',
+                'data' => $tmp_data_call,
+                'showInLegend' => false
+            ],
+        ];
+
         return $this->render('pabx-daily-usage', [
             'model' => $model,
-            'data' => $data
+            'data' => $data,
+            'data_call' => $data_call,
+            'call_categories' => $call_categories,
         ]);
     }
 
