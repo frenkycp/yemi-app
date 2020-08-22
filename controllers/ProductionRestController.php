@@ -891,7 +891,8 @@ class ProductionRestController extends Controller
             'ng_qty' => 'SUM(ng_qty)'
         ])
         ->where([
-            'post_date' => $proddate
+            'post_date' => $proddate,
+            'loc_id' => 'WF01'
         ])
         ->groupBy('post_date, gmc_line, gmc_no')
         ->all();

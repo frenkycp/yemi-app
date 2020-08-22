@@ -148,9 +148,162 @@ use app\models\VmsRemark;
 use app\models\VmsItem;
 use app\models\RunningHoursView01;
 use app\models\WipPlanActualReport;
+use app\models\GpsTollRecord;
 
 class DisplayController extends Controller
 {
+    public function actionYesterdaySummary($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+        $tmp_yesterday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            '<', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
+        ])
+        ->andWhere('holiday IS NULL')
+        ->orderBy('cal_date DESC')
+        ->one();
+        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
+        $yesterday_period = date('Ym', strtotime($yesterday));
+
+        $tmp_yesterday_prod = VmsPlanActual::find()->select('VMS_DATE')->where(['<', 'VMS_DATE', $today])->orderBy('VMS_DATE DESC')->one();
+        $yesterday_prod = date('Y-m-d', strtotime($tmp_yesterday_prod->VMS_DATE));
+
+        $tmp_prod_daily = VmsPlanActual::find()
+        ->select([
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+        ])
+        ->where(['VMS_DATE' => $yesterday])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->one();
+
+        $tmp_prod_monthly = VmsPlanActual::find()
+        ->select([
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+        ])
+        ->where(['<=', 'VMS_DATE', $yesterday])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->andWhere(['FORMAT(VMS_DATE, \'yyyyMM\')' => $yesterday_period])
+        ->one();
+
+        $bu_arr  = ['AV' => 0, 'PA' => 0, 'B&O' => 0, 'DMI' => 0, 'PIANO' => 0, 'SN' => 0, 'OTHERS' => 0];
+        $tmp_data_arr = [];
+        $tmp_so = SernoOutput::find()->select([
+            'bu', 'output' => 'SUM(output)'
+        ])->where([
+            'etd' => $yesterday
+        ])
+        ->andWhere(['<>', 'line_so', 'SPC'])
+        ->groupBy('bu')
+        ->asArray()
+        ->all();
+        $total_shipping = 0;
+        foreach ($tmp_so as $key => $value) {
+            $total_shipping +=$value['output'];
+            $tmp_data_arr[$value['bu']] = $value['output'];
+            if (isset($bu_arr[$value['bu']])) {
+                $bu_arr[$value['bu']] = $value['output'];
+            } else {
+                $bu_arr['OTHERS'] += $value['output'];
+            }
+        }
+
+        $tmp_total_output = SernoInput::find()
+        ->select([
+            'total' => 'COUNT(pk)'
+        ])
+        ->where([
+            'proddate' => $yesterday,
+        ])
+        ->one();
+        $total_output = $tmp_total_output->total;
+
+        $tmp_total_ng_fa = ProdNgData::find()
+        ->select([
+            'ng_qty' => 'SUM(ng_qty)'
+        ])
+        ->where([
+            'post_date' => $yesterday,
+            'loc_id' => 'WF01'
+        ])
+        ->one();
+        $total_ng = $tmp_total_ng_fa->ng_qty;
+
+        $ng_rate = 0;
+        if ($total_output > 0) {
+            $ng_rate = round(($total_ng / $total_output) * 100, 2);
+        }
+
+        $tmp_top_minus = VmsPlanActual::find()
+        ->select([
+            'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+        ])
+        ->where([
+            'VMS_PERIOD' => $yesterday_period,
+            'FG_KD' => 'PRODUCT'
+        ])
+        ->andWhere(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('MODEL, ITEM, ITEM_DESC, DESTINATION')
+        ->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+        ->limit(3)
+        ->all();
+
+        //return $total_ng . '/' . $total_output;
+
+        return $this->render('yesterday-summary', [
+            'prod_data_daily' => $tmp_prod_daily,
+            'prod_data_monthly' => $tmp_prod_monthly,
+            'total_shipping' => $total_shipping,
+            'bu_arr' => $bu_arr,
+            'tmp_data_arr' => $tmp_data_arr,
+            'yesterday' => $yesterday,
+            'yesterday_prod' => $yesterday_prod,
+            'ng_rate' => $ng_rate,
+            'tmp_top_minus' => $tmp_top_minus,
+        ]);
+    }
+
+    public function actionBelajarMap($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'post_date',
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = '2020-08-19';
+
+        if ($model->load($_GET)) { }
+
+        $tmp_toll_record = GpsTollRecord::find()->all();
+        $tmp_data = [];
+        foreach ($tmp_toll_record as $key => $tmp_record) {
+            $tmp_data[] = [
+                'nik' => $tmp_record->NIK,
+                'name' => $tmp_record->NAMA_KARYAWAN,
+                'last_update' => $tmp_record->LAST_UPDATED,
+            ];
+        }
+
+        return $this->render('belajar-map', [
+            'model' => $model,
+            'tmp_data' => $tmp_data,
+        ]);
+    }
+
     public function actionMonthlyProgressSummary($type = 2)
     {
         $this->layout = 'clean';
