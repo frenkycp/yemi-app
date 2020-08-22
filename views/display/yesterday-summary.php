@@ -180,7 +180,7 @@ echo '</pre>';*/
                 <tr style="<?= $value == 0 ? 'display: none;' : ''; ?>">
                     <td class="text-center"><?= $key; ?></td>
                     <td class="text-center">実績</td>
-                    <td class="text-center"><?= $value; ?></td>
+                    <td class="text-center"><?= number_format($value); ?></td>
                 </tr>
             <?php endforeach ?>
         </tbody>
