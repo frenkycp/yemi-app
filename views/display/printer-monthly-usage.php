@@ -93,7 +93,7 @@ $total_plan = $total_act = $total_balance = 0;
 ]); ?>
 <div id="pagewrap" class="pagewrap">
     <div class="container show">
-        <div class="row" style="display: none;">
+        <div class="row" style="">
             <div class="col-md-4">
                 <?php echo '<label class="control-label">Select date range</label>';
                 echo DatePicker::widget([

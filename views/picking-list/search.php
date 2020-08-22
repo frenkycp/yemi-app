@@ -30,7 +30,7 @@ $this->registerJs("$(document).ready(function() {
         'pageLength': 25,
         'sScrollX': '100%',
         'sScrollXInner': '100%',
-        'order': [[12, 'desc' ], [5, 'asc' ], [6, 'asc' ], [7, 'asc' ]]
+        'order': [[13, 'desc' ], [5, 'asc' ], [6, 'asc' ], [7, 'asc' ]]
     });
 });");
 
@@ -64,7 +64,14 @@ $this->registerJs("$(document).ready(function() {
 	<div class="panel panel-success">
 		<div class="panel-heading">
 			<h3 class="panel-title">
-				Setlist Number : <b style="letter-spacing: 5px;"><?= $setlist_no; ?></b>
+				<div class="row">
+					<div class="col-md-8">
+						Setlist Number : <b style="letter-spacing: 5px;"><?= $setlist_no; ?></b>
+					</div>
+					<div class="col-md-4 text-right">
+						Plan Qty : <b><?= number_format($plan_qty); ?></b>
+					</div>
+				</div>
 			</h3>
 		</div>
 		<div class="panel-body no-padding">

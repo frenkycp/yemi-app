@@ -21,7 +21,7 @@ if ($_GET['category'] == 4 || $_GET['category'] == 5) {
         .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold; color: white;}
         body, .content-wrapper {background-color: #000;}
         .temp-widget {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 1.4em; width: 90px; letter-spacing: 1.1px;}
-        .temp-widget-info {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 1.4em; width: 250px; letter-spacing: 1.1px;}
+        .temp-widget-info {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 1.8em; width: 423px; letter-spacing: 1.1px;}
         .temp-widget-refrigerator {border-radius: 15px 15px 0px 0px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 25px; letter-spacing: 1.1px;}
         #main-body {overflow: auto;}
         .temp-widget-rh {border-radius: 4px; overflow: auto; border: 1px solid white; font-size: 0.75em; width: 35px; letter-spacing: 1px;}
@@ -168,16 +168,16 @@ echo '</pre>';*/
     }
     ?>
     <div id="custom-title" class="text-center"><?= $custom_title; ?></div>
-    <div class="temp-widget-info bg-light-blue-active" style="position: absolute; top: 775px; left: 40px; <?= $_GET['category'] == 4 ? '' : 'display: none;'; ?>">
+    <div class="temp-widget-info bg-black-active" style="position: absolute; top: 770px; left: 302px; <?= $_GET['category'] == 4 ? '' : 'display: none;'; ?>">
         <table class="table table-bordered" style="margin-bottom: 0px;">
             <tbody>
                 <tr>
                     <td>Total kwH</td>
-                    <td class="text-center"><?= number_format($total_kwh); ?></td>
+                    <td class="text-center" style="font-size: 1.1em;"><?= number_format($total_kwh); ?></td>
                 </tr>
                 <tr>
-                    <td>Emisi CO<sub>2</sub> (Ion)</td>
-                    <td class="text-center"><?= round(($total_kwh * 0.891 / 1000), 2); ?></td>
+                    <td>Emisi CO<sub>2</sub> (Ton)</td>
+                    <td class="text-center" style="font-size: 1.1em;"><?= round(($total_kwh * 0.891 / 1000), 2); ?></td>
                 </tr>
             </tbody>
         </table>
