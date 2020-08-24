@@ -177,6 +177,10 @@ class DisplayController extends Controller
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
 
+        if ($model->load($_GET)) {
+
+        }
+
         $power_consumption_current = SensorTbl::find()
         ->where([
             'map_no' => $map_no_arr

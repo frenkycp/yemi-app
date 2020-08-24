@@ -71,7 +71,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['power-consumption-chart']),
+    'action' => Url::to(['power-consumption-dashboard']),
 ]); ?>
 
 <div class="row" style="">
