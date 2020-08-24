@@ -120,6 +120,15 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'id',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; min-width: 90px; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'cust_desc',
         'value' => 'shipCustomer.customer_desc',
         'label' => 'Customer Description',
