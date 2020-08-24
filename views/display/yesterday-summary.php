@@ -103,7 +103,7 @@ echo '</pre>';*/
     'action' => Url::to(['yesterday-summary']),
 ]); ?>
 
-<div style="margin: auto; width: 350px; padding-top: 20px;">
+<div style="margin: auto; width: 400px; padding-top: 20px;">
     <div class="row">
         <div class="col-md-12">
             <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
@@ -133,19 +133,34 @@ echo '</pre>';*/
         </thead>
         <tbody>
             <tr>
-                <td class="text-center column-1">Plan</td>
+                <td class="text-left column-1">Plan (FG)</td>
                 <td class="text-center column-2">計画</td>
-                <td class="text-center column-3"><?= number_format($prod_data_daily->PLAN_QTY); ?></td>
+                <td class="text-center column-3"><?= number_format($prod_data_daily_fg->PLAN_QTY); ?></td>
             </tr>
             <tr>
-                <td class="text-center">Actual</td>
+                <td class="text-left">Actual (FG)</td>
                 <td class="text-center">実績</td>
-                <td class="text-center"><?= number_format($prod_data_daily->ACTUAL_QTY); ?></td>
+                <td class="text-center"><?= number_format($prod_data_daily_fg->ACTUAL_QTY); ?></td>
             </tr>
             <tr>
-                <td class="text-center">Balance</td>
+                <td class="text-left">Balance (FG)</td>
                 <td class="text-center">進度</td>
-                <td class="text-center"><?= number_format($prod_data_daily->ACTUAL_QTY - $prod_data_daily->PLAN_QTY); ?></td>
+                <td class="text-center"><?= number_format($prod_data_daily_fg->ACTUAL_QTY - $prod_data_daily_fg->PLAN_QTY); ?></td>
+            </tr>
+            <tr>
+                <td class="text-left column-1">Plan (KD)</td>
+                <td class="text-center column-2">計画</td>
+                <td class="text-center column-3"><?= number_format($prod_data_daily_kd->PLAN_QTY); ?></td>
+            </tr>
+            <tr>
+                <td class="text-left">Actual (KD)</td>
+                <td class="text-center">実績</td>
+                <td class="text-center"><?= number_format($prod_data_daily_kd->ACTUAL_QTY); ?></td>
+            </tr>
+            <tr>
+                <td class="text-left">Balance (KD)</td>
+                <td class="text-center">進度</td>
+                <td class="text-center"><?= number_format($prod_data_daily_kd->ACTUAL_QTY - $prod_data_daily_kd->PLAN_QTY); ?></td>
             </tr>
         </tbody>
     </table>
@@ -173,13 +188,13 @@ echo '</pre>';*/
                 <td class="text-center">進度</td>
                 <td class="text-center"><?= number_format($prod_data_monthly->ACTUAL_QTY - $prod_data_monthly->PLAN_QTY); ?></td>
             </tr>
-            <tr>
-                <td colspan="3">
+            <tr style="<?= $tmp_top_minus ? '' : 'display: none;'; ?>">
+                <td colspan="3" style="font-size: 12px;">
                     <?php
                     if ($tmp_top_minus) {
                         echo '<u>Top 3 Balance :</u><br/>';
                         foreach ($tmp_top_minus as $key => $value) { ?>
-                            - <?= $value->ITEM; ?> | <?= $value->ITEM_DESC . ' ' . $value->DESTINATION; ?> | <span class="text-red"><?= $value->BALANCE_QTY; ?></span><br/>
+                            - <?= $value->ITEM; ?> | <?= $value->ITEM_DESC . ' ' . $value->DESTINATION; ?> | <span class="text-red"><?= number_format($value->BALANCE_QTY); ?></span><br/>
                         <?php
                         }
                     }
@@ -192,7 +207,7 @@ echo '</pre>';*/
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
-                <th colspan="2" class="">Shipping (<?= date('d M\' Y', strtotime($yesterday)); ?>)<br/><span class="japanesse">出荷実績</span></th>
+                <th colspan="2" class="">Shipping (<?= date('d M\' Y', strtotime($yesterday)); ?>)<br/><span class="japanesse">出荷実績 (日次)</span></th>
                 <th class="text-center">Daily</th>
             </tr>
         </thead>
@@ -224,6 +239,19 @@ echo '</pre>';*/
                 <td class="text-center column-1">Actual</td>
                 <td class="text-center column-2">実績</td>
                 <td class="text-center column-3"><?= $ng_rate; ?>%</td>
+            </tr>
+            <tr style="<?= $tmp_top_ng ? '' : 'display: none;'; ?>">
+                <td colspan="3" style="font-size: 12px;">
+                    <?php
+                    if ($tmp_top_ng) {
+                        echo '<u>Top 3 NG Qty :</u><br/>';
+                        foreach ($tmp_top_ng as $key => $value) { ?>
+                            - <?= $value->gmc_desc; ?> ( <span class="text-red"><?= 'NG : ' . number_format($value->ng_qty); ?></span>)<br/>
+                        <?php
+                        }
+                    }
+                    ?>
+                </td>
             </tr>
         </tbody>
     </table>

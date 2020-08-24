@@ -193,6 +193,30 @@ class DisplayController extends Controller
         ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
+        $tmp_prod_daily_fg = VmsPlanActual::find()
+        ->select([
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+        ])
+        ->where([
+            'VMS_DATE' => $yesterday,
+            'FG_KD' => 'PRODUCT'
+        ])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->one();
+
+        $tmp_prod_daily_kd = VmsPlanActual::find()
+        ->select([
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+        ])
+        ->where([
+            'VMS_DATE' => $yesterday,
+            'FG_KD' => 'KD'
+        ])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->one();
+
         $tmp_prod_monthly = VmsPlanActual::find()
         ->select([
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -261,7 +285,7 @@ class DisplayController extends Controller
         ])
         ->where([
             'VMS_PERIOD' => $yesterday_period,
-            'FG_KD' => 'PRODUCT'
+            //'FG_KD' => 'PRODUCT'
         ])
         ->andWhere(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
         ->andWhere('LINE IS NOT NULL')
@@ -272,11 +296,26 @@ class DisplayController extends Controller
         ->limit(3)
         ->all();
 
+        $tmp_top_ng = ProdNgData::find()
+        ->select([
+            'gmc_no', 'gmc_desc', 'ng_qty' => 'SUM(ng_qty)'
+        ])
+        ->where([
+            'post_date' => $model->post_date,
+            'loc_id' => 'WF01',
+            'fa_area_detec' => 'OQC'
+        ])
+        ->groupBy('gmc_no, gmc_desc')
+        ->orderBy('SUM(ng_qty) DESC')
+        ->limit(3)->all();
+
         //return $total_ng . '/' . $total_output;
 
         return $this->render('yesterday-summary', [
             'model' => $model,
             'prod_data_daily' => $tmp_prod_daily,
+            'prod_data_daily_fg' => $tmp_prod_daily_fg,
+            'prod_data_daily_kd' => $tmp_prod_daily_kd,
             'prod_data_monthly' => $tmp_prod_monthly,
             'total_shipping' => $total_shipping,
             'bu_arr' => $bu_arr,
@@ -285,6 +324,7 @@ class DisplayController extends Controller
             'yesterday_prod' => $yesterday_prod,
             'ng_rate' => $ng_rate,
             'tmp_top_minus' => $tmp_top_minus,
+            'tmp_top_ng' => $tmp_top_ng,
         ]);
     }
 
@@ -766,7 +806,7 @@ class DisplayController extends Controller
         ])
         ->where([
             'VMS_PERIOD' => $yesterday_period,
-            'FG_KD' => 'PRODUCT'
+            //'FG_KD' => 'PRODUCT'
         ])
         ->andWhere(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
         ->andWhere('LINE IS NOT NULL')
