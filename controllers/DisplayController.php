@@ -149,9 +149,77 @@ use app\models\VmsItem;
 use app\models\RunningHoursView01;
 use app\models\WipPlanActualReport;
 use app\models\GpsTollRecord;
+use app\models\AvgPowerConsumptionView;
 
 class DisplayController extends Controller
 {
+    public function actionPowerConsumptionData($map_no)
+    {
+        $sensor_data = SensorTbl::find()->where(['map_no' => $map_no])->one();
+
+        $data = [
+            'power_consumption' => $sensor_data->power_consumption,
+        ];
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function actionPowerConsumptionDashboard($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $map_no_arr = [44, 45, 46];
+
+        $model = new \yii\base\DynamicModel([
+            'map_no', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        $power_consumption_current = SensorTbl::find()
+        ->where([
+            'map_no' => $map_no_arr
+        ])
+        ->all();
+
+        $avg_data = [];
+        foreach ($power_consumption_current as $key => $value) {
+            $tmp_avg = AvgPowerConsumptionView::find()
+            ->where([
+                'AND',
+                ['>=', 'post_date', $model->from_date],
+                ['<=', 'post_date', $model->to_date]
+            ])
+            ->andWhere([
+                'map_no' => $value->map_no
+            ])
+            ->orderBy('post_date')
+            ->all();
+
+            $tmp_data = [];
+            foreach ($tmp_avg as $value2) {
+                $post_date = (strtotime($value2->post_date . " +7 hours") * 1000);
+                $tmp_data[] = [
+                    'x' => $post_date,
+                    'y' => (float)$value2->avg_power_consumption,
+                ];
+            }
+            $avg_data[$value->map_no] = [
+                [
+                    'name' => $value->area,
+                    'data' => $tmp_data
+                ]
+            ];
+        }
+
+        return $this->render('power-consumption-dashboard', [
+            'model' => $model,
+            'power_consumption_current' => $power_consumption_current,
+            'avg_data' => $avg_data,
+        ]);
+    }
+
     public function actionYesterdaySummary($value='')
     {
         $this->layout = 'clean';
