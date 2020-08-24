@@ -21,7 +21,7 @@ date_default_timezone_set('Asia/Jakarta');
 
 
 $css_string = "
-    .form-control, .control-label {background-color: #FFF; color: white; border-color: white;}
+    //.form-control, .control-label {background-color: #FFF; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
     .content-header {color: white; font-size: 0.7em; text-align: center; display: none;}
     //.box-body {background-color: #000;}
@@ -97,7 +97,33 @@ print_r($tmp_data_arr);
 echo '</pre>';*/
 ?>
 
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['yesterday-summary']),
+]); ?>
+
 <div style="margin: auto; width: 350px; padding-top: 20px;">
+    <div class="row">
+        <div class="col-md-12">
+            <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
+                'type' => DatePicker::TYPE_INPUT,
+                'options' => [
+                    'placeholder' => 'Enter date ...',
+                    'class' => 'form-control text-center',
+                    'onchange'=>'this.form.submit()',
+                ],
+                'pluginOptions' => [
+                    'autoclose'=>true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ])->label('Date'); ?>
+        </div>
+        
+        
+    </div>
+
+    <?php ActiveForm::end(); ?>
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
@@ -171,11 +197,6 @@ echo '</pre>';*/
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td class="text-center column-1">Actual</td>
-                <td class="text-center column-2">実績</td>
-                <td class="text-center column-3"><?= number_format($total_shipping); ?></td>
-            </tr>
             <?php foreach ($bu_arr as $key => $value): ?>
                 <tr style="<?= $value == 0 ? 'display: none;' : ''; ?>">
                     <td class="text-center"><?= $key; ?></td>
@@ -183,6 +204,11 @@ echo '</pre>';*/
                     <td class="text-center"><?= number_format($value); ?></td>
                 </tr>
             <?php endforeach ?>
+            <tr>
+                <td class="text-center column-1" style="font-weight: bold;">Total</td>
+                <td class="text-center column-2" style="font-weight: bold;">実績</td>
+                <td class="text-center column-3" style="font-weight: bold;"><?= number_format($total_shipping); ?></td>
+            </tr>
         </tbody>
     </table>
 

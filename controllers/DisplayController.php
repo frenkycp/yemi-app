@@ -168,10 +168,21 @@ class DisplayController extends Controller
         ->orderBy('cal_date DESC')
         ->one();
         $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
-        $yesterday_period = date('Ym', strtotime($yesterday));
 
         $tmp_yesterday_prod = VmsPlanActual::find()->select('VMS_DATE')->where(['<', 'VMS_DATE', $today])->orderBy('VMS_DATE DESC')->one();
         $yesterday_prod = date('Y-m-d', strtotime($tmp_yesterday_prod->VMS_DATE));
+
+        $model = new \yii\base\DynamicModel([
+            'post_date',
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = $yesterday;
+
+        if ($model->load($_GET)) {
+
+        }
+        $yesterday = $model->post_date;
+        $yesterday_period = date('Ym', strtotime($yesterday));
 
         $tmp_prod_daily = VmsPlanActual::find()
         ->select([
@@ -230,7 +241,8 @@ class DisplayController extends Controller
         ])
         ->where([
             'post_date' => $yesterday,
-            'loc_id' => 'WF01'
+            'loc_id' => 'WF01',
+            'fa_area_detec' => 'OQC'
         ])
         ->one();
         $total_ng = $tmp_total_ng_fa->ng_qty;
@@ -263,6 +275,7 @@ class DisplayController extends Controller
         //return $total_ng . '/' . $total_output;
 
         return $this->render('yesterday-summary', [
+            'model' => $model,
             'prod_data_daily' => $tmp_prod_daily,
             'prod_data_monthly' => $tmp_prod_monthly,
             'total_shipping' => $total_shipping,
