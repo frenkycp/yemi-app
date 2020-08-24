@@ -54,7 +54,7 @@ $css_string = "
     }
     .summary-tbl > thead > tr > th{
         border:1px solid #777474 !important;
-        background-color: white;
+        background-color: rgb(255, 229, 153);
         color: black;
         font-size: 16px;
         //border-bottom: 7px solid #797979;
@@ -127,7 +127,7 @@ echo '</pre>';*/
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
-                <th colspan="2" class="text-center">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>)</th>
+                <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>)<br/><span class="japanesse">生産予実績 （日次）</span></th>
                 <th class="text-center">Daily</th>
             </tr>
         </thead>
@@ -153,7 +153,7 @@ echo '</pre>';*/
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
-                <th colspan="2" class="text-center">Production (<?= date('M\' Y', strtotime($yesterday)); ?>)</th>
+                <th colspan="2" class="">Production (<?= date('M\' Y', strtotime($yesterday)); ?>)<br/><span class="japanesse">生産予実績 （月次）</span></th>
                 <th class="text-center">Monthly</th>
             </tr>
         </thead>
@@ -192,7 +192,7 @@ echo '</pre>';*/
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
-                <th colspan="2" class="text-center">Shipping (<?= date('d M\' Y', strtotime($yesterday)); ?>)</th>
+                <th colspan="2" class="">Shipping (<?= date('d M\' Y', strtotime($yesterday)); ?>)<br/><span class="japanesse">出荷実績</span></th>
                 <th class="text-center">Daily</th>
             </tr>
         </thead>
@@ -206,7 +206,7 @@ echo '</pre>';*/
             <?php endforeach ?>
             <tr>
                 <td class="text-center column-1" style="font-weight: bold;">Total</td>
-                <td class="text-center column-2" style="font-weight: bold;">実績</td>
+                <td class="text-center column-2" style="font-weight: bold;">合計</td>
                 <td class="text-center column-3" style="font-weight: bold;"><?= number_format($total_shipping); ?></td>
             </tr>
         </tbody>
@@ -215,7 +215,7 @@ echo '</pre>';*/
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
-                <th colspan="2" class="text-center">NG Rate (<?= date('d M\' Y', strtotime($yesterday)); ?>)</th>
+                <th colspan="2" class="">FA OQC NG Rate (<?= date('d M\' Y', strtotime($yesterday)); ?>)<br/><span class="japanesse">総組 OQC不良率</span></th>
                 <th class="text-center">Daily</th>
             </tr>
         </thead>
