@@ -127,7 +127,7 @@ echo '</pre>';*/
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
-                <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>) - FG<br/><span class="japanesse">生産予実績 （日次）</span></th>
+                <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>) - FG<br/><span class="japanesse">生産予実績 （日次） - 完成品</span></th>
                 <th class="text-center">Daily</th>
             </tr>
         </thead>
@@ -166,7 +166,7 @@ echo '</pre>';*/
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
-                <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>) - KD<br/><span class="japanesse">生産予実績 （日次）</span></th>
+                <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>) - KD Parts<br/><span class="japanesse">生産予実績 （日次） - KDパーツ</span></th>
                 <th class="text-center">Daily</th>
             </tr>
         </thead>
