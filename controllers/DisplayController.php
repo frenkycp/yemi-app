@@ -381,6 +381,62 @@ class DisplayController extends Controller
         ->orderBy('SUM(ng_qty) DESC')
         ->limit(3)->all();
 
+        $tmp_data_present = SunfishAttendanceData::find()
+        ->select([
+            'total_present' => 'SUM(CASE WHEN attend_judgement = \'P\' THEN 1 ELSE 0 END)',
+            'total_mp' => 'COUNT(*)'
+        ])
+        ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
+        ->where('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'')
+        ->andWhere([
+            'FORMAT(shiftendtime, \'yyyy-MM-dd\')' => $yesterday
+        ])
+        ->one();
+        $attendance_rate = 0;
+        if ($tmp_data_present->total_mp > 0) {
+            $attendance_rate = round(($tmp_data_present->total_present / $tmp_data_present->total_mp) * 100, 1);
+        }
+
+        $tmp_fg_minus_daily = VmsPlanActual::find()
+        ->select([
+            'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+        ])
+        ->where([
+            'FORMAT(VMS_DATE, \'yyyy-MM-dd\')' => $yesterday,
+            'FG_KD' => 'PRODUCT'
+        ])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('MODEL, ITEM, ITEM_DESC, DESTINATION')
+        ->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+        ->limit(3)
+        ->all();
+
+        $tmp_kd_minus_daily = VmsPlanActual::find()
+        ->select([
+            'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+        ])
+        ->where([
+            'FORMAT(VMS_DATE, \'yyyy-MM-dd\')' => $yesterday,
+            'FG_KD' => 'KD'
+        ])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('MODEL, ITEM, ITEM_DESC, DESTINATION')
+        ->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+        ->limit(3)
+        ->all();
+
+        //return $tmp_data_present->total_present . '/' . $tmp_data_present->total_mp;
+
         //return $total_ng . '/' . $total_output;
 
         return $this->render('yesterday-summary', [
@@ -397,6 +453,9 @@ class DisplayController extends Controller
             'ng_rate' => $ng_rate,
             'tmp_top_minus' => $tmp_top_minus,
             'tmp_top_ng' => $tmp_top_ng,
+            'attendance_rate' => $attendance_rate,
+            'tmp_fg_minus_daily' => $tmp_fg_minus_daily,
+            'tmp_kd_minus_daily' => $tmp_kd_minus_daily,
         ]);
     }
 

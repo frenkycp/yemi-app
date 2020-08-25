@@ -127,40 +127,77 @@ echo '</pre>';*/
     <table class="table table-condensed summary-tbl" id="">
         <thead>
             <tr>
-                <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>)<br/><span class="japanesse">生産予実績 （日次）</span></th>
+                <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>) - FG<br/><span class="japanesse">生産予実績 （日次）</span></th>
                 <th class="text-center">Daily</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="text-left column-1">Plan (FG)</td>
+                <td class="text-left column-1">Plan</td>
                 <td class="text-center column-2">計画</td>
                 <td class="text-center column-3"><?= number_format($prod_data_daily_fg->PLAN_QTY); ?></td>
             </tr>
             <tr>
-                <td class="text-left">Actual (FG)</td>
+                <td class="text-left">Actual</td>
                 <td class="text-center">実績</td>
                 <td class="text-center"><?= number_format($prod_data_daily_fg->ACTUAL_QTY); ?></td>
             </tr>
             <tr>
-                <td class="text-left">Balance (FG)</td>
+                <td class="text-left">Balance</td>
                 <td class="text-center">進度</td>
                 <td class="text-center"><?= number_format($prod_data_daily_fg->ACTUAL_QTY - $prod_data_daily_fg->PLAN_QTY); ?></td>
             </tr>
+            <tr style="<?= $tmp_fg_minus_daily ? '' : 'display: none;'; ?>">
+                <td colspan="3" style="font-size: 12px;">
+                    <?php
+                    if ($tmp_fg_minus_daily) {
+                        echo '<u>Top 3 Balance :</u><br/>';
+                        foreach ($tmp_fg_minus_daily as $key => $value) { ?>
+                            - <?= $value->ITEM; ?> | <?= $value->ITEM_DESC . ' ' . $value->DESTINATION; ?> | <span class="text-red"><?= number_format($value->BALANCE_QTY); ?></span><br/>
+                        <?php
+                        }
+                    }
+                    ?>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-condensed summary-tbl" id="">
+        <thead>
             <tr>
-                <td class="text-left column-1">Plan (KD)</td>
+                <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>) - KD<br/><span class="japanesse">生産予実績 （日次）</span></th>
+                <th class="text-center">Daily</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-left column-1">Plan</td>
                 <td class="text-center column-2">計画</td>
                 <td class="text-center column-3"><?= number_format($prod_data_daily_kd->PLAN_QTY); ?></td>
             </tr>
             <tr>
-                <td class="text-left">Actual (KD)</td>
+                <td class="text-left">Actual</td>
                 <td class="text-center">実績</td>
                 <td class="text-center"><?= number_format($prod_data_daily_kd->ACTUAL_QTY); ?></td>
             </tr>
             <tr>
-                <td class="text-left">Balance (KD)</td>
+                <td class="text-left">Balance</td>
                 <td class="text-center">進度</td>
                 <td class="text-center"><?= number_format($prod_data_daily_kd->ACTUAL_QTY - $prod_data_daily_kd->PLAN_QTY); ?></td>
+            </tr>
+            <tr style="<?= $tmp_kd_minus_daily ? '' : 'display: none;'; ?>">
+                <td colspan="3" style="font-size: 12px;">
+                    <?php
+                    if ($tmp_kd_minus_daily) {
+                        echo '<u>Top 3 Balance :</u><br/>';
+                        foreach ($tmp_kd_minus_daily as $key => $value) { ?>
+                            - <?= $value->ITEM; ?> | <?= $value->ITEM_DESC . ' ' . $value->DESTINATION; ?> | <span class="text-red"><?= number_format($value->BALANCE_QTY); ?></span><br/>
+                        <?php
+                        }
+                    }
+                    ?>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -174,17 +211,17 @@ echo '</pre>';*/
         </thead>
         <tbody>
             <tr>
-                <td class="text-center column-1">Plan Acc.</td>
+                <td class="column-1">Plan Acc.</td>
                 <td class="text-center column-2">累計計画</td>
                 <td class="text-center column-3"><?= number_format($prod_data_monthly->PLAN_QTY); ?></td>
             </tr>
             <tr>
-                <td class="text-center">Actual Acc.</td>
+                <td class="">Actual Acc.</td>
                 <td class="text-center">累計実績</td>
                 <td class="text-center"><?= number_format($prod_data_monthly->ACTUAL_QTY); ?></td>
             </tr>
             <tr>
-                <td class="text-center">Balance</td>
+                <td class="">Balance</td>
                 <td class="text-center">進度</td>
                 <td class="text-center"><?= number_format($prod_data_monthly->ACTUAL_QTY - $prod_data_monthly->PLAN_QTY); ?></td>
             </tr>
@@ -214,13 +251,13 @@ echo '</pre>';*/
         <tbody>
             <?php foreach ($bu_arr as $key => $value): ?>
                 <tr style="<?= $value == 0 ? 'display: none;' : ''; ?>">
-                    <td class="text-center"><?= $key; ?></td>
+                    <td class=""><?= $key; ?></td>
                     <td class="text-center">実績</td>
                     <td class="text-center"><?= number_format($value); ?></td>
                 </tr>
             <?php endforeach ?>
             <tr>
-                <td class="text-center column-1" style="font-weight: bold;">Total</td>
+                <td class="column-1" style="font-weight: bold;">Total</td>
                 <td class="text-center column-2" style="font-weight: bold;">合計</td>
                 <td class="text-center column-3" style="font-weight: bold;"><?= number_format($total_shipping); ?></td>
             </tr>
@@ -236,7 +273,7 @@ echo '</pre>';*/
         </thead>
         <tbody>
             <tr>
-                <td class="text-center column-1">Actual</td>
+                <td class="column-1">Actual</td>
                 <td class="text-center column-2">実績</td>
                 <td class="text-center column-3"><?= $ng_rate; ?>%</td>
             </tr>
@@ -254,6 +291,15 @@ echo '</pre>';*/
                 </td>
             </tr>
         </tbody>
+    </table>
+
+    <table class="table table-condensed summary-tbl" id="">
+        <thead>
+            <tr>
+                <th colspan="2" class="">Attendance Rate (<?= date('d M\' Y', strtotime($yesterday)); ?>)<br/><span class="japanesse">出勤率</span></th>
+                <th class="text-center column-3"><?= $attendance_rate; ?>%</th>
+            </tr>
+        </thead>
     </table>
 
     <i>Source : MITA</i><br/>

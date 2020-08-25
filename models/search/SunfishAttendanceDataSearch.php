@@ -44,7 +44,7 @@ $query = SunfishAttendanceData::find()
 ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
 ->where('PATINDEX(\'YE%\', UPPER(VIEW_YEMI_ATTENDANCE.emp_no)) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'');
 $filter_shift = [
-	1 => 'PATINDEX(\'%SHIFT_1%\', UPPER(shiftdaily_code)) > 0',
+	1 => 'PATINDEX(\'%SHIFT_1%\', UPPER(shiftdaily_code)) > 0 OR UPPER(shiftdaily_code) = \'GARDENER\' OR UPPER(shiftdaily_code) = \'SHIFT_08_17\'',
 	2 => '(PATINDEX(\'%SHIFT_2%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%MAINTENANCE%\', UPPER(shiftdaily_code)) > 0)',
 	3 => 'PATINDEX(\'%SHIFT_3%\', UPPER(shiftdaily_code)) > 0'
 ];

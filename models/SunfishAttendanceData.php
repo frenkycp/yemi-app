@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SunfishAttendanceData extends BaseSunfishAttendanceData
 {
-    public $post_date, $period, $shift, $start_date, $end_date;
+    public $post_date, $period, $shift, $start_date, $end_date, $total_present, $total_mp;
 
     public function behaviors()
     {
@@ -99,7 +99,9 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
 
         foreach ($tmp_data as $value) {
             if ($value->start_date <= $value->shiftendtime && ($value->end_date == null || $value->end_date >= $value->shiftendtime)) {
-                if (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_1') !== false) {
+                if (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_1') !== false
+                    || strtoupper($value->shiftdaily_code) == 'GARDENER'
+                    || strtoupper($value->shiftdaily_code) == 'SHIFT_08_17') {
                     $shift =  1;
                 } elseif (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_2') !== false || strpos(strtoupper($value->shiftdaily_code), 'MAINTENANCE') !== false) {
                     $shift =  2;
