@@ -113,7 +113,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'ng_root_cause',
-        'label' => 'Root Cause',
+        'label' => 'Pre Process',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
