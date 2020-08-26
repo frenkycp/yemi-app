@@ -33,6 +33,102 @@ $image_height = '300px';
 <h2>Timeline</h2>
 <ul class="timeline">
 
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Mar. 2020
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2020-03-24</span>
+
+            <h3 class="timeline-header"><a href="#">Visitor Display Information <span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Display Visitor Information
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/202003_visitor_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2020-03-12</span>
+
+            <h3 class="timeline-header"><a href="#">Fix Asset Stock Take <span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Fix Asset Digital Stock Take
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/202003_stock_take_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Feb. 2020
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2020-02-12</span>
+
+            <h3 class="timeline-header"><a href="#">E-NG Production <span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring NG on Production
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/202002_ng_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>&nbsp;&nbsp;&nbsp;
+                <?= Html::img('@web/uploads/ABOUT/202002_ng_02.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jan. 2020
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2020-01-10</span>
+
+            <h3 class="timeline-header"><a href="#">PCB Repair Database <span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring Repair on PCB
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/202001_repair_04.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+            </div>
+        </div>
+    </li>
+    <!-- END timeline item -->
+
 	<!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
