@@ -41,7 +41,7 @@ class NgFaModel extends BaseProdNgData
                 'part_desc' => 'Part Name (Raw Material)',
                 'smt_group' => 'Group',
                 'pcb_side' => 'Side',
-                'ng_detail' => 'Remark',
+                'ng_detail' => 'NG Detail',
                 'gmc_no' => 'Model',
                 'ng_category_id' => 'Cause',
                 'ng_qty' => 'NG Qty',
@@ -53,7 +53,7 @@ class NgFaModel extends BaseProdNgData
                 'ng_location' => 'Location',
                 'pcb_repair' => 'Repair (Action)',
                 'fa_area_detec' => 'Detected Area',
-                'ng_root_cause' => 'Root Cause',
+                'ng_root_cause' => 'Pre & Self Process',
                 'fa_status' => 'Status',
             ]
         );

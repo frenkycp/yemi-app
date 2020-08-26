@@ -232,8 +232,8 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		$this->layout = 'fixed-asset/main';
 		date_default_timezone_set('Asia/Jakarta');
 
-		\Yii::$app->session->setFlash("warning", "This options is temporarily disabled...");
-		return $this->redirect(['index']);
+		/*\Yii::$app->session->setFlash("warning", "This options is temporarily disabled...");
+		return $this->redirect(['index']);*/
 
 	    $searchModel  = new FixAssetDataSearch;
 	    //$searchModel->department_pic = \Yii::$app->session['fix_asset_cc_id'];
@@ -286,6 +286,78 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 				'width' => '100%',
 				'alt' => $tmp_item->asset_id . '.jpg not found.'
 			]) . '</div>';
+	}
+
+	public function actionScrap($asset_id='')
+	{
+		$session = \Yii::$app->session;
+        if (!$session->has('fix_asset_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['fix_asset_user'];
+        $name = $session['fix_asset_name'];
+
+		$this->layout = 'fixed-asset/main';
+		date_default_timezone_set('Asia/Jakarta');
+
+		$fixed_asset_data = $this->findModel($asset_id);
+		$model = new AssetLogTbl;
+
+		$model->from_loc = $fixed_asset_data->location;
+		$model->NBV = $fixed_asset_data->NBV;
+		$model->trans_type = 'SCRAP';
+		$model->posting_date = date('Y-m-d');
+		$model->asset_id = $fixed_asset_data->asset_id;
+		$model->computer_name = $fixed_asset_data->computer_name;
+		$model->user_id = $nik;
+		$model->user_desc = $name;
+		$model->status = $fixed_asset_data->status;
+		$model->label = $fixed_asset_data->label;
+		$model->schedule_status = 'C';
+		$model->is_scheduled = 'N';
+		$model->to_loc = 'SCRAP';
+		$model->last_update = date('Y-m-d H:i:s');
+		$model->propose_scrap = $model->propose_scrap_dd = 'Y';
+
+		$asset_dtr = AssetDtrTbl::find()
+		->where([
+			'faid' => $asset_id
+		])
+		->orderBy('subexp')
+		->all();
+
+		if ($model->load($_POST)) {
+			$tmp_karyawan = Karyawan::find()->where([
+				'OR',
+				['NIK' => $nik],
+				['NIK_SUN_FISH' => $nik]
+			])->one();
+
+			if ($tmp_karyawan->NIK_SUN_FISH != null) {
+				if ($model->save()) {
+					$fixed_asset_data->Discontinue = 'Y';
+					$fixed_asset_data->LAST_UPDATE = date('Y-m-d H:i:s');
+					$fixed_asset_data->DateDisc = date('Y-m-d H:i:s');
+					$fixed_asset_data->scrap_by_id = $nik;
+					$fixed_asset_data->scrap_by_name = $name;
+					if (!$fixed_asset_data->save()) {
+						return json_encode($fixed_asset_data->errors);
+					}
+				} else {
+					return json_encode($model->errors);
+				}
+			} else {
+				\Yii::$app->getSession()->setFlash('error', 'Your NIK Sunfish not found. Please contact administrator');
+			}
+
+			return $this->redirect(Url::previous());
+		}
+
+		return $this->render('scrap', [
+			'fixed_asset_data' => $fixed_asset_data,
+			'model' => $model,
+			'asset_dtr' => $asset_dtr,
+		]);
 	}
 
 	public function actionStockTake($asset_id = '', $trans_id = null)

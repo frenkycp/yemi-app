@@ -55,6 +55,13 @@ use Yii;
  * @property string $label
  * @property double $NBV
  * @property string $propose_scrap
+ * @property string $expired_date
+ * @property string $img_filename
+ * @property string $model_used
+ * @property string $part
+ * @property string $domestic_overseas
+ * @property string $scrap_by_id
+ * @property string $scrap_by_name
  * @property string $aliasModel
  */
 abstract class AssetTbl extends \yii\db\ActiveRecord
@@ -85,10 +92,16 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
     {
         return [
             [['asset_id'], 'required'],
-            [['asset_id', 'qr', 'ip_address', 'computer_name', 'jenis', 'manufacture', 'manufacture_desc', 'cpu_desc', 'ram_desc', 'rom_desc', 'os_desc', 'fixed_asst_account', 'asset_category', 'network', 'display', 'camera', 'battery', 'note', 'loc_type', 'LOC', 'location', 'area', 'project', 'cur', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'FINANCE_ASSET', 'Discontinue', 'status', 'label', 'propose_scrap'], 'string'],
-            [['purchase_date', 'LAST_UPDATE', 'DateDisc'], 'safe'],
+            [['fixed_asst_account', 'note', 'model_used'], 'string'],
+            [['purchase_date', 'LAST_UPDATE', 'DateDisc', 'expired_date'], 'safe'],
             [['report_type'], 'integer'],
             [['price', 'price_usd', 'qty', 'AtCost', 'NBV'], 'number'],
+            [['asset_id', 'qr', 'ip_address', 'jenis', 'manufacture', 'ram_desc', 'rom_desc', 'asset_category', 'network', 'display', 'camera', 'battery', 'loc_type', 'LOC', 'area', 'project', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'status', 'label', 'img_filename', 'part', 'domestic_overseas', 'scrap_by_id'], 'string', 'max' => 50],
+            [['computer_name'], 'string', 'max' => 400],
+            [['manufacture_desc', 'cpu_desc', 'os_desc', 'location'], 'string', 'max' => 100],
+            [['cur'], 'string', 'max' => 3],
+            [['FINANCE_ASSET', 'Discontinue', 'propose_scrap'], 'string', 'max' => 1],
+            [['scrap_by_name'], 'string', 'max' => 250],
             [['asset_id'], 'unique']
         ];
     }
@@ -114,7 +127,7 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'asset_category' => 'Asset Category',
             'purchase_date' => 'Purchase Date',
             'report_type' => 'Report Type',
-            'LAST_UPDATE' => 'Last  Update',
+            'LAST_UPDATE' => 'Last Update',
             'network' => 'Network',
             'display' => 'Display',
             'camera' => 'Camera',
@@ -134,9 +147,9 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'department_name' => 'Department Name',
             'section_name' => 'Section Name',
             'nik' => 'Nik',
-            'NAMA_KARYAWAN' => 'Nama  Karyawan',
+            'NAMA_KARYAWAN' => 'Nama Karyawan',
             'primary_picture' => 'Primary Picture',
-            'FINANCE_ASSET' => 'Finance  Asset',
+            'FINANCE_ASSET' => 'Finance Asset',
             'qty' => 'Qty',
             'AtCost' => 'At Cost',
             'Discontinue' => 'Discontinue',
@@ -145,6 +158,13 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'label' => 'Label',
             'NBV' => 'Nbv',
             'propose_scrap' => 'Propose Scrap',
+            'expired_date' => 'Expired Date',
+            'img_filename' => 'Img Filename',
+            'model_used' => 'Model Used',
+            'part' => 'Part',
+            'domestic_overseas' => 'Domestic Overseas',
+            'scrap_by_id' => 'Scrap By ID',
+            'scrap_by_name' => 'Scrap By Name',
         ];
     }
 

@@ -66,11 +66,14 @@ $this->title = [
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
+$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
+    .disabled-link {color: DarkGrey; cursor: not-allowed;}");
+
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
         //'hidden' => !$is_clinic ? true : false,
-        'template' => '{stock-take}',
+        'template' => '{stock-take}&nbsp;&nbsp;&nbsp;{scrap}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -82,10 +85,23 @@ $gridColumns = [
             }, 'stock-take' => function($url, $model, $key){
                 $url = ['stock-take', 'asset_id' => $model->asset_id];
                 $options = [
-                    'title' => 'Stock Take',
+                    'title' => 'Stock Take (Unscheduled)',
                     'data-pjax' => '0',
                 ];
+                if ($model->Discontinue == 'Y') {
+                    return '<i class="fa fa-cubes disabled-link"></i>';
+                }
                 return Html::a('<span class="fa fa-cubes"></span>', $url, $options);
+            }, 'scrap' => function($url, $model, $key){
+                $url = ['scrap', 'asset_id' => $model->asset_id];
+                $options = [
+                    'title' => 'Scrap',
+                    'data-pjax' => '0',
+                ];
+                if ($model->Discontinue == 'Y') {
+                    return '<i class="fa fa-trash-o disabled-link"></i>';
+                }
+                return Html::a('<span class="fa fa-trash-o"></span>', $url, $options);
             }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -218,6 +234,19 @@ $gridColumns = [
     //     ],
     // ],
     [
+        'attribute' => 'propose_scrap',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            'Y' => 'Y',
+            'N' => 'N',
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
+        ],
+    ],
+    [
         'attribute' => 'Discontinue',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -265,9 +294,9 @@ $gridColumns = [
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
             'columns' => $gridColumns,
-            'hover' => true,
+            //'hover' => true,
             //'condensed' => true,
-            'striped' => true,
+            'striped' => false,
             //'floatHeader'=>true,
             //'floatHeaderOptions'=>['scrollingTop'=>'50'],
             'containerOptions' => ['style' => 'overflow: auto; font-size: 12px;'], // only set when $responsive = false
@@ -278,6 +307,11 @@ $gridColumns = [
                 '{export}',
                 '{toggleData}',
             ],
+            'rowOptions' => function($model){
+                if ($model->Discontinue == 'Y') {
+                    return ['class' => 'bg-danger'];
+                }
+            },
             // set export properties
             'export' => [
                 'fontAwesome' => true
