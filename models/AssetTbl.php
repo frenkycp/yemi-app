@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class AssetTbl extends BaseAssetTbl
 {
-    public $asset_name;
+    public $asset_name, $upload_file_proposal, $upload_file_bac, $upload_file_scraping;
 
     public function behaviors()
     {
@@ -28,7 +28,7 @@ class AssetTbl extends BaseAssetTbl
         return ArrayHelper::merge(
             parent::rules(),
             [
-                # custom validation rules
+                [['upload_file_proposal', 'upload_file_bac', 'upload_file_scraping'], 'file']
             ]
         );
     }

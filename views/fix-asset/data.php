@@ -73,15 +73,19 @@ $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
         //'hidden' => !$is_clinic ? true : false,
-        'template' => '{stock-take}&nbsp;&nbsp;&nbsp;{scrap}',
+        'template' => '{stock-take}&nbsp;&nbsp;&nbsp;{scrap}&nbsp;&nbsp;&nbsp;{view}',
         'buttons' => [
-            'view' => function ($url, $model, $key) {
+            'view' => function($url, $model, $key){
+                $url = ['view', 'asset_id' => $model->asset_id];
                 $options = [
-                    'title' => Yii::t('cruds', 'View'),
-                    'aria-label' => Yii::t('cruds', 'View'),
+                    'title' => 'View',
                     'data-pjax' => '0',
+                    'target' => '_blank'
                 ];
-                return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+                /*if ($model->Discontinue == 'Y') {
+                    return '<i class="fa fa-trash-o disabled-link"></i>';
+                }*/
+                return Html::a('<span class="fa fa-eye"></span>', $url, $options);
             }, 'stock-take' => function($url, $model, $key){
                 $url = ['stock-take', 'asset_id' => $model->asset_id];
                 $options = [
@@ -110,7 +114,7 @@ $gridColumns = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap']
+        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 100px;']
     ],
     [
         'attribute' => 'asset_id',

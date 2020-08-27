@@ -288,6 +288,25 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 			]) . '</div>';
 	}
 
+	public function actionView($asset_id = '')
+	{
+		$session = \Yii::$app->session;
+        if (!$session->has('fix_asset_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['fix_asset_user'];
+        $name = $session['fix_asset_name'];
+
+        $this->layout = 'fixed-asset/main';
+		date_default_timezone_set('Asia/Jakarta');
+
+		$fixed_asset_data = $this->findModel($asset_id);
+
+		return $this->render('view', [
+			'fixed_asset_data' => $fixed_asset_data
+		]);
+	}
+
 	public function actionScrap($asset_id='')
 	{
 		$session = \Yii::$app->session;
@@ -301,23 +320,9 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		date_default_timezone_set('Asia/Jakarta');
 
 		$fixed_asset_data = $this->findModel($asset_id);
-		$model = new AssetLogTbl;
-
-		$model->from_loc = $fixed_asset_data->location;
-		$model->NBV = $fixed_asset_data->NBV;
-		$model->trans_type = 'SCRAP';
-		$model->posting_date = date('Y-m-d');
-		$model->asset_id = $fixed_asset_data->asset_id;
-		$model->computer_name = $fixed_asset_data->computer_name;
-		$model->user_id = $nik;
-		$model->user_desc = $name;
-		$model->status = $fixed_asset_data->status;
-		$model->label = $fixed_asset_data->label;
-		$model->schedule_status = 'C';
-		$model->is_scheduled = 'N';
-		$model->to_loc = 'SCRAP';
-		$model->last_update = date('Y-m-d H:i:s');
-		$model->propose_scrap = $model->propose_scrap_dd = 'Y';
+		if ($fixed_asset_data->DateDisc !== null) {
+			$fixed_asset_data->DateDisc = date('Y-m-d', strtotime($fixed_asset_data->DateDisc));
+		}
 
 		$asset_dtr = AssetDtrTbl::find()
 		->where([
@@ -326,7 +331,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		->orderBy('subexp')
 		->all();
 
-		if ($model->load($_POST)) {
+		if ($fixed_asset_data->load($_POST)) {
 			$tmp_karyawan = Karyawan::find()->where([
 				'OR',
 				['NIK' => $nik],
@@ -334,17 +339,45 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 			])->one();
 
 			if ($tmp_karyawan->NIK_SUN_FISH != null) {
-				if ($model->save()) {
-					$fixed_asset_data->Discontinue = 'Y';
-					$fixed_asset_data->LAST_UPDATE = date('Y-m-d H:i:s');
-					$fixed_asset_data->DateDisc = date('Y-m-d H:i:s');
-					$fixed_asset_data->scrap_by_id = $nik;
-					$fixed_asset_data->scrap_by_name = $name;
-					if (!$fixed_asset_data->save()) {
-						return json_encode($fixed_asset_data->errors);
-					}
-				} else {
-					return json_encode($model->errors);
+				$fixed_asset_data->upload_file_proposal = UploadedFile::getInstance($fixed_asset_data, 'upload_file_proposal');
+				$proposal_new_filename = 'PROPOSAL_' . $asset_id . '.' . $fixed_asset_data->upload_file_proposal->extension;
+				if ($fixed_asset_data->upload_file_proposal && $fixed_asset_data->validate()) {
+					$filePath = \Yii::getAlias("@app/web/uploads/SCRAP/PROPOSAL/");
+					if (!file_exists($filePath)) {
+                    	mkdir($filePath);
+                    }
+					$fixed_asset_data->upload_file_proposal->saveAs($filePath . $proposal_new_filename);
+					$fixed_asset_data->scrap_proposal_file = Url::to('@web/uploads/SCRAP/PROPOSAL/') . $proposal_new_filename;
+				}
+
+				$fixed_asset_data->upload_file_bac = UploadedFile::getInstance($fixed_asset_data, 'upload_file_bac');
+				$bac_new_filename = 'BAC_' . $asset_id . '.' . $fixed_asset_data->upload_file_bac->extension;
+				if ($fixed_asset_data->upload_file_bac && $fixed_asset_data->validate()) {
+					$filePath = \Yii::getAlias("@app/web/uploads/SCRAP/BAC/");
+					if (!file_exists($filePath)) {
+                    	mkdir($filePath);
+                    }
+					$fixed_asset_data->upload_file_bac->saveAs($filePath . $bac_new_filename);
+					$fixed_asset_data->bac_file = Url::to('@web/uploads/SCRAP/BAC/') . $bac_new_filename;
+				}
+
+				$fixed_asset_data->upload_file_scraping = UploadedFile::getInstance($fixed_asset_data, 'upload_file_scraping');
+				$scrap_new_filename = 'SCRAP_' . $asset_id . '.' . $fixed_asset_data->upload_file_scraping->extension;
+				if ($fixed_asset_data->upload_file_scraping && $fixed_asset_data->validate()) {
+					$filePath = \Yii::getAlias("@app/web/uploads/SCRAP/IMG/");
+					if (!file_exists($filePath)) {
+                    	mkdir($filePath);
+                    }
+					$fixed_asset_data->upload_file_scraping->saveAs($filePath . $scrap_new_filename);
+					$fixed_asset_data->scraping_file = Url::to('@web/uploads/SCRAP/IMG/') . $scrap_new_filename;
+				}
+
+				$fixed_asset_data->scrap_by_id = $nik;
+				$fixed_asset_data->scrap_by_name = $name;
+				$fixed_asset_data->Discontinue = 'Y';
+				$fixed_asset_data->LAST_UPDATE = date('Y-m-d H:i:s');
+				if (!$fixed_asset_data->save()) {
+					return json_encode($fixed_asset_data->errors);
 				}
 			} else {
 				\Yii::$app->getSession()->setFlash('error', 'Your NIK Sunfish not found. Please contact administrator');
@@ -355,7 +388,6 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 
 		return $this->render('scrap', [
 			'fixed_asset_data' => $fixed_asset_data,
-			'model' => $model,
 			'asset_dtr' => $asset_dtr,
 		]);
 	}

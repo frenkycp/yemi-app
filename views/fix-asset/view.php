@@ -1,147 +1,116 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use yii\grid\GridView;
-use yii\widgets\DetailView;
-use yii\widgets\Pjax;
-use dmstr\bootstrap\Tabs;
 
-/**
-* @var yii\web\View $this
-* @var app\models\AssetTbl $model
-*/
-$copyParams = $model->attributes;
+$this->title = [
+    'page_title' => 'Fix Asset Detail View <span class="japanesse light-green"></span>',
+    'tab_title' => 'Fix Asset Detail View',
+    'breadcrumbs_title' => 'Fix Asset Detail View'
+];
 
-$this->title = Yii::t('models', 'Asset Tbl');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Asset Tbls'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => (string)$model->asset_id, 'url' => ['view', 'asset_id' => $model->asset_id]];
-$this->params['breadcrumbs'][] = 'View';
 ?>
-<div class="giiant-crud asset-tbl-view">
 
-    <!-- flash message -->
-    <?php if (\Yii::$app->session->getFlash('deleteError') !== null) : ?>
-        <span class="alert alert-info alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span></button>
-            <?= \Yii::$app->session->getFlash('deleteError') ?>
-        </span>
-    <?php endif; ?>
-
-    <h1>
-        <?= Yii::t('models', 'Asset Tbl') ?>
-        <small>
-            <?= Html::encode($model->asset_id) ?>
-        </small>
-    </h1>
-
-
-    <div class="clearfix crud-navigation">
-
-        <!-- menu buttons -->
-        <div class='pull-left'>
-            <?= Html::a(
-            '<span class="glyphicon glyphicon-pencil"></span> ' . 'Edit',
-            [ 'update', 'asset_id' => $model->asset_id],
-            ['class' => 'btn btn-info']) ?>
-
-            <?= Html::a(
-            '<span class="glyphicon glyphicon-copy"></span> ' . 'Copy',
-            ['create', 'asset_id' => $model->asset_id, 'AssetTbl'=>$copyParams],
-            ['class' => 'btn btn-success']) ?>
-
-            <?= Html::a(
-            '<span class="glyphicon glyphicon-plus"></span> ' . 'New',
-            ['create'],
-            ['class' => 'btn btn-success']) ?>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Image Preview</h3>
+            </div>
+            <div class="panel-body">
+                <?php
+                $filename = $fixed_asset_data->primary_picture . '.jpg';
+                $path1 = \Yii::$app->basePath . '\\web\\uploads\\ASSET_IMG\\' . $filename;
+                if (file_exists($path1)) {
+                    echo Html::img('@web/uploads/ASSET_IMG/' . $filename, ['class' => 'attachment-img', 'width' => '100%']);
+                } else {
+                    echo Html::img('@web/uploads/image-not-available.png', ['class' => 'attachment-img', 'width' => '100%']);
+                }
+                
+                ?>
+            </div>
         </div>
-
-        <div class="pull-right">
-            <?= Html::a('<span class="glyphicon glyphicon-list"></span> '
-            . 'Full list', ['index'], ['class'=>'btn btn-default']) ?>
-        </div>
-
     </div>
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Fix Asset Information</h3>
+            </div>
+            <div class="panel-body">
+                <strong>Fixed Asset ID</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->asset_id; ?>
+                </p>
+                
+                <strong>Fixed Asset Description</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->computer_name; ?>
+                </p>
+                
+                <strong>Qty</strong>
+                <p class="text-muted">
+                    <?= number_format($fixed_asset_data->qty); ?>
+                </p>
 
-    <hr/>
+                <strong>PIC Name</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->NAMA_KARYAWAN == null ? '<em>(Not Set)</em>' : $fixed_asset_data->NAMA_KARYAWAN; ?>
+                </p>
 
-    <?php $this->beginBlock('app\models\AssetTbl'); ?>
+                <strong>Department</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->section_name; ?> (<?= $fixed_asset_data->cost_centre; ?>)
+                </p>
 
-    
-    <?= DetailView::widget([
-    'model' => $model,
-    'attributes' => [
-            'asset_id',
-        'qr',
-        'ip_address',
-        'computer_name',
-        'jenis',
-        'manufacture',
-        'manufacture_desc',
-        'cpu_desc',
-        'ram_desc',
-        'rom_desc',
-        'os_desc',
-        'fixed_asst_account',
-        'asset_category',
-        'network',
-        'display',
-        'camera',
-        'battery',
-        'note',
-        'location',
-        'area',
-        'project',
-        'cur',
-        'manager_name',
-        'department_pic',
-        'cost_centre',
-        'department_name',
-        'section_name',
-        'nik',
-        'NAMA_KARYAWAN',
-        'primary_picture',
-        'FINANCE_ASSET',
-        'Discontinue',
-        'status',
-        'label',
-        'purchase_date',
-        'LAST_UPDATE',
-        'DateDisc',
-        'report_type',
-        'price',
-        'price_usd',
-        'qty',
-        'AtCost',
-    ],
-    ]); ?>
+                <strong>Location</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->LOC . ' - ' . $fixed_asset_data->location; ?>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-danger">
+            <div class="panel-heading">
+                <h3 class="panel-title">Scrap Information</h3>
+            </div>
+            <div class="panel-body">
+                <strong>Discontinue (Scrap)</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->Discontinue; ?>
+                </p>
 
-    
-    <hr/>
+                <strong>Disposal Date</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->DateDisc == null ? '-' : date('Y-m-d', strtotime($fixed_asset_data->DateDisc)); ?>
+                </p>
 
-    <?= Html::a('<span class="glyphicon glyphicon-trash"></span> ' . 'Delete', ['delete', 'asset_id' => $model->asset_id],
-    [
-    'class' => 'btn btn-danger',
-    'data-confirm' => '' . 'Are you sure to delete this item?' . '',
-    'data-method' => 'post',
-    ]); ?>
-    <?php $this->endBlock(); ?>
+                <strong>Slip No.</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->scrap_slip_no == null ? '-' : $fixed_asset_data->scrap_slip_no; ?>
+                </p>
 
+                <strong>PIC</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->scrap_by_id == null ? '-' : $fixed_asset_data->scrap_by_id . ' - ' . $fixed_asset_data->scrap_by_name; ?>
+                </p>
 
-    
-    <?= Tabs::widget(
-                 [
-                     'id' => 'relation-tabs',
-                     'encodeLabels' => false,
-                     'items' => [
- [
-    'label'   => '<b class=""># '.Html::encode($model->asset_id).'</b>',
-    'content' => $this->blocks['app\models\AssetTbl'],
-    'active'  => true,
-],
- ]
-                 ]
-    );
-    ?>
+                <strong>Proposal</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->scrap_proposal_file == null ? '-' : Html::a('<i class="fa fa-file"></i> Attachment', [$fixed_asset_data->scrap_proposal_file]); ?>
+                </p>
+
+                <strong>BAC</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->bac_file == null ? '-' : Html::a('<i class="fa fa-file"></i> Attachment', [$fixed_asset_data->bac_file]); ?>
+                </p>
+
+                <strong>Disposal Image</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->scraping_file == null ? '-' : Html::a('<i class="fa fa-file"></i> Attachment', [$fixed_asset_data->scraping_file]); ?>
+                </p>
+            </div>
+        </div>
+    </div>
 </div>

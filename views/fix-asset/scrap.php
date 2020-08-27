@@ -6,19 +6,11 @@ use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
 
-if ($model->schedule_id == null) {
-	$this->title = [
-	    'page_title' => 'STOCK TAKING FIXED ASSET ' . date('d M\' Y') . '<span class="japanesse light-green"></span>',
-	    'tab_title' => 'STOCK TAKING FIXED ASSET',
-	    'breadcrumbs_title' => 'STOCK TAKING FIXED ASSET'
-	];
-} else {
-	$this->title = [
-	    'page_title' => 'STOCK TAKING FIXED ASSET PERIOD (' . date('d M\' Y', strtotime($model->schedule_start)) . ' - ' . date('d M\' Y', strtotime($model->schedule_end)) . ')<span class="japanesse light-green"></span>',
-	    'tab_title' => 'STOCK TAKING FIXED ASSET',
-	    'breadcrumbs_title' => 'STOCK TAKING FIXED ASSET'
-	];
-}
+$this->title = [
+    'page_title' => 'Fix Asset Scrap <span class="japanesse light-green"></span>',
+    'tab_title' => 'Fix Asset Scrap',
+    'breadcrumbs_title' => 'Fix Asset Scrap'
+];
 
 
 //$this->registerCssFile("@web/css/data_table.css");
@@ -77,12 +69,12 @@ $this->registerJs("$(function() {
 						
 						<strong>Fixed Asset ID</strong>
 						<p class="text-muted">
-							<?= $model->asset_id; ?>
+							<?= $fixed_asset_data->asset_id; ?>
 						</p>
 						
 						<strong>Fixed Asset Description</strong>
 						<p class="text-muted">
-							<?= $model->computer_name; ?>
+							<?= $fixed_asset_data->computer_name; ?>
 						</p>
 						
 						<strong>Qty</strong>
@@ -181,7 +173,7 @@ $this->registerJs("$(function() {
 			<div class="box-body">
 				<div class="row">
 					<div class="col-md-4">
-				        <?= $form->field($model, 'posting_date')->widget(DatePicker::classname(), [
+				        <?= $form->field($fixed_asset_data, 'DateDisc')->widget(DatePicker::classname(), [
 				        'options' => [
 				            'type' => DatePicker::TYPE_INPUT,
 				        ],
@@ -189,10 +181,52 @@ $this->registerJs("$(function() {
 				            'autoclose'=>true,
 				            'format' => 'yyyy-mm-dd'
 				        ]
-				    ]); ?>
+				    ])->label('Disposal Date'); ?>
 				    </div>
-				    <div class="col-md-8">
-				    	<?= $form->field($model, 'slip_no')->textInput(['placeholder' => 'Insert Slip number here ...']); ?>
+				    <div class="col-md-4">
+				    	<?= $form->field($fixed_asset_data, 'scrap_pic_id')->widget(Select2::classname(), [
+                            'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
+                                'NIK_SUN_FISH', 'NAMA_KARYAWAN'
+                            ])
+                            ->where([
+                                'AKTIF' => 'Y',
+                                //'DEPARTEMEN' => 'PRODUCTION'
+                            ])
+                            ->andWhere('PATINDEX(\'YE%\', NIK_SUN_FISH) > 0')
+                            ->all(), 'NIK_SUN_FISH', 'nikSunFishNama'),
+                            'options' => [
+                                'placeholder' => '- SELECT -',
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                            ],
+                        ])->label('Scrap PIC'); ?>
+				    </div>
+				    <div class="col-md-4">
+				    	<?= $form->field($fixed_asset_data, 'scrap_slip_no')->textInput(['placeholder' => 'Insert Slip number here ...']); ?>
+				    </div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+				    	<div class="panel panel-default">
+				    		<div class="panel-body">
+				    			<?= $form->field($fixed_asset_data, 'upload_file_proposal')->fileInput()->label('Proposal'); ?>
+				    		</div>
+				    	</div>
+				    </div>
+				    <div class="col-md-4">
+				    	<div class="panel panel-default">
+				    		<div class="panel-body">
+				    			<?= $form->field($fixed_asset_data, 'upload_file_bac')->fileInput()->label('Berita Acara Custom'); ?>
+				    		</div>
+				    	</div>
+				    </div>
+				    <div class="col-md-4">
+				    	<div class="panel panel-default">
+				    		<div class="panel-body">
+				    			<?= $form->field($fixed_asset_data, 'upload_file_scraping')->fileInput()->label('Disposal Image'); ?>
+				    		</div>
+				    	</div>
 				    </div>
 				</div>
 			</div>
@@ -200,7 +234,7 @@ $this->registerJs("$(function() {
 				<?= Html::submitButton(
 		        '<span class="glyphicon glyphicon-check"></span> Submit',
 		        [
-		        'id' => 'save-' . $model->formName(),
+		        'id' => 'save-' . $fixed_asset_data->formName(),
 		        'class' => 'btn btn-success'
 		        ]
 		        );
