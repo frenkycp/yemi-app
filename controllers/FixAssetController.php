@@ -378,6 +378,12 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 				$fixed_asset_data->scrap_by_name = $name;
 				$fixed_asset_data->Discontinue = 'Y';
 				$fixed_asset_data->LAST_UPDATE = date('Y-m-d H:i:s');
+
+				$tmp_pic = Karyawan::find()->where([
+					'NIK_SUN_FISH' => $fixed_asset_data->scrap_pic_id
+				])->one();
+				$fixed_asset_data->scrap_pic_name = $tmp_pic->NAMA_KARYAWAN;
+
 				if (!$fixed_asset_data->save()) {
 					return json_encode($fixed_asset_data->errors);
 				}
