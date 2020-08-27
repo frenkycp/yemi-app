@@ -339,6 +339,8 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 			])->one();
 
 			if ($tmp_karyawan->NIK_SUN_FISH != null) {
+				$fixed_asset_data->scrap_proposal_file = $fixed_asset_data->bac_file = $fixed_asset_data->scraping_file = null;
+
 				$fixed_asset_data->upload_file_proposal = UploadedFile::getInstance($fixed_asset_data, 'upload_file_proposal');
 				$proposal_new_filename = 'PROPOSAL_' . $asset_id . '.' . $fixed_asset_data->upload_file_proposal->extension;
 				if ($fixed_asset_data->upload_file_proposal && $fixed_asset_data->validate()) {
