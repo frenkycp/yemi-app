@@ -111,14 +111,19 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'ng_category_id',
-        'value' => function($model)
-        {
-            return $model->ng_category_desc . ' | ' . $model->ng_category_detail;
-        },
-        'label' => 'NG- Name',
+        'attribute' => 'ng_category_desc',
+        'label' => 'NG Category',
         'vAlign' => 'middle',
-        'filter' => ArrayHelper::map(app\models\ProdNgCategory::find()->orderBy('category_name, category_detail')->all(), 'id', 'description'),
+        'filter' => ArrayHelper::map(app\models\ProdNgCategory::find()->select('category_name')->groupBy('category_name')->orderBy('category_name')->all(), 'category_name', 'category_name'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
+        'attribute' => 'ng_category_detail',
+        'label' => 'NG Category Detail',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\ProdNgCategory::find()->select('category_detail')->groupBy('category_detail')->orderBy('category_detail')->all(), 'category_detail', 'category_detail'),
         'filterInputOptions' => [
             'class' => 'form-control',
         ],
