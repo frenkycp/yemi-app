@@ -42,7 +42,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = ProdNgData::find()->where(['<>', 'ng_category_id', 28])->andWhere(['flag' => 1]);
+$query = ProdNgData::find()->andWhere(['flag' => 1]);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
