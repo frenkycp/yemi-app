@@ -283,9 +283,9 @@ echo '</pre>';*/
                                         ]
                                     ],
                                     'allowDecimals' => false,
-                                    'max' => 100,
+                                    'max' => 2500,
                                     'min' => 0,
-                                    'tickInterval' => 5
+                                    'tickInterval' => 100
                                 ],
                                 /*'tooltip' => [
                                     'headerFormat' => '<b>{series.name}</b><br/>',
