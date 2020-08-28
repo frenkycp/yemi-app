@@ -153,13 +153,36 @@ use app\models\AvgPowerConsumptionView;
 
 class DisplayController extends Controller
 {
-    public function actionPowerConsumptionData($map_no)
+    public function actionGetTotalKwh()
+    {
+        $sensor_data = SensorTbl::find()
+        ->select([
+            'kw' => 'SUM(kw)'
+        ])
+        ->where(['map_no' => [44, 45, 46]])
+        ->one();
+
+        $data = [
+            'total_kwh' => $sensor_data->kw,
+        ];
+
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function actionPowerConsumptionData($map_no, $get_kwh = 0)
     {
         $sensor_data = SensorTbl::find()->where(['map_no' => $map_no])->one();
 
-        $data = [
-            'power_consumption' => $sensor_data->power_consumption,
-        ];
+        if ($get_kwh == 0) {
+            $data = [
+                'power_consumption' => $sensor_data->power_consumption,
+            ];
+        } else {
+            $data = [
+                'power_consumption' => $sensor_data->kw,
+            ];
+        }
+        
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
