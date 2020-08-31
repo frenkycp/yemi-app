@@ -13,26 +13,8 @@ $this->title = [
 ?>
 
 <div class="row">
-    <div class="col-md-4">
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <h3 class="panel-title">Image Preview</h3>
-            </div>
-            <div class="panel-body">
-                <?php
-                $filename = $fixed_asset_data->primary_picture . '.jpg';
-                $path1 = \Yii::$app->basePath . '\\web\\uploads\\ASSET_IMG\\' . $filename;
-                if (file_exists($path1)) {
-                    echo Html::img('@web/uploads/ASSET_IMG/' . $filename, ['class' => 'attachment-img', 'width' => '100%']);
-                } else {
-                    echo Html::img('@web/uploads/image-not-available.png', ['class' => 'attachment-img', 'width' => '100%']);
-                }
-                
-                ?>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
+    
+    <div class="col-md-5">
         <div class="panel panel-info">
             <div class="panel-heading">
                 <h3 class="panel-title">Fix Asset Information</h3>
@@ -115,6 +97,25 @@ $this->title = [
                 <p class="text-muted">
                     <?= $fixed_asset_data->scraping_file == null ? '-' : Html::a('<i class="fa fa-file"></i> Attachment', [$fixed_asset_data->scraping_file]); ?>
                 </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <h3 class="panel-title">Image Preview</h3>
+            </div>
+            <div class="panel-body text-center" style="height: 380px; margin: auto;">
+                <?php
+                $filename = $fixed_asset_data->primary_picture . '.jpg';
+                $path1 = \Yii::$app->basePath . '\\web\\uploads\\ASSET_IMG\\' . $filename;
+                if (file_exists($path1)) {
+                    echo Html::img('@web/uploads/ASSET_IMG/' . $filename, ['class' => 'attachment-img', 'style' => 'max-width: 100%; max-height: 100%;']);
+                } else {
+                    echo Html::img('@web/uploads/image-not-available.png', ['class' => 'attachment-img', 'style' => 'max-width: 100%; max-height: 100%;']);
+                }
+                
+                ?>
             </div>
         </div>
     </div>
