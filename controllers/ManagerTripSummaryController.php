@@ -37,6 +37,12 @@ class ManagerTripSummaryController extends \app\controllers\base\ManagerTripSumm
 	    	$searchModel->post_date = \Yii::$app->request->get('post_date');
 	    }
 
+	    $searchModel->account_type = 'MANAGER';
+	    if(\Yii::$app->request->get('account_type') !== null)
+	    {
+	    	$searchModel->account_type = \Yii::$app->request->get('account_type');
+	    }
+
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

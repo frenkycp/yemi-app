@@ -10,12 +10,14 @@ use Yii;
  * This is the base-model class for table "tbl_manager_trip_summary".
  *
  * @property string $id
+ * @property string $period
  * @property string $post_date
  * @property string $emp_id
  * @property string $emp_name
  * @property string $account_type
  * @property integer $start_status
  * @property integer $end_status
+ * @property string $trip_category
  * @property integer $start_validation
  * @property integer $end_validation
  * @property string $status_last_update
@@ -52,7 +54,8 @@ abstract class BentolManagerTripSummary extends \yii\db\ActiveRecord
             [['id'], 'required'],
             [['post_date', 'status_last_update', 'validation_last_update'], 'safe'],
             [['start_status', 'end_status', 'start_validation', 'end_validation'], 'integer'],
-            [['id', 'emp_id'], 'string', 'max' => 50],
+            [['id', 'emp_id', 'trip_category'], 'string', 'max' => 50],
+            [['period'], 'string', 'max' => 10],
             [['emp_name'], 'string', 'max' => 255],
             [['account_type'], 'string', 'max' => 20],
             [['id'], 'unique']
@@ -66,12 +69,14 @@ abstract class BentolManagerTripSummary extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'period' => 'Period',
             'post_date' => 'Post Date',
             'emp_id' => 'Emp ID',
             'emp_name' => 'Emp Name',
             'account_type' => 'Account Type',
             'start_status' => 'Start Status',
             'end_status' => 'End Status',
+            'trip_category' => 'Trip Category',
             'start_validation' => 'Start Validation',
             'end_validation' => 'End Validation',
             'status_last_update' => 'Status Last Update',

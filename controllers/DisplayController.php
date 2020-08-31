@@ -153,6 +153,67 @@ use app\models\AvgPowerConsumptionView;
 
 class DisplayController extends Controller
 {
+    public function actionGetWipBalanceAcc($post_date = '', $location = '')
+    {
+        $location_desc = \Yii::$app->params['wip_location_arr'][$location];
+        $period = date('Ym', strtotime($post_date));
+
+        $wip_painting_data_arr = WipPlanActualReport::find()
+        ->where([
+            'FORMAT(due_date, \'yyyyMM\')' => $period,
+            'child_analyst' => $location,
+            'stage' => ['00-ORDER', '01-CREATED', '02-STARTED']
+        ])
+        ->andWhere(['<=', 'due_date', $post_date])
+        ->all();
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>Location : ' . $location_desc . ' <small>(' . $post_date . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $data .= '<table id="popup-tbl" class="table table-bordered table-striped table-hover">';
+        $data .= 
+        '<thead><tr style="font-size: 12px;">
+            <th class="text-center">Slip No.</th>
+            <th class="text-center">Model</th>
+            <th class="text-center">Item</th>
+            <th class="">Item Description</th>
+            <th class="text-center">Lot Qty</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">FA Start</th>
+            <th class="text-center">Start Plan</th>
+            <th class="text-center">End Plan</th>
+        </tr></thead>'
+        ;
+        $data .= '<tbody>';
+        $total_plan = $total_actual = $total_balance = 0;
+        foreach ($wip_painting_data_arr as $key => $value) {
+            $fa_start = $value->source_date == null ? '-' : date('Y-m-d', strtotime($value->source_date));
+            $start_plan = $value->start_date == null ? '-' : date('Y-m-d', strtotime($value->start_date));
+            $end_plan = $value->due_date == null ? '-' : date('Y-m-d', strtotime($value->due_date));
+            $data .= '
+            <tr style="font-size: 12px;">
+                <td class="text-center">' . $value->slip_id . '</td>
+                <td class="text-center">' . $value->model_group . '</td>
+                <td class="text-center">' . $value->child . '</td>
+                <td class="">' . $value->child_desc . '</td>
+                <td class="text-center">' . $value->fa_lot_qty . '</td>
+                <td class="text-center">' . $value->summary_qty . '</td>
+                <td class="text-center">' . $fa_start . '</td>
+                <td class="text-center">' . $start_plan . '</td>
+                <td class="text-center">' . $end_plan . '</td>
+            </tr>
+            ';
+            
+        }
+        $data .= '</tbody>';
+        $data .= '</table>';
+        return $data;
+    }
+
     public function actionGetTotalKwh()
     {
         $sensor_data = SensorTbl::find()
@@ -1236,7 +1297,7 @@ class DisplayController extends Controller
                 'total_handover' => 'SUM(CASE WHEN stage=\'04-HAND OVER\' THEN summary_qty ELSE 0 END)'
             ])
             ->where([
-                'period' => $model->period,
+                'FORMAT(due_date, \'yyyyMM\')' => $model->period,
                 'child_analyst' => $model_loc
             ])
             ->groupBy('due_date')

@@ -276,12 +276,37 @@ echo '</pre>';*/
                 <tr style="">
                     <td>Actual Accumulation</td>
                     <?php
-                    if (isset($tmp_table['plan']))
+                    if (isset($tmp_table['actual']))
                     foreach ($tmp_table['actual'] as $key => $value): ?>
                         <td class="text-center"><?= number_format($value); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr style="">
+                    <td>Balance Accumulation</td>
+                    <?php
+                    if (isset($tmp_table['balance']))
+                    foreach ($tmp_table['balance'] as $key => $value): ?>
+                        <td class="text-center">
+                            <?php
+                            if ($value < 0) {
+                                echo Html::a('<span class="badge bg-red">' . number_format($value) . '</span>', ['get-wip-balance-acc', 'post_date' => date('Y-m-d', strtotime($tmp_table['thead'][$key])), 'location' => $model->location], ['class' => 'popup_btn']);
+                            } else {
+                                echo $value;
+                            }
+                            ?>
+                        </td>
                     <?php endforeach ?>
                 </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<?php
+    yii\bootstrap\Modal::begin([
+        'id' =>'modal',
+        'header' => '<h3>Detail Info</h3>',
+        'size' => 'modal-lg',
+    ]);
+    yii\bootstrap\Modal::end();
+?>
