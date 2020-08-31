@@ -75,6 +75,26 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'account_type',
+        'value' => function($model){
+            if ($model->account_type == 'COORDINATOR') {
+                return 'NON-MANAGER';
+            } else {
+                return $model->account_type;
+            }
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            'MANAGER' => 'MANAGER',
+            'COORDINATOR' => 'NON-MANAGER'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'start_status',
         'label' => 'Go To Office',
         'vAlign' => 'middle',
