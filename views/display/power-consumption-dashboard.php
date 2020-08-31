@@ -209,7 +209,7 @@ echo '</pre>';*/
                                             'valueSuffix' => ' %',
                                         ],
                                         'dataLabels' => [
-                                            'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px; letter-spacing: 1.5px;">{point.y:.1f}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
+                                            'format' => '<div style="text-align:center; color: white;"><span style="font-size:22px; letter-spacing: 1.5px;">{point.y:.0f}</span><span style="font-size:19px;opacity:0.6">%</span></div>'
                                         ],
                                     ],
                                 ],
@@ -283,9 +283,9 @@ echo '</pre>';*/
                                         ]
                                     ],
                                     'allowDecimals' => false,
-                                    'max' => 2500,
+                                    'max' => 1500,
                                     'min' => 0,
-                                    'tickInterval' => 100
+                                    'tickInterval' => 20
                                 ],
                                 /*'tooltip' => [
                                     'headerFormat' => '<b>{series.name}</b><br/>',

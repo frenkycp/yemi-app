@@ -163,7 +163,7 @@ class DisplayController extends Controller
         ->one();
 
         $data = [
-            'total_kwh' => $sensor_data->kw,
+            'total_kwh' => round($sensor_data->kw),
         ];
 
         return json_encode($data, JSON_UNESCAPED_UNICODE);
@@ -175,11 +175,11 @@ class DisplayController extends Controller
 
         if ($get_kwh == 0) {
             $data = [
-                'power_consumption' => $sensor_data->power_consumption,
+                'power_consumption' => round($sensor_data->power_consumption),
             ];
         } else {
             $data = [
-                'power_consumption' => $sensor_data->kw,
+                'power_consumption' => round($sensor_data->kw),
             ];
         }
         
@@ -229,13 +229,13 @@ class DisplayController extends Controller
                 $post_date = (strtotime($value2->post_date . " +7 hours") * 1000);
                 $tmp_data[] = [
                     'x' => $post_date,
-                    'y' => (float)$value2->avg_power_consumption,
+                    'y' => round($value2->avg_power_consumption),
                 ];
             }
             $avg_data[$value->map_no] = [
                 [
                     'name' => $value->area,
-                    'data' => $tmp_data
+                    'data' => $tmp_data,
                 ]
             ];
         }
@@ -1266,6 +1266,7 @@ class DisplayController extends Controller
                 $tmp_table['thead'][] = $value->due_date;
                 $tmp_table['plan'][] = $tmp_total_plan;
                 $tmp_table['actual'][] = $tmp_total_actual;
+                $tmp_table['balance'][] = $tmp_total_actual - $tmp_total_plan;
             }
         }
 
