@@ -302,8 +302,16 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 
 		$fixed_asset_data = $this->findModel($asset_id);
 
+		$asset_dtr = AssetDtrTbl::find()
+		->where([
+			'faid' => $asset_id
+		])
+		->orderBy('subexp')
+		->all();
+
 		return $this->render('view', [
-			'fixed_asset_data' => $fixed_asset_data
+			'fixed_asset_data' => $fixed_asset_data,
+			'asset_dtr' => $asset_dtr,
 		]);
 	}
 

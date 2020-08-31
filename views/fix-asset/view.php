@@ -67,6 +67,11 @@ $this->title = [
                 <p class="text-muted">
                     <?= $fixed_asset_data->LOC . ' - ' . $fixed_asset_data->location; ?>
                 </p>
+
+                <strong>Acquisition Date</strong>
+                <p class="text-muted">
+                    <?= $fixed_asset_data->purchase_date == null ? '-' : date('Y-m-d', strtotime($fixed_asset_data->purchase_date)); ?>
+                </p>
             </div>
         </div>
     </div>
@@ -112,5 +117,75 @@ $this->title = [
                 </p>
             </div>
         </div>
+    </div>
+</div>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Sub Expense</h3>
+    </div>
+    <div class="panel-body no-padding">
+        <table class="table table-responsice table-bordered table-striped">
+            <thead>
+                <tr class="bg-navy color-palette">
+                    <th class="text-center">No.</th>
+                    <th>Detail</th>
+                    <th class="text-center">Acquisition Date</th>
+                    <th>Vendor</th>
+                    <th class="text-center">Voucher Number</th>
+                    <th class="text-center">Payment Date</th>
+                    <th class="text-center">Depr. Date</th>
+                    <th class="text-center">Qty</th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">Currency</th>
+                    <th class="text-center">Rate</th>
+                    <th class="text-center">At Cost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if (!$asset_dtr) {
+                    echo '<tr>
+                        <td colspan="12">No history data ...</td>
+                    </tr>';
+                } else {
+                    $no = 1;
+                    foreach ($asset_dtr as $key => $value) {
+                        if ($value->dateacqledger == null) {
+                            $acq_date = '-';
+                        } else {
+                            $acq_date = date('Y-m-d', strtotime($value->dateacqledger));
+                        }
+
+                        if ($value->date_of_payment == null) {
+                            $payment_date = '-';
+                        } else {
+                            $payment_date = date('Y-m-d', strtotime($value->date_of_payment));
+                        }
+
+                        if ($value->depr_date == null) {
+                            $depr_date = '-';
+                        } else {
+                            $depr_date = date('Y-m-d', strtotime($value->depr_date));
+                        }
+
+                        echo '<tr>
+                            <td class="text-center">' . $value->fixed_asset_subid . '</td>
+                            <td>' . $value->description . '</td>
+                            <td class="text-center date-format">' . $acq_date . '</td>
+                            <td>' . $value->vendor . '</td>
+                            <td class="text-center">' . $value->voucher_number . '</td>
+                            <td class="text-center date-format">' . $payment_date . '</td>
+                            <td class="text-center date-format">' . $depr_date . '</td>
+                            <td class="text-center">' . number_format($value->qty) . '</td>
+                            <td class="text-center">' . number_format($value->price_unit) . '</td>
+                            <td class="text-center">' . $value->currency . '</td>
+                            <td class="text-center">' . number_format($value->rate) . '</td>
+                            <td class="text-center">' . number_format($value->at_cost) . '</td>
+                        </tr>';
+                    }
+                }
+                ?>
+            </tbody>
+        </table>
     </div>
 </div>
