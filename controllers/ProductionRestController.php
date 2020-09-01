@@ -47,7 +47,7 @@ class ProductionRestController extends Controller
         if ($tmp_workday) {
             $bentol_karyawan = BentolKaryawan::find()
             ->where([
-                'hak_akses_karyawan' => 'MANAGER'
+                'hak_akses_karyawan' => ['MANAGER', 'COORDINATOR']
             ])
             ->all();
 

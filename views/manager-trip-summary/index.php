@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
+use kartik\date\DatePicker;
 
 /**
 * @var yii\web\View $this
@@ -51,6 +52,16 @@ $gridColumns = [
         'attribute' => 'post_date',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterType' => GridView::FILTER_DATE,
+        'filterWidgetOptions' => [
+            'options' => ['placeholder' => 'Select date'],
+            'type' => DatePicker::TYPE_INPUT,
+            'pluginOptions' => [
+                'format' => 'yyyy-mm-dd',
+                'todayHighlight' => true,
+                'autoclose'=>true,
+            ]
+        ],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center;'

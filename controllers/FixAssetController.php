@@ -24,6 +24,7 @@ use Imagine\Gd;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
 use app\models\AssetStockTakeSummary;
+use app\models\CostCenter;
 
 class FixAssetController extends \app\controllers\base\FixAssetController
 {
@@ -465,6 +466,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 					$tmp_asset_loc = AssetLocTbl::find()->where(['LOC' => $model->to_loc])->one();
 					$fixed_asset_data->LOC = $model->to_loc;
 					$fixed_asset_data->location = $tmp_asset_loc->LOC_DESC;
+					$fixed_asset_data->loc_type = $tmp_asset_loc->LOC_TYPE;
 					$model->to_loc = $tmp_asset_loc->LOC_DESC;
 				} else {
 					$model->to_loc = NULL;
@@ -476,6 +478,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 
 				$model->upload_file = UploadedFile::getInstance($model, 'upload_file');
 		        $new_filename = $asset_id . '.' . $model->upload_file->extension;
+		        $new_filename_ext = $model->upload_file->extension;
 
 		        if ($model->validate()) {
 		        	if ($model->upload_file) {
@@ -483,11 +486,11 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		        		if ($model->upload_file->saveAs($filePath)) {
 		                    //ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
 		                    ImageFile::imagine_resize($filePath);
-		                    $log_folder = \Yii::getAlias("@app/web/uploads/ASSET_IMG/" . $model->schedule_id . '/');
+		                    $log_folder = \Yii::getAlias("@app/web/uploads/ASSET_IMG/LOG/");
 		                    if (!file_exists($log_folder)) {
 		                    	mkdir($log_folder);
 		                    }
-		                    copy($filePath, $log_folder . $new_filename);
+		                    copy($filePath, $log_folder . $asset_id . date('_Ymd_His') . $new_filename_ext);
 
 		                    $fixed_asset_data->primary_picture = $asset_id;
 		                }
@@ -611,14 +614,66 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		]);
 	}
 
-	/*public function actionCreate()
+	public function actionCreate()
 	{
+		$session = \Yii::$app->session;
+        if (!$session->has('fix_asset_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['fix_asset_user'];
+        $name = $session['fix_asset_name'];
+
 		$this->layout = 'fixed-asset/main';
+		date_default_timezone_set('Asia/Jakarta');
+
 		$model = new AssetTbl;
+		$model->status = 'OK';
+		$model->qty = $model->AtCost = $model->NBV = 0;
 
 		try {
-			if ($model->load($_POST) && $model->save()) {
-				return $this->redirect(['view', 'asset_id' => $model->asset_id]);
+			if ($model->load($_POST)) {
+				$model->created_by_id = $nik;
+				$model->created_by_name = $name;
+				$model->created_datetime = date('Y-m-d H:i:s');
+				$model->Discontinue = 'N';
+				$model->propose_scrap = 'N';
+				$model->status = 'OK';
+				$model->qr = $model->asset_id;
+				$tmp_location = AssetLocTbl::find($model->LOC)->one();
+				$model->location = $tmp_location->LOC_DESC;
+				$model->loc_type = $tmp_location->LOC_TYPE;
+
+				$tmp_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->nik])->one();
+				$model->NAMA_KARYAWAN = $tmp_karyawan->NAMA_KARYAWAN;
+
+				$tmp_cc = CostCenter::find($model->cost_centre)->one();
+				$model->department_name = $tmp_cc->CC_GROUP;
+				$model->section_name = $tmp_cc->CC_DESC;
+				$model->department_pic = $tmp_cc->CC_ID;
+
+				$model->upload_file_asset = UploadedFile::getInstance($model, 'upload_file_asset');
+		        $new_filename = $model->asset_id . '.' . $model->upload_file_asset->extension;
+		        $new_filename_ext = $model->upload_file_asset->extension;
+
+		        if ($model->upload_file_asset && $model->validate()) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/ASSET_IMG/") . $new_filename;
+	        		if ($model->upload_file_asset->saveAs($filePath)) {
+	                    //ImageFile::resize_crop_image($filePath, $filePath, 50, 800);
+	                    /*ImageFile::imagine_resize($filePath);
+	                    $log_folder = \Yii::getAlias("@app/web/uploads/ASSET_IMG/LOG/");
+	                    if (!file_exists($log_folder)) {
+	                    	mkdir($log_folder);
+	                    }
+	                    copy($filePath, $log_folder . $model->asset_id . date('_Ymd_His') . $new_filename_ext);*/
+
+	                    $model->primary_picture = $model->asset_id;
+	                }
+		        }
+
+				if (!$model->save()) {
+					return json_encode($model->errors);
+				}
+				return $this->redirect(Url::previous());
 			} elseif (!\Yii::$app->request->isPost) {
 				$model->load($_GET);
 			}
@@ -641,5 +696,5 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 				'model' => $model,
 			]);
 		}
-	}*/
+	}
 }

@@ -68,6 +68,9 @@ use Yii;
  * @property string $model_used
  * @property string $part
  * @property string $domestic_overseas
+ * @property string $created_by_id
+ * @property string $created_by_name
+ * @property string $created_datetime
  * @property string $aliasModel
  */
 abstract class AssetTbl extends \yii\db\ActiveRecord
@@ -99,15 +102,15 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
         return [
             [['asset_id'], 'required'],
             [['fixed_asst_account', 'note', 'scrap_proposal_file', 'bac_file', 'scraping_file', 'model_used'], 'string'],
-            [['purchase_date', 'LAST_UPDATE', 'DateDisc', 'expired_date'], 'safe'],
+            [['purchase_date', 'LAST_UPDATE', 'DateDisc', 'expired_date', 'created_datetime'], 'safe'],
             [['report_type'], 'integer'],
             [['price', 'price_usd', 'qty', 'AtCost', 'NBV'], 'number'],
-            [['asset_id', 'qr', 'ip_address', 'jenis', 'manufacture', 'ram_desc', 'rom_desc', 'asset_category', 'network', 'display', 'camera', 'battery', 'loc_type', 'LOC', 'area', 'project', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'scrap_slip_no', 'scrap_by_id', 'scrap_pic_id', 'status', 'label', 'img_filename', 'part', 'domestic_overseas'], 'string', 'max' => 50],
+            [['asset_id', 'qr', 'ip_address', 'jenis', 'manufacture', 'ram_desc', 'rom_desc', 'asset_category', 'network', 'display', 'camera', 'battery', 'loc_type', 'LOC', 'area', 'project', 'manager_name', 'department_pic', 'cost_centre', 'department_name', 'section_name', 'nik', 'NAMA_KARYAWAN', 'primary_picture', 'scrap_slip_no', 'scrap_by_id', 'scrap_pic_id', 'status', 'label', 'img_filename', 'part', 'domestic_overseas', 'created_by_id'], 'string', 'max' => 50],
             [['computer_name'], 'string', 'max' => 400],
             [['manufacture_desc', 'cpu_desc', 'os_desc', 'location'], 'string', 'max' => 100],
             [['cur'], 'string', 'max' => 3],
             [['FINANCE_ASSET', 'Discontinue', 'propose_scrap'], 'string', 'max' => 1],
-            [['scrap_by_name', 'scrap_pic_name'], 'string', 'max' => 250],
+            [['scrap_by_name', 'scrap_pic_name', 'created_by_name'], 'string', 'max' => 250],
             [['asset_id'], 'unique']
         ];
     }
@@ -177,6 +180,9 @@ abstract class AssetTbl extends \yii\db\ActiveRecord
             'model_used' => 'Model Used',
             'part' => 'Part',
             'domestic_overseas' => 'Domestic Overseas',
+            'created_by_id' => 'Created By ID',
+            'created_by_name' => 'Created By Name',
+            'created_datetime' => 'Created Datetime',
         ];
     }
 
