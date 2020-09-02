@@ -127,13 +127,13 @@ $query->andFilterWhere([
             'LAST_UPDATE' => $this->LAST_UPDATE,
             'post_date_original' => $this->post_date_original,
             'plan_qty' => $this->plan_qty,
-            'plan_date' => $this->plan_date,
             'plan_balance' => $this->plan_balance,
             'slip_count' => $this->slip_count,
             'ext_dandori_status' => $this->ext_dandori_status,
         ]);
 
         $query->andFilterWhere(['like', 'lot_id', $this->lot_id])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),plan_date,120)', $this->plan_date])
             ->andFilterWhere(['like', 'child_analyst', $this->child_analyst])
             ->andFilterWhere(['like', 'child_analyst_desc', $this->child_analyst_desc])
             ->andFilterWhere(['like', 'LINE', $this->LINE])

@@ -150,9 +150,76 @@ use app\models\RunningHoursView01;
 use app\models\WipPlanActualReport;
 use app\models\GpsTollRecord;
 use app\models\AvgPowerConsumptionView;
+use app\models\BentolKaryawan;
+use app\models\RfidCarScan;
 
 class DisplayController extends Controller
 {
+    public function actionTolMonthlySummary($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'account_type', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','account_type'], 'required');
+
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t');
+        $model->account_type = 'MANAGER';
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $rfid_car_scan = RfidCarScan::find()
+        ->where([
+            'AND',
+            ['>=', 'post_date', $model->from_date],
+            ['<=', 'post_date', $model->to_date]
+        ])
+        ->all();
+
+        
+        
+        $tmp_karyawan = BentolKaryawan::find()
+        ->where(['status_karyawan' => $model->account_type])
+        ->andWhere(['<>', 'nik_karyawan', 'YE9909002'])
+        ->orderBy('nama_karyawan')
+        ->all();
+
+        $tmp_data = $tmp_header = [];
+        foreach ($tmp_karyawan as $karyawan) {
+            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+            $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+            for($i = $begin; $i <= $end; $i->modify('+1 day')){
+                $tgl = $i->format("Y-m-d");
+                if (!in_array($tgl, $tmp_header)) {
+                    $tmp_header[] = $tgl;
+                }
+                $tmp_in = $tmp_out = null;
+                foreach ($rfid_car_scan as $car_scan) {
+                    if ($karyawan->nik_karyawan == $car_scan->nik && $tgl == $car_scan->post_date) {
+                        $tmp_in = date('H:i', strtotime($car_scan->in_datetime));
+                        $tmp_out = date('H:i', strtotime($car_scan->out_datetime));
+                    }
+                }
+                $tmp_data[$karyawan->nik_karyawan]['name'] = $karyawan->nama_karyawan;
+                $tmp_data[$karyawan->nik_karyawan]['data'][$tgl] = [
+                    'in' => $tmp_in,
+                    'out' => $tmp_out
+                ];
+            }
+        }
+
+        return $this->render('tol-monthly-summary', [
+            'model' => $model,
+            'tmp_data' => $tmp_data,
+            'tmp_header' => $tmp_header,
+        ]);
+    }
+
     public function actionGetWipBalanceAcc($post_date = '', $location = '')
     {
         $location_desc = \Yii::$app->params['wip_location_arr'][$location];
@@ -258,8 +325,8 @@ class DisplayController extends Controller
         ]);
         $model->addRule(['from_date', 'to_date','map_no'], 'required');
 
-        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
-        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $model->from_date = date('Y-m-01 00:00:00', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t 23:59:59', strtotime(date('Y-m-d')));
 
         if ($model->load($_GET)) {
 
@@ -271,29 +338,30 @@ class DisplayController extends Controller
         ])
         ->all();
 
-        $avg_data = [];
+        $log_data = [];
         foreach ($power_consumption_current as $key => $value) {
-            $tmp_avg = AvgPowerConsumptionView::find()
+            $tmp_log = SensorLog::find()
             ->where([
                 'AND',
-                ['>=', 'post_date', $model->from_date],
-                ['<=', 'post_date', $model->to_date]
+                ['>=', 'system_date_time', $model->from_date],
+                ['<=', 'system_date_time', $model->to_date]
             ])
             ->andWhere([
                 'map_no' => $value->map_no
             ])
-            ->orderBy('post_date')
+            ->andWhere(['>=', 'kw', 0])
+            ->orderBy('system_date_time')
             ->all();
 
             $tmp_data = [];
-            foreach ($tmp_avg as $value2) {
-                $post_date = (strtotime($value2->post_date . " +7 hours") * 1000);
+            foreach ($tmp_log as $value2) {
+                $post_date = (strtotime($value2->system_date_time . " +7 hours") * 1000);
                 $tmp_data[] = [
                     'x' => $post_date,
-                    'y' => round($value2->avg_power_consumption),
+                    'y' => round($value2->kw),
                 ];
             }
-            $avg_data[$value->map_no] = [
+            $log_data[$value->map_no] = [
                 [
                     'name' => $value->area,
                     'data' => $tmp_data,
@@ -304,7 +372,7 @@ class DisplayController extends Controller
         return $this->render('power-consumption-dashboard', [
             'model' => $model,
             'power_consumption_current' => $power_consumption_current,
-            'avg_data' => $avg_data,
+            'log_data' => $log_data,
         ]);
     }
 

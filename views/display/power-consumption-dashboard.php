@@ -237,12 +237,13 @@ echo '</pre>';*/
                                         'fontFamily' => 'sans-serif',
                                     ],
                                     'marginRight' => 10,
+                                    'zoomType' => 'x'
                                 ],
                                 'time' => [
                                     'useUTC' => false
                                 ],
                                 'title' => [
-                                    'text' => 'Average Power',
+                                    'text' => null,
                                     'style' => [
                                         'color' => 'white'
                                     ],
@@ -264,6 +265,7 @@ echo '</pre>';*/
                                     'tickPixelInterval' => 150,
                                     'lineWidth' => 1,
                                     'gridLineColor' => '#1b1b1b',
+
                                     // 'plotLines' => [
                                     //     'color' => '#FF0000'
                                     // ],
@@ -308,7 +310,7 @@ echo '</pre>';*/
                                     ],
                                     
                                 ],
-                                'series' => $avg_data[$current->map_no]
+                                'series' => $log_data[$current->map_no]
                             ],
                         ]);
                         ?>
