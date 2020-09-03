@@ -38,6 +38,7 @@ use Yii;
  * @property string $child_analyst_desc
  * @property string $child
  * @property string $child_desc
+ * @property string $fa_line
  * @property string $replied_by_id
  * @property string $replied_by_name
  * @property string $closed_by_id
@@ -76,9 +77,17 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['case_no', 'period', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'line_pic', 'cause', 'countermeasure', 'filename1', 'closed_by', 'deleted_by', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'child_analyst_desc', 'child', 'child_desc', 'replied_by_id', 'replied_by_name', 'closed_by_id', 'closed_by_name', 'deleted_by_id', 'deleted_by_name', 'reject_remark', 'reject_answer', 'rank_category'], 'string'],
             [['event_date', 'due_date', 'input_datetime', 'reply_datetime', 'close_datetime', 'delete_datetime'], 'safe'],
-            [['status', 'flag'], 'integer']
+            [['description', 'cause', 'countermeasure', 'reject_remark', 'reject_answer'], 'string'],
+            [['status', 'flag'], 'integer'],
+            [['case_no'], 'string', 'max' => 20],
+            [['period'], 'string', 'max' => 7],
+            [['category', 'inspector_id', 'CC_ID', 'child', 'replied_by_id', 'closed_by_id', 'deleted_by_id'], 'string', 'max' => 10],
+            [['problem', 'deleted_by', 'child_desc', 'replied_by_name', 'closed_by_name', 'deleted_by_name'], 'string', 'max' => 200],
+            [['inspector_name'], 'string', 'max' => 150],
+            [['line_pic', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'fa_line'], 'string', 'max' => 50],
+            [['filename1', 'closed_by', 'child_analyst_desc'], 'string', 'max' => 100],
+            [['rank_category'], 'string', 'max' => 1]
         ];
     }
 
@@ -110,13 +119,14 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             'filename1' => 'Filename1',
             'closed_by' => 'Closed By',
             'deleted_by' => 'Deleted By',
-            'CC_ID' => 'Cc  ID',
-            'CC_GROUP' => 'Cc  Group',
-            'CC_DESC' => 'Cc  Desc',
+            'CC_ID' => 'Cc ID',
+            'CC_GROUP' => 'Cc Group',
+            'CC_DESC' => 'Cc Desc',
             'child_analyst' => 'Child Analyst',
             'child_analyst_desc' => 'Child Analyst Desc',
             'child' => 'Child',
             'child_desc' => 'Child Desc',
+            'fa_line' => 'Fa Line',
             'replied_by_id' => 'Replied By ID',
             'replied_by_name' => 'Replied By Name',
             'closed_by_id' => 'Closed By ID',

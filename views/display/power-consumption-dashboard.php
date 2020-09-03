@@ -140,7 +140,7 @@ echo '</pre>';*/
                                                     series.update(jsondata.power_consumption);
                                                     //alert(series.data);
                                                 });
-                                            }, 3000);}"),
+                                            }, 10000);}"),
                                     ],
                                 ],
                                 'title' => null,
@@ -285,9 +285,9 @@ echo '</pre>';*/
                                         ]
                                     ],
                                     'allowDecimals' => false,
-                                    'max' => 1500,
+                                    //'max' => 1500,
                                     'min' => 0,
-                                    'tickInterval' => 20
+                                    //'tickInterval' => 20
                                 ],
                                 /*'tooltip' => [
                                     'headerFormat' => '<b>{series.name}</b><br/>',
@@ -356,7 +356,7 @@ echo '</pre>';*/
                                         
                                         //alert(series.data);
                                     });
-                                }, 3000);}"),
+                                }, 10000);}"),
                         ],
                     ],
                     'title' => null,

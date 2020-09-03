@@ -20,7 +20,7 @@ public function rules()
 {
 return [
 [['id', 'status', 'flag'], 'integer'],
-            [['period', 'event_date', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child', 'child_desc', 'child_analyst', 'due_date', 'reject_remark', 'reject_answer', 'case_no', 'rank_category'], 'safe'],
+            [['period', 'event_date', 'category', 'problem', 'description', 'inspector_id', 'inspector_name', 'cause', 'countermeasure', 'input_datetime', 'close_datetime', 'line_pic', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'child', 'child_desc', 'child_analyst', 'due_date', 'reject_remark', 'reject_answer', 'case_no', 'rank_category', 'fa_line'], 'safe'],
 ];
 }
 
@@ -83,6 +83,7 @@ $query->andFilterWhere([
             'child' => $this->child,
             'child_analyst' => $this->child_analyst,
             'due_date' => $this->due_date,
+            'fa_line' => $this->fa_line,
             'rank_category' => $this->rank_category,
         ]);
 
