@@ -91,7 +91,7 @@ $css_string = "
     .text-red {color: #ff7564 !important;}
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
-    //#summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
+    #summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .accumulation > td {
         background: #454B52 !important;
     }
@@ -130,7 +130,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['power-consumption-dashboard']),
+    'action' => Url::to(['tol-monthly-summary']),
 ]); ?>
 
 <div class="row" style="">
@@ -149,6 +149,12 @@ echo '</pre>';*/
                 'autoclose' => true,
             ]
         ]);?>
+    </div>
+    <div class="col-md-2">
+        <?= $form->field($model, 'account_type')->dropDownList([
+            'MANAGER' => 'MANAGER',
+            'COORDINATOR' => 'NON-MANAGER',
+        ]); ?>
     </div>
     <div class="form-group">
         <br/>

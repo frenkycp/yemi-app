@@ -198,11 +198,11 @@ class DisplayController extends Controller
                 if (!in_array($tgl, $tmp_header)) {
                     $tmp_header[] = $tgl;
                 }
-                $tmp_in = $tmp_out = null;
+                $tmp_in = $tmp_out = '-';
                 foreach ($rfid_car_scan as $car_scan) {
                     if ($karyawan->nik_karyawan == $car_scan->nik && $tgl == $car_scan->post_date) {
-                        $tmp_in = date('H:i', strtotime($car_scan->in_datetime));
-                        $tmp_out = date('H:i', strtotime($car_scan->out_datetime));
+                        $tmp_in = $car_scan->in_datetime == null ? '-' : date('H:i', strtotime($car_scan->in_datetime));
+                        $tmp_out = $car_scan->out_datetime == null ? '-' : date('H:i', strtotime($car_scan->out_datetime));
                     }
                 }
                 $tmp_data[$karyawan->nik_karyawan]['name'] = $karyawan->nama_karyawan;
