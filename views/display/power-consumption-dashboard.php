@@ -106,9 +106,11 @@ echo '</pre>';*/
     <div class="col-md-9">
         <?php foreach ($power_consumption_current as $current):
             $total_kwh += $current->kw;
+            $tmp_title = str_replace('ELECTRIC ROOM ', '', $current->area);
+            $tmp_title = str_replace(' (KWH)', '', $tmp_title);
             ?>
             <div class="chart-header">
-                <span><?= str_replace('ELECTRIC ROOM ', '', $current->area); ?></span>
+                <span>KWH</span>
             </div>
             <div class="chart-content">
                 <div class="row">
@@ -176,11 +178,12 @@ echo '</pre>';*/
                                     'minorTickInterval' => null,
                                     'tickAmount' => 2,
                                     'title' => [
-                                        'text' => 'Power Consumption',
+                                        'text' => $tmp_title,
                                         'y' => -75,
                                         'style' => [
                                             'color' => 'white',
-                                            'letter-spacing' => '2px'
+                                            'letter-spacing' => '1px',
+                                            'fontSize' => '20px'
                                         ]
                                     ],
                                     'labels' => [
@@ -243,9 +246,10 @@ echo '</pre>';*/
                                     'useUTC' => false
                                 ],
                                 'title' => [
-                                    'text' => null,
+                                    'text' => 'Power Consumption',
                                     'style' => [
-                                        'color' => 'white'
+                                        'color' => 'white',
+                                        'fontSize' => '14px'
                                     ],
                                 ],
                                 'accessibility' => [
@@ -321,7 +325,7 @@ echo '</pre>';*/
     </div>
     <div class="col-md-3">
         <div class="chart-header">
-            <span>Total kwh</span>
+            <span>Total KWH</span>
         </div>
         <div class="chart-content">
             <?=

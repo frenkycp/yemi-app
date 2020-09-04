@@ -213,6 +213,17 @@ $columns = [
             'style' => 'min-width: 70px; font-size: 11px; text-align: center;',
         ],
     ],
+    [
+        'attribute' => 'fa_line',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\SernoMaster::find()->select('line')->where(['<>', 'line', ''])->andWhere(['<>', 'line', 'MIS'])->groupBy('line')->orderBy('line')->all(), 'line', 'line'),
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'min-width: 70px; font-size: 11px; text-align: center;',
+        ],
+    ],
     /*[
         'attribute' => 'color',
         'hAlign' => 'center',

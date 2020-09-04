@@ -94,6 +94,16 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		    'section_arr' => $this->getSectionArr(),
 		]);
 	}
+
+	public function getGmcLine($gmc = '')
+	{
+		$tmp_gmc = SernoMaster::find()->where(['gmc' => $gmc])->one();
+		if ($tmp_gmc && $tmp_gmc->line != '') {
+			return $tmp_gmc->line;
+		} else {
+			return null;
+		}
+	}
     
 	public function actionCreate()
 	{
@@ -114,6 +124,7 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 				$total_case++;
 				$case_number = 'QA-P-' . str_pad($total_case, 6, '0', STR_PAD_LEFT);
 				$model->case_no = $case_number;
+				$model->fa_line = $this->getGmcLine($model->child);
 				//$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
 				//$model->CC_ID = $section->CC_ID;
 				//$model->CC_GROUP = $section->CC_GROUP;
@@ -168,6 +179,7 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
 		if ($model->load($_POST)) {
 			$model->period = date('Ym', strtotime($model->event_date));
 			$model->line_pic = strtoupper($model->line_pic);
+			$model->fa_line = $this->getGmcLine($model->child);
 			//$section = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
 			//$model->CC_ID = $section->CC_ID;
 			//$model->CC_GROUP = $section->CC_GROUP;

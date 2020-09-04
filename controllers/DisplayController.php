@@ -152,6 +152,7 @@ use app\models\GpsTollRecord;
 use app\models\AvgPowerConsumptionView;
 use app\models\BentolKaryawan;
 use app\models\RfidCarScan;
+use app\models\AirCompressorDailyView;
 
 class DisplayController extends Controller
 {
@@ -314,6 +315,100 @@ class DisplayController extends Controller
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 
+    public function actionAirCompressorData($map_no)
+    {
+        $sensor_data = SensorTbl::find()->where(['map_no' => $map_no])->one();
+
+        $data = [
+            'pressure' => $sensor_data->pressure,
+        ];
+        
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function actionAirCompressorDaily($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $map_no_arr = [
+            [49, 50, 51, 52],
+            [53, 54]
+        ];
+        $map_no_arr_all = [49, 50, 51, 52, 53, 54];
+        $area_name_arr = [
+            49 => '',
+            50 => '',
+            51 => '',
+            52 => '',
+            53 => '',
+            54 => ''
+        ];
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_air_compressor_1 = SensorTbl::find()->where(['map_no' => 47])->one();
+        $tmp_air_compressor_2 = SensorTbl::find()->where(['map_no' => 48])->one();
+
+        $data = [
+            [
+                'title' => 'Factory #1',
+                'map_no' => 47,
+                'pressure' => $tmp_air_compressor_1->pressure,
+            ],
+            [
+                'title' => 'Factory #2, #2.5',
+                'map_no' => 48,
+                'pressure' => $tmp_air_compressor_2->pressure,
+            ],
+        ];
+
+        $tmp_log = AirCompressorDailyView::find()
+        ->where([
+            'AND',
+            ['>=', 'post_date', $model->from_date],
+            ['<=', 'post_date', $model->to_date]
+        ])
+        ->andWhere([
+            'map_no' => $map_no_arr_all
+        ])
+        ->orderBy('map_no, post_date')
+        ->all();
+
+        foreach ($map_no_arr as $key => $value) {
+            foreach ($value as $value2) {
+                $data[$key]['data'][$value2] = [];
+                foreach ($tmp_log as $log) {
+                    if ($area_name_arr[$log->map_no] == '') {
+                        $area_name_arr[$log->map_no] = str_replace(' (Run. Hours)', '', $log->area);
+                    }
+                    if ($log->map_no == $value2) {
+                        $post_date = (strtotime($log->post_date . " +7 hours") * 1000);
+                        $data[$key]['data'][$value2][] = [
+                            'x' => $post_date,
+                            'y' => $log->running_hour,
+                        ];
+                    }
+                }
+            }
+        }
+
+        return $this->render('air-compressor-daily', [
+            'model' => $model,
+            'data' => $data,
+            'area_name_arr' => $area_name_arr,
+        ]);
+    }
+
     public function actionPowerConsumptionDashboard($value='')
     {
         $this->layout = 'clean';
@@ -321,12 +416,12 @@ class DisplayController extends Controller
         $map_no_arr = [44, 45, 46];
 
         $model = new \yii\base\DynamicModel([
-            'map_no', 'from_date', 'to_date'
+            'from_date', 'to_date'
         ]);
-        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+        $model->addRule(['from_date', 'to_date'], 'required');
 
-        $model->from_date = date('Y-m-01 00:00:00', strtotime(date('Y-m-d')));
-        $model->to_date = date('Y-m-t 23:59:59', strtotime(date('Y-m-d')));
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t');
 
         if ($model->load($_GET)) {
 
@@ -343,8 +438,8 @@ class DisplayController extends Controller
             $tmp_log = SensorLog::find()
             ->where([
                 'AND',
-                ['>=', 'system_date_time', $model->from_date],
-                ['<=', 'system_date_time', $model->to_date]
+                ['>=', 'system_date_time', $model->from_date . ' 00:00:00'],
+                ['<=', 'system_date_time', $model->to_date . ' 23:59:59']
             ])
             ->andWhere([
                 'map_no' => $value->map_no
@@ -355,7 +450,7 @@ class DisplayController extends Controller
 
             $tmp_data = [];
             foreach ($tmp_log as $value2) {
-                $post_date = (strtotime($value2->system_date_time . " +7 hours") * 1000);
+                $post_date = (strtotime($value2->system_date_time) * 1000);
                 $tmp_data[] = [
                     'x' => $post_date,
                     'y' => round($value2->kw),
