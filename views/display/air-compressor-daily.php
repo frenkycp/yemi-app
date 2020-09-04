@@ -172,7 +172,7 @@ echo '</pre>';*/
                             //'minorTickInterval' => null,
                             //'tickAmount' => 2,
                             'title' => [
-                                'text' => 'Air Pressure',
+                                'text' => 'Running Hour(s)',
                                 'y' => -75,
                                 'style' => [
                                     'color' => 'white',
@@ -311,7 +311,7 @@ echo '</pre>';*/
                             ],
                             'series' => [
                                 [
-                                    'name' => 'Air Pressure',
+                                    'name' => 'Running Hour(s)',
                                     'data' => $map_data_arr
                                 ],
                             ],
