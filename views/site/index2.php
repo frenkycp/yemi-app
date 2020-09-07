@@ -433,6 +433,7 @@ $this->registerCss("
                             <p>Plant Maintenance <span class="japanesse-word">(工場保全管理)</span></p>
                             <ol style="padding-left: 1em">
                                 <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
+                                <li><?= Html::a('Monthly Corrective (Total Hours)<span class="japanesse-word"></span>', ['/display/monthly-total-corrective']); ?></li>
                                 <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
                                 <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
                                 <li><?= Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
