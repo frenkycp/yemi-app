@@ -153,9 +153,104 @@ use app\models\AvgPowerConsumptionView;
 use app\models\BentolKaryawan;
 use app\models\RfidCarScan;
 use app\models\AirCompressorDailyView;
+use app\models\PcStockTakingTbl;
+use app\models\MachineCorrectiveView01;
 
 class DisplayController extends Controller
 {
+    public function actionMonthlyTotalCorrective($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        /*if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }*/
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_corrective_arr = MachineCorrectiveView01::find()
+        ->select([
+            'period',
+            'total_seconds' => 'SUM(total_seconds)'
+        ])
+        ->where(['period' => $period_arr])
+        ->groupBy('period')
+        ->orderBy('period')
+        ->all();
+
+        $tmp_data = $data = $categories = [];
+        foreach ($tmp_corrective_arr as $key => $value) {
+            $categories[] = date('M\' Y', strtotime($value->period . '01'));
+            $tmp_data[] = [
+                'y' => round(($value->total_seconds / 3600))
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'Total Hour(s)',
+                'data' => $tmp_data
+            ],
+        ];
+
+        return $this->render('monthly-total-corrective', [
+            'data' => $data,
+            'model' => $model,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function actionPcMonthlyStockTake()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym', strtotime('-1 month'));
+
+        $period_dropdown_arr = ArrayHelper::map(PcStockTakingTbl::find()->select('period')->groupBy('period')->orderBy('period')->all(), 'period', 'period');
+
+        if ($model->load($_GET)) {
+
+        }
+
+
+
+        return $this->render('pc-monthly-stock-take', [
+            'model' => $model,
+            'data' => $data,
+            'period_dropdown_arr' => $period_dropdown_arr,
+        ]);
+    }
+
     public function actionTolMonthlySummary($value='')
     {
         $this->layout = 'clean';
