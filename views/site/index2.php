@@ -445,6 +445,8 @@ $this->registerCss("
                                 <li><?= Html::a('Temperature Over (Total Frequency) <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
                                 <li><?= Html::a('Critical Control Room <span class="japanesse-word">音湿度の管理</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
                                 <li><?= Html::a('Temperature & Humidity Monitoring (All Area)<br/><span class="japanesse">温湿度データ　(全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
+                                <li><?= Html::a('Power Consumption Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
+                                <li><?= Html::a('Air Pressure Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
                             </ol>
                         </div>
 
