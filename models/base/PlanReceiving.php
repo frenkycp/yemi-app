@@ -30,6 +30,7 @@ use yii\behaviors\BlameableBehavior;
  * @property integer $last_modified_by
  * @property string $deleted_date
  * @property integer $deleted_by
+ * @property string $bl_no
  * @property integer $flag
  * @property integer $created_by
  * @property string $aliasModel
@@ -79,7 +80,8 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
             [['receiving_date', 'eta_yemi_date', 'cut_off_date', 'etd_port_date', 'eta_port_date', 'unloading_time', 'completed_time', 'created_date', 'last_modified_date', 'deleted_date'], 'safe'],
             [['vendor_name', 'vehicle'], 'string', 'max' => 50],
             [['item_type', 'container_no'], 'string', 'max' => 20],
-            [['month_periode'], 'string', 'max' => 7]
+            [['month_periode'], 'string', 'max' => 7],
+            [['bl_no'], 'string', 'max' => 255]
         ];
     }
 
@@ -110,6 +112,7 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
             'last_modified_by' => 'Last Modified By',
             'deleted_date' => 'Deleted Date',
             'deleted_by' => 'Deleted By',
+            'bl_no' => 'Bl No',
             'flag' => 'Flag',
         ];
     }

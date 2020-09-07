@@ -233,6 +233,16 @@ $columns = [
         ],
     ],
     [
+        'attribute' => 'bl_no',
+        'label' => 'BL No.',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'created_date',
         'label' => 'Created Date',
         'vAlign' => 'middle',

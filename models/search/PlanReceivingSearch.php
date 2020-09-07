@@ -19,7 +19,7 @@ class PlanReceivingSearch extends PlanReceiving
     {
         return [
             [['id', 'flag'], 'integer'],
-            [['vendor_name', 'vehicle', 'item_type', 'receiving_date', 'month_periode', 'container_no', 'urgent_status', 'eta_yemi_date', 'cut_off_date', 'eta_port_date', 'etd_port_date'], 'safe'],
+            [['vendor_name', 'vehicle', 'item_type', 'receiving_date', 'month_periode', 'container_no', 'urgent_status', 'eta_yemi_date', 'cut_off_date', 'eta_port_date', 'etd_port_date', 'bl_no'], 'safe'],
         ];
     }
 
@@ -69,6 +69,7 @@ class PlanReceivingSearch extends PlanReceiving
 
         $query->andFilterWhere(['like', 'vendor_name', $this->vendor_name])
             ->andFilterWhere(['like', 'vehicle', $this->vehicle])
+            ->andFilterWhere(['like', 'bl_no', $this->bl_no])
             ->andFilterWhere(['like', 'receiving_date', $this->receiving_date])
             ->andFilterWhere(['like', 'eta_yemi_date', $this->eta_yemi_date])
             ->andFilterWhere(['like', 'cut_off_date', $this->cut_off_date])

@@ -81,6 +81,8 @@ $unit_list = ArrayHelper::map(ItemUnit::find()->where(['flag' => 1])->orderBy('n
                         ]
                     ]); ?>
 
+                    <?= $form->field($model, 'bl_no')->textInput(['maxlength' => true])->label('BL No.') ?>
+
                     <?= ''; $form->field($model, 'unloading_time')->widget(TimePicker::classname(), [
                         'value'=> null,
                         'pluginOptions' => [
