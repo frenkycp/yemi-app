@@ -172,12 +172,12 @@ echo '</pre>';*/
                             //'minorTickInterval' => null,
                             //'tickAmount' => 2,
                             'title' => [
-                                'text' => 'Running Hour(s)',
+                                'text' => 'Air Pressure',
                                 'y' => -75,
                                 'style' => [
                                     'color' => 'white',
                                     'letter-spacing' => '1px',
-                                    'fontSize' => '20px'
+                                    'fontSize' => '18px'
                                 ]
                             ],
                             'labels' => [
