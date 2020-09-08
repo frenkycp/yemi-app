@@ -86,6 +86,16 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'shift_trip',
+        'label' => 'Shift',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            //'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'account_type',
         'value' => function($model){
             if ($model->account_type == 'COORDINATOR') {
@@ -198,12 +208,28 @@ $gridColumns = [
     [
         'attribute' => 'in_datetime',
         'value' => function($model){
+            if ($model->shift_trip == 3) {
+                $tmp_rfid_scan = app\models\RfidCarScan::find()->where([
+                    'post_date' => date('Y-m-d', strtotime($model->post_date . ' -1 day')),
+                    'nik' => $model->emp_id
+                ])->one();
+                
+                if ($tmp_rfid_scan->out_datetime == null) {
+                    if ($tmp_rfid_scan->in_datetime != null) {
+                        return date('Y-m-d H:i', strtotime($tmp_rfid_scan->in_datetime));
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return date('Y-m-d H:i', strtotime($tmp_rfid_scan->out_datetime));
+                }
+            }
             $tmp_rfid_scan = app\models\RfidCarScan::find()->where([
                 'post_date' => $model->post_date,
                 'nik' => $model->emp_id
             ])->one();
             if ($tmp_rfid_scan->in_datetime != null) {
-                return date('H:i', strtotime($tmp_rfid_scan->in_datetime));
+                return date('Y-m-d H:i', strtotime($tmp_rfid_scan->in_datetime));
             } else {
                 return null;
             }
@@ -222,11 +248,20 @@ $gridColumns = [
                 'post_date' => $model->post_date,
                 'nik' => $model->emp_id
             ])->one();
-            if ($tmp_rfid_scan->out_datetime != null) {
-                return date('H:i', strtotime($tmp_rfid_scan->out_datetime));
+            if ($model->shift_trip == 3) {
+                if ($tmp_rfid_scan->in_datetime != null) {
+                    return date('Y-m-d H:i', strtotime($tmp_rfid_scan->in_datetime));
+                } else {
+                    return null;
+                }
             } else {
-                return null;
+                if ($tmp_rfid_scan->out_datetime != null) {
+                    return date('Y-m-d H:i', strtotime($tmp_rfid_scan->out_datetime));
+                } else {
+                    return null;
+                }
             }
+            
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',
