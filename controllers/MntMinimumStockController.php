@@ -5,8 +5,12 @@ namespace app\controllers;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use app\models\MinimumStockView02;
+use app\models\MinimumStockView03;
 use yii\web\Response;
 use yii\helpers\Json;
+use app\models\search\MntMinimumStockSearch;
+use dmstr\bootstrap\Tabs;
+use yii\web\JsExpression;
 
 /**
 * This is the class for controller "MntMinimumStockController".
@@ -18,6 +22,46 @@ class MntMinimumStockController extends \app\controllers\base\MntMinimumStockCon
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
+
+    public function actionIndex()
+	{
+	    $searchModel  = new MntMinimumStockSearch;
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		$tmp_stock = MinimumStockView03::find()->select([
+			'ONHAND_STATUS', 'ONHAND_STATUS_DESC',
+			'total_item' => 'COUNT(ITEM)'
+		])->groupBy('ONHAND_STATUS, ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all();
+
+		$tmp_data = $data = [];
+		$color_index_arr = ['#dd4b39', '#e5f312', '#f39c12', '#00a65a'];
+
+		foreach ($tmp_stock as $key => $value) {
+			$tmp_data[] = [
+				'name' => $value->ONHAND_STATUS_DESC,
+				'y' => (int)$value->total_item,
+				'color' => $color_index_arr[$key],
+			];
+		}
+
+		$data = [
+			[
+				'name' => 'Progress Percentage',
+				'data' => $tmp_data
+			]
+		];
+
+		return $this->render('index', [
+			'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		    'data' => $data,
+		]);
+	}
 
     public function actionGetImagePreview($urutan)
 	{

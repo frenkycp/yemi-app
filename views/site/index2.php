@@ -442,22 +442,22 @@ $this->registerCss("
                                 <br/>
                                 <li style="font-weight: bold;">Map Control</li>
                                 <ol style="padding-left: 1em">
-                                    <li><?= Html::a('Temperature <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
-                                    <li><?= Html::a('Humidity <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
-                                    <li><?= Html::a('Noise <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
-                                    <li><?= Html::a('Air Pressure <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=5']); ?></li>
-                                    <li><?= Html::a('Power Consumption <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
+                                    <li><?= Html::a('Temperature <span class="japanesse-word">温度</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
+                                    <li><?= Html::a('Humidity <span class="japanesse-word">湿度</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
+                                    <li><?= Html::a('Noise <span class="japanesse-word">雑音</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
+                                    <li><?= Html::a('Air Pressure <span class="japanesse-word">圧縮気</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=5']); ?></li>
+                                    <li><?= Html::a('Power Consumption <span class="japanesse-word">電気消費量</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
                                 </ol>
                                 <li style="font-weight: bold;">Abnormal Control</li>
                                 <ol style="padding-left: 1em">
-                                    <li><?= Html::a('Critical Control Room <span class="japanesse-word">音湿度の管理</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
-                                    <li><?= Html::a('Temperature Over (Total Frequency) <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
+                                    <li><?= Html::a('Critical Control Room <span class="japanesse-word">温湿度管理(重要職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
+                                    <li><?= Html::a('Abnormal Temperature <span class="japanesse-word">異常温度</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
                                 </ol>
                                 <li style="font-weight: bold;">Dashboard</li>
                                 <ol style="padding-left: 1em;">
-                                    <li><?= Html::a('Power Consumption <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
-                                    <li><?= Html::a('Air Pressure <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
-                                    <li><?= Html::a('Temperature & Humidity <span class="japanesse">温湿度データ　(全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
+                                    <li><?= Html::a('Power Consumption <span class="japanesse-word">電気消費量</span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
+                                    <li><?= Html::a('Air Pressure <span class="japanesse-word">圧縮気</span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
+                                    <li><?= Html::a('Temperature & Humidity <span class="japanesse">温湿度管理 (全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
                                 </ol>
                             </ol>
                             <!-- <ol style="padding-left: 1em" style="display: none;">

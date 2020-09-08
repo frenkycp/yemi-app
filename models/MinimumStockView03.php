@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MinimumStockView03 extends BaseMinimumStockView03
 {
-    public $budget, $req_qty;
+    public $budget, $req_qty, $total_item;
     
     public function behaviors()
     {

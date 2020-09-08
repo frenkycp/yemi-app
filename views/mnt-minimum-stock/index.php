@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
+use miloschuman\highcharts\Highcharts;
 
 /**
 * @var yii\web\View $this
@@ -367,6 +368,71 @@ $this->registerJs("$(document).ready(function() {
 ?>
 
 <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">Summary</h3>
+            </div>
+            <div class="panel-body no-padding">
+                <?php
+                echo Highcharts::widget([
+                    'scripts' => [
+                        //'modules/exporting',
+                        //'themes/sand-signika',
+                        //'themes/grid-light',
+                    ],
+                    'options' => [
+                        'chart' => [
+                            'type' => 'pie',
+                            'style' => [
+                                'fontFamily' => 'sans-serif',
+                            ],
+                            'plotBackgroundColor' => null,
+                            'plotBorderWidth' => null,
+                            'plotShadow' => false,
+                            'height' => 400,
+                        ],
+                        'title' => [
+                            'text' => null
+                        ],
+                        'credits' => [
+                            'enabled' =>false
+                        ],
+                        'tooltip' => [
+                            'pointFormat' => '{series.name}: <b>{point.percentage:.0f}% ({point.y} Part(s))</b>',
+                        ],
+                        'plotOptions' => [
+                            'pie' => [
+                                // 'allowPointSelect' => true,
+                                // 'cursor' => 'pointer',
+                                'dataLabels' => [
+                                    'enabled' => true,
+                                    'format' => '<b>{point.name}</b>: {point.percentage:.0f}% ({point.y} Part(s))'
+                                ],
+                            ],
+                            /*'series' => [
+                                'cursor' => 'pointer',
+                                'point' => [
+                                    'events' => [
+                                        'click' => new JsExpression("
+                                            function(e){
+                                                e.preventDefault();
+                                                $('#modal').modal('show').find('.modal-body').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                            }
+                                        "),
+                                    ]
+                                ]
+                            ],*/
+                        ],
+                        'series' => $data
+                    ],
+                ]);
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="giiant-crud minimum-stock-index">
     <div class="">
