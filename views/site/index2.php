@@ -442,11 +442,11 @@ $this->registerCss("
                                 <br/>
                                 <li style="font-weight: bold;">Map Control</li>
                                 <ol style="padding-left: 1em">
-                                    <li><?= Html::a('Temperature Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
-                                    <li><?= Html::a('Humidity Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
-                                    <li><?= Html::a('Noise Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
-                                    <li><?= Html::a('Air Pressure Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=5']); ?></li>
-                                    <li><?= Html::a('Power Consumption Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
+                                    <li><?= Html::a('Temperature <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
+                                    <li><?= Html::a('Humidity <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
+                                    <li><?= Html::a('Noise <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
+                                    <li><?= Html::a('Air Pressure <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=5']); ?></li>
+                                    <li><?= Html::a('Power Consumption <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
                                 </ol>
                                 <li style="font-weight: bold;">Abnormal Control</li>
                                 <ol style="padding-left: 1em">
@@ -455,9 +455,9 @@ $this->registerCss("
                                 </ol>
                                 <li style="font-weight: bold;">Dashboard</li>
                                 <ol style="padding-left: 1em;">
-                                    <li><?= Html::a('Power Consumption Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
-                                    <li><?= Html::a('Air Pressure Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
-                                    <li><?= Html::a('Temperature & Humidity Monitoring (All Area)<br/><span class="japanesse">温湿度データ　(全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
+                                    <li><?= Html::a('Power Consumption <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
+                                    <li><?= Html::a('Air Pressure <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
+                                    <li><?= Html::a('Temperature & Humidity <span class="japanesse">温湿度データ　(全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
                                 </ol>
                             </ol>
                             <!-- <ol style="padding-left: 1em" style="display: none;">
