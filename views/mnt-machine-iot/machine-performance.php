@@ -86,8 +86,8 @@ $this->registerJs("
 <span style="color: white">Last Update : <span id="last-update"><?= date('Y-m-d H:i:s'); ?></span></span>
 <div style="width: 100%; display: table;">
 	<div style="display: table-cell; padding: 15px;">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="panel panel-primary">
+			<div class="panel-heading text-center">
 				<h3 class="panel-title">INJECTION</h3>
 			</div>
 			<div class="panel-body">
@@ -100,8 +100,8 @@ $this->registerJs("
 		</div>
 	</div>
 	<div style="display: table-cell; padding: 15px;">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="panel panel-primary">
+			<div class="panel-heading text-center">
 				<h3 class="panel-title">REAKTOR</h3>
 			</div>
 			<div class="panel-body">
@@ -112,8 +112,8 @@ $this->registerJs("
 				<?php endforeach ?>
 			</div>
 		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="panel panel-primary">
+			<div class="panel-heading text-center">
 				<h3 class="panel-title">QA CHAMBER</h3>
 			</div>
 			<div class="panel-body">
@@ -126,8 +126,8 @@ $this->registerJs("
 		</div>
 	</div>
 	<div style="display: table-cell; padding: 15px;">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="panel panel-primary">
+			<div class="panel-heading text-center">
 				<h3 class="panel-title">WW END</h3>
 			</div>
 			<div class="panel-body">
@@ -140,8 +140,8 @@ $this->registerJs("
 		</div>
 	</div>
 	<div style="display: table-cell; padding: 15px;">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="panel panel-primary">
+			<div class="panel-heading text-center">
 				<h3 class="panel-title">WW MIDDLE</h3>
 			</div>
 			<div class="panel-body">
@@ -154,8 +154,8 @@ $this->registerJs("
 		</div>
 	</div>
 	<div style="display: table-cell; padding: 15px;">
-		<div class="panel panel-default">
-			<div class="panel-heading">
+		<div class="panel panel-primary">
+			<div class="panel-heading text-center">
 				<h3 class="panel-title">WW FRONT</h3>
 			</div>
 			<div class="panel-body">
