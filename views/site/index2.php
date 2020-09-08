@@ -433,15 +433,14 @@ $this->registerCss("
                             <p><b>Plant Maintenance <span class="japanesse-word">(工場保全管理)</span></b></p>
                             <ol style="padding-left: 1em" type="A">
                                 <li style="font-weight: bold;">Maintenance Management</li>
-                                <ol style="padding-left: 1em">
+                                <ol style="padding-left: 1em; margin-bottom: 5px;">
                                     <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
                                     <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
                                     <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
                                     <li><?= Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
                                 </ol>
-                                <br/>
                                 <li style="font-weight: bold;">Map Control</li>
-                                <ol style="padding-left: 1em">
+                                <ol style="padding-left: 1em; margin-bottom: 5px;">
                                     <li><?= Html::a('Temperature <span class="japanesse-word">温度</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
                                     <li><?= Html::a('Humidity <span class="japanesse-word">湿度</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
                                     <li><?= Html::a('Noise <span class="japanesse-word">雑音</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
@@ -449,15 +448,25 @@ $this->registerCss("
                                     <li><?= Html::a('Power Consumption <span class="japanesse-word">電気消費量</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
                                 </ol>
                                 <li style="font-weight: bold;">Abnormal Control</li>
-                                <ol style="padding-left: 1em">
+                                <ol style="padding-left: 1em; margin-bottom: 5px;">
                                     <li><?= Html::a('Critical Control Room <span class="japanesse-word">温湿度管理(重要職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
                                     <li><?= Html::a('Abnormal Temperature <span class="japanesse-word">異常温度</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
                                 </ol>
                                 <li style="font-weight: bold;">Dashboard</li>
-                                <ol style="padding-left: 1em;">
+                                <ol style="padding-left: 1em; margin-bottom: 5px;;">
                                     <li><?= Html::a('Power Consumption <span class="japanesse-word">電気消費量</span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
                                     <li><?= Html::a('Air Pressure <span class="japanesse-word">圧縮気</span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
                                     <li><?= Html::a('Temperature & Humidity <span class="japanesse">温湿度管理 (全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
+                                    <li><?= Html::a('Machine Operation Status (Currently) <span class="text-red"><b>*IoT</b></span><br/><span class="japanesse">設備稼働状況 (現状)</span>', ['/mnt-machine-iot/machine-performance']); ?></li>
+                                    <li><?= Html::a('Machine Operation Status (Hourly) <span class="text-red"><b>*IoT</b></span><br/><span class="japanesse">設備稼働状況 (一時間単位)</span>', ['/mnt-kwh-report']); ?></li>
+                                    <li><?= Html::a('Machine Operation Status (Long Range) <span class="text-red"><b>*IoT</b></span><br/><span class="japanesse">設備稼働状況 (期間単位)</span>', ['/display/machine-status-range']); ?></li>
+                                </ol>
+                                <li style="font-weight: bold;">Office Support</li>
+                                <ol style="padding-left: 1em; margin-bottom: 5px;;">
+                                    <li><?= Html::a('PABX Data Management <span class="japanesse-word">通話履歴データ</span>', ['/pabx-log']); ?></li>
+                                    <li><?= Html::a('PABX Daily Usage <span class="japanesse-word">日常通話管理</span>', ['/display/pabx-daily-usage']); ?></li>
+                                    <li><?= Html::a('Copy Machine Data Management <span class="japanesse-word">コピー機使用履歴データ</span>', ['/xerox-log']); ?></li>
+                                    <li><?= Html::a('Copy Machine Daily usage <span class="japanesse-word">日常コピー利用状況管理</span>', ['/display/printer-monthly-usage']); ?></li>
                                 </ol>
                             </ol>
                             <!-- <ol style="padding-left: 1em" style="display: none;">

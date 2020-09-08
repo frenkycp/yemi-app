@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
 */
 
 $this->title = [
-    'page_title' => 'IoT Production Machine Performance <span class="japanesse text-green"></span>',
+    'page_title' => 'IoT Production Machine Performance <span class="japanesse light-green">(生産設備稼働状況)</span>',
     'tab_title' => 'IoT Production Machine Performance',
     'breadcrumbs_title' => 'IoT Production Machine Performance'
 ];
@@ -27,6 +27,8 @@ $this->registerCss("
 	.container {width: auto;}
 	.content-header>h1 {font-size: 3em; text-align: center;}
 	body {background-color: #000;}
+	.panel-body {background-color: black;}
+	.btn {margin-bottom: 10px;}
 ");
 
 date_default_timezone_set('Asia/Jakarta');
@@ -45,7 +47,9 @@ $this->registerJs("
 	        success: function(data){
 		    	//alert(data[0].mesin_id);
 		    	var content = '';
-		        $.each(data , function(index, val) {
+		    	//alert(data['last_update']);
+		    	$('#last-update').html(data['last_update']);
+		        $.each(data['data'] , function(index, val) {
 		        	var background_color = 'white';
 		        	var color = 'white';
 		        	if(val.status_warna == 'KUNING'){
@@ -79,20 +83,104 @@ $this->registerJs("
 	});
 ");
 ?>
-
+<span style="color: white">Last Update : <span id="last-update"><?= date('Y-m-d H:i:s'); ?></span></span>
+<div style="width: 100%; display: table;">
+	<div style="display: table-cell; padding: 15px;">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">INJECTION</h3>
+			</div>
+			<div class="panel-body">
+				<?php foreach ($group_arr[0] as $key => $value): ?>
+					<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $key; ?>">
+						<?= $key . ' | ' . $value; ?>
+					</button>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
+	<div style="display: table-cell; padding: 15px;">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">REAKTOR</h3>
+			</div>
+			<div class="panel-body">
+				<?php foreach ($group_arr[1] as $key => $value): ?>
+					<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $key; ?>">
+						<?= $key . ' | ' . $value; ?>
+					</button>
+				<?php endforeach ?>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">QA CHAMBER</h3>
+			</div>
+			<div class="panel-body">
+				<?php foreach ($group_arr[5] as $key => $value): ?>
+					<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $key; ?>">
+						<?= $key . ' | ' . $value; ?>
+					</button>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
+	<div style="display: table-cell; padding: 15px;">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">WW END</h3>
+			</div>
+			<div class="panel-body">
+				<?php foreach ($group_arr[2] as $key => $value): ?>
+					<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $key; ?>">
+						<?= $key . ' | ' . $value; ?>
+					</button>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
+	<div style="display: table-cell; padding: 15px;">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">WW MIDDLE</h3>
+			</div>
+			<div class="panel-body">
+				<?php foreach ($group_arr[3] as $key => $value): ?>
+					<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $key; ?>">
+						<?= $key . ' | ' . $value; ?>
+					</button>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
+	<div style="display: table-cell; padding: 15px;">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">WW FRONT</h3>
+			</div>
+			<div class="panel-body">
+				<?php foreach ($group_arr[4] as $key => $value): ?>
+					<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $key; ?>">
+						<?= $key . ' | ' . $value; ?>
+					</button>
+				<?php endforeach ?>
+			</div>
+		</div>
+	</div>
+</div>
 <div>
 	<div class="row">
 		
-		<?php
-		foreach ($data as $key => $value) {
+		<!-- <?php
+		//foreach ($data as $key => $value) {
 			?>
 			<div class="col-md-6" style="padding: 3px;">
-				<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= $value->mesin_id; ?>">
-					<?= $value->mesin_description . ' - ' . $value->mesin_id; ?>
+				<button type="button" class="btn btn-default btn-block" style="font-size: 20px;" id="<?= ''; //$value->mesin_id; ?>">
+					<?= ''; //$value->mesin_description . ' - ' . $value->mesin_id; ?>
 				</button>
 			</div>
-		<?php }
-		?>
+		<?php //}
+		?> -->
 		
 	</div>
 </div>
