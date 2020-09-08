@@ -430,25 +430,54 @@ $this->registerCss("
                     <div class="panel-heading text-center">Production Support Monitoring<br/><span class="japanesse-word">生産支援モニタリング</span></div>
                     <div class="list-group">
                         <div class="list-group-item">
-                            <p>Plant Maintenance <span class="japanesse-word">(工場保全管理)</span></p>
-                            <ol style="padding-left: 1em">
-                                <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
-                                <li><?= Html::a('Monthly Corrective (Total Hours)<span class="japanesse-word"></span>', ['/display/monthly-total-corrective']); ?></li>
-                                <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
-                                <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
-                                <li><?= Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
-                                <li><?= Html::a('Temperature Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
-                                <li><?= Html::a('Humidity Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
-                                <li><?= Html::a('Noise Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
-                                <li><?= Html::a('Power Consumption Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
-                                <li><?= Html::a('Air Pressure Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=5']); ?></li>
-                                <li><?= Html::a('Temperature & Humidity Data <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-tbl-display']); ?></li>
-                                <li><?= Html::a('Temperature Over (Total Frequency) <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
-                                <li><?= Html::a('Critical Control Room <span class="japanesse-word">音湿度の管理</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
-                                <li><?= Html::a('Temperature & Humidity Monitoring (All Area)<br/><span class="japanesse">温湿度データ　(全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
-                                <li><?= Html::a('Power Consumption Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
-                                <li><?= Html::a('Air Pressure Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
+                            <p><b>Plant Maintenance <span class="japanesse-word">(工場保全管理)</span></b></p>
+                            <ol style="padding-left: 1em" type="A">
+                                <li style="font-weight: bold;">Maintenance Management</li>
+                                <ol style="padding-left: 1em">
+                                    <li><?= Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
+                                    <li><?= Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
+                                    <li><?= Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
+                                    <li><?= Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
+                                </ol>
+                                <br/>
+                                <li style="font-weight: bold;">Map Control</li>
+                                <ol style="padding-left: 1em">
+                                    <li><?= Html::a('Temperature Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
+                                    <li><?= Html::a('Humidity Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
+                                    <li><?= Html::a('Noise Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
+                                    <li><?= Html::a('Air Pressure Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=5']); ?></li>
+                                    <li><?= Html::a('Power Consumption Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
+                                </ol>
+                                <li style="font-weight: bold;">Abnormal Control</li>
+                                <ol style="padding-left: 1em">
+                                    <li><?= Html::a('Critical Control Room <span class="japanesse-word">音湿度の管理</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
+                                    <li><?= Html::a('Temperature Over (Total Frequency) <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
+                                </ol>
+                                <li style="font-weight: bold;">Dashboard</li>
+                                <ol style="padding-left: 1em;">
+                                    <li><?= Html::a('Power Consumption Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
+                                    <li><?= Html::a('Air Pressure Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
+                                    <li><?= Html::a('Temperature & Humidity Monitoring (All Area)<br/><span class="japanesse">温湿度データ　(全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
+                                </ol>
                             </ol>
+                            <!-- <ol style="padding-left: 1em" style="display: none;">
+                                <li><?= ''; //Html::a('Weekly Corrective <span class="japanesse-word">(週次修繕)</span>', ['/ng-report/index']); ?></li>
+                                <li><?= ''; //Html::a('Monthly Corrective (Total Hours)<span class="japanesse-word"></span>', ['/display/monthly-total-corrective']); ?></li>
+                                <li><?= ''; //Html::a('Weekly Preventive <span class="japanesse-word">(週次予防保全)</span>', ['/masterplan-report/index']); ?></li>
+                                <li><?= ''; //Html::a('Corrective Progress <span class="japanesse-word">(修理中設備の進捗)</span>', ['/mnt-progress/index']); ?></li>
+                                <li><?= ''; //Html::a('Maintenance Spareparts <span class="japanesse-word">(スペアパーツ）</span>', ['/mnt-minimum-stock/index']); ?></li>
+                                <li><?= ''; //Html::a('Temperature Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=1']); ?></li>
+                                <li><?= ''; //Html::a('Humidity Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=2']); ?></li>
+                                <li><?= ''; //Html::a('Noise Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
+                                <li><?= ''; //Html::a('Power Consumption Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
+                                <li><?= ''; //Html::a('Air Pressure Monitoring <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=5']); ?></li>
+                                <li><?= ''; //Html::a('Temperature & Humidity Data <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-tbl-display']); ?></li>
+                                <li><?= ''; //Html::a('Temperature Over (Total Frequency) <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
+                                <li><?= ''; //Html::a('Critical Control Room <span class="japanesse-word">音湿度の管理</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
+                                <li><?= ''; //Html::a('Temperature & Humidity Monitoring (All Area)<br/><span class="japanesse">温湿度データ　(全職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/sensor-log']); ?></li>
+                                <li><?= ''; //Html::a('Power Consumption Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/power-consumption-dashboard']); ?></li>
+                                <li><?= ''; //Html::a('Air Pressure Dashboard <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display/air-compressor-daily']); ?></li>
+                            </ol> -->
                         </div>
 
                         <div class="list-group-item">
