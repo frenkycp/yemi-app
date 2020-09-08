@@ -113,6 +113,9 @@ $this->registerJs("$(document).ready(function() {
 					<th class="text-center">Pick Qty</th>
 					<th class="text-center">Req. Qty</th>
 					<th class="text-center">Status</th>
+					<th class="text-center">Scan by ID</th>
+					<th class="">Scan by Name</th>
+					<th class="text-center">Scan Datetime</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -149,6 +152,9 @@ $this->registerJs("$(document).ready(function() {
 							<td class="text-center"><?= $value->compl_qty; ?></td>
 							<td class="text-center"><?= $value->req_qty; ?></td>
 							<td class="text-center"><?= $value->hand_scan == 'Y' ? 'CLOSE' : 'OPEN'; ?></td>
+							<td class="text-center"><?= $value->hand_scan_user; ?></td>
+							<td class=""><?= $value->hand_scan_desc; ?></td>
+							<td class="text-center"><?= $value->hand_scan_datetime == null ? '-' : date('Y-m-d H:i', strtotime($value->hand_scan_datetime)); ?></td>
 						</tr>
 					<?php endforeach ?>
 				<?php }
