@@ -52,15 +52,15 @@ $this->registerJs("
 		        $.each(data['data'] , function(index, val) {
 		        	var background_color = 'white';
 		        	var color = 'white';
-		        	if(val.status_warna == 'KUNING'){
+		        	if(val.status_warna == 'Yellow'){
 		        		//background_color = 'yellow';
 		        		color = 'black';
 		        		background_color = 'yellow';
-		        	} else if (val.status_warna == 'HIJAU') {
+		        	} else if (val.status_warna == 'Green') {
 		        		background_color = 'green';
-		        	} else if (val.status_warna == 'BIRU') {
+		        	} else if (val.status_warna == 'Blue') {
 		        		background_color = 'blue';
-		        	} else if (val.status_warna == 'MERAH') {
+		        	} else if (val.status_warna == 'Red') {
 		        		background_color = 'red';
 		        	}
 

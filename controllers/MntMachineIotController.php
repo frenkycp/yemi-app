@@ -10,7 +10,7 @@ class MntMachineIotController extends Controller
 	public function actionCurrentStatus()
 	{
 		date_default_timezone_set('Asia/Jakarta');
-		$tmp_data = MachineIotCurrent::find()->where(['is_iot' => 'Y'])->orderBy('mesin_description')->asArray()->all();
+		$tmp_data = MachineIotCurrentMnt::find()->orderBy('mesin_description')->asArray()->all();
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$data = [
 			'last_update' => date('Y-m-d H:i:s'),
@@ -72,7 +72,7 @@ class MntMachineIotController extends Controller
 			],
 			[
 				'MNT00252' => 'QACBR-1',
-				'MNT00252' => 'QACBR-2',
+				'MNT00253' => 'QACBR-2',
 				'MNT00254' => 'QACBR-3'
 			],
 		];

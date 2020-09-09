@@ -198,11 +198,11 @@ echo '</pre>';*/
     </div>
 </div>
 
-<div class="box box-primary box-solid">
+<!-- <div class="box box-primary box-solid">
     <div class="box-body">
         <div class="col-md-12">
             <?php
-            echo Highcharts::widget([
+            echo ''; /*Highcharts::widget([
                 'scripts' => [
                     //'modules/exporting',
                     //'themes/grid-light',
@@ -252,10 +252,10 @@ echo '</pre>';*/
                     ],
                     'series' => $data_power_consumption,
                 ],
-            ]);
+            ]);*/
 
             ?>
         </div>
         
     </div>
-</div>
+</div> -->
