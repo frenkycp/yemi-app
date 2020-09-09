@@ -225,32 +225,6 @@ class DisplayController extends Controller
         ]);
     }
 
-    public function actionPcMonthlyStockTake()
-    {
-        $this->layout = 'clean';
-        date_default_timezone_set('Asia/Jakarta');
-
-        $model = new \yii\base\DynamicModel([
-            'period'
-        ]);
-        $model->addRule(['period'], 'required');
-        $model->period = date('Ym', strtotime('-1 month'));
-
-        $period_dropdown_arr = ArrayHelper::map(PcStockTakingTbl::find()->select('period')->groupBy('period')->orderBy('period')->all(), 'period', 'period');
-
-        if ($model->load($_GET)) {
-
-        }
-
-
-
-        return $this->render('pc-monthly-stock-take', [
-            'model' => $model,
-            'data' => $data,
-            'period_dropdown_arr' => $period_dropdown_arr,
-        ]);
-    }
-
     public function actionTolMonthlySummary($value='')
     {
         $this->layout = 'clean';

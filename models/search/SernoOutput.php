@@ -145,6 +145,7 @@ $query->andFilterWhere([
         $query->andFilterWhere(['like', 'pk', $this->pk])
             ->andFilterWhere(['like', 'stc', $this->stc])
             ->andFilterWhere(['like', 'etd', $this->etd])
+            ->andFilterWhere(['like', 'vms', $this->vms])
             ->andFilterWhere(['like', 'etd_old', $this->etd_old])
             ->andFilterWhere(['like', 'tb_serno_master.model', $this->description])
             ->andFilterWhere(['like', 'category', $this->category])
