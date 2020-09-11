@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class PcPiVariance extends BasePcPiVariance
 {
-    public $total;
+    public $total_open, $total_close;
 
     public function behaviors()
     {

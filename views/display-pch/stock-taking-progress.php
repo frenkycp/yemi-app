@@ -124,6 +124,10 @@ $total_kwh = 0;
 /*echo '<pre>';
 print_r($data);
 echo '</pre>';*/
+
+/*echo '<pre>';
+print_r($data2);
+echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 
@@ -157,7 +161,7 @@ echo '</pre>';*/
                 'highcharts-more',
                 //'modules/exporting',
                 //'themes/sand-signika',
-                'modules/solid-gauge',
+                //'modules/solid-gauge',
                 //'themes/dark-unica',
                 //'themes/grid-light',
             ],
@@ -166,17 +170,17 @@ echo '</pre>';*/
                     'type' => 'waterfall',
                 ],
                 'title' => null,
-                'exporting' => [
+                /*'exporting' => [
                     'enabled' =>false
-                ],
-                'legend' => [
+                ],*/
+                /*'legend' => [
                     'enabled' =>false
-                ],
+                ],*/
                 'credits' => [
                     'enabled' =>false
                 ],
                 'xAxis' => [
-                    'type' => 'datetime'
+                    'categories' => $categories_arr,
                 ],
                 'yAxis' => [
                     'title' => [
@@ -185,9 +189,14 @@ echo '</pre>';*/
                     'min' => 0,
                     'max' => 100,
                 ],
-                'tooltip' => [
-                    'pointFormat' => '{point.category_label} : {point.y}%'
-                ],
+                /*'tooltip' => [
+                    'pointFormat' => '{point.category_label} : {point.qty} item(s)'
+                ],*/
+                /*'plotOptions' => [
+                    'series' => [
+                        'stacking' => 'normal'
+                    ],
+                ],*/
                 'series' => $data,
             ],
         ]);

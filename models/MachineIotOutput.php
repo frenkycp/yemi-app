@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MachineIotOutput extends BaseMachineIotOutput
 {
+    public $child_analyst;
 
     public function behaviors()
     {

@@ -166,6 +166,14 @@ return [
         'WW04' => 'VACUUM PRESS',
         'WW02' => 'WW PROCESS',
     ],
+    'iot_location_arr' => [
+        'WI02' => 'INJ LARGE',
+        'WI03' => 'INJ MEDIUM',
+        'WI01' => 'INJ SMALL',
+        'WP01' => 'PAINTING',
+        'WU01' => 'SPEAKER PROJECT',
+        'WW02' => 'WW PROCESS',
+    ],
     'ng_found_dropdown' => [
         'AVMT' => 'AVMT',
         'FA' => 'FA',

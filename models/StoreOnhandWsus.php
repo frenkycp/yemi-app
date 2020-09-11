@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class StoreOnhandWsus extends BaseStoreOnhandWsus
 {
+    public $total_open, $total_close;
 
     public function behaviors()
     {
