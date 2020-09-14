@@ -1220,7 +1220,9 @@ class DisplayController extends Controller
             'product_actual' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN ACTUAL_QTY ELSE 0 END)'
         ])
         ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
-        ->andWhere(['FORMAT(VMS_DATE, \'yyyyMM\')' => $yesterday_period])
+        ->andWhere(['VMS_PERIOD' => $yesterday_period])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
         /*$tmp_yesterday = VmsPlanActual::find()
@@ -2374,7 +2376,9 @@ class DisplayController extends Controller
             'product_actual' => 'SUM(CASE WHEN FG_KD = \'PRODUCT\' THEN ACTUAL_QTY ELSE 0 END)'
         ])
         ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
-        ->andWhere(['FORMAT(VMS_DATE, \'yyyyMM\')' => $yesterday_period])
+        ->andWhere(['VMS_PERIOD' => $yesterday_period])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
         /*$tmp_yesterday = VmsPlanActual::find()
@@ -3222,12 +3226,16 @@ class DisplayController extends Controller
         foreach ($tmp_gmc_arr as $key => $tmp_gmc) {
             foreach ($period_arr as $period) {
                 if (!isset($tmp_data_arr[$key][$period])) {
-                    $tmp_data_arr[$key][$period]['percentage'] = '';
+                    $tmp_data_arr[$key][$period]['percentage'] = 0;
+                    $tmp_data_arr[$key][$period]['plan_qty'] = 0;
+                    $tmp_data_arr[$key][$period]['actual_qty'] = 0;
                 }
             }
             ksort($tmp_data_arr[$key]);
         }
-
+        /*echo '<pre>';
+print_r($tmp_data_arr);
+echo '</pre>';*/
         $actual_by_period = $plan_by_period = $price_by_period = $price_by_period_plan = [];
         foreach ($tmp_data_arr as $key => $value) {
             $total_actual = $value['total_actual'];
@@ -4843,8 +4851,15 @@ class DisplayController extends Controller
 
         if ($model->load($_GET)) {
             $lot_number = $model->lot_number;
-            $tmp_beacon = BeaconTbl::find()->where(['lot_number' => $model->lot_number])->one();
+            
             $wet = WipEffTbl::find()->where(['lot_id' => $lot_number])->one();
+            if (!$wet) {
+                \Yii::$app->session->setFlash('warning', 'Lot number not found on database...!');
+                return $this->render('fix-lot-stuck', [
+                    'model' => $model,
+                ]);
+            }
+            $tmp_beacon = BeaconTbl::find()->where(['lot_number' => $model->lot_number])->one();
             if ($model->next_process == 'END') {
                 if ($tmp_beacon) {
                     if ($tmp_beacon->analyst != $wet->child_analyst) {

@@ -302,7 +302,7 @@ echo '</pre>';*/
                 </tr>
                 <tr>
                     <td style="background-color: #454B52;" class="label-tbl text-right">FG</td>
-                    <td class="text-right<?= $yesterday_data['kd_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['product_balance']); ?> <span style="font-size: 0.2em; color: white;"> SET</span></td>
+                    <td class="text-right<?= $yesterday_data['product_balance'] < 0 ? ' text-red' : ''; ?>"><?= number_format($yesterday_data['product_balance']); ?> <span style="font-size: 0.2em; color: white;"> SET</span></td>
                 </tr>
             </tbody>
         </table>
