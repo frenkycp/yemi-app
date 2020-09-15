@@ -11,9 +11,276 @@ use dmstr\bootstrap\Tabs;
 
 use app\models\PcPiVariance;
 use app\models\StoreOnhandWsus;
+use app\models\StorePiItem;
+use app\models\StorePiItemLog;
 
 class DisplayPchController extends Controller
 {
+    public function actionMonthlyStockTake($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $drilldown = [];
+        
+
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+
+        $period_dropdown_arr = ArrayHelper::map(StorePiItem::find()->select('PI_PERIOD')->where('PI_PERIOD IS NOT NULL')->groupBy('PI_PERIOD')->orderBy('PI_PERIOD DESC')->all(), 'PI_PERIOD', 'PI_PERIOD');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_result_arr = StorePiItem::find()
+        ->select([
+            'total_open' => 'SUM(CASE WHEN PI_STAGE = 0 THEN 1 ELSE 0 END)',
+            'total1' => 'SUM(CASE WHEN PI_STAGE = 1 THEN 1 ELSE 0 END)',
+            'total2' => 'SUM(CASE WHEN PI_STAGE = 2 THEN 1 ELSE 0 END)',
+            'total3' => 'SUM(CASE WHEN PI_STAGE = 3 THEN 1 ELSE 0 END)',
+            'total4' => 'SUM(CASE WHEN PI_STAGE = 4 THEN 1 ELSE 0 END)',
+            'total_all' => 'COUNT(*)',
+        ])
+        ->where([
+            'SLIP_STAT' => 'USED',
+            'PI_PERIOD' => $model->period
+        ])
+        ->andWhere('PI_STAGE IS NOT NULL')
+        ->one();
+
+        $total_all_slip = $tmp_result_arr->total_all;
+        $status_arr = [
+            0 => [
+                'label' => 'OPEN',
+                'color' => '#FF0000',
+            ],
+            1 => [
+                'label' => 'COUNT 1',
+                'color' => '#12A712',
+            ],
+            2 => [
+                'label' => 'COUNT 2',
+                'color' => '#58CE58',
+            ],
+            3 => [
+                'label' => 'AUDIT 1',
+                'color' => '#0E7E7E',
+            ],
+            4 => [
+                'label' => 'AUDIT 2',
+                'color' => '#439C9C',
+            ],
+        ];
+
+        $data = [
+            [
+                'name' => $status_arr[1]['label'],
+                'data' => [
+                    [
+                        'name' => 'Completion',
+                        'y' => (int)$tmp_result_arr->total1,
+                        'drilldown' => $status_arr[1]['label'],
+                        
+                    ],
+                ],
+                'color' => $status_arr[1]['color'],
+            ],
+            [
+                'name' => $status_arr[2]['label'],
+                'data' => [
+                    [
+                        'name' => 'Completion',
+                        'y' => (int)$tmp_result_arr->total2,
+                        'drilldown' => $status_arr[2]['label'],
+                        
+                    ],
+                ],
+                'color' => $status_arr[2]['color'],
+            ],
+            [
+                'name' => $status_arr[3]['label'],
+                'data' => [
+                    [
+                        'name' => 'Completion',
+                        'y' => (int)$tmp_result_arr->total3,
+                        'drilldown' => $status_arr[3]['label'],
+                        
+                    ],
+                ],
+                'color' => $status_arr[3]['color'],
+            ],
+            [
+                'name' => $status_arr[4]['label'],
+                'data' => [
+                    [
+                        'name' => 'Completion',
+                        'y' => (int)$tmp_result_arr->total4,
+                        'drilldown' => $status_arr[4]['label'],
+                        
+                    ],
+                ],
+                'color' => $status_arr[4]['color'],
+            ],
+            [
+                'name' => $status_arr[0]['label'],
+                'data' => [
+                    [
+                        'name' => 'Completion',
+                        'y' => (int)$tmp_result_arr->total_open,
+                        'drilldown' => $status_arr[0]['label'],
+                        
+                    ],
+                ],
+                'color' => $status_arr[0]['color'],
+            ],
+        ];
+
+        $pic_arr = StorePiItem::find()
+        ->select('PIC')
+        ->where([
+            'SLIP_STAT' => 'USED',
+            'PI_PERIOD' => $model->period,
+        ])
+        ->andWhere(['<>', 'PIC', '-'])
+        ->groupBy('PIC')
+        ->orderBy('PIC')
+        ->all();
+
+        foreach ($status_arr as $key => $status) {
+            $tmp_data = [];
+            $tmp_drilldown_open = StorePiItem::find()->select([
+                'PIC', 'total' => 'COUNT(*)'
+            ])
+            ->where([
+                'SLIP_STAT' => 'USED',
+                'PI_PERIOD' => $model->period,
+                'PI_STAGE' => $key
+            ])
+            ->andWhere(['<>', 'PIC', '-'])
+            ->groupBy('PIC')->orderBy('PIC')->all();
+
+            foreach ($pic_arr as $pic) {
+                $tmp_total_value = 0;
+                foreach ($tmp_drilldown_open as $value) {
+                    if ($pic->PIC == $value->PIC) {
+                        $tmp_total_value = $value->total;
+                    }
+                }
+                $tmp_data[] = [
+                    $pic->PIC, (int)$tmp_total_value
+                ];
+            }
+            
+            $drilldown[] = [
+                'id' => $status,
+                'name' => $status,
+                'data' => $tmp_data
+            ];
+        }
+
+        $start_date = date('Y-m-01', strtotime($model->period . '01'));
+        $end_date = date('Y-m-t', strtotime($model->period . '01'));
+        $today = date('Y-m-d');
+        /*if ($today < $end_date) {
+            $end_date = $today;
+        }*/
+
+        $begin = new \DateTime(date('Y-m-d', strtotime($start_date)));
+        $end   = new \DateTime(date('Y-m-d', strtotime($end_date)));
+        
+        $log_1 = StorePiItemLog::find()
+        ->select([
+            'PI_COUNT_01_LAST_UPDATE' => 'FORMAT(PI_COUNT_01_LAST_UPDATE, \'yyyy-MM-dd\')',
+            'total_slip' => 'COUNT(*)'
+        ])
+        ->where([
+            'SLIP_STAT' => 'USED',
+            'PI_MISTAKE' => 'N'
+        ])
+        ->groupBy('PI_COUNT_01_LAST_UPDATE')
+        ->all();
+
+        $log_2 = StorePiItemLog::find()
+        ->select([
+            'PI_COUNT_02_LAST_UPDATE' => 'FORMAT(PI_COUNT_02_LAST_UPDATE, \'yyyy-MM-dd\')',
+            'total_slip' => 'COUNT(*)'
+        ])
+        ->where([
+            'SLIP_STAT' => 'USED',
+            'PI_MISTAKE' => 'N'
+        ])
+        ->groupBy('PI_COUNT_02_LAST_UPDATE')
+        ->all();
+
+        $tmp_data1 = $tmp_data2 = [];
+        $tmp_total_slip1 = $tmp_total_slip2 = 0;
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){
+            $tgl = $i->format("Y-m-d");
+            $post_date = (strtotime($tgl . " +7 hours") * 1000);
+            $tmp_pct1 = $tmp_pct2 = 0;
+
+            foreach ($log_1 as $key => $value) {
+                if ($tgl == $value->PI_COUNT_01_LAST_UPDATE) {
+                    $tmp_total_slip1 += $value->total_slip;
+                }
+            }
+
+            foreach ($log_2 as $key => $value) {
+                if ($tgl == $value->PI_COUNT_02_LAST_UPDATE) {
+                    $tmp_total_slip2 += $value->total_slip;
+                }
+            }
+
+            if ($total_all_slip > 0) {
+                $tmp_pct1 = round(($tmp_total_slip1 / $total_all_slip) * 100, 1);
+                $tmp_pct2 = round(($tmp_total_slip2 / $total_all_slip) * 100, 1);
+            }
+
+            if ($tgl > $today) {
+                $tmp_pct1 = $tmp_pct2 = null;
+            }
+
+            $tmp_data1[] = [
+                'x' => $post_date,
+                'y' => $tmp_pct1
+            ];
+
+            $tmp_data2[] = [
+                'x' => $post_date,
+                'y' => $tmp_pct2
+            ];
+        }
+
+        $data2 = [
+            [
+                'name' => $status_arr[1]['label'],
+                'data' => $tmp_data1,
+                'color' => $status_arr[1]['color']
+            ],
+            [
+                'name' => $status_arr[2]['label'],
+                'data' => $tmp_data2,
+                'color' => $status_arr[2]['color']
+            ],
+        ];
+
+        return $this->render('monthly-stock-take', [
+            'model' => $model,
+            'data' => $data,
+            'data2' => $data2,
+            'drilldown' => $drilldown,
+            'period_dropdown_arr' => $period_dropdown_arr,
+        ]);
+    }
+
+    public function getMonthlyStockTakeDrilldown($value='')
+    {
+        # code...
+    }
+
 	public function actionStockTakingProgress($value='')
 	{
 		$this->layout = 'clean';
