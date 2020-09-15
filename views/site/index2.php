@@ -271,6 +271,9 @@ $this->registerCss("
                         <?= Html::a('Machine IoT Output Data (Detail) <span class="text-red"><b>*IoT</b></span>', ['machine-iot-output-dtr/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
+                        <?= Html::a('Beacon Data Record <span class="text-red"><b>*IoT</b></span>', ['machine-iot-output/index'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
                         <?= Html::a('Wood Working Lot Waiting Next Process <span class="text-red"><b>*IoT</b></span> - <b>Beacon</b>', ['display/ww-lot-waiting'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>

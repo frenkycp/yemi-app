@@ -174,6 +174,13 @@ return [
         'WU01' => 'SPEAKER PROJECT',
         'WW02' => 'WW PROCESS',
     ],
+    'ng_rate_location_arr' => [
+        'INJ' => 'INJECTION',
+        'WP01' => 'PAINTING',
+        'WM01' => 'PCB MANUAL INS.',
+        'WU01' => 'SPEAKER PROJECT',
+        'WW02' => 'WW PROCESS',
+    ],
     'ng_found_dropdown' => [
         'AVMT' => 'AVMT',
         'FA' => 'FA',
