@@ -59,19 +59,19 @@ class DisplayPchController extends Controller
             ],
             1 => [
                 'label' => 'COUNT 1',
-                'color' => '#12A712',
+                'color' => '#ff7300',
             ],
             2 => [
                 'label' => 'COUNT 2',
-                'color' => '#58CE58',
+                'color' => '#ffff00',
             ],
             3 => [
                 'label' => 'AUDIT 1',
-                'color' => '#0E7E7E',
+                'color' => '#77ff00',
             ],
             4 => [
                 'label' => 'AUDIT 2',
-                'color' => '#439C9C',
+                'color' => '#00ff00',
             ],
         ];
 
@@ -175,8 +175,8 @@ class DisplayPchController extends Controller
             }
             
             $drilldown[] = [
-                'id' => $status,
-                'name' => $status,
+                'id' => $status['label'],
+                'name' => $status['label'],
                 'data' => $tmp_data
             ];
         }
@@ -215,12 +215,36 @@ class DisplayPchController extends Controller
         ->groupBy('PI_COUNT_02_LAST_UPDATE')
         ->all();
 
-        $tmp_data1 = $tmp_data2 = [];
-        $tmp_total_slip1 = $tmp_total_slip2 = 0;
+        $log_3 = StorePiItemLog::find()
+        ->select([
+            'PI_AUDIT_01_LAST_UPDATE' => 'FORMAT(PI_AUDIT_01_LAST_UPDATE, \'yyyy-MM-dd\')',
+            'total_slip' => 'COUNT(*)'
+        ])
+        ->where([
+            'SLIP_STAT' => 'USED',
+            'PI_MISTAKE' => 'N'
+        ])
+        ->groupBy('PI_AUDIT_01_LAST_UPDATE')
+        ->all();
+
+        $log_4 = StorePiItemLog::find()
+        ->select([
+            'PI_AUDIT_02_LAST_UPDATE' => 'FORMAT(PI_AUDIT_02_LAST_UPDATE, \'yyyy-MM-dd\')',
+            'total_slip' => 'COUNT(*)'
+        ])
+        ->where([
+            'SLIP_STAT' => 'USED',
+            'PI_MISTAKE' => 'N'
+        ])
+        ->groupBy('PI_AUDIT_02_LAST_UPDATE')
+        ->all();
+
+        $tmp_data1 = $tmp_data2 = $tmp_data3 = $tmp_data4 = [];
+        $tmp_total_slip1 = $tmp_total_slip2 = $tmp_total_slip3 = $tmp_total_slip4 = 0;
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
             $tgl = $i->format("Y-m-d");
             $post_date = (strtotime($tgl . " +7 hours") * 1000);
-            $tmp_pct1 = $tmp_pct2 = 0;
+            $tmp_pct1 = $tmp_pct2 = $tmp_pct3 = $tmp_pct4 = 0;
 
             foreach ($log_1 as $key => $value) {
                 if ($tgl == $value->PI_COUNT_01_LAST_UPDATE) {
@@ -234,13 +258,27 @@ class DisplayPchController extends Controller
                 }
             }
 
+            foreach ($log_3 as $key => $value) {
+                if ($tgl == $value->PI_AUDIT_01_LAST_UPDATE) {
+                    $tmp_total_slip3 += $value->total_slip;
+                }
+            }
+
+            foreach ($log_4 as $key => $value) {
+                if ($tgl == $value->PI_AUDIT_02_LAST_UPDATE) {
+                    $tmp_total_slip4 += $value->total_slip;
+                }
+            }
+
             if ($total_all_slip > 0) {
                 $tmp_pct1 = round(($tmp_total_slip1 / $total_all_slip) * 100, 1);
                 $tmp_pct2 = round(($tmp_total_slip2 / $total_all_slip) * 100, 1);
+                $tmp_pct3 = round(($tmp_total_slip3 / $total_all_slip) * 100, 1);
+                $tmp_pct4 = round(($tmp_total_slip4 / $total_all_slip) * 100, 1);
             }
 
             if ($tgl > $today) {
-                $tmp_pct1 = $tmp_pct2 = null;
+                $tmp_pct1 = $tmp_pct2 = $tmp_pct3 = $tmp_pct4 = null;
             }
 
             $tmp_data1[] = [
@@ -251,6 +289,16 @@ class DisplayPchController extends Controller
             $tmp_data2[] = [
                 'x' => $post_date,
                 'y' => $tmp_pct2
+            ];
+
+            $tmp_data3[] = [
+                'x' => $post_date,
+                'y' => $tmp_pct3
+            ];
+
+            $tmp_data4[] = [
+                'x' => $post_date,
+                'y' => $tmp_pct4
             ];
         }
 
@@ -264,6 +312,16 @@ class DisplayPchController extends Controller
                 'name' => $status_arr[2]['label'],
                 'data' => $tmp_data2,
                 'color' => $status_arr[2]['color']
+            ],
+            [
+                'name' => $status_arr[3]['label'],
+                'data' => $tmp_data3,
+                'color' => $status_arr[3]['color']
+            ],
+            [
+                'name' => $status_arr[4]['label'],
+                'data' => $tmp_data4,
+                'color' => $status_arr[4]['color']
             ],
         ];
 

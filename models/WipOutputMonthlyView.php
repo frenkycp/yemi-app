@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\WipPlanActualReport as BaseWipPlanActualReport;
+use \app\models\base\WipOutputMonthlyView as BaseWipOutputMonthlyView;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.WIP_PLAN_ACTUAL_REPORT".
+ * This is the model class for table "db_owner.WIP_OUTPUT_MONTHLY_VIEW".
  */
-class WipPlanActualReport extends BaseWipPlanActualReport
+class WipOutputMonthlyView extends BaseWipOutputMonthlyView
 {
-    public $total_plan, $total_actual, $total_order, $total_created, $total_started, $total_completed, $total_handover, $request_qty, $end_job_period;
 
     public function behaviors()
     {
