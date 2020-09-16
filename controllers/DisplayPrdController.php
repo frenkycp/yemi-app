@@ -18,6 +18,67 @@ use app\models\ProdNgData;
 
 class DisplayPrdController extends Controller
 {
+    public function actionWipNgRateGetRemark($child_analyst, $period, $total_output)
+    {
+        $location = \Yii::$app->params['ng_rate_location_arr'][$child_analyst];
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3><u>' . $location . ' <small>(' . $period . ')</small></u><br/>Total Output : ' . number_format($total_output) . '</h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 12px;">
+            <th class="text-center" style="min-width: 90px;">Date</th>
+            <th class="">Model</th>
+            <th class="text-center">NG Qty</th>
+            <th class="text-center">Root Cause</th>
+            <th class="text-center">NG Category</th>
+            <th class="text-center">NG Category Detail</th>
+            <th class="">Remark</th>
+        </tr>';
+
+        if ($child_analyst == 'INJ') {
+            $child_analyst = ['WU01', 'WU02', 'WU03'];
+        }
+
+        $tmp_ng_arr = ProdNgData::find()
+        ->where([
+            'loc_id' => $child_analyst,
+            'period' => $period,
+            'flag' => 1
+        ])
+        ->orderBy('post_date')
+        ->all();
+
+        $no = 1;
+        foreach ($tmp_ng_arr as $key => $value) {
+            if ($value->part_no == null) {
+                $part_no = $value->part_no;
+                $part_desc = $value->part_desc;
+            } else {
+                $part_no = $value->pcb_id;
+                $part_desc = $value->pcb_name;
+            }
+            $remark .= '<tr style="font-size: 12px;">
+                <td class="text-center">' .$value->post_date . '</td>
+                <td class="">' .$value->gmc_desc . '</td>
+                <td class="text-center">' .$value->ng_qty . '</td>
+                <td class="text-center">' .$value->ng_cause_category . '</td>
+                <td class="text-center">' .$value->ng_category_desc . '</td>
+                <td class="text-center">' .$value->ng_category_detail . '</td>
+                <td class="">' .$value->ng_detail . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
 	public function actionWipNgRate()
     {
         $this->layout = 'clean';
@@ -118,6 +179,7 @@ class DisplayPrdController extends Controller
 
                 $tmp_data[$location_val][] = [
                     'y' => $tmp_pct,
+                    'url' => Url::to(['wip-ng-rate-get-remark', 'child_analyst' => $location_val, 'period' => $period_val, 'total_output' => $tmp_output])
                 ];
                 /*$data[$location_val][$period_val] = [
                     'output' => $tmp_output,

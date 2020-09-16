@@ -49,6 +49,7 @@ class DisplayPchController extends Controller
             'PI_PERIOD' => $model->period
         ])
         ->andWhere('PI_STAGE IS NOT NULL')
+        //->andWhere(['<>', 'PIC', '-'])
         ->one();
 
         $total_all_slip = $tmp_result_arr->total_all;
@@ -144,7 +145,7 @@ class DisplayPchController extends Controller
             'SLIP_STAT' => 'USED',
             'PI_PERIOD' => $model->period,
         ])
-        ->andWhere(['<>', 'PIC', '-'])
+        //->andWhere(['<>', 'PIC', '-'])
         ->groupBy('PIC')
         ->orderBy('PIC')
         ->all();
@@ -159,7 +160,7 @@ class DisplayPchController extends Controller
                 'PI_PERIOD' => $model->period,
                 'PI_STAGE' => $key
             ])
-            ->andWhere(['<>', 'PIC', '-'])
+            //->andWhere(['<>', 'PIC', '-'])
             ->groupBy('PIC')->orderBy('PIC')->all();
 
             foreach ($pic_arr as $pic) {

@@ -155,6 +155,9 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 
 <div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Current Progress (Last Update : <?= date('Y-m-d H:i:s'); ?>)</h3>
+    </div>
     <div class="panel-body">
         <?php
         echo Highcharts::widget([
@@ -214,6 +217,9 @@ echo '</pre>';*/
 </div>
 
 <div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Daily Progress</h3>
+    </div>
     <div class="panel-body">
         <?php
         echo Highcharts::widget([
@@ -241,6 +247,9 @@ echo '</pre>';*/
                     /*'labels' => [
                         'enabled' => false,
                     ],*/
+                ],
+                'tooltip' => [
+                    'valueSuffix' => '%'
                 ],
                 'yAxis' => [
                     'min' => 0,

@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['seq'], 'integer'],
-            [['tanggal', 'ext', 'line', 'nik', 'nama_karyawan', 'departemen', 'jabatan', 'password', 'phone', 'durasi', 'provider_type', 'provider', 'provider_name', 'registered_name', 'note'], 'safe'],
+            [['tanggal', 'ext', 'line', 'nik', 'nama_karyawan', 'departemen', 'jabatan', 'password', 'phone', 'durasi', 'provider_type', 'provider', 'provider_name', 'registered_name', 'note', 'last_update'], 'safe'],
 ];
 }
 
@@ -68,6 +68,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'ext', $this->ext])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),tanggal,120)', $this->tanggal])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),last_update,120)', $this->last_update])
             ->andFilterWhere(['like', 'line', $this->line])
             ->andFilterWhere(['like', 'nik', $this->nik])
             ->andFilterWhere(['like', 'nama_karyawan', $this->nama_karyawan])

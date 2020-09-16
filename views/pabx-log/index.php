@@ -25,12 +25,12 @@ date_default_timezone_set('Asia/Jakarta');
 
 $gridColumns = [
     [
-        'attribute' => 'tanggal',
+        'attribute' => 'last_update',
         'value' => function($model){
-            if ($model->tanggal == null) {
+            if ($model->last_update == null) {
                 return '-';
             } else {
-                return date('Y-m-d H:i', strtotime($model->tanggal));
+                return date('Y-m-d H:i:s', strtotime($model->last_update));
             }
         },
         'hAlign' => 'center',
