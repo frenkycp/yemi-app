@@ -16,6 +16,53 @@ use app\models\StorePiItemLog;
 
 class DisplayPchController extends Controller
 {
+    public function actionMonthlyStockTakeGetRemark($period, $pic)
+    {
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>PIC : ' . $pic . ' <small>(' . $period . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 14px;">
+            <th class="text-center">No.</th>
+            <th class="text-center">Slip No.</th>
+            <th class="text-center" style="min-width: 90px;">Item</th>
+            <th class="">Item Description</th>
+            <th class="text-center">Rack</th>
+            <th class="text-center">Rack Loc.</th>
+        </tr>';
+
+        $tmp_ng_arr = StorePiItem::find()
+        ->where([
+            'SLIP_STAT' => 'USED',
+            'PI_PERIOD' => $period,
+            'PIC' => $pic,
+            'PI_STAGE' => 0
+        ])
+        ->all();
+
+        $no = 1;
+        foreach ($tmp_ng_arr as $key => $value) {
+            $remark .= '<tr style="font-size: 14px;">
+                <td class="text-center">' .$no . '</td>
+                <td class="text-center">' .$value->SLIP . '</td>
+                <td class="text-center">' .$value->ITEM . '</td>
+                <td class="">' .$value->ITEM_DESC . '</td>
+                <td class="text-center">' .$value->RACK . '</td>
+                <td class="text-center">' .$value->RACK_LOC . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
     public function actionMonthlyStockTake($value='')
     {
         $this->layout = 'clean';
@@ -60,7 +107,7 @@ class DisplayPchController extends Controller
             ],
             1 => [
                 'label' => 'COUNT 1',
-                'color' => '#ff7300',
+                'color' => '#00d0fa',
             ],
             2 => [
                 'label' => 'COUNT 2',
@@ -171,15 +218,37 @@ class DisplayPchController extends Controller
                     }
                 }
                 $tmp_data[] = [
-                    $pic->PIC, (int)$tmp_total_value
+                    'name' => $pic->PIC,
+                    'y' => (int)$tmp_total_value,
+                    'url' => Url::to(['monthly-stock-take-get-remark', 'period' => $model->period, 'pic' => $pic->PIC])
                 ];
             }
             
-            $drilldown[] = [
-                'id' => $status['label'],
-                'name' => $status['label'],
-                'data' => $tmp_data
-            ];
+            if ($key == 0) {
+                $drilldown[] = [
+                    'id' => $status['label'],
+                    'name' => $status['label'],
+                    'data' => $tmp_data,
+                    'cursor' => 'pointer',
+                    'point' => [
+                        'events' => [
+                            'click' => new JsExpression("
+                                function(e){
+                                    e.preventDefault();
+                                    $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                }
+                            "),
+                        ]
+                    ]
+                ];
+            } else {
+                $drilldown[] = [
+                    'id' => $status['label'],
+                    'name' => $status['label'],
+                    'data' => $tmp_data,
+                ];
+            }
+            
         }
 
         $start_date = date('Y-m-01', strtotime($model->period . '01'));
