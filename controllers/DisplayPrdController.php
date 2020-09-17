@@ -174,7 +174,7 @@ class DisplayPrdController extends Controller
 
                 $tmp_pct = 0;
                 if ($tmp_output > 0) {
-                    $tmp_pct = round(($tmp_ng / $tmp_output) * 100, 1);
+                    $tmp_pct = round(($tmp_ng / $tmp_output) * 100, 3);
                 }
 
                 $tmp_data[$location_val][] = [
