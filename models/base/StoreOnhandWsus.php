@@ -12,8 +12,31 @@ use Yii;
  * @property string $ITEM
  * @property string $ITEM_DESC
  * @property string $UM
+ * @property double $STD_PRICE
+ * @property double $PI_VALUE
  * @property double $ONHAND_QTY
+ * @property double $PI_VARIANCE
+ * @property double $PI_VARIANCE_ABSOLUTE
+ * @property double $ONHAND_AMT
+ * @property double $PI_VALUE_AMT
+ * @property double $PI_VARIANCE_AMT
+ * @property double $PI_VARIANCE_ABSOLUTE_AMT
+ * @property double $PI_RATE
+ * @property double $PI_COUNT_1
+ * @property double $PI_COUNT_2
+ * @property double $PI_AUDIT_1
+ * @property double $PI_AUDIT_2
+ * @property string $PI_PERIOD
+ * @property string $PI_AUDIT_LAST_UPDATE
+ * @property string $PI_STAT
  * @property string $PI_DUMMY
+ * @property string $model
+ * @property double $LOC_ONHAND_QTY
+ * @property double $BALANCE
+ * @property string $VMS_VERSION
+ * @property string $MAT_CLASS
+ * @property string $category
+ * @property string $dandory_date
  * @property string $aliasModel
  */
 abstract class StoreOnhandWsus extends \yii\db\ActiveRecord
@@ -44,8 +67,15 @@ abstract class StoreOnhandWsus extends \yii\db\ActiveRecord
     {
         return [
             [['ITEM'], 'required'],
-            [['ITEM', 'ITEM_DESC', 'UM', 'PI_DUMMY'], 'string'],
-            [['ONHAND_QTY'], 'number'],
+            [['STD_PRICE', 'PI_VALUE', 'ONHAND_QTY', 'PI_VARIANCE', 'PI_VARIANCE_ABSOLUTE', 'ONHAND_AMT', 'PI_VALUE_AMT', 'PI_VARIANCE_AMT', 'PI_VARIANCE_ABSOLUTE_AMT', 'PI_RATE', 'PI_COUNT_1', 'PI_COUNT_2', 'PI_AUDIT_1', 'PI_AUDIT_2', 'LOC_ONHAND_QTY', 'BALANCE'], 'number'],
+            [['PI_AUDIT_LAST_UPDATE', 'dandory_date'], 'safe'],
+            [['model'], 'string'],
+            [['ITEM'], 'string', 'max' => 13],
+            [['ITEM_DESC', 'VMS_VERSION', 'category'], 'string', 'max' => 50],
+            [['UM'], 'string', 'max' => 5],
+            [['PI_PERIOD'], 'string', 'max' => 6],
+            [['PI_STAT', 'PI_DUMMY'], 'string', 'max' => 1],
+            [['MAT_CLASS'], 'string', 'max' => 4],
             [['ITEM'], 'unique']
         ];
     }
@@ -57,10 +87,33 @@ abstract class StoreOnhandWsus extends \yii\db\ActiveRecord
     {
         return [
             'ITEM' => 'Item',
-            'ITEM_DESC' => 'Item  Desc',
+            'ITEM_DESC' => 'Item Desc',
             'UM' => 'Um',
-            'ONHAND_QTY' => 'Onhand  Qty',
-            'PI_DUMMY' => 'Pi  Dummy',
+            'STD_PRICE' => 'Std Price',
+            'PI_VALUE' => 'Pi Value',
+            'ONHAND_QTY' => 'Onhand Qty',
+            'PI_VARIANCE' => 'Pi Variance',
+            'PI_VARIANCE_ABSOLUTE' => 'Pi Variance Absolute',
+            'ONHAND_AMT' => 'Onhand Amt',
+            'PI_VALUE_AMT' => 'Pi Value Amt',
+            'PI_VARIANCE_AMT' => 'Pi Variance Amt',
+            'PI_VARIANCE_ABSOLUTE_AMT' => 'Pi Variance Absolute Amt',
+            'PI_RATE' => 'Pi Rate',
+            'PI_COUNT_1' => 'Pi Count 1',
+            'PI_COUNT_2' => 'Pi Count 2',
+            'PI_AUDIT_1' => 'Pi Audit 1',
+            'PI_AUDIT_2' => 'Pi Audit 2',
+            'PI_PERIOD' => 'Pi Period',
+            'PI_AUDIT_LAST_UPDATE' => 'Pi Audit Last Update',
+            'PI_STAT' => 'Pi Stat',
+            'PI_DUMMY' => 'Pi Dummy',
+            'model' => 'Model',
+            'LOC_ONHAND_QTY' => 'Loc Onhand Qty',
+            'BALANCE' => 'Balance',
+            'VMS_VERSION' => 'Vms Version',
+            'MAT_CLASS' => 'Mat Class',
+            'category' => 'Category',
+            'dandory_date' => 'Dandory Date',
         ];
     }
 
