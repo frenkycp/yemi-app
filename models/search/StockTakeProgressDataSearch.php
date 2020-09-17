@@ -76,13 +76,13 @@ $query->andFilterWhere([
             'PI_COUNT_2' => $this->PI_COUNT_2,
             'PI_AUDIT_1' => $this->PI_AUDIT_1,
             'PI_AUDIT_2' => $this->PI_AUDIT_2,
-            'PI_AUDIT_LAST_UPDATE' => $this->PI_AUDIT_LAST_UPDATE,
             'LOC_ONHAND_QTY' => $this->LOC_ONHAND_QTY,
             'BALANCE' => $this->BALANCE,
             'dandory_date' => $this->dandory_date,
         ]);
 
         $query->andFilterWhere(['like', 'ITEM', $this->ITEM])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),PI_AUDIT_LAST_UPDATE,120)', $this->PI_AUDIT_LAST_UPDATE])
             ->andFilterWhere(['like', 'ITEM_DESC', $this->ITEM_DESC])
             ->andFilterWhere(['like', 'UM', $this->UM])
             ->andFilterWhere(['like', 'PI_PERIOD', $this->PI_PERIOD])
