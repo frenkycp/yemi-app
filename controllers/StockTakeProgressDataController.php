@@ -17,6 +17,7 @@ class StockTakeProgressDataController extends \app\controllers\base\StockTakePro
 		$this->layout = 'clean';
 	    $searchModel  = new StockTakeProgressDataSearch;
 	    //$searchModel->PI_STAT = 'C';
+	    $searchModel->PI = 'Y';
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

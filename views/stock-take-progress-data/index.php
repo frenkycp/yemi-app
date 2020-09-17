@@ -13,7 +13,7 @@ $this->title = [
 
 $this->registerCss("
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
-    .form-control {font-size: 30px; height: 52px;}
+    //.form-control {font-size: 30px; height: 52px;}
     .content-header {color: white;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
@@ -134,6 +134,13 @@ $gridColumns = [
         'attribute' => 'PI_AUDIT_2',
         'label' => 'Audit 2',
         'format' => ['decimal', 0],
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'PIC',
+        'label' => 'PIC',
+        'filter' => ArrayHelper::map(app\models\StoreOnhandWsus::find()->select('PIC')->where('PIC IS NOT NULL')->groupBy('PIC')->orderBy('PIC')->all(), 'PIC', 'PIC'),
         'vAlign' => 'middle',
         'hAlign' => 'center',
     ],

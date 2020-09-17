@@ -37,6 +37,12 @@ use Yii;
  * @property string $MAT_CLASS
  * @property string $category
  * @property string $dandory_date
+ * @property string $PI
+ * @property string $PIC
+ * @property string $RACK
+ * @property string $RACK_LOC
+ * @property string $STORAGE
+ * @property string $STORAGE_DESC
  * @property string $aliasModel
  */
 abstract class StoreOnhandWsus extends \yii\db\ActiveRecord
@@ -71,11 +77,12 @@ abstract class StoreOnhandWsus extends \yii\db\ActiveRecord
             [['PI_AUDIT_LAST_UPDATE', 'dandory_date'], 'safe'],
             [['model'], 'string'],
             [['ITEM'], 'string', 'max' => 13],
-            [['ITEM_DESC', 'VMS_VERSION', 'category'], 'string', 'max' => 50],
+            [['ITEM_DESC', 'VMS_VERSION', 'category', 'STORAGE_DESC'], 'string', 'max' => 50],
             [['UM'], 'string', 'max' => 5],
             [['PI_PERIOD'], 'string', 'max' => 6],
-            [['PI_STAT', 'PI_DUMMY'], 'string', 'max' => 1],
+            [['PI_STAT', 'PI_DUMMY', 'PI'], 'string', 'max' => 1],
             [['MAT_CLASS'], 'string', 'max' => 4],
+            [['PIC', 'RACK', 'RACK_LOC', 'STORAGE'], 'string', 'max' => 30],
             [['ITEM'], 'unique']
         ];
     }
@@ -114,6 +121,12 @@ abstract class StoreOnhandWsus extends \yii\db\ActiveRecord
             'MAT_CLASS' => 'Mat Class',
             'category' => 'Category',
             'dandory_date' => 'Dandory Date',
+            'PI' => 'Pi',
+            'PIC' => 'Pic',
+            'RACK' => 'Rack',
+            'RACK_LOC' => 'Rack Loc',
+            'STORAGE' => 'Storage',
+            'STORAGE_DESC' => 'Storage Desc',
         ];
     }
 
