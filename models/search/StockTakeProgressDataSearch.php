@@ -41,10 +41,16 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = StoreOnhandWsus::find();
+$query = StoreOnhandWsus::find()->andWhere(['NOT IN', 'ITEM', ['TEST-A', 'TEST-B', 'TEST-C']]);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+      'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'PI_VARIANCE_ABSOLUTE' => SORT_DESC,
+        ]
+    ],
 ]);
 
 $this->load($params);
