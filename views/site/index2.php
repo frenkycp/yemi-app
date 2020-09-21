@@ -265,6 +265,9 @@ $this->registerCss("
                         <?= Html::a('WIP Data Record（仕掛りデーター）', ['wip-plan-actual-report/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
+                        <?= Html::a('WIP NG Rate', ['display-prd/wip-ng-rate'], [
+                            'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
+                        ]); ?>
                         <?= Html::a('Machine IoT Output Data <span class="text-red"><b>*IoT</b></span>', ['machine-iot-output-hdr/index'], [
                             'class' => 'list-group-item', 'style' => 'font-size: 11.8px;'
                         ]); ?>
