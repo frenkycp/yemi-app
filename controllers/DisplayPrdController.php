@@ -40,7 +40,7 @@ class DisplayPrdController extends Controller
         </tr>';
 
         if ($child_analyst == 'INJ') {
-            $child_analyst = ['WU01', 'WU02', 'WU03'];
+            $child_analyst = ['WI01', 'WI02', 'WI03'];
         }
 
         $tmp_ng_arr = ProdNgData::find()
@@ -49,6 +49,7 @@ class DisplayPrdController extends Controller
             'period' => $period,
             'flag' => 1
         ])
+        ->andWhere(['>', 'ng_qty', 0])
         ->orderBy('post_date')
         ->all();
 
