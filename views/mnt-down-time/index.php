@@ -163,7 +163,10 @@ $gridColumns = [
 <div class="giiant-crud gojek-order-tbl-index">
 
     <?php
-//             echo $this->render('_search', ['model' =>$searchModel]);
+             echo $this->render('_search', [
+                'model' => $searchModel,
+                'mesin_dropdown' => $mesin_dropdown
+            ]);
         ?>
 
     
@@ -172,7 +175,7 @@ $gridColumns = [
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => $gridColumns,
             'hover' => true,
             //'condensed' => true,

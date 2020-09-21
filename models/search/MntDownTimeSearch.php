@@ -67,6 +67,7 @@ return $dataProvider;
 $query->andFilterWhere([
             'location' => $this->location,
             'area' => $this->area,
+            'mesin_id' => $this->mesin_id,
         ]);
 
 $query->andFilterWhere(['like', 'period', $this->period])
