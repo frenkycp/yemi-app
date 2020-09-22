@@ -387,6 +387,14 @@ return [
         'Warehouse Parts' => 'Warehouse Parts',
         'Wood Working' => 'Wood Working',
     ],
+    'ship_reservation_status_arr' => [
+        'NO ACTION YET' => 'NO ACTION YET',
+        'BOOKING REQUESTED' => 'BOOKING REQUESTED',
+        'BOOKING UNACCEPTED' => 'BOOKING UNACCEPTED',
+        'BOOKING CONFIRMED' => 'BOOKING CONFIRMED',
+        'NO NEED ANYMORE' => 'NO NEED ANYMORE',
+        'OTHER' => 'OTHER',
+    ],
 ];
 
 function getYearArray()

@@ -146,7 +146,7 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Production Support Applications<br/><span class="japanesse-word"></span></div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.217/kaizen"><i class="fa fa-fw fa-tag"></i> E-Kaizen<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://10.110.52.10/kaizen"><i class="fa fa-fw fa-tag"></i> E-Kaizen<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
                         <?= Html::a('<i class="fa fa-fw fa-tag"></i> Line Performance by Model<span class="japanesse-word"></span>', ['/line-performance-visual'], [
@@ -633,13 +633,13 @@ $this->registerCss("
                 <div class="panel panel-success" style="display: <?= in_array(Yii::$app->user->identity->role->id, [15]) ? 'none' : ''; ?>;">
                     <div class="panel-heading text-center">Production Engineering<br/></div>
                     <div class="list-group">
-                        <a class="list-group-item" href="http://pe12/yamaha/project/index" target="_blank">New Model Development <span class="japanesse-word">（新製品開発日程）</span></a>
+                        <a class="list-group-item" href="http://10.110.52.3/yamaha/project/index" target="_blank">New Model Development <span class="japanesse-word">（新製品開発日程）</span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" href="http://pe12" target="_blank">PRODUCTION ENGINEERING CONTROL DATA <span class="japanesse-word">(技術管理データ)</span></a>
+                        <a class="list-group-item" href="http://10.110.52.3" target="_blank">PRODUCTION ENGINEERING CONTROL DATA <span class="japanesse-word">(技術管理データ)</span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" href="http://pe12/repair" target="_blank">PCB Repair Database <span class="japanesse-word"></span></a>
+                        <a class="list-group-item" href="http://10.110.52.3/repair" target="_blank">PCB Repair Database <span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
                         <?= Html::a('PCB repair status <span class="japanesse-word">基板修理の管理表</span>', ['/display/repair-kpi'], ['class' => 'list-group-item']); ?>
