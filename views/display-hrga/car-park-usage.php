@@ -112,7 +112,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 450,
+                    //'height' => 450,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],
@@ -127,34 +127,32 @@ echo '</pre>';*/
                     'text' => null
                 ],
                 'xAxis' => [
-                    'type' => 'datetime',
+                    'categories' => $categories,
                 ],
                 'yAxis' => [
                     'min' => 0,
+                    'max' => 100,
                     'title' => [
                         'text' => 'Percentage'
-                    ],
-                    'stackLabels' => [
-                        'enabled' => true,
-                        'style' => [
-                            //'color' => 'white',
-                            //'fontWeight' => 'bold',
-                            'fontSize' => '20px',
-                        ],
-                    ],
-                ],
-                'legend' => [
-                    'enabled' => true,
-                    'itemStyle' => [
-                        'fontSize' => '16px',
                     ],
                 ],
                 'plotOptions' => [
                     'column' => [
-                        'stacking' => 'normal',
                         'dataLabels' => [
-                            'enabled' => false,
-                            
+                            'enabled' => true,
+                        ]
+                    ],
+                    'series' => [
+                        'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
                         ]
                     ],
                 ],
@@ -164,3 +162,12 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>

@@ -88,10 +88,20 @@ class ProductionRestController extends Controller
             $in_datetime = $out_datetime = null;
             foreach ($tmp_rfid_scan as $rfid_scan) {
                 if ($rfid_scan->post_date == $in_date && $rfid_scan->nik == $bentol_summary->emp_id) {
-                    $in_datetime = $rfid_scan->in_datetime;
+                    if ($bentol_summary->shift_trip == 3) {
+                        $in_datetime = $rfid_scan->out_datetime;
+                    } else {
+                        $in_datetime = $rfid_scan->in_datetime;
+                    }
+                    
                 }
                 if ($rfid_scan->post_date == $out_date && $rfid_scan->nik == $bentol_summary->emp_id) {
-                    $out_datetime = $rfid_scan->out_datetime;
+                    if ($bentol_summary->shift_trip == 3) {
+                        $out_datetime = $rfid_scan->in_datetime;
+                    } else {
+                        $out_datetime = $rfid_scan->out_datetime;
+                    }
+                    
                 }
             }
             if ($in_datetime != null || $out_datetime != null) {
@@ -131,18 +141,18 @@ class ProductionRestController extends Controller
             }
         }
 
+        $insertCount = 0;
         if (count($bulkInsertArray) > 0) {
             $insertCount = \Yii::$app->db_sql_server->createCommand()
             ->batchInsert(CarParkAttendance::getTableSchema()->fullName, $columnNameArray, $bulkInsertArray)
             ->execute();
-            
-            $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
-            $total_minutes = round($process_time / 60, 1);
 
             //return 'Add Success...(' . $insertCount . ' data - ' . $total_minutes . ' minute(s)';
         } else {
             //return 'No data added ...';
         }
+        $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+        $total_minutes = round($process_time / 60, 1);
 
         return 'Insert : ' . $insertCount . ' | Update : ' . $total_update . ' | Total Time : ' . $total_minutes . ' minute(s)';
     }

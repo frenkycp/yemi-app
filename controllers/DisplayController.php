@@ -12951,7 +12951,7 @@ echo '</pre>';*/
 		$year = date('Y');
         $month = date('m');
 
-        $searchModel->PERIOD = $year . $month;
+        $searchModel->PERIOD = '201912';
         
         if (\Yii::$app->request->get('PERIOD') !== null) {
 			$searchModel->PERIOD = \Yii::$app->request->get('PERIOD');

@@ -111,7 +111,10 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 <br/>
 
-<div class="panel panel-default">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><?= $type == 'hour' ? 'Total : ' . number_format($total_hour) . ' hour(s)' : 'Total : ' . number_format($total_mp) . ' employee(s)'  ?></h3>
+    </div>
     <div class="panel-body">
         <?php
         echo Highcharts::widget([

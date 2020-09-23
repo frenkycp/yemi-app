@@ -12,9 +12,72 @@ use dmstr\bootstrap\Tabs;
 use app\models\SunfishAttendanceData;
 use app\models\SunfishViewEmp;
 use app\models\CarParkAttendance;
+use app\models\WorkDayTbl;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionCarParkUsageGetRemark($period, $emp_id, $emp_name, $working_days, $usage)
+    {
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $emp_name . ' - ' . $emp_id . ' <small>(Period : ' . $period . ', Total Working Day : ' . $working_days . ', Usage : ' . $usage . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $tmp_park_attendance = CarParkAttendance::find()
+        ->where([
+            'emp_id' => $emp_id,
+            'period' => $period
+        ])
+        ->orderBy('post_date')
+        ->all();
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 14px;">
+            <th class="text-center">No.</th>
+            <th class="text-center">Date</th>
+            <th class="text-center">RFID Scan Status</th>
+            <th class="text-center">Parking Status</th>
+            <th class="text-center">In Datetime</th>
+            <th class="text-center">Out Datetime</th>
+            <th class="text-center">Trip Category</th>
+        </tr>';
+
+        $no = 1;
+        foreach ($tmp_park_attendance as $key => $value) {
+            if ($value->rfid_scan_status == 1) {
+                $rfid_scan_status = 'O';
+            } else {
+                $rfid_scan_status = 'X';
+            }
+            if ($value->parking_status == 1) {
+                $parking_status = 'O';
+                $tmp_class = ' success';
+            } else {
+                $parking_status = 'X';
+                $tmp_class = ' danger';
+            }
+
+            $in_datetime = $value->in_datetime == null ? '-' : date('Y-m-d H:i', strtotime($value->in_datetime));
+            $out_datetime = $value->out_datetime == null ? '-' : date('Y-m-d H:i', strtotime($value->out_datetime));
+            $remark .= '<tr style="font-size: 14px;">
+                <td class="text-center' . $tmp_class . '">' . $no . '</td>
+                <td class="text-center' . $tmp_class . '">' . $value->post_date . '</td>
+                <td class="text-center' . $tmp_class . '">' . $rfid_scan_status . '</td>
+                <td class="text-center' . $tmp_class . '">' . $parking_status . '</td>
+                <td class="text-center' . $tmp_class . '">' . $in_datetime . '</td>
+                <td class="text-center' . $tmp_class . '">' . $out_datetime . '</td>
+                <td class="text-center' . $tmp_class . '">' . $value->trip_category . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
     public function actionCarParkUsage($value='')
     {
         $this->layout = 'clean';
@@ -40,12 +103,42 @@ class DisplayHrgaController extends Controller
             'period' => $model->period,
             'account_type' => $model->account_type
         ])
+        ->andWhere(['<>', 'emp_id', 'YE9909002'])
         ->groupBy('emp_id, emp_name')
-        ->orderBy('total_usage DESC')
+        ->orderBy('total_usage DESC, emp_name')
         ->all();
+
+        $working_days = WorkDayTbl::find()
+        ->where([
+            'FORMAT(cal_date, \'yyyyMM\')' => $model->period
+        ])
+        ->andWhere('holiday IS NULL')
+        ->count();
+
+        $categories = $tmp_data = $data = [];
+        foreach ($tmp_attendance as $key => $value) {
+            $categories[] = $value->emp_name . ' - ' . $value->emp_id;
+            $pct = 0;
+            if ($working_days > 0) {
+                $pct = round(($value->total_usage / $working_days) * 100, 1);
+            }
+            $tmp_data[] = [
+                'y' => $pct,
+                'url' => Url::to(['car-park-usage-get-remark', 'period' => $model->period, 'emp_id' => $value->emp_id, 'emp_name' => $value->emp_name, 'working_days' => $working_days, 'usage' => $value->total_usage])
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'Usage Percentage',
+                'data' => $tmp_data,
+                'showInLegend' => false,
+            ],
+        ];
 
         return $this->render('car-park-usage', [
             'data' => $data,
+            'categories' => $categories,
             'model' => $model,
         ]);
     }
@@ -88,8 +181,11 @@ class DisplayHrgaController extends Controller
         ->all();
 
         $tmp_data = $data = $tmp_data2 = $data2 = [];
+        $total_hour = $total_mp = 0;
         foreach ($tmp_attendance_arr as $key => $attendance) {
             $post_date = (strtotime($attendance->post_date . " +7 hours") * 1000);
+            $total_hour += round(($attendance->total_ot / 60), 1);
+            $total_mp += $attendance->total_mp;
             $tmp_data[$attendance->department][] = [
                 'x' => $post_date,
                 'y' => round(($attendance->total_ot / 60), 1)
@@ -145,6 +241,8 @@ class DisplayHrgaController extends Controller
             'data' => $data,
             'data2' => $data2,
             'type' => $type,
+            'total_hour' => $total_hour,
+            'total_mp' => $total_mp,
         ]);
     }
 }
