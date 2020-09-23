@@ -80,7 +80,7 @@ class ImageFile extends Model
 	public static function imagine_resize($filePath, $width = 600, $height = 600, $quality = 80)
 	{
 		$tmp_img = Image::getImagine()->open($filePath);
-        $exif = exif_read_data($filePath);
+        $exif = @exif_read_data($filePath);
 
         $orientation = $exif['Orientation'];
        	switch($orientation) {

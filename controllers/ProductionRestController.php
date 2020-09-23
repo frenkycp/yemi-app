@@ -22,9 +22,131 @@ use app\models\WorkDayTbl;
 use app\models\BentolKaryawan;
 use app\models\BentolManagerTripSummary;
 use app\models\SapItemTbl;
+use app\models\SunfishAttendanceData;
+use app\models\CarParkAttendance;
+use app\models\RfidCarScan;
 
 class ProductionRestController extends Controller
 {
+    public function actionBentolUpdateAll($value='')
+    {
+        $tmp_1 = $this->actionUpdateBentolTripSummary();
+        $tmp_2 = $this->actionCarParkSummaryUpdate();
+
+        $return_msg = [
+            'Update Trip Summary' => $tmp_1,
+            'Update Car Park Usage' => $tmp_2
+        ];
+
+        return $return_msg;
+    }
+
+    public function actionCarParkSummaryUpdate($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        $last_month_date = date('Y-m-d', strtotime(' -1 month'));
+        if ($last_month_date < '2020-09-01') {
+            $last_month_date = '2020-09-01';
+        }
+        $today = date('Y-m-d');
+
+        $tmp_bentol_summary = BentolManagerTripSummary::find()
+        ->where(['>=', 'post_date', $last_month_date])
+        ->andWhere(['<=', 'post_date', $today])
+        ->all();
+
+        $tmp_car_park_attendance = CarParkAttendance::find()
+        ->where(['>=', 'post_date', $last_month_date])
+        ->andWhere(['<=', 'post_date', $today])
+        ->all();
+
+        $tmp_rfid_scan = RfidCarScan::find()
+        ->where(['>=', 'post_date', date('Y-m-d', strtotime($last_month_date . ' -1 day'))])
+        ->andWhere(['<=', 'post_date', $today])
+        ->all();
+
+        $bulkInsertArray = [];
+        $columnNameArray = ['id', 'period', 'post_date', 'emp_id', 'emp_name', 'account_type', 'emp_shift', 'rfid_scan_status', 'parking_status', 'trip_category', 'last_update', 'in_datetime', 'out_datetime', 'start_status', 'end_status', 'start_validation', 'end_validation'];
+        $tmp_data = [];
+        $total_update = 0;
+        foreach ($tmp_bentol_summary as $bentol_summary) {
+            $is_found = false;
+            foreach ($tmp_car_park_attendance as $car_park_attendance) {
+                if ($bentol_summary->id == $car_park_attendance->id) {
+                    $is_found = true;
+                    $tmp_last_update = $car_park_attendance->last_update;
+
+                }
+            }
+
+            $in_date = $out_date = $bentol_summary->post_date;
+            if ($bentol_summary->shift_trip == 3) {
+                $in_date = date('Y-m-d', strtotime($in_date . ' -1 day'));
+            }
+            $in_datetime = $out_datetime = null;
+            foreach ($tmp_rfid_scan as $rfid_scan) {
+                if ($rfid_scan->post_date == $in_date && $rfid_scan->nik == $bentol_summary->emp_id) {
+                    $in_datetime = $rfid_scan->in_datetime;
+                }
+                if ($rfid_scan->post_date == $out_date && $rfid_scan->nik == $bentol_summary->emp_id) {
+                    $out_datetime = $rfid_scan->out_datetime;
+                }
+            }
+            if ($in_datetime != null || $out_datetime != null) {
+                $rfid_scan_status = 1;
+            } else {
+                $rfid_scan_status = 0;
+            }
+            if (in_array($bentol_summary->trip_category, ['NORMAL', 'CUTI', 'WFH', 'BUSINESS TRIP'])) {
+                $parking_status = 1;
+            } else {
+                $parking_status = 0;
+            }
+
+            if ($is_found) {
+                if ($in_datetime > $tmp_last_update || $out_datetime > $tmp_last_update || $bentol_summary->status_last_update > $tmp_last_update || $bentol_summary->validation_last_update > $tmp_last_update) {
+                    $update_data = CarParkAttendance::find()->where(['id' => $bentol_summary->id])->one();
+                    $update_data->rfid_scan_status = $rfid_scan_status;
+                    $update_data->parking_status = $parking_status;
+                    $update_data->emp_shift = $bentol_summary->shift_trip;
+                    $update_data->trip_category = $trip_category;
+                    $update_data->last_update = $this_time;
+                    $update_data->in_datetime = $in_datetime;
+                    $update_data->out_datetime = $out_datetime;
+                    $update_data->start_status = $bentol_summary->start_status;
+                    $update_data->end_status = $bentol_summary->end_status;
+                    $update_data->start_validation = $bentol_summary->start_validation;
+                    $update_data->end_validation = $bentol_summary->end_validation;
+                    $total_update++;
+                    if (!$update_data->save()) {
+                        return $models->errors;
+                    }
+                }
+                
+            } else {
+                
+                $bulkInsertArray[] = [$bentol_summary->id, $bentol_summary->period, $bentol_summary->post_date, $bentol_summary->emp_id, $bentol_summary->emp_name, $bentol_summary->account_type, $bentol_summary->shift_trip, $rfid_scan_status, $parking_status, $bentol_summary->trip_category, $this_time, $in_datetime, $out_datetime, $bentol_summary->start_status, $bentol_summary->end_status, $bentol_summary->start_validation, $bentol_summary->end_validation];
+            }
+        }
+
+        if (count($bulkInsertArray) > 0) {
+            $insertCount = \Yii::$app->db_sql_server->createCommand()
+            ->batchInsert(CarParkAttendance::getTableSchema()->fullName, $columnNameArray, $bulkInsertArray)
+            ->execute();
+            
+            $process_time = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+            $total_minutes = round($process_time / 60, 1);
+
+            //return 'Add Success...(' . $insertCount . ' data - ' . $total_minutes . ' minute(s)';
+        } else {
+            //return 'No data added ...';
+        }
+
+        return 'Insert : ' . $insertCount . ' | Update : ' . $total_update . ' | Total Time : ' . $total_minutes . ' minute(s)';
+    }
+
     public function actionUpdateBentolTripSummary($post_date = '')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -52,16 +174,36 @@ class ProductionRestController extends Controller
             ->all();
 
             $bulkInsertArray = [];
-            $columnNameArray = ['id', 'period', 'post_date', 'emp_id', 'emp_name', 'account_type'];
+            $columnNameArray = ['id', 'period', 'post_date', 'emp_id', 'emp_name', 'account_type', 'shift_trip'];
             $tmp_today_summary = ArrayHelper::map(BentolManagerTripSummary::find()->where([
                 'post_date' => $post_date
             ])->all(), 'emp_id', 'emp_id');
 
+            $tmp_attendance = SunfishAttendanceData::find()->where([
+                'FORMAT(shiftendtime, \'yyyy-MM-dd\')' => $post_date
+            ])->all();
+
             foreach ($bentol_karyawan as $value) {
                 if (!isset($tmp_today_summary[$value->nik_karyawan])) {
                     $id = $post_date . '_' . $value->nik_karyawan;
+                    $shift = 1;
+                    foreach ($tmp_attendance as $attendance) {
+                        if ($attendance->emp_no == $value->nik_karyawan) {
+                            if (strpos(strtoupper($attendance->shiftdaily_code), 'SHIFT_1') !== false
+                                || strtoupper($attendance->shiftdaily_code) == 'GARDENER'
+                                || strtoupper($attendance->shiftdaily_code) == 'SHIFT_08_17') {
+                                $shift =  1;
+                            } elseif (strpos(strtoupper($attendance->shiftdaily_code), 'SHIFT_2') !== false || strpos(strtoupper($attendance->shiftdaily_code), 'MAINTENANCE') !== false) {
+                                $shift =  2;
+                            } elseif (strpos(strtoupper($attendance->shiftdaily_code), 'SHIFT_3') !== false) {
+                                $shift =  3;
+                            } else {
+                                $shift =  1;
+                            }
+                        }
+                    }
                     $period = date('Ym', strtotime($post_date));
-                    $bulkInsertArray[] = [$id, $period, $post_date, $value->nik_karyawan, $value->nama_karyawan, $value->hak_akses_karyawan];
+                    $bulkInsertArray[] = [$id, $period, $post_date, $value->nik_karyawan, $value->nama_karyawan, $value->hak_akses_karyawan, $shift];
                 }
             }
 

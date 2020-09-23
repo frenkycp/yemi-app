@@ -9,6 +9,7 @@ use Yii;
 /**
  * This is the base-model class for table "db_owner.RFID_CAR_SCAN".
  *
+ * @property string $rfid_scan_id
  * @property string $post_date
  * @property string $nik
  * @property string $nama_karyawan
@@ -45,7 +46,7 @@ abstract class RfidCarScan extends \yii\db\ActiveRecord
     {
         return [
             [['in_datetime', 'out_datetime'], 'safe'],
-            [['post_date'], 'string', 'max' => 4000],
+            [['rfid_scan_id', 'post_date'], 'string', 'max' => 4000],
             [['nik', 'nama_karyawan', 'dept'], 'string', 'max' => 50]
         ];
     }
@@ -56,6 +57,7 @@ abstract class RfidCarScan extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'rfid_scan_id' => 'Rfid Scan ID',
             'post_date' => 'Post Date',
             'nik' => 'Nik',
             'nama_karyawan' => 'Nama Karyawan',

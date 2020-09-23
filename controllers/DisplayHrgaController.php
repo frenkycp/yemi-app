@@ -11,9 +11,45 @@ use dmstr\bootstrap\Tabs;
 
 use app\models\SunfishAttendanceData;
 use app\models\SunfishViewEmp;
+use app\models\CarParkAttendance;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionCarParkUsage($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'period', 'account_type'
+        ]);
+        $model->addRule(['period', 'account_type'], 'required');
+
+        $model->period = date('Ym');
+        $model->account_type = 'COORDINATOR';
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_attendance = CarParkAttendance::find()
+        ->select([
+            'emp_id', 'emp_name', 'total_usage' => 'SUM(parking_status)'
+        ])
+        ->where([
+            'period' => $model->period,
+            'account_type' => $model->account_type
+        ])
+        ->groupBy('emp_id, emp_name')
+        ->orderBy('total_usage DESC')
+        ->all();
+
+        return $this->render('car-park-usage', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
+
     public function actionDailyOvertimeByDept($type = 'hour')
     {
          $this->layout = 'clean';
