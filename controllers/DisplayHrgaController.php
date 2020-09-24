@@ -25,10 +25,24 @@ class DisplayHrgaController extends Controller
         <div class="modal-body">
         ';
 
+        $tmp_work_day = WorkDayTbl::find()
+        ->select(['cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'])
+        ->where([
+            'FORMAT(cal_date, \'yyyyMM\')' => $period
+        ])
+        ->andWhere('holiday IS NULL')
+        ->all();
+
+        $work_day_arr = [];
+        foreach ($tmp_work_day as $key => $value) {
+            $work_day_arr[] = $value->cal_date;
+        }
+
         $tmp_park_attendance = CarParkAttendance::find()
         ->where([
             'emp_id' => $emp_id,
-            'period' => $period
+            'period' => $period,
+            'post_date' => $work_day_arr
         ])
         ->orderBy('post_date')
         ->all();
@@ -95,25 +109,34 @@ class DisplayHrgaController extends Controller
 
         }
 
+        $tmp_work_day = WorkDayTbl::find()
+        ->select(['cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'])
+        ->where([
+            'FORMAT(cal_date, \'yyyyMM\')' => $model->period
+        ])
+        ->andWhere('holiday IS NULL')
+        ->all();
+
+        $work_day_arr = [];
+        foreach ($tmp_work_day as $key => $value) {
+            $work_day_arr[] = $value->cal_date;
+        }
+
+        $working_days = count($work_day_arr);
+
         $tmp_attendance = CarParkAttendance::find()
         ->select([
             'emp_id', 'emp_name', 'total_usage' => 'SUM(parking_status)'
         ])
         ->where([
             'period' => $model->period,
-            'account_type' => $model->account_type
+            'account_type' => $model->account_type,
+            'post_date' => $work_day_arr
         ])
         ->andWhere(['<>', 'emp_id', 'YE9909002'])
         ->groupBy('emp_id, emp_name')
         ->orderBy('total_usage DESC, emp_name')
         ->all();
-
-        $working_days = WorkDayTbl::find()
-        ->where([
-            'FORMAT(cal_date, \'yyyyMM\')' => $model->period
-        ])
-        ->andWhere('holiday IS NULL')
-        ->count();
 
         $categories = $tmp_data = $data = [];
         foreach ($tmp_attendance as $key => $value) {
