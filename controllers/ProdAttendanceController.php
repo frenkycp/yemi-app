@@ -93,12 +93,7 @@ class ProdAttendanceController extends Controller
 			                $insert_attendance->check_in = $now;
 			                $insert_attendance->child_analyst = $model->child_analyst;
 
-			                $location_data = WipLocation::find()
-			                ->where([
-			                    'child_analyst' => $model->child_analyst
-			                ])
-			                ->one();
-			                $insert_attendance->child_analyst_desc = $location_data->child_analyst_desc;
+			                $insert_attendance->child_analyst_desc = \Yii::$app->params['wip_location_arr'][$model->child_analyst];
 			                $insert_attendance->current_status = 'I';
 			            } else {
 			            	$insert_attendance = $find_data;
