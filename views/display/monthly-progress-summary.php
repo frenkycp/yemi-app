@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Monthly Progress Summary (SCM Versus FLO) <span class="japanesse light-green"></span>',
-    'tab_title' => 'Monthly Progress Summary (SCM Versus FLO)',
-    'breadcrumbs_title' => 'Monthly Progress Summary (SCM Versus FLO)'
+    'page_title' => 'BU別の生産進捗 (Progress production by BU) <span class="japanesse light-green"></span>',
+    'tab_title' => 'BU別の生産進捗 (Progress production by BU)',
+    'breadcrumbs_title' => 'BU別の生産進捗 (Progress production by BU)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -59,6 +59,7 @@ $css_string = "
         font-size: 16px;
         border-bottom: 7px solid #797979;
         vertical-align: middle;
+        font-weight: normal;
     }
      .tbl-header{
         border:1px solid #8b8c8d !important;
@@ -145,9 +146,26 @@ echo '</pre>';*/
             <tr>
                 <td><?= $key; ?></td>
                 <?php foreach ($value as $value2): ?>
-                    <td class="text-center"><?= $value2 . ''; ?></td>
+                    <td class="text-center" style="<?= $value2['pct'] >= 100 ? 'color: #00ff00;' : ''; ?>"><span title="<?= number_format($value2['plan']) . ' / ' . number_format($value2['actual']); ?>"><?= $value2['pct'] . ''; ?></span></td>
                 <?php endforeach ?>
             </tr>
         <?php endforeach ?>
     </tbody>
 </table>
+
+
+
+<div class="row">
+    <div class="col-sm-12 text-center">
+        <span style="color: white;">Top Minus (By Amount)</span>
+    </div>
+</div>
+
+<hr style="margin: 0px;">
+<div class="row">
+    <?php foreach ($top_minus as $key => $value): ?>
+        <div class="col-sm-6 text-center" style="color: white;">
+            <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | ' . number_format($value->BALANCE_AMT_ALLOC); ?>
+        </div>
+    <?php endforeach ?>
+</div>

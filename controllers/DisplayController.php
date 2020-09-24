@@ -851,8 +851,12 @@ class DisplayController extends Controller
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
             'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
             'ACTUAL_QTY_ALLOC' => 'SUM(ACTUAL_QTY_ALLOC)',
+            'PLAN_AMT' => 'SUM(PLAN_AMT)',
+            'ACTUAL_AMT_ALLOC' => 'SUM(ACTUAL_AMT_ALLOC)'
         ])
-        ->where(['PERIOD' => $period_arr])
+        ->where([
+            'PERIOD' => $period_arr,
+        ])
         ->andWhere('BU IS NOT NULL')
         ->groupBy('BU, PERIOD')
         ->orderBy('BU, PERIOD')
@@ -861,7 +865,17 @@ class DisplayController extends Controller
         foreach ($tmp_bu_arr as $tmp_bu) {
             foreach ($period_arr as $period) {
                 $tmp_pct = 0;
-                $plan_qty = $actual_qty = 0;
+                $plan_amt = $act_amt = 0;
+                foreach ($tmp_data_summary as $tmp_summary) {
+                    if ($tmp_bu->BU == $tmp_summary->BU && $period == $tmp_summary->PERIOD) {
+                        $plan_amt = $tmp_summary->PLAN_AMT;
+                        $act_amt = $tmp_summary->ACTUAL_AMT_ALLOC;
+                    }
+                }
+                if ($plan_amt > 0) {
+                    $tmp_pct = round(($act_amt / $plan_amt) * 100, 1);
+                }
+                /*$plan_qty = $actual_qty = 0;
                 foreach ($tmp_data_summary as $tmp_summary) {
                     if ($tmp_bu->BU == $tmp_summary->BU && $period == $tmp_summary->PERIOD) {
                         $plan_qty = $tmp_summary->PLAN_QTY;
@@ -874,16 +888,31 @@ class DisplayController extends Controller
                 }
                 if ($plan_qty > 0) {
                     $tmp_pct = round(($actual_qty / $plan_qty) * 100, 1);
-                }
-                $data[$tmp_bu->BU][] = $tmp_pct;
+                }*/
+                $data[$tmp_bu->BU][] = [
+                    'plan' => $plan_amt,
+                    'actual' => $act_amt,
+                    'pct' => $tmp_pct
+                ];
             }
             
         }
+
+        $top_minus = IjazahPlanActual::find()
+        ->select([
+            'ITEM', 'ITEM_DESC',
+            'BALANCE_AMT_ALLOC' => 'SUM(ACTUAL_AMT_ALLOC - PLAN_AMT)'
+        ])
+        ->where(['<', 'PERIOD', date('Ym')])
+        ->groupBy('ITEM, ITEM_DESC')
+        ->orderBy('BALANCE_AMT_ALLOC')
+        ->limit(10)->all();
 
         return $this->render('monthly-progress-summary', [
             'data' => $data,
             'model' => $model,
             'period_arr' => $period_arr,
+            'top_minus' => $top_minus,
         ]);
     }
 
@@ -3084,7 +3113,7 @@ class DisplayController extends Controller
                 ->where([
                     'PERIOD' => $period_arr,
                     'BU' => $model->category,
-                    'FG_KD' => 'PRODUCT'
+                    //'FG_KD' => 'PRODUCT'
                 ])
                 ->andWhere('ITEM IS NOT NULL')
                 ->groupBy('ITEM, ITEM_DESC, BU, LINE')
@@ -3095,7 +3124,7 @@ class DisplayController extends Controller
                 ->where([
                     'PERIOD' => $period_arr,
                     'BU' => $model->category,
-                    'FG_KD' => 'PRODUCT'
+                    //'FG_KD' => 'PRODUCT'
                 ])
                 ->orderBy('BU, LINE, ITEM')
                 ->all();
@@ -3124,7 +3153,7 @@ class DisplayController extends Controller
                     ->select('ITEM, ITEM_DESC, BU, LINE')
                     ->where([
                         'PERIOD' => $period_arr,
-                        'FG_KD' => 'PRODUCT'
+                        //'FG_KD' => 'PRODUCT'
                     ])
                     ->andWhere('ITEM IS NOT NULL')
                     ->groupBy('ITEM, ITEM_DESC, BU, LINE')
@@ -3134,7 +3163,7 @@ class DisplayController extends Controller
                     $tmp_ijazah_arr = IjazahPlanActual::find()
                     ->where([
                         'PERIOD' => $period_arr,
-                        'FG_KD' => 'PRODUCT'
+                        //'FG_KD' => 'PRODUCT'
                     ])
                     ->orderBy('BU, LINE, ITEM')
                     ->all();
@@ -3217,7 +3246,10 @@ class DisplayController extends Controller
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['actual_qty'] = $value->ACTUAL_QTY;
             $tmp_data_arr[$value->ITEM][$value->PERIOD]['std_price'] = $value->STD_PRICE;
             $tmp_data_arr[$value->ITEM]['total_actual'] += $value->ACTUAL_QTY;
-            $std_price_arr[$value->ITEM] = $value->STD_PRICE;
+            if ($value->STD_PRICE != null) {
+                $std_price_arr[$value->ITEM] = $value->STD_PRICE;
+            }
+            
             $tmp_bu_line[$value->ITEM] = [
                 'bu' => $value->BU,
                 'line' => $value->LINE,
@@ -3233,6 +3265,8 @@ class DisplayController extends Controller
             }
             ksort($tmp_data_arr[$key]);
         }
+
+        $tmp_std_price = ArrayHelper::map(IjazahPlanActual::find()->select('ITEM, STD_PRICE')->where('STD_PRICE IS NOT NULL')->groupBy('ITEM, STD_PRICE')->all(), 'ITEM', 'STD_PRICE');
         /*echo '<pre>';
 print_r($tmp_data_arr);
 echo '</pre>';*/
@@ -3245,7 +3279,11 @@ echo '</pre>';*/
                     # code...
                 } else {
                     $plan_qty = $value2['plan_qty'];
-                    $std_price = $std_price_arr[$key];
+                    if (isset($tmp_std_price[$key])) {
+                        $std_price = $tmp_std_price[$key];
+                    } else {
+                        $std_price = 0;
+                    }
 
                     if ($total_actual >= $plan_qty) {
                         $total_actual -= $plan_qty;

@@ -858,10 +858,29 @@ class ProductionRestController extends Controller
                     $ACTUAL_AMT_ALLOC = $tmp_ijazah->ACTUAL_QTY_ALLOC * $tmp_ijazah->STD_PRICE;
                     $ACTUAL_AMT_ALLOC_NEW = $actual_qty_alloc * $tmp_ijazah->STD_PRICE;
 
+                    /*if ($actual_qty_alloc != $tmp_ijazah->ACTUAL_QTY_ALLOC
+                        || $tmp_ijazah->BALANCE_QTY_ALLOC != $tmp_balance_qty_alloc
+                        || $ACTUAL_AMT_ALLOC != $ACTUAL_AMT_ALLOC_NEW
+                        || $tmp_ijazah->PLAN_QTY != $plan_qty
+                    ) {
+                        $update_ijazah = IjazahPlanActual::findOne($tmp_ijazah->ITEM . '-' . $tmp_ijazah->PERIOD);
+                        $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;
+                        $update_ijazah->BALANCE_QTY_ALLOC = $tmp_balance_qty_alloc;
+                        $update_ijazah->ACT_ALLOC_LAST_UPDATE = $this_time;
+                        $update_ijazah->PLAN_AMT = $tmp_ijazah->PLAN_QTY * $tmp_ijazah->STD_PRICE;
+                        $update_ijazah->ACTUAL_AMT_ALLOC = $ACTUAL_AMT_ALLOC;
+                        $update_ijazah->BALANCE_AMT_ALLOC = $tmp_balance_qty_alloc * $tmp_ijazah->STD_PRICE;
+                        $update_ijazah->AMT_RATIO = $amt_ratio;
+                        if (!$update_ijazah->save()) {
+                            return $update_ijazah->errors;
+                        }
+                        $data_update++;
+                    }*/
                     if ($actual_qty_alloc != $tmp_ijazah->ACTUAL_QTY_ALLOC
                         || $tmp_ijazah->BALANCE_QTY_ALLOC != $tmp_balance_qty_alloc
                         || $ACTUAL_AMT_ALLOC != $ACTUAL_AMT_ALLOC_NEW
                         || $tmp_ijazah->PLAN_QTY != $plan_qty
+                        || ($tmp_ijazah->PLAN_QTY != $tmp_ijazah->ACTUAL_QTY_ALLOC && ($tmp_ijazah->STD_PRICE * $tmp_ijazah->ACTUAL_QTY_ALLOC) * $tmp_ijazah->ACTUAL_AMT_ALLOC)
                     ) {
                         $update_ijazah = IjazahPlanActual::findOne($tmp_ijazah->ITEM . '-' . $tmp_ijazah->PERIOD);
                         $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;

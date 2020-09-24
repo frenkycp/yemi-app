@@ -16,6 +16,48 @@ use app\models\WorkDayTbl;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionProgressOvertimeHours($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_attendance = SunfishAttendanceData::find()
+        ->select([
+            'cost_center', 'total_ot' => 'SUM(total_ot)'
+        ])
+        ->where([
+            'FORMAT(shiftendtime, \'yyyyMM\')' => $model->period
+        ])
+        ->andWhere('total_ot IS NOT NULL')
+        ->andWhere(['NOT IN', 'cost_center', ['Board of Director']])
+        ->groupBy('cost_center')
+        ->orderBy('cost_center')
+        ->all();
+
+        $total_mp = SunfishViewEmp::find()
+        ->where(['status' => 1])
+        ->andWhere('cost_center_code NOT IN (\'10\', \'110X\') AND PATINDEX(\'YE%\', Emp_no) > 0')
+        ->count();
+
+        return $this->render('progress-overtime-hours', [
+            'data' => $data,
+            'model' => $model,
+            'tmp_attendance' => $tmp_attendance,
+            'total_mp' => $total_mp,
+        ]);
+    }
+
     public function actionCarParkUsageGetRemark($period, $emp_id, $emp_name, $working_days, $usage)
     {
         $remark = '<div class="modal-header">
