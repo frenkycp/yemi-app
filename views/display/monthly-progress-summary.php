@@ -164,8 +164,8 @@ echo '</pre>';*/
 <hr style="margin: 0px;">
 <div class="row">
     <?php foreach ($top_minus as $key => $value): ?>
-        <div class="col-sm-6 text-center" style="color: white;">
-            <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | ' . number_format($value->BALANCE_AMT_ALLOC); ?>
+        <div class="col-sm-6 text-center" style="color: white; letter-spacing: 1.5px;">
+            <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | <span class="text-red">USD ' . number_format($value->BALANCE_AMT_ALLOC) . '</span>'; ?>
         </div>
     <?php endforeach ?>
 </div>

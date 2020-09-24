@@ -24,7 +24,7 @@ $this->registerJsFile('@web/js/svgLoader.js');
 $css_string = "
     //.form-control, .control-label {background-color: #FFF; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 0.5em; text-align: center;}
+    .content-header {color: white; font-size: 0.4em; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -45,7 +45,7 @@ $css_string = "
     }
     .summary-tbl > tbody > tr > td{
         border:1px solid #777474;
-        font-size: 14px;
+        font-size: 12px;
         background: white;
         color: black;
         vertical-align: middle;
@@ -57,7 +57,7 @@ $css_string = "
         border:1px solid #777474 !important;
         background-color: rgb(255, 229, 153);
         color: black;
-        font-size: 16px;
+        font-size: 14px;
         //border-bottom: 7px solid #797979;
         vertical-align: middle;
     }
@@ -140,8 +140,8 @@ $grand_total_hours = 0;
 </div>
 
 <?php ActiveForm::end(); ?>
-<br/>
-<div class="row">
+
+<div class="row" style="margin-top: 5px;">
     <div class="col-sm-6">
         <table class="table summary-tbl">
             <thead>
