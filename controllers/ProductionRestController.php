@@ -106,14 +106,16 @@ class ProductionRestController extends Controller
             }
             if ($in_datetime != null || $out_datetime != null) {
                 $rfid_scan_status = 1;
-            } else {
-                $rfid_scan_status = 0;
-            }
-            if (in_array($bentol_summary->trip_category, ['NORMAL', 'CUTI', 'WFH', 'BUSINESS TRIP'])) {
                 $parking_status = 1;
             } else {
-                $parking_status = 0;
+                $rfid_scan_status = 0;
+                if (in_array($bentol_summary->trip_category, ['NORMAL', 'CUTI', 'WFH', 'BUSINESS TRIP'])) {
+                    $parking_status = 1;
+                } else {
+                    $parking_status = 0;
+                }
             }
+            
 
             if ($is_found) {
                 if ($in_datetime > $tmp_last_update || $out_datetime > $tmp_last_update || $bentol_summary->status_last_update > $tmp_last_update || $bentol_summary->validation_last_update > $tmp_last_update) {

@@ -32,6 +32,13 @@ class DisplayHrgaController extends Controller
 
         }
 
+        /*$data2 = SunfishAttendanceData::instance()->getDailyAttendanceRange('2020-09-01', '2020-09-24');
+        $data_arr = [];
+        foreach ($data2 as $key => $value) {
+            $data_arr[] = count($value);
+        }
+        return json_encode($data2);*/
+
         $tmp_attendance = SunfishAttendanceData::find()
         ->select([
             'cost_center', 'total_ot' => 'SUM(total_ot)'

@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\MachinePerformanceView01;
+use app\models\MttrMtbfDataView;
 
 /**
-* MntDownTimeSearch represents the model behind the search form about `app\models\MachinePerformanceView01`.
+* MntDownTimeSearch represents the model behind the search form about `app\models\MttrMtbfDataView`.
 */
-class MntDownTimeSearch extends MachinePerformanceView01
+class MntDownTimeSearch extends MttrMtbfDataView
 {
 /**
 * @inheritdoc
@@ -40,7 +40,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = MachinePerformanceView01::find();
+$query = MttrMtbfDataView::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
