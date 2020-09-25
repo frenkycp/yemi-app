@@ -52,13 +52,38 @@ class DisplayHrgaController extends Controller
         ->orderBy('cost_center')
         ->all();
 
-        $total_mp = SunfishViewEmp::find()
+        $mp_by_section = SunfishViewEmp::find()
+        ->select([
+            'cost_center_name', 'total_mp' => 'COUNT(*)'
+        ])
         ->where(['status' => 1])
         ->andWhere('cost_center_code NOT IN (\'10\', \'110X\') AND PATINDEX(\'YE%\', Emp_no) > 0')
-        ->count();
+        ->groupBy('cost_center_name')
+        ->orderBy('cost_center_name')
+        ->all();
+
+        $data = [];
+        $grand_total_mp = 0;
+        foreach ($mp_by_section as $mp) {
+            $tmp_total_ot = 0;
+            $grand_total_mp += $mp->total_mp;
+            foreach ($tmp_attendance as $attendance) {
+                if ($attendance->cost_center == $mp->cost_center_name) {
+                    $tmp_total_ot = $attendance->total_ot;
+                }
+            }
+            if ($tmp_total_ot > 0) {
+                $data[$mp->cost_center_name] = [
+                    'total_ot' => $tmp_total_ot,
+                    'total_mp' => $mp->total_mp
+                ];
+            }
+            
+        }
 
         return $this->render('progress-overtime-hours', [
             'data' => $data,
+            'grand_total_mp' => $grand_total_mp,
             'model' => $model,
             'tmp_attendance' => $tmp_attendance,
             'total_mp' => $total_mp,

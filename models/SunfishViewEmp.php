@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SunfishViewEmp extends BaseSunfishViewEmp
 {
-    public $attend_code;
+    public $attend_code, $total_mp;
 
     public function behaviors()
     {

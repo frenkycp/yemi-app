@@ -46,11 +46,12 @@ $css_string = "
     .summary-tbl > tbody > tr > td{
         border:1px solid #777474;
         font-size: 12px;
+        font-weight: bold;
         background: white;
         color: black;
         vertical-align: middle;
         //padding: 10px 10px;
-        letter-spacing: 1.1px;
+        letter-spacing: 1.3px;
         //height: 100px;
     }
     .summary-tbl > thead > tr > th{
@@ -148,16 +149,21 @@ $grand_total_hours = 0;
                 <tr>
                     <th>Section</th>
                     <th class="text-center">Total Hours</th>
+                    <th class="text-center">Total MP</th>
+                    <th class="text-center">Hours per MP</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($tmp_attendance as $key => $value):
-                    $total_hours = round(($value->total_ot / 60));
+                <?php foreach ($data as $key => $value):
+                    $total_hours = round(($value['total_ot'] / 60));
+                    $hours_per_mp = round(($total_hours / $value['total_mp']), 1);
                     $grand_total_hours += $total_hours;
                     ?>
                     <tr>
-                        <td><?= $value->cost_center; ?></td>
-                        <td><?= number_format($total_hours); ?></td>
+                        <td class=""><?= $key; ?></td>
+                        <td class="text-center"><?= number_format($total_hours); ?></td>
+                        <td class="text-center"><?= number_format($value['total_mp']); ?></td>
+                        <td class="text-center"><?= $hours_per_mp; ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
@@ -175,8 +181,8 @@ $grand_total_hours = 0;
             <tbody>
                 <tr>
                     <td class="text-center" style="font-size: 4em;"><?= number_format($grand_total_hours); ?></td>
-                    <td class="text-center" style="font-size: 4em;"><?= number_format($total_mp); ?></td>
-                    <td class="text-center" style="font-size: 4em;"><?= number_format($grand_total_hours / $total_mp); ?></td>
+                    <td class="text-center" style="font-size: 4em;"><?= number_format($grand_total_mp); ?></td>
+                    <td class="text-center" style="font-size: 4em;"><?= round($grand_total_hours / $grand_total_mp, 1); ?></td>
                 </tr>
             </tbody>
         </table>
