@@ -95,7 +95,7 @@ class ProductionMonthlyInspectionController extends Controller
             ],
     		[
     			'name' => 'Lot Out ロットアウト',
-    			'data' => $tmp_data,
+    			'data' => [],
     			'color' => 'rgba(255, 0, 0, 0.5)'
     		],
             
