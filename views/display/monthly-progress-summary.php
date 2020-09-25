@@ -105,14 +105,14 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data);
 echo '</pre>';*/
 ?>
-<br/>
+
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
     'action' => Url::to(['monthly-progress-summary']),
 ]); ?>
 
-<div class="row">
+<div class="row" style="padding-top: 5px;">
     <div class="col-md-2">
         <?= $form->field($model, 'fiscal_year')->dropDownList(ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->all(), 'FISCAL', 'FISCAL'), [
                 //'onchange'=>'this.form.submit()'
@@ -131,7 +131,7 @@ echo '</pre>';*/
 </div>
 
 <?php ActiveForm::end(); ?>
-<br/>
+
 <table class="table" id="summary-tbl">
     <thead>
         <tr>
@@ -153,18 +153,18 @@ echo '</pre>';*/
     </tbody>
 </table>
 
-
+<hr style="margin: 0px;">
 
 <div class="row">
     <div class="col-sm-12 text-center">
-        <span style="color: white;">Top Minus (By Amount)</span>
+        <span style="color: white; font-size: 2em;">主な遅れ製品  (Top Minus xxxx ) </span>
     </div>
 </div>
 
 <hr style="margin: 0px;">
 <div class="row">
     <?php foreach ($top_minus as $key => $value): ?>
-        <div class="col-sm-6 text-center" style="color: white; letter-spacing: 1.5px;">
+        <div class="col-sm-6 text-center" style="color: white; letter-spacing: 1.5px; padding: 3px;">
             <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | <span class="text-red">USD ' . number_format($value->BALANCE_AMT_ALLOC) . '</span>'; ?>
         </div>
     <?php endforeach ?>

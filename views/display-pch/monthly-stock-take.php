@@ -276,6 +276,13 @@ echo '</pre>';*/
                         'text' => 'Percentage (%)'
                     ],
                 ],
+                'plotOptions' => [
+                    'series' => [
+                        'dataLabels' => [
+                            'enabled' => true,
+                        ],
+                    ]
+                ],
                 'series' => $data2,
             ],
         ]);

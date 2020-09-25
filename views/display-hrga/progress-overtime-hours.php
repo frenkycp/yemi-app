@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => '一人当たりの残業進捗 (Progress overtime hours per man) H-1',
-    'tab_title' => '一人当たりの残業進捗 (Progress overtime hours per man) H-1',
-    'breadcrumbs_title' => '一人当たりの残業進捗 (Progress overtime hours per man) H-1'
+    'page_title' => '一人当たりの残業時間 (Progress overtime hours per man) H-1',
+    'tab_title' => '一人当たりの残業時間 (Progress overtime hours per man) H-1',
+    'breadcrumbs_title' => '一人当たりの残業時間 (Progress overtime hours per man) H-1'
 ];
 
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
