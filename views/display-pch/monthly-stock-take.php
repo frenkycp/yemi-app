@@ -126,7 +126,7 @@ print_r($data);
 echo '</pre>';*/
 
 /*echo '<pre>';
-print_r($data2);
+print_r($data_new);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
@@ -173,6 +173,13 @@ echo '</pre>';*/
                         'fontFamily' => 'sans-serif',
                     ],
                     'height' => 400,
+                    'events' => [
+                        'load' => new JsExpression("
+                            function(){
+                                this.series[0].data[0].doDrilldown();
+                            }
+                        "),
+                    ],
                 ],
                 'credits' => [
                     'enabled' => false
@@ -181,7 +188,7 @@ echo '</pre>';*/
                     'text' => null,
                 ],
                 'xAxis' => [
-                    'type' => 'category',
+                    'categories' => $categories,
                     /*'labels' => [
                         'enabled' => false,
                     ],*/
@@ -200,16 +207,27 @@ echo '</pre>';*/
                                 }
                             "),
                         ],
+                        'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ],
                         'dataLabels' => [
                             'enabled' => true
                         ],
                     ],
                 ],
-                'series' => $data,
-                'drilldown' => [
+                'series' => $data_new,
+                /*'drilldown' => [
                     'series' => $drilldown,
                     'allowPointDrilldown' => false
-                ],
+                ],*/
             ],
         ]);
         ?>
