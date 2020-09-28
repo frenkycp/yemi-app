@@ -18,7 +18,7 @@ $this->title = [
 $this->registerCss("
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white;}
+    .content-header {color: white; font-size: 0.8em;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     .box-header .box-title{font-size: 2em;}
@@ -113,13 +113,13 @@ echo '</pre>';*/
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
-                    'height' => 400
+                    'height' => 500
                 ],
                 'credits' => [
                     'enabled' => false
                 ],
                 'title' => [
-                    'text' => null,
+                    'text' => $model->section,
                 ],
                 'subtitle' => [
                     'text' => null,
