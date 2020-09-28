@@ -38,6 +38,7 @@ use Yii;
  * @property string $category
  * @property string $dandory_date
  * @property string $PI
+ * @property string $AREA
  * @property string $PIC
  * @property string $RACK
  * @property string $RACK_LOC
@@ -82,7 +83,7 @@ abstract class StoreOnhandWsus extends \yii\db\ActiveRecord
             [['PI_PERIOD'], 'string', 'max' => 6],
             [['PI_STAT', 'PI_DUMMY', 'PI'], 'string', 'max' => 1],
             [['MAT_CLASS'], 'string', 'max' => 4],
-            [['PIC', 'RACK', 'RACK_LOC', 'STORAGE'], 'string', 'max' => 30],
+            [['AREA', 'PIC', 'RACK', 'RACK_LOC', 'STORAGE'], 'string', 'max' => 30],
             [['ITEM'], 'unique']
         ];
     }
@@ -122,6 +123,7 @@ abstract class StoreOnhandWsus extends \yii\db\ActiveRecord
             'category' => 'Category',
             'dandory_date' => 'Dandory Date',
             'PI' => 'Pi',
+            'AREA' => 'Area',
             'PIC' => 'Pic',
             'RACK' => 'Rack',
             'RACK_LOC' => 'Rack Loc',

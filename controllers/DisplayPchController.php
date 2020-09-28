@@ -299,9 +299,10 @@ class DisplayPchController extends Controller
         ])
         ->where([
             'SLIP_STAT' => 'USED',
-            'PI_MISTAKE' => 'N'
+            'PI_MISTAKE' => 'N',
+            'PI_STAGE' => 1
         ])
-        ->groupBy('PI_COUNT_01_LAST_UPDATE')
+        ->groupBy(['FORMAT(PI_COUNT_01_LAST_UPDATE, \'yyyy-MM-dd\')'])
         ->all();
 
         $log_2 = StorePiItemLog::find()
@@ -311,9 +312,10 @@ class DisplayPchController extends Controller
         ])
         ->where([
             'SLIP_STAT' => 'USED',
-            'PI_MISTAKE' => 'N'
+            'PI_MISTAKE' => 'N',
+            'PI_STAGE' => 2
         ])
-        ->groupBy('PI_COUNT_02_LAST_UPDATE')
+        ->groupBy(['FORMAT(PI_COUNT_02_LAST_UPDATE, \'yyyy-MM-dd\')'])
         ->all();
 
         $log_3 = StorePiItemLog::find()
@@ -323,9 +325,10 @@ class DisplayPchController extends Controller
         ])
         ->where([
             'SLIP_STAT' => 'USED',
-            'PI_MISTAKE' => 'N'
+            'PI_MISTAKE' => 'N',
+            'PI_STAGE' => 3
         ])
-        ->groupBy('PI_AUDIT_01_LAST_UPDATE')
+        ->groupBy(['FORMAT(PI_AUDIT_01_LAST_UPDATE, \'yyyy-MM-dd\')'])
         ->all();
 
         $log_4 = StorePiItemLog::find()
@@ -335,9 +338,10 @@ class DisplayPchController extends Controller
         ])
         ->where([
             'SLIP_STAT' => 'USED',
-            'PI_MISTAKE' => 'N'
+            'PI_MISTAKE' => 'N',
+            'PI_STAGE' => 4
         ])
-        ->groupBy('PI_AUDIT_02_LAST_UPDATE')
+        ->groupBy(['FORMAT(PI_AUDIT_02_LAST_UPDATE, \'yyyy-MM-dd\')'])
         ->all();
 
         $tmp_data1 = $tmp_data2 = $tmp_data3 = $tmp_data4 = [];

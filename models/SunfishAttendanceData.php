@@ -76,6 +76,26 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
         return $keterangan;
     }
 
+    public function getMonthlyOtBySection($period)
+    {
+        $return_data = [];
+        $tmp_data = $this::find()
+        ->select([
+            'cost_center', 'total_ot' => 'SUM(total_ot)'
+        ])
+        ->where([
+            'FORMAT(shiftendtime, \'yyyyMM\')' => $period
+        ])
+        ->andWhere('total_ot IS NOT NULL')
+        ->andWhere(['NOT IN', 'cost_center', ['Board of Director']])
+        ->groupBy('cost_center')
+        ->orderBy('cost_center')
+        ->asArray()
+        ->all();
+
+        return $tmp_data;
+    }
+
     public function getDailyAttendanceRange($from_date, $to_date)
     {
         $return_data = [];

@@ -18,7 +18,7 @@ class StockTakeProgressDataSearch extends StoreOnhandWsus
 public function rules()
 {
 return [
-[['ITEM', 'ITEM_DESC', 'UM', 'PI_PERIOD', 'PI_AUDIT_LAST_UPDATE', 'PI_STAT', 'PI_DUMMY', 'model', 'VMS_VERSION', 'MAT_CLASS', 'category', 'dandory_date', 'PIC', 'PI'], 'safe'],
+[['ITEM', 'ITEM_DESC', 'UM', 'PI_PERIOD', 'PI_AUDIT_LAST_UPDATE', 'PI_STAT', 'PI_DUMMY', 'model', 'VMS_VERSION', 'MAT_CLASS', 'category', 'dandory_date', 'PIC', 'PI', 'AREA'], 'safe'],
             [['STD_PRICE', 'PI_VALUE', 'ONHAND_QTY', 'PI_VARIANCE', 'PI_VARIANCE_ABSOLUTE', 'ONHAND_AMT', 'PI_VALUE_AMT', 'PI_VARIANCE_AMT', 'PI_VARIANCE_ABSOLUTE_AMT', 'PI_RATE', 'PI_COUNT_1', 'PI_COUNT_2', 'PI_AUDIT_1', 'PI_AUDIT_2', 'LOC_ONHAND_QTY', 'BALANCE'], 'number'],
 ];
 }
@@ -81,6 +81,7 @@ $query->andFilterWhere([
             'dandory_date' => $this->dandory_date,
             'PIC' => $this->PIC,
             'PI' => $this->PI,
+            'AREA' => $this->AREA,
         ]);
 
         $query->andFilterWhere(['like', 'ITEM', $this->ITEM])

@@ -97,7 +97,9 @@ $section_data = app\models\CostCenter::find()
 
 <div class="box box-primary box-solid">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-user"></i> Last Update : <?= date('Y-m-d H:i:s'); ?></h3>
+        <h3 class="box-title">
+            <i class="fa fa-user"></i> Last Update : 2020-03-30 <small style="color: yellow;">(For New Data Click <u><?= Html::a('Here', ['monthly-overtime-by-section-new']); ?></u>)</small>
+        </h3>
     </div>
     <div class="box-body">
         <?php
@@ -135,7 +137,7 @@ $section_data = app\models\CostCenter::find()
                         'categories' => $categories,
                         'labels' => [
                             'style' => [
-                                'fontSize' => '20px',
+                                //'fontSize' => '20px',
                                 'fontWeight' => 'bold'
                             ],
                         ],

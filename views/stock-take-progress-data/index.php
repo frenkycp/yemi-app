@@ -138,6 +138,12 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
+        'attribute' => 'AREA',
+        'filter' => ArrayHelper::map(app\models\StoreOnhandWsus::find()->select('AREA')->where('AREA IS NOT NULL')->andWhere(['<>', 'AREA', ''])->groupBy('AREA')->orderBy('AREA')->all(), 'AREA', 'AREA'),
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'PIC',
         'label' => 'PIC',
         'filter' => ArrayHelper::map(app\models\StoreOnhandWsus::find()->select('PIC')->where('PIC IS NOT NULL')->groupBy('PIC')->orderBy('PIC')->all(), 'PIC', 'PIC'),
