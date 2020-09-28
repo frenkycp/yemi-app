@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'BU別の生産進捗 (Progress production by BU) <span class="japanesse light-green"></span>',
+    'page_title' => '<span class="japanesse">BU別の生産進捗</span> (Progress production by BU) <span class="japanesse light-green"></span>',
     'tab_title' => 'BU別の生産進捗 (Progress production by BU)',
     'breadcrumbs_title' => 'BU別の生産進捗 (Progress production by BU)'
 ];
@@ -157,7 +157,7 @@ echo '</pre>';*/
 
 <div class="row">
     <div class="col-sm-12 text-center">
-        <span style="color: white; font-size: 2em;">主な遅れ製品  (Top Minus xxxx ) </span>
+        <span style="color: white; font-size: 2em;"><span class="japanesse">主な遅れ製品</span>  (Top Minus xxxx ) </span>
     </div>
 </div>
 

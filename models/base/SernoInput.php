@@ -12,8 +12,12 @@ use Yii;
  * @property string $pk
  * @property string $gmc
  * @property string $line
+ * @property double $mp
  * @property string $proddate
  * @property string $waktu
+ * @property double $wrk_time
+ * @property double $mp_time
+ * @property double $qty_time
  * @property string $sernum
  * @property integer $flo
  * @property string $plan
@@ -23,7 +27,10 @@ use Yii;
  * @property string $qa_ng
  * @property string $qa_ng_date
  * @property integer $qa_result
+ * @property integer $qa_report
  * @property integer $loct
+ * @property string $loct_time
+ * @property integer $reprint
  * @property string $aliasModel
  */
 abstract class SernoInput extends \yii\db\ActiveRecord
@@ -54,16 +61,17 @@ abstract class SernoInput extends \yii\db\ActiveRecord
     {
         return [
             [['pk', 'gmc', 'line', 'proddate', 'waktu', 'sernum'], 'required'],
-            [['waktu'], 'safe'],
-            [['flo', 'adv', 'qa_result', 'loct'], 'integer'],
+            [['mp', 'wrk_time', 'mp_time', 'qty_time'], 'number'],
+            [['waktu', 'loct_time'], 'safe'],
+            [['flo', 'adv', 'qa_result', 'qa_report', 'loct', 'reprint'], 'integer'],
             [['pk'], 'string', 'max' => 40],
             [['gmc'], 'string', 'max' => 11],
             [['line'], 'string', 'max' => 15],
-            [['proddate', 'qa_ok_date', 'qa_ng_date'], 'string', 'max' => 10],
-            [['sernum'], 'string', 'max' => 20],
+            [['proddate'], 'string', 'max' => 10],
+            [['sernum'], 'string', 'max' => 30],
             [['plan'], 'string', 'max' => 35],
             [['qa_ok'], 'string', 'max' => 2],
-            [['qa_ng'], 'string', 'max' => 255],
+            [['qa_ok_date', 'qa_ng', 'qa_ng_date'], 'string', 'max' => 255],
             [['pk'], 'unique']
         ];
     }
@@ -77,8 +85,12 @@ abstract class SernoInput extends \yii\db\ActiveRecord
             'pk' => 'Pk',
             'gmc' => 'Gmc',
             'line' => 'Line',
+            'mp' => 'Mp',
             'proddate' => 'Proddate',
             'waktu' => 'Waktu',
+            'wrk_time' => 'Wrk Time',
+            'mp_time' => 'Mp Time',
+            'qty_time' => 'Qty Time',
             'sernum' => 'Sernum',
             'flo' => 'Flo',
             'plan' => 'Plan',
@@ -88,7 +100,10 @@ abstract class SernoInput extends \yii\db\ActiveRecord
             'qa_ng' => 'Qa Ng',
             'qa_ng_date' => 'Qa Ng Date',
             'qa_result' => 'Qa Result',
+            'qa_report' => 'Qa Report',
             'loct' => 'Loct',
+            'loct_time' => 'Loct Time',
+            'reprint' => 'Reprint',
         ];
     }
 

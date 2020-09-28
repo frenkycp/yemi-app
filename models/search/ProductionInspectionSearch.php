@@ -59,7 +59,7 @@ $query = SernoInputAll::find()
 ])
 ->where([
     '<>', 'flo', 0
-])
+])->andWhere(['qa_report' => 0])
 //->andWhere(['<>', 'status', 'LOT OUT'])
 //->joinWith('sernoOutput')
 //->joinWith('sernoMaster')

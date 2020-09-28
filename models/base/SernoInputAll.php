@@ -27,6 +27,7 @@ use Yii;
  * @property string $qa_ng
  * @property string $qa_ng_date
  * @property integer $qa_result
+ * @property integer $qa_report
  * @property integer $loct
  * @property string $loct_time
  * @property integer $reprint
@@ -61,12 +62,12 @@ abstract class SernoInputAll extends \yii\db\ActiveRecord
         return [
             [['mp', 'wrk_time', 'mp_time', 'qty_time'], 'number'],
             [['waktu', 'loct_time'], 'safe'],
-            [['flo', 'adv', 'qa_result', 'loct', 'reprint'], 'integer'],
+            [['flo', 'adv', 'qa_result', 'qa_report', 'loct', 'reprint'], 'integer'],
             [['pk'], 'string', 'max' => 40],
             [['gmc'], 'string', 'max' => 11],
             [['line'], 'string', 'max' => 15],
             [['proddate'], 'string', 'max' => 10],
-            [['sernum'], 'string', 'max' => 20],
+            [['sernum'], 'string', 'max' => 30],
             [['plan'], 'string', 'max' => 35],
             [['qa_ok'], 'string', 'max' => 2],
             [['qa_ok_date', 'qa_ng', 'qa_ng_date'], 'string', 'max' => 255]
@@ -97,6 +98,7 @@ abstract class SernoInputAll extends \yii\db\ActiveRecord
             'qa_ng' => 'Qa Ng',
             'qa_ng_date' => 'Qa Ng Date',
             'qa_result' => 'Qa Result',
+            'qa_report' => 'Qa Report',
             'loct' => 'Loct',
             'loct_time' => 'Loct Time',
             'reprint' => 'Reprint',

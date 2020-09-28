@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Stock Taking Progress  <span class="japanesse light-green">棚卸進捗管理</span>',
-    'tab_title' => 'Stock Taking Progress ',
-    'breadcrumbs_title' => 'Stock Taking Progress '
+    'page_title' => 'MTTR - MTBF AVERAGE <span class="japanesse light-green"></span>',
+    'tab_title' => 'MTTR - MTBF AVERAGE',
+    'breadcrumbs_title' => 'MTTR - MTBF AVERAGE'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -134,110 +134,30 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['monthly-stock-take']),
+    'action' => Url::to(['mttr-mtbf-avg']),
 ]); ?>
 
-<div class="row" style="">
-    <div class="col-md-2">
-        <?= $form->field($model, 'period')->dropDownList($period_dropdown_arr, [
-            'prompt' => 'Choose period...',
-            'onchange'=>'this.form.submit()'
-        ]); ?>
+<div class="row" style="padding-top: 5px;">
+    <div class="col-sm-2">
+        <?= $form->field($model, 'fiscal_year')->dropDownList(ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->all(), 'FISCAL', 'FISCAL'), [
+                //'onchange'=>'this.form.submit()'
+            ]
+        ); ?>
     </div>
-    <div class="form-group" style="display: none;">
+    <div class="col-sm-3">
+        <?= $form->field($model, 'area')->dropDownList(ArrayHelper::map(app\models\AssetTbl::find()->select('area')->where('PATINDEX(\'%MNT%\', asset_id) > 0')->andWhere('area IS NOT NULL')->groupBy('area')->orderBy('area')->all(), 'area', 'area')); ?>
+    </div>
+    
+    <div class="form-group">
         <br/>
-        <?= Html::submitButton('GENERATE', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+        <?= Html::submitButton('GENERATE', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
     </div>
     
 </div>
-<br/>
 
 <?php ActiveForm::end(); ?>
 
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Current Progress (Last Update : <?= date('Y-m-d H:i:s'); ?>)</h3>
-    </div>
-    <div class="panel-body">
-        <?php
-        echo Highcharts::widget([
-            'scripts' => [
-                'modules/drilldown',
-                //'themes/grid-light',
-                'themes/dark-unica',
-            ],
-            'options' => [
-                'chart' => [
-                    'type' => 'column',
-                    'style' => [
-                        'fontFamily' => 'sans-serif',
-                    ],
-                    'height' => 400,
-                    'events' => [
-                        'load' => new JsExpression("
-                            function(){
-                                this.series[0].data[0].doDrilldown();
-                            }
-                        "),
-                    ],
-                ],
-                'credits' => [
-                    'enabled' => false
-                ],
-                'title' => [
-                    'text' => null,
-                ],
-                'xAxis' => [
-                    'categories' => $categories,
-                    /*'labels' => [
-                        'enabled' => false,
-                    ],*/
-                ],
-                'yAxis' => [
-                    'min' => 0,
-                    'max' => 100,
-                ],
-                'plotOptions' => [
-                    'series' => [
-                        'stacking' => 'percent',
-                        'events' => [
-                            'legendItemClick' => new JsExpression("
-                                function(e){
-                                    return false;
-                                }
-                            "),
-                        ],
-                        'cursor' => 'pointer',
-                        'point' => [
-                            'events' => [
-                                'click' => new JsExpression("
-                                    function(e){
-                                        e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                    }
-                                "),
-                            ]
-                        ],
-                        'dataLabels' => [
-                            'enabled' => true
-                        ],
-                    ],
-                ],
-                'series' => $data_new,
-                /*'drilldown' => [
-                    'series' => $drilldown,
-                    'allowPointDrilldown' => false
-                ],*/
-            ],
-        ]);
-        ?>
-    </div>
-</div>
-
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Daily Progress</h3>
-    </div>
+<div class="panel panel-default">
     <div class="panel-body">
         <?php
         echo Highcharts::widget([
@@ -261,29 +181,90 @@ echo '</pre>';*/
                     'text' => null,
                 ],
                 'xAxis' => [
-                    'type' => 'datetime',
+                    'categories' => $categories,
                     /*'labels' => [
                         'enabled' => false,
                     ],*/
                 ],
-                'tooltip' => [
-                    'valueSuffix' => '%'
-                ],
                 'yAxis' => [
                     'min' => 0,
-                    'max' => 100,
-                    'title' => [
-                        'text' => 'Percentage (%)'
-                    ],
                 ],
                 'plotOptions' => [
                     'series' => [
+                        /*'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ],*/
                         'dataLabels' => [
-                            'enabled' => true,
+                            'enabled' => true
                         ],
-                    ]
+                    ],
                 ],
-                'series' => $data2,
+                'series' => $data_mttr,
+            ],
+        ]);
+        ?>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                'modules/drilldown',
+                //'themes/grid-light',
+                'themes/dark-unica',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'line',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
+                    'height' => 400,
+                ],
+                'credits' => [
+                    'enabled' => false
+                ],
+                'title' => [
+                    'text' => null,
+                ],
+                'xAxis' => [
+                    'categories' => $categories,
+                    /*'labels' => [
+                        'enabled' => false,
+                    ],*/
+                ],
+                'yAxis' => [
+                    'min' => 0,
+                ],
+                'plotOptions' => [
+                    'series' => [
+                        /*'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ],*/
+                        'dataLabels' => [
+                            'enabled' => true
+                        ],
+                    ],
+                ],
+                'series' => $data_mtbf,
             ],
         ]);
         ?>
