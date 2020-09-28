@@ -67,7 +67,8 @@ class ProductionMonthlyInspectionController extends Controller
             'total_repair' => 'SUM((CASE WHEN ((qa_ng <> \'\') and (qa_result = 2)) then 1 ELSE 0 END))',
         ])
         ->where([
-            'extract(year_month from proddate)' => $periode
+            'extract(year_month from proddate)' => $periode,
+            'qa_report' => 0
         ])
         ->groupBy('proddate')
         ->all();
@@ -95,7 +96,7 @@ class ProductionMonthlyInspectionController extends Controller
             ],
     		[
     			'name' => 'Lot Out ロットアウト',
-    			'data' => [],
+    			'data' => $tmp_data,
     			'color' => 'rgba(255, 0, 0, 0.5)'
     		],
             

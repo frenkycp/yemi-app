@@ -124,8 +124,8 @@ $query->andFilterWhere([
                 'qa_ok' => 'OK'
             ]);
         } else if ($this->status == 'LOT OUT') {
-            //$query->andWhere(['<>', 'qa_ng', ''])->andWhere(['<>', 'qa_result', 2]);
-            $query->andWhere(['<>', 'qa_ng', ''])->andWhere(['qa_result' => 999]);
+            $query->andWhere(['<>', 'qa_ng', ''])->andWhere(['<>', 'qa_result', 2]);
+            //$query->andWhere(['<>', 'qa_ng', ''])->andWhere(['qa_result' => 999]);
         } else if ($this->status == 'REPAIR') {
             $query->andWhere(['<>', 'qa_ng', ''])->andWhere(['qa_result' => 2]);
         }  elseif ($this->status == 'OPEN') {
