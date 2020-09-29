@@ -163,8 +163,8 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 'modules/drilldown',
-                //'themes/grid-light',
-                'themes/dark-unica',
+                'themes/grid-light',
+                //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
@@ -191,6 +191,7 @@ echo '</pre>';*/
                 ],
                 'plotOptions' => [
                     'series' => [
+                        'lineWidth' => 5,
                         /*'cursor' => 'pointer',
                         'point' => [
                             'events' => [
@@ -220,8 +221,8 @@ echo '</pre>';*/
         echo Highcharts::widget([
             'scripts' => [
                 'modules/drilldown',
-                //'themes/grid-light',
-                'themes/dark-unica',
+                'themes/grid-light',
+                //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
@@ -248,6 +249,7 @@ echo '</pre>';*/
                 ],
                 'plotOptions' => [
                     'series' => [
+                        'lineWidth' => 5,
                         /*'cursor' => 'pointer',
                         'point' => [
                             'events' => [

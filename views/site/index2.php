@@ -457,6 +457,7 @@ $this->registerCss("
                                 <ol style="padding-left: 1em; margin-bottom: 5px;">
                                     <li><?= Html::a('Critical Control Room <span class="japanesse-word">温湿度管理(重要職場)</span> <span class="text-red"><b>*IoT</b></span>', ['/display/critical-temp-monitoring']); ?></li>
                                     <li><?= Html::a('Abnormal Temperature <span class="japanesse-word">異常温度</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temperature-over']); ?></li>
+                                    <li><?= Html::a('MTTR - MTBF (Average) <span class="japanesse-word"></span>', ['/display-mnt/mttr-mtbf-avg']); ?></li>
                                 </ol>
                                 <li style="font-weight: bold;">Dashboard</li>
                                 <ol style="padding-left: 1em; margin-bottom: 5px;;">
