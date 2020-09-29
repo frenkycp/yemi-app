@@ -9,14 +9,32 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'OT Management by Section <span class="japanesse text-green">(部門別残業管理）</span>',
+    'page_title' => 'OT Management by Section <span class="japanesse light-green">(部門別残業管理）</span>',
     'tab_title' => 'OT Management by Section',
     'breadcrumbs_title' => 'OT Management by Section'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
-$color = 'ForestGreen';
 
-$this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }");
+$this->registerCss("
+    //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
+    //.form-control {font-size: 30px; height: 52px;}
+    .content-header {color: white; font-size: 0.8em;}
+    //.box-body {background-color: #000;}
+    .box-title {font-weight: bold;}
+    .box-header .box-title{font-size: 2em;}
+    .container {width: auto;}
+    .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
+    //body {background-color: #ecf0f5;}
+    .form-group {margin-bottom: 0px;}
+    //body, .content-wrapper {background-color: #000;}
+    .small-box .icon {top: 1px;}
+    .inner p {font-size: 18px;}
+    .form-horizontal .control-label {padding-top: 0px;}
+    .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
+    a {
+        color: yellow;
+    }
+");
 
 date_default_timezone_set('Asia/Jakarta');
 
@@ -36,15 +54,12 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
-$section_data = app\models\CostCenter::find()
-->where(['CC_ID' => $section])
-->one();
 ?>
 
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['monthly-overtime-by-section/index']),
+    'action' => Url::to(['index']),
 ]); ?>
 
 <div class="row">
@@ -72,112 +87,111 @@ $section_data = app\models\CostCenter::find()
     </div>
     <div class="form-group">
         <br/>
-        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-success', 'style' => 'margin-top: 5px;']); ?>
+        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
     </div>
     
 </div>
-<br/>
 
 <?php ActiveForm::end(); ?>
 
-<div class="box box-primary box-solid">
-    <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-user"></i> Last Update : <?= date('Y-m-d H:i:s'); ?></h3>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-user"></i> Last Update : <?= date('Y-m-d H:i:s'); ?> <span style="color: yellow;">(For Old Data Click <u><?= Html::a('Here', ['index-old']); ?></u>)</span></h3>
     </div>
-    <div class="box-body">
+    <div class="panel-body">
         <?php
-        if (isset($section) && $section != '') {
-            echo Highcharts::widget([
-                'scripts' => [
-                    //'modules/exporting',
-                    'themes/grid-light',
-                    //'themes/dark-unica',
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                'themes/grid-light',
+                //'themes/dark-unica',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'spline',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
+                    'height' => 500
                 ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'spline',
+                'credits' => [
+                    'enabled' => false
+                ],
+                'title' => [
+                    'text' => $model->section,
+                ],
+                'subtitle' => [
+                    'text' => null,
+                ],
+                'xAxis' => [
+                    'categories' => $categories,
+                    'labels' => [
                         'style' => [
-                            'fontFamily' => 'sans-serif',
+                            'fontSize' => '20px',
+                            'fontWeight' => 'bold'
                         ],
-                        'zoomType' => 'x',
-                        //'height' => 290
                     ],
-                    'credits' => [
-                        'enabled' => false
-                    ],
-                    'title' => [
-                        'text' => $section == 'ALL' ? 'OT Management by Section (ALL SECTIONS)' : 'OT Management by Section (' . $section_data->CC_DESC . ')',
-                    ],
-                    'subtitle' => [
-                        'text' => '',
-                    ],
-                    'xAxis' => [
-                        'categories' => $categories,
-
-                    ],
-                    'yAxis' => [
-                        'title' => [
-                            'text' => 'HOURS'
-                        ],
-                        'min' => 0,
-                        'max' => 100,
-                        'plotLines' => [
-                            [
-                                'value' => 10,
-                                'color' => 'orange',
-                                'dashStyle' => 'shortdash',
-                                'width' => 2,
-                                'label' => [
-                                    'text' => 'NORMAL (10)',
-                                    'align' => 'left',
-                                ],
-                                //'zIndex' => 5
-                            ], [
-                                'value' => 20,
-                                'color' => 'red',
-                                'dashStyle' => 'shortdash',
-                                'width' => 2,
-                                'label' => [
-                                    'text' => 'MAXIMUM (20)',
-                                    'align' => 'left',
-                                ],
-                                //'zIndex' => 5
-                            ]
-                        ]
-                    ],
-                    'plotOptions' => [
-                        'spline' => [
-                            'dataLabels' => [
-                                'enabled' => true,
-                            ],
-                        ],
-                        'series' => [
-                            'cursor' => 'pointer',
-                            'marker' => [
-                                'enabled' => false
-                            ],
-                            'dataLabels' => [
-                                //'allowOverlap' => true
-                                //'enabled' => true
-                            ],
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression("
-                                        function(e){
-                                            e.preventDefault();
-                                            $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
-                                        }
-                                    "),
-                                ]
-                            ]
-                        ]
-                    ],
-                    'series' => $data,
                 ],
-            ]);
-        } else {
-            echo 'Please select a section...';
-        }
+                'yAxis' => [
+                    'title' => [
+                        'text' => 'HOURS'
+                    ],
+                    'min' => 0,
+                    'max' => 100,
+                    'plotLines' => [
+                        [
+                            'value' => 10,
+                            'color' => 'orange',
+                            'dashStyle' => 'shortdash',
+                            'width' => 2,
+                            'label' => [
+                                'text' => 'NORMAL (10)',
+                                'align' => 'left',
+                            ],
+                            //'zIndex' => 5
+                        ], [
+                            'value' => 20,
+                            'color' => 'red',
+                            'dashStyle' => 'shortdash',
+                            'width' => 2,
+                            'label' => [
+                                'text' => 'MAXIMUM (20)',
+                                'align' => 'left',
+                            ],
+                            //'zIndex' => 5
+                        ]
+                    ]
+                ],
+                'plotOptions' => [
+                    'spline' => [
+                        'dataLabels' => [
+                            'enabled' => true,
+                        ],
+                    ],
+                    'series' => [
+                        //'cursor' => 'pointer',
+                        'marker' => [
+                            'enabled' => false
+                        ],
+                        'dataLabels' => [
+                            //'allowOverlap' => true
+                            //'enabled' => true
+                        ],
+                        /*'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ]*/
+                    ]
+                ],
+                'series' => $data,
+            ],
+        ]);
         ?>
     </div>
 </div>

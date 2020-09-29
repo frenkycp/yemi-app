@@ -16,7 +16,7 @@ use app\models\StorePiItemLog;
 
 class DisplayPchController extends Controller
 {
-    public function actionMonthlyStockTakeGetRemark($period, $pic, $pi_stage)
+    public function actionMonthlyStockTakeGetRemark($period, $area, $pi_stage)
     {
         $status_arr = [
             0 => [
@@ -43,7 +43,7 @@ class DisplayPchController extends Controller
 
         $remark = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>PIC : ' . $pic . ' , Status : ' . $status_arr[$pi_stage]['label'] . ' <small>(' . $period . ')</small></h3>
+            <h3>Area : ' . $area . ' , Status : ' . $status_arr[$pi_stage]['label'] . ' <small>(' . $period . ')</small></h3>
         </div>
         <div class="modal-body">
         ';
@@ -62,7 +62,7 @@ class DisplayPchController extends Controller
         ->where([
             'SLIP_STAT' => 'USED',
             'PI_PERIOD' => $period,
-            'PIC' => $pic,
+            'AREA' => $area,
             'PI_STAGE' => $pi_stage
         ])
         ->all();
@@ -209,15 +209,15 @@ class DisplayPchController extends Controller
             ],
         ];
 
-        $pic_arr = StorePiItem::find()
-        ->select('PIC')
+        $area_arr = StorePiItem::find()
+        ->select('AREA')
         ->where([
             'SLIP_STAT' => 'USED',
             'PI_PERIOD' => $model->period,
         ])
         //->andWhere(['<>', 'PIC', '-'])
-        ->groupBy('PIC')
-        ->orderBy('PIC')
+        ->groupBy('AREA')
+        ->orderBy('AREA')
         ->all();
 
         $categories = [];
@@ -225,7 +225,7 @@ class DisplayPchController extends Controller
         foreach ($status_arr as $key => $status) {
             
             $tmp_drilldown_open = StorePiItem::find()->select([
-                'PIC', 'total' => 'COUNT(*)'
+                'AREA', 'total' => 'COUNT(*)'
             ])
             ->where([
                 'SLIP_STAT' => 'USED',
@@ -233,21 +233,21 @@ class DisplayPchController extends Controller
                 'PI_STAGE' => $key
             ])
             //->andWhere(['<>', 'PIC', '-'])
-            ->groupBy('PIC')->orderBy('PIC')->all();
+            ->groupBy('AREA')->orderBy('AREA')->all();
 
-            foreach ($pic_arr as $pic) {
-                if (!in_array($pic->PIC, $categories)) {
-                    $categories[] = $pic->PIC;
+            foreach ($area_arr as $area) {
+                if (!in_array($area->AREA, $categories)) {
+                    $categories[] = $area->AREA;
                 }
                 $tmp_total_value = 0;
                 foreach ($tmp_drilldown_open as $value) {
-                    if ($pic->PIC == $value->PIC) {
+                    if ($area->AREA == $value->AREA) {
                         $tmp_total_value = $value->total;
                     }
                 }
                 $tmp_data[$key][] = [
                     'y' => (int)$tmp_total_value,
-                    'url' => Url::to(['monthly-stock-take-get-remark', 'period' => $model->period, 'pic' => $pic->PIC, 'pi_stage' => $key])
+                    'url' => Url::to(['monthly-stock-take-get-remark', 'period' => $model->period, 'area' => $area->AREA, 'pi_stage' => $key])
                 ];
             }
             

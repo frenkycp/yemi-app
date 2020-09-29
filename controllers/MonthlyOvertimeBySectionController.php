@@ -11,6 +11,8 @@ use app\models\SplView;
 use app\models\Karyawan;
 use app\models\CostCenter;
 use app\models\FiscalTbl;
+use app\models\SunfishViewEmp;
+use app\models\SunfishAttendanceData;
 
 class MonthlyOvertimeBySectionController extends Controller
 {
@@ -21,6 +23,96 @@ class MonthlyOvertimeBySectionController extends Controller
     }
     
     public function actionIndex()
+    {
+    	$model = new \yii\base\DynamicModel([
+            'section', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','section'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . '-1 year'));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+
+        $section_arr = SunfishViewEmp::instance()->getSectionDropdown();
+
+        if (\Yii::$app->request->get('id') == 'fa') {
+            $model->section = 'Final Assembling';
+        } elseif (\Yii::$app->request->get('id') == 'pnt') {
+            $model->section = 'Painting';
+        } elseif (\Yii::$app->request->get('id') == 'ww') {
+            $model->section = 'Wood Working';
+        }
+
+        $data = $period_arr = $tmp_emp = [];
+        if ($model->load($_GET) || \Yii::$app->request->get('id')) {
+            $tmp_data_attendance = SunfishAttendanceData::find()
+            ->select([
+                'emp_no', 'full_name', 'shiftendtime' => 'FORMAT(shiftendtime, \'yyyyMM\')',
+                'total_ot' => 'SUM(total_ot)'
+            ])
+            ->where(['>=', 'shiftendtime', date('Y-m-d 00:00:00', strtotime($model->from_date))])
+            ->andWhere(['<=', 'shiftendtime', date('Y-m-d 23:59:59', strtotime($model->to_date))])
+            ->andWhere([
+                'cost_center' => $model->section
+            ])
+            ->andWhere('total_ot IS NOT NULL')
+            ->groupBy(['emp_no', 'full_name', 'FORMAT(shiftendtime, \'yyyyMM\')'])
+            ->all();
+
+            foreach ($tmp_data_attendance as $key => $value) {
+                if (!in_array($value->emp_no, $tmp_emp)) {
+                    $tmp_emp[$value->emp_no] = $value->full_name;
+                }
+                /*$tmp_data[$value->shiftendtime][] = [
+                    'nik' => $value->emp_no,
+                    'name' => $value->full_name,
+                    'total_ot' => $value->total_ot
+                ];*/
+            }
+
+            $tmp_fiscal_period = FiscalTbl::find()
+            ->where(['>=', 'PERIOD', date('Ym', strtotime($model->from_date))])
+            ->andWhere(['<=', 'PERIOD', date('Ym', strtotime($model->to_date))])
+            ->orderBy('PERIOD')
+            ->all();
+            
+            foreach ($tmp_fiscal_period as $key => $value) {
+                $period_arr[] = $value->PERIOD;
+            }
+
+            foreach ($tmp_emp as $nik => $emp) {
+                $tmp_data = [];
+                foreach ($period_arr as $period) {
+                    $ot_hours = 0;
+                    foreach ($tmp_data_attendance as $value) {
+                        if ($value->emp_no == $nik && $value->shiftendtime == $period) {
+                            $ot_hours = round($value->total_ot / 60, 2);
+                        }
+                    }
+                    $tmp_data[] = [
+                        'y' => (float)$ot_hours
+                    ];
+                }
+                $data[] = [
+                    'name' => $nik . ' - ' . $emp,
+                    'data' => $tmp_data,
+                    'showInLegend' => false,
+                    'lineWidth' => 0.8,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[0]')
+                ];
+            }
+        }
+
+        return $this->render('index', [
+            'data' => $data,
+            'tmp_data' => $tmp_data,
+            'model' => $model,
+            'section' => $section,
+            'categories' => $period_arr,
+            'section_arr' => $section_arr
+        ]);
+    }
+
+    public function actionIndexOld()
     {
     	$categories = $data = [];
     	$model = new \yii\base\DynamicModel([
@@ -132,7 +224,7 @@ class MonthlyOvertimeBySectionController extends Controller
 			}
 		}
 
-    	return $this->render('index', [
+    	return $this->render('index-old', [
 			'data' => $data,
 			'model' => $model,
 			'section' => $section,
