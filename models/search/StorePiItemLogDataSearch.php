@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\StorePiItemLog;
+use app\models\StorePiItem;
 
 /**
 * StorePiItemLogDataSearch represents the model behind the search form about `app\models\StorePiItemLog`.
 */
-class StorePiItemLogDataSearch extends StorePiItemLog
+class StorePiItemLogDataSearch extends StorePiItem
 {
 /**
 * @inheritdoc
@@ -18,7 +18,7 @@ class StorePiItemLogDataSearch extends StorePiItemLog
 public function rules()
 {
 return [
-[['ID', 'SLIP', 'BARCODE', 'BARCODE_QTY', 'PI_PERIOD', 'ITEM', 'ITEM_DESC', 'UM', 'AREA', 'STORAGE', 'STORAGE_DESC', 'PIC', 'RACK', 'RACK_LOC', 'PI_CREATED_BY', 'PI_CREATED', 'PI_COUNT_01_ID', 'PI_COUNT_01_DESC', 'PI_COUNT_01_STAT', 'PI_COUNT_01_TIMER', 'PI_COUNT_01_LAST_UPDATE', 'PI_COUNT_02_ID', 'PI_COUNT_02_DESC', 'PI_COUNT_02_STAT', 'PI_COUNT_02_TIMER', 'PI_COUNT_02_LAST_UPDATE', 'PI_AUDIT_01_ID', 'PI_AUDIT_01_DESC', 'PI_AUDIT_01_STAT', 'PI_AUDIT_01_TIMER', 'PI_AUDIT_01_LAST_UPDATE', 'PI_AUDIT_02_ID', 'PI_AUDIT_02_DESC', 'PI_AUDIT_02_STAT', 'PI_AUDIT_02_TIMER', 'PI_AUDIT_02_LAST_UPDATE', 'NOTE_01', 'NOTE_02', 'NOTE_03', 'NOTE_04', 'NOTE_05', 'NOTE_06', 'NOTE_07', 'NOTE_08', 'NOTE_09', 'NOTE_10', 'SLIP_STAT', 'PI_DUMMY', 'PI_MISTAKE', 'CATEGORY', 'SLIP_SAP'], 'safe'],
+[['SLIP', 'BARCODE', 'BARCODE_QTY', 'PI_PERIOD', 'ITEM', 'ITEM_DESC', 'UM', 'AREA', 'STORAGE', 'STORAGE_DESC', 'PIC', 'RACK', 'RACK_LOC', 'PI_CREATED_BY', 'PI_CREATED', 'PI_COUNT_01_ID', 'PI_COUNT_01_DESC', 'PI_COUNT_01_STAT', 'PI_COUNT_01_TIMER', 'PI_COUNT_01_LAST_UPDATE', 'PI_COUNT_02_ID', 'PI_COUNT_02_DESC', 'PI_COUNT_02_STAT', 'PI_COUNT_02_TIMER', 'PI_COUNT_02_LAST_UPDATE', 'PI_AUDIT_01_ID', 'PI_AUDIT_01_DESC', 'PI_AUDIT_01_STAT', 'PI_AUDIT_01_TIMER', 'PI_AUDIT_01_LAST_UPDATE', 'PI_AUDIT_02_ID', 'PI_AUDIT_02_DESC', 'PI_AUDIT_02_STAT', 'PI_AUDIT_02_TIMER', 'PI_AUDIT_02_LAST_UPDATE', 'NOTE_01', 'NOTE_02', 'NOTE_03', 'NOTE_04', 'NOTE_05', 'NOTE_06', 'NOTE_07', 'NOTE_08', 'NOTE_09', 'NOTE_10', 'SLIP_STAT', 'PI_DUMMY', 'PI_MISTAKE', 'CATEGORY', 'SLIP_SAP'], 'safe'],
             [['SLIP_INT', 'SESSION', 'PI_STAGE'], 'integer'],
             [['PI_VALUE', 'PI_COUNT_01', 'PI_COUNT_01_PROGRESS', 'PI_COUNT_01_TIMER_SECOND', 'PI_COUNT_02', 'PI_COUNT_02_PROGRESS', 'PI_COUNT_02_TIMER_SECOND', 'PI_AUDIT_01', 'PI_AUDIT_01_PROGRESS', 'PI_AUDIT_01_TIMER_SECOND', 'PI_AUDIT_02', 'PI_AUDIT_02_PROGRESS', 'PI_AUDIT_02_TIMER_SECOND', 'Q01_NO', 'Q01_QTY', 'Q01_TOT', 'Q02_NO', 'Q02_QTY', 'Q02_TOT', 'Q03_NO', 'Q03_QTY', 'Q03_TOT', 'Q04_NO', 'Q04_QTY', 'Q04_TOT', 'Q05_NO', 'Q05_QTY', 'Q05_TOT', 'Q06_NO', 'Q06_QTY', 'Q06_TOT', 'Q07_NO', 'Q07_QTY', 'Q07_TOT', 'Q08_NO', 'Q08_QTY', 'Q08_TOT', 'Q09_NO', 'Q09_QTY', 'Q09_TOT', 'Q10_NO', 'Q10_QTY', 'Q10_TOT'], 'number'],
 ];
@@ -42,7 +42,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = StorePiItemLog::find()->where(['<>', 'ID', '-1']);
+$query = StorePiItem::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -110,8 +110,7 @@ $query->andFilterWhere([
             'PI_STAGE' => $this->PI_STAGE,
         ]);
 
-        $query->andFilterWhere(['like', 'ID', $this->ID])
-            ->andFilterWhere(['like', 'SLIP', $this->SLIP])
+        $query->andFilterWhere(['like', 'SLIP', $this->SLIP])
             ->andFilterWhere(['like', 'BARCODE', $this->BARCODE])
             ->andFilterWhere(['like', 'BARCODE_QTY', $this->BARCODE_QTY])
             ->andFilterWhere(['like', 'PI_PERIOD', $this->PI_PERIOD])

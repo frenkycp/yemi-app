@@ -93,6 +93,36 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'PI_STAGE',
+        'value' => function($model){
+            if ($model->PI_STAGE == 0) {
+                return 'OPEN';
+            } elseif ($model->PI_STAGE == 1) {
+                return 'COUNT 1';
+            } elseif ($model->PI_STAGE == 2) {
+                return 'COUNT 2';
+            } elseif ($model->PI_STAGE == 3) {
+                return 'AUDIT 1';
+            } elseif ($model->PI_STAGE == 4) {
+                return 'AUDIT 2';
+            }
+        },
+        'label' => 'Status',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            0 => 'OPEN',
+            1 => 'COUNT 1',
+            2 => 'COUNT 2',
+            3 => 'AUDIT 1',
+            4 => 'AUDIT 2',
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'PI_VALUE',
         'label' => 'Qty',
         'vAlign' => 'middle',
