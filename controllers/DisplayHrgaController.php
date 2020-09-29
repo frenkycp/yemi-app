@@ -16,6 +16,17 @@ use app\models\WorkDayTbl;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionKoyemiMaxCapacity($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $max_capacity = 4;
+
+        return $this->render('koyemi-max-capacity', [
+            'max_capacity' => $max_capacity,
+        ]);
+    }
+
     public function actionProgressOvertimeHours($value='')
     {
         $this->layout = 'clean';
