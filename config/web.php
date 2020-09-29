@@ -122,6 +122,7 @@ $config = [
         'db_cbsupplement' => require(__DIR__ . '/db_cbsupplement.php'),
         'db_211' => require(__DIR__ . '/db_211.php'),
         'db_bentol' => require(__DIR__ . '/db_bentol.php'),
+        'db_biostar_tna' => require(__DIR__ . '/db_biostar_tna.php'),
     ],
     'params' => $params,
     'modules' => [
