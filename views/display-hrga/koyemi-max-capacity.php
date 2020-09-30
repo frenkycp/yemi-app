@@ -56,7 +56,8 @@ $this->registerCss("
         padding: 5px 0px;
     }
     #img-txt {
-        font-size: 4em;
+        font-size: 6em;
+        letter-spacing: 1.5px;
     }
     .badge {
         font-size: 2em;
@@ -76,8 +77,30 @@ $this->registerCss("
 ");
 
 $script = "
+    function update_data(){
+        $.ajax({
+            type: 'POST',
+            url: '" . Url::to(['koyemi-max-capacity-data', 'max_capacity' => $max_capacity]) . "',
+            success: function(data){
+                var tmp_data = JSON.parse(data);
+                $('#total-pengunjung').html(tmp_data.current_capacity);
+                $('#img-view').attr('src', tmp_data.img_url);
+                var tmp_count = 1;
+                $.each(tmp_data.detail_pembeli , function(index, val) {
+                    //alert(index);
+                    $('#pengunjung-' + tmp_count).html(tmp_count + '. ' + val.full_name + ' (' + val.in + ')');
+                    tmp_count = tmp_count + 1;
+                });
+            },
+            complete: function(){
+                setTimeout(function(){update_data();}, 2000);
+            }
+        });
+    }
+
     $(document).ready(function() {
         setupRefresh();
+        update_data();
     });
 
     function setupRefresh() {
@@ -99,13 +122,13 @@ $this->registerJs($script, View::POS_HEAD );
     </div>
 </div>
 <div class="row" style="margin: 10px;">
-    <div class="col-sm-6 text-center">
+    <div class="col-sm-5 text-center">
         <div class="panel panel-primary">
             <div class="panel-heading" style="background-color: #61258e;">
                 <h3 class="panel-title" style="font-size: 2em;">TOTAL PEMBELI</h3>
             </div>
             <div class="panel-body no-padding">
-                <span id="total-pengunjung">3</span>
+                <span id="total-pengunjung">1</span>
                 <hr style="margin: 0px;">
                 <div id="detail-pengunjung" class="text-left">
                     <span style="font-size: 1.5em;">
@@ -123,13 +146,14 @@ $this->registerJs($script, View::POS_HEAD );
             </div>
         </div>
     </div>
-    <div class="col-sm-6 text-center">
+    <div class="col-sm-7 text-center">
         <div id="img-title" class="bg-green">
             <span id="img-txt">"BOLEH MASUK"</span>
         </div>
-        <div id="img" style="height: 600px;">
+        <div style="height: 300px;">
             <?= Html::img('@web/uploads/ICON/NO.png', [
-                'height' => '100%'
+                'height' => '100%',
+                'id' => 'img-view'
             ]); ?>
         </div>
     </div>

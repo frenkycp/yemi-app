@@ -13,9 +13,52 @@ use app\models\SunfishAttendanceData;
 use app\models\SunfishViewEmp;
 use app\models\CarParkAttendance;
 use app\models\WorkDayTbl;
+use app\models\KoyemiInOutView;
+use app\models\Karyawan;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionKoyemiMaxCapacityData($max_capacity='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_in_out = KoyemiInOutView::find()
+        ->where([
+            'in_out_status' => 'KANTIN IN'
+        ])
+        ->orderBy('in_out_datetime')
+        ->all();
+
+        $tmp_nik_arr = $tmp_data_pengunjung = [];
+        foreach ($tmp_in_out as $key => $value) {
+            $nik = $value->user_name;
+            $tmp_nik_arr[] = $nik;
+            $tmp_data_pengunjung[$nik] = [
+                'in' => date('H:i', strtotime($value->in_out_datetime))
+            ];
+        }
+        $tmp_data_karyawan = ArrayHelper::map(Karyawan::find()->where(['NIK_SUN_FISH' => $tmp_nik_arr])->all(), 'NIK_SUN_FISH', 'NAMA_KARYAWAN');
+        foreach ($tmp_data_pengunjung as $key => $value) {
+            $tmp_data_pengunjung[$key]['full_name'] = $tmp_data_karyawan[$key];
+        }
+        $current_capacity = count($tmp_data_pengunjung);
+        if ($current_capacity > 5) {
+            $msg = 'TUNGGU DULU';
+            $img_url = Url::to('@web/uploads/ICON/NO.png');
+        } else {
+            $msg = 'BOLEH MASUK';
+            $img_url = Url::to('@web/uploads/ICON/YES.png');
+        }
+
+        $data = [
+            'current_capacity' => $current_capacity,
+            'msg' => $msg,
+            'img_url' => $img_url,
+            'detail_pembeli' => $tmp_data_pengunjung
+        ];
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
     public function actionKoyemiMaxCapacity($value='')
     {
         $this->layout = 'clean';
