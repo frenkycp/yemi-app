@@ -51,7 +51,7 @@ class DisplayHrgaController extends Controller
         }
         $current_capacity = count($tmp_data_pengunjung);
         //$current_capacity = 6;
-        if ($current_capacity > $max_capacity) {
+        if ($current_capacity >= $max_capacity) {
             $msg = 'TUNGGU DULU';
             $img_url = Url::to('@web/uploads/ICON/NO-2.png');
             $bg_class = 'bg-red';
@@ -104,7 +104,7 @@ class DisplayHrgaController extends Controller
             }
         }
         $current_capacity = count($tmp_data_pengunjung);
-        if ($current_capacity > 5) {
+        if ($current_capacity >= $max_capacity) {
             $msg = 'TUNGGU DULU';
             $img_url = Url::to('@web/uploads/ICON/NO-2.png');
             $bg_class = 'bg-red';
