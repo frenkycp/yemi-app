@@ -104,12 +104,22 @@ $script = "
                 $('#img-txt').html(tmp_data.msg);
                 $('#img-view').attr('src', tmp_data.img_url);
                 $('#img-title').attr('class', tmp_data.bg_class);
-                var tmp_count = 1;
-                $.each(tmp_data.detail_pembeli , function(index, val) {
-                    //alert(index);
-                    $('#pengunjung-' + tmp_count).html(tmp_count + '. ' + val.full_name + ' (' + val.in + ')');
-                    tmp_count = tmp_count + 1;
-                });
+                
+                if(tmp_data.current_capacity == 0){
+                    $('#pengunjung-1').html('-');
+                    $('#pengunjung-2').html('-');
+                    $('#pengunjung-3').html('-');
+                    $('#pengunjung-4').html('-');
+                    $('#pengunjung-5').html('-');
+                } else {
+                    var tmp_count = 1;
+                    $.each(tmp_data.detail_pembeli , function(index, val) {
+                        //alert(index);
+                        $('#pengunjung-' + tmp_count).html(tmp_count + '. ' + val.full_name + ' (' + val.in + ')');
+                        tmp_count = tmp_count + 1;
+                    });
+                }
+
             },
             complete: function(){
                 setTimeout(function(){update_data();}, 2000);

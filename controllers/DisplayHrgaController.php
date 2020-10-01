@@ -40,7 +40,12 @@ class DisplayHrgaController extends Controller
         }
         $tmp_data_karyawan = ArrayHelper::map(Karyawan::find()->where(['NIK_SUN_FISH' => $tmp_nik_arr])->all(), 'NIK_SUN_FISH', 'NAMA_KARYAWAN');
         foreach ($tmp_data_pengunjung as $key => $value) {
-            $tmp_data_pengunjung[$key]['full_name'] = $tmp_data_karyawan[$key];
+            if (isset($tmp_data_karyawan[$key])) {
+                $tmp_data_pengunjung[$key]['full_name'] = $tmp_data_karyawan[$key];
+            } else {
+                $tmp_data_pengunjung[$key]['full_name'] = $key;
+            }
+            
         }
         $current_capacity = count($tmp_data_pengunjung);
         //$current_capacity = 6;
@@ -88,7 +93,11 @@ class DisplayHrgaController extends Controller
         }
         $tmp_data_karyawan = ArrayHelper::map(Karyawan::find()->where(['NIK_SUN_FISH' => $tmp_nik_arr])->all(), 'NIK_SUN_FISH', 'NAMA_KARYAWAN');
         foreach ($tmp_data_pengunjung as $key => $value) {
-            $tmp_data_pengunjung[$key]['full_name'] = $tmp_data_karyawan[$key];
+            if (isset($tmp_data_karyawan[$key])) {
+                $tmp_data_pengunjung[$key]['full_name'] = $tmp_data_karyawan[$key];
+            } else {
+                $tmp_data_pengunjung[$key]['full_name'] = $key;
+            }
         }
         $current_capacity = count($tmp_data_pengunjung);
         if ($current_capacity > 5) {
