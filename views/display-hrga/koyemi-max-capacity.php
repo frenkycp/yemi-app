@@ -125,9 +125,47 @@ $script = "
         });
     }
 
+    function news() 
+        {
+            $.ajax
+            ({ 
+                url: '" . Url::to(['/display/indo-news']) . "',
+                type: 'get',
+                data: 
+                {
+                    'news':'on'
+                },
+                success: function (result) 
+                {
+                    var json = result, 
+                    obj = JSON.parse(json);
+                    var tmp_str = '';
+                    $.each( obj.news, function( key, value ) {
+                        //alert( key + ': ' + value );
+                        if(tmp_str == ''){
+                            tmp_str = value;
+                        } else {
+                            tmp_str += ' <span> </span> ' + value;
+                        }
+                    });
+
+                    $('#berita').html(`
+                        <marquee scrollamount=\"25\" style=\"background-color: #61258e; color: white; text-align: center; font-size: 3em; letter-spacing: 5px; font-weight: normal; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
+                            `+ tmp_str +`
+                        </marquee> 
+                    `);
+
+                    setTimeout(function(){news();}, 180000);
+
+                    // console.log(obj);
+                }
+            });
+        };
+
     $(document).ready(function() {
         setupRefresh();
         update_data();
+        news();
     });
 
     function setupRefresh() {
@@ -185,3 +223,5 @@ $this->registerJs($script, View::POS_HEAD );
         </div>
     </div>
 </div>
+
+<div id="berita"></div>
