@@ -24,7 +24,56 @@ class DisplayHrgaController extends Controller
 
         $tmp_in_out = KoyemiInOutView::find()
         ->where([
-            'in_out_status' => 'KANTIN IN'
+            'in_out_status' => 'KANTIN IN',
+            'tgl' => date('Y-m-d')
+        ])
+        ->orderBy('in_out_datetime')
+        ->all();
+
+        $tmp_nik_arr = $tmp_data_pengunjung = [];
+        foreach ($tmp_in_out as $key => $value) {
+            $nik = $value->user_name;
+            $tmp_nik_arr[] = $nik;
+            $tmp_data_pengunjung[$nik] = [
+                'in' => date('H:i', strtotime($value->in_out_datetime))
+            ];
+        }
+        $tmp_data_karyawan = ArrayHelper::map(Karyawan::find()->where(['NIK_SUN_FISH' => $tmp_nik_arr])->all(), 'NIK_SUN_FISH', 'NAMA_KARYAWAN');
+        foreach ($tmp_data_pengunjung as $key => $value) {
+            $tmp_data_pengunjung[$key]['full_name'] = $tmp_data_karyawan[$key];
+        }
+        $current_capacity = count($tmp_data_pengunjung);
+        //$current_capacity = 6;
+        if ($current_capacity > $max_capacity) {
+            $msg = 'TUNGGU DULU';
+            $img_url = Url::to('@web/uploads/ICON/NO-2.png');
+            $bg_class = 'bg-red';
+        } else {
+            $msg = 'BOLEH MASUK';
+            $img_url = Url::to('@web/uploads/ICON/YES.png');
+            $bg_class = 'bg-green';
+        }
+
+        $data = [
+            'current_capacity' => $current_capacity,
+            'msg' => $msg,
+            'bg_class' => $bg_class,
+            'img_url' => $img_url,
+            'detail_pembeli' => $tmp_data_pengunjung
+        ];
+        return json_encode($data, JSON_UNESCAPED_UNICODE);
+    }
+
+    public function actionKoyemiMaxCapacity($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $max_capacity = 5;
+
+        $tmp_in_out = KoyemiInOutView::find()
+        ->where([
+            'in_out_status' => 'KANTIN IN',
+            'tgl' => date('Y-m-d')
         ])
         ->orderBy('in_out_datetime')
         ->all();
@@ -44,29 +93,25 @@ class DisplayHrgaController extends Controller
         $current_capacity = count($tmp_data_pengunjung);
         if ($current_capacity > 5) {
             $msg = 'TUNGGU DULU';
-            $img_url = Url::to('@web/uploads/ICON/NO.png');
+            $img_url = Url::to('@web/uploads/ICON/NO-2.png');
+            $bg_class = 'bg-red';
         } else {
             $msg = 'BOLEH MASUK';
             $img_url = Url::to('@web/uploads/ICON/YES.png');
+            $bg_class = 'bg-green';
         }
 
         $data = [
             'current_capacity' => $current_capacity,
             'msg' => $msg,
+            'bg_class' => $bg_class,
             'img_url' => $img_url,
             'detail_pembeli' => $tmp_data_pengunjung
         ];
-        return json_encode($data, JSON_UNESCAPED_UNICODE);
-    }
-
-    public function actionKoyemiMaxCapacity($value='')
-    {
-        $this->layout = 'clean';
-        date_default_timezone_set('Asia/Jakarta');
-        $max_capacity = 4;
 
         return $this->render('koyemi-max-capacity', [
             'max_capacity' => $max_capacity,
+            'data' => $data,
         ]);
     }
 

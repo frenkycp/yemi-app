@@ -54,6 +54,7 @@ $this->registerCss("
         border: 1px solid gray;
         border-radius: 10px;
         padding: 5px 0px;
+        text-align: center;
     }
     #img-txt {
         font-size: 6em;
@@ -65,14 +66,30 @@ $this->registerCss("
     }
     #total-pengunjung {
         font-size: 20em;
-        font-family: sans-serif;
+        font-family: tahoma;
     }
     #detail-pengunjung {
         padding: 5px;
     }
     #list-pengunjung {
         padding-left: 20px;
-        font-size: 1.2em;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+    #img-view {
+        position: absolute;
+        top: 10px;
+    }
+    .column {
+        float: left;
+        width: 50%;
+    }
+
+    /* Clear floats after the columns */
+    .custom-row:after {
+        content: '';
+        display: table;
+        clear: both;
     }
 ");
 
@@ -84,7 +101,9 @@ $script = "
             success: function(data){
                 var tmp_data = JSON.parse(data);
                 $('#total-pengunjung').html(tmp_data.current_capacity);
+                $('#img-txt').html(tmp_data.msg);
                 $('#img-view').attr('src', tmp_data.img_url);
+                $('#img-title').attr('class', tmp_data.bg_class);
                 var tmp_count = 1;
                 $.each(tmp_data.detail_pembeli , function(index, val) {
                     //alert(index);
@@ -104,7 +123,7 @@ $script = "
     });
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 3600000); // milliseconds
+      setTimeout(\"refreshPage();\", 600000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -121,40 +140,51 @@ $this->registerJs($script, View::POS_HEAD );
         </div>
     </div>
 </div>
-<div class="row" style="margin: 10px;">
-    <div class="col-sm-5 text-center">
-        <div class="panel panel-primary">
-            <div class="panel-heading" style="background-color: #61258e;">
-                <h3 class="panel-title" style="font-size: 2em;">TOTAL PEMBELI</h3>
-            </div>
-            <div class="panel-body no-padding">
-                <span id="total-pengunjung">1</span>
-                <hr style="margin: 0px;">
-                <div id="detail-pengunjung" class="text-left">
-                    <span style="font-size: 1.5em;">
-                        List Pembeli :
-                    </span>
-                    <div id="list-pengunjung">
-                        <span id="pengunjung-1">-</span><br/>
-                        <span id="pengunjung-2">-</span><br/>
-                        <span id="pengunjung-3">-</span><br/>
-                        <span id="pengunjung-4">-</span><br/>
-                        <span id="pengunjung-5">-</span>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-7 text-center">
-        <div id="img-title" class="bg-green">
-            <span id="img-txt">"BOLEH MASUK"</span>
-        </div>
-        <div style="height: 300px;">
-            <?= Html::img('@web/uploads/ICON/NO.png', [
-                'height' => '100%',
+<div style="margin: auto; width: 900px;">
+    <div class="row" style="margin: 10px;">
+        <div class="col-sm-12">
+            <div id="img-title" class="bg-green">
+                <span id="img-txt"><?= $data['msg']; ?></span><?= Html::img($data['img_url'], [
+                'height' => '110px',
                 'id' => 'img-view'
             ]); ?>
+            </div>
+            <div class="panel panel-primary" style="margin-top: 5px;">
+                <div class="panel-heading text-center" style="background-color: #61258e;">
+                    <h3 class="panel-title" style="font-size: 2em;">TOTAL PEMBELI</h3>
+                </div>
+                <div class="panel-body no-padding">
+                    <div class="custom-row" style="height: 400px; padding: 5px;">
+                        <div class="column text-center" style="height: 100%; border-right: 2px solid grey;">
+                            <span id="total-pengunjung"><?= $data['current_capacity']; ?></span>
+                        </div>
+                        <div class="column" style="height: 100%;">
+                            <div id="detail-pengunjung" class="text-left">
+                                <div id="list-pengunjung">
+                                    <?php
+                                    if ($data['current_capacity'] > 0) {
+                                        $count = 1;
+                                        foreach ($data['detail_pembeli'] as $key => $value) {
+                                            echo '<span id="pengunjung-' . $count . '">' . $count . '. ' . $value['full_name'] . ' (' . $value['in'] . ')' . '</span><br/>';
+                                            $count++;
+                                        }
+                                    } else {
+                                        ?>
+                                        <span id="pengunjung-1">-</span><br/>
+                                        <span id="pengunjung-2">-</span><br/>
+                                        <span id="pengunjung-3">-</span><br/>
+                                        <span id="pengunjung-4">-</span><br/>
+                                        <span id="pengunjung-5">-</span>
+                                    <?php }
+                                    ?>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
