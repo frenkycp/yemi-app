@@ -105,24 +105,22 @@ $script = "
                 $('#img-view').attr('src', tmp_data.img_url);
                 $('#img-title').attr('class', tmp_data.bg_class);
                 
-                if(tmp_data.current_capacity == 0){
-                    $('#pengunjung-1').html('-');
-                    $('#pengunjung-2').html('-');
-                    $('#pengunjung-3').html('-');
-                    $('#pengunjung-4').html('-');
-                    $('#pengunjung-5').html('-');
-                } else {
-                    var tmp_count = 1;
-                    $.each(tmp_data.detail_pembeli , function(index, val) {
-                        //alert(index);
-                        $('#pengunjung-' + tmp_count).html(tmp_count + '. ' + val.full_name + ' (' + val.in + ')');
-                        tmp_count = tmp_count + 1;
-                    });
-                }
+                $('#pengunjung-1').html('-');
+                $('#pengunjung-2').html('-');
+                $('#pengunjung-3').html('-');
+                $('#pengunjung-4').html('-');
+                $('#pengunjung-5').html('-');
+                
+                var tmp_count = 1;
+                $.each(tmp_data.detail_pembeli , function(index, val) {
+                    //alert(index);
+                    $('#pengunjung-' + tmp_count).html(tmp_count + '. ' + val.full_name + ' (' + val.in + ')');
+                    tmp_count = tmp_count + 1;
+                });
 
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 2000);
+                setTimeout(function(){update_data();}, 1000);
             }
         });
     }
@@ -171,22 +169,11 @@ $this->registerJs($script, View::POS_HEAD );
                         <div class="column" style="height: 100%;">
                             <div id="detail-pengunjung" class="text-left">
                                 <div id="list-pengunjung">
-                                    <?php
-                                    if ($data['current_capacity'] > 0) {
-                                        $count = 1;
-                                        foreach ($data['detail_pembeli'] as $key => $value) {
-                                            echo '<span id="pengunjung-' . $count . '">' . $count . '. ' . $value['full_name'] . ' (' . $value['in'] . ')' . '</span><br/>';
-                                            $count++;
-                                        }
-                                    } else {
-                                        ?>
-                                        <span id="pengunjung-1">-</span><br/>
-                                        <span id="pengunjung-2">-</span><br/>
-                                        <span id="pengunjung-3">-</span><br/>
-                                        <span id="pengunjung-4">-</span><br/>
-                                        <span id="pengunjung-5">-</span>
-                                    <?php }
-                                    ?>
+                                    <span id="pengunjung-1">-</span><br/>
+                                    <span id="pengunjung-2">-</span><br/>
+                                    <span id="pengunjung-3">-</span><br/>
+                                    <span id="pengunjung-4">-</span><br/>
+                                    <span id="pengunjung-5">-</span>
                                     
                                 </div>
                             </div>

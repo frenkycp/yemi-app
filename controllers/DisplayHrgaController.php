@@ -25,8 +25,9 @@ class DisplayHrgaController extends Controller
         $tmp_in_out = KoyemiInOutView::find()
         ->where([
             'in_out_status' => 'KANTIN IN',
-            'tgl' => date('Y-m-d')
+            'FORMAT(in_out_datetime, \'yyyy-MM-dd\')' => date('Y-m-d')
         ])
+        ->andWhere(['>', 'in_out_datetime', date('Y-m-d H:i:s', strtotime('-10 minutes'))])
         ->orderBy('in_out_datetime')
         ->all();
 
@@ -39,6 +40,7 @@ class DisplayHrgaController extends Controller
             ];
         }
         $tmp_data_karyawan = ArrayHelper::map(Karyawan::find()->where(['NIK_SUN_FISH' => $tmp_nik_arr])->all(), 'NIK_SUN_FISH', 'NAMA_KARYAWAN');
+        //$tmp_data_karyawan = [];
         foreach ($tmp_data_pengunjung as $key => $value) {
             if (isset($tmp_data_karyawan[$key])) {
                 $tmp_data_pengunjung[$key]['full_name'] = $tmp_data_karyawan[$key];
@@ -78,8 +80,9 @@ class DisplayHrgaController extends Controller
         $tmp_in_out = KoyemiInOutView::find()
         ->where([
             'in_out_status' => 'KANTIN IN',
-            'tgl' => date('Y-m-d')
+            'FORMAT(in_out_datetime, \'yyyy-MM-dd\')' => date('Y-m-d')
         ])
+        ->andWhere(['>', 'in_out_datetime', date('Y-m-d H:i:s', strtotime('-10 minutes'))])
         ->orderBy('in_out_datetime')
         ->all();
 
@@ -92,6 +95,7 @@ class DisplayHrgaController extends Controller
             ];
         }
         $tmp_data_karyawan = ArrayHelper::map(Karyawan::find()->where(['NIK_SUN_FISH' => $tmp_nik_arr])->all(), 'NIK_SUN_FISH', 'NAMA_KARYAWAN');
+        //$tmp_data_karyawan = [];
         foreach ($tmp_data_pengunjung as $key => $value) {
             if (isset($tmp_data_karyawan[$key])) {
                 $tmp_data_pengunjung[$key]['full_name'] = $tmp_data_karyawan[$key];
