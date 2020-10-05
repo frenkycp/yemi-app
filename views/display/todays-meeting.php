@@ -66,7 +66,7 @@ if ($_GET['room_id'] == 6) {
         {
             $.ajax
             ({ 
-                url: 'http://172.17.144.6:99/plus/display/visitor_coridor.php?cek&room_id=" . $_GET['room_id'] . "',
+                url: 'http://10.110.52.5:99/plus/display/visitor_coridor.php?cek&room_id=" . $_GET['room_id'] . "',
                 success: function (result) 
                 {
                     var json = result, 
@@ -77,7 +77,7 @@ if ($_GET['room_id'] == 6) {
 
                     if (obj.datang < 1.35 && obj.visitor_comp != null) 
                     {
-                        window.location = 'http://172.17.144.6:99/plus/display/visitor_coridor.php?room_id=" . $_GET['room_id'] . "';
+                        window.location = 'http://10.110.52.5:99/plus/display/visitor_coridor.php?room_id=" . $_GET['room_id'] . "';
                     }
                     else
                     {

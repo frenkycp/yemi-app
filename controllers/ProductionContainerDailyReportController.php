@@ -195,7 +195,7 @@ class ProductionContainerDailyReportController extends Controller
             $path = \Yii::$app->basePath . '\\..\\mis7\\fg\\' . $filename;
             $link = '-';
             if (file_exists($path)) {
-                $link = Html::a($filename, 'http://172.17.144.6:99/fg/' . $filename, ['target' => '_blank']);
+                $link = Html::a($filename, 'http://10.110.52.5:99/fg/' . $filename, ['target' => '_blank']);
             }
             $data .= '
                 <tr class="' . $class . '">

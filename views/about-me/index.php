@@ -540,7 +540,7 @@ $image_height = '300px';
                             <div class="panel-body">
                                 <span><b><u>GO-PICKING</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://172.17.144.6:86/uploads/video/go_picking_new.mp4" type="video/mp4">
+                                    <source src="http://10.110.52.5:86/uploads/video/go_picking_new.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -601,7 +601,7 @@ $image_height = '300px';
                             <div class="panel-body">
                                 <span><b><u>SMT</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://172.17.144.6:86/uploads/video/smt_new.mp4" type="video/mp4">
+                                    <source src="http://10.110.52.5:86/uploads/video/smt_new.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -628,7 +628,7 @@ $image_height = '300px';
                             <div class="panel-body">
                                 <span><b><u>GO-PALLET</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://172.17.144.6:86/uploads/video/go_pallet_new.mp4" type="video/mp4">
+                                    <source src="http://10.110.52.5:86/uploads/video/go_pallet_new.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -680,7 +680,7 @@ $image_height = '300px';
                             <div class="panel-body">
                                 <span><b><u>DPR</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://172.17.144.6:86/uploads/video/dpr_new.mp4" type="video/mp4">
+                                    <source src="http://10.110.52.5:86/uploads/video/dpr_new.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -706,7 +706,7 @@ $image_height = '300px';
                             <div class="panel-body">
                                 <span><b><u>GO-WIP</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://172.17.144.6:86/uploads/video/go_wip_new.mp4" type="video/mp4">
+                                    <source src="http://10.110.52.5:86/uploads/video/go_wip_new.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>
@@ -809,7 +809,7 @@ $image_height = '300px';
                             <div class="panel-body">
                                 <span><b><u>RFID</u></b></span>
                                 <?= '<video width="100%" controls>
-                                    <source src="http://172.17.144.6:86/uploads/video/rfid_new.mp4" type="video/mp4">
+                                    <source src="http://10.110.52.5:86/uploads/video/rfid_new.mp4" type="video/mp4">
                                 </video>' ?>
                             </div>
                         </div>

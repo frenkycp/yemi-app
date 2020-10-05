@@ -92,7 +92,7 @@ $this->registerCss("
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Management Support<br/><span class="japanesse-word"></span></div>
                     <div class="list-group">
-                        <?= Html::a('Visitor Confirmation <span class="japanesse-word"></span>', ['before-load-url/visitor-confirm', 'url' => 'http://172.17.144.6:99/plus/index_visitor'], [
+                        <?= Html::a('Visitor Confirmation <span class="japanesse-word"></span>', ['before-load-url/visitor-confirm', 'url' => 'http://10.110.52.5:99/plus/index_visitor'], [
                             'class' => 'list-group-item',
                             'target' => '_blank'
                         ]) ?>
@@ -105,7 +105,7 @@ $this->registerCss("
                             <div class="box-body">
                                 <ol>
                                     <li>
-                                        <?= Html::a('Clinic Confirmation <span class="japanesse-word"></span>', ['before-load-url/clinic-confirm', 'url' => 'http://172.17.144.6:99/plus/clinic'], [
+                                        <?= Html::a('Clinic Confirmation <span class="japanesse-word"></span>', ['before-load-url/clinic-confirm', 'url' => 'http://10.110.52.5:99/plus/clinic'], [
                                             'target' => '_blank'
                                         ]) ?>
                                     </li>
@@ -134,7 +134,7 @@ $this->registerCss("
                         </div>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/driver/display.php">Company Car Monitoring <span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://10.110.52.5:99/plus/driver/display.php">Company Car Monitoring <span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
                         <?= Html::a('Shift Maintenance <span class="japanesse-word"></span>', ['/mnt-shift-display'], [
@@ -155,13 +155,13 @@ $this->registerCss("
                         ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_prd/index_prd_efficiency.php"><i class="fa fa-fw fa-tag"></i> Line Efficiency (MITA+)<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://10.110.52.5:99/plus/index_prd/index_prd_efficiency.php"><i class="fa fa-fw fa-tag"></i> Line Efficiency (MITA+)<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/plan/display.php"><i class="fa fa-fw fa-tag"></i> Priority Plan (MITA+)<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://10.110.52.5:99/plus/plan/display.php"><i class="fa fa-fw fa-tag"></i> Priority Plan (MITA+)<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/index_fg/display.php"><i class="fa fa-fw fa-tag"></i> FGS Loading Status (MITA+)<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://10.110.52.5:99/plus/index_fg/display.php"><i class="fa fa-fw fa-tag"></i> FGS Loading Status (MITA+)<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
                         <?= Html::a('<i class="fa fa-fw fa-tag"></i>Container Loading by Group<span class="japanesse-word"></span>', ['/display/container-loading'], [
@@ -218,10 +218,10 @@ $this->registerCss("
                         ]) ?>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/monitor.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Monitor <span class="japanesse-word">( ダイレクトバンニング進捗表 )</span></a>
+                        <a class="list-group-item" target="_blank" href="http://10.110.52.5:99/plus/vanning/monitor.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Monitor <span class="japanesse-word">( ダイレクトバンニング進捗表 )</span></a>
                     </div>
                     <div class="list-group">
-                        <a class="list-group-item" target="_blank" href="http://172.17.144.6:99/plus/vanning/summary.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Summary<span class="japanesse-word"></span></a>
+                        <a class="list-group-item" target="_blank" href="http://10.110.52.5:99/plus/vanning/summary.php"><i class="fa fa-fw fa-tag"></i> Direct Vanning Summary<span class="japanesse-word"></span></a>
                     </div>
                     <div class="list-group">
                         <?= Html::a('<i class="fa fa-fw fa-tag"></i> FGS Stock (Group by Days)<span class="japanesse-word"></span>', ['/display/fgs-stock'], [

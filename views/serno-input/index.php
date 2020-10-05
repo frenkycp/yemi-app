@@ -252,7 +252,7 @@ $grid_columns = [
             $path = \Yii::$app->basePath . '\\..\\mis7\\fg\\' . $filename;
             $link = '-';
             if (file_exists($path)) {
-                $link = Html::a($filename, 'http://172.17.144.6:99/fg/' . $filename, ['target' => '_blank']);
+                $link = Html::a($filename, 'http://10.110.52.5:99/fg/' . $filename, ['target' => '_blank']);
             }
             return $link;
         },
@@ -296,7 +296,7 @@ $grid_columns = [
         'label' => 'PDF File',
         'value' => function($model){
             $filename = str_replace('-', '', $model->qa_ng_date) . $model->gmc . '.pdf';
-            $link = Html::a($filename, 'http://172.17.144.6:99/qa/' . $filename, ['target' => '_blank']);
+            $link = Html::a($filename, 'http://10.110.52.5:99/qa/' . $filename, ['target' => '_blank']);
             return $model->qa_ng != '' ? $link : '';
         },
         'format' => 'raw',
