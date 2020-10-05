@@ -267,7 +267,8 @@ echo '</pre>';*/
                     ],*/
                 ],
                 'tooltip' => [
-                    'valueSuffix' => '%'
+                    'valueSuffix' => '%',
+                    'shared' => true,
                 ],
                 'yAxis' => [
                     'min' => 0,
