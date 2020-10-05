@@ -142,7 +142,7 @@ echo '</pre>';*/
 <div class="row" style="padding-top: 5px;">
     <div class="col-sm-2">
         <?= $form->field($model, 'fiscal_year')->dropDownList(ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->all(), 'FISCAL', 'FISCAL'), [
-                //'onchange'=>'this.form.submit()'
+                'onchange'=>'$("#area-id").trigger("change")'
             ]
         ); ?>
     </div>
