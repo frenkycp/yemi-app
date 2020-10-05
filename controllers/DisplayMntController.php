@@ -70,6 +70,8 @@ class DisplayMntController extends Controller
 	{
 		$this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
+        $limit_mttr = 122;
+        $limit_mtbf = 7500;
 
         $model = new \yii\base\DynamicModel([
             'fiscal_year', 'area', 'machine'
@@ -146,7 +148,7 @@ class DisplayMntController extends Controller
 	        ->all();
 
 	        //return json_encode($tmp_ng_data);
-
+	        $mttr_fy_data = $mtbf_fy_data = [];
 	        foreach ($period_arr as $period) {
 	        	$categories[] = $period;
 	        	$avg_mttr = $avg_mtbf = 0;
@@ -182,17 +184,33 @@ class DisplayMntController extends Controller
 		        }
 		        //print_r($tmp_nama);
 		        if (count($tmp_mttr_arr) > 0) {
-		        	$avg_mttr = round((array_sum($tmp_mttr_arr) / count($tmp_mttr_arr)), 1);
+		        	$avg_mttr = round((array_sum($tmp_mttr_arr) / count($tmp_mttr_arr)));
 		        }
 		        if (count($tmp_mtbf_arr) > 0) {
-		        	$avg_mtbf = round((array_sum($tmp_mtbf_arr) / count($tmp_mtbf_arr)), 1);
+		        	$avg_mtbf = round((array_sum($tmp_mtbf_arr) / count($tmp_mtbf_arr)));
+		        }
+		        if ($avg_mttr > 0) {
+		        	$mttr_fy_data[] = $avg_mttr;
+		        }
+		        if ($avg_mtbf > 0) {
+		        	$mtbf_fy_data[] = $avg_mtbf;
 		        }
 		        $tmp_data_mttr[] = [
-		        	'y' => $avg_mttr
+		        	'y' => $avg_mttr,
+		        	'color' => $avg_mttr > $limit_mttr ? 'red' : 'green'
 		        ];
 		        $tmp_data_mtbf[] = [
-		        	'y' => $avg_mtbf
+		        	'y' => $avg_mtbf,
+		        	'color' => $avg_mtbf < $limit_mtbf ? 'red' : 'green'
 		        ];
+	        }
+
+	        $mttr_fy_avg = $mtbf_fy_avg = 0;
+	        if (count($mttr_fy_data) > 0) {
+	        	$mttr_fy_avg = round(array_sum($mttr_fy_data) / count($mttr_fy_data));
+	        }
+	        if (count($mtbf_fy_data) > 0) {
+	        	$mtbf_fy_avg = round(array_sum($mtbf_fy_data) / count($mtbf_fy_data));
 	        }
 
 	        $data_mttr = [
@@ -215,6 +233,10 @@ class DisplayMntController extends Controller
         	'data_mtbf' => $data_mtbf,
         	'model' => $model,
         	'categories' => $categories,
+        	'limit_mttr' => $limit_mttr,
+        	'limit_mtbf' => $limit_mtbf,
+        	'mttr_fy_avg' => $mttr_fy_avg,
+        	'mtbf_fy_avg' => $mtbf_fy_avg,
         ]);
 	}
 }

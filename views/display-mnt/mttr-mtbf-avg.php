@@ -178,13 +178,16 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<div class="panel panel-default">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">FY<?= $model->fiscal_year; ?> : <?= number_format($mttr_fy_avg); ?> min (AVG)</h3>
+    </div>
     <div class="panel-body">
         <?php
         echo Highcharts::widget([
             'scripts' => [
                 'modules/drilldown',
-                'themes/grid-light',
+                //'themes/grid-light',
                 //'themes/dark-unica',
             ],
             'options' => [
@@ -193,7 +196,7 @@ echo '</pre>';*/
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
-                    'height' => 400,
+                    'height' => 300,
                 ],
                 'credits' => [
                     'enabled' => false
@@ -209,6 +212,19 @@ echo '</pre>';*/
                 ],
                 'yAxis' => [
                     'min' => 0,
+                    'plotLines' => [
+                        [
+                            'value' => $limit_mttr,
+                            'color' => 'red',
+                            'dashStyle' => 'shortdash',
+                            'width' => 2,
+                            'label' => [
+                                'text' => 'TARGET (<=' . $limit_mttr . ')',
+                                'align' => 'left',
+                            ],
+                            //'zIndex' => 5
+                        ]
+                    ]
                 ],
                 'plotOptions' => [
                     'series' => [
@@ -236,13 +252,16 @@ echo '</pre>';*/
     </div>
 </div>
 
-<div class="panel panel-default">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">FY<?= $model->fiscal_year; ?> : <?= number_format($mtbf_fy_avg); ?> min (AVG)</h3>
+    </div>
     <div class="panel-body">
         <?php
         echo Highcharts::widget([
             'scripts' => [
                 'modules/drilldown',
-                'themes/grid-light',
+                //'themes/grid-light',
                 //'themes/dark-unica',
             ],
             'options' => [
@@ -251,7 +270,7 @@ echo '</pre>';*/
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
-                    'height' => 400,
+                    'height' => 300,
                 ],
                 'credits' => [
                     'enabled' => false
@@ -267,6 +286,19 @@ echo '</pre>';*/
                 ],
                 'yAxis' => [
                     'min' => 0,
+                    'plotLines' => [
+                        [
+                            'value' => $limit_mtbf,
+                            'color' => 'red',
+                            'dashStyle' => 'shortdash',
+                            'width' => 2,
+                            'label' => [
+                                'text' => 'TARGET (>=' . $limit_mtbf . ')',
+                                'align' => 'left',
+                            ],
+                            //'zIndex' => 5
+                        ]
+                    ]
                 ],
                 'plotOptions' => [
                     'series' => [
