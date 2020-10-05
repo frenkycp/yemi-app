@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class MesinCheckNg extends BaseMesinCheckNg
 {
-    public $total_open, $total_close, $tgl, $closing_day_total, $period, $total;
+    public $total_open, $total_close, $tgl, $closing_day_total, $period, $total, $down_time_number;
 
     public function behaviors()
     {

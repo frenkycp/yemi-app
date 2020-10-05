@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\depdrop\DepDrop;
 
 $this->title = [
     'page_title' => 'MTTR - MTBF AVERAGE <span class="japanesse light-green"></span>',
@@ -16,7 +17,8 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 $css_string = "
-    .form-control, .control-label {background-color: #000; color: white; border-color: white;}
+    //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
+    .control-label {color: white;}
     //.form-control {font-size: 30px; height: 52px;}
     .content-header {color: white; font-size: 0.7em; text-align: center;}
     //.box-body {background-color: #000;}
@@ -108,7 +110,7 @@ $this->registerCss($css_string);
 
 date_default_timezone_set('Asia/Jakarta');
 
-$script = "
+/*$script = "
     window.onload = setupRefresh;
 
     function setupRefresh() {
@@ -118,11 +120,11 @@ $script = "
        window.location = location.href;
     }
 ";
-$this->registerJs($script, View::POS_HEAD );
+$this->registerJs($script, View::POS_HEAD );*/
 $total_kwh = 0;
 
 /*echo '<pre>';
-print_r($data);
+print_r($data_mttr);
 echo '</pre>';*/
 
 /*echo '<pre>';
@@ -132,7 +134,7 @@ echo '</pre>';*/
 ?>
 
 <?php $form = ActiveForm::begin([
-    'method' => 'get',
+    'method' => 'post',
     //'layout' => 'horizontal',
     'action' => Url::to(['mttr-mtbf-avg']),
 ]); ?>
@@ -145,14 +147,33 @@ echo '</pre>';*/
         ); ?>
     </div>
     <div class="col-sm-3">
-        <?= $form->field($model, 'area')->dropDownList(ArrayHelper::map(app\models\AssetTbl::find()->select('area')->where('PATINDEX(\'%MNT%\', asset_id) > 0')->andWhere('area IS NOT NULL')->groupBy('area')->orderBy('area')->all(), 'area', 'area')); ?>
+        <?= $form->field($model, 'area')->dropDownList(ArrayHelper::map(app\models\AssetTbl::find()->select('area')->where('PATINDEX(\'%MNT%\', asset_id) > 0')->andWhere('area IS NOT NULL')->groupBy('area')->orderBy('area')->all(), 'area', 'area'), [
+            'id' => 'area-id'
+        ]); ?>
     </div>
+    
     
     <div class="form-group">
         <br/>
         <?= Html::submitButton('GENERATE', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
     </div>
     
+</div>
+<div class="row">
+    <div class="col-sm-12" style="color: black;">
+        <?= $form->field($model, 'machine')->widget(DepDrop::classname(), [
+            'type' => DepDrop::TYPE_SELECT2,
+            'options'=>[
+                'id' => 'machine-id',
+                'multiple' => true
+            ],
+            'pluginOptions'=>[
+                'depends' => ['area-id'],
+                'url' => Url::to(['/display-mnt/machine-by-area', 'fiscal_year' => $model->fiscal_year]),
+                'allowClear' => true
+            ]
+        ]); ?>
+    </div>
 </div>
 
 <?php ActiveForm::end(); ?>
