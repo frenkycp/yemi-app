@@ -109,12 +109,12 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 
 $server_arr = [
-    '172.17.144.65' => 'MITA - DB',
+    '10.110.52.4' => 'MITA - DB',
     '172.17.144.5' => 'WSUS',
-    '172.17.144.6' => 'MITA - APP',
-    '174.17.144.109' => 'IoT',
+    '10.110.52.4' => 'MITA - APP',
+    '10.110.2.1' => 'IoT',
     '172.17.144.211' => 'IT INVENTORY',
-    '172.17.144.11' => 'SUNFISH - DB',
+    '10.110.48.8' => 'SUNFISH - DB',
 ];
 ?>
 <div class="text-center" style="border-bottom: 1px solid grey; display: none;">
