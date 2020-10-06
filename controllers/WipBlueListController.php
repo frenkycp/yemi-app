@@ -41,7 +41,7 @@ class WipBlueListController extends Controller
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
-		$tmp_location = ArrayHelper::map(WipLocation::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc');
+		$tmp_location = \Yii::$app->params['wip_location_arr'];
 
 		/*$status_arr = WipPlanActualReport::find()->select('distinct(stage)')->orderBy('stage ASC')->all();
 

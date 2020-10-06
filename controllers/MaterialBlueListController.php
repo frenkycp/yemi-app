@@ -23,7 +23,7 @@ class MaterialBlueListController extends \app\controllers\base\MaterialBlueListC
     
 	public function actionIndex()
 	{
-		$location_dropdown = ArrayHelper::map(WipPlanActualReport::find()->select('child_analyst, child_analyst_desc')->groupBy('child_analyst, child_analyst_desc')->orderBy('child_analyst_desc')->all(), 'child_analyst_desc', 'child_analyst_desc');
+		$location_dropdown = \Yii::$app->params['wip_location_arr'];
 
 	    $searchModel  = new MaterialBlueListSearch;
 	    $dataProvider = $searchModel->search($_GET);

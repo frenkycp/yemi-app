@@ -32,4 +32,9 @@ class VisualPickingList extends BaseVisualPickingList
             ]
         );
     }
+
+    public function getGojekOrderTbl()
+    {
+        return $this->hasOne(GojekOrderTbl::className(), ['slip_id' => 'set_list_no']);
+    }
 }

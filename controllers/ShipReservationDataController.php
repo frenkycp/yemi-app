@@ -64,8 +64,14 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 	        	$tmp_ship_liner = ShipLiner::findOne($model->CARRIER);
 
 				$model->CREATE_TIME = date('Y-m-d H:i:s');
-				$model->CREATED_BY_ID = $creator->NIK_SUN_FISH;
-				$model->CREATED_BY_NAME = $creator->NAMA_KARYAWAN;
+				if ($creator) {
+					$model->CREATED_BY_ID = $creator->NIK_SUN_FISH;
+					$model->CREATED_BY_NAME = $creator->NAMA_KARYAWAN;
+				} else {
+					$model->CREATED_BY_ID = \Yii::$app->user->identity->username;
+					$model->CREATED_BY_NAME = \Yii::$app->user->identity->username;
+				}
+				
 
 				$model->POD = $tmp_ship_liner->POD;
 				$model->CARRIER = $tmp_ship_liner->CARRIER;

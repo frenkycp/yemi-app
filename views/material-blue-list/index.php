@@ -30,19 +30,19 @@ $grid_columns = [
 	[
         'class' => 'yii\grid\CheckboxColumn',
         'checkboxOptions' => function($model) {
-            $find_slip = app\models\GojekOrderTbl::find()
+            /*$find_slip = app\models\GojekOrderTbl::find()
             ->where([
                 'slip_id' => $model->set_list_no,
                 'source' => 'MAT'
             ])
-            ->one();
-            if ($find_slip->slip_id == null) {
+            ->one();*/
+            if (!$model->gojekOrderTbl) {
                 return ['value' => $model->set_list_no];
             } else {
                 return [
                     'value' => $model->set_list_no,
                     'disabled' => true,
-                    'title' => 'This item has been ordered by ' . $find_slip->NAMA_KARYAWAN . ' to ' . $find_slip->to_loc
+                    'title' => 'This item has been ordered...'
                 ];
             }
             return ['value' => $model->set_list_no];
@@ -91,17 +91,16 @@ $grid_columns = [
     ],
     [
         'attribute' => 'analyst',
+        'label' => 'Location',
+        'value' => function($model){
+            return $model->analyst_desc;
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
+        'filter' => [
+            'WF01' => 'FINAL ASSY',
+            'WS01' => 'SUB ASSY',
         ],
-    ],
-    [
-        'attribute' => 'analyst_desc',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
