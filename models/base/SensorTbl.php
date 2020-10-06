@@ -46,6 +46,7 @@ use Yii;
  * @property integer $temp_over_old
  * @property integer $is_critical
  * @property integer $flags
+ * @property string $on_off
  * @property string $aliasModel
  */
 abstract class SensorTbl extends \yii\db\ActiveRecord
@@ -82,7 +83,7 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
             [['loc_no'], 'string', 'max' => 6],
             [['Factory', 'location', 'area'], 'string', 'max' => 100],
             [['layout', 'range_24_jam'], 'string', 'max' => 1],
-            [['ref_abs', 'wh_prod', 'ip_plc'], 'string', 'max' => 50],
+            [['ref_abs', 'wh_prod', 'ip_plc', 'on_off'], 'string', 'max' => 50],
             [['map_no'], 'unique']
         ];
     }
@@ -130,6 +131,7 @@ abstract class SensorTbl extends \yii\db\ActiveRecord
             'temp_over_old' => 'Temp Over Old',
             'is_critical' => 'Is Critical',
             'flags' => 'Flags',
+            'on_off' => 'On Off',
         ];
     }
 
