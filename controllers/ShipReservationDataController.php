@@ -16,7 +16,7 @@ use app\models\Karyawan;
 */
 class ShipReservationDataController extends \app\controllers\base\ShipReservationDataController
 {
-	public function actionCarrier()
+	public function actionCarrier($POD_VAL = '', $CARRIER_VAL = '', $FLAG_DESC_VAL = '')
 	{
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 		$out = [];
@@ -26,15 +26,44 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 	            $pod = $parents[0];
 	            $tmp_data = ShipLiner::find()->where(['POD' => $pod])->orderBy('FLAG_PRIORITY')->all();
 	            $data = [];
-	            $selected = null;
+	            
+	            if ($POD_VAL == '') {
+	            	$selected = null;
+	            } else {
+	            	$tmp_selected = ShipLiner::find()->where([
+	            		'POD' => $POD_VAL,
+	            		'CARRIER' => $CARRIER_VAL,
+	            		'FLAG_DESC' => $FLAG_DESC_VAL,
+	            	])->one();
+	            	if (!$tmp_selected->SEQ) {
+	            		$selected = null;
+	            	} else {
+	            		$selected = $tmp_selected->SEQ;
+	            	}
+	            	
+	            }
+	            $first_selected = null;
+	            $current_selected = null;
 	            foreach ($tmp_data as $key => $value) {
 	            	if ($selected == null) {
 	            		$selected = $value->SEQ;
+	            	} else {
+	            		if ($selected == $value->SEQ) {
+	            			$current_selected = $value->SEQ;
+	            		}
+	            	}
+	            	if ($first_selected == null) {
+	            		$first_selected = $value->SEQ;
 	            	}
 	            	$data[] = [
 	            		'id' => $value->SEQ,
 	            		'name' => $value->carrierDesc
 	            	];
+	            }
+	            if ($current_selected != null) {
+	            	$selected = $current_selected;
+	            } else {
+	            	$selected = $first_selected;
 	            }
 	            //$out = self::getSubCatList($pod); 
 	            // the getSubCatList function will query the database based on the
@@ -61,7 +90,6 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 	        		['NIK' => \Yii::$app->user->identity->username],
 	        		['NIK_SUN_FISH' => \Yii::$app->user->identity->username]
 	        	])->one();
-	        	$tmp_ship_liner = ShipLiner::findOne($model->CARRIER);
 
 				$model->CREATE_TIME = date('Y-m-d H:i:s');
 				if ($creator) {
@@ -72,7 +100,7 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 					$model->CREATED_BY_NAME = \Yii::$app->user->identity->username;
 				}
 				
-
+				$tmp_ship_liner = ShipLiner::findOne($model->CARRIER);
 				$model->POD = $tmp_ship_liner->POD;
 				$model->CARRIER = $tmp_ship_liner->CARRIER;
 				$model->FLAG_DESC = $tmp_ship_liner->FLAG_DESC;
@@ -134,5 +162,82 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 			$model->addError('_exception', $msg);
 		}
 		return $this->render('create', ['model' => $model]);
+	}
+
+	public function actionUpdate($BL_NO)
+	{
+		$model = $this->findModel($BL_NO);
+		/*$tmp_selected = ShipLiner::find()->where([
+    		'POD' => $model->POD,
+    		'CARRIER' => $model->CARRIER,
+    		'FLAG_DESC' => $model->FLAG_DESC,
+    	])->one();
+    	$model->CARRIER = $tmp_selected->SEQ;*/
+
+		if ($model->load($_POST)) {
+			if ($model->save()) {
+				$tmp_ship_liner = ShipLiner::findOne($model->CARRIER);
+				$model->POD = $tmp_ship_liner->POD;
+				$model->CARRIER = $tmp_ship_liner->CARRIER;
+				$model->FLAG_DESC = $tmp_ship_liner->FLAG_DESC;
+				if (!$model->save()) {
+					return json_encode($model->errors);
+				}
+
+				$hdr = ShipReservationHdr::find()->where(['RESERVATION_NO' => $model->RESERVATION_NO])->one();
+				if (!$hdr) {
+					$hdr = new ShipReservationHdr;
+					$hdr->RESERVATION_NO = $model->RESERVATION_NO;
+				}
+
+				$tmp_total_container = ShipReservationDtr::find()->select([
+					'CNT_40HC' => 'SUM(CNT_40HC)',
+					'CNT_40' => 'SUM(CNT_40)',
+					'CNT_20' => 'SUM(CNT_20)',
+				])
+				->where(['RESERVATION_NO' => $model->RESERVATION_NO])
+				->one();
+
+				$hdr_remark = 'Total container for Reservation No. ' . $model->RESERVATION_NO . ' : ';
+				$total_container_type = 0;
+
+				if (($tmp_total_container->CNT_40HC + $tmp_total_container->CNT_40 + $tmp_total_container->CNT_20) == 0) {
+					$hdr_remark .= '0 container.';
+				} else {
+					if ($tmp_total_container->CNT_40HC > 0) {
+						$hdr_remark .= $tmp_total_container->CNT_40HC . ' container(s) 40\'HC';
+						$total_container_type++;
+					}
+					if ($tmp_total_container->CNT_40 > 0) {
+						if ($total_container_type > 0) {
+							$hdr_remark .= ', ' . $tmp_total_container->CNT_40 . ' container(s) 40\'';
+						} else {
+							$hdr_remark .= $tmp_total_container->CNT_40 . ' container(s) 40\'';
+						}
+						$total_container_type++;
+					}
+					if ($tmp_total_container->CNT_20 > 0) {
+						if ($total_container_type > 0) {
+							$hdr_remark .= ', ' . $tmp_total_container->CNT_20 . ' container(s) 20\'';
+						} else {
+							$hdr_remark .= $tmp_total_container->CNT_20 . ' container(s) 20\'';
+						}
+					}
+				}
+				$hdr->RESERVATION_REMARK = $hdr_remark;
+				if (!$hdr->save()) {
+					return json_encode($hdr->errors);
+				}
+
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($model->errors);
+			}
+			
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+			]);
+		}
 	}
 }

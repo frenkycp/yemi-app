@@ -8,11 +8,21 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use kartik\depdrop\DepDrop;
 use kartik\date\DatePicker;
+use yii\web\View;
 /**
 * @var yii\web\View $this
 * @var app\models\ShipReservationDtr $model
 * @var yii\widgets\ActiveForm $form
 */
+
+if (!$model->isNewRecord) {
+    $script = "
+        $(document).ready(function() {
+            $('#pod-id').trigger('change');
+        });
+    ";
+    $this->registerJs($script, View::POS_READY );
+}
 
 ?>
 
@@ -71,7 +81,7 @@ use kartik\date\DatePicker;
                 <div class="col-sm-4">
                     <?= $form->field($model, 'POD')->dropDownList(ArrayHelper::map(app\models\ShipLiner::find()->select('POD')->groupBy('POD')->orderBy('POD')->all(), 'POD', 'POD'), [
                         'id' => 'pod-id',
-                        'prompt' => 'Choose...'
+                        'prompt' => 'Choose...',
                     ]); ?>
                 </div>
                 <div class="col-sm-4">
@@ -79,7 +89,7 @@ use kartik\date\DatePicker;
                         'options' => ['id' => 'carrier-id'],
                         'pluginOptions'=>[
                             'depends'=>['pod-id'],
-                            'url'=>Url::to(['/ship-reservation-data/carrier'])
+                            'url' => $model->isNewRecord ? Url::to(['/ship-reservation-data/carrier']) : Url::to(['/ship-reservation-data/carrier', 'POD_VAL' => $model->POD, 'CARRIER_VAL' => $model->CARRIER, 'FLAG_DESC_VAL' => $model->FLAG_DESC])
                         ]
                     ]); ?>
                 </div>
