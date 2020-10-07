@@ -123,6 +123,7 @@ $config = [
         'db_211' => require(__DIR__ . '/db_211.php'),
         'db_bentol' => require(__DIR__ . '/db_bentol.php'),
         'db_biostar_tna' => require(__DIR__ . '/db_biostar_tna.php'),
+        'db_smt' => require(__DIR__ . '/db_smt.php'),
     ],
     'params' => $params,
     'modules' => [
