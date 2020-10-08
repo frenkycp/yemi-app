@@ -19,6 +19,60 @@ use app\models\DbSmtMaterialInOut;
 
 class DisplayPrdController extends Controller
 {
+    public function actionDailySmtReel($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_in_out = DbSmtMaterialInOut::find()
+        ->select([
+            'post_date' => 'DATE(tgl)',
+            'total_count' => 'COUNT(id_part)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'tgl', $model->from_date . ' 00:00:00'],
+            ['<=', 'tgl', $model->to_date . ' 23:59:59']
+        ])
+        ->andWhere(['RIGHT(pk,2)' => '_0'])
+        ->andWhere(['!=', 'id_part', ''])
+        ->groupBy(['DATE(tgl)'])
+        ->orderBy('post_date')
+        ->all();
+
+        foreach ($tmp_in_out as $key => $value) {
+            $post_date = (strtotime($value->post_date . " +7 hours") * 1000);
+            $tmp_data[] = [
+                'x' => $post_date,
+                'y' => (int)$value->total_count,
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'Total Count',
+                'data' => $tmp_data
+            ],
+        ];
+
+        return $this->render('daily-smt-reel', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
+
     public function actionDailyMountCountingMaterial($value='')
     {
         $this->layout = 'clean';
