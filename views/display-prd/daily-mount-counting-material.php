@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Daily Mount Counting Material <span class="japanesse light-green"></span>',
-    'tab_title' => 'Daily Mount Counting Material',
-    'breadcrumbs_title' => 'Daily Mount Counting Material'
+    'page_title' => 'Daily SMT reel count times <span class="japanesse light-green">(SMTリールカウントの回数)</span>',
+    'tab_title' => 'Daily SMT reel count times',
+    'breadcrumbs_title' => 'Daily SMT reel count times'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -160,8 +160,8 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<div class="panel panel-primary">
-    <div class="panel-body">
+<div class="panel panel-default">
+    <div class="panel-body no-padding">
         <?=
         Highcharts::widget([
             'scripts' => [

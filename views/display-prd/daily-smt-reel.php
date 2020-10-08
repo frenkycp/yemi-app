@@ -174,7 +174,7 @@ echo '</pre>';*/
             ],
             'options' => [
                 'chart' => [
-                    'type' => 'line',
+                    'type' => 'column',
                     'height' => '500',
                     'backgroundColor' => '#000',
                     'style' => [
@@ -208,7 +208,8 @@ echo '</pre>';*/
                     'enabled' => false
                 ],
                 'plotOptions' => [
-                    'line' => [
+                    'column' => [
+                        'maxPointWidth' => 50,
                         'dataLabels' => [
                             'enabled' => true,
                         ],
