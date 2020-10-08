@@ -4741,7 +4741,7 @@ echo '</pre>';*/
         date_default_timezone_set('Asia/Jakarta');
 
         $server_status = ServerStatus::find()
-        ->where(['<>', 'server_mac_address', '7C-8B-CA-02-BD-F1'])
+        ->where(['<>', 'server_mac_address', '0C-54-A5-05-EE-6A'])
         ->all();
         
         return $this->render('server-status',[
