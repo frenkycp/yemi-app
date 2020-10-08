@@ -4740,7 +4740,9 @@ echo '</pre>';*/
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
-        $server_status = ServerStatus::find()->all();
+        $server_status = ServerStatus::find()
+        ->where(['<>', 'server_mac_address', '7C-8B-CA-02-BD-F1'])
+        ->all();
         
         return $this->render('server-status',[
             'server_status' => $server_status,
