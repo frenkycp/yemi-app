@@ -265,9 +265,9 @@ $this->registerJs($script, View::POS_HEAD );
                             <?php foreach ($summary_data as $value): ?>
                                 <tr>
                                     <td class="text-center">
-                                        <?= Html::a('<i class="fa fa-print"></i>', ['print-summary', 'schedule_id' => $value->schedule_id, 'department_name' => $value->department_name], ['target' => '_blank']); ?>
+                                        <?= Html::a('<i class="fa fa-print"></i>', ['print-summary', 'schedule_id' => $value->schedule_id, 'CC_GROUP' => $value->CC_GROUP], ['target' => '_blank']); ?>
                                     </td>
-                                    <td class=""><?= $value->department_name; ?></td>
+                                    <td class=""><?= $value->CC_GROUP; ?></td>
                                     <td class="text-center"><?= number_format($value->total_ok); ?></td>
                                     <td class="text-center"><?= number_format($value->total_ng); ?></td>
                                     <td class="text-center"><?= number_format($value->ng_plan_scrap); ?></td>

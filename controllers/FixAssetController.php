@@ -94,7 +94,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		return $this->render('index');
 	}
 
-	public function actionPrintSummary($schedule_id, $department_name)
+	public function actionPrintSummary($schedule_id, $CC_GROUP)
 	{
 		$session = \Yii::$app->session;
         if (!$session->has('fix_asset_user')) {
@@ -104,13 +104,13 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 		$this->layout = 'clean';
 
 		$summary_data = AssetStockTakeSummary::find()
-        ->where(['schedule_id' => $schedule_id, 'department_name' => $department_name])
-        ->orderBy('department_name')
+        ->where(['schedule_id' => $schedule_id, 'CC_GROUP' => $CC_GROUP])
+        ->orderBy('CC_GROUP')
         ->one();
 
 		return $this->render('print-summary', [
 			'summary_data' => $summary_data,
-			'department_name' => $department_name,
+			'department_name' => $CC_GROUP,
 		]);
 	}
 
@@ -185,7 +185,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 	        //summary
 	        $tmp_summary = AssetStockTakeSummary::find()
 	        ->where(['schedule_id' => $model->period])
-	        ->orderBy('department_name')
+	        ->orderBy('CC_GROUP')
 	        ->all();
         }
 

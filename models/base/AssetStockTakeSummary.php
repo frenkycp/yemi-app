@@ -10,7 +10,7 @@ use Yii;
  * This is the base-model class for table "db_owner.ASSET_STOCK_TAKE_SUMMARY".
  *
  * @property integer $schedule_id
- * @property string $department_name
+ * @property string $CC_GROUP
  * @property integer $total_ok
  * @property integer $total_ng
  * @property integer $total_repair
@@ -51,7 +51,7 @@ abstract class AssetStockTakeSummary extends \yii\db\ActiveRecord
     {
         return [
             [['schedule_id', 'total_ok', 'total_ng', 'total_repair', 'total_standby', 'ng_plan_scrap', 'label_y', 'label_n', 'total_open', 'total_close', 'total'], 'integer'],
-            [['department_name'], 'string', 'max' => 50]
+            [['CC_GROUP'], 'string', 'max' => 50]
         ];
     }
 
@@ -62,7 +62,7 @@ abstract class AssetStockTakeSummary extends \yii\db\ActiveRecord
     {
         return [
             'schedule_id' => 'Schedule ID',
-            'department_name' => 'Department Name',
+            'CC_GROUP' => 'Cc Group',
             'total_ok' => 'Total Ok',
             'total_ng' => 'Total Ng',
             'total_repair' => 'Total Repair',
