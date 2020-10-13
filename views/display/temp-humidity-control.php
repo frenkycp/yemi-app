@@ -154,6 +154,12 @@ echo '</pre>';*/
                 echo Html::a($content, ['air-pressure-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
             }
             if (in_array($value->map_no, [49, 50, 51, 52, 53, 54])) {
+                $tmp_compressor_no = [49 => 1,
+                    50 => 2,
+                    51 => 3,
+                    52 => 4,
+                    53 => 5,
+                    54 => 6];
                 $widget_class = 'temp-widget-rh';
                 if ($value->on_off == 1) {
                     $temp_class = ' bg-green-active';
@@ -161,7 +167,7 @@ echo '</pre>';*/
                     $temp_class = ' bg-red-active';
                 }
                 
-                $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . number_format($params_val) . ' h <span style="font-size: 0.6em;"></span></div></div>';
+                $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">(' . $tmp_compressor_no[$value->map_no] . ') ' . number_format($params_val) . ' h <span style="font-size: 0.6em;"></span></div></div>';
                 echo Html::a($content, ['running-hour-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
             }
 

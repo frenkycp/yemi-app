@@ -138,30 +138,21 @@ echo '</pre>';*/
     'action' => Url::to(['wip-ng-rate']),
 ]); ?>
 <div class="row" style="padding-top: 10px;">
-    <div class="col-sm-12">
-        <?= $form->field($model, 'location')->widget(Select2::classname(), [
-            'data' => \Yii::$app->params['ng_rate_location_arr'],
-            'options' => [
-                'placeholder' => 'Choose...',
-                'multiple' => true,
-            ],
-            'pluginOptions' => [
-                'allowClear' => true,
-            ],
-        ]); ?>
-    </div>
-</div>
-<div class="row" style="">
     <div class="col-md-2">
         <?= $form->field($model, 'fiscal')->dropDownList(ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->all(), 'FISCAL', 'FISCAL'), [
             'prompt' => 'Choose...',
         ]); ?>
     </div>
+    <div class="col-sm-3">
+        <?= $form->field($model, 'location')->dropDownList(\Yii::$app->params['ng_rate_location_arr'], [
+            'prompt' => 'Choose Location...'
+        ]); ?>
+    </div>
+    
     <div class="form-group" style="">
         <br/>
         <?= Html::submitButton('GENERATE', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
     </div>
-    
 </div>
 <br/>
 
@@ -182,7 +173,7 @@ echo '</pre>';*/
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
-                    'height' => 500,
+                    'height' => 400,
                 ],
                 'credits' => [
                     'enabled' => false
@@ -239,3 +230,28 @@ yii\bootstrap\Modal::begin([
 ]);
 yii\bootstrap\Modal::end();
 ?>
+
+<table class="table" id="summary-tbl">
+    <thead>
+        <tr>
+            <th></th>
+            <?php foreach ($period_arr as $key => $value): ?>
+                <th class="text-center"><?= $value; ?></th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="text-center">Output</td>
+            <?php foreach ($output_tbl_arr as $key => $value): ?>
+                <td class="text-center"><?= number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <td class="text-center">NG</td>
+            <?php foreach ($ng_tbl_arr as $key => $value): ?>
+                <td class="text-center"><?= number_format($value); ?></td>
+            <?php endforeach ?>
+        </tr>
+    </tbody>
+</table>

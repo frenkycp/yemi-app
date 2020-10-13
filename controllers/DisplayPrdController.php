@@ -202,39 +202,35 @@ class DisplayPrdController extends Controller
             'PERIOD' => date('Ym')
         ])->one();
         $model->fiscal = $current_fiscal->FISCAL;
-        $model->location = ['INJ', 'WP01'];
 
+        $output_tbl_arr = $ng_tbl_arr = [];
         if ($model->load($_GET)) {
-            
-        };
+            $tmp_fiscal_period = FiscalTbl::find()
+            ->where([
+                'FISCAL' => $model->fiscal
+            ])
+            ->orderBy('PERIOD')
+            ->all();
+            $period_arr = [];
+            foreach ($tmp_fiscal_period as $key => $value) {
+                $period_arr[] = $value->PERIOD;
+            }
 
-        $tmp_fiscal_period = FiscalTbl::find()
-        ->where([
-            'FISCAL' => $model->fiscal
-        ])
-        ->orderBy('PERIOD')
-        ->all();
-        $period_arr = [];
-        foreach ($tmp_fiscal_period as $key => $value) {
-            $period_arr[] = $value->PERIOD;
-        }
+            $tmp_output_monthly = WipOutputMonthlyView::find()
+            ->select([
+                'child_analyst_group', 'period', 'total_qty' => 'SUM(total_qty)'
+            ])
+            ->where([
+                'child_analyst_group' => $model->location,
+                //'period' => $period_arr
+            ])
+            ->groupBy('child_analyst_group, period')
+            ->all();
 
-        $tmp_output_monthly = WipOutputMonthlyView::find()
-        ->select([
-            'child_analyst_group', 'period', 'total_qty' => 'SUM(total_qty)'
-        ])
-        ->where([
-            'child_analyst_group' => $model->location,
-            //'period' => $period_arr
-        ])
-        ->groupBy('child_analyst_group, period')
-        ->all();
-
-        foreach ($model->location as $location_val) {
-            if ($location_val == 'INJ') {
+            if ($model->location == 'INJ') {
                 $tmp_location = ['WI01', 'WI02', 'WI03'];
             } else {
-                $tmp_location = $location_val;
+                $tmp_location = $model->location;
             }
 
             /*$tmp_output_monthly = WipOutputMonthlyView::find()
@@ -275,26 +271,30 @@ class DisplayPrdController extends Controller
                 }
 
                 foreach ($tmp_output_monthly as $output_row) {
-                    if ($output_row->period == $period_val && $output_row->child_analyst_group == $location_val) {
+                    if ($output_row->period == $period_val && $output_row->child_analyst_group == $model->location) {
                         $tmp_output = $output_row->total_qty;
                     }
                 }
+                $output_tbl_arr[] = $tmp_output;
+                $ng_tbl_arr[] = $tmp_ng;
 
                 $tmp_pct = 0;
                 if ($tmp_output > 0) {
                     $tmp_pct = round(($tmp_ng / $tmp_output) * 100, 3);
                 }
 
-                $tmp_data[$location_val][] = [
+                $tmp_data[$model->location][] = [
                     'y' => $tmp_pct,
-                    'url' => Url::to(['wip-ng-rate-get-remark', 'child_analyst' => $location_val, 'period' => $period_val, 'total_output' => $tmp_output])
+                    'url' => Url::to(['wip-ng-rate-get-remark', 'child_analyst' => $model->location, 'period' => $period_val, 'total_output' => $tmp_output])
                 ];
-                /*$data[$location_val][$period_val] = [
+                /*$data[$model->location][$period_val] = [
                     'output' => $tmp_output,
                     'ng' => $tmp_ng
                 ];*/
             }
-        }
+        };
+
+        
 
         foreach ($tmp_data as $key => $value) {
             $data[] = [
@@ -307,6 +307,8 @@ class DisplayPrdController extends Controller
             'data' => $data,
             'model' => $model,
             'period_arr' => $period_arr,
+            'output_tbl_arr' => $output_tbl_arr,
+            'ng_tbl_arr' => $ng_tbl_arr,
         ]);
     }
 }
