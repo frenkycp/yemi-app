@@ -27,7 +27,7 @@ class DisplayHrgaController extends Controller
             'in_out_status' => 'KANTIN IN',
             'FORMAT(in_out_datetime, \'yyyy-MM-dd\')' => date('Y-m-d')
         ])
-        ->andWhere(['>', 'in_out_datetime', date('Y-m-d H:i:s', strtotime('-10 minutes'))])
+        ->andWhere(['>', 'in_out_datetime', date('Y-m-d H:i:s', strtotime('-3 minutes'))])
         ->orderBy('in_out_datetime')
         ->all();
 
@@ -82,7 +82,7 @@ class DisplayHrgaController extends Controller
             'in_out_status' => 'KANTIN IN',
             'FORMAT(in_out_datetime, \'yyyy-MM-dd\')' => date('Y-m-d')
         ])
-        ->andWhere(['>', 'in_out_datetime', date('Y-m-d H:i:s', strtotime('-10 minutes'))])
+        ->andWhere(['>', 'in_out_datetime', date('Y-m-d H:i:s', strtotime('-3 minutes'))])
         ->orderBy('in_out_datetime')
         ->all();
 
