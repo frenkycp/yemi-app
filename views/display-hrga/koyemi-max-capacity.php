@@ -120,7 +120,7 @@ $script = "
 
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 1000);
+                setTimeout(function(){update_data();}, 500);
             }
         });
     }
