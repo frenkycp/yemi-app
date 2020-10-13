@@ -28,6 +28,10 @@ $script = "
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
+
+/*echo '<pre>';
+print_r($data);
+echo '</pre>';*/
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -83,6 +87,7 @@ $this->registerJs($script, View::POS_HEAD );
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
+                    'zoomType' => 'x'
                     //'height' => 500
                 ],
                 'title' => [

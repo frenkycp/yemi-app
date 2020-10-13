@@ -4973,10 +4973,15 @@ echo '</pre>';*/
         $model->from_date = date('Y-m-01', strtotime(date('Y-m-d') . ' -1 year'));
         $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
 
-        $section_arr = ArrayHelper::map(CostCenter::find()->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC');
+        $section_arr = ArrayHelper::map(SunfishViewEmp::find()
+            ->select(['cost_center_name'])
+            ->where(['NOT IN', 'cost_center_code', ['10', '110X']])
+            ->groupBy('cost_center_name')
+            ->orderBy('cost_center_name')
+            ->all(), 'cost_center_name', 'cost_center_name');
 
         if ($model->load($_GET)) {
-            $tmp_attendance = AbsensiTbl::find()
+            /*$tmp_attendance = AbsensiTbl::find()
             ->select([
                 'DATE',
                 'total' => 'SUM(BONUS)'
@@ -4989,6 +4994,24 @@ echo '</pre>';*/
             ->andWhere(['CC_ID' => $model->section])
             ->groupBy('DATE')
             ->orderBy('DATE')
+            ->all();*/
+
+            $tmp_attendance = SunfishAttendanceData::find()
+            ->select([
+                'post_date' => 'FORMAT(shiftendtime, \'yyyy-MM-dd\')',
+                'total_mp' => 'COUNT(cost_center)'
+            ])
+            ->where([
+                'AND',
+                ['>=', 'FORMAT(shiftendtime, \'yyyy-MM-dd\')', $model->from_date],
+                ['<=', 'FORMAT(shiftendtime, \'yyyy-MM-dd\')', $model->to_date]
+            ])
+            ->andWhere([
+                'cost_center' => $model->section,
+                'attend_judgement' => 'P'
+            ])
+            ->groupBy(['FORMAT(shiftendtime, \'yyyy-MM-dd\')'])
+            ->orderBy('post_date')
             ->all();
 
             $tmp_work_day = ArrayHelper::map(WorkDayTbl::find()->where([
@@ -4998,14 +5021,14 @@ echo '</pre>';*/
             ])->andWhere('holiday IS NULL')->all(), 'cal_date', 'wrk_no');
 
             foreach ($tmp_attendance as $key => $value) {
-                if (isset($tmp_work_day[$value->DATE])) {
-                    $post_date = (strtotime($value->DATE . " +7 hours") * 1000);
+                //if (isset($tmp_work_day[$value->post_date])) {
+                    $post_date = (strtotime($value->post_date . " +7 hours") * 1000);
                     $tmp_data[] = [
                         'x' => $post_date,
-                        'y' => (int)$value->total,
+                        'y' => (int)$value->total_mp,
                         //'url' => Url::to(['defect-daily-pcb-get-remark', 'post_date' => $value->post_date, 'line_pcb' => $model->line_pcb]),
                     ];
-                }
+                //}
                 
             }
         }
