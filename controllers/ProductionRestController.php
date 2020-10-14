@@ -123,7 +123,7 @@ class ProductionRestController extends Controller
                     $update_data->rfid_scan_status = $rfid_scan_status;
                     $update_data->parking_status = $parking_status;
                     $update_data->emp_shift = $bentol_summary->shift_trip;
-                    $update_data->trip_category = $trip_category;
+                    $update_data->trip_category = $bentol_summary->trip_category;
                     $update_data->last_update = $this_time;
                     $update_data->in_datetime = $in_datetime;
                     $update_data->out_datetime = $out_datetime;
