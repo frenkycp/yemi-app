@@ -231,7 +231,7 @@ yii\bootstrap\Modal::begin([
 yii\bootstrap\Modal::end();
 ?>
 
-<table class="table" id="summary-tbl">
+<table class="table" id="summary-tbl" style="<?= $model->load($_GET) ? '' : 'display: none;'; ?>">
     <thead>
         <tr>
             <th></th>

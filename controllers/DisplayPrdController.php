@@ -204,6 +204,7 @@ class DisplayPrdController extends Controller
         $model->fiscal = $current_fiscal->FISCAL;
 
         $output_tbl_arr = $ng_tbl_arr = [];
+        $period_arr = [];
         if ($model->load($_GET)) {
             $tmp_fiscal_period = FiscalTbl::find()
             ->where([
@@ -211,7 +212,7 @@ class DisplayPrdController extends Controller
             ])
             ->orderBy('PERIOD')
             ->all();
-            $period_arr = [];
+            
             foreach ($tmp_fiscal_period as $key => $value) {
                 $period_arr[] = $value->PERIOD;
             }
