@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ShipReservationDtr extends BaseShipReservationDtr
 {
+    public $main_40hc, $main_40, $main_20, $sub_40hc, $sub_40, $sub_20, $backup_40hc, $backup_40, $backup_20;
 
     public function behaviors()
     {
@@ -38,6 +39,7 @@ class ShipReservationDtr extends BaseShipReservationDtr
             parent::attributeLabels(),
             [
                 'BL_NO' => 'BL No.',
+                'YCJ_REF_NO' => 'YCJ Ref. No.',
                 'RESERVATION_NO' => 'Reservation No.',
                 'HELP' => 'Help',
                 'STATUS' => 'Status',
@@ -60,6 +62,6 @@ class ShipReservationDtr extends BaseShipReservationDtr
 
     public function getShipReservationHdr()
     {
-        return $this->hasOne(ShipReservationHdr::className(), ['RESERVATION_NO' => 'RESERVATION_NO']);
+        return $this->hasOne(ShipReservationHdr::className(), ['YCJ_REF_NO' => 'YCJ_REF_NO']);
     }
 }

@@ -36,6 +36,15 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],
     [
+        'attribute' => 'YCJ_REF_NO',
+        'value' => function($model){
+            return Html::a($model->YCJ_REF_NO, ['create', 'YCJ_REF_NO' => $model->YCJ_REF_NO]);
+        },
+        'format' => 'html',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'RESERVATION_NO',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -115,7 +124,7 @@ $gridColumns = [
 <div class="giiant-crud ship-reservation-dtr-index">
 
     <?php
-//             echo $this->render('_search', ['model' =>$searchModel]);
+             echo $this->render('_search', ['model' =>$searchModel]);
         ?>
 
     
@@ -124,7 +133,7 @@ $gridColumns = [
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => $gridColumns,
             'hover' => true,
             'condensed' => true,
@@ -137,6 +146,10 @@ $gridColumns = [
             //'toolbar' => false,
             'toolbar' =>  [
                 Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
+                Html::a('<span class="glyphicon glyphicon-th-list"></span> ' . 'Summary', ['/display-log/ship-reservation-summary'], [
+                    'class' => 'btn btn-info',
+                    'target' => '_blank'
+                ]),
                 '{export}',
                 '{toggleData}',
             ],

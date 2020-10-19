@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use kartik\date\DatePicker;
 
 /**
 * @var yii\web\View $this
@@ -16,16 +18,90 @@ use yii\widgets\ActiveForm;
     'action' => ['index'],
     'method' => 'get',
     ]); ?>
+    <div class="panel panel-default">
+    	<div class="panel-body">
+    		<div class="row">
+    			<div class="col-sm-3">
+    				<?= $form->field($model, 'YCJ_REF_NO') ?>
+    			</div>
+    			<div class="col-sm-3">
+    				<?= $form->field($model, 'RESERVATION_NO') ?>
+    			</div>
+    			<div class="col-sm-3">
+    				<?= $form->field($model, 'BL_NO') ?>
+    			</div>
+    			<div class="col-sm-3">
+    				<?= $form->field($model, 'INVOICE') ?>
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="col-sm-3">
+                    <?= $form->field($model, 'STATUS')->dropDownList(\Yii::$app->params['ship_reservation_status_arr'], [
+                        'prompt' => 'Choose...',
+                    ]); ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'HELP')->dropDownList([
+                        'N' => 'No',
+                        'Y' => 'Yes',
+                    ], [                        
+                        'prompt' => 'Choose...',
+                    ]); ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'POL')->textInput([
+                        'onkeyup' => 'this.value=this.value.toUpperCase()',
+                        'onfocusout' => 'this.value=this.value.toUpperCase()'
+                    ]) ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'POD')->dropDownList(ArrayHelper::map(app\models\ShipLiner::find()->select('POD')->groupBy('POD')->orderBy('POD')->all(), 'POD', 'POD'), [
+                        'id' => 'pod-id',
+                        'prompt' => 'Choose...',
+                    ]); ?>
+                </div>
+    		</div>
+    		<div class="row">
+    			<div class="col-sm-3">
+    				<?= $form->field($model, 'ETD')->widget(DatePicker::classname(), [
+                        'options' => [
+                            'type' => DatePicker::TYPE_INPUT,
+                        ],
+                        'removeButton' => false,
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true,
+                            'todayBtn' => true,
+                        ]
+                    ]); ?>
+    			</div>
+    			<div class="col-sm-3">
+    				<?= $form->field($model, 'NOTE') ?>
+    			</div>
+    			<div class="col-sm-3">
+                    <?= $form->field($model, 'APPLIED_RATE')->dropDownList([
+                        'Contracted Rate' => 'Contracted Rate',
+                        'Spot/Extra Rate' => 'Spot/Extra Rate',
+                    ], [
+                        'prompt' => 'Choose...'
+                    ]) ?>
+                </div>
+                <div class="col-sm-4">
+                    <?= $form->field($model, 'CARRIER')->dropDownList(ArrayHelper::map(app\models\ShipLiner::find()->select('CARRIER')->groupBy('CARRIER')->orderBy('CARRIER')->all(), 'CARRIER', 'CARRIER'), [
+                        'prompt' => 'Choose...',
+                    ]); ?>
+                </div>
+    		</div>
+    	</div>
+    	<div class="panel-footer">
+    		<div class="form-group">
+		        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+		    </div>
+    	</div>
+    </div>
 
-    		<?= $form->field($model, 'BL_NO') ?>
-
-		<?= $form->field($model, 'RESERVATION_NO') ?>
-
-		<?= $form->field($model, 'HELP') ?>
-
-		<?= $form->field($model, 'STATUS') ?>
-
-		<?= $form->field($model, 'SHIPPER') ?>
+    		
 
 		<?php // echo $form->field($model, 'POL') ?>
 
@@ -51,10 +127,7 @@ use yii\widgets\ActiveForm;
 
 		<?php // echo $form->field($model, 'NOTE') ?>
 
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-    </div>
+    
 
     <?php ActiveForm::end(); ?>
 
