@@ -100,6 +100,12 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
+        'attribute' => 'FLAG_DESC',
+        'label' => 'Category',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'ETD',
         'vAlign' => 'middle',
         'hAlign' => 'center',

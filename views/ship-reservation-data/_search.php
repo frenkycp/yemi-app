@@ -63,7 +63,34 @@ use kartik\date\DatePicker;
     		</div>
     		<div class="row">
     			<div class="col-sm-3">
-    				<?= $form->field($model, 'ETD')->widget(DatePicker::classname(), [
+    				<?= $form->field($model, 'NOTE') ?>
+    			</div>
+    			<div class="col-sm-3">
+                    <?= $form->field($model, 'APPLIED_RATE')->dropDownList([
+                        'Contracted Rate' => 'Contracted Rate',
+                        'Spot/Extra Rate' => 'Spot/Extra Rate',
+                    ], [
+                        'prompt' => 'Choose...'
+                    ]) ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'CARRIER')->dropDownList(ArrayHelper::map(app\models\ShipLiner::find()->select('CARRIER')->groupBy('CARRIER')->orderBy('CARRIER')->all(), 'CARRIER', 'CARRIER'), [
+                        'prompt' => 'Choose...',
+                    ]); ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'FLAG_DESC')->dropDownList([
+                        'MAIN' => 'MAIN',
+                        'SUB' => 'SUB',
+                        'BACK UP' => 'BACK UP',
+                    ], [
+                        'prompt' => 'Choose...'
+                    ])->label('Category') ?>
+                </div>
+    		</div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'ETD')->widget(DatePicker::classname(), [
                         'options' => [
                             'type' => DatePicker::TYPE_INPUT,
                         ],
@@ -75,24 +102,8 @@ use kartik\date\DatePicker;
                             'todayBtn' => true,
                         ]
                     ]); ?>
-    			</div>
-    			<div class="col-sm-3">
-    				<?= $form->field($model, 'NOTE') ?>
-    			</div>
-    			<div class="col-sm-3">
-                    <?= $form->field($model, 'APPLIED_RATE')->dropDownList([
-                        'Contracted Rate' => 'Contracted Rate',
-                        'Spot/Extra Rate' => 'Spot/Extra Rate',
-                    ], [
-                        'prompt' => 'Choose...'
-                    ]) ?>
                 </div>
-                <div class="col-sm-4">
-                    <?= $form->field($model, 'CARRIER')->dropDownList(ArrayHelper::map(app\models\ShipLiner::find()->select('CARRIER')->groupBy('CARRIER')->orderBy('CARRIER')->all(), 'CARRIER', 'CARRIER'), [
-                        'prompt' => 'Choose...',
-                    ]); ?>
-                </div>
-    		</div>
+            </div>
     	</div>
     	<div class="panel-footer">
     		<div class="form-group">

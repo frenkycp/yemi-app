@@ -16,12 +16,6 @@ use app\models\Karyawan;
 */
 class ShipReservationDataController extends \app\controllers\base\ShipReservationDataController
 {
-	public function actionUpdateByRef($YCJ_REF_NO)
-	{
-		return $this->render('update-by-ref', [
-			'model' => $model
-		]);
-	}
 
 	public function actionCarrier($POD_VAL = '', $CARRIER_VAL = '', $FLAG_DESC_VAL = '')
 	{
