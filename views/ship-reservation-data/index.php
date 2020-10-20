@@ -50,6 +50,11 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
+        'attribute' => 'DO_NO',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'HELP',
         'vAlign' => 'middle',
         'hAlign' => 'center',

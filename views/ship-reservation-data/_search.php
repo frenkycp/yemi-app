@@ -27,11 +27,11 @@ use kartik\date\DatePicker;
     			<div class="col-sm-3">
     				<?= $form->field($model, 'RESERVATION_NO') ?>
     			</div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'DO_NO') ?>
+                </div>
     			<div class="col-sm-3">
     				<?= $form->field($model, 'BL_NO') ?>
-    			</div>
-    			<div class="col-sm-3">
-    				<?= $form->field($model, 'INVOICE') ?>
     			</div>
     		</div>
     		<div class="row">
@@ -102,6 +102,9 @@ use kartik\date\DatePicker;
                             'todayBtn' => true,
                         ]
                     ]); ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'INVOICE') ?>
                 </div>
             </div>
     	</div>

@@ -9,8 +9,11 @@ use Yii;
 /**
  * This is the base-model class for table "db_owner.SHIP_RESERVATION_DTR".
  *
- * @property string $BL_NO
+ * @property integer $SEQ
+ * @property string $YCJ_REF_NO
  * @property string $RESERVATION_NO
+ * @property string $DO_NO
+ * @property string $BL_NO
  * @property string $HELP
  * @property string $STATUS
  * @property string $SHIPPER
@@ -20,12 +23,18 @@ use Yii;
  * @property double $CNT_40
  * @property double $CNT_20
  * @property string $CARRIER
- * @property integer $FLAG_PRIORTY
+ * @property integer $FLAG_PRIORITY
  * @property string $FLAG_DESC
  * @property string $ETD
  * @property string $APPLIED_RATE
  * @property string $INVOICE
  * @property string $NOTE
+ * @property string $CREATE_TIME
+ * @property string $CREATED_BY_ID
+ * @property string $CREATED_BY_NAME
+ * @property string $LAST_UPDATE
+ * @property string $UPDATED_BY_ID
+ * @property string $UPDATED_BY_NAME
  * @property string $aliasModel
  */
 abstract class ShipReservationDtr extends \yii\db\ActiveRecord
@@ -55,14 +64,14 @@ abstract class ShipReservationDtr extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['BL_NO', 'RESERVATION_NO'], 'required'],
             [['CNT_40HC', 'CNT_40', 'CNT_20'], 'number'],
-            [['FLAG_PRIORTY'], 'integer'],
-            [['ETD'], 'safe'],
-            [['BL_NO', 'RESERVATION_NO', 'STATUS', 'SHIPPER', 'POL', 'POD', 'CARRIER', 'FLAG_DESC', 'INVOICE'], 'string', 'max' => 50],
+            [['FLAG_PRIORITY'], 'integer'],
+            [['ETD', 'CREATE_TIME', 'LAST_UPDATE'], 'safe'],
+            [['YCJ_REF_NO', 'CREATED_BY_ID', 'UPDATED_BY_ID'], 'string', 'max' => 20],
+            [['RESERVATION_NO', 'DO_NO', 'BL_NO', 'STATUS', 'SHIPPER', 'POL', 'POD', 'CARRIER', 'FLAG_DESC', 'INVOICE'], 'string', 'max' => 50],
             [['HELP'], 'string', 'max' => 1],
             [['APPLIED_RATE', 'NOTE'], 'string', 'max' => 100],
-            [['BL_NO'], 'unique']
+            [['CREATED_BY_NAME', 'UPDATED_BY_NAME'], 'string', 'max' => 250]
         ];
     }
 
@@ -72,8 +81,11 @@ abstract class ShipReservationDtr extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'BL_NO' => 'Bl No',
+            'SEQ' => 'Seq',
+            'YCJ_REF_NO' => 'Ycj Ref No',
             'RESERVATION_NO' => 'Reservation No',
+            'DO_NO' => 'Do No',
+            'BL_NO' => 'Bl No',
             'HELP' => 'Help',
             'STATUS' => 'Status',
             'SHIPPER' => 'Shipper',
@@ -83,12 +95,18 @@ abstract class ShipReservationDtr extends \yii\db\ActiveRecord
             'CNT_40' => 'Cnt 40',
             'CNT_20' => 'Cnt 20',
             'CARRIER' => 'Carrier',
-            'FLAG_PRIORTY' => 'Flag Priorty',
+            'FLAG_PRIORITY' => 'Flag Priority',
             'FLAG_DESC' => 'Flag Desc',
             'ETD' => 'Etd',
             'APPLIED_RATE' => 'Applied Rate',
             'INVOICE' => 'Invoice',
             'NOTE' => 'Note',
+            'CREATE_TIME' => 'Create Time',
+            'CREATED_BY_ID' => 'Created By ID',
+            'CREATED_BY_NAME' => 'Created By Name',
+            'LAST_UPDATE' => 'Last Update',
+            'UPDATED_BY_ID' => 'Updated By ID',
+            'UPDATED_BY_NAME' => 'Updated By Name',
         ];
     }
 
