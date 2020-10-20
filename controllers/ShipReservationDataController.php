@@ -16,6 +16,11 @@ use app\models\Karyawan;
 */
 class ShipReservationDataController extends \app\controllers\base\ShipReservationDataController
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
 
 	public function actionCarrier($POD_VAL = '', $CARRIER_VAL = '', $FLAG_DESC_VAL = '')
 	{
@@ -133,6 +138,7 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 					'CNT_40HC' => 'SUM(CNT_40HC)',
 					'CNT_40' => 'SUM(CNT_40)',
 					'CNT_20' => 'SUM(CNT_20)',
+					'total_reservation' => 'COUNT(YCJ_REF_NO)'
 				])
 				->where(['YCJ_REF_NO' => $model->YCJ_REF_NO])
 				->one();
@@ -163,6 +169,15 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 						}
 					}
 				}
+
+				$hdr->CNT_40HC = $tmp_total_container->CNT_40HC;
+				$hdr->CNT_40 = $tmp_total_container->CNT_40;
+				$hdr->CNT_20 = $tmp_total_container->CNT_20;
+				$hdr->UPDATED_BY_ID = $model->UPDATED_BY_ID;
+				$hdr->UPDATED_BY_NAME = $model->UPDATED_BY_NAME;
+				$hdr->LAST_UPDATE = $model->LAST_UPDATE;
+				$hdr->TOTAL_RESERVATION = $tmp_total_container->total_reservation;
+
 				$hdr->RESERVATION_REMARK = $hdr_remark;
 				if (!$hdr->save()) {
 					return json_encode($hdr->errors);
@@ -210,6 +225,7 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 					'CNT_40HC' => 'SUM(CNT_40HC)',
 					'CNT_40' => 'SUM(CNT_40)',
 					'CNT_20' => 'SUM(CNT_20)',
+					'total_reservation' => 'COUNT(YCJ_REF_NO)'
 				])
 				->where(['YCJ_REF_NO' => $model->YCJ_REF_NO])
 				->one();
@@ -240,6 +256,15 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 						}
 					}
 				}
+
+				$hdr->CNT_40HC = $tmp_total_container->CNT_40HC;
+				$hdr->CNT_40 = $tmp_total_container->CNT_40;
+				$hdr->CNT_20 = $tmp_total_container->CNT_20;
+				$hdr->UPDATED_BY_ID = $model->UPDATED_BY_ID;
+				$hdr->UPDATED_BY_NAME = $model->UPDATED_BY_NAME;
+				$hdr->LAST_UPDATE = $model->LAST_UPDATE;
+				$hdr->TOTAL_RESERVATION = $tmp_total_container->total_reservation;
+
 				$hdr->RESERVATION_REMARK = $hdr_remark;
 				if (!$hdr->save()) {
 					return json_encode($hdr->errors);

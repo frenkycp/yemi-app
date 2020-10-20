@@ -11,6 +11,13 @@ use Yii;
  *
  * @property string $YCJ_REF_NO
  * @property string $RESERVATION_REMARK
+ * @property integer $CNT_40HC
+ * @property integer $CNT_40
+ * @property integer $CNT_20
+ * @property integer $TOTAL_RESERVATION
+ * @property string $LAST_UPDATE
+ * @property string $UPDATED_BY_ID
+ * @property string $UPDATED_BY_NAME
  * @property string $aliasModel
  */
 abstract class ShipReservationHdr extends \yii\db\ActiveRecord
@@ -41,8 +48,12 @@ abstract class ShipReservationHdr extends \yii\db\ActiveRecord
     {
         return [
             [['YCJ_REF_NO'], 'required'],
+            [['CNT_40HC', 'CNT_40', 'CNT_20', 'TOTAL_RESERVATION'], 'integer'],
+            [['LAST_UPDATE'], 'safe'],
             [['YCJ_REF_NO'], 'string', 'max' => 20],
             [['RESERVATION_REMARK'], 'string', 'max' => 150],
+            [['UPDATED_BY_ID'], 'string', 'max' => 50],
+            [['UPDATED_BY_NAME'], 'string', 'max' => 250],
             [['YCJ_REF_NO'], 'unique']
         ];
     }
@@ -55,6 +66,13 @@ abstract class ShipReservationHdr extends \yii\db\ActiveRecord
         return [
             'YCJ_REF_NO' => 'Ycj Ref No',
             'RESERVATION_REMARK' => 'Reservation Remark',
+            'CNT_40HC' => 'Cnt 40 Hc',
+            'CNT_40' => 'Cnt 40',
+            'CNT_20' => 'Cnt 20',
+            'TOTAL_RESERVATION' => 'Total Reservation',
+            'LAST_UPDATE' => 'Last Update',
+            'UPDATED_BY_ID' => 'Updated By ID',
+            'UPDATED_BY_NAME' => 'Updated By Name',
         ];
     }
 

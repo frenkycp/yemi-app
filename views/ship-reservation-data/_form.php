@@ -65,10 +65,17 @@ $this->registerCss("
                         'onfocusout' => 'this.value=this.value.toUpperCase()'
                     ]); ?>
                 </div>
+                <div class="col-sm-4">
+                    <?= $form->field($model, 'RESERVATION_NO')->textInput([
+                        'onkeyup' => 'this.value=this.value.toUpperCase()',
+                        'onfocusout' => 'this.value=this.value.toUpperCase()'
+                    ]); ?>
+                </div>
+                
             </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <?= $form->field($model, 'RESERVATION_NO')->textInput([
+                        <?= $form->field($model, 'DO_NO')->textInput([
                             'onkeyup' => 'this.value=this.value.toUpperCase()',
                             'onfocusout' => 'this.value=this.value.toUpperCase()'
                         ]); ?>
