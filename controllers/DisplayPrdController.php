@@ -16,9 +16,149 @@ use app\models\WipOutputMonthlyView;
 use app\models\WipHdrDtr;
 use app\models\ProdNgData;
 use app\models\DbSmtMaterialInOut;
+use app\models\WhFgsStock;
+use app\models\SapItemTbl;
 
 class DisplayPrdController extends Controller
 {
+    public function actionWhFgsStockDetail($etd)
+    {
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>FGS Stock <small>(' . $etd . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 14px;">
+            <th class="text-center">GMC</th>
+            <th class="text-center">GMC Desc</th>
+            <th class="text-center">Total Amount</th>
+        </tr>';
+        
+        $tmp_total_amount = WhFgsStock::find()
+        ->select([
+            'gmc', 'gmc_desc', 'total_output' => 'SUM(total_output)'
+        ])
+        ->where(['etd' => $etd])
+        ->groupBy('gmc, gmc_desc')
+        ->all();
+
+        $tmp_gmc_desc = $tmp_gmc_arr = $tmp_amount_arr = [];
+        foreach ($tmp_total_amount as $key => $value) {
+            $tmp_gmc_desc[$value->gmc] = $value->gmc_desc;
+            if (!isset($tmp_gmc_arr[$value->gmc])) {
+                $tmp_gmc_arr[] = $value->gmc;
+            }
+        }
+
+        $tmp_std_price = ArrayHelper::map(SapItemTbl::find()
+        ->select(['material', 'standard_price'])
+        ->where(['material' => $tmp_gmc_arr])
+        ->all(), 'material', 'standard_price');
+
+        $tmp_data1 = $tmp_data2 = [];
+        foreach ($tmp_total_amount as $key => $value) {
+            $subtotal = 0;
+            if (isset($tmp_std_price[$value['gmc']])) {
+                $subtotal = $value->total_output * $tmp_std_price[$value['gmc']];
+            }
+            $tmp_data1[$value->gmc] = $subtotal;
+        }
+
+        arsort($tmp_data1);
+
+        foreach ($tmp_data1 as $key => $value) {
+            $remark .= '<tr style="font-size: 14px;">
+                <td class="text-center">' . $key . '</td>
+                <td class="text-center">' . $tmp_gmc_desc[$key] . '</td>
+                <td class="text-center">' . number_format($value) . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
+    public function actionWhFgsStock($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_stock_arr = WhFgsStock::find()->orderBy('etd')->all();
+        $tmp_data = $tmp_sort_arr = $tmp_gmc_arr = [];
+        foreach ($tmp_stock_arr as $key => $value) {
+            if (!isset($tmp_gmc_arr[$value->gmc])) {
+                $tmp_gmc_arr[] = $value->gmc;
+            }
+        }
+
+        $tmp_std_price = ArrayHelper::map(SapItemTbl::find()
+        ->select(['material', 'standard_price'])
+        ->where(['material' => $tmp_gmc_arr])
+        ->all(), 'material', 'standard_price');
+
+        $tmp_data_etd = [];
+        foreach ($tmp_stock_arr as $key => $value) {
+            if (!isset($tmp_data[$value->dst])) {
+                $tmp_data[$value->dst] = 0;
+            }
+            if (!isset($tmp_data_etd[$value->etd])) {
+                $tmp_data_etd[$value->etd] = 0;
+            }
+            $subtotal = 0;
+            if (isset($tmp_std_price[$value->gmc])) {
+                $subtotal = $value->total_output * $tmp_std_price[$value->gmc];
+            }
+            $tmp_data[$value->dst] += $subtotal;
+            $tmp_data_etd[$value->etd] += $subtotal;
+        }
+
+        $tmp_data_etd2 = [];
+        foreach ($tmp_data_etd as $key => $value) {
+            $post_date = (strtotime($key . " +7 hours") * 1000);
+            $tmp_data_etd2[] = [
+                'x' => $post_date,
+                'y' => round($value),
+                'url' => Url::to(['wh-fgs-stock-detail', 'etd' => $key]),
+            ];
+        }
+
+        $data_by_etd = [
+            [
+                'name' => 'Total Amount by ETD',
+                'data' => $tmp_data_etd2
+            ],
+        ];
+
+        arsort($tmp_data);
+        $tmp_data_dst = $dst_category = [];
+        foreach ($tmp_data as $key => $value) {
+            $dst_category[] = $key;
+            $tmp_data_dst[] = [
+                'y' => round($value)
+            ];
+        }
+
+        $data_by_dst = [
+            [
+                'name' => 'Total Amount',
+                'data' => $tmp_data_dst,
+                'showInLegend' => false
+            ],
+        ];
+
+        return $this->render('wh-fgs-stock', [
+            'data_by_dst' => $data_by_dst,
+            'data_by_etd' => $data_by_etd,
+            'dst_category' => $dst_category,
+        ]);
+    }
+
     public function actionDailySmtReel($value='')
     {
         $this->layout = 'clean';
