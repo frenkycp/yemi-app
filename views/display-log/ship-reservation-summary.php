@@ -119,12 +119,12 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['tol-monthly-summary']),
+    'action' => Url::to(['ship-reservation-summary']),
 ]); ?>
 <br/>
 <div class="row" style="">
     <div class="col-md-4">
-        <?php echo '<label class="control-label">Select ETD range</label>';
+        <?php echo '<label class="control-label">Select ETD YEMI range</label>';
         echo DatePicker::widget([
             'model' => $model,
             'attribute' => 'from_date',

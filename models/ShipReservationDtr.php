@@ -53,7 +53,7 @@ class ShipReservationDtr extends BaseShipReservationDtr
                 'CARRIER' => 'Carrier',
                 'FLAG_PRIORTY' => 'Flag Priorty',
                 'FLAG_DESC' => 'Flag Desc',
-                'ETD' => 'ETD',
+                'ETD' => 'ETD YEMI',
                 'APPLIED_RATE' => 'Applied Rate',
                 'INVOICE' => 'Invoice',
                 'NOTE' => 'Note',

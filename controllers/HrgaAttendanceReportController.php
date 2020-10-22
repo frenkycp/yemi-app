@@ -7,17 +7,18 @@ use app\models\AbsensiTbl;
 use yii\web\JsExpression;
 use yii\Helpers\Url;
 use app\models\SunfishEmpAttendance;
+use app\models\SunfishAttendanceData;
 
 class HrgaAttendanceReportController extends Controller
 {
 	public $category_masuk = ['SHIFT-01', 'SHIFT-02', 'SHIFT-03', 'PULANG TIDAK ABSEN', 'PULANG CEPAT', 'DATANG TERLAMBAT', 'DINAS'];
 	public $category_cuti = ['CUTI', 'CUTI KHUSUS', 'CUTI KHUSUS IJIN', 'KELUARGA MENINGGAL', 'MELAHIRKAN', 'KEGUGURAN', 'MENIKAH', 'MENGHITANKAN', 'ISTRI KEGUGURAN/MELAHIRKAN'];
 	
-	public function behaviors()
+	/*public function behaviors()
     {
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
-    }
+    }*/
     
     public function actionIndex()
     {
@@ -117,43 +118,50 @@ class HrgaAttendanceReportController extends Controller
 				
 			}
 		} else {
-			$tmp_attendance_data = SunfishEmpAttendance::find()
-			->select([
-				'post_date' => 'FORMAT(shiftstarttime, \'yyyy-MM-dd\')',
-				'total_absent' => 'SUM(CASE WHEN PATINDEX(\'%ABS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-	            'total_present' => 'SUM(CASE WHEN PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-	            'total_permit' => 'SUM(CASE WHEN PATINDEX(\'%Izin%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
-	            'total_sick' => 'SUM(CASE WHEN PATINDEX(\'%SAKIT%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
-	            'total_cuti' => 'SUM(CASE WHEN PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
-	            'total_late' => 'SUM(CASE WHEN PATINDEX(\'%LTI%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-	            'total_early_out' => 'SUM(CASE WHEN PATINDEX(\'%EAO%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-	            'total_shift2' => 'SUM(CASE WHEN shiftdaily_code = \'Shift_2\' AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-	            'total_shift3' => 'SUM(CASE WHEN shiftdaily_code = \'Shift_3\' AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-	            'total_shift4' => 'SUM(CASE WHEN PATINDEX(\'4G_Shift%\', shiftdaily_code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) > 0 THEN 1 ELSE 0 END)',
-	            'total_ck' => 'SUM(CASE WHEN PATINDEX(\'%CK%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)'
-			])
-			->where([
-	            'FORMAT(shiftstarttime, \'yyyyMM\')' => $period,
-	        ])
-	        ->andWhere(['<=', 'shiftstarttime', date('Y-m-d 23:59:59')])
-			->groupBy(['FORMAT(shiftstarttime, \'yyyy-MM-dd\')'])
-			->orderBy('post_date')
-			->all();
+			$from_date = date('Y-m-01', strtotime($period . '01'));
+        	$to_date = date('Y-m-t', strtotime($period . '05'));
+        	$data2 = SunfishAttendanceData::instance()->getDailyAttendanceRange($from_date, $to_date);
+        	$tmp_daily_record = [];
+        	foreach ($data2 as $tgl => $daily_record) {
+        		foreach ($daily_record as $value) {
+        			if ($tgl <= date('Y-m-d')) {
+        				if (!isset($tmp_daily_record[$tgl][$value['attend_judgement']])) {
+		                    $tmp_daily_record[$tgl][$value['attend_judgement']] = 0;
+		                }
+		                $tmp_daily_record[$tgl][$value['attend_judgement']]++;
+        			}
+        			
+        		}
+        	}
+        	//return json_encode($tmp_daily_record);
 
-			foreach ($tmp_attendance_data as $value) {
-				$proddate = (strtotime($value->post_date . " +7 hours") * 1000);
-				$total_absent = $value->total_absent + $value->total_permit + $value->total_sick;
-				$total_cuti = $value->total_cuti + $value->total_ck;
-				$total_hadir = $value->total_present;
+			foreach ($tmp_daily_record as $key => $value) {
+				$proddate = (strtotime($key . " +7 hours") * 1000);
+				$total_hadir = $total_alpa = $total_cuti = $total_ijin = $total_sakit = 0;
+				if (isset($value['P'])) {
+					$total_hadir = $value['P'];
+				}
+				if (isset($value['A'])) {
+					$total_alpa = $value['A'];
+				}
+				if (isset($value['C'])) {
+					$total_cuti = $value['C'];
+				}
+				if (isset($value['I'])) {
+					$total_ijin = $value['I'];
+				}
+				if (isset($value['S'])) {
+					$total_sakit = $value['S'];
+				}
 				//$presentase_absent = 100 - ($presentase_hadir + $presentase_cuti);
 				$tmp_data_absen[] = [
 					'x' => $proddate,
 					//'y' => $presentase_absent == 0 ? null : $presentase_absent,
-					'y' => (int)$total_absent,
+					'y' => (int)$total_alpa + (int)$total_ijin + (int)$total_sakit,
 					//'remark' => $this->getRemark($attendance_report->DATE, 0),
 					//'qty' => $attendance_report->total_karyawan - ($attendance_report->total_kehadiran + $attendance_report->total_cuti),
 					'year_month' => date('M Y', strtotime($period)),
-					'url' => Url::to(['get-remark', 'date' => $value->post_date, 'category' => 0, 'sunfish' => true]),
+					'url' => Url::to(['get-remark', 'date' => $key, 'category' => 0, 'sunfish' => true]),
 				];
 				$tmp_data_cuti[] = [
 					'x' => $proddate,
@@ -162,7 +170,7 @@ class HrgaAttendanceReportController extends Controller
 					//'remark' => $this->getRemark($attendance_report->DATE, 2),
 					//'qty' => $attendance_report->total_cuti,
 					'year_month' => date('M Y', strtotime($period)),
-					'url' => Url::to(['get-remark', 'date' => $value->post_date, 'category' => 2, 'sunfish' => true]),
+					'url' => Url::to(['get-remark', 'date' => $key, 'category' => 2, 'sunfish' => true]),
 				];
 				$tmp_data_hadir[] = [
 					'x' => $proddate,
@@ -171,7 +179,7 @@ class HrgaAttendanceReportController extends Controller
 					//'remark' => $this->getRemark($attendance_report->DATE, 1),
 					//'qty' => $attendance_report->total_kehadiran,
 					'year_month' => date('M Y', strtotime($period)),
-					'url' => Url::to(['get-remark', 'date' => $value->post_date, 'category' => 1, 'sunfish' => true]),
+					'url' => Url::to(['get-remark', 'date' => $key, 'category' => 1, 'sunfish' => true]),
 				];
 			}
 		}
@@ -260,6 +268,8 @@ class HrgaAttendanceReportController extends Controller
             $keterangan = 'Sakit';
         } elseif (strpos($attend_code, 'CUTI') && !strpos($attend_code, 'PRS') && !strpos($attend_code, 'Izin')) {
             $keterangan = 'Cuti Tahunan';
+        } elseif (strpos($attend_code, 'UPL')) {
+            $keterangan = 'Tambahan Cuti Melahirkan';
         }
 
         return $keterangan;
@@ -269,11 +279,10 @@ class HrgaAttendanceReportController extends Controller
     {
     	if ($category == 1) {
 			$filter_arr = $this->category_masuk;
-			$filter_sunfish = 'PATINDEX(\'%PRS%\', Attend_Code) > 0';
+			$filter_sunfish = ['P'];
 		} elseif ($category == 2) {
 			$filter_arr = $this->category_cuti;
-			$filter_sunfish = '(PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0)
-			OR (PATINDEX(\'%CK%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0)';
+			$filter_sunfish = ['C'];
 		} else {
 			$tmp = AbsensiTbl::find()->select('DISTINCT(CATEGORY)')->where([
 				'DATE' => $date,
@@ -288,9 +297,7 @@ class HrgaAttendanceReportController extends Controller
 			}
 			$filter_arr = $tmp_arr;
 
-			$filter_sunfish = '(PATINDEX(\'%ABS%\', Attend_Code) > 0)
-			OR (PATINDEX(\'%Izin%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0)
-			OR (PATINDEX(\'%SAKIT%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0)';
+			$filter_sunfish = ['I', 'S', 'A'];
 		}
 
 		$attendance_report_arr = [];
@@ -328,26 +335,26 @@ class HrgaAttendanceReportController extends Controller
 				];
 			}
     	} else {
-    		$tmp_attendance_report_arr = SunfishEmpAttendance::find()
-    		->where([
-	            'FORMAT(shiftstarttime, \'yyyy-MM-dd\')' => $date,
-	        ])
-	        ->andWhere($filter_sunfish)
-			->all();
-
-			foreach ($tmp_attendance_report_arr as $value) {
-				$keterangan = $this->getAttendCodeDescription($value->Attend_Code);
-				$attendance_report_arr[] = [
-					'CHECK_IN' => $value->starttime,
-					'CHECK_OUT' => $value->endtime,
-					'DATE' => date('Y-m-d', strtotime($value->shiftstarttime)),
-					'NIK' => $value->emp_no,
-					'NAMA_KARYAWAN' => $value->empData->Full_name,
-					'SECTION' => $value->cost_center,
-					'SHIFT' => $value->shiftdaily_code,
-					'CATEGORY' => $keterangan,
-				];
-			}
+    		$tmp_attendance_report_arr = SunfishAttendanceData::instance()->getDailyAttendanceRange($date, $date);
+    		if (count($tmp_attendance_report_arr[$date]) > 0) {
+    			foreach ($tmp_attendance_report_arr[$date] as $key => $value) {
+    				if (in_array($value['attend_judgement'], $filter_sunfish)) {
+    					$keterangan = $this->getAttendCodeDescription($value['Attend_Code']);
+		    			$attendance_report_arr[] = [
+							'CHECK_IN' => $value['starttime'],
+							'CHECK_OUT' => $value['endtime'],
+							'DATE' => date('Y-m-d', strtotime($value['shiftstarttime'])),
+							'NIK' => $value['nik'],
+							'NAMA_KARYAWAN' => $value['name'],
+							'SECTION' => $value['cost_center'],
+							'SHIFT' => $value['shift'],
+							'CATEGORY' => $keterangan,
+						];
+    				}
+	    			
+	    		}
+    		}
+    		
     	}
 
     	
@@ -365,7 +372,7 @@ class HrgaAttendanceReportController extends Controller
 			<th class="text-center">NO</th>
 			<th class="text-center">NIK</th>
 			<th>Nama Karyawan</th>
-			<th class="text-center">Section</th>
+			<th class="">Section</th>
 			<th class="text-center">Shift</th>
 			<th class="text-center">Keterangan</th>
 			<th class="text-center">Cek In</th>
@@ -412,7 +419,7 @@ class HrgaAttendanceReportController extends Controller
 					<td class="text-center">' . $i . '</td>
 					<td class="text-center">' . $attendance_report['NIK'] . '</td>
 					<td>' . $attendance_report['NAMA_KARYAWAN'] . '</td>
-					<td class="text-center">' . $attendance_report['SECTION'] . '</td>
+					<td class="">' . $attendance_report['SECTION'] . '</td>
 					<td class="text-center">' . $attendance_report['SHIFT'] . '</td>
                     <td class="text-center">' . $attendance_report['CATEGORY'] . '</td>
                     <td class="text-center">' . $check_in . '</td>

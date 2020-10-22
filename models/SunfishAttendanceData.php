@@ -101,11 +101,11 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
         $return_data = [];
         $tmp_data = $this::find()
         ->select([
-            'shiftendtime' => 'FORMAT(shiftendtime, \'yyyy-MM-dd\')',
+            'shiftendtime' => 'CONVERT(DATE, shiftendtime)',
             'VIEW_YEMI_ATTENDANCE.emp_no', 'VIEW_YEMI_ATTENDANCE.full_name', 'shiftdaily_code',
-            'start_date' => 'FORMAT(VIEW_YEMI_Emp_OrgUnit.start_date, \'yyyy-MM-dd\')',
-            'end_date' => 'FORMAT(VIEW_YEMI_Emp_OrgUnit.end_date, \'yyyy-MM-dd\')',
-            'shiftdaily_code', 'Attend_Code', 'attend_judgement'
+            'start_date' => 'CONVERT(DATE, VIEW_YEMI_Emp_OrgUnit.start_date)',
+            'end_date' => 'CONVERT(DATE, VIEW_YEMI_Emp_OrgUnit.end_date)',
+            'shiftdaily_code', 'Attend_Code', 'attend_judgement', 'starttime', 'endtime', 'cost_center'
         ])
         ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
         ->where('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'')
@@ -142,7 +142,11 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
                     'nik' => $value->emp_no,
                     'name' => $value->full_name,
                     'shift' => $shift,
-                    'attend_judgement' => $attend_judgement
+                    'Attend_Code' => $value->Attend_Code,
+                    'attend_judgement' => $attend_judgement,
+                    'starttime' => $value->starttime,
+                    'endtime' => $value->endtime,
+                    'cost_center' => $value->cost_center,
                 ];
             }
         }
