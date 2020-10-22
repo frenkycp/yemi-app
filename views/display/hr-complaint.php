@@ -35,6 +35,18 @@ $this->registerCss("
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
 ");
 
+$script = "
+    window.onload = setupRefresh;
+
+    function setupRefresh() {
+      setTimeout(\"refreshPage();\", 180000); // milliseconds
+    }
+    function refreshPage() {
+       window.location = location.href;
+    }
+";
+$this->registerJs($script, View::POS_HEAD );
+
 if (isset($actionColumnTemplates)) {
 $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
@@ -45,44 +57,6 @@ Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphic
 $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
 
 $grid_columns = [
-    /*[
-        'class' => 'kartik\grid\ActionColumn',
-        'template' => '{add-response}',
-        'buttons' => [
-            'view' => function ($url, $model, $key) {
-                $options = [
-                    'title' => Yii::t('cruds', 'View'),
-                    'aria-label' => Yii::t('cruds', 'View'),
-                    'data-pjax' => '0',
-                ];
-                return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-            }, 'add-response' => function($url, $model, $key){
-                $url = ['add-response', 'id' => $model->id];
-                $options = [
-                    'title' => 'Add Response',
-                    'data-pjax' => '0',
-                ];
-                return Html::a('<span class="fa fa-reply"></span>', $url, $options);
-            },
-        ],
-        'urlCreator' => function($action, $model, $key, $index) {
-            // using the column name as key, not mapping to 'id' like the standard generator
-            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
-            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
-            return Url::toRoute($params);
-        },
-        'contentOptions' => ['nowrap'=>'nowrap']
-    ],
-    [
-        'attribute' => 'period',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'width' => '90px;',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; '
-        ],
-    ],*/
     [
         'class' => 'kartik\grid\EnumColumn',
         'attribute' => 'whatsapp',
@@ -145,14 +119,6 @@ $grid_columns = [
             'style' => ''
         ],
     ],
-    /*[
-        'attribute' => 'department',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => ''
-        ],
-    ],*/
     [
         'attribute' => 'section',
         'vAlign' => 'middle',
