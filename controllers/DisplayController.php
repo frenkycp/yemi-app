@@ -901,11 +901,11 @@ class DisplayController extends Controller
         $top_minus = IjazahPlanActual::find()
         ->select([
             'ITEM', 'ITEM_DESC',
-            'BALANCE_AMT_ALLOC' => 'SUM(ACTUAL_AMT_ALLOC - PLAN_AMT)'
+            'BALANCE_AMT_ALLOC' => 'SUM(BALANCE_AMT_ALLOC)'
         ])
         ->where(['<', 'PERIOD', date('Ym')])
         ->groupBy('ITEM, ITEM_DESC')
-        ->orderBy('BALANCE_AMT_ALLOC')
+        ->orderBy('BALANCE_AMT_ALLOC DESC')
         ->limit(10)->all();
 
         return $this->render('monthly-progress-summary', [

@@ -28,6 +28,248 @@ use app\models\RfidCarScan;
 
 class ProductionRestController extends Controller
 {
+    public function actionSendYesterdaySummary($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+        //$today = date('Y-m-d');
+        $today = '2020-10-25';
+
+        $tmp_today = WorkDayTbl::find()
+        ->where([
+            'FORMAT(cal_date, \'yyyy-MM-dd\')' => $today
+        ])
+        ->one();
+
+        if ($tmp_today->holiday == 'Y') {
+            return [
+                'message' => 'Today is holiday...'
+            ];
+        }
+
+        $tmp_yesterday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            '<', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
+        ])
+        ->andWhere('holiday IS NULL')
+        ->orderBy('cal_date DESC')
+        ->one();
+        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
+
+        $tmp_yesterday_prod = VmsPlanActual::find()->select('VMS_DATE')->where(['<', 'VMS_DATE', $today])->orderBy('VMS_DATE DESC')->one();
+        $yesterday_prod = date('Y-m-d', strtotime($tmp_yesterday_prod->VMS_DATE));
+
+        $yesterday_period = date('Ym', strtotime($yesterday));
+
+        $tmp_prod_daily = VmsPlanActual::find()
+        ->select([
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+        ])
+        ->where(['VMS_DATE' => $yesterday])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->one();
+
+        $tmp_prod_daily_fg = VmsPlanActual::find()
+        ->select([
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+        ])
+        ->where([
+            'VMS_DATE' => $yesterday,
+            'FG_KD' => 'PRODUCT'
+        ])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->one();
+
+        $tmp_prod_daily_kd = VmsPlanActual::find()
+        ->select([
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+        ])
+        ->where([
+            'VMS_DATE' => $yesterday,
+            'FG_KD' => 'KD'
+        ])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->one();
+
+        $tmp_prod_monthly = VmsPlanActual::find()
+        ->select([
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+        ])
+        ->where(['<=', 'VMS_DATE', $yesterday])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->andWhere(['FORMAT(VMS_DATE, \'yyyyMM\')' => $yesterday_period])
+        ->one();
+
+        $bu_arr  = ['AV' => 0, 'PA' => 0, 'B&O' => 0, 'DMI' => 0, 'PIANO' => 0, 'SN' => 0, 'OTHERS' => 0];
+        $tmp_data_arr = [];
+        $tmp_so = SernoOutput::find()->select([
+            'bu', 'output' => 'SUM(output)'
+        ])->where([
+            'etd' => $yesterday
+        ])
+        ->andWhere(['<>', 'line_so', 'SPC'])
+        ->groupBy('bu')
+        ->asArray()
+        ->all();
+        $total_shipping = 0;
+        foreach ($tmp_so as $key => $value) {
+            $total_shipping +=$value['output'];
+            $tmp_data_arr[$value['bu']] = $value['output'];
+            if (isset($bu_arr[$value['bu']])) {
+                $bu_arr[$value['bu']] = $value['output'];
+            } else {
+                $bu_arr['OTHERS'] += $value['output'];
+            }
+        }
+
+        $tmp_total_output = SernoInput::find()
+        ->select([
+            'total' => 'COUNT(pk)'
+        ])
+        ->where([
+            'proddate' => $yesterday,
+        ])
+        ->one();
+        $total_output = $tmp_total_output->total;
+
+        $tmp_total_ng_fa = ProdNgData::find()
+        ->select([
+            'ng_qty' => 'SUM(ng_qty)'
+        ])
+        ->where([
+            'post_date' => $yesterday,
+            'loc_id' => 'WF01',
+            'fa_area_detec' => 'OQC'
+        ])
+        ->one();
+        $total_ng = $tmp_total_ng_fa->ng_qty;
+
+        $ng_rate = 0;
+        if ($total_output > 0) {
+            $ng_rate = round(($total_ng / $total_output) * 100, 2);
+        }
+
+        $tmp_top_minus = VmsPlanActual::find()
+        ->select([
+            'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+        ])
+        ->where([
+            'VMS_PERIOD' => $yesterday_period,
+            //'FG_KD' => 'PRODUCT'
+        ])
+        ->andWhere(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('MODEL, ITEM, ITEM_DESC, DESTINATION')
+        ->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+        ->limit(3)
+        ->all();
+
+        $tmp_top_ng = ProdNgData::find()
+        ->select([
+            'gmc_no', 'gmc_desc', 'ng_qty' => 'SUM(ng_qty)'
+        ])
+        ->where([
+            'post_date' => $model->post_date,
+            'loc_id' => 'WF01',
+            'fa_area_detec' => 'OQC'
+        ])
+        ->groupBy('gmc_no, gmc_desc')
+        ->orderBy('SUM(ng_qty) DESC')
+        ->limit(3)->all();
+
+        $tmp_data_present = SunfishAttendanceData::find()
+        ->select([
+            'total_present' => 'SUM(CASE WHEN attend_judgement = \'P\' THEN 1 ELSE 0 END)',
+            'total_mp' => 'COUNT(*)'
+        ])
+        ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
+        ->where('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'')
+        ->andWhere([
+            'FORMAT(shiftendtime, \'yyyy-MM-dd\')' => $yesterday
+        ])
+        ->one();
+        $attendance_rate = 0;
+        if ($tmp_data_present->total_mp > 0) {
+            $attendance_rate = round(($tmp_data_present->total_present / $tmp_data_present->total_mp) * 100, 1);
+        }
+
+        $tmp_fg_minus_daily = VmsPlanActual::find()
+        ->select([
+            'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+        ])
+        ->where([
+            'FORMAT(VMS_DATE, \'yyyy-MM-dd\')' => $yesterday,
+            'FG_KD' => 'PRODUCT'
+        ])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('MODEL, ITEM, ITEM_DESC, DESTINATION')
+        ->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+        ->limit(3)
+        ->all();
+
+        $tmp_kd_minus_daily = VmsPlanActual::find()
+        ->select([
+            'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+        ])
+        ->where([
+            'FORMAT(VMS_DATE, \'yyyy-MM-dd\')' => $yesterday,
+            'FG_KD' => 'KD'
+        ])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('MODEL, ITEM, ITEM_DESC, DESTINATION')
+        ->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+        ->limit(3)
+        ->all();
+
+        \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/yesterday-summary'], [
+            'prod_data_daily' => $tmp_prod_daily,
+            'prod_data_daily_fg' => $tmp_prod_daily_fg,
+            'prod_data_daily_kd' => $tmp_prod_daily_kd,
+            'prod_data_monthly' => $tmp_prod_monthly,
+            'total_shipping' => $total_shipping,
+            'bu_arr' => $bu_arr,
+            'tmp_data_arr' => $tmp_data_arr,
+            'yesterday' => $yesterday,
+            'yesterday_prod' => $yesterday_prod,
+            'ng_rate' => $ng_rate,
+            'tmp_top_minus' => $tmp_top_minus,
+            'tmp_top_ng' => $tmp_top_ng,
+            'attendance_rate' => $attendance_rate,
+            'tmp_fg_minus_daily' => $tmp_fg_minus_daily,
+            'tmp_kd_minus_daily' => $tmp_kd_minus_daily,
+        ])
+        ->setFrom('purnama.frenky@gmail.com')
+        ->setTo(['frenky.purnama@music.yamaha.com', 'ipung.gautama@music.yamaha.com'])
+        ->setSubject('Production, Shipping, NG and Attendance Report')
+        ->send();
+
+        return [
+            'message' => 'Email Sent...'
+        ];
+    }
+
     public function actionBentolUpdateAll($value='')
     {
         $tmp_1 = $this->actionUpdateBentolTripSummary();
@@ -818,7 +1060,7 @@ class ProductionRestController extends Controller
         $this_time = date('Y-m-d H:i:s');
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
 
-        $period_arr = $this->getPeriodArr($period_arr);
+        $period_arr = $this->getPeriodArr($post_date);
 
         $tmp_ijazah_arr = IjazahPlanActual::find()
         ->where([
@@ -883,6 +1125,7 @@ class ProductionRestController extends Controller
                         || $ACTUAL_AMT_ALLOC != $ACTUAL_AMT_ALLOC_NEW
                         || $tmp_ijazah->PLAN_QTY != $plan_qty
                         || ($tmp_ijazah->PLAN_QTY != $tmp_ijazah->ACTUAL_QTY_ALLOC && ($tmp_ijazah->STD_PRICE * $tmp_ijazah->ACTUAL_QTY_ALLOC) * $tmp_ijazah->ACTUAL_AMT_ALLOC)
+                        || ($tmp_ijazah->ACT_ALLOC_LAST_UPDATE < $tmp_ijazah->ACT_QTY_LAST_UPDATE && $tmp_ijazah->ACT_LAST_UPDATE != null)
                     ) {
                         $update_ijazah = IjazahPlanActual::findOne($tmp_ijazah->ITEM . '-' . $tmp_ijazah->PERIOD);
                         $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;
@@ -890,7 +1133,7 @@ class ProductionRestController extends Controller
                         $update_ijazah->ACT_ALLOC_LAST_UPDATE = $this_time;
                         $update_ijazah->PLAN_AMT = $tmp_ijazah->PLAN_QTY * $tmp_ijazah->STD_PRICE;
                         $update_ijazah->ACTUAL_AMT_ALLOC = $ACTUAL_AMT_ALLOC;
-                        $update_ijazah->BALANCE_AMT_ALLOC = $tmp_balance_qty_alloc * $tmp_ijazah->STD_PRICE;
+                        $update_ijazah->BALANCE_AMT_ALLOC = round($tmp_balance_qty_alloc * $tmp_ijazah->STD_PRICE, 1);
                         $update_ijazah->AMT_RATIO = $amt_ratio;
                         if (!$update_ijazah->save()) {
                             return $update_ijazah->errors;
@@ -911,7 +1154,7 @@ class ProductionRestController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $this_time = date('Y-m-d H:i:s');
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $period = $this->getPeriodArr($period_arr);
+        $period = $this->getPeriodArr($post_date);
         //return $period;
 
         $tmp_output = SernoOutput::find()
