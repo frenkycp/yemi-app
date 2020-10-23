@@ -1125,7 +1125,7 @@ class ProductionRestController extends Controller
                         || $ACTUAL_AMT_ALLOC != $ACTUAL_AMT_ALLOC_NEW
                         || $tmp_ijazah->PLAN_QTY != $plan_qty
                         || ($tmp_ijazah->PLAN_QTY != $tmp_ijazah->ACTUAL_QTY_ALLOC && ($tmp_ijazah->STD_PRICE * $tmp_ijazah->ACTUAL_QTY_ALLOC) * $tmp_ijazah->ACTUAL_AMT_ALLOC)
-                        || ($tmp_ijazah->ACT_ALLOC_LAST_UPDATE < $tmp_ijazah->ACT_QTY_LAST_UPDATE && $tmp_ijazah->ACT_LAST_UPDATE != null)
+                        || ($tmp_ijazah->ACT_ALLOC_LAST_UPDATE < $tmp_ijazah->ACT_LAST_UPDATE && $tmp_ijazah->ACT_LAST_UPDATE != null)
                     ) {
                         $update_ijazah = IjazahPlanActual::findOne($tmp_ijazah->ITEM . '-' . $tmp_ijazah->PERIOD);
                         $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;
