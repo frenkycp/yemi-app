@@ -158,6 +158,19 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'defect_category',
+        'label' => 'Defect Category',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filter' => [
+            'PRE' => 'PRE',
+            'SELF' => 'SELF'
+        ],
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
         'attribute' => 'emp_id',
         'label' => 'PIC NG (NIK)',
         'hAlign' => 'center',

@@ -32,8 +32,8 @@ class ProductionRestController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         date_default_timezone_set('Asia/Jakarta');
-        //$today = date('Y-m-d');
-        $today = '2020-10-25';
+        $today = date('Y-m-d');
+        //$today = '2020-10-25';
 
         $tmp_today = WorkDayTbl::find()
         ->where([
@@ -261,7 +261,7 @@ class ProductionRestController extends Controller
             'tmp_kd_minus_daily' => $tmp_kd_minus_daily,
         ])
         ->setFrom('purnama.frenky@gmail.com')
-        ->setTo(['frenky.purnama@music.yamaha.com', 'ipung.gautama@music.yamaha.com'])
+        ->setTo(['gazalba.briljan@music.yamaha.com'])
         ->setSubject('Production, Shipping, NG and Attendance Report')
         ->send();
 

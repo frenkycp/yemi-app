@@ -55,6 +55,7 @@ use Yii;
  * @property string $fa_area_detec
  * @property string $fa_serno
  * @property string $fa_status
+ * @property string $defect_category
  * @property string $pcb_id
  * @property string $pcb_name
  * @property string $pcb_ng_found
@@ -109,7 +110,7 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
             [['emp_working_month', 'ng_category_id', 'ng_shift', 'inj_set_parameter', 'flag'], 'integer'],
             [['ng_qty', 'total_output', 'ww_total_price'], 'number'],
             [['action_remark'], 'string'],
-            [['document_no', 'loc_desc', 'ng_category_desc', 'ng_category_detail', 'ng_location_id', 'ng_location', 'ng_root_cause', 'attachment', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_pic_aoi', 'smt_group_pic', 'next_action'], 'string', 'max' => 50],
+            [['document_no', 'loc_desc', 'ng_category_desc', 'ng_category_detail', 'ng_location_id', 'ng_location', 'ng_root_cause', 'attachment', 'defect_category', 'pcb_ng_found', 'pcb_side', 'pcb_problem', 'pcb_occu', 'pcb_process', 'pcb_part_section', 'pcb_pic', 'pcb_repair', 'smt_pic_aoi', 'smt_group_pic', 'next_action'], 'string', 'max' => 50],
             [['period', 'loc_id', 'fa_status'], 'string', 'max' => 10],
             [['line', 'emp_id', 'emp_status_code', 'model_group', 'gmc_no', 'gmc_color', 'gmc_dest', 'gmc_line', 'part_no', 'ng_cause_category', 'created_by_id', 'updated_by_id', 'detected_by_id', 'fa_area_detec'], 'string', 'max' => 20],
             [['emp_name', 'gmc_desc', 'gmc_model', 'ng_detail', 'created_by_name', 'updated_by_name', 'detected_by_name', 'smt_pic_aoi_name', 'smt_group_pic_name'], 'string', 'max' => 150],
@@ -173,6 +174,7 @@ abstract class ProdNgData extends \yii\db\ActiveRecord
             'fa_area_detec' => 'Fa Area Detec',
             'fa_serno' => 'Fa Serno',
             'fa_status' => 'Fa Status',
+            'defect_category' => 'Defect Category',
             'pcb_id' => 'Pcb ID',
             'pcb_name' => 'Pcb Name',
             'pcb_ng_found' => 'Pcb Ng Found',
