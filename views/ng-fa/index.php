@@ -164,7 +164,8 @@ $gridColumns = [
         'hAlign' => 'center',
         'filter' => [
             'PRE' => 'PRE',
-            'SELF' => 'SELF'
+            'SELF' => 'SELF',
+            'POST' => 'POST',
         ],
         'filterInputOptions' => [
             'class' => 'form-control',

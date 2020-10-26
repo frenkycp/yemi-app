@@ -144,6 +144,7 @@ $this->registerCss("
                     <?= $form->field($model, 'defect_category')->dropDownList([
                         'PRE' => 'PRE',
                         'SELF' => 'SELF',
+                        'POST' => 'POST',
                     ]); ?>
 
                     <?= $form->field($model, 'ng_root_cause')->dropDownList($ng_fa_root_cause_dropdown, [
