@@ -44,7 +44,8 @@ class KaryawanRestController extends Controller
             'post_date' => 'CAST(shiftendtime AS DATE)', 'VIEW_YEMI_ATTENDANCE.emp_no', 'VIEW_YEMI_ATTENDANCE.full_name', 'cost_center', 'grade' => 'VIEW_YEMI_Emp_OrgUnit.grade_code', 'attend_judgement', 'starttime', 'endtime'
         ])
         ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
-        ->where([
+        ->where('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'')
+        ->andWhere([
             'AND',
             ['>=', 'FORMAT(shiftendtime, \'yyyy-MM-dd\')', $from_date],
             ['<=', 'FORMAT(shiftendtime, \'yyyy-MM-dd\')', $to_date]
