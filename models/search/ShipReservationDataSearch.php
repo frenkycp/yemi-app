@@ -18,7 +18,7 @@ class ShipReservationDataSearch extends ShipReservationDtr
 public function rules()
 {
 return [
-[['BL_NO', 'RESERVATION_NO', 'HELP', 'STATUS', 'SHIPPER', 'POL', 'POD', 'CARRIER', 'FLAG_DESC', 'ETD', 'APPLIED_RATE', 'INVOICE', 'NOTE', 'YCJ_REF_NO'], 'safe'],
+[['BL_NO', 'RESERVATION_NO', 'HELP', 'STATUS', 'SHIPPER', 'POL', 'POD', 'CARRIER', 'FLAG_DESC', 'ETD', 'APPLIED_RATE', 'INVOICE', 'NOTE', 'YCJ_REF_NO', 'DUE_DATE'], 'safe'],
             [['CNT_40HC', 'CNT_40', 'CNT_20'], 'number'],
             [['FLAG_PRIORITY'], 'integer'],
 ];
@@ -62,6 +62,7 @@ $query->andFilterWhere([
             'CNT_20' => $this->CNT_20,
             'FLAG_PRIORITY' => $this->FLAG_PRIORITY,
             'ETD' => $this->ETD,
+            'DUE_DATE' => $this->DUE_DATE,
         ]);
 
         $query->andFilterWhere(['like', 'BL_NO', $this->BL_NO])

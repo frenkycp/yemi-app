@@ -60,6 +60,11 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
+        'attribute' => 'DUE_DATE',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'STATUS',
         'vAlign' => 'middle',
         //'hAlign' => 'center',

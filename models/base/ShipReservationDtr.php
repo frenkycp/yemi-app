@@ -26,6 +26,7 @@ use Yii;
  * @property integer $FLAG_PRIORITY
  * @property string $FLAG_DESC
  * @property string $ETD
+ * @property string $DUE_DATE
  * @property string $APPLIED_RATE
  * @property string $INVOICE
  * @property string $NOTE
@@ -66,7 +67,7 @@ abstract class ShipReservationDtr extends \yii\db\ActiveRecord
         return [
             [['CNT_40HC', 'CNT_40', 'CNT_20'], 'number'],
             [['FLAG_PRIORITY'], 'integer'],
-            [['ETD', 'CREATE_TIME', 'LAST_UPDATE'], 'safe'],
+            [['ETD', 'DUE_DATE', 'CREATE_TIME', 'LAST_UPDATE'], 'safe'],
             [['YCJ_REF_NO', 'CREATED_BY_ID', 'UPDATED_BY_ID'], 'string', 'max' => 20],
             [['RESERVATION_NO', 'DO_NO', 'BL_NO', 'STATUS', 'SHIPPER', 'POL', 'POD', 'CARRIER', 'FLAG_DESC', 'INVOICE'], 'string', 'max' => 50],
             [['HELP'], 'string', 'max' => 1],
@@ -98,6 +99,7 @@ abstract class ShipReservationDtr extends \yii\db\ActiveRecord
             'FLAG_PRIORITY' => 'Flag Priority',
             'FLAG_DESC' => 'Flag Desc',
             'ETD' => 'Etd',
+            'DUE_DATE' => 'Due Date',
             'APPLIED_RATE' => 'Applied Rate',
             'INVOICE' => 'Invoice',
             'NOTE' => 'Note',

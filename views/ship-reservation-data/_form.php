@@ -71,25 +71,39 @@ $this->registerCss("
                         'onfocusout' => 'this.value=this.value.toUpperCase()'
                     ]); ?>
                 </div>
-                
+                <div class="col-sm-4">
+                    <?= $form->field($model, 'DO_NO')->textInput([
+                        'onkeyup' => 'this.value=this.value.toUpperCase()',
+                        'onfocusout' => 'this.value=this.value.toUpperCase()'
+                    ]); ?>
+                </div>
             </div>
                 <div class="row">
-                    <div class="col-sm-4">
-                        <?= $form->field($model, 'DO_NO')->textInput([
-                            'onkeyup' => 'this.value=this.value.toUpperCase()',
-                            'onfocusout' => 'this.value=this.value.toUpperCase()'
-                        ]); ?>
-                    </div>
                     <div class="col-sm-2">
                         <?= $form->field($model, 'HELP')->dropDownList([
                             'N' => 'No',
                             'Y' => 'Yes',
                         ]); ?>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
+                        <?= $form->field($model, 'DUE_DATE')->widget(DatePicker::classname(), [
+                            'options' => [
+                                'type' => DatePicker::TYPE_INPUT,
+                            ],
+                            'removeButton' => false,
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'format' => 'yyyy-mm-dd',
+                                'todayHighlight' => true,
+                                'todayBtn' => true,
+                            ]
+                        ]); ?>
+                    </div>
+                    
+                    <div class="col-sm-4">
                         <?= $form->field($model, 'STATUS')->dropDownList(\Yii::$app->params['ship_reservation_status_arr']); ?>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-4">
                         <?= $form->field($model, 'SHIPPER')->textInput([
                             'onkeyup' => 'this.value=this.value.toUpperCase()',
                             'onfocusout' => 'this.value=this.value.toUpperCase()'
