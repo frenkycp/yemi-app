@@ -12,7 +12,7 @@ use yii\helpers\ArrayHelper;
  */
 class ProdNgData extends BaseProdNgData
 {
-    public $qty_ng_contract1, $qty_ng_contract2, $qty_ng_permanent, $ng_qty_1y_less, $ng_qty_1y_5y, $ng_qty_5y_over, $ng_total;
+    public $qty_ng_contract1, $qty_ng_contract2, $qty_ng_permanent, $ng_qty_1y_less, $ng_qty_1y_5y, $ng_qty_5y_over, $ng_total, $total_ng_all, $total_ng_sn, $total_ng_pa, $total_ng_piano, $total_ng_bo, $total_ng_av, $total_ng_dmi, $total_ng_other, $total_ng_null;
 
     public function behaviors()
     {

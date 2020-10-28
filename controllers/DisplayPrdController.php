@@ -18,9 +18,273 @@ use app\models\ProdNgData;
 use app\models\DbSmtMaterialInOut;
 use app\models\WhFgsStock;
 use app\models\SapItemTbl;
+use app\models\SernoInputAll;
+use app\models\VmsItem;
 
 class DisplayPrdController extends Controller
 {
+    public function getPeriodArr($post_date='')
+    {
+        if ($post_date == '') {
+            $current_period = date('Ym');
+        } else {
+            $current_period = date('Ym', strtotime($post_date));
+        }
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => $current_period
+        ])->one();
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $current_fiscal->FISCAL
+        ])
+        ->andWhere(['<=', 'PERIOD', $current_period])
+        ->orderBy('PERIOD')
+        ->all();
+
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        return $period_arr;
+    }
+
+    public function actionFaDefectRatio($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+        $target = 0.04;
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $period_arr = $this->getPeriodArr($model->period . '01');
+        $tmp_serno_input = SernoInputAll::find()
+        ->select([
+            'period' => 'extract(year_month FROM proddate)', 'gmc', 'total' => 'COUNT(pk)'
+        ])
+        ->where([
+            'extract(year_month FROM proddate)' => $period_arr
+        ])
+        ->groupBy('period, gmc')
+        ->all();
+
+        $tmp_info_arr = ArrayHelper::map(VmsItem::find()
+        ->select(['ITEM', 'BU'])
+        ->all(), 'ITEM', 'BU');
+
+        $data = [];
+        foreach ($period_arr as $key => $period) {
+            
+            $total_all = $total_sn = $total_pa = $total_piano = $total_bo = $total_av = $total_dmi = $total_other = $total_null = 0;
+            foreach ($tmp_serno_input as $key => $value) {
+                if ($value->period == $period) {
+                    $tmp_bu = null;
+                    if (isset($tmp_info_arr[$value->gmc])) {
+                        $tmp_bu = $tmp_info_arr[$value->gmc];
+                    }
+                    $total_all += $value->total;
+                    if ($tmp_bu == 'SN') {
+                        $total_sn += $value->total;
+                    } elseif ($tmp_bu == 'PA') {
+                        $total_pa += $value->total;
+                    } elseif ($tmp_bu == 'PIANO') {
+                        $total_piano += $value->total;
+                    } elseif ($tmp_bu == 'B&O') {
+                        $total_bo += $value->total;
+                    } elseif ($tmp_bu == 'AV') {
+                        $total_av += $value->total;
+                    } elseif ($tmp_bu == 'DMI') {
+                        $total_dmi += $value->total;
+                    } elseif ($tmp_bu == 'OTHER') {
+                        $total_other += $value->total;
+                    } elseif ($tmp_bu == null) {
+                        $total_null += $value->total;
+                    }
+                }
+            }
+
+            $output_arr = [
+                'total_all' => $total_all,
+                'total_sn' => $total_sn,
+                'total_pa' => $total_pa,
+                'total_piano' => $total_piano,
+                'total_bo' => $total_bo,
+                'total_av' => $total_av,
+                'total_dmi' => $total_dmi,
+                'total_other' => $total_other,
+                'total_null' => $total_null,
+            ];
+
+            $tmp_ng_pre = ProdNgData::find()
+            ->select([
+                'total_ng_all' => 'ISNULL(SUM(ng_qty), 0)',
+                'total_ng_sn' => 'ISNULL(SUM(CASE WHEN BU = \'SN\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_pa' => 'ISNULL(SUM(CASE WHEN BU = \'PA\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_piano' => 'ISNULL(SUM(CASE WHEN BU = \'PIANO\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_bo' => 'ISNULL(SUM(CASE WHEN BU = \'B&O\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_av' => 'ISNULL(SUM(CASE WHEN BU = \'AV\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_dmi' => 'ISNULL(SUM(CASE WHEN BU = \'DMI\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_other' => 'ISNULL(SUM(CASE WHEN BU = \'OTHER\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_null' => 'ISNULL(SUM(CASE WHEN BU IS NULL THEN ng_qty ELSE 0 END), 0)',
+            ])
+            ->leftJoin('VMS_ITEM', 'PROD_NG_TBL.gmc_no = VMS_ITEM.ITEM')
+            ->where([
+                'loc_id' => 'WF01',
+                'period' => $period,
+                'defect_category' => 'PRE',
+                'flag' => 1,
+            ])
+            ->one();
+
+            $tmp_ng_self = ProdNgData::find()
+            ->select([
+                'total_ng_all' => 'ISNULL(SUM(ng_qty), 0)',
+                'total_ng_sn' => 'ISNULL(SUM(CASE WHEN BU = \'SN\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_pa' => 'ISNULL(SUM(CASE WHEN BU = \'PA\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_piano' => 'ISNULL(SUM(CASE WHEN BU = \'PIANO\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_bo' => 'ISNULL(SUM(CASE WHEN BU = \'B&O\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_av' => 'ISNULL(SUM(CASE WHEN BU = \'AV\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_dmi' => 'ISNULL(SUM(CASE WHEN BU = \'DMI\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_other' => 'ISNULL(SUM(CASE WHEN BU = \'OTHER\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_null' => 'ISNULL(SUM(CASE WHEN BU IS NULL THEN ng_qty ELSE 0 END), 0)',
+            ])
+            ->leftJoin('VMS_ITEM', 'PROD_NG_TBL.gmc_no = VMS_ITEM.ITEM')
+            ->where([
+                'loc_id' => 'WF01',
+                'period' => $period,
+                'defect_category' => 'SELF',
+                'flag' => 1,
+            ])
+            ->one();
+
+            $tmp_ng_post = ProdNgData::find()
+            ->select([
+                'total_ng_all' => 'ISNULL(SUM(ng_qty), 0)',
+                'total_ng_sn' => 'ISNULL(SUM(CASE WHEN BU = \'SN\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_pa' => 'ISNULL(SUM(CASE WHEN BU = \'PA\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_piano' => 'ISNULL(SUM(CASE WHEN BU = \'PIANO\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_bo' => 'ISNULL(SUM(CASE WHEN BU = \'B&O\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_av' => 'ISNULL(SUM(CASE WHEN BU = \'AV\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_dmi' => 'ISNULL(SUM(CASE WHEN BU = \'DMI\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_other' => 'ISNULL(SUM(CASE WHEN BU = \'OTHER\' THEN ng_qty ELSE 0 END), 0)',
+                'total_ng_null' => 'ISNULL(SUM(CASE WHEN BU IS NULL THEN ng_qty ELSE 0 END), 0)',
+            ])
+            ->leftJoin('VMS_ITEM', 'PROD_NG_TBL.gmc_no = VMS_ITEM.ITEM')
+            ->where([
+                'loc_id' => 'WF01',
+                'period' => $period,
+                'defect_category' => 'POST',
+                'flag' => 1,
+            ])
+            ->one();
+
+            $data[$period] = [
+                'all' => [
+                    'output' => $output_arr['total_all'],
+                    'ng_post' => $tmp_ng_post->total_ng_all,
+                    'ng_self' => $tmp_ng_self->total_ng_all,
+                    'ng_pre' => $tmp_ng_pre->total_ng_all,
+                    'post_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_post->total_ng_all / $output_arr['total_all']) * 100, 2),
+                    'self_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_self->total_ng_all / $output_arr['total_all']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_all / $output_arr['total_all']) * 100, 2),
+                ],
+                'sn' => [
+                    'output' => $output_arr['total_sn'],
+                    'ng_post' => $tmp_ng_post->total_ng_sn,
+                    'ng_self' => $tmp_ng_self->total_ng_sn,
+                    'ng_pre' => $tmp_ng_pre->total_ng_sn,
+                    'post_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_post->total_ng_sn / $output_arr['total_sn']) * 100, 2),
+                    'self_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_self->total_ng_sn / $output_arr['total_sn']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_sn / $output_arr['total_sn']) * 100, 2),
+                ],
+                'pa' => [
+                    'output' => $output_arr['total_pa'],
+                    'ng_post' => $tmp_ng_post->total_ng_pa,
+                    'ng_self' => $tmp_ng_self->total_ng_pa,
+                    'ng_pre' => $tmp_ng_pre->total_ng_pa,
+                    'post_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_post->total_ng_pa / $output_arr['total_pa']) * 100, 2),
+                    'self_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_self->total_ng_pa / $output_arr['total_pa']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_pa / $output_arr['total_pa']) * 100, 2),
+                ],
+                'piano' => [
+                    'output' => $output_arr['total_piano'],
+                    'ng_post' => $tmp_ng_post->total_ng_piano,
+                    'ng_self' => $tmp_ng_self->total_ng_piano,
+                    'ng_pre' => $tmp_ng_pre->total_ng_piano,
+                    'post_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_post->total_ng_piano / $output_arr['total_piano']) * 100, 2),
+                    'self_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_self->total_ng_piano / $output_arr['total_piano']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_piano / $output_arr['total_piano']) * 100, 2),
+                ],
+                'bo' => [
+                    'output' => $output_arr['total_bo'],
+                    'ng_post' => $tmp_ng_post->total_ng_bo,
+                    'ng_self' => $tmp_ng_self->total_ng_bo,
+                    'ng_pre' => $tmp_ng_pre->total_ng_bo,
+                    'post_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_post->total_ng_bo / $output_arr['total_bo']) * 100, 2),
+                    'self_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_self->total_ng_bo / $output_arr['total_bo']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_bo / $output_arr['total_bo']) * 100, 2),
+                ],
+                'av' => [
+                    'output' => $output_arr['total_av'],
+                    'ng_post' => $tmp_ng_post->total_ng_av,
+                    'ng_self' => $tmp_ng_self->total_ng_av,
+                    'ng_pre' => $tmp_ng_pre->total_ng_av,
+                    'post_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_post->total_ng_av / $output_arr['total_av']) * 100, 2),
+                    'self_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_self->total_ng_av / $output_arr['total_av']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_av / $output_arr['total_av']) * 100, 2),
+                ],
+                'dmi' => [
+                    'output' => $output_arr['total_dmi'],
+                    'ng_post' => $tmp_ng_post->total_ng_dmi,
+                    'ng_self' => $tmp_ng_self->total_ng_dmi,
+                    'ng_pre' => $tmp_ng_pre->total_ng_dmi,
+                    'post_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_post->total_ng_dmi / $output_arr['total_dmi']) * 100, 2),
+                    'self_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_self->total_ng_dmi / $output_arr['total_dmi']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_dmi / $output_arr['total_dmi']) * 100, 2),
+                ],
+                'other' => [
+                    'output' => $output_arr['total_other'],
+                    'ng_post' => $tmp_ng_post->total_ng_other,
+                    'ng_self' => $tmp_ng_self->total_ng_other,
+                    'ng_pre' => $tmp_ng_pre->total_ng_other,
+                    'post_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_post->total_ng_other / $output_arr['total_other']) * 100, 2),
+                    'self_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_self->total_ng_other / $output_arr['total_other']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_other / $output_arr['total_other']) * 100, 2),
+                ],
+                'null' => [
+                    'output' => $output_arr['total_null'],
+                    'ng_post' => $tmp_ng_post->total_ng_null,
+                    'ng_self' => $tmp_ng_self->total_ng_null,
+                    'ng_pre' => $tmp_ng_pre->total_ng_null,
+                    'post_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_post->total_ng_null / $output_arr['total_null']) * 100, 2),
+                    'self_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_self->total_ng_null / $output_arr['total_null']) * 100, 2),
+                    'pre_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_null / $output_arr['total_null']) * 100, 2),
+                ],
+                /*'output_arr' => $output_arr,
+                'ng_post' => $tmp_ng_post,
+                'ng_self' => $tmp_ng_self,
+                'ng_pre' => $tmp_ng_pre,*/
+            ];
+        }
+
+        return $this->render('fa-defect-ratio', [
+            'model' => $model,
+            'data' => $data,
+            'target' => $target,
+            'period_arr' => $period_arr,
+        ]);
+    }
+
     public function actionWhFgsStockDetail($etd)
     {
         $remark = '<div class="modal-header">
