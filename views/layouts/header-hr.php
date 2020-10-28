@@ -52,7 +52,7 @@ $current_action = \Yii::$app->controller->action->id;
               </ul>
             </li>
             <li >
-                <?= Html::a('<i class="fa fa-share"></i> <span>Information Center</span>', '//172.17.144.2/hr/karyawan'); ?>
+                <?= Html::a('<i class="fa fa-share"></i> <span>Information Center</span>', '//10.110.52.3/hr/karyawan'); ?>
             </li>
           </ul>
         </div>
