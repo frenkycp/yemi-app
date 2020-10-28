@@ -25,6 +25,7 @@ use app\models\SapItemTbl;
 use app\models\SunfishAttendanceData;
 use app\models\CarParkAttendance;
 use app\models\RfidCarScan;
+use app\models\IjazahItem;
 
 class ProductionRestController extends Controller
 {
@@ -1208,7 +1209,7 @@ class ProductionRestController extends Controller
                     
                 }
             } else {
-                $tmp_gmc = IjazahPlanActual::find()->where(['ITEM' => $value->gmc])->orderBy('PERIOD DESC')->one();
+                $tmp_gmc = IjazahItem::find()->where(['ITEM' => $value->gmc])->orderBy('PERIOD DESC')->one();
                 $balance = 0 - $value->output;
                 $tmp_insert = [
                     'ID' => $index,

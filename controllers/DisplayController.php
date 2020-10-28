@@ -9503,6 +9503,7 @@ echo '</pre>';*/
             ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
         ])
         ->andWhere(['map_no' => $model->map_no])
+        ->orderBy('system_date_time')
         ->asArray()
         ->all();
 
@@ -9580,6 +9581,7 @@ echo '</pre>';*/
             ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
         ])
         ->andWhere(['map_no' => $model->map_no])
+        ->orderBy('system_date_time')
         ->asArray()
         ->all();
 
