@@ -113,7 +113,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'ng_root_cause',
-        'label' => 'Detected Section',
+        'label' => 'Root Cause Section',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [

@@ -144,9 +144,10 @@ $current_data = $data[$model->period];
             <th class="text-center">AV MODELS</th>
             <th class="text-center">PA MODELS</th>
             <th class="text-center">SN MODELS</th>
-            <th class="text-center">GA15II</th>
+            <th class="text-center">B&O</th>
             <th class="text-center">DMI</th>
-            <th class="text-center">SILENT PN</th>
+            <th class="text-center">PIANO</th>
+            <th class="text-center">OTHER</th>
         </tr>
     </thead>
     <tbody>
@@ -159,6 +160,7 @@ $current_data = $data[$model->period];
             <td class="text-center"><?= $current_data['bo']['post_ratio']; ?>%</td>
             <td class="text-center"><?= $current_data['dmi']['post_ratio']; ?>%</td>
             <td class="text-center"><?= $current_data['piano']['post_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['other']['post_ratio']; ?>%</td>
         </tr>
         <tr>
             <td>DEFECT RATIO  % SELF PROCESS</td>
@@ -169,6 +171,7 @@ $current_data = $data[$model->period];
             <td class="text-center"><?= $current_data['bo']['self_ratio']; ?>%</td>
             <td class="text-center"><?= $current_data['dmi']['self_ratio']; ?>%</td>
             <td class="text-center"><?= $current_data['piano']['self_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['other']['self_ratio']; ?>%</td>
         </tr>
         <tr>
             <td>DEFECT RATIO  % PRE PROCESS</td>
@@ -179,6 +182,7 @@ $current_data = $data[$model->period];
             <td class="text-center"><?= $current_data['bo']['pre_ratio']; ?>%</td>
             <td class="text-center"><?= $current_data['dmi']['pre_ratio']; ?>%</td>
             <td class="text-center"><?= $current_data['piano']['pre_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['other']['pre_ratio']; ?>%</td>
         </tr>
         <tr>
             <td>OUTPUT QTY </td>
@@ -189,6 +193,7 @@ $current_data = $data[$model->period];
             <td class="text-center"><?= number_format($current_data['bo']['output']); ?></td>
             <td class="text-center"><?= number_format($current_data['dmi']['output']); ?></td>
             <td class="text-center"><?= number_format($current_data['piano']['output']); ?></td>
+            <td class="text-center"><?= number_format($current_data['other']['output']); ?></td>
         </tr>
         <tr>
             <td>> POST PROCESS ( NG QTY )</td>
@@ -199,6 +204,7 @@ $current_data = $data[$model->period];
             <td class="text-center"><?= number_format($current_data['bo']['ng_post']); ?></td>
             <td class="text-center"><?= number_format($current_data['dmi']['ng_post']); ?></td>
             <td class="text-center"><?= number_format($current_data['piano']['ng_post']); ?></td>
+            <td class="text-center"><?= number_format($current_data['other']['ng_post']); ?></td>
         </tr>
         <tr>
             <td>> SELF PROCESS ( NG QTY )</td>
@@ -209,6 +215,7 @@ $current_data = $data[$model->period];
             <td class="text-center"><?= number_format($current_data['bo']['ng_self']); ?></td>
             <td class="text-center"><?= number_format($current_data['dmi']['ng_self']); ?></td>
             <td class="text-center"><?= number_format($current_data['piano']['ng_self']); ?></td>
+            <td class="text-center"><?= number_format($current_data['other']['ng_self']); ?></td>
         </tr>
         <tr>
             <td>> PRE PROCESS ( NG QTY )</td>
@@ -219,6 +226,7 @@ $current_data = $data[$model->period];
             <td class="text-center"><?= number_format($current_data['bo']['ng_pre']); ?></td>
             <td class="text-center"><?= number_format($current_data['dmi']['ng_pre']); ?></td>
             <td class="text-center"><?= number_format($current_data['piano']['ng_pre']); ?></td>
+            <td class="text-center"><?= number_format($current_data['other']['ng_pre']); ?></td>
         </tr>
     </tbody>
 </table>

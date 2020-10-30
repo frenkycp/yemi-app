@@ -149,7 +149,7 @@ $this->registerCss("
 
                     <?= $form->field($model, 'ng_root_cause')->dropDownList($ng_fa_root_cause_dropdown, [
                         'prompt' => 'Choose...'
-                    ])->label('Detected Section'); ?>
+                    ])->label('Root Cause Section'); ?>
                     
                     <?= $form->field($model, 'ng_cause_category')->dropDownList($ng_pcb_cause_category_dropdown, [
                         'prompt' => 'Choose...',
