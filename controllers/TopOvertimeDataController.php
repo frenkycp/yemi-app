@@ -29,10 +29,10 @@ class TopOvertimeDataController extends Controller
 		$year = date('Y');
         $month = date('m');
 
-        $searchModel->PERIOD = $year . $month;
+        $searchModel->period = $year . $month;
         
-        if (\Yii::$app->request->get('PERIOD') !== null) {
-			$searchModel->PERIOD = \Yii::$app->request->get('PERIOD');
+        if (\Yii::$app->request->get('period') !== null) {
+			$searchModel->period = \Yii::$app->request->get('period');
 		}
 
 	    $dataProvider = $searchModel->search($_GET);

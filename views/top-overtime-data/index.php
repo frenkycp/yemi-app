@@ -27,7 +27,7 @@ $gridColumns = [
         'headerOptions' => ['class' => 'kartik-sheet-style']
     ],
     [
-        'attribute' => 'PERIOD',
+        'attribute' => 'period',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -36,29 +36,19 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'CC_GROUP',
-        'label' => 'Department',
-        'vAlign' => 'middle',
-        //'hAlign' => 'center',
-        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_GROUP')->groupBy('CC_GROUP')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP'),
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
-        ],
-    ],
-    [
-        'attribute' => 'CC_DESC',
+        'attribute' => 'cost_center',
         'label' => 'Section',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
-        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_DESC')->groupBy('CC_DESC')->orderBy('CC_DESC')->all(), 'CC_DESC', 'CC_DESC'),
+        'filter' => \Yii::$app->params['sunfish_cost_center'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
-        'attribute' => 'NIK',
+        'attribute' => 'emp_no',
+        'label' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'format' => 'html',
@@ -68,7 +58,7 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'NAMA_KARYAWAN',
+        'attribute' => 'full_name',
         'label' => 'Name',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
@@ -78,18 +68,11 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'GRADE',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filter' => \Yii::$app->params['grade_arr'],
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
-        ],
-    ],
-    [
-        'attribute' => 'NILAI_LEMBUR_ACTUAL',
+        'attribute' => 'total_ot',
         'label' => 'Overtime Total',
+        'value' => function($model){
+            return round($model->total_ot/60, 1);
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -97,7 +80,7 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
-    [
+    /*[
         'class' => 'kartik\grid\ActionColumn',
         //'template' => "{check_sheet} {history}",
         'template' => "{view_period}",
@@ -117,7 +100,7 @@ $gridColumns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ],
+    ],*/
 ];
 ?>
 <div class="giiant-crud gojek-order-tbl-index">

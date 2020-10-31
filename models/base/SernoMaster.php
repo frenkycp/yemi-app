@@ -14,10 +14,17 @@ use Yii;
  * @property string $color
  * @property string $dest
  * @property string $package
+ * @property integer $package_qty
  * @property integer $pallet
  * @property string $line
  * @property double $st
  * @property double $eff
+ * @property integer $safety
+ * @property string $id_log
+ * @property string $log_date
+ * @property string $hpl_desc
+ * @property string $bu
+ * @property integer $eff_target
  * @property string $aliasModel
  */
 abstract class SernoMaster extends \yii\db\ActiveRecord
@@ -47,15 +54,11 @@ abstract class SernoMaster extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gmc'], 'required'],
-            [['pallet'], 'integer'],
+            [['gmc', 'eff_target'], 'required'],
+            [['package_qty', 'pallet', 'safety', 'eff_target'], 'integer'],
             [['st', 'eff'], 'number'],
-            [['gmc'], 'string', 'max' => 11],
-            [['model'], 'string', 'max' => 50],
-            [['color'], 'string', 'max' => 2],
-            [['dest'], 'string', 'max' => 3],
-            [['package'], 'string', 'max' => 255],
-            [['line'], 'string', 'max' => 30],
+            [['gmc', 'model', 'color', 'dest', 'package', 'line', 'id_log', 'log_date', 'hpl_desc'], 'string', 'max' => 255],
+            [['bu'], 'string', 'max' => 20],
             [['gmc'], 'unique']
         ];
     }
@@ -71,10 +74,17 @@ abstract class SernoMaster extends \yii\db\ActiveRecord
             'color' => 'Color',
             'dest' => 'Dest',
             'package' => 'Package',
+            'package_qty' => 'Package Qty',
             'pallet' => 'Pallet',
             'line' => 'Line',
             'st' => 'St',
             'eff' => 'Eff',
+            'safety' => 'Safety',
+            'id_log' => 'Id Log',
+            'log_date' => 'Log Date',
+            'hpl_desc' => 'Hpl Desc',
+            'bu' => 'Bu',
+            'eff_target' => 'Eff Target',
         ];
     }
 

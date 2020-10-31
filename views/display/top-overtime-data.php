@@ -47,77 +47,80 @@ $gridColumns = [
         'headerOptions' => ['class' => 'kartik-sheet-style']
     ],
     [
-        'attribute' => 'PERIOD',
+        'attribute' => 'period',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
-        'attribute' => 'CC_GROUP',
-        'label' => 'Department',
-        'vAlign' => 'middle',
-        //'hAlign' => 'center',
-        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_GROUP')->groupBy('CC_GROUP')->orderBy('CC_GROUP')->all(), 'CC_GROUP', 'CC_GROUP'),
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
-        ],
-    ],
-    [
-        'attribute' => 'CC_DESC',
+        'attribute' => 'cost_center',
         'label' => 'Section',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
-        'filter' => ArrayHelper::map(app\models\CostCenter::find()->select('CC_DESC')->groupBy('CC_DESC')->orderBy('CC_DESC')->all(), 'CC_DESC', 'CC_DESC'),
+        'filter' => \Yii::$app->params['sunfish_cost_center'],
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
-        'attribute' => 'NIK',
+        'attribute' => 'emp_no',
+        'label' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'format' => 'html',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
-        'attribute' => 'NAMA_KARYAWAN',
+        'attribute' => 'full_name',
         'label' => 'Name',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
-        'attribute' => 'GRADE',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filter' => \Yii::$app->params['grade_arr'],
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
-        ],
-    ],
-    [
-        'attribute' => 'NILAI_LEMBUR_ACTUAL',
+        'attribute' => 'total_ot',
         'label' => 'Overtime Total',
+        'value' => function($model){
+            return round($model->total_ot/60, 1);
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'mergeHeader' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 18px; min-width: 80px;'
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
+    /*[
+        'class' => 'kartik\grid\ActionColumn',
+        //'template' => "{check_sheet} {history}",
+        'template' => "{view_period}",
+        'buttons' => [
+            'view_period' => function ($url, $model, $key) {
+                $options = [
+                    'title' => 'View Monthly Overtime (in a year)',
+                ];
+                $url = ['/emp-overtime-monthly/index', 'year' => substr($model->PERIOD, 0, 4), 'nik' => $model->NIK];
+                return Html::a('<span class="glyphicon glyphicon-calendar"></span>', $url, $options);
+            },
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap']
+    ],*/
     
 ];
 ?>
@@ -133,7 +136,7 @@ $gridColumns = [
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+            //'filterModel' => $searchModel,
             'columns' => $gridColumns,
             'hover' => true,
             'condensed' => true,
@@ -146,7 +149,7 @@ $gridColumns = [
             //'toolbar' => false,
             'toolbar' =>  [
                 //'{export}',
-                '{toggleData}',
+                //'{toggleData}',
             ],
             // set export properties
             'export' => [
