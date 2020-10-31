@@ -128,7 +128,10 @@ $this->registerJs($script, View::POS_HEAD );
                         ?>
                         <?php foreach ($data as $key => $value): ?>
                             <?php
-
+                            $oven_time = $value->oven_time;
+                            if ($oven_time == 0) {
+                                $oven_time = 8 * 60;
+                            }
                             $datetime1 = new \DateTime(date('Y-m-d H:i:s', strtotime($value->start_date)));
                             $datetime2 = new \DateTime(date('Y-m-d H:i:s'));
                             $interval = $datetime1->diff($datetime2);
@@ -137,10 +140,10 @@ $this->registerJs($script, View::POS_HEAD );
                             $minutes += $interval->i;
 
                             $bg_class = ' bg-gray';
-                            if ($minutes > $value->oven_time) {
+                            if ($minutes > $oven_time) {
                                 $bg_class = ' bg-green';
                             }
-                            if (($minutes - $value->oven_time) > 60) {
+                            if (($minutes - $oven_time) > 60) {
                                 $bg_class = ' bg-red';
                             }
 
@@ -150,7 +153,7 @@ $this->registerJs($script, View::POS_HEAD );
                                 <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
                                     <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value->act_qty); ?> PCS)</small></div>
                                     <div title="<?= $value->seq; ?>" style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
-                                    <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 12px;"><?= number_format($minutes); ?></span> minutes <small>( target > <?= number_format($value->oven_time); ?> )</small></div>
+                                    <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 12px;"><?= number_format($minutes); ?></span> minutes <small>( target > <?= number_format($oven_time); ?> )</small></div>
                                 </div>
                             </div>
                         <?php endforeach ?>
@@ -172,7 +175,10 @@ $this->registerJs($script, View::POS_HEAD );
                         ?>
                         <?php foreach ($data2 as $key => $value): ?>
                             <?php
-
+                            $oven_time = $value->oven_time;
+                            if ($oven_time == 0) {
+                                $oven_time = 8 * 60;
+                            }
                             $datetime1 = new \DateTime(date('Y-m-d H:i:s', strtotime($value->start_date)));
                             $datetime2 = new \DateTime(date('Y-m-d H:i:s'));
                             $interval = $datetime1->diff($datetime2);
@@ -181,7 +187,7 @@ $this->registerJs($script, View::POS_HEAD );
                             $minutes += $interval->i;
 
                             $bg_class = ' bg-green';
-                            if ($minutes > $value->oven_time) {
+                            if ($minutes > $oven_time) {
                                 $bg_class = ' bg-red';
                             }
 
@@ -191,7 +197,7 @@ $this->registerJs($script, View::POS_HEAD );
                                 <div class="text-center<?= $bg_class; ?>" style="border-radius: 5px;">
                                     <div style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 16px; letter-spacing: 3px; font-weight: bold;"><?= $value->model_group; ?> <small style="font-weight: normal; letter-spacing: 1px;">(<?= number_format($value->act_qty); ?> PCS)</small></div>
                                     <div title="<?= $value->seq; ?>" style="border-bottom: 1px solid white; margin: 0px 10px; font-size: 18px;">ID : <?= $value->minor; ?></div>
-                                    <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 12px;"><?= number_format($minutes); ?></span> minutes <small>( target < <?= number_format($value->oven_time); ?> )</small></div>
+                                    <div style="padding: 5px;"><span style="letter-spacing: 1px; font-size: 12px;"><?= number_format($minutes); ?></span> minutes <small>( target < <?= number_format($oven_time); ?> )</small></div>
                                 </div>
                             </div>
                         <?php endforeach ?>

@@ -109,7 +109,7 @@ $this->registerJs($script, View::POS_HEAD );
 $total_kwh = 0;
 
 /*echo '<pre>';
-print_r($data);
+print_r($daily_ratio);
 echo '</pre>';*/
 
 $current_data = $data[$model->period];
@@ -262,7 +262,7 @@ $current_data = $data[$model->period];
                 $total_output = $value['all']['output'];
                 $tmp_ratio = 0;
                 if ($total_output > 0) {
-                    $tmp_ratio = round(($total_ng / $total_output) * 100, 2);
+                    $tmp_ratio = round(($total_ng / $total_output) * 100, 3);
                 }
                 $tmp_data_series[] = [
                     'y' => $tmp_ratio,
@@ -271,7 +271,7 @@ $current_data = $data[$model->period];
                     'y' => $target,
                 ];
                 ?>
-                <td class="text-center"><?= $value['all']['output'] == 0 ? 0 : round((($value['all']['ng_self'] + $value['all']['ng_post']) / $value['all']['output']) * 100, 2); ?>%</th>
+                <td class="text-center"><?= $value['all']['output'] == 0 ? 0 : round((($value['all']['ng_self'] + $value['all']['ng_post']) / $value['all']['output']) * 100, 3); ?>%</th>
             <?php endforeach;
             $data_series = [
                 [

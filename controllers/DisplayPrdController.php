@@ -194,87 +194,106 @@ class DisplayPrdController extends Controller
                     'ng_post' => $tmp_ng_post->total_ng_all,
                     'ng_self' => $tmp_ng_self->total_ng_all,
                     'ng_pre' => $tmp_ng_pre->total_ng_all,
-                    'post_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_post->total_ng_all / $output_arr['total_all']) * 100, 2),
-                    'self_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_self->total_ng_all / $output_arr['total_all']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_all / $output_arr['total_all']) * 100, 2),
+                    'post_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_post->total_ng_all / $output_arr['total_all']) * 100, 3),
+                    'self_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_self->total_ng_all / $output_arr['total_all']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_all / $output_arr['total_all']) * 100, 3),
                 ],
                 'sn' => [
                     'output' => $output_arr['total_sn'],
                     'ng_post' => $tmp_ng_post->total_ng_sn,
                     'ng_self' => $tmp_ng_self->total_ng_sn,
                     'ng_pre' => $tmp_ng_pre->total_ng_sn,
-                    'post_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_post->total_ng_sn / $output_arr['total_sn']) * 100, 2),
-                    'self_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_self->total_ng_sn / $output_arr['total_sn']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_sn / $output_arr['total_sn']) * 100, 2),
+                    'post_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_post->total_ng_sn / $output_arr['total_sn']) * 100, 3),
+                    'self_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_self->total_ng_sn / $output_arr['total_sn']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_sn / $output_arr['total_sn']) * 100, 3),
                 ],
                 'pa' => [
                     'output' => $output_arr['total_pa'],
                     'ng_post' => $tmp_ng_post->total_ng_pa,
                     'ng_self' => $tmp_ng_self->total_ng_pa,
                     'ng_pre' => $tmp_ng_pre->total_ng_pa,
-                    'post_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_post->total_ng_pa / $output_arr['total_pa']) * 100, 2),
-                    'self_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_self->total_ng_pa / $output_arr['total_pa']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_pa / $output_arr['total_pa']) * 100, 2),
+                    'post_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_post->total_ng_pa / $output_arr['total_pa']) * 100, 3),
+                    'self_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_self->total_ng_pa / $output_arr['total_pa']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_pa / $output_arr['total_pa']) * 100, 3),
                 ],
                 'piano' => [
                     'output' => $output_arr['total_piano'],
                     'ng_post' => $tmp_ng_post->total_ng_piano,
                     'ng_self' => $tmp_ng_self->total_ng_piano,
                     'ng_pre' => $tmp_ng_pre->total_ng_piano,
-                    'post_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_post->total_ng_piano / $output_arr['total_piano']) * 100, 2),
-                    'self_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_self->total_ng_piano / $output_arr['total_piano']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_piano / $output_arr['total_piano']) * 100, 2),
+                    'post_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_post->total_ng_piano / $output_arr['total_piano']) * 100, 3),
+                    'self_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_self->total_ng_piano / $output_arr['total_piano']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_piano / $output_arr['total_piano']) * 100, 3),
                 ],
                 'bo' => [
                     'output' => $output_arr['total_bo'],
                     'ng_post' => $tmp_ng_post->total_ng_bo,
                     'ng_self' => $tmp_ng_self->total_ng_bo,
                     'ng_pre' => $tmp_ng_pre->total_ng_bo,
-                    'post_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_post->total_ng_bo / $output_arr['total_bo']) * 100, 2),
-                    'self_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_self->total_ng_bo / $output_arr['total_bo']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_bo / $output_arr['total_bo']) * 100, 2),
+                    'post_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_post->total_ng_bo / $output_arr['total_bo']) * 100, 3),
+                    'self_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_self->total_ng_bo / $output_arr['total_bo']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_bo / $output_arr['total_bo']) * 100, 3),
                 ],
                 'av' => [
                     'output' => $output_arr['total_av'],
                     'ng_post' => $tmp_ng_post->total_ng_av,
                     'ng_self' => $tmp_ng_self->total_ng_av,
                     'ng_pre' => $tmp_ng_pre->total_ng_av,
-                    'post_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_post->total_ng_av / $output_arr['total_av']) * 100, 2),
-                    'self_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_self->total_ng_av / $output_arr['total_av']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_av / $output_arr['total_av']) * 100, 2),
+                    'post_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_post->total_ng_av / $output_arr['total_av']) * 100, 3),
+                    'self_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_self->total_ng_av / $output_arr['total_av']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_av / $output_arr['total_av']) * 100, 3),
                 ],
                 'dmi' => [
                     'output' => $output_arr['total_dmi'],
                     'ng_post' => $tmp_ng_post->total_ng_dmi,
                     'ng_self' => $tmp_ng_self->total_ng_dmi,
                     'ng_pre' => $tmp_ng_pre->total_ng_dmi,
-                    'post_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_post->total_ng_dmi / $output_arr['total_dmi']) * 100, 2),
-                    'self_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_self->total_ng_dmi / $output_arr['total_dmi']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_dmi / $output_arr['total_dmi']) * 100, 2),
+                    'post_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_post->total_ng_dmi / $output_arr['total_dmi']) * 100, 3),
+                    'self_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_self->total_ng_dmi / $output_arr['total_dmi']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_dmi / $output_arr['total_dmi']) * 100, 3),
                 ],
                 'other' => [
                     'output' => $output_arr['total_other'],
                     'ng_post' => $tmp_ng_post->total_ng_other,
                     'ng_self' => $tmp_ng_self->total_ng_other,
                     'ng_pre' => $tmp_ng_pre->total_ng_other,
-                    'post_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_post->total_ng_other / $output_arr['total_other']) * 100, 2),
-                    'self_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_self->total_ng_other / $output_arr['total_other']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_other / $output_arr['total_other']) * 100, 2),
+                    'post_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_post->total_ng_other / $output_arr['total_other']) * 100, 3),
+                    'self_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_self->total_ng_other / $output_arr['total_other']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_other / $output_arr['total_other']) * 100, 3),
                 ],
                 'null' => [
                     'output' => $output_arr['total_null'],
                     'ng_post' => $tmp_ng_post->total_ng_null,
                     'ng_self' => $tmp_ng_self->total_ng_null,
                     'ng_pre' => $tmp_ng_pre->total_ng_null,
-                    'post_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_post->total_ng_null / $output_arr['total_null']) * 100, 2),
-                    'self_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_self->total_ng_null / $output_arr['total_null']) * 100, 2),
-                    'pre_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_null / $output_arr['total_null']) * 100, 2),
+                    'post_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_post->total_ng_null / $output_arr['total_null']) * 100, 3),
+                    'self_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_self->total_ng_null / $output_arr['total_null']) * 100, 3),
+                    'pre_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_null / $output_arr['total_null']) * 100, 3),
                 ],
                 /*'output_arr' => $output_arr,
                 'ng_post' => $tmp_ng_post,
                 'ng_self' => $tmp_ng_self,
                 'ng_pre' => $tmp_ng_pre,*/
             ];
+        }
+
+        $tmp_serno_input = SernoInputAll::find()
+        ->select([
+            'period' => 'extract(year_month FROM proddate)', 'gmc', 'total' => 'COUNT(pk)'
+        ])
+        ->where([
+            'extract(year_month FROM proddate)' => $period_arr
+        ])
+        ->groupBy('period, gmc')
+        ->all();
+
+        $begin = new \DateTime(date('Y-m-01', strtotime($model->period . '01')));
+        $end   = new \DateTime(date('Y-m-t', strtotime($model->period . '01')));
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){
+            $tgl = $i->format("Y-m-d");
+            //$proddate = (strtotime($tgl . " +7 hours") * 1000);
+            $post_date = (strtotime($tgl . " +7 hours") * 1000);
+            $tmp_daily_ratio[] = $tgl;
         }
 
         return $this->render('fa-defect-ratio', [
