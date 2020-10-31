@@ -109,7 +109,7 @@ $this->registerJs($script, View::POS_HEAD );
 $total_kwh = 0;
 
 /*echo '<pre>';
-print_r($daily_ratio);
+print_r($tmp_daily_ratio);
 echo '</pre>';*/
 
 $current_data = $data[$model->period];
@@ -299,55 +299,112 @@ $current_data = $data[$model->period];
     <div class="panel-body">
         <?php
         echo Highcharts::widget([
-        'scripts' => [
-            //'modules/exporting',
-            //'themes/sand-signika',
-            //'themes/grid-light',
-            //'themes/dark-unica',
-        ],
-        'options' => [
-            'chart' => [
-                'type' => 'line',
-                'style' => [
-                    'fontFamily' => 'sans-serif',
-                ],
-                //'height' => 500
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/sand-signika',
+                //'themes/grid-light',
+                //'themes/dark-unica',
             ],
-            'title' => [
-                'text' => 'DEFECT RATIO - FA',
-            ],
-            'subtitle' => [
-                'text' => null
-            ],
-            'xAxis' => [
-                'categories' => $period_arr,
-            ],
-            'yAxis' => [
-                'title' => [
-                    'text' => 'Defect Ratio (%)'
-                ],
-            ],
-            'credits' => [
-                'enabled' =>false
-            ],
-            'tooltip' => [
-                'enabled' => true,
-                //'shared' => true,
-                //'xDateFormat' => '%A, %b %e %Y',
-                'valueSuffix' => '%'
-                //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
-            ],
-            'plotOptions' => [
-                'series' => [
-                    'dataLabels' => [
-                        'enabled' => true
+            'options' => [
+                'chart' => [
+                    'type' => 'line',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
                     ],
-                    
-                ]
+                    //'height' => 500
+                ],
+                'title' => [
+                    'text' => 'DEFECT RATIO - FA',
+                ],
+                'subtitle' => [
+                    'text' => null
+                ],
+                'xAxis' => [
+                    'categories' => $period_arr,
+                ],
+                'yAxis' => [
+                    'title' => [
+                        'text' => 'Defect Ratio (%)'
+                    ],
+                ],
+                'credits' => [
+                    'enabled' =>false
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    //'shared' => true,
+                    //'xDateFormat' => '%A, %b %e %Y',
+                    'valueSuffix' => '%'
+                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                ],
+                'plotOptions' => [
+                    'series' => [
+                        'dataLabels' => [
+                            'enabled' => true
+                        ],
+                        
+                    ]
+                ],
+                'series' => $data_series
             ],
-            'series' => $data_series
-        ],
-    ]);
-    ?>
+        ]);
+        ?>
+    </div>
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <?php
+        echo Highcharts::widget([
+            'scripts' => [
+                //'modules/exporting',
+                //'themes/sand-signika',
+                //'themes/grid-light',
+                //'themes/dark-unica',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'line',
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
+                    //'height' => 500
+                ],
+                'title' => [
+                    'text' => ' DAILY DEFECT RATIO - FA',
+                ],
+                'subtitle' => [
+                    'text' => null
+                ],
+                'xAxis' => [
+                    'type' => 'datetime',
+                ],
+                'yAxis' => [
+                    'title' => [
+                        'text' => 'Defect Ratio (%)'
+                    ],
+                ],
+                'credits' => [
+                    'enabled' =>false
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    'shared' => true,
+                    //'xDateFormat' => '%A, %b %e %Y',
+                    'valueSuffix' => '%'
+                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                ],
+                'plotOptions' => [
+                    'series' => [
+                        'dataLabels' => [
+                            'enabled' => true
+                        ],
+                        
+                    ]
+                ],
+                'series' => $data_daily_ratio
+            ],
+        ]);
+        ?>
     </div>
 </div>

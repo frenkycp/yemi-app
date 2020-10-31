@@ -78,6 +78,16 @@ class DisplayPrdController extends Controller
         ->groupBy('period, gmc')
         ->all();
 
+        $tmp_serno_input_daily = SernoInputAll::find()
+        ->select([
+            'proddate', 'total' => 'COUNT(pk)'
+        ])
+        ->where([
+            'extract(year_month FROM proddate)' => $period_arr
+        ])
+        ->groupBy('proddate')
+        ->all();
+
         $tmp_info_arr = ArrayHelper::map(VmsItem::find()
         ->select(['ITEM', 'BU'])
         ->all(), 'ITEM', 'BU');
@@ -277,28 +287,146 @@ class DisplayPrdController extends Controller
             ];
         }
 
-        $tmp_serno_input = SernoInputAll::find()
+        $tmp_daily_ng_pre = ProdNgData::find()
         ->select([
-            'period' => 'extract(year_month FROM proddate)', 'gmc', 'total' => 'COUNT(pk)'
+            'post_date',
+            'total_ng_all' => 'ISNULL(SUM(ng_qty), 0)',
         ])
         ->where([
-            'extract(year_month FROM proddate)' => $period_arr
+            'loc_id' => 'WF01',
+            'period' => $period,
+            'defect_category' => 'PRE',
+            'flag' => 1,
         ])
-        ->groupBy('period, gmc')
+        ->groupBy('post_date')
+        ->orderBy('post_date')
+        ->all();
+
+        $tmp_daily_ng_self = ProdNgData::find()
+        ->select([
+            'post_date',
+            'total_ng_all' => 'ISNULL(SUM(ng_qty), 0)',
+        ])
+        ->where([
+            'loc_id' => 'WF01',
+            'period' => $period,
+            'defect_category' => 'SELF',
+            'flag' => 1,
+        ])
+        ->groupBy('post_date')
+        ->orderBy('post_date')
+        ->all();
+
+        $tmp_daily_ng_post = ProdNgData::find()
+        ->select([
+            'post_date',
+            'total_ng_all' => 'ISNULL(SUM(ng_qty), 0)',
+        ])
+        ->where([
+            'loc_id' => 'WF01',
+            'period' => $period,
+            'defect_category' => 'POST',
+            'flag' => 1,
+        ])
+        ->groupBy('post_date')
+        ->orderBy('post_date')
         ->all();
 
         $begin = new \DateTime(date('Y-m-01', strtotime($model->period . '01')));
         $end   = new \DateTime(date('Y-m-t', strtotime($model->period . '01')));
+        $total_acc = 0;
+        $tmp_daily_ratio_pre = $tmp_daily_ratio_post = $tmp_daily_ratio_self = $tmp_daily_ratio_self_post = $data_daily_ratio = [];
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
+
             $tgl = $i->format("Y-m-d");
             //$proddate = (strtotime($tgl . " +7 hours") * 1000);
             $post_date = (strtotime($tgl . " +7 hours") * 1000);
-            $tmp_daily_ratio[] = $tgl;
+            $total_all = 0;
+            foreach ($tmp_serno_input_daily as $key => $value) {
+                if ($value->proddate == $tgl) {
+                    $total_all = $value->total;
+                }
+            }
+            $total_acc += $total_all;
+
+            $total_ng_all = $total_ng_sn = $total_ng_pa = $total_ng_piano = $total_ng_bo = $total_ng_av = $total_ng_dmi = $total_ng_other = $total_ng_null = 0;
+            $all_ng_pre = $all_ng_self = $all_ng_post = 0;
+            if ($tmp_daily_ng_self) {
+                foreach ($tmp_daily_ng_self as $key => $value) {
+                    if ($value->post_date == $tgl) {
+                        $all_ng_self = $value->total_ng_all;
+                    }
+                }
+            }
+            
+            if ($tmp_daily_ng_pre) {
+                foreach ($tmp_daily_ng_pre as $key => $value) {
+                    if ($value->post_date == $tgl) {
+                        $all_ng_pre = $value->total_ng_all;
+                    }
+                }
+            }
+            
+            if ($tmp_daily_ng_post) {
+                foreach ($tmp_daily_ng_post as $key => $value) {
+                    if ($value->post_date == $tgl) {
+                        $all_ng_post = $value->total_ng_all;
+                    }
+                }
+            }
+
+            $tmp_daily_ratio_pre[] = [
+                'x' => $post_date,
+                'y' => $total_all == 0 ? 0 : round(($all_ng_pre / $total_all) * 100, 3)
+            ];
+            $tmp_daily_ratio_self[] = [
+                'x' => $post_date,
+                'y' => $total_all == 0 ? 0 : round(($all_ng_self / $total_all) * 100, 3)
+            ];
+            $tmp_daily_ratio_post[] = [
+                'x' => $post_date,
+                'y' => $total_all == 0 ? 0 : round(($all_ng_post / $total_all) * 100, 3)
+            ];
+            $tmp_daily_ratio_self_post[] = [
+                'x' => $post_date,
+                'y' => $total_all == 0 ? 0 : round((($all_ng_post + $all_ng_self) / $total_all) * 100, 3)
+            ];
+            
+            /*$tmp_daily_ratio[$tgl] = [
+                'output' => $total_all,
+                'ng_post' => $all_ng_post,
+                'ng_self' => $all_ng_self,
+                'ng_pre' => $all_ng_pre,
+                'post_ratio' => $total_all == 0 ? 0 : round(($all_ng_post / $total_all) * 100, 3),
+                'self_ratio' => $total_all == 0 ? 0 : round(($all_ng_self / $total_all) * 100, 3),
+                'pre_ratio' => $total_all == 0 ? 0 : round(($all_ng_pre / $total_all) * 100, 3),
+                'output_acc' => $total_acc
+            ];*/
         }
+
+        $data_daily_ratio = [
+            [
+                'name' => 'DEFECT RATIO (PRE)',
+                'data' => $tmp_daily_ratio_pre
+            ],
+            [
+                'name' => 'DEFECT RATIO (SELF)',
+                'data' => $tmp_daily_ratio_self
+            ],
+            [
+                'name' => 'DEFECT RATIO (POST)',
+                'data' => $tmp_daily_ratio_post
+            ],
+            [
+                'name' => 'DEFECT RATIO (SELF + POST)',
+                'data' => $tmp_daily_ratio_self_post
+            ],
+        ];
 
         return $this->render('fa-defect-ratio', [
             'model' => $model,
             'data' => $data,
+            'data_daily_ratio' => $data_daily_ratio,
             'target' => $target,
             'period_arr' => $period_arr,
         ]);

@@ -29,6 +29,24 @@ use app\models\IjazahItem;
 
 class ProductionRestController extends Controller
 {
+    public function actionUpdateSernoMasterBu($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $tmp_serno_master = SernoMaster::find()->all();
+        $tmp_info_arr = ArrayHelper::map(VmsItem::find()
+        ->select(['ITEM', 'BU'])
+        ->all(), 'ITEM', 'BU');
+        foreach ($tmp_serno_master as $key => $value) {
+            if (isset($tmp_info_arr[$value->gmc])) {
+                $connection = \Yii::$app->db_mis7;
+                $connection->createCommand()->update('tb_serno_master', ['bu' => $tmp_info_arr[$value->gmc]], 'gmc = \'' . $value->gmc . '\'')->execute();
+            }
+        }
+        return [
+            'message' => 'Update Success...'
+        ];
+    }
+
     public function actionSendYesterdaySummary($value='')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -263,6 +281,7 @@ class ProductionRestController extends Controller
         ])
         ->setFrom('purnama.frenky@gmail.com')
         ->setTo(['gazalba.briljan@music.yamaha.com'])
+        //->setTo(['frenky.purnama@music.yamaha.com'])
         ->setSubject('Production, Shipping, NG and Attendance Report')
         ->send();
 
