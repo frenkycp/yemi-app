@@ -406,5 +406,71 @@ $current_data = $data[$model->period];
             ],
         ]);
         ?>
+        <table class="summary-tbl table table-responsive" style="display: block; overflow-x: auto; white-space: nowrap;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <th class="text-center" style="font-size: 12px; min-width: 65px;"><?= date('d', strtotime($key)); ?></th>
+                    <?php endforeach ?>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>OUTPUT QTY</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= number_format($value['all']); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>POST PROCESS ( NG QTY )</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= number_format($value['ng_post']); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>SELF PROCESS ( NG QTY )</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= number_format($value['ng_self']); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>PRE PROCESS ( NG QTY )</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= number_format($value['ng_pre']); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>SELF + POST PROCESS ( NG QTY )</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= number_format($value['ng_self_post']); ?></td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>POST PROCESS ( DEFECT RATIO )</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= $value['post_ratio']; ?>%</td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>SELF PROCESS ( DEFECT RATIO )</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= $value['self_ratio']; ?>%</td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>PRE PROCESS ( DEFECT RATIO )</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= $value['pre_ratio']; ?>%</td>
+                    <?php endforeach ?>
+                </tr>
+                <tr>
+                    <td>SELF + POST PROCESS ( DEFECT RATIO )</td>
+                    <?php foreach ($data_table_daily_ratio as $key => $value): ?>
+                        <td class="text-center" style="font-size: 12px;"><?= $value['self_post_ratio']; ?>%</td>
+                    <?php endforeach ?>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>

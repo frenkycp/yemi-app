@@ -335,7 +335,7 @@ class DisplayPrdController extends Controller
         $begin = new \DateTime(date('Y-m-01', strtotime($model->period . '01')));
         $end   = new \DateTime(date('Y-m-t', strtotime($model->period . '01')));
         $total_acc = 0;
-        $tmp_daily_ratio_pre = $tmp_daily_ratio_post = $tmp_daily_ratio_self = $tmp_daily_ratio_self_post = $data_daily_ratio = [];
+        $tmp_daily_ratio_pre = $tmp_daily_ratio_post = $tmp_daily_ratio_self = $tmp_daily_ratio_self_post = $data_daily_ratio = $data_table_daily_ratio = [];
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
 
             $tgl = $i->format("Y-m-d");
@@ -375,21 +375,38 @@ class DisplayPrdController extends Controller
                 }
             }
 
+            $pre_ratio = $total_all == 0 ? 0 : round(($all_ng_pre / $total_all) * 100, 3);
+            $self_ratio = $total_all == 0 ? 0 : round(($all_ng_self / $total_all) * 100, 3);
+            $post_ratio = $total_all == 0 ? 0 : round(($all_ng_post / $total_all) * 100, 3);
+            $self_post_ratio = $total_all == 0 ? 0 : round((($all_ng_post + $all_ng_self) / $total_all) * 100, 3);
+
+            $data_table_daily_ratio[$tgl] = [
+                'all' => $total_all,
+                'ng_pre' => $all_ng_pre,
+                'ng_self' => $all_ng_self,
+                'ng_post' => $all_ng_post,
+                'ng_self_post' => $all_ng_post + $all_ng_self,
+                'pre_ratio' => $pre_ratio,
+                'self_ratio' => $self_ratio,
+                'post_ratio' => $post_ratio,
+                'self_post_ratio' => $self_post_ratio,
+            ];
+
             $tmp_daily_ratio_pre[] = [
                 'x' => $post_date,
-                'y' => $total_all == 0 ? 0 : round(($all_ng_pre / $total_all) * 100, 3)
+                'y' => $pre_ratio
             ];
             $tmp_daily_ratio_self[] = [
                 'x' => $post_date,
-                'y' => $total_all == 0 ? 0 : round(($all_ng_self / $total_all) * 100, 3)
+                'y' => $self_ratio
             ];
             $tmp_daily_ratio_post[] = [
                 'x' => $post_date,
-                'y' => $total_all == 0 ? 0 : round(($all_ng_post / $total_all) * 100, 3)
+                'y' => $post_ratio
             ];
             $tmp_daily_ratio_self_post[] = [
                 'x' => $post_date,
-                'y' => $total_all == 0 ? 0 : round((($all_ng_post + $all_ng_self) / $total_all) * 100, 3)
+                'y' => $self_post_ratio
             ];
             
             /*$tmp_daily_ratio[$tgl] = [
@@ -426,6 +443,7 @@ class DisplayPrdController extends Controller
         return $this->render('fa-defect-ratio', [
             'model' => $model,
             'data' => $data,
+            'data_table_daily_ratio' => $data_table_daily_ratio,
             'data_daily_ratio' => $data_daily_ratio,
             'target' => $target,
             'period_arr' => $period_arr,
