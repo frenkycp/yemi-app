@@ -247,7 +247,8 @@ use yii\helpers\Html;
 	        </thead>
 	    </table>
 
-	    <i>Source : MITA</i>
+	    <i>Source : MITA</i><br/>
+	    <i>Last Update : <?= date('Y-m-d H:i:s'); ?></i>
     </div>
     
     
