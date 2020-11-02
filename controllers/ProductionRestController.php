@@ -200,7 +200,7 @@ class ProductionRestController extends Controller
             'gmc_no', 'gmc_desc', 'ng_qty' => 'SUM(ng_qty)'
         ])
         ->where([
-            'post_date' => $model->post_date,
+            'post_date' => $yesterday,
             'loc_id' => 'WF01',
             'fa_area_detec' => 'OQC'
         ])
@@ -262,7 +262,7 @@ class ProductionRestController extends Controller
         ->limit(3)
         ->all();
 
-        \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/yesterday-summary'], [
+        \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/yesterday-summary'], [
             'prod_data_daily' => $tmp_prod_daily,
             'prod_data_daily_fg' => $tmp_prod_daily_fg,
             'prod_data_daily_kd' => $tmp_prod_daily_kd,
@@ -279,8 +279,9 @@ class ProductionRestController extends Controller
             'tmp_fg_minus_daily' => $tmp_fg_minus_daily,
             'tmp_kd_minus_daily' => $tmp_kd_minus_daily,
         ])
-        ->setFrom('purnama.frenky@gmail.com')
+        ->setFrom('yemi.pch@gmail.com')
         ->setTo(['gazalba.briljan@music.yamaha.com'])
+        ->setCc(array('frenky.purnama@music.yamaha.com'))
         //->setTo(['frenky.purnama@music.yamaha.com'])
         ->setSubject('Production, Shipping, NG and Attendance Report')
         ->send();

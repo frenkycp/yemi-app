@@ -689,7 +689,7 @@ class DisplayController extends Controller
             'gmc_no', 'gmc_desc', 'ng_qty' => 'SUM(ng_qty)'
         ])
         ->where([
-            'post_date' => $model->post_date,
+            'post_date' => $yesterday,
             'loc_id' => 'WF01',
             'fa_area_detec' => 'OQC'
         ])
