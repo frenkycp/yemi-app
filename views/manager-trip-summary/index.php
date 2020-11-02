@@ -116,6 +116,16 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'trip_category',
+        'label' => 'Remark',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            //'style' => 'text-align: center;'
+        ],
+    ],
+    [
         'attribute' => 'start_status',
         'label' => 'Go To Office',
         'vAlign' => 'middle',
