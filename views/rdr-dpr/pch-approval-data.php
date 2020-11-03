@@ -11,9 +11,9 @@ use yii\web\View;
 */
 
 $this->title = [
-    'page_title' => null,
-    'tab_title' => 'RDR - DPR Waiting Approval (KORLAP)',
-    'breadcrumbs_title' => 'RDR - DPR Waiting Approval (KORLAP)'
+    'page_title' => 'RDR - DPR Waiting Approval (Purchasing) <span class="japanesse light-green"></span>',
+    'tab_title' => 'RDR - DPR Waiting Approval (Purchasing)',
+    'breadcrumbs_title' => 'RDR - DPR Waiting Approval (Purchasing)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -31,55 +31,29 @@ $this->registerJs($script, View::POS_HEAD );
 $gridColumns = [
 	[
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{approve} {pch_approve} {close}',
+        'template' => '{approve}',
         'buttons' => [
-            'approve' => function ($url, $model, $key) {
-                $options = [
-                    'title' => Yii::t('cruds', 'Approve'),
-                    'data-pjax' => '0',
-                    'class' => 'btn btn-info btn-xs btn-approve btn-block'
-                ];
-                if ($model->korlap != null) {
-                    return '<button class="btn btn-xs btn-info btn-block disabled" title="Aprroved...">KORLAP APPROVE</button>';
-                }
-                return Html::a('KORLAP APPROVE', Url::to(['korlap-approve', 'material_document_number' => $model->material_document_number]), $options);
-            },
-            'pch_approve' => function($url, $model, $key){
+            'approve' => function($url, $model, $key){
                 $options = [
                     'data-pjax' => '0',
                     'id' => 'btn-report',
                     'value' => Url::to(['pch-approve','material_document_number' => $model->material_document_number]),
                     'title' => 'Purchasing Approve',
-                    'class' => 'showModalButton btn btn-primary btn-xs btn-block'
+                    'class' => 'showModalButton btn btn-success btn-sm'
                 ];
-                if ($model->purc_approve != null) {
-                    return '<button class="btn btn-xs btn-primary btn-block disabled" title="Aprroved...">PURCH. APPROVE</button>';
-                }
-                return Html::a('PURCH. APPROVE', '#', $options);
-            },
-            'close' => function ($url, $model, $key) {
-                $options = [
-                    'title' => Yii::t('cruds', 'Close'),
-                    'data-pjax' => '0',
-                    'data-confirm' => 'Are you sure to close this report ?',
-                    'class' => 'btn btn-success btn-xs btn-block'
-                ];
-                if ($model->close_open  == 'C') {
-                    return '<button class="btn btn-xs btn-success btn-block disabled" title="CLOSED...">CLOSE</button>';
-                }
-                return Html::a('CLOSE', Url::to(['close', 'material_document_number' => $model->material_document_number]), $options);
+                return Html::a('Approve', '#', $options);
             },
         ],
-        'urlCreator' => function($action, $model, $key, $index) {
-            // using the column name as key, not mapping to 'id' like the standard generator
-            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
-            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
-            return Url::toRoute($params);
-        },
-        'contentOptions' => ['nowrap'=>'nowrap'],
+    ],
+    [
+        'attribute' => 'material_document_number',
+        'label' => 'Document No.',
         'vAlign' => 'middle',
-        'width' => '60px',
-        //'hidden' => in_array(Yii::$app->user->identity->username, ['admin', 'prd']) ? false : true,
+        'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
     ],
     [
         'attribute' => 'period',
@@ -99,16 +73,6 @@ $gridColumns = [
         		return '-';
         	}
         },
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'material_document_number',
-        'label' => 'Doc. No.',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -191,39 +155,6 @@ $gridColumns = [
     ],
     [
         'attribute' => 'normal_urgent',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'user_issue_date',
-        'label' => 'Issue Date',
-        'value' => function($model){
-            return date('Y-m-d H:i:s', strtotime($model->user_issue_date));
-        },
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'user_id',
-        'label' => 'Issued By (NIK)',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'user_desc',
-        'label' => 'Issued By (Name)',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [

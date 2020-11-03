@@ -90,6 +90,14 @@ $css_string = "
     .total-nolog {font-size: 20em;}
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
 $this->registerCss($css_string);
+$this->registerJsFile('@web/js/html2canvas.min.js');
+
+$script = '
+    html2canvas(document.querySelector("#table1")).then(canvas => {
+        document.querySelector("#display-container").appendChild(canvas);
+    });
+';
+$this->registerJs($script, View::POS_READY);
 
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
@@ -103,7 +111,7 @@ echo '</pre>';*/
     'action' => Url::to(['yesterday-summary']),
 ]); ?>
 
-<div style="margin: auto; width: 400px; padding-top: 20px;">
+<div style="margin: auto; width: 400px; padding-top: 20px;" id="display-container">
     <div class="row">
         <div class="col-md-12">
             <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
@@ -124,7 +132,8 @@ echo '</pre>';*/
     </div>
 
     <?php ActiveForm::end(); ?>
-    <table class="table table-condensed summary-tbl" id="">
+    <div id="test">aaaa</div>
+    <table class="table table-condensed summary-tbl" id="table1">
         <thead>
             <tr>
                 <th colspan="2" class="">Production (<?= date('d M\' Y', strtotime($yesterday)); ?>) - FG<br/><span class="japanesse">生産予実績 （日次） - 完成品</span></th>
@@ -304,4 +313,8 @@ echo '</pre>';*/
 
     <i>Source : MITA</i><br/>
     <i>Last Update : <?= date('Y-m-d H:i:s'); ?></i>
+</div>
+
+<div id="table1-result">
+    
 </div>

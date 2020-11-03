@@ -24,6 +24,7 @@ use Yii;
  * @property string $log_date
  * @property string $hpl_desc
  * @property string $bu
+ * @property string $fg_kd
  * @property integer $eff_target
  * @property string $aliasModel
  */
@@ -58,7 +59,7 @@ abstract class SernoMaster extends \yii\db\ActiveRecord
             [['package_qty', 'pallet', 'safety', 'eff_target'], 'integer'],
             [['st', 'eff'], 'number'],
             [['gmc', 'model', 'color', 'dest', 'package', 'line', 'id_log', 'log_date', 'hpl_desc'], 'string', 'max' => 255],
-            [['bu'], 'string', 'max' => 20],
+            [['bu', 'fg_kd'], 'string', 'max' => 20],
             [['gmc'], 'unique']
         ];
     }
@@ -84,6 +85,7 @@ abstract class SernoMaster extends \yii\db\ActiveRecord
             'log_date' => 'Log Date',
             'hpl_desc' => 'Hpl Desc',
             'bu' => 'Bu',
+            'fg_kd' => 'Fg Kd',
             'eff_target' => 'Eff Target',
         ];
     }

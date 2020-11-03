@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use kartik\date\DatePicker;
 
 /**
 * @var yii\web\View $this
@@ -45,54 +46,37 @@ date_default_timezone_set('Asia/Jakarta');
 <div class="box box-primary">
 	<div class="box-body">
 		<div class="row">
-			<div class="col-md-3">
-				<?= $form->field($model, 'ITEM')->textInput(['readonly' => 'readonly']); ?>
+			<div class="col-sm-6">
+				<?= $form->field($model, 'discrepancy_treatment')->dropDownList([
+					'Replacement for shortage qty' => 'Replacement for shortage qty',
+					'No Need replacement for shortage qty' => 'No Need replacement for shortage qty',
+					'Over qty return supplier' => 'Over qty return supplier',
+					'No Need return over qty, Issue additional P/O' => 'No Need return over qty, Issue additional P/O',
+				]); ?>
 			</div>
-			<div class="col-md-6">
-				<?= $form->field($model, 'ITEM_DESC')->textInput(['readonly' => 'readonly']); ?>
-			</div>
-			<div class="col-md-3">
-				<?= $form->field($model, 'QTY_IN')->textInput(['readonly' => 'readonly']); ?>
+			<div class="col-sm-6">
+				<?= $form->field($model, 'payment_treatment')->dropDownList([
+					'Debit Note' => 'Debit Note',
+					'Replacement' => 'Replacement',
+				], [
+					'prompt' => 'Choose...',
+				]); ?>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-3">
-				<?= $form->field($model, 'LOC')->textInput(['readonly' => 'readonly']); ?>
+			<div class="col-sm-8">
+				<?= $form->field($model, 'purc_approve_remark')->textInput()->label('Remark'); ?>
 			</div>
-			<div class="col-md-9">
-				<?= $form->field($model, 'LOC_DESC')->textInput(['readonly' => 'readonly']); ?>
-			</div>
-		</div>
-		
-		<div class="row">
-			<div class="col-md-3">
-				<?= $form->field($model_judgement, 'type')->dropDownList([
-                	'RDR' => 'RDR',
-                	//'DPR' => 'DPR',
-                ], [
-                	'prompt' => 'Choose...'
-                ]); ?>
-			</div>
-			<div class="col-md-3">
-				<?= $form->field($model_judgement, 'category')->dropDownList([
-                	'SHORTAGE' => 'SHORTAGE',
-                	'OVER' => 'OVER',
-                	'WRONG PART' => 'WRONG PART',
-                	'NO PART NUMBER' => 'NO PART NUMBER',
-                ], [
-                	'prompt' => 'Choose...'
-                ]); ?>
-			</div>
-			<div class="col-md-3">
-				<?= $form->field($model_judgement, 'urgency')->dropDownList([
-                	'NORMAL' => 'NORMAL',
-                	'URGENT' => 'URGENT',
-                ], [
-                	'prompt' => 'Choose...'
-                ]); ?>
-			</div>
-			<div class="col-md-3">
-				<?= $form->field($model_judgement, 'actual_qty')->textInput(); ?>
+			<div class="col-sm-4">
+				<?= $form->field($model, 'eta_yemi')->widget(DatePicker::classname(), [
+                    'options' => [
+                        'type' => DatePicker::TYPE_INPUT,
+                    ],
+                    'pluginOptions' => [
+                        'autoclose'=>true,
+                        'format' => 'yyyy-mm-dd'
+                    ]
+                ])->label('ETA YEMI'); ?>
 			</div>
 		</div>
 	</div>

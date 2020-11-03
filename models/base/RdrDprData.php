@@ -17,6 +17,8 @@ use Yii;
  * @property string $vendor_name
  * @property string $pic
  * @property string $division
+ * @property string $EMAIL_ADDRESS
+ * @property string $EMAIL_ADDRESS_CC
  * @property string $NOTE
  * @property string $inv_no
  * @property string $material
@@ -42,6 +44,7 @@ use Yii;
  * @property string $discrepancy_treatment
  * @property string $payment_treatment
  * @property string $purc_approve_remark
+ * @property string $eta_yemi
  * @property string $user_close
  * @property string $user_close_desc
  * @property string $user_close_date
@@ -76,11 +79,11 @@ abstract class RdrDprData extends \yii\db\ActiveRecord
     {
         return [
             [['material_document_number'], 'required'],
-            [['rcv_date', 'user_issue_date', 'purc_approve_date', 'user_close_date'], 'safe'],
+            [['rcv_date', 'user_issue_date', 'korlap_confirm_date', 'purc_approve_date', 'eta_yemi', 'user_close_date'], 'safe'],
             [['do_inv_qty', 'act_rcv_qty', 'discrepancy_qty', 'standard_price', 'standard_amount'], 'number'],
             [['purc_approve_remark'], 'string'],
             [['material_document_number'], 'string', 'max' => 24],
-            [['material_document_number_barcode', 'pic', 'division', 'NOTE', 'user_desc', 'korlap_desc', 'korlap_confirm_date', 'purc_approve_desc', 'user_close_desc'], 'string', 'max' => 50],
+            [['material_document_number_barcode', 'pic', 'division', 'EMAIL_ADDRESS', 'EMAIL_ADDRESS_CC', 'NOTE', 'user_desc', 'korlap_desc', 'purc_approve_desc', 'user_close_desc'], 'string', 'max' => 50],
             [['period'], 'string', 'max' => 6],
             [['vendor_code', 'material'], 'string', 'max' => 11],
             [['vendor_name'], 'string', 'max' => 35],
@@ -108,6 +111,8 @@ abstract class RdrDprData extends \yii\db\ActiveRecord
             'vendor_name' => 'Vendor Name',
             'pic' => 'Pic',
             'division' => 'Division',
+            'EMAIL_ADDRESS' => 'Email Address',
+            'EMAIL_ADDRESS_CC' => 'Email Address Cc',
             'NOTE' => 'Note',
             'inv_no' => 'Inv No',
             'material' => 'Material',
@@ -133,6 +138,7 @@ abstract class RdrDprData extends \yii\db\ActiveRecord
             'discrepancy_treatment' => 'Discrepancy Treatment',
             'payment_treatment' => 'Payment Treatment',
             'purc_approve_remark' => 'Purc Approve Remark',
+            'eta_yemi' => 'Eta Yemi',
             'user_close' => 'User Close',
             'user_close_desc' => 'User Close Desc',
             'user_close_date' => 'User Close Date',

@@ -27,12 +27,7 @@ $model_karyawan = Karyawan::find()->where([
                 <?= Html::a('Incoming Data', ['data']) ?>
             </li>
             <li class="<?= \Yii::$app->controller->id == 'rdr-dpr' && in_array(\Yii::$app->controller->action->id, ['korlap-approval-data']) ? 'active' : ''; ?> dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">RDR - DPR Data <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                    <li>
-                        <?= Html::a('Waiting Approval', ['korlap-approval-data']); ?>
-                    </li>
-                </ul>
+                <?= Html::a('RDR - DPR Data', ['korlap-approval-data']); ?>
             </li>
           </ul>
         </div>

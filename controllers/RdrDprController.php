@@ -12,6 +12,29 @@ use app\models\RdrDprData;
 
 class RdrDprController extends \app\controllers\base\IqaInspectionController
 {
+    public function actionClose($material_document_number)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('rdr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['rdr_user'];
+        $name = $session['rdr_name'];
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_model = RdrDprData::find()->where(['material_document_number' => $material_document_number])->one();
+        $tmp_model->user_close = $nik;
+        $tmp_model->user_close_desc = $name;
+        $tmp_model->user_close_date = date('Y-m-d H:i:s');
+        $tmp_model->close_open = 'C';
+
+        if ($tmp_model->save()) {
+            return $this->redirect(Url::previous());
+        } else {
+            return json_encode($model->errors);
+        }
+    }
+
     public function actionKorlapApprove($material_document_number)
     {
         $session = \Yii::$app->session;
@@ -27,7 +50,47 @@ class RdrDprController extends \app\controllers\base\IqaInspectionController
         $tmp_model->korlap_desc = $name;
         $tmp_model->korlap_confirm_date = date('Y-m-d H:i:s');
 
+        $content = 'Dear Mr./Mrs. ' . ucwords(strtolower($tmp_model->pic)) . ',<br/>Laporan berikut sudah di Approve oleh koordinator lapangan. Tolong di follow up.<br/>';
+
+        $content .= '<br/>Doc. Number : ' . $tmp_model->material_document_number;
+        $content .= '<br/>Rcv. Date : ' . date('Y-m-d', strtotime($tmp_model->rcv_date));
+        $content .= '<br/>RDR / DPR : ' . $tmp_model->rdr_dpr;
+        $content .= '<br/>Material : ' . $tmp_model->material;
+        $content .= '<br/>Description : ' . $tmp_model->description;
+        $content .= '<br/>Vendor Code : ' . $tmp_model->vendor_code;
+        $content .= '<br/>Vendor Name : ' . $tmp_model->vendor_name;
+        $content .= '<br/>DO Inv. Qty : ' . $tmp_model->do_inv_qty;
+        $content .= '<br/>Actual Qty : ' . $tmp_model->act_rcv_qty;
+        $content .= '<br/>Discrepancy Qty : ' . $tmp_model->discrepancy_qty;
+        $content .= '<br/>Category : ' . $tmp_model->category;
+        $content .= '<br/>Priority : ' . $tmp_model->normal_urgent;
+        $content .= '<br/>Issued Date : ' . date('d F Y H:i:s', strtotime($tmp_model->user_issue_date));
+        $content .= '<br/>Issued By : ' . $tmp_model->user_id . ' - ' . $tmp_model->user_desc;
+        $content .= '<br/><br/>Thanks & Best Regards';
+        $content .= '<br/>' . $tmp_model->korlap . ' - ' . $tmp_model->korlap_desc;
+
         if ($tmp_model->save()) {
+            if ($tmp_model->EMAIL_ADDRESS != null && $tmp_model->EMAIL_ADDRESS != '') {
+                $set_to = $tmp_model->EMAIL_ADDRESS;
+                $set_cc = [$tmp_model->EMAIL_ADDRESS_CC];
+
+                $set_to = 'frenky.purnama@music.yamaha.com';
+                $set_cc = ['fredy.agus@music.yamaha.com'];
+
+                \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/html'], [
+                    'content' => $content
+                ])
+                ->setFrom('yemi.pch@gmail.com')
+                ->setTo($set_to)
+                ->setCc($set_cc)
+                ->setSubject('RDR - DPR Report')
+                ->send();
+
+                \Yii::$app->session->setFlash("success", "Email has been sent to the correspondence PIC.");
+            } else {
+                \Yii::$app->session->setFlash("warning", "There is no email for the correspondence PIC. Please contact personally.");
+            }
+            
             return $this->redirect(Url::previous());
         } else {
             return json_encode($model->errors);
@@ -44,7 +107,7 @@ class RdrDprController extends \app\controllers\base\IqaInspectionController
         $this->layout = 'rdr-dpr\main';
 
         $searchModel  = new RdrDprDataSearch;
-        $_GET['approval_type'] = 'korlap';
+        //$_GET['approval_type'] = 'korlap';
         $dataProvider = $searchModel->search($_GET);
 
         Tabs::clearLocalStorage();
@@ -56,6 +119,63 @@ class RdrDprController extends \app\controllers\base\IqaInspectionController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
         ]);
+    }
+
+    public function actionPchApprovalData($value='')
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('rdr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['rdr_user'];
+        $this->layout = 'rdr-dpr\main';
+
+        $searchModel  = new RdrDprDataSearch;
+        $_GET['approval_type'] = 'pch';
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('pch-approval-data', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    public function actionPchApprove($material_document_number)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('rdr_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['rdr_user'];
+        $name = $session['rdr_name'];
+        date_default_timezone_set('Asia/Jakarta');
+        $model = RdrDprData::find()->where(['material_document_number' => $material_document_number])->one();
+
+        if ($model->load(\Yii::$app->request->post())) {
+            try {
+                $model->purc_approve = $nik;
+                $model->purc_approve_desc = $name;
+                $model->purc_approve_date = date('Y-m-d H:i:s');
+                if ($model->save()) {
+                    \Yii::$app->session->setFlash('success', 'Document No. ' . $material_document_number . ' approved by Purchasing');
+                } else {
+                    return json_encode($model->errors);
+                }
+            } catch (Exception $ex) {
+                return json_encode($ex);
+            }
+            
+            return $this->redirect(Url::previous());
+        } else {
+            return $this->renderAjax('pch-approve', [
+                'model' => $model,
+            ]);
+        }
     }
 
 	public function actionReport($SEQ_LOG)

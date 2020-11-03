@@ -32,15 +32,22 @@ class ProductionRestController extends Controller
     public function actionUpdateSernoMasterBu($value='')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $tmp_serno_master = SernoMaster::find()->all();
-        $tmp_info_arr = ArrayHelper::map(VmsItem::find()
-        ->select(['ITEM', 'BU'])
-        ->all(), 'ITEM', 'BU');
-        foreach ($tmp_serno_master as $key => $value) {
-            if (isset($tmp_info_arr[$value->gmc])) {
+        $tmp_serno_master = SernoMaster::find()->asArray()->all();
+        $tmp_vms_item = VmsItem::find()
+        ->select(['ITEM', 'BU', 'FG_KD'])
+        ->asArray()
+        ->all();
+        foreach ($tmp_serno_master as $serno_master) {
+            foreach ($tmp_vms_item as $vms_item) {
+                if ($serno_master['gmc'] == $vms_item['ITEM']) {
+                    $connection = \Yii::$app->db_mis7;
+                    $connection->createCommand()->update('tb_serno_master', ['bu' => $vms_item['BU'], 'fg_kd' => $vms_item['FG_KD']], 'gmc = \'' . $serno_master['gmc'] . '\'')->execute();
+                }
+            }
+            /*if (isset($tmp_info_arr[$value->gmc])) {
                 $connection = \Yii::$app->db_mis7;
                 $connection->createCommand()->update('tb_serno_master', ['bu' => $tmp_info_arr[$value->gmc]], 'gmc = \'' . $value->gmc . '\'')->execute();
-            }
+            }*/
         }
         return [
             'message' => 'Update Success...'

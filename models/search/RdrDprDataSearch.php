@@ -43,6 +43,8 @@ public function search($params)
 {
       if ($params['approval_type'] == 'korlap') {
             $query = RdrDprData::find()->where('korlap IS NULL');
+      } elseif ($params['approval_type'] == 'pch') {
+            $query = RdrDprData::find()->where('korlap IS NOT NULL')->andWhere('purc_approve IS NULL');
       } else {
             $query = RdrDprData::find();
       }

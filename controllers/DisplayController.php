@@ -158,6 +158,77 @@ use app\models\MachineCorrectiveView01;
 
 class DisplayController extends Controller
 {
+    public function actionSoAchievement($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) { }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_serno_output = SernoOutput::find()
+        ->select([
+            'id', 'plan_qty' => 'SUM(qty)', 'actual_qty' => 'SUM(output)'
+        ])
+        ->where([
+            'id' => $period_arr
+        ])
+        ->groupBy('id')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($period_arr as $period) {
+            $tmp_plan = $tmp_actual = 0;
+            foreach ($tmp_serno_output as $serno_output) {
+                if ($serno_output->id == $period) {
+                    $tmp_plan = $serno_output->plan_qty;
+                    $tmp_actual = $serno_output->actual_qty;
+                }
+            }
+            $tmp_plan_actual_ratio = 0;
+            if ($tmp_plan > 0) {
+                $tmp_plan_actual_ratio = round(($tmp_actual / $tmp_plan) * 100, 1);
+            }
+            $tmp_data[$period] = [
+                'plan' => $tmp_plan,
+                'actual' => $tmp_actual,
+                'qty_ratio' => $tmp_plan_actual_ratio
+            ];
+        }
+
+        return $this->render('so-achievement', [
+            'data' => $data,
+            'model' => $model,
+            'period_arr' => $period_arr,
+            'tmp_data' => $tmp_data,
+        ]);
+    }
+
     public function actionMonthlyTotalCorrective($value='')
     {
         $this->layout = 'clean';
