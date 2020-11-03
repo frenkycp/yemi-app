@@ -51,6 +51,68 @@ class DisplayPrdController extends Controller
         return $period_arr;
     }
 
+    public function actionFaDefectRatioGetRemark($post_date, $defect_category)
+    {
+        if ($defect_category == 'pre') {
+            $defect_category_filter = ['PRE'];
+            $tmp_title = 'PRE';
+        } elseif ($defect_category == 'self') {
+            $defect_category_filter = ['SELF'];
+            $tmp_title = 'SELF';
+        } elseif ($defect_category == 'post') {
+            $defect_category_filter = ['POST'];
+            $tmp_title = 'POST';
+        } elseif ($defect_category == 'self_post') {
+            $defect_category_filter = ['SELF', 'POST'];
+            $tmp_title = 'SELF + POST';
+        }
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>NG Detail Data <small>(Category : ' . $tmp_title . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 12px;">
+            <th class="text-center">Date</th>
+            <th class="text-center">Model</th>
+            <th class="text-center">NG Qty</th>
+            <th class="text-center">Root Cause</th>
+            <th class="">Cause</th>
+            <th class="">NG Detail</th>
+        </tr>';
+
+        $tmp_ng_arr = ProdNgData::find()
+        ->where([
+            'loc_id' => 'WF01',
+            'post_date' => $post_date,
+            'fa_area_detec' => ['SOUND', 'OQC'],
+            'defect_category' => $defect_category_filter,
+            'flag' => 1
+        ])
+        ->orderBy('ng_qty DESC')
+        ->all();
+
+        $no = 1;
+        foreach ($tmp_ng_arr as $key => $value) {
+            $remark .= '<tr style="font-size: 12px;">
+                <td class="text-center">' .$post_date . '</td>
+                <td class="text-center">' .$value->gmc_model . '</td>
+                <td class="text-center">' .$value->ng_qty . '</td>
+                <td class="text-center">' .$value->ng_cause_category . '</td>
+                <td class="">' .$value->ng_category_desc . ' | ' . $value->ng_category_detail . '</td>
+                <td class="">' .$value->ng_detail . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
     public function actionFaDefectRatio($value='')
     {
         $this->layout = 'clean';
@@ -150,6 +212,7 @@ class DisplayPrdController extends Controller
             ->leftJoin('VMS_ITEM', 'PROD_NG_TBL.gmc_no = VMS_ITEM.ITEM')
             ->where([
                 'loc_id' => 'WF01',
+                'fa_area_detec' => ['SOUND', 'OQC'],
                 'period' => $period,
                 'defect_category' => 'PRE',
                 'flag' => 1,
@@ -171,6 +234,7 @@ class DisplayPrdController extends Controller
             ->leftJoin('VMS_ITEM', 'PROD_NG_TBL.gmc_no = VMS_ITEM.ITEM')
             ->where([
                 'loc_id' => 'WF01',
+                'fa_area_detec' => ['SOUND', 'OQC'],
                 'period' => $period,
                 'defect_category' => 'SELF',
                 'flag' => 1,
@@ -192,6 +256,7 @@ class DisplayPrdController extends Controller
             ->leftJoin('VMS_ITEM', 'PROD_NG_TBL.gmc_no = VMS_ITEM.ITEM')
             ->where([
                 'loc_id' => 'WF01',
+                'fa_area_detec' => ['SOUND', 'OQC'],
                 'period' => $period,
                 'defect_category' => 'POST',
                 'flag' => 1,
@@ -294,6 +359,7 @@ class DisplayPrdController extends Controller
         ])
         ->where([
             'loc_id' => 'WF01',
+            'fa_area_detec' => ['SOUND', 'OQC'],
             'period' => $period,
             'defect_category' => 'PRE',
             'flag' => 1,
@@ -309,6 +375,7 @@ class DisplayPrdController extends Controller
         ])
         ->where([
             'loc_id' => 'WF01',
+            'fa_area_detec' => ['SOUND', 'OQC'],
             'period' => $period,
             'defect_category' => 'SELF',
             'flag' => 1,
@@ -324,6 +391,7 @@ class DisplayPrdController extends Controller
         ])
         ->where([
             'loc_id' => 'WF01',
+            'fa_area_detec' => ['SOUND', 'OQC'],
             'period' => $period,
             'defect_category' => 'POST',
             'flag' => 1,
@@ -394,19 +462,23 @@ class DisplayPrdController extends Controller
 
             $tmp_daily_ratio_pre[] = [
                 'x' => $post_date,
-                'y' => $pre_ratio
+                'y' => $pre_ratio,
+                'url' => Url::to(['fa-defect-ratio-get-remark', 'post_date' => $tgl, 'defect_category' => 'pre'])
             ];
             $tmp_daily_ratio_self[] = [
                 'x' => $post_date,
-                'y' => $self_ratio
+                'y' => $self_ratio,
+                'url' => Url::to(['fa-defect-ratio-get-remark', 'post_date' => $tgl, 'defect_category' => 'self'])
             ];
             $tmp_daily_ratio_post[] = [
                 'x' => $post_date,
-                'y' => $post_ratio
+                'y' => $post_ratio,
+                'url' => Url::to(['fa-defect-ratio-get-remark', 'post_date' => $tgl, 'defect_category' => 'post'])
             ];
             $tmp_daily_ratio_self_post[] = [
                 'x' => $post_date,
-                'y' => $self_post_ratio
+                'y' => $self_post_ratio,
+                'url' => Url::to(['fa-defect-ratio-get-remark', 'post_date' => $tgl, 'defect_category' => 'self_post'])
             ];
             
             /*$tmp_daily_ratio[$tgl] = [

@@ -332,7 +332,7 @@ $current_data = $data[$model->period];
                 ],
                 'tooltip' => [
                     'enabled' => true,
-                    //'shared' => true,
+                    'shared' => true,
                     //'xDateFormat' => '%A, %b %e %Y',
                     'valueSuffix' => '%'
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
@@ -368,6 +368,7 @@ $current_data = $data[$model->period];
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
+                    'zoomType' => 'x',
                     //'height' => 500
                 ],
                 'title' => [
@@ -389,7 +390,7 @@ $current_data = $data[$model->period];
                 ],
                 'tooltip' => [
                     'enabled' => true,
-                    'shared' => true,
+                    //'shared' => true,
                     //'xDateFormat' => '%A, %b %e %Y',
                     'valueSuffix' => '%'
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
@@ -399,7 +400,17 @@ $current_data = $data[$model->period];
                         'dataLabels' => [
                             'enabled' => true
                         ],
-                        
+                        'cursor' => 'pointer',
+                        'point' => [
+                            'events' => [
+                                'click' => new JsExpression("
+                                    function(e){
+                                        e.preventDefault();
+                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                    }
+                                "),
+                            ]
+                        ]
                     ]
                 ],
                 'series' => $data_daily_ratio
@@ -474,3 +485,12 @@ $current_data = $data[$model->period];
         </table>
     </div>
 </div>
+
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'modal',
+    'header' => '<h3>Detail Information</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
+?>
