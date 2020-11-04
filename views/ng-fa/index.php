@@ -30,7 +30,7 @@ $this->registerCss("
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update} {next-actions}',
+        'template' => '{update} {next-actions} {delete_item}',
         'header' => "",
         'buttons' => [
             'update' => function ($url, $model, $key) {
@@ -59,7 +59,16 @@ $gridColumns = [
                     return '<button class="btn btn-xs btn-primary btn-block disabled"><i class="fa fa-fw fa-tasks"></i> Action</button>';
                 }
                 
-            }
+            },
+            'delete_item' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'Close'),
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to delete this report ?',
+                    'class' => 'btn btn-danger btn-xs btn-block'
+                ];
+                return Html::a('<i class="fa fa-fw fa-trash"></i> Delete', Url::to(['delete-item', 'id' => $model->id]), $options);
+            },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator

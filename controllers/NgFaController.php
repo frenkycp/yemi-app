@@ -23,6 +23,32 @@ class NgFaController extends Controller
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
+
+    public function actionDeleteItem($id)
+    {
+    	date_default_timezone_set('Asia/Jakarta');
+
+    	$user_id = \Yii::$app->user->identity->username;
+    	$creator = Karyawan::find()->where([
+		   	'OR',
+		   	['NIK' => $user_id],
+			['NIK_SUN_FISH' => $user_id]
+		])->one();
+		$user_id = $creator->NIK_SUN_FISH;
+		$user_desc = $creator->NAMA_KARYAWAN;
+
+		$model = $this->findModel($id);
+    	$model->flag = 0;
+    	$model->updated_time = date('Y-m-d H:i:s');
+    	$model->updated_by_id = $user_id;
+    	$model->updated_by_name = $user_desc;
+
+    	if ($model->save()) {
+    		return $this->redirect(Url::previous());
+    	} else {
+    		return json_encode($model->errors);
+    	}
+    }
 	
 	public function actionIndex($value='')
 	{

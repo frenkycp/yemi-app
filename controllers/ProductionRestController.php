@@ -1153,7 +1153,9 @@ class ProductionRestController extends Controller
                         || $ACTUAL_AMT_ALLOC != $ACTUAL_AMT_ALLOC_NEW
                         || $tmp_ijazah->PLAN_QTY != $plan_qty
                         || ($tmp_ijazah->PLAN_QTY != $tmp_ijazah->ACTUAL_QTY_ALLOC && ($tmp_ijazah->STD_PRICE * $tmp_ijazah->ACTUAL_QTY_ALLOC) * $tmp_ijazah->ACTUAL_AMT_ALLOC)
-                        || ($tmp_ijazah->ACT_ALLOC_LAST_UPDATE < $tmp_ijazah->ACT_LAST_UPDATE && $tmp_ijazah->ACT_LAST_UPDATE != null)
+                        || ($tmp_ijazah->ACT_ALLOC_LAST_UPDATE < $tmp_ijazah->ACT_LAST_UPDATE)
+                        || $tmp_ijazah->ACT_ALLOC_LAST_UPDATE == null
+                        || $tmp_ijazah->ACTUAL_AMT_ALLOC != $tmp_ijazah->PLAN_AMT
                     ) {
                         $update_ijazah = IjazahPlanActual::findOne($tmp_ijazah->ITEM . '-' . $tmp_ijazah->PERIOD);
                         $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;
@@ -1187,7 +1189,7 @@ class ProductionRestController extends Controller
 
         $tmp_output = SernoOutput::find()
         ->select([
-            'id' ,'gmc', 'output' => 'SUM(output)'
+            'id' ,'gmc', 'output' => 'SUM(output)', 'qty' => 'SUM(qty)'
         ])
         ->where([
             'id' => $period
@@ -1214,17 +1216,19 @@ class ProductionRestController extends Controller
             $index = strtoupper($index);
             $found = false;
             $tmp_act_qty = $tmp_plan_qty = $tmp_balance_qty = 0;
+            $tmp_act_last_update = null;
             foreach ($tmp_plan2 as $plan2) {
                 if ($plan2->ID == $index) {
                     $found = true;
                     $tmp_act_qty = $plan2->ACTUAL_QTY;
                     $tmp_plan_qty = $plan2->PLAN_QTY;
                     $tmp_balance_qty = $plan2->BALANCE_QTY;
+                    $tmp_act_last_update = $plan2->ACT_LAST_UPDATE;
                 }
             }
             if ($found) {
                 $balance = $tmp_plan_qty - $value->output;
-                if ($value->output != $tmp_act_qty || $tmp_balance_qty != $balance) {
+                if ($value->output != $tmp_act_qty || $value->qty != $tmp_plan_qty || $tmp_act_last_update == null) {
                     $total_update++;
                     $tmp_update = IjazahPlanActual::findOne($index);
                     $tmp_update->ACTUAL_QTY = $value->output;
@@ -1236,7 +1240,7 @@ class ProductionRestController extends Controller
                     
                 }
             } else {
-                $tmp_gmc = IjazahItem::find()->where(['ITEM' => $value->gmc])->orderBy('PERIOD DESC')->one();
+                $tmp_gmc = IjazahItem::find()->where(['ITEM' => $value->gmc])->one();
                 $balance = 0 - $value->output;
                 $tmp_insert = [
                     'ID' => $index,
