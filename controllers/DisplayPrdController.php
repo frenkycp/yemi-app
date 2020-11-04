@@ -20,9 +20,175 @@ use app\models\WhFgsStock;
 use app\models\SapItemTbl;
 use app\models\SernoInputAll;
 use app\models\VmsItem;
+use app\models\TraceItemDtr;
 
 class DisplayPrdController extends Controller
 {
+    public function actionExpirationMonitoringGetRemark($post_date, $item_category, $data_category = 'expired')
+    {
+        if ($data_category == 'expired') {
+            $tmp_trace_arr = TraceItemDtr::find()
+            ->where([
+                '<=', 'EXPIRED_DATE', $post_date
+            ])
+            ->andWhere([
+                'AVAILABLE' => 'Y',
+                'CATEGORY' => $item_category
+            ])
+            ->orderBy('EXPIRED_DATE')
+            ->all();
+            $tmp_title = 'Expired';
+        } else {
+            $tmp_trace_arr = TraceItemDtr::find()
+            ->where([
+                'AVAILABLE' => 'Y',
+                'CATEGORY' => $item_category
+            ])
+            ->orderBy('EXPIRED_DATE')
+            ->all();
+            $tmp_title = 'All Items';
+        }
+
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $tmp_title . ' - Category : ' . $item_category . ' <small>(' . date('d M\' Y') . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 12px;">
+            <th class="text-center">No.</th>
+            <th class="text-center">Part No.</th>
+            <th class="">Part Description</th>
+            <th class="text-center">Category</th>
+            <th class="text-center">Amount</th>
+            <th class="text-center">Rcv. Date</th>
+            <th class="text-center">Exp. Date</th>
+        </tr>';
+
+        $no = 1;
+        foreach ($tmp_trace_arr as $tmp_trace) {
+            $remark .= '<tr style="font-size: 12px;">
+                <td class="text-center">' . $no . '</td>
+                <td class="text-center">' . $tmp_trace->ITEM . '</td>
+                <td class="">' . $tmp_trace->ITEM_DESC . '</td>
+                <td class="text-center">' . $tmp_trace->CATEGORY . '</td>
+                <td class="text-center">' . $tmp_trace->STD_AMT . '</td>
+                <td class="text-center">' . date('d M\' Y', strtotime($tmp_trace->RECEIVED_DATE)) . '</td>
+                <td class="text-center">' . date('d M\' Y', strtotime($tmp_trace->EXPIRED_DATE)) . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
+    public function actionExpirationMonitoring($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date', 'item_category'
+        ]);
+        $model->addRule(['from_date', 'to_date', 'item_category'], 'required');
+
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t', strtotime(' +3 months'));
+        $model->item_category = 'ADHESIVE';
+
+        $tmp_data = $data = [];
+        if ($model->load($_GET)) {
+            
+        }
+
+        $tmp_trace_arr = TraceItemDtr::find()
+        ->where([
+            'AVAILABLE' => 'Y',
+            'CATEGORY' => $model->item_category
+        ])
+        ->all();
+
+        $begin = new \DateTime(date('Y-m-01', strtotime($model->from_date)));
+        $end   = new \DateTime(date('Y-m-t', strtotime($model->to_date)));
+        
+        
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){
+
+            $tgl = $i->format("Y-m-d");
+            //$proddate = (strtotime($tgl . " +7 hours") * 1000);
+            $post_date = (strtotime($tgl . " +7 hours") * 1000);
+
+            $tmp_total1 = $tmp_total2 = $tmp_total3 = 0;
+            foreach ($tmp_trace_arr as $tmp_trace) {
+                if (strtotime($tgl . '00:00:00') >= strtotime($tmp_trace->EXPIRED_DATE)) {
+                    $tmp_total3 += $tmp_trace->STD_AMT;
+                } else {
+                    if ($tmp_trace->EXPIRED_REVISION_NO > 0) {
+                        $tmp_total2 += $tmp_trace->STD_AMT;
+                    } else {
+                        $tmp_total1 += $tmp_trace->STD_AMT;
+                    }
+                    
+                }
+                
+            }
+            $tmp_data['new'][] = [
+                'x' => $post_date,
+                'y' => round($tmp_total1),
+                'url' => Url::to(['expiration-monitoring-get-remark', 'post_date' => $tgl, 'item_category' => $model->item_category, 'data_category' => 'expired'])
+            ];
+            $tmp_data['rev'][] = [
+                'x' => $post_date,
+                'y' => round($tmp_total2),
+                'url' => Url::to(['expiration-monitoring-get-remark', 'post_date' => $tgl, 'item_category' => $model->item_category, 'data_category' => 'expired'])
+            ];
+            $tmp_data['exp'][] = [
+                'x' => $post_date,
+                'y' => round($tmp_total3),
+                'url' => Url::to(['expiration-monitoring-get-remark', 'post_date' => $tgl, 'item_category' => $model->item_category, 'data_category' => 'expired'])
+            ];
+        }
+
+        $data = [
+            [
+                'name' => 'New Incoming',
+                'data' => $tmp_data['new'],
+                'color' => \Yii::$app->params['bg-green'],
+            ],
+            [
+                'name' => 'Exp. Revised',
+                'data' => $tmp_data['rev'],
+                'color' => \Yii::$app->params['bg-yellow'],
+            ],
+            [
+                'name' => 'Expired',
+                'data' => $tmp_data['exp'],
+                'color' => \Yii::$app->params['bg-red'],
+                'cursor' => 'pointer',
+                'point' => [
+                    'events' => [
+                        'click' => new JsExpression("
+                            function(e){
+                                e.preventDefault();
+                                $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                            }
+                        "),
+                    ]
+                ]
+            ],
+        ];
+
+        return $this->render('expiration-monitoring', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
+
     public function getPeriodArr($post_date='')
     {
         if ($post_date == '') {
