@@ -6841,6 +6841,58 @@ echo '</pre>';*/
         ]);
     }
 
+    public function actionUpdateStockRecycle()
+    {
+        $this->layout = 'clean';
+        $data = [];
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'stock_recycle', 'username', 'password'
+        ]);
+        $model->addRule(['stock_recycle', 'username', 'password'], 'required');
+
+        if ($model->load($_POST)) {
+            $creator = Karyawan::find()->where([
+                'OR',
+                ['NIK' => $model->username],
+                ['NIK_SUN_FISH' => $model->username]
+            ])
+            ->one();
+
+            if (!$creator) {
+                \Yii::$app->session->setFlash('warning', 'Username is not found...');
+                return $this->render('update-stock-recycle', [
+                    'model' => $model
+                ]);
+            } else {
+                if ($creator->PASSWORD != $model->password) {
+                    \Yii::$app->session->setFlash('warning', 'Wrong password...');
+                    return $this->render('update-stock-recycle', [
+                        'model' => $model
+                    ]);
+                }
+            }
+
+            $new_stock = new DrossStock;
+            $new_stock->st_dross = 0;
+            $new_stock->st_recycle = $model->stock_recycle;
+            $new_stock->tgl = date('Y-m-d H:i:s');
+            $new_stock->user_id = $creator->NIK_SUN_FISH;
+            $new_stock->user_name = $creator->NAMA_KARYAWAN;
+
+            if ($new_stock->save()) {
+                \Yii::$app->session->setFlash('success', 'Recycle stock has been updated...');
+                return $this->redirect(Url::previous());
+            } else {
+                return json_encode($model->errors);
+            }
+        }
+
+        return $this->render('update-stock-recycle', [
+            'model' => $model
+        ]);
+    }
+
     public function actionCrusherInputDaily($value='')
     {
         $this->layout = 'clean';
