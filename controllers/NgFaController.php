@@ -34,8 +34,14 @@ class NgFaController extends Controller
 		   	['NIK' => $user_id],
 			['NIK_SUN_FISH' => $user_id]
 		])->one();
-		$user_id = $creator->NIK_SUN_FISH;
-		$user_desc = $creator->NAMA_KARYAWAN;
+		if ($creator) {
+			$user_id = $creator->NIK_SUN_FISH;
+			$user_desc = $creator->NAMA_KARYAWAN;
+		} else {
+			$user_id = $user_id;
+			$user_desc = $user_id;
+		}
+		
 
 		$model = $this->findModel($id);
     	$model->flag = 0;
