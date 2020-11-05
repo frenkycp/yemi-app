@@ -38,6 +38,19 @@ class DisplayPrdController extends Controller
             ->orderBy('EXPIRED_DATE')
             ->all();
             $tmp_title = 'Expired';
+        } elseif ($data_category == 'one_month') {
+            $tmp_trace_arr = TraceItemDtr::find()
+            ->where([
+                '<=', 'EXPIRED_DATE', date('Y-m-d', strtotime($post_date . ' +1 month'))
+            ])
+            ->andWhere(['>', 'EXPIRED_DATE', $post_date])
+            ->andWhere([
+                'AVAILABLE' => 'Y',
+                'CATEGORY' => $item_category
+            ])
+            ->orderBy('EXPIRED_DATE')
+            ->all();
+            $tmp_title = '1 Month Before Expired';
         } else {
             $tmp_trace_arr = TraceItemDtr::find()
             ->where([
@@ -126,12 +139,12 @@ class DisplayPrdController extends Controller
             $tmp_total1 = $tmp_total2 = $tmp_total3 = 0;
             foreach ($tmp_trace_arr as $tmp_trace) {
                 if (strtotime($tgl . '00:00:00') >= strtotime($tmp_trace->EXPIRED_DATE)) {
-                    $tmp_total3 += $tmp_trace->STD_AMT;
+                    $tmp_total3 ++;
                 } else {
-                    if ($tmp_trace->EXPIRED_REVISION_NO > 0) {
-                        $tmp_total2 += $tmp_trace->STD_AMT;
+                    if (strtotime($tgl . '00:00:00') >= strtotime($tmp_trace->EXPIRED_DATE . ' -1 month')) {
+                        $tmp_total2 ++;
                     } else {
-                        $tmp_total1 += $tmp_trace->STD_AMT;
+                        $tmp_total1 ++;
                     }
                     
                 }
@@ -140,12 +153,12 @@ class DisplayPrdController extends Controller
             $tmp_data['new'][] = [
                 'x' => $post_date,
                 'y' => round($tmp_total1),
-                'url' => Url::to(['expiration-monitoring-get-remark', 'post_date' => $tgl, 'item_category' => $model->item_category, 'data_category' => 'expired'])
+                'url' => Url::to(['expiration-monitoring-get-remark', 'post_date' => $tgl, 'item_category' => $model->item_category, 'data_category' => 'new_incoming'])
             ];
             $tmp_data['rev'][] = [
                 'x' => $post_date,
                 'y' => round($tmp_total2),
-                'url' => Url::to(['expiration-monitoring-get-remark', 'post_date' => $tgl, 'item_category' => $model->item_category, 'data_category' => 'expired'])
+                'url' => Url::to(['expiration-monitoring-get-remark', 'post_date' => $tgl, 'item_category' => $model->item_category, 'data_category' => 'one_month'])
             ];
             $tmp_data['exp'][] = [
                 'x' => $post_date,
@@ -161,9 +174,20 @@ class DisplayPrdController extends Controller
                 'color' => \Yii::$app->params['bg-green'],
             ],
             [
-                'name' => 'Exp. Revised',
+                'name' => '1 Month Before Expired',
                 'data' => $tmp_data['rev'],
                 'color' => \Yii::$app->params['bg-yellow'],
+                'cursor' => 'pointer',
+                'point' => [
+                    'events' => [
+                        'click' => new JsExpression("
+                            function(e){
+                                e.preventDefault();
+                                $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                            }
+                        "),
+                    ]
+                ]
             ],
             [
                 'name' => 'Expired',

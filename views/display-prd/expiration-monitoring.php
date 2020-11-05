@@ -208,7 +208,7 @@ echo '</pre>';*/
                 ],
                 'tooltip' => [
                     'enabled' => true,
-                    'valueSuffix' => ' USD'
+                    'valueSuffix' => ' Item(s)'
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                 ],
                 'plotOptions' => [
