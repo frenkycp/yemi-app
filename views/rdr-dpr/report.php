@@ -69,17 +69,10 @@ date_default_timezone_set('Asia/Jakarta');
 				<?= $form->field($model_judgement, 'type')->dropDownList([
                 	'RDR' => 'RDR',
                 	//'DPR' => 'DPR',
-                ], [
-                	'prompt' => 'Choose...'
                 ]); ?>
 			</div>
 			<div class="col-md-3">
-				<?= $form->field($model_judgement, 'category')->dropDownList([
-                	'SHORTAGE' => 'SHORTAGE',
-                	'OVER' => 'OVER',
-                	'WRONG PART' => 'WRONG PART',
-                	'NO PART NUMBER' => 'NO PART NUMBER',
-                ], [
+				<?= $form->field($model_judgement, 'category')->dropDownList(\Yii::$app->params['rdr_category_arr'], [
                 	'prompt' => 'Choose...'
                 ]); ?>
 			</div>

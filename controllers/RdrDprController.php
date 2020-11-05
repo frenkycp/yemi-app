@@ -23,6 +23,7 @@ class RdrDprController extends \app\controllers\base\IqaInspectionController
         date_default_timezone_set('Asia/Jakarta');
 
         $tmp_model = RdrDprData::find()->where(['material_document_number' => $material_document_number])->one();
+        $tmp_model->status_val = 3;
         $tmp_model->user_close = $nik;
         $tmp_model->user_close_desc = $name;
         $tmp_model->user_close_date = date('Y-m-d H:i:s');
@@ -47,6 +48,7 @@ class RdrDprController extends \app\controllers\base\IqaInspectionController
 
         $tmp_model = RdrDprData::find()->where(['material_document_number' => $material_document_number])->one();
         $tmp_model->korlap = $nik;
+        $tmp_model->status_val = 1;
         $tmp_model->korlap_desc = $name;
         $tmp_model->korlap_confirm_date = date('Y-m-d H:i:s');
 
@@ -158,6 +160,7 @@ class RdrDprController extends \app\controllers\base\IqaInspectionController
 
         if ($model->load(\Yii::$app->request->post())) {
             try {
+                $model->status_val = 2;
                 $model->purc_approve = $nik;
                 $model->purc_approve_desc = $name;
                 $model->purc_approve_date = date('Y-m-d H:i:s');

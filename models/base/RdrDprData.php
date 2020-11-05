@@ -48,6 +48,7 @@ use Yii;
  * @property string $user_close
  * @property string $user_close_desc
  * @property string $user_close_date
+ * @property integer $status_val
  * @property string $close_open
  * @property string $aliasModel
  */
@@ -82,6 +83,7 @@ abstract class RdrDprData extends \yii\db\ActiveRecord
             [['rcv_date', 'user_issue_date', 'korlap_confirm_date', 'purc_approve_date', 'eta_yemi', 'user_close_date'], 'safe'],
             [['do_inv_qty', 'act_rcv_qty', 'discrepancy_qty', 'standard_price', 'standard_amount'], 'number'],
             [['purc_approve_remark'], 'string'],
+            [['status_val'], 'integer'],
             [['material_document_number'], 'string', 'max' => 24],
             [['material_document_number_barcode', 'pic', 'division', 'EMAIL_ADDRESS', 'EMAIL_ADDRESS_CC', 'NOTE', 'user_desc', 'korlap_desc', 'purc_approve_desc', 'user_close_desc'], 'string', 'max' => 50],
             [['period'], 'string', 'max' => 6],
@@ -142,6 +144,7 @@ abstract class RdrDprData extends \yii\db\ActiveRecord
             'user_close' => 'User Close',
             'user_close_desc' => 'User Close Desc',
             'user_close_date' => 'User Close Date',
+            'status_val' => 'Status Val',
             'close_open' => 'Close Open',
         ];
     }

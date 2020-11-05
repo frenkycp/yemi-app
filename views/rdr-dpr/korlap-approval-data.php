@@ -55,6 +55,9 @@ $gridColumns = [
                 if ($model->purc_approve != null) {
                     return '<button class="btn btn-xs btn-primary btn-block disabled" title="Aprroved...">PURCH. APPROVE</button>';
                 }
+                if ($model->korlap == null) {
+                    return '<button class="btn btn-xs btn-primary btn-block disabled" title="Waiting Korlap Approval...">PURCH. APPROVE</button>';
+                }
                 return Html::a('PURCH. APPROVE', '#', $options);
             },
             'close' => function ($url, $model, $key) {
@@ -237,8 +240,8 @@ $gridColumns = [
 <div class="giiant-crud skill-master-karyawan-index">
 
     <?php
-//             echo $this->render('_search', ['model' =>$searchModel]);
-        ?>
+        echo $this->render('approval_data_search', ['model' =>$searchModel]);
+    ?>
 
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
@@ -247,7 +250,7 @@ $gridColumns = [
 	    	<div class="box-body no-padding">
 		        <?= GridView::widget([
 		            'dataProvider' => $dataProvider,
-		            'filterModel' => $searchModel,
+		            //'filterModel' => $searchModel,
 		            'columns' => $gridColumns,
 		            'hover' => true,
 		            //'condensed' => true,

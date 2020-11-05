@@ -18,7 +18,7 @@ class RdrDprDataSearch extends RdrDprData
 public function rules()
 {
 return [
-[['material_document_number', 'material_document_number_barcode', 'period', 'rcv_date', 'vendor_code', 'vendor_name', 'pic', 'division', 'NOTE', 'inv_no', 'material', 'description', 'um', 'rdr_dpr', 'category', 'normal_urgent', 'user_id', 'user_desc', 'user_issue_date', 'korlap', 'korlap_desc', 'korlap_confirm_date', 'purc_approve', 'purc_approve_desc', 'purc_approve_date', 'discrepancy_treatment', 'payment_treatment', 'purc_approve_remark', 'user_close', 'user_close_desc', 'user_close_date', 'close_open'], 'safe'],
+[['material_document_number', 'material_document_number_barcode', 'period', 'rcv_date', 'vendor_code', 'vendor_name', 'pic', 'division', 'NOTE', 'inv_no', 'material', 'description', 'um', 'rdr_dpr', 'category', 'normal_urgent', 'user_id', 'user_desc', 'user_issue_date', 'korlap', 'korlap_desc', 'korlap_confirm_date', 'purc_approve', 'purc_approve_desc', 'purc_approve_date', 'discrepancy_treatment', 'payment_treatment', 'purc_approve_remark', 'user_close', 'user_close_desc', 'user_close_date', 'close_open', 'status_val'], 'safe'],
             [['do_inv_qty', 'act_rcv_qty', 'discrepancy_qty', 'standard_price', 'standard_amount'], 'number'],
 ];
 }
@@ -41,13 +41,14 @@ return Model::scenarios();
 */
 public function search($params)
 {
-      if ($params['approval_type'] == 'korlap') {
+      /*if ($params['status'] == 'korlap') {
             $query = RdrDprData::find()->where('korlap IS NULL');
-      } elseif ($params['approval_type'] == 'pch') {
+      } elseif ($params['status'] == 'pch') {
             $query = RdrDprData::find()->where('korlap IS NOT NULL')->andWhere('purc_approve IS NULL');
       } else {
             $query = RdrDprData::find();
-      }
+      }*/
+      $query = RdrDprData::find();
 
 
 $dataProvider = new ActiveDataProvider([
@@ -72,7 +73,9 @@ $query->andFilterWhere([
             'user_issue_date' => $this->user_issue_date,
             'purc_approve_date' => $this->purc_approve_date,
             'user_close_date' => $this->user_close_date,
+            'status_val' => $this->status_val,
         ]);
+
 
         $query->andFilterWhere(['like', 'material_document_number', $this->material_document_number])
             ->andFilterWhere(['like', 'material_document_number_barcode', $this->material_document_number_barcode])

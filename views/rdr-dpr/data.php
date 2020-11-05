@@ -39,6 +39,17 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'SEQ_LOG',
+        'label' => 'Document No.',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '90px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+    ],
+    [
         'attribute' => 'ITEM',
         'label' => 'Part No.',
         'hAlign' => 'center',
