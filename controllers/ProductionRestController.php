@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use yii\rest\Controller;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 use app\models\SernoInput;
 use app\models\SernoInputAll;
 use app\models\ProdNgData;
@@ -26,9 +27,54 @@ use app\models\SunfishAttendanceData;
 use app\models\CarParkAttendance;
 use app\models\RfidCarScan;
 use app\models\IjazahItem;
+use app\models\PermitInputData;
 
 class ProductionRestController extends Controller
 {
+    public function actionPermitSendEmail($set_to = 'frenky.purnama@music.yamaha.com', $set_to_cc = 'ipung.gautama@music.yamaha.com', $id = 'YE1409004202011061033')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $permit_input = PermitInputData::find()->where(['id' => $id])->one();
+
+        if (!$permit_input) {
+            return [
+                'status' => 'FAILED',
+                'message' => 'Item not found...'
+            ];
+        }
+        $msg = 'Dear Mr./Mrs. ' . ucwords(strtolower($permit_input->atasan)) . ',<br/><br/>
+        Please confirm the following permit (Link ' . Html::a('HERE', 'http://10.110.52.5:99/plus/index_permit/index_permit_login.php') . '):
+        <ul>
+            <li>Date : ' . date('d M\' Y', strtotime($permit_input->tgl)) . '</li>
+            <li>NIK : ' . $permit_input->nik . '</li>
+            <li>Name : ' . $permit_input->nama . '</li>
+            <li>Department : ' . $permit_input->dept . '</li>
+            <li>Reason : ' . $permit_input->reason . '</li>
+        </ul>
+        <br/>
+        Thanks & Best Regards,<br/>
+        MITA
+        ';
+
+        $set_to_arr = explode(';', $set_to);
+        $set_to_cc_arr = explode(';', $set_to_cc);
+
+        \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/html'], [
+            'content' => $msg
+        ])
+        ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
+        ->setTo($set_to_arr)
+        //->setCc($set_to_cc_arr)
+        ->setSubject('Permit Confirm Notification')
+        ->send();
+
+        return [
+            'status' => 'OK',
+            'message' => 'Email has been sent...'
+        ];
+    }
+
     public function actionUpdateSernoMasterBu($value='')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -286,7 +332,7 @@ class ProductionRestController extends Controller
             'tmp_fg_minus_daily' => $tmp_fg_minus_daily,
             'tmp_kd_minus_daily' => $tmp_kd_minus_daily,
         ])
-        ->setFrom('yemi.pch@gmail.com')
+        ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
         ->setTo(['gazalba.briljan@music.yamaha.com'])
         ->setCc(array('frenky.purnama@music.yamaha.com'))
         //->setTo(['frenky.purnama@music.yamaha.com'])

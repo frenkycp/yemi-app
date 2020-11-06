@@ -68,7 +68,7 @@ $grid_column = [
         'attribute' => 'image',
         'label' => 'Foto',
         'value' => function($model){
-            return Html::a(Html::img('http://172.17.144.5/product_image/' . $model->ITEM . '.jpg', [
+            return Html::a(Html::img('http://10.110.52.5:84/product_image/' . $model->ITEM . '.jpg', [
                 'width' => '20px',
                 'height' => '20px',
                 'alt' => '-'

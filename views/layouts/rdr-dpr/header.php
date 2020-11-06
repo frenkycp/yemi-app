@@ -14,7 +14,7 @@ $model_karyawan = Karyawan::find()->where([
     <nav class="navbar navbar-static-top">
       <div class="container">
         <div class="navbar-header">
-            <?= Html::a('<i class="fa fa-file-text-o"> </i><b style="padding-left: 5px;"></b> RDR - DPR', Yii::$app->homeUrl . 'fix-asset', ['class' => 'navbar-brand']) ?>
+            <?= Html::a('<i class="fa fa-file-text-o"> </i><b style="padding-left: 5px;"></b> RDR - DPR', Yii::$app->homeUrl . 'rdr-dpr', ['class' => 'navbar-brand']) ?>
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
             <i class="fa fa-bars"></i>
           </button>
@@ -27,7 +27,7 @@ $model_karyawan = Karyawan::find()->where([
                 <?= Html::a('Incoming Data', ['data']) ?>
             </li>
             <li class="<?= \Yii::$app->controller->id == 'rdr-dpr' && in_array(\Yii::$app->controller->action->id, ['korlap-approval-data']) ? 'active' : ''; ?> dropdown">
-                <?= Html::a('RDR - DPR Data', ['korlap-approval-data']); ?>
+                <?= Html::a('RDR Data', ['korlap-approval-data']); ?>
             </li>
           </ul>
         </div>

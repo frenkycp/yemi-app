@@ -276,7 +276,8 @@ $current_data = $data[$model->period];
             $data_series = [
                 [
                     'name' => 'DEFECT RATIO',
-                    'data' => $tmp_data_series
+                    'data' => $tmp_data_series,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[3]')
                 ],
                 [
                     'name' => 'TARGET',
