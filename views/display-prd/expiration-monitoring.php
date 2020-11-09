@@ -34,11 +34,11 @@ $css_string = "
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
     .badge {font-weight: normal;}
 
-    #summary-tbl{
+    .summary-tbl{
         //border:1px solid #29B6F6;
         border-top: 0;
     }
-    #summary-tbl > tbody > tr > td{
+    .summary-tbl > tbody > tr > td{
         border:1px solid #777474;
         font-size: 14px;
         background: #33383d;
@@ -48,7 +48,7 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
-    #summary-tbl > thead > tr > th{
+    .summary-tbl > thead > tr > th{
         border:1px solid #8b8c8d;
         background-color: #518469;
         color: white;
@@ -64,7 +64,7 @@ $css_string = "
         border-bottom: 7px solid #797979 !important;
         vertical-align: middle !important;
     }
-    #summary-tbl > tfoot > tr > td{
+    .summary-tbl > tfoot > tr > td{
         border:1px solid #777474;
         font-size: 20px;
         background: #000;
@@ -91,10 +91,11 @@ $css_string = "
     .text-red {color: #ff7564 !important;}
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
-    #summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
+    .summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .accumulation > td {
         background: #454B52 !important;
     }
+    .bg-yellow-mod {background-color: yellow !important;}
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important;}
     .bg-black {background-color: black; color: yellow !important;}
@@ -226,6 +227,39 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+
+<table class="table summary-tbl">
+    <thead>
+        <tr>
+            <th class="text-center">Part No.</th>
+            <th class="">Description</th>
+            <th class="text-center">Exp. Rev. No.</th>
+            <th class="text-center">Received Date</th>
+            <th class="text-center">Manufactured Date</th>
+            <th class="text-center">Expired Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($tmp_trace_arr as $key => $value):
+            if (strtotime(date('Y-m-d')) >= strtotime($value->EXPIRED_DATE)) {
+                $text_class = 'bg-red';
+            } elseif (strtotime(date('Y-m-d')) > strtotime($value->EXPIRED_DATE . ' -1 month')) {
+                $text_class = 'bg-yellow';
+            } else {
+                $text_class = 'bg-green';
+            }
+            ?>
+            <tr class="text_class">
+                <td class="text-center"><?= $value->ITEM; ?></td>
+                <td class=""><?= $value->ITEM_DESC; ?></td>
+                <td class="text-center"><?= $value->EXPIRED_REVISION_NO; ?></td>
+                <td class="text-center"><?= date('Y-m-d', strtotime($value->RECEIVED_DATE)); ?></td>
+                <td class="text-center"><?= date('Y-m-d', strtotime($value->MANUFACTURED_DATE)); ?></td>
+                <td class="text-center <?= $text_class; ?>"><?= date('Y-m-d', strtotime($value->EXPIRED_DATE)); ?></td>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
 
 <?php
 yii\bootstrap\Modal::begin([

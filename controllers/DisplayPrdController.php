@@ -104,13 +104,14 @@ class DisplayPrdController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
 
         $model = new \yii\base\DynamicModel([
             'from_date', 'to_date', 'item_category'
         ]);
         $model->addRule(['from_date', 'to_date', 'item_category'], 'required');
 
-        $model->from_date = date('Y-m-01');
+        $model->from_date = $today;
         $model->to_date = date('Y-m-t', strtotime(' +3 months'));
         $model->item_category = 'ADHESIVE';
 
@@ -124,10 +125,11 @@ class DisplayPrdController extends Controller
             'AVAILABLE' => 'Y',
             'CATEGORY' => $model->item_category
         ])
+        ->orderBy('EXPIRED_DATE')
         ->all();
 
-        $begin = new \DateTime(date('Y-m-01', strtotime($model->from_date)));
-        $end   = new \DateTime(date('Y-m-t', strtotime($model->to_date)));
+        $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+        $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
         
         
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
@@ -210,6 +212,7 @@ class DisplayPrdController extends Controller
         return $this->render('expiration-monitoring', [
             'model' => $model,
             'data' => $data,
+            'tmp_trace_arr' => $tmp_trace_arr,
         ]);
     }
 
