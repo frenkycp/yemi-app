@@ -465,6 +465,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_post->total_ng_all / $output_arr['total_all']) * 100, 3),
                     'self_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_self->total_ng_all / $output_arr['total_all']) * 100, 3),
                     'pre_ratio' => $output_arr['total_all'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_all / $output_arr['total_all']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_all'] == 0 ? 0 : round((($tmp_ng_self->total_ng_all + $tmp_ng_post->total_ng_all) / $output_arr['total_all']) * 100, 3),
                 ],
                 'sn' => [
                     'output' => $output_arr['total_sn'],
@@ -474,6 +475,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_post->total_ng_sn / $output_arr['total_sn']) * 100, 3),
                     'self_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_self->total_ng_sn / $output_arr['total_sn']) * 100, 3),
                     'pre_ratio' => $output_arr['total_sn'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_sn / $output_arr['total_sn']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_sn'] == 0 ? 0 : round((($tmp_ng_self->total_ng_sn + $tmp_ng_post->total_ng_sn) / $output_arr['total_sn']) * 100, 3),
                 ],
                 'pa' => [
                     'output' => $output_arr['total_pa'],
@@ -483,6 +485,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_post->total_ng_pa / $output_arr['total_pa']) * 100, 3),
                     'self_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_self->total_ng_pa / $output_arr['total_pa']) * 100, 3),
                     'pre_ratio' => $output_arr['total_pa'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_pa / $output_arr['total_pa']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_pa'] == 0 ? 0 : round((($tmp_ng_self->total_ng_pa + $tmp_ng_post->total_ng_pa) / $output_arr['total_pa']) * 100, 3),
                 ],
                 'piano' => [
                     'output' => $output_arr['total_piano'],
@@ -492,6 +495,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_post->total_ng_piano / $output_arr['total_piano']) * 100, 3),
                     'self_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_self->total_ng_piano / $output_arr['total_piano']) * 100, 3),
                     'pre_ratio' => $output_arr['total_piano'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_piano / $output_arr['total_piano']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_piano'] == 0 ? 0 : round((($tmp_ng_self->total_ng_piano + $tmp_ng_post->total_ng_piano) / $output_arr['total_piano']) * 100, 3),
                 ],
                 'bo' => [
                     'output' => $output_arr['total_bo'],
@@ -501,6 +505,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_post->total_ng_bo / $output_arr['total_bo']) * 100, 3),
                     'self_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_self->total_ng_bo / $output_arr['total_bo']) * 100, 3),
                     'pre_ratio' => $output_arr['total_bo'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_bo / $output_arr['total_bo']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_bo'] == 0 ? 0 : round((($tmp_ng_self->total_ng_bo + $tmp_ng_post->total_ng_bo) / $output_arr['total_bo']) * 100, 3),
                 ],
                 'av' => [
                     'output' => $output_arr['total_av'],
@@ -510,6 +515,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_post->total_ng_av / $output_arr['total_av']) * 100, 3),
                     'self_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_self->total_ng_av / $output_arr['total_av']) * 100, 3),
                     'pre_ratio' => $output_arr['total_av'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_av / $output_arr['total_av']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_av'] == 0 ? 0 : round((($tmp_ng_self->total_ng_av + $tmp_ng_post->total_ng_av) / $output_arr['total_av']) * 100, 3),
                 ],
                 'dmi' => [
                     'output' => $output_arr['total_dmi'],
@@ -519,6 +525,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_post->total_ng_dmi / $output_arr['total_dmi']) * 100, 3),
                     'self_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_self->total_ng_dmi / $output_arr['total_dmi']) * 100, 3),
                     'pre_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_dmi / $output_arr['total_dmi']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_dmi'] == 0 ? 0 : round((($tmp_ng_self->total_ng_dmi + $tmp_ng_post->total_ng_dmi) / $output_arr['total_dmi']) * 100, 3),
                 ],
                 'other' => [
                     'output' => $output_arr['total_other'],
@@ -528,6 +535,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_post->total_ng_other / $output_arr['total_other']) * 100, 3),
                     'self_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_self->total_ng_other / $output_arr['total_other']) * 100, 3),
                     'pre_ratio' => $output_arr['total_other'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_other / $output_arr['total_other']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_other'] == 0 ? 0 : round((($tmp_ng_self->total_ng_other + $tmp_ng_post->total_ng_other) / $output_arr['total_other']) * 100, 3),
                 ],
                 'null' => [
                     'output' => $output_arr['total_null'],
@@ -537,6 +545,7 @@ class DisplayPrdController extends Controller
                     'post_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_post->total_ng_null / $output_arr['total_null']) * 100, 3),
                     'self_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_self->total_ng_null / $output_arr['total_null']) * 100, 3),
                     'pre_ratio' => $output_arr['total_null'] == 0 ? 0 : round(($tmp_ng_pre->total_ng_null / $output_arr['total_null']) * 100, 3),
+                    'self_post_ratio' => $output_arr['total_null'] == 0 ? 0 : round((($tmp_ng_self->total_ng_null + $tmp_ng_post->total_ng_null) / $output_arr['total_null']) * 100, 3),
                 ],
                 /*'output_arr' => $output_arr,
                 'ng_post' => $tmp_ng_post,

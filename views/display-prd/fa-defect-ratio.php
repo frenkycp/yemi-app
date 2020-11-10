@@ -185,6 +185,17 @@ $current_data = $data[$model->period];
             <td class="text-center"><?= $current_data['other']['pre_ratio']; ?>%</td>
         </tr>
         <tr>
+            <td>DEFECT RATIO  % SELF + POST PROCESS</td>
+            <td class="text-center"><?= $current_data['all']['self_post_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['av']['self_post_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['pa']['self_post_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['sn']['self_post_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['bo']['self_post_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['dmi']['self_post_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['piano']['self_post_ratio']; ?>%</td>
+            <td class="text-center"><?= $current_data['other']['self_post_ratio']; ?>%</td>
+        </tr>
+        <tr>
             <td>OUTPUT QTY </td>
             <td class="text-center"><?= number_format($current_data['all']['output']); ?></td>
             <td class="text-center"><?= number_format($current_data['av']['output']); ?></td>
