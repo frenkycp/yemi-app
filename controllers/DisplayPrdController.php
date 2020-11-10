@@ -21,9 +21,55 @@ use app\models\SapItemTbl;
 use app\models\SernoInputAll;
 use app\models\VmsItem;
 use app\models\TraceItemDtr;
+use app\models\TraceItemDtrLog;
 
 class DisplayPrdController extends Controller
 {
+    public function actionExpirationGetLog($SERIAL_NO)
+    {
+        $tmp_item = TraceItemDtr::findOne($SERIAL_NO);
+        $tmp_log = TraceItemDtrLog::find()->where(['SERIAL_NO' => $SERIAL_NO])->orderBy('LAST_UPDATE DESC')->all();
+
+        $data = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $tmp_item->ITEM_DESC . ' - ' . $tmp_item->ITEM . ' <small>(Serial No. : ' . $SERIAL_NO . ')</small></h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $data .= '<table class="table table-bordered table-striped table-hover">';
+        $data .= '
+        <tr>
+            <th class="text-center">Last Update</th>
+            <th class="text-center">Transaction</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">UM</th>
+        </tr>
+        ';
+
+        foreach ($tmp_log as $value) {
+            if ($value->TRANS_ID == 'IN') {
+                $tmp_trans = '<span class="label label-success">IN</span>';
+                $tmp_qty = $value->QTY_IN;
+            } else {
+                $tmp_trans = '<span class="label label-warning">OUT</span>';
+                $tmp_qty = $value->QTY_OUT;
+            }
+            $data .= '
+            <tr>
+                <td class="text-center">' . date('d M\' Y H:i', strtotime($value->LAST_UPDATE)) . '</td>
+                <td class="text-center">' . $tmp_trans . '</td>
+                <td class="text-center">' . $tmp_qty . '</td>
+                <td class="text-center">' . $value->UM . '</td>
+            </tr>
+            ';
+        }
+
+        $data .= '</table>';
+
+        return $data;
+    }
+
     public function actionExpirationMonitoringGetRemark($post_date, $item_category, $data_category = 'expired')
     {
         if ($data_category == 'expired') {

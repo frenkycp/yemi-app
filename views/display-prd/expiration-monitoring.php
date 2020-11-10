@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Expiration Monitoring <span class="japanesse light-green"></span>',
-    'tab_title' => 'Expiration Monitoring',
-    'breadcrumbs_title' => 'Expiration Monitoring'
+    'page_title' => 'Expired Monitoring <span class="japanesse light-green"></span>',
+    'tab_title' => 'Expired Monitoring',
+    'breadcrumbs_title' => 'Expired Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -104,6 +104,7 @@ $css_string = "
     hr {
         margin-bottom: 0px;
     }
+    .disabled-link {color: DarkGrey; cursor: not-allowed;}
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
 $this->registerCss($css_string);
 
@@ -120,6 +121,12 @@ $script = "
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
+$this->registerJs("$(function() {
+   $('.popupModal').click(function(e) {
+        e.preventDefault();
+        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+   });
+});");
 $total_kwh = 0;
 
 /*echo '<pre>';
@@ -131,10 +138,10 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['daily-smt-reel']),
+    'action' => Url::to(['expiration-monitoring']),
 ]); ?>
 
-<div class="row" style="">
+<div class="row" style="margin-top: 10px;">
     <div class="col-md-4">
         <?php echo '<label class="control-label">Select date range</label>';
         echo DatePicker::widget([
@@ -152,7 +159,7 @@ echo '</pre>';*/
         ]);?>
     </div>
     <div class="col-md-2">
-        <?= $form->field($model, 'item_category')->dropDownList(ArrayHelper::map(app\models\TraceItemHdr::find()->select('CATEGORY')->groupBy('CATEGORY')->orderBy('CATEGORY')->all(), 'CATEGORY', 'CATEGORY')); ?>
+        <?= $form->field($model, 'item_category')->dropDownList(ArrayHelper::map(app\models\TraceItemDtr::find()->select('CATEGORY')->where('CATEGORY IS NOT NULL')->groupBy('CATEGORY')->orderBy('CATEGORY')->all(), 'CATEGORY', 'CATEGORY')); ?>
     </div>
     <div class="form-group">
         <br/>
@@ -231,11 +238,14 @@ echo '</pre>';*/
 <table class="table summary-tbl">
     <thead>
         <tr>
+            <th class="text-center">Action</th>
+            <th class="text-center">Serial No.</th>
             <th class="text-center">Part No.</th>
             <th class="">Description</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">UM</th>
             <th class="text-center">Exp. Rev. No.</th>
             <th class="text-center">Received Date</th>
-            <th class="text-center">Manufactured Date</th>
             <th class="text-center">Expired Date</th>
         </tr>
     </thead>
@@ -250,11 +260,29 @@ echo '</pre>';*/
             }
             ?>
             <tr class="text_class">
+                <td class="text-center">
+                    <?php
+                    $options = [
+                        'title' => 'View Log Data',
+                        'class' => 'popupModal',
+                    ];
+                    $url = ['expiration-get-log', 'SERIAL_NO' => $value->SERIAL_NO];
+                    $tmp_count = app\models\TraceItemDtrLog::find()->where(['SERIAL_NO' => $value->SERIAL_NO])->count();
+                    if ($tmp_count == 0) {
+                        echo '<span class="glyphicon glyphicon-list-alt disabled-link"></span>';
+                    } else {
+                        echo Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, $options);
+                    }
+                    
+                    ?>
+                </td>
+                <td class="text-center"><?= $value->SERIAL_NO; ?></td>
                 <td class="text-center"><?= $value->ITEM; ?></td>
                 <td class=""><?= $value->ITEM_DESC; ?></td>
+                <td class="text-center"><?= $value->NILAI_INVENTORY; ?></td>
+                <td class="text-center"><?= $value->UM; ?></td>
                 <td class="text-center"><?= $value->EXPIRED_REVISION_NO; ?></td>
                 <td class="text-center"><?= date('Y-m-d', strtotime($value->RECEIVED_DATE)); ?></td>
-                <td class="text-center"><?= date('Y-m-d', strtotime($value->MANUFACTURED_DATE)); ?></td>
                 <td class="text-center <?= $text_class; ?>"><?= date('Y-m-d', strtotime($value->EXPIRED_DATE)); ?></td>
             </tr>
         <?php endforeach ?>
