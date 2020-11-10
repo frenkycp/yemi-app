@@ -43,6 +43,13 @@ class ProductionRestController extends Controller
                 'message' => 'Item not found...'
             ];
         }
+
+        if ($permit_input->status == 2) {
+            $status_kembali = 'RETURN';
+        } else {
+            $status_kembali = 'NO RETURN';
+        }
+
         $msg = 'Dear Mr./Mrs. ' . ucwords(strtolower($permit_input->atasan)) . ',<br/><br/>
         Please confirm the following permit (Link ' . Html::a('HERE', 'http://10.110.52.5:99/plus/index_permit/index_permit_login.php') . '):
         <ul>
@@ -51,6 +58,7 @@ class ProductionRestController extends Controller
             <li>Name : ' . $permit_input->nama . '</li>
             <li>Department : ' . $permit_input->dept . '</li>
             <li>Reason : ' . $permit_input->reason . '</li>
+            <li>Return Status : ' . $status_kembali . '</li>
         </ul>
         <br/>
         Thanks & Best Regards,<br/>
