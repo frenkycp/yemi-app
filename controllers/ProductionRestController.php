@@ -44,7 +44,7 @@ class ProductionRestController extends Controller
             ];
         }
 
-        if ($permit_input->status == 2) {
+        if ($permit_input->opsi == 1) {
             $status_kembali = 'RETURN';
         } else {
             $status_kembali = 'NO RETURN';
