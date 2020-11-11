@@ -35,6 +35,13 @@ $this->registerCss("
         padding-bottom: 10px;
         min-height: 720px;
     }
+    marquee span { 
+        margin-right: 100%; 
+    } 
+    marquee p { 
+        white-space:nowrap;
+        margin-right: 1000px; 
+    } 
 ");
 
 $this->registerJs("
@@ -88,7 +95,7 @@ $script = "
     {
         $.ajax
         ({ 
-            url: '" . Url::to(['live-cooking-news']) . "',
+            url: '" . Url::to(['/display/indo-news']) . "',
             type: 'get',
             data: 
             {
@@ -98,14 +105,23 @@ $script = "
             {
                 var json = result, 
                 obj = JSON.parse(json);
+                var tmp_str = '';
+                $.each( obj.news, function( key, value ) {
+                    //alert( key + ': ' + value );
+                    if(tmp_str == ''){
+                        tmp_str = value;
+                    } else {
+                        tmp_str += ' <span> </span> ' + value;
+                    }
+                });
 
                 $('#berita').html(`
-                    <marquee scrollamount=\"30\" style=\"background-color: transparent; color: #0008ff; text-align: center; font-size: 5em; font-weight: bold; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
-                        `+ obj.news +`
+                    <marquee scrollamount=\"25\" style=\"background-color: transparent; color: #0008ff; text-align: center; font-size: 4em; letter-spacing: 5px; font-weight: bold; margin-bottom: 0.5em; position: fixed; z-index:2; right: 0; bottom: 0; left: 0; clear: both;\">
+                        `+ tmp_str +`
                     </marquee> 
                 `);
 
-                setTimeout(function(){news();}, 15000);
+                setTimeout(function(){news();}, 180000);
 
                 // console.log(obj);
             }
