@@ -235,6 +235,12 @@ $this->registerCss("
                             'target' => '_blank'
                         ]) ?>
                     </div>
+                    <div class="list-group">
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> OT Non-Production<span class="japanesse-word"></span>', 'http://10.110.52.10/po/summary_yoy', [
+                            'class' => 'list-group-item',
+                            'target' => '_blank'
+                        ]) ?>
+                    </div>
                 </div>
                 <div class="panel panel-success">
                     <div class="panel-heading text-center">Production Defect (Daily)<br/><span class="japanesse-word"></span></div>
