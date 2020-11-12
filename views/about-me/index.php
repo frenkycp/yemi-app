@@ -33,6 +33,35 @@ $image_height = '300px';
 <h2>Timeline</h2>
 <ul class="timeline">
 
+
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Oct. 2020
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-02-24</span>
+
+            <h3 class="timeline-header"><a href="#">FA Defect Ratio<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                FA Defect Ratio
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/202010_defect_ratio.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
@@ -436,32 +465,7 @@ $image_height = '300px';
             <div class="timeline-body">
                 Live Cooking Service
                 <br/>
-                <?= Html::img('@web/uploads/ABOUT/202003_canteen_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
-            </div>
-        </div>
-    </li>
-
-<!-- timeline time label -->
-    <li class="time-label">
-        <span class="bg-purple">
-            Mar. 2020
-        </span>
-    </li>
-    <!-- /.timeline-label -->
-
-    <!-- timeline item -->
-    <li>
-        <!-- timeline icon -->
-        <i class="fa fa-user bg-teal"></i>
-        <div class="timeline-item">
-            <span class="time"><i class="fa fa-clock-o"></i> 2020-03-24</span>
-
-            <h3 class="timeline-header"><a href="#">Live Cooking Service<span class="japanesse"></span></a></h3>
-
-            <div class="timeline-body">
-                Live Cooking Service
-                <br/>
-                <?= Html::img('@web/uploads/ABOUT/202003_canteen_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+                <?= Html::img('@web/uploads/ABOUT/202004_canteen_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
             </div>
         </div>
     </li>
@@ -613,6 +617,37 @@ $image_height = '300px';
         </div>
     </li>
 
+
+
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Dec. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-02-24</span>
+
+            <h3 class="timeline-header"><a href="#">E-News<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                E-News for My Company News
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201912_enews1.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+                <?= Html::img('@web/uploads/ABOUT/201912_enews2.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
@@ -684,7 +719,7 @@ $image_height = '300px';
             <div class="timeline-body">
                 System untuk mengontrol Sparepart Miantenance
                 <br/>
-                <?= Html::img('@web/uploads/ABOUT/202008_bentol_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+                <?= Html::img('@web/uploads/ABOUT/201909_mnt_part_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
 
             </div>
         </div>
@@ -876,7 +911,60 @@ $image_height = '300px';
             <div class="timeline-body">
                 MTTR and MTBF
                 <br/>
-                <?= Html::img('@web/uploads/ABOUT/201907_mttr_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+                <?= Html::img('@web/uploads/ABOUT/201908_mttr_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
+<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Aug. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-07-24</span>
+
+            <h3 class="timeline-header"><a href="#">Picking Monitoring<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Picking Monitoring
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201907_picking.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Aug. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-08-24</span>
+
+            <h3 class="timeline-header"><a href="#">E-Setlist SMT<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Auto setlist and Control Stock Material SMT
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/202008_SMT.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
 
             </div>
         </div>
@@ -902,7 +990,7 @@ $image_height = '300px';
             <div class="timeline-body">
                 Overtime Mnitoring
                 <br/>
-                <?= Html::img('@web/uploads/ABOUT/201907_ot_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+                <?= Html::img('@web/uploads/ABOUT/201908_ot_01.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
 
             </div>
         </div>
@@ -1142,6 +1230,35 @@ $image_height = '300px';
     <!-- END timeline item -->
     <!-- /.timeline-label -->
 
+
+
+      <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Apr. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-04-24</span>
+
+            <h3 class="timeline-header"><a href="#">Milkrun Monitoring<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Milkrun Material Monitoring
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201904_milkrun.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
@@ -1166,6 +1283,36 @@ $image_height = '300px';
     </li>
     <!-- END timeline item -->
     <!-- /.timeline-label -->
+
+
+
+<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Mar. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-03-24</span>
+
+            <h3 class="timeline-header"><a href="#">JIT Monitoring<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                JIT Material Monitoring
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201903_jit.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
 
     <!-- timeline time label -->
     <li class="time-label">
@@ -1192,6 +1339,33 @@ $image_height = '300px';
     <!-- END timeline item -->
     <!-- /.timeline-label -->
 
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Feb. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-02-24</span>
+
+            <h3 class="timeline-header"><a href="#">My-HR<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Self Service My HR and Q&A
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201902_my_hr.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
     <!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
@@ -1216,6 +1390,199 @@ $image_height = '300px';
     </li>
     <!-- END timeline item -->
     <!-- /.timeline-label -->
+
+
+      <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jan. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-01-24</span>
+
+            <h3 class="timeline-header"><a href="#">FA Today<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring Final Assy Performance
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201901_fa_today.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
+
+  <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jan. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-01-24</span>
+
+            <h3 class="timeline-header"><a href="#">Injection Today<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring Injection Performance
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201901_inj_today.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jan. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-01-24</span>
+
+            <h3 class="timeline-header"><a href="#">Woodworking Today<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring Woodworking Performance
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201901_ww_today.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
+
+<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jan. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-01-24</span>
+
+            <h3 class="timeline-header"><a href="#">Painting Today<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring Painting Performance
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201901_ptg_today.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jan. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-01-24</span>
+
+            <h3 class="timeline-header"><a href="#">PCB Today<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring PCB Performance
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201901_pcb_today.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jan. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-01-24</span>
+
+            <h3 class="timeline-header"><a href="#">SPU Today<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring SPU Performance
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201901_spu_today.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jan. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-01-24</span>
+
+            <h3 class="timeline-header"><a href="#">SMT Today<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Monitoring SMT Performance
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201901_smt_today.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
 
     <!-- timeline time label -->
     <li class="time-label">
@@ -1254,6 +1621,33 @@ $image_height = '300px';
     </li>
     <!-- END timeline item -->
     <!-- /.timeline-label -->
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Dec. 2018
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2018-12-24</span>
+
+            <h3 class="timeline-header"><a href="#">E-Kaizen<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                System E-Kaizen  
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201902_Kaizen.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>      
+    </li>
+
 
     <!-- timeline time label -->
     <li class="time-label">
@@ -1341,6 +1735,36 @@ $image_height = '300px';
         </div>
     </li>
     <!-- END timeline item -->
+
+
+
+<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Oct. 2018
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2018-10-24</span>
+
+            <h3 class="timeline-header"><a href="#">PE Development<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                PE Product Development 
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201810_pe.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>      
+    </li>
+
+
 
     <li class="time-label">
         <span class="bg-purple">
