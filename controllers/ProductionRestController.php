@@ -31,6 +31,150 @@ use app\models\PermitInputData;
 
 class ProductionRestController extends Controller
 {
+    public function actionSendNgByModel($model_name)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+
+        $sql = "{CALL NEW_MODEL_PROGRESS_BY_MODEL(:MODEL)}";
+        $params[':MODEL'] = $model_name;
+        $response['data'] = '';
+
+        try {
+            $result = \Yii::$app->db_sql_server->createCommand($sql, $params)->queryOne();
+            $result_data = $result['body'];
+            $response['data'] = $result_data;
+        } catch (Exception $ex) {
+            return [
+                'message' => 'Failed to get data...!'
+            ];
+        }
+
+        $email = \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/empty'], [
+            'content' => $response['data']
+        ]);
+        $email->attach(\Yii::$app->basePath. '\web\mita_insight.png');
+        $email->setFrom(['purnama.frenky@gmail.com' => 'YEMI - MIS'])
+        ->setTo(['frenky.purnama@music.yamaha.com'])
+        //->setCc($set_to_cc_arr)
+        ->setSubject($model_name . ' OQC Monitoring')
+        ->send();
+        
+        return [
+            'message' => 'Email send...'
+        ];
+    }
+
+    public function actionSendFgsStock($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+        //$today = '2020-10-25';
+
+        $tmp_today = WorkDayTbl::find()
+        ->where([
+            'FORMAT(cal_date, \'yyyy-MM-dd\')' => $today
+        ])
+        ->one();
+
+        if ($tmp_today->holiday == 'Y') {
+            return [
+                'message' => 'Today is holiday...'
+            ];
+        }
+
+        $tmp_yesterday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            '<', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
+        ])
+        ->andWhere('holiday IS NULL')
+        ->orderBy('cal_date DESC')
+        ->one();
+        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
+
+        $data = [
+            [
+                'destination' => 'G',
+                'qty' => 4376,
+                'amount' => 238460,
+                'total_m3' => 0
+            ],
+            [
+                'destination' => 'J',
+                'qty' => 557,
+                'amount' => 39555,
+                'total_m3' => 0
+            ],
+            [
+                'destination' => 'K',
+                'qty' => 455,
+                'amount' => 35733,
+                'total_m3' => 0
+            ],
+        ];
+
+        $yesterday_indo_format = date('d M\' Y', strtotime($yesterday));
+        $data_table = '<span style="font-size: 20px;">
+            <b><u>FGS STOCK (' . $yesterday_indo_format . ')</u></b>
+        </span>
+        <table class="summary-tbl">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 100px;">Dest</th>
+                    <th class="text-center" style="width: 100px;">Qty</th>
+                    <th class="text-center" style="width: 100px;">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                ';
+        
+        $grandtotal_qty = $grandtotal_amount = 0;
+        foreach ($data as $key => $value) {
+            $grandtotal_qty += $value['qty'];
+            $grandtotal_amount += $value['amount'];
+            $data_table .= '<tr>
+                <td class="text-center">' . $value['destination'] . '</td>
+                <td class="text-center">' . number_format($value['qty']) . '</td>
+                <td class="text-center">' . number_format($value['amount']) . '</td>
+            </tr>';
+        }
+
+        $data_table .= '</tbody>
+            <tfoot>
+                <tr>
+                    <td class="text-center">TOTAL</td>
+                    <td class="text-center">' . number_format($grandtotal_qty) . '</td>
+                    <td class="text-center">' . number_format($grandtotal_amount) . '</td>
+                </tr>
+            </tfoot>
+        </table>
+        <br/><br/>
+        Thanks & Best Regards,<br/>
+        YEMI - MIS
+        ';
+
+        \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/html'], [
+            'content' => $data_table
+        ])
+        ->setFrom(['purnama.frenky@gmail.com' => 'YEMI - MIS'])
+        ->setTo(['frenky.purnama@music.yamaha.com'])
+        //->setCc($set_to_cc_arr)
+        ->setSubject('FGS Stock (' . $yesterday_indo_format . ')')
+        ->send();
+
+        return [
+            'status' => 'OK',
+            'message' => 'Email has been sent...'
+        ];
+    }
+
     public function actionPermitSendEmail($set_to = 'frenky.purnama@music.yamaha.com', $set_to_cc = 'ipung.gautama@music.yamaha.com', $id = 'YE1409004202011061033')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
