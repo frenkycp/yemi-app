@@ -357,7 +357,7 @@ $grid_columns = [
             'style' => 'font-size: 12px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'repair_plan',
         'label' => 'Repair Plan',
         'vAlign' => 'middle',
@@ -372,7 +372,7 @@ $grid_columns = [
             'style' => 'font-size: 12px;'
         ],
         //'hidden' => true
-    ],
+    ],*/
     [
         'attribute' => 'down_time',
         'vAlign' => 'middle',
