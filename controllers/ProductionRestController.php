@@ -177,8 +177,8 @@ class ProductionRestController extends Controller
             'content' => $data_table
         ])
         ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
-        ->setTo(['frenky.purnama@music.yamaha.com'])
-        //->setTo(['gazalba.briljan@music.yamaha.com', 'frenky.purnama@music.yamaha.com', 'fredy.agus@music.yamaha.com'])
+        //->setTo(['frenky.purnama@music.yamaha.com'])
+        ->setTo(['gazalba.briljan@music.yamaha.com', 'frenky.purnama@music.yamaha.com', 'fredy.agus@music.yamaha.com'])
         //->setCc($set_to_cc_arr)
         ->setSubject('FGS Stock (' . $yesterday_indo_format . ')')
         ->send();
