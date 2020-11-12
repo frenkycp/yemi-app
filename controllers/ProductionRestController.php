@@ -28,6 +28,7 @@ use app\models\CarParkAttendance;
 use app\models\RfidCarScan;
 use app\models\IjazahItem;
 use app\models\PermitInputData;
+use app\models\ShippingPeriod;
 
 class ProductionRestController extends Controller
 {
@@ -99,31 +100,53 @@ class ProductionRestController extends Controller
         ->one();
         $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
 
-        $data = [
-            [
-                'destination' => 'G',
-                'qty' => 4376,
-                'amount' => 238460,
-                'total_m3' => 0
-            ],
-            [
-                'destination' => 'J',
-                'qty' => 557,
-                'amount' => 39555,
-                'total_m3' => 0
-            ],
-            [
-                'destination' => 'K',
-                'qty' => 455,
-                'amount' => 35733,
-                'total_m3' => 0
-            ],
-        ];
+        $tmp_shipping_period = ShippingPeriod::find()
+        ->where('ENDING_AMT IS NOT NULL')
+        ->all();
+
+        $serno_master_dst_arr = ArrayHelper::map(SernoMaster::find()->select('dest')->where(['!=', 'dest', ''])->andWhere('dest IS NOT NULL')->groupBy('dest')->all(), 'dest', 'dest');
+
+        $tmp_serno_master = ArrayHelper::map(SernoMaster::find()->where(['!=', 'dest', ''])->andWhere('dest IS NOT NULL')->all(), 'gmc', 'dest');
+        $tmp_data_qty = $tmp_data_amt = [];
+        $grandtotal_qty = $grandtotal_amount = 0;
+        foreach ($tmp_shipping_period as $ship_val) {
+            $destination = 'N/A';
+            if (isset($tmp_serno_master[$ship_val->ITEM])) {
+                $destination = $tmp_serno_master[$ship_val->ITEM];
+            }
+            if (!isset($tmp_data_qty[$destination])) {
+                $tmp_data_qty[$destination] = 0;
+            }
+            if (!isset($tmp_data_amt[$destination])) {
+                $tmp_data_amt[$destination] = 0;
+            }
+            $tmp_data_qty[$destination] += $ship_val->ENDING_QTY;
+            $tmp_data_amt[$destination] += $ship_val->ENDING_AMT;
+
+            $grandtotal_qty += $ship_val->ENDING_QTY;
+            $grandtotal_amount += $ship_val->ENDING_AMT;
+        }
+
+        foreach ($serno_master_dst_arr as $dest_val) {
+            if (!isset($tmp_data_qty[$dest_val])) {
+                $tmp_data_qty[$dest_val] = 0;
+            }
+            if (!isset($tmp_data_amt[$dest_val])) {
+                $tmp_data_amt[$dest_val] = 0;
+            }
+        }
+
+        arsort($tmp_data_amt);
 
         $yesterday_indo_format = date('d M\' Y', strtotime($yesterday));
         $data_table = '<span style="font-size: 20px;">
-            <b><u>FGS STOCK (' . $yesterday_indo_format . ')</u></b>
-        </span>
+            <b><u>FGS STOCK (Non Booking) ' . $yesterday_indo_format . '</u></b>
+        </span><br/>
+        <span style="font-size: 20px; font-weight: bold; font-family: Arial, sans-serif;">船予約待ちの完成品在庫</span>
+        <ul>
+            <li>Qty : ' . number_format($grandtotal_qty) . '</li>
+            <li>Amount : ' . number_format($grandtotal_amount) . '</li>
+        </ul>
         <table class="summary-tbl">
             <thead>
                 <tr>
@@ -135,25 +158,15 @@ class ProductionRestController extends Controller
             <tbody>
                 ';
         
-        $grandtotal_qty = $grandtotal_amount = 0;
-        foreach ($data as $key => $value) {
-            $grandtotal_qty += $value['qty'];
-            $grandtotal_amount += $value['amount'];
+        foreach ($tmp_data_amt as $key => $value) {
             $data_table .= '<tr>
-                <td class="text-center">' . $value['destination'] . '</td>
-                <td class="text-center">' . number_format($value['qty']) . '</td>
-                <td class="text-center">' . number_format($value['amount']) . '</td>
+                <td class="text-center">' . $key . '</td>
+                <td class="text-center">' . number_format($tmp_data_qty[$key]) . '</td>
+                <td class="text-center">' . number_format($value) . '</td>
             </tr>';
         }
 
         $data_table .= '</tbody>
-            <tfoot>
-                <tr>
-                    <td class="text-center">TOTAL</td>
-                    <td class="text-center">' . number_format($grandtotal_qty) . '</td>
-                    <td class="text-center">' . number_format($grandtotal_amount) . '</td>
-                </tr>
-            </tfoot>
         </table>
         <br/><br/>
         Thanks & Best Regards,<br/>
@@ -163,8 +176,9 @@ class ProductionRestController extends Controller
         \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/html'], [
             'content' => $data_table
         ])
-        ->setFrom(['purnama.frenky@gmail.com' => 'YEMI - MIS'])
+        ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
         ->setTo(['frenky.purnama@music.yamaha.com'])
+        //->setTo(['gazalba.briljan@music.yamaha.com', 'frenky.purnama@music.yamaha.com', 'fredy.agus@music.yamaha.com'])
         //->setCc($set_to_cc_arr)
         ->setSubject('FGS Stock (' . $yesterday_indo_format . ')')
         ->send();
