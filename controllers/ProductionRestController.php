@@ -29,6 +29,8 @@ use app\models\RfidCarScan;
 use app\models\IjazahItem;
 use app\models\PermitInputData;
 use app\models\ShippingPeriod;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ProductionRestController extends Controller
 {
@@ -102,14 +104,25 @@ class ProductionRestController extends Controller
 
         $tmp_shipping_period = ShippingPeriod::find()
         ->where('ENDING_AMT IS NOT NULL')
+        ->orderBy('ENDING_AMT DESC')
         ->all();
 
         $serno_master_dst_arr = ArrayHelper::map(SernoMaster::find()->select('dest')->where(['!=', 'dest', ''])->andWhere('dest IS NOT NULL')->groupBy('dest')->all(), 'dest', 'dest');
-
         $tmp_serno_master = ArrayHelper::map(SernoMaster::find()->where(['!=', 'dest', ''])->andWhere('dest IS NOT NULL')->all(), 'gmc', 'dest');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'GMC');
+        $sheet->setCellValue('B1', 'Description');
+        $sheet->setCellValue('C1', 'Destination');
+        $sheet->setCellValue('D1', 'Qty (Sets)');
+        $sheet->setCellValue('E1', 'Amount (USD)');
+
         $tmp_data_qty = $tmp_data_amt = [];
         $grandtotal_qty = $grandtotal_amount = 0;
+        $row = 1;
         foreach ($tmp_shipping_period as $ship_val) {
+            $row++;
             $destination = 'N/A';
             if (isset($tmp_serno_master[$ship_val->ITEM])) {
                 $destination = $tmp_serno_master[$ship_val->ITEM];
@@ -125,7 +138,17 @@ class ProductionRestController extends Controller
 
             $grandtotal_qty += $ship_val->ENDING_QTY;
             $grandtotal_amount += $ship_val->ENDING_AMT;
+
+            $sheet->setCellValue('A' . $row, $ship_val->ITEM);
+            $sheet->setCellValue('B' . $row, $ship_val->material_description);
+            $sheet->setCellValue('C' . $row, $destination);
+            $sheet->setCellValue('D' . $row, $ship_val->ENDING_QTY);
+            $sheet->setCellValue('E' . $row, $ship_val->ENDING_AMT);
         }
+
+        $excel_filename = 'FGS Stock (Non Booking).xlsx';
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('uploads/temp/' . $excel_filename);
 
         foreach ($serno_master_dst_arr as $dest_val) {
             if (!isset($tmp_data_qty[$dest_val])) {
@@ -144,15 +167,15 @@ class ProductionRestController extends Controller
         </span><br/>
         <span style="font-size: 20px; font-weight: bold; font-family: Arial, sans-serif;">船予約待ちの完成品在庫</span>
         <ul>
-            <li>Qty : ' . number_format($grandtotal_qty) . '</li>
-            <li>Amount : ' . number_format($grandtotal_amount) . '</li>
+            <li>Qty (sets) : ' . number_format($grandtotal_qty) . '</li>
+            <li>Amount (USD) : ' . number_format($grandtotal_amount) . '</li>
         </ul>
         <table class="summary-tbl">
             <thead>
                 <tr>
                     <th class="text-center" style="width: 100px;">Dest</th>
-                    <th class="text-center" style="width: 100px;">Qty</th>
-                    <th class="text-center" style="width: 100px;">Amount</th>
+                    <th class="text-center" style="width: 100px;">Qty (sets)</th>
+                    <th class="text-center" style="width: 100px;">Amount (USD)</th>
                 </tr>
             </thead>
             <tbody>
@@ -173,13 +196,14 @@ class ProductionRestController extends Controller
         YEMI - MIS
         ';
 
-        \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/html'], [
+        $email = \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/html'], [
             'content' => $data_table
-        ])
-        ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
+        ]);
+        $email->attach(\Yii::$app->basePath. '\web\uploads\temp\\' . $excel_filename);
+        $email->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
         //->setTo(['frenky.purnama@music.yamaha.com'])
-        ->setTo(['gazalba.briljan@music.yamaha.com', 'frenky.purnama@music.yamaha.com', 'fredy.agus@music.yamaha.com'])
-        //->setCc($set_to_cc_arr)
+        ->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', '', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com'])
+        ->setCc('frenky.purnama@music.yamaha.com')
         ->setSubject('FGS Stock (' . $yesterday_indo_format . ')')
         ->send();
 
