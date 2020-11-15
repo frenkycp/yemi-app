@@ -202,7 +202,7 @@ class ProductionRestController extends Controller
         $email->attach(\Yii::$app->basePath. '\web\uploads\temp\\' . $excel_filename);
         $email->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
         //->setTo(['frenky.purnama@music.yamaha.com'])
-        ->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', '', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com'])
+        ->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com'])
         ->setCc('frenky.purnama@music.yamaha.com')
         ->setSubject('FGS Stock (' . $yesterday_indo_format . ')')
         ->send();
