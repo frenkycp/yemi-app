@@ -803,6 +803,86 @@ $image_height = '300px';
     </li>
     <!-- END timeline item -->
 
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Oct. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-10-24</span>
+
+            <h3 class="timeline-header"><a href="#">Unmanned Supermarket- MY BOX<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+               Unmanned Supermarket
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201910_mybox.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Oct. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-10-24</span>
+
+            <h3 class="timeline-header"><a href="#">Unmanned Supermarket- MY SMT<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+               Unmanned Supermarket
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201910_mysmt.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Oct. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-10-24</span>
+
+            <h3 class="timeline-header"><a href="#">Unmanned Supermarket- MY wood<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+               Unmanned Supermarket
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201910_mywood.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
 	<!-- timeline time label -->
     <li class="time-label">
         <span class="bg-purple">
@@ -829,6 +909,62 @@ $image_height = '300px';
         </div>
     </li>
     <!-- END timeline item -->
+
+
+
+    <!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Sept. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-09-24</span>
+
+            <h3 class="timeline-header"><a href="#">My BPJS and My Facility<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+               System for information BPJS and Suggestion the Facility 
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201909_bpjs.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
+
+<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Sept. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-07-24</span>
+
+            <h3 class="timeline-header"><a href="#">Clinic Visitor Frequence Report<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+               Clinic Visitor Summary
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201909_klinik_fq.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
 
     <!-- timeline time label -->
     <li class="time-label">
@@ -1039,6 +1175,32 @@ $image_height = '300px';
         </div>
     </li>
     <!-- END timeline item -->
+<!-- timeline time label -->
+    <li class="time-label">
+        <span class="bg-purple">
+            Jul. 2019
+        </span>
+    </li>
+    <!-- /.timeline-label -->
+
+    <!-- timeline item -->
+    <li>
+        <!-- timeline icon -->
+        <i class="fa fa-user bg-teal"></i>
+        <div class="timeline-item">
+            <span class="time"><i class="fa fa-clock-o"></i> 2019-07-24</span>
+
+            <h3 class="timeline-header"><a href="#">Cutter Request System<span class="japanesse"></span></a></h3>
+
+            <div class="timeline-body">
+                Request System for re-Tip and new Cutter  
+                <br/>
+                <?= Html::img('@web/uploads/ABOUT/201907_grinding.png', ['class' => 'attachment-img', 'height' => $image_height]); ?>
+
+            </div>
+        </div>
+    </li>
+
 
 
 
