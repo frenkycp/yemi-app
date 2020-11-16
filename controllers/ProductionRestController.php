@@ -150,33 +150,45 @@ class ProductionRestController extends Controller
         $sheet->setCellValue('C1', 'Destination');
         $sheet->setCellValue('D1', 'Qty (Sets)');
         $sheet->setCellValue('E1', 'Amount (USD)');
+        $sheet->setCellValue('F1', 'M3');
 
-        $tmp_data_qty = $tmp_data_amt = [];
-        $grandtotal_qty = $grandtotal_amount = 0;
+        $tmp_data_qty = $tmp_data_amt = $tmp_data_m3 = [];
+        $grandtotal_qty = $grandtotal_amount = $grandtotal_m3 = 0;
         $row = 1;
         foreach ($tmp_shipping_period as $ship_val) {
             $row++;
             $destination = 'N/A';
-            if (isset($tmp_serno_master[$ship_val->ITEM])) {
-                $destination = $tmp_serno_master[$ship_val->ITEM];
+            if ($ship_val->DESTINATION != '-' AND $ship_val->DESTINATION != null) {
+                $destination = $ship_val->DESTINATION;
             }
+            /*if (isset($tmp_serno_master[$ship_val->ITEM])) {
+                $destination = $tmp_serno_master[$ship_val->ITEM];
+            }*/
+
             if (!isset($tmp_data_qty[$destination])) {
                 $tmp_data_qty[$destination] = 0;
             }
             if (!isset($tmp_data_amt[$destination])) {
                 $tmp_data_amt[$destination] = 0;
             }
+            if (!isset($tmp_data_m3[$destination])) {
+                $tmp_data_m3[$destination] = 0;
+            }
+
             $tmp_data_qty[$destination] += $ship_val->ENDING_QTY;
             $tmp_data_amt[$destination] += $ship_val->ENDING_AMT;
+            $tmp_data_m3[$destination] += $ship_val->ENDING_M3;
 
             $grandtotal_qty += $ship_val->ENDING_QTY;
             $grandtotal_amount += $ship_val->ENDING_AMT;
+            $grandtotal_m3 += $ship_val->ENDING_M3;
 
             $sheet->setCellValue('A' . $row, $ship_val->ITEM);
             $sheet->setCellValue('B' . $row, $ship_val->material_description);
             $sheet->setCellValue('C' . $row, $destination);
             $sheet->setCellValue('D' . $row, $ship_val->ENDING_QTY);
             $sheet->setCellValue('E' . $row, $ship_val->ENDING_AMT);
+            $sheet->setCellValue('F' . $row, round($ship_val->ENDING_M3, 3));
         }
 
         $excel_filename = 'FGS Stock (Non Booking).xlsx';
@@ -190,6 +202,9 @@ class ProductionRestController extends Controller
             if (!isset($tmp_data_amt[$dest_val])) {
                 $tmp_data_amt[$dest_val] = 0;
             }
+            if (!isset($tmp_data_m3[$dest_val])) {
+                $tmp_data_m3[$dest_val] = 0;
+            }
         }
 
         arsort($tmp_data_amt);
@@ -202,6 +217,7 @@ class ProductionRestController extends Controller
         <ul>
             <li>Qty (sets) : ' . number_format($grandtotal_qty) . '</li>
             <li>Amount (USD) : ' . number_format($grandtotal_amount) . '</li>
+            <li>M3 : ' . round($grandtotal_m3, 3) . '</li>
         </ul>
         <table class="summary-tbl">
             <thead>
@@ -209,6 +225,7 @@ class ProductionRestController extends Controller
                     <th class="text-center" style="width: 100px;">Dest</th>
                     <th class="text-center" style="width: 100px;">Qty (sets)</th>
                     <th class="text-center" style="width: 100px;">Amount (USD)</th>
+                    <th class="text-center" style="width: 100px;">M3</th>
                 </tr>
             </thead>
             <tbody>
@@ -219,6 +236,7 @@ class ProductionRestController extends Controller
                 <td class="text-center">' . $key . '</td>
                 <td class="text-center">' . number_format($tmp_data_qty[$key]) . '</td>
                 <td class="text-center">' . number_format($value) . '</td>
+                <td class="text-center">' . round($tmp_data_m3[$key], 3) . '</td>
             </tr>';
         }
 
