@@ -159,7 +159,7 @@ echo '</pre>';*/
         ]);?>
     </div>
     <div class="col-md-2">
-        <?= $form->field($model, 'item_category')->dropDownList(ArrayHelper::map(app\models\TraceItemDtr::find()->select('CATEGORY')->where('CATEGORY IS NOT NULL')->groupBy('CATEGORY')->orderBy('CATEGORY')->all(), 'CATEGORY', 'CATEGORY')); ?>
+        <?= $form->field($model, 'item_category')->dropDownList($item_category_arr); ?>
     </div>
     <div class="form-group">
         <br/>
@@ -239,9 +239,11 @@ echo '</pre>';*/
     <thead>
         <tr>
             <th class="text-center">Action</th>
+            <th class="text-center">Item Category</th>
             <th class="text-center">Serial No.</th>
             <th class="text-center">Part No.</th>
             <th class="">Description</th>
+            <th class="">Location</th>
             <th class="text-center">Qty</th>
             <th class="text-center">UM</th>
             <th class="text-center">Exp. Rev. No.</th>
@@ -276,9 +278,11 @@ echo '</pre>';*/
                     
                     ?>
                 </td>
+                <td class="text-center"><?= $value->CATEGORY; ?></td>
                 <td class="text-center"><?= $value->SERIAL_NO; ?></td>
                 <td class="text-center"><?= $value->ITEM; ?></td>
                 <td class=""><?= $value->ITEM_DESC; ?></td>
+                <td class=""><?= $value->LOC_DESC; ?></td>
                 <td class="text-center"><?= $value->NILAI_INVENTORY; ?></td>
                 <td class="text-center"><?= $value->UM; ?></td>
                 <td class="text-center"><?= $value->EXPIRED_REVISION_NO; ?></td>

@@ -72,15 +72,23 @@ class DisplayPrdController extends Controller
 
     public function actionExpirationMonitoringGetRemark($post_date, $item_category, $data_category = 'expired')
     {
+        if ($item_category == 'ALL') {
+            $filter_arr = [
+                'AVAILABLE' => 'Y',
+            ];
+        } else {
+            [
+                'AVAILABLE' => 'Y',
+                'CATEGORY' => $item_category
+            ];
+        }
+
         if ($data_category == 'expired') {
             $tmp_trace_arr = TraceItemDtr::find()
             ->where([
                 '<=', 'EXPIRED_DATE', $post_date
             ])
-            ->andWhere([
-                'AVAILABLE' => 'Y',
-                'CATEGORY' => $item_category
-            ])
+            ->andWhere($filter_arr)
             ->orderBy('EXPIRED_DATE')
             ->all();
             $tmp_title = 'Expired';
@@ -90,19 +98,13 @@ class DisplayPrdController extends Controller
                 '<=', 'EXPIRED_DATE', date('Y-m-d', strtotime($post_date . ' +1 month'))
             ])
             ->andWhere(['>', 'EXPIRED_DATE', $post_date])
-            ->andWhere([
-                'AVAILABLE' => 'Y',
-                'CATEGORY' => $item_category
-            ])
+            ->andWhere($filter_arr)
             ->orderBy('EXPIRED_DATE')
             ->all();
             $tmp_title = '1 Month Before Expired';
         } else {
             $tmp_trace_arr = TraceItemDtr::find()
-            ->where([
-                'AVAILABLE' => 'Y',
-                'CATEGORY' => $item_category
-            ])
+            ->where($filter_arr)
             ->orderBy('EXPIRED_DATE')
             ->all();
             $tmp_title = 'All Items';
@@ -118,10 +120,12 @@ class DisplayPrdController extends Controller
         $remark .= '<table class="table table-bordered table-striped table-hover">';
         $remark .= '<tr style="font-size: 12px;">
             <th class="text-center">No.</th>
+            <th class="text-center">Category</th>
             <th class="text-center">Part No.</th>
             <th class="">Part Description</th>
-            <th class="text-center">Category</th>
-            <th class="text-center">Amount</th>
+            <th class="">Location</th>
+            <th class="text-center">Qty</th>
+            <th class="text-center">UM</th>
             <th class="text-center">Rcv. Date</th>
             <th class="text-center">Exp. Date</th>
         </tr>';
@@ -130,10 +134,12 @@ class DisplayPrdController extends Controller
         foreach ($tmp_trace_arr as $tmp_trace) {
             $remark .= '<tr style="font-size: 12px;">
                 <td class="text-center">' . $no . '</td>
+                <td class="text-center">' . $tmp_trace->CATEGORY . '</td>
                 <td class="text-center">' . $tmp_trace->ITEM . '</td>
                 <td class="">' . $tmp_trace->ITEM_DESC . '</td>
-                <td class="text-center">' . $tmp_trace->CATEGORY . '</td>
-                <td class="text-center">' . $tmp_trace->STD_AMT . '</td>
+                <td class="">' . $tmp_trace->LOC_DESC . '</td>
+                <td class="text-center">' . $tmp_trace->NILAI_INVENTORY . '</td>
+                <td class="text-center">' . $tmp_trace->UM . '</td>
                 <td class="text-center">' . date('d M\' Y', strtotime($tmp_trace->RECEIVED_DATE)) . '</td>
                 <td class="text-center">' . date('d M\' Y', strtotime($tmp_trace->EXPIRED_DATE)) . '</td>
             </tr>';
@@ -159,20 +165,32 @@ class DisplayPrdController extends Controller
 
         $model->from_date = $today;
         $model->to_date = date('Y-m-t', strtotime(' +3 months'));
-        $model->item_category = 'ADHESIVE';
+        $model->item_category = 'ALL';
+
+        $item_category_arr = ArrayHelper::map(TraceItemDtr::find()->select('CATEGORY')->where('CATEGORY IS NOT NULL')->groupBy('CATEGORY')->orderBy('CATEGORY')->all(), 'CATEGORY', 'CATEGORY');
+        $item_category_arr['ALL'] = '-ALL CATEGORY-';
 
         $tmp_data = $data = [];
         if ($model->load($_GET)) {
             
         }
 
-        $tmp_trace_arr = TraceItemDtr::find()
-        ->where([
-            'AVAILABLE' => 'Y',
-            'CATEGORY' => $model->item_category
-        ])
-        ->orderBy('EXPIRED_DATE')
-        ->all();
+        if ($model->item_category == 'ALL') {
+            $tmp_trace_arr = TraceItemDtr::find()
+            ->where([
+                'AVAILABLE' => 'Y',
+            ])
+            ->orderBy('EXPIRED_DATE')
+            ->all();
+        } else {
+            $tmp_trace_arr = TraceItemDtr::find()
+            ->where([
+                'AVAILABLE' => 'Y',
+                'CATEGORY' => $model->item_category
+            ])
+            ->orderBy('EXPIRED_DATE')
+            ->all();
+        }
 
         $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
         $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
@@ -258,6 +276,7 @@ class DisplayPrdController extends Controller
         return $this->render('expiration-monitoring', [
             'model' => $model,
             'data' => $data,
+            'item_category_arr' => $item_category_arr,
             'tmp_trace_arr' => $tmp_trace_arr,
         ]);
     }
