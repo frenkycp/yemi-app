@@ -5,9 +5,10 @@ use yii\web\View;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
+use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Maintenance Shift Data <small>' . $today .'</small><span class="japanesse text-green"></span>',
+    'page_title' => 'Maintenance Shift Data <span class="japanesse text-green"></span>',
     'tab_title' => 'Maintenance Shift Data',
     'breadcrumbs_title' => 'Maintenance Shift Data'
 ];
@@ -49,6 +50,33 @@ JS;
 $this->registerJs($script, View::POS_HEAD );
 
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['index']),
+]); ?>
+
+<div class="row">
+    <div class="col-md-2">
+        <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
+            'type' => DatePicker::TYPE_INPUT,
+            'options' => [
+                'placeholder' => 'Enter date ...',
+                'class' => 'form-control',
+                'style' => 'font-size: 1em;',
+                'onchange'=>'this.form.submit()',
+            ],
+            'pluginOptions' => [
+                'autoclose'=>true,
+                'format' => 'yyyy-mm-dd'
+            ]
+        ])->label('DATE :'); ?>
+    </div>
+    
+</div>
+<br/>
+
+<?php ActiveForm::end(); ?>
 <div class="row">
     <div class="col-md-4">
         <div class="box box-primary box-solid">

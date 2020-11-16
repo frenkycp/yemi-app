@@ -29,6 +29,8 @@ use Yii;
  * @property double $RCV_AMT
  * @property double $ISSUE_AMT
  * @property double $ENDING_AMT
+ * @property double $item_m3
+ * @property double $ENDING_M3
  * @property string $aliasModel
  */
 abstract class ShippingPeriod extends \yii\db\ActiveRecord
@@ -59,7 +61,7 @@ abstract class ShippingPeriod extends \yii\db\ActiveRecord
     {
         return [
             [['ID'], 'required'],
-            [['standard_price', 'BEGIN_QTY', 'RCV_QTY', 'ISSUE_QTY', 'ENDING_QTY', 'BEGIN_AMT', 'RCV_AMT', 'ISSUE_AMT', 'ENDING_AMT'], 'number'],
+            [['standard_price', 'BEGIN_QTY', 'RCV_QTY', 'ISSUE_QTY', 'ENDING_QTY', 'BEGIN_AMT', 'RCV_AMT', 'ISSUE_AMT', 'ENDING_AMT', 'item_m3', 'ENDING_M3'], 'number'],
             [['ID', 'DESTINATION', 'BU', 'LINE', 'MODEL', 'FG_KD', 'hpl_desc'], 'string', 'max' => 50],
             [['PERIOD'], 'string', 'max' => 6],
             [['ITEM'], 'string', 'max' => 13],
@@ -93,6 +95,8 @@ abstract class ShippingPeriod extends \yii\db\ActiveRecord
             'RCV_AMT' => 'Rcv Amt',
             'ISSUE_AMT' => 'Issue Amt',
             'ENDING_AMT' => 'Ending Amt',
+            'item_m3' => 'Item M3',
+            'ENDING_M3' => 'Ending M3',
         ];
     }
 
