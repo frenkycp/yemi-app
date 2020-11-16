@@ -15,9 +15,43 @@ use app\models\CarParkAttendance;
 use app\models\WorkDayTbl;
 use app\models\KoyemiInOutView;
 use app\models\Karyawan;
+use app\models\PermitInputData;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionTopPermitData($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $data = PermitInputData::find()
+        ->select([
+            'period' => 'extract(year_month FROM tgl)', 'nik', 'nama',
+            'total' => 'COUNT(id)'
+        ])
+        ->where(['extract(year_month FROM tgl)' => $model->period])
+        ->groupBy(['extract(year_month FROM tgl)', 'nik', 'nama'])
+        ->orderBy('total DESC')
+        ->limit(20)
+        ->all();
+
+        return $this->render('top-permit-data', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
+
     public function actionKoyemiMaxCapacityData($max_capacity='')
     {
         date_default_timezone_set('Asia/Jakarta');

@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class PermitInputData extends BasePermitInputData
 {
+    public $period, $total;
 
     public function behaviors()
     {
