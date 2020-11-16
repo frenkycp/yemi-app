@@ -34,6 +34,39 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ProductionRestController extends Controller
 {
+    public function actionTotalEmpByJoinDate($from_date = '', $to_date = '')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+
+        if ($from_date == '') {
+            $from_date = date('Y-m-01', strtotime(' -1 month'));
+        }
+        if ($to_date == '') {
+            $to_date = date('Y-m-t', strtotime(' -1 month'));
+        }
+
+        $tmp_data = SunfishViewEmp::find()
+        ->select([
+            'start_date' => 'FORMAT(start_date, \'yyyy-MM-dd\')',
+            'total_mp' => 'COUNT(Emp_no)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'FORMAT(start_date, \'yyyy-MM-dd\')', $from_date],
+            ['<=', 'FORMAT(start_date, \'yyyy-MM-dd\')', $to_date]
+        ])
+        //->andWhere(['status' => 1])
+        ->andWhere(['NOT IN', 'cost_center_code', ['10', '110X']])
+        ->andWhere('PATINDEX(\'YE%\', Emp_no) > 0')
+        ->groupBy(['FORMAT(start_date, \'yyyy-MM-dd\')'])
+        ->orderBy('start_date')
+        ->asArray()
+        ->all();
+
+        return $tmp_data;
+    }
+
     public function actionSendNgByModel($model_name)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
