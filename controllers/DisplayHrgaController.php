@@ -40,7 +40,10 @@ class DisplayHrgaController extends Controller
             'period' => 'extract(year_month FROM tgl)', 'nik', 'nama',
             'total' => 'COUNT(id)'
         ])
-        ->where(['extract(year_month FROM tgl)' => $model->period])
+        ->where([
+            'extract(year_month FROM tgl)' => $model->period,
+            'handleby' => 'pribadi'
+        ])
         ->groupBy(['extract(year_month FROM tgl)', 'nik', 'nama'])
         ->orderBy('total DESC')
         ->limit(20)
