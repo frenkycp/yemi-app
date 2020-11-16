@@ -177,18 +177,18 @@ class ProductionRestController extends Controller
 
             $tmp_data_qty[$destination] += $ship_val->ENDING_QTY;
             $tmp_data_amt[$destination] += $ship_val->ENDING_AMT;
-            $tmp_data_m3[$destination] += $ship_val->ENDING_M3;
+            $tmp_data_m3[$destination] += round($ship_val->ENDING_M3);
 
             $grandtotal_qty += $ship_val->ENDING_QTY;
             $grandtotal_amount += $ship_val->ENDING_AMT;
-            $grandtotal_m3 += $ship_val->ENDING_M3;
+            $grandtotal_m3 += round($ship_val->ENDING_M3);
 
             $sheet->setCellValue('A' . $row, $ship_val->ITEM);
             $sheet->setCellValue('B' . $row, $ship_val->material_description);
             $sheet->setCellValue('C' . $row, $destination);
             $sheet->setCellValue('D' . $row, $ship_val->ENDING_QTY);
             $sheet->setCellValue('E' . $row, $ship_val->ENDING_AMT);
-            $sheet->setCellValue('F' . $row, round($ship_val->ENDING_M3, 3));
+            $sheet->setCellValue('F' . $row, round($ship_val->ENDING_M3));
         }
 
         $excel_filename = 'FGS Stock (Non Booking).xlsx';
@@ -217,7 +217,7 @@ class ProductionRestController extends Controller
         <ul>
             <li>Qty (sets) : ' . number_format($grandtotal_qty) . '</li>
             <li>Amount (USD) : ' . number_format($grandtotal_amount) . '</li>
-            <li>M3 : ' . round($grandtotal_m3, 3) . '</li>
+            <li>M3 : ' . number_format($grandtotal_m3) . '</li>
         </ul>
         <table class="summary-tbl">
             <thead>
@@ -236,7 +236,7 @@ class ProductionRestController extends Controller
                 <td class="text-center">' . $key . '</td>
                 <td class="text-center">' . number_format($tmp_data_qty[$key]) . '</td>
                 <td class="text-center">' . number_format($value) . '</td>
-                <td class="text-center">' . round($tmp_data_m3[$key], 3) . '</td>
+                <td class="text-center">' . round($tmp_data_m3[$key]) . '</td>
             </tr>';
         }
 
@@ -247,14 +247,14 @@ class ProductionRestController extends Controller
         YEMI - MIS
         ';
 
-        $email = \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/html'], [
+        $email = \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/html'], [
             'content' => $data_table
         ]);
         $email->attach(\Yii::$app->basePath. '\web\uploads\temp\\' . $excel_filename);
         $email->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
-        //->setTo(['frenky.purnama@music.yamaha.com'])
-        ->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com'])
-        ->setCc('frenky.purnama@music.yamaha.com')
+        ->setTo(['frenky.purnama@music.yamaha.com'])
+        //->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com'])
+        //->setCc('frenky.purnama@music.yamaha.com')
         ->setSubject('FGS Stock (' . $yesterday_indo_format . ')')
         ->send();
 
