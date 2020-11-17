@@ -22,6 +22,7 @@ use app\models\SernoInputAll;
 use app\models\VmsItem;
 use app\models\TraceItemDtr;
 use app\models\TraceItemDtrLog;
+use app\models\DbSmtReelInOut;
 
 class DisplayPrdController extends Controller
 {
@@ -998,17 +999,17 @@ class DisplayPrdController extends Controller
 
         }
 
-        $tmp_in_out = DbSmtMaterialInOut::find()
+        $tmp_in_out = DbSmtReelInOut::find()
         ->select([
-            'post_date' => 'DATE(tgl)',
-            'total_count' => 'COUNT(tgl)'
+            'post_date' => 'DATE(date)',
+            'total_count' => 'COUNT(date)'
         ])
         ->where([
             'AND',
-            ['>=', 'tgl', $model->from_date . ' 00:00:00'],
-            ['<=', 'tgl', $model->to_date . ' 23:59:59']
+            ['>=', 'date', $model->from_date . ' 00:00:00'],
+            ['<=', 'date', $model->to_date . ' 23:59:59']
         ])
-        ->groupBy(['DATE(tgl)'])
+        ->groupBy(['DATE(date)'])
         ->orderBy('post_date')
         ->all();
 
