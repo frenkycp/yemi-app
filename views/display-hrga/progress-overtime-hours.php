@@ -143,9 +143,11 @@ $grand_total_hours = 0;
 <?php ActiveForm::end(); ?>
 
 <div style="margin: auto; width: 800px; padding-top: 20px;" id="display-container">
+
     <div class="text-center" style="font-size: 24px; background-color: #61258e; margin-bottom: 20px; color: white;">
         <span class="japanesse light-green">一人当たりの残業時間</span> (Progress overtime hours per man) H-1
     </div>
+
     <div class="row">
         <div class="col-sm-12">
             <table class="table summary-tbl">
@@ -166,6 +168,7 @@ $grand_total_hours = 0;
             </table>
         </div>
     </div>
+
     <div class="row">
         <div class="col-sm-12">
             <table class="table summary-tbl">
@@ -194,4 +197,41 @@ $grand_total_hours = 0;
             </table>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <u><b>Top 10 Data</b></u>
+            <table class="table summary-tbl">
+                <thead>
+                    <tr>
+                        <th class="text-center">No.</th>
+                        <th class="text-center">NIK</th>
+                        <th class="">Name</th>
+                        <th class="">Section</th>
+                        <th class="text-center">Total OT(hour)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $no = 1;
+                    foreach ($tmp_top_ten as $key => $value):
+                        $total_hours = round(($value['total_ot'] / 60));
+                        //$hours_per_mp = round(($total_hours / $value['total_mp']), 1);
+                        //$grand_total_hours += $total_hours;
+                        ?>
+                        <tr>
+                            <td class="text-center"><?= $no; ?></td>
+                            <td class="text-center"><?= $value['emp_no']; ?></td>
+                            <td class=""><?= $value['full_name']; ?></td>
+                            <td class=""><?= $value['cost_center']; ?></td>
+                            <td class="text-center"><?= number_format($total_hours); ?></td>
+                        </tr>
+                    <?php
+                    $no++;
+                    endforeach ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
