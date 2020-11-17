@@ -93,7 +93,7 @@ class ProductionRestController extends Controller
         ]);
         $email->attach(\Yii::$app->basePath. '\web\mita_insight.png');
         $email->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
-        ->setTo(['frenky.purnama@music.yamaha.com'])
+        ->setTo(['gazalba.briljan@music.yamaha.com', 'yunan.prawoto@music.yamaha.com', 'abdul.ghofur@music.yamaha.com', 'muhammad.zamroni@music.yamaha.com', 'sony.wisantomo@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'frenky.purnama@music.yamaha.com'])
         //->setCc($set_to_cc_arr)
         ->setSubject($model_name . ' OQC Monitoring')
         ->send();
