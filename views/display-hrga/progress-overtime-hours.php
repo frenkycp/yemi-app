@@ -213,22 +213,31 @@ $grand_total_hours = 0;
                 </thead>
                 <tbody>
                     <?php
-                    $no = 1;
-                    foreach ($tmp_top_ten as $key => $value):
-                        $total_hours = round(($value['total_ot'] / 60));
-                        //$hours_per_mp = round(($total_hours / $value['total_mp']), 1);
-                        //$grand_total_hours += $total_hours;
+                    if ($tmp_top_ten) {
+                        $no = 1;
+                        foreach ($tmp_top_ten as $key => $value):
+                            $total_hours = round(($value['total_ot'] / 60));
+                            //$hours_per_mp = round(($total_hours / $value['total_mp']), 1);
+                            //$grand_total_hours += $total_hours;
+                            ?>
+                            <tr>
+                                <td class="text-center"><?= $no; ?></td>
+                                <td class="text-center"><?= $value['emp_no']; ?></td>
+                                <td class=""><?= $value['full_name']; ?></td>
+                                <td class=""><?= $value['cost_center']; ?></td>
+                                <td class="text-center"><?= number_format($total_hours); ?></td>
+                            </tr>
+                        <?php
+                        $no++;
+                        endforeach;
+                    } else {
                         ?>
                         <tr>
-                            <td class="text-center"><?= $no; ?></td>
-                            <td class="text-center"><?= $value['emp_no']; ?></td>
-                            <td class=""><?= $value['full_name']; ?></td>
-                            <td class=""><?= $value['cost_center']; ?></td>
-                            <td class="text-center"><?= number_format($total_hours); ?></td>
+                            <td>Zero Overtime...</td>
                         </tr>
-                    <?php
-                    $no++;
-                    endforeach ?>
+                        <?php
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
