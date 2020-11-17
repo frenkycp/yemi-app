@@ -1348,7 +1348,7 @@ class DisplayController extends Controller
 
         $tmp_top_minus = VmsPlanActual::find()
         ->select([
-            'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
+            'MODEL','ITEM', 'ITEM_DESC',
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
             'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
             'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
@@ -1360,8 +1360,8 @@ class DisplayController extends Controller
         ->andWhere(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
         ->andWhere('LINE IS NOT NULL')
         ->andWhere(['<>', 'LINE', 'SPC'])
-        ->groupBy('MODEL, ITEM, ITEM_DESC, DESTINATION')
-        ->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->groupBy('MODEL, ITEM, ITEM_DESC')
+        //->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
         ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
         ->limit(3)
         ->all();

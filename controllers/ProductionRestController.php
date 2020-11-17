@@ -88,11 +88,11 @@ class ProductionRestController extends Controller
             ];
         }
 
-        $email = \Yii::$app->mailer->compose(['html' => '@app/mail/layouts/empty'], [
+        $email = \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/empty'], [
             'content' => $response['data']
         ]);
         $email->attach(\Yii::$app->basePath. '\web\mita_insight.png');
-        $email->setFrom(['purnama.frenky@gmail.com' => 'YEMI - MIS'])
+        $email->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
         ->setTo(['frenky.purnama@music.yamaha.com'])
         //->setCc($set_to_cc_arr)
         ->setSubject($model_name . ' OQC Monitoring')
@@ -247,13 +247,13 @@ class ProductionRestController extends Controller
         YEMI - MIS
         ';
 
-        $email = \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/html'], [
+        \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/html'], [
             'content' => $data_table
-        ]);
-        $email->attach(\Yii::$app->basePath. '\web\uploads\temp\\' . $excel_filename);
-        $email->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
-        ->setTo(['frenky.purnama@music.yamaha.com'])
-        //->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com'])
+        ])
+        ->attach(\Yii::$app->basePath. '\web\uploads\temp\\' . $excel_filename)
+        ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
+        //->setTo(['frenky.purnama@music.yamaha.com'])
+        ->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com', 'frenky.purnama@music.yamaha.com'])
         //->setCc('frenky.purnama@music.yamaha.com')
         ->setSubject('FGS Stock (' . $yesterday_indo_format . ')')
         ->send();
