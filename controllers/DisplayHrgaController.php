@@ -230,12 +230,25 @@ class DisplayHrgaController extends Controller
             
         }
 
+        $tmp_top_ten = SunfishAttendanceData::find()
+        ->select([
+            'emp_no', 'full_name', 'cost_center', 'total_ot' => 'SUM(total_ot)'
+        ])
+        ->where('total_ot IS NOT NULL AND PATINDEX(\'YE%\', emp_no) > 0')
+        ->andWhere([
+            'FORMAT(shiftendtime, \'yyyyMM\')' => $model->period
+        ])
+        ->groupBy('emp_no, full_name, cost_center')
+        ->orderBy('SUM(total_ot) DESC')
+        ->limit(10)->asArray()->all();
+
         return $this->render('progress-overtime-hours', [
             'data' => $data,
             'grand_total_mp' => $grand_total_mp,
             'model' => $model,
             'tmp_attendance' => $tmp_attendance,
             'total_mp' => $total_mp,
+            'tmp_top_ten' => $tmp_top_ten,
         ]);
     }
 
