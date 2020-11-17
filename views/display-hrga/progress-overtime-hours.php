@@ -24,7 +24,7 @@ $this->registerJsFile('@web/js/svgLoader.js');
 $css_string = "
     //.form-control, .control-label {background-color: #FFF; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 0.4em; text-align: center;}
+    .content-header {color: white; font-size: 0.4em; text-align: center; display: none;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -142,49 +142,56 @@ $grand_total_hours = 0;
 
 <?php ActiveForm::end(); ?>
 
-<div class="row" style="margin-top: 5px;">
-    <div class="col-sm-6">
-        <table class="table summary-tbl">
-            <thead>
-                <tr>
-                    <th>Section</th>
-                    <th class="text-center">Total Hours</th>
-                    <th class="text-center">Total MP</th>
-                    <th class="text-center">Hours per MP</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($data as $key => $value):
-                    $total_hours = round(($value['total_ot'] / 60));
-                    $hours_per_mp = round(($total_hours / $value['total_mp']), 1);
-                    $grand_total_hours += $total_hours;
-                    ?>
-                    <tr>
-                        <td class=""><?= $key; ?></td>
-                        <td class="text-center"><?= number_format($total_hours); ?></td>
-                        <td class="text-center"><?= number_format($value['total_mp']); ?></td>
-                        <td class="text-center"><?= $hours_per_mp; ?></td>
-                    </tr>
-                <?php endforeach ?>
-            </tbody>
-        </table>
+<div style="margin: auto; width: 800px; padding-top: 20px;" id="display-container">
+    <div class="text-center" style="font-size: 24px; background-color: #61258e; margin-bottom: 20px; color: white;">
+        <span class="japanesse light-green">一人当たりの残業時間</span> (Progress overtime hours per man) H-1
     </div>
-    <div class="col-sm-6">
-        <table class="table summary-tbl">
-            <thead>
-                <tr>
-                    <th class="text-center" style="font-size: 2em;">Total Overtime<br/>(A)</th>
-                    <th class="text-center" style="font-size: 2em;">Total MP<br/>(B)</th>
-                    <th class="text-center" style="font-size: 2em;">Hours per MP<br/>(A/B)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-center" style="font-size: 4em;"><?= number_format($grand_total_hours); ?></td>
-                    <td class="text-center" style="font-size: 4em;"><?= number_format($grand_total_mp); ?></td>
-                    <td class="text-center" style="font-size: 4em;"><?= round($grand_total_hours / $grand_total_mp, 1); ?></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table summary-tbl">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="font-size: 2em;">Total Overtime<br/>(A)</th>
+                        <th class="text-center" style="font-size: 2em;">Total MP<br/>(B)</th>
+                        <th class="text-center" style="font-size: 2em;">Hours per MP<br/>(A/B)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center" style="font-size: 4em;"><?= number_format($grand_total_hours); ?></td>
+                        <td class="text-center" style="font-size: 4em;"><?= number_format($grand_total_mp); ?></td>
+                        <td class="text-center" style="font-size: 4em;"><?= round($grand_total_hours / $grand_total_mp, 1); ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table summary-tbl">
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th class="text-center">Total Hours</th>
+                        <th class="text-center">Total MP</th>
+                        <th class="text-center">Hours per MP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($data as $key => $value):
+                        $total_hours = round(($value['total_ot'] / 60));
+                        $hours_per_mp = round(($total_hours / $value['total_mp']), 1);
+                        $grand_total_hours += $total_hours;
+                        ?>
+                        <tr>
+                            <td class=""><?= $key; ?></td>
+                            <td class="text-center"><?= number_format($total_hours); ?></td>
+                            <td class="text-center"><?= number_format($value['total_mp']); ?></td>
+                            <td class="text-center"><?= $hours_per_mp; ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
