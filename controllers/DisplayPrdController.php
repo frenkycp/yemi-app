@@ -23,9 +23,52 @@ use app\models\VmsItem;
 use app\models\TraceItemDtr;
 use app\models\TraceItemDtrLog;
 use app\models\DbSmtReelInOut;
+use app\models\ClientStatus;
 
 class DisplayPrdController extends Controller
 {
+    public function actionNetworkStatusData($value='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $this_time = date('Y-m-d H:i:s');
+
+        $tmp_data_client = ClientStatus::find()
+        ->where(['visible' => 1])
+        ->all();
+
+        $tmp_status_arr = [];
+        foreach ($tmp_data_client as $key => $value) {
+            $tmp_new_class = 'client-widget bg-green';
+            if ($value->reply_roundtriptime > 10) {
+                $tmp_new_class = 'client-widget bg-yellow';
+            }
+
+            $diff_s = strtotime($this_time) - strtotime($value->last_update);
+            if ($diff_s > 60) {
+                $tmp_new_class = 'client-widget bg-red';
+            }
+
+            $tmp_status_arr[$value->server_mac_address]['new_class'] = $tmp_new_class;
+        }
+
+        return $tmp_status_arr;
+    }
+
+    public function actionNetworkStatus($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = ClientStatus::find()
+        ->where(['visible' => 1])
+        ->all();
+
+        return $this->render('network-status', [
+            'data' => $data,
+        ]);
+    }
+
     public function actionExpirationGetLog($SERIAL_NO)
     {
         $tmp_item = TraceItemDtr::findOne($SERIAL_NO);
