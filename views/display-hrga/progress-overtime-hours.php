@@ -42,6 +42,7 @@ $css_string = "
     .summary-tbl{
         //border:1px solid #29B6F6;
         border-top: 0;
+        margin-bottom: 10px;
     }
     .summary-tbl > tbody > tr > td{
         border:1px solid #777474;
@@ -123,6 +124,10 @@ print_r($data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 $grand_total_hours = 0;
+foreach ($data as $key => $value) {
+    $total_hours = round(($value['total_ot'] / 60));
+    $grand_total_hours += $total_hours;
+}
 ?>
 <?php $form = ActiveForm::begin([
     'method' => 'get',
@@ -142,9 +147,9 @@ $grand_total_hours = 0;
 
 <?php ActiveForm::end(); ?>
 
-<div style="margin: auto; width: 800px; padding-top: 20px;" id="display-container">
+<div style="margin: auto; width: 800px; padding-top: 10px;" id="display-container">
 
-    <div class="text-center" style="font-size: 24px; background-color: #61258e; margin-bottom: 20px; color: white;">
+    <div class="text-center" style="font-size: 24px; background-color: #61258e; margin-bottom: 10px; color: white; border-radius: 5px;">
         <span class="japanesse light-green">一人当たりの残業時間</span> (Progress overtime hours per man) H-1
     </div>
 
@@ -184,7 +189,7 @@ $grand_total_hours = 0;
                     <?php foreach ($data as $key => $value):
                         $total_hours = round(($value['total_ot'] / 60));
                         $hours_per_mp = round(($total_hours / $value['total_mp']), 1);
-                        $grand_total_hours += $total_hours;
+                        //$grand_total_hours += $total_hours;
                         ?>
                         <tr>
                             <td class=""><?= $key; ?></td>
