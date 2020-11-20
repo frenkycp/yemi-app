@@ -48,7 +48,7 @@ class ProductionRestController extends Controller
 
         $tmp_data = SunfishViewEmp::find()
         ->select([
-            'start_date' => 'FORMAT(start_date, \'yyyy-MM-dd\')',
+            'start_date' => 'FORMAT(start_date, \'yyyy-MM-dd\')', 'cost_center_name',
             'total_mp' => 'COUNT(Emp_no)'
         ])
         ->where([
@@ -59,8 +59,8 @@ class ProductionRestController extends Controller
         //->andWhere(['status' => 1])
         ->andWhere(['NOT IN', 'cost_center_code', ['10', '110X']])
         ->andWhere('PATINDEX(\'YE%\', Emp_no) > 0')
-        ->groupBy(['FORMAT(start_date, \'yyyy-MM-dd\')'])
-        ->orderBy('start_date')
+        ->groupBy(['FORMAT(start_date, \'yyyy-MM-dd\')', 'cost_center_name'])
+        ->orderBy('start_date, cost_center_name')
         ->asArray()
         ->all();
 
