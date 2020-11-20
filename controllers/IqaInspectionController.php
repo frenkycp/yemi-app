@@ -122,6 +122,7 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
         $name = $session['iqa_inspection_name'];
 		date_default_timezone_set('Asia/Jakarta');
 		$model = $this->findModel($SEQ_LOG);
+        $model->inspect_by_id = $nik;
 		//$model->POST_DATE = date('Y-m-d', strtotime($model->POST_DATE));
 
 		$model_judgement = new \yii\base\DynamicModel([
@@ -143,8 +144,14 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 			if ($model_judgement->remark != '') {
 				$model->Remark = $model_judgement->remark;
 			}
-			$model->inspect_by_id = $nik;
-			$model->inspect_by_name = $name;
+			$tmp_karyawan = Karyawan::find()
+            ->where([
+                'OR',
+                ['NIK' => $model->inspect_by_id],
+                ['NIK_SUN_FISH' => $model->inspect_by_id],
+            ])
+            ->one();
+			$model->inspect_by_name = $tmp_karyawan->NAMA_KARYAWAN;
 			$model->inspect_datetime = date('Y-m-d H:i:s');
 			$model->inspect_period = date('Ym');
 

@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
+use kartik\select2\Select2;
 
 /**
 * @var yii\web\View $this
@@ -44,12 +45,50 @@ date_default_timezone_set('Asia/Jakarta');
 
 <div class="box box-primary">
 	<div class="box-body">
-		<?= $form->field($model, 'POST_DATE')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'ITEM')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'ITEM_DESC')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'LOC')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'LOC_DESC')->textInput(['readonly' => 'readonly']); ?>
-		<?= $form->field($model, 'QTY_IN')->textInput(['readonly' => 'readonly']); ?>
+		<div class="row">
+			<div class="col-sm-3">
+				<?= $form->field($model, 'POST_DATE')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+			<div class="col-sm-9">
+				<?= $form->field($model, 'inspect_by_id')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
+                        'NIK_SUN_FISH', 'NAMA_KARYAWAN'
+                    ])
+                    ->where([
+                    	'AKTIF' => 'Y'
+                    ])
+                    ->andWhere(['NOT IN', 'CC_ID', ['110X', '110D', '110C', '110B']])
+                    ->all(), 'NIK_SUN_FISH', 'nikSunfishNama'),
+                    'options' => [
+                        'placeholder' => 'Choose...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ])->label('Inspector'); ?>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-sm-3">
+				<?= $form->field($model, 'ITEM')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+			<div class="col-sm-6">
+				<?= $form->field($model, 'ITEM_DESC')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+			<div class="col-sm-3">
+				<?= $form->field($model, 'QTY_IN')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				<?= $form->field($model, 'LOC')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+			<div class="col-sm-9">
+				<?= $form->field($model, 'LOC_DESC')->textInput(['readonly' => 'readonly']); ?>
+			</div>
+		</div>
+		
 		<div class="row">
 			<div class="col-md-3">
                 <?= $form->field($model_judgement, 'judgement')->dropDownList([
