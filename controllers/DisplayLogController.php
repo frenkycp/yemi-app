@@ -68,8 +68,8 @@ class DisplayLogController extends Controller
         }
         if ($total_plan > 0) {
             $plan_pct = 100;
-            $confirm_pct = round($total_confirm / $total_plan * 100, 1);
-            $not_confirm_pct = round($total_not_confirm / $total_plan * 100, 1);
+            $confirm_pct = round($total_confirm / $total_plan * 100);
+            $not_confirm_pct = round($total_not_confirm / $total_plan * 100);
         }
         
 
