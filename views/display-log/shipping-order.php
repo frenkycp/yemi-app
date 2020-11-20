@@ -75,7 +75,8 @@ $css_string = "
     }
 
     #my-title {
-        font-size: 20px;
+        font-size: 28px;
+        font-weight: bold;
         background-color: #a6ff79;
         border-radius: 5px;
         margin-bottom: 10px;
@@ -88,6 +89,11 @@ $css_string = "
     .total-container {
         font-size: 24px;
         font-weight: bold;
+    }
+
+    .total-pct {
+        font-size: 18px;
+        font-style: italic;
     }
 
     .label-tbl {padding-left: 20px !important;}
@@ -143,7 +149,7 @@ $current_data = $data[$model->period];
                     <h3 class="panel-title">PLAN</h3>
                 </div>
                 <div class="panel-body no-padding">
-                    <span class="total-container"><?= $total_plan; ?></span>
+                    <span class="total-container"><?= $total_plan; ?></span> <span class="total-pct">(<?= $plan_pct; ?>%)</span>
                 </div>
             </div>
         </div>
@@ -152,8 +158,10 @@ $current_data = $data[$model->period];
                 <div class="panel-heading">
                     <h3 class="panel-title">CONFIRMED</h3>
                 </div>
-                <div class="panel-body no-padding">
-                    <span class="total-container"><?= $total_confirm; ?></span>
+                <div class="panel-body no-padding" style="">
+                    <span class="total-container"><?= $total_confirm; ?></span> <span class="total-pct">(<?= $confirm_pct; ?>%)</span>
+                    <hr style="margin: 5px 10px;">
+                    <span>SHIP OUT : <b><?= $total_ship_out; ?></b></span>
                 </div>
             </div>
         </div>
@@ -163,7 +171,7 @@ $current_data = $data[$model->period];
                     <h3 class="panel-title">NOT CONFIRMED</h3>
                 </div>
                 <div class="panel-body no-padding">
-                    <span class="total-container"><?= $total_not_confirm; ?></span>
+                    <span class="total-container"><?= $total_not_confirm; ?></span> <span class="total-pct">(<?= $not_confirm_pct; ?>%)</span>
                 </div>
             </div>
         </div>
@@ -172,9 +180,9 @@ $current_data = $data[$model->period];
         <thead>
             <tr>
                 <th class="text-center">DESTINATION</th>
-                <th class="text-center">PLAN</th>
-                <th class="text-center">CONFIRMED</th>
-                <th class="text-center">NOT CONFIRMED</th>
+                <th class="text-center" style="width: 20%;">PLAN</th>
+                <th class="text-center" style="width: 20%;">CONFIRMED</th>
+                <th class="text-center" style="width: 20%;">NOT CONFIRMED</th>
             </tr>
         </thead>
         <tbody>

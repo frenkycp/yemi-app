@@ -30,12 +30,14 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
         if($model->load(\Yii::$app->request->post())){
             $karyawan = Karyawan::find()
             ->where([
-                'NIK' => $model->username,
-                'PASSWORD' => $model->password,
+                'OR',
+                ['NIK' => $model->username],
+                ['NIK_SUN_FISH' => $model->username],
             ])
+            ->andWhere(['PASSWORD' => $model->password])
             ->one();
-            if ($karyawan->NIK !== null) {
-                $session['iqa_inspection_user'] = $model->username;
+            if ($karyawan->NIK_SUN_FISH !== null) {
+                $session['iqa_inspection_user'] = $karyawan->NIK_SUN_FISH;
                 $session['iqa_inspection_name'] = $karyawan->NAMA_KARYAWAN;
                 return $this->redirect(['index']);
             } else {

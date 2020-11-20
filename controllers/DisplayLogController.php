@@ -13,6 +13,7 @@ use app\models\ShipReservationDtr;
 use app\models\WorkDayTbl;
 use app\models\ShipReservationView02;
 use app\models\ShippingContainerView01;
+use app\models\ContainerView;
 
 /**
  * 
@@ -47,11 +48,13 @@ class DisplayLogController extends Controller
             'total_not_confirm' => 'SUM(CASE WHEN STATUS_CONFIRMED = \'NOT CONFIRMED\' THEN total_container ELSE 0 END)'
         ])
         ->where(['PERIOD' => $yesterday_period])
+        ->andWhere(['>', 'total_container', 0])
         ->groupBy('POD')
-        ->orderBy('POD')
+        ->orderBy('total_not_confirm DESC, POD')
         ->all();
 
         $total_plan = $total_confirm = $total_not_confirm = 0;
+        $plan_pct = $confirm_pct = $not_confirm_pct = 0;
         $data_arr = [];
         foreach ($tmp_total_container as $key => $value) {
             $total_plan += $value->total_all;
@@ -63,6 +66,19 @@ class DisplayLogController extends Controller
                 'not_confirm' => $value->total_not_confirm
             ];
         }
+        if ($total_plan > 0) {
+            $plan_pct = 100;
+            $confirm_pct = round($total_confirm / $total_plan * 100, 1);
+            $not_confirm_pct = round($total_not_confirm / $total_plan * 100, 1);
+        }
+        
+
+        $tmp_ship_out = ContainerView::find()->select(['total_cntr' => 'SUM(total_cntr)'])->where([
+            'EXTRACT(YEAR_MONTH FROM etd)' => $yesterday_period
+        ])
+        ->andWhere(['<=', 'etd', $yesterday])
+        ->one();
+        $total_ship_out = $tmp_ship_out->total_cntr;
 
         return $this->render('shipping-order', [
             'data' => $data,
@@ -72,6 +88,9 @@ class DisplayLogController extends Controller
             'total_confirm' => $total_confirm,
             'total_not_confirm' => $total_not_confirm,
             'data_arr' => $data_arr,
+            'plan_pct' => $plan_pct,
+            'confirm_pct' => $confirm_pct,
+            'not_confirm_pct' => $not_confirm_pct,
         ]);
     }
 
