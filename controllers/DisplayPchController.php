@@ -438,6 +438,11 @@ class DisplayPchController extends Controller
             'categories' => $categories,
             'drilldown' => $drilldown,
             'period_dropdown_arr' => $period_dropdown_arr,
+            'total_all_slip' => $total_all_slip,
+            'tmp_total_slip1' => $tmp_total_slip1,
+            'tmp_total_slip2' => $tmp_total_slip2,
+            'tmp_total_slip3' => $tmp_total_slip3,
+            'tmp_total_slip4' => $tmp_total_slip4,
         ]);
     }
 

@@ -236,7 +236,7 @@ echo '</pre>';*/
 
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Daily Progress</h3>
+        <h3 class="panel-title">Daily Progress <i>(Total Slip : <?= number_format($total_all_slip); ?>)</i></h3>
     </div>
     <div class="panel-body">
         <?php
@@ -288,6 +288,37 @@ echo '</pre>';*/
             ],
         ]);
         ?>
+        <br/>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel panel-primary" style="margin-bottom: 0px;">
+                    <div class="panel-body text-center">
+                        Total Count 1 : <b><?= number_format($tmp_total_slip1); ?></b> slip
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-primary" style="margin-bottom: 0px;">
+                    <div class="panel-body text-center">
+                        Total Count 2 : <b><?= number_format($tmp_total_slip2); ?></b> slip
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-primary" style="margin-bottom: 0px;">
+                    <div class="panel-body text-center">
+                        Total Audit 1 : <b><?= number_format($tmp_total_slip3); ?></b> slip
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="panel panel-primary" style="margin-bottom: 0px;">
+                    <div class="panel-body text-center">
+                        Total Audit 2 : <b><?= number_format($tmp_total_slip4); ?></b> slip
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
