@@ -16,7 +16,7 @@ date_default_timezone_set('Asia/Jakarta');
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update}',
+        'template' => '{update} {delete}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -25,7 +25,15 @@ $gridColumns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, $options);
-            }
+            },
+            'delete' => function ($url, $model, $key) {
+                $options = [
+                    'title' => Yii::t('cruds', 'Close'),
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to delete this report ?',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['delete', 'SEQ' => $model->SEQ]), $options);
+            },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator

@@ -84,6 +84,31 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 		return ['output' => '', 'selected' => ''];
 	}
 
+	public function actionDelete($SEQ)
+	{
+		try {
+			$this->findModel($SEQ)->delete();
+		} catch (\Exception $e) {
+			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+			\Yii::$app->getSession()->addFlash('error', $msg);
+			return $this->redirect(Url::previous());
+		}
+
+		// TODO: improve detection
+		$isPivot = strstr('$SEQ',',');
+		if ($isPivot == true) {
+			return $this->redirect(Url::previous());
+		} elseif (isset(\Yii::$app->session['__crudReturnUrl']) && \Yii::$app->session['__crudReturnUrl'] != '/') {
+			Url::remember(null);
+			$url = \Yii::$app->session['__crudReturnUrl'];
+			\Yii::$app->session['__crudReturnUrl'] = null;
+
+			return $this->redirect($url);
+		} else {
+			return $this->redirect(['index']);
+		}
+	}
+
 	public function actionCreate($YCJ_REF_NO = '')
 	{
 		$model = new ShipReservationDtr;
