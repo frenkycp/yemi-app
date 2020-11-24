@@ -601,6 +601,9 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('Daily Shipping Completion Time <span class="japanesse-word"></span>', ['/display/last-shipping-daily']); ?>
                                 </li>
+                                <li>
+                                    <?= Html::a('Shipping Order <span class="japanesse-word"></span>', ['/display-log/shipping-order']); ?>
+                                </li>
                             </ol>
                         </div>
                         <div class="list-group-item">
