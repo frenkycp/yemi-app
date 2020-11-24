@@ -79,7 +79,7 @@ abstract class PlanReceiving extends \yii\db\ActiveRecord
             [['receiving_date'], 'required'],
             [['receiving_date', 'eta_yemi_date', 'cut_off_date', 'etd_port_date', 'eta_port_date', 'unloading_time', 'completed_time', 'created_date', 'last_modified_date', 'deleted_date'], 'safe'],
             [['vendor_name', 'vehicle'], 'string', 'max' => 50],
-            [['item_type', 'container_no'], 'string', 'max' => 20],
+            [['item_type', 'container_no'], 'string', 'max' => 255],
             [['month_periode'], 'string', 'max' => 7],
             [['bl_no'], 'string', 'max' => 255]
         ];
