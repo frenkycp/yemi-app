@@ -21,6 +21,7 @@ use yii\web\JsExpression;
 use app\models\SunfishEmpAttendance;
 use app\models\SunfishLeaveSummary;
 use app\models\SunfishViewEmp;
+use app\models\SunfishAttendanceData;
 
 class MyHrController extends Controller
 {
@@ -106,7 +107,7 @@ class MyHrController extends Controller
             ];
         }
 
-        $absensi_data_sunfish = SunfishEmpAttendance::find()
+        /*$absensi_data_sunfish = SunfishEmpAttendance::find()
         ->select([
             'emp_no',
             'period' => 'FORMAT(shiftstarttime, \'yyyyMM\')',
@@ -132,7 +133,9 @@ class MyHrController extends Controller
         ->andWhere(['>=', 'FORMAT(shiftstarttime, \'yyyyMM\')', '202003'])
         ->groupBy(['emp_no', 'FORMAT(shiftstarttime, \'yyyyMM\')'])
         ->orderBy('period')
-        ->all();
+        ->all();*/
+
+        $absensi_data_sunfish = SunfishAttendanceData::instance()->getMyHrSummary($this_year, $model_karyawan->NIK_SUN_FISH);
 
         foreach ($absensi_data_sunfish as $key => $value) {
             $data_attendance_arr[$value['period']] = [
@@ -843,73 +846,73 @@ class MyHrController extends Controller
             }
         } else {
             if ($note == 'A') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
+                $abensi_data_arr = SunfishAttendanceData::find()
                 ->where([
                     'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                    'FORMAT(shiftendtime, \'yyyyMM\')' => $period,
+                    'attend_judgement' => 'A'
                 ])
-                ->andWhere('PATINDEX(\'%ABS%\', Attend_Code) > 0')
-                ->orderBy('shiftstarttime')
+                ->orderBy('shiftendtime')
                 ->all();
                 
             } elseif ($note == 'I') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
+                $abensi_data_arr = SunfishAttendanceData::find()
                 ->where([
                     'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                    'FORMAT(shiftendtime, \'yyyyMM\')' => $period,
+                    'attend_judgement' => 'I',
                 ])
-                ->andWhere('(PATINDEX(\'%Izin%\', Attend_Code) > 0 OR PATINDEX(\'%IPU%\', Attend_Code) > 0) AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
-                ->orderBy('shiftstarttime')
+                ->orderBy('shiftendtime')
                 ->all();
                 
             } elseif ($note == 'S') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
+                $abensi_data_arr = SunfishAttendanceData::find()
                 ->where([
                     'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                    'FORMAT(shiftendtime, \'yyyyMM\')' => $period,
+                    'attend_judgement' => 'S',
                 ])
-                ->andWhere('PATINDEX(\'%SAKIT%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
-                ->orderBy('shiftstarttime')
+                ->orderBy('shiftendtime')
                 ->all();
                 
             } elseif ($note == 'DL') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
+                $abensi_data_arr = SunfishAttendanceData::find()
                 ->where([
                     'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                    'FORMAT(shiftendtime, \'yyyyMM\')' => $period,
+                    'come_late' => '1'
                 ])
-                ->andWhere('PATINDEX(\'%LTI%\', Attend_Code) > 0')
-                ->orderBy('shiftstarttime')
+                ->orderBy('shiftendtime')
                 ->all();
                 
             } elseif ($note == 'PC') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
+                $abensi_data_arr = SunfishAttendanceData::find()
                 ->where([
                     'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                    'FORMAT(shiftendtime, \'yyyyMM\')' => $period,
+                    'home_early' => '1',
                 ])
-                ->andWhere('PATINDEX(\'%EAO%\', Attend_Code) > 0')
-                ->orderBy('shiftstarttime')
+                ->orderBy('shiftendtime')
                 ->all();
                 
             } elseif ($note == 'C') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
+                $abensi_data_arr = SunfishAttendanceData::find()
                 ->where([
                     'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                    'FORMAT(shiftendtime, \'yyyyMM\')' => $period,
+                    'attend_judgement' => 'C'
                 ])
-                ->andWhere('PATINDEX(\'%CUTI%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0')
-                ->orderBy('shiftstarttime')
+                ->orderBy('shiftendtime')
                 ->all();
                 
             } elseif ($note == 'CK') {
-                $abensi_data_arr = SunfishEmpAttendance::find()
+                $abensi_data_arr = SunfishAttendanceData::find()
                 ->where([
                     'emp_no' => $nik,
-                    'FORMAT(shiftstarttime, \'yyyyMM\')' => $period
+                    'FORMAT(shiftendtime, \'yyyyMM\')' => $period
                 ])
-                ->andWhere('PATINDEX(\'%CK%\', Attend_Code) > 0 AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0')
-                ->orderBy('shiftstarttime')
+                ->andWhere('(PATINDEX(\'%CK%\', Attend_Code) > 0 OR PATINDEX(\'%UPL%\', Attend_Code) > 0) AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0')
+                ->orderBy('shiftendtime')
                 ->all();
                 
             }
@@ -921,7 +924,7 @@ class MyHrController extends Controller
                     'starttime' => $value->starttime,
                     'endtime' => $value->endtime,
                     'keterangan' => $keterangan,
-                    'shiftstarttime' => date('Y-m-d', strtotime($value->shiftstarttime)),
+                    'shiftstarttime' => date('Y-m-d', strtotime($value->shiftendtime)),
                 ];
             }
         }

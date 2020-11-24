@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SunfishAttendanceData extends BaseSunfishAttendanceData
 {
-    public $post_date, $period, $shift, $start_date, $end_date, $total_present, $total_mp, $department, $grade;
+    public $post_date, $period, $shift, $start_date, $end_date, $total_present, $total_mp, $department, $grade, $total_absent, $total_permit, $total_sick, $total_cuti, $total_late, $total_early_out, $total_shift2, $total_shift3, $total_shift4, $total_ck, $total_ck_no_disiplin;
 
     public function behaviors()
     {
@@ -36,6 +36,38 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
                 # custom validation rules
             ]
         );
+    }
+
+    public function getMyHrSummary($this_year, $emp_no)
+    {
+        $absensi_data_sunfish = $this::find()
+        ->select([
+            'emp_no',
+            'period' => 'FORMAT(shiftendtime, \'yyyyMM\')',
+            'total_absent' => 'SUM(CASE WHEN attend_judgement = \'A\' THEN 1 ELSE 0 END)',
+            'total_present' => 'SUM(CASE WHEN attend_judgement = \'P\' THEN 1 ELSE 0 END)',
+            'total_permit' => 'SUM(CASE WHEN attend_judgement = \'I\' THEN 1 ELSE 0 END)',
+            'total_sick' => 'SUM(CASE WHEN attend_judgement = \'S\' THEN 1 ELSE 0 END)',
+            'total_cuti' => 'SUM(CASE WHEN (attend_judgement = \'C\') THEN 1 ELSE 0 END)',
+            'total_late' => 'SUM(CASE WHEN come_late = \'1\' THEN 1 ELSE 0 END)',
+            'total_early_out' => 'SUM(CASE WHEN home_early = \'1\' THEN 1 ELSE 0 END)',
+            'total_shift2' => 'SUM(CASE WHEN (PATINDEX(\'%SHIFT_2%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%MAINTENANCE%\', UPPER(shiftdaily_code)) > 0) AND attend_judgement = \'P\' THEN 1 ELSE 0 END)',
+            'total_shift3' => 'SUM(CASE WHEN PATINDEX(\'%SHIFT_3%\', UPPER(shiftdaily_code)) > 0 AND attend_judgement = \'P\' THEN 1 ELSE 0 END)',
+            'total_shift4' => 'SUM(CASE WHEN PATINDEX(\'%4G_SHIFT%\', UPPER(shiftdaily_code)) > 0 AND attend_judgement = \'P\' THEN 1 ELSE 0 END)',
+            'total_ck' => 'SUM(CASE WHEN (PATINDEX(\'%CK%\', Attend_Code) > 0 OR PATINDEX(\'%UPL%\', Attend_Code) > 0) AND PATINDEX(\'%PRS%\', Attend_Code) = 0 AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+            'total_ck_no_disiplin' => 'SUM(CASE WHEN Attend_Code IN (\'CK9\', \'CK10\', \'CK11\') AND PATINDEX(\'%Izin%\', Attend_Code) = 0 THEN 1 ELSE 0 END)',
+        ])
+        ->where([
+            'FORMAT(shiftendtime, \'yyyy\')' => $this_year,
+            'emp_no' => $emp_no,
+        ])
+        ->andWhere(['<>', 'shiftdaily_code', 'OFF'])
+        ->andWhere(['>=', 'FORMAT(shiftendtime, \'yyyyMM\')', '202003'])
+        ->groupBy(['emp_no', 'FORMAT(shiftendtime, \'yyyyMM\')'])
+        ->orderBy('period')
+        ->all();
+
+        return $absensi_data_sunfish;
     }
 
     public function getCutiKhususDesc($attend_code)
