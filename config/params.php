@@ -395,6 +395,15 @@ return [
         'NO NEED ANYMORE' => 'NO NEED ANYMORE',
         'OTHER' => 'OTHER',
     ],
+    'bu_conversion_arr' => [
+        'AV' => 'AV',
+        'CA' => 'PA',
+        'DMI' => 'DMI',
+        'GUITAR AMPLIFIER' => 'B&O',
+        'MIPA' => 'PA',
+        'PIANO' => 'PIANO',
+        'SOUND PROOF' => 'SN'
+    ],
 ];
 
 function getYearArray()

@@ -24,9 +24,113 @@ use app\models\TraceItemDtr;
 use app\models\TraceItemDtrLog;
 use app\models\DbSmtReelInOut;
 use app\models\ClientStatus;
+use app\models\PcbInsertPoint;
+use app\models\PcbOutputInsertPoint01;
+use app\models\PcbNg01;
 
 class DisplayPrdController extends Controller
 {
+    public function actionPcbDefectRatio($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $bu_arr = ['AV', 'PA', 'PIANO'];
+        $tmp_data = [];
+
+        $tmp_wip_output = PcbOutputInsertPoint01::find()
+        ->select([
+            'end_job_period', 'sap_bu', 'total_insert_point' => 'SUM(total_insert_point)'
+        ])
+        ->groupBy('end_job_period, sap_bu')
+        ->orderBy('end_job_period, sap_bu')
+        ->all();
+
+        $tmp_ng_pcb = PcbNg01::find()
+        ->select([
+            'period', 'sap_bu',
+            'defect_fa' => 'SUM(CASE WHEN pcb_ng_found = \'FA\' THEN ng_qty ELSE 0 END)',
+            'defect_fct_ict' => 'SUM(CASE WHEN pcb_ng_found IN (\'FCT\', \'ICT\') THEN ng_qty ELSE 0 END)',
+        ])
+        ->where([
+            'period' => $period_arr,
+        ])
+        ->groupBy('period, sap_bu')
+        ->orderBy('period, sap_bu')
+        ->all();
+
+        foreach ($bu_arr as $bu_val) {
+            foreach ($period_arr as $period_value) {
+                $tmp_total = 0;
+                foreach ($tmp_wip_output as $key => $output) {
+                    $tmp_bu = $output->sap_bu;
+                    if (isset(\Yii::$app->params['bu_conversion_arr'][$tmp_bu])) {
+                        $tmp_bu = \Yii::$app->params['bu_conversion_arr'][$tmp_bu];
+                    }
+
+                    if ($tmp_bu == $bu_val && $output->end_job_period == $period_value) {
+                        $tmp_total += $output->total_insert_point;
+                    }
+                }
+                $tmp_data['ALL'][$period_value]['output'] += $tmp_total;
+                $tmp_data[$bu_val][$period_value]['output'] = $tmp_total;
+                
+                $tmp_ng_fa = $tmp_ng_fct_ict = 0;
+                foreach ($tmp_ng_pcb as $ng_pcb) {
+                    $tmp_bu = $ng_pcb->sap_bu;
+                    if (isset(\Yii::$app->params['bu_conversion_arr'][$tmp_bu])) {
+                        $tmp_bu = \Yii::$app->params['bu_conversion_arr'][$tmp_bu];
+                    }
+                    if ($ng_pcb->period == $period_value && $tmp_bu == $bu_val) {
+                        $tmp_ng_fa = $ng_pcb->defect_fa;
+                        $tmp_ng_fct_ict = $ng_pcb->defect_fct_ict;
+                    }
+                }
+
+                $tmp_data['ALL'][$period_value]['defect_fa'] += $tmp_ng_fa;
+                $tmp_data[$bu_val][$period_value]['defect_fa'] = $tmp_ng_fa;
+                $tmp_data['ALL'][$period_value]['defect_fct_ict'] += $tmp_ng_fct_ict;
+                $tmp_data[$bu_val][$period_value]['defect_fct_ict'] = $tmp_ng_fct_ict;
+            }
+        }
+
+        return $this->render('pcb-defect-ratio', [
+            'model' => $model,
+            'tmp_data' => $tmp_data,
+            'period_arr' => $period_arr,
+        ]);
+    }
+
     public function actionNetworkStatusData($value='')
     {
         date_default_timezone_set('Asia/Jakarta');
