@@ -11,10 +11,13 @@ use Yii;
  *
  * @property string $end_job_period
  * @property string $child
- * @property double $summary_qty
+ * @property string $child_desc
+ * @property integer $summary_qty
  * @property string $sap_bu
  * @property integer $insert_point
- * @property double $total_insert_point
+ * @property integer $total_insert_point
+ * @property string $hpl_desc
+ * @property string $bu
  * @property string $aliasModel
  */
 abstract class PcbOutputInsertPoint01 extends \yii\db\ActiveRecord
@@ -44,12 +47,11 @@ abstract class PcbOutputInsertPoint01 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['summary_qty', 'total_insert_point'], 'number'],
+            [['summary_qty', 'insert_point', 'total_insert_point'], 'integer'],
             [['sap_bu', 'insert_point', 'total_insert_point'], 'required'],
-            [['insert_point'], 'integer'],
             [['end_job_period'], 'string', 'max' => 4000],
             [['child'], 'string', 'max' => 15],
-            [['sap_bu'], 'string', 'max' => 50]
+            [['child_desc', 'sap_bu', 'hpl_desc', 'bu'], 'string', 'max' => 50]
         ];
     }
 
@@ -61,10 +63,13 @@ abstract class PcbOutputInsertPoint01 extends \yii\db\ActiveRecord
         return [
             'end_job_period' => 'End Job Period',
             'child' => 'Child',
+            'child_desc' => 'Child Desc',
             'summary_qty' => 'Summary Qty',
             'sap_bu' => 'Sap Bu',
             'insert_point' => 'Insert Point',
             'total_insert_point' => 'Total Insert Point',
+            'hpl_desc' => 'Hpl Desc',
+            'bu' => 'Bu',
         ];
     }
 

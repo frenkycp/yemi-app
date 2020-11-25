@@ -107,6 +107,14 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'pcb_id',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'pcb_name',
         'vAlign' => 'middle',
         'filterInputOptions' => [
