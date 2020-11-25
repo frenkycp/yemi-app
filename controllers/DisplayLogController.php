@@ -14,6 +14,7 @@ use app\models\WorkDayTbl;
 use app\models\ShipReservationView02;
 use app\models\ShippingContainerView01;
 use app\models\ContainerView;
+use app\models\ShippingOrderView03;
 
 /**
  * 
@@ -40,7 +41,28 @@ class DisplayLogController extends Controller
 
         $yesterday_period = date('Ym', strtotime($yesterday));
 
-        $tmp_total_container = ShipReservationView02::find()
+        $total_plan = $total_confirm = $total_not_confirm = 0;
+        $plan_pct = $confirm_pct = $not_confirm_pct = 0;
+        $data_arr = [];
+        $tmp_shipping_order = ShippingOrderView03::find()->where(['PERIOD' => $yesterday_period])->orderBy('TOTAL_UNCONFIRMED DESC')->all();
+        foreach ($tmp_shipping_order as $key => $value) {
+            $total_plan += $value->TOTAL_CONFIRMED + $value->TOTAL_UNCONFIRMED;
+            $total_confirm += $value->TOTAL_CONFIRMED;
+            $total_not_confirm += $value->TOTAL_UNCONFIRMED;
+
+            $data_arr[$value->POD] = [
+                'plan' => $value->TOTAL_CONFIRMED + $value->TOTAL_UNCONFIRMED,
+                'confirm' => $value->TOTAL_CONFIRMED,
+                'not_confirm' => $value->TOTAL_UNCONFIRMED
+            ];
+        }
+        if ($total_plan > 0) {
+            $plan_pct = 100;
+            $confirm_pct = round($total_confirm / $total_plan * 100);
+            $not_confirm_pct = round($total_not_confirm / $total_plan * 100);
+        }
+
+        /*$tmp_total_container = ShipReservationView02::find()
         ->select([
             'POD',
             'total_all' => 'SUM(total_container)',
@@ -70,7 +92,7 @@ class DisplayLogController extends Controller
             $plan_pct = 100;
             $confirm_pct = round($total_confirm / $total_plan * 100);
             $not_confirm_pct = round($total_not_confirm / $total_plan * 100);
-        }
+        }*/
         
 
         $tmp_ship_out = ContainerView::find()->select(['total_cntr' => 'SUM(total_cntr)'])->where([
