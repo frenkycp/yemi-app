@@ -44,7 +44,7 @@ class DisplayLogController extends Controller
         $total_plan = $total_confirm = $total_not_confirm = 0;
         $plan_pct = $confirm_pct = $not_confirm_pct = 0;
         $data_arr = [];
-        $tmp_shipping_order = ShippingOrderView03::find()->where(['PERIOD' => $yesterday_period])->orderBy('TOTAL_UNCONFIRMED DESC')->all();
+        $tmp_shipping_order = ShippingOrderView03::find()->where(['PERIOD' => $yesterday_period])->orderBy('TOTAL_UNCONFIRMED DESC, POD')->all();
         foreach ($tmp_shipping_order as $key => $value) {
             $total_plan += $value->TOTAL_CONFIRMED + $value->TOTAL_UNCONFIRMED;
             $total_confirm += $value->TOTAL_CONFIRMED;
