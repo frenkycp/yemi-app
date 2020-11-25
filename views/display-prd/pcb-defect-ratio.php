@@ -45,7 +45,7 @@ $css_string = "
         color: black;
         vertical-align: middle;
         //padding: 10px 10px;
-        letter-spacing: 1.1px;
+        letter-spacing: 0.5px;
         //height: 100px;
     }
     .summary-tbl > thead > tr > th{
@@ -142,12 +142,13 @@ echo '</pre>';*/
 <?php foreach ($tmp_data as $model_name => $period_data_arr): 
     $tmp_total_ppm_arr = [];
     $avg_output = $avg_defect_fa = $avg_defect_fct_ict = $avg_ppm_fa = $avg_ppm_fct_ict = 0;
+    $total_defect_fa = $total_defect_fct_ict = $total_ppm_fa = $total_ppm_fct_ict = $total_output = 0;
     ?>
     <div class="table-responsive">
         <table class="table summary-tbl" style="margin-bottom: 0px;">
         <thead>
             <tr>
-                <th style="min-width: 230px;"><?= $model_name; ?> MODEL</th>
+                <th style="min-width: 230px;">PCB - <?= $model_name; ?> MODEL<?= isset($ppm_target_arr[$model_name]) ? ' => TARGET : ' . $ppm_target_arr[$model_name] . ' dppm' : ''; ?></th>
                 <?php foreach ($period_data_arr as $period => $period_data): ?>
                     <th class="text-center period-title">
                         <?= strtoupper(date('M\'Y', strtotime($period . '01'))); ?>
@@ -177,6 +178,7 @@ echo '</pre>';*/
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
                 $avg_output = $tmp_avg;
+                $total_output = $tmp_grandtotal;
                 ?>
                 <td class="text-center"><?= number_format($tmp_avg); ?></td>
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
@@ -222,6 +224,7 @@ echo '</pre>';*/
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
                 $avg_defect_fa = $tmp_avg;
+                $total_defect_fa = $tmp_grandtotal;
                 ?>
                 <td class="text-center"><?= number_format($tmp_avg); ?></td>
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
@@ -245,6 +248,7 @@ echo '</pre>';*/
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
                 $avg_defect_fct_ict = $tmp_avg;
+                $total_defect_fct_ict = $tmp_grandtotal;
                 ?>
                 <td class="text-center"><?= number_format($tmp_avg); ?></td>
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
@@ -274,7 +278,7 @@ echo '</pre>';*/
                 }
                 ?>
                 <td class="text-center"><?= round(($avg_defect_fa / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= ($tmp_grandtotal); ?></td>
+                <td class="text-center"><?= round(($total_defect_fa / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
                 <td>PPM at FCT, ICT</td>
@@ -301,7 +305,7 @@ echo '</pre>';*/
                 }
                 ?>
                 <td class="text-center"><?= round(($avg_defect_fct_ict / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= ($tmp_grandtotal); ?></td>
+                <td class="text-center"><?= round(($total_defect_fct_ict / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
                 <td>PPM Total</td>
@@ -327,7 +331,7 @@ echo '</pre>';*/
                 }
                 ?>
                 <td class="text-center"><?= round(($avg_defect_fa / $avg_output) * 1000000, 2) + round(($avg_defect_fct_ict / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= ($tmp_grandtotal); ?></td>
+                <td class="text-center"><?= round(($total_defect_fa / $total_output) * 1000000, 2) + round(($total_defect_fct_ict / $total_output) * 1000000, 2); ?></td>
             </tr>
         </tbody>
     </table>

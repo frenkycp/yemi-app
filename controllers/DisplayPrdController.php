@@ -66,6 +66,11 @@ class DisplayPrdController extends Controller
         }
 
         $bu_arr = ['AV', 'PA', 'PIANO'];
+        $ppm_target_arr = [
+            'ALL' => 1.15,
+            'AV' => 1.02,
+            'PA' => 1.01
+        ];
         $tmp_data = [];
 
         $tmp_wip_output = PcbOutputInsertPoint01::find()
@@ -128,6 +133,7 @@ class DisplayPrdController extends Controller
             'model' => $model,
             'tmp_data' => $tmp_data,
             'period_arr' => $period_arr,
+            'ppm_target_arr' => $ppm_target_arr,
         ]);
     }
 
