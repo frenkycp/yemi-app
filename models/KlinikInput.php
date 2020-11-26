@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use \app\models\base\KlinikInput as BaseKlinikInput;
 use yii\helpers\ArrayHelper;
+use app\models\SunfishViewEmp;
 
 /**
  * This is the model class for table "tb_klinik_input".
@@ -60,14 +61,12 @@ class KlinikInput extends BaseKlinikInput
                 'NIK_SUN_FISH' => $this->nik_sun_fish
             ])->one();
             $this->nik = $tmp_karyawan->NIK;
-            
 
-            // if($this->isNewRecord)
-            // {
-                
-            // } else {
-                
-            // }
+            $tmp_sunfish_data = SunfishViewEmp::find()->where(['Emp_no' => $this->nik_sun_fish])->one();
+            if ($tmp_sunfish_data) {
+                $this->cost_center_name = $tmp_sunfish_data->cost_center_name;
+            }
+
             return true;
         }
     }

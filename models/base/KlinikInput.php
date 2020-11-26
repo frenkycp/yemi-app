@@ -15,6 +15,7 @@ use Yii;
  * @property string $CC_ID
  * @property string $dept
  * @property string $section
+ * @property string $cost_center_name
  * @property string $status_karyawan
  * @property integer $opsi
  * @property string $masuk
@@ -71,6 +72,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             [['nama', 'dept', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'string', 'max' => 255],
             [['CC_ID'], 'string', 'max' => 10],
             [['section'], 'string', 'max' => 50],
+            [['cost_center_name'], 'string', 'max' => 100],
             [['last_status'], 'string', 'max' => 30],
             [['pk'], 'unique']
         ];
@@ -88,6 +90,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'CC_ID' => 'Cc ID',
             'dept' => 'Dept',
             'section' => 'Section',
+            'cost_center_name' => 'Cost Center Name',
             'status_karyawan' => 'Status Karyawan',
             'opsi' => 'Opsi',
             'masuk' => 'Masuk',

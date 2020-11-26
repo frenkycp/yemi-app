@@ -48,7 +48,7 @@ class ProductionRestController extends Controller
 
         $tmp_data = SunfishViewEmp::find()
         ->select([
-            'start_date' => 'FORMAT(start_date, \'yyyy-MM-dd\')', 'cost_center_name',
+            'start_date' => 'FORMAT(start_date, \'yyyy-MM-dd\')', 'cost_center_id', 'cost_center_name',
             'total_mp' => 'COUNT(Emp_no)'
         ])
         ->where([
