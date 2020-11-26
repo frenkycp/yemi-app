@@ -34,7 +34,7 @@ use app\models\IjazahItem;
 use app\models\PermitInputData;
 use app\models\ShippingPeriod;
 use app\models\KlinikInput;
-use app\models\StoreInOutWsus
+use app\models\StoreInOutWsus;
 
 class ProductionRestController extends Controller
 {
