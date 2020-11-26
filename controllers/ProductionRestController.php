@@ -31,9 +31,34 @@ use app\models\PermitInputData;
 use app\models\ShippingPeriod;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use app\models\KlinikInput;
 
 class ProductionRestController extends Controller
 {
+    public function actionClinicDailyVisit($from_date = '', $to_date = '')
+    {
+        if ($from_date == '') {
+            $from_date = date('Y-m-01', strtotime(' -1 month'));
+        }
+        if ($to_date == '') {
+            $to_date = date('Y-m-t', strtotime(' -1 month'));
+        }
+
+        $tmp_data = KlinikInput::find()
+        ->select([
+            'input_date' => 'date(pk)', 'nik_sun_fish', 'nama', 'cost_center_name', 'status_karyawan', 'opsi'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'date(pk)', $from_date],
+            ['<=', 'date(pk)', $to_date]
+        ])
+        ->asArray()
+        ->all();
+
+        return $tmp_data;
+    }
+
     public function actionTotalEmpByJoinDate($from_date = '', $to_date = '')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
