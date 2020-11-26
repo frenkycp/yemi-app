@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class StoreInOutWsus extends BaseStoreInOutWsus
 {
-    public $TOTAL_ITEM, $TOTAL_OK, $TOTAL_NG, $TOTAL_OPEN;
+    public $TOTAL_ITEM, $TOTAL_OK, $TOTAL_NG, $TOTAL_OPEN, $TOTAL_COUNT, $TOTAL_QTY;
 
     public function behaviors()
     {

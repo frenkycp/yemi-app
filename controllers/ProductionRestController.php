@@ -35,8 +35,34 @@ use app\models\KlinikInput;
 
 class ProductionRestController extends Controller
 {
+    public function actionDailyIncomingMaterial($from_date, $to_date)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_data = StoreInOutWsus::find()
+        ->select([
+            'POST_DATE', 'ITEM', 'ITEM_DESC', 'LOC', 'LOC_DESC', 'TOTAL_COUNT' => 'COUNT(SEQ_LOG)', 'TOTAL_QTY' => 'SUM(QTY_IN)'
+        ])
+        ->where([
+            'AND',
+            ['>=', 'POST_DATE', $from_date . ' 00:00:00'],
+            ['<=', 'POST_DATE', $to_date . ' 00:00:00']
+        ])
+        ->andWhere(['TRANS_ID' => '11'])
+        ->groupBy('POST_DATE, ITEM, ITEM_DESC, LOC, LOC_DESC')
+        ->orderBy('POST_DATE')
+        ->asArray()
+        ->all();
+
+        return $tmp_data;
+    }
+
     public function actionClinicDailyVisit($from_date = '', $to_date = '')
     {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+
         if ($from_date == '') {
             $from_date = date('Y-m-01', strtotime(' -1 month'));
         }
