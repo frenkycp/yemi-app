@@ -32,7 +32,7 @@ $gridColumns = [
                     'data-pjax' => '0',
                     'data-confirm' => 'Are you sure to delete this report ?',
                 ];
-                return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['delete', 'SEQ' => $model->SEQ]), $options);
+                return Html::a('<span class="glyphicon glyphicon-trash"></span>', Url::to(['delete', 'DTR_ID' => $model->DTR_ID]), $options);
             },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -44,9 +44,15 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap']
     ],
     [
+        'attribute' => 'PERIOD',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'hiddenFromExport' => true,
+    ],
+    [
         'attribute' => 'YCJ_REF_NO',
         'value' => function($model){
-            return Html::a($model->YCJ_REF_NO, ['create', 'YCJ_REF_NO' => $model->YCJ_REF_NO]);
+            return Html::a($model->YCJ_REF_NO, ['create', 'HDR_ID' => $model->HDR_ID]);
         },
         'format' => 'html',
         'vAlign' => 'middle',
@@ -129,6 +135,11 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
+        'attribute' => 'ETD_SUB',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'APPLIED_RATE',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
@@ -170,10 +181,10 @@ $gridColumns = [
             //'toolbar' => false,
             'toolbar' =>  [
                 Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
-                Html::a('<span class="glyphicon glyphicon-th-list"></span> ' . 'Summary', ['/display-log/ship-reservation-summary'], [
+                /*Html::a('<span class="glyphicon glyphicon-th-list"></span> ' . 'Summary', ['/display-log/ship-reservation-summary'], [
                     'class' => 'btn btn-info',
                     'target' => '_blank'
-                ]),
+                ]),*/
                 '{export}',
                 '{toggleData}',
             ],

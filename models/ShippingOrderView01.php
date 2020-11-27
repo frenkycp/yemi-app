@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\ShipReservationHdr as BaseShipReservationHdr;
+use \app\models\base\ShippingOrderView01 as BaseShippingOrderView01;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.SHIP_RESERVATION_HDR".
+ * This is the model class for table "db_owner.SHIPPING_ORDER_VIEW_01".
  */
-class ShipReservationHdr extends BaseShipReservationHdr
+class ShippingOrderView01 extends BaseShippingOrderView01
 {
-    public $TOTAL_REF;
 
     public function behaviors()
     {

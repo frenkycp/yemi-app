@@ -10,6 +10,7 @@ use kartik\depdrop\DepDrop;
 use kartik\date\DatePicker;
 use yii\web\View;
 use app\models\ShipReservationDtr;
+use app\models\ShipReservationHdr;
 /**
 * @var yii\web\View $this
 * @var app\models\ShipReservationDtr $model
@@ -33,7 +34,21 @@ $this->registerCss("
     }
 ");
 
+$total_reservation = ShipReservationHdr::find()
+->select([
+    'PERIOD', 'TOTAL_REF' => 'COUNT(HDR_ID)'
+])
+->groupBy('PERIOD')
+->orderBy('PERIOD DESC')
+->limit(5)
+->all();
+
 ?>
+<?php foreach ($total_reservation as $key => $value):
+    $count_str = 'YEMI' . str_pad($value->TOTAL_REF + 1, 3, "0", STR_PAD_LEFT);
+    ?>
+    <input type="hidden" id="ref-no-<?= $value->PERIOD; ?>" value="<?= $count_str; ?>">
+<?php endforeach ?>
 
 <div class="ship-reservation-dtr-form">
 
@@ -59,33 +74,100 @@ $this->registerCss("
     <div class="panel-body panel-body-mod">
         <div class="">
             <div class="row">
-                <div class="col-sm-4">
-                    <?= $form->field($model, 'YCJ_REF_NO')->textInput([
-                        'onkeyup' => 'this.value=this.value.toUpperCase()',
-                        'onfocusout' => 'this.value=this.value.toUpperCase()'
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'ETD')->widget(DatePicker::classname(), [
+                        'options' => [
+                            'type' => DatePicker::TYPE_INPUT,
+                        ],
+                        'removeButton' => false,
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true,
+                            'todayBtn' => true,
+                        ]
                     ]); ?>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'ETD_SUB')->widget(DatePicker::classname(), [
+                        'options' => [
+                            'type' => DatePicker::TYPE_INPUT,
+                            'id' =>'etd-sub'
+                        ],
+                        'removeButton' => false,
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true,
+                            'todayBtn' => true,
+                        ],
+                        'pluginEvents' => [
+                            'changeDate' => 'function(e){
+                                var tmp_etd_sub = $("#etd-sub").val();
+                                var etd_sub_date = new Date(tmp_etd_sub);
+                                var tmp_year = tmp_etd_sub.substring(0, 4);
+                                var tmp_month = tmp_etd_sub.substring(5, 7);
+                                var tmp_period = tmp_year + "" + tmp_month;
+                                $("#etd-sub-period").val(tmp_period);
+                                $("#etd-sub-period").trigger("change");
+                            }',
+                        ],
+                    ]); ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'PERIOD')->textInput([
+                        'id' => 'etd-sub-period',
+                        'onchange' => $model->isNewRecord ? '
+                            var tmp_period = $("#etd-sub-period").val();
+                            var ycj_ref_no = "YEMI001";
+                            if($("#ref-no-" + tmp_period).length > 0){
+                                ycj_ref_no = $("#ref-no-" + tmp_period).val();
+                            }
+                            $("#ycj_ref_no").val(ycj_ref_no);
+                        ' : '',
+                        'onkeyup' => '$("#etd-sub-period").trigger("change");',
+                        'onfocusout' => '$("#etd-sub-period").trigger("change");',
+                    ]); ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= isset($_GET['HDR_ID']) ? $form->field($model, 'YCJ_REF_NO')->textInput([
+                        'readonly' => true
+                    ]) : $form->field($model, 'YCJ_REF_NO')->textInput([
+                        'onkeyup' => 'this.value=this.value.toUpperCase()',
+                        'onfocusout' => 'this.value=this.value.toUpperCase()',
+                        'id' => 'ycj_ref_no'
+                    ]); ?>
+                </div>
+            </div>
+            <div class="row">
+                
+                <div class="col-sm-3">
                     <?= $form->field($model, 'RESERVATION_NO')->textInput([
                         'onkeyup' => 'this.value=this.value.toUpperCase()',
                         'onfocusout' => 'this.value=this.value.toUpperCase()'
                     ]); ?>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                     <?= $form->field($model, 'DO_NO')->textInput([
                         'onkeyup' => 'this.value=this.value.toUpperCase()',
                         'onfocusout' => 'this.value=this.value.toUpperCase()'
                     ]); ?>
                 </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'BL_NO')->textInput(['maxlength' => true]) ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'INVOICE')->textInput(['maxlength' => true]) ?>
+                </div>
             </div>
                 <div class="row">
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'HELP')->dropDownList([
                             'N' => 'No',
                             'Y' => 'Yes',
                         ]); ?>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'DUE_DATE')->widget(DatePicker::classname(), [
                             'options' => [
                                 'type' => DatePicker::TYPE_INPUT,
@@ -100,10 +182,10 @@ $this->registerCss("
                         ]); ?>
                     </div>
                     
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'STATUS')->dropDownList(\Yii::$app->params['ship_reservation_status_arr']); ?>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'SHIPPER')->textInput([
                             'onkeyup' => 'this.value=this.value.toUpperCase()',
                             'onfocusout' => 'this.value=this.value.toUpperCase()'
@@ -111,19 +193,24 @@ $this->registerCss("
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'POL')->textInput([
                             'onkeyup' => 'this.value=this.value.toUpperCase()',
                             'onfocusout' => 'this.value=this.value.toUpperCase()'
                         ]) ?>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
+                        <?= $form->field($model, 'KD_FLAG')->dropDownList(\Yii::$app->params['kd_flag_arr'], [
+                            'prompt' => 'Choose...'
+                        ]) ?>
+                    </div>
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'POD')->dropDownList(ArrayHelper::map(app\models\ShipLiner::find()->select('POD')->groupBy('POD')->orderBy('POD')->all(), 'POD', 'POD'), [
                             'id' => 'pod-id',
                             'prompt' => 'Choose...',
                         ]); ?>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'CARRIER')->widget(DepDrop::classname(), [
                             'options' => ['id' => 'carrier-id'],
                             'pluginOptions'=>[
@@ -145,25 +232,11 @@ $this->registerCss("
                         <?= $form->field($model, 'CNT_20')->textInput(['type' => 'number']) ?>
                     </div>
                     <div class="col-sm-3">
-                        <?= $form->field($model, 'BL_NO')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'LCL')->textInput(['type' => 'number']) ?>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-2">
-                        <?= $form->field($model, 'ETD')->widget(DatePicker::classname(), [
-                            'options' => [
-                                'type' => DatePicker::TYPE_INPUT,
-                            ],
-                            'removeButton' => false,
-                            'pluginOptions' => [
-                                'autoclose'=>true,
-                                'format' => 'yyyy-mm-dd',
-                                'todayHighlight' => true,
-                                'todayBtn' => true,
-                            ]
-                        ]); ?>
-                    </div>
                     <div class="col-sm-3">
                         <?= $form->field($model, 'APPLIED_RATE')->dropDownList([
                             'Contracted Rate' => 'Contracted Rate',
@@ -172,10 +245,7 @@ $this->registerCss("
                             'prompt' => 'Choose...'
                         ]) ?>
                     </div>
-                    <div class="col-sm-3">
-                        <?= $form->field($model, 'INVOICE')->textInput(['maxlength' => true]) ?>
-                    </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <?= $form->field($model, 'NOTE')->textInput(['maxlength' => true]) ?>
                     </div>
                 </div>
@@ -204,16 +274,16 @@ $this->registerCss("
 </div>
 <?php
 $tmp_detail_ref = [];
-if (isset($_GET['YCJ_REF_NO'])) {
+if (isset($_GET['HDR_ID'])) {
     $tmp_detail_ref = ShipReservationDtr::find()
-    ->where(['YCJ_REF_NO' => $_GET['YCJ_REF_NO']])
+    ->where(['HDR_ID' => $_GET['HDR_ID']])
     ->all();
 }
 
 ?>
 <div class="panel panel-primary" style="<?= $tmp_detail_ref == null ? 'display: none;' : ''; ?>">
     <div class="panel-heading">
-        <h3 class="panel-title">Detail for YCJ Ref. No. <?= $_GET['YCJ_REF_NO']; ?></h3>
+        <h3 class="panel-title">Detail for YCJ Ref. No. <?= $tmp_detail_ref[0]->YCJ_REF_NO; ?> PERIOD : <?= strtoupper(date('M\' Y', strtotime($tmp_detail_ref[0]->PERIOD))); ?></h3>
     </div>
     <div class="panel-body no-padding">
         <table class="table table-striped">
@@ -231,7 +301,8 @@ if (isset($_GET['YCJ_REF_NO'])) {
                     <th class="text-center">20</th>
                     <th class="text-center">BL No.</th>
                     <th class="text-center">Carrier</th>
-                    <th class="text-center">ETD</th>
+                    <th class="text-center">ETD YEMI</th>
+                    <th class="text-center">ETD SUB</th>
                     <th class="text-center">Applied Rate</th>
                     <th class="text-center">Invoice</th>
                     <th class="text-center">Note</th>
@@ -241,7 +312,7 @@ if (isset($_GET['YCJ_REF_NO'])) {
                 <?php foreach ($tmp_detail_ref as $key => $value): ?>
                     <tr>
                         <td>
-                            <?= Html::a('<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>', ['update', 'SEQ' => $value->SEQ]); ?>
+                            <?= Html::a('<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>', ['update', 'DTR_ID' => $value->DTR_ID]); ?>
                         </td>
                         <td class="text-center"><?= $value->RESERVATION_NO; ?></td>
                         <td class="text-center"><?= $value->HELP; ?></td>
@@ -255,6 +326,7 @@ if (isset($_GET['YCJ_REF_NO'])) {
                         <td class="text-center"><?= $value->BL_NO; ?></td>
                         <td class="text-center"><?= $value->CARRIER; ?></td>
                         <td class="text-center"><?= $value->ETD; ?></td>
+                        <td class="text-center"><?= $value->ETD_SUB; ?></td>
                         <td class="text-center"><?= $value->APPLIED_RATE; ?></td>
                         <td class="text-center"><?= $value->INVOICE; ?></td>
                         <td class="text-center"><?= $value->NOTE; ?></td>

@@ -404,6 +404,20 @@ return [
         'PIANO' => 'PIANO',
         'SOUND PROOF' => 'SN'
     ],
+    'kd_flag_arr' => [
+        'KD to HY' => 'KD to HY',
+        'KD to TY' => 'KD to TY',
+        'KD to XY' => 'KD to XY',
+        'KD to YES' => 'KD to YES',
+        'KD to YEMI' => 'KD to YEMI',
+        'KD to YI' => 'KD to YI',
+        'KD to YMMA' => 'KD to YMMA',
+        'KD to YMMI' => 'KD to YMMI',
+        'KD to YMPI' => 'KD to YMPI',
+        'KD to YEM' => 'KD to YEM',
+        'KD to YMIN' => 'KD to YMIN',
+        'KD to YMMJ' => 'KD to YMMJ',
+    ],
 ];
 
 function getYearArray()

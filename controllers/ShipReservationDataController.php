@@ -84,10 +84,13 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 		return ['output' => '', 'selected' => ''];
 	}
 
-	public function actionDelete($SEQ)
+	public function actionDelete($DTR_ID)
 	{
 		try {
-			$this->findModel($SEQ)->delete();
+			$model = $this->findModel($DTR_ID);
+			$model->FLAG = 1;
+
+			$model->save();
 		} catch (\Exception $e) {
 			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
 			\Yii::$app->getSession()->addFlash('error', $msg);
@@ -95,7 +98,7 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 		}
 
 		// TODO: improve detection
-		$isPivot = strstr('$SEQ',',');
+		$isPivot = strstr('$DTR_ID',',');
 		if ($isPivot == true) {
 			return $this->redirect(Url::previous());
 		} elseif (isset(\Yii::$app->session['__crudReturnUrl']) && \Yii::$app->session['__crudReturnUrl'] != '/') {
@@ -109,21 +112,31 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 		}
 	}
 
-	public function actionCreate($YCJ_REF_NO = '')
+	public function actionCreate($HDR_ID = '')
 	{
 		$model = new ShipReservationDtr;
 		date_default_timezone_set('Asia/Jakarta');
 		$this_time = date('Y-m-d H:i:s');
+		$model->ETD_SUB = date('Y-m-t');
+		$model->PERIOD = date('Ym', strtotime($model->ETD_SUB));
 
-		if ($YCJ_REF_NO == '') {
+		if ($HDR_ID == '') {
 			$total_ycj_ref_no = ShipReservationHdr::find()->count();
-			$count_str = str_pad($total_ycj_ref_no + 1, 4, "0", STR_PAD_LEFT);
+			$count_str = str_pad($total_ycj_ref_no + 1, 3, "0", STR_PAD_LEFT);
 			$model->YCJ_REF_NO = 'YEMI' . $count_str;
 		} else {
-			$model->YCJ_REF_NO = $YCJ_REF_NO;
+			$tmp_dtr = ShipReservationDtr::find()->where([
+				'HDR_ID' => $HDR_ID
+			])->orderBy('LAST_UPDATE DESC')->one();
+			$model->YCJ_REF_NO = $tmp_dtr->YCJ_REF_NO;
+			$model->ETD = $tmp_dtr->ETD;
+			$model->ETD_SUB = $tmp_dtr->ETD_SUB;
+			$model->PERIOD = $tmp_dtr->PERIOD;
+			$model->SHIPPER = $tmp_dtr->SHIPPER;
+			$model->POL = $tmp_dtr->POL;
+			$model->KD_FLAG = $tmp_dtr->KD_FLAG;
 		}
 		
-
 		try {
 			if ($model->load($_POST)) {
 				$creator = Karyawan::find()->where([
@@ -141,71 +154,15 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 					$model->CREATED_BY_ID = \Yii::$app->user->identity->username;
 					$model->CREATED_BY_NAME = \Yii::$app->user->identity->username;
 				}
-				$model->UPDATED_BY_ID = $model->CREATED_BY_ID;
-				$model->UPDATED_BY_NAME = $model->CREATED_BY_NAME;
 				
 				$tmp_ship_liner = ShipLiner::findOne($model->CARRIER);
 				$model->POD = $tmp_ship_liner->POD;
 				$model->CARRIER = $tmp_ship_liner->CARRIER;
 				$model->FLAG_DESC = $tmp_ship_liner->FLAG_DESC;
 				$model->FLAG_PRIORITY = $tmp_ship_liner->FLAG_PRIORITY;
+				$model->DTR_ID = $model->PERIOD . $model->YCJ_REF_NO . '_' . date('His', strtotime($this_time));
 				if (!$model->save()) {
 					return json_encode($model->errors);
-				}
-
-				$hdr = ShipReservationHdr::find()->where(['YCJ_REF_NO' => $model->YCJ_REF_NO])->one();
-				if (!$hdr) {
-					$hdr = new ShipReservationHdr;
-					$hdr->YCJ_REF_NO = $model->YCJ_REF_NO;
-				}
-
-				$tmp_total_container = ShipReservationDtr::find()->select([
-					'CNT_40HC' => 'SUM(CNT_40HC)',
-					'CNT_40' => 'SUM(CNT_40)',
-					'CNT_20' => 'SUM(CNT_20)',
-					'total_reservation' => 'COUNT(YCJ_REF_NO)'
-				])
-				->where(['YCJ_REF_NO' => $model->YCJ_REF_NO])
-				->one();
-
-				$hdr_remark = 'Total container for YCJ Ref. No. ' . $model->YCJ_REF_NO . ' : ';
-				$total_container_type = 0;
-
-				if (($tmp_total_container->CNT_40HC + $tmp_total_container->CNT_40 + $tmp_total_container->CNT_20) == 0) {
-					$hdr_remark .= '0 container.';
-				} else {
-					if ($tmp_total_container->CNT_40HC > 0) {
-						$hdr_remark .= $tmp_total_container->CNT_40HC . ' container(s) 40\'HC';
-						$total_container_type++;
-					}
-					if ($tmp_total_container->CNT_40 > 0) {
-						if ($total_container_type > 0) {
-							$hdr_remark .= ', ' . $tmp_total_container->CNT_40 . ' container(s) 40\'';
-						} else {
-							$hdr_remark .= $tmp_total_container->CNT_40 . ' container(s) 40\'';
-						}
-						$total_container_type++;
-					}
-					if ($tmp_total_container->CNT_20 > 0) {
-						if ($total_container_type > 0) {
-							$hdr_remark .= ', ' . $tmp_total_container->CNT_20 . ' container(s) 20\'';
-						} else {
-							$hdr_remark .= $tmp_total_container->CNT_20 . ' container(s) 20\'';
-						}
-					}
-				}
-
-				$hdr->CNT_40HC = $tmp_total_container->CNT_40HC;
-				$hdr->CNT_40 = $tmp_total_container->CNT_40;
-				$hdr->CNT_20 = $tmp_total_container->CNT_20;
-				$hdr->UPDATED_BY_ID = $model->UPDATED_BY_ID;
-				$hdr->UPDATED_BY_NAME = $model->UPDATED_BY_NAME;
-				$hdr->LAST_UPDATE = $model->LAST_UPDATE;
-				$hdr->TOTAL_RESERVATION = $tmp_total_container->total_reservation;
-
-				$hdr->RESERVATION_REMARK = $hdr_remark;
-				if (!$hdr->save()) {
-					return json_encode($hdr->errors);
 				}
 
 				return $this->redirect(Url::previous());
@@ -219,9 +176,9 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 		return $this->render('create', ['model' => $model]);
 	}
 
-	public function actionUpdate($SEQ)
+	public function actionUpdate($DTR_ID)
 	{
-		$model = $this->findModel($SEQ);
+		$model = $this->findModel($DTR_ID);
 		/*$tmp_selected = ShipLiner::find()->where([
     		'POD' => $model->POD,
     		'CARRIER' => $model->CARRIER,
@@ -238,61 +195,6 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 				$model->FLAG_PRIORITY = $tmp_ship_liner->FLAG_PRIORITY;
 				if (!$model->save()) {
 					return json_encode($model->errors);
-				}
-
-				$hdr = ShipReservationHdr::find()->where(['YCJ_REF_NO' => $model->YCJ_REF_NO])->one();
-				if (!$hdr) {
-					$hdr = new ShipReservationHdr;
-					$hdr->YCJ_REF_NO = $model->YCJ_REF_NO;
-				}
-
-				$tmp_total_container = ShipReservationDtr::find()->select([
-					'CNT_40HC' => 'SUM(CNT_40HC)',
-					'CNT_40' => 'SUM(CNT_40)',
-					'CNT_20' => 'SUM(CNT_20)',
-					'total_reservation' => 'COUNT(YCJ_REF_NO)'
-				])
-				->where(['YCJ_REF_NO' => $model->YCJ_REF_NO])
-				->one();
-
-				$hdr_remark = 'Total container for YCJ Ref. No. ' . $model->YCJ_REF_NO . ' : ';
-				$total_container_type = 0;
-
-				if (($tmp_total_container->CNT_40HC + $tmp_total_container->CNT_40 + $tmp_total_container->CNT_20) == 0) {
-					$hdr_remark .= '0 container.';
-				} else {
-					if ($tmp_total_container->CNT_40HC > 0) {
-						$hdr_remark .= $tmp_total_container->CNT_40HC . ' container(s) 40\'HC';
-						$total_container_type++;
-					}
-					if ($tmp_total_container->CNT_40 > 0) {
-						if ($total_container_type > 0) {
-							$hdr_remark .= ', ' . $tmp_total_container->CNT_40 . ' container(s) 40\'';
-						} else {
-							$hdr_remark .= $tmp_total_container->CNT_40 . ' container(s) 40\'';
-						}
-						$total_container_type++;
-					}
-					if ($tmp_total_container->CNT_20 > 0) {
-						if ($total_container_type > 0) {
-							$hdr_remark .= ', ' . $tmp_total_container->CNT_20 . ' container(s) 20\'';
-						} else {
-							$hdr_remark .= $tmp_total_container->CNT_20 . ' container(s) 20\'';
-						}
-					}
-				}
-
-				$hdr->CNT_40HC = $tmp_total_container->CNT_40HC;
-				$hdr->CNT_40 = $tmp_total_container->CNT_40;
-				$hdr->CNT_20 = $tmp_total_container->CNT_20;
-				$hdr->UPDATED_BY_ID = $model->UPDATED_BY_ID;
-				$hdr->UPDATED_BY_NAME = $model->UPDATED_BY_NAME;
-				$hdr->LAST_UPDATE = $model->LAST_UPDATE;
-				$hdr->TOTAL_RESERVATION = $tmp_total_container->total_reservation;
-
-				$hdr->RESERVATION_REMARK = $hdr_remark;
-				if (!$hdr->save()) {
-					return json_encode($hdr->errors);
 				}
 
 				return $this->redirect(Url::previous());

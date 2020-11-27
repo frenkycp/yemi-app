@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['BL_NO', 'RESERVATION_NO', 'HELP', 'STATUS', 'SHIPPER', 'POL', 'POD', 'CARRIER', 'FLAG_DESC', 'ETD', 'APPLIED_RATE', 'INVOICE', 'NOTE', 'YCJ_REF_NO', 'DUE_DATE'], 'safe'],
-            [['CNT_40HC', 'CNT_40', 'CNT_20'], 'number'],
+            [['CNT_40HC', 'CNT_40', 'CNT_20', 'ETD_SUB', 'PERIOD'], 'number'],
             [['FLAG_PRIORITY'], 'integer'],
 ];
 }
@@ -63,6 +63,8 @@ $query->andFilterWhere([
             'FLAG_PRIORITY' => $this->FLAG_PRIORITY,
             'ETD' => $this->ETD,
             'DUE_DATE' => $this->DUE_DATE,
+            'ETD_SUB' => $this->ETD_SUB,
+            'PERIOD' => $this->PERIOD,
         ]);
 
         $query->andFilterWhere(['like', 'BL_NO', $this->BL_NO])

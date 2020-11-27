@@ -104,7 +104,24 @@ use kartik\date\DatePicker;
                     ]); ?>
                 </div>
                 <div class="col-sm-3">
+                    <?= $form->field($model, 'ETD_SUB')->widget(DatePicker::classname(), [
+                        'options' => [
+                            'type' => DatePicker::TYPE_INPUT,
+                        ],
+                        'removeButton' => false,
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true,
+                            'todayBtn' => true,
+                        ]
+                    ]); ?>
+                </div>
+                <div class="col-sm-3">
                     <?= $form->field($model, 'INVOICE') ?>
+                </div>
+                <div class="col-sm-3">
+                    <?= $form->field($model, 'PERIOD') ?>
                 </div>
             </div>
     	</div>

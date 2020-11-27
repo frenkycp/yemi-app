@@ -7,11 +7,11 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.SHIP_RESERVATION_HDR".
+ * This is the base-model class for table "db_owner.SHIPPING_ORDER_VIEW_01".
  *
  * @property string $HDR_ID
- * @property string $PERIOD
  * @property string $YCJ_REF_NO
+ * @property string $PERIOD
  * @property string $POD
  * @property integer $CONFIRM_40HC
  * @property integer $CONFIRM_40
@@ -21,15 +21,10 @@ use Yii;
  * @property integer $UNCONFIRM_40
  * @property integer $UNCONFIRM_20
  * @property integer $UNCONFIRM_LCL
- * @property integer $TOTAL_CONFIRM
- * @property integer $TOTAL_UNCONFIRM
  * @property string $STATUS_CONFIRMED
- * @property string $LAST_UPDATE
- * @property string $UPDATED_BY_ID
- * @property string $UPDATED_BY_NAME
  * @property string $aliasModel
  */
-abstract class ShipReservationHdr extends \yii\db\ActiveRecord
+abstract class ShippingOrderView01 extends \yii\db\ActiveRecord
 {
 
 
@@ -39,7 +34,7 @@ abstract class ShipReservationHdr extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.SHIP_RESERVATION_HDR';
+        return 'db_owner.SHIPPING_ORDER_VIEW_01';
     }
 
     /**
@@ -56,14 +51,12 @@ abstract class ShipReservationHdr extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['HDR_ID', 'YCJ_REF_NO'], 'required'],
-            [['CONFIRM_40HC', 'CONFIRM_40', 'CONFIRM_20', 'CONFIRM_LCL', 'UNCONFIRM_40HC', 'UNCONFIRM_40', 'UNCONFIRM_20', 'UNCONFIRM_LCL', 'TOTAL_CONFIRM', 'TOTAL_UNCONFIRM'], 'integer'],
-            [['LAST_UPDATE'], 'safe'],
-            [['HDR_ID', 'POD', 'STATUS_CONFIRMED', 'UPDATED_BY_ID'], 'string', 'max' => 50],
-            [['PERIOD'], 'string', 'max' => 10],
+            [['HDR_ID', 'YCJ_REF_NO', 'CONFIRM_40HC', 'CONFIRM_40', 'CONFIRM_20', 'CONFIRM_LCL', 'STATUS_CONFIRMED'], 'required'],
+            [['CONFIRM_40HC', 'CONFIRM_40', 'CONFIRM_20', 'CONFIRM_LCL', 'UNCONFIRM_40HC', 'UNCONFIRM_40', 'UNCONFIRM_20', 'UNCONFIRM_LCL'], 'integer'],
+            [['HDR_ID', 'POD'], 'string', 'max' => 50],
             [['YCJ_REF_NO'], 'string', 'max' => 20],
-            [['UPDATED_BY_NAME'], 'string', 'max' => 250],
-            [['HDR_ID'], 'unique']
+            [['PERIOD'], 'string', 'max' => 10],
+            [['STATUS_CONFIRMED'], 'string', 'max' => 11]
         ];
     }
 
@@ -74,8 +67,8 @@ abstract class ShipReservationHdr extends \yii\db\ActiveRecord
     {
         return [
             'HDR_ID' => 'Hdr ID',
-            'PERIOD' => 'Period',
             'YCJ_REF_NO' => 'Ycj Ref No',
+            'PERIOD' => 'Period',
             'POD' => 'Pod',
             'CONFIRM_40HC' => 'Confirm 40 Hc',
             'CONFIRM_40' => 'Confirm 40',
@@ -85,12 +78,7 @@ abstract class ShipReservationHdr extends \yii\db\ActiveRecord
             'UNCONFIRM_40' => 'Unconfirm 40',
             'UNCONFIRM_20' => 'Unconfirm 20',
             'UNCONFIRM_LCL' => 'Unconfirm Lcl',
-            'TOTAL_CONFIRM' => 'Total Confirm',
-            'TOTAL_UNCONFIRM' => 'Total Unconfirm',
             'STATUS_CONFIRMED' => 'Status Confirmed',
-            'LAST_UPDATE' => 'Last Update',
-            'UPDATED_BY_ID' => 'Updated By ID',
-            'UPDATED_BY_NAME' => 'Updated By Name',
         ];
     }
 
