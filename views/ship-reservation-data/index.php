@@ -28,7 +28,7 @@ $gridColumns = [
             },
             'delete' => function ($url, $model, $key) {
                 $options = [
-                    'title' => Yii::t('cruds', 'Close'),
+                    'title' => Yii::t('cruds', 'Delete'),
                     'data-pjax' => '0',
                     'data-confirm' => 'Are you sure to delete this report ?',
                 ];

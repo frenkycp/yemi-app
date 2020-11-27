@@ -22,6 +22,22 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
         return \app\models\Action::getAccess($this->id);
     }
 
+    public function actionIndex()
+	{
+	    $searchModel  = new ShipReservationDataSearch;
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('index', [
+		'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
+	}
+
 	public function actionCarrier($POD_VAL = '', $CARRIER_VAL = '', $FLAG_DESC_VAL = '')
 	{
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -88,9 +104,10 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 	{
 		try {
 			$model = $this->findModel($DTR_ID);
-			$model->FLAG = 1;
+			$model->FLAG = 0;
 
 			$model->save();
+			return $this->redirect(Url::previous());
 		} catch (\Exception $e) {
 			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
 			\Yii::$app->getSession()->addFlash('error', $msg);
