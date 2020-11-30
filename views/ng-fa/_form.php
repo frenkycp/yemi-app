@@ -134,6 +134,7 @@ $this->registerCss("
                         'AVMT' => 'AVMT',
                         'SOUND' => 'SOUND',
                         'OQC' => 'OQC',
+                        'FQA' => 'FQA',
                     ], [
                         'prompt' => 'Choose...'
                     ]); ?>
