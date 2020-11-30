@@ -50,7 +50,7 @@ class ProductionRestController extends Controller
         ->where([
             'AND',
             ['>=', 'POST_DATE', $from_date . ' 00:00:00'],
-            ['<=', 'POST_DATE', $to_date . ' 00:00:00']
+            ['<=', 'POST_DATE', $to_date . ' 23:59:59']
         ])
         ->andWhere(['TRANS_ID' => '11'])
         ->groupBy('POST_DATE, ITEM, ITEM_DESC, LOC, LOC_DESC')

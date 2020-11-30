@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\WipHdrDtr;
+use app\models\WipHdrDtrBu;
 
 /**
 * CisClientIpAddressSearch represents the model behind the search form about `app\models\CisClientIpAddress`.
 */
-class WipHdrDtrSearch extends WipHdrDtr
+class WipHdrDtrSearch extends WipHdrDtrBu
 {
 	/**
 	* @inheritdoc
@@ -43,7 +43,7 @@ class WipHdrDtrSearch extends WipHdrDtr
 	*/
 	public function search($params)
 	{
-		$query = WipHdrDtr::find()
+		$query = WipHdrDtrBu::find()
 		->where('(act_qty - balance_by_day_2) <> 0');
 
 		$dataProvider = new ActiveDataProvider([

@@ -7,11 +7,12 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Expired Monitoring <span class="japanesse light-green"></span>',
-    'tab_title' => 'Expired Monitoring',
-    'breadcrumbs_title' => 'Expired Monitoring'
+    'page_title' => 'Stock Monitoring <span class="japanesse light-green"></span>',
+    'tab_title' => 'Stock Monitoring',
+    'breadcrumbs_title' => 'Stock Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -137,28 +138,40 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['expiration-monitoring']),
+    'action' => Url::to(['stock-monitoring']),
 ]); ?>
 
 <div class="row" style="margin-top: 10px;">
-    <div class="col-md-4">
-        <?php echo '<label class="control-label">Select date range</label>';
-        echo DatePicker::widget([
-            'model' => $model,
-            'attribute' => 'from_date',
-            'attribute2' => 'to_date',
-            'options' => ['placeholder' => 'Start date'],
-            'options2' => ['placeholder' => 'End date'],
-            'type' => DatePicker::TYPE_RANGE,
-            'form' => $form,
+    <div class="col-md-2">
+        <?= $form->field($model, 'from_date')->widget(DatePicker::classname(), [
+            'options' => [
+                'type' => DatePicker::TYPE_INPUT,
+            ],
+            'removeButton' => false,
             'pluginOptions' => [
+                'autoclose'=>true,
                 'format' => 'yyyy-mm-dd',
-                'autoclose' => true,
+                'todayHighlight' => true,
+                'todayBtn' => true,
             ]
-        ]);?>
+        ]); ?>
     </div>
     <div class="col-md-2">
-        <?= $form->field($model, 'item_category')->dropDownList($item_category_arr); ?>
+        <?= $form->field($model, 'to_date')->textInput([
+            'readonly' => true,
+            'style' => 'background-color: black;'
+        ])->label('To Date (Today)') ?>
+    </div>
+    <div class="col-md-4">
+        <?= $form->field($model, 'item')->widget(Select2::classname(), [
+            'data' => $item_arr,
+            'options' => [
+                'placeholder' => 'Choose Item...',
+            ],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]); ?>
     </div>
     <div class="form-group">
         <br/>
@@ -179,11 +192,11 @@ echo '</pre>';*/
                 //'modules/exporting',
                 //'themes/sand-signika',
                 'modules/solid-gauge',
-                //'themes/grid-light',
+                //'themes/dark-unica',
             ],
             'options' => [
                 'chart' => [
-                    'type' => 'area',
+                    'type' => 'line',
                     'height' => '500',
                     'style' => [
                         'fontFamily' => 'sans-serif',
@@ -203,26 +216,32 @@ echo '</pre>';*/
                         'enabled' => false
                     ],
                     'allowDecimals' => false,
-                    //'max' => 1500,
+                    /*'stackLabels' => [
+                        'enabled' => true,
+                    ],*/
                     'min' => 0,
                     //'tickInterval' => 20
                 ],
                 'legend' => [
-                    'enabled' => false
+                    'enabled' => true,
                 ],
                 'credits' => [
                     'enabled' => false
                 ],
                 'tooltip' => [
                     'enabled' => true,
-                    'valueSuffix' => ' Item(s)'
+                    'valueSuffix' => ' ' . $um,
+                    //'shared' => true,
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                 ],
                 'plotOptions' => [
-                    'area' => [
-                        'stacking' => 'percent',
+                    'line' => [
+                        //'stacking' => 'normal',
                         'marker' => [
                             'enabled' => false
+                        ],
+                        'dataLabels' => [
+                            'enabled' => true,
                         ],
                     ],
                     
@@ -233,70 +252,3 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
-
-<table class="table summary-tbl">
-    <thead>
-        <tr>
-            <th class="text-center">Action</th>
-            <th class="text-center">Item Category</th>
-            <th class="text-center">Serial No.</th>
-            <th class="text-center">Part No.</th>
-            <th class="">Description</th>
-            <th class="">Location</th>
-            <th class="text-center">Qty</th>
-            <th class="text-center">UM</th>
-            <th class="text-center">Exp. Rev. No.</th>
-            <th class="text-center">Received Date</th>
-            <th class="text-center">Expired Date</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($tmp_trace_arr as $key => $value):
-            if (strtotime(date('Y-m-d')) >= strtotime($value->EXPIRED_DATE)) {
-                $text_class = 'bg-red';
-            } elseif (strtotime(date('Y-m-d')) > strtotime($value->EXPIRED_DATE . ' -1 month')) {
-                $text_class = 'bg-yellow';
-            } else {
-                $text_class = 'bg-green';
-            }
-            ?>
-            <tr class="text_class">
-                <td class="text-center">
-                    <?php
-                    $options = [
-                        'title' => 'View Log Data',
-                        'class' => 'popupModal',
-                    ];
-                    $url = ['expiration-get-log', 'SERIAL_NO' => $value->SERIAL_NO];
-                    $tmp_count = app\models\TraceItemDtrLog::find()->where(['SERIAL_NO' => $value->SERIAL_NO])->count();
-                    if ($tmp_count == 0) {
-                        echo '<span class="glyphicon glyphicon-list-alt disabled-link"></span>';
-                    } else {
-                        echo Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, $options);
-                    }
-                    
-                    ?>
-                </td>
-                <td class="text-center"><?= $value->CATEGORY; ?></td>
-                <td class="text-center"><?= $value->SERIAL_NO; ?></td>
-                <td class="text-center"><?= $value->ITEM; ?></td>
-                <td class=""><?= $value->ITEM_DESC; ?></td>
-                <td class=""><?= $value->LOC_DESC; ?></td>
-                <td class="text-center"><?= $value->NILAI_INVENTORY; ?></td>
-                <td class="text-center"><?= $value->UM; ?></td>
-                <td class="text-center"><?= $value->EXPIRED_REVISION_NO; ?></td>
-                <td class="text-center"><?= date('Y-m-d', strtotime($value->RECEIVED_DATE)); ?></td>
-                <td class="text-center <?= $text_class; ?>"><?= date('Y-m-d', strtotime($value->EXPIRED_DATE)); ?></td>
-            </tr>
-        <?php endforeach ?>
-    </tbody>
-</table>
-
-<?php
-yii\bootstrap\Modal::begin([
-    'id' =>'modal',
-    'header' => '<h3>Detail Information</h3>',
-    'size' => 'modal-lg',
-]);
-yii\bootstrap\Modal::end();
-?>
