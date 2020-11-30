@@ -647,16 +647,30 @@ class DisplayPrdController extends Controller
             <th class="">NG Detail</th>
         </tr>';
 
-        $tmp_ng_arr = ProdNgData::find()
-        ->where([
-            'loc_id' => 'WF01',
-            'post_date' => $post_date,
-            'fa_area_detec' => ['SOUND', 'OQC'],
-            'defect_category' => $defect_category_filter,
-            'flag' => 1
-        ])
-        ->orderBy('ng_qty DESC')
-        ->all();
+        if ($defect_category == 'post' || $defect_category == 'self_post') {
+            $tmp_ng_arr = ProdNgData::find()
+            ->where([
+                'loc_id' => 'WF01',
+                'post_date' => $post_date,
+                'fa_area_detec' => ['SOUND', 'OQC', 'FQA'],
+                'defect_category' => $defect_category_filter,
+                'flag' => 1
+            ])
+            ->orderBy('ng_qty DESC')
+            ->all();
+        } else {
+            $tmp_ng_arr = ProdNgData::find()
+            ->where([
+                'loc_id' => 'WF01',
+                'post_date' => $post_date,
+                'fa_area_detec' => ['SOUND', 'OQC'],
+                'defect_category' => $defect_category_filter,
+                'flag' => 1
+            ])
+            ->orderBy('ng_qty DESC')
+            ->all();
+        }
+        
 
         $no = 1;
         foreach ($tmp_ng_arr as $key => $value) {
@@ -820,7 +834,7 @@ class DisplayPrdController extends Controller
             ->leftJoin('VMS_ITEM', 'PROD_NG_TBL.gmc_no = VMS_ITEM.ITEM')
             ->where([
                 'loc_id' => 'WF01',
-                'fa_area_detec' => ['SOUND', 'OQC'],
+                'fa_area_detec' => ['SOUND', 'OQC', 'FQA'],
                 'period' => $period,
                 'defect_category' => 'POST',
                 'flag' => 1,
@@ -964,7 +978,7 @@ class DisplayPrdController extends Controller
         ])
         ->where([
             'loc_id' => 'WF01',
-            'fa_area_detec' => ['SOUND', 'OQC'],
+            'fa_area_detec' => ['SOUND', 'OQC', 'FQA'],
             'period' => $period,
             'defect_category' => 'POST',
             'flag' => 1,
