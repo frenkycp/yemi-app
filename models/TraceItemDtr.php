@@ -31,4 +31,9 @@ class TraceItemDtr extends BaseTraceItemDtr
             ]
         );
     }
+
+    public function getItemDescription()
+    {
+        return $this->ITEM_DESC . ' (' . $this->ITEM . ')';
+    }
 }

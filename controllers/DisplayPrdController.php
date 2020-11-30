@@ -27,7 +27,6 @@ use app\models\ClientStatus;
 use app\models\PcbInsertPoint;
 use app\models\PcbOutputInsertPoint01;
 use app\models\PcbNg01;
-use app\models\TraceItemGraph;
 use app\models\TraceItemHdr;
 
 class DisplayPrdController extends Controller
@@ -46,7 +45,7 @@ class DisplayPrdController extends Controller
         $model->from_date = date('Y-m-d', strtotime(' -1 month'));
         $model->to_date = $today;
 
-        $item_arr = ArrayHelper::map(TraceItemGraph::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->groupBy('ITEM, ITEM_DESC')->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
+        $item_arr = ArrayHelper::map(TraceItemHdr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->groupBy('ITEM, ITEM_DESC')->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
 
         $tmp_data = [];
         $item_info = null;
