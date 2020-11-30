@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use app\models\MinimumStockView02;
 use app\models\MinimumStockView03;
 use yii\web\Response;
@@ -56,10 +57,13 @@ class MntMinimumStockController extends \app\controllers\base\MntMinimumStockCon
 			]
 		];
 
+		$dropdown_status = ArrayHelper::map(MinimumStockView03::find()->select('ONHAND_STATUS_DESC, ONHAND_STATUS_DESC')->groupBy('ONHAND_STATUS_DESC, ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all(), 'ONHAND_STATUS_DESC', 'ONHAND_STATUS_DESC');
+
 		return $this->render('index', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
 		    'data' => $data,
+		    'dropdown_status' => $dropdown_status,
 		]);
 	}
 

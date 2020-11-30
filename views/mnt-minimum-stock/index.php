@@ -202,15 +202,15 @@ $grid_column = [
         ],
     ],
     [
-        'attribute' => 'ONHAND_STATUS',
+        'attribute' => 'ONHAND_STATUS_DESC',
         'label' => 'Status',
         'value' => function($model){
             $label_class = '';
-            if ($model->ONHAND_STATUS == 1) {
+            if ($model->ONHAND_STATUS_DESC == 'ASAP TO ORDER') {
                 $label_class = 'label-danger';
-            } elseif ($model->ONHAND_STATUS == 2 || $model->ONHAND_STATUS == 3) {
+            } elseif ($model->ONHAND_STATUS_DESC == 'ORDER' || $model->ONHAND_STATUS_DESC == 'ASAP WAITING RECEIVE') {
                 $label_class = 'label-warning';
-            } elseif ($model->ONHAND_STATUS == 4) {
+            } elseif ($model->ONHAND_STATUS_DESC == 'READY') {
                 $label_class = 'label-success';
             }
             return '<span class="label ' . $label_class . '">' . $model->ONHAND_STATUS_DESC . '</span>';
@@ -222,7 +222,36 @@ $grid_column = [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
-        'filter' => ArrayHelper::map(app\models\MinimumStockView03::find()->select('ONHAND_STATUS, ONHAND_STATUS_DESC')->groupBy('ONHAND_STATUS, ONHAND_STATUS_DESC')->orderBy('ONHAND_STATUS_DESC')->all(), 'ONHAND_STATUS', 'ONHAND_STATUS_DESC'),
+        'filter' => $dropdown_status,
+    ],
+    [
+        'attribute' => 'ONHAND_STATUS_BY_MTTR',
+        'label' => 'Status (By MTTR)',
+        'value' => function($model){
+            $label_class = '';
+            if ($model->ONHAND_STATUS_BY_MTTR == 'ASAP TO ORDER') {
+                $label_class = 'label-danger';
+            } elseif ($model->ONHAND_STATUS_BY_MTTR == 'ORDER' || $model->ONHAND_STATUS_BY_MTTR == 'ASAP WAITING RECEIVE') {
+                $label_class = 'label-warning';
+            } elseif ($model->ONHAND_STATUS_BY_MTTR == 'READY') {
+                $label_class = 'label-success';
+            }
+            return '<span class="label ' . $label_class . '">' . $model->ONHAND_STATUS_BY_MTTR . '</span>';
+        },
+        'format' => 'raw',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
+        ],
+        'filter' => $dropdown_status,
+    ],
+    [
+        'attribute' => 'LAST_MONTH_MTTR',
+        'label' => 'MTTR (Last Month)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'POST_DATE',
