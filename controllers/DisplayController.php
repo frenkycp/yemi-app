@@ -1131,14 +1131,26 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $this_period = date('Ym');
+
         $today = date('Y-m-d');
+        $tmp_yesterday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            '<', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
+        ])
+        ->andWhere('holiday IS NULL')
+        ->orderBy('cal_date DESC')
+        ->one();
+        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
+        $yesterday_period = date('Ym', strtotime($yesterday));
 
         $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
         $model = new \yii\base\DynamicModel([
-            'period', 'line'
+            'line'
         ]);
-        $model->addRule(['period', 'line'], 'required');
-        $model->period = $this_period;
+        $model->addRule(['line'], 'required');
         $model->line = 'ALL';
 
         /*$line_dropdown = ArrayHelper::map(SernoMaster::find()
@@ -1180,7 +1192,7 @@ class DisplayController extends Controller
                 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
             ])
             ->where([
-                'VMS_PERIOD' => $model->period,
+                'VMS_PERIOD' => $yesterday_period,
             ])
             ->andWhere('LINE IS NOT NULL')
             ->andWhere(['<>', 'LINE', 'SPC'])
@@ -1195,7 +1207,7 @@ class DisplayController extends Controller
                 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
             ])
             ->where([
-                'VMS_PERIOD' => $model->period,
+                'VMS_PERIOD' => $yesterday_period,
                 'FG_KD' => 'KD'
             ])
             ->andWhere('LINE IS NOT NULL')
@@ -1211,7 +1223,7 @@ class DisplayController extends Controller
                 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
             ])
             ->where([
-                'VMS_PERIOD' => $model->period,
+                'VMS_PERIOD' => $yesterday_period,
                 'FG_KD' => 'PRODUCT'
             ])
             ->andWhere('LINE IS NOT NULL')
@@ -1227,7 +1239,7 @@ class DisplayController extends Controller
                 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)'
             ])
             ->where([
-                'VMS_PERIOD' => $model->period,
+                'VMS_PERIOD' => $yesterday_period,
                 'LINE' => $model->line
             ])
             ->groupBy('VMS_DATE')
@@ -1308,10 +1320,10 @@ class DisplayController extends Controller
             ],
         ];
 
-        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $model->period])->orderBy('VMS_VERSION')->one();
+        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $yesterday_period])->orderBy('VMS_VERSION')->one();
         $vms_version = $tmp_vms_version->VMS_VERSION;
 
-        $yesterday_period = date('Ym', strtotime(' -1 day'));
+        //$yesterday_period = date('Ym', strtotime(' -1 day'));
         $tmp_yesterday = VmsPlanActual::find()
         ->select([
             'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',

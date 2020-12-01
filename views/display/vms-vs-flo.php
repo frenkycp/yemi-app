@@ -158,14 +158,6 @@ echo '</pre>';*/
 
 <div class="row" style="display: none;">
     <div class="col-md-2">
-        <?= $form->field($model, 'period')->dropDownList(
-            $period_dropdown,
-            [
-                //'prompt' => 'Choose...',
-            ]
-        ); ?>
-    </div>
-    <div class="col-md-2">
         <?= $form->field($model, 'line')->dropDownList(
             $line_dropdown,
             [
