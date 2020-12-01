@@ -221,12 +221,12 @@ class DisplayHrgaController extends Controller
                     $tmp_total_ot = $attendance->total_ot;
                 }
             }
-            if ($tmp_total_ot > 0) {
+            //if ($tmp_total_ot > 0) {
                 $data[$mp->cost_center_name] = [
                     'total_ot' => $tmp_total_ot,
                     'total_mp' => $mp->total_mp
                 ];
-            }
+            //}
             
         }
 

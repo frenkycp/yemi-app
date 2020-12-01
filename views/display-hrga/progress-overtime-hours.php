@@ -134,25 +134,20 @@ foreach ($data as $key => $value) {
     //'layout' => 'horizontal',
     'action' => Url::to(['progress-overtime-hours']),
 ]); ?>
-<div class="row" style="display: none;">
-    <div class="col-md-2">
-        <?= $form->field($model, 'period')->textInput(); ?>
-    </div>
-    <div class="form-group">
-        <br/>
-        <?= Html::submitButton('GENERATE', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
-    </div>
-    
-</div>
 
-<?php ActiveForm::end(); ?>
 
 <div style="margin: auto; width: 800px; padding-top: 10px;" id="display-container">
 
     <div class="text-center" style="font-size: 24px; background-color: #61258e; margin-bottom: 10px; color: white; border-radius: 5px;">
         <span class="japanesse light-green">一人当たりの残業時間</span> (Progress overtime hours per man) H-1
     </div>
-
+    <div class="row" style="">
+        <div class="col-md-3">
+            <?= $form->field($model, 'period')->textInput([
+                'onchange'=>'this.form.submit()'
+            ]); ?>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-12">
             <table class="table summary-tbl">
@@ -238,7 +233,7 @@ foreach ($data as $key => $value) {
                     } else {
                         ?>
                         <tr>
-                            <td>Zero Overtime...</td>
+                            <td colspan="5">Zero Overtime...</td>
                         </tr>
                         <?php
                     }
@@ -249,3 +244,5 @@ foreach ($data as $key => $value) {
     </div>
 
 </div>
+
+<?php ActiveForm::end(); ?>
