@@ -184,28 +184,6 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td>Part Output IPQA, FCT & ICT</td>
-                <?php
-                $tmp_grandtotal = $tmp_count = 0;
-                foreach ($period_data_arr as $period_data): 
-                    if ($period_data['output'] > 0) {
-                        $tmp_count++;
-                        $tmp_grandtotal += $period_data['output'];
-                    }
-                    ?>
-                    <td class="text-center">
-                        <?= number_format($period_data['output']); ?>
-                    </td>
-                <?php endforeach; 
-                $tmp_avg = 0;
-                if ($tmp_count > 0) {
-                    $tmp_avg = round($tmp_grandtotal / $tmp_count);
-                }
-                ?>
-                <td class="text-center"><?= number_format($tmp_avg); ?></td>
-                <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
-            </tr>
-            <tr>
                 <td>Part Defect AI</td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
