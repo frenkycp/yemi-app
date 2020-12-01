@@ -160,9 +160,9 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'line',
+        'attribute' => 'pcb_process',
         'vAlign' => 'middle',
-        'filter' => $ng_found_dropdown,
+        'filter' => (\Yii::$app->params['ng_pcb_process_dropdown']),
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px;'
@@ -213,7 +213,7 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
         ],
-    ],
+    ],/*
     [
         'attribute' => 'pcb_process',
         'label' => 'Process',
@@ -223,7 +223,7 @@ $gridColumns = [
         'filterInputOptions' => [
             'class' => 'form-control',
         ],
-    ],
+    ],*/
     [
         'attribute' => 'pcb_part_section',
         'label' => 'Part Section',

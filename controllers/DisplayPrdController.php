@@ -238,6 +238,9 @@ class DisplayPrdController extends Controller
             'period', 'bu',
             'defect_fa' => 'SUM(CASE WHEN pcb_ng_found = \'FA\' THEN ng_qty ELSE 0 END)',
             'defect_fct_ict' => 'SUM(CASE WHEN pcb_ng_found IN (\'FCT\', \'ICT\') THEN ng_qty ELSE 0 END)',
+            'defect_mi' => 'SUM(CASE WHEN pcb_process = \'MI\' THEN ng_qty ELSE 0 END)',
+            'defect_ai' => 'SUM(CASE WHEN pcb_process = \'AI\' THEN ng_qty ELSE 0 END)',
+            'defect_smt' => 'SUM(CASE WHEN pcb_process = \'SMT\' THEN ng_qty ELSE 0 END)',
         ])
         ->where([
             'period' => $period_arr,
@@ -263,6 +266,7 @@ class DisplayPrdController extends Controller
                 $tmp_data[$bu_val][$period_value]['output'] = $tmp_total;
                 
                 $tmp_ng_fa = $tmp_ng_fct_ict = 0;
+                $tmp_ng_mi = $tmp_ng_ai = $tmp_ng_smt = 0;
                 foreach ($tmp_ng_pcb as $ng_pcb) {
                     $tmp_bu = $ng_pcb->bu;
                     /*if (isset(\Yii::$app->params['bu_conversion_arr'][$tmp_bu])) {
@@ -271,13 +275,23 @@ class DisplayPrdController extends Controller
                     if ($ng_pcb->period == $period_value && $tmp_bu == $bu_val) {
                         $tmp_ng_fa = $ng_pcb->defect_fa;
                         $tmp_ng_fct_ict = $ng_pcb->defect_fct_ict;
+                        $tmp_ng_mi = $ng_pcb->defect_mi;
+                        $tmp_ng_ai = $ng_pcb->defect_ai;
+                        $tmp_ng_smt = $ng_pcb->defect_smt;
                     }
                 }
 
                 $tmp_data['ALL'][$period_value]['defect_fa'] += $tmp_ng_fa;
-                $tmp_data[$bu_val][$period_value]['defect_fa'] = $tmp_ng_fa;
                 $tmp_data['ALL'][$period_value]['defect_fct_ict'] += $tmp_ng_fct_ict;
+                $tmp_data['ALL'][$period_value]['defect_mi'] += $tmp_ng_mi;
+                $tmp_data['ALL'][$period_value]['defect_ai'] += $tmp_ng_ai;
+                $tmp_data['ALL'][$period_value]['defect_smt'] += $tmp_ng_smt;
+
+                $tmp_data[$bu_val][$period_value]['defect_fa'] = $tmp_ng_fa;
                 $tmp_data[$bu_val][$period_value]['defect_fct_ict'] = $tmp_ng_fct_ict;
+                $tmp_data[$bu_val][$period_value]['defect_mi'] = $tmp_ng_mi;
+                $tmp_data[$bu_val][$period_value]['defect_ai'] = $tmp_ng_ai;
+                $tmp_data[$bu_val][$period_value]['defect_smt'] = $tmp_ng_smt;
             }
         }
 

@@ -17,6 +17,7 @@ use Yii;
  * @property string $pcb_name
  * @property string $sap_bu
  * @property string $pcb_ng_found
+ * @property string $pcb_process
  * @property double $ng_qty
  * @property string $hpl_desc
  * @property string $bu
@@ -53,7 +54,7 @@ abstract class PcbNg01 extends \yii\db\ActiveRecord
             [['id'], 'integer'],
             [['post_date'], 'safe'],
             [['ng_qty'], 'number'],
-            [['document_no', 'sap_bu', 'pcb_ng_found', 'hpl_desc', 'bu'], 'string', 'max' => 50],
+            [['document_no', 'sap_bu', 'pcb_ng_found', 'pcb_process', 'hpl_desc', 'bu'], 'string', 'max' => 50],
             [['period'], 'string', 'max' => 10],
             [['pcb_id', 'pcb_name'], 'string', 'max' => 200]
         ];
@@ -73,6 +74,7 @@ abstract class PcbNg01 extends \yii\db\ActiveRecord
             'pcb_name' => 'Pcb Name',
             'sap_bu' => 'Sap Bu',
             'pcb_ng_found' => 'Pcb Ng Found',
+            'pcb_process' => 'Pcb Process',
             'ng_qty' => 'Ng Qty',
             'hpl_desc' => 'Hpl Desc',
             'bu' => 'Bu',

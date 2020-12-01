@@ -141,8 +141,8 @@ echo '</pre>';*/
 
 <?php foreach ($tmp_data as $model_name => $period_data_arr): 
     $tmp_total_ppm_arr = [];
-    $avg_output = $avg_defect_fa = $avg_defect_fct_ict = $avg_ppm_fa = $avg_ppm_fct_ict = 0;
-    $total_defect_fa = $total_defect_fct_ict = $total_ppm_fa = $total_ppm_fct_ict = $total_output = 0;
+    $avg_output = $avg_defect_fa = $avg_defect_fct_ict = $avg_defect_mi = $avg_defect_ai = $avg_defect_smt = $avg_ppm_fa = $avg_ppm_fct_ict = 0;
+    $total_defect_fa = $total_defect_fct_ict = $total_defect_mi = $total_defect_ai = $total_defect_smt = $total_ppm_fa = $total_ppm_fct_ict = $total_output = 0;
     ?>
     <div class="table-responsive">
         <table class="table summary-tbl" style="margin-bottom: 0px;">
@@ -206,61 +206,85 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td>Part Defect FA</td>
+                <td>Part Defect AI</td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period_data): 
-                    if ($period_data['defect_fa'] > 0) {
+                    if ($period_data['defect_ai'] > 0) {
                         $tmp_count++;
-                        $tmp_grandtotal += $period_data['defect_fa'];
+                        $tmp_grandtotal += $period_data['defect_ai'];
                     }
                     ?>
                     <td class="text-center">
-                        <?= number_format($period_data['defect_fa']); ?>
+                        <?= number_format($period_data['defect_ai']); ?>
                     </td>
                 <?php endforeach; 
                 $tmp_avg = 0;
                 if ($tmp_count > 0) {
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
-                $avg_defect_fa = $tmp_avg;
-                $total_defect_fa = $tmp_grandtotal;
+                $avg_defect_ai = $tmp_avg;
+                $total_defect_ai = $tmp_grandtotal;
                 ?>
                 <td class="text-center"><?= number_format($tmp_avg); ?></td>
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td>Part Defect FCT, ICT</td>
+                <td>Part Defect SMT</td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period_data): 
-                    if ($period_data['defect_fct_ict'] > 0) {
+                    if ($period_data['defect_smt'] > 0) {
                         $tmp_count++;
-                        $tmp_grandtotal += $period_data['defect_fct_ict'];
+                        $tmp_grandtotal += $period_data['defect_smt'];
                     }
                     ?>
                     <td class="text-center">
-                        <?= number_format($period_data['defect_fct_ict']); ?>
+                        <?= number_format($period_data['defect_smt']); ?>
                     </td>
                 <?php endforeach; 
                 $tmp_avg = 0;
                 if ($tmp_count > 0) {
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
-                $avg_defect_fct_ict = $tmp_avg;
-                $total_defect_fct_ict = $tmp_grandtotal;
+                $avg_defect_smt = $tmp_avg;
+                $total_defect_smt = $tmp_grandtotal;
                 ?>
                 <td class="text-center"><?= number_format($tmp_avg); ?></td>
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td>PPM at FA</td>
+                <td>Part Defect MI</td>
+                <?php
+                $tmp_grandtotal = $tmp_count = 0;
+                foreach ($period_data_arr as $period_data): 
+                    if ($period_data['defect_mi'] > 0) {
+                        $tmp_count++;
+                        $tmp_grandtotal += $period_data['defect_mi'];
+                    }
+                    ?>
+                    <td class="text-center">
+                        <?= number_format($period_data['defect_mi']); ?>
+                    </td>
+                <?php endforeach; 
+                $tmp_avg = 0;
+                if ($tmp_count > 0) {
+                    $tmp_avg = round($tmp_grandtotal / $tmp_count);
+                }
+                $avg_defect_mi = $tmp_avg;
+                $total_defect_mi = $tmp_grandtotal;
+                ?>
+                <td class="text-center"><?= number_format($tmp_avg); ?></td>
+                <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
+            </tr>
+            <tr>
+                <td>PPM at AI</td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
                     $tmp_ppm = 0;
                     if ($period_data['output'] > 0) {
-                        $tmp_ppm = round(($period_data['defect_fa'] / $period_data['output']) * 1000000, 2);
+                        $tmp_ppm = round(($period_data['defect_ai'] / $period_data['output']) * 1000000, 2);
                     }
                     if ($tmp_ppm > 0) {
                         $tmp_count++;
@@ -277,17 +301,17 @@ echo '</pre>';*/
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
                 ?>
-                <td class="text-center"><?= round(($avg_defect_fa / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= round(($total_defect_fa / $total_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= round(($avg_defect_ai / $avg_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= round(($total_defect_ai / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
-                <td>PPM at FCT, ICT</td>
+                <td>PPM at SMT</td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
                     $tmp_ppm = 0;
                     if ($period_data['output'] > 0) {
-                        $tmp_ppm = round(($period_data['defect_fct_ict'] / $period_data['output']) * 1000000, 2);
+                        $tmp_ppm = round(($period_data['defect_smt'] / $period_data['output']) * 1000000, 2);
                     }
                     if ($tmp_ppm > 0) {
                         $tmp_count++;
@@ -304,8 +328,35 @@ echo '</pre>';*/
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
                 ?>
-                <td class="text-center"><?= round(($avg_defect_fct_ict / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= round(($total_defect_fct_ict / $total_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= round(($avg_defect_smt / $avg_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= round(($total_defect_smt / $total_output) * 1000000, 2); ?></td>
+            </tr>
+            <tr>
+                <td>PPM at MI</td>
+                <?php
+                $tmp_grandtotal = $tmp_count = 0;
+                foreach ($period_data_arr as $period => $period_data):
+                    $tmp_ppm = 0;
+                    if ($period_data['output'] > 0) {
+                        $tmp_ppm = round(($period_data['defect_mi'] / $period_data['output']) * 1000000, 2);
+                    }
+                    if ($tmp_ppm > 0) {
+                        $tmp_count++;
+                        $tmp_grandtotal += $tmp_ppm;
+                    }
+                    $tmp_total_ppm_arr[$period] += $tmp_ppm;
+                    ?>
+                    <td class="text-center">
+                        <?= $tmp_ppm; ?>
+                    </td>
+                <?php endforeach; 
+                $tmp_avg = 0;
+                if ($tmp_count > 0) {
+                    $tmp_avg = round($tmp_grandtotal / $tmp_count);
+                }
+                ?>
+                <td class="text-center"><?= round(($avg_defect_mi / $avg_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= round(($total_defect_mi / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
                 <td>PPM Total</td>
@@ -330,8 +381,8 @@ echo '</pre>';*/
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
                 ?>
-                <td class="text-center"><?= round(($avg_defect_fa / $avg_output) * 1000000, 2) + round(($avg_defect_fct_ict / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= round(($total_defect_fa / $total_output) * 1000000, 2) + round(($total_defect_fct_ict / $total_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= round(($avg_defect_ai / $avg_output) * 1000000, 2) + round(($avg_defect_smt / $avg_output) * 1000000, 2) + round(($avg_defect_mi / $avg_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= round(($total_defect_ai / $total_output) * 1000000, 2) + round(($total_defect_smt / $total_output) * 1000000, 2) + round(($total_defect_mi / $total_output) * 1000000, 2); ?></td>
             </tr>
         </tbody>
     </table>

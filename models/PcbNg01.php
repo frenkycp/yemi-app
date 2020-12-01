@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class PcbNg01 extends BasePcbNg01
 {
-    public $defect_fa, $defect_fct_ict;
+    public $defect_fa, $defect_fct_ict, $defect_mi, $defect_smt, $defect_ai;
 
     public function behaviors()
     {
