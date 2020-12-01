@@ -87,6 +87,9 @@ $css_string = "
         font-weight: bold;
         background-color: rgba(0, 0, 150, 0.3);
     }
+    .panel-title {
+        font-size: 30px;
+    }
     .label-tbl {padding-left: 20px !important;}
     .text-red {color: #ff7564 !important;}
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
@@ -105,6 +108,11 @@ $css_string = "
         margin-bottom: 0px;
     }
     .disabled-link {color: DarkGrey; cursor: not-allowed;}
+    .expired-um {
+        font-size: 60px;
+        font-weight: bold;
+        border: 1px solid black;
+    }
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
 $this->registerCss($css_string);
 
@@ -170,6 +178,49 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
+<div class="row">
+    <div class="col-sm-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">EXPIRED TODAY <small>(<?= strtoupper(date('d M\' Y', strtotime($today))); ?>)</small></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <?php foreach ($expired_today as $key => $value): ?>
+                        <div class="col-sm-6 text-center">
+                            <div class="expired-um">
+                                <?= $value . ' <small style="font-weight: normal;">' . $key . '</small>'; ?>
+                            </div>
+                            
+                        </div>
+                    <?php endforeach ?>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="panel panel-danger">
+            <div class="panel-heading text-center">
+                <h3 class="panel-title">EXPIRED TOMORROW <small>(<?= strtoupper(date('d M\' Y', strtotime($tomorrow))); ?>)</small></h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <?php foreach ($expired_tomorrow as $key => $value): ?>
+                        <div class="col-sm-6 text-center">
+                            <div class="expired-um">
+                                <?= $value . ' <small style="font-weight: normal;">' . $key . '</small>'; ?>
+                            </div>
+                            
+                        </div>
+                    <?php endforeach ?>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="panel panel-default">
     <div class="panel-body no-padding">
         <?=
@@ -184,7 +235,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'area',
-                    'height' => '500',
+                    'height' => '400',
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],

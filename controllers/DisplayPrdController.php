@@ -477,6 +477,7 @@ class DisplayPrdController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
+        $tomorrow = date('Y-m-d', strtotime(' +1 day'));
 
         $model = new \yii\base\DynamicModel([
             'from_date', 'to_date', 'item_category'
@@ -515,7 +516,11 @@ class DisplayPrdController extends Controller
         $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
         $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
         
-        
+        $expired_today = $expired_tomorrow = [
+            'KG' => 0,
+            'L' => 0
+        ];
+        $expired_um_arr = ['KG', 'L'];
         for($i = $begin; $i <= $end; $i->modify('+1 day')){
 
             $tgl = $i->format("Y-m-d");
@@ -526,6 +531,16 @@ class DisplayPrdController extends Controller
             foreach ($tmp_trace_arr as $tmp_trace) {
                 if (strtotime($tgl . '00:00:00') >= strtotime($tmp_trace->EXPIRED_DATE)) {
                     $tmp_total3 ++;
+
+                    foreach ($expired_today as $tmp_expired_um => $expired_um) {
+                        if ($tmp_expired_um == $tmp_trace->UM && $tgl == $today) {
+                            $expired_today[$tmp_expired_um] += $tmp_trace->NILAI_INVENTORY;
+                        }
+                        if ($tmp_expired_um == $tmp_trace->UM && $tgl == $tomorrow) {
+                            $expired_tomorrow[$tmp_expired_um] += $tmp_trace->NILAI_INVENTORY;
+                        }
+                    }
+                    
                 } else {
                     if (strtotime($tgl . '00:00:00') >= strtotime($tmp_trace->EXPIRED_DATE . ' -1 month')) {
                         $tmp_total2 ++;
@@ -598,6 +613,10 @@ class DisplayPrdController extends Controller
             'data' => $data,
             'item_category_arr' => $item_category_arr,
             'tmp_trace_arr' => $tmp_trace_arr,
+            'today' => $today,
+            'tomorrow' => $tomorrow,
+            'expired_today' => $expired_today,
+            'expired_tomorrow' => $expired_tomorrow,
         ]);
     }
 
