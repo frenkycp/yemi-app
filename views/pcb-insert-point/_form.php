@@ -52,24 +52,30 @@ use yii\helpers\StringHelper;
             <div class="row">
                 <div class="col-sm-6">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <?= $form->field($model, 'smt_a')->textInput(['type' => 'number']) ?>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <?= $form->field($model, 'smt_b')->textInput(['type' => 'number']) ?>
+                        </div>
+                        <div class="col-sm-4">
+                            <?= $form->field($model, 'smt')->textInput(['type' => 'number']) ?>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <?= $form->field($model, 'jv2')->textInput(['type' => 'number']) ?>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <?= $form->field($model, 'av131')->textInput(['type' => 'number']) ?>
                         </div>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <?= $form->field($model, 'rg131')->textInput(['type' => 'number']) ?>
+                        </div>
+                        <div class="col-sm-3">
+                            <?= $form->field($model, 'ai')->textInput(['type' => 'number']) ?>
                         </div>
                     </div>
                 </div>

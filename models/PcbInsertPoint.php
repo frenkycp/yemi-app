@@ -62,9 +62,9 @@ class PcbInsertPoint extends BasePcbInsertPoint
     public function beforeSave($insert){
         date_default_timezone_set('Asia/Jakarta');
         if(parent::beforeSave($insert)){
-            $this->smt = $this->smt_a + $this->smt_b;
-            $this->ai = $this->jv2 + $this->av131 + $this->rg131;
-            $this->total = $this->smt + $this->ai + $this->mi;
+            //$this->smt = $this->smt_a + $this->smt_b;
+            //$this->ai = $this->jv2 + $this->av131 + $this->rg131;
+            //$this->total = $this->smt + $this->ai + $this->mi;
             $sap_item = SapItemTbl::find()->where(['material' => $this->part_no])->one();
             if ($sap_item) {
                 $this->sap_bu = $sap_item->hpl_desc;
