@@ -18,7 +18,7 @@ class ClinicDataSearch extends KlinikInput
 public function rules()
 {
 return [
-[['pk', 'nama', 'dept', 'masuk', 'keluar', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby', 'input_date', 'section', 'last_status', 'nik_sun_fish'], 'safe'],
+[['pk', 'nama', 'dept', 'masuk', 'keluar', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby', 'input_date', 'section', 'last_status', 'nik_sun_fish', 'cost_center_name'], 'safe'],
             [['nik', 'opsi', 'confirm'], 'integer'],
 ];
 }
@@ -64,6 +64,7 @@ $query->andFilterWhere([
             'dept' => $this->dept,
             'section' => $this->section,
             'last_status' => $this->last_status,
+            'cost_center_name' => $this->cost_center_name,
         ]);
 
         $query->andFilterWhere(['like', 'nama', $this->nama])

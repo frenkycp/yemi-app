@@ -41,7 +41,7 @@ class KaryawanRestController extends Controller
 
         $tmp_attendance = SunfishAttendanceData::find()
         ->select([
-            'post_date' => 'CAST(shiftendtime AS DATE)', 'VIEW_YEMI_ATTENDANCE.emp_no', 'VIEW_YEMI_ATTENDANCE.full_name', 'cost_center', 'grade' => 'VIEW_YEMI_Emp_OrgUnit.grade_code', 'attend_judgement', 'starttime', 'endtime'
+            'post_date' => 'CAST(shiftendtime AS DATE)', 'VIEW_YEMI_ATTENDANCE.emp_no', 'VIEW_YEMI_ATTENDANCE.full_name', 'cost_center', 'grade' => 'VIEW_YEMI_Emp_OrgUnit.grade_code', 'Attend_Code', 'attend_judgement', 'starttime', 'endtime'
         ])
         ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
         ->where('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'')
