@@ -5150,7 +5150,7 @@ echo '</pre>';*/
 
     public function actionIndoNews()
     {
-        $feeds = array("http://rss.detik.com");
+        $feeds = array("https://www.cnnindonesia.com/nasional/rss");
         $entries = array();
         $tmp_arr = [];
         foreach($feeds as $feed) 
@@ -5162,7 +5162,7 @@ echo '</pre>';*/
         foreach ($entries as $row) 
         {
             $tmp = $row->title;
-            $tmp_arr[] = $tmp . ' - news.detik';
+            $tmp_arr[] = $tmp . ' - cnnindonesia.com';
         }
         shuffle($tmp_arr);
 
