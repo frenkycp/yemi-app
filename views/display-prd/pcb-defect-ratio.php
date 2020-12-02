@@ -78,6 +78,13 @@ $css_string = "
         width: 110px;
         min-width: 110px;
     }
+    .row-title {
+        font-weight: bold;
+    }
+    .row-title > small {
+        font-weight: normal;
+        font-style: italic;
+    }
     .label-tbl {padding-left: 20px !important;}
     .text-red {color: #ff7564 !important;}
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
@@ -160,7 +167,7 @@ echo '</pre>';*/
         </thead>
         <tbody>
             <tr>
-                <td>Part Output PCB</td>
+                <td><span class="row-title">Part Output PCB <small>(pcs)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period_data): 
@@ -184,7 +191,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td>Part Defect AI</td>
+                <td><span class="row-title">Part Defect AI <small>(pcs)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period_data): 
@@ -208,7 +215,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td>Part Defect SMT</td>
+                <td><span class="row-title">Part Defect SMT <small>(pcs)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period_data): 
@@ -232,7 +239,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td>Part Defect MI</td>
+                <td><span class="row-title">Part Defect MI <small>(pcs)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period_data): 
@@ -256,7 +263,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td>PPM at AI</td>
+                <td><span class="row-title">PPM at AI <small>(ppm)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -283,7 +290,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= round(($total_defect_ai / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
-                <td>PPM at SMT</td>
+                <td><span class="row-title">PPM at SMT <small>(ppm)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -310,7 +317,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= round(($total_defect_smt / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
-                <td>PPM at MI</td>
+                <td><span class="row-title">PPM at MI <small>(ppm)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -337,7 +344,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= round(($total_defect_mi / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
-                <td>PPM Total</td>
+                <td><span class="row-title">PPM Total <small>(ppm)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($tmp_total_ppm_arr as $tmp_ppm):
