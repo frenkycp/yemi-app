@@ -1502,8 +1502,8 @@ class ProductionRestController extends Controller
                         $update_ijazah->ACTUAL_QTY_ALLOC = $actual_qty_alloc;
                         $update_ijazah->BALANCE_QTY_ALLOC = $tmp_balance_qty_alloc;
                         $update_ijazah->ACT_ALLOC_LAST_UPDATE = $this_time;
-                        $update_ijazah->PLAN_AMT = $tmp_ijazah->PLAN_QTY * $tmp_ijazah->STD_PRICE;
-                        $update_ijazah->ACTUAL_AMT_ALLOC = $ACTUAL_AMT_ALLOC;
+                        $update_ijazah->PLAN_AMT = round($tmp_ijazah->PLAN_QTY * $tmp_ijazah->STD_PRICE, 1);
+                        $update_ijazah->ACTUAL_AMT_ALLOC = round($ACTUAL_AMT_ALLOC, 1);
                         $update_ijazah->BALANCE_AMT_ALLOC = round($tmp_balance_qty_alloc * $tmp_ijazah->STD_PRICE, 1);
                         $update_ijazah->AMT_RATIO = $amt_ratio;
                         if (!$update_ijazah->save()) {

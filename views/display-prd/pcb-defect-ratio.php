@@ -263,7 +263,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td><span class="row-title">PPM at AI <small>(ppm)</small></span></td>
+                <td><span class="row-title">AI <small>(ppm)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -290,7 +290,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= round(($total_defect_ai / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
-                <td><span class="row-title">PPM at SMT <small>(ppm)</small></span></td>
+                <td><span class="row-title">SMT <small>(ppm)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -317,7 +317,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= round(($total_defect_smt / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
-                <td><span class="row-title">PPM at MI <small>(ppm)</small></span></td>
+                <td><span class="row-title">MI <small>(ppm)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -344,7 +344,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= round(($total_defect_mi / $total_output) * 1000000, 2); ?></td>
             </tr>
             <tr>
-                <td><span class="row-title">PPM Total <small>(ppm)</small></span></td>
+                <td><span class="row-title">Total <small>(ppm)</small></span></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($tmp_total_ppm_arr as $tmp_ppm):
