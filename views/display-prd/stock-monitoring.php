@@ -213,13 +213,13 @@ echo '</pre>';*/
                 'yAxis' => [
                     'minorGridLineWidth' => 0,
                     'title' => [
-                        'enabled' => false
+                        'text' => $um,
                     ],
                     'allowDecimals' => false,
                     /*'stackLabels' => [
                         'enabled' => true,
                     ],*/
-                    'min' => 0,
+                    //'min' => 0,
                     //'tickInterval' => 20
                 ],
                 'legend' => [
@@ -231,7 +231,7 @@ echo '</pre>';*/
                 'tooltip' => [
                     'enabled' => true,
                     'valueSuffix' => ' ' . $um,
-                    //'shared' => true,
+                    'shared' => true,
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                 ],
                 'plotOptions' => [

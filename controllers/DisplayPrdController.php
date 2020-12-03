@@ -28,6 +28,9 @@ use app\models\PcbInsertPoint;
 use app\models\PcbOutputInsertPoint01;
 use app\models\PcbNg01;
 use app\models\TraceItemHdr;
+use app\models\SapGrGiByPlant; //current stock
+use app\models\SapMaterialDocumentBc; //stock in out
+
 
 class DisplayPrdController extends Controller
 {
@@ -47,9 +50,11 @@ class DisplayPrdController extends Controller
 
         $item_arr = ArrayHelper::map(TraceItemDtr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->groupBy('ITEM, ITEM_DESC')->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
 
-        $tmp_data = [];
+        $tmp_data = $tmp_data_total = $tmp_data_sap_stock = [];
         $item_info = null;
         if ($model->load($_GET)) {
+
+            //start actual stock
             $model->to_date = $today;
             $tmp_dtr = TraceItemDtr::find()
             ->select([
@@ -116,6 +121,7 @@ class DisplayPrdController extends Controller
                     $tgl = $i->format("Y-m-d");
 
                     $tmp_data[$dtr_val->LOC_DESC][$tgl] = $initial_stock;
+                    $tmp_data_total[$tgl] += $initial_stock;
 
                     if (count($tmp_log) > 0) {
                         
@@ -142,8 +148,52 @@ class DisplayPrdController extends Controller
                     }
 
                 }
-            }
+            } //end actual stock
             
+            //start sap stock
+            $tmp_sap_current_stock = SapGrGiByPlant::find()->where([
+                'plant' => '8250',
+                'material' => $model->item
+            ])->one();
+            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+            $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+            $sap_initial_stock = 0;
+            $sap_stock_last_update = date('Y-m-d');
+            if ($tmp_sap_current_stock) {
+                $sap_initial_stock = $tmp_sap_current_stock->ending_balance;
+                $sap_stock_last_update = date('Y-m-d', $tmp_sap_current_stock->file_date);
+            }
+
+            $tmp_sap_log_arr = SapMaterialDocumentBc::find()
+            ->select([
+                'posting_date' => 'CAST(posting_date AS date)', 'qty_in' => 'SUM(qty_in)', 'qty_out' => 'SUM(qty_out)'
+            ])
+            ->where([
+                'plant' => '8250',
+                'material' => $model->item
+            ])
+            ->andWhere(['>=', 'posting_date', $model->from_date])
+            //->andWhere(['<=', 'posting_date', $sap_stock_last_update])
+            ->groupBy('posting_date')
+            ->orderBy('posting_date DESC')
+            ->all();
+
+            for($i = $end; $i >= $begin; $i->modify('-1 day')){
+                $tgl = $i->format("Y-m-d");
+                /*if ($tgl > $sap_stock_last_update) {
+                    $tmp_data_sap_stock[$tgl] = null;
+                } else {
+                    $tmp_data_sap_stock[$tgl] = $sap_initial_stock;
+                }*/
+                $tmp_data_sap_stock[$tgl] = round($sap_initial_stock);
+
+                foreach ($tmp_sap_log_arr as $tmp_sap_log) {
+                    if ($tgl == $tmp_sap_log->posting_date) {
+                        $sap_initial_stock += $tmp_sap_log->qty_out;
+                        $sap_initial_stock -= $tmp_sap_log->qty_in;
+                    }
+                }
+            }
         }
 
         if (count($tmp_data > 0)) {
@@ -151,6 +201,8 @@ class DisplayPrdController extends Controller
                 ksort($tmp_data[$key]);
             }
         }
+        ksort($tmp_data_total);
+        ksort($tmp_data_sap_stock);
 
         $tmp_data2 = [];
         foreach ($tmp_data as $loc_desc => $value) {
@@ -165,13 +217,39 @@ class DisplayPrdController extends Controller
             $tmp_data2[$loc_desc] = $tmp_data3;
         }
 
+        $tmp_data_total2 = [];
+        foreach ($tmp_data_total as $key => $value) {
+            $post_date = (strtotime($key . " +7 hours") * 1000);
+            $tmp_data_total2[] = [
+                'x' => $post_date,
+                'y' => round($value),
+            ];
+        }
+
+        $tmp_data_sap_stock2 = [];
+        foreach ($tmp_data_sap_stock as $key => $value) {
+            $post_date = (strtotime($key . " +7 hours") * 1000);
+            $tmp_data_sap_stock2[] = [
+                'x' => $post_date,
+                'y' => ($value),
+            ];
+        }
+
         $data = [];
-        foreach ($tmp_data2 as $key => $value) {
+        /*foreach ($tmp_data2 as $key => $value) {
             $data[] = [
                 'name' => $key,
                 'data' => $value
             ];
-        }
+        }*/
+        $data[] = [
+            'name' => 'ACTUAL QTY',
+            'data' => $tmp_data_total2
+        ];
+        $data[] = [
+            'name' => 'SAP QTY',
+            'data' => $tmp_data_sap_stock2
+        ];
 
         return $this->render('stock-monitoring', [
             'model' => $model,
