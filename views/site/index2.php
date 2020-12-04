@@ -236,7 +236,7 @@ $this->registerCss("
                         ]) ?>
                     </div>
                     <div class="list-group">
-                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> OT Non-Production<span class="japanesse-word"></span>', 'http://10.110.52.10/po/summary_yoy', [
+                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Loss Time Non Production<span class="japanesse-word"></span>', 'http://10.110.52.10/po/summary_yoy', [
                             'class' => 'list-group-item',
                             'target' => '_blank'
                         ]) ?>
