@@ -405,10 +405,21 @@ return [
         'SOUND PROOF' => 'SN'
     ],
     'bu_arr_production' => [
-        'AV', 'PA', 'DMI', 'SN', 'PIANO', 'B&O', 'OTHER'
+        'AV' => 'AV',
+        'PA' => 'PA',
+        'DMI' => 'DMI',
+        'SN' => 'SN',
+        'PIANO' => 'PIANO',
+        'B&O' => 'B&O',
+        'OTHER' => 'OTHER',
     ],
     'bu_arr_shipping' => [
-        'AV', 'PA', 'DMI', 'SN', 'PIANO', 'B&O'
+        'AV' => 'AV',
+        'PA' => 'PA',
+        'DMI' => 'DMI',
+        'SN' => 'SN',
+        'PIANO' => 'PIANO',
+        'B&O' => 'B&O',
     ],
     'kd_flag_arr' => [
         'KD to HY' => 'KD to HY',

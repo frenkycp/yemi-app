@@ -1030,7 +1030,7 @@ class DisplayController extends Controller
             $period_arr[] = $value->PERIOD;
         }
 
-        $tmp_bu_arr = IjazahPlanActual::find()->select('BU')->where(['FG_KD' => 'PRODUCT'])->groupBy('BU')->orderBy('BU')->all();
+        $tmp_bu_arr = \Yii::$app->params['bu_arr_production'];
 
         $tmp_data_summary = IjazahPlanActual::find()->select([
             'BU', 'PERIOD',
@@ -1053,7 +1053,7 @@ class DisplayController extends Controller
                 $tmp_pct = 0;
                 $plan_amt = $act_amt = 0;
                 foreach ($tmp_data_summary as $tmp_summary) {
-                    if ($tmp_bu->BU == $tmp_summary->BU && $period == $tmp_summary->PERIOD) {
+                    if ($tmp_bu == $tmp_summary->BU && $period == $tmp_summary->PERIOD) {
                         $plan_amt = $tmp_summary->PLAN_AMT;
                         $act_amt = $tmp_summary->ACTUAL_AMT_ALLOC;
                     }
@@ -1063,7 +1063,7 @@ class DisplayController extends Controller
                 }
                 /*$plan_qty = $actual_qty = 0;
                 foreach ($tmp_data_summary as $tmp_summary) {
-                    if ($tmp_bu->BU == $tmp_summary->BU && $period == $tmp_summary->PERIOD) {
+                    if ($tmp_bu == $tmp_summary->BU && $period == $tmp_summary->PERIOD) {
                         $plan_qty = $tmp_summary->PLAN_QTY;
                         if ($type == 1) {
                             $actual_qty = $tmp_summary->ACTUAL_QTY;
@@ -1075,7 +1075,7 @@ class DisplayController extends Controller
                 if ($plan_qty > 0) {
                     $tmp_pct = round(($actual_qty / $plan_qty) * 100, 1);
                 }*/
-                $data[$tmp_bu->BU][] = [
+                $data[$tmp_bu][] = [
                     'plan' => $plan_amt,
                     'actual' => $act_amt,
                     'pct' => $tmp_pct
