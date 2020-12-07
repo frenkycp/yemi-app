@@ -404,6 +404,12 @@ return [
         'PIANO' => 'PIANO',
         'SOUND PROOF' => 'SN'
     ],
+    'bu_arr_production' => [
+        'AV', 'PA', 'DMI', 'SN', 'PIANO', 'B&O', 'OTHER'
+    ],
+    'bu_arr_shipping' => [
+        'AV', 'PA', 'DMI', 'SN', 'PIANO', 'B&O'
+    ],
     'kd_flag_arr' => [
         'KD to HY' => 'KD to HY',
         'KD to TY' => 'KD to TY',

@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
+use yii\httpclient\Client;
 
 //production-monthly-inspection
 use app\models\InspectionReportView;
@@ -1101,6 +1102,91 @@ class DisplayController extends Controller
         ]);
     }
 
+    public function actionShippingDisplayChorei($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+        $tmp_today_week = SernoCalendar::find()->where(['etd' => $today])->one();
+        $today_week_no = $tmp_today_week->week_ship;
+        $today_year = date('Y', strtotime($today));
+        $tmp_last_week = SernoCalendar::find()->where(['<', 'etd', $today])->andWhere(['<', 'week_ship', $today_week_no])->orderBy('etd DESC')->one();
+        $last_week_no = $tmp_last_week->week_ship;
+        $last_week_year = date('Y', strtotime($tmp_last_week->etd));
+
+        $total_container = 0;
+        $period_week_arr = [
+            [
+                'year' => $last_week_year . '',
+                'week_no' => $last_week_no . ''
+            ],
+            [
+                'year' => $today_year . '',
+                'week_no' => $today_week_no . ''
+            ],
+        ];
+        $tmp_bu_arr = \Yii::$app->params['bu_arr_shipping'];
+
+        $data = [];
+        $data_summary = [];
+        foreach ($period_week_arr as $period_week_val) {
+            $client = new Client();
+            $tmp_response = [];
+            $tmp_week_no = $period_week_val['week_no'] . '';
+            $response = $client->createRequest()
+                ->setMethod('POST')
+                ->setUrl('http://10.110.52.5:99/api/rest_server.php?weekly_ship&year=' . $period_week_val['year'] . '&week=' . $tmp_week_no)
+                //->setData(['year' => $period_week_val['year'], 'week' => $tmp_week_no])
+                ->send();
+            if ($response->isOk) {
+                $tmp_response = $response->data['data1'];
+                // /print_r($tmp_response);
+                //$total_container = $response->data['data2']['total_cnt'];
+                //$newUserId = $response->data['id'];
+            }
+
+            $tmp_total_plan = $tmp_total_actual = $tmp_total_progress = 0;
+            foreach ($tmp_bu_arr as $bu_val) {
+                $tmp_plan = $tmp_actual = $tmp_pct = 0;
+                if (count($tmp_response) > 0) {
+                    foreach ($tmp_response as $response_val) {
+                        if ($response_val['bu'] == $bu_val) {
+                            $tmp_plan = $response_val['plan'];
+                            $tmp_actual = $response_val['actual'];
+                            if ($tmp_plan > 0) {
+                                $tmp_pct = round(($tmp_actual / $tmp_plan) * 100, 1);
+                            }
+                        }
+                    }
+                }
+                $tmp_total_plan += $tmp_plan;
+                $tmp_total_actual += $tmp_actual;
+                $data[$tmp_week_no][$bu_val] = [
+                    'plan' => $tmp_plan,
+                    'actual' => $tmp_actual,
+                    'progress' => $tmp_pct
+                ];
+            }
+            if ($tmp_total_plan > 0) {
+                $tmp_total_progress = round(($tmp_total_actual / $tmp_total_plan) * 100);
+            }
+            $data_summary[$tmp_week_no] = [
+                'progress' => $tmp_total_progress
+            ];
+        }
+
+        
+
+        return $this->render('shipping-display-chorei', [
+            'total_container' => $total_container,
+            'today_week_no' => $today_week_no,
+            'last_week_no' => $last_week_no,
+            'data' => $data,
+            'data_summary' => $data_summary,
+            'period_week_arr' => $period_week_arr,
+        ]);
+    }
+
     public function actionShippingDisplay($value='')
     {
         $this->layout = 'clean';
@@ -1502,6 +1588,102 @@ class DisplayController extends Controller
             'yesterday_data' => $yesterday_data,
             'tmp_top_minus' => $tmp_top_minus,
             'yesterday' => $yesterday,
+        ]);
+    }
+
+    public function actionVmsYesterday($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $this_period = date('Ym');
+
+        $today = date('Y-m-d');
+        $tmp_yesterday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            '<', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
+        ])
+        ->andWhere('holiday IS NULL')
+        ->orderBy('cal_date DESC')
+        ->one();
+        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
+        $yesterday_period = date('Ym', strtotime($yesterday));
+
+        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
+        $model = new \yii\base\DynamicModel([
+            'line'
+        ]);
+        $model->addRule(['line'], 'required');
+        $model->line = 'ALL';
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $yesterday_period])->orderBy('VMS_VERSION')->one();
+        $vms_version = $tmp_vms_version->VMS_VERSION;
+
+        $tmp_bu_arr = \Yii::$app->params['bu_arr_production'];
+
+        $tmp_yesterday = VmsPlanActual::find()
+        ->select([
+            'BU', 'PLAN_QTY' => 'SUM(PLAN_QTY)', 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)', 'BALANCE_QTY' => 'SUM(BALANCE_QTY)'
+        ])
+        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere(['VMS_PERIOD' => $yesterday_period])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('BU')
+        ->all();
+
+        $tmp_data_yesterday = [];
+        foreach ($tmp_bu_arr as $bu_val) {
+            $tmp_plan = $tmp_actual = $tmp_balance = $tmp_pct = 0;
+            foreach ($tmp_yesterday as $key => $value) {
+                if ($value->BU == $bu_val) {
+                    $tmp_plan = $value->PLAN_QTY;
+                    $tmp_actual = $value->ACTUAL_QTY;
+                    $tmp_balance = $value->BALANCE_QTY;
+                    if ($tmp_plan > 0) {
+                        $tmp_pct = round(($tmp_actual / $tmp_plan) * 100);
+                    }
+                }
+            }
+            $tmp_data_yesterday[$bu_val] = [
+                'plan' => $tmp_plan,
+                'actual' => $tmp_actual,
+                'balance' => $tmp_balance,
+                'pct' => $tmp_pct,
+            ];
+        }
+
+        $tmp_top_minus = VmsPlanActual::find()
+        ->select([
+            'MODEL','ITEM', 'ITEM_DESC',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
+        ])
+        ->where([
+            'VMS_PERIOD' => $yesterday_period,
+            //'FG_KD' => 'PRODUCT'
+        ])
+        ->andWhere(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere('LINE IS NOT NULL')
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('MODEL, ITEM, ITEM_DESC')
+        //->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
+        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
+        ->limit(3)
+        ->all();
+
+        return $this->render('vms-yesterday', [
+            'model' => $model,
+            'period_dropdown' => $period_dropdown,
+            'vms_version' => $vms_version,
+            'tmp_top_minus' => $tmp_top_minus,
+            'tmp_data_yesterday' => $tmp_data_yesterday,
         ]);
     }
 
