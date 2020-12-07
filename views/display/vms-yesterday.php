@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Production Progress <span class="japanesse light-green">(生産進捗)</span> VMS (N-1)',
-    'tab_title' => 'Production Progress (N-1)',
-    'breadcrumbs_title' => 'Production Progress (N-1)'
+    'page_title' => 'Production Progress <span class="japanesse light-green">(生産進捗)</span> VMS (D-1)',
+    'tab_title' => 'Production Progress (D-1)',
+    'breadcrumbs_title' => 'Production Progress (D-1)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -221,21 +221,7 @@ echo '</pre>';*/
         </tr>
     </tfoot>
 </table>
-<hr style="margin-top: 0px; margin-bottom: 20px;">
-<?php
-if (count($tmp_top_minus) == 0) { } else {
-    ?>
-    <div class="row">
-        <?php foreach ($tmp_top_minus as $value): ?>
-            <div class="text-center col-md-4" style="font-size: 26px; color: white;">
-                <?= $value->ITEM; ?> | <?= $value->ITEM_DESC . ' ' . $value->DESTINATION; ?> | <span class="text-red"><?= $value->BALANCE_QTY; ?></span>
-            </div>
-        <?php endforeach ?>
-    </div>
-<?php }
-?>
-<hr>
-<span style="color: silver; font-size: 1.2em;"><i>VMS Version : <?= $vms_version; ?></i><i style="display: none;">Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
+<span style="color: silver; font-size: 1.5em;"><i>VMS Version : <?= $vms_version; ?></i><i style="display: none;">Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
 <?php
     yii\bootstrap\Modal::begin([
         'id' =>'modal',
