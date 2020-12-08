@@ -192,13 +192,13 @@ class IqaInspectionController extends \app\controllers\base\IqaInspectionControl
 
 	public function actionDailyInspection()
 	{
-		$session = \Yii::$app->session;
+		/*$session = \Yii::$app->session;
         if (!$session->has('iqa_inspection_user')) {
             return $this->redirect(['login']);
         }
         $nik = $session['iqa_inspection_user'];
-        $name = $session['iqa_inspection_name'];
-        $this->layout = 'iqa-inspection\main';
+        $name = $session['iqa_inspection_name'];*/
+        $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
         $data = $tmp_data_open = $tmp_data_ok = $tmp_data_ng = [];
