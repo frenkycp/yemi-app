@@ -407,7 +407,7 @@ echo '</pre>';*/
                     ],
                     'yAxis' => [
                         'min' => 0,
-                        'max' => 2490,
+                        'max' => 4200,
 
                         'minorTickInterval' => 'auto',
                         'minorTickWidth' => 1,
@@ -433,11 +433,11 @@ echo '</pre>';*/
                             'color' => '#55BF3B' // green
                         ], [
                             'from' => 1500,
-                            'to' => 2000,
+                            'to' => 3300,
                             'color' => '#DDDF0D' // yellow
                         ], [
-                            'from' => 2000,
-                            'to' => 2490,
+                            'from' => 3300,
+                            'to' => 4200,
                             'color' => '#DF5353' // red
                         ]]
                     ],
