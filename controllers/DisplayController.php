@@ -1107,6 +1107,81 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
+
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_calendar = SernoCalendar::find()->where(['EXTRACT(year_month FROM etd)' => $model->period])->andWhere(['>', 'week_ship', 2])->orderBy('etd')->all();
+        $tmp_week_arr = [];
+        $current_week = 0;
+        foreach ($tmp_calendar as $key => $value) {
+            if (!isset($tmp_week_arr[$value->week_ship]['start_date'])) {
+                $tmp_week_arr[$value->week_ship]['start_date'] = $value->etd;
+                $tmp_week_arr[$value->week_ship]['end_date'] = $value->etd;
+            }
+            if ($value->etd > $tmp_week_arr[$value->week_ship]['end_date']) {
+                $tmp_week_arr[$value->week_ship]['end_date'] = $value->etd;
+            }
+            if ($value->etd == $today) {
+                $current_week = $value->week_ship;
+            }
+        }
+
+        $tmp_bu_arr = \Yii::$app->params['bu_arr_shipping'];
+
+        $client = new Client();
+        $tmp_response = [];
+        $response = $client->createRequest()
+            ->setMethod('POST')
+            ->setUrl('http://10.110.52.5:99/api/rest_server.php?weekly_ship&period=' . $model->period)
+            //->setData(['year' => $period_week_val['year'], 'week' => $tmp_week_no])
+            ->send();
+        if ($response->isOk) {
+            $tmp_response = $response->data['data1'];
+            // /print_r($tmp_response);
+            //$total_container = $response->data['data2']['total_cnt'];
+            //$newUserId = $response->data['id'];
+        }
+
+        $tmp_new_data = [];
+        foreach ($tmp_bu_arr as $bu_val) {
+            foreach ($tmp_week_arr as $week_no => $week_value) {
+                $tmp_plan = $tmp_actual = $tmp_progress = 0;
+                if (count($tmp_response) > 0) {
+                    foreach ($tmp_response as $response_val) {
+                        if ($response_val['bu'] == $bu_val && $week_no == $response_val['week_ship']) {
+                            $tmp_plan = $response_val['plan'];
+                            $tmp_actual = $response_val['actual'];
+                            if ($tmp_plan > 0) {
+                                $tmp_progress = round(($tmp_actual / $tmp_plan) * 100, 1);
+                            }
+                        }
+                    }
+                }
+
+                $progress_class = ' text-green';
+                if ($tmp_progress < 100 && $tmp_plan > 0) {
+                    $progress_class = ' text-red';
+                }
+                
+                $tmp_new_data[$bu_val][$week_no] = [
+                    'plan' => $tmp_plan,
+                    'actual' => $tmp_actual,
+                    'progress' => $tmp_progress,
+                    'start_date' => $week_value['start_date'],
+                    'end_date' => $week_value['end_date'],
+                    'progress_class' => $progress_class
+                ];
+            }
+        }
+
         $tmp_today_week = SernoCalendar::find()->where(['etd' => $today])->one();
         $today_week_no = $tmp_today_week->week_ship;
         $today_year = date('Y', strtotime($today));
@@ -1125,7 +1200,7 @@ class DisplayController extends Controller
                 'week_no' => $today_week_no . ''
             ],
         ];
-        $tmp_bu_arr = \Yii::$app->params['bu_arr_shipping'];
+        
 
         $data = [];
         $data_summary = [];
@@ -1178,12 +1253,16 @@ class DisplayController extends Controller
         
 
         return $this->render('shipping-display-chorei', [
+            'model' => $model,
             'total_container' => $total_container,
             'today_week_no' => $today_week_no,
             'last_week_no' => $last_week_no,
             'data' => $data,
             'data_summary' => $data_summary,
             'period_week_arr' => $period_week_arr,
+            'tmp_new_data' => $tmp_new_data,
+            'tmp_week_arr' => $tmp_week_arr,
+            'current_week' => $current_week,
         ]);
     }
 

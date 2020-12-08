@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Shipping Progress <span class="japanesse light-green">(出荷進捗)</span>',
-    'tab_title' => 'Shipping Progress',
-    'breadcrumbs_title' => 'Shipping Progress'
+    'page_title' => 'PRODUCTION FOR WEEKLY SHIPPING <span class="japanesse light-green"></span>',
+    'tab_title' => 'PRODUCTION FOR WEEKLY SHIPPING',
+    'breadcrumbs_title' => 'PRODUCTION FOR WEEKLY SHIPPING'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Jakarta');
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 1.5em; text-align: center;}
+    .content-header {color: white; font-size: 0.8em; text-align: center; letter-spacing: 1.5px;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -47,7 +47,7 @@ $css_string = "
     .summary-tbl > tbody > tr > td{
         border:1px solid #777474;
         font-size: 50px;
-        background: #121213;
+        background: #2f2f2f;
         color: #FFF;
         vertical-align: middle;
         padding: 10px 10px;
@@ -55,12 +55,12 @@ $css_string = "
         //height: 100px;
     }
     .summary-tbl > thead > tr > th{
-        border: 1px solid #595F66;
+        border: 2px solid #595F66;
         border-top: 0px;
         background-color: #518469;
         color: #ffeb3b;
         font-size: 30px;
-        border-bottom: 7px solid #797979;
+        //border-bottom: 2px solid #797979;
         vertical-align: middle;
     }
      .tbl-header{
@@ -98,9 +98,12 @@ $css_string = "
     .text-red {color: #ff7564 !important;}
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
-    #summary-tbl > tbody > tr:nth-child(odd) > td {background: #2f2f2f;}
+    //.summary-tbl > tbody > tr:nth-child(odd) > td {background: #2f2f2f;}
     .accumulation > td {
         background: #454B52 !important;
+    }
+    .current-week {
+        background-color: #121213 !important;
     }
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important;}
@@ -159,12 +162,61 @@ $this->registerJs("$(function() {
 });");
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
-print_r($data);
+print_r($tmp_new_data);
 echo '</pre>';*/
 ?>
 
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['shipping-display-chorei']),
+]); ?>
 
-<div class="row" style="padding-top: 20px;">
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-2">
+        <?= $form->field($model, 'period')->textInput(
+            [
+                'onchange'=>'this.form.submit()'
+            ]
+        ); ?>
+    </div>
+    
+    
+</div>
+
+<?php ActiveForm::end(); ?>
+
+<table class="table summary-tbl">
+    <thead>
+        <tr>
+            <th rowspan="2">BU</th>
+            <?php foreach ($tmp_week_arr as $key => $value): ?>
+                <th class="text-center" colspan="3" style="line-height: 80%;" width="200px"><?= 'WEEK ' . $key; ?><br/><span style="font-size: 0.6em;">(<?= date('d M\' y', strtotime($value['start_date'])); ?> - <?= date('d M\' y', strtotime($value['end_date'])); ?>)</span></th>
+            <?php endforeach ?>
+        </tr>
+        <tr>
+            <?php foreach ($tmp_week_arr as $key => $value): ?>
+                <th class="text-center" style="font-size: 24px;" width="110px;">P<span style="font-size: 0.6em;">LAN</span></th>
+                <th class="text-center" style="font-size: 24px;" width="110px;">A<span style="font-size: 0.6em;">CTUAL</span></th>
+                <th class="text-center" style="font-size: 24px;" width="110px;">P<span style="font-size: 0.6em;">ROGRESS</span></th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($tmp_new_data as $bu_val => $bu_data): ?>
+            <tr>
+                <td><?= $bu_val; ?></td>
+                <?php foreach ($bu_data as $week_no => $value): ?>
+                    <td class="text-center<?= $current_week == $week_no ? ' current-week' : ''; ?>" style="font-size: 1.9em;"><?= number_format($value['plan']); ?></td>
+                    <td class="text-center<?= $current_week == $week_no ? ' current-week' : ''; ?>" style="font-size: 1.9em;"><?= number_format($value['actual']); ?></td>
+                    <td class="text-center<?= $value['progress_class']; ?><?= $current_week == $week_no ? ' current-week' : ''; ?>" style="font-size: 1.9em; font-weight: bold"><?= ($value['progress']); ?><span style="font-size: 0.6em;">%</span></td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+<div class="row" style="padding-top: 20px; display: none;">
     <?php foreach ($data as $week_no => $data_val_arr): ?>
         <div class="col-sm-6">
             <div class="panel panel-default">
@@ -210,4 +262,5 @@ if (count($top_minus) == 0) { } else {
     </div>
 <?php }
 ?>
+<br/>
 <span style="color: silver; font-size: 20px;"><i>Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
