@@ -26,7 +26,7 @@ $css_string = "
     .content-header>h1 {font-size: 3.5em; font-family: sans-serif; font-weight: bold;}
     body {background-color: #ecf0f5;}
     .form-group {margin-bottom: 0px;}
-    body, .content-wrapper {background-color: #000;}
+    body, .content-wrapper {background-color: white;}
     .content {padding-top: 0px;}
     .small-box .icon {top: 1px;}
     .inner p {font-size: 18px;}
@@ -41,27 +41,25 @@ $css_string = "
     .summary-tbl > tbody > tr > td{
         border:1px solid #777474;
         font-size: 14px;
-        background: #33383d;
-        color: #FFF;
+        background: white;
+        color: black;
         vertical-align: middle;
-        padding: 10px 10px;
+        //padding: 10px 10px;
         letter-spacing: 1.1px;
         //height: 100px;
     }
     .summary-tbl > thead > tr > th{
-        border:1px solid #8b8c8d;
-        background-color: #518469;
-        color: white;
+        border:1px solid #777474 !important;
+        background-color: rgb(255, 229, 153);
+        color: black;
         font-size: 16px;
-        border-bottom: 7px solid #797979;
+        //border-bottom: 7px solid #797979;
         vertical-align: middle;
-        letter-spacing: 2px;
-        font-weight: normal;
     }
      .tbl-header{
         border:1px solid #8b8c8d !important;
         background-color: #518469 !important;
-        color: white !important;
+        color: black !important;
         font-size: 16px !important;
         border-bottom: 7px solid #797979 !important;
         vertical-align: middle !important;
@@ -70,7 +68,7 @@ $css_string = "
         border:1px solid #777474;
         font-size: 20px;
         background: #000;
-        color: yellow;
+        color: white;
         vertical-align: middle;
         padding: 20px 10px;
         letter-spacing: 1.1px;
@@ -96,7 +94,7 @@ $css_string = "
     .text-red {color: #ff7564 !important;}
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
-    .summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
+    //.summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .accumulation > td {
         background: #454B52 !important;
     }
@@ -116,7 +114,6 @@ $css_string = "
         border: 1px solid black;
     }
     #main-title {
-        color: white;
         font-size: 40px;
         padding: 10px 0px;
     }
