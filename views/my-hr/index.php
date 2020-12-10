@@ -77,21 +77,10 @@ echo '</pre>';*/
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <strong><i class="fa fa-map-marker margin-r-5"></i> Department</strong>
-
-                <p class="text-muted"><?= $model_karyawan->DEPARTEMEN; ?></p>
-
-                <br\>
 
                 <strong><i class="fa fa-map-marker margin-r-5"></i> Section</strong>
 
-                <p class="text-muted"><?= $model_karyawan->SECTION; ?></p>
-
-                <br\>
-
-                <strong><i class="fa fa-map-marker margin-r-5"></i> Sub - Section</strong>
-
-                <p class="text-muted"><?= $model_karyawan->SUB_SECTION; ?></p>
+                <p class="text-muted"><?= $model_karyawan_sunfish->cost_center_name; ?></p>
 
                 <br\>
 
@@ -111,6 +100,17 @@ echo '</pre>';*/
 
                 <p class="text-muted"><?= $model_karyawan->STATUS_PERKAWINAN !== null ? $model_karyawan->STATUS_PERKAWINAN : '-'; ?></p>
 
+                <strong><i class="fa fa-fw fa-star"></i> BPJS No.</strong>
+
+                <p class="text-muted"><?= $model_karyawan_sunfish->BPJS !== null ? $model_karyawan_sunfish->BPJS : '-'; ?></p>
+
+                <br\>
+
+                <strong><i class="fa fa-fw fa-star"></i> Jamsostek No.</strong>
+
+                <p class="text-muted"><?= $model_karyawan_sunfish->JP !== null ? $model_karyawan_sunfish->JP : '-'; ?></p>
+
+                <br\>
             </div>
             <!-- /.box-body -->
         </div>
