@@ -30,10 +30,32 @@ use app\models\PcbNg01;
 use app\models\TraceItemHdr;
 use app\models\SapGrGiByPlant; //current stock
 use app\models\SapMaterialDocumentBc; //stock in out
+use app\models\IpqaPatrolTbl;
 
 
 class DisplayPrdController extends Controller
 {
+    public function actionIpqaDailyPatrol()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = IpqaPatrolTbl::find()
+        ->where([
+            'IPQA_PATROL_TBL.flag' => 1,
+            'status' => [0, 2]
+        ])
+        ->andWhere([
+            '>=', 'event_date', '2019-12-09'
+        ])
+        ->orderBy('event_date DESC')
+        ->all();
+
+        return $this->render('ipqa-daily-patrol', [
+            'data' => $data,
+        ]);
+    }
+
     public function actionStockMonitoring($value='')
     {
         $this->layout = 'clean';

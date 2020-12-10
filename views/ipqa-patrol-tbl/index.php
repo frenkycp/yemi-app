@@ -442,10 +442,10 @@ $columns = [
 $special_role_id = [1, 28];
 if (in_array(\Yii::$app->user->identity->role_id, $special_role_id)) {
     $special_role = true;
-    unset($columns[11]);
+    unset($columns[12]);
 } else {
     $special_role = false;
-    unset($columns[12]);
+    unset($columns[13]);
 }
 ?>
 
