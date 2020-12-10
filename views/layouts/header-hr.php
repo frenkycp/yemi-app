@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use app\models\Karyawan;
+use app\models\SunfishViewEmp;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -8,6 +9,11 @@ $session = \Yii::$app->session;
 $nik = $session['my_hr_user'];
 $model_karyawan = Karyawan::find()->where([
     'NIK' => $nik
+])->one();
+
+$nik_sunfish = $session['my_hr_user_sunfish'];
+$model_karyawan_sunfish = SunfishViewEmp::find()->where([
+    'Emp_no' => $nik_sunfish
 ])->one();
 
 $current_controller = \Yii::$app->controller->id;
@@ -100,7 +106,7 @@ $current_action = \Yii::$app->controller->action->id;
                     ?>
 
                   <p style="font-size: 15px;">
-                    <?= ucwords(strtolower($model_karyawan->NAMA_KARYAWAN)); ?><br/><?= ucwords(strtolower($model_karyawan->DEPARTEMEN)); ?>
+                    <?= ucwords(strtolower($model_karyawan->NAMA_KARYAWAN)); ?><br/><?= $model_karyawan_sunfish->cost_center_name; ?>
                     <small>Member since : <?= date('d M\' Y', strtotime($model_karyawan->TGL_MASUK_YEMI)); ?></small>
                   </p>
                 </li>
