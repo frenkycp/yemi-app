@@ -407,7 +407,7 @@ echo '</pre>';*/
                     ],
                     'yAxis' => [
                         'min' => 0,
-                        'max' => 4200,
+                        'max' => 2700,
 
                         'minorTickInterval' => 'auto',
                         'minorTickWidth' => 1,
@@ -429,15 +429,15 @@ echo '</pre>';*/
                         ],
                         'plotBands' => [[
                             'from' => 0,
-                            'to' => 1500,
+                            'to' => 1600,
                             'color' => '#55BF3B' // green
                         ], [
-                            'from' => 1500,
-                            'to' => 3300,
+                            'from' => 1600,
+                            'to' => 2500,
                             'color' => '#DDDF0D' // yellow
                         ], [
-                            'from' => 3300,
-                            'to' => 4200,
+                            'from' => 2500,
+                            'to' => 2700,
                             'color' => '#DF5353' // red
                         ]]
                     ],
