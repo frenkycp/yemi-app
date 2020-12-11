@@ -201,7 +201,7 @@ $grid_column = [
             'style' => 'text-align: center;'
         ],
     ],
-    /*[
+    [
         'attribute' => 'ONHAND_STATUS_DESC',
         'label' => 'Status',
         'value' => function($model){
@@ -223,7 +223,7 @@ $grid_column = [
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
         'filter' => $dropdown_status,
-    ],*/
+    ],
     [
         'attribute' => 'ONHAND_STATUS_BY_MTTR',
         'label' => 'Status (By MTTR)',
@@ -356,10 +356,10 @@ $this->registerJs("$(document).ready(function() {
         var value_arr = [];
         $('input[name=\"selection[]\"]:checked').each(function() {
             var tmp_qty = parseInt($(this).closest('tr').find('td:eq(10)').text());
-            var tmp_niprcv = $(this).closest('tr').find('td:eq(19)').text();
-            var tmp_account = $(this).closest('tr').find('td:eq(20)').text();
-            var tmp_lt = $(this).closest('tr').find('td:eq(21)').text();
-            var tmp_cost_dep = $(this).closest('tr').find('td:eq(22)').text();
+            var tmp_niprcv = $(this).closest('tr').find('td:eq(21)').text();
+            var tmp_account = $(this).closest('tr').find('td:eq(22)').text();
+            var tmp_lt = $(this).closest('tr').find('td:eq(23)').text();
+            var tmp_cost_dep = $(this).closest('tr').find('td:eq(24)').text();
             value_arr.push({item:this.value, req_qty:tmp_qty, nip_rcv:tmp_niprcv, account:tmp_account, lt:tmp_lt, cost_dep: tmp_cost_dep});
             //alert(tmp_qty);
             if(strvalue!=\"\")
