@@ -201,7 +201,7 @@ $grid_column = [
             'style' => 'text-align: center;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'ONHAND_STATUS_DESC',
         'label' => 'Status',
         'value' => function($model){
@@ -223,7 +223,7 @@ $grid_column = [
             'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
         'filter' => $dropdown_status,
-    ],
+    ],*/
     [
         'attribute' => 'ONHAND_STATUS_BY_MTTR',
         'label' => 'Status (By MTTR)',
