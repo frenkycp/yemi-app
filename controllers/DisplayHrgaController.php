@@ -34,9 +34,14 @@ class DisplayHrgaController extends Controller
         $yesterday = date('Y-m-d', strtotime($post_date . ' -1 day'));
 
         $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($post_date, $post_date);
-        $tmp_temperature = TemperatureDailyView02::find()->where([
+        $tmp_temperature = TemperatureDailyView02::find()
+        ->where([
             '>=', 'POST_DATE', $yesterday
-        ])->orderBy('TEMPERATURE DESC')->all();
+        ])
+        ->andWhere([
+            '<=', 'POST_DATE', $post_date
+        ])
+        ->orderBy('TEMPERATURE DESC')->all();
         /*$tmp_temperature = ScanTemperature::find()->where(['POST_DATE' => $post_date])->all();*/
 
         $shift_summary_arr = [
@@ -164,9 +169,14 @@ class DisplayHrgaController extends Controller
         /*$tmp_temperature = TemperatureDailyView01::find()->where([
             '>=', 'POST_DATE', $yesterday
         ])->orderBy('TEMPERATURE')->all();*/
-        $tmp_temperature = TemperatureDailyView02::find()->where([
+        $tmp_temperature = TemperatureDailyView02::find()
+        ->where([
             '>=', 'POST_DATE', $yesterday
-        ])->orderBy('TEMPERATURE')->all();
+        ])
+        ->andWhere([
+            '<=', 'POST_DATE', $model->post_date
+        ])
+        ->orderBy('TEMPERATURE')->all();
         /*$tmp_temperature = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->all();*/
 
         $shift_summary_arr = [
