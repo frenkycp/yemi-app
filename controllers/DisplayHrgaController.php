@@ -16,9 +16,232 @@ use app\models\WorkDayTbl;
 use app\models\KoyemiInOutView;
 use app\models\Karyawan;
 use app\models\PermitInputData;
+use app\models\TemperatureDailyView01;
+use app\models\ScanTemperature;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionTemperatureDailyGetRemark($post_date, $temperature)
+    {
+        $remark = '<div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3>' . $post_date . '</h3>
+        </div>
+        <div class="modal-body">
+        ';
+
+        $yesterday = date('Y-m-d', strtotime($post_date . ' -1 day'));
+
+        $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($post_date, $post_date);
+        $tmp_temperature = TemperatureDailyView01::find()->where([
+            '>=', 'POST_DATE', $yesterday
+        ])->orderBy('TEMPERATURE')->all();
+        /*$tmp_temperature = ScanTemperature::find()->where(['POST_DATE' => $post_date])->all();*/
+
+        $shift_summary_arr = [
+            1 => [
+                'total_check' => 0,
+                'total_no_check' => 0
+            ],
+            2 => [
+                'total_check' => 0,
+                'total_no_check' => 0
+            ],
+            3 => [
+                'total_check' => 0,
+                'total_no_check' => 0
+            ],
+        ];
+        $tmp_data_suspect = $tmp_data_person = $tmp_data = [];
+        foreach ($tmp_attendance[$post_date] as $attendance_val) {
+            $tmp_suhu = $check_time = null;
+            foreach ($tmp_temperature as $temp_val) {
+                if ($attendance_val['shift'] == 3) {
+                    if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($yesterday . ' 00:00:00')) {
+                        $tmp_suhu = $temp_val->TEMPERATURE;
+                        $check_time = $temp_val->LAST_UPDATE;
+                    }
+                } else {
+                    if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($post_date . ' 00:00:00')) {
+                        $tmp_suhu = $temp_val->TEMPERATURE;
+                        $check_time = $temp_val->LAST_UPDATE;
+                    }
+                }
+                
+            }
+            if ($tmp_suhu == null) {
+                $shift_summary_arr[$attendance_val['shift']]['total_no_check'] ++;
+            } else {
+                $shift_summary_arr[$attendance_val['shift']]['total_check'] ++;
+                if ($tmp_suhu >= 37.5) {
+                    $tmp_data_suspect[] = [
+                        'nik' => $attendance_val['nik'],
+                        'name' => $attendance_val['name'],
+                        'temperature' => $tmp_suhu,
+                    ];
+                }
+                if ($tmp_suhu < 35) {
+                    if (!isset($tmp_data['34'])) {
+                        $tmp_data['34'] = 0;
+                    }
+                    $tmp_data['34']++;
+                    $tmp_data_person['34'][] = [
+                        'nik' => $attendance_val['nik'],
+                        'name' => $attendance_val['name'],
+                        'temperature' => $tmp_suhu,
+                        'check_time' => $check_time,
+                    ];
+                } else {
+                    if (!isset($tmp_data[$tmp_suhu . ''])) {
+                        $tmp_data[$tmp_suhu . ''] = 0;
+                    }
+                    $tmp_data[$tmp_suhu . '']++;
+                    $tmp_data_person[$tmp_suhu . ''][] = [
+                        'nik' => $attendance_val['nik'],
+                        'name' => $attendance_val['name'],
+                        'temperature' => $tmp_suhu,
+                        'check_time' => $check_time,
+                    ];
+                }
+            }
+        }
+        
+        
+        $remark .= '<table class="table table-bordered table-striped table-hover">';
+        $remark .= '<tr style="font-size: 14px;">
+            <th class="text-center">No.</th>
+            <th class="text-center">NIK</th>
+            <th class="">Name</th>
+            <th class="text-center">Check Time</th>
+            <th class="text-center">Temperature</th>
+        </tr>';
+
+        $no = 1;
+        foreach ($tmp_data_person[$temperature . ''] as $key => $value) {
+            $remark .= '<tr style="font-size: 14px;">
+                <td class="text-center">' . $no . '</td>
+                <td class="text-center">' . $value['nik'] . '</td>
+                <td class="">' . $value['name'] . '</td>
+                <td class="text-center">' . $value['check_time'] . '</td>
+                <td class="text-center">' . $value['temperature'] . '</td>
+            </tr>';
+            $no++;
+        }
+
+        $remark .= '</table>';
+        $remark .= '</div>';
+
+        return $remark;
+    }
+
+    public function actionTemperatureDaily($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'post_date',
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime($model->post_date . ' -1 day'));
+
+        $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
+        $tmp_temperature = TemperatureDailyView01::find()->where([
+            '>=', 'POST_DATE', $yesterday
+        ])->orderBy('TEMPERATURE')->all();
+        /*$tmp_temperature = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->all();*/
+
+        $shift_summary_arr = [
+            1 => [
+                'total_check' => 0,
+                'total_no_check' => 0
+            ],
+            2 => [
+                'total_check' => 0,
+                'total_no_check' => 0
+            ],
+            3 => [
+                'total_check' => 0,
+                'total_no_check' => 0
+            ],
+        ];
+        $tmp_data_suspect = $tmp_data = [];
+        foreach ($tmp_attendance[$model->post_date] as $attendance_val) {
+            $tmp_suhu = null;
+            foreach ($tmp_temperature as $temp_val) {
+                if ($attendance_val['shift'] == 3) {
+                    if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($yesterday . ' 00:00:00')) {
+                        $tmp_suhu = $temp_val->TEMPERATURE;
+                    }
+                } else {
+                    if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($model->post_date . ' 00:00:00')) {
+                        $tmp_suhu = $temp_val->TEMPERATURE;
+                    }
+                }
+                
+            }
+            if ($tmp_suhu == null) {
+                $shift_summary_arr[$attendance_val['shift']]['total_no_check'] ++;
+            } else {
+                $shift_summary_arr[$attendance_val['shift']]['total_check'] ++;
+                if ($tmp_suhu >= 37.5) {
+                    $tmp_data_suspect[] = [
+                        'nik' => $attendance_val['nik'],
+                        'name' => $attendance_val['name'],
+                        'temperature' => $tmp_suhu,
+                    ];
+                }
+                if ($tmp_suhu < 35) {
+                    if (!isset($tmp_data['34'])) {
+                        $tmp_data['34'] = 0;
+                    }
+                    $tmp_data['34']++;
+                } else {
+                    if (!isset($tmp_data[$tmp_suhu . ''])) {
+                        $tmp_data[$tmp_suhu . ''] = 0;
+                    }
+                    $tmp_data[$tmp_suhu . '']++;
+                }
+            }
+        }
+
+        if (count($tmp_data) > 0) {
+            ksort($tmp_data);
+        }
+
+        $data_chart = $categories = $tmp_data_chart = [];
+        foreach ($tmp_data as $key => $value) {
+            $category = $key . ' °C';
+            if ($key == '34') {
+                $category = '<35 °C';
+            }
+            $categories[] = $category;
+            $tmp_data_chart[] = [
+                //'x' => $category,
+                'y' => $value,
+                'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature' => $key])
+            ];
+        }
+        $data_chart = [
+            [
+                'name' => 'Total Person(s)',
+                'data' => $tmp_data_chart,
+                'showInLegend' => false,
+            ],
+        ];
+
+        return $this->render('temperature-daily', [
+            'model' => $model,
+            'categories' => $categories,
+            'data_chart' => $data_chart,
+            'tmp_attendance' => $tmp_attendance,
+            'shift_summary_arr' => $shift_summary_arr,
+            'tmp_data_suspect' => $tmp_data_suspect,
+            'tmp_data' => $tmp_data,
+        ]);
+    }
+
     public function actionTopPermitData($value='')
     {
         $this->layout = 'clean';

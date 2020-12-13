@@ -143,17 +143,18 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
         ->where('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'')
         ->andWhere([
             'AND',
-            ['>=', 'FORMAT(shiftendtime, \'yyyy-MM-dd\')', $from_date],
-            ['<=', 'FORMAT(shiftendtime, \'yyyy-MM-dd\')', $to_date],
+            ['>=', 'shiftendtime', $from_date . ' 00:00:00'],
+            ['<=', 'shiftendtime', $to_date . ' 23:59:59'],
         ])
+        ->andWhere(['VIEW_YEMI_Emp_OrgUnit.status' => 1])
         ->orderBy('shiftendtime, emp_no')
         ->all();
 
         foreach ($tmp_data as $value) {
             if ($value->start_date <= $value->shiftendtime && ($value->end_date == null || $value->end_date >= $value->shiftendtime)) {
                 if (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_1') !== false
-                    || strtoupper($value->shiftdaily_code) == 'GARDENER'
-                    || strtoupper($value->shiftdaily_code) == 'SHIFT_08_17') {
+                    || strpos(strtoupper($value->shiftdaily_code), 'SHIFT_08_17') !== false
+                    || strpos(strtoupper($value->shiftdaily_code), 'GARDENER') !== false) {
                     $shift =  1;
                 } elseif (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_2') !== false || strpos(strtoupper($value->shiftdaily_code), 'MAINTENANCE') !== false) {
                     $shift =  2;
