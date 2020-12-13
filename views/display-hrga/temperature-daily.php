@@ -19,7 +19,6 @@ $this->title = [
 date_default_timezone_set('Asia/Jakarta');
 
 
-
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
@@ -97,6 +96,23 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
+$script = <<< JS
+    $(function() {
+        $('#belum_cek_1').click(function () {
+            $('#modal_1').modal('show');
+        });
+        $('#belum_cek_2').click(function () {
+            $('#modal_2').modal('show');
+        });
+        $('#belum_cek_3').click(function () {
+            $('#modal_3').modal('show');
+        });
+    });
+JS;
+
+$this->registerJs($script);
+
+
 /*echo '<pre>';
 print_r($tmp_data);
 echo '</pre>';*/
@@ -144,7 +160,7 @@ echo '</pre>';*/
                     <tr>
                         <td class="text-center"><?= $shift; ?></td>
                         <td class="text-center"><?= number_format($value['total_check']); ?></td>
-                        <td class="text-center"><?= number_format($value['total_no_check']); ?></td>
+                        <td class="text-center"><span id="belum_cek_<?= $shift; ?>"><?= number_format($value['total_no_check']); ?></span></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
@@ -179,6 +195,7 @@ echo '</pre>';*/
                 
             </tbody>
         </table>
+
     </div>
     <div class="col-sm-8">
         <?php
@@ -241,6 +258,46 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+
+<?php foreach ($tmp_belum_check as $shift_val => $data_arr): 
+    yii\bootstrap\Modal::begin([
+        'id' =>'modal_' . $shift_val,
+        'header' => '<h3>Belum Cek (Shift ' . $shift_val . ')</h3>',
+        'size' => 'modal-lg',
+    ]);
+    ?>
+
+    <div id="modalContent<?= $key; ?>">
+        <table class="table summary-tbl">
+            <thead>
+                <tr>
+                    <th class="text-center">No</th>
+                    <th class="text-center">NIK</th>
+                    <th class="">Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                $no = 0;
+                foreach ($data_arr as $key => $value): 
+                    $no++;
+                    ?>
+                    <tr>
+                        <td class="text-center"><?= $no; ?></td>
+                        <td class="text-center"><?= $value['nik']; ?></td>
+                        <td class=""><?= $value['name']; ?></td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+        
+    </div>
+
+    <?php
+    yii\bootstrap\Modal::end();
+    ?>
+    
+<?php endforeach ?>
 
 <?php
 yii\bootstrap\Modal::begin([

@@ -17,11 +17,12 @@ use app\models\KoyemiInOutView;
 use app\models\Karyawan;
 use app\models\PermitInputData;
 use app\models\TemperatureDailyView01;
+use app\models\TemperatureDailyView02;
 use app\models\ScanTemperature;
 
 class DisplayHrgaController extends Controller
 {
-    public function actionTemperatureDailyGetRemark($post_date, $temperature)
+    public function actionTemperatureDailyGetRemark($post_date, $temperature_category)
     {
         $remark = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -33,9 +34,9 @@ class DisplayHrgaController extends Controller
         $yesterday = date('Y-m-d', strtotime($post_date . ' -1 day'));
 
         $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($post_date, $post_date);
-        $tmp_temperature = TemperatureDailyView01::find()->where([
+        $tmp_temperature = TemperatureDailyView02::find()->where([
             '>=', 'POST_DATE', $yesterday
-        ])->orderBy('TEMPERATURE')->all();
+        ])->orderBy('TEMPERATURE DESC')->all();
         /*$tmp_temperature = ScanTemperature::find()->where(['POST_DATE' => $post_date])->all();*/
 
         $shift_summary_arr = [
@@ -60,11 +61,13 @@ class DisplayHrgaController extends Controller
                     if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($yesterday . ' 00:00:00')) {
                         $tmp_suhu = $temp_val->TEMPERATURE;
                         $check_time = $temp_val->LAST_UPDATE;
+                        $tmp_suhu_category = $temp_val->TEMPERATURE_CATEGORY;
                     }
                 } else {
                     if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($post_date . ' 00:00:00')) {
                         $tmp_suhu = $temp_val->TEMPERATURE;
                         $check_time = $temp_val->LAST_UPDATE;
+                        $tmp_suhu_category = $temp_val->TEMPERATURE_CATEGORY;
                     }
                 }
                 
@@ -73,7 +76,13 @@ class DisplayHrgaController extends Controller
                 $shift_summary_arr[$attendance_val['shift']]['total_no_check'] ++;
             } else {
                 $shift_summary_arr[$attendance_val['shift']]['total_check'] ++;
-                if ($tmp_suhu >= 37.5) {
+                $tmp_data_person[$tmp_suhu_category . ''][] = [
+                    'nik' => $attendance_val['nik'],
+                    'name' => $attendance_val['name'],
+                    'temperature' => $tmp_suhu,
+                    'check_time' => $check_time,
+                ];
+                /*if ($tmp_suhu >= 37.5) {
                     $tmp_data_suspect[] = [
                         'nik' => $attendance_val['nik'],
                         'name' => $attendance_val['name'],
@@ -102,7 +111,7 @@ class DisplayHrgaController extends Controller
                         'temperature' => $tmp_suhu,
                         'check_time' => $check_time,
                     ];
-                }
+                }*/
             }
         }
         
@@ -117,7 +126,7 @@ class DisplayHrgaController extends Controller
         </tr>';
 
         $no = 1;
-        foreach ($tmp_data_person[$temperature . ''] as $key => $value) {
+        foreach ($tmp_data_person[$temperature_category . ''] as $key => $value) {
             $remark .= '<tr style="font-size: 14px;">
                 <td class="text-center">' . $no . '</td>
                 <td class="text-center">' . $value['nik'] . '</td>
@@ -144,10 +153,18 @@ class DisplayHrgaController extends Controller
         ]);
         $model->addRule(['post_date'], 'required');
         $model->post_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
         $yesterday = date('Y-m-d', strtotime($model->post_date . ' -1 day'));
 
         $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
-        $tmp_temperature = TemperatureDailyView01::find()->where([
+        /*$tmp_temperature = TemperatureDailyView01::find()->where([
+            '>=', 'POST_DATE', $yesterday
+        ])->orderBy('TEMPERATURE')->all();*/
+        $tmp_temperature = TemperatureDailyView02::find()->where([
             '>=', 'POST_DATE', $yesterday
         ])->orderBy('TEMPERATURE')->all();
         /*$tmp_temperature = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->all();*/
@@ -166,23 +183,30 @@ class DisplayHrgaController extends Controller
                 'total_no_check' => 0
             ],
         ];
-        $tmp_data_suspect = $tmp_data = [];
+        $tmp_data_suspect = $tmp_belum_check = $tmp_data = [];
         foreach ($tmp_attendance[$model->post_date] as $attendance_val) {
             $tmp_suhu = null;
             foreach ($tmp_temperature as $temp_val) {
                 if ($attendance_val['shift'] == 3) {
                     if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($yesterday . ' 00:00:00')) {
                         $tmp_suhu = $temp_val->TEMPERATURE;
+                        $tmp_suhu_category = $temp_val->TEMPERATURE_CATEGORY;
                     }
                 } else {
                     if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($model->post_date . ' 00:00:00')) {
                         $tmp_suhu = $temp_val->TEMPERATURE;
+                        $tmp_suhu_category = $temp_val->TEMPERATURE_CATEGORY;
                     }
                 }
                 
             }
             if ($tmp_suhu == null) {
                 $shift_summary_arr[$attendance_val['shift']]['total_no_check'] ++;
+                $tmp_belum_check[$attendance_val['shift']][] = [
+                    'nik' => $attendance_val['nik'],
+                    'name' => $attendance_val['name'],
+                    'shift' => 'Shift_' . $attendance_val['shift']
+                ];
             } else {
                 $shift_summary_arr[$attendance_val['shift']]['total_check'] ++;
                 if ($tmp_suhu >= 37.5) {
@@ -192,7 +216,11 @@ class DisplayHrgaController extends Controller
                         'temperature' => $tmp_suhu,
                     ];
                 }
-                if ($tmp_suhu < 35) {
+                if (!isset($tmp_data[$tmp_suhu_category . ''])) {
+                    $tmp_data[$tmp_suhu_category . ''] = 0;
+                }
+                $tmp_data[$tmp_suhu_category . '']++;
+                /*if ($tmp_suhu < 35) {
                     if (!isset($tmp_data['34'])) {
                         $tmp_data['34'] = 0;
                     }
@@ -202,7 +230,7 @@ class DisplayHrgaController extends Controller
                         $tmp_data[$tmp_suhu . ''] = 0;
                     }
                     $tmp_data[$tmp_suhu . '']++;
-                }
+                }*/
             }
         }
 
@@ -212,15 +240,15 @@ class DisplayHrgaController extends Controller
 
         $data_chart = $categories = $tmp_data_chart = [];
         foreach ($tmp_data as $key => $value) {
-            $category = $key . ' °C';
+            /*$category = $key . ' °C';
             if ($key == '34') {
                 $category = '<35 °C';
-            }
-            $categories[] = $category;
+            }*/
+            $categories[] = $key;
             $tmp_data_chart[] = [
                 //'x' => $category,
                 'y' => $value,
-                'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature' => $key])
+                'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature_category' => $key])
             ];
         }
         $data_chart = [
@@ -239,6 +267,7 @@ class DisplayHrgaController extends Controller
             'shift_summary_arr' => $shift_summary_arr,
             'tmp_data_suspect' => $tmp_data_suspect,
             'tmp_data' => $tmp_data,
+            'tmp_belum_check' => $tmp_belum_check,
         ]);
     }
 
