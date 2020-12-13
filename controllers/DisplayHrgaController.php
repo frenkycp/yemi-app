@@ -26,7 +26,7 @@ class DisplayHrgaController extends Controller
     {
         $remark = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>Temperature Data on ' . date('d M\' Y', strtotime($post_date)) . '</h3>
+            <h3>Temperature Data on ' . date('d M\' Y', strtotime($post_date)) . ' (' . $temperature_category . ')</h3>
         </div>
         <div class="modal-body">
         ';
