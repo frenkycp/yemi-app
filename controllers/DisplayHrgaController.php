@@ -26,7 +26,7 @@ class DisplayHrgaController extends Controller
     {
         $remark = '<div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3>' . $post_date . '</h3>
+            <h3>Temperature Data on ' . date('d M\' Y', strtotime($post_date)) . '</h3>
         </div>
         <div class="modal-body">
         ';
@@ -202,10 +202,24 @@ class DisplayHrgaController extends Controller
             }
             if ($tmp_suhu == null) {
                 $shift_summary_arr[$attendance_val['shift']]['total_no_check'] ++;
+                $attend_judgement = $attendance_val['attend_judgement'];
+                $attend_judgement_txt = '-';
+                if ($attend_judgement == 'P') {
+                    $attend_judgement_txt = 'Hadir';
+                } elseif ($attend_judgement == 'A') {
+                    $attend_judgement_txt = 'Alpa';
+                } elseif ($attend_judgement == 'I') {
+                    $attend_judgement_txt = 'Ijin';
+                } elseif ($attend_judgement == 'S') {
+                    $attend_judgement_txt = 'Sakit';
+                } elseif ($attend_judgement == 'C') {
+                    $attend_judgement_txt = 'Cuti';
+                }
                 $tmp_belum_check[$attendance_val['shift']][] = [
                     'nik' => $attendance_val['nik'],
                     'name' => $attendance_val['name'],
-                    'shift' => 'Shift_' . $attendance_val['shift']
+                    'shift' => 'Shift_' . $attendance_val['shift'],
+                    'attendance' => $attend_judgement_txt,
                 ];
             } else {
                 $shift_summary_arr[$attendance_val['shift']]['total_check'] ++;

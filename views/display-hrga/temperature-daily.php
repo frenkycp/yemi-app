@@ -274,6 +274,7 @@ echo '</pre>';*/
                     <th class="text-center">No</th>
                     <th class="text-center">NIK</th>
                     <th class="">Name</th>
+                    <th class="">Absensi</th>
                 </tr>
             </thead>
             <tbody>
@@ -286,6 +287,7 @@ echo '</pre>';*/
                         <td class="text-center"><?= $no; ?></td>
                         <td class="text-center"><?= $value['nik']; ?></td>
                         <td class=""><?= $value['name']; ?></td>
+                        <td class=""><?= $value['attendance']; ?></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
