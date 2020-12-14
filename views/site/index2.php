@@ -251,6 +251,19 @@ $this->registerCss("
                         ]) ?>
                     </div>
                 </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Chorei</div>
+                    <div class="list-group-item">
+                        <ol style="padding-left: 1em">
+                            <li>
+                                <?= Html::a('Production for Weekly Shipping <span class="japanesse-word"></span>', ['/display/shipping-display-chorei']); ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Production Progress VMS <span class="japanesse-word"></span>', ['/display/vms-yesterday']); ?>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
     		</div>
     		<div class="col-sm-3">
                 <div class="panel panel-success">
