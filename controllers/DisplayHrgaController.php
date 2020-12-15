@@ -58,8 +58,13 @@ class DisplayHrgaController extends Controller
                 'total_no_check' => 0
             ],
         ];
-        $tmp_data_suspect = $tmp_data_person = $tmp_data = [];
-        foreach ($tmp_attendance[$post_date] as $attendance_val) {
+        $tmp_data_suspect = $tmp_filter_attendance = $tmp_data_person = $tmp_data = [];
+        foreach ($tmp_attendance[$post_date] as $key => $value) {
+            if ($value['attend_judgement'] == 'P') {
+                $tmp_filter_attendance[] = $value;
+            }
+        }
+        foreach ($tmp_filter_attendance as $attendance_val) {
             $tmp_suhu = $check_time = null;
             foreach ($tmp_temperature as $temp_val) {
                 if ($attendance_val['shift'] == 3) {
@@ -193,8 +198,13 @@ class DisplayHrgaController extends Controller
                 'total_no_check' => 0
             ],
         ];
-        $tmp_data_suspect = $tmp_belum_check = $tmp_data = [];
-        foreach ($tmp_attendance[$model->post_date] as $attendance_val) {
+        $tmp_data_suspect = $tmp_filter_attendance = $tmp_belum_check = $tmp_data = [];
+        foreach ($tmp_attendance[$model->post_date] as $key => $value) {
+            if ($value['attend_judgement'] == 'P') {
+                $tmp_filter_attendance[] = $value;
+            }
+        }
+        foreach ($tmp_filter_attendance as $attendance_val) {
             $tmp_suhu = null;
             foreach ($tmp_temperature as $temp_val) {
                 if ($attendance_val['shift'] == 3) {
