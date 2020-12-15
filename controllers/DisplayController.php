@@ -1856,6 +1856,42 @@ class DisplayController extends Controller
         ->groupBy('BU')
         ->all();
 
+        $tmp_top_minus_av = VmsPlanActual::find()
+        ->select([
+            'ITEM', 'ITEM_DESC',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(BALANCE_QTY)',
+        ])
+        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere([
+            'VMS_PERIOD' => $yesterday_period,
+            'BU' => 'AV',
+        ])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('ITEM, ITEM_DESC')
+        ->orderBy('BALANCE_QTY')
+        ->limit(3)
+        ->all();
+
+        $tmp_top_minus_pa = VmsPlanActual::find()
+        ->select([
+            'ITEM', 'ITEM_DESC',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'BALANCE_QTY' => 'SUM(BALANCE_QTY)',
+        ])
+        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
+        ->andWhere([
+            'VMS_PERIOD' => $yesterday_period,
+            'BU' => 'PA',
+        ])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('ITEM, ITEM_DESC')
+        ->orderBy('BALANCE_QTY')
+        ->limit(3)
+        ->all();
+
         $tmp_data_yesterday = [];
         foreach ($tmp_bu_arr as $bu_val) {
             $tmp_plan = $tmp_actual = $tmp_balance = $tmp_pct = 0;
@@ -1877,7 +1913,7 @@ class DisplayController extends Controller
             ];
         }
 
-        $tmp_top_minus = VmsPlanActual::find()
+        /*$tmp_top_minus = VmsPlanActual::find()
         ->select([
             'MODEL','ITEM', 'ITEM_DESC',
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -1895,13 +1931,15 @@ class DisplayController extends Controller
         //->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
         ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
         ->limit(3)
-        ->all();
+        ->all();*/
 
         return $this->render('vms-yesterday', [
             'model' => $model,
             'period_dropdown' => $period_dropdown,
             'vms_version' => $vms_version,
-            'tmp_top_minus' => $tmp_top_minus,
+            //'tmp_top_minus' => $tmp_top_minus,
+            'tmp_top_minus_av' => $tmp_top_minus_av,
+            'tmp_top_minus_pa' => $tmp_top_minus_pa,
             'tmp_data_yesterday' => $tmp_data_yesterday,
         ]);
     }
