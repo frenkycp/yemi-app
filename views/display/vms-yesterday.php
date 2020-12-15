@@ -215,7 +215,7 @@ echo '</pre>';*/
                                     <ol>
                                         <?php foreach ($tmp_top_minus_av as $key => $value): ?>
                                             <li>
-                                                <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | <b class="">' . $value->BALANCE_QTY . '</b>'; ?>
+                                                <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | <b class="">' . number_format($value->BALANCE_QTY) . '</b>'; ?>
                                             </li>
                                         <?php endforeach ?>
                                     </ol>
@@ -234,7 +234,7 @@ echo '</pre>';*/
                                     <ol>
                                         <?php foreach ($tmp_top_minus_pa as $key => $value): ?>
                                             <li>
-                                                <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | <b class="">' . $value->BALANCE_QTY . '</b>'; ?>
+                                                <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | <b class="">' . number_format($value->BALANCE_QTY) . '</b>'; ?>
                                             </li>
                                         <?php endforeach ?>
                                     </ol>
