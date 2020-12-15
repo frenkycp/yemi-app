@@ -210,7 +210,7 @@ echo '</pre>';*/
                                 <span class="<?= $text_class; ?>" style="font-weight: bold;"><?= number_format($value['balance']); ?></span> <span style="font-size: 0.4em;">SET</span>
                             </div>
                             <div class="col-sm-6" style="border-left: 2px solid white;">
-                                <div class="text-left" style="font-size: 14px;">
+                                <div class="text-left" style="font-size: 18px;">
                                     Top Minus :
                                     <ol>
                                         <?php foreach ($tmp_top_minus_av as $key => $value): ?>
@@ -229,7 +229,7 @@ echo '</pre>';*/
                                 <span class="<?= $text_class; ?>" style="font-weight: bold;"><?= number_format($value['balance']); ?></span> <span style="font-size: 0.4em;">SET</span>
                             </div>
                             <div class="col-sm-6" style="border-left: 2px solid white;">
-                                <div class="text-left" style="font-size: 14px;">
+                                <div class="text-left" style="font-size: 18px;">
                                     Top Minus :
                                     <ol>
                                         <?php foreach ($tmp_top_minus_pa as $key => $value): ?>
