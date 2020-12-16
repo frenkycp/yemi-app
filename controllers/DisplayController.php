@@ -1121,6 +1121,7 @@ class DisplayController extends Controller
         $tmp_calendar = SernoCalendar::find()->where(['EXTRACT(year_month FROM etd)' => $model->period])->andWhere(['>', 'week_ship', 2])->orderBy('etd')->all();
         $tmp_week_arr = [];
         $current_week = 0;
+        $current_year = date('Y', strtotime($model->period . '01'));
         foreach ($tmp_calendar as $key => $value) {
             if (!isset($tmp_week_arr[$value->week_ship]['start_date'])) {
                 $tmp_week_arr[$value->week_ship]['start_date'] = $value->etd;
@@ -1140,7 +1141,7 @@ class DisplayController extends Controller
         $tmp_response = [];
         $response = $client->createRequest()
             ->setMethod('POST')
-            ->setUrl('http://10.110.52.5:99/api/rest_server.php?weekly_ship&period=' . $model->period)
+            ->setUrl('http://10.110.52.5:99/api/rest_server.php?weekly_ship')
             //->setData(['year' => $period_week_val['year'], 'week' => $tmp_week_no])
             ->send();
         if ($response->isOk) {
@@ -1156,9 +1157,9 @@ class DisplayController extends Controller
                 $tmp_plan = $tmp_actual = $tmp_progress = 0;
                 if (count($tmp_response) > 0) {
                     foreach ($tmp_response as $response_val) {
-                        if ($response_val['bu'] == $bu_val && $week_no == $response_val['week_ship']) {
+                        if ($response_val['bu'] == $bu_val && $week_no == $response_val['week'] && $response_val['year'] == $current_year) {
                             $tmp_plan = $response_val['plan'];
-                            $tmp_actual = $response_val['actual'];
+                            $tmp_actual = $response_val['act'];
                             if ($tmp_plan > 0) {
                                 $tmp_progress = round(($tmp_actual / $tmp_plan) * 100, 1);
                             }
