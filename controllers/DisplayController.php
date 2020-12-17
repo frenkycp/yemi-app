@@ -1102,11 +1102,29 @@ class DisplayController extends Controller
         ]);
     }
 
+    function getStartAndEndDate($week, $year) {
+        $dto = new \DateTime();
+        $dto->setISODate($year, $week);
+        $ret['week_start'] = date('Y-m-d', strtotime($dto->format('Y-m-d') . ' -1 day'));
+        $dto->modify('+6 days');
+        $ret['week_end'] = $dto->format('Y-m-d');
+
+        /*if ($ret['week_start'] != $ret['week_end']) {
+            # code...
+        }
+        if (date('Y', strtotime($ret['week_end'])) != $year) {
+            $ret['week_end'] = date('Y-m-t', strtotime($ret['week_start']));
+        }*/
+
+        return $ret;
+    }
+
     public function actionShippingDisplayChorei($value='')
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $today = date('Y-m-d');
+        //$today = '2020-12-20';
 
         $model = new \yii\base\DynamicModel([
             'period'
@@ -1124,14 +1142,23 @@ class DisplayController extends Controller
         $current_year = date('Y', strtotime($model->period . '01'));
         foreach ($tmp_calendar as $key => $value) {
             if (!isset($tmp_week_arr[$value->week_ship]['start_date'])) {
-                $tmp_week_arr[$value->week_ship]['start_date'] = $value->etd;
-                $tmp_week_arr[$value->week_ship]['end_date'] = $value->etd;
+                $tmp_week_arr[$value->week_ship]['start_date'] = $value->ship;
+                $tmp_week_arr[$value->week_ship]['end_date'] = $value->ship;
             }
-            if ($value->etd > $tmp_week_arr[$value->week_ship]['end_date']) {
-                $tmp_week_arr[$value->week_ship]['end_date'] = $value->etd;
+            if ($value->ship > $tmp_week_arr[$value->week_ship]['end_date']) {
+                $tmp_week_arr[$value->week_ship]['end_date'] = $value->ship;
             }
-            if ($value->etd == $today) {
+            if ($value->ship == $today) {
                 $current_week = $value->week_ship;
+            }
+        }
+
+        foreach ($tmp_week_arr as $week_no => $value) {
+            $week_day_arr = $this->getStartAndEndDate($week_no, $current_year);
+            $tmp_week_arr[$week_no]['start_date'] = $week_day_arr['week_start'];
+            $tmp_week_arr[$week_no]['end_date'] = $week_day_arr['week_end'];
+            if ($today >= $week_day_arr['week_start'] && $today <= $week_day_arr['week_end']) {
+                $current_week = $week_no;
             }
         }
 

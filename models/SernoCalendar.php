@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SernoCalendar extends BaseSernoCalendar
 {
+    public $start_date, $end_date;
 
     public function behaviors()
     {

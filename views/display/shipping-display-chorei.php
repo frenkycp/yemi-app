@@ -191,7 +191,7 @@ echo '</pre>';*/
         <tr>
             <th rowspan="2">BU</th>
             <?php foreach ($tmp_week_arr as $key => $value): ?>
-                <th class="text-center" colspan="3" style="line-height: 80%;" width="200px"><?= 'WEEK ' . $key; ?><br/><span style="font-size: 0.6em;">(<?= date('d M\' y', strtotime($value['start_date'])); ?> - <?= date('d M\' y', strtotime($value['end_date'])); ?>)</span></th>
+                <th class="text-center" colspan="3" style="line-height: 80%;" width="200px"><?= 'WEEK ' . $key; ?><br/><span style="font-size: 0.5em;">(<?= date('d M\' y', strtotime($value['start_date'])); ?> - <?= date('d M\' y', strtotime($value['end_date'])); ?>)</span></th>
             <?php endforeach ?>
         </tr>
         <tr>
