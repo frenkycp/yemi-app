@@ -348,7 +348,6 @@ class DisplayHrgaController extends Controller
         $tmp_in_out = KoyemiInOutView::find()
         ->where([
             'in_out_status' => 'KANTIN IN',
-            'bsevtdt' => date('Y-m-d')
         ])
         ->andWhere(['>', 'in_out_datetime', date('Y-m-d H:i:s', strtotime('-2 minutes'))])
         ->orderBy('in_out_datetime')
@@ -403,7 +402,6 @@ class DisplayHrgaController extends Controller
         $tmp_in_out = KoyemiInOutView::find()
         ->where([
             'in_out_status' => 'KANTIN IN',
-            'bsevtdt' => date('Y-m-d')
         ])
         ->andWhere(['>', 'in_out_datetime', date('Y-m-d H:i:s', strtotime('-2 minutes'))])
         ->orderBy('in_out_datetime')

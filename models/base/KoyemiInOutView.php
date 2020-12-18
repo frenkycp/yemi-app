@@ -9,7 +9,6 @@ use Yii;
 /**
  * This is the base-model class for table "dbo.KOYEMI_IN_OUT_VIEW".
  *
- * @property string $tgl
  * @property string $user_name
  * @property string $in_out_status
  * @property string $in_out_datetime
@@ -43,7 +42,6 @@ abstract class KoyemiInOutView extends \yii\db\ActiveRecord
     {
         return [
             [['in_out_datetime'], 'safe'],
-            [['tgl'], 'string', 'max' => 4000],
             [['user_name', 'in_out_status'], 'string', 'max' => 255]
         ];
     }
@@ -54,7 +52,6 @@ abstract class KoyemiInOutView extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'tgl' => 'Tgl',
             'user_name' => 'User Name',
             'in_out_status' => 'In Out Status',
             'in_out_datetime' => 'In Out Datetime',
