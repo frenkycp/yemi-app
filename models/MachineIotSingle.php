@@ -3,15 +3,15 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\MttrMtbfDataView as BaseMttrMtbfDataView;
+use \app\models\base\MachineIotSingle as BaseMachineIotSingle;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.MTTR_MTBF_DATA_VIEW".
+ * This is the model class for table "db_owner.MACHINE_IOT_SINGLE".
  */
-class MttrMtbfDataView extends BaseMttrMtbfDataView
+class MachineIotSingle extends BaseMachineIotSingle
 {
-    public $down_time_iot, $down_time_number_iot, $mttr_iot, $mtbf_iot;
+    public $total_down_time, $total_down_time_number;
 
     public function behaviors()
     {
