@@ -114,6 +114,11 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
+        'attribute' => 'LCL',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'BL_NO',
         'vAlign' => 'middle',
         'hAlign' => 'center',
