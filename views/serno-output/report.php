@@ -32,7 +32,9 @@ $this->registerCss(".tab-content > .tab-pane,
 .pill-content > .active {
     height: auto;       
 } ");
-
+foreach ($tmp_week_arr as $week_no) {
+    # code...
+}
 $script = <<< JS
     window.onload = setupRefresh;
 
@@ -87,18 +89,17 @@ $this->registerJs($script, View::POS_HEAD );
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">
         <?php
-        if ($startWeek == 0) {
+        if (count($tmp_week_arr) == 0) {
             
         } else {
-            for($i = $startWeek; $i <= $endWeek; $i++)
-            {
-                if($i == $weekToday)
+            foreach ($tmp_week_arr as $week_no1) {
+                if($week_no1->week_ship == $todays_week)
                 {
-                    echo '<li class="active"><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
+                    echo '<li class="active"><a href="#tab_1_' . $week_no1->week_ship . '" data-toggle="tab">Week ' . $week_no1->week_ship . '</a></li>';
                 }
                 else
                 {
-                    echo '<li><a href="#tab_1_' . $i . '" data-toggle="tab">Week ' . $i . '</a></li>';
+                    echo '<li><a href="#tab_1_' . $week_no1->week_ship . '" data-toggle="tab">Week ' . $week_no1->week_ship . '</a></li>';
                 }
             }
             /*if ((int)date('n') == 12 && date('j') > 20) {
@@ -110,24 +111,23 @@ $this->registerJs($script, View::POS_HEAD );
     </ul>
     <div class="tab-content">
         <?php
-        if ($startWeek == 0) {
+        if (count($tmp_week_arr) == 0) {
             echo '<h4>No data found...</h4>';
         } else {
-            for($j = $startWeek; $j <= $endWeek; $j++)
-            {
-                if($j == $weekToday)
+            foreach ($tmp_week_arr as $week_no2) {
+                if($week_no2->week_ship == $todays_week)
                 {
-                    echo '<div class="tab-pane active" id="tab_1_' . $j .'">';
+                    echo '<div class="tab-pane active" id="tab_1_' . $week_no2->week_ship .'">';
                 }
                 else
                 {
-                    echo '<div class="tab-pane" id="tab_1_' . $j .'">';
+                    echo '<div class="tab-pane" id="tab_1_' . $week_no2->week_ship .'">';
                 }
 
                 $sernoFg = app\models\SernoOutput::find()
-                ->select(['etd, SUM(qty) as qty, SUM(output) as output, WEEK(ship,4) as week_no'])
+                ->select(['etd, SUM(qty) as qty, SUM(output) as output, WEEK(ship,4) as week_no2'])
                 ->where([
-                    'WEEK(ship,4)' => $j,
+                    'WEEK(ship,4)' => $week_no2->week_ship,
                     'EXTRACT(YEAR_MONTH FROM etd)' => $period,
                 ])
                 ->andWhere(['<>', 'stc', 'ADVANCE'])
@@ -146,7 +146,7 @@ $this->registerJs($script, View::POS_HEAD );
                     /*$delay_data_arr = app\models\SernoInput::find()
                     ->joinWith('sernoOutput')
                     ->where([
-                        //'WEEK(ship,4)' => $j,
+                        //'WEEK(ship,4)' => $week_no2->week_ship,
                         //'LEFT(id,4)' => date('Y'),
                         'tb_serno_output.etd' => $value->etd
                     ])

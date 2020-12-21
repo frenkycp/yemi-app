@@ -61,41 +61,54 @@ class SernoOutputController extends base\SernoOutputController
 
         $period = $year . $month;
 
-    	$min_max_week = SernoOutput::find()
+    	/*$min_max_week = SernoOutput::find()
     	->select([
     		'EXTRACT(YEAR_MONTH FROM etd)',
     		'min_week' => 'MIN(WEEK(ship,4))',
     		'max_week' => 'MAX(WEEK(ship,4))'
     	])
     	->where(['<>', 'stc', 'ADVANCE'])
-    	//->andWhere(['<>', 'stc', 'NOSO'])
-    	//->andWhere(['LEFT(id,4)' => date('Y')])
-    	//->andWhere(['<>', 'ship', '9999-12-31'])
         ->andWhere(['EXTRACT(YEAR_MONTH FROM etd)' => $period])
     	->groupBy('EXTRACT(YEAR_MONTH FROM etd)')
-    	->one();
+    	->one();*/
+        $todays_week = 0;
+    	$weekToday = SernoCalendar::find()->where([
+            'etd' => date('Y-m-d'),
+            'EXTRACT(year_month FROM etd)' => $period
+        ])->one()->week_ship;
+        $tmp_week_arr = SernoCalendar::find()->select('week_ship')->where(['EXTRACT(year_month FROM etd)' => $period])->groupBy('week_ship')->orderBy('etd')->all();
 
-    	$weekToday = SernoCalendar::find()->where(['etd' => date('Y-m-d')])->one()->week_ship;
+        foreach ($tmp_week_arr as $key => $value) {
+            if ($todays_week == 0) {
+                $todays_week = $value->week_ship;
+            }
 
-        $start_week = 0;
+            if ($weekToday == $value->week_ship) {
+                $todays_week = $value->week_ship;
+            }
+        }
+
+        /*$start_week = 0;
         $end_week = 0;
         if(count($min_max_week) > 0)
         {
             $start_week = $min_max_week->min_week;
             $end_week = $min_max_week->max_week;
-        }
+        }*/
 
-        if ($weekToday == null || $weekToday < $start_week || $weekToday > $end_week) {
+        /*if (!$weekToday) {
             $weekToday = $start_week;
-        }
+        }*/
 
         return $this->render('report',[
         	'weekToday' => $weekToday,
+            'todays_week' => $todays_week,
         	'startWeek' => $start_week,
         	'endWeek' => $end_week,
             'year' => $year,
             'month' => $month,
             'period' => $period,
+            'tmp_week_arr' => $tmp_week_arr,
         ]);
     }
 
