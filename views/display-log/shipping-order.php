@@ -135,6 +135,10 @@ print_r($tmp_daily_ratio);
 echo '</pre>';*/
 
 $current_data = $data[$model->period];
+$ship_out_pct = 0;
+if ($total_plan > 0) {
+    $ship_out_pct = round(($total_ship_out / $total_plan) * 100);
+}
 //echo Yii::$app->request->baseUrl;
 ?>
 
@@ -161,7 +165,7 @@ $current_data = $data[$model->period];
                 <div class="panel-body no-padding" style="">
                     <span class="total-container"><?= $total_confirm; ?></span> <span class="total-pct">(<?= $confirm_pct; ?>%)</span>
                     <hr style="margin: 5px 10px;">
-                    <span>SHIP OUT : <b><?= $total_ship_out; ?></b></span>
+                    <span>SHIP OUT : <b><?= $total_ship_out; ?></b> <i>(<?= $ship_out_pct; ?>%)</i></span>
                 </div>
             </div>
         </div>
