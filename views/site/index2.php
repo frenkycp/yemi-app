@@ -200,12 +200,6 @@ $this->registerCss("
                         ]) ?>
                     </div>
                     <div class="list-group">
-                        <?= Html::a('<i class="fa fa-fw fa-tag"></i> Shift Daily Patrol<span class="japanesse-word"></span>', ['/shift-patrol-tbl'], [
-                            'class' => 'list-group-item',
-                            'target' => '_blank'
-                        ]) ?>
-                    </div>
-                    <div class="list-group">
                         <?= Html::a('<i class="fa fa-fw fa-tag"></i> Model Monthly Progress<span class="japanesse-word"></span>', ['/new-model-progress'], [
                             'class' => 'list-group-item',
                             'target' => '_blank'

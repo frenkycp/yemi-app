@@ -156,6 +156,7 @@ use app\models\RfidCarScan;
 use app\models\AirCompressorDailyView;
 use app\models\PcStockTakingTbl;
 use app\models\MachineCorrectiveView01;
+use app\models\MachineIotLogHour;
 
 class DisplayController extends Controller
 {
@@ -12448,7 +12449,7 @@ echo '</pre>';*/
             
         }
 
-        $iot_by_hours = MachineIotCurrentEffLog::find()
+        $iot_by_hours = MachineIotLogHour::find()
         ->where([
             'mesin_id' => $model->machine_id,
         ])
@@ -12457,7 +12458,7 @@ echo '</pre>';*/
         ->asArray()
         ->all();
 
-        $avg_arr = MachineIotCurrentEffLog::find()
+        $avg_arr = MachineIotLogHour::find()
         ->select([
             'period_shift',
             'hijau' => 'SUM(hijau)',
@@ -12587,7 +12588,7 @@ echo '</pre>';*/
             ],
         ];
 
-        $machine_iot_util = MachineIotCurrentEffLog::find()
+        $machine_iot_util = MachineIotLogHour::find()
         ->select([
             'posting_shift',
             'merah' => 'SUM(merah)',
@@ -12727,7 +12728,7 @@ echo '</pre>';*/
             
         }
 
-        $iot_by_hours = MachineIotCurrentEffLog::find()
+        $iot_by_hours = MachineIotLogHour::find()
         ->where([
             'mesin_id' => $model->machine_id,
         ])
@@ -12736,7 +12737,7 @@ echo '</pre>';*/
         ->asArray()
         ->all();
 
-        $avg_arr = MachineIotCurrentEffLog::find()
+        $avg_arr = MachineIotLogHour::find()
         ->select([
             'period_shift',
             'hijau' => 'SUM(hijau)',
@@ -12858,7 +12859,7 @@ echo '</pre>';*/
         $begin = new \DateTime($model->from_date);
         $end = new \DateTime($model->to_date);
 
-        $machine_iot_util = MachineIotCurrentEffPershiftLog::find()
+        $machine_iot_util = MachineIotLogHour::find()
         ->select([
             'posting_shift', 'shift',
             'merah' => 'SUM(merah)',

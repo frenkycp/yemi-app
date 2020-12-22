@@ -4,7 +4,7 @@ namespace app\controllers;
 use yii\web\Controller;
 use yii\web\JsExpression;
 
-use app\models\MachineIotCurrentEffLog;
+use app\models\MachineIotLogHour;
 
 class MntIotUtilityController extends Controller
 {
@@ -41,7 +41,7 @@ class MntIotUtilityController extends Controller
 		if ($model->load($_GET)) {
 			$period = $model->year . $model->month;
 
-			$iot_monthly_data = MachineIotCurrentEffLog::find()
+			$iot_monthly_data = MachineIotLogHour::find()
 			->select([
 				'posting_shift',
 				'hijau' => 'SUM(hijau)',
@@ -54,7 +54,7 @@ class MntIotUtilityController extends Controller
 			->groupBy('posting_shift')
 			->all();
 
-			$iot_hour_data2 = MachineIotCurrentEffLog::find()
+			$iot_hour_data2 = MachineIotLogHour::find()
 			->where([
 				'period_shift' => $period,
 				'mesin_id' => $model->machine_id,
