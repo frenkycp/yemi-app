@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use app\models\MachineIotCurrentEffLog;
+use app\models\MachineIotLogHour;
 
 class MntKwhReportController extends Controller
 {
@@ -46,7 +47,7 @@ class MntKwhReportController extends Controller
 		if ($model->load($_GET)) {
 			
 		}
-		$iot_by_hours = MachineIotCurrentEffLog::find()
+		$iot_by_hours = MachineIotLogHour::find()
 		->where([
 			'posting_shift' => $model->posting_date,
 			'mesin_id' => $model->machine_id,
@@ -157,7 +158,7 @@ class MntKwhReportController extends Controller
 			]
 		];
 
-		$machine_iot_util = MachineIotCurrentEffLog::find()
+		$machine_iot_util = MachineIotLogHour::find()
 		->select([
 			'posting_shift',
 			'merah' => 'SUM(merah)',
