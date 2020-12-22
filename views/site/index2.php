@@ -52,13 +52,16 @@ $this->registerCss("
                             <p>Vendor to YEMI <span class="japanesse-word">(ベンダー⇒YEMI)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Weekly MilkRun Parts <span class="japanesse-word">(週次ミルクラン部品納入）</span>', ['/parts-milk-run-weekly']); ?>
+                                    <?= Html::a('Weekly MilkRun Parts <span class="japanesse-word">(週次ミルクラン部品納入）</span>', ['/parts-milk-run-weekly'], ['target' => '_blank']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Weekly JIT Parts <span class="japanesse-word">（週次JIT部品納入)</span>', ['/parts-jit-weekly']); ?>
+                                    <?= Html::a('Weekly JIT Parts <span class="japanesse-word">（週次JIT部品納入)</span>', ['/parts-jit-weekly'], ['target' => '_blank']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Weekly Import Parts <span class="japanesse-word"></span>', ['/parts-import-weekly']); ?>
+                                    <?= Html::a('JIT Parts (Status : DEPARTURED)', ['/display-pch/mrs-dds-departure'], ['target' => '_blank']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Weekly Import Parts <span class="japanesse-word"></span>', ['/parts-import-weekly'], ['target' => '_blank']); ?>
                                 </li>
                             </ol>
                         </div>
