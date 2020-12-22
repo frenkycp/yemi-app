@@ -13,9 +13,33 @@ use app\models\PcPiVariance;
 use app\models\StoreOnhandWsus;
 use app\models\StorePiItem;
 use app\models\StorePiItemLog;
+use app\models\BookingShipTrack02;
 
 class DisplayPchController extends Controller
 {
+    public function actionMrsDdsDeparture()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = BookingShipTrack02::find()
+        ->where([
+            'STAT_ID' => 3,
+            'TRANS_MTHD' => ['MRS', 'DDS']
+        ])
+        ->andWhere([
+            '>=', 'PICKUP_PLAN', date('Y-m-d', strtotime(' -1 month'))
+        ])
+        ->andWhere(['>', 'BO_QTY', 0])
+        ->orderBy('USER_DESC, BOOKING_ID')
+        ->asArray()
+        ->all();
+
+        return $this->render('mrs-dds-departure', [
+            'data' => $data,
+        ]);
+    }
+
     public function actionMonthlyStockTakeGetRemark($period, $area, $pi_stage)
     {
         $status_arr = [
