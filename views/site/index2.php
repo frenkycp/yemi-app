@@ -69,15 +69,19 @@ $this->registerCss("
                             <p>YEMI WH to Production <span class="japanesse-word">(YEMI 部品倉庫⇒生産職場)</span></p>
                             <ol style="padding-left: 1em">
                                 <li>
-                                    <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['/parts-picking-status']); ?> <span class="text-red"><b>*IoT</b></span>
+                                    <?= Html::a('Weekly Picking Status <span class="japanesse-word">(週次ピッキング状況)</span>', ['/parts-picking-status'], ['target' => '_blank']); ?> <span class="text-red"><b>*IoT</b></span>
                                 </li>
                                 <li>
-                                    <?= Html::a('Budomari Material Monitor <span class="japanesse-word">(材料歩留モニター）</span>', ['/parts-uncountable-monthly-report']); ?>
+                                    <?= Html::a('Budomari Material Monitor <span class="japanesse-word">(材料歩留モニター）</span>', ['/parts-uncountable-monthly-report'], ['target' => '_blank']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['/parts-picking-pts']); ?>
-                                </li><li>
+                                    <?= Html::a('Picking Trouble by Vendor <span class="japanesse-word">(ベンダー別のピッキング問題）</span>', ['/parts-picking-pts'], ['target' => '_blank']); ?>
+                                </li>
+                                <li>
                                     <?= Html::a('Picking Trouble by Model GMC <span class="japanesse-word">(製品ＧＭＣ別のピッキング問題）</span>', ['/parts-picking-pts-gmc']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('PTS Data', ['/pts-data'], ['target' => '_blank']); ?>
                                 </li>
                             </ol>
                         </div>

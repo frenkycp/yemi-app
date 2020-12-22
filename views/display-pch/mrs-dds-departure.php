@@ -102,7 +102,7 @@ echo '</pre>';*/
 ?>
 
 <div style="margin: auto; padding-top: 10px;" id="display-container">
-    <div class="text-center" style="font-size: 30px; font-weight: bold; padding-bottom: 10px;">JIT Parts - ETD Supplier Based (Status : DEPARTURE)</div>
+    <div class="text-center" style="font-size: 30px; font-weight: bold; padding-bottom: 10px;">JIT Parts - ETD Supplier Based (Status : DEPARTURED)</div>
     <table class="table summary-tbl">
         <thead>
             <tr>
