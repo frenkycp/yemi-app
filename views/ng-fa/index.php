@@ -79,6 +79,26 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'max-width: 90px;'],
     ],
     [
+        'attribute' => 'serno_record',
+        'label' => 'Serno.',
+        'value' => function($model){
+            $total_record = count($model->detailSerno);
+            if ($total_record == 0) {
+                return Html::a('<span class="glyphicon glyphicon-plus"></span>', ['add-multiple-serno', 'id' => $model->id], ['class' => 'btn btn-xs btn-success']);
+            } else {
+                return Html::a('<span class="badge bg-blue">' . count($model->detailSerno) . '</span>', ['ng-serno/index', 'document_no' => $model->document_no]);
+            }
+            return count($model->detailSerno);
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
         'attribute' => 'post_date',
         'label' => 'Prod. Date',
         /*'value' => function($model){
@@ -328,6 +348,7 @@ $gridColumns = [
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' => [
             	Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
+                Html::a('<span class="glyphicon glyphicon-list-alt"></span> ' . 'Serno NG Data', ['ng-serno/index'], ['class' => 'btn btn-primary']),
                 '{export}',
                 '{toggleData}',
             ],
