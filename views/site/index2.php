@@ -83,6 +83,12 @@ $this->registerCss("
                                 <li>
                                     <?= Html::a('PTS Data', ['/pts-data'], ['target' => '_blank']); ?>
                                 </li>
+                                <li>
+                                    <?= Html::a('Visual Picking Data (Complete - PTS)', ['/visual-picking-complete/pts'], ['target' => '_blank']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Visual Picking Data (Complete - No PTS)', ['/visual-picking-complete/no-pts'], ['target' => '_blank']); ?>
+                                </li>
                             </ol>
                         </div>
                         

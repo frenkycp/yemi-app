@@ -2,7 +2,7 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'sqlsrv:Server=10.110.48.3;Database=biostar_tna',
+    'dsn' => 'sqlsrv:Server=10.110.48.6;Database=biostar_tna',
     'username' => 'sa',
     'password' => '123@yemiyamaha',
     //'dsn' => 'dblib:host=localhost;Database=TEST',
