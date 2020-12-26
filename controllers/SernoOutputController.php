@@ -6,6 +6,7 @@ use yii\web\Controller;
 use app\models\ContainerView;
 use app\models\SernoOutput;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 use app\models\search\SernoOutput as SernoOutputSearch;
 use app\models\SernoCalendar;
@@ -88,6 +89,11 @@ class SernoOutputController extends base\SernoOutputController
             }
         }
 
+        $week_data_arr = ArrayHelper::map(SernoCalendar::find()
+            ->where([
+            '>=', 'EXTRACT(year_month FROM etd)', $period
+        ])->all(), 'etd', 'week_ship');
+
         /*$start_week = 0;
         $end_week = 0;
         if(count($min_max_week) > 0)
@@ -108,6 +114,7 @@ class SernoOutputController extends base\SernoOutputController
             'year' => $year,
             'month' => $month,
             'period' => $period,
+            'week_data_arr' => $week_data_arr,
             'tmp_week_arr' => $tmp_week_arr,
         ]);
     }

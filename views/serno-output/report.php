@@ -114,6 +114,14 @@ $this->registerJs($script, View::POS_HEAD );
         if (count($tmp_week_arr) == 0) {
             echo '<h4>No data found...</h4>';
         } else {
+            $sernoFg = app\models\SernoOutput::find()
+            ->select(['etd, SUM(qty) as qty, SUM(output) as output'])
+            ->where([
+                '>=', 'EXTRACT(YEAR_MONTH FROM etd)', $period,
+            ])
+            ->andWhere(['<>', 'stc', 'ADVANCE'])
+            ->groupBy('etd')
+            ->all();
             foreach ($tmp_week_arr as $week_no2) {
                 if($week_no2->week_ship == $todays_week)
                 {
@@ -123,17 +131,7 @@ $this->registerJs($script, View::POS_HEAD );
                 {
                     echo '<div class="tab-pane" id="tab_1_' . $week_no2->week_ship .'">';
                 }
-
-                $sernoFg = app\models\SernoOutput::find()
-                ->select(['etd, SUM(qty) as qty, SUM(output) as output, WEEK(ship,4) as week_no2'])
-                ->where([
-                    'WEEK(ship,4)' => $week_no2->week_ship,
-                    'EXTRACT(YEAR_MONTH FROM etd)' => $period,
-                ])
-                ->andWhere(['<>', 'stc', 'ADVANCE'])
-                //->andWhere(['<>', 'stc', 'NOSO'])
-                ->groupBy('etd')
-                ->all();
+                
                 $data_close = [];
                 $data_open = [];
                 $data_ng = [];
@@ -142,43 +140,36 @@ $this->registerJs($script, View::POS_HEAD );
                 $delay_num_arr = [];
 
                 foreach ($sernoFg as $value) {
-                    $vms_date = $value->vms;
-                    /*$delay_data_arr = app\models\SernoInput::find()
-                    ->joinWith('sernoOutput')
-                    ->where([
-                        //'WEEK(ship,4)' => $week_no2->week_ship,
-                        //'LEFT(id,4)' => date('Y'),
-                        'tb_serno_output.etd' => $value->etd
-                    ])
-                    ->andWhere(['<>', 'stc', 'ADVANCE'])
-                    //->andWhere(['<>', 'stc', 'NOSO'])
-                    ->andWhere('tb_serno_input.proddate>tb_serno_output.etd')
-                    ->all();*/
+                    $tmp_week_no = $week_data_arr[$value->etd];
 
-                    $remark = count($delay_data_arr) . '<br/>';
-                    $remark .= '<table>';
-                    $remark .= '</table>';
+                    if ($tmp_week_no == $week_no2->week_ship) {
+                        $remark = count($delay_data_arr) . '<br/>';
+                        $remark .= '<table>';
+                        $remark .= '</table>';
 
-                    //$total_delay = 500;
-                    $total_close = $value->output - (0 + $total_delay);
-                    $total_open = $value->qty - $value->output;
-                    $presentase_open = ceil(($total_open/$value->qty)*100);
-                    $presentase_close = 100 - $presentase_open;
-                    //$presentase_open = (int)(100 - $presentase_close);
-                    //$data_close[] = (int)$presentase;
-                    $data_close[] = [
-                        'y' => (int)($presentase_close),
-                        'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
-                        'qty' => $total_close,
-                    ];
-                    //$data_open[] = (int)(100 - $presentase_close);
-                    $data_open[] = [
-                        'y' => $presentase_open > 0 ? $presentase_open : null,
-                        'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
-                        'qty' => $value->qty - $value->output,
-                    ];
-                    //$categories[] = $value->etd;
-                    $categories[] = date('Y-m-d', strtotime($value->etd));
+                        //$total_delay = 500;
+                        $total_close = $value->output - (0 + $total_delay);
+                        $total_open = $value->qty - $value->output;
+                        $presentase_open = ceil(($total_open/$value->qty)*100);
+                        $presentase_close = 100 - $presentase_open;
+                        //$presentase_open = (int)(100 - $presentase_close);
+                        //$data_close[] = (int)$presentase;
+                        $data_close[] = [
+                            'y' => (int)($presentase_close),
+                            'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
+                            'qty' => $total_close,
+                        ];
+                        //$data_open[] = (int)(100 - $presentase_close);
+                        $data_open[] = [
+                            'y' => $presentase_open > 0 ? $presentase_open : null,
+                            'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
+                            'qty' => $value->qty - $value->output,
+                        ];
+                        //$categories[] = $value->etd;
+                        $categories[] = date('Y-m-d', strtotime($value->etd));
+                    }
+
+                    
                 }
                 echo Highcharts::widget([
                 'scripts' => [
@@ -287,167 +278,6 @@ $this->registerJs($script, View::POS_HEAD );
             ]);
                 echo '</div>';
             }
-        }
-        if ((int)date('n') == 12 && date('j') > 20) {
-            echo '<div class="tab-pane" id="tab_1_0">';
-            $sernoFg = app\models\SernoOutput::find()
-            ->select(['etd, SUM(qty) as qty, SUM(output) as output, WEEK(ship,4) as week_no'])
-            ->where([
-                'WEEK(ship,4)' => 2,
-                'LEFT(id,4)' => date('Y') + 1,
-            ])
-            ->andWhere(['<>', 'stc', 'ADVANCE'])
-            //->andWhere(['<>', 'stc', 'NOSO'])
-            ->groupBy('etd')
-            ->all();
-            $data_close = [];
-            $data_open = [];
-            $data_ng = [];
-            $data_delay = [];
-            $categories = [];
-            $delay_num_arr = [];
-
-            foreach ($sernoFg as $value) {
-                $vms_date = $value->vms;
-                /*$delay_data_arr = app\models\SernoInput::find()
-                ->joinWith('sernoOutput')
-                ->where([
-                    //'WEEK(ship,4)' => $j,
-                    //'LEFT(id,4)' => date('Y'),
-                    'tb_serno_output.etd' => $value->etd
-                ])
-                ->andWhere(['<>', 'stc', 'ADVANCE'])
-                //->andWhere(['<>', 'stc', 'NOSO'])
-                ->andWhere('tb_serno_input.proddate>tb_serno_output.etd')
-                ->all();*/
-
-                $remark = count($delay_data_arr) . '<br/>';
-                $remark .= '<table>';
-                $remark .= '</table>';
-
-                //$total_delay = 500;
-                $total_close = $value->output - (0 + $total_delay);
-                $total_open = $value->qty - $value->output;
-                $presentase_open = ceil(($total_open/$value->qty)*100);
-                $presentase_close = 100 - $presentase_open;
-                //$presentase_open = (int)(100 - $presentase_close);
-                //$data_close[] = (int)$presentase;
-                $data_close[] = [
-                    'y' => (int)($presentase_close),
-                    'url' => Url::to(['index', 'index_type' => 2, 'etd' => $value->etd]),
-                    'qty' => $total_close,
-                ];
-                //$data_open[] = (int)(100 - $presentase_close);
-                $data_open[] = [
-                    'y' => $presentase_open > 0 ? $presentase_open : null,
-                    'url' => Url::to(['index', 'index_type' => 1, 'etd' => $value->etd]),
-                    'qty' => $value->qty - $value->output,
-                ];
-                //$categories[] = $value->etd;
-                $categories[] = date('Y-m-d', strtotime($value->etd));
-            }
-            echo Highcharts::widget([
-                'scripts' => [
-                    'modules/exporting',
-                    'themes/sand-signika',
-                ],
-                'options' => [
-                    'chart' => [
-                        'type' => 'column',
-                        'height' => 400,
-                        'width' => null
-                    ],
-                    'credits' => [
-                        'enabled' =>false
-                    ],
-                    'title' => [
-                        'text' => 'Weekly Report'
-                    ],
-                    'subtitle' => [
-                        'text' => null
-                    ],
-                    'xAxis' => [
-                        'type' => 'category'
-                    ],
-                    'xAxis' => [
-                        'categories' => $categories,
-                        'labels' => [
-                            'formatter' => new JsExpression('function(){ return \'<a href="container-progress?etd=\' + this.value + \'">\' + this.value + \'</a>\'; }'),
-                        ],
-                    ],
-                    'yAxis' => [
-                        'min' => 0,
-                        'title' => [
-                            'text' => 'Total Completion'
-                        ],
-                        'gridLineWidth' => 0,
-                    ],
-                    'tooltip' => [
-                        'enabled' => true,
-                        'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + this.point.qty + " pcs"; }'),
-                    ],
-                    'plotOptions' => [
-                        'column' => [
-                            'stacking' => 'percent',
-                            'dataLabels' => [
-                                'enabled' => true,
-                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                                'style' => [
-                                    'fontSize' => '14px',
-                                    'fontWeight' => '0'
-                                ],
-                            ],
-                            //'borderWidth' => 1,
-                            //'borderColor' => $color,
-                        ],
-                    ],
-                    'series' => [
-                        [
-                            'name' => 'Outstanding',
-                            'data' => $data_open,
-                            'color' => 'FloralWhite',
-                            'dataLabels' => [
-                                'enabled' => true,
-                                'color' => 'black',
-                                'format' => '{point.percentage:.0f}% ({point.qty})',
-                                'style' => [
-                                    'textOutline' => '0px'
-                                ],
-                                'allowOverlap' => true,
-                            ],
-                            'showInLegend' => false,
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                                ]
-                            ]
-                        ],
-                        [
-                            'name' => 'Completed',
-                            'data' => $data_close,
-                            'color' => $color,
-                            'dataLabels' => [
-                                'enabled' => true,
-                                'color' => 'black',
-                                'format' => '{point.percentage:.0f}%',
-                                'style' => [
-                                    'textOutline' => '0px'
-                                ],
-                            ],
-                            'cursor' => 'pointer',
-                            'point' => [
-                                'events' => [
-                                    'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                    //'click' => new JsExpression('function(){ window.open(this.options.url); }')
-                                ]
-                            ]
-                        ],
-                    ]
-                ],
-            ]);
-            echo '</div>';
         }
         yii\bootstrap\Modal::begin([
             'id' =>'modal',
