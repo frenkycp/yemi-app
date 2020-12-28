@@ -26,7 +26,19 @@ class DisplayLogController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
-        $today = date('Y-m-d');
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $period_name = strtoupper(date('M Y', strtotime($model->period . '01')));
+
+        /*$today = date('Y-m-d');
         $tmp_yesterday = WorkDayTbl::find()
         ->select([
             'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
@@ -37,9 +49,11 @@ class DisplayLogController extends Controller
         ->andWhere('holiday IS NULL')
         ->orderBy('cal_date DESC')
         ->one();
-        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
+        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));*/
+        $yesterday = date('Y-m-d', strtotime(' -1 day'));
 
-        $yesterday_period = date('Ym', strtotime($yesterday));
+        //$yesterday_period = date('Ym', strtotime($yesterday));
+        $yesterday_period = $model->period;
 
         $total_plan = $total_confirm = $total_not_confirm = 0;
         $plan_pct = $confirm_pct = $not_confirm_pct = 0;
@@ -104,6 +118,8 @@ class DisplayLogController extends Controller
 
         return $this->render('shipping-order', [
             'data' => $data,
+            'model' => $model,
+            'period_name' => $period_name,
             'total_plan' => $total_plan,
             'total_ship_out' => $total_ship_out,
             'yesterday' => $yesterday,

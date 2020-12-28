@@ -141,10 +141,22 @@ if ($total_plan > 0) {
 }
 //echo Yii::$app->request->baseUrl;
 ?>
-
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['shipping-order']),
+]); ?>
 <div style="margin: auto; width: 900px; padding-top: 20px;" id="display-container">
-    <div id="my-title" class="text-center">
-        YEMI SHIPPING ORDER <?= strtoupper(date('M Y', strtotime($yesterday))); ?>
+    
+    <div class="row">
+        <div class="col-sm-10">
+            <div id="my-title" class="text-center">
+                YEMI SHIPPING ORDER <?= $period_name; ?>
+            </div>
+        </div>
+        <div class="col-sm-2" style="padding-top: 3px;">
+            <?= $form->field($model, 'period')->textInput()->label(false); ?>
+        </div>
     </div>
     <div class="row">
         <div class="col-sm-4">
@@ -201,3 +213,5 @@ if ($total_plan > 0) {
         </tbody>
     </table>
 </div>
+
+<?php ActiveForm::end(); ?>
