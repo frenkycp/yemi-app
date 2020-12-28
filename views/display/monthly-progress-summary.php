@@ -142,7 +142,11 @@ echo '</pre>';*/
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($data as $key => $value): ?>
+        <?php foreach ($data as $key => $value): 
+            if ($key == 'OTHER') {
+                $key = 'KD PARTS';
+            }
+            ?>
             <tr>
                 <td><?= $key; ?></td>
                 <?php foreach ($value as $value2): ?>
