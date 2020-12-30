@@ -35,9 +35,85 @@ use app\models\PermitInputData;
 use app\models\ShippingPeriod;
 use app\models\KlinikInput;
 use app\models\StoreInOutWsus;
+use app\models\MachineIotSingle;
+use app\models\DrsView03;
 
 class ProductionRestController extends Controller
 {
+    public function actionGetDrsData($from_date, $to_date)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_data = DrsView03::find()
+        ->where([
+            'AND',
+            ['>=', 'DRS_DATE', $from_date . ' 00:00:00'],
+            ['<=', 'DRS_DATE', $to_date . ' 23:59:59']
+        ])
+        ->asArray()
+        ->all();
+
+        return $tmp_data;
+    }
+
+    public function actionUpdateMachineIotLog($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_iot_single = MachineIotSingle::find()
+        ->where([
+            'mesin_id' => 'MNT00022',
+            'FORMAT(jam_start, \'yyyy-MM-dd\')' => '2020-12-14',
+            //'jam_no' => 7
+        ])
+        ->orderBy('jam_start')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_iot_single as $key => $value) {
+            $datetime_start = $value->jam_start;
+            $datetime_end = $value->jam_end;
+            $tmp_post_date = date('Y-m-d', strtotime($datetime_start));
+            $tmp_jam_start = date('H', strtotime($datetime_start));
+            $tmp_jam_end = date('H', strtotime($datetime_end));
+            $tmp_status_warna = $value->status_warna;
+            $tmp_id = date('Ymd', strtotime($tmp_post_date)) . '_' . (int)$tmp_jam_start . '_' . $value->mesin_id;
+            if (!isset($tmp_data[$tmp_id]['MESIN_ID'])) {
+                $tmp_data[$tmp_id]['MESIN_ID'] = $value->mesin_id;
+                $tmp_data[$tmp_id]['MESIN_DESC'] = $value->mesin_description;
+                $tmp_data[$tmp_id]['MERAH'] = 0;
+                $tmp_data[$tmp_id]['KUNING'] = 0;
+                $tmp_data[$tmp_id]['HIJAU'] = 0;
+                $tmp_data[$tmp_id]['BIRU'] = 0;
+                $tmp_data[$tmp_id]['PUTIH'] = 0;
+                $tmp_data[$tmp_id]['HITAM'] = 0;
+            }
+            if ($tmp_jam_start == $tmp_jam_end) {
+                $tmp_data[$tmp_id][$tmp_status_warna] += $value->count;
+            } else {
+                $datetime_start2 = date('Y-m-d H:59:59', strtotime($datetime_start));
+                $tmp_data[$tmp_id][$tmp_status_warna] += strtotime($datetime_start2) - strtotime($datetime_start);
+                $begin = new \DateTime(date('Y-m-d H:00:00', strtotime($datetime_start . ' +1 hour')));
+                $end = new \DateTime(date('Y-m-d H:00:00', strtotime($datetime_end)));
+                $tmp_datetime_start = $datetime_start;
+                for($i = $begin; $i <= $end; $i->modify('+1 hour')){
+                    $tgl_waktu = $i->format("Y-m-d H:00:00");
+                    $tmp_id = $i->format("Ymd") . '_' . $i->format("H") . '_' . $value->mesin_id;
+                    if ($i->format("H") != $tmp_jam_end) {
+                        $tmp_data[$tmp_id][$tmp_status_warna] += 3600;
+                    } else {
+                        $tmp_second = strtotime($datetime_end) - strtotime($tgl_waktu);
+                        $tmp_data[$tmp_id][$tmp_status_warna] += $tmp_second;
+                    }
+                }
+            }
+        }
+
+        return $tmp_data;
+    }
+
     public function actionDailyIncomingMaterial($from_date, $to_date)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
