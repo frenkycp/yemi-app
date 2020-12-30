@@ -31,10 +31,99 @@ use app\models\TraceItemHdr;
 use app\models\SapGrGiByPlant; //current stock
 use app\models\SapMaterialDocumentBc; //stock in out
 use app\models\IpqaPatrolTbl;
-
+use app\models\SmtAiOutputInsertPoint01;
 
 class DisplayPrdController extends Controller
 {
+    public function actionSmtAiInsertPoint($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_total_insert = SmtAiOutputInsertPoint01::find()
+        ->select([
+            'child_analyst', 'end_job_period',
+            'TOTAL_INSERT_POINT' => 'SUM((summary_qty * POINT_TOTAL))',
+            'TOTAL_JV' => 'SUM((summary_qty * POINT_JV))',
+            'TOTAL_AX' => 'SUM((summary_qty * POINT_AV))',
+            'TOTAL_RH' => 'SUM((summary_qty * POINT_RG))',
+        ])
+        ->where([
+            'end_job_period' => $period_arr,
+        ])
+        ->andWhere('POINT_TOTAL IS NOT NULL')
+        ->groupBy('child_analyst, end_job_period')
+        ->orderBy('child_analyst, end_job_period')
+        ->all();
+
+        /*$tmp_smt_total_insert = SmtAiOutputInsertPoint01::find()
+        ->select([
+            'end_job_period', 'TOTAL_INSERT_POINT' => 'SUM((summary_qty * POINT_TOTAL))'
+        ])
+        ->where([
+            'end_job_period' => $period_arr,
+            'child_analyst' => 'WM03'
+        ])
+        ->andWhere('POINT_TOTAL IS NOT NULL')
+        ->groupBy('end_job_period')
+        ->orderBy('end_job_period')
+        ->all();
+
+        $tmp_ai_total_insert = SmtAiOutputInsertPoint01::find()
+        ->select([
+            'end_job_period',
+            'TOTAL_JV' => 'SUM((summary_qty * POINT_JV))',
+            'TOTAL_AX' => 'SUM((summary_qty * POINT_AV))',
+            'TOTAL_RH' => 'SUM((summary_qty * POINT_RG))',
+        ])
+        ->where([
+            'end_job_period' => $period_arr,
+            'child_analyst' => 'WM02'
+        ])
+        ->andWhere('POINT_TOTAL IS NOT NULL')
+        ->groupBy('end_job_period')
+        ->orderBy('end_job_period')
+        ->all();*/
+
+        return $this->render('smt-ai-insert-point', [
+            'model' => $model,
+            'period_arr' => $period_arr,
+            'tmp_total_insert' => $tmp_total_insert,
+            /*'tmp_smt_total_insert' => $tmp_smt_total_insert,
+            'tmp_ai_total_insert' => $tmp_ai_total_insert,*/
+        ]);
+    }
+
     public function actionIpqaDailyPatrol()
     {
         $this->layout = 'clean';
