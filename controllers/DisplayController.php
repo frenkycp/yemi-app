@@ -1137,7 +1137,7 @@ class DisplayController extends Controller
 
         }
 
-        $tmp_calendar = SernoCalendar::find()->where(['EXTRACT(year_month FROM etd)' => $model->period])->orderBy('etd')->all();
+        $tmp_calendar = SernoCalendar::find()->where(['EXTRACT(year_month FROM ship)' => $model->period])->orderBy('ship')->all();
         $tmp_week_arr = [];
         $current_week = 0;
         $current_year = date('Y', strtotime($model->period . '01'));
