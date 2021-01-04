@@ -1137,7 +1137,7 @@ class DisplayController extends Controller
 
         }
 
-        $tmp_calendar = SernoCalendar::find()->where(['EXTRACT(year_month FROM etd)' => $model->period])->andWhere(['>', 'week_ship', 2])->orderBy('etd')->all();
+        $tmp_calendar = SernoCalendar::find()->where(['EXTRACT(year_month FROM etd)' => $model->period])->orderBy('etd')->all();
         $tmp_week_arr = [];
         $current_week = 0;
         $current_year = date('Y', strtotime($model->period . '01'));
@@ -1154,14 +1154,14 @@ class DisplayController extends Controller
             }
         }
 
-        foreach ($tmp_week_arr as $week_no => $value) {
+        /*foreach ($tmp_week_arr as $week_no => $value) {
             $week_day_arr = $this->getStartAndEndDate($week_no, $current_year);
             $tmp_week_arr[$week_no]['start_date'] = $week_day_arr['week_start'];
             $tmp_week_arr[$week_no]['end_date'] = $week_day_arr['week_end'];
             if ($today >= $week_day_arr['week_start'] && $today <= $week_day_arr['week_end']) {
                 $current_week = $week_no;
             }
-        }
+        }*/
 
         $tmp_bu_arr = \Yii::$app->params['bu_arr_shipping'];
 
