@@ -22,7 +22,7 @@ date_default_timezone_set('Asia/Jakarta');
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 0.5em; text-align: center;}
+    .content-header {color: white; font-size: 1.5em; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -124,7 +124,7 @@ echo '</pre>';*/
     'action' => Url::to(['temperature-daily']),
 ]); ?>
 
-<div class="row" style="width: 200px; padding-top: 10px;">
+<div class="row" style="width: 300px; padding-top: 10px;">
     <div class="col-md-12">
         <?= $form->field($model, 'post_date')->widget(DatePicker::classname(), [
             //'type' => DatePicker::TYPE_COMPONENT_APPEND,
@@ -133,6 +133,7 @@ echo '</pre>';*/
                 'placeholder' => 'Enter date ...',
                 'class' => 'form-control text-center',
                 'onchange'=>'this.form.submit()',
+                'style' => 'font-size:30px; height: 45px;'
             ],
             'pluginOptions' => [
                 'autoclose'=>true,
@@ -208,7 +209,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 800,
+                    'height' => 850,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],
