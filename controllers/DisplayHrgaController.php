@@ -171,6 +171,7 @@ class DisplayHrgaController extends Controller
         $yesterday = date('Y-m-d', strtotime($model->post_date . ' -1 day'));
 
         $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
+        $color_category_arr = ArrayHelper::map(TemperatureDailyView02::find()->select('TEMPERATURE_CATEGORY, COLOR_CATEGORY')->groupBy('TEMPERATURE_CATEGORY, COLOR_CATEGORY')->all(), 'TEMPERATURE_CATEGORY', 'COLOR_CATEGORY');
         /*$tmp_temperature = TemperatureDailyView01::find()->where([
             '>=', 'POST_DATE', $yesterday
         ])->orderBy('TEMPERATURE')->all();*/
@@ -278,11 +279,17 @@ class DisplayHrgaController extends Controller
             if ($key == '34') {
                 $category = '<35 °C';
             }*/
+            $tmp_color = $color_category_arr[$key];
+            $color_name = strtolower($tmp_color);
             $categories[] = $key;
             $tmp_data_chart[] = [
                 //'x' => $category,
                 'y' => $value,
-                'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature_category' => $key])
+                'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature_category' => $key]),
+                'color' => $color_name,
+                'dataLabels' => [
+                    'color' => $color_name == 'red' ? 'red' : 'white',
+                ],
             ];
         }
         $data_chart = [

@@ -45,7 +45,7 @@ $css_string = "
         border:1px solid #8b8c8d;
         background-color: #518469;
         color: white;
-        font-size: 18px;
+        font-size: 24px;
         //border-bottom: 7px solid #797979;
         vertical-align: middle;
     }
@@ -70,7 +70,7 @@ $css_string = "
         //height: 100px;
     }
     .side-title {
-        font-size: 20px;
+        font-size: 26px;
         color: white;
         letter-spacing: 2px;
         font-weight : bold;
@@ -158,9 +158,9 @@ echo '</pre>';*/
             <tbody>
                 <?php foreach ($shift_summary_arr as $shift => $value): ?>
                     <tr>
-                        <td class="text-center"><?= $shift; ?></td>
-                        <td class="text-center"><?= number_format($value['total_check']); ?></td>
-                        <td class="text-center"><span id="belum_cek_<?= $shift; ?>"><?= number_format($value['total_no_check']); ?></span></td>
+                        <td class="text-center" style="font-size: 30px;"><?= $shift; ?></td>
+                        <td class="text-center" style="font-size: 30px;"><?= number_format($value['total_check']); ?></td>
+                        <td class="text-center" style="font-size: 30px;"><span id="belum_cek_<?= $shift; ?>"><?= number_format($value['total_no_check']); ?></span></td>
                     </tr>
                 <?php endforeach ?>
             </tbody>
@@ -208,7 +208,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 600,
+                    'height' => 800,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],
@@ -225,6 +225,11 @@ echo '</pre>';*/
                 ],
                 'xAxis' => [
                     'categories' => $categories,
+                    'labels' => [
+                        'style' => [
+                            'fontSize' => '26px'
+                        ],
+                    ],
                 ],
                 'yAxis' => [
                     'min' => 0,
@@ -236,6 +241,9 @@ echo '</pre>';*/
                     'column' => [
                         'dataLabels' => [
                             'enabled' => true,
+                            'style' => [
+                                'fontSize' => '36px'
+                            ],
                         ]
                     ],
                     'series' => [

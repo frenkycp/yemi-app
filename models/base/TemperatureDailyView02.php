@@ -18,6 +18,7 @@ use Yii;
  * @property string $HOST
  * @property double $TEMPERATURE
  * @property string $TEMPERATURE_CATEGORY
+ * @property string $COLOR_CATEGORY
  * @property string $LAST_UPDATE
  * @property string $aliasModel
  */
@@ -50,12 +51,13 @@ abstract class TemperatureDailyView02 extends \yii\db\ActiveRecord
         return [
             [['POST_DATE', 'LAST_UPDATE'], 'safe'],
             [['TEMPERATURE'], 'number'],
-            [['TEMPERATURE_CATEGORY'], 'required'],
+            [['TEMPERATURE_CATEGORY', 'COLOR_CATEGORY'], 'required'],
             [['PERIOD'], 'string', 'max' => 7],
             [['NIK', 'COST_CENTER'], 'string', 'max' => 10],
             [['NAMA_KARYAWAN'], 'string', 'max' => 100],
             [['COST_CENTER_DESC', 'HOST'], 'string', 'max' => 50],
-            [['TEMPERATURE_CATEGORY'], 'string', 'max' => 12]
+            [['TEMPERATURE_CATEGORY'], 'string', 'max' => 11],
+            [['COLOR_CATEGORY'], 'string', 'max' => 5]
         ];
     }
 
@@ -74,6 +76,7 @@ abstract class TemperatureDailyView02 extends \yii\db\ActiveRecord
             'HOST' => 'Host',
             'TEMPERATURE' => 'Temperature',
             'TEMPERATURE_CATEGORY' => 'Temperature Category',
+            'COLOR_CATEGORY' => 'Color Category',
             'LAST_UPDATE' => 'Last Update',
         ];
     }
