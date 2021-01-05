@@ -45,7 +45,8 @@
         "kartik-v/yii2-number": "@dev",
         "mongosoft/yii2-soap-client": "*",
         "yiisoft/yii2-imagine": "^2.2",
-        "kartik-v/yii2-tree-manager": "dev-master"
+        "kartik-v/yii2-tree-manager": "dev-master",
+        "yiisoft/yii2-httpclient": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
