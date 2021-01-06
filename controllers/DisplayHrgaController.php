@@ -19,9 +19,11 @@ use app\models\PermitInputData;
 use app\models\TemperatureDailyView01;
 use app\models\TemperatureDailyView02;
 use app\models\ScanTemperature;
+use app\models\OfficeEmp;
 
 class DisplayHrgaController extends Controller
 {
+
     public function actionTemperatureDailyGetRemark($post_date, $temperature_category)
     {
         $remark = '<div class="modal-header">
@@ -153,6 +155,29 @@ class DisplayHrgaController extends Controller
         return $remark;
     }
 
+    /*public function getEmpTemperature($start_date, $end_date)
+    {
+        $tmp_scan = ScanTemperature::find()
+        ->where([
+            'AND',
+            ['>=', 'POST_DATE', $start_date],
+            ['<=', 'POST_DATE', $end]
+        ])
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_scan as $key => $value) {
+            $post_date = date('Y-m-d', strtotime($value->POST_DATE));
+            $nik = $value->NIK;
+            if (!isset($tmp_data[$post_date][$nik])) {
+                $tmp_data[$post_date][$nik] = [
+                    'name' => $value->NAMA_KARYAWAN,
+
+                ];
+            }
+        }
+    }*/
+
     public function actionTemperatureDaily($value='')
     {
         $this->layout = 'clean';
@@ -171,7 +196,7 @@ class DisplayHrgaController extends Controller
         $yesterday = date('Y-m-d', strtotime($model->post_date . ' -1 day'));
 
         $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
-        $color_category_arr = ArrayHelper::map(TemperatureDailyView02::find()->select('TEMPERATURE_CATEGORY, COLOR_CATEGORY')->groupBy('TEMPERATURE_CATEGORY, COLOR_CATEGORY')->all(), 'TEMPERATURE_CATEGORY', 'COLOR_CATEGORY');
+        //$color_category_arr = ArrayHelper::map(TemperatureDailyView02::find()->select('TEMPERATURE_CATEGORY, COLOR_CATEGORY')->groupBy('TEMPERATURE_CATEGORY, COLOR_CATEGORY')->all(), 'TEMPERATURE_CATEGORY', 'COLOR_CATEGORY');
         /*$tmp_temperature = TemperatureDailyView01::find()->where([
             '>=', 'POST_DATE', $yesterday
         ])->orderBy('TEMPERATURE')->all();*/
@@ -200,6 +225,7 @@ class DisplayHrgaController extends Controller
             ],
         ];
         $tmp_data_suspect = $tmp_filter_attendance = $tmp_belum_check = $tmp_data = [];
+        $color_category_arr = [];
         foreach ($tmp_attendance[$model->post_date] as $key => $value) {
             if ($value['attend_judgement'] == 'P') {
                 $tmp_filter_attendance[] = $value;
@@ -208,6 +234,7 @@ class DisplayHrgaController extends Controller
         foreach ($tmp_filter_attendance as $attendance_val) {
             $tmp_suhu = null;
             foreach ($tmp_temperature as $temp_val) {
+                $color_category_arr[$temp_val->TEMPERATURE_CATEGORY] = $temp_val->COLOR_CATEGORY;
                 if ($attendance_val['shift'] == 3) {
                     if ($attendance_val['nik'] == $temp_val->NIK && strtotime($temp_val->POST_DATE) == strtotime($yesterday . ' 00:00:00')) {
                         $tmp_suhu = $temp_val->TEMPERATURE;
@@ -273,6 +300,10 @@ class DisplayHrgaController extends Controller
             ksort($tmp_data);
         }
 
+        if (count($tmp_belum_check) > 0) {
+            ksort($tmp_belum_check);
+        }
+
         $data_chart = $categories = $tmp_data_chart = [];
         foreach ($tmp_data as $key => $value) {
             /*$category = $key . ' °C';
@@ -309,6 +340,159 @@ class DisplayHrgaController extends Controller
             'tmp_data_suspect' => $tmp_data_suspect,
             'tmp_data' => $tmp_data,
             'tmp_belum_check' => $tmp_belum_check,
+        ]);
+    }
+
+    public function actionOfficeBodyTemp($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'post_date',
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $yesterday = date('Y-m-d', strtotime($model->post_date . ' -1 day'));
+
+        $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
+        $tmp_office_emp = OfficeEmp::find()->all();
+        $today_temp = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->orderBy('LAST_UPDATE')->all();
+        $yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();
+
+        $total_check = $total_no_check = 0;
+        $no_check_data = $temp_over_data = [];
+        $temp_category_total = [
+            '34 - 35' => [],
+            '35 - 35.5' => [],
+            '35.5 - 36' => [],
+            '36 - 36.5' => [],
+            '36.5 - 37' => [],
+            '37 - 37.5' => [],
+            '>= 37.5' => [],
+        ];
+        foreach ($tmp_office_emp as $office_emp_val) {
+            $attend_judgement = 'A';
+            $emp_shift = 1;
+            $emp_name = $office_emp_val->EMP_NAME;
+            foreach ($tmp_attendance[$model->post_date] as $attendance_val) {
+               if ($office_emp_val->EMP_ID == $attendance_val['nik']) {
+                   $attend_judgement = $attendance_val['attend_judgement'];
+                   $emp_shift = $attendance_val['shift'];
+                   $emp_name = $attendance_val['name'];
+               }
+            }
+
+            if ($emp_shift == 3) {
+                $temp_data = $yesterday_temp;
+            } else {
+                $temp_data = $today_temp;
+            }
+
+            $body_temp = 0;
+            $last_update = null;
+            foreach ($temp_data as $temp_value) {
+                if ($temp_value->NIK == $office_emp_val->EMP_ID) {
+                    $body_temp = $temp_value->SUHU;
+                    $last_update = $temp_value->LAST_UPDATE;
+                }
+            }
+
+            if ($last_update == null) {
+                if ($attend_judgement == 'P') {
+                    $attend_judgement_txt = 'Hadir';
+                } elseif ($attend_judgement == 'I') {
+                    $attend_judgement_txt = 'Ijin';
+                } elseif ($attend_judgement == 'S') {
+                    $attend_judgement_txt = 'Sakit';
+                } elseif ($attend_judgement == 'C') {
+                    $attend_judgement_txt = 'Cuti';
+                } else {
+                    $attend_judgement_txt = 'Alpa';
+                }
+                $no_check_data[] = [
+                    'nik' => $office_emp_val->EMP_ID,
+                    'name' => $emp_name,
+                    'attendance' => $attend_judgement_txt
+                ];
+                $total_no_check++;
+            } else {
+                $total_check++;
+                if ($body_temp >= 37.5) {
+                    $temp_over_data[] = [
+                        'nik' => $office_emp_val->EMP_ID,
+                        'name' => $emp_name,
+                        'temperature' => $body_temp
+                    ];
+                }
+
+                $tmp_category_data = [
+                    'nik' => $office_emp_val,
+                    'name' => $emp_name,
+                    'temperature' => $body_temp,
+                    'last_update' => $last_update,
+                ];
+
+                if ($body_temp < 35) {
+                    $temp_category_total['34 - 35'][] = $tmp_category_data;
+                } elseif ($body_temp < 35.5) {
+                    $temp_category_total['35 - 35.5'][] = $tmp_category_data;
+                } elseif ($body_temp < 36) {
+                    $temp_category_total['35.5 - 36'][] = $tmp_category_data;
+                } elseif ($body_temp < 36.5) {
+                    $temp_category_total['36 - 36.5'][] = $tmp_category_data;
+                } elseif ($body_temp < 37) {
+                    $temp_category_total['36.5 - 37'][] = $tmp_category_data;
+                } elseif ($body_temp < 37.5) {
+                    $temp_category_total['37 - 37.5'][] = $tmp_category_data;
+                } else {
+                    $temp_category_total['>= 37.5'][] = $tmp_category_data;
+                }
+            }
+        }
+
+        $data_chart = $categories = $tmp_data_chart = [];
+        foreach ($temp_category_total as $key => $value) {
+            $categories[] = $key;
+
+            if ($key == '>= 37.5') {
+                $color_name = 'red';
+            } else {
+                $color_name = 'green';
+            }
+
+            $tmp_data_chart[] = [
+                //'x' => $category,
+                'y' => count($value),
+                'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature_category' => $key]),
+                'color' => $color_name,
+                'dataLabels' => [
+                    'color' => $color_name == 'red' ? 'red' : 'white',
+                ],
+            ];
+        }
+
+        $data_chart = [
+            [
+                'name' => 'Total Person(s)',
+                'data' => $tmp_data_chart,
+                'showInLegend' => false,
+            ],
+        ];
+
+        return $this->render('office-body-temp', [
+            'model' => $model,
+            'total_check' => $total_check,
+            'total_no_check' => $total_no_check,
+            'no_check_data' => $no_check_data,
+            'temp_over_data' => $temp_over_data,
+            'categories' => $categories,
+            'data_chart' => $data_chart,
         ]);
     }
 
