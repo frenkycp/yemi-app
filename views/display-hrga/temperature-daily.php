@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Employees Temperature Monitoring <span class="japanesse light-green"></span>',
-    'tab_title' => 'Employees Temperature Monitoring',
-    'breadcrumbs_title' => 'Employees Temperature Monitoring'
+    'page_title' => 'Employee Body Temp. Monitoring <span class="japanesse light-green">社員の体温管理</span>',
+    'tab_title' => 'Employee Body Temp. Monitoring',
+    'breadcrumbs_title' => 'Employee Body Temp. Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -209,7 +209,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 850,
+                    'height' => 820,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],
