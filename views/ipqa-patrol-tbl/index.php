@@ -295,16 +295,12 @@ $columns = [
             'S' => 'S',
             'A' => 'A',
             'B' => 'B',
+            'A (5s)' => 'A (5s)',
         ],
         'width' => '110px',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 50px; font-size: 11px; text-align: center;',
-        ],
-        'filter' => [
-            'S' => 'S',
-            'A' => 'A',
-            'B' => 'B',
         ],
     ],
     [
@@ -316,7 +312,7 @@ $columns = [
             'inputType'=>\kartik\editable\Editable::INPUT_DROPDOWN_LIST,
             'asPopover' => true,
             'header' => 'Rank',
-            'data' => ['S' => 'S', 'A' => 'A', 'B' => 'B'],
+            'data' => ['S' => 'S', 'A' => 'A', 'B' => 'B', 'A (5s)' => 'A (5s)'],
             'options' => ['class'=>'form-control', 'prompt'=>'Select status...'],
         ],
         'filterInputOptions' => [
@@ -327,6 +323,7 @@ $columns = [
             'S' => 'S',
             'A' => 'A',
             'B' => 'B',
+            'A (5s)' => 'A (5s)'
         ],
         //'hiddenFromExport' => true,
         //'hidden' => !$is_clinic ? true : false,
