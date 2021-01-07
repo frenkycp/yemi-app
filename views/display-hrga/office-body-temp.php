@@ -161,7 +161,7 @@ echo '</pre>';*/
             </tbody>
         </table>
 
-        <div class="side-title"><i class="fa fa-caret-right"></i> Detail Cek Suhu >= 37.5 &deg;C</div>
+        <div class="side-title"><i class="fa fa-caret-right"></i> Detail Cek Suhu ≥ 37.5 &deg;C</div>
         <table class="table summary-tbl table-condensed">
             <thead>
                 <tr>
@@ -174,7 +174,7 @@ echo '</pre>';*/
                 if (count($temp_over_data) > 0) {
                     # code...
                 } else {
-                    echo '<td colspan="2" class="" style="font-weight: bold; padding-left: 10px;">Tidak ada suhu yang >= 37.5 &deg;C</td>';
+                    echo '<td colspan="2" class="" style="font-weight: bold; padding-left: 10px;">Tidak ada suhu yang ≥ 37.5 &deg;C</td>';
                 }
                 ?>
                 
@@ -194,16 +194,27 @@ echo '</pre>';*/
             <tbody>
                 <?php 
                 $no = 0;
-                foreach ($no_check_data as $value): 
-                    $no++;
-                    ?>
-                    <tr>
-                        <td class="text-center" style="font-weight: bold;"><?= $no; ?></td>
-                        <td class="text-center" style="font-weight: bold;"><?= $value['nik']; ?></td>
-                        <td class="text-center" style="font-weight: bold;"><?= $value['name']; ?></td>
-                        <td class="text-center" style="font-weight: bold;"><?= $value['attendance']; ?></td>
-                    </tr>
-                <?php endforeach ?>
+                if ($total_no_check == 0) {
+                    echo '<tr>
+                        <td colspan="4" style="font-weight: bold; padding-left: 5px;">Semua Karyawan Office Sudah Cek Suhu</td>
+                    </tr>';
+                } else {
+                    foreach ($no_check_data2 as $value){
+                        if (count($value) > 0) {
+                            foreach ($value as $value2) {
+                                $no++;
+                                ?>
+                                <tr>
+                                    <td class="text-center" style="font-weight: bold;"><?= $no; ?></td>
+                                    <td class="text-center" style="font-weight: bold;"><?= $value2['nik']; ?></td>
+                                    <td class="text-center" style="font-weight: bold;"><?= $value2['name']; ?></td>
+                                    <td class="text-center" style="font-weight: bold;"><?= $value2['attendance']; ?></td>
+                                </tr>
+                            <?php }
+                        }
+                    } 
+                } ?>
+                
             </tbody>
         </table>
 

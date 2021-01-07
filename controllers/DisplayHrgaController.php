@@ -368,13 +368,13 @@ class DisplayHrgaController extends Controller
         $total_check = $total_no_check = 0;
         $no_check_data = $temp_over_data = [];
         $temp_category_total = [
-            '34 - 35' => [],
-            '35.1 - 35.4' => [],
+            '34 - 34.9' => [],
+            '35 - 35.4' => [],
             '35.5 - 35.9' => [],
             '36 - 36.4' => [],
             '36.5 - 36.9' => [],
             '37 - 37.4' => [],
-            '>= 37.5' => [],
+            '≥ 37.5' => [],
         ];
         foreach ($tmp_office_emp as $office_emp_val) {
             $attend_judgement = 'A';
@@ -439,9 +439,9 @@ class DisplayHrgaController extends Controller
                 ];
 
                 if ($body_temp < 35) {
-                    $temp_category_total['34 - 35'][] = $tmp_category_data;
+                    $temp_category_total['34 - 34.9'][] = $tmp_category_data;
                 } elseif ($body_temp < 35.5) {
-                    $temp_category_total['35.1 - 35.4'][] = $tmp_category_data;
+                    $temp_category_total['35 - 35.4'][] = $tmp_category_data;
                 } elseif ($body_temp < 36) {
                     $temp_category_total['35.5 - 35.9'][] = $tmp_category_data;
                 } elseif ($body_temp < 36.5) {
@@ -451,7 +451,7 @@ class DisplayHrgaController extends Controller
                 } elseif ($body_temp < 37.5) {
                     $temp_category_total['37 - 37.4'][] = $tmp_category_data;
                 } else {
-                    $temp_category_total['>= 37.5'][] = $tmp_category_data;
+                    $temp_category_total['≥ 37.5'][] = $tmp_category_data;
                 }
             }
         }
@@ -460,7 +460,7 @@ class DisplayHrgaController extends Controller
         foreach ($temp_category_total as $key => $value) {
             $categories[] = $key;
 
-            if ($key == '>= 37.5') {
+            if ($key == '≥ 37.5') {
                 $color_name = 'red';
             } else {
                 $color_name = 'green';
@@ -500,6 +500,18 @@ class DisplayHrgaController extends Controller
             ];
         }
 
+        $no_check_data2 = [
+            'Hadir' => [],
+            'Sakit' => [],
+            'Ijin' => [],
+            'Alpa' => [],
+            'Cuti' => [],
+        ];
+
+        foreach ($no_check_data as $value) {
+            $no_check_data2[$value['attendance']][] = $value;
+        }
+
         $data_chart = [
             [
                 'name' => 'Total Person(s)',
@@ -513,6 +525,7 @@ class DisplayHrgaController extends Controller
             'total_check' => $total_check,
             'total_no_check' => $total_no_check,
             'no_check_data' => $no_check_data,
+            'no_check_data2' => $no_check_data2,
             'temp_over_data' => $temp_over_data,
             'categories' => $categories,
             'data_chart' => $data_chart,
