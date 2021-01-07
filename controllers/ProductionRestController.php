@@ -121,7 +121,7 @@ class ProductionRestController extends Controller
 
         $tmp_data = StoreInOutWsus::find()
         ->select([
-            'POST_DATE', 'ITEM', 'ITEM_DESC', 'LOC', 'LOC_DESC', 'TOTAL_COUNT' => 'COUNT(SEQ_LOG)', 'TOTAL_QTY' => 'SUM(QTY_IN)'
+            'SEQ_LOG', 'POST_DATE', 'ITEM', 'ITEM_DESC', 'LOC', 'LOC_DESC', 'TOTAL_COUNT' => 'COUNT(SEQ_LOG)', 'TOTAL_QTY' => 'SUM(QTY_IN)', 'Judgement'
         ])
         ->where([
             'AND',
@@ -129,7 +129,7 @@ class ProductionRestController extends Controller
             ['<=', 'POST_DATE', $to_date . ' 23:59:59']
         ])
         ->andWhere(['TRANS_ID' => '11'])
-        ->groupBy('POST_DATE, ITEM, ITEM_DESC, LOC, LOC_DESC')
+        ->groupBy('SEQ_LOG, POST_DATE, ITEM, ITEM_DESC, LOC, LOC_DESC, Judgement')
         ->orderBy('POST_DATE')
         ->asArray()
         ->all();

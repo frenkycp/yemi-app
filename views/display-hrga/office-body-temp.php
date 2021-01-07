@@ -51,7 +51,7 @@ $css_string = "
     }
     .summary-tbl > tbody > tr > td{
         border: 1px solid black;
-        font-size: 18px;
+        font-size: 16px;
         background: #8bd78f;
         color: #000;
         vertical-align: middle;
@@ -148,7 +148,7 @@ echo '</pre>';*/
 <div class="row">
     <div class="col-sm-5">
         <div class="side-title"><i class="fa fa-caret-right"></i> Cek Status</div>
-        <table class="table summary-tbl">
+        <table class="table summary-tbl table-condensed">
             <thead>
                 <tr>
                     <th class="text-center">Sudah Cek</th>
@@ -162,7 +162,7 @@ echo '</pre>';*/
         </table>
 
         <div class="side-title"><i class="fa fa-caret-right"></i> Detail Cek Suhu >= 37.5 &deg;C</div>
-        <table class="table summary-tbl">
+        <table class="table summary-tbl table-condensed">
             <thead>
                 <tr>
                     <th class="text-center">Karyawan</th>
@@ -182,7 +182,7 @@ echo '</pre>';*/
         </table>
 
         <div class="side-title"><i class="fa fa-caret-right"></i> Detail Belum Cek</div>
-        <table class="table summary-tbl">
+        <table class="table summary-tbl table-condensed">
             <thead>
                 <tr>
                     <th class="text-center" width="60px">#</th>
@@ -259,16 +259,15 @@ echo '</pre>';*/
                     ],
                     'series' => [
                         'cursor' => 'pointer',
-                        /*'point' => [
+                        'point' => [
                             'events' => [
-                                'click' => new JsExpression("
-                                    function(e){
-                                        e.preventDefault();
-                                        $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load(this.options.url);
+                                'click' => new JsExpression('
+                                    function(){
+                                        $("#modal").modal("show").find(".modal-content").html(this.options.remark);
                                     }
-                                "),
+                                '),
                             ]
-                        ]*/
+                        ]
                     ],
                 ],
                 'series' => $data_chart

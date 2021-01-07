@@ -432,7 +432,7 @@ class DisplayHrgaController extends Controller
                 }
 
                 $tmp_category_data = [
-                    'nik' => $office_emp_val,
+                    'nik' => $office_emp_val->EMP_ID,
                     'name' => $emp_name,
                     'temperature' => $body_temp,
                     'last_update' => $last_update,
@@ -466,10 +466,33 @@ class DisplayHrgaController extends Controller
                 $color_name = 'green';
             }
 
+            $remark = '<div style="padding: 5px;">
+            <table class="table table-bordered table-striped table-hover" style="margin-bottom: 0px;">';
+            $remark .= 
+            '<tr>
+                <th class="text-center">NIK</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Check Time</th>
+                <th class="text-center">Temp.</th>
+            </tr>'
+            ;
+
+            foreach ($value as $value2) {
+                $remark .= '<tr>
+                    <td class="text-center">' . $value2['nik'] . '</td>
+                    <td class="text-center">' . $value2['name'] . '</td>
+                    <td class="text-center">' . date('d M\' Y H:i', strtotime($value2['last_update'])) . '</td>
+                    <td class="text-center">' . $value2['temperature'] . '</td>
+                </tr>';
+            }
+
+            $remark .= '</table></div>';
+
             $tmp_data_chart[] = [
                 //'x' => $category,
                 'y' => count($value),
-                'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature_category' => $key]),
+                'remark' => $remark,
+                //'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature_category' => $key]),
                 'color' => $color_name,
                 'dataLabels' => [
                     'color' => $color_name == 'red' ? 'red' : 'white',
