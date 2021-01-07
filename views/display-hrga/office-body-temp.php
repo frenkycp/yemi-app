@@ -258,6 +258,7 @@ echo '</pre>';*/
                         ]
                     ],
                     'series' => [
+                        'pointPadding' => '0.05',
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [

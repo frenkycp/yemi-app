@@ -369,11 +369,11 @@ class DisplayHrgaController extends Controller
         $no_check_data = $temp_over_data = [];
         $temp_category_total = [
             '34 - 35' => [],
-            '35 - 35.5' => [],
-            '35.5 - 36' => [],
-            '36 - 36.5' => [],
-            '36.5 - 37' => [],
-            '37 - 37.5' => [],
+            '35.1 - 35.4' => [],
+            '35.5 - 35.9' => [],
+            '36 - 36.4' => [],
+            '36.5 - 36.9' => [],
+            '37 - 37.4' => [],
             '>= 37.5' => [],
         ];
         foreach ($tmp_office_emp as $office_emp_val) {
@@ -441,15 +441,15 @@ class DisplayHrgaController extends Controller
                 if ($body_temp < 35) {
                     $temp_category_total['34 - 35'][] = $tmp_category_data;
                 } elseif ($body_temp < 35.5) {
-                    $temp_category_total['35 - 35.5'][] = $tmp_category_data;
+                    $temp_category_total['35.1 - 35.4'][] = $tmp_category_data;
                 } elseif ($body_temp < 36) {
-                    $temp_category_total['35.5 - 36'][] = $tmp_category_data;
+                    $temp_category_total['35.5 - 35.9'][] = $tmp_category_data;
                 } elseif ($body_temp < 36.5) {
-                    $temp_category_total['36 - 36.5'][] = $tmp_category_data;
+                    $temp_category_total['36 - 36.4'][] = $tmp_category_data;
                 } elseif ($body_temp < 37) {
-                    $temp_category_total['36.5 - 37'][] = $tmp_category_data;
+                    $temp_category_total['36.5 - 36.9'][] = $tmp_category_data;
                 } elseif ($body_temp < 37.5) {
-                    $temp_category_total['37 - 37.5'][] = $tmp_category_data;
+                    $temp_category_total['37 - 37.4'][] = $tmp_category_data;
                 } else {
                     $temp_category_total['>= 37.5'][] = $tmp_category_data;
                 }
