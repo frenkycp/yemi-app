@@ -517,12 +517,6 @@ class DisplayHrgaController extends Controller
             ],
         ];
 
-        $temp_over_data[] = [
-            'nik' => 'YE1511001',
-            'name' => 'FRENKY CAHYA PURNAMA',
-            'temperature' => 40
-        ];
-
         return $this->render('office-body-temp', [
             'model' => $model,
             'total_check' => $total_check,
