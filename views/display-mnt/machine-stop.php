@@ -170,16 +170,8 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 
-<?php
-if (count($data) == 0) {
-    echo '<div id="running-well"><marquee behavior="scroll" scrollamount="20">ALL MACHINE ARE RUNNING WELL</marquee></div>';
-} else {
-    ?>
-    <br/>
-    <table class="table summary-tbl">
-        <tbody id="tbody-id">
-            
-        </tbody>
-    </table>
-<?php }
-?>
+<table class="table summary-tbl">
+    <tbody id="tbody-id">
+        
+    </tbody>
+</table>

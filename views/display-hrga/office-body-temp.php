@@ -75,6 +75,10 @@ $css_string = "
         letter-spacing: 2px;
         font-weight : bold;
     }
+    .temp-over-style {
+        background-color: red;
+        color: white;
+    }
     //tbody > tr > td { background: #33383d;}
     //.summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .icon-status {font-size : 3em;}
@@ -84,33 +88,31 @@ $css_string = "
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
 $this->registerCss($css_string);
 
-$script = "
+$script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 300000); // milliseconds
+      setTimeout("refreshPage();", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
-";
-$this->registerJs($script, View::POS_HEAD );
 
-$script = <<< JS
-    $(function() {
-        $('#belum_cek_1').click(function () {
-            $('#modal_1').modal('show');
-        });
-        $('#belum_cek_2').click(function () {
-            $('#modal_2').modal('show');
-        });
-        $('#belum_cek_3').click(function () {
-            $('#modal_3').modal('show');
-        });
+    $(document).ready(function() {
+        var i = 0;
+        setInterval(function() {
+            i++;
+            if(i%2 == 0){
+                $(".temp-over").css("background-color", "red");
+                $(".temp-over").css("color", "white");
+            } else {
+                $(".temp-over").css("background-color", "#8bd78f");
+                $(".temp-over").css("color", "black");
+            }
+        }, 700);
     });
 JS;
-
-$this->registerJs($script);
+$this->registerJs($script, View::POS_END );
 
 
 /*echo '<pre>';
@@ -166,13 +168,18 @@ echo '</pre>';*/
             <thead>
                 <tr>
                     <th class="text-center">Karyawan</th>
-                    <th class="text-center">Temp</th>
+                    <th class="text-center" width="120px">Temp</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 if (count($temp_over_data) > 0) {
-                    # code...
+                    foreach ($temp_over_data as $key => $value) {
+                        echo '<tr>
+                            <td class="text-center temp-over" style="font-size: 24px;"><b>' . $value['nik'] . '<br/>' . $value['name'] . '</b></td>
+                            <td class="text-center temp-over" style="font-size: 24px;"><b>' . $value['temperature'] . '</b></td>
+                        </tr>';
+                    }
                 } else {
                     echo '<td colspan="2" class="" style="font-weight: bold; padding-left: 10px;">Tidak ada suhu yang ≥ 37.5 &deg;C</td>';
                 }

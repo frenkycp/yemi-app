@@ -130,9 +130,9 @@ $gridColumns = [
         <div class="box-body">
             <?= Html::a('Click Here to add new data', ['create'], ['class' => 'btn btn-default']); ?><br/><br/>
             <?php
-            $tmp_stop = MachineStopRecord::find()->where(['STATUS' => 0])->all();
+            $tmp_stop = MachineStopRecord::find()->where(['STATUS' => 0])->orderBy('START_TIME')->all();
             if (count($tmp_stop) == 0) {
-                echo '<span style="font-size: 30px">ALL MACHINE ARE RUNNING WELL ...</span>';
+                echo '<marquee behavior="alternate" scrollamount="10"><span style="font-size: 30px" class="text-green">ALL ARE RUNNING WELL ...</span></marquee>';
             } else {
                 ?>
                 <table class="table table-responsive table-bordered table-striped" style="font-size: 20px;">

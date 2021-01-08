@@ -376,17 +376,10 @@ class DisplayHrgaController extends Controller
             '37 - 37.4' => [],
             '≥ 37.5' => [],
         ];
-        foreach ($tmp_office_emp as $office_emp_val) {
-            $attend_judgement = 'A';
-            $emp_shift = 1;
-            $emp_name = $office_emp_val->EMP_NAME;
-            foreach ($tmp_attendance[$model->post_date] as $attendance_val) {
-               if ($office_emp_val->EMP_ID == $attendance_val['nik']) {
-                   $attend_judgement = $attendance_val['attend_judgement'];
-                   $emp_shift = $attendance_val['shift'];
-                   $emp_name = $attendance_val['name'];
-               }
-            }
+        foreach ($tmp_attendance[$model->post_date] as $attendance_val) {
+            $attend_judgement = $attendance_val['attend_judgement'];
+            $emp_shift = $attendance_val['shift'];
+            $emp_name = $attendance_val['name'];
 
             if ($emp_shift == 3) {
                 $temp_data = $yesterday_temp;
@@ -397,7 +390,7 @@ class DisplayHrgaController extends Controller
             $body_temp = 0;
             $last_update = null;
             foreach ($temp_data as $temp_value) {
-                if ($temp_value->NIK == $office_emp_val->EMP_ID) {
+                if ($temp_value->NIK == $attendance_val['nik']) {
                     $body_temp = $temp_value->SUHU;
                     $last_update = $temp_value->LAST_UPDATE;
                 }
@@ -416,7 +409,7 @@ class DisplayHrgaController extends Controller
                     $attend_judgement_txt = 'Alpa';
                 }
                 $no_check_data[] = [
-                    'nik' => $office_emp_val->EMP_ID,
+                    'nik' => $attendance_val['nik'],
                     'name' => $emp_name,
                     'attendance' => $attend_judgement_txt
                 ];
@@ -425,14 +418,14 @@ class DisplayHrgaController extends Controller
                 $total_check++;
                 if ($body_temp >= 37.5) {
                     $temp_over_data[] = [
-                        'nik' => $office_emp_val->EMP_ID,
+                        'nik' => $attendance_val['nik'],
                         'name' => $emp_name,
                         'temperature' => $body_temp
                     ];
                 }
 
                 $tmp_category_data = [
-                    'nik' => $office_emp_val->EMP_ID,
+                    'nik' => $attendance_val['nik'],
                     'name' => $emp_name,
                     'temperature' => $body_temp,
                     'last_update' => $last_update,
@@ -470,6 +463,7 @@ class DisplayHrgaController extends Controller
             <table class="table table-bordered table-striped table-hover" style="margin-bottom: 0px;">';
             $remark .= 
             '<tr>
+                <th class="text-center">#</th>
                 <th class="text-center">NIK</th>
                 <th class="text-center">Name</th>
                 <th class="text-center">Check Time</th>
@@ -477,8 +471,11 @@ class DisplayHrgaController extends Controller
             </tr>'
             ;
 
+            $no = 0;
             foreach ($value as $value2) {
+                $no++;
                 $remark .= '<tr>
+                    <td class="text-center">' . $no . '</td>
                     <td class="text-center">' . $value2['nik'] . '</td>
                     <td class="text-center">' . $value2['name'] . '</td>
                     <td class="text-center">' . date('d M\' Y H:i', strtotime($value2['last_update'])) . '</td>
@@ -518,6 +515,12 @@ class DisplayHrgaController extends Controller
                 'data' => $tmp_data_chart,
                 'showInLegend' => false,
             ],
+        ];
+
+        $temp_over_data[] = [
+            'nik' => 'YE1511001',
+            'name' => 'FRENKY CAHYA PURNAMA',
+            'temperature' => 40
         ];
 
         return $this->render('office-body-temp', [
