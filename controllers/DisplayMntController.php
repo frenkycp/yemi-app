@@ -14,9 +14,52 @@ use app\models\AssetTbl;
 use app\models\MttrMtbfDataView;
 use app\models\MesinCheckNg;
 use app\models\WorkDayTbl;
+use app\models\MachineStopRecord;
 
 class DisplayMntController extends Controller
 {
+	public function actionMachineStopTime()
+	{
+		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_data = MachineStopRecord::find()->where(['STATUS' => 0])->all();
+        $data = [];
+        $tbody_content = '';
+
+        if (count($tmp_data) > 0) {
+        	foreach ($tmp_data as $key => $value) {
+	        	$second_date = new \DateTime(date('Y-m-d H:i:s'));
+	            $first_date = new \DateTime($value->START_TIME);
+	            $interval = $first_date->diff($second_date);
+	            $stopwatch = str_pad($interval->h, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->i, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->s, 2, '0', STR_PAD_LEFT);
+	            
+	            $tbody_content .= '<tr>
+                    <td><span class="fa fa-gears" style=""></span> ' . $value->MESIN_DESC . '</td>
+                    <td class="text-center" style="background-color: white; border-radius: 10px;" width="300px"><span class="glyphicon glyphicon-time" style="font-size: 0.65em; color: black;"></span> <b><span style="color: red;">' . $stopwatch . '</span></b></td>
+                </tr>';
+	        }
+        }
+        
+
+        return [
+        	'total_stop' => count($tmp_data),
+        	'tbody_content' => $tbody_content
+        ];
+	}
+
+	public function actionMachineStop()
+	{
+		$this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = MachineStopRecord::find()->where(['STATUS' => 0])->all();
+
+        return $this->render('machine-stop', [
+        	'data' => $data
+        ]);
+	}
+
 	public function actionMachineByArea($fiscal_year)
 	{
 		\Yii::$app->response->format = Response::FORMAT_JSON;
