@@ -24,7 +24,36 @@ $this->registerCss("
     .btn-block {margin: 3px;}
 ");
 
+$this->registerJs("$(function() {
+   $('.popup_img').click(function(e) {
+        e.preventDefault();
+        $('#serno_img').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
+   });
+});");
+
 $gridColumns = [
+    [
+        'class' => 'kartik\grid\ActionColumn',
+        //'hidden' => !$is_clinic ? true : false,
+        'template' => '{update-image}',
+        'buttons' => [
+            'update-image' => function($url, $model, $key){
+                $url = ['update-image', 'detail_id' => $model->detail_id, 'serial_no' => $model->serial_no];
+                $options = [
+                    'title' => 'Update Image',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="fa fa-image"></span>', $url, $options);
+            }
+        ],
+        'urlCreator' => function($action, $model, $key, $index) {
+            // using the column name as key, not mapping to 'id' like the standard generator
+            $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
+            $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
+            return Url::toRoute($params);
+        },
+        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 100px;']
+    ],
     [
         'attribute' => 'document_no',
         'hAlign' => 'center',
@@ -56,6 +85,50 @@ $gridColumns = [
         'attribute' => 'serial_no',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;',
+        ],
+    ],
+    [
+        'attribute' => 'img_before',
+        'value' => function($model){
+            if ($model->img_before != null) {
+                //return Html::img('@web/uploads/NG_FA/thumbnail/' . $model->img_before);
+                return Html::a(Html::img('@web/uploads/NG_FA/thumbnail/' . $model->img_before),
+                    ['image-preview', 'before_after' => 'BEFORE', 'serial_no' => $model->serial_no, 'img_filename' => $model->img_before],
+                    ['class' => 'popup_img', 'data-pjax' => '0',]
+                );
+            } else {
+                return '-';
+            }
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;',
+        ],
+    ],
+    [
+        'attribute' => 'img_after',
+        'value' => function($model){
+            if ($model->img_after != null) {
+                //return Html::img('@web/uploads/NG_FA/thumbnail/' . $model->img_after);
+                return Html::a(Html::img('@web/uploads/NG_FA/thumbnail/' . $model->img_after),
+                    ['image-preview', 'before_after' => 'AFTER', 'serial_no' => $model->serial_no, 'img_filename' => $model->img_after],
+                    ['class' => 'popup_img', 'data-pjax' => '0',]
+                );
+            } else {
+                return '-';
+            }
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;',
@@ -160,7 +233,9 @@ $gridColumns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    
+    <?php
+    echo date('Y-m-d', strtotime(' -1 week'));
+    ?>
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
@@ -196,3 +271,10 @@ $gridColumns = [
 <?php \yii\widgets\Pjax::end() ?>
 
 
+<?php
+yii\bootstrap\Modal::begin([
+    'id' =>'serno_img',
+    'header' => '<h3>Machine Image</h3>',
+    'size' => 'modal-lg',
+]);
+yii\bootstrap\Modal::end();
