@@ -175,22 +175,22 @@ echo '</pre>';*/
     <tbody>
         <tr>
             <td colspan="4" class="bg-black"><span class="desc-number">A. </span>PLAN Qty</td>
-            <?php foreach ($plan_by_period as $key => $value): ?>
+            <?php foreach ($plan_qty_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format($value); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
             <td colspan="4" class="bg-black"><span class="desc-number">B. </span>ACTUAL Qty</td>
-            <?php foreach ($actual_by_period as $key => $value): ?>
+            <?php foreach ($actual_qty_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format($value); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
             <td colspan="4" class="bg-black"><span class="desc-number">C. </span>RATIO B/A</td>
-            <?php foreach ($actual_by_period as $key => $value):
+            <?php foreach ($actual_qty_period as $key => $value):
                 $tmp_pct = 0;
-                if ($plan_by_period[$key] > 0) {
-                    $tmp_pct = round(($value / $plan_by_period[$key]) * 100, 1);
+                if ($plan_qty_period[$key] > 0) {
+                    $tmp_pct = round(($value / $plan_qty_period[$key]) * 100, 1);
                 }
                 ?>
                 <td class="text-center bg-black"><?= $tmp_pct; ?>%</td>
@@ -198,22 +198,22 @@ echo '</pre>';*/
         </tr>
         <tr>
             <td colspan="4" class="bg-black"><span class="desc-number">D. </span>PLAN Amount</td>
-            <?php foreach ($price_by_period_plan as $key => $value): ?>
+            <?php foreach ($plan_amt_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
             <td colspan="4" class="bg-black"><span class="desc-number">E. </span>ACTUAL Amount</td>
-            <?php foreach ($price_by_period as $key => $value): ?>
+            <?php foreach ($actual_amt_period as $key => $value): ?>
                 <td class="text-center bg-black"><?= number_format(round($value)); ?></td>
             <?php endforeach ?>
         </tr>
         <tr>
             <td colspan="4" class="bg-black"><span class="desc-number">F. </span>RATIO E/D</td>
-            <?php foreach ($price_by_period as $key => $value):
+            <?php foreach ($actual_amt_period as $key => $value):
                 $tmp_pct = 0;
-                if ($price_by_period_plan[$key] > 0) {
-                    $tmp_pct = round(($value / $price_by_period_plan[$key]) * 100, 1);
+                if ($plan_amt_period[$key] > 0) {
+                    $tmp_pct = round(($value / $plan_amt_period[$key]) * 100, 1);
                 }
                 ?>
                 <td class="text-center bg-black"><?= $tmp_pct; ?>%</td>
@@ -221,7 +221,7 @@ echo '</pre>';*/
         </tr>
         <tr>
             <td colspan="4" class="bg-black"><span class="desc-number">G. </span>Working Days</td>
-            <?php foreach ($plan_by_period as $key => $value):
+            <?php foreach ($plan_qty_period as $key => $value):
                 if (isset($tmp_work_day[$key])) {
                     $working_days = $tmp_work_day[$key];
                 } else {
