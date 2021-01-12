@@ -390,7 +390,7 @@ class DisplayHrgaController extends Controller
             $body_temp = 0;
             $last_update = null;
             foreach ($temp_data as $temp_value) {
-                if ($temp_value->NIK == $attendance_val['nik']) {
+                if ($temp_value->NIK == $attendance_val['nik'] && $body_temp == 0 && $temp_value->SUHU > 0) {
                     $body_temp = $temp_value->SUHU;
                     $last_update = $temp_value->LAST_UPDATE;
                 }
