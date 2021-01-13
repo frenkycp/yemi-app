@@ -74,6 +74,7 @@ $query->andFilterWhere([
             'ww_total_price' => $this->ww_total_price,
             'next_action' => $this->next_action,
             'action_status' => $this->action_status,
+            'defect_category' => $this->defect_category,
         ]);
 
         $query->andFilterWhere(['like', 'document_no', $this->document_no])
