@@ -362,8 +362,9 @@ class DisplayHrgaController extends Controller
 
         $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
         $tmp_office_emp = OfficeEmp::find()->all();
-        $today_temp = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->orderBy('LAST_UPDATE')->all();
-        $yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();
+        //$today_temp = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->orderBy('LAST_UPDATE')->all();
+        //$yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();
+        $temperature_from_yesterday = ScanTemperature::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
 
         $total_check = $total_no_check = 0;
         $no_check_data = $temp_over_data = [];
@@ -381,16 +382,28 @@ class DisplayHrgaController extends Controller
             $emp_shift = $attendance_val['shift'];
             $emp_name = $attendance_val['name'];
 
+            $temp_data = $temperature_from_yesterday;
+            $start_time = $model->post_date . ' 05:00:00';
+            $end_time = $model->post_date . ' 17:00:00';
             if ($emp_shift == 3) {
+                $start_time = $yesterday . ' 19:00:00';
+                $end_time = $model->post_date . ' 07:00:00';
+            }
+            /*if ($emp_shift == 3) {
                 $temp_data = $yesterday_temp;
             } else {
                 $temp_data = $today_temp;
-            }
+            }*/
 
             $body_temp = 0;
             $last_update = null;
             foreach ($temp_data as $temp_value) {
-                if ($temp_value->NIK == $attendance_val['nik'] && $body_temp == 0 && $temp_value->SUHU > 0) {
+                if ($temp_value->NIK == $attendance_val['nik']
+                    && $body_temp == 0
+                    && $temp_value->SUHU > 0
+                    && $temp_value->LAST_UPDATE > $start_time
+                    && $temp_value->LAST_UPDATE < $end_time
+                ) {
                     $body_temp = $temp_value->SUHU;
                     $last_update = $temp_value->LAST_UPDATE;
                 }
