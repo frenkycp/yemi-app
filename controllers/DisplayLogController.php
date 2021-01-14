@@ -15,12 +15,127 @@ use app\models\ShipReservationView02;
 use app\models\ShippingContainerView01;
 use app\models\ContainerView;
 use app\models\ShippingOrderView03;
+use app\models\ShippingOrderNew01;
 
 /**
  * 
  */
 class DisplayLogController extends Controller
 {
+    public function actionShippingOrderNew($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $period_name = strtoupper(date('M Y', strtotime($model->period . '01')));
+
+        $tmp_shipping_order = ShippingOrderNew01::find()
+        ->select([
+            'ETD',
+            'TOTAL_CONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_UNCONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+        ])
+        ->where([
+            'PERIOD' => $model->period,
+        ])
+        ->groupBy('ETD')
+        ->orderBy('ETD')
+        ->all();
+
+        $tmp_confirm = $tmp_unconfirm = $tmp_rejected = [];
+        $total_plan = $total_confirm = $total_reject = $total_unconfirm = 0;
+        foreach ($tmp_shipping_order as $order_value) {
+            $post_date = (strtotime($order_value->ETD . " +7 hours") * 1000);
+            $tmp_confirm[] = [
+                'x' => $post_date,
+                'y' => $order_value->TOTAL_CONFIRMED == 0 ? null : (int)$order_value->TOTAL_CONFIRMED,
+                
+            ];
+            $tmp_unconfirm[] = [
+                'x' => $post_date,
+                'y' => $order_value->TOTAL_UNCONFIRMED == 0 ? null : (int)$order_value->TOTAL_UNCONFIRMED,
+                
+            ];
+            $tmp_rejected[] = [
+                'x' => $post_date,
+                'y' => null,
+                
+            ];
+
+            $total_confirm += $order_value->TOTAL_CONFIRMED;
+            $total_unconfirm += $order_value->TOTAL_UNCONFIRMED;
+        }
+
+        $total_plan = $total_confirm + $total_unconfirm;
+
+        $data = [
+            [
+                'name' => 'REJECTED',
+                'data' => $tmp_rejected,
+                'color' => '#001F3F',
+            ],
+            [
+                'name' => 'NOT CONFIRMED',
+                'data' => $tmp_unconfirm,
+                'color' => '#dd4b39',
+            ],
+            [
+                'name' => 'CONFIRMED',
+                'data' => $tmp_confirm,
+                'color' => '#00a65a',
+            ],
+            
+        ];
+
+        $order_by_pod = ShippingOrderNew01::find()
+        ->select([
+            'POD',
+            'TOTAL_CONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_UNCONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+        ])
+        ->where([
+            'PERIOD' => $model->period,
+        ])
+        ->groupBy('POD')
+        ->orderBy('TOTAL_UNCONFIRMED DESC')
+        ->all();
+
+        $pct_arr = [
+            'confirm' => 0,
+            'reject' => 0,
+            'unconfirm' => 0,
+        ];
+
+        if ($total_plan > 0) {
+            $pct_arr['confirm'] = round(($total_confirm / $total_plan) * 100, 2);
+            $pct_arr['reject'] = round(($total_reject / $total_plan) * 100, 2);
+            $pct_arr['unconfirm'] = round(($total_unconfirm / $total_plan) * 100, 2);
+        }
+
+        return $this->render('shipping-order-new', [
+            'data' => $data,
+            'model' => $model,
+            'period_name' => $period_name,
+            'tmp_shipping_order' => $tmp_shipping_order,
+            'total_plan' => $total_plan,
+            'total_confirm' => $total_confirm,
+            'total_unconfirm' => $total_unconfirm,
+            'total_reject' => $total_reject,
+            'pct_arr' => $pct_arr,
+            'order_by_pod' => $order_by_pod,
+        ]);
+    }
+
     public function actionShippingOrder($value='')
     {
         $this->layout = 'clean';

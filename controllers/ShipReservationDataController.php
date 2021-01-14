@@ -25,6 +25,12 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
     public function actionIndex()
 	{
 	    $searchModel  = new ShipReservationDataSearch;
+
+	    if(\Yii::$app->request->get('PERIOD') !== null)
+	    {
+	    	$searchModel->PERIOD = \Yii::$app->request->get('PERIOD');
+	    }
+
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

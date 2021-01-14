@@ -254,7 +254,7 @@ class ProductionRestController extends Controller
         ]);
         $email->attach(\Yii::$app->basePath. '\web\mita_insight.png');
         $email->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
-        ->setTo(['gazalba.briljan@music.yamaha.com', 'yunan.prawoto@music.yamaha.com', 'abdul.ghofur@music.yamaha.com', 'muhammad.zamroni@music.yamaha.com', 'sony.wisantomo@music.yamaha.com', 'masatoshi.nasuda@music.yamaha.com', 'satriya.wibowo@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'frenky.purnama@music.yamaha.com'])
+        ->setTo(['gazalba.briljan@music.yamaha.com', 'yunan.prawoto@music.yamaha.com', 'abdul.ghofur@music.yamaha.com', 'muhammad.zamroni@music.yamaha.com', 'sony.wisantomo@music.yamaha.com', 'masatoshi.nasuda@music.yamaha.com', 'satriya.wibowo@music.yamaha.com', 'fredy.agus@music.yamaha.com'])
         //->setCc($set_to_cc_arr)
         ->setSubject($model_name . ' OQC Monitoring')
         ->send();
@@ -414,7 +414,7 @@ class ProductionRestController extends Controller
         ->attach(\Yii::$app->basePath. '\web\uploads\temp\\' . $excel_filename)
         ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
         //->setTo(['frenky.purnama@music.yamaha.com'])
-        ->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com', 'frenky.purnama@music.yamaha.com'])
+        ->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com'])
         //->setCc('frenky.purnama@music.yamaha.com')
         ->setSubject('FGS Stock (' . $yesterday_indo_format . ')')
         ->send();
@@ -736,7 +736,7 @@ class ProductionRestController extends Controller
         ])
         ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
         ->setTo(['gazalba.briljan@music.yamaha.com'])
-        ->setCc(array('frenky.purnama@music.yamaha.com'))
+        //->setCc(array('frenky.purnama@music.yamaha.com'))
         //->setTo(['frenky.purnama@music.yamaha.com'])
         ->setSubject('Production, Shipping, NG and Attendance Report')
         ->send();
