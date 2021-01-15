@@ -8,12 +8,30 @@ use yii\helpers\StringHelper;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use kartik\widgets\DateTimePicker;
+use app\models\MachineStopRecord;
 
 /**
 * @var yii\web\View $this
 * @var app\models\MachineStopRecord $model
 * @var yii\widgets\ActiveForm $form
 */
+
+$tmp_open = MachineStopRecord::find()->where([
+    'STATUS' => 0
+])->all();
+
+$dropdown_options = [
+    'placeholder' => 'Select a machine ...'
+];
+
+if (count($tmp_open) > 0) {
+    $disabled_arr = [];
+    foreach ($tmp_open as $key => $value) {
+        $disabled_arr[$value->MESIN_ID] = ['disabled' => true];
+    }
+    $dropdown_options['options'] = $disabled_arr;
+}
+
 
 ?>
 
@@ -43,7 +61,7 @@ use kartik\widgets\DateTimePicker;
                 <div class="col-sm-8">
                     <?= $form->field($model, 'MESIN_ID')->widget(Select2::classname(), [
                         'data' => ArrayHelper::map(app\models\MachineIotCurrent::find()->all(), 'mesin_id', 'assetName'),
-                        'options' => ['placeholder' => 'Select a machine ...'],
+                        'options' => $dropdown_options,
                         'value' => date('Y-m-d H:i:s'),
                         'pluginOptions' => [
                             'allowClear' => true

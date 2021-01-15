@@ -25,6 +25,19 @@ class MachineStopRecordController extends \app\controllers\base\MachineStopRecor
 		try {
 			if ($model->load($_POST)) {
 				//return $this->redirect(['view', 'ID' => $model->ID]);
+
+				$tmp_open = MachineStopRecord::find()
+				->where([
+					'STATUS' => 0,
+					'MESIN_ID' => $model->MESIN_ID
+				])
+				->one();
+
+				if ($tmp_open) {
+					\Yii::$app->session->setFlash("danger", "Add data failed...! Machine stop working since " . date('d M\' Y H:i', strtotime($tmp_open->START_TIME)) . " by " . $tmp_open->START_BY_NAME . '.');
+					return $this->render('create', ['model' => $model]);
+				}
+
 				$nik = \Yii::$app->user->identity->username;
 				$tmp_user = Karyawan::find()->where([
 					'OR',
