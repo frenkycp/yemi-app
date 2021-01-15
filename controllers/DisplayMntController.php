@@ -34,7 +34,7 @@ class DisplayMntController extends Controller
 	            $interval = $first_date->diff($second_date);
 	            $total_hour = $interval->d * 24;
 	            $total_hour += $interval->h;
-	            $stopwatch = str_pad($total_hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->i, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->s, 2, '0', STR_PAD_LEFT);
+	            $stopwatch = str_pad($total_hour, 2, '0', STR_PAD_LEFT) . '<span style="font-size: 0.4em;"> hour</span> ' . str_pad($interval->i, 2, '0', STR_PAD_LEFT) . '<span style="font-size: 0.4em;"> min</span>';
 	            
 	            $tbody_content .= '<tr>
                     <td><span class="fa fa-gears" style=""></span> ' . $value->MESIN_DESC . '</td>

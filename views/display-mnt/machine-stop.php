@@ -139,7 +139,7 @@ $this->registerJs("
                 
             },
             complete: function(){
-                setTimeout(function(){update_data();}, 500);
+                setTimeout(function(){update_data();}, 5000);
             }
         });
     }
