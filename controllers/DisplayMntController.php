@@ -32,11 +32,13 @@ class DisplayMntController extends Controller
 	        	$second_date = new \DateTime(date('Y-m-d H:i:s'));
 	            $first_date = new \DateTime($value->START_TIME);
 	            $interval = $first_date->diff($second_date);
-	            $stopwatch = str_pad($interval->h, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->i, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->s, 2, '0', STR_PAD_LEFT);
+	            $total_hour = $interval->d * 24;
+	            $total_hour += $interval->h;
+	            $stopwatch = str_pad($total_hour, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->i, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->s, 2, '0', STR_PAD_LEFT);
 	            
 	            $tbody_content .= '<tr>
                     <td><span class="fa fa-gears" style=""></span> ' . $value->MESIN_DESC . '</td>
-                    <td class="text-center" style="background-color: white; border-radius: 10px;" width="300px"><span class="glyphicon glyphicon-time" style="font-size: 0.65em; color: black;"></span> <b><span style="color: red;">' . $stopwatch . '</span></b></td>
+                    <td class="text-center" style="background-color: white; border-radius: 10px;" width="400px"><span class="glyphicon glyphicon-time" style="font-size: 0.65em; color: black;"></span> <b><span style="color: red;">' . $stopwatch . '</span></b></td>
                 </tr>';
 	        }
         }

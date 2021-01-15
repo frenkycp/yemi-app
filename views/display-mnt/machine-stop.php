@@ -43,7 +43,7 @@ $css_string = "
         border-collapse: separate;
     }
     .summary-tbl > tbody > tr > td{
-        font-size: 60px;
+        font-size: 56px;
         background: #000;
         color: #FFF;
         vertical-align: middle;
