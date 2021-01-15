@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\depdrop\DepDrop;
 
 $this->title = [
-    'page_title' => '<span class="text-red"><i class="fa fa-warning"></i></span>&nbsp;&nbsp; MACHINE STOP &nbsp;&nbsp;<span class="text-red"><i class="fa fa-warning"></i></span>',
-    'tab_title' => 'MACHINE STOP',
-    'breadcrumbs_title' => 'MACHINE STOP'
+    'page_title' => '<span class="text-red"><i class="fa fa-warning"></i></span>&nbsp;&nbsp; Machine Broken Status <span class="japanesse light-green">機械故障・停止状況</span> &nbsp;&nbsp;<span class="text-red"><i class="fa fa-warning"></i></span>',
+    'tab_title' => 'Machine Broken Status',
+    'breadcrumbs_title' => 'Machine Broken Status'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -20,7 +20,7 @@ $css_string = "
     //.form-control, .control-label {background-color: #000; color: white; border-color: white;}
     .control-label {color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 1.5em; text-align: center;}
+    .content-header {color: white; font-size: 1.3em; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
