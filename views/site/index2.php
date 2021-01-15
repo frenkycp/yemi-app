@@ -682,7 +682,12 @@ $this->registerCss("
                         $tmp_url = app\models\MitaUrl::find()->where(['flag' => 1])->orderBy('location, title')->all();
                         $url_arr = [];
                         foreach ($tmp_url as $key => $value) {
-                            $url_arr[$value->location][] = Html::a($value->title, $value->url, ['target' => '_blank']);
+                            if (strpos($value->url, 'http') !== false) {
+                                $url_arr[$value->location][] = Html::a($value->title, $value->url, ['target' => '_blank']);
+                            } else {
+                                $url_arr[$value->location][] = Html::a($value->title, [$value->url], ['target' => '_blank']);
+                            }
+                            
                         }
 
                         foreach ($url_arr as $location => $link) {

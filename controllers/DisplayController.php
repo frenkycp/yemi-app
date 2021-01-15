@@ -1872,96 +1872,74 @@ class DisplayController extends Controller
 
         $tmp_yesterday = VmsPlanActual::find()
         ->select([
-            'BU', 'PLAN_QTY' => 'SUM(PLAN_QTY)', 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)', 'BALANCE_QTY' => 'SUM(BALANCE_QTY)'
+            'BU', 'ITEM', 'ITEM_DESC', 'DESTINATION', 'PLAN_QTY' => 'SUM(PLAN_QTY)', 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)', 'BALANCE_QTY' => 'SUM(BALANCE_QTY)'
         ])
         ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
         ->andWhere(['VMS_PERIOD' => $yesterday_period])
         ->andWhere(['<>', 'LINE', 'SPC'])
-        ->groupBy('BU')
+        ->groupBy('BU, ITEM, ITEM_DESC, DESTINATION')
+        ->orderBy('BU, BALANCE_QTY')
         ->all();
 
-        $tmp_top_minus_av = VmsPlanActual::find()
-        ->select([
-            'ITEM', 'ITEM_DESC',
-            'PLAN_QTY' => 'SUM(PLAN_QTY)',
-            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
-            'BALANCE_QTY' => 'SUM(BALANCE_QTY)',
-        ])
-        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
-        ->andWhere([
-            'VMS_PERIOD' => $yesterday_period,
-            'BU' => 'AV',
-        ])
-        ->andWhere(['<>', 'LINE', 'SPC'])
-        ->groupBy('ITEM, ITEM_DESC')
-        ->orderBy('BALANCE_QTY')
-        ->limit(3)
-        ->all();
-
-        $tmp_top_minus_pa = VmsPlanActual::find()
-        ->select([
-            'ITEM', 'ITEM_DESC',
-            'PLAN_QTY' => 'SUM(PLAN_QTY)',
-            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
-            'BALANCE_QTY' => 'SUM(BALANCE_QTY)',
-        ])
-        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
-        ->andWhere([
-            'VMS_PERIOD' => $yesterday_period,
-            'BU' => 'PA',
-        ])
-        ->andWhere(['<>', 'LINE', 'SPC'])
-        ->groupBy('ITEM, ITEM_DESC')
-        ->orderBy('BALANCE_QTY')
-        ->limit(3)
-        ->all();
-
-        $tmp_data_yesterday = [];
+        $tmp_data_yesterday = $tmp_top_minus = [];
         foreach ($tmp_bu_arr as $bu_val) {
-            $tmp_plan = $tmp_actual = $tmp_balance = $tmp_pct = 0;
+            $tmp_pct = $tmp_total_plan = $tmp_total_actual = $tmp_total_balance = 0;
             foreach ($tmp_yesterday as $key => $value) {
+                $tmp_plan = $tmp_actual = $tmp_balance = 0;
                 if ($value->BU == $bu_val) {
                     $tmp_plan = $value->PLAN_QTY;
                     $tmp_actual = $value->ACTUAL_QTY;
-                    $tmp_balance = $value->BALANCE_QTY;
-                    if ($tmp_plan > 0) {
-                        $tmp_pct = round(($tmp_actual / $tmp_plan) * 100);
+                    if ($tmp_actual > $tmp_plan) {
+                        $tmp_actual = $tmp_plan;
+                    }
+                    $tmp_balance = $tmp_actual - $tmp_plan;
+
+                    if (count($tmp_top_minus[$bu_val]) < 3 && $tmp_balance < 0) {
+                        if ($value->DESTINATION == null || $value->DESTINATION == '-') {
+                            $item_desc = $value->ITEM_DESC;
+                        } else {
+                            if (strpos($value->ITEM_DESC, '//' . $value->DESTINATION) === false) {
+                                $item_desc = $value->ITEM_DESC . ' // ' . $value->DESTINATION;
+                            } else {
+                                $item_desc = $value->ITEM_DESC;
+                            }
+                        }
+                        $tmp_top_minus[$bu_val][] = [
+                            'item' => $value->ITEM,
+                            'item_desc' => $item_desc,
+                            'balance' => $tmp_balance
+                        ];
                     }
                 }
+                $tmp_total_plan += $tmp_plan;
+                $tmp_total_actual += $tmp_actual;
+                $tmp_total_balance += $tmp_balance;
             }
+
+            if ($tmp_total_plan > 0) {
+                $tmp_pct = round(($tmp_total_actual / $tmp_total_plan) * 100);
+            }
+
             $tmp_data_yesterday[$bu_val] = [
-                'plan' => $tmp_plan,
-                'actual' => $tmp_actual,
-                'balance' => $tmp_balance,
+                'plan' => $tmp_total_plan,
+                'actual' => $tmp_total_actual,
+                'balance' => $tmp_total_balance,
                 'pct' => $tmp_pct,
             ];
+
         }
 
-        /*$tmp_top_minus = VmsPlanActual::find()
-        ->select([
-            'MODEL','ITEM', 'ITEM_DESC',
-            'PLAN_QTY' => 'SUM(PLAN_QTY)',
-            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
-            'BALANCE_QTY' => 'SUM(ACTUAL_QTY - PLAN_QTY)',
-        ])
-        ->where([
-            'VMS_PERIOD' => $yesterday_period,
-            //'FG_KD' => 'PRODUCT'
-        ])
-        ->andWhere(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $today])
-        ->andWhere('LINE IS NOT NULL')
-        ->andWhere(['<>', 'LINE', 'SPC'])
-        ->groupBy('MODEL, ITEM, ITEM_DESC')
-        //->having(['<', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
-        ->orderBy('SUM(ACTUAL_QTY - PLAN_QTY)')
-        ->limit(3)
-        ->all();*/
+        foreach ($tmp_top_minus as $key => $value) {
+            if ($key != 'AV' && $key != 'PA' && count($value) == 3) {
+                unset($tmp_top_minus[$key][2]);
+            }
+        }
 
         return $this->render('vms-yesterday', [
             'model' => $model,
             'period_dropdown' => $period_dropdown,
             'vms_version' => $vms_version,
-            //'tmp_top_minus' => $tmp_top_minus,
+            'tmp_top_minus' => $tmp_top_minus,
             'tmp_top_minus_av' => $tmp_top_minus_av,
             'tmp_top_minus_pa' => $tmp_top_minus_pa,
             'tmp_data_yesterday' => $tmp_data_yesterday,

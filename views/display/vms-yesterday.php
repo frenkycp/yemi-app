@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Jakarta');
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 1.3em; text-align: center;}
+    .content-header {color: white; font-size: 0.8em; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -146,7 +146,7 @@ $this->registerJs("$(function() {
 });");
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
-print_r($tmp_data_arr);
+print_r($tmp_top_minus);
 echo '</pre>';*/
 ?>
 <?php $form = ActiveForm::begin([
@@ -180,6 +180,7 @@ echo '</pre>';*/
         <?php
         $tmp_total_plan = $tmp_total_actual = $tmp_total_balance = $tmp_total_pct = 0;
         foreach ($tmp_data_yesterday as $key => $value): 
+            $bu = $key;
             if ($key == 'OTHER') {
                 $key = 'KD PARTS';
             } elseif ($key == 'PIANO') {
@@ -201,50 +202,31 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($value['plan']); ?> <span style="font-size: 0.4em;">SET</span></td>
                 <td class="text-center"><?= number_format($value['actual']); ?> <span style="font-size: 0.4em;">SET</span></td>
                 <td class="text-center">
-                    
-                    <?php
-                    if ($key == 'AV' && $value['balance'] < 0) {
-                        ?>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <span class="<?= $text_class; ?>" style="font-weight: bold;"><?= number_format($value['balance']); ?></span> <span style="font-size: 0.4em;">SET</span>
-                            </div>
-                            <div class="col-sm-6" style="border-left: 2px solid white;">
-                                <div class="text-left" style="font-size: 18px;">
-                                    Top Minus :
-                                    <ol>
-                                        <?php foreach ($tmp_top_minus_av as $key => $value): ?>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <span class="<?= $text_class; ?>" style="font-weight: bold;"><?= number_format($value['balance']); ?></span> <span style="font-size: 0.4em;">SET</span>
+                        </div>
+                        <div class="col-sm-7" style="border-left: 2px solid white; min-height: 83px;">
+                            <div class="text-left" style="font-size: 17px;">
+                                
+                                    <?php
+                                    if (count($tmp_top_minus[$bu]) > 0) {
+                                        echo 'Top Minus :<ol>';
+                                        foreach ($tmp_top_minus[$bu] as $top_minus){
+                                            ?>
                                             <li>
-                                                <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | <b class="">' . number_format($value->BALANCE_QTY) . '</b>'; ?>
+                                                <?= $top_minus['item'] . ' | ' . $top_minus['item_desc'] . ' | <b class="">' . number_format($top_minus['balance']) . '</b>'; ?>
                                             </li>
-                                        <?php endforeach ?>
-                                    </ol>
-                                </div>
+                                        <?php }
+                                        echo '</ol>';
+                                    } else {
+                                        echo 'No minus ...<br/> ';
+                                    }
+                                    ?>
+                                </ol>
                             </div>
                         </div>
-                    <?php } elseif ($key == 'PA' && $value['balance'] < 0) {
-                        ?>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <span class="<?= $text_class; ?>" style="font-weight: bold;"><?= number_format($value['balance']); ?></span> <span style="font-size: 0.4em;">SET</span>
-                            </div>
-                            <div class="col-sm-6" style="border-left: 2px solid white;">
-                                <div class="text-left" style="font-size: 18px;">
-                                    Top Minus :
-                                    <ol>
-                                        <?php foreach ($tmp_top_minus_pa as $key => $value): ?>
-                                            <li>
-                                                <?= $value->ITEM . ' | ' . $value->ITEM_DESC . ' | <b class="">' . number_format($value->BALANCE_QTY) . '</b>'; ?>
-                                            </li>
-                                        <?php endforeach ?>
-                                    </ol>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } else { ?>
-                        <span class="<?= $text_class; ?>" style="font-weight: bold;"><?= number_format($value['balance']); ?></span> <span style="font-size: 0.4em;">SET</span>
-                    <?php }
-                    ?>
+                    </div>
                 </td>
             </tr>
         <?php endforeach; 
