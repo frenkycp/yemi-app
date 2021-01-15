@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Production Progress <span class="japanesse light-green">(生産進捗)</span> VMS (D-1)',
-    'tab_title' => 'Production Progress (D-1)',
-    'breadcrumbs_title' => 'Production Progress (D-1)'
+    'page_title' => 'PRODUCTION PROGRESS <span class="japanesse light-green">(生産進捗)</span> VMS (D-1)',
+    'tab_title' => 'PRODUCTION PROGRESS (D-1)',
+    'breadcrumbs_title' => 'PRODUCTION PROGRESS (D-1)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Jakarta');
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 0.8em; text-align: center;}
+    .content-header {color: white; font-size: 0.7em; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -60,6 +60,7 @@ $css_string = "
         font-size: 40px;
         border-bottom: 7px solid #797979;
         vertical-align: middle;
+        padding: 0px 10px;
     }
      .tbl-header{
         border:1px solid #8b8c8d !important;
@@ -167,7 +168,7 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 <br/>
-<table class="table summary-tbl">
+<table class="table summary-tbl" style="margin-bottom: 0px;">
     <thead>
         <tr>
             <th class="">BU</th>
@@ -203,10 +204,10 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($value['actual']); ?> <span style="font-size: 0.4em;">SET</span></td>
                 <td class="text-center">
                     <div class="row">
-                        <div class="col-sm-5">
+                        <div class="col-sm-5" style="">
                             <span class="<?= $text_class; ?>" style="font-weight: bold;"><?= number_format($value['balance']); ?></span> <span style="font-size: 0.4em;">SET</span>
                         </div>
-                        <div class="col-sm-7" style="border-left: 2px solid white; min-height: 83px;">
+                        <div class="col-sm-7" style="border-left: 2px solid white; min-height: 71px;">
                             <div class="text-left" style="font-size: 17px;">
                                 
                                     <?php
@@ -253,7 +254,7 @@ echo '</pre>';*/
         </tr>
     </tfoot>
 </table>
-<span style="color: silver; font-size: 1.5em;"><i>VMS Version : <?= $vms_version; ?></i><i style="display: none;">Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
+<span style="color: silver; font-size: 1.5em; letter-spacing: 2px; font-weight: bolder;"><i>VMS Version : <?= $vms_version; ?></i><i style="display: none;">Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
 <?php
     yii\bootstrap\Modal::begin([
         'id' =>'modal',
