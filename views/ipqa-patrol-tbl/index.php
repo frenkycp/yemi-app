@@ -207,7 +207,7 @@ $columns = [
         },
         'vAlign' => 'middle',
         'width' => '70px',
-        'filter' => ArrayHelper::map(app\models\WipLocation::find()->orderBy('child_analyst_desc')->all(), 'child_analyst', 'child_analyst_desc'),
+        'filter' => \Yii::$app->params['wip_location_arr'],
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'min-width: 70px; font-size: 11px; text-align: center;',

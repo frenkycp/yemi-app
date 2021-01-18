@@ -148,16 +148,30 @@ $this->registerJs("
     });
 ");
 
-$script = "
+$script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 300000); // milliseconds
+      setTimeout("refreshPage();", 300000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
     }
-";
+
+    $(document).ready(function() {
+        var i = 0;
+        setInterval(function() {
+            i++;
+            if(i%2 == 0){
+                $(".machine-stop").css("background-color", "red");
+                $(".machine-stop").css("color", "white");
+            } else {
+                $(".machine-stop").css("background-color", "black");
+                $(".machine-stop").css("color", "white");
+            }
+        }, 700);
+    });
+JS;
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';

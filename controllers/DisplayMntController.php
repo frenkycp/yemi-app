@@ -38,7 +38,7 @@ class DisplayMntController extends Controller
 	            
 	            $tbody_content .= '<tr>
                     <td><span class="fa fa-gears" style=""></span> ' . $value->MESIN_DESC . '</td>
-                    <td class="text-center" style="background-color: red; border-radius: 10px; border: 2px solid white;" width="400px"><span class="glyphicon glyphicon-time" style="font-size: 0.65em; color: white;"></span> <b><span style="color: white;">' . $stopwatch . '</span></b></td>
+                    <td class="text-center machine-stop" style="background-color: red; border-radius: 10px; border: 2px solid white;" width="400px"><span class="glyphicon glyphicon-time" style="font-size: 0.65em; color: white;"></span> <b><span style="color: white;">' . $stopwatch . '</span></b></td>
                 </tr>';
 	        }
         }
