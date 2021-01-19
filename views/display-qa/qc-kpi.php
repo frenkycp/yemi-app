@@ -38,6 +38,7 @@ $css_string = "
     .summary-tbl{
         //border:1px solid #29B6F6;
         border-top: 0;
+        height: 100%;
     }
     .summary-tbl > tbody > tr > td{
         border:3px solid white;
@@ -106,12 +107,22 @@ $css_string = "
         margin-bottom: 0px;
     }
     .sortir-class {
+        font-family: Impact, Charcoal, sans-serif !important;
         font-size: 70px !important;
-        letter-spacing: 5px;
+        letter-spacing: 5px !important;
         height: 100px !important;
     }
     .table-list div{
         min-height: 130px;
+    }
+    .ok-style {
+        font-family: Impact, Charcoal, sans-serif !important;
+        font-size: 140px !important;
+    }
+    .row-title {
+        font-family: Impact, Charcoal, sans-serif !important;
+        font-size: 160px !important;
+        line-height: 300px !important;
     }
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
 $this->registerCss($css_string);
@@ -159,7 +170,7 @@ echo '</pre>';*/
         <?php 
         if ($data1) { ?>
             <tr>
-                <td class="text-center" rowspan="2" style="font-size: 160px; line-height: 300px;" width="600px">IQC</td>
+                <td class="text-center row-title" rowspan="2" style="" width="600px">IQC</td>
                 <td class="text-center sortir-class blink">
                     SORTIR
                 </td>
@@ -174,8 +185,8 @@ echo '</pre>';*/
             </tr>
         <?php } else { ?>
             <tr>
-                <td class="text-center" style="font-size: 160px; line-height: 300px;" width="600px">IQC</td>
-                <td class="text-center" style="font-size: 100px;">
+                <td class="text-center row-title" style="" width="600px">IQC</td>
+                <td class="text-center ok-style">
                     OK
                 </td>
             </tr>
@@ -187,14 +198,14 @@ echo '</pre>';*/
         <?php 
         if ($data2_total <= 10) { ?>
             <tr>
-                <td class="text-center" style="font-size: 160px; line-height: 300px;">IPQA</td>
-                <td class="text-center" style="font-size: 100px;">
+                <td class="text-center row-title" style="">IPQA</td>
+                <td class="text-center ok-style">
                     OK
                 </td>
             </tr>
         <?php } else { ?>
             <tr>
-                <td class="text-center" rowspan="2" style="font-size: 160px; line-height: 300px;">IPQA</td>
+                <td class="text-center row-title" rowspan="2" style="">IPQA</td>
                 <td class="text-center sortir-class blink">
                     <b><?= $data2_total; ?></b> <small>UNFINISHED</small>
                 </td>
@@ -213,14 +224,14 @@ echo '</pre>';*/
         <?php 
         if ($data3->gmc == null) { ?>
             <tr>
-                <td class="text-center" style="font-size: 160px; line-height: 300px;">FQC</td>
-                <td class="text-center" style="font-size: 100px;">
+                <td class="text-center row-title" style="">FQC</td>
+                <td class="text-center ok-style">
                     OK
                 </td>
             </tr>
         <?php } else { ?>
             <tr>
-                <td class="text-center" rowspan="2" style="font-size: 160px; line-height: 300px;">FQC</td>
+                <td class="text-center row-title" rowspan="2" style="">FQC</td>
                 <td class="text-center sortir-class blink">
                     LOTOUT/REPAIR
                 </td>
