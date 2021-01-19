@@ -166,8 +166,8 @@ $script = <<< JS
                 $(".machine-stop").css("background-color", "red");
                 $(".machine-stop").css("color", "white");
             } else {
-                $(".machine-stop").css("background-color", "black");
-                $(".machine-stop").css("color", "white");
+                $(".machine-stop").css("background-color", "white");
+                $(".machine-stop").css("color", "red");
             }
         }, 700);
     });
