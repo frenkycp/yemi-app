@@ -19,7 +19,7 @@ class DisplayQaController extends Controller
 	{
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $today = '2021-01-15';
+        $today = date('Y-m-d');
 
         $data1 = StoreInOutWsus::find()
         ->select([
