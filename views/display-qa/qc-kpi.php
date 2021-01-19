@@ -42,7 +42,7 @@ $css_string = "
     .summary-tbl > tbody > tr > td{
         border:3px solid white;
         font-size: 40px;
-        background: #33383d;
+        background: #000;
         color: #FFF;
         vertical-align: middle;
         //padding: 10px 10px;
