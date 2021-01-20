@@ -23,6 +23,8 @@ use Yii;
  * @property string $CLOSING_TIME
  * @property string $CLOSING_BY_ID
  * @property string $CLOSING_BY_NAME
+ * @property integer $TOTAL_DOWNTIME
+ * @property string $REMARK
  * @property integer $STATUS
  * @property string $aliasModel
  */
@@ -53,9 +55,9 @@ abstract class MachineStopRecord extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['MESIN_DESC', 'START_BY_NAME', 'END_BY_NAME', 'CLOSING_BY_NAME'], 'string'],
+            [['MESIN_DESC', 'START_BY_NAME', 'END_BY_NAME', 'CLOSING_BY_NAME', 'REMARK'], 'string'],
             [['POST_DATE', 'START_TIME', 'END_TIME', 'CLOSING_TIME'], 'safe'],
-            [['STATUS'], 'integer'],
+            [['TOTAL_DOWNTIME', 'STATUS'], 'integer'],
             [['MESIN_ID', 'START_BY_ID', 'END_BY_ID', 'CLOSING_BY_ID'], 'string', 'max' => 50],
             [['PERIOD'], 'string', 'max' => 10]
         ];
@@ -81,6 +83,8 @@ abstract class MachineStopRecord extends \yii\db\ActiveRecord
             'CLOSING_TIME' => 'Closing Time',
             'CLOSING_BY_ID' => 'Closing By ID',
             'CLOSING_BY_NAME' => 'Closing By Name',
+            'TOTAL_DOWNTIME' => 'Total Downtime',
+            'REMARK' => 'Remark',
             'STATUS' => 'Status',
         ];
     }

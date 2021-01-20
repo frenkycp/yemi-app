@@ -57,26 +57,32 @@ if (count($tmp_open) > 0) {
     ?>
 
     <div class="">
-            <div class="row">
-                <div class="col-sm-8">
-                    <?= $form->field($model, 'MESIN_ID')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\MachineIotCurrent::find()->all(), 'mesin_id', 'assetName'),
-                        'options' => $dropdown_options,
-                        'value' => date('Y-m-d H:i:s'),
-                        'pluginOptions' => [
-                            'allowClear' => true
-                        ],
-                    ]); ?>
-                </div>
-                <div class="col-sm-4">
-                    <?= $form->field($model, 'START_TIME')->widget(DateTimePicker::classname(), [
-                        'options' => ['placeholder' => 'Enter start time ...'],
-                        'pluginOptions' => [
-                            'autoclose' => true
-                        ]
-                    ]); ?>
-                </div>
+        <div class="row">
+            <div class="col-sm-8">
+                <?= $model->isNewRecord ? $form->field($model, 'MESIN_ID')->widget(Select2::classname(), [
+                    'data' => ArrayHelper::map(app\models\MachineIotCurrent::find()->all(), 'mesin_id', 'assetName'),
+                    'options' => $dropdown_options,
+                    'value' => date('Y-m-d H:i:s'),
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]) : $form->field($model, 'MESIN_DESC')->textInput(['readonly' => true]); ?>
             </div>
+            <div class="col-sm-4">
+                <?= $model->isNewRecord ? $form->field($model, 'START_TIME')->widget(DateTimePicker::classname(), [
+                    'options' => ['placeholder' => 'Enter start time ...'],
+                    'pluginOptions' => [
+                        'autoclose' => true
+                    ]
+                ]) : ''; ?>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <?= $form->field($model, 'REMARK')->textArea(['rows' => 3, 'style' => 'resize : none;']); ?>
+            </div>
+        </div>
         
 
         <?php echo $form->errorSummary($model); ?>

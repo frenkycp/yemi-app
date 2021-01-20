@@ -34,11 +34,11 @@ class DisplayMntController extends Controller
 	            $interval = $first_date->diff($second_date);
 	            $total_hour = $interval->d * 24;
 	            $total_hour += $interval->h;
-	            $stopwatch = str_pad($total_hour, 2, '0', STR_PAD_LEFT) . '<span style="font-size: 0.4em;"> hour</span> ' . $interval->i . '<span style="font-size: 0.4em;"> min</span>';
+	            $stopwatch = $total_hour . '<span style="font-size: 0.4em;"> hour</span> ' . $interval->i . '<span style="font-size: 0.4em;"> min</span>';
 	            
 	            $tbody_content .= '<tr>
                     <td><span class="fa fa-gears" style=""></span> ' . $value->MESIN_DESC . '</td>
-                    <td class="text-center machine-stop" style="background-color: red; border-radius: 10px; border: 2px solid white; letter-spacing: 5px;" width="400px"><span class="glyphicon glyphicon-time" style="font-size: 0.65em;"></span> <b><span>' . $stopwatch . '</span></b></td>
+                    <td class="machine-stop" style="background-color: red; border-radius: 10px; border: 2px solid white; letter-spacing: 5px;" width="400px"><span class="glyphicon glyphicon-time" style="font-size: 0.65em;"></span> <b><span>' . $stopwatch . '</span></b></td>
                 </tr>';
 	        }
         }

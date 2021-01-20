@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['ID', 'STATUS'], 'integer'],
-            [['MESIN_ID', 'MESIN_DESC', 'START_TIME', 'START_BY_ID', 'START_BY_NAME', 'END_TIME', 'END_BY_ID', 'END_BY_NAME', 'CLOSING_TIME', 'CLOSING_BY_ID', 'CLOSING_BY_NAME', 'PERIOD', 'POST_DATE'], 'safe'],
+            [['MESIN_ID', 'MESIN_DESC', 'START_TIME', 'START_BY_ID', 'START_BY_NAME', 'END_TIME', 'END_BY_ID', 'END_BY_NAME', 'CLOSING_TIME', 'CLOSING_BY_ID', 'CLOSING_BY_NAME', 'PERIOD', 'POST_DATE', 'REMARK'], 'safe'],
 ];
 }
 
@@ -67,6 +67,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'MESIN_ID', $this->MESIN_ID])
             ->andFilterWhere(['like', 'MESIN_DESC', $this->MESIN_DESC])
+            ->andFilterWhere(['like', 'REMARK', $this->REMARK])
             ->andFilterWhere(['like', 'START_BY_ID', $this->START_BY_ID])
             ->andFilterWhere(['like', 'START_BY_NAME', $this->START_BY_NAME])
             ->andFilterWhere(['like', 'END_BY_ID', $this->END_BY_ID])
