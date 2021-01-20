@@ -23,6 +23,68 @@ use app\models\OfficeEmp;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionTodaysShift($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+        $today_name = date('d M\' Y', strtotime($today));
+
+        $active_emp = SunfishViewEmp::find()
+        ->where([
+            'status' => 1
+        ])
+        ->andWhere(['<>', 'cost_center_code', '10'])
+        ->all();
+
+        $today_shift = SunfishAttendanceData::find()
+        ->select([
+            'emp_no', 'full_name',
+            'shift' => "(CASE WHEN (PATINDEX('%SHIFT_1%', UPPER(shiftdaily_code)) > 0 OR PATINDEX('%GARDENER%', UPPER(shiftdaily_code)) > 0 OR PATINDEX('%SHIFT_08_17%', UPPER(shiftdaily_code)) > 0) THEN '1'
+            WHEN (PATINDEX('%SHIFT_2%', UPPER(shiftdaily_code)) > 0 OR PATINDEX('%MAINTENANCE%', UPPER(shiftdaily_code)) > 0) THEN '2'
+            WHEN PATINDEX('%SHIFT_3%', UPPER(shiftdaily_code)) > 0 THEN '3' ELSE 'UNKNOWN' END)"
+        ])
+        ->where([
+            'CAST(shiftstarttime AS date)' => $today
+        ])
+        ->all();
+
+        $unknown_shift_arr = [];
+        $tmp_shift_data = [
+            '1' => [],
+            '2' => [],
+            '3' => [],
+        ];
+        foreach ($active_emp as $active_emp_value) {
+            $tmp_shift = 0;
+            foreach ($today_shift as $today_shift_value) {
+                if ($today_shift_value->emp_no == $active_emp_value->Emp_no) {
+                    $tmp_shift = $today_shift_value->shift;
+                }
+            }
+
+            if ($tmp_shift == 'UNKNOWN') {
+                $unknown_shift_arr[] = $active_emp_value->Emp_no;
+            } else {
+                $tmp_shift_data[$tmp_shift][] = [
+                    'nik' => $active_emp_value->Emp_no,
+                    'name' => $active_emp_value->Full_name,
+                ];
+            }
+        }
+
+        $data = [];
+        foreach ($tmp_shift_data as $key => $value) {
+            $data[$key] = count($value);
+        }
+        
+        return $this->render('todays-shift', [
+            'data' => $data,
+            'today' => $today,
+            'today_name' => $today_name,
+            'unknown_shift_arr' => $unknown_shift_arr,
+        ]);
+    }
 
     public function actionTemperatureDailyGetRemark($post_date, $temperature_category)
     {
