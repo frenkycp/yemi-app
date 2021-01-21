@@ -233,9 +233,6 @@ $gridColumns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <?php
-    echo date('Y-m-d', strtotime(' -1 week'));
-    ?>
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
