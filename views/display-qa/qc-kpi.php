@@ -184,7 +184,7 @@ echo '</pre>';*/
                     <span class="sortir-small">( Lotout/Sortir )</span>
                 </td>
                 <td class="text-center sortir-class blink">
-                    SORTIR
+                    LOTOUT / SORTIR
                 </td>
             </tr>
 
@@ -260,7 +260,7 @@ echo '</pre>';*/
                     <span class="sortir-small">( Lotout/Repair )</span>
                 </td>
                 <td class="text-center sortir-class blink">
-                    LOTOUT/REPAIR
+                    LOTOUT / REPAIR
                 </td>
             </tr>
             <tr>
