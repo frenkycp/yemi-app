@@ -45,7 +45,8 @@ class DisplayHrgaController extends Controller
             WHEN PATINDEX('%SHIFT_3%', UPPER(shiftdaily_code)) > 0 THEN '3' ELSE 'UNKNOWN' END)"
         ])
         ->where([
-            'CAST(shiftstarttime AS date)' => $today
+            'CAST(shiftstarttime AS date)' => $today,
+            'attend_judgement' => 'P'
         ])
         ->all();
 
@@ -76,6 +77,9 @@ class DisplayHrgaController extends Controller
         $data = [];
         foreach ($tmp_shift_data as $key => $value) {
             $data[$key] = count($value);
+            if ($key == '1') {
+                $data[$key] -= 60;
+            }
         }
         
         return $this->render('todays-shift', [
