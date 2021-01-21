@@ -121,8 +121,17 @@ $css_string = "
     }
     .row-title {
         font-family: Impact, Charcoal, sans-serif !important;
-        font-size: 160px !important;
-        line-height: 300px !important;
+        font-size: 150px !important;
+        line-height: 50% !important;
+        height: 315px;
+        padding-top: 50px !important;
+        //padding-top: 40px !important;
+    }
+    .sortir-small {
+        font-size: 0.3em;
+        font-family: sans-serif;
+        letter-spacing: 2px;
+        
     }
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
 $this->registerCss($css_string);
@@ -170,7 +179,10 @@ echo '</pre>';*/
         <?php 
         if ($data1) { ?>
             <tr>
-                <td class="text-center row-title" rowspan="2" style="" width="600px">IQC</td>
+                <td class="text-center row-title" rowspan="2" style="" width="600px">
+                    IQC<br/>
+                    <span class="sortir-small">( Lotout/Sortir )</span>
+                </td>
                 <td class="text-center sortir-class blink">
                     SORTIR
                 </td>
@@ -185,7 +197,10 @@ echo '</pre>';*/
             </tr>
         <?php } else { ?>
             <tr>
-                <td class="text-center row-title" style="" width="600px">IQC</td>
+                <td class="text-center row-title" style="" width="600px">
+                    IQC<br/>
+                    <span class="sortir-small">( Lotout/Sortir )</span>
+                </td>
                 <td class="text-center ok-style">
                     OK
                 </td>
@@ -198,16 +213,22 @@ echo '</pre>';*/
         <?php 
         if ($data2_total <= 10) { ?>
             <tr>
-                <td class="text-center row-title" style="">IPQA</td>
+                <td class="text-center row-title" style="">
+                    IPQA<br/>
+                    <span class="sortir-small">( Open > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
+                </td>
                 <td class="text-center ok-style">
                     OK
                 </td>
             </tr>
         <?php } else { ?>
             <tr>
-                <td class="text-center row-title" rowspan="2" style="">IPQA</td>
+                <td class="text-center row-title" rowspan="2" style="">
+                    IPQA<br/>
+                    <span class="sortir-small">( Open > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
+                </td>
                 <td class="text-center sortir-class blink">
-                    <b><?= $data2_total; ?></b> <small>UNFINISHED</small>
+                    <b><?= $data2_total; ?></b> <small>OPEN</small>
                 </td>
             </tr>
             <tr>
@@ -224,14 +245,20 @@ echo '</pre>';*/
         <?php 
         if ($data3->gmc == null) { ?>
             <tr>
-                <td class="text-center row-title" style="">FQC</td>
+                <td class="text-center row-title" style="">
+                    FQC<br/>
+                    <span class="sortir-small">( Lotout/Repair )</span>
+                </td>
                 <td class="text-center ok-style">
                     OK
                 </td>
             </tr>
         <?php } else { ?>
             <tr>
-                <td class="text-center row-title" rowspan="2" style="">FQC</td>
+                <td class="text-center row-title" rowspan="2" style="">
+                    FQC<br/>
+                    <span class="sortir-small">( Lotout/Repair )</span>
+                </td>
                 <td class="text-center sortir-class blink">
                     LOTOUT/REPAIR
                 </td>
