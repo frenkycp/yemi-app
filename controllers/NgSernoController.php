@@ -12,6 +12,7 @@ use app\models\ProdNgSernoView;
 use app\models\ProdNgDetailSerno;
 use yii\web\UploadedFile;
 use yii\imagine\Image;
+use Imagine\Image\Box;
 
 /**
 * This is the class for controller "NgSernoController".
@@ -83,6 +84,8 @@ class NgSernoController extends \app\controllers\base\NgSernoController
 	        		if ($model->upload_file_1->saveAs($filePath)) {
 	                    Image::thumbnail($filePath, 50, 50)
     					->save($filePathThumbnail, ['quality' => 80]);
+    					Image::getImagine()->open($filePath)->thumbnail(new Box(1280, 720))->save($filePath , ['quality' => 90]);
+    					//Image::getImagine()->open($filePath)->save($filePath, ['quality' => 25]);
     					$new_data->img_before = $new_filename1;
 	                }
 	        	}
@@ -92,6 +95,7 @@ class NgSernoController extends \app\controllers\base\NgSernoController
 	        		if ($model->upload_file_2->saveAs($filePath)) {
 	                    Image::thumbnail($filePath, 50, 50)
     					->save($filePathThumbnail, ['quality' => 80]);
+    					Image::getImagine()->open($filePath)->thumbnail(new Box(1280, 720))->save($filePath , ['quality' => 90]);
     					$new_data->img_after = $new_filename2;
 	                }
 	        	}
