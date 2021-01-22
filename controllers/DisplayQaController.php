@@ -45,10 +45,25 @@ class DisplayQaController extends Controller
 
         $data2_total = count($tmp_data2);
         $data2 = null;
-        foreach ($tmp_data2 as $key => $value) {
-        	if ($data2 == null) {
-        		$data2 = $value;
-        	}
+        $data2_marquee = 'No Report With Status = "OPEN"';
+        $i = 0;
+
+        if (count($tmp_data2) > 0) {
+            foreach ($tmp_data2 as $key => $value) {
+                $i++;
+                if ($data2 == null) {
+                    $data2 = $value;
+                }
+
+                if ($i <= 3) {
+                    if ($i == 1) {
+                        $data2_marquee = 'Section : ' . $value->CC_DESC . ', Problem : ' . $value->problem . ', Description : ' . $value->description;
+                    } else {
+                        $data2_marquee .= '<span> </span>' . 'Section : ' . $value->CC_DESC . ', Problem : ' . $value->problem . ', Description : ' . $value->description;
+                    }
+                }
+                    
+            }
         }
 
         $data3 = SernoInput::find()
@@ -69,6 +84,7 @@ class DisplayQaController extends Controller
         return $this->render('qc-kpi', [
         	'data1' => $data1,
         	'data2' => $data2,
+            'data2_marquee' => $data2_marquee,
         	'data2_total' => $data2_total,
         	'data3' => $data3,
         ]);
