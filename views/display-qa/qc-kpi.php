@@ -225,9 +225,11 @@ echo '</pre>';*/
                     <span class="sortir-small">( Open > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
                 </td>
                 <td class="table-list">
-                    <marquee scrollamount="20" behavior="scroll" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
-                        <?= $data2_marquee; ?>
-                    </marquee>
+                    <div>
+                        <marquee scrollamount="20" behavior="scroll" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
+                            <?= $data2_marquee; ?>
+                        </marquee>
+                    </div>
                 </td>
             </tr>
         <?php } else { ?>
@@ -242,9 +244,11 @@ echo '</pre>';*/
             </tr>
             <tr>
                 <td class="table-list text-center">
-                    <marquee scrollamount="20" behavior="scroll" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:2; font-size: 1.5em;">
-                        <?= $data2_marquee; ?>
-                    </marquee>
+                    <div>
+                        <marquee scrollamount="20" behavior="scroll" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
+                            <?= $data2_marquee; ?>
+                        </marquee>
+                    </div>
                 </td>
             </tr>
         <?php }
