@@ -134,7 +134,7 @@ $css_string = "
         
     }
     marquee span { 
-        margin-right: 100%px;
+        margin-right: 1000px;
     } 
     marquee p { 
         white-space:nowrap;
@@ -226,7 +226,7 @@ echo '</pre>';*/
                 </td>
                 <td class="table-list">
                     <div>
-                        <marquee scrollamount="20" behavior="scroll" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
+                        <marquee scrollamount="20" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
                             <?= $data2_marquee; ?>
                         </marquee>
                     </div>
@@ -244,11 +244,9 @@ echo '</pre>';*/
             </tr>
             <tr>
                 <td class="table-list text-center">
-                    <div>
-                        <marquee scrollamount="20" behavior="scroll" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
-                            <?= $data2_marquee; ?>
-                        </marquee>
-                    </div>
+                    <marquee scrollamount="15" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
+                        <?= $data2_marquee; ?>
+                    </marquee>
                 </td>
             </tr>
         <?php }
