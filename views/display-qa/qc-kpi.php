@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\depdrop\DepDrop;
 
 $this->title = [
-    'page_title' => 'QC KPI TODAY',
-    'tab_title' => 'QC KPI TODAY',
-    'breadcrumbs_title' => 'QC KPI TODAY'
+    'page_title' => 'QC Inspection Today <span class="japanesse light-green">品質管理検査状況</span>',
+    'tab_title' => 'QC Inspection Today',
+    'breadcrumbs_title' => 'QC Inspection Today'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
