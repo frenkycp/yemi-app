@@ -147,6 +147,7 @@ $config = [
         'db_bentol' => require(__DIR__ . '/db_bentol.php'),
         'db_biostar_tna' => require(__DIR__ . '/db_biostar_tna.php'),
         'db_smt' => require(__DIR__ . '/db_smt.php'),
+        'db_suhu' => require(__DIR__ . '/db_suhu.php'),
     ],
     'params' => $params,
     'modules' => [

@@ -21,6 +21,7 @@ use app\models\TemperatureDailyView02;
 use app\models\ScanTemperature;
 use app\models\OfficeEmp;
 use app\models\DriverTbl;
+use app\models\KaryawanSuhuView;
 
 class DisplayHrgaController extends Controller
 {
@@ -465,6 +466,7 @@ class DisplayHrgaController extends Controller
         //$today_temp = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->orderBy('LAST_UPDATE')->all();
         //$yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();
         $temperature_from_yesterday = ScanTemperature::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
+        $temperature_from_yesterday2 = KaryawanSuhuView::find()->where(['>=', 'swipetime', $yesterday])->orderBy('swipetime')->all();
 
         $total_check = $total_no_check = 0;
         $no_check_data = $temp_over_data = [];
@@ -497,6 +499,7 @@ class DisplayHrgaController extends Controller
 
             $body_temp = 0;
             $last_update = null;
+
             foreach ($temp_data as $temp_value) {
                 if ($temp_value->NIK == $attendance_val['nik']
                     && $body_temp == 0
@@ -508,6 +511,21 @@ class DisplayHrgaController extends Controller
                     $last_update = $temp_value->LAST_UPDATE;
                 }
             }
+
+            if ($last_update == null) {
+                foreach ($temperature_from_yesterday2 as $temp_value) {
+                    if ($temp_value->NIK == $attendance_val['nik']
+                        && $body_temp == 0
+                        && $temp_value->temperature > 0
+                        && $temp_value->swipetime > $start_time
+                        && $temp_value->swipetime < $end_time
+                    ) {
+                        $body_temp = $temp_value->temperature;
+                        $last_update = $temp_value->swipetime;
+                    }
+                }
+            }
+            
 
             if ($last_update == null) {
                 if ($attend_judgement == 'P') {
