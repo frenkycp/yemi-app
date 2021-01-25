@@ -128,7 +128,7 @@ $css_string = "
         //padding-top: 40px !important;
     }
     .sortir-small {
-        font-size: 0.3em;
+        font-size: 0.25em;
         font-family: sans-serif;
         letter-spacing: 2px;
         
@@ -188,7 +188,7 @@ echo '</pre>';*/
             <tr>
                 <td class="text-center row-title" rowspan="2" style="" width="600px">
                     IQC<br/>
-                    <span class="sortir-small">( Lotout/Sortir )</span>
+                    <span class="sortir-small">( Lotout / Sortir )</span>
                 </td>
                 <td class="text-center sortir-class blink">
                     LOTOUT / SORTIR
@@ -206,7 +206,7 @@ echo '</pre>';*/
             <tr>
                 <td class="text-center row-title" style="" width="600px">
                     IQC<br/>
-                    <span class="sortir-small">( Lotout/Sortir )</span>
+                    <span class="sortir-small">( Lotout / Sortir )</span>
                 </td>
                 <td class="text-center ok-style">
                     OK
@@ -222,7 +222,7 @@ echo '</pre>';*/
             <tr>
                 <td class="text-center row-title" style="">
                     IPQA<br/>
-                    <span class="sortir-small">( Open > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
+                    <span class="sortir-small">( Outstanding > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
                 </td>
                 <td class="table-list">
                     <div>
@@ -236,10 +236,10 @@ echo '</pre>';*/
             <tr>
                 <td class="text-center row-title" rowspan="2" style="">
                     IPQA<br/>
-                    <span class="sortir-small">( Open > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
+                    <span class="sortir-small">( Outstanding > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
                 </td>
                 <td class="text-center sortir-class blink">
-                    <b><?= $data2_total; ?></b> <small>OPEN</small>
+                    <b><?= $data2_total; ?></b> <small>Outstanding</small>
                 </td>
             </tr>
             <tr>
@@ -257,7 +257,7 @@ echo '</pre>';*/
             <tr>
                 <td class="text-center row-title" style="">
                     FQC<br/>
-                    <span class="sortir-small">( Lotout/Repair )</span>
+                    <span class="sortir-small">( Lotout / Repair )</span>
                 </td>
                 <td class="text-center ok-style">
                     OK
@@ -267,7 +267,7 @@ echo '</pre>';*/
             <tr>
                 <td class="text-center row-title" rowspan="2" style="">
                     FQC<br/>
-                    <span class="sortir-small">( Lotout/Repair )</span>
+                    <span class="sortir-small">( Lotout / Repair )</span>
                 </td>
                 <td class="text-center sortir-class blink">
                     LOTOUT / REPAIR

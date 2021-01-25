@@ -20,9 +20,43 @@ use app\models\TemperatureDailyView01;
 use app\models\TemperatureDailyView02;
 use app\models\ScanTemperature;
 use app\models\OfficeEmp;
+use app\models\DriverTbl;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionDriverStatusReset($id)
+    {
+        $model = DriverTbl::find()->where(['id' => $id])->one();
+
+        if (!$model->save()) {
+            return json_encode($model->errors);
+        }
+
+        \Yii::$app->session->setFlash("success", "Reset successfull...");
+        return $this->redirect('driver-status');
+    }
+
+    public function actionDriverStatus()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'driver',
+        ]);
+        $model->addRule(['driver'], 'required');
+
+        $driver_data = DriverTbl::find()->orderBy('nama')->all();
+
+        if ($model->load($_GET)) {
+
+        }
+
+        return $this->render('driver-status', [
+            'driver_data' => $driver_data,
+        ]);
+    }
+
     public function actionTodaysShift($value='')
     {
         $this->layout = 'clean';
