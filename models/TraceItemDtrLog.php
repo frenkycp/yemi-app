@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class TraceItemDtrLog extends BaseTraceItemDtrLog
 {
+    public $QTY;
 
     public function behaviors()
     {
