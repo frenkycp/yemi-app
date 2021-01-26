@@ -158,10 +158,37 @@ use app\models\PcStockTakingTbl;
 use app\models\MachineCorrectiveView01;
 use app\models\MachineIotLogHour;
 use app\models\SapItemTbl;
+use app\models\EmpInterviewYubisashi;
 
 class DisplayController extends Controller
 {
-    public function actionSoAchievement($value='')
+    public function actionInterviewYubisashi()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = null;
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year', 'section'
+        ]);
+        $model->addRule(['fiscal_year', 'section'], 'required');
+        /*$tmp_last_fy = EmpInterviewYubisashi::find()->select(['FISCAL_YEAR' => 'MAX(FISCAL_YEAR)'])->one();
+        $model->fiscal_year = $tmp_last_fy->FISCAL_YEAR;*/
+
+        if ($model->load($_GET)) {
+            $data = EmpInterviewYubisashi::find()->where([
+                'cost_center_code' => $model->section,
+                'FISCAL_YEAR' => $model->fiscal_year
+            ])->all();
+        }
+
+        return $this->render('interview-yubisashi', [
+            'data' => $data,
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSoAchievement()
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
