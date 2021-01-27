@@ -77,8 +77,8 @@ $css_string = "
     //tbody > tr > td { background: #33383d;}
     //#summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .icon-status {
-        font-size : 1.5em;
-        font-weight: bold;
+        font-size : 30px;
+        
     }
     .target, .actual {font-size: 4em !important;}
     .bg-black {background-color: black; color: yellow !important;}
@@ -102,11 +102,11 @@ $this->registerJs($script, View::POS_HEAD );
 
 function getIcon($val){
     if ($val == 0) {
-        return '⨯';
+        return '&Chi;';
     } elseif ($val == 1) {
-        return '&#9651;';
+        return '&Delta;';
     } elseif ($val == 2) {
-        return '<i class="fa fa-circle-o"></i>';
+        return '&Omicron;';
     } else {
         return '';
     }
@@ -146,10 +146,10 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<table class="table summary-tbl">
+<table class="table summary-tbl table-condensed">
     <thead>
         <tr>
-            <th class="text-center" width="60px">No.</th>
+            <th class="text-center" width="50px">No.</th>
             <th class="">Nama</th>
             <th class="text-center" width="12%">Yamaha Diamond</th>
             <th class="text-center" width="12%">12 Aturan Keselamatan & Kesehatan Kerja Yamaha</th>
