@@ -1861,7 +1861,139 @@ class DisplayController extends Controller
         ]);
     }
 
-    public function actionVmsYesterday($value='')
+    public function getBuProgressByDate($post_date)
+    {
+        $tmp_bu_arr = \Yii::$app->params['bu_arr_production'];
+        $period = date('Ym', strtotime($post_date));
+
+        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $period])->orderBy('VMS_VERSION')->one();
+        $vms_version = $tmp_vms_version->VMS_VERSION;
+
+        $tmp_yesterday = VmsPlanActual::find()
+        ->select([
+            'BU', 'ITEM', 'ITEM_DESC', 'DESTINATION', 'PLAN_QTY' => 'SUM(PLAN_QTY)', 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)', 'BALANCE_QTY' => 'SUM(BALANCE_QTY)'
+        ])
+        ->where(['<', 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')', $post_date])
+        ->andWhere(['VMS_PERIOD' => $period])
+        ->andWhere(['<>', 'LINE', 'SPC'])
+        ->groupBy('BU, ITEM, ITEM_DESC, DESTINATION')
+        ->orderBy('BU, BALANCE_QTY')
+        ->all();
+
+        $tmp_data_yesterday = $tmp_top_minus = [];
+        foreach ($tmp_bu_arr as $bu_val) {
+            $tmp_pct = $tmp_total_plan = $tmp_total_actual = $tmp_total_balance = 0;
+            foreach ($tmp_yesterday as $key => $value) {
+                $tmp_plan = $tmp_actual = $tmp_balance = 0;
+                if ($value->BU == $bu_val) {
+                    $tmp_plan = $value->PLAN_QTY;
+                    $tmp_actual = $value->ACTUAL_QTY;
+                    if ($tmp_actual > $tmp_plan) {
+                        $tmp_actual = $tmp_plan;
+                    }
+                    $tmp_balance = $tmp_actual - $tmp_plan;
+
+                    if (count($tmp_top_minus[$bu_val]) < 3 && $tmp_balance < 0) {
+                        if ($value->DESTINATION == null || $value->DESTINATION == '-') {
+                            $item_desc = $value->ITEM_DESC;
+                        } else {
+                            if (strpos($value->ITEM_DESC, '//' . $value->DESTINATION) === false) {
+                                $item_desc = $value->ITEM_DESC . ' // ' . $value->DESTINATION;
+                            } else {
+                                $item_desc = $value->ITEM_DESC;
+                            }
+                        }
+                        $tmp_top_minus[$bu_val][] = [
+                            'item' => $value->ITEM,
+                            'item_desc' => $item_desc,
+                            'balance' => $tmp_balance
+                        ];
+                    }
+                }
+                $tmp_total_plan += $tmp_plan;
+                $tmp_total_actual += $tmp_actual;
+                $tmp_total_balance += $tmp_balance;
+            }
+
+            if ($tmp_total_plan > 0) {
+                $tmp_pct = round(($tmp_total_actual / $tmp_total_plan) * 100);
+            }
+
+            $tmp_data_yesterday[$bu_val] = [
+                'plan' => $tmp_total_plan,
+                'actual' => $tmp_total_actual,
+                'balance' => $tmp_total_balance,
+                'pct' => $tmp_pct == 0 ? null : $tmp_pct,
+            ];
+
+        }
+
+        return [
+            'data' => $tmp_data_yesterday,
+            'vms_version' => $vms_version,
+            'top_minus' => $tmp_top_minus,
+            'period' => $period,
+        ];
+    }
+
+    public function getYesterdayDate()
+    {
+        $today = date('Y-m-d');
+        $tmp_yesterday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            '<', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
+        ])
+        ->andWhere('holiday IS NULL')
+        ->orderBy('cal_date DESC')
+        ->one();
+        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
+
+        return $yesterday;
+    }
+
+    public function actionBuProgressChart()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $yesterday = $this->getYesterdayDate();
+        $data_arr = $this->getBuProgressByDate($yesterday);
+        $vms_version = $data_arr['vms_version'];
+        $bu_data = $data_arr['data'];
+        $period = $data_arr['period'];
+
+        $categories = $tmp_data_chart = [];
+        foreach ($bu_data as $key => $value) {
+            $categories[] = $key;
+
+            $tmp_data_chart[] = [
+                //'x' => $category,
+                'y' => $value['pct'],
+            ];
+        }
+
+        $data_chart = [
+            [
+                'name' => 'BU Progress',
+                'data' => $tmp_data_chart,
+                'showInLegend' => false,
+            ],
+        ];
+
+        $period_text = date('F Y', strtotime($period . 01));
+
+        return $this->render('bu-progress-chart', [
+            'data_chart' => $data_chart,
+            'categories' => $categories,
+            'vms_version' => $vms_version,
+            'period_text' => $period_text,
+        ]);
+    }
+
+    public function actionVmsYesterday()
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');

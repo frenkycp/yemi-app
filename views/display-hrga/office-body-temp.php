@@ -195,6 +195,7 @@ echo '</pre>';*/
                     <th class="text-center" width="60px">#</th>
                     <th class="text-center" width="150px">ID</th>
                     <th class="text-center">Name</th>
+                    <th class="text-center">Shift</th>
                     <th class="text-center">Attendance</th>
                 </tr>
             </thead>
@@ -215,6 +216,7 @@ echo '</pre>';*/
                                     <td class="text-center" style="font-weight: bold;"><?= $no; ?></td>
                                     <td class="text-center" style="font-weight: bold;"><?= $value2['nik']; ?></td>
                                     <td class="text-center" style="font-weight: bold;"><?= $value2['name']; ?></td>
+                                    <td class="text-center" style="font-weight: bold;"><?= $value2['shift']; ?></td>
                                     <td class="text-center" style="font-weight: bold;"><?= $value2['attendance']; ?></td>
                                 </tr>
                             <?php }

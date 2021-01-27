@@ -542,6 +542,7 @@ class DisplayHrgaController extends Controller
                 $no_check_data[] = [
                     'nik' => $attendance_val['nik'],
                     'name' => $emp_name,
+                    'shift' => $emp_shift,
                     'attendance' => $attend_judgement_txt
                 ];
                 $total_no_check++;
