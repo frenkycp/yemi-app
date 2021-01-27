@@ -1967,6 +1967,9 @@ class DisplayController extends Controller
 
         $categories = $tmp_data_chart = [];
         foreach ($bu_data as $key => $value) {
+            if ($key == 'OTHER') {
+                $key = 'KD';
+            }
             $categories[] = $key;
 
             $tmp_data_chart[] = [

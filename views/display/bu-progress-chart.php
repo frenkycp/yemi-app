@@ -133,15 +133,6 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-$this->registerJs("$(function() {
-   $('.popup_btn').click(function(e) {
-     e.preventDefault();
-     $('#modal').modal('show').find('.modal-content').html('<div class=\"text-center\">" . Html::img('@web/loading-01.gif', ['alt'=>'some', 'class'=>'thing']) . "</div>').load($(this).attr('href'));
-     $('#popup-tbl').DataTable({
-        'order': [[ 6, 'desc' ]]
-    });
-   });
-});");
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
 print_r($tmp_top_minus);
