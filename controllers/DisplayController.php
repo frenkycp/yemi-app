@@ -162,6 +162,64 @@ use app\models\EmpInterviewYubisashi;
 
 class DisplayController extends Controller
 {
+    public function actionIjazahProgressChart($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $period = date('Ym');
+        $tmp_data_summary = IjazahPlanActual::find()->select([
+            'BU',
+            'PLAN_QTY' => 'SUM(PLAN_QTY)',
+            'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
+            'ACTUAL_QTY_ALLOC' => 'SUM(ACTUAL_QTY_ALLOC)',
+            'PLAN_AMT' => 'SUM(PLAN_QTY * STD_PRICE)',
+            'ACTUAL_AMT_ALLOC' => 'SUM(ACTUAL_QTY_ALLOC * STD_PRICE)'
+        ])
+        ->where([
+            'PERIOD' => $period,
+        ])
+        ->andWhere('BU IS NOT NULL')
+        ->groupBy('BU')
+        ->orderBy('BU')
+        ->all();
+
+        $categories = $tmp_data_chart = [];
+        foreach ($tmp_data_summary as $value) {
+            $key = $value->BU;
+            if ($key == 'OTHER') {
+                $key = 'KD';
+            }
+            $categories[] = $key;
+
+            $tmp_pct = 0;
+            if ($value->PLAN_QTY > 0) {
+                $tmp_pct = round(($value->ACTUAL_QTY_ALLOC / $value->PLAN_QTY) * 100, 1);
+            }
+
+            $tmp_data_chart[] = [
+                //'x' => $category,
+                'y' => $tmp_pct,
+            ];
+        }
+
+        $data_chart = [
+            [
+                'name' => 'BU Progress',
+                'data' => $tmp_data_chart,
+                'showInLegend' => false,
+            ],
+        ];
+
+        $period_text = date('F Y', strtotime($period . 01));
+
+        return $this->render('ijazah-progress-chart', [
+            'data_chart' => $data_chart,
+            'categories' => $categories,
+            'period_text' => $period_text,
+        ]);
+    }
+
     public function actionInterviewYubisashi()
     {
         $this->layout = 'clean';
