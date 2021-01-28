@@ -16,12 +16,55 @@ use app\models\ShippingContainerView01;
 use app\models\ContainerView;
 use app\models\ShippingOrderView03;
 use app\models\ShippingOrderNew01;
-
+use app\models\GeneralFunction;
+use app\models\ShippingModel;
 /**
  * 
  */
 class DisplayLogController extends Controller
 {
+    public function actionShippingOrderProgress($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $yesterday = GeneralFunction::instance()->getYesterdayDate();
+        $total_ship_out = ShippingModel::instance()->getTotalShipOut($yesterday);
+        $period = date('Ym');
+        $period_text = strtoupper(date('F Y', strtotime($period . '01')));
+
+        $tmp_shipping_order = ShippingOrderNew01::find()
+        ->select([
+            'TOTAL_CONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_UNCONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+        ])
+        ->where([
+            'PERIOD' => $period,
+        ])
+        ->one();
+
+        $confirmed_pct = $unconfirmed_pct = $ship_out_pct = 0;
+        $total_container = [
+            'plan' => $tmp_shipping_order->TOTAL_CONFIRMED + $tmp_shipping_order->TOTAL_UNCONFIRMED,
+            'confirmed' => $tmp_shipping_order->TOTAL_CONFIRMED,
+            'unconfirmed' => $tmp_shipping_order->TOTAL_UNCONFIRMED,
+        ];
+        if ($total_container['plan'] > 0) {
+            $confirmed_pct = round(($total_container['confirmed'] / $total_container['plan']) * 100, 1);
+            $unconfirmed_pct = round(($total_container['unconfirmed_pct'] / $total_container['plan']) * 100, 1);
+            $ship_out_pct = round(($total_ship_out / $total_container['plan']) * 100, 1);
+        }
+        $total_container['confirmed_pct'] = $confirmed_pct;
+        $total_container['unconfirmed_pct'] = $unconfirmed_pct;
+        $total_container['ship_out_pct'] = $ship_out_pct;
+
+        return $this->render('shipping-order-progress', [
+            'data' => $data,
+            'period_text' => $period_text,
+            'total_ship_out' => $total_ship_out,
+            'total_container' => $total_container,
+        ]);
+    }
+
     public function actionShippingOrderNew($value='')
     {
         $this->layout = 'clean';

@@ -28,6 +28,7 @@ class DisplayHrgaController extends Controller
     public function actionDriverStatusReset($id)
     {
         $model = DriverTbl::find()->where(['id' => $id])->one();
+        $model->status = 0;
 
         if (!$model->save()) {
             return json_encode($model->errors);

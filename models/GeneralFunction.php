@@ -2,9 +2,41 @@
 namespace app\models;
 
 use yii\base\Model;
+use app\models\WorkDayTbl;
+use app\models\ContainerView;
 
 class GeneralFunction extends Model
 {
+    public function getTotalShipOut($post_date)
+    {
+        $period = date('Ym', strtotime($post_date));
+        $tmp_ship_out = ContainerView::find()->select(['total_cntr' => 'SUM(total_cntr)'])->where([
+            'EXTRACT(YEAR_MONTH FROM etd)' => $period
+        ])
+        ->andWhere(['<=', 'etd', $post_date])
+        ->one();
+
+        return $tmp_ship_out->total_cntr;
+    }
+
+    public function getYesterdayDate()
+    {
+        $today = date('Y-m-d');
+        $tmp_yesterday = WorkDayTbl::find()
+        ->select([
+            'cal_date' => 'FORMAT(cal_date, \'yyyy-MM-dd\')'
+        ])
+        ->where([
+            '<', 'FORMAT(cal_date, \'yyyy-MM-dd\')', $today
+        ])
+        ->andWhere('holiday IS NULL')
+        ->orderBy('cal_date DESC')
+        ->one();
+        $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
+
+        return $yesterday;
+    }
+
 	public function getWorkingTime($start_time, $end_time)
 	{
         $start_date = new \DateTime($start_time);
