@@ -23,7 +23,7 @@ date_default_timezone_set('Asia/Jakarta');
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 1em; text-align: center;}
+    .content-header {color: white; font-size: 18px; text-align: center;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -91,12 +91,12 @@ $css_string = "
     }
     .progress-text{
         color: white;
-        font-size: 70px;
+        font-size: 60px;
         letter-spacing: 1px;
     }
     .progress-number {
         color: white;
-        font-size: 70px;
+        font-size: 60px;
         letter-spacing: 1px;
         font-weight: bold;
     }
@@ -111,7 +111,7 @@ $css_string = "
         outline: 1px solid silver;
     }
     .progress-group {
-        padding-top: 30px;
+        padding-top: 50px;
     }
     .label-tbl {padding-left: 20px !important;}
     .text-red {color: #ff7564 !important;}
