@@ -184,22 +184,25 @@ class DisplayController extends Controller
         ->orderBy('BU')
         ->all();
 
-        $categories = $tmp_data_chart = [];
-        foreach ($tmp_data_summary as $value) {
-            $key = $value->BU;
-            if ($key == 'OTHER') {
-                $key = 'KD';
-            }
-            $categories[] = $key;
-
+        $bu_arr  = ['AV', 'PA', 'B&O', 'DMI', 'PIANO', 'SN', 'KD'];
+        $tmp_data_chart = [];
+        foreach ($bu_arr as $bu_val) {
             $tmp_pct = 0;
-            if ($value->PLAN_QTY > 0) {
-                $tmp_pct = round(($value->ACTUAL_QTY_ALLOC / $value->PLAN_QTY) * 100, 1);
+            foreach ($tmp_data_summary as $value) {
+                $key = $value->BU;
+                if ($key == 'OTHER') {
+                    $key = 'KD';
+                }
+
+                if ($value->PLAN_QTY > 0 && $key == $bu_val) {
+                    $tmp_pct = round(($value->ACTUAL_QTY_ALLOC / $value->PLAN_QTY) * 100, 1);
+                }
             }
 
             $tmp_data_chart[] = [
                 //'x' => $category,
                 'y' => $tmp_pct,
+                'color' => $tmp_pct == 100 ? 'green' : new JsExpression('Highcharts.getOptions().colors[0]')
             ];
         }
 
@@ -215,7 +218,7 @@ class DisplayController extends Controller
 
         return $this->render('ijazah-progress-chart', [
             'data_chart' => $data_chart,
-            'categories' => $categories,
+            'categories' => $bu_arr,
             'period_text' => $period_text,
         ]);
     }
