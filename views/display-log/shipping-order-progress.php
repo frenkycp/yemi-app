@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'SHIPPING ORDER ' . $period_text,
-    'tab_title' => 'SHIPPING ORDER',
-    'breadcrumbs_title' => 'SHIPPING ORDER'
+    'page_title' => 'CONTAINER RESERVATION CONTROL <span class="japanesse light-green">(コンテナー予約管理)</span>',
+    'tab_title' => 'CONTAINER RESERVATION CONTROL',
+    'breadcrumbs_title' => 'CONTAINER RESERVATION CONTROL'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -91,24 +91,24 @@ $css_string = "
     }
     .progress-text{
         color: white;
-        font-size: 90px;
-        letter-spacing: 3px;
+        font-size: 70px;
+        letter-spacing: 1px;
     }
     .progress-number {
         color: white;
-        font-size: 90px;
+        font-size: 70px;
         letter-spacing: 1px;
         font-weight: bold;
     }
     .progress-bar {
-        font-size: 90px;
+        font-size: 100px;
         padding: 50px;
     }
     .progress {
-        height: 120px;
+        height: 150px;
         font-family: Impact, Charcoal, sans-serif !important;
         letter-spacing: 5px;
-        outline: 1px solid white;
+        outline: 1px solid silver;
     }
     .progress-group {
         padding-top: 30px;
@@ -159,32 +159,36 @@ print_r($tmp_top_minus);
 echo '</pre>';*/
 ?>
 <br/>
-<div class="progress-group">
-    <span class="progress-text">PLAN</span>
-    <span class="progress-number"><?= $total_container['plan']; ?></span>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="progress-group">
+            <span class="progress-text">CONTAINER PLAN <span class="japanesse light-green">(コンテナー計画)</span></span>
+            <span class="progress-number"><?= $total_container['plan']; ?></span>
 
-    <div class="progress">
-        <div class="progress-bar progress-bar-success" style="width: 100%"></div>
-    </div>
-</div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+            </div>
+        </div>
 
-<div class="progress-group">
-    <span class="progress-text">RESERVED</span>
-    <span class="progress-number"><?= $total_container['confirmed']; ?> <small>(<?= $total_container['confirmed_pct']; ?>%)</small></span>
+        <div class="progress-group">
+            <span class="progress-text">RESERVED <span class="japanesse light-green">(予約済み)</span></span>
+            <span class="progress-number"><?= $total_container['confirmed']; ?> <small>(<?= $total_container['confirmed_pct']; ?>%)</small></span>
 
-    <div class="progress">
-        <div class="progress-bar progress-bar-warning" style="width: <?= $total_container['confirmed_pct']; ?>%"></div>
-    </div>
-</div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-warning progress-bar-striped active" style="width: <?= $total_container['confirmed_pct']; ?>%"></div>
+            </div>
+        </div>
 
-<div class="progress-group">
-    <span class="progress-text">SHIP OUT</span>
-    <span class="progress-number">
-        <?= $total_ship_out; ?>
-        <small>(<?= $total_container['ship_out_pct']; ?>%)</small>
-    </span>
+        <div class="progress-group">
+            <span class="progress-text">SHIP OUT <span class="japanesse light-green">(出荷済み)</span></span>
+            <span class="progress-number">
+                <?= $total_ship_out; ?>
+                <small>(<?= $total_container['ship_out_pct']; ?>%)</small>
+            </span>
 
-    <div class="progress">
-        <div class="progress-bar progress-bar-primary" style="width: <?= $total_container['ship_out_pct'] ?>%"></div>
+            <div class="progress">
+                <div class="progress-bar progress-bar-primary progress-bar-striped active" style="width: <?= $total_container['ship_out_pct'] ?>%"></div>
+            </div>
+        </div>
     </div>
 </div>

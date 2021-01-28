@@ -14,6 +14,8 @@ class ShippingModel extends Model
             'EXTRACT(YEAR_MONTH FROM etd)' => $period
         ])
         ->andWhere(['<=', 'etd', $post_date])
+        ->andWhere(['<>', 'dst', 'JAKARTA'])
+        ->andWhere(['<>', 'back_order', 2])
         ->one();
 
         return $tmp_ship_out->total_cntr;

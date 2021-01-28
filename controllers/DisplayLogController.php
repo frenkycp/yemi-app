@@ -29,6 +29,7 @@ class DisplayLogController extends Controller
         date_default_timezone_set('Asia/Jakarta');
         $yesterday = GeneralFunction::instance()->getYesterdayDate();
         $total_ship_out = ShippingModel::instance()->getTotalShipOut($yesterday);
+        $today = date('Y-m-d');
         $period = date('Ym');
         $period_text = strtoupper(date('F Y', strtotime($period . '01')));
 
@@ -41,6 +42,26 @@ class DisplayLogController extends Controller
             'PERIOD' => $period,
         ])
         ->one();
+
+        $start_end_date = ShippingOrderNew01::find()
+        ->select([
+            'START_DATE' => 'MIN(ETD)',
+            'END_DATE' => 'MAX(ETD)',
+        ])
+        ->where([
+            'PERIOD' => $period,
+        ])
+        ->one();
+
+        /*$tmp_ship_out = ContainerView::find()->select(['total_cntr' => 'SUM(total_cntr)'])
+        ->where(['>=', 'etd', $start_end_date->START_DATE])
+        ->andWhere(['<=', 'etd', $start_end_date->END_DATE])
+        ->andWhere(['<', 'etd', $today])
+        ->andWhere(['<>', 'dst', 'JAKARTA'])
+        ->andWhere(['<>', 'back_order', 2])
+        ->one();
+
+        $total_ship_out = $tmp_ship_out->total_cntr;*/
 
         $confirmed_pct = $unconfirmed_pct = $ship_out_pct = 0;
         $total_container = [
@@ -267,12 +288,14 @@ class DisplayLogController extends Controller
         }*/
         
 
-        $tmp_ship_out = ContainerView::find()->select(['total_cntr' => 'SUM(total_cntr)'])->where([
+        /*$tmp_ship_out = ContainerView::find()->select(['total_cntr' => 'SUM(total_cntr)'])->where([
             'EXTRACT(YEAR_MONTH FROM etd)' => $yesterday_period
         ])
         ->andWhere(['<=', 'etd', $yesterday])
-        ->one();
-        $total_ship_out = $tmp_ship_out->total_cntr;
+        ->andWhere(['<>', 'dst', 'JAKARTA'])
+        ->andWhere(['<>', 'back_order', 2])
+        ->one();*/
+        $total_ship_out = ShippingModel::instance()->getTotalShipOut($yesterday);
 
         return $this->render('shipping-order', [
             'data' => $data,
