@@ -28,7 +28,7 @@ class DisplayLogController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $yesterday = GeneralFunction::instance()->getYesterdayDate();
-        $total_ship_out = ShippingModel::instance()->getTotalShipOut($yesterday);
+        $total_ship_out = ShippingModel::instance()->getTotalShipOut(date('Y-m-d', strtotime('-1 day')));
         $today = date('Y-m-d');
         $period = date('Ym');
         $period_text = strtoupper(date('F Y', strtotime($period . '01')));

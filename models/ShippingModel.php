@@ -14,7 +14,7 @@ class ShippingModel extends Model
             'EXTRACT(YEAR_MONTH FROM etd)' => $period
         ])
         ->andWhere(['<=', 'etd', $post_date])
-        ->andWhere(['<>', 'dst', 'JAKARTA'])
+        ->andWhere(['NOT IN', 'dst', ['JAKARTA', 'B4TSNI']])
         ->andWhere(['<>', 'back_order', 2])
         ->one();
 
