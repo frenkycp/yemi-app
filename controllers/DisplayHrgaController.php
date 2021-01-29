@@ -25,6 +25,123 @@ use app\models\KaryawanSuhuView;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionOvertimeMonthlyAvg($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $period = date('Ym');
+        $period_text = date('F Y', strtotime($period . 01));
+        $tmp_attendance = SunfishAttendanceData::find()
+        ->select([
+            'cost_center', 'total_ot' => 'SUM(total_ot)'
+        ])
+        ->where([
+            'FORMAT(shiftendtime, \'yyyyMM\')' => $period
+        ])
+        ->andWhere('total_ot IS NOT NULL')
+        ->andWhere(['NOT IN', 'cost_center', ['Board of Director']])
+        ->groupBy('cost_center')
+        ->orderBy('cost_center')
+        ->all();
+
+        $mp_by_section = SunfishViewEmp::find()
+        ->select([
+            'cost_center_code', 'cost_center_name', 'total_mp' => 'COUNT(*)'
+        ])
+        ->where(['status' => 1])
+        ->andWhere([
+            'cost_center_code' => ['130A', '200A', '240', '300', '310', '320', '330', '340A', '340M', '350', '360', '370', '371', '372']
+        ])
+        ->groupBy('cost_center_code, cost_center_name')
+        ->orderBy('cost_center_name')
+        ->all();
+
+        $section_arr = [
+            'INJ' => ['370', '371', '372'],
+            'WH FG' => ['130A'],
+            'WH Parts' => ['200A'],
+            'Grinding' => ['240'],
+            'WW' => ['300'],
+            'SA' => ['310'],
+            'FA' => ['320'],
+            'PNT' => ['330'],
+            'AI' => ['340A'],
+            'MI' => ['340M'],
+            'SPU' => ['350'],
+            'SMT' => ['360'],
+        ];
+
+        $tmp_data = $data = [];
+        foreach ($section_arr as $section => $array_val) {
+            $tmp_total_mp = $tmp_total_ot = $avg_ot = 0;
+            $tmp_cost_center = [];
+            foreach ($mp_by_section as $section_value) {
+                if (in_array($section_value->cost_center_code, $array_val)) {
+                    $tmp_total_mp += $section_value->total_mp;
+                    $tmp_cost_center[] = $section_value->cost_center_name;
+                }
+            }
+
+            foreach ($tmp_attendance as $attendance_val) {
+                if (in_array($attendance_val->cost_center, $tmp_cost_center)) {
+                    $tmp_total_ot += $attendance_val->total_ot;
+                }
+            }
+
+            if ($tmp_total_mp > 0) {
+                $avg_ot = round(($tmp_total_ot / 60 / $tmp_total_mp), 1);
+            }
+
+            $tmp_data[$section] = $avg_ot;
+        }
+        /*foreach ($mp_by_section as $section_value) {
+            $cost_center_name = $section_value->cost_center_name;
+
+            if ($section_value->cost_center_code == '370' || $section_value->cost_center_code == '371' || $section_value->cost_center_code == '372') {
+                $cost_center_name = 'INJ';
+            }
+
+            $tmp_total_ot = $avg_ot = 0;
+            foreach ($tmp_attendance as $attendance_val) {
+                if ($attendance_val->cost_center == $cost_center_name) {
+                    $tmp_total_ot = $attendance_val->total_ot;
+                }
+            }
+            if ($section_value->total_mp > 0) {
+                $avg_ot = round(($tmp_total_ot / 60 / $section_value->total_mp), 1);
+            }
+
+            $tmp_data[$cost_center_name] = $avg_ot;
+
+        }*/
+        arsort($tmp_data);
+        $tmp_data_chart = $categories = [];
+        foreach ($tmp_data as $key => $value) {
+            $categories[] = $key;
+
+            $tmp_data_chart[] = [
+                //'x' => $category,
+                'y' => $value,
+            ];
+        }
+
+        $data_chart = [
+            [
+                'name' => 'Monthly Overtime (AVG)',
+                'data' => $tmp_data_chart,
+                'showInLegend' => false,
+            ],
+        ];
+
+        return $this->render('overtime-monthly-avg', [
+            'data_chart' => $data_chart,
+            'tmp_data' => $tmp_data,
+            'categories' => $categories,
+            'period_text' => $period_text,
+        ]);
+    }
+
     public function actionDriverStatusReset($id)
     {
         $model = DriverTbl::find()->where(['id' => $id])->one();
