@@ -45,7 +45,7 @@ class DisplayQaController extends Controller
 
         $data2_total = count($tmp_data2);
         $data2 = null;
-        $data2_marquee = 'No Report With Status = "OPEN"';
+        $data2_marquee = 'OK';
         $i = 0;
 
         if (count($tmp_data2) > 0) {

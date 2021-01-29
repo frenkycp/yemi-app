@@ -42,7 +42,7 @@ $css_string = "
     }
     .summary-tbl > tbody > tr > td{
         border:2px solid grey;
-        font-size: 40px;
+        font-size: 38px;
         background: #000;
         color: #FFF;
         vertical-align: middle;
@@ -179,9 +179,18 @@ echo '</pre>';*/
 print_r($data_new);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
+$model_used = app\models\SapItemModelUsed::find()->where([
+    'material' => $data1->ITEM
+])->one();
+
+if ($model_used) {
+    $model_used_txt = $model_used->model;
+} else {
+    $model_used_txt = 'N/A';
+}
 ?>
 
-<table class="table summary-tbl" style="margin-top: 10px;">
+<table class="table summary-tbl table-condensed" style="margin-top: 10px;">
     <tbody>
         <?php 
         if ($data1) { ?>
@@ -199,6 +208,8 @@ echo '</pre>';*/
                 <td class="table-list text-center">
                     <div class="col-sm-12">
                         <?= $data1->ITEM . ' - ' . $data1->ITEM_DESC . '<br/>(' . $data1->QTY_IN . ' pcs)'; ?>
+                        <br/>
+                        <marquee scrollamount="15">Model Used : <?= $model_used_txt; ?></marquee>
                     </div>
                 </td>
             </tr>
@@ -221,21 +232,30 @@ echo '</pre>';*/
         if ($data2_total <= 10) { ?>
             <tr>
                 <td class="text-center row-title" style="">
-                    IPQA<br/>
+                    IPQC<br/>
                     <span class="sortir-small">( Outstanding > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
                 </td>
-                <td class="table-list">
-                    <div>
-                        <marquee scrollamount="20" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
-                            <?= $data2_marquee; ?>
-                        </marquee>
-                    </div>
-                </td>
+                
+                <?php
+                if ($data2_marquee == 'OK') { ?>
+                    <td class="text-center ok-style">
+                        OK
+                    </td>
+                <?php } else { ?>
+                    <td class="table-list">
+                        <div>
+                            <marquee scrollamount="15" style="background-color: transparent; color: white; font-weight: normal; clear: both; z-index:200; font-size: 1.5em;">
+                                <?= $data2_marquee; ?>
+                            </marquee>
+                        </div>
+                    </td>
+                <?php }
+                ?>
             </tr>
         <?php } else { ?>
             <tr>
                 <td class="text-center row-title" rowspan="2" style="">
-                    IPQA<br/>
+                    IPQC<br/>
                     <span class="sortir-small">( Outstanding > 10 <i class="fa fa-arrow-right"></i> <b><u>NG</u></b> )</span>
                 </td>
                 <td class="text-center sortir-class blink">
