@@ -201,6 +201,7 @@ class MyHrController extends Controller
         ->andWHere([
             'FORMAT(startvaliddate, \'yyyy\')' => $this_year
         ])
+        ->orderBy('endvaliddate DESC, leave_code DESC')
         ->one();
         $sisa_cuti_panjang = (int)$cuti_panjang_summary->remaining;
         $kuota_cuti_panjang = (int)$cuti_panjang_summary->entitlement;
