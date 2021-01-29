@@ -209,7 +209,7 @@ if ($model_used) {
                     <div class="col-sm-12">
                         <?= $data1->ITEM . ' - ' . $data1->ITEM_DESC . '<br/>(' . $data1->QTY_IN . ' pcs)'; ?>
                         <br/>
-                        <marquee scrollamount="15">Model Used : <?= $model_used_txt; ?></marquee>
+                        <marquee scrollamount="15">Model : <?= $model_used_txt; ?></marquee>
                     </div>
                 </td>
             </tr>
