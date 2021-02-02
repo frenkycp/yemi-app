@@ -214,7 +214,7 @@ class DisplayController extends Controller
             ],
         ];
 
-        $period_text = date('F Y', strtotime($period . 01));
+        $period_text = date('F Y', strtotime($period . '01'));
 
         return $this->render('ijazah-progress-chart', [
             'data_chart' => $data_chart,
