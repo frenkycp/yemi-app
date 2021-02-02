@@ -2020,8 +2020,9 @@ class DisplayController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
+        $today = date('Y-m-d');
         $yesterday = $this->getYesterdayDate();
-        $data_arr = $this->getBuProgressByDate($yesterday);
+        $data_arr = $this->getBuProgressByDate($today);
         $vms_version = $data_arr['vms_version'];
         $bu_data = $data_arr['data'];
         $period = $data_arr['period'];
@@ -2047,13 +2048,15 @@ class DisplayController extends Controller
             ],
         ];
 
-        $period_text = date('F Y', strtotime($period . 01));
+        $period_text = date('F Y', strtotime($period . '01'));
 
         return $this->render('bu-progress-chart', [
             'data_chart' => $data_chart,
             'categories' => $categories,
             'vms_version' => $vms_version,
             'period_text' => $period_text,
+            'yesterday' => $yesterday,
+            'period' => $period,
         ]);
     }
 

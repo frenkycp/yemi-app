@@ -132,7 +132,7 @@ $script = "
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
-
+//echo $period;
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
 print_r($tmp_top_minus);
