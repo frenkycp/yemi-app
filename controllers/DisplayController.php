@@ -2115,9 +2115,9 @@ class DisplayController extends Controller
                 if ($value->BU == $bu_val) {
                     $tmp_plan = $value->PLAN_QTY;
                     $tmp_actual = $value->ACTUAL_QTY;
-                    if ($tmp_actual > $tmp_plan) {
+                    /*if ($tmp_actual > $tmp_plan) {
                         $tmp_actual = $tmp_plan;
-                    }
+                    }*/
                     $tmp_balance = $tmp_actual - $tmp_plan;
 
                     if (count($tmp_top_minus[$bu_val]) < 3 && $tmp_balance < 0) {
