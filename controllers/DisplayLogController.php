@@ -28,7 +28,7 @@ class DisplayLogController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
         $yesterday = GeneralFunction::instance()->getYesterdayDate();
-        $total_ship_out = ShippingModel::instance()->getTotalShipOut(date('Y-m-d', strtotime('-1 day')));
+        //$total_ship_out = ShippingModel::instance()->getTotalShipOut(date('Y-m-d', strtotime('-1 day')));
         $today = date('Y-m-d');
         $period = date('Ym');
         $period_text = strtoupper(date('F Y', strtotime($period . '01')));
@@ -43,7 +43,19 @@ class DisplayLogController extends Controller
         ])
         ->one();
 
-        $start_end_date = ShippingOrderNew01::find()
+        $tmp_total_ship_out = ShippingOrderNew01::find()
+        ->select([
+            'TOTAL_CONTAINER' => 'SUM(CNT_40HC + CNT_40 + CNT_20 + LCL)'
+        ])
+        ->where([
+            'PERIOD' => $period,
+        ])
+        ->andWhere(['<', 'ETD', $today])
+        ->one();
+
+        $total_ship_out = $tmp_total_ship_out->TOTAL_CONTAINER;
+
+        /*$start_end_date = ShippingOrderNew01::find()
         ->select([
             'START_DATE' => 'MIN(ETD)',
             'END_DATE' => 'MAX(ETD)',
@@ -51,7 +63,7 @@ class DisplayLogController extends Controller
         ->where([
             'PERIOD' => $period,
         ])
-        ->one();
+        ->one();*/
 
         /*$tmp_ship_out = ContainerView::find()->select(['total_cntr' => 'SUM(total_cntr)'])
         ->where(['>=', 'etd', $start_end_date->START_DATE])

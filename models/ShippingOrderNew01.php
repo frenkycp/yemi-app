@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class ShippingOrderNew01 extends BaseShippingOrderNew01
 {
-    public $TOTAL_CONFIRMED, $TOTAL_UNCONFIRMED, $START_DATE, $END_DATE;
+    public $TOTAL_CONFIRMED, $TOTAL_UNCONFIRMED, $START_DATE, $END_DATE, $TOTAL_CONTAINER;
 
     public function behaviors()
     {
