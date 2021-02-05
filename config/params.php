@@ -421,6 +421,12 @@ return [
         'PIANO' => 'PIANO',
         'B&O' => 'B&O',
     ],
+    's_billing_stage_arr' => [
+        1 => 'WAITING RECEIVED',
+        2 => 'ON PROGRESS',
+        3 => 'WAITING FOR HANDOVER',
+        4 => 'HANDOVER TO FINANCE',
+    ],
     'kd_flag_arr' => [
         'KD to HY' => 'KD to HY',
         'KD to TY' => 'KD to TY',

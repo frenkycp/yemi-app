@@ -203,7 +203,7 @@ echo '</pre>';*/
                         ]
                     ],
                     'series' => [
-                        'pointPadding' => '0.1',
+                        'pointPadding' => 0.1,
                         'groupPadding' => 0,
                     ],
                 ],

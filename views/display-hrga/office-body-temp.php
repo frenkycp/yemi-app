@@ -265,7 +265,7 @@ echo '</pre>';*/
                 'yAxis' => [
                     'min' => 0,
                     'title' => [
-                        'text' => 'Total Person(s)'
+                        'text' => null
                     ],
                 ],
                 'plotOptions' => [
@@ -278,7 +278,8 @@ echo '</pre>';*/
                         ]
                     ],
                     'series' => [
-                        'pointPadding' => '0.05',
+                        'pointPadding' => 0.1,
+                        'groupPadding' => 0,
                         'cursor' => 'pointer',
                         'point' => [
                             'events' => [

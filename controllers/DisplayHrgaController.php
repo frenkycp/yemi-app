@@ -588,6 +588,221 @@ class DisplayHrgaController extends Controller
 
         $total_check = $total_no_check = 0;
         $no_check_data = $temp_over_data = [];
+        $temp_category_total = [];
+        foreach ($tmp_attendance[$model->post_date] as $attendance_val) {
+            $attend_judgement = $attendance_val['attend_judgement'];
+            $emp_shift = $attendance_val['shift'];
+            $emp_name = $attendance_val['name'];
+
+            $temp_data = $temperature_from_yesterday;
+            $start_time = $model->post_date . ' 05:00:00';
+            $end_time = $model->post_date . ' 17:00:00';
+            if ($emp_shift == 3) {
+                $start_time = $yesterday . ' 19:00:00';
+                $end_time = $model->post_date . ' 07:00:00';
+            }
+            /*if ($emp_shift == 3) {
+                $temp_data = $yesterday_temp;
+            } else {
+                $temp_data = $today_temp;
+            }*/
+
+            $body_temp = 0;
+            $last_update = null;
+
+            foreach ($temp_data as $temp_value) {
+                if ($temp_value->NIK == $attendance_val['nik']
+                    && $body_temp == 0
+                    && $temp_value->SUHU > 0
+                    && $temp_value->LAST_UPDATE > $start_time
+                    && $temp_value->LAST_UPDATE < $end_time
+                ) {
+                    $body_temp = $temp_value->SUHU;
+                    $last_update = $temp_value->LAST_UPDATE;
+                }
+            }
+
+            if ($last_update == null) {
+                foreach ($temperature_from_yesterday2 as $temp_value) {
+                    if ($temp_value->NIK == $attendance_val['nik']
+                        && $body_temp == 0
+                        && $temp_value->temperature > 0
+                        && $temp_value->swipetime > $start_time
+                        && $temp_value->swipetime < $end_time
+                    ) {
+                        $body_temp = $temp_value->temperature;
+                        $last_update = $temp_value->swipetime;
+                    }
+                }
+            }
+            
+
+            if ($last_update == null) {
+                if ($attend_judgement == 'P') {
+                    $attend_judgement_txt = 'Hadir';
+                } elseif ($attend_judgement == 'I') {
+                    $attend_judgement_txt = 'Ijin';
+                } elseif ($attend_judgement == 'S') {
+                    $attend_judgement_txt = 'Sakit';
+                } elseif ($attend_judgement == 'C') {
+                    $attend_judgement_txt = 'Cuti';
+                } else {
+                    $attend_judgement_txt = 'Alpa';
+                }
+                $no_check_data[] = [
+                    'nik' => $attendance_val['nik'],
+                    'name' => $emp_name,
+                    'shift' => $emp_shift,
+                    'attendance' => $attend_judgement_txt
+                ];
+                $total_no_check++;
+            } else {
+                $total_check++;
+                if ($body_temp >= 37.5) {
+                    $temp_over_data[] = [
+                        'nik' => $attendance_val['nik'],
+                        'name' => $emp_name,
+                        'temperature' => $body_temp
+                    ];
+                }
+
+                $tmp_category_data = [
+                    'nik' => $attendance_val['nik'],
+                    'name' => $emp_name,
+                    'temperature' => $body_temp,
+                    'last_update' => $last_update,
+                ];
+
+                $temp_category_total['' . $body_temp][] = $tmp_category_data;
+
+                /*if ($body_temp < 35) {
+                    $temp_category_total['34 - 34.9'][] = $tmp_category_data;
+                } elseif ($body_temp < 35.5) {
+                    $temp_category_total['35 - 35.4'][] = $tmp_category_data;
+                } elseif ($body_temp < 36) {
+                    $temp_category_total['35.5 - 35.9'][] = $tmp_category_data;
+                } elseif ($body_temp < 36.5) {
+                    $temp_category_total['36 - 36.4'][] = $tmp_category_data;
+                } elseif ($body_temp < 37) {
+                    $temp_category_total['36.5 - 36.9'][] = $tmp_category_data;
+                } elseif ($body_temp < 37.5) {
+                    $temp_category_total['37 - 37.4'][] = $tmp_category_data;
+                } else {
+                    $temp_category_total['≥ 37.5'][] = $tmp_category_data;
+                }*/
+            }
+        }
+
+        if (count($temp_category_total) > 0) {
+            ksort($temp_category_total);
+        }
+
+        $data_chart = $categories = $tmp_data_chart = [];
+        foreach ($temp_category_total as $key => $value) {
+            $categories[] = $key;
+
+            if ($key > 37.5) {
+                $color_name = 'red';
+            } else {
+                $color_name = 'green';
+            }
+
+            $remark = '<div style="padding: 5px;">
+            <table class="table table-bordered table-striped table-hover" style="margin-bottom: 0px;">';
+            $remark .= 
+            '<tr>
+                <th class="text-center">#</th>
+                <th class="text-center">NIK</th>
+                <th class="text-center">Name</th>
+                <th class="text-center">Check Time</th>
+                <th class="text-center">Temp.</th>
+            </tr>'
+            ;
+
+            $no = 0;
+            foreach ($value as $value2) {
+                $no++;
+                $remark .= '<tr>
+                    <td class="text-center">' . $no . '</td>
+                    <td class="text-center">' . $value2['nik'] . '</td>
+                    <td class="text-center">' . $value2['name'] . '</td>
+                    <td class="text-center">' . date('d M\' Y H:i', strtotime($value2['last_update'])) . '</td>
+                    <td class="text-center">' . $value2['temperature'] . '</td>
+                </tr>';
+            }
+
+            $remark .= '</table></div>';
+
+            $tmp_data_chart[] = [
+                //'x' => $category,
+                'y' => count($value),
+                'remark' => $remark,
+                //'url' => Url::to(['temperature-daily-get-remark', 'post_date' => $model->post_date, 'temperature_category' => $key]),
+                'color' => $color_name,
+                'dataLabels' => [
+                    'color' => $color_name == 'red' ? 'red' : 'white',
+                ],
+            ];
+        }
+
+        $no_check_data2 = [
+            'Hadir' => [],
+            'Sakit' => [],
+            'Ijin' => [],
+            'Alpa' => [],
+            'Cuti' => [],
+        ];
+
+        foreach ($no_check_data as $value) {
+            $no_check_data2[$value['attendance']][] = $value;
+        }
+
+        $data_chart = [
+            [
+                'name' => 'Total Person(s)',
+                'data' => $tmp_data_chart,
+                'showInLegend' => false,
+            ],
+        ];
+
+        return $this->render('office-body-temp', [
+            'model' => $model,
+            'total_check' => $total_check,
+            'total_no_check' => $total_no_check,
+            'no_check_data' => $no_check_data,
+            'no_check_data2' => $no_check_data2,
+            'temp_over_data' => $temp_over_data,
+            'categories' => $categories,
+            'data_chart' => $data_chart,
+        ]);
+    }
+
+    public function actionOfficeBodyTempOld($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'post_date',
+        ]);
+        $model->addRule(['post_date'], 'required');
+        $model->post_date = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $yesterday = date('Y-m-d', strtotime($model->post_date . ' -1 day'));
+
+        $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
+        $tmp_office_emp = OfficeEmp::find()->all();
+        //$today_temp = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->orderBy('LAST_UPDATE')->all();
+        //$yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();
+        $temperature_from_yesterday = ScanTemperature::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
+        $temperature_from_yesterday2 = KaryawanSuhuView::find()->where(['>=', 'swipetime', $yesterday])->orderBy('swipetime')->all();
+
+        $total_check = $total_no_check = 0;
+        $no_check_data = $temp_over_data = [];
         $temp_category_total = [
             '34 - 34.9' => [],
             '35 - 35.4' => [],
