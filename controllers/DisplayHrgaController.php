@@ -658,6 +658,7 @@ class DisplayHrgaController extends Controller
                 $total_no_check++;
             } else {
                 $total_check++;
+                $body_temp -= 0.1;
                 if ($body_temp >= 37.5) {
                     $temp_over_data[] = [
                         'nik' => $attendance_val['nik'],
