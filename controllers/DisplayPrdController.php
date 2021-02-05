@@ -32,9 +32,121 @@ use app\models\SapGrGiByPlant; //current stock
 use app\models\SapMaterialDocumentBc; //stock in out
 use app\models\IpqaPatrolTbl;
 use app\models\SmtAiOutputInsertPoint01;
+use app\models\SapSoPlanActual;
 
 class DisplayPrdController extends Controller
 {
+    public function actionSapSoFy($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $otd_arr = [
+            'EARLY',
+            'OTD',
+            'OUTSTANDING'
+        ];
+
+        $tmp_sap_so = SapSoPlanActual::find()
+        ->select([
+            'period_plan',
+            'total_early' => 'SUM(CASE WHEN otd = \'EARLY\' THEN quantity ELSE 0 END)',
+            'total_otd' => 'SUM(CASE WHEN otd = \'OTD\' THEN quantity ELSE 0 END)',
+            'total_outstanding' => 'SUM(CASE WHEN otd = \'OUTSTANDING\' THEN quantity ELSE 0 END)',
+            'total_late' => 'SUM(CASE WHEN otd = \'LATE\' THEN quantity ELSE 0 END)',
+        ])
+        ->where(['period_plan' => $period_arr])
+        ->groupBy('period_plan')
+        ->all();
+
+        $tmp_data = $categories = $data = [];
+        foreach ($period_arr as $period_val) {
+            $tmp_early = $tmp_otd = $tmp_outstanding = $tmp_late = 0;
+            $categories[] = date('M\' Y', strtotime($period_val . '01'));
+            foreach ($tmp_sap_so as $sap_so_val) {
+                if ($sap_so_val->period_plan == $period_val) {
+                    $tmp_early = $sap_so_val->total_early;
+                    $tmp_otd = $sap_so_val->total_otd;
+                    $tmp_outstanding = $sap_so_val->total_outstanding;
+                    $tmp_late = $sap_so_val->total_late;
+                }
+            }
+            $tmp_data['early'][] = [
+                'y' => $tmp_early == 0 ? null : (int)$tmp_early
+            ];
+            $tmp_data['otd'][] = [
+                'y' => $tmp_otd == 0 ? null : (int)$tmp_otd
+            ];
+            $tmp_data['outstanding'][] = [
+                'y' => $tmp_outstanding == 0 ? null : (int)$tmp_outstanding
+            ];
+            $tmp_data['late'][] = [
+                'y' => $tmp_late == 0 ? null : (int)$tmp_late
+            ];
+        }
+
+        $data = [
+            
+            
+            [
+                'name' => 'OUTSTANDING',
+                'data' => $tmp_data['outstanding'],
+                'color' => 'red',
+            ],
+            [
+                'name' => 'LATE',
+                'data' => $tmp_data['late'],
+                'color' => 'orange',
+            ],
+            [
+                'name' => 'EARLY',
+                'data' => $tmp_data['early'],
+            ],
+            [
+                'name' => 'OTD',
+                'data' => $tmp_data['otd'],
+                'color' => 'green',
+            ],
+        ];
+
+        return $this->render('sap-so-fy', [
+            'model' => $model,
+            'period_arr' => $period_arr,
+            'data' => $data,
+            'categories' => $categories,
+        ]);
+    }
+
     public function actionSmtAiInsertPoint($value='')
     {
         $this->layout = 'clean';
