@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use app\models\MachineStopRecord;
 use app\models\Karyawan;
 use app\models\MachineIotCurrent;
+use app\models\AssetTbl;
 
 class MachineStopRecordController extends \app\controllers\base\MachineStopRecordController
 {
@@ -51,10 +52,11 @@ class MachineStopRecordController extends \app\controllers\base\MachineStopRecor
 					$model->PERIOD = date('Ym', strtotime($model->START_TIME));
 					$model->POST_DATE = date('Y-m-d', strtotime($model->START_TIME));
 
-					$tmp_machine = MachineIotCurrent::find()->where([
+					/*$tmp_machine = MachineIotCurrent::find()->where([
 						'mesin_id' => $model->MESIN_ID
-					])->one();
-					$model->MESIN_DESC = $tmp_machine->mesin_description;
+					])->one();*/
+					$tmp_machine = AssetTbl::find()->where(['asset_id' => $model->MESIN_ID])->one();
+					$model->MESIN_DESC = $tmp_machine->computer_name;
 
 					if ($model->save()) {
 						return $this->redirect(Url::previous());
