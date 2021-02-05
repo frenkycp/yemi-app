@@ -60,7 +60,7 @@ if (count($tmp_open) > 0) {
         <div class="row">
             <div class="col-sm-8">
                 <?= $model->isNewRecord ? $form->field($model, 'MESIN_ID')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(app\models\MachineIotCurrent::find()->all(), 'mesin_id', 'assetName'),
+                    'data' => ArrayHelper::map(app\models\AssetTbl::find()->where('PATINDEX(\'MNT%\', asset_id) > 0')->orderBy('computer_name')->all(), 'asset_id', 'assetName'),
                     'options' => $dropdown_options,
                     'value' => date('Y-m-d H:i:s'),
                     'pluginOptions' => [

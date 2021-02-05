@@ -103,6 +103,6 @@ class AssetTbl extends BaseAssetTbl
 
     public function getAssetName($value='')
     {
-        return $this->asset_id . ' - ' . $this->computer_name;
+        return $this->computer_name . ' (' . $this->asset_id . ')';
     }
 }
