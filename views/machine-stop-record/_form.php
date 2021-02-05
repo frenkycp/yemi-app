@@ -62,7 +62,6 @@ if (count($tmp_open) > 0) {
                 <?= $model->isNewRecord ? $form->field($model, 'MESIN_ID')->widget(Select2::classname(), [
                     'data' => ArrayHelper::map(app\models\AssetTbl::find()
                         ->where('PATINDEX(\'MNT%\', asset_id) > 0')
-                        ->andWhere('jenis IS NOT NULL')
                         ->orderBy('computer_name')->all(), 'asset_id', 'assetName'),
                     'options' => $dropdown_options,
                     'value' => date('Y-m-d H:i:s'),
