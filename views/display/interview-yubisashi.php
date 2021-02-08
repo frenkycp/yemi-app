@@ -146,7 +146,7 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<table class="table summary-tbl table-condensed">
+<table class="table summary-tbl">
     <thead>
         <tr>
             <th class="text-center" width="50px">No.</th>
@@ -177,6 +177,10 @@ echo '</pre>';*/
                     <td class="text-center icon-status"><?= getIcon($value->BUDAYA_KERJA); ?></td>
                 </tr>
             <?php }
+        } else {
+            echo '<tr>
+                <td colspan="8">No data found...</td>
+            </tr>';
         }
         ?>
     </tbody>
