@@ -10,7 +10,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'SCM ORDER vs EXPORT <span class="japanesse light-green">(SCM受注 対出荷)</span>',
+    'page_title' => 'SCM ORDER vs EXPORT <span class="japanesse light-green">(SCM受注対出荷)</span>',
     'tab_title' => 'SCM ORDER vs EXPORT',
     'breadcrumbs_title' => 'SCM ORDER vs EXPORT'
 ];
