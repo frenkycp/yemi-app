@@ -78,7 +78,7 @@ class IpqaPatrolTblController extends \app\controllers\base\IpqaPatrolTblControl
                 $model->save();
                 if ($model->rank_category == 'S' || $model->rank_category == 'A') {
                 	$client = new \mongosoft\soapclient\Client([
-					    'url' => 'http://172.17.144.211/WebService01.asmx?WSDL',
+					    'url' => 'http://10.110.48.12/WebService01.asmx?WSDL',
 					]);
 					$client->IPQA_Patrol_Rank_S(['id' => $id]);
                 }
