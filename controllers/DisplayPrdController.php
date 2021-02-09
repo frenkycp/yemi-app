@@ -37,6 +37,76 @@ use app\models\SernoOutput;
 
 class DisplayPrdController extends Controller
 {
+    public function actionSapVsFlo()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $this_month_period = date('Ym');
+        $last_month_period = date('Ym', strtotime(' -1 month'));
+
+        $tmp_sap_so = SapSoPlanActual::find()
+        ->select([
+            'period_plan',
+            'total_early' => 'SUM(CASE WHEN otd = \'EARLY\' THEN quantity ELSE 0 END)',
+            'total_otd' => 'SUM(CASE WHEN otd = \'OTD\' THEN quantity ELSE 0 END)',
+            'total_outstanding' => 'SUM(CASE WHEN otd = \'OUTSTANDING\' THEN quantity ELSE 0 END)',
+            'total_late' => 'SUM(CASE WHEN otd = \'LATE\' THEN quantity ELSE 0 END)',
+        ])
+        ->where(['period_plan' => [$last_month_period, $this_month_period]])
+        //->andWhere(['<>', 'BU', 'OTHER'])
+        ->groupBy('period_plan')
+        ->all();
+
+        $output[$last_month_period] = SernoOutput::find()->select([
+            'output' => 'SUM(output)'
+        ])
+        ->where(['id' => $last_month_period])
+        ->one();
+
+        $output[$this_month_period] = SernoOutput::find()->select([
+            'output' => 'SUM(output)'
+        ])
+        ->where(['id' => $this_month_period])
+        ->one();
+
+        $last_month_data = $this_month_data = [];
+        foreach ($tmp_sap_so as $key => $value) {
+            $total_plan = $value->total_early + $value->total_otd + $value->total_outstanding + $value->total_late;
+            $total_export = $value->total_early + $value->total_otd + $value->total_late;
+            $output_qty = $output[$value->period_plan]->output;
+            $tmp_export_pct = $tmp_output_pct = 0;
+            if ($total_plan > 0) {
+                $tmp_export_pct = round(($total_export / $total_plan) * 100);
+                $tmp_output_pct = round(($output[$value->period_plan]->output / $total_plan) * 100);
+            }
+            if ($value->period_plan == $last_month_period) {
+                $last_month_data = [
+                    'plan' => $total_plan,
+                    'export' => $total_export,
+                    'period' => date('M\' Y', strtotime($last_month_period . '01')),
+                    'export_pct' => $tmp_export_pct,
+                    'output' => $output_qty,
+                    'output_pct' => $tmp_output_pct,
+                ];
+            } elseif ($value->period_plan == $this_month_period) {
+                $this_month_data = [
+                    'plan' => $total_plan,
+                    'export' => $total_export,
+                    'period' => date('M\' Y', strtotime($this_month_period . '01')),
+                    'export_pct' => $tmp_export_pct,
+                    'output' => $output_qty,
+                    'output_pct' => $tmp_output_pct,
+                ];
+            }
+        }
+
+        return $this->render('sap-vs-flo', [
+            'last_month_data' => $last_month_data,
+            'this_month_data' => $this_month_data,
+        ]);
+    }
+
     public function actionSapSoProgress($value='')
     {
         $this->layout = 'clean';
