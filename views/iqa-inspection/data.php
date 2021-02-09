@@ -135,8 +135,27 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'Remark',
+        'attribute' => 'inspect_by_id',
+        'label' => 'Inspector ID',
         'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'inspect_by_name',
+        'label' => 'Inspector Name',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'Remark',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
@@ -148,6 +167,7 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '90px',
+        'hidden' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 60px;'
@@ -165,6 +185,7 @@ $gridColumns = [
         'attribute' => 'TAG_SLIP',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'hidden' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 70px;'
@@ -174,6 +195,7 @@ $gridColumns = [
         'attribute' => 'NO',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'hidden' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 30px;'
@@ -183,6 +205,7 @@ $gridColumns = [
         'attribute' => 'SLIP_REF',
         'hAlign' => 'center',
         'vAlign' => 'middle',
+        'hidden' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px; min-width: 100px;'

@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'S.O V.S INVOICE (SAP) <span class="japanesse light-green"></span>',
-    'tab_title' => 'S.O V.S INVOICE (SAP)',
-    'breadcrumbs_title' => 'S.O V.S INVOICE (SAP)'
+    'page_title' => 'SCM ORDER vs EXPORT <span class="japanesse light-green">(SCM受注 対出荷)</span>',
+    'tab_title' => 'SCM ORDER vs EXPORT',
+    'breadcrumbs_title' => 'SCM ORDER vs EXPORT'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -175,7 +175,7 @@ echo '</pre>';*/
             </div>
             <div class="panel-body">
                 <div class="progress-group">
-                    <span class="progress-text">SALES ORDER</span>
+                    <span class="progress-text">SCM Order (SCM<span class="japanesse">受注</span>)</span>
                     <span class="progress-number"></span>
 
                     <div class="progress">
@@ -196,7 +196,7 @@ echo '</pre>';*/
                 </div>
 
                 <div class="progress-group">
-                    <span class="progress-text">EXPORT</span>
+                    <span class="progress-text">EXPORT (<span class="japanesse">出荷</span>)</span>
                     <span class="progress-number"></span>
 
                     <div class="progress">
@@ -213,7 +213,7 @@ echo '</pre>';*/
             </div>
             <div class="panel-body">
                 <div class="progress-group">
-                    <span class="progress-text">SALES ORDER</span>
+                    <span class="progress-text">SCM Order (SCM<span class="japanesse">受注</span>)</span>
                     <span class="progress-number"></span>
 
                     <div class="progress">
@@ -234,7 +234,7 @@ echo '</pre>';*/
                 </div>
 
                 <div class="progress-group">
-                    <span class="progress-text">EXPORT</span>
+                    <span class="progress-text">EXPORT (<span class="japanesse">出荷</span>)</span>
                     <span class="progress-number"></span>
 
                     <div class="progress">
