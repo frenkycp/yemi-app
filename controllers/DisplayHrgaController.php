@@ -30,8 +30,9 @@ class DisplayHrgaController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
-        $period = date('Ym');
-        $period_text = date('F Y', strtotime($period . 01));
+        //$period = date('Ym');
+        $period = '202101';
+        $period_text = date('F Y', strtotime($period . '01'));
         $tmp_attendance = SunfishAttendanceData::find()
         ->select([
             'cost_center', 'total_ot' => 'SUM(total_ot)'

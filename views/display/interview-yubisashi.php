@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Interview Yubisashi Kosou <span class="japanesse light-green"></span>',
-    'tab_title' => 'Interview Yubisashi Kosou',
-    'breadcrumbs_title' => 'Interview Yubisashi Kosou'
+    'page_title' => 'Interview Yubisashi Koshou <span class="japanesse light-green"></span>',
+    'tab_title' => 'Interview Yubisashi Koshou',
+    'breadcrumbs_title' => 'Interview Yubisashi Koshou'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -119,7 +119,7 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 
-<div style="font-size: 24px;"><b><u>Interview Yubisashi Kosou</u></b></div>
+<div style="font-size: 24px;"><b><u>Interview Yubisashi Koshou</u></b></div>
 <br/>
 <?php $form = ActiveForm::begin([
     'method' => 'get',
