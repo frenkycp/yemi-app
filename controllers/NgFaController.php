@@ -17,6 +17,9 @@ use app\models\SkillMasterKaryawan;
 use app\models\SkillMasterKaryawanLog;
 use app\models\ProdNgDetailSerno;
 use app\models\SunfishViewEmp;
+use yii\web\UploadedFile;
+use yii\imagine\Image;
+use Imagine\Image\Box;
 
 class NgFaController extends Controller
 {
@@ -37,10 +40,11 @@ class NgFaController extends Controller
             'Emp_no', 'Full_name'
         ])
         ->where([
-            'status' => 1,
-            'Division' => 'Production'
+            'status' => 1
         ])
         ->andWhere('PATINDEX(\'YE%\', Emp_no) > 0')
+        ->andWhere('PATINDEX(\'M%\', grade_code) = 0')
+        ->andWhere('PATINDEX(\'D%\', grade_code) = 0')
         ->all(), 'Emp_no', 'nikNama');
 
         $karyawan_data_arr = ArrayHelper::map(SunfishViewEmp::find()->select([
@@ -54,17 +58,19 @@ class NgFaController extends Controller
         ->all(), 'Emp_no', 'Full_name');
 
     	$model = new \yii\base\DynamicModel([
-            'serial_number', 'repair_pic'
+            'serial_number', 'repair_pic', 'image_file'
         ]);
-        $model->addRule(['serial_number', 'repair_pic'], 'required');
+        $model->addRule(['serial_number', 'repair_pic', 'image_file'], 'required')
+        ->addRule(['image_file'], 'file');
 
         $serno_arr = $repair_pic_arr = [];
         $duplicate_serno = '';
         $bulkInsertArray = array();
-    	$columnNameArray = ['detail_id', 'loc_id', 'period', 'post_date', 'document_no', 'serial_no', 'create_date', 'last_update', 'repair_id', 'repair_name', 'user_id', 'user_name'];
+    	$columnNameArray = ['detail_id', 'loc_id', 'period', 'post_date', 'document_no', 'serial_no', 'create_date', 'last_update', 'repair_id', 'repair_name', 'user_id', 'user_name', 'img_before'];
         if ($model->load(\Yii::$app->request->post())) {
         	$tmp_serno_arr = $_POST['DynamicModel']['serial_number'];
         	$tmp_repair_arr = $_POST['DynamicModel']['repair_pic'];
+        	$tmp_img_arr = UploadedFile::getInstances($model, 'image_file');
         	foreach ($tmp_serno_arr as $key => $value) {
         		if (!in_array($value, $serno_arr)) {
         			$serno_arr[] = $value;
@@ -95,8 +101,21 @@ class NgFaController extends Controller
         				$user_name_val = $karyawan_data_arr[$user_id_val];
         			}
 
-        			$bulkInsertArray[] = [
-        				$detail_id_val, $loc_id_val, $period_val, $post_date_val, $document_no_val, $serial_no_val, $create_date_val, $last_update_val, $repair_id_val, $repair_name_val, $user_id_val, $user_name_val
+        			
+
+        			$tmp_image = $tmp_img_arr[$key];
+        			$new_filename = $detail_id_val . '_1.' . $tmp_image->extension;
+        			$filePath = \Yii::getAlias("@app/web/uploads/NG_FA/") . $new_filename;
+        			$filePathThumbnail = \Yii::getAlias("@app/web/uploads/NG_FA/thumbnail/") . $new_filename;
+	        		if ($tmp_image->saveAs($filePath)) {
+	                    Image::thumbnail($filePath, 50, 50)
+    					->save($filePathThumbnail, ['quality' => 80]);
+    					Image::getImagine()->open($filePath)->thumbnail(new Box(1920, 1080))->save($filePath , ['quality' => 90]);
+    					//Image::getImagine()->open($filePath)->save($filePath, ['quality' => 25]);
+	                }
+
+	                $bulkInsertArray[] = [
+        				$detail_id_val, $loc_id_val, $period_val, $post_date_val, $document_no_val, $serial_no_val, $create_date_val, $last_update_val, $repair_id_val, $repair_name_val, $user_id_val, $user_name_val, $new_filename
         			];
         		}
 

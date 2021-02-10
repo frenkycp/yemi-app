@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
 use kartik\typeahead\TypeaheadBasic;
+use kartik\widgets\FileInput;
 use yii\web\View;
 use yii\helpers\Url;
 
@@ -54,6 +55,7 @@ echo '</pre>';*/
 </div>
 <?php $form = ActiveForm::begin([
     'method' => 'post',
+    'options' => ['enctype' => 'multipart/form-data']
     //'layout' => 'horizontal',
     //'action' => Url::to(['add-multiple-serno']),
 ]); ?>
@@ -68,6 +70,7 @@ echo '</pre>';*/
 					<th class="text-center">No.</th>
 					<th class="text-center">Serial Number</th>
 					<th class="text-center">Repair PIC</th>
+					<th class="text-center">Image Before</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -100,6 +103,20 @@ echo '</pre>';*/
 		                            'allowClear' => true,
 		                        ],
 		                    ])->label(false); ?>
+						</td>
+						<td>
+							<?= $form->field($model, 'image_file[]')->widget(FileInput::classname(), [
+							    'options' => [
+							    	'accept' => 'image/*',
+							    	'id' => 'image_' . $i,
+							    ],
+							    'pluginOptions' => [
+							        'showPreview' => false,
+							        'showCaption' => true,
+							        'showRemove' => true,
+							        'showUpload' => false
+							    ]
+							])->label(false); ?>
 						</td>
 					</tr>
 				<?php } ?>
