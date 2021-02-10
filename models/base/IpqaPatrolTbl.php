@@ -82,12 +82,11 @@ abstract class IpqaPatrolTbl extends \yii\db\ActiveRecord
             [['status', 'flag'], 'integer'],
             [['case_no'], 'string', 'max' => 20],
             [['period'], 'string', 'max' => 7],
-            [['category', 'inspector_id', 'CC_ID', 'child', 'replied_by_id', 'closed_by_id', 'deleted_by_id'], 'string', 'max' => 10],
+            [['category', 'inspector_id', 'CC_ID', 'child', 'replied_by_id', 'closed_by_id', 'deleted_by_id', 'rank_category'], 'string', 'max' => 10],
             [['problem', 'deleted_by', 'child_desc', 'replied_by_name', 'closed_by_name', 'deleted_by_name'], 'string', 'max' => 200],
             [['inspector_name'], 'string', 'max' => 150],
             [['line_pic', 'CC_GROUP', 'CC_DESC', 'child_analyst', 'fa_line'], 'string', 'max' => 50],
-            [['filename1', 'closed_by', 'child_analyst_desc'], 'string', 'max' => 100],
-            [['rank_category'], 'string', 'max' => 1]
+            [['filename1', 'closed_by', 'child_analyst_desc'], 'string', 'max' => 100]
         ];
     }
 
