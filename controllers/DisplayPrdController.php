@@ -54,7 +54,7 @@ class DisplayPrdController extends Controller
             'total_late' => 'SUM(CASE WHEN otd = \'LATE\' THEN quantity ELSE 0 END)',
         ])
         ->where(['period_plan' => [$last_month_period, $this_month_period]])
-        //->andWhere(['<>', 'BU', 'OTHER'])
+        ->andWhere(['<>', 'BU', 'OTHER'])
         ->groupBy('period_plan')
         ->all();
 

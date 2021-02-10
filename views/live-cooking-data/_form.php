@@ -30,8 +30,9 @@ use kartik\select2\Select2;
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-6">
-                    <?= $form->field($model, 'post_date')->textInput(['readonly' => true]);
-                    /*$form->field($model, 'post_date')->widget(DatePicker::classname(), [
+                    <?= 
+                    //$form->field($model, 'post_date')->textInput(['readonly' => true]);
+                    $form->field($model, 'post_date')->widget(DatePicker::classname(), [
                         'options' => [
                             'type' => DatePicker::TYPE_INPUT,
                         ],
@@ -39,7 +40,8 @@ use kartik\select2\Select2;
                             'autoclose'=>true,
                             'format' => 'yyyy-mm-dd'
                         ]
-                    ]);*/ ?>
+                    ]);
+                    ?>
                 </div>
                 <div class="col-md-6">
                     <?= $form->field($model, 'cc')->dropDownList(ArrayHelper::map(app\models\LiveCookingList::find()->orderBy('cc_desc')->all(), 'cc', 'cc_desc'), [
