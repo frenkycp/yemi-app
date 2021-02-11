@@ -622,7 +622,7 @@ $this->registerCss("
                                     <?= Html::a('Daily Shipping Completion Time <span class="japanesse-word"></span>', ['/display/last-shipping-daily']); ?>
                                 </li>
                                 <li>
-                                    <?= Html::a('Shipping Order <span class="japanesse-word"></span>', ['/display-log/shipping-order']); ?>
+                                    <?= Html::a('Shipping Order <span class="japanesse-word"></span>', ['/display-log/shipping-order-new']); ?>
                                 </li>
                             </ol>
                         </div>
