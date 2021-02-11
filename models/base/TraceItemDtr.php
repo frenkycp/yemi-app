@@ -32,6 +32,12 @@ use Yii;
  * @property string $LAST_UPDATE
  * @property string $AVAILABLE
  * @property string $CATEGORY
+ * @property string $LOC
+ * @property string $LOC_DESC
+ * @property string $POST_DATE
+ * @property string $PERIOD
+ * @property string $ID_STOK
+ * @property integer $SCRAP_REQUEST_STATUS
  * @property string $aliasModel
  */
 abstract class TraceItemDtr extends \yii\db\ActiveRecord
@@ -62,15 +68,16 @@ abstract class TraceItemDtr extends \yii\db\ActiveRecord
     {
         return [
             [['SERIAL_NO'], 'required'],
-            [['RECEIVED_DATE', 'MANUFACTURED_DATE', 'EXPIRED_DATE', 'LAST_UPDATE'], 'safe'],
-            [['EXPIRED_REVISION_NO'], 'integer'],
+            [['RECEIVED_DATE', 'MANUFACTURED_DATE', 'EXPIRED_DATE', 'LAST_UPDATE', 'POST_DATE'], 'safe'],
+            [['EXPIRED_REVISION_NO', 'SCRAP_REQUEST_STATUS'], 'integer'],
             [['LIFE_TIME', 'ISI_DALAM_KEMASAN', 'NILAI_INVENTORY', 'STD_PRICE', 'STD_AMT'], 'number'],
-            [['SERIAL_NO', 'SUPPLIER', 'LOT_NO', 'SURAT_JALAN', 'BENTUK_KEMASAN', 'USER_DESC', 'CATEGORY'], 'string', 'max' => 50],
+            [['SERIAL_NO', 'SUPPLIER', 'LOT_NO', 'SURAT_JALAN', 'BENTUK_KEMASAN', 'USER_DESC', 'CATEGORY', 'LOC_DESC', 'ID_STOK'], 'string', 'max' => 50],
             [['ITEM'], 'string', 'max' => 13],
             [['ITEM_DESC', 'SUPPLIER_DESC'], 'string', 'max' => 100],
             [['UM'], 'string', 'max' => 5],
-            [['USER_ID'], 'string', 'max' => 10],
+            [['USER_ID', 'LOC'], 'string', 'max' => 10],
             [['AVAILABLE'], 'string', 'max' => 1],
+            [['PERIOD'], 'string', 'max' => 6],
             [['SERIAL_NO'], 'unique']
         ];
     }
@@ -104,6 +111,12 @@ abstract class TraceItemDtr extends \yii\db\ActiveRecord
             'LAST_UPDATE' => 'Last Update',
             'AVAILABLE' => 'Available',
             'CATEGORY' => 'Category',
+            'LOC' => 'Loc',
+            'LOC_DESC' => 'Loc Desc',
+            'POST_DATE' => 'Post Date',
+            'PERIOD' => 'Period',
+            'ID_STOK' => 'Id Stok',
+            'SCRAP_REQUEST_STATUS' => 'Scrap Request Status',
         ];
     }
 

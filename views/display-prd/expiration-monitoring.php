@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
+use app\models\TraceItemScrap;
 
 $this->title = [
     'page_title' => 'Expired Monitoring <span class="japanesse light-green"></span>',
@@ -303,8 +304,19 @@ echo '</pre>';*/
     </thead>
     <tbody>
         <?php foreach ($tmp_trace_arr as $key => $value):
+            $action_scrap = '<span class="glyphicon glyphicon-trash disabled-link"></span>';
             if (strtotime(date('Y-m-d')) >= strtotime($value->EXPIRED_DATE)) {
                 $text_class = 'bg-red';
+                $tmp_scrap = TraceItemScrap::find()->where(['SERIAL_NO' => $value->SERIAL_NO])->one();
+
+                if ($tmp_scrap) {
+                    $action_scrap = '<span class="glyphicon glyphicon-trash disabled-link" title="Scrap request has been made..."></span>';
+                } else {
+                    $action_scrap = Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/scrap-request/create-request', 'SERIAL_NO' => $value->SERIAL_NO], [
+                        //'data-confirm' => 'Do you want to scrap this item ?'
+                    ]);
+                }
+                
             } elseif (strtotime(date('Y-m-d')) > strtotime($value->EXPIRED_DATE . ' -1 month')) {
                 $text_class = 'bg-yellow';
             } else {
@@ -325,7 +337,7 @@ echo '</pre>';*/
                     } else {
                         echo Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, $options);
                     }
-                    
+                    //echo ' ' . $action_scrap;
                     ?>
                 </td>
                 <td class="text-center"><?= $value->CATEGORY; ?></td>
