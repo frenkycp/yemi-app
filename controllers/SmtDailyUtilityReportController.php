@@ -483,7 +483,7 @@ class SmtDailyUtilityReportController extends Controller
 	    	<th class="text-center">Operating Loss</th>
 	    	<th class="text-center">Working Time<br/>(G)</th>
 	    	<th class="text-center">Operation Ratio(%)<br/>((G-E-F) / 1440)</th>
-	    	<th class="text-center">Working Ratio(%)<br/>(C / (D-E-F))</th>
+	    	<th class="text-center">Working Ratio(%)<br/>(C / (G-E-F))</th>
 	    </tr>';
 
 	    $utility_data_arr = WipEffNew03::find()
