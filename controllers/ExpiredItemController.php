@@ -65,7 +65,7 @@ class ExpiredItemController extends \app\controllers\base\ExpiredItemController
 					return json_encode($item->errors);
 				}
 				$this->sendScrapRequestEmail($model->SERIAL_NO);
-				return $this->redirect(Url::previous());
+				return $this->redirect(['/scrap-request']);
 
 			} elseif (!\Yii::$app->request->isPost) {
 				$model->load($_GET);

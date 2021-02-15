@@ -4202,6 +4202,10 @@ class DisplayController extends Controller
         $period_arr = [];
         foreach ($tmp_fiscal_period as $key => $value) {
             $period_arr[] = $value->PERIOD;
+            $plan_qty_period[$value->PERIOD] = 0;
+            $actual_qty_period[$value->PERIOD] = 0;
+            $plan_amt_period[$value->PERIOD] = 0;
+            $actual_amt_period[$value->PERIOD] = 0;
         }
 
         $tmp_work_day = ArrayHelper::map(WorkingDaysView::find()
@@ -4262,7 +4266,7 @@ class DisplayController extends Controller
             }
         }
 
-        $tmp_data_arr = $tmp_bu_line = $plan_qty_period = $actual_qty_period = $plan_amt_period = $actual_amt_period = [];
+        $tmp_data_arr = $tmp_bu_line = [];
         foreach ($tmp_ijazah_arr as $key => $value) {
             $pct_qty = 0;
             $period = $value->PERIOD;

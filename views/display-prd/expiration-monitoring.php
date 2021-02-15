@@ -312,7 +312,7 @@ echo '</pre>';*/
                 if ($tmp_scrap) {
                     $action_scrap = '<span class="glyphicon glyphicon-trash disabled-link" title="Scrap request has been made..."></span>';
                 } else {
-                    $action_scrap = Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/scrap-request/create-request', 'SERIAL_NO' => $value->SERIAL_NO], [
+                    $action_scrap = Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/expired-item/scrap', 'SERIAL_NO' => $value->SERIAL_NO], [
                         //'data-confirm' => 'Do you want to scrap this item ?'
                     ]);
                 }
@@ -337,7 +337,7 @@ echo '</pre>';*/
                     } else {
                         echo Html::a('<span class="glyphicon glyphicon-list-alt"></span>', $url, $options);
                     }
-                    //echo ' ' . $action_scrap;
+                    echo ' ' . $action_scrap;
                     ?>
                 </td>
                 <td class="text-center"><?= $value->CATEGORY; ?></td>
