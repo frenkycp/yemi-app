@@ -260,6 +260,7 @@ echo '</pre>';*/
                 ]); ?>
             </div>
         </div>
+        <br/>
     </div>
     <div class="col-sm-9">
         <div class="panel panel-primary">
@@ -279,7 +280,7 @@ echo '</pre>';*/
                                 'fontFamily' => 'sans-serif',
                             ],
                             'zoomType' => 'x',
-                            'height' => 508
+                            'height' => 612
                         ],
                         'title' => [
                             'text' => 'Shipping Booking Management List'
