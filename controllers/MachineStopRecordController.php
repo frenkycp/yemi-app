@@ -131,8 +131,12 @@ class MachineStopRecordController extends \app\controllers\base\MachineStopRecor
 		}
 
 		if ($model->load($_POST)) {
+			$model->PERIOD = date('Ym', strtotime($model->START_TIME));
+			$model->POST_DATE = date('Y-m-d', strtotime($model->START_TIME));
 			if ($model->END_TIME != null) {
 				$model->TOTAL_DOWNTIME = strtotime($model->END_TIME) - strtotime($model->START_TIME);
+			} else {
+				$model->TOTAL_DOWNTIME = 0;
 			}
 			if ($model->save()) {
 				return $this->redirect(Url::previous());
