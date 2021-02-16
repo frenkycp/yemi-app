@@ -441,6 +441,11 @@ return [
         'KD to YMIN' => 'KD to YMIN',
         'KD to YMMJ' => 'KD to YMMJ',
     ],
+    'interview_yubisashi_value_arr' => [
+        0 => 'Χ',
+        1 => 'Δ',
+        2 => 'Ο'
+    ],
 ];
 
 function getYearArray()

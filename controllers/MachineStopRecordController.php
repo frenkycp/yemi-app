@@ -83,10 +83,15 @@ class MachineStopRecordController extends \app\controllers\base\MachineStopRecor
 		date_default_timezone_set('Asia/Jakarta');
 
 		$model = $this->findModel($ID);
-		$model->END_TIME = date('Y-m-d H:i');
+		//$model->END_TIME = date('Y-m-d H:i');
 
 		if ($model->load($_POST)) {
-
+			if ($model->END_TIME == null || $model->END_TIME == '') {
+				\Yii::$app->session->setFlash("danger", "Please fill the correct end time...!");
+				return $this->render('end-time', [
+					'model' => $model
+				]);
+			}
 			$nik = \Yii::$app->user->identity->username;
 			$tmp_user = Karyawan::find()->where([
 				'OR',
@@ -114,5 +119,31 @@ class MachineStopRecordController extends \app\controllers\base\MachineStopRecor
 		return $this->render('end-time', [
 			'model' => $model
 		]);
+	}
+
+	public function actionUpdate($ID)
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$model = $this->findModel($ID);
+		$model->START_TIME = date('Y-m-d H:i', strtotime($model->START_TIME));
+		if ($model->END_TIME != null) {
+			$model->END_TIME = date('Y-m-d H:i', strtotime($model->END_TIME));
+		}
+
+		if ($model->load($_POST)) {
+			if ($model->END_TIME != null) {
+				$model->TOTAL_DOWNTIME = strtotime($model->END_TIME) - strtotime($model->START_TIME);
+			}
+			if ($model->save()) {
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($model->errors);
+			}
+			
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+			]);
+		}
 	}
 }
