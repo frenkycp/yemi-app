@@ -43,21 +43,21 @@ $this->registerCss("
     }
     .info-box-icon {
         font-size: 180px;
-        height: 250px;
-        width: 250px;
-        line-height: 270px;
+        height: 220px;
+        width: 220px;
+        line-height: 220px;
     }
     .info-box-content {
-        line-height: 250px;
-        margin-left: 250px;
-        height: 250px;
+        line-height: 220px;
+        margin-left: 220px;
+        height: 220px;
         background-color: rgba(0, 0, 0, 0.9);
     }
     .info-box-text {
         font-size: 120px;
         //text-align: center;
         line-height: unset;
-        letter-spacing: 10px;
+        letter-spacing: 5px;
         padding-left: 30px;
     }
     .info-box-number {
@@ -87,9 +87,11 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($db_arr);
 echo '</pre>';*/
 ?>
-<div class="row">
-    <div class="col-md-12 text-center">
-        <span class="" style="color: white; font-size: 10em; letter-spacing: 10px;">BACKUP</span>
+<div class="row" style="margin: 0px 10px; font-weight: bold;">
+    <div class="panel panel-default" style="background-color: #61258e;">
+        <div class="panel-body text-center">
+            <span class="" style="color: white; font-size: 10em; letter-spacing: 10px;">BACKUP</span>
+        </div>
     </div>
 </div>
 <div class="row" style="padding: 10px;">

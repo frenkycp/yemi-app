@@ -85,7 +85,7 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 <div class="row" style="padding: 0px 20px;">
-    <div class="col-md-12 text-center" style="background-color: rgba(255, 255, 255, 0.05); border: 2px solid grey; border-radius: 20px 20px 0px 0px;">
+    <div class="col-md-12 text-center" style="background-color: #61258e; border: 2px solid grey; border-radius: 20px 20px 0px 0px;">
         <span style="font-size: 18em; color: white;">
             <?= $title; ?>
         </span>

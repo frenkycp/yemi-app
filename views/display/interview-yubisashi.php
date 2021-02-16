@@ -101,15 +101,7 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 function getIcon($val){
-    if ($val == 0) {
-        return '&Chi;';
-    } elseif ($val == 1) {
-        return '&Delta;';
-    } elseif ($val == 2) {
-        return '&Omicron;';
-    } else {
-        return '';
-    }
+    return \Yii::$app->params['interview_yubisashi_value_arr'][$val];
 }
 
 /*echo '<pre>';
