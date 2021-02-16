@@ -402,14 +402,14 @@ class DisplayPrdController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $today = date('Y-m-d');
+        $today = date('Y-m-d', strtotime('-1 day'));
 
         $model = new \yii\base\DynamicModel([
             'from_date', 'to_date', 'item'
         ]);
         $model->addRule(['from_date', 'to_date', 'item'], 'required');
 
-        $model->from_date = date('Y-m-d', strtotime(' -1 month'));
+        $model->from_date = date('Y-m-d', strtotime($today . ' -1 month'));
         $model->to_date = $today;
 
         $item_arr = ArrayHelper::map(TraceItemDtr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->groupBy('ITEM, ITEM_DESC')->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
