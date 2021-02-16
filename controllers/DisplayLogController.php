@@ -120,6 +120,7 @@ class DisplayLogController extends Controller
             'ETD',
             'TOTAL_CONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_UNCONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_ON_BOARD' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ON_BOARD_STATUS = 1 THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
         ])
         ->where([
             'PERIOD' => $model->period,
@@ -128,49 +129,67 @@ class DisplayLogController extends Controller
         ->orderBy('ETD')
         ->all();
 
-        $tmp_confirm = $tmp_unconfirm = $tmp_rejected = [];
-        $total_plan = $total_confirm = $total_reject = $total_unconfirm = 0;
+        $tmp_confirm = $tmp_unconfirm = $tmp_rejected = $tmp_on_board = [];
+        $total_plan = $total_confirm = $total_reject = $total_unconfirm = $total_etd_yemi = $total_on_board = 0;
         foreach ($tmp_shipping_order as $order_value) {
             $post_date = (strtotime($order_value->ETD . " +7 hours") * 1000);
+
             $tmp_confirm[] = [
                 'x' => $post_date,
-                'y' => $order_value->TOTAL_CONFIRMED == 0 ? null : (int)$order_value->TOTAL_CONFIRMED,
-                
+                'y' => (int)$order_value->TOTAL_CONFIRMED == 0 ? null : (int)$order_value->TOTAL_CONFIRMED,
             ];
+
             $tmp_unconfirm[] = [
                 'x' => $post_date,
-                'y' => $order_value->TOTAL_UNCONFIRMED == 0 ? null : (int)$order_value->TOTAL_UNCONFIRMED,
-                
+                'y' => (int)$order_value->TOTAL_UNCONFIRMED == 0 ? null : (int)$order_value->TOTAL_UNCONFIRMED,
             ];
+
             $tmp_rejected[] = [
                 'x' => $post_date,
                 'y' => null,
-                
+            ];
+
+            $tmp_on_board[] = [
+                'x' => $post_date,
+                'y' => (int)$order_value->TOTAL_ON_BOARD/* == 0 ? null : (int)$order_value->TOTAL_ON_BOARD*/,
             ];
 
             $total_confirm += $order_value->TOTAL_CONFIRMED;
             $total_unconfirm += $order_value->TOTAL_UNCONFIRMED;
+            $total_on_board += $order_value->TOTAL_ON_BOARD;
+
+            if ($order_value->ETD <= date('Y-m-d')) {
+                $total_etd_yemi += $order_value->TOTAL_CONFIRMED;
+            }
         }
 
         $total_plan = $total_confirm + $total_unconfirm;
 
         $data = [
-            [
+            /*[
                 'name' => 'REJECTED',
                 'data' => $tmp_rejected,
                 'color' => '#001F3F',
-            ],
+                'stack' => 'etd_yemi'
+            ],*/
             [
                 'name' => 'NOT CONFIRMED',
                 'data' => $tmp_unconfirm,
                 'color' => '#dd4b39',
+                'stack' => 'etd_yemi'
             ],
             [
                 'name' => 'CONFIRMED',
                 'data' => $tmp_confirm,
                 'color' => '#00a65a',
+                'stack' => 'etd_yemi'
             ],
-            
+            [
+                'name' => 'ETD PORT',
+                'data' => $tmp_on_board,
+                'color' => '#ff851b',
+                'stack' => 'etd_port'
+            ],
         ];
 
         $order_by_pod = ShippingOrderNew01::find()
@@ -196,6 +215,8 @@ class DisplayLogController extends Controller
             $pct_arr['confirm'] = round(($total_confirm / $total_plan) * 100, 2);
             $pct_arr['reject'] = round(($total_reject / $total_plan) * 100, 2);
             $pct_arr['unconfirm'] = round(($total_unconfirm / $total_plan) * 100, 2);
+            $pct_arr['etd_yemi'] = round(($total_etd_yemi / $total_confirm) * 100, 2);
+            $pct_arr['etd_port'] = round(($total_on_board / $total_confirm) * 100, 2);
         }
 
         return $this->render('shipping-order-new', [
@@ -207,6 +228,8 @@ class DisplayLogController extends Controller
             'total_confirm' => $total_confirm,
             'total_unconfirm' => $total_unconfirm,
             'total_reject' => $total_reject,
+            'total_etd_yemi' => $total_etd_yemi,
+            'total_on_board' => $total_on_board,
             'pct_arr' => $pct_arr,
             'order_by_pod' => $order_by_pod,
         ]);

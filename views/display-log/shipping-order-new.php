@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Shipping Booking Mangagement List <span class="japanesse light-green"></span>',
-    'tab_title' => 'Shipping Booking Mangagement List',
-    'breadcrumbs_title' => 'Shipping Booking Mangagement List'
+    'page_title' => 'Shipping Booking Management List <span class="japanesse light-green"></span>',
+    'tab_title' => 'Shipping Booking Management List',
+    'breadcrumbs_title' => 'Shipping Booking Management List'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -171,7 +171,7 @@ echo '</pre>';*/
         <div class="row">
             <div class="col-sm-12">
                 <div class="info-box">
-                    <span class="info-box-icon bg-aqua"><i class="fa fa-ship"></i></span>
+                    <span class="info-box-icon bg-aqua"><i class="fa fa-calendar"></i></span>
 
                     <div class="info-box-content">
                         <span class="info-box-text">PLAN</span>
@@ -197,6 +197,34 @@ echo '</pre>';*/
         </div>
 
         <div class="row">
+            <div class="col-sm-12">
+                <div class="info-box">
+                    <span class="info-box-icon"><i class="fa fa-truck"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">ETD YEMI</span>
+                        <span class="info-box-number"><?= number_format($total_etd_yemi); ?> <span style="font-size: 0.6em;">(<?= $pct_arr['etd_yemi']; ?>%)</span></span>
+                    </div>
+                <!-- /.info-box-content -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-orange"><i class="fa fa-ship"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">ETD PORT</span>
+                        <span class="info-box-number"><?= number_format($total_on_board); ?> <span style="font-size: 0.6em;">(<?= $pct_arr['etd_port']; ?>%)</span></span>
+                    </div>
+                <!-- /.info-box-content -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row" style="display: none;">
             <div class="col-sm-12">
                 <div class="info-box">
                     <span class="info-box-icon bg-navy"><i class="fa fa-warning"></i></span>
@@ -254,7 +282,7 @@ echo '</pre>';*/
                             'height' => 508
                         ],
                         'title' => [
-                            'text' => 'Shipping Booking Mangagement List'
+                            'text' => 'Shipping Booking Management List'
                         ],
                         'subtitle' => [
                             'text' => $period_name

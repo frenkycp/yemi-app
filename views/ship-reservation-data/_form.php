@@ -101,7 +101,7 @@ $total_reservation = ShipReservationHdr::find()
                             'todayHighlight' => true,
                             'todayBtn' => true,
                         ],
-                        'pluginEvents' => [
+                        /*'pluginEvents' => [
                             'changeDate' => 'function(e){
                                 var tmp_etd_sub = $("#etd-sub").val();
                                 var etd_sub_date = new Date(tmp_etd_sub);
@@ -111,7 +111,7 @@ $total_reservation = ShipReservationHdr::find()
                                 $("#etd-sub-period").val(tmp_period);
                                 $("#etd-sub-period").trigger("change");
                             }',
-                        ],
+                        ],*/
                     ]); ?>
                 </div>
                 <div class="col-sm-3">
