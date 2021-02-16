@@ -28,7 +28,7 @@ class ShipReservationDtr extends BaseShipReservationDtr
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['POD', 'CARRIER', 'ETD_SUB', 'ETD', 'PERIOD'], 'required'],
+                [['POD', 'CARRIER', 'ETD', 'PERIOD'], 'required'],
             ]
         );
     }

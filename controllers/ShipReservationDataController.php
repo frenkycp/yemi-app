@@ -140,8 +140,8 @@ class ShipReservationDataController extends \app\controllers\base\ShipReservatio
 		$model = new ShipReservationDtr;
 		date_default_timezone_set('Asia/Jakarta');
 		$this_time = date('Y-m-d H:i:s');
-		$model->ETD_SUB = date('Y-m-t');
-		$model->PERIOD = date('Ym', strtotime($model->ETD_SUB));
+		//$model->ETD_SUB = date('Y-m-t');
+		$model->PERIOD = date('Ym', strtotime(date('Y-m-d')));
 
 		if ($HDR_ID == '') {
 			$total_ycj_ref_no = ShipReservationHdr::find()->count();
