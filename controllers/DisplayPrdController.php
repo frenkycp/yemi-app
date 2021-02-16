@@ -398,6 +398,59 @@ class DisplayPrdController extends Controller
         ]);
     }
 
+    public function actionItemCurrentStock($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $tmp_dtr = TraceItemDtr::find()
+        ->select([
+            'ITEM', 'ITEM_DESC', 'UM', 'NILAI_INVENTORY' => 'SUM(NILAI_INVENTORY)'
+        ])
+        ->groupBy('ITEM, ITEM_DESC, UM')
+        ->all();
+
+        $tmp_name_arr = $item_arr = $tmp_data = $tmp_sort = [];
+        foreach ($tmp_dtr as $key => $value) {
+            $tmp_name_arr[$value->ITEM] = $value->ITEM_DESC;
+            $tmp_data[$value->ITEM]['actual'] = $value->NILAI_INVENTORY;
+            $tmp_data[$value->ITEM]['item_name'] = $value->ITEM_DESC;
+            $tmp_data[$value->ITEM]['um'] = $value->UM;
+            $item_arr[] = $value->ITEM;
+        }
+
+        $tmp_sap_current_stock = SapGrGiByPlant::find()->where([
+            'plant' => '8250',
+            'material' => $item_arr
+        ])->all();
+
+        foreach ($tmp_data as $key => $value) {
+            $tmp_sap_qty = 0;
+            foreach ($tmp_sap_current_stock as $sap_val) {
+                if ($sap_val->material == $key) {
+                    $tmp_sap_qty = $sap_val->ending_balance;
+                }
+            }
+            $tmp_diff = $value['actual'] - $tmp_sap_qty;
+            $tmp_data[$key]['sap'] = $tmp_sap_qty;
+            $tmp_data[$key]['diff'] = $tmp_diff;
+            $tmp_sort[$key] = $tmp_diff;
+        }
+
+        if (count($tmp_sort) > 0) {
+            asort($tmp_sort);
+        }
+
+        $data = [];
+        foreach ($tmp_sort as $key => $value) {
+            $data[$key] = $tmp_data[$key];
+        }
+
+        return $this->render('item-current-stock', [
+            'data' => $data,
+        ]);
+    }
+
     public function actionStockMonitoring($value='')
     {
         $this->layout = 'clean';
