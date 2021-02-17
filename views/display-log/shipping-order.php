@@ -150,7 +150,7 @@ $this->registerJs($script, View::POS_HEAD );
         <div class="col-sm-4">
             <div class="panel panel-success text-center">
                 <div class="panel-heading">
-                    <h3 class="panel-title">PLAN</h3>
+                    <h3 class="panel-title">PLAN (PCS)</h3>
                 </div>
                 <div class="panel-body no-padding">
                     <span class="total-container"><?= $data['total_plan']; ?></span> <span class="total-pct">(100%)</span>
@@ -160,7 +160,7 @@ $this->registerJs($script, View::POS_HEAD );
         <div class="col-sm-4">
             <div class="panel panel-success text-center">
                 <div class="panel-heading">
-                    <h3 class="panel-title">CONFIRMED</h3>
+                    <h3 class="panel-title">CONFIRMED (PCS)</h3>
                 </div>
                 <div class="panel-body no-padding" style="">
                     <span class="total-container"><?= $data['total_confirm']; ?></span> <span class="total-pct">(<?= $data['confirm_pct']; ?>%)</span>
@@ -172,7 +172,7 @@ $this->registerJs($script, View::POS_HEAD );
         <div class="col-sm-4">
             <div class="panel panel-success text-center">
                 <div class="panel-heading">
-                    <h3 class="panel-title">NOT CONFIRMED</h3>
+                    <h3 class="panel-title">NOT CONFIRMED (PCS)</h3>
                 </div>
                 <div class="panel-body no-padding">
                     <span class="total-container"><?= $data['total_not_confirm']; ?></span> <span class="total-pct">(<?= $data['not_confirm_pct']; ?>%)</span>
@@ -218,9 +218,9 @@ $this->registerJs($script, View::POS_HEAD );
         <thead>
             <tr>
                 <th class="text-center">DESTINATION</th>
-                <th class="text-center" style="width: 20%;">PLAN</th>
-                <th class="text-center" style="width: 20%;">CONFIRMED</th>
-                <th class="text-center" style="width: 20%;">NOT CONFIRMED</th>
+                <th class="text-center" style="width: 20%;">PLAN (PCS)</th>
+                <th class="text-center" style="width: 20%;">CONFIRMED (PCS)</th>
+                <th class="text-center" style="width: 20%;">NOT CONFIRMED (PCS)</th>
             </tr>
         </thead>
         <tbody>

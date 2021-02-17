@@ -174,7 +174,7 @@ echo '</pre>';*/
                     <span class="info-box-icon bg-aqua"><i class="fa fa-calendar"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">PLAN</span>
+                        <span class="info-box-text">PLAN (PCS)</span>
                         <span class="info-box-number"><?= number_format($total_plan); ?></span>
                     </div>
                 <!-- /.info-box-content -->
@@ -188,7 +188,7 @@ echo '</pre>';*/
                     <span class="info-box-icon bg-green"><i class="fa fa-check-square-o"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">CONFIRMED</span>
+                        <span class="info-box-text">CONFIRMED (PCS)</span>
                         <span class="info-box-number"><?= number_format($total_confirm); ?> <span style="font-size: 0.6em;">(<?= $pct_arr['confirm']; ?>%)</span></span>
                     </div>
                 <!-- /.info-box-content -->
@@ -202,7 +202,7 @@ echo '</pre>';*/
                     <span class="info-box-icon"><i class="fa fa-truck"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">ETD YEMI</span>
+                        <span class="info-box-text">ETD YEMI (PCS)</span>
                         <span class="info-box-number"><?= number_format($total_etd_yemi); ?> <span style="font-size: 0.6em;">(<?= $pct_arr['etd_yemi']; ?>%)</span></span>
                     </div>
                 <!-- /.info-box-content -->
@@ -216,7 +216,7 @@ echo '</pre>';*/
                     <span class="info-box-icon bg-orange"><i class="fa fa-ship"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">ETD PORT</span>
+                        <span class="info-box-text">ETD PORT (PCS)</span>
                         <span class="info-box-number"><?= number_format($total_on_board); ?> <span style="font-size: 0.6em;">(<?= $pct_arr['etd_port']; ?>%)</span></span>
                     </div>
                 <!-- /.info-box-content -->
@@ -244,7 +244,7 @@ echo '</pre>';*/
                     <span class="info-box-icon bg-red"><i class="fa fa-close"></i></span>
 
                     <div class="info-box-content">
-                        <span class="info-box-text">NOT CONFIRMED</span>
+                        <span class="info-box-text">NOT CONFIRMED (PCS)</span>
                         <span class="info-box-number"><?= number_format($total_unconfirm); ?> <span style="font-size: 0.6em;">(<?= $pct_arr['unconfirm']; ?>%)</span></span>
                     </div>
                 <!-- /.info-box-content -->
@@ -330,10 +330,10 @@ echo '</pre>';*/
             <thead>
                 <tr>
                     <th class="text-center">DESTINATION</th>
-                    <th class="text-center" width="18%">PLAN</th>
-                    <th class="text-center" width="18%">CONFIRMED</th>
-                    <th class="text-center" width="18%">REJECTED</th>
-                    <th class="text-center" width="18%">NOT CONFIRMED</th>
+                    <th class="text-center" width="18%">PLAN (PCS)</th>
+                    <th class="text-center" width="18%">CONFIRMED (PCS)</th>
+                    <th class="text-center" width="18%">REJECTED (PCS)</th>
+                    <th class="text-center" width="18%">NOT CONFIRMED (PCS)</th>
                 </tr>
             </thead>
             <tbody>
