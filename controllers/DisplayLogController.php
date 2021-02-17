@@ -288,10 +288,12 @@ class DisplayLogController extends Controller
             ];
         }
 
-        $total_ship_out = ShippingOrderNew01::find()
+        $total_etd_yemi = ShippingOrderNew01::find()
         ->select([
-            'TOTAL_SHIP_OUT' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
-            'TOTAL_SHIP_OUT_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)'
+            'TOTAL_ETD_YEMI' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_ETD_YEMI_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_ETD_SUB' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ON_BOARD_STATUS = 1 THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_ETD_SUB_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ON_BOARD_STATUS = 1 THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
         ])
         ->where([
             'PERIOD' => $model->period,
@@ -314,18 +316,16 @@ class DisplayLogController extends Controller
         }
         
         if ($total_confirm > 0) {
-            $ship_out_pct = round($total_ship_out->TOTAL_SHIP_OUT / $total_confirm * 100);
+            $ship_out_pct = round($total_etd_yemi->TOTAL_ETD_YEMI / $total_confirm * 100);
         }
 
         if ($total_confirm_teu > 0) {
-            $ship_out_pct_teu = round($total_ship_out->TOTAL_SHIP_OUT_TEU / $total_confirm_teu * 100);
+            $ship_out_pct_teu = round($total_etd_yemi->TOTAL_ETD_YEMI_TEU / $total_confirm_teu * 100);
         }
 
         $data = [
             'total_plan' => $total_plan,
             'total_plan_teu' => $total_plan_teu,
-            'total_ship_out' => $total_ship_out->TOTAL_SHIP_OUT,
-            'total_ship_out_teu' => $total_ship_out->TOTAL_SHIP_OUT_TEU,
             'total_confirm' => $total_confirm,
             'total_confirm_teu' => $total_confirm_teu,
             'total_not_confirm' => $total_not_confirm,
@@ -334,6 +334,14 @@ class DisplayLogController extends Controller
             'confirm_pct_teu' => $confirm_pct_teu,
             'not_confirm_pct' => $not_confirm_pct,
             'not_confirm_pct_teu' => $not_confirm_pct_teu,
+            'total_etd_yemi' => $total_etd_yemi->TOTAL_ETD_YEMI,
+            'total_etd_yemi_teu' => $total_etd_yemi->TOTAL_ETD_YEMI_TEU,
+            'total_etd_sub' => $total_etd_yemi->TOTAL_ETD_SUB,
+            'total_etd_sub_teu' => $total_etd_yemi->TOTAL_ETD_SUB_TEU,
+            'total_at_port' => $total_etd_yemi->TOTAL_ETD_YEMI - $total_etd_yemi->TOTAL_ETD_SUB,
+            'total_at_port_teu' => $total_etd_yemi->TOTAL_ETD_YEMI_TEU - $total_etd_yemi->TOTAL_ETD_SUB_TEU,
+            'not_yet_stuffing' => $total_confirm - $total_etd_yemi->TOTAL_ETD_YEMI,
+            'not_yet_stuffing_teu' => $total_confirm_teu - $total_etd_yemi->TOTAL_ETD_YEMI_TEU,
             'ship_out_pct' => $ship_out_pct,
             'ship_out_pct_teu' => $ship_out_pct_teu,
         ];

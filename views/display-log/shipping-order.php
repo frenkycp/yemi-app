@@ -134,7 +134,7 @@ $this->registerJs($script, View::POS_HEAD );
     //'layout' => 'horizontal',
     'action' => Url::to(['shipping-order']),
 ]); ?>
-<div style="margin: auto; width: 900px; padding-top: 20px;" id="display-container">
+<div style="margin: auto; width: 1200px; padding-top: 20px;" id="display-container">
     
     <div class="row">
         <div class="col-sm-10">
@@ -146,7 +146,40 @@ $this->registerJs($script, View::POS_HEAD );
             <?= $form->field($model, 'period')->textInput()->label(false); ?>
         </div>
     </div>
-    <div class="row">
+    <table class="table summary-tbl">
+        <thead>
+            <tr>
+                <th class="">Subject 件名</th>
+                <th class="text-center">PLAN 計画</th>
+                <th class="text-center">ETD SUB 出荷</th>
+                <th class="text-center">At Port 港</th>
+                <th class="text-center">Not yet Stuffing<br/>未スタッフィング</th>
+                <th class="text-center">CONFIRMED 確保済み</th>
+                <th class="text-center">NOT CONFIRMED 未確保</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="">TEU</td>
+                <td class="text-center"><?= $data['total_plan_teu']; ?></td>
+                <td class="text-center"><?= $data['total_etd_sub_teu']; ?></td>
+                <td class="text-center"><?= $data['total_at_port_teu']; ?></td>
+                <td class="text-center"><?= $data['not_yet_stuffing_teu']; ?></td>
+                <td class="text-center"><?= $data['total_confirm_teu']; ?></td>
+                <td class="text-center"><?= $data['total_not_confirm_teu']; ?></td>
+            </tr>
+            <tr>
+                <td class="">ORDINARY CONTAINER<br/>通常のコンテナ</td>
+                <td class="text-center"><?= $data['total_plan']; ?></td>
+                <td class="text-center"><?= $data['total_etd_sub']; ?></td>
+                <td class="text-center"><?= $data['total_at_port']; ?></td>
+                <td class="text-center"><?= $data['not_yet_stuffing']; ?></td>
+                <td class="text-center"><?= $data['total_confirm']; ?></td>
+                <td class="text-center"><?= $data['total_not_confirm']; ?></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="row" style="display: none;">
         <div class="col-sm-4">
             <div class="panel panel-success text-center">
                 <div class="panel-heading">
@@ -165,7 +198,7 @@ $this->registerJs($script, View::POS_HEAD );
                 <div class="panel-body no-padding" style="">
                     <span class="total-container"><?= $data['total_confirm']; ?></span> <span class="total-pct">(<?= $data['confirm_pct']; ?>%)</span>
                     <hr style="margin: 5px 10px;">
-                    <span>SHIP OUT : <b><?= $data['total_ship_out']; ?></b> <i>(<?= $data['ship_out_pct']; ?>%)</i></span>
+                    <span>SHIP OUT : <b><?= $data['total_etd_yemi']; ?></b> <i>(<?= $data['ship_out_pct']; ?>%)</i></span>
                 </div>
             </div>
         </div>
@@ -180,7 +213,7 @@ $this->registerJs($script, View::POS_HEAD );
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="display: none;">
         <div class="col-sm-4">
             <div class="panel panel-info text-center">
                 <div class="panel-heading">
@@ -199,7 +232,7 @@ $this->registerJs($script, View::POS_HEAD );
                 <div class="panel-body no-padding" style="">
                     <span class="total-container"><?= $data['total_confirm_teu']; ?></span> <span class="total-pct">(<?= $data['confirm_pct_teu']; ?>%)</span>
                     <hr style="margin: 5px 10px;">
-                    <span>SHIP OUT : <b><?= $data['total_ship_out_teu']; ?></b> <i>(<?= $data['ship_out_pct_teu']; ?>%)</i></span>
+                    <span>SHIP OUT : <b><?= $data['total_etd_yemi_teu']; ?></b> <i>(<?= $data['ship_out_pct_teu']; ?>%)</i></span>
                 </div>
             </div>
         </div>
