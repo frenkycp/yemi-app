@@ -128,18 +128,6 @@ $script = "
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
-$total_kwh = 0;
-
-/*echo '<pre>';
-print_r($tmp_daily_ratio);
-echo '</pre>';*/
-
-$current_data = $data[$model->period];
-$ship_out_pct = 0;
-if ($total_plan > 0) {
-    $ship_out_pct = round(($total_ship_out / $total_plan) * 100);
-}
-//echo Yii::$app->request->baseUrl;
 ?>
 <?php $form = ActiveForm::begin([
     'method' => 'get',
@@ -165,7 +153,7 @@ if ($total_plan > 0) {
                     <h3 class="panel-title">PLAN</h3>
                 </div>
                 <div class="panel-body no-padding">
-                    <span class="total-container"><?= $total_plan; ?></span> <span class="total-pct">(<?= $plan_pct; ?>%)</span>
+                    <span class="total-container"><?= $data['total_plan']; ?></span> <span class="total-pct">(100%)</span>
                 </div>
             </div>
         </div>
@@ -175,9 +163,9 @@ if ($total_plan > 0) {
                     <h3 class="panel-title">CONFIRMED</h3>
                 </div>
                 <div class="panel-body no-padding" style="">
-                    <span class="total-container"><?= $total_confirm; ?></span> <span class="total-pct">(<?= $confirm_pct; ?>%)</span>
+                    <span class="total-container"><?= $data['total_confirm']; ?></span> <span class="total-pct">(<?= $data['confirm_pct']; ?>%)</span>
                     <hr style="margin: 5px 10px;">
-                    <span>SHIP OUT : <b><?= $total_ship_out; ?></b> <i>(<?= $ship_out_pct; ?>%)</i></span>
+                    <span>SHIP OUT : <b><?= $data['total_ship_out']; ?></b> <i>(<?= $data['ship_out_pct']; ?>%)</i></span>
                 </div>
             </div>
         </div>
@@ -187,7 +175,41 @@ if ($total_plan > 0) {
                     <h3 class="panel-title">NOT CONFIRMED</h3>
                 </div>
                 <div class="panel-body no-padding">
-                    <span class="total-container"><?= $total_not_confirm; ?></span> <span class="total-pct">(<?= $not_confirm_pct; ?>%)</span>
+                    <span class="total-container"><?= $data['total_not_confirm']; ?></span> <span class="total-pct">(<?= $data['not_confirm_pct']; ?>%)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-info text-center">
+                <div class="panel-heading">
+                    <h3 class="panel-title">PLAN (TEU)</h3>
+                </div>
+                <div class="panel-body no-padding">
+                    <span class="total-container"><?= $data['total_plan_teu']; ?></span> <span class="total-pct">(100%)</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-info text-center">
+                <div class="panel-heading">
+                    <h3 class="panel-title">CONFIRMED (TEU)</h3>
+                </div>
+                <div class="panel-body no-padding" style="">
+                    <span class="total-container"><?= $data['total_confirm_teu']; ?></span> <span class="total-pct">(<?= $data['confirm_pct_teu']; ?>%)</span>
+                    <hr style="margin: 5px 10px;">
+                    <span>SHIP OUT : <b><?= $data['total_ship_out_teu']; ?></b> <i>(<?= $data['ship_out_pct_teu']; ?>%)</i></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-info text-center">
+                <div class="panel-heading">
+                    <h3 class="panel-title">NOT CONFIRMED (TEU)</h3>
+                </div>
+                <div class="panel-body no-padding">
+                    <span class="total-container"><?= $data['total_not_confirm_teu']; ?></span> <span class="total-pct">(<?= $data['not_confirm_pct_teu']; ?>%)</span>
                 </div>
             </div>
         </div>
