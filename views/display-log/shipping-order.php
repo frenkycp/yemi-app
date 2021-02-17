@@ -51,7 +51,7 @@ $css_string = "
         border:1px solid #777474 !important;
         background-color: rgba(255, 229, 153, 0.5);
         color: black;
-        font-size: 16px;
+        font-size: 14px;
         //border-bottom: 7px solid #797979;
         vertical-align: middle;
     }
@@ -95,6 +95,9 @@ $css_string = "
         font-size: 18px;
         font-style: italic;
     }
+    .container-qty {
+        width: 130px;
+    }
 
     .label-tbl {padding-left: 20px !important;}
     .text-red {color: #ff7564 !important;}
@@ -134,7 +137,7 @@ $this->registerJs($script, View::POS_HEAD );
     //'layout' => 'horizontal',
     'action' => Url::to(['shipping-order']),
 ]); ?>
-<div style="margin: auto; width: 1200px; padding-top: 20px;" id="display-container">
+<div style="margin: auto; width: 1000px; padding-top: 20px;" id="display-container">
     
     <div class="row">
         <div class="col-sm-10">
@@ -150,12 +153,12 @@ $this->registerJs($script, View::POS_HEAD );
         <thead>
             <tr>
                 <th class="">Subject 件名</th>
-                <th class="text-center">PLAN 計画</th>
-                <th class="text-center">ETD SUB 出荷</th>
-                <th class="text-center">At Port 港</th>
-                <th class="text-center">Not yet Stuffing<br/>未スタッフィング</th>
-                <th class="text-center">CONFIRMED 確保済み</th>
-                <th class="text-center">NOT CONFIRMED 未確保</th>
+                <th class="text-center container-qty">PLAN 計画</th>
+                <th class="text-center container-qty">ETD SUB 出荷</th>
+                <th class="text-center container-qty">At Port 港</th>
+                <th class="text-center container-qty">Not yet Stuffing<br/>未スタッフィング</th>
+                <th class="text-center container-qty">CONFIRMED<br/>確保済み</th>
+                <th class="text-center container-qty">NOT CONFIRMED<br/>未確保</th>
             </tr>
         </thead>
         <tbody>
