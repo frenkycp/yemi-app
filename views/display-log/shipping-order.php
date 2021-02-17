@@ -149,10 +149,10 @@ $this->registerJs($script, View::POS_HEAD );
             <?= $form->field($model, 'period')->textInput()->label(false); ?>
         </div>
     </div>
-    <table class="table summary-tbl">
+    <table class="table summary-tbl" style="display: none;">
         <thead>
             <tr>
-                <th class="">Subject 件名</th>
+                <th class="">Unit</th>
                 <th class="text-center container-qty">PLAN 計画</th>
                 <th class="text-center container-qty">ETD SUB 出荷</th>
                 <th class="text-center container-qty">At Port 港</th>
@@ -172,7 +172,7 @@ $this->registerJs($script, View::POS_HEAD );
                 <td class="text-center"><?= $data['total_not_confirm_teu']; ?></td>
             </tr>
             <tr>
-                <td class="">ORDINARY CONTAINER<br/>通常のコンテナ</td>
+                <td class="">CONTAINER</td>
                 <td class="text-center"><?= $data['total_plan']; ?></td>
                 <td class="text-center"><?= $data['total_etd_sub']; ?></td>
                 <td class="text-center"><?= $data['total_at_port']; ?></td>
@@ -182,7 +182,7 @@ $this->registerJs($script, View::POS_HEAD );
             </tr>
         </tbody>
     </table>
-    <div class="row" style="display: none;">
+    <div class="row">
         <div class="col-sm-4">
             <div class="panel panel-success text-center">
                 <div class="panel-heading">
@@ -216,7 +216,7 @@ $this->registerJs($script, View::POS_HEAD );
             </div>
         </div>
     </div>
-    <div class="row" style="display: none;">
+    <div class="row">
         <div class="col-sm-4">
             <div class="panel panel-info text-center">
                 <div class="panel-heading">
