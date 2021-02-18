@@ -217,4 +217,40 @@ class MesinCheckNgController extends \app\controllers\base\MesinCheckNgControlle
 	    	'urutan' => $urutan,
 	    ]);
 	}
+
+	public function actionAttachment($urutan)
+	{
+		$model = new \yii\base\DynamicModel([
+        	'attachment'
+	    ]);
+	    $model->addRule(['attachment'], 'file');
+
+	    if($model->load(\Yii::$app->request->post())){
+	        $model->attachment = UploadedFile::getInstance($model, 'attachment');
+	        $attachment_filename = 'attachment_' . $urutan . '.' . $model->attachment->extension;
+
+	        if ($model->validate()) {
+	        	if ($model->attachment) {
+	        		$filePath = \Yii::getAlias("@app/web/uploads/NG_MNT/attachment/") . $attachment_filename;
+	        		if (!$model->attachment->saveAs($filePath)) {
+	        			\Yii::$app->session->setFlash('warning', 'Attachment upload failed...');
+	                    return $this->render('attachment', [
+					    	'model'=>$model,
+					    	'urutan' => $urutan,
+					    ]);
+	                }
+	                $update_model = $this->findModel($urutan);
+	                $update_model->attachment = $attachment_filename;
+	                if (!$update_model->save()) {
+	                	return json_encode($update_model->errors);
+	                }
+	        	}
+	        	return $this->redirect(Url::previous());
+	        }
+	    }
+	    return $this->render('attachment', [
+	    	'model'=>$model,
+	    	'urutan' => $urutan,
+	    ]);
+	}
 }

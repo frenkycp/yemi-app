@@ -26,7 +26,7 @@ $actionColumnTemplate = implode(' ', $actionColumnTemplates);
     $actionColumnTemplateString = $actionColumnTemplate;
 } else {
 Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-$actionColumnTemplateString = "{update} {upload} {delete} {change_color}";    
+$actionColumnTemplateString = "{update}&nbsp;&nbsp;{upload}&nbsp;&nbsp;{delete}&nbsp;&nbsp;{change_color}&nbsp;&nbsp;{attachment}";    
 /*if (Yii::$app->user->identity->role->id == 1) {
         $actionColumnTemplateString = "{update} {delete} {change_color}";
     } else {
@@ -79,7 +79,14 @@ $grid_columns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<span class="glyphicon glyphicon-cloud-upload"></span>', $url, $options);
-            },
+            }, 'attachment' => function($url, $model, $key){
+                $url = ['attachment', 'urutan' => $model->urutan];
+                $options = [
+                    'title' => 'Attachment',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
+            }
         ],
         'urlCreator' => function($action, $model, $key, $index) {
             // using the column name as key, not mapping to 'id' like the standard generator
@@ -87,7 +94,10 @@ $grid_columns = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap']
+        'contentOptions' => [
+            'nowrap'=>'nowrap',
+            'style' => 'min-width: 100px;',
+        ]
     ],
     [
         'attribute' => 'urutan',
@@ -386,6 +396,27 @@ $grid_columns = [
         'attribute' => 'non_down_time',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; text-align: center;'
+        ],
+    ],
+    [
+        'attribute' => 'attachment',
+        'value' => function($model){
+            if ($model->attachment != null) {
+                return Html::a('<i class="fa fa-download"></i>', ['/uploads/NG_MNT/attachment/' . $model->attachment], [
+                    //'class' => 'btn btn-primary btn-block btn-sm'
+                    'title' => 'Download Attachment'
+                ]);
+            } else {
+                return '';
+            }
+        },
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'format' => 'html',
+        'hiddenFromExport' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'font-size: 12px; text-align: center;'

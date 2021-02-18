@@ -37,6 +37,7 @@ use Yii;
  * @property integer $install_time
  * @property integer $down_time
  * @property integer $non_down_time
+ * @property string $attachment
  * @property string $aliasModel
  */
 abstract class MesinCheckNg extends \yii\db\ActiveRecord
@@ -66,9 +67,15 @@ abstract class MesinCheckNg extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'repair_user_id', 'repair_user_desc', 'repair_status', 'repair_pic', 'repair_note'], 'string'],
+            [['mesin_catatan', 'repair_note'], 'string'],
             [['mesin_last_update', 'repair_plan', 'repair_aktual'], 'safe'],
-            [['color_stat', 'prepare_time', 'repair_time', 'spare_part_time', 'install_time', 'down_time', 'non_down_time'], 'integer']
+            [['color_stat', 'prepare_time', 'repair_time', 'spare_part_time', 'install_time', 'down_time', 'non_down_time'], 'integer'],
+            [['location', 'area', 'user_desc', 'repair_user_desc', 'repair_pic'], 'string', 'max' => 50],
+            [['mesin_id', 'mesin_status', 'user_id', 'repair_user_id'], 'string', 'max' => 10],
+            [['mesin_nama', 'mesin_bagian', 'mesin_bagian_ket', 'attachment'], 'string', 'max' => 100],
+            [['mesin_no'], 'string', 'max' => 3],
+            [['mesin_periode'], 'string', 'max' => 30],
+            [['repair_status'], 'string', 'max' => 1]
         ];
     }
 
@@ -106,6 +113,7 @@ abstract class MesinCheckNg extends \yii\db\ActiveRecord
             'install_time' => 'Install Time',
             'down_time' => 'Down Time',
             'non_down_time' => 'Non Down Time',
+            'attachment' => 'Attachment',
         ];
     }
 
