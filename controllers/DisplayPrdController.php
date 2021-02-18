@@ -634,23 +634,35 @@ class DisplayPrdController extends Controller
             $tmp_data2[$loc_desc] = $tmp_data3;
         }
 
-        $tmp_data_total2 = [];
+        $tmp_data_total2 = $tmp_data_sap_stock2 = $tmp_data_diff = [];
         foreach ($tmp_data_total as $key => $value) {
             $post_date = (strtotime($key . " +7 hours") * 1000);
             $tmp_data_total2[] = [
                 'x' => $post_date,
-                'y' => round($value),
+                'y' => ($value),
             ];
+            $tmp_data_sap_stock2[] = [
+                'x' => $post_date,
+                'y' => ($tmp_data_sap_stock[$key]),
+            ];
+            $tmp_diff = $value - $tmp_data_sap_stock[$key];
+            $tmp_data_diff[] = $tmp_diff;
         }
 
-        $tmp_data_sap_stock2 = [];
+        $diff_avg = 0;
+        if (count($tmp_data_diff) > 0) {
+            $diff_avg = array_sum($tmp_data_diff)/count($tmp_data_diff);
+        }
+        
+
+        /*$tmp_data_sap_stock2 = [];
         foreach ($tmp_data_sap_stock as $key => $value) {
             $post_date = (strtotime($key . " +7 hours") * 1000);
             $tmp_data_sap_stock2[] = [
                 'x' => $post_date,
                 'y' => ($value),
             ];
-        }
+        }*/
 
         $data = [];
         /*foreach ($tmp_data2 as $key => $value) {
@@ -673,6 +685,7 @@ class DisplayPrdController extends Controller
             'item_arr' => $item_arr,
             'tmp_data' => $tmp_data,
             'data' => $data,
+            'diff_avg' => $diff_avg,
             'um' => $item_info->UM,
         ]);
     }

@@ -141,43 +141,56 @@ echo '</pre>';*/
     'action' => Url::to(['stock-monitoring']),
 ]); ?>
 
-<div class="row" style="margin-top: 10px;">
-    <div class="col-md-2">
-        <?= $form->field($model, 'from_date')->widget(DatePicker::classname(), [
-            'options' => [
-                'type' => DatePicker::TYPE_INPUT,
-            ],
-            'removeButton' => false,
-            'pluginOptions' => [
-                'autoclose'=>true,
-                'format' => 'yyyy-mm-dd',
-                'todayHighlight' => true,
-                'todayBtn' => true,
-            ]
-        ]); ?>
+<div style="margin-top: 10px;">
+    <div class="row">
+        <div class="col-sm-10">
+            <div class="row">
+                <div class="col-md-2">
+                    <?= $form->field($model, 'from_date')->widget(DatePicker::classname(), [
+                        'options' => [
+                            'type' => DatePicker::TYPE_INPUT,
+                        ],
+                        'removeButton' => false,
+                        'pluginOptions' => [
+                            'autoclose'=>true,
+                            'format' => 'yyyy-mm-dd',
+                            'todayHighlight' => true,
+                            'todayBtn' => true,
+                        ]
+                    ]); ?>
+                </div>
+                <div class="col-md-2">
+                    <?= $form->field($model, 'to_date')->textInput([
+                        'readonly' => true,
+                        'style' => 'background-color: black;'
+                    ])->label('To Date (Today)') ?>
+                </div>
+                <div class="col-md-4">
+                    <?= $form->field($model, 'item')->widget(Select2::classname(), [
+                        'data' => $item_arr,
+                        'options' => [
+                            'placeholder' => 'Choose Item...',
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ]); ?>
+                </div>
+                <div class="form-group">
+                    <br/>
+                    <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <label class="control-label">
+                    AVG (Different)
+                </label>
+                <input type="text" style="background-color: black;" class="form-control" value="<?= round($diff_avg); ?>" readonly>
+            </div>
+        </div>
     </div>
-    <div class="col-md-2">
-        <?= $form->field($model, 'to_date')->textInput([
-            'readonly' => true,
-            'style' => 'background-color: black;'
-        ])->label('To Date (Today)') ?>
-    </div>
-    <div class="col-md-4">
-        <?= $form->field($model, 'item')->widget(Select2::classname(), [
-            'data' => $item_arr,
-            'options' => [
-                'placeholder' => 'Choose Item...',
-            ],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]); ?>
-    </div>
-    <div class="form-group">
-        <br/>
-        <?= Html::submitButton('GENERATE CHART', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
-    </div>
-    
 </div>
 <br/>
 
