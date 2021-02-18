@@ -50,7 +50,7 @@ class DisplayLogController extends Controller
         ->where([
             'PERIOD' => $period,
         ])
-        ->andWhere(['<', 'ETD', $today])
+        ->andWhere(['<=', 'ETD', $today])
         ->one();
 
         $total_ship_out = $tmp_total_ship_out->TOTAL_CONTAINER;
