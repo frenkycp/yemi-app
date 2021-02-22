@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class KaryawanSuhuView extends BaseKaryawanSuhuView
 {
+    public $from_time, $to_time;
 
     public function behaviors()
     {

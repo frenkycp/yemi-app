@@ -20,18 +20,6 @@ date_default_timezone_set('Asia/Jakarta');
 
 $gridColumns = [
     [
-        'attribute' => 'POST_DATE',
-        'value' => function($model){
-            return date('Y-m-d', strtotime($model->POST_DATE));
-        },
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px;'
-        ],
-    ],
-    [
         'attribute' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -41,7 +29,7 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'NAMA_KARYAWAN',
+        'attribute' => 'Full_name',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
         'filterInputOptions' => [
@@ -50,7 +38,7 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'COST_CENTER_DESC',
+        'attribute' => 'cost_center_name',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
         'filterInputOptions' => [
@@ -59,7 +47,7 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'SUHU',
+        'attribute' => 'swipetime',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [
@@ -68,7 +56,7 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'LAST_UPDATE',
+        'attribute' => 'temperature',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filterInputOptions' => [

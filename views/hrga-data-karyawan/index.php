@@ -210,9 +210,14 @@ $gridColumns = [
         'value' => function($model){
             $value = '-';
             if ($model->KONTRAK_KE == 1) {
-                $value = date('Y-m-d', strtotime($model->K1_START));
+                if ($model->K1_START == null) {
+                    $value = '-';
+                } else {
+                    $value = date('Y-m-d', strtotime($model->K1_START));
+                }
+                
             } elseif ($model->KONTRAK_KE == 2) {
-                $value = date('Y-m-d', strtotime($model->K2_START));
+                $value = $model->K2_START == null ? '-' : date('Y-m-d', strtotime($model->K2_START));
             }
             return $value;
         },
@@ -228,9 +233,9 @@ $gridColumns = [
         'value' => function($model){
             $value = '-';
             if ($model->KONTRAK_KE == 1) {
-                $value = date('Y-m-d', strtotime($model->K1_END));
+                $value = $model->K1_END == null ? '-' : date('Y-m-d', strtotime($model->K1_END));
             } elseif ($model->KONTRAK_KE == 2) {
-                $value = date('Y-m-d', strtotime($model->K2_END));
+                $value = $model->K2_END == null ? '-' : date('Y-m-d', strtotime($model->K2_END));
             }
             return $value;
         },
