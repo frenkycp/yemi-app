@@ -469,6 +469,7 @@ class DisplayPrdController extends Controller
 
         $tmp_data = $tmp_data_total = $tmp_data_sap_stock = [];
         $item_info = null;
+        $current_sap = $current_actual = 0;
         if ($model->load($_GET)) {
 
             //start actual stock
@@ -488,6 +489,7 @@ class DisplayPrdController extends Controller
 
             foreach ($tmp_dtr as $dtr_val) {
                 $initial_stock = $dtr_val->NILAI_INVENTORY;
+                $current_actual = $initial_stock;
 
                 $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
                 $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
@@ -580,6 +582,7 @@ class DisplayPrdController extends Controller
                 $sap_initial_stock = $tmp_sap_current_stock->ending_balance;
                 $sap_stock_last_update = date('Y-m-d', $tmp_sap_current_stock->file_date);
             }
+            $current_sap = $sap_initial_stock;
 
             $tmp_sap_log_arr = SapMaterialDocumentBc::find()
             ->select([
@@ -680,11 +683,19 @@ class DisplayPrdController extends Controller
             'data' => $tmp_data_sap_stock2
         ];
 
+        $current_pct = 0;
+        if ($current_sap > 0) {
+            $current_pct = round(($current_actual / $current_sap - 1) * 100, 1);
+        } else {
+            $current_pct = round((0 - 1) * 100, 1);
+        }
+
         return $this->render('stock-monitoring', [
             'model' => $model,
             'item_arr' => $item_arr,
             'tmp_data' => $tmp_data,
             'data' => $data,
+            'current_pct' => $current_pct,
             'diff_avg' => $diff_avg,
             'um' => $item_info->UM,
         ]);

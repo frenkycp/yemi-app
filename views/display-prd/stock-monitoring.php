@@ -185,9 +185,9 @@ echo '</pre>';*/
         <div class="col-sm-2">
             <div class="form-group">
                 <label class="control-label">
-                    AVG (Different)
+                    Percentage (%)
                 </label>
-                <input type="text" style="background-color: black;" class="form-control" value="<?= round($diff_avg); ?>" readonly>
+                <input type="text" style="background-color: black;" class="form-control" value="<?= $current_pct; ?>" readonly>
             </div>
         </div>
     </div>
