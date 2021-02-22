@@ -182,12 +182,14 @@ echo '</pre>';*/
                 </div>
             </div>
         </div>
-        <div class="col-sm-2">
-            <div class="form-group">
-                <label class="control-label">
-                    Percentage (%)
-                </label>
-                <input type="text" style="background-color: black;" class="form-control" value="<?= $current_pct; ?>" readonly>
+        <div class="col-sm-2" style="font-size: 34px;">
+            <div class="panel panel-default" style="margin-bottom: 0px;">
+                <div class="panel-heading text-center">
+                    <h3 class="panel-title">AVG Percentage (%)</h3>
+                </div>
+                <div class="panel-body no-padding text-center">
+                    <?= $pct; ?>
+                </div>
             </div>
         </div>
     </div>

@@ -141,7 +141,7 @@ use app\models\IjazahPlanActual;
 use app\models\WorkingDaysView;
 use app\models\PabxLog;
 use app\models\DnsStatus;
-use app\models\VmsPlanActual;
+use app\models\VmsPlanActualView;
 use app\models\ServerBackupCurrent;
 use app\models\HakAksesPlus;
 use app\models\ContainerView;
@@ -719,7 +719,7 @@ class DisplayController extends Controller
         ->one();
         $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
 
-        $tmp_yesterday_prod = VmsPlanActual::find()->select('VMS_DATE')->where(['<', 'VMS_DATE', $today])->orderBy('VMS_DATE DESC')->one();
+        $tmp_yesterday_prod = VmsPlanActualView::find()->select('VMS_DATE')->where(['<', 'VMS_DATE', $today])->orderBy('VMS_DATE DESC')->one();
         $yesterday_prod = date('Y-m-d', strtotime($tmp_yesterday_prod->VMS_DATE));
 
         $model = new \yii\base\DynamicModel([
@@ -734,7 +734,7 @@ class DisplayController extends Controller
         $yesterday = $model->post_date;
         $yesterday_period = date('Ym', strtotime($yesterday));
 
-        $tmp_prod_daily = VmsPlanActual::find()
+        $tmp_prod_daily = VmsPlanActualView::find()
         ->select([
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
             'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
@@ -743,7 +743,7 @@ class DisplayController extends Controller
         ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
-        $tmp_prod_daily_fg = VmsPlanActual::find()
+        $tmp_prod_daily_fg = VmsPlanActualView::find()
         ->select([
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
             'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
@@ -755,7 +755,7 @@ class DisplayController extends Controller
         ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
-        $tmp_prod_daily_kd = VmsPlanActual::find()
+        $tmp_prod_daily_kd = VmsPlanActualView::find()
         ->select([
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
             'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
@@ -767,7 +767,7 @@ class DisplayController extends Controller
         ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
-        $tmp_prod_monthly = VmsPlanActual::find()
+        $tmp_prod_monthly = VmsPlanActualView::find()
         ->select([
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
             'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)',
@@ -826,7 +826,7 @@ class DisplayController extends Controller
             $ng_rate = round(($total_ng / $total_output) * 100, 2);
         }
 
-        $tmp_top_minus = VmsPlanActual::find()
+        $tmp_top_minus = VmsPlanActualView::find()
         ->select([
             'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -875,7 +875,7 @@ class DisplayController extends Controller
             $attendance_rate = round(($tmp_data_present->total_present / $tmp_data_present->total_mp) * 100, 1);
         }
 
-        $tmp_fg_minus_daily = VmsPlanActual::find()
+        $tmp_fg_minus_daily = VmsPlanActualView::find()
         ->select([
             'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -894,7 +894,7 @@ class DisplayController extends Controller
         ->limit(3)
         ->all();
 
-        $tmp_kd_minus_daily = VmsPlanActual::find()
+        $tmp_kd_minus_daily = VmsPlanActualView::find()
         ->select([
             'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -1677,7 +1677,7 @@ class DisplayController extends Controller
         $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
         $yesterday_period = date('Ym', strtotime($yesterday));
 
-        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
+        $period_dropdown = ArrayHelper::map(VmsPlanActualView::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
         $model = new \yii\base\DynamicModel([
             'line'
         ]);
@@ -1716,7 +1716,7 @@ class DisplayController extends Controller
         }
 
         if ($model->line == 'ALL') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -1731,7 +1731,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } elseif ($model->line == 'KD') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -1747,7 +1747,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } elseif ($model->line == 'PRODUCT') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -1763,7 +1763,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } else {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -1851,11 +1851,11 @@ class DisplayController extends Controller
             ],
         ];
 
-        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $yesterday_period])->orderBy('VMS_VERSION')->one();
+        $tmp_vms_version = VmsPlanActualView::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $yesterday_period])->orderBy('VMS_VERSION')->one();
         $vms_version = $tmp_vms_version->VMS_VERSION;
 
         //$yesterday_period = date('Ym', strtotime(' -1 day'));
-        $tmp_yesterday = VmsPlanActual::find()
+        $tmp_yesterday = VmsPlanActualView::find()
         ->select([
             'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
             'kd_actual' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN ACTUAL_QTY ELSE 0 END)',
@@ -1868,7 +1868,7 @@ class DisplayController extends Controller
         ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
-        /*$tmp_yesterday = VmsPlanActual::find()
+        /*$tmp_yesterday = VmsPlanActualView::find()
         ->select([
             'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
             'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
@@ -1889,7 +1889,7 @@ class DisplayController extends Controller
         ];
         $yesterday_data['balance'] = $yesterday_data['actual'] - $yesterday_data['plan'];
 
-        $tmp_top_minus = VmsPlanActual::find()
+        $tmp_top_minus = VmsPlanActualView::find()
         ->select([
             'MODEL','ITEM', 'ITEM_DESC',
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -1927,10 +1927,10 @@ class DisplayController extends Controller
         $tmp_bu_arr = \Yii::$app->params['bu_arr_production'];
         $period = date('Ym', strtotime($post_date));
 
-        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $period])->orderBy('VMS_VERSION')->one();
+        $tmp_vms_version = VmsPlanActualView::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $period])->orderBy('VMS_VERSION')->one();
         $vms_version = $tmp_vms_version->VMS_VERSION;
 
-        $tmp_yesterday = VmsPlanActual::find()
+        $tmp_yesterday = VmsPlanActualView::find()
         ->select([
             'BU', 'ITEM', 'ITEM_DESC', 'DESTINATION', 'PLAN_QTY' => 'SUM(PLAN_QTY)', 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)', 'BALANCE_QTY' => 'SUM(BALANCE_QTY)'
         ])
@@ -2080,7 +2080,7 @@ class DisplayController extends Controller
         $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
         $yesterday_period = date('Ym', strtotime($yesterday));
 
-        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
+        $period_dropdown = ArrayHelper::map(VmsPlanActualView::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
         $model = new \yii\base\DynamicModel([
             'line'
         ]);
@@ -2091,12 +2091,12 @@ class DisplayController extends Controller
 
         }
 
-        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $yesterday_period])->orderBy('VMS_VERSION')->one();
+        $tmp_vms_version = VmsPlanActualView::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $yesterday_period])->orderBy('VMS_VERSION')->one();
         $vms_version = $tmp_vms_version->VMS_VERSION;
 
         $tmp_bu_arr = \Yii::$app->params['bu_arr_production'];
 
-        $tmp_yesterday = VmsPlanActual::find()
+        $tmp_yesterday = VmsPlanActualView::find()
         ->select([
             'BU', 'ITEM', 'ITEM_DESC', 'DESTINATION', 'PLAN_QTY' => 'SUM(PLAN_QTY)', 'ACTUAL_QTY' => 'SUM(ACTUAL_QTY)', 'BALANCE_QTY' => 'SUM(BALANCE_QTY)'
         ])
@@ -2192,7 +2192,7 @@ class DisplayController extends Controller
         $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
         $yesterday_period = date('Ym', strtotime($yesterday));
 
-        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
+        $period_dropdown = ArrayHelper::map(VmsPlanActualView::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
         $model = new \yii\base\DynamicModel([
             'line'
         ]);
@@ -2231,7 +2231,7 @@ class DisplayController extends Controller
         }
 
         if ($model->line == 'ALL') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -2246,7 +2246,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } elseif ($model->line == 'KD') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -2262,7 +2262,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } elseif ($model->line == 'PRODUCT') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -2278,7 +2278,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } else {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -2366,11 +2366,11 @@ class DisplayController extends Controller
             ],
         ];
 
-        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $yesterday_period])->orderBy('VMS_VERSION')->one();
+        $tmp_vms_version = VmsPlanActualView::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $yesterday_period])->orderBy('VMS_VERSION')->one();
         $vms_version = $tmp_vms_version->VMS_VERSION;
 
         //$yesterday_period = date('Ym', strtotime(' -1 day'));
-        $tmp_yesterday = VmsPlanActual::find()
+        $tmp_yesterday = VmsPlanActualView::find()
         ->select([
             'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
             'kd_actual' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN ACTUAL_QTY ELSE 0 END)',
@@ -2383,7 +2383,7 @@ class DisplayController extends Controller
         ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
-        /*$tmp_yesterday = VmsPlanActual::find()
+        /*$tmp_yesterday = VmsPlanActualView::find()
         ->select([
             'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
             'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
@@ -2404,7 +2404,7 @@ class DisplayController extends Controller
         ];
         $yesterday_data['balance'] = $yesterday_data['actual'] - $yesterday_data['plan'];
 
-        $tmp_top_minus = VmsPlanActual::find()
+        $tmp_top_minus = VmsPlanActualView::find()
         ->select([
             'MODEL','ITEM', 'ITEM_DESC',
             'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3002,7 +3002,7 @@ class DisplayController extends Controller
         $period = date('Ym', strtotime($vms_date));
         if ($acc == 0) {
             if ($line == 'ALL') {
-                $tmp_vms_arr = VmsPlanActual::find()
+                $tmp_vms_arr = VmsPlanActualView::find()
                 ->select([
                     'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3019,7 +3019,7 @@ class DisplayController extends Controller
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } elseif ($line == 'KD') {
-                $tmp_vms_arr = VmsPlanActual::find()
+                $tmp_vms_arr = VmsPlanActualView::find()
                 ->select([
                     'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3037,7 +3037,7 @@ class DisplayController extends Controller
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } elseif ($line == 'PRODUCT') {
-                $tmp_vms_arr = VmsPlanActual::find()
+                $tmp_vms_arr = VmsPlanActualView::find()
                 ->select([
                     'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3055,7 +3055,7 @@ class DisplayController extends Controller
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } else {
-                $tmp_vms_arr = VmsPlanActual::find()
+                $tmp_vms_arr = VmsPlanActualView::find()
                 ->select([
                     'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3073,7 +3073,7 @@ class DisplayController extends Controller
             }
         } else {
             if ($line == 'ALL') {
-                $tmp_vms_arr = VmsPlanActual::find()
+                $tmp_vms_arr = VmsPlanActualView::find()
                 ->select([
                     'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3091,7 +3091,7 @@ class DisplayController extends Controller
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } elseif ($line == 'KD') {
-                $tmp_vms_arr = VmsPlanActual::find()
+                $tmp_vms_arr = VmsPlanActualView::find()
                 ->select([
                     'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3110,7 +3110,7 @@ class DisplayController extends Controller
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } elseif ($line == 'PRODUCT') {
-                $tmp_vms_arr = VmsPlanActual::find()
+                $tmp_vms_arr = VmsPlanActualView::find()
                 ->select([
                     'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3129,7 +3129,7 @@ class DisplayController extends Controller
                 //->having(['>', 'SUM(ACTUAL_QTY - PLAN_QTY)', 0])
                 ->all();
             } else {
-                $tmp_vms_arr = VmsPlanActual::find()
+                $tmp_vms_arr = VmsPlanActualView::find()
                 ->select([
                     'LINE', 'MODEL','ITEM', 'ITEM_DESC', 'DESTINATION',
                     'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3347,7 +3347,7 @@ class DisplayController extends Controller
         $this_period = date('Ym');
         $today = date('Y-m-d');
 
-        $period_dropdown = ArrayHelper::map(VmsPlanActual::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
+        $period_dropdown = ArrayHelper::map(VmsPlanActualView::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
         $model = new \yii\base\DynamicModel([
             'period', 'line'
         ]);
@@ -3387,7 +3387,7 @@ class DisplayController extends Controller
         }
 
         if ($model->line == 'ALL') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3402,7 +3402,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } elseif ($model->line == 'KD') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3418,7 +3418,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } elseif ($model->line == 'PRODUCT') {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3434,7 +3434,7 @@ class DisplayController extends Controller
             ->orderBy('VMS_DATE')
             ->all();
         } else {
-            $tmp_vms = VmsPlanActual::find()
+            $tmp_vms = VmsPlanActualView::find()
             ->select([
                 'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
                 'PLAN_QTY' => 'SUM(PLAN_QTY)',
@@ -3522,11 +3522,11 @@ class DisplayController extends Controller
             ],
         ];
 
-        $tmp_vms_version = VmsPlanActual::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $model->period])->orderBy('VMS_VERSION')->one();
+        $tmp_vms_version = VmsPlanActualView::find()->select('VMS_VERSION')->where('VMS_VERSION IS NOT NULL')->andWhere(['VMS_PERIOD' => $model->period])->orderBy('VMS_VERSION')->one();
         $vms_version = $tmp_vms_version->VMS_VERSION;
 
         $yesterday_period = date('Ym', strtotime(' -1 day'));
-        $tmp_yesterday = VmsPlanActual::find()
+        $tmp_yesterday = VmsPlanActualView::find()
         ->select([
             'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',
             'kd_actual' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN ACTUAL_QTY ELSE 0 END)',
@@ -3539,7 +3539,7 @@ class DisplayController extends Controller
         ->andWhere(['<>', 'LINE', 'SPC'])
         ->one();
 
-        /*$tmp_yesterday = VmsPlanActual::find()
+        /*$tmp_yesterday = VmsPlanActualView::find()
         ->select([
             'VMS_DATE' => 'FORMAT(VMS_DATE, \'yyyy-MM-dd\')',
             'kd_plan' => 'SUM(CASE WHEN FG_KD = \'KD\' THEN PLAN_QTY ELSE 0 END)',

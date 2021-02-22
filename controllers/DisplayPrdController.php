@@ -469,9 +469,10 @@ class DisplayPrdController extends Controller
 
         $tmp_data = $tmp_data_total = $tmp_data_sap_stock = [];
         $item_info = null;
-        $current_sap = $current_actual = 0;
-        if ($model->load($_GET)) {
+        $model_load = false;
 
+        if ($model->load($_GET)) {
+            $model_load = true;
             //start actual stock
             $model->to_date = $today;
             $tmp_dtr = TraceItemDtr::find()
@@ -489,7 +490,6 @@ class DisplayPrdController extends Controller
 
             foreach ($tmp_dtr as $dtr_val) {
                 $initial_stock = $dtr_val->NILAI_INVENTORY;
-                $current_actual = $initial_stock;
 
                 $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
                 $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
@@ -582,7 +582,6 @@ class DisplayPrdController extends Controller
                 $sap_initial_stock = $tmp_sap_current_stock->ending_balance;
                 $sap_stock_last_update = date('Y-m-d', $tmp_sap_current_stock->file_date);
             }
-            $current_sap = $sap_initial_stock;
 
             $tmp_sap_log_arr = SapMaterialDocumentBc::find()
             ->select([
@@ -614,7 +613,8 @@ class DisplayPrdController extends Controller
                     }
                 }
             }
-        }
+
+        } //close $model->load
 
         if (count($tmp_data > 0)) {
             foreach ($tmp_data as $key => $value) {
@@ -638,6 +638,7 @@ class DisplayPrdController extends Controller
         }
 
         $tmp_data_total2 = $tmp_data_sap_stock2 = $tmp_data_diff = [];
+        $sap_val_arr = $actual_val_arr = [];
         foreach ($tmp_data_total as $key => $value) {
             $post_date = (strtotime($key . " +7 hours") * 1000);
             $tmp_data_total2[] = [
@@ -650,30 +651,37 @@ class DisplayPrdController extends Controller
             ];
             $tmp_diff = $value - $tmp_data_sap_stock[$key];
             $tmp_data_diff[] = $tmp_diff;
+            //if ($value != 0) {
+                $actual_val_arr[] = $value;
+            //}
+            //if ($tmp_data_sap_stock[$key] != 0) {
+                $sap_val_arr[] = $tmp_data_sap_stock[$key];
+            //}
+        }
+
+        $tmp_avg_actual = 0;
+        if (count($actual_val_arr) > 0) {
+            $tmp_avg_actual = array_sum($actual_val_arr) / count($actual_val_arr);
+        }
+        $tmp_avg_sap = 0;
+        if (count($sap_val_arr) > 0) {
+            $tmp_avg_sap = array_sum($sap_val_arr) / count($sap_val_arr);
+        }
+
+        $pct = 0;
+        if ($model_load) {
+            if ($tmp_avg_sap > 0) {
+                $pct = round(($tmp_avg_actual / $tmp_avg_sap - 1) * 100, 1);
+            } else {
+                $pct = round((0 - 1) * 100, 1);
+            }
         }
 
         $diff_avg = 0;
         if (count($tmp_data_diff) > 0) {
             $diff_avg = array_sum($tmp_data_diff)/count($tmp_data_diff);
         }
-        
 
-        /*$tmp_data_sap_stock2 = [];
-        foreach ($tmp_data_sap_stock as $key => $value) {
-            $post_date = (strtotime($key . " +7 hours") * 1000);
-            $tmp_data_sap_stock2[] = [
-                'x' => $post_date,
-                'y' => ($value),
-            ];
-        }*/
-
-        $data = [];
-        /*foreach ($tmp_data2 as $key => $value) {
-            $data[] = [
-                'name' => $key,
-                'data' => $value
-            ];
-        }*/
         $data[] = [
             'name' => 'ACTUAL QTY',
             'data' => $tmp_data_total2
@@ -683,19 +691,12 @@ class DisplayPrdController extends Controller
             'data' => $tmp_data_sap_stock2
         ];
 
-        $current_pct = 0;
-        if ($current_sap > 0) {
-            $current_pct = round(($current_actual / $current_sap - 1) * 100, 1);
-        } else {
-            $current_pct = round((0 - 1) * 100, 1);
-        }
-
         return $this->render('stock-monitoring', [
             'model' => $model,
             'item_arr' => $item_arr,
             'tmp_data' => $tmp_data,
             'data' => $data,
-            'current_pct' => $current_pct,
+            'pct' => $pct,
             'diff_avg' => $diff_avg,
             'um' => $item_info->UM,
         ]);
