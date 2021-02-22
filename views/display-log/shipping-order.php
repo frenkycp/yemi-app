@@ -201,7 +201,9 @@ $this->registerJs($script, View::POS_HEAD );
                 <div class="panel-body no-padding" style="">
                     <span class="total-container"><?= $data['total_confirm']; ?></span> <span class="total-pct">(<?= $data['confirm_pct']; ?>%)</span>
                     <hr style="margin: 5px 10px;">
-                    <span>SHIP OUT : <b><?= $data['total_etd_yemi']; ?></b> <i>(<?= $data['ship_out_pct']; ?>%)</i></span>
+                    <span>ETD Port : <b><?= $data['total_etd_sub']; ?></b></span><br/>
+                    <span>At Port : <b><?= $data['total_at_port']; ?></b></span><br/>
+                    <span>Not Yet Stuffing : <b><?= $data['not_yet_stuffing']; ?></b></span>
                 </div>
             </div>
         </div>
@@ -235,7 +237,9 @@ $this->registerJs($script, View::POS_HEAD );
                 <div class="panel-body no-padding" style="">
                     <span class="total-container"><?= $data['total_confirm_teu']; ?></span> <span class="total-pct">(<?= $data['confirm_pct_teu']; ?>%)</span>
                     <hr style="margin: 5px 10px;">
-                    <span>SHIP OUT : <b><?= $data['total_etd_yemi_teu']; ?></b> <i>(<?= $data['ship_out_pct_teu']; ?>%)</i></span>
+                    <span>ETD Port : <b><?= $data['total_etd_sub_teu']; ?></b></span><br/>
+                    <span>At Port : <b><?= $data['total_at_port_teu']; ?></b></span><br/>
+                    <span>Not Yet Stuffing : <b><?= $data['not_yet_stuffing_teu']; ?></b></span>
                 </div>
             </div>
         </div>
