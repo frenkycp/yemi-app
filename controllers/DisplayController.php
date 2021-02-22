@@ -1143,7 +1143,7 @@ class DisplayController extends Controller
                     }
                 }
                 if ($plan_amt > 0) {
-                    $tmp_pct = round(($act_amt / $plan_amt) * 100, 1);
+                    $tmp_pct = round(($act_amt / $plan_amt) * 100, 2);
                 }
                 /*$plan_qty = $actual_qty = 0;
                 foreach ($tmp_data_summary as $tmp_summary) {
