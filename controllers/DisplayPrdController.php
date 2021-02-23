@@ -465,7 +465,7 @@ class DisplayPrdController extends Controller
         $model->from_date = date('Y-m-d', strtotime($today . ' -1 month'));
         $model->to_date = $today;
 
-        $item_arr = ArrayHelper::map(TraceItemDtr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->groupBy('ITEM, ITEM_DESC')->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
+        $item_arr = ArrayHelper::map(TraceItemHdr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->groupBy('ITEM, ITEM_DESC')->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
 
         $tmp_data = $tmp_data_total = $tmp_data_sap_stock = [];
         $item_info = null;
