@@ -18,7 +18,7 @@ class SBillingSearch extends SupplierBilling
 public function rules()
 {
 return [
-[['no', 'supplier_name', 'UserName', 'Email', 'supplier_pic', 'receipt_no', 'invoice_no', 'delivery_no', 'tax_no', 'cur', 'doc_upload_by', 'doc_upload_date', 'doc_upload_stat', 'doc_received_by', 'doc_received_date', 'doc_received_stat', 'doc_pch_finished_by', 'doc_pch_finished_date', 'doc_pch_finished_stat', 'doc_finance_handover_by', 'doc_finance_handover_date', 'doc_finance_handover_stat', 'document_link', 'open_close', 'remark', 'dokumen'], 'safe'],
+[['no', 'supplier_name', 'UserName', 'Email', 'supplier_pic', 'receipt_no', 'invoice_no', 'delivery_no', 'tax_no', 'cur', 'doc_upload_by', 'doc_upload_date', 'doc_upload_stat', 'doc_received_by', 'doc_received_date', 'doc_received_stat', 'doc_pch_finished_by', 'doc_pch_finished_date', 'doc_pch_finished_stat', 'doc_finance_handover_by', 'doc_finance_handover_date', 'doc_finance_handover_stat', 'document_link', 'open_close', 'remark', 'dokumen', 'voucher_no'], 'safe'],
             [['id', 'stage'], 'integer'],
             [['amount'], 'number'],
 ];
@@ -67,6 +67,7 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'no', $this->no])
+            ->andFilterWhere(['like', 'voucher_no', $this->voucher_no])
             ->andFilterWhere(['like', 'supplier_name', $this->supplier_name])
             ->andFilterWhere(['like', 'UserName', $this->UserName])
             ->andFilterWhere(['like', 'Email', $this->Email])

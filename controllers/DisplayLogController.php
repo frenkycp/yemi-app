@@ -27,74 +27,61 @@ class DisplayLogController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $yesterday = GeneralFunction::instance()->getYesterdayDate();
-        //$total_ship_out = ShippingModel::instance()->getTotalShipOut(date('Y-m-d', strtotime('-1 day')));
-        $today = date('Y-m-d');
-        $period = date('Ym');
-        $period_text = strtoupper(date('F Y', strtotime($period . '01')));
 
-        $tmp_shipping_order = ShippingOrderNew01::find()
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+        $today = date('Y-m-d');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_data = ShippingOrderNew01::find()
         ->select([
             'TOTAL_CONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_UNCONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_CONFIRMED_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_UNCONFIRMED_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_ETD_YEMI' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ETD <= \'' . $today . '\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_ETD_YEMI_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ETD <= \'' . $today . '\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_ETD_SUB' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ON_BOARD_STATUS = 1 THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_ETD_SUB_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ON_BOARD_STATUS = 1 THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
         ])
         ->where([
-            'PERIOD' => $period,
+            'PERIOD' => $model->period,
         ])
+        ->groupBy('PERIOD')
+        ->orderBy('TOTAL_UNCONFIRMED DESC')
         ->one();
 
-        $tmp_total_ship_out = ShippingOrderNew01::find()
-        ->select([
-            'TOTAL_CONTAINER' => 'SUM(CNT_40HC + CNT_40 + CNT_20 + LCL)'
-        ])
-        ->where([
-            'PERIOD' => $period,
-        ])
-        ->andWhere(['<=', 'ETD', $today])
-        ->one();
-
-        $total_ship_out = $tmp_total_ship_out->TOTAL_CONTAINER;
-
-        /*$start_end_date = ShippingOrderNew01::find()
-        ->select([
-            'START_DATE' => 'MIN(ETD)',
-            'END_DATE' => 'MAX(ETD)',
-        ])
-        ->where([
-            'PERIOD' => $period,
-        ])
-        ->one();*/
-
-        /*$tmp_ship_out = ContainerView::find()->select(['total_cntr' => 'SUM(total_cntr)'])
-        ->where(['>=', 'etd', $start_end_date->START_DATE])
-        ->andWhere(['<=', 'etd', $start_end_date->END_DATE])
-        ->andWhere(['<', 'etd', $today])
-        ->andWhere(['<>', 'dst', 'JAKARTA'])
-        ->andWhere(['<>', 'back_order', 2])
-        ->one();
-
-        $total_ship_out = $tmp_ship_out->total_cntr;*/
-
-        $confirmed_pct = $unconfirmed_pct = $ship_out_pct = 0;
-        $total_container = [
-            'plan' => $tmp_shipping_order->TOTAL_CONFIRMED + $tmp_shipping_order->TOTAL_UNCONFIRMED,
-            'confirmed' => $tmp_shipping_order->TOTAL_CONFIRMED,
-            'unconfirmed' => $tmp_shipping_order->TOTAL_UNCONFIRMED,
+        $data = [
+            'plan' => $tmp_data->TOTAL_CONFIRMED + $tmp_data->TOTAL_UNCONFIRMED,
+            'plan_teu' => $tmp_data->TOTAL_CONFIRMED_TEU + $tmp_data->TOTAL_UNCONFIRMED_TEU,
+            'confirmed' => $tmp_data->TOTAL_CONFIRMED,
+            'confirmed_teu' => $tmp_data->TOTAL_CONFIRMED_TEU,
+            'unconfirmed' => $tmp_data->TOTAL_UNCONFIRMED,
+            'unconfirmed_teu' => $tmp_data->TOTAL_UNCONFIRMED_TEU,
+            'etd_sub' => $tmp_data->TOTAL_ETD_SUB,
+            'etd_sub_teu' => $tmp_data->TOTAL_ETD_SUB_TEU,
+            'at_port' => $tmp_data->TOTAL_ETD_YEMI - $tmp_data->TOTAL_ETD_SUB,
+            'at_port_teu' => $tmp_data->TOTAL_ETD_YEMI_TEU - $tmp_data->TOTAL_ETD_SUB_TEU,
         ];
-        if ($total_container['plan'] > 0) {
-            $confirmed_pct = round(($total_container['confirmed'] / $total_container['plan']) * 100, 1);
-            $unconfirmed_pct = round(($total_container['unconfirmed_pct'] / $total_container['plan']) * 100, 1);
-            $ship_out_pct = round(($total_ship_out / $total_container['plan']) * 100, 1);
-        }
-        $total_container['confirmed_pct'] = $confirmed_pct;
-        $total_container['unconfirmed_pct'] = $unconfirmed_pct;
-        $total_container['ship_out_pct'] = $ship_out_pct;
+        $data_pct = [
+            'confirmed' => $data['plan'] > 0 ? round(($data['confirmed'] / $data['plan']) * 100) : 0,
+            'confirmed_teu' => $data['plan_teu'] > 0 ? round(($data['confirmed_teu'] / $data['plan_teu']) * 100) : 0,
+            'etd_sub' => $data['plan'] > 0 ? round(($data['etd_sub'] / $data['plan']) * 100) : 0,
+            'etd_sub_teu' => $data['plan_teu'] > 0 ? round(($data['etd_sub'] / $data['plan_teu']) * 100) : 0,
+            'at_port' => $data['plan'] > 0 ? round(($data['at_port'] / $data['plan']) * 100) : 0,
+            'at_port_teu' => $data['plan_teu'] > 0 ? round(($data['at_port_teu'] / $data['plan_teu']) * 100) : 0,
+        ];
 
         return $this->render('shipping-order-progress', [
             'data' => $data,
-            'period_text' => $period_text,
-            'total_ship_out' => $total_ship_out,
-            'total_container' => $total_container,
+            'data_pct' => $data_pct,
+            'model' => $model,
         ]);
     }
 

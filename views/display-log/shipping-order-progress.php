@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'CONTAINER RESERVATION CONTROL <span class="japanesse light-green">(コンテナー予約管理)</span>',
-    'tab_title' => 'CONTAINER RESERVATION CONTROL',
-    'breadcrumbs_title' => 'CONTAINER RESERVATION CONTROL'
+    'page_title' => 'CONTAINER RESERVATION <span class="japanesse light-green">(コンテナ予約管理)</span>',
+    'tab_title' => 'CONTAINER RESERVATION',
+    'breadcrumbs_title' => 'CONTAINER RESERVATION'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -101,17 +101,16 @@ $css_string = "
         font-weight: bold;
     }
     .progress-bar {
-        font-size: 100px;
-        padding: 50px;
+        font-size: 40px;
+        padding: 40px;
     }
     .progress {
-        height: 150px;
-        font-family: Impact, Charcoal, sans-serif !important;
-        letter-spacing: 5px;
+        height: 100px;
+        background-color: black;
+        //font-family: Impact, Charcoal, sans-serif !important;
+        letter-spacing: 1px;
         outline: 1px solid silver;
-    }
-    .progress-group {
-        padding-top: 50px;
+        margin-bottom: 1px;
     }
     .label-tbl {padding-left: 20px !important;}
     .text-red {color: #ff7564 !important;}
@@ -158,37 +157,106 @@ $this->registerJs($script, View::POS_HEAD );
 print_r($tmp_top_minus);
 echo '</pre>';*/
 ?>
+
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['shipping-order-progress']),
+]); ?>
+
+<br/>
+<div class="row">
+    <div class="col-sm-2" style="color: white; font-size: 30px;">
+        <?= $form->field($model, 'period')->textInput(['style' => 'height: 60px; font-size: 30px;', 'placeholder' => 'Choose period...'])->label('Period'); ?>
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2 style="color: white;"><u>TOTAL CONTAINER (PCS)</u></h2>
+
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">PLAN <span class="japanesse">予定</span> : <?= $data['plan']; ?> <span style="font-size: 1.5em; color: yellow; font-weight: bold;">(PCS)</span></div>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="<?= $data_pct['confirmed']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['confirmed']; ?>%">
+                <?php
+                if ($data_pct['confirmed'] >= 30) {
+                    echo 'CONFIRMED <span class="japanesse">確保</span> : ' . $data['confirmed'];
+                } else {
+                    echo $data['confirmed'];
+                }
+                ?>
+            </div>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar bg-orange text-nowrap" role="progressbar" aria-valuenow="<?= $data_pct['etd_sub']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['etd_sub']; ?>%">
+                <?php
+                if ($data_pct['etd_sub'] >= 20) {
+                    echo 'EXPORT <span class="japanesse">出港</span> : ' . $data['etd_sub'];
+                } else {
+                    echo $data['etd_sub'];
+                }
+                ?>
+            </div>
+            <div class="progress-bar bg-purple text-nowrap" role="progressbar" aria-valuenow="<?= $data_pct['at_port']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['at_port']; ?>%">
+                <?php
+                if ($data_pct['at_port'] >= 20) {
+                    echo 'AT PORT <span class="japanesse">港在庫</span> : ' . $data['at_port'];
+                } else {
+                    echo $data['at_port'];
+                }
+                ?>
+            </div>
+        </div>
+
+    </div>
+</div>
 <br/>
 <div class="row">
     <div class="col-sm-12">
-        <div class="progress-group">
-            <span class="progress-text">CONTAINER PLAN <span class="japanesse light-green">(コンテナー計画)</span></span>
-            <span class="progress-number"><?= $total_container['plan']; ?></span>
+        <h2 style="color: white;"><u>TOTAL CONTAINER (TEU)</u></h2>
 
-            <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: 100%"></div>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">PLAN <span class="japanesse">予定</span> : <?= $data['plan_teu']; ?> <span style="font-size: 1.5em; color: yellow; font-weight: bold;">(TEU)</span></div>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="<?= $data_pct['confirmed_teu']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['confirmed_teu']; ?>%">
+                <?php
+                if ($data_pct['confirmed_teu'] >= 30) {
+                    echo 'CONFIRMED <span class="japanesse">確保</span> : ' . $data['confirmed_teu'];
+                } else {
+                    echo $data['confirmed_teu'];
+                }
+                ?>
             </div>
         </div>
 
-        <div class="progress-group">
-            <span class="progress-text">RESERVED <span class="japanesse light-green">(予約済み)</span></span>
-            <span class="progress-number"><?= $total_container['confirmed']; ?> <small>(<?= $total_container['confirmed_pct']; ?>%)</small></span>
-
-            <div class="progress">
-                <div class="progress-bar progress-bar-warning progress-bar-striped active" style="width: <?= $total_container['confirmed_pct']; ?>%"></div>
+        <div class="progress">
+            <div class="progress-bar bg-orange text-nowrap" role="progressbar" aria-valuenow="<?= $data_pct['etd_sub_teu']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['etd_sub_teu']; ?>%">
+                <?php
+                if ($data_pct['etd_sub_teu'] >= 20) {
+                    echo 'EXPORT <span class="japanesse">出港</span> : ' . $data['etd_sub_teu'];
+                } else {
+                    echo $data['etd_sub_teu'];
+                }
+                ?>
+            </div>
+            <div class="progress-bar bg-purple text-nowrap" role="progressbar" aria-valuenow="<?= $data_pct['at_port_teu']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['at_port_teu']; ?>%">
+                <?php
+                if ($data_pct['at_port_teu'] >= 20) {
+                    echo 'AT PORT <span class="japanesse">港在庫</span> : ' . $data['at_port_teu'];
+                } else {
+                    echo $data['at_port_teu'];
+                }
+                ?>
             </div>
         </div>
 
-        <div class="progress-group">
-            <span class="progress-text">SHIP OUT <span class="japanesse light-green">(出荷済み)</span></span>
-            <span class="progress-number">
-                <?= $total_ship_out; ?>
-                <small>(<?= $total_container['ship_out_pct']; ?>%)</small>
-            </span>
-
-            <div class="progress">
-                <div class="progress-bar progress-bar-primary progress-bar-striped active" style="width: <?= $total_container['ship_out_pct'] ?>%"></div>
-            </div>
-        </div>
     </div>
 </div>
