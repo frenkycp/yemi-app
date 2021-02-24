@@ -409,6 +409,7 @@ return [
         'PA' => 'PA',
         'DMI' => 'DMI',
         'SN' => 'SN',
+        'GA' => 'GA',
         'PIANO' => 'PIANO',
         'B&O' => 'B&O',
         'OTHER' => 'OTHER',
@@ -424,8 +425,7 @@ return [
     's_billing_stage_arr' => [
         1 => 'WAITING RECEIVED',
         2 => 'ON PROGRESS',
-        3 => 'WAITING FOR HANDOVER',
-        4 => 'HANDOVER TO FINANCE',
+        3 => 'HANDOVER TO FINANCE',
     ],
     'kd_flag_arr' => [
         'KD to HY' => 'KD to HY',
