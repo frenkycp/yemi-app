@@ -61,7 +61,7 @@ class MaterialBlueListController extends \app\controllers\base\MaterialBlueListC
 				$material_data = VisualPickingList::find()->where([
 					'set_list_no' => $value
 				])->one();
-				$sql = "{CALL CALL_GOJEK_WH(:slip_id, :item, :item_desc, :from_loc, :to_loc, :source, :requestor, :request_time)}";
+				$sql = "{CALL CALL_GOJEK_WH(:slip_id, :item, :item_desc, :from_loc, :to_loc, :source, :req_nik, :eta)}";
 				//$sql = "{CALL SPARE_PART_STOCK(:MACHINE)}";
 				// passing the params into to the sql query
 				$params = [
@@ -71,9 +71,9 @@ class MaterialBlueListController extends \app\controllers\base\MaterialBlueListC
 					':from_loc' => $destination,
 					':to_loc' => '',
 					':source' => 'MAT',
-					':requestor' => \Yii::$app->user->identity->username,
+					':req_nik' => \Yii::$app->user->identity->username,
 					//':requestor' => '150826',
-					':request_time' => $request_time,
+					':eta' => $request_time,
 				];
 				// execute the sql command
 				try {

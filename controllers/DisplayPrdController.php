@@ -639,23 +639,23 @@ class DisplayPrdController extends Controller
 
         $tmp_data_total2 = $tmp_data_sap_stock2 = $tmp_data_diff = [];
         $sap_val_arr = $actual_val_arr = [];
-        foreach ($tmp_data_total as $key => $value) {
+        foreach ($tmp_data_sap_stock as $key => $value) {
             $post_date = (strtotime($key . " +7 hours") * 1000);
             $tmp_data_total2[] = [
                 'x' => $post_date,
-                'y' => ($value),
+                'y' => ($tmp_data_total[$key]),
             ];
             $tmp_data_sap_stock2[] = [
                 'x' => $post_date,
-                'y' => ($tmp_data_sap_stock[$key]),
+                'y' => ($value),
             ];
-            $tmp_diff = $value - $tmp_data_sap_stock[$key];
+            $tmp_diff = $tmp_data_total[$key] - $value;
             $tmp_data_diff[] = $tmp_diff;
-            //if ($value != 0) {
-                $actual_val_arr[] = $value;
+            //if ($tmp_data_total[$key] != 0) {
+                $actual_val_arr[] = $tmp_data_total[$key];
             //}
-            //if ($tmp_data_sap_stock[$key] != 0) {
-                $sap_val_arr[] = $tmp_data_sap_stock[$key];
+            //if ($value != 0) {
+                $sap_val_arr[] = $value;
             //}
         }
 

@@ -1115,6 +1115,7 @@ class DisplayController extends Controller
         }
 
         $tmp_bu_arr = \Yii::$app->params['bu_arr_production'];
+        //unset($tmp_bu_arr['GA']);
 
         $tmp_data_summary = IjazahPlanActual::find()->select([
             'BU', 'PERIOD',

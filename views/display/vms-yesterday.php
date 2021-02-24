@@ -45,7 +45,7 @@ $css_string = "
     }
     .summary-tbl > tbody > tr > td{
         border:1px solid #777474;
-        font-size: 50px;
+        font-size: 45px;
         background: #33383d;
         color: #FFF;
         vertical-align: middle;
@@ -72,7 +72,7 @@ $css_string = "
     }
     .summary-tbl > tfoot > tr > td{
         border:1px solid #777474;
-        font-size: 50px;
+        font-size: 40px;
         background: #000;
         color: white;
         vertical-align: middle;
@@ -168,7 +168,7 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 <br/>
-<table class="table summary-tbl" style="margin-bottom: 0px;">
+<table class="table summary-tbl table-condensed" style="margin-bottom: 0px;">
     <thead>
         <tr>
             <th class="">BU</th>
@@ -207,8 +207,8 @@ echo '</pre>';*/
                         <div class="col-sm-5" style="">
                             <span class="<?= $text_class; ?>" style="font-weight: bold;"><?= number_format($value['balance']); ?></span> <span style="font-size: 0.4em;">SET</span>
                         </div>
-                        <div class="col-sm-7" style="border-left: 2px solid white; min-height: 71px;">
-                            <div class="text-left" style="font-size: 17px;">
+                        <div class="col-sm-7" style="border-left: 2px solid white; min-height: 70px;">
+                            <div class="text-left" style="font-size: 15px;">
                                 
                                     <?php
                                     if (count($tmp_top_minus[$bu]) > 0) {
