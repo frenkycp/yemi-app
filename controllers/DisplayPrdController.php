@@ -465,7 +465,15 @@ class DisplayPrdController extends Controller
         $model->from_date = date('Y-m-d', strtotime($today . ' -1 month'));
         $model->to_date = $today;
 
-        $item_arr = ArrayHelper::map(TraceItemHdr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->groupBy('ITEM, ITEM_DESC')->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
+        /*$item_arr = ArrayHelper::map(TraceItemHdr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->groupBy('ITEM, ITEM_DESC')->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');*/
+
+        $tmp_item_dropdown1 = ArrayHelper::map(TraceItemHdr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->andWhere(['CRITICAL_CATEGORY' => 'CRITICAL'])->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
+        $tmp_item_dropdown2 = ArrayHelper::map(TraceItemHdr::find()->select(['ITEM', 'ITEM_DESC'])->where('ITEM IS NOT NULL')->andWhere(['CRITICAL_CATEGORY' => 'NORMAL'])->orderBy('ITEM_DESC')->all(), 'ITEM', 'itemDescription');
+
+        $item_dropdown = [
+            'CRITICAL' => $tmp_item_dropdown1,
+            'NORMAL' => $tmp_item_dropdown2,
+        ];
 
         $tmp_data = $tmp_data_total = $tmp_data_sap_stock = [];
         $item_info = null;
@@ -693,7 +701,7 @@ class DisplayPrdController extends Controller
 
         return $this->render('stock-monitoring', [
             'model' => $model,
-            'item_arr' => $item_arr,
+            'item_arr' => $item_dropdown,
             'tmp_data' => $tmp_data,
             'data' => $data,
             'pct' => $pct,
