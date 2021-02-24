@@ -45,7 +45,7 @@ $css_string = "
     }
     .summary-tbl > tbody > tr > td{
         border:1px solid #777474;
-        font-size: 50px;
+        font-size: 80px;
         background: #33383d;
         color: #FFF;
         vertical-align: middle;
@@ -140,11 +140,11 @@ echo '</pre>';*/
 ?>
 
 <div class="row" style="padding-top: 10px;">
-    <div class="col-sm-12 text-center" style="color: white; font-size: 40px;">
-        <u><?= strtoupper($period_text); ?></u>
+    <div class="col-sm-12 text-center" style="color: white; font-size: 50px;">
+        <?= strtoupper($period_text); ?>
     </div>
 </div>
-<div style="margin: auto; width: 800px; padding-top: 10px;" id="display-container">
+<div style="margin: auto; width: 900px; padding-top: 10px;" id="display-container">
     <div class="row">
         <div class="col-sm-12">
             <table class="table summary-tbl">
@@ -180,7 +180,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 700,
+                    'height' => 650,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],
