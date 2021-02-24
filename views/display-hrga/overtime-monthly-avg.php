@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Monthly Overtime (AVG) by Section',
-    'tab_title' => 'Monthly Overtime (AVG) by Section',
-    'breadcrumbs_title' => 'Monthly Overtime (AVG) by Section'
+    'page_title' => 'Production Monthly Overtime (AVG) by Section',
+    'tab_title' => 'Production Monthly Overtime (AVG) by Section',
+    'breadcrumbs_title' => 'Production Monthly Overtime (AVG) by Section'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -139,11 +139,35 @@ print_r($tmp_data);
 echo '</pre>';*/
 ?>
 
-<div class="row" style="padding-top: 20px;">
+<div class="row" style="padding-top: 10px;">
     <div class="col-sm-12 text-center" style="color: white; font-size: 40px;">
-        <?= strtoupper($period_text); ?>
+        <u><?= strtoupper($period_text); ?></u>
     </div>
 </div>
+<div style="margin: auto; width: 800px; padding-top: 10px;" id="display-container">
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table summary-tbl">
+                <thead>
+                    <tr>
+                        <th class="text-center">Total Overtime</th>
+                        <th class="text-center">Total MP</th>
+                        <th class="text-center">Hours per MP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center"><?= number_format($grandtotal_overtime); ?></td>
+                        <td class="text-center"><?= number_format($grandtotal_mp); ?></td>
+                        <td class="text-center"><?= $avg_total; ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<br/>
 <div class="row">
     <div class="col-sm-12">
         <?php
@@ -156,7 +180,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 850,
+                    'height' => 700,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],

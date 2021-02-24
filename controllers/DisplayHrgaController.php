@@ -74,6 +74,7 @@ class DisplayHrgaController extends Controller
         ];
 
         $tmp_data = $data = [];
+        $grandtotal_overtime = $grandtotal_mp = 0;
         foreach ($section_arr as $section => $array_val) {
             $tmp_total_mp = $tmp_total_ot = $avg_ot = 0;
             $tmp_cost_center = [];
@@ -93,29 +94,17 @@ class DisplayHrgaController extends Controller
             if ($tmp_total_mp > 0) {
                 $avg_ot = round(($tmp_total_ot / 60 / $tmp_total_mp), 1);
             }
-
+            $grandtotal_mp += $tmp_total_mp;
+            $grandtotal_overtime += $tmp_total_ot;
             $tmp_data[$section] = $avg_ot;
         }
-        /*foreach ($mp_by_section as $section_value) {
-            $cost_center_name = $section_value->cost_center_name;
 
-            if ($section_value->cost_center_code == '370' || $section_value->cost_center_code == '371' || $section_value->cost_center_code == '372') {
-                $cost_center_name = 'INJ';
-            }
-
-            $tmp_total_ot = $avg_ot = 0;
-            foreach ($tmp_attendance as $attendance_val) {
-                if ($attendance_val->cost_center == $cost_center_name) {
-                    $tmp_total_ot = $attendance_val->total_ot;
-                }
-            }
-            if ($section_value->total_mp > 0) {
-                $avg_ot = round(($tmp_total_ot / 60 / $section_value->total_mp), 1);
-            }
-
-            $tmp_data[$cost_center_name] = $avg_ot;
-
-        }*/
+        $avg_total = 0;
+        $grandtotal_overtime = round($grandtotal_overtime / 60);
+        if ($grandtotal_mp > 0) {
+            $avg_total = round(($grandtotal_overtime / $grandtotal_mp), 1);
+        }
+        
         arsort($tmp_data);
         $tmp_data_chart = $categories = [];
         foreach ($tmp_data as $key => $value) {
@@ -138,6 +127,9 @@ class DisplayHrgaController extends Controller
         return $this->render('overtime-monthly-avg', [
             'data_chart' => $data_chart,
             'tmp_data' => $tmp_data,
+            'grandtotal_overtime' => $grandtotal_overtime,
+            'grandtotal_mp' => $grandtotal_mp,
+            'avg_total' => $avg_total,
             'categories' => $categories,
             'period_text' => $period_text,
         ]);
