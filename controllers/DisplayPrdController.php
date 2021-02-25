@@ -455,7 +455,7 @@ class DisplayPrdController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $today = date('Y-m-d', strtotime('-1 day'));
+        $today = date('Y-m-d');
 
         $model = new \yii\base\DynamicModel([
             'from_date', 'to_date', 'item'
@@ -478,6 +478,7 @@ class DisplayPrdController extends Controller
         $tmp_data = $tmp_data_total = $tmp_data_sap_stock = [];
         $item_info = null;
         $model_load = false;
+        $actual_stock_by_loc = [];
 
         if ($model->load($_GET)) {
             $model_load = true;
@@ -491,91 +492,88 @@ class DisplayPrdController extends Controller
                 'ITEM' => $model->item
             ])
             ->groupBy('LOC_DESC')
-            ->orderBy('LOC_DESC')
             ->all();
+
+            $tmp_sum_nilai_inventory = 0;
+            foreach ($tmp_dtr as $key => $value) {
+                $tmp_sum_nilai_inventory += $value->NILAI_INVENTORY;
+                $actual_stock_by_loc[$value->LOC_DESC] = $value->NILAI_INVENTORY;
+            }
 
             $item_info = TraceItemHdr::find()->where(['ITEM' => $model->item])->one();
 
-            foreach ($tmp_dtr as $dtr_val) {
-                $initial_stock = $dtr_val->NILAI_INVENTORY;
+            //foreach ($tmp_dtr as $dtr_val) {
+            $initial_stock = $tmp_sum_nilai_inventory;
 
-                $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
-                $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+            $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
 
-                $tmp_log = TraceItemDtrLog::find()
-                ->select([
-                    'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'LOC_DESC', 'QTY_IN' => 'ISNULL(SUM(QTY_IN), 0)', 'QTY_OUT' => 'ISNULL(SUM(QTY_OUT), 0)',
-                ])
-                ->where([
-                    'ITEM' => $model->item,
-                    'LOC_DESC' => $dtr_val->LOC_DESC
-                ])
-                ->andWhere(['>=', 'POST_DATE', $model->from_date])
-                ->andWhere('POST_DATE IS NOT NULL')
-                ->groupBy(['POST_DATE', 'LOC_DESC'])
-                ->all();
+            $tmp_log = TraceItemDtrLog::find()
+            ->select([
+                'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'QTY_IN' => 'ISNULL(SUM(QTY_IN), 0)', 'QTY_OUT' => 'ISNULL(SUM(QTY_OUT), 0)',
+            ])
+            ->where([
+                'ITEM' => $model->item,
+            ])
+            ->andWhere(['>=', 'POST_DATE', $model->from_date])
+            ->andWhere('POST_DATE IS NOT NULL')
+            ->groupBy(['POST_DATE'])
+            ->all();
 
-                //var_dump(count($tmp_log)) ;
-                if (count($tmp_log) == 0) {
-                    //return 'ini yang bener?';
+            $tmp_dtr_info = TraceItemDtr::find()
+            ->select([
+                'POST_DATE' => 'CAST(POST_DATE AS DATE)'
+            ])
+            ->where([
+                'ITEM' => $model->item,
+            ])
+            ->andWhere(['>=', 'POST_DATE', $model->from_date])
+            ->andWhere('POST_DATE IS NOT NULL')
+            ->orderBy('POST_DATE')
+            ->one();
+
+            for($i = $end; $i >= $begin; $i->modify('-1 day')){
+                $tgl = $i->format("Y-m-d");
+
+                //$tmp_data[$dtr_val->LOC_DESC][$tgl] = $initial_stock;
+                $tmp_data_total[$tgl] += $initial_stock;
+
+                if (count($tmp_log) > 0) {
+                    
+                    foreach ($tmp_log as $log_val) {
+                        //if ($tgl < $today) {
+                            if ($log_val->POST_DATE == $tgl) {
+                                $initial_stock += $log_val->QTY_OUT;
+                                $initial_stock -= $log_val->QTY_IN;
+                            }
+                        //}
+                        
+                    }
+                } else {
                     $tmp_log_last_update = TraceItemDtr::find()
                     ->select([
-                        'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'NILAI_INVENTORY'
+                        'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'NILAI_INVENTORY' => 'SUM(NILAI_INVENTORY)'
                     ])
                     ->where([
-                        'ITEM' => $model->item,
-                        'LOC_DESC' => $dtr_val->LOC_DESC
+                        'ITEM' => $model->item
                     ])
                     ->andWhere(['>=', 'POST_DATE', $model->from_date])
                     ->andWhere('POST_DATE IS NOT NULL')
                     ->all();
-                }
 
-                $tmp_dtr_info = TraceItemDtr::find()
-                ->select([
-                    'POST_DATE' => 'CAST(POST_DATE AS DATE)'
-                ])
-                ->where([
-                    'ITEM' => $model->item,
-                    'LOC_DESC' => $dtr_val->LOC_DESC
-                ])
-                ->andWhere(['>=', 'POST_DATE', $model->from_date])
-                ->andWhere('POST_DATE IS NOT NULL')
-                ->orderBy('POST_DATE')
-                ->one();
-
-                for($i = $end; $i >= $begin; $i->modify('-1 day')){
-                    $tgl = $i->format("Y-m-d");
-
-                    $tmp_data[$dtr_val->LOC_DESC][$tgl] = $initial_stock;
-                    $tmp_data_total[$tgl] += $initial_stock;
-
-                    if (count($tmp_log) > 0) {
-                        
-                        foreach ($tmp_log as $log_val) {
-                            //if ($tgl < $today) {
-                                if ($log_val->POST_DATE == $tgl) {
-                                    $initial_stock += $log_val->QTY_OUT;
-                                    $initial_stock -= $log_val->QTY_IN;
-                                }
-                            //}
-                            
-                        }
-                    } else {
-                        //return 'hah?';
-                        foreach ($tmp_log_last_update as $log_last_update) {
-                            if ($log_last_update->POST_DATE == $tgl) {
-                                $initial_stock -= $log_last_update->NILAI_INVENTORY;
-                            }
+                    foreach ($tmp_log_last_update as $log_last_update) {
+                        if ($log_last_update->POST_DATE == $tgl) {
+                            $initial_stock -= $log_last_update->NILAI_INVENTORY;
                         }
                     }
-
-                    if ($tgl < $tmp_dtr_info->POST_DATE) {
-                        $initial_stock = 0;
-                    }
-
                 }
-            } //end actual stock
+
+                if ($tgl < $tmp_dtr_info->POST_DATE) {
+                    $initial_stock = 0;
+                }
+
+            }
+            //} //end actual stock
             
             //start sap stock
             $tmp_sap_current_stock = SapGrGiByPlant::find()->where([
@@ -624,26 +622,8 @@ class DisplayPrdController extends Controller
 
         } //close $model->load
 
-        if (count($tmp_data > 0)) {
-            foreach ($tmp_data as $key => $value) {
-                ksort($tmp_data[$key]);
-            }
-        }
         ksort($tmp_data_total);
         ksort($tmp_data_sap_stock);
-
-        $tmp_data2 = [];
-        foreach ($tmp_data as $loc_desc => $value) {
-            $tmp_data3 = [];
-            foreach ($value as $tgl => $value2) {
-                $post_date = (strtotime($tgl . " +7 hours") * 1000);
-                $tmp_data3[] = [
-                    'x' => $post_date,
-                    'y' => round($value2),
-                ];
-            }
-            $tmp_data2[$loc_desc] = $tmp_data3;
-        }
 
         $tmp_data_total2 = $tmp_data_sap_stock2 = $tmp_data_diff = [];
         $sap_val_arr = $actual_val_arr = [];
@@ -703,10 +683,12 @@ class DisplayPrdController extends Controller
             'model' => $model,
             'item_arr' => $item_dropdown,
             'tmp_data' => $tmp_data,
+            'actual_stock_by_loc' => $actual_stock_by_loc,
             'data' => $data,
             'pct' => $pct,
             'diff_avg' => $diff_avg,
             'um' => $item_info->UM,
+            'item_desc' => $item_info->itemDescription,
         ]);
     }
 

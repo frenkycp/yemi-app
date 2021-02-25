@@ -198,7 +198,10 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<div class="panel panel-default">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title"><?= $item_desc; ?></h3>
+    </div>
     <div class="panel-body no-padding">
         <?=
         Highcharts::widget([
@@ -265,5 +268,14 @@ echo '</pre>';*/
             ],
         ]);
         ?>
+    </div>
+    <div class="panel-footer" style="font-size: 20px;">
+        <span><u>Actual Stock Detail by Location :</u></span>
+        <ul>
+            <?php foreach ($actual_stock_by_loc as $key => $value): ?>
+                <li><?= $key; ?> : <b><?= $value; ?></b> <?= $um; ?></li>
+            <?php endforeach ?>
+        </ul>
+        
     </div>
 </div>
