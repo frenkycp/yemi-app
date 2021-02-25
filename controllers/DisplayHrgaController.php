@@ -631,7 +631,7 @@ class DisplayHrgaController extends Controller
             
 
             if ($last_update == null) {
-                if ($attend_judgement == 'P' && strpos($attendance_val['Attend_Code'], 'WFH') === false) {
+                if ($attend_judgement == 'P' && strpos($attendance_val['shiftdaily_code'], 'WFH') === false) {
                     $attend_judgement_txt = 'Hadir';
                     $no_check_data[] = [
                         'nik' => $attendance_val['nik'],
