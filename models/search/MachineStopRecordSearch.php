@@ -45,6 +45,12 @@ $query = MachineStopRecord::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+        'defaultOrder' => [
+            //'cust_desc' => SORT_ASC,
+            'START_TIME' => SORT_DESC,
+        ]
+    ],
 ]);
 
 $this->load($params);
