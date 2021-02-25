@@ -176,6 +176,7 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
                     'name' => $value->full_name,
                     'shift' => $shift,
                     'Attend_Code' => $value->Attend_Code,
+                    'shiftdaily_code' => $value->shiftdaily_code,
                     'attend_judgement' => $attend_judgement,
                     'starttime' => $value->starttime,
                     'endtime' => $value->endtime,
