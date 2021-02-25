@@ -202,8 +202,8 @@ class DisplayLogController extends Controller
             $pct_arr['confirm'] = round(($total_confirm / $total_plan) * 100, 2);
             $pct_arr['reject'] = round(($total_reject / $total_plan) * 100, 2);
             $pct_arr['unconfirm'] = round(($total_unconfirm / $total_plan) * 100, 2);
-            $pct_arr['etd_yemi'] = round(($total_etd_yemi / $total_confirm) * 100, 2);
-            $pct_arr['etd_port'] = round(($total_on_board / $total_confirm) * 100, 2);
+            $pct_arr['etd_yemi'] = round(($total_etd_yemi / $total_plan) * 100, 2);
+            $pct_arr['etd_port'] = round(($total_on_board / $total_plan) * 100, 2);
         }
 
         return $this->render('shipping-order-new', [
