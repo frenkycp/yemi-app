@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
 $bg_url = Url::to('@web/uploads/ICON/coronavirus_03.png');
+$audio_url = Url::to('@web/uploads/AUDIO/scifi_siren_01.mp3');
 
 $this->registerCss("
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
@@ -94,6 +95,16 @@ $this->registerCss("
 ");
 
 $script = "
+    function playAudio() 
+    {
+        var x = document.getElementById('myAudio');
+        x.play();
+    }
+    function stopAudio() 
+    {
+        var x = document.getElementById('myAudio');
+        x.pause();
+    }
     function update_data(){
         $.ajax({
             type: 'POST',
@@ -110,6 +121,11 @@ $script = "
                 $('#pengunjung-3').html('-');
                 $('#pengunjung-4').html('-');
                 $('#pengunjung-5').html('-');
+                $('#pengunjung-6').html('-');
+                $('#pengunjung-7').html('-');
+                $('#pengunjung-8').html('-');
+                $('#pengunjung-9').html('-');
+                $('#pengunjung-10').html('-');
                 
                 var tmp_count = 1;
                 $.each(tmp_data.detail_pembeli , function(index, val) {
@@ -117,7 +133,11 @@ $script = "
                     $('#pengunjung-' + tmp_count).html(tmp_count + '. ' + val.full_name + ' (' + val.in + ')');
                     tmp_count = tmp_count + 1;
                 });
-
+                if(tmp_data.current_capacity > tmp_data.max_capacity) {
+                    playAudio();
+                } else {
+                    stopAudio();
+                }
             },
             complete: function(){
                 setTimeout(function(){update_data();}, 500);
@@ -161,7 +181,6 @@ $script = "
                 }
             });
         };
-
     $(document).ready(function() {
         setupRefresh();
         update_data();
@@ -176,7 +195,11 @@ $script = "
     }
 ";
 $this->registerJs($script, View::POS_HEAD );
+$audio_url = Url::to('@web/uploads/AUDIO/scifi_siren_01.mp3');
 ?>
+<audio id="myAudio" hidden="hidden">
+    <source src="<?= $audio_url; ?>" type="audio/mpeg">
+</audio>
 <div class="row" style="background-color: #61258e;">
     <div class="col-md-12">
         <div class="text-center">
@@ -211,7 +234,12 @@ $this->registerJs($script, View::POS_HEAD );
                                     <span id="pengunjung-2">-</span><br/>
                                     <span id="pengunjung-3">-</span><br/>
                                     <span id="pengunjung-4">-</span><br/>
-                                    <span id="pengunjung-5">-</span>
+                                    <span id="pengunjung-5">-</span><br/
+                                    <span id="pengunjung-6">-</span><br/>
+                                    <span id="pengunjung-7">-</span><br/>
+                                    <span id="pengunjung-8">-</span><br/>
+                                    <span id="pengunjung-9">-</span><br/>
+                                    <span id="pengunjung-10">-</span>
                                     
                                 </div>
                             </div>

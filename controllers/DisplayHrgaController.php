@@ -1057,18 +1057,23 @@ class DisplayHrgaController extends Controller
         }
         $current_capacity = count($tmp_data_pengunjung);
         //$current_capacity = 6;
-        if ($current_capacity >= $max_capacity) {
-            $msg = 'TUNGGU DULU';
-            $img_url = Url::to('@web/uploads/ICON/NO-2.png');
-            $bg_class = 'bg-red';
-        } else {
+        if ($current_capacity < $max_capacity) {
             $msg = 'BOLEH MASUK';
             $img_url = Url::to('@web/uploads/ICON/YES.png');
             $bg_class = 'bg-green';
+        } elseif ($current_capacity == $max_capacity) {
+            $msg = 'TUNGGU DULU';
+            $img_url = Url::to('@web/uploads/ICON/NO-2.png');
+            $bg_class = 'bg-orange';
+        } else {
+            $msg = 'OVER';
+            $img_url = Url::to('@web/uploads/ICON/NO-2.png');
+            $bg_class = 'bg-red';
         }
 
         $data = [
             'current_capacity' => $current_capacity,
+            'max_capacity' => $max_capacity,
             'msg' => $msg,
             'bg_class' => $bg_class,
             'img_url' => $img_url,
@@ -1081,7 +1086,7 @@ class DisplayHrgaController extends Controller
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $max_capacity = 5;
+        $max_capacity = 6;
 
         $tmp_in_out = KoyemiInOutView::find()
         ->where([
@@ -1109,14 +1114,18 @@ class DisplayHrgaController extends Controller
             }
         }
         $current_capacity = count($tmp_data_pengunjung);
-        if ($current_capacity >= $max_capacity) {
-            $msg = 'TUNGGU DULU';
-            $img_url = Url::to('@web/uploads/ICON/NO-2.png');
-            $bg_class = 'bg-red';
-        } else {
+        if ($current_capacity < $max_capacity) {
             $msg = 'BOLEH MASUK';
             $img_url = Url::to('@web/uploads/ICON/YES.png');
             $bg_class = 'bg-green';
+        } elseif ($current_capacity == $max_capacity) {
+            $msg = 'TUNGGU DULU';
+            $img_url = Url::to('@web/uploads/ICON/NO-2.png');
+            $bg_class = 'bg-orange';
+        } else {
+            $msg = 'OVER';
+            $img_url = Url::to('@web/uploads/ICON/NO-2.png');
+            $bg_class = 'bg-red';
         }
 
         $data = [
