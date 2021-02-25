@@ -573,7 +573,7 @@ class DisplayHrgaController extends Controller
         $yesterday = date('Y-m-d', strtotime($model->post_date . ' -1 day'));
 
         $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
-        $tmp_office_emp = OfficeEmp::find()->all();
+        //$tmp_office_emp = OfficeEmp::find()->all();
         //$today_temp = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->orderBy('LAST_UPDATE')->all();
         //$yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();
         $temperature_from_yesterday = ScanTemperature::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
@@ -631,7 +631,7 @@ class DisplayHrgaController extends Controller
             
 
             if ($last_update == null) {
-                if ($attend_judgement == 'P') {
+                if ($attend_judgement == 'P' && strpos($attendance_val['Attend_Code'], 'WFH') === false) {
                     $attend_judgement_txt = 'Hadir';
                     $no_check_data[] = [
                         'nik' => $attendance_val['nik'],
