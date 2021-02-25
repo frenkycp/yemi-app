@@ -633,6 +633,13 @@ class DisplayHrgaController extends Controller
             if ($last_update == null) {
                 if ($attend_judgement == 'P') {
                     $attend_judgement_txt = 'Hadir';
+                    $no_check_data[] = [
+                        'nik' => $attendance_val['nik'],
+                        'name' => $emp_name,
+                        'shift' => $emp_shift,
+                        'attendance' => $attend_judgement_txt
+                    ];
+                    $total_no_check++;
                 } elseif ($attend_judgement == 'I') {
                     $attend_judgement_txt = 'Ijin';
                 } elseif ($attend_judgement == 'S') {
@@ -642,13 +649,7 @@ class DisplayHrgaController extends Controller
                 } else {
                     $attend_judgement_txt = 'Alpa';
                 }
-                $no_check_data[] = [
-                    'nik' => $attendance_val['nik'],
-                    'name' => $emp_name,
-                    'shift' => $emp_shift,
-                    'attendance' => $attend_judgement_txt
-                ];
-                $total_no_check++;
+                
             } else {
                 $total_check++;
                 $body_temp -= 0.1;
