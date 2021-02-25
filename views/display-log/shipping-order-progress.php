@@ -185,9 +185,9 @@ echo '</pre>';*/
             <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="<?= $data_pct['confirmed']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['confirmed']; ?>%">
                 <?php
                 if ($data_pct['confirmed'] >= 30) {
-                    echo 'CONFIRMED <span class="japanesse">確保</span> : ' . $data['confirmed'];
+                    echo 'CONFIRMED <span class="japanesse">確保</span> : ' . $data['confirmed'] . ' <small>(' . $data_pct['confirmed'] . '%)</small>';
                 } else {
-                    echo $data['confirmed'];
+                    echo $data['confirmed'] . ' <small>(' . $data_pct['confirmed'] . '%)</small>';
                 }
                 ?>
             </div>
@@ -197,18 +197,18 @@ echo '</pre>';*/
             <div class="progress-bar bg-orange text-nowrap" role="progressbar" aria-valuenow="<?= $data_pct['etd_sub']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['etd_sub']; ?>%">
                 <?php
                 if ($data_pct['etd_sub'] >= 20) {
-                    echo 'EXPORT <span class="japanesse">出港</span> : ' . $data['etd_sub'];
+                    echo 'EXPORT <span class="japanesse">出港</span> : ' . $data['etd_sub'] . ' <small>(' . $data_pct['etd_sub'] . '%)</small>';
                 } else {
-                    echo $data['etd_sub'];
+                    echo $data['etd_sub'] . ' <small>(' . $data_pct['etd_sub'] . '%)</small>';
                 }
                 ?>
             </div>
             <div class="progress-bar bg-purple text-nowrap" role="progressbar" aria-valuenow="<?= $data_pct['at_port']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['at_port']; ?>%">
                 <?php
                 if ($data_pct['at_port'] >= 20) {
-                    echo 'AT PORT <span class="japanesse">港在庫</span> : ' . $data['at_port'];
+                    echo 'AT PORT <span class="japanesse">港在庫</span> : ' . $data['at_port'] . ' <small>(' . $data_pct['at_port'] . '%)</small>';
                 } else {
-                    echo $data['at_port'];
+                    echo $data['at_port'] . ' <small>(' . $data_pct['at_port'] . '%)</small>';
                 }
                 ?>
             </div>
@@ -229,9 +229,9 @@ echo '</pre>';*/
             <div class="progress-bar progress-bar-green" role="progressbar" aria-valuenow="<?= $data_pct['confirmed_teu']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['confirmed_teu']; ?>%">
                 <?php
                 if ($data_pct['confirmed_teu'] >= 30) {
-                    echo 'CONFIRMED <span class="japanesse">確保</span> : ' . $data['confirmed_teu'];
+                    echo 'CONFIRMED <span class="japanesse">確保</span> : ' . $data['confirmed_teu'] . ' <small>(' . $data_pct['confirmed_teu'] . '%)</small>';
                 } else {
-                    echo $data['confirmed_teu'];
+                    echo $data['confirmed_teu'] . ' <small>(' . $data_pct['confirmed_teu'] . '%)</small>';
                 }
                 ?>
             </div>
@@ -241,18 +241,18 @@ echo '</pre>';*/
             <div class="progress-bar bg-orange text-nowrap" role="progressbar" aria-valuenow="<?= $data_pct['etd_sub_teu']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['etd_sub_teu']; ?>%">
                 <?php
                 if ($data_pct['etd_sub_teu'] >= 20) {
-                    echo 'EXPORT <span class="japanesse">出港</span> : ' . $data['etd_sub_teu'];
+                    echo 'EXPORT <span class="japanesse">出港</span> : ' . $data['etd_sub_teu'] . ' <small>(' . $data_pct['etd_sub_teu'] . '%)</small>';
                 } else {
-                    echo $data['etd_sub_teu'];
+                    echo $data['etd_sub_teu'] . ' <small>(' . $data_pct['etd_sub_teu'] . '%)</small>';
                 }
                 ?>
             </div>
             <div class="progress-bar bg-purple text-nowrap" role="progressbar" aria-valuenow="<?= $data_pct['at_port_teu']; ?>" aria-valuemin="0" aria-valuemax="100" style="width:<?= $data_pct['at_port_teu']; ?>%">
                 <?php
                 if ($data_pct['at_port_teu'] >= 20) {
-                    echo 'AT PORT <span class="japanesse">港在庫</span> : ' . $data['at_port_teu'];
+                    echo 'AT PORT <span class="japanesse">港在庫</span> : ' . $data['at_port_teu'] . ' <small>(' . $data_pct['at_port_teu'] . '%)</small>';
                 } else {
-                    echo $data['at_port_teu'];
+                    echo $data['at_port_teu'] . ' <small>(' . $data_pct['at_port_teu'] . '%)</small>';
                 }
                 ?>
             </div>

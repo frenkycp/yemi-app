@@ -73,7 +73,7 @@ class DisplayLogController extends Controller
             'confirmed' => $data['plan'] > 0 ? round(($data['confirmed'] / $data['plan']) * 100) : 0,
             'confirmed_teu' => $data['plan_teu'] > 0 ? round(($data['confirmed_teu'] / $data['plan_teu']) * 100) : 0,
             'etd_sub' => $data['plan'] > 0 ? round(($data['etd_sub'] / $data['plan']) * 100) : 0,
-            'etd_sub_teu' => $data['plan_teu'] > 0 ? round(($data['etd_sub'] / $data['plan_teu']) * 100) : 0,
+            'etd_sub_teu' => $data['plan_teu'] > 0 ? round(($data['etd_sub_teu'] / $data['plan_teu']) * 100) : 0,
             'at_port' => $data['plan'] > 0 ? round(($data['at_port'] / $data['plan']) * 100) : 0,
             'at_port_teu' => $data['plan_teu'] > 0 ? round(($data['at_port_teu'] / $data['plan_teu']) * 100) : 0,
         ];

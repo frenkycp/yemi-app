@@ -98,6 +98,9 @@ $css_string = "
     .container-qty {
         width: 130px;
     }
+    .detail-confirmed {
+        font-size: 18px;
+    }
 
     .label-tbl {padding-left: 20px !important;}
     .text-red {color: #ff7564 !important;}
@@ -201,9 +204,15 @@ $this->registerJs($script, View::POS_HEAD );
                 <div class="panel-body no-padding" style="">
                     <span class="total-container"><?= $data['total_confirm']; ?></span> <span class="total-pct">(<?= $data['confirm_pct']; ?>%)</span>
                     <hr style="margin: 5px 10px;">
-                    <span>ETD Port : <b><?= $data['total_etd_sub']; ?></b></span><br/>
-                    <span>At Port : <b><?= $data['total_at_port']; ?></b></span><br/>
-                    <span>Not Yet Stuffing : <b><?= $data['not_yet_stuffing']; ?></b></span>
+                    <span class="detail-confirmed">ETD Port : <b><?= $data['total_etd_sub']; ?></b> <span>
+                        (<?= $data['total_plan'] > 0 ? round(($data['total_etd_sub'] / $data['total_plan']) * 100) : '0'; ?>%)</span>
+                    </span><br/>
+                    <span class="detail-confirmed">At Port : <b><?= $data['total_at_port']; ?></b> <span>
+                        (<?= $data['total_plan'] > 0 ? round(($data['total_at_port'] / $data['total_plan']) * 100) : '0'; ?>%)
+                    </span></span><br/>
+                    <span class="detail-confirmed">Not Yet Stuffing : <b><?= $data['not_yet_stuffing']; ?></b> <span>
+                        (<?= $data['total_plan'] > 0 ? round(($data['not_yet_stuffing'] / $data['total_plan']) * 100) : '0'; ?>%)
+                    </span></span>
                 </div>
             </div>
         </div>
@@ -237,9 +246,15 @@ $this->registerJs($script, View::POS_HEAD );
                 <div class="panel-body no-padding" style="">
                     <span class="total-container"><?= $data['total_confirm_teu']; ?></span> <span class="total-pct">(<?= $data['confirm_pct_teu']; ?>%)</span>
                     <hr style="margin: 5px 10px;">
-                    <span>ETD Port : <b><?= $data['total_etd_sub_teu']; ?></b></span><br/>
-                    <span>At Port : <b><?= $data['total_at_port_teu']; ?></b></span><br/>
-                    <span>Not Yet Stuffing : <b><?= $data['not_yet_stuffing_teu']; ?></b></span>
+                    <span class="detail-confirmed">ETD Port : <b><?= $data['total_etd_sub_teu']; ?></b> <small>
+                        (<?= $data['total_plan_teu'] > 0 ? round(($data['total_etd_sub_teu'] / $data['total_plan_teu']) * 100) : '0'; ?>%)
+                    </small></span><br/>
+                    <span class="detail-confirmed">At Port : <b><?= $data['total_at_port_teu']; ?></b> <small>
+                        (<?= $data['total_plan_teu'] > 0 ? round(($data['total_at_port_teu'] / $data['total_plan_teu']) * 100) : '0'; ?>%)
+                    </small></span><br/>
+                    <span class="detail-confirmed">Not Yet Stuffing : <b><?= $data['not_yet_stuffing_teu']; ?></b> <small>
+                        (<?= $data['total_plan_teu'] > 0 ? round(($data['not_yet_stuffing_teu'] / $data['total_plan_teu']) * 100) : '0'; ?>%)
+                    </small></span>
                 </div>
             </div>
         </div>
