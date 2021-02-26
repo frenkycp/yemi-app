@@ -86,7 +86,9 @@ if (count($tmp_open) > 0) {
                 <?= $model->isNewRecord || $model->STATUS == 0 ? '' : $form->field($model, 'END_TIME')->widget(DateTimePicker::classname(), [
                     'options' => ['placeholder' => 'Enter end time ...'],
                     'pluginOptions' => [
-                        'autoclose' => true
+                        'autoclose' => true,
+                        'startDate' => date("Y-m-d", strtotime($model->START_TIME)),
+                        'endDate' => date('Y-m-d')
                     ]
                 ]); ?>
             </div>

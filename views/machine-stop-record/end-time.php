@@ -37,7 +37,9 @@ $this->title = Yii::t('models', 'Machine Stop Record (End Time)');
 		<?= $form->field($model, 'END_TIME')->widget(DateTimePicker::classname(), [
             'options' => ['placeholder' => 'Enter end time ...'],
             'pluginOptions' => [
-                'autoclose' => true
+                'autoclose' => true,
+                'startDate' => date("Y-m-d", strtotime($model->START_TIME)),
+                'endDate' => date('Y-m-d')
             ]
         ]); ?>
 	</div>
