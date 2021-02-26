@@ -4,9 +4,25 @@ namespace app\models;
 use yii\base\Model;
 use app\models\WorkDayTbl;
 use app\models\ContainerView;
+use app\models\IjazahPlanActual;
+use app\models\VmsPlanActual;
 
 class GeneralFunction extends Model
 {
+    public function getIjazahPlanActualLastUpdate($value='')
+    {
+        $tmp_last_update = IjazahPlanActual::find()->select(['ACT_LAST_UPDATE' => 'MAX(ACT_LAST_UPDATE)'])->one();
+        $last_update = date('d M\' Y H:i', strtotime($tmp_last_update->ACT_LAST_UPDATE));
+        return $last_update;
+    }
+
+    public function getVmsPlanActualLastUpdate($value='')
+    {
+        $tmp_last_update = VmsPlanActual::find()->select(['ACT_QTY_LAST_UPDATE' => 'MAX(ACT_QTY_LAST_UPDATE)'])->one();
+        $last_update = date('d M\' Y H:i', strtotime($tmp_last_update->ACT_QTY_LAST_UPDATE));
+        return $last_update;
+    }
+
     public function getTotalShipOut($post_date)
     {
         $period = date('Ym', strtotime($post_date));

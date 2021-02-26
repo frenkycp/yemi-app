@@ -139,7 +139,7 @@ print_r($tmp_top_minus);
 echo '</pre>';*/
 ?>
 
-<div class="row" style="padding-top: 20px;">
+<div class="row" style="padding-top: 10px;">
     <div class="col-sm-12 text-center" style="color: white; font-size: 40px;">
         <?= strtoupper($period_text); ?>
     </div>
@@ -213,3 +213,5 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+<hr style="margin-bottom: 0px;">
+<span style="color: silver; font-size: 20px;">LAST UPDATE : <?= $last_update; ?></span>

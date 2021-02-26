@@ -10,15 +10,13 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'PRODUCTION PROGRESS <span class="japanesse light-green">(生産進捗)</span> VMS (D-1)',
+    'page_title' => 'PRODUCTION PROGRESS <span class="japanesse light-green">(生産進捗)</span> VMS (D-1) ' . strtoupper($yesterday_period_name),
     'tab_title' => 'PRODUCTION PROGRESS (D-1)',
     'breadcrumbs_title' => 'PRODUCTION PROGRESS (D-1)'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
-
-
 
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
@@ -167,8 +165,7 @@ echo '</pre>';*/
 </div>
 
 <?php ActiveForm::end(); ?>
-<br/>
-<table class="table summary-tbl table-condensed" style="margin-bottom: 0px;">
+<table class="table summary-tbl table-condensed" style="margin-bottom: 0px; margin-top: 10px;">
     <thead>
         <tr>
             <th class="">BU</th>
@@ -254,7 +251,15 @@ echo '</pre>';*/
         </tr>
     </tfoot>
 </table>
-<span style="color: silver; font-size: 1.5em; letter-spacing: 2px; font-weight: bolder;"><i>VMS Version : <?= $vms_version; ?></i><i style="display: none;">Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
+<div class="row">
+    <div class="col-sm-6 text-left">
+        <span style="color: silver; font-size: 1.5em; letter-spacing: 2px; font-weight: bolder;"><i>VMS Version : <?= $vms_version; ?></i>
+    </div>
+    <div class="col-sm-6 text-right">
+        <span style="color: silver; font-size: 1.5em; letter-spacing: 2px; font-weight: bolder;"><i>Last Update : <?= ($last_update); ?></i>
+    </div>
+</div>
+
 <?php
     yii\bootstrap\Modal::begin([
         'id' =>'modal',

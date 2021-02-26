@@ -260,3 +260,5 @@ echo '</pre>';*/
 
     </div>
 </div>
+<hr style="margin-bottom: 0px;">
+<span style="color: silver; font-size: 20px;">Last Update : <?= date('d M\' Y H:i'); ?></span>

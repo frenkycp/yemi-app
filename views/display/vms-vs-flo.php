@@ -314,7 +314,7 @@ if (count($tmp_top_minus) == 0) { } else {
 <?php }
 ?>
 <hr>
-<span style="color: silver; font-size: 1.2em;"><i>Last Update : <?= date('Y-m-d H:i:s'); ?></i></span>
+<span style="color: silver; font-size: 20px;"><i>Last Update : <?= date('d M\' Y H:i'); ?></i></span>
 <?php
     yii\bootstrap\Modal::begin([
         'id' =>'modal',

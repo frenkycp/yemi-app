@@ -159,6 +159,7 @@ use app\models\MachineCorrectiveView01;
 use app\models\MachineIotLogHour;
 use app\models\SapItemTbl;
 use app\models\EmpInterviewYubisashi;
+use app\models\VmsPlanActual;
 
 class DisplayController extends Controller
 {
@@ -215,10 +216,12 @@ class DisplayController extends Controller
         ];
 
         $period_text = date('F Y', strtotime($period . '01'));
+        $last_update = GeneralFunction::instance()->getIjazahPlanActualLastUpdate();
 
         return $this->render('ijazah-progress-chart', [
             'data_chart' => $data_chart,
             'categories' => $bu_arr,
+            'last_update' => $last_update,
             'period_text' => $period_text,
         ]);
     }
@@ -1179,9 +1182,12 @@ class DisplayController extends Controller
         ->orderBy('BALANCE_AMT_ALLOC DESC')
         ->limit(10)->all();
 
+        $last_update = GeneralFunction::instance()->getIjazahPlanActualLastUpdate();
+
         return $this->render('monthly-progress-summary', [
             'data' => $data,
             'model' => $model,
+            'last_update' => $last_update,
             'period_arr' => $period_arr,
             'top_minus' => $top_minus,
         ]);
@@ -2080,6 +2086,7 @@ class DisplayController extends Controller
         ->one();
         $yesterday = date('Y-m-d', strtotime($tmp_yesterday->cal_date));
         $yesterday_period = date('Ym', strtotime($yesterday));
+        $yesterday_period_name = date('F Y', strtotime($yesterday));
 
         $period_dropdown = ArrayHelper::map(VmsPlanActualView::find()->select('VMS_PERIOD')->groupBy('VMS_PERIOD')->orderBy('VMS_PERIOD DESC')->all(), 'VMS_PERIOD', 'VMS_PERIOD');
         $model = new \yii\base\DynamicModel([
@@ -2162,10 +2169,14 @@ class DisplayController extends Controller
             }
         }
 
+        $last_update = GeneralFunction::instance()->getVmsPlanActualLastUpdate();
+
         return $this->render('vms-yesterday', [
             'model' => $model,
+            'yesterday_period_name' => $yesterday_period_name,
             'period_dropdown' => $period_dropdown,
             'vms_version' => $vms_version,
+            'last_update' => $last_update,
             'tmp_top_minus' => $tmp_top_minus,
             'tmp_top_minus_av' => $tmp_top_minus_av,
             'tmp_top_minus_pa' => $tmp_top_minus_pa,

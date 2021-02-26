@@ -134,6 +134,11 @@ $gridColumns = [
     ],
     [
         'attribute' => 'TOTAL_DOWNTIME',
+        'label' => 'Downtime<br/>(minutes)',
+        'encodeLabel' => false,
+        'value' => function($model){
+            return round($model->TOTAL_DOWNTIME / 60);
+        },
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'mergeHeader' => true,

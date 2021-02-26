@@ -156,7 +156,7 @@ echo '</pre>';*/
         <?php endforeach ?>
     </tbody>
 </table>
-
+<span style="color: silver; font-size: 20px;">Last Update : <?= $last_update; ?></span>
 <hr style="margin: 0px;">
 
 <div class="row">
