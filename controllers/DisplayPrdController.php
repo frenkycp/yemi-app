@@ -118,10 +118,10 @@ class DisplayPrdController extends Controller
         $tmp_sap_so = SapSoPlanActual::find()
         ->select([
             'period_plan',
-            'total_early' => 'SUM(CASE WHEN otd = \'EARLY\' THEN quantity ELSE 0 END)',
-            'total_otd' => 'SUM(CASE WHEN otd = \'OTD\' THEN quantity ELSE 0 END)',
-            'total_outstanding' => 'SUM(CASE WHEN otd = \'OUTSTANDING\' THEN quantity ELSE 0 END)',
-            'total_late' => 'SUM(CASE WHEN otd = \'LATE\' THEN quantity ELSE 0 END)',
+            'total_early' => 'SUM(CASE WHEN otd = \'EARLY\' THEN amount_usd ELSE 0 END)',
+            'total_otd' => 'SUM(CASE WHEN otd = \'OTD\' THEN amount_usd ELSE 0 END)',
+            'total_outstanding' => 'SUM(CASE WHEN otd = \'OUTSTANDING\' THEN amount_usd ELSE 0 END)',
+            'total_late' => 'SUM(CASE WHEN otd = \'LATE\' THEN amount_usd ELSE 0 END)',
         ])
         ->where(['period_plan' => [$last_month_period, $this_month_period]])
         //->andWhere(['<>', 'BU', 'OTHER'])

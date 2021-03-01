@@ -30,11 +30,13 @@ class MitaUrlController extends \app\controllers\base\MitaUrlController
 
 	public function actionCreate()
 	{
+		date_default_timezone_set('Asia/Jakarta');
 		$model = new MitaUrl;
 
 		try {
 			if ($model->load($_POST)) {
 				$tmp_url = MitaUrl::find()->where(['url' => $model->url])->one();
+				$model->created_datetime;
 				if ($tmp_url) {
 					\Yii::$app->session->setFlash("danger", "Url already exist ...");
 				} else {

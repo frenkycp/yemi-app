@@ -176,7 +176,7 @@ echo '</pre>';*/
             <div class="panel-body">
                 <div class="progress-group">
                     <span class="progress-text">SCM Order (SCM<span class="japanesse">受注</span>)</span>
-                    <span class="progress-number"></span>
+                    <span class="progress-number">(USD <?= number_format($last_month_data['plan']); ?>)</span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" style="width: 100%">100%</div>
@@ -197,7 +197,7 @@ echo '</pre>';*/
 
                 <div class="progress-group">
                     <span class="progress-text">EXPORT (<span class="japanesse">出荷</span>)</span>
-                    <span class="progress-number"></span>
+                    <span class="progress-number">(USD <?= number_format($last_month_data['export']); ?>)</span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-primary progress-bar-striped active" style="width: <?= $last_month_data['export_pct']; ?>%"><?= $last_month_data['export_pct']; ?>%</div>
@@ -214,7 +214,7 @@ echo '</pre>';*/
             <div class="panel-body">
                 <div class="progress-group">
                     <span class="progress-text">SCM Order (SCM<span class="japanesse">受注</span>)</span>
-                    <span class="progress-number"></span>
+                    <span class="progress-number">(USD <?= number_format($this_month_data['plan']); ?>)</span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" style="width: 100%">100%</div>
@@ -235,7 +235,7 @@ echo '</pre>';*/
 
                 <div class="progress-group">
                     <span class="progress-text">EXPORT (<span class="japanesse">出荷</span>)</span>
-                    <span class="progress-number"></span>
+                    <span class="progress-number">(USD <?= number_format($this_month_data['export']); ?>)</span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-primary progress-bar-striped active" style="width: <?= $this_month_data['export_pct']; ?>%"><?= $this_month_data['export_pct']; ?>%</div>
