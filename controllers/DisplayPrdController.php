@@ -34,9 +34,50 @@ use app\models\IpqaPatrolTbl;
 use app\models\SmtAiOutputInsertPoint01;
 use app\models\SapSoPlanActual;
 use app\models\SernoOutput;
+use app\models\SapSoPrice;
 
 class DisplayPrdController extends Controller
 {
+    public function getFloTotalAmount($period)
+    {
+        $output = SernoOutput::find()->select([
+            'so', 'gmc',
+            'output' => 'SUM(output)'
+        ])
+        ->where(['id' => $period])
+        ->groupBy('so, gmc')
+        ->all();
+
+        $price_arr = SapSoPrice::find()->where(['period_plan' => $period])->all();
+
+        $grandtotal = 0;
+        $not_found_arr = [];
+        foreach ($output as $output_val) {
+            $tmp_id = $output_val->so . '-' . $output_val->gmc;
+            $tmp_amt = 0;
+            foreach ($price_arr as $price_val) {
+                if ($price_val->so_no_material_number == $tmp_id) {
+                    $tmp_amt = $output_val->output * $price_val->price_master_usd;
+                }
+            }
+            $grandtotal += $tmp_amt;
+            if ($tmp_amt == 0) {
+                $not_found_arr[] = $tmp_id;
+            }
+            /*if (isset($price_arr[$tmp_id])) {
+                $grandtotal += ($output_val->output * $price_arr[$tmp_id]);
+            } else {
+                $not_found_arr[] = $tmp_id;
+            }*/
+        }
+
+        return [
+            'total_amount' => $grandtotal,
+            'not_found_arr' => $not_found_arr,
+            'price_arr' => count($price_arr)
+        ];
+    }
+
     public function actionSapVsFlo()
     {
         $this->layout = 'clean';
@@ -48,10 +89,10 @@ class DisplayPrdController extends Controller
         $tmp_sap_so = SapSoPlanActual::find()
         ->select([
             'period_plan',
-            'total_early' => 'SUM(CASE WHEN otd = \'EARLY\' THEN quantity ELSE 0 END)',
-            'total_otd' => 'SUM(CASE WHEN otd = \'OTD\' THEN quantity ELSE 0 END)',
-            'total_outstanding' => 'SUM(CASE WHEN otd = \'OUTSTANDING\' THEN quantity ELSE 0 END)',
-            'total_late' => 'SUM(CASE WHEN otd = \'LATE\' THEN quantity ELSE 0 END)',
+            'total_early' => 'SUM(CASE WHEN otd = \'EARLY\' THEN amount_usd ELSE 0 END)',
+            'total_otd' => 'SUM(CASE WHEN otd = \'OTD\' THEN amount_usd ELSE 0 END)',
+            'total_outstanding' => 'SUM(CASE WHEN otd = \'OUTSTANDING\' THEN amount_usd ELSE 0 END)',
+            'total_late' => 'SUM(CASE WHEN otd = \'LATE\' THEN amount_usd ELSE 0 END)',
         ])
         ->where(['period_plan' => [$last_month_period, $this_month_period]])
         ->andWhere(['<>', 'BU', 'OTHER'])
@@ -76,9 +117,10 @@ class DisplayPrdController extends Controller
             $total_export = $value->total_early + $value->total_otd + $value->total_late;
             $output_qty = $output[$value->period_plan]->output;
             $tmp_export_pct = $tmp_output_pct = 0;
+            $total_amount = $this->getFloTotalAmount($value->period_plan);
             if ($total_plan > 0) {
                 $tmp_export_pct = round(($total_export / $total_plan) * 100);
-                $tmp_output_pct = round(($output[$value->period_plan]->output / $total_plan) * 100);
+                $tmp_output_pct = round(($total_amount['total_amount'] / $total_plan) * 100);
             }
             if ($value->period_plan == $last_month_period) {
                 $last_month_data = [
@@ -88,6 +130,7 @@ class DisplayPrdController extends Controller
                     'export_pct' => $tmp_export_pct,
                     'output' => $output_qty,
                     'output_pct' => $tmp_output_pct,
+                    'total_amount' => $total_amount,
                 ];
             } elseif ($value->period_plan == $this_month_period) {
                 $this_month_data = [
@@ -97,6 +140,7 @@ class DisplayPrdController extends Controller
                     'export_pct' => $tmp_export_pct,
                     'output' => $output_qty,
                     'output_pct' => $tmp_output_pct,
+                    'total_amount' => $total_amount,
                 ];
             }
         }

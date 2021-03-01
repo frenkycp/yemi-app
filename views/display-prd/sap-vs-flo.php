@@ -101,18 +101,18 @@ $css_string = "
         font-weight: bold;
     }
     .progress-bar {
-        font-size: 150px;
-        line-height: 250px;
+        font-size: 130px;
+        line-height: 200px;
         -webkit-text-stroke: 2px grey;
     }
     .progress {
-        height: 250px;
+        height: 200px;
         font-family: Impact, Charcoal, sans-serif !important;
         letter-spacing: 5px;
         outline: 1px solid silver;
     }
     .progress-group {
-        padding-top: 50px;
+        padding-top: 20px;
     }
     .panel-title {
         font-size: 60px;
@@ -163,7 +163,7 @@ $this->registerJs($script, View::POS_HEAD );
 
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
-print_r($tmp_top_minus);
+print_r($last_month_data['total_amount']);
 echo '</pre>';*/
 ?>
 <br/>
@@ -176,7 +176,7 @@ echo '</pre>';*/
             <div class="panel-body">
                 <div class="progress-group">
                     <span class="progress-text">SCM Order (SCM<span class="japanesse">受注</span>)</span>
-                    <span class="progress-number"></span>
+                    <span class="progress-number">(USD <?= number_format($last_month_data['plan']); ?>)</span>
 
                     <div class="progress">
                         <div class="progress-bar progress-bar-success" style="width: 100%">100%</div>
@@ -184,7 +184,9 @@ echo '</pre>';*/
                 </div>
 
                 <div class="progress-group">
-                    <span class="progress-text">PRODUCTION OUTPUT <span class="japanesse">(生産出来高)</span></span>
+                    <span class="progress-text">PRODUCTION OUTPUT <span class="japanesse">(生産出来高)</span><br/>
+                        (USD <?= number_format($last_month_data['total_amount']['total_amount']); ?>)
+                    </span>
                     <span class="progress-number"></span>
 
                     <div class="progress">
@@ -210,7 +212,9 @@ echo '</pre>';*/
                 </div>
 
                 <div class="progress-group">
-                    <span class="progress-text">PRODUCTION OUTPUT <span class="japanesse">(生産出来高)</span></span>
+                    <span class="progress-text">PRODUCTION OUTPUT <span class="japanesse">(生産出来高)</span><br/>
+                        (USD <?= number_format($this_month_data['total_amount']['total_amount']); ?>)
+                    </span>
                     <span class="progress-number"></span>
 
                     <div class="progress">

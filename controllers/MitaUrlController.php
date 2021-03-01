@@ -36,7 +36,7 @@ class MitaUrlController extends \app\controllers\base\MitaUrlController
 		try {
 			if ($model->load($_POST)) {
 				$tmp_url = MitaUrl::find()->where(['url' => $model->url])->one();
-				$model->created_datetime;
+				$model->created_datetime = date('Y-m-d H:i:s');
 				if ($tmp_url) {
 					\Yii::$app->session->setFlash("danger", "Url already exist ...");
 				} else {
