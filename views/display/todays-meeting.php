@@ -275,7 +275,7 @@ echo '</pre>';*/
                 <span id="room-name">
                     <?php
                     $room_name = strtoupper($room_info->room_name);
-                    if ($room_id == 1 || $room_id == 6) {
+                    if ($room_id == 1) {
                         $room_name = strtoupper($room_info->room_name . ' ROOM');
                     }
                     echo $room_info->id == null ? '' : $room_name;
