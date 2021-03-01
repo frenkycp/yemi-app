@@ -42,6 +42,11 @@ use Yii;
  * @property string $LINE
  * @property string $MODEL
  * @property string $FG_KD
+ * @property string $period_act_rate_id
+ * @property string $period_plan_rate_id
+ * @property double $period_act_rate
+ * @property double $period_plan_rate
+ * @property double $amount_usd
  * @property string $aliasModel
  */
 abstract class SapSoPlanActual extends \yii\db\ActiveRecord
@@ -71,10 +76,10 @@ abstract class SapSoPlanActual extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['quantity'], 'number'],
+            [['quantity', 'period_act_rate', 'period_plan_rate', 'amount_usd'], 'number'],
             [['do_number'], 'string'],
             [['period_plan', 'period_act', 'deviasi'], 'integer'],
-            [['billing_ID', 'so_id', 'billing_document', 'billing_item', 'currency', 'price_master', 'price_invoice', 'amount', 'ycj_iv', 'billing_date', 'our_ref_number', 'bl_no', 'eta', 'otd', 'so_open_close', 'material_number', 'material_description', 'so_no', 'so_line', 'ship_to', 'ship_to_name', 'po_no_01', 'po_no_02', 'BU', 'LINE', 'MODEL', 'FG_KD'], 'string', 'max' => 50]
+            [['billing_ID', 'so_id', 'billing_document', 'billing_item', 'currency', 'price_master', 'price_invoice', 'amount', 'ycj_iv', 'billing_date', 'our_ref_number', 'bl_no', 'eta', 'otd', 'so_open_close', 'material_number', 'material_description', 'so_no', 'so_line', 'ship_to', 'ship_to_name', 'po_no_01', 'po_no_02', 'BU', 'LINE', 'MODEL', 'FG_KD', 'period_act_rate_id', 'period_plan_rate_id'], 'string', 'max' => 50]
         ];
     }
 
@@ -117,6 +122,11 @@ abstract class SapSoPlanActual extends \yii\db\ActiveRecord
             'LINE' => 'Line',
             'MODEL' => 'Model',
             'FG_KD' => 'Fg Kd',
+            'period_act_rate_id' => 'Period Act Rate ID',
+            'period_plan_rate_id' => 'Period Plan Rate ID',
+            'period_act_rate' => 'Period Act Rate',
+            'period_plan_rate' => 'Period Plan Rate',
+            'amount_usd' => 'Amount Usd',
         ];
     }
 
