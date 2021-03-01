@@ -54,6 +54,10 @@ class PartsPickingStatusController extends Controller
     			if ($week_no == $visual_picking->week) {
     				$tmp_category[] = date('Y-m-d', strtotime($visual_picking->req_date));
 
+                    if (date('Y-m-d', strtotime($visual_picking->req_date)) == date('Y-m-d')) {
+                        $this_week = $visual_picking->week;
+                    }
+
     				$open_qty = $visual_picking->slip_open;
     				$close_qty = $visual_picking->slip_close;
 

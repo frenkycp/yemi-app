@@ -9,6 +9,10 @@ use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use app\models\Karyawan;
 use app\models\SupplierBilling;
+use app\models\SupplierBillingVoucher;
+use yii\web\UploadedFile;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 /**
 * This is the class for controller "SBillingController".
@@ -140,7 +144,7 @@ class SBillingController extends \app\controllers\base\SBillingController
         date_default_timezone_set('Asia/Jakarta');
 
         $model = $this->findModel($no);
-        $model->stage = 4;
+        $model->stage = 3;
         $model->open_close = 'C';
         $model->doc_finance_handover_by = $session['s_billing_name'];
         $model->doc_finance_handover_date = date('Y-m-d H:i:s');
@@ -183,6 +187,62 @@ class SBillingController extends \app\controllers\base\SBillingController
 		echo $bin;
 		exit;
 	}
+
+    public function actionCreateVoucher()
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+
+        $this->layout = 's-billing/main';
+
+        $model = new SupplierBillingVoucher;
+        $base64 = '';
+        if ($model->load(\Yii::$app->request->post())) {
+            $user_id = \Yii::$app->user->identity->username;
+            $tmp_data_user = Karyawan::find()
+            ->where([
+                'OR',
+                ['NIK' => $user_id],
+                ['NIK_SUN_FISH' => $user_id]
+            ])
+            ->one();
+
+            if (!$tmp_data_user) {
+                \Yii::$app->getSession()->setFlash('error', 'User not found ...');
+            } else {
+                $model->attachment_file = $tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
+                //$tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
+                $tmp_data = file_get_contents($tmp_attachment->tempName);
+                $base64 = base64_encode($tmp_data);
+                //return $base64;
+
+                $model->create_by_id = $user_id;
+                $model->create_by_name = $tmp_data_user->NAMA_KARYAWAN;
+                $model->create_time = $this_time;
+                $model->attached_by_id = $user_id;
+                $model->attached_by_name = $tmp_data_user->NAMA_KARYAWAN;
+                $model->attached_time = $this_time;
+
+                if (!$model->save()) {
+                    return json_encode($model->errors);
+                }
+
+                return $this->redirect(Url::previous());
+            }
+
+            
+
+        }
+
+        return $this->render('create-voucher', [
+            'model' => $model,
+            'base64' => $base64,
+        ]);
+    }
 
 	public function actionRemark($no)
 	{
