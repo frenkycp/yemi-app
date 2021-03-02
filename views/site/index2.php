@@ -31,6 +31,7 @@ $this->registerCss("
         font-size: 13px;
     }
 ");
+$user_id = \Yii::$app->user->identity->username;
 ?>
 <hr>
 <div class="site-index">
@@ -267,6 +268,25 @@ $this->registerCss("
                             </li>
                             <li>
                                 <?= Html::a('Production Progress VMS <span class="japanesse-word"></span>', ['/display/vms-yesterday']); ?>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="panel panel-success" style="<?= in_array($user_id, ['ura', '150826']) ? '' : 'display: none;'; ?>">
+                    <div class="panel-heading text-center">*</div>
+                    <div class="list-group-item">
+                        <ol style="padding-left: 1em">
+                            <li>
+                                <?= Html::a('FLO vs SCM (Monthly Summary) <span class="japanesse-word"></span>', ['/display/monthly-progress-summary'], ['target' => '_blank']); ?>
+                            </li>
+                            <li>
+                                <?= Html::a('CONTAINER RESERVATION <span class="japanesse-word">(コンテナ予約管理)</span>', ['/display-log/shipping-order-progress'], ['target' => '_blank']); ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Progress overtime hours per man H-1 <span class="japanesse-word">一人当たりの残業時間</span>', ['/display-hrga/progress-overtime-hours'], ['target' => '_blank']); ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Production Progress <span class="japanesse-word">(生産進捗)</span> VMS (N-1)', ['/display/vms-vs-flo'], ['target' => '_blank']); ?>
                             </li>
                         </ol>
                     </div>

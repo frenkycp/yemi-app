@@ -194,7 +194,7 @@ echo '</pre>';*/
                                 'fontFamily' => 'sans-serif',
                             ],
                             'zoomType' => 'x',
-                            'height' => 710
+                            'height' => 615
                         ],
                         'title' => [
                             //'text' => 'Plan Qty V.S Actual Qty (Monthly Based)'
@@ -262,7 +262,7 @@ echo '</pre>';*/
         </div>
     </div>
     <div class="col-md-5">
-        <table height="750px" class="table table-bordered" style="font-size: 90px; margin-bottom: 0px;" id="yesterday-tbl">
+        <table height="650px" class="table table-bordered" style="font-size: 80px; margin-bottom: 0px;" id="yesterday-tbl">
             <tbody>
                 <tr>
                     <td width="50%" style="background-color: #454B52;" class="label-tbl">Plan</td>
