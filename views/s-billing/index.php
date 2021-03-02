@@ -43,7 +43,7 @@ $this->title = [
 			<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
 		</div>
 	</div>
-	<div class="col-sm-3">
+	<!-- <div class="col-sm-3">
 		<div class="small-box bg-light-blue">
 			<div class="inner">
 				<h3><?= $tmp_total->total_stage3; ?></h3>
@@ -55,5 +55,5 @@ $this->title = [
 			</div>
 			<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
 		</div>
-	</div>
+	</div> -->
 </div>

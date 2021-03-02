@@ -27,7 +27,7 @@ $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, san
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{received} {finished} {handover} {remark}',
+        'template' => '{received} {handover} {remark}',
         'buttons' => [
             'received' => function($url, $model, $key){
                 $url = ['receive', 'no' => $model->no];
@@ -72,7 +72,7 @@ $gridColumns = [
                     'data-pjax' => '0',
                     'data-confirm' => 'Is it already handover to Finance?',
                 ];
-                if ($model->stage != 3) {
+                if ($model->stage != 2) {
                     return '<button class="btn btn-danger disabled" title="Handover to Finance"><span class="fa fa-hand-paper-o"></span></button>';
                 }
                 return Html::a('<button class="btn btn-success"><span class="fa fa-hand-paper-o"></span></button>', $url, $options);
@@ -85,7 +85,7 @@ $gridColumns = [
                     'class' => 'showModalButton'
                 ];
                 
-                return Html::a('<button class="btn btn-info"><span class="fa fa-edit"></span></button>', '#', $options);
+                return Html::a('<button class="btn btn-default"><span class="fa fa-edit"></span></button>', '#', $options);
             },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -127,6 +127,11 @@ $gridColumns = [
     ],
     [
         'attribute' => 'invoice_no',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'voucher_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
     ],
@@ -221,7 +226,7 @@ $gridColumns = [
             'headerRowOptions' => ['class' => 'kartik-sheet-style'],
             'filterRowOptions' => ['class' => 'kartik-sheet-style'],
             'toolbar' =>  [
-                //Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['create'], ['class' => 'btn btn-success']),
+                Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Create Voucher', ['create-voucher'], ['class' => 'btn btn-success']),
                 '{export}',
                 '{toggleData}',
             ],
