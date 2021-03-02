@@ -109,7 +109,7 @@ $gridColumns = [
             'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'down_time_iot',
         'label' => 'Down Time (min) - IoT',
         'value' => function($model){
@@ -158,7 +158,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 80px;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'working_days',
         'vAlign' => 'middle',
@@ -188,7 +188,7 @@ $gridColumns = [
             'style' => 'text-align: center; min-width: 80px;'
         ],
     ],
-    [
+    /*[
         'attribute' => 'mttr_iot',
         'label' => 'MTTR - IoT',
         'value' => function($model){
@@ -245,7 +245,7 @@ $gridColumns = [
             'class' => 'form-control',
             'style' => 'text-align: center; min-width: 80px;'
         ],
-    ],
+    ],*/
     [
         'attribute' => 'non_down_time',
         'label' => 'Non Down Time (min)',
