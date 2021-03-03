@@ -60,11 +60,14 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 
 				if ($model->save()) {
 					$model->upload_before_1 = UploadedFile::getInstance($model, 'upload_before_1');
-					$new_filename_b1 = $model->ID . '_BEFORE_1.' . $model->upload_before_1->extension;
-					$filePath_b1 = \Yii::getAlias("@app/web/uploads/AUDIT_PATROL/") . $new_filename_b1;
-					$model->upload_before_1->saveAs($filePath_b1);
-					Image::getImagine()->open($filePath_b1)->thumbnail(new Box(1920, 1080))->save($filePath_b1 , ['quality' => 90]);
-					AuditPatrolTbl::UpdateAll(['IMAGE_BEFORE_1' => $new_filename_b1], ['ID' => $model->ID]);
+					if ($model->upload_before_1) {
+						$new_filename_b1 = $model->ID . '_BEFORE_1.' . $model->upload_before_1->extension;
+						$filePath_b1 = \Yii::getAlias("@app/web/uploads/AUDIT_PATROL/") . $new_filename_b1;
+						$model->upload_before_1->saveAs($filePath_b1);
+						Image::getImagine()->open($filePath_b1)->thumbnail(new Box(1920, 1080))->save($filePath_b1 , ['quality' => 90]);
+						AuditPatrolTbl::UpdateAll(['IMAGE_BEFORE_1' => $new_filename_b1], ['ID' => $model->ID]);
+					}
+					
 					return $this->redirect(Url::previous());
 				}
 				
@@ -85,11 +88,14 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 			$model->STATUS = 'C';
 			if ($model->save()) {
 				$model->upload_after_1 = UploadedFile::getInstance($model, 'upload_after_1');
-				$new_filename_a1 = $model->ID . '_AFTER_1.' . $model->upload_after_1->extension;
-				$filePath_a1 = \Yii::getAlias("@app/web/uploads/AUDIT_PATROL/") . $new_filename_a1;
-				$model->upload_after_1->saveAs($filePath_a1);
-				Image::getImagine()->open($filePath_a1)->thumbnail(new Box(1920, 1080))->save($filePath_a1 , ['quality' => 90]);
-				AuditPatrolTbl::UpdateAll(['IMAGE_AFTER_1' => $new_filename_a1], ['ID' => $model->ID]);
+				if ($model->upload_after_1) {
+					$new_filename_a1 = $model->ID . '_AFTER_1.' . $model->upload_after_1->extension;
+					$filePath_a1 = \Yii::getAlias("@app/web/uploads/AUDIT_PATROL/") . $new_filename_a1;
+					$model->upload_after_1->saveAs($filePath_a1);
+					Image::getImagine()->open($filePath_a1)->thumbnail(new Box(1920, 1080))->save($filePath_a1 , ['quality' => 90]);
+					AuditPatrolTbl::UpdateAll(['IMAGE_AFTER_1' => $new_filename_a1], ['ID' => $model->ID]);
+				}
+				
 				return $this->redirect(Url::previous());
 			}
 		} else {
@@ -118,11 +124,14 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 			
 			if ($model->save()) {
 				$model->upload_before_1 = UploadedFile::getInstance($model, 'upload_before_1');
-				$new_filename_b1 = $model->ID . '_BEFORE_1.' . $model->upload_before_1->extension;
-				$filePath_b1 = \Yii::getAlias("@app/web/uploads/AUDIT_PATROL/") . $new_filename_b1;
-				$model->upload_before_1->saveAs($filePath_b1);
-				Image::getImagine()->open($filePath_b1)->thumbnail(new Box(1920, 1080))->save($filePath_b1 , ['quality' => 90]);
-				AuditPatrolTbl::UpdateAll(['IMAGE_BEFORE_1' => $new_filename_b1], ['ID' => $model->ID]);
+				if ($model->upload_before_1) {
+					$new_filename_b1 = $model->ID . '_BEFORE_1.' . $model->upload_before_1->extension;
+					$filePath_b1 = \Yii::getAlias("@app/web/uploads/AUDIT_PATROL/") . $new_filename_b1;
+					$model->upload_before_1->saveAs($filePath_b1);
+					Image::getImagine()->open($filePath_b1)->thumbnail(new Box(1920, 1080))->save($filePath_b1 , ['quality' => 90]);
+					AuditPatrolTbl::UpdateAll(['IMAGE_BEFORE_1' => $new_filename_b1], ['ID' => $model->ID]);
+				}
+				
 				return $this->redirect(Url::previous());
 			}
 			
