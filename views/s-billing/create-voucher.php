@@ -43,16 +43,11 @@ $this->title = Yii::t('models', 'Create Voucher');
         ?>
 	</div>
 </div>
-<div class="row">
-	<div class="col-sm-12">
-		<?= $form->field($model, 'base64_txt')->textArea(); ?>
-	</div>
-</div>
 
 <div class="row">
 	<div class="col-sm-12">
 		<?= $form->field($model, 'invoice_no')->widget(Select2::classname(), [
-		    'data' => ArrayHelper::map(app\models\SupplierBilling::find()->where(['stage' => 2])->all(), 'no', 'invoice_no'),
+		    'data' => ArrayHelper::map(app\models\SupplierBilling::find()->where(['stage' => 2])->andWhere('voucher_no IS NULL')->all(), 'no', 'invoice_no'),
 		    'options' => ['placeholder' => 'Select invoice ...'],
 		    'pluginOptions' => [
 		        'allowClear' => true,

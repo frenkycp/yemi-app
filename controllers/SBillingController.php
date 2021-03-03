@@ -188,6 +188,25 @@ class SBillingController extends \app\controllers\base\SBillingController
 		exit;
 	}
 
+    public function actionVoucherDetail($voucher_no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+
+        $this->layout = 's-billing/main';
+
+        $invoice_data = SupplierBilling::find()->where(['voucher_no' => $voucher_no])->all();
+
+        return $this->render('voucher-detail', [
+            'invoice_data' => $invoice_data,
+            'voucher_no' => $voucher_no,
+        ]);
+    }
+
     public function actionCreateVoucher()
     {
         $session = \Yii::$app->session;
@@ -229,6 +248,11 @@ class SBillingController extends \app\controllers\base\SBillingController
 
                 if (!$model->save()) {
                     return json_encode($model->errors);
+                }
+
+                $no_arr = $model->invoice_no;
+                foreach ($no_arr as $no_val) {
+                    SupplierBilling::updateAll(['voucher_no' => $model->voucher_no], ['no' => $no_val]);
                 }
 
                 return $this->redirect(Url::previous());

@@ -37,9 +37,9 @@ $gridColumns = [
                     'data-confirm' => 'Did you receive the document?',
                 ];
                 if ($model->stage != 1) {
-                    return '<button class="btn btn-danger disabled" title="Received"><span class="fa fa-sign-in"></span></button>';
+                    return '<button class="btn btn-danger disabled btn-sm" title="Received"><span class="fa fa-sign-in"></span></button>';
                 }
-                return Html::a('<button class="btn btn-success"><span class="fa fa-sign-in"></span></button>', $url, $options);
+                return Html::a('<button class="btn btn-success btn-sm"><span class="fa fa-sign-in"></span></button>', $url, $options);
             },
             'finished' => function($url, $model, $key){
                 $options = [
@@ -50,10 +50,10 @@ $gridColumns = [
                 ];
 
                 if ($model->stage != 2) {
-                    return '<button class="btn btn-danger disabled" title="Pch. Finished"><span class="fa fa-check-square-o"></span></button>';
+                    return '<button class="btn btn-danger disabled btn-sm" title="Pch. Finished"><span class="fa fa-check-square-o"></span></button>';
                 }
                 
-                return Html::a('<button class="btn btn-success" title="Pch. Finished"><span class="fa fa-check-square-o"></span></button>', '#', $options);
+                return Html::a('<button class="btn btn-success btn-sm" title="Pch. Finished"><span class="fa fa-check-square-o"></span></button>', '#', $options);
 
                 /*$url = ['pch-finish', 'no' => $model->no];
                 $options = [
@@ -73,9 +73,9 @@ $gridColumns = [
                     'data-confirm' => 'Is it already handover to Finance?',
                 ];
                 if ($model->stage != 2) {
-                    return '<button class="btn btn-danger disabled" title="Handover to Finance"><span class="fa fa-hand-paper-o"></span></button>';
+                    return '<button class="btn btn-danger disabled btn-sm" title="Handover to Finance"><span class="fa fa-hand-paper-o"></span></button>';
                 }
-                return Html::a('<button class="btn btn-success"><span class="fa fa-hand-paper-o"></span></button>', $url, $options);
+                return Html::a('<button class="btn btn-success btn-sm"><span class="fa fa-hand-paper-o"></span></button>', $url, $options);
             },
             'remark' => function($url, $model, $key){
                 $options = [
@@ -85,7 +85,7 @@ $gridColumns = [
                     'class' => 'showModalButton'
                 ];
                 
-                return Html::a('<button class="btn btn-default"><span class="fa fa-edit"></span></button>', '#', $options);
+                return Html::a('<button class="btn btn-default btn-sm"><span class="fa fa-edit"></span></button>', '#', $options);
             },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -100,7 +100,7 @@ $gridColumns = [
         'label' => 'Vendor<br/>Document',
         'encodeLabel' => false,
         'value' => function($model){
-            return Html::a('<button class="btn btn-default"><span class="fa fa-download"></span></button>', ['vendor-attachment', 'no' => $model->no
+            return Html::a('<button class="btn btn-default btn-sm"><span class="fa fa-download"></span></button>', ['vendor-attachment', 'no' => $model->no
             ], [
                 'title' => 'Download Attachment',
                 'data-pjax' => '0',
@@ -132,6 +132,24 @@ $gridColumns = [
     ],
     [
         'attribute' => 'voucher_no',
+        'hiddenFromExport' => true,
+        'value' => function($model){
+            if ($model->voucher_no != null) {
+                return Html::a($model->voucher_no . ' <i class="fa fa-info-circle"></i>', ['voucher-detail', 'voucher_no' => $model->voucher_no], ['title' => 'Click for more detail...', 'target' => '_blank']);
+            }
+        },
+        'format' => 'html',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'voucher_no_export',
+        'label' => 'Voucher No.',
+        'value' => function($model){
+            return $model->voucher_no;
+        },
+        'hidden' => true,
+        'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
     ],

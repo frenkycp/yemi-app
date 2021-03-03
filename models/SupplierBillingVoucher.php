@@ -29,6 +29,7 @@ class SupplierBillingVoucher extends BaseSupplierBillingVoucher
             parent::rules(),
             [
                 [['attachment_file'], 'file', 'extensions' => ['pdf'], 'skipOnEmpty' => false],
+                [['invoice_no'], 'required'],
             ]
         );
     }

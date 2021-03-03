@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SupplierBilling extends BaseSupplierBilling
 {
-    public $total_stage1, $total_stage2, $total_stage3;
+    public $total_stage1, $total_stage2, $total_stage3, $voucher_no_export;
 
     public function behaviors()
     {
