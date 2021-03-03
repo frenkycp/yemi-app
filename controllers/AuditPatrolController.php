@@ -21,7 +21,7 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionCreate()
 	{
 		date_default_timezone_set('Asia/Jakarta');
@@ -34,8 +34,11 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 				$model->PATROL_PERIOD = date('Ym', strtotime($model->PATROL_DATE));
 				$model->PATROL_DATETIME = date('Y-m-d H:i:s');
 				$model->LOC_DESC = \Yii::$app->params['wip_location_arr'][$model->LOC_ID];
-				$tmp_pic = SunfishViewEmp::find()->where(['Emp_no' => $model->PIC_ID])->one();
-				$model->PIC_NAME = $tmp_pic->Full_name;
+				if ($model->PIC_ID != null && $model->PIC_ID != '') {
+					$tmp_pic = SunfishViewEmp::find()->where(['Emp_no' => $model->PIC_ID])->one();
+					$model->PIC_NAME = $tmp_pic->Full_name;
+				}
+				
 				$model->USER_ID = $model->USER_NAME = \Yii::$app->user->identity->username;
 				$tmp_user = Karyawan::find()
 				->where([
@@ -95,8 +98,10 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 
 		if ($model->load($_POST)) {
 			$model->LOC_DESC = \Yii::$app->params['wip_location_arr'][$model->LOC_ID];
-			$tmp_pic = SunfishViewEmp::find()->where(['Emp_no' => $model->PIC_ID])->one();
-			$model->PIC_NAME = $tmp_pic->Full_name;
+			if ($model->PIC_ID != null && $model->PIC_ID != '') {
+				$tmp_pic = SunfishViewEmp::find()->where(['Emp_no' => $model->PIC_ID])->one();
+				$model->PIC_NAME = $tmp_pic->Full_name;
+			}
 			
 			if ($model->save()) {
 				$model->upload_before_1 = UploadedFile::getInstance($model, 'upload_before_1');

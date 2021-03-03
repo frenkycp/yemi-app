@@ -50,12 +50,23 @@ $gridColumns = [
         ],
         'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 160px;']
     ],
-    [
+    /*[
         'attribute' => 'CATEGORY',
         'value' => function($model){
             return \Yii::$app->params['audit_patrol_category'][$model->CATEGORY];
         },
+        'label' => 'Patrol Type',
         'filter' => \Yii::$app->params['audit_patrol_category'],
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],*/
+    [
+        'attribute' => 'TOPIC',
+        'value' => function($model){
+            return \Yii::$app->params['audit_patrol_topic'][$model->TOPIC];
+        },
+        'label' => 'Patrol Category',
+        'filter' => \Yii::$app->params['audit_patrol_topic'],
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
@@ -79,7 +90,7 @@ $gridColumns = [
         'vAlign' => 'middle',
     ],
     [
-        'attribute' => 'USER_NAME',
+        'attribute' => 'PIC_NAME',
         'label' => 'Auditee',
         //'hAlign' => 'center',
         'vAlign' => 'middle',

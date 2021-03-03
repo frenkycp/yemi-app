@@ -60,7 +60,9 @@ $karyawan_dropdown = ArrayHelper::map(app\models\SunfishViewEmp::find()->select(
 
                 <?= $form->field($model, 'AUDITOR')->textInput(['maxlength' => true]) ?>
 
-                <?= $form->field($model, 'CATEGORY')->dropDownList(\Yii::$app->params['audit_patrol_category']); ?>
+                <?= $form->field($model, 'CATEGORY')->dropDownList(\Yii::$app->params['audit_patrol_category'])->label('Patrol Type'); ?>
+
+                <?= $form->field($model, 'TOPIC')->dropDownList(\Yii::$app->params['audit_patrol_topic'])->label('Patrol Category'); ?>
 
                 <?= $form->field($model, 'LOC_ID')->dropDownList(\Yii::$app->params['wip_location_arr'])->label('Location'); ?>
 
