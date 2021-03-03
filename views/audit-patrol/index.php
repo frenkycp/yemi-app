@@ -75,16 +75,24 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
-    [
+    /*[
         'attribute' => 'LOC_ID',
         'value' => 'LOC_DESC',
         'label' => 'Location',
         'filter' => \Yii::$app->params['wip_location_arr'],
         'hAlign' => 'center',
         'vAlign' => 'middle',
+    ],*/
+    [
+        'attribute' => 'CC_ID',
+        'value' => 'CC_DESC',
+        'label' => 'Section',
+        'filter' => ArrayHelper::map(app\models\CostCenter::find()->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'),
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
     ],
     [
-        'attribute' => 'LOC_DESC',
+        'attribute' => 'LOC_DETAIL',
         'label' => 'Location Detail',
         //'hAlign' => 'center',
         'vAlign' => 'middle',

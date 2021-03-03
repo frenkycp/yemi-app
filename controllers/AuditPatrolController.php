@@ -7,6 +7,7 @@ use app\models\search\AuditPatrolSearch;
 use yii\helpers\Url;
 use app\models\SunfishViewEmp;
 use app\models\Karyawan;
+use app\models\CostCenter;
 use yii\web\UploadedFile;
 use yii\imagine\Image;
 use Imagine\Image\Box;
@@ -33,10 +34,15 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 			if ($model->load($_POST)) {
 				$model->PATROL_PERIOD = date('Ym', strtotime($model->PATROL_DATE));
 				$model->PATROL_DATETIME = date('Y-m-d H:i:s');
-				$model->LOC_DESC = \Yii::$app->params['wip_location_arr'][$model->LOC_ID];
+				// $model->LOC_DESC = \Yii::$app->params['wip_location_arr'][$model->LOC_ID];
 				if ($model->PIC_ID != null && $model->PIC_ID != '') {
 					$tmp_pic = SunfishViewEmp::find()->where(['Emp_no' => $model->PIC_ID])->one();
 					$model->PIC_NAME = $tmp_pic->Full_name;
+				}
+
+				if ($model->CC_ID != null && $model->CC_ID != '') {
+					$tmp_cc = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
+					$model->CC_DESC = $tmp_cc->CC_DESC;
 				}
 				
 				$model->USER_ID = $model->USER_NAME = \Yii::$app->user->identity->username;
@@ -97,10 +103,15 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 		$model = $this->findModel($ID);
 
 		if ($model->load($_POST)) {
-			$model->LOC_DESC = \Yii::$app->params['wip_location_arr'][$model->LOC_ID];
+			// $model->LOC_DESC = \Yii::$app->params['wip_location_arr'][$model->LOC_ID];
 			if ($model->PIC_ID != null && $model->PIC_ID != '') {
 				$tmp_pic = SunfishViewEmp::find()->where(['Emp_no' => $model->PIC_ID])->one();
 				$model->PIC_NAME = $tmp_pic->Full_name;
+			}
+
+			if ($model->CC_ID != null && $model->CC_ID != '') {
+				$tmp_cc = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
+				$model->CC_DESC = $tmp_cc->CC_DESC;
 			}
 			
 			if ($model->save()) {

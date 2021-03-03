@@ -13,6 +13,8 @@ use Yii;
  * @property string $PATROL_PERIOD
  * @property string $PATROL_DATE
  * @property string $PATROL_DATETIME
+ * @property string $CC_ID
+ * @property string $CC_DESC
  * @property string $LOC_ID
  * @property string $LOC_DESC
  * @property string $LOC_DETAIL
@@ -65,7 +67,7 @@ abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
             [['PATROL_DATE', 'PATROL_DATETIME'], 'safe'],
             [['CATEGORY'], 'integer'],
             [['DESCRIPTION', 'ACTION', 'IMAGE_BEFORE_1', 'IMAGE_BEFORE_2', 'IMAGE_BEFORE_3', 'IMAGE_AFTER_1', 'IMAGE_AFTER_2', 'IMAGE_AFTER_3'], 'string'],
-            [['PATROL_PERIOD', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'PIC_ID', 'USER_ID'], 'string', 'max' => 50],
+            [['PATROL_PERIOD', 'CC_ID', 'CC_DESC', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'PIC_ID', 'USER_ID'], 'string', 'max' => 50],
             [['AUDITOR', 'AUDITEE', 'PIC_NAME', 'USER_NAME'], 'string', 'max' => 150],
             [['STATUS'], 'string', 'max' => 1]
         ];
@@ -81,6 +83,8 @@ abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
             'PATROL_PERIOD' => 'Patrol Period',
             'PATROL_DATE' => 'Patrol Date',
             'PATROL_DATETIME' => 'Patrol Datetime',
+            'CC_ID' => 'Cc ID',
+            'CC_DESC' => 'Cc Desc',
             'LOC_ID' => 'Loc ID',
             'LOC_DESC' => 'Loc Desc',
             'LOC_DETAIL' => 'Loc Detail',

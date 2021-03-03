@@ -78,7 +78,7 @@ $karyawan_dropdown = ArrayHelper::map(app\models\SunfishViewEmp::find()->select(
 
                 <div class="row">
                     <div class="col-sm-5">
-                        <?= $form->field($model, 'LOC_ID')->dropDownList(\Yii::$app->params['wip_location_arr'])->label('Location'); ?>
+                        <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(app\models\CostCenter::find()->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'))->label('Section'); ?>
                     </div>
                     <div class="col-sm-7">
                         <?= $form->field($model, 'LOC_DETAIL')->textInput()->label('Location Detail'); ?>
