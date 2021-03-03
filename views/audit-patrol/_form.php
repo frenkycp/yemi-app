@@ -51,20 +51,39 @@ $karyawan_dropdown = ArrayHelper::map(app\models\SunfishViewEmp::find()->select(
     <div class="">
         <div class="panel panel-primary">
             <div class="panel-body">
-                <?= $form->field($model, 'PATROL_DATE')->widget(DatePicker::classname(), [
-                    'options' => ['placeholder' => 'Enter date ...'],
-                    'pluginOptions' => [
-                        'autoclose'=>true
-                    ]
-                ]) ?>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'PATROL_DATE')->widget(DatePicker::classname(), [
+                            'options' => ['placeholder' => 'Enter date ...'],
+                            'pluginOptions' => [
+                                'autoclose'=>true,
+                                'format' => 'yyyy-mm-dd'
+                            ]
+                        ]) ?>
+                    </div>
+                </div>
+                
 
-                <?= $form->field($model, 'AUDITOR')->textInput(['maxlength' => true]) ?>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'AUDITOR')->textInput(['maxlength' => true]) ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'CATEGORY')->dropDownList(\Yii::$app->params['audit_patrol_category'])->label('Patrol Type'); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <?= $form->field($model, 'TOPIC')->dropDownList(\Yii::$app->params['audit_patrol_topic'])->label('Patrol Category'); ?>
+                    </div>
+                </div>
 
-                <?= $form->field($model, 'CATEGORY')->dropDownList(\Yii::$app->params['audit_patrol_category'])->label('Patrol Type'); ?>
-
-                <?= $form->field($model, 'TOPIC')->dropDownList(\Yii::$app->params['audit_patrol_topic'])->label('Patrol Category'); ?>
-
-                <?= $form->field($model, 'LOC_ID')->dropDownList(\Yii::$app->params['wip_location_arr'])->label('Location'); ?>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <?= $form->field($model, 'LOC_ID')->dropDownList(\Yii::$app->params['wip_location_arr'])->label('Location'); ?>
+                    </div>
+                    <div class="col-sm-7">
+                        <?= $form->field($model, 'LOC_DETAIL')->textInput()->label('Location Detail'); ?>
+                    </div>
+                </div>
 
                 <?php
                 echo $form->field($model, 'upload_before_1')->widget(\kartik\file\FileInput::className(), [
