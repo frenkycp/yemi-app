@@ -43,6 +43,7 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 				if ($model->CC_ID != null && $model->CC_ID != '') {
 					$tmp_cc = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
 					$model->CC_DESC = $tmp_cc->CC_DESC;
+					$model->CC_GROUP = $tmp_cc->CC_GROUP;
 				}
 				
 				$model->USER_ID = $model->USER_NAME = \Yii::$app->user->identity->username;
@@ -112,6 +113,7 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 			if ($model->CC_ID != null && $model->CC_ID != '') {
 				$tmp_cc = CostCenter::find()->where(['CC_ID' => $model->CC_ID])->one();
 				$model->CC_DESC = $tmp_cc->CC_DESC;
+				$model->CC_GROUP = $tmp_cc->CC_GROUP;
 			}
 			
 			if ($model->save()) {
