@@ -84,6 +84,12 @@ $gridColumns = [
         'vAlign' => 'middle',
     ],
     [
+        'attribute' => 'LOC_DESC',
+        'label' => 'Location Detail',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
         'attribute' => 'AUDITOR',
         'hidden' => true,
         //'hAlign' => 'center',
@@ -126,6 +132,23 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'ACTION',
+        /*'value' => function($model){
+            $return_val = $model->ACTION;
+            if ($model->IMAGE_AFTER_1 != null) {
+                $return_val .= '<br/>' . Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'250']);
+            }
+            return $return_val;
+        },
+        'mergeHeader' => true,*/
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
+    ],
+    [
         'attribute' => 'IMAGE_BEFORE_1',
         'value' => function($model){
             if ($model->IMAGE_BEFORE_1 != null) {
@@ -142,24 +165,8 @@ $gridColumns = [
             'style' => 'min-width: 250px;'
         ],
     ],
+    
     [
-        'attribute' => 'ACTION',
-        'value' => function($model){
-            $return_val = $model->ACTION;
-            if ($model->IMAGE_AFTER_1 != null) {
-                $return_val .= '<br/>' . Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'250']);
-            }
-            return $return_val;
-        },
-        'mergeHeader' => true,
-        'format' => 'html',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'contentOptions' => [
-            'style' => 'min-width: 100px;'
-        ],
-    ],
-    /*[
         'attribute' => 'IMAGE_AFTER_1',
         'value' => function($model){
             if ($model->IMAGE_AFTER_1 != null) {
@@ -175,7 +182,7 @@ $gridColumns = [
         'contentOptions' => [
             'style' => 'min-width: 250px;'
         ],
-    ],*/
+    ],
 
 ];
 ?>
