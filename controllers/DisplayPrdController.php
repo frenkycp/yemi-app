@@ -38,6 +38,213 @@ use app\models\SapSoPrice;
 
 class DisplayPrdController extends Controller
 {
+    public function actionStockMonitoringAvg()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-d', strtotime($today . ' -2 weeks'));
+        $model->to_date = $today;
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_dtr = TraceItemDtr::find()
+        ->select([
+            'ITEM', 'ITEM_DESC', 'UM', 'NILAI_INVENTORY' => 'SUM(NILAI_INVENTORY)', 'LAST_UPDATE' => 'MAX(LAST_UPDATE)'
+        ])
+        ->where([
+            'AVAILABLE' => 'Y'
+        ])
+        ->groupBy('ITEM, ITEM_DESC, UM')
+        ->orderBy('ITEM_DESC')
+        ->all();
+
+        $item_arr = $tmp_data_total = [];
+        foreach ($tmp_dtr as $value) {
+            $item_arr[] = $value->ITEM;
+            //$item_description_arr[$value->ITEM] = $value->ITEM_DESC;
+            $initial_stock = $value->NILAI_INVENTORY;
+            $tmp_data_total[$value->ITEM]['actual']['current_stock'] = $initial_stock;
+            $tmp_data_total[$value->ITEM]['actual']['last_update'] = $value->LAST_UPDATE;
+            $tmp_data_total[$value->ITEM]['description'] = $value->ITEM_DESC;
+            $tmp_data_total[$value->ITEM]['um'] = $value->UM;
+
+            $tmp_sap_current_stock = SapGrGiByPlant::find()->where([
+                'plant' => '8250',
+                'material' => $value->ITEM
+            ])->one();
+
+            $sap_initial_stock = 0;
+            $sap_stock_last_update = null;
+            if ($tmp_sap_current_stock) {
+                $sap_initial_stock = $tmp_sap_current_stock->ending_balance;
+                $sap_stock_last_update = date('Y-m-d', $tmp_sap_current_stock->file_date);
+            }
+
+            $tmp_data_total[$value->ITEM]['sap']['current_stock'] = $sap_initial_stock;
+            //$tmp_data_total[$value->ITEM]['sap']['last_update'] = $sap_stock_last_update;
+
+            $tmp_log = TraceItemDtrLog::find()
+            ->select([
+                'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'QTY_IN' => 'ISNULL(SUM(QTY_IN), 0)', 'QTY_OUT' => 'ISNULL(SUM(QTY_OUT), 0)'
+            ])
+            ->where([
+                'ITEM' => $value->ITEM,
+            ])
+            ->andWhere(['>=', 'POST_DATE', $model->from_date])
+            ->andWhere('POST_DATE IS NOT NULL')
+            ->groupBy(['POST_DATE'])
+            ->all();
+
+            $tmp_dtr_info = TraceItemDtr::find()
+            ->select([
+                'POST_DATE' => 'CAST(POST_DATE AS DATE)'
+            ])
+            ->where([
+                'ITEM' => $value->ITEM,
+            ])
+            ->andWhere(['>=', 'POST_DATE', $model->from_date])
+            ->andWhere('POST_DATE IS NOT NULL')
+            ->orderBy('POST_DATE')
+            ->one();
+
+            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+            $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+
+            for($i = $end; $i >= $begin; $i->modify('-1 day')){
+                $tgl = $i->format("Y-m-d");
+
+                $tmp_data_total[$value->ITEM]['actual']['stock_arr'][$tgl] += $initial_stock;
+
+                if (count($tmp_log) > 0) {
+                    
+                    foreach ($tmp_log as $log_val) {
+                        //if ($tgl < $today) {
+                            if ($log_val->POST_DATE == $tgl) {
+                                $initial_stock += $log_val->QTY_OUT;
+                                $initial_stock -= $log_val->QTY_IN;
+                            }
+                        //}
+                        
+                    }
+                } else {
+                    $tmp_log_last_update = TraceItemDtr::find()
+                    ->select([
+                        'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'NILAI_INVENTORY' => 'SUM(NILAI_INVENTORY)'
+                    ])
+                    ->where([
+                        'ITEM' => $value->ITEM
+                    ])
+                    ->andWhere(['>=', 'POST_DATE', $model->from_date])
+                    ->andWhere('POST_DATE IS NOT NULL')
+                    ->groupBy('POST_DATE')
+                    ->all();
+
+                    foreach ($tmp_log_last_update as $log_last_update) {
+                        if ($log_last_update->POST_DATE == $tgl) {
+                            $initial_stock -= $log_last_update->NILAI_INVENTORY;
+                        }
+                    }
+                }
+
+                if ($tgl < $tmp_dtr_info->POST_DATE) {
+                    $initial_stock = 0;
+                }
+            }
+            if (count($tmp_data_total[$value->ITEM]['actual']['stock_arr']) > 0) {
+                ksort($tmp_data_total[$value->ITEM]['actual']['stock_arr']);
+                $tmp_data_total[$value->ITEM]['actual']['avg'] = array_sum($tmp_data_total[$value->ITEM]['actual']['stock_arr']) / count($tmp_data_total[$value->ITEM]['actual']['stock_arr']);
+            }
+            
+        }
+
+        $tmp_sap_log_arr = SapMaterialDocumentBc::find()
+        ->select([
+            'posting_date' => 'CAST(posting_date AS date)', 'material', 'qty_in' => 'SUM(qty_in)', 'qty_out' => 'SUM(qty_out)', 'entered_datetime' => 'MAX(entered_datetime)'
+        ])
+        ->where([
+            'plant' => '8250',
+            'material' => $item_arr
+        ])
+        ->andWhere(['>=', 'posting_date', $model->from_date])
+        //->andWhere(['<=', 'posting_date', $sap_stock_last_update])
+        ->groupBy('posting_date, material')
+        ->orderBy('posting_date DESC, material')
+        ->all();
+
+        foreach ($tmp_data_total as $item => $value) {
+            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+            $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+
+            $sap_initial_stock = $value['sap']['current_stock'];
+
+            for($i = $end; $i >= $begin; $i->modify('-1 day')){
+                $tgl = $i->format("Y-m-d");
+                /*if ($tgl > $sap_stock_last_update) {
+                    $tmp_data_sap_stock[$tgl] = null;
+                } else {
+                    $tmp_data_sap_stock[$tgl] = $sap_initial_stock;
+                }*/
+                $tmp_data_total[$item]['sap']['stock_arr'][$tgl] = round($sap_initial_stock);
+
+                foreach ($tmp_sap_log_arr as $tmp_sap_log) {
+                    if ($tgl == $tmp_sap_log->posting_date && $tmp_sap_log->material == $item) {
+                        $sap_initial_stock += $tmp_sap_log->qty_out;
+                        $sap_initial_stock -= $tmp_sap_log->qty_in;
+
+                        if (!isset($value['sap']['last_update'])) {
+                            $tmp_data_total[$item]['sap']['last_update'] = $tmp_sap_log->entered_datetime;
+                        } else {
+                            if ($value->entered_datetime > $value['sap']['last_update']) {
+                                $tmp_data_total[$item]['sap']['last_update'] = $tmp_sap_log->entered_datetime;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (count($tmp_data_total[$item]['sap']['stock_arr']) > 0) {
+                ksort($tmp_data_total[$item]['sap']['stock_arr']);
+                $tmp_data_total[$item]['sap']['avg'] = array_sum($tmp_data_total[$item]['sap']['stock_arr']) / count($tmp_data_total[$item]['sap']['stock_arr']);
+            }
+        }
+
+        $for_sorting = [];
+        foreach ($tmp_data_total as $key => $value) {
+            $pct = 0;
+            if ($value['sap']['avg'] > 0) {
+                $pct = round(($value['actual']['avg'] / $value['sap']['avg'] - 1) * 100, 1);
+            } else {
+                $pct = round((0 - 1) * 100, 1);
+            }
+            $tmp_data_total[$key]['pct'] = $pct;
+            $for_sorting[$key] = $pct;
+        }
+
+        if (count($for_sorting) > 0) {
+            asort($for_sorting);
+        }
+
+        $data = [];
+        foreach ($for_sorting as $key => $value) {
+            $data[$key] = $tmp_data_total[$key];
+        }
+
+        return $this->render('stock-monitoring-avg', [
+            'model' => $model,
+            'tmp_data_total' => $tmp_data_total,
+            'data' => $data,
+        ]);
+    }
+
     public function getFloTotalAmount($period)
     {
         $output = SernoOutput::find()->select([

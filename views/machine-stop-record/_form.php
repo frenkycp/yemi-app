@@ -74,7 +74,8 @@ if (count($tmp_open) > 0) {
                 <?= $form->field($model, 'START_TIME')->widget(DateTimePicker::classname(), [
                     'options' => ['placeholder' => 'Enter start time ...'],
                     'pluginOptions' => [
-                        'autoclose' => true
+                        'autoclose' => true,
+                        'endDate' => date('Y-m-d')
                     ]
                 ]); ?>
             </div>

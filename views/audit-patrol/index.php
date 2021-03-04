@@ -61,6 +61,11 @@ $gridColumns = [
         'vAlign' => 'middle',
     ],*/
     [
+        'attribute' => 'ID',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
         'attribute' => 'TOPIC',
         'value' => function($model){
             return \Yii::$app->params['audit_patrol_topic'][$model->TOPIC];
