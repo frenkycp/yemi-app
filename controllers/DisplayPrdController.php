@@ -201,10 +201,10 @@ class DisplayPrdController extends Controller
                         $sap_initial_stock -= $tmp_sap_log->qty_in;
 
                         if (!isset($tmp_data_total[$item]['sap']['last_update'])) {
-                            $tmp_data_total[$item]['sap']['last_update'] = $tmp_sap_log->entered_datetime;
+                            $tmp_data_total[$item]['sap']['last_update'] = $tmp_sap_log->posting_date;
                         } else {
-                            if (strtotime($value->entered_datetime) > strtotime($tmp_data_total[$item]['sap']['last_update'])) {
-                                $tmp_data_total[$item]['sap']['last_update'] = $tmp_sap_log->entered_datetime;
+                            if (strtotime($value->posting_date) > strtotime($tmp_data_total[$item]['sap']['last_update'])) {
+                                $tmp_data_total[$item]['sap']['last_update'] = $tmp_sap_log->posting_date;
                             }
                         }
                     }
