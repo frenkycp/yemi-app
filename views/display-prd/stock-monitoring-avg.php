@@ -46,7 +46,7 @@ $css_string = "
         color: #FFF;
         vertical-align: middle;
         padding: 10px 10px;
-        letter-spacing: 1.1px;
+        //letter-spacing: 1.1px;
         //height: 100px;
     }
     .summary-tbl > thead > tr > th{
@@ -155,9 +155,9 @@ echo '</pre>';*/
             <th class="">Item Description</th>
             <th class="text-center">UM</th>
             <th class="text-center">AVG Qty (Actual)</th>
-            <th class="text-center">Last Update (Actual)</th>
+            <th class="text-center">Last Transaction (Actual)</th>
             <th class="text-center">AVG Qty (SAP)</th>
-            <th class="text-center">Last Update (SAP)</th>
+            <th class="text-center">Last Transaction (SAP)</th>
             <th class="text-center">%</th>
         </tr>
     </thead>
