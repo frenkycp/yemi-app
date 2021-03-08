@@ -45,15 +45,22 @@ class DisplayPrdController extends Controller
         $today = date('Y-m-d');
 
         $model = new \yii\base\DynamicModel([
-            'from_date', 'to_date'
+            'from_date', 'to_date', 'category'
         ]);
-        $model->addRule(['from_date', 'to_date'], 'required');
+        $model->addRule(['from_date', 'to_date', 'category'], 'required');
 
         $model->from_date = date('Y-m-d', strtotime($today . ' -2 weeks'));
         $model->to_date = $today;
+        $model->category = 'CRITICAL';
 
         if ($model->load($_GET)) {
 
+        }
+
+        if ($model->category == 'CRITICAL') {
+            $tmp_item_filter = ArrayHelper::map(TraceItemHdr::find()->where(['CRITICAL_CATEGORY' => 'CRITICAL'])->all(), 'ITEM', 'ITEM_DESC');
+        } else {
+            $tmp_item_filter = ArrayHelper::map(TraceItemHdr::find()->all(), 'ITEM', 'ITEM_DESC');
         }
 
         $tmp_dtr = TraceItemDtr::find()
@@ -69,101 +76,102 @@ class DisplayPrdController extends Controller
 
         $item_arr = $tmp_data_total = [];
         foreach ($tmp_dtr as $value) {
-            $item_arr[] = $value->ITEM;
+            if (isset($tmp_item_filter[$value->ITEM])) {
+                $item_arr[] = $value->ITEM;
             //$item_description_arr[$value->ITEM] = $value->ITEM_DESC;
-            $initial_stock = $value->NILAI_INVENTORY;
-            $tmp_data_total[$value->ITEM]['actual']['current_stock'] = $initial_stock;
-            $tmp_data_total[$value->ITEM]['actual']['last_update'] = $value->LAST_UPDATE;
-            $tmp_data_total[$value->ITEM]['description'] = $value->ITEM_DESC;
-            $tmp_data_total[$value->ITEM]['um'] = $value->UM;
+                $initial_stock = $value->NILAI_INVENTORY;
+                $tmp_data_total[$value->ITEM]['actual']['current_stock'] = $initial_stock;
+                $tmp_data_total[$value->ITEM]['actual']['last_update'] = $value->LAST_UPDATE;
+                $tmp_data_total[$value->ITEM]['description'] = $value->ITEM_DESC;
+                $tmp_data_total[$value->ITEM]['um'] = $value->UM;
 
-            $tmp_sap_current_stock = SapGrGiByPlant::find()->where([
-                'plant' => '8250',
-                'material' => $value->ITEM
-            ])->one();
+                $tmp_sap_current_stock = SapGrGiByPlant::find()->where([
+                    'plant' => '8250',
+                    'material' => $value->ITEM
+                ])->one();
 
-            $sap_initial_stock = 0;
-            $sap_stock_last_update = null;
-            if ($tmp_sap_current_stock) {
-                $sap_initial_stock = $tmp_sap_current_stock->ending_balance;
-                $sap_stock_last_update = date('Y-m-d', $tmp_sap_current_stock->file_date);
-            }
+                $sap_initial_stock = 0;
+                $sap_stock_last_update = null;
+                if ($tmp_sap_current_stock) {
+                    $sap_initial_stock = $tmp_sap_current_stock->ending_balance;
+                    $sap_stock_last_update = date('Y-m-d', $tmp_sap_current_stock->file_date);
+                }
 
-            $tmp_data_total[$value->ITEM]['sap']['current_stock'] = $sap_initial_stock;
-            //$tmp_data_total[$value->ITEM]['sap']['last_update'] = $sap_stock_last_update;
+                $tmp_data_total[$value->ITEM]['sap']['current_stock'] = $sap_initial_stock;
+                //$tmp_data_total[$value->ITEM]['sap']['last_update'] = $sap_stock_last_update;
 
-            $tmp_log = TraceItemDtrLog::find()
-            ->select([
-                'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'QTY_IN' => 'ISNULL(SUM(QTY_IN), 0)', 'QTY_OUT' => 'ISNULL(SUM(QTY_OUT), 0)'
-            ])
-            ->where([
-                'ITEM' => $value->ITEM,
-            ])
-            ->andWhere(['>=', 'POST_DATE', $model->from_date])
-            ->andWhere('POST_DATE IS NOT NULL')
-            ->groupBy(['POST_DATE'])
-            ->all();
+                $tmp_log = TraceItemDtrLog::find()
+                ->select([
+                    'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'QTY_IN' => 'ISNULL(SUM(QTY_IN), 0)', 'QTY_OUT' => 'ISNULL(SUM(QTY_OUT), 0)'
+                ])
+                ->where([
+                    'ITEM' => $value->ITEM,
+                ])
+                ->andWhere(['>=', 'POST_DATE', $model->from_date])
+                ->andWhere('POST_DATE IS NOT NULL')
+                ->groupBy(['POST_DATE'])
+                ->all();
 
-            $tmp_dtr_info = TraceItemDtr::find()
-            ->select([
-                'POST_DATE' => 'CAST(POST_DATE AS DATE)'
-            ])
-            ->where([
-                'ITEM' => $value->ITEM,
-            ])
-            ->andWhere(['>=', 'POST_DATE', $model->from_date])
-            ->andWhere('POST_DATE IS NOT NULL')
-            ->orderBy('POST_DATE')
-            ->one();
+                $tmp_dtr_info = TraceItemDtr::find()
+                ->select([
+                    'POST_DATE' => 'CAST(POST_DATE AS DATE)'
+                ])
+                ->where([
+                    'ITEM' => $value->ITEM,
+                ])
+                ->andWhere(['>=', 'POST_DATE', $model->from_date])
+                ->andWhere('POST_DATE IS NOT NULL')
+                ->orderBy('POST_DATE')
+                ->one();
 
-            $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
-            $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+                $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
+                $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
 
-            for($i = $end; $i >= $begin; $i->modify('-1 day')){
-                $tgl = $i->format("Y-m-d");
+                for($i = $end; $i >= $begin; $i->modify('-1 day')){
+                    $tgl = $i->format("Y-m-d");
 
-                $tmp_data_total[$value->ITEM]['actual']['stock_arr'][$tgl] += $initial_stock;
+                    $tmp_data_total[$value->ITEM]['actual']['stock_arr'][$tgl] += $initial_stock;
 
-                if (count($tmp_log) > 0) {
-                    
-                    foreach ($tmp_log as $log_val) {
-                        //if ($tgl < $today) {
-                            if ($log_val->POST_DATE == $tgl) {
-                                $initial_stock += $log_val->QTY_OUT;
-                                $initial_stock -= $log_val->QTY_IN;
-                            }
-                        //}
+                    if (count($tmp_log) > 0) {
                         
-                    }
-                } else {
-                    $tmp_log_last_update = TraceItemDtr::find()
-                    ->select([
-                        'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'NILAI_INVENTORY' => 'SUM(NILAI_INVENTORY)'
-                    ])
-                    ->where([
-                        'ITEM' => $value->ITEM
-                    ])
-                    ->andWhere(['>=', 'POST_DATE', $model->from_date])
-                    ->andWhere('POST_DATE IS NOT NULL')
-                    ->groupBy('POST_DATE')
-                    ->all();
+                        foreach ($tmp_log as $log_val) {
+                            //if ($tgl < $today) {
+                                if ($log_val->POST_DATE == $tgl) {
+                                    $initial_stock += $log_val->QTY_OUT;
+                                    $initial_stock -= $log_val->QTY_IN;
+                                }
+                            //}
+                            
+                        }
+                    } else {
+                        $tmp_log_last_update = TraceItemDtr::find()
+                        ->select([
+                            'POST_DATE' => 'CAST(POST_DATE AS DATE)', 'NILAI_INVENTORY' => 'SUM(NILAI_INVENTORY)'
+                        ])
+                        ->where([
+                            'ITEM' => $value->ITEM
+                        ])
+                        ->andWhere(['>=', 'POST_DATE', $model->from_date])
+                        ->andWhere('POST_DATE IS NOT NULL')
+                        ->groupBy('POST_DATE')
+                        ->all();
 
-                    foreach ($tmp_log_last_update as $log_last_update) {
-                        if ($log_last_update->POST_DATE == $tgl) {
-                            $initial_stock -= $log_last_update->NILAI_INVENTORY;
+                        foreach ($tmp_log_last_update as $log_last_update) {
+                            if ($log_last_update->POST_DATE == $tgl) {
+                                $initial_stock -= $log_last_update->NILAI_INVENTORY;
+                            }
                         }
                     }
-                }
 
-                if ($tgl < $tmp_dtr_info->POST_DATE) {
-                    $initial_stock = 0;
+                    if ($tgl < $tmp_dtr_info->POST_DATE) {
+                        $initial_stock = 0;
+                    }
+                }
+                if (count($tmp_data_total[$value->ITEM]['actual']['stock_arr']) > 0) {
+                    ksort($tmp_data_total[$value->ITEM]['actual']['stock_arr']);
+                    $tmp_data_total[$value->ITEM]['actual']['avg'] = array_sum($tmp_data_total[$value->ITEM]['actual']['stock_arr']) / count($tmp_data_total[$value->ITEM]['actual']['stock_arr']);
                 }
             }
-            if (count($tmp_data_total[$value->ITEM]['actual']['stock_arr']) > 0) {
-                ksort($tmp_data_total[$value->ITEM]['actual']['stock_arr']);
-                $tmp_data_total[$value->ITEM]['actual']['avg'] = array_sum($tmp_data_total[$value->ITEM]['actual']['stock_arr']) / count($tmp_data_total[$value->ITEM]['actual']['stock_arr']);
-            }
-            
         }
 
         $tmp_sap_log_arr = SapMaterialDocumentBc::find()

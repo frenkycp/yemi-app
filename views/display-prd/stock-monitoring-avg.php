@@ -139,6 +139,14 @@ echo '</pre>';*/
             ]
         ]);?>
     </div>
+    <div class="col-md-3">
+        <?= $form->field($model, 'category')->dropDownList([
+            'CRITICAL' => 'CRITICAL',
+            'ALL' => 'ALL',
+        ], [
+            'class' => 'form-control',
+        ]); ?>
+    </div>
     <div class="form-group">
         <br/>
         <?= Html::submitButton('GENERATE', ['class' => 'btn btn-primary', 'style' => 'margin-top: 5px;']); ?>
