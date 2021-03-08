@@ -11,9 +11,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Data Table <span class="japanesse light-green"></span>',
-    'tab_title' => 'Data Table',
-    'breadcrumbs_title' => 'Data Table'
+    'page_title' => 'Invoice Data Table <span class="japanesse light-green"></span>',
+    'tab_title' => 'Invoice Data Table',
+    'breadcrumbs_title' => 'Invoice Data Table'
 ];
 
 date_default_timezone_set('Asia/Jakarta');
@@ -27,7 +27,7 @@ $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, san
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{received} {handover} {remark}',
+        'template' => '{received}{remark}',
         'buttons' => [
             'received' => function($url, $model, $key){
                 $url = ['receive', 'no' => $model->no];
@@ -37,9 +37,9 @@ $gridColumns = [
                     'data-confirm' => 'Did you receive the document?',
                 ];
                 if ($model->stage != 1) {
-                    return '<button class="btn btn-danger disabled btn-sm" title="Received"><span class="fa fa-sign-in"></span></button>';
+                    return '<button class="btn btn-block btn-danger disabled btn-sm" title="Received"><span class="fa fa-sign-in"></span> Receive</button>';
                 }
-                return Html::a('<button class="btn btn-success btn-sm"><span class="fa fa-sign-in"></span></button>', $url, $options);
+                return Html::a('<button class="btn btn-block btn-success btn-sm"><span class="fa fa-sign-in"></span> Receive</button>', $url, $options);
             },
             'finished' => function($url, $model, $key){
                 $options = [
@@ -65,18 +65,6 @@ $gridColumns = [
                 }
                 return Html::a('<button class="btn btn-success"><span class="fa fa-check-square-o"></span></button>', $url, $options);*/
             },
-            'handover' => function($url, $model, $key){
-                $url = ['handover', 'no' => $model->no];
-                $options = [
-                    'title' => 'Handover to Finance',
-                    'data-pjax' => '0',
-                    'data-confirm' => 'Is it already handover to Finance?',
-                ];
-                if ($model->stage != 2) {
-                    return '<button class="btn btn-danger disabled btn-sm" title="Handover to Finance"><span class="fa fa-hand-paper-o"></span></button>';
-                }
-                return Html::a('<button class="btn btn-success btn-sm"><span class="fa fa-hand-paper-o"></span></button>', $url, $options);
-            },
             'remark' => function($url, $model, $key){
                 $options = [
                     'data-pjax' => '0',
@@ -85,7 +73,7 @@ $gridColumns = [
                     'class' => 'showModalButton'
                 ];
                 
-                return Html::a('<button class="btn btn-default btn-sm"><span class="fa fa-edit"></span></button>', '#', $options);
+                return Html::a('<button style="margin-top: 5px;" class="btn btn-block btn-info btn-sm"><span class="fa fa-edit"></span> Remark</button>', '#', $options);
             },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -93,7 +81,7 @@ $gridColumns = [
             $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
             return Url::toRoute($params);
         },
-        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 250px;']
+        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 100px;']
     ],
     [
         'attribute' => 'dokumen',
@@ -102,7 +90,7 @@ $gridColumns = [
         'value' => function($model){
             return Html::a('<button class="btn btn-default btn-sm"><span class="fa fa-download"></span></button>', ['vendor-attachment', 'no' => $model->no
             ], [
-                'title' => 'Download Attachment',
+                'title' => 'Download',
                 'data-pjax' => '0',
             ]);
         },
@@ -177,7 +165,10 @@ $gridColumns = [
         'attribute' => 'doc_upload_date',
         'label' => 'Upload Date',
         'value' => function($model){
-            return date('Y-m-d', strtotime($model->doc_upload_date));
+            if ($model->doc_upload_date != null) {
+                return date('Y-m-d', strtotime($model->doc_upload_date));
+            }
+            
         },
         'vAlign' => 'middle',
         'hAlign' => 'center',

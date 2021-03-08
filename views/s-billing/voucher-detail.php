@@ -19,7 +19,7 @@ $this->title = [
 date_default_timezone_set('Asia/Jakarta');
 
 ?>
-
+<?= Html::a('<i class="fa fa-arrow-circle-left"></i> Back', Url::previous(), ['class' => 'btn btn-warning', 'style' => 'margin-bottom: 10px;']); ?>
 <div class="panel panel-primary">
 	<div class="panel-body">
 		<span style="font-size: 20px;">Voucher No. <?= $voucher_no; ?></span>

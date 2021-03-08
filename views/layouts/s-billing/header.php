@@ -26,7 +26,10 @@ $model_karyawan = Karyawan::find()->where([
         <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
           <ul class="nav navbar-nav">
             <li style="" class="<?= \Yii::$app->controller->id == 's-billing' && in_array(\Yii::$app->controller->action->id, ['data']) ? 'active' : ''; ?>">
-                <?= Html::a('<u>Data</u>', ['data']) ?>
+                <?= Html::a('<u>Invoice Data</u>', ['data']) ?>
+            </li>
+            <li style="" class="<?= \Yii::$app->controller->id == 's-billing' && in_array(\Yii::$app->controller->action->id, ['voucher']) ? 'active' : ''; ?>">
+                <?= Html::a('<u>Voucher Data</u>', ['voucher']) ?>
             </li>
           </ul>
         </div>

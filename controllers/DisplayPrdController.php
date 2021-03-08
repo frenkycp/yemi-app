@@ -810,6 +810,7 @@ class DisplayPrdController extends Controller
                     ])
                     ->andWhere(['>=', 'POST_DATE', $model->from_date])
                     ->andWhere('POST_DATE IS NOT NULL')
+                    ->groupBy('POST_DATE')
                     ->all();
 
                     foreach ($tmp_log_last_update as $log_last_update) {

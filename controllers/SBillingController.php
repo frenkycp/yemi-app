@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\search\SBillingSearch;
+use app\models\search\SupplierBillingVoucherSearch;
 use yii\web\HttpException;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
@@ -114,6 +115,28 @@ class SBillingController extends \app\controllers\base\SBillingController
 		]);
 	}
 
+    public function actionVoucher()
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+        $this->layout = 's-billing/main';
+
+        $searchModel  = new SupplierBillingVoucherSearch;
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('voucher', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
 	public function actionReceive($no)
 	{
 		$session = \Yii::$app->session;
@@ -135,7 +158,7 @@ class SBillingController extends \app\controllers\base\SBillingController
         return $this->redirect(Url::previous());
 	}
 
-	public function actionHandover($no)
+	public function actionHandover($voucher_no)
 	{
 		$session = \Yii::$app->session;
         if (!$session->has('s_billing_user')) {
@@ -143,12 +166,21 @@ class SBillingController extends \app\controllers\base\SBillingController
         }
         date_default_timezone_set('Asia/Jakarta');
 
-        $model = $this->findModel($no);
-        $model->stage = 3;
-        $model->open_close = 'C';
-        $model->doc_finance_handover_by = $session['s_billing_name'];
-        $model->doc_finance_handover_date = date('Y-m-d H:i:s');
-        $model->doc_finance_handover_stat = '1';
+        $tmp_voucher = SupplierBillingVoucher::find()->where(['voucher_no' => $voucher_no])->one();
+        $tmp_voucher->handover_status = 'C';
+
+        if (!$tmp_voucher->save()) {
+            return json_encode($tmp_voucher->errors);
+        }
+
+        //update invoice data
+        SupplierBilling::updateAll([
+            'stage' => 3,
+            'open_close' => 'C',
+            'doc_finance_handover_by' => $session['s_billing_name'],
+            'doc_finance_handover_date' => date('Y-m-d H:i:s'),
+            'doc_finance_handover_stat' => '1',
+        ], ['voucher_no' => $voucher_no]);
 
         if (!$model->save()) {
         	return json_encode($model->errors);
@@ -187,6 +219,37 @@ class SBillingController extends \app\controllers\base\SBillingController
 		echo $bin;
 		exit;
 	}
+
+    public function actionVoucherAttachment($voucher_no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+
+        $sql = "{CALL SUPPLIER_BILLING_VEFIFIKASI_DOC_DOWNLOAD(:voucher_no)}";
+        // passing the params into to the sql query
+        $params = [':voucher_no'=>$voucher_no];
+        $result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryOne();
+        $b64 = $result['docbase64'];
+
+        $bin = base64_decode($b64, true);
+        if (strpos($bin, '%PDF') !== 0) {
+          throw new Exception('Missing the PDF file signature');
+        }
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/pdf');
+        header('Content-Disposition: attachment; filename=' . $voucher_no . '.pdf');
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . strlen($bin));
+        ob_clean();
+        flush();
+        echo $bin;
+        exit;
+    }
 
     public function actionVoucherDetail($voucher_no)
     {
@@ -233,12 +296,6 @@ class SBillingController extends \app\controllers\base\SBillingController
             if (!$tmp_data_user) {
                 \Yii::$app->getSession()->setFlash('error', 'User not found ...');
             } else {
-                $model->attachment_file = $tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
-                //$tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
-                $tmp_data = file_get_contents($tmp_attachment->tempName);
-                $base64 = base64_encode($tmp_data);
-                //return $base64;
-
                 $model->create_by_id = $user_id;
                 $model->create_by_name = $tmp_data_user->NAMA_KARYAWAN;
                 $model->create_time = $this_time;
@@ -246,9 +303,36 @@ class SBillingController extends \app\controllers\base\SBillingController
                 $model->attached_by_name = $tmp_data_user->NAMA_KARYAWAN;
                 $model->attached_time = $this_time;
 
-                if (!$model->save()) {
-                    return json_encode($model->errors);
+                $model->attachment_file = $tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
+                //$tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
+                if ($model->attachment_file) {
+                    $tmp_data = file_get_contents($tmp_attachment->tempName);
+                    $base64 = base64_encode($tmp_data);
                 }
+                
+                $sql = "{CALL SUPPLIER_BILLING_VEFIFIKASI_REG(:voucher_no, :create_by_id, :create_by_name, :dokumen)}";
+                $params = [
+                    ':voucher_no' => $model->voucher_no,
+                    ':create_by_id' =>  $model->create_by_id,
+                    ':create_by_name' => $model->create_by_name,
+                    ':dokumen' => $base64,
+                ];
+
+                try {
+                    $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
+                    \Yii::$app->session->setFlash('success', "Voucher no. " . $model->voucher_no . " created successfully...");
+                } catch (Exception $ex) {
+                    \Yii::$app->session->setFlash('danger', "Error : $ex");
+                    return $this->render('create-voucher', [
+                        'model' => $model,
+                    ]);
+                }
+
+                
+
+                /*if (!$model->save()) {
+                    return json_encode($model->errors);
+                }*/
 
                 $no_arr = $model->invoice_no;
                 foreach ($no_arr as $no_val) {
@@ -264,7 +348,6 @@ class SBillingController extends \app\controllers\base\SBillingController
 
         return $this->render('create-voucher', [
             'model' => $model,
-            'base64' => $base64,
         ]);
     }
 
