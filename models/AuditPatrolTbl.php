@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class AuditPatrolTbl extends BaseAuditPatrolTbl
 {
-    public $upload_before_1, $upload_before_2, $upload_before_3, $upload_after_1, $upload_after_2, $upload_after_3;
+    public $upload_before_1, $upload_before_2, $upload_before_3, $upload_after_1, $upload_after_2, $upload_after_3, $total_open, $total_close, $total_5s, $total_safety;
 
     public function behaviors()
     {
