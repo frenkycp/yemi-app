@@ -588,6 +588,22 @@ $user_id = \Yii::$app->user->identity->username;
                         </div>
                     </div>
                 </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">Expiration & Stock Monitoring</div>
+                    <div class="list-group-item">
+                        <ol style="padding-left: 1em">
+                            <li>
+                                <?= Html::a('Expiration Monitoring <span class="japanesse-word"></span>', ['/display-prd/expiration-monitoring']); ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Stock Monitoring (Daily) <span class="japanesse-word"></span>', ['/display-prd/stock-monitoring']); ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Stock Monitoring (Average) <span class="japanesse-word"></span>', ['/display-prd/stock-monitoring-avg']); ?>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
                 
     		</div>
     		<div class="col-sm-1 text-center">
