@@ -75,7 +75,7 @@ if (count($tmp_open) > 0) {
                     'options' => ['placeholder' => 'Enter start time ...'],
                     'pluginOptions' => [
                         'autoclose' => true,
-                        'endDate' => date('Y-m-d')
+                        'endDate' => date('Y-m-d H:i:s')
                     ]
                 ]); ?>
             </div>
@@ -88,8 +88,8 @@ if (count($tmp_open) > 0) {
                     'options' => ['placeholder' => 'Enter end time ...'],
                     'pluginOptions' => [
                         'autoclose' => true,
-                        'startDate' => date("Y-m-d", strtotime($model->START_TIME)),
-                        'endDate' => date('Y-m-d')
+                        'startDate' => date("Y-m-d H:i:s", strtotime($model->START_TIME)),
+                        'endDate' => date('Y-m-d H:i:s')
                     ]
                 ]); ?>
             </div>
