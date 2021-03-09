@@ -454,6 +454,12 @@ return [
         '5S' => '5S',
         'Safety' => 'Safety',
     ],
+    'rdr_category_arr' => [
+        'SHORTAGE' => 'SHORTAGE',
+        'OVER' => 'OVER',
+        'WRONG PART' => 'WRONG PART',
+        'NO PART NUMBER' => 'NO PART NUMBER',
+    ],
 ];
 
 function getYearArray()
