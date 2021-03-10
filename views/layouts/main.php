@@ -14,6 +14,10 @@ dmstr\web\AdminLteAsset::register($this);
 
 $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/plugins');
+
+$sidebar_collapse_arr = [
+    'about-me', 'manufacture-flow', 'audit-patrol-monitoring', 'audit-patrol'
+];
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -49,7 +53,7 @@ $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/a
         }
     </style>
 </head>
-<body class="hold-transition <?= \dmstr\helpers\AdminLteHelper::skinClass(); ?> sidebar-mini<?= \Yii::$app->controller->id == 'about-me' || \Yii::$app->controller->id == 'manufacture-flow' ? ' sidebar-collapse' : ''; ?>">
+<body class="hold-transition <?= \dmstr\helpers\AdminLteHelper::skinClass(); ?> sidebar-mini<?= in_array(\Yii::$app->controller->id, $sidebar_collapse_arr) ? ' sidebar-collapse' : ''; ?>">
 <?php $this->beginBody() ?>
 <div class="wrapper">
 

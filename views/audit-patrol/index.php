@@ -138,7 +138,7 @@ $gridColumns = [
     ],*/
     [
         'attribute' => 'DESCRIPTION',
-        'hAlign' => 'center',
+        //'hAlign' => 'center',
         'vAlign' => 'middle',
         'contentOptions' => [
             'style' => 'min-width: 100px;'

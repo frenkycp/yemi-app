@@ -137,6 +137,28 @@ class SBillingController extends \app\controllers\base\SBillingController
         ]);
     }
 
+    public function actionVoucherRemoveInvoice($no, $voucher_no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = $this->findModel($no);
+        $model->voucher_no = null;
+
+        if (!$model->save()) {
+            return json_encode($model->errors);
+        }
+
+        $user_id = \Yii::$app->user->identity->username;
+
+        SupplierBillingVoucher::updateAll(['update_by_id' => $session['s_billing_user'], 'update_by_name' => $session['s_billing_name'], 'update_datetime' => date('Y-m-d H:i:s')], ['voucher_no' => $voucher_no]);
+
+        return $this->redirect(['voucher-detail', 'voucher_no' => $voucher_no]);
+    }
+
 	public function actionReceive($no)
 	{
 		$session = \Yii::$app->session;
@@ -166,12 +188,14 @@ class SBillingController extends \app\controllers\base\SBillingController
         }
         date_default_timezone_set('Asia/Jakarta');
 
-        $tmp_voucher = SupplierBillingVoucher::find()->where(['voucher_no' => $voucher_no])->one();
-        $tmp_voucher->handover_status = 'C';
+        /*$tmp_voucher = SupplierBillingVoucher::find()->where(['voucher_no' => $voucher_no])->one();
+        $tmp_voucher->handover_status = 'C';*/
 
-        if (!$tmp_voucher->save()) {
+        SupplierBillingVoucher::updateAll(['handover_status' => 'C'], ['voucher_no' => $voucher_no]);
+
+        /*if (!$tmp_voucher->save()) {
             return json_encode($tmp_voucher->errors);
-        }
+        }*/
 
         //update invoice data
         SupplierBilling::updateAll([
@@ -182,9 +206,7 @@ class SBillingController extends \app\controllers\base\SBillingController
             'doc_finance_handover_stat' => '1',
         ], ['voucher_no' => $voucher_no]);
 
-        if (!$model->save()) {
-        	return json_encode($model->errors);
-        }
+        \Yii::$app->getSession()->setFlash('success', 'Handover successfully...');
 
         return $this->redirect(Url::previous());
 	}
@@ -263,10 +285,66 @@ class SBillingController extends \app\controllers\base\SBillingController
         $this->layout = 's-billing/main';
 
         $invoice_data = SupplierBilling::find()->where(['voucher_no' => $voucher_no])->all();
+        $voucher_data = SupplierBillingVoucher::find()->where(['voucher_no' => $voucher_no])->one();
 
         return $this->render('voucher-detail', [
             'invoice_data' => $invoice_data,
             'voucher_no' => $voucher_no,
+            'voucher_data' => $voucher_data,
+        ]);
+    }
+
+    public function actionVoucherAttachmentEdit($voucher_no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+
+        $this->layout = 's-billing/main';
+
+        $model = SupplierBillingVoucher::find()->where([
+            'voucher_no' => $voucher_no
+        ])->one();
+
+        if ($model->load(\Yii::$app->request->post())) {
+
+            $model->attachment_file = $tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
+            //$tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
+            if ($model->attachment_file) {
+                $tmp_data = file_get_contents($tmp_attachment->tempName);
+                $base64 = base64_encode($tmp_data);
+                //return $base64;
+            } else {
+                \Yii::$app->session->setFlash('danger', "Attachment is empty");
+                return $this->render('voucher-attachment-edit', [
+                    'model' => $model,
+                ]);
+            }
+            
+            $sql = "{CALL SUPPLIER_BILLING_VEFIFIKASI_REVISI(:voucher_no, :update_by_id, :update_by_name, :dokumen)}";
+            $params = [
+                ':voucher_no' => $model->voucher_no,
+                ':update_by_id' =>  $session['s_billing_user'],
+                ':update_by_name' => $session['s_billing_name'],
+                ':dokumen' => $base64,
+            ];
+
+            try {
+                $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
+                \Yii::$app->session->setFlash('success', "Attachment for Voucher no. " . $model->voucher_no . " updated successfully...");
+            } catch (Exception $ex) {
+                \Yii::$app->session->setFlash('danger', "Error : $ex");
+                return $this->render('voucher-attachment-edit', [
+                    'model' => $model,
+                ]);
+            }
+
+            return $this->redirect(Url::previous());
+        }
+
+        return $this->render('voucher-attachment-edit', [
+            'model' => $model,
         ]);
     }
 
@@ -284,65 +362,51 @@ class SBillingController extends \app\controllers\base\SBillingController
         $model = new SupplierBillingVoucher;
         $base64 = '';
         if ($model->load(\Yii::$app->request->post())) {
-            $user_id = \Yii::$app->user->identity->username;
-            $tmp_data_user = Karyawan::find()
-            ->where([
-                'OR',
-                ['NIK' => $user_id],
-                ['NIK_SUN_FISH' => $user_id]
-            ])
-            ->one();
 
-            if (!$tmp_data_user) {
-                \Yii::$app->getSession()->setFlash('error', 'User not found ...');
-            } else {
-                $model->create_by_id = $user_id;
-                $model->create_by_name = $tmp_data_user->NAMA_KARYAWAN;
-                $model->create_time = $this_time;
-                $model->attached_by_id = $user_id;
-                $model->attached_by_name = $tmp_data_user->NAMA_KARYAWAN;
-                $model->attached_time = $this_time;
+            $model->create_by_id = $session['s_billing_user'];
+            $model->create_by_name = $session['s_billing_name'];
+            $model->create_time = $this_time;
+            $model->attached_by_id = $session['s_billing_user'];
+            $model->attached_by_name = $session['s_billing_name'];
+            $model->attached_time = $this_time;
 
-                $model->attachment_file = $tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
-                //$tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
-                if ($model->attachment_file) {
-                    $tmp_data = file_get_contents($tmp_attachment->tempName);
-                    $base64 = base64_encode($tmp_data);
-                }
-                
-                $sql = "{CALL SUPPLIER_BILLING_VEFIFIKASI_REG(:voucher_no, :create_by_id, :create_by_name, :dokumen)}";
-                $params = [
-                    ':voucher_no' => $model->voucher_no,
-                    ':create_by_id' =>  $model->create_by_id,
-                    ':create_by_name' => $model->create_by_name,
-                    ':dokumen' => $base64,
-                ];
+            $model->attachment_file = $tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
+            //$tmp_attachment = UploadedFile::getInstance($model, 'attachment_file');
+            if ($model->attachment_file) {
+                $tmp_data = file_get_contents($tmp_attachment->tempName);
+                $base64 = base64_encode($tmp_data);
+            }
+            
+            $sql = "{CALL SUPPLIER_BILLING_VEFIFIKASI_REG(:voucher_no, :create_by_id, :create_by_name, :dokumen)}";
+            $params = [
+                ':voucher_no' => $model->voucher_no,
+                ':create_by_id' =>  $model->create_by_id,
+                ':create_by_name' => $model->create_by_name,
+                ':dokumen' => $base64,
+            ];
 
-                try {
-                    $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
-                    \Yii::$app->session->setFlash('success', "Voucher no. " . $model->voucher_no . " created successfully...");
-                } catch (Exception $ex) {
-                    \Yii::$app->session->setFlash('danger', "Error : $ex");
-                    return $this->render('create-voucher', [
-                        'model' => $model,
-                    ]);
-                }
-
-                
-
-                /*if (!$model->save()) {
-                    return json_encode($model->errors);
-                }*/
-
-                $no_arr = $model->invoice_no;
-                foreach ($no_arr as $no_val) {
-                    SupplierBilling::updateAll(['voucher_no' => $model->voucher_no], ['no' => $no_val]);
-                }
-
-                return $this->redirect(Url::previous());
+            try {
+                $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
+                \Yii::$app->session->setFlash('success', "Voucher no. " . $model->voucher_no . " created successfully...");
+            } catch (Exception $ex) {
+                \Yii::$app->session->setFlash('danger', "Error : $ex");
+                return $this->render('create-voucher', [
+                    'model' => $model,
+                ]);
             }
 
             
+
+            /*if (!$model->save()) {
+                return json_encode($model->errors);
+            }*/
+
+            $no_arr = $model->invoice_no;
+            foreach ($no_arr as $no_val) {
+                SupplierBilling::updateAll(['voucher_no' => $model->voucher_no], ['no' => $no_val]);
+            }
+
+            return $this->redirect(Url::previous());
 
         }
 
@@ -410,4 +474,32 @@ class SBillingController extends \app\controllers\base\SBillingController
     		'model' => $model
     	]);
 	}
+
+    public function actionVoucherAddInvoice($voucher_no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+
+        $model = new \yii\base\DynamicModel([
+            'invoice_no'
+        ]);
+        $model->addRule(['invoice_no'], 'required');
+
+        date_default_timezone_set('Asia/Jakarta');
+
+        if ($model->load(\Yii::$app->request->post())) {
+            $no_arr = $model->invoice_no;
+            foreach ($no_arr as $no_val) {
+                SupplierBilling::updateAll(['voucher_no' => $voucher_no], ['no' => $no_val]);
+            }
+
+            return $this->redirect(['voucher-detail', 'voucher_no' => $voucher_no]);
+        }
+
+        return $this->renderAjax('voucher-add-invoice', [
+            'model' => $model
+        ]);
+    }
 }

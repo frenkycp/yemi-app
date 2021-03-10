@@ -74,12 +74,19 @@ $gridColumns = [
     [
         'attribute' => 'handover_status',
         'value' => function($model){
-            if ($model->handover_status == 'O') {
-                return 'OPEN';
+            if ($model->handover_status == 'C') {
+                return '<span class="label label-success">CLOSE</span>';
+            } elseif ($model->handover_status == 'O') {
+                return '<span class="label label-danger">OPEN</span>';
             } else {
-                return 'CLOSE';
+                return '-';
             }
         },
+        'format' => 'html',
+        'filter' => [
+            'O' => 'OPEN',
+            'C' => 'CLOSE',
+        ],
         'label' => 'Handover<br/>Status',
         'encodeLabel' => false,
         'vAlign' => 'middle',
@@ -91,6 +98,10 @@ $gridColumns = [
             return Html::a('<button class="btn btn-default btn-sm"><span class="fa fa-download"></span></button>', ['voucher-attachment', 'voucher_no' => $model->voucher_no
             ], [
                 'title' => 'Download',
+                'data-pjax' => '0',
+            ]) . Html::a('<button class="btn btn-default btn-sm"><span class="fa fa-pencil"></span></button>', ['voucher-attachment-edit', 'voucher_no' => $model->voucher_no
+            ], [
+                'title' => 'Update',
                 'data-pjax' => '0',
             ]);
         },

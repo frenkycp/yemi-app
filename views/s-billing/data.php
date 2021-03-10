@@ -37,7 +37,7 @@ $gridColumns = [
                     'data-confirm' => 'Did you receive the document?',
                 ];
                 if ($model->stage != 1) {
-                    return '<button class="btn btn-block btn-danger disabled btn-sm" title="Received"><span class="fa fa-sign-in"></span> Receive</button>';
+                    return '<button class="btn btn-block btn-success disabled btn-sm" title="Received"><span class="fa fa-sign-in"></span> Receive</button>';
                 }
                 return Html::a('<button class="btn btn-block btn-success btn-sm"><span class="fa fa-sign-in"></span> Receive</button>', $url, $options);
             },
