@@ -102,6 +102,12 @@ class SBillingController extends \app\controllers\base\SBillingController
 		$this->layout = 's-billing/main';
 
 	    $searchModel  = new SBillingSearch;
+
+        if(\Yii::$app->request->get('stage') !== null)
+        {
+            $searchModel->stage = \Yii::$app->request->get('stage');
+        }
+
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();

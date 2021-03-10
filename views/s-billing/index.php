@@ -27,7 +27,7 @@ $this->title = [
 			<div class="icon">
 				<i class="ion ion-person-add"></i>
 			</div>
-			<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+			<?= Html::a('More info <i class="fa fa-arrow-circle-right"></i>', ['data', 'stage' => 1], ['class' => 'small-box-footer']); ?>
 		</div>
 	</div>
 	<div class="col-sm-3">
@@ -40,7 +40,7 @@ $this->title = [
 			<div class="icon">
 				<i class="ion ion-person-add"></i>
 			</div>
-			<a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+			<?= Html::a('More info <i class="fa fa-arrow-circle-right"></i>', ['data', 'stage' => 2], ['class' => 'small-box-footer']); ?>
 		</div>
 	</div>
 	<!-- <div class="col-sm-3">
