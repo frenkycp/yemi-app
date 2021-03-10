@@ -39,9 +39,21 @@ date_default_timezone_set('Asia/Jakarta');
 $script = "
     window.onload = setupRefresh;
 
+    function playAudio() 
+    {
+        var x = document.getElementById('myAudio');
+        x.play();
+    }
+    function stopAudio() 
+    {
+        var x = document.getElementById('myAudio');
+        x.pause();
+    }
+
     function setupRefresh() {
       setTimeout(\"refreshPage();\", 600000); // milliseconds
     }
+
     function refreshPage() {
        window.location = location.href;
     }
@@ -83,7 +95,11 @@ $this->registerJs("$(document).ready(function() {
 print_r($data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
+$audio_url = Url::to('@web/uploads/AUDIO/industry_alarm_tone.wav');
 ?>
+<audio id="myAudio" hidden="hidden">
+    <source src="<?= $audio_url; ?>" type="audio/mpeg">
+</audio>
 <div class="row" style="padding: 0px 20px;">
     <div class="col-md-12 text-center" style="background-color: #61258e; border: 2px solid grey; border-radius: 20px 20px 0px 0px;">
         <span style="font-size: 18em; color: white;">
@@ -142,6 +158,11 @@ echo '</pre>';*/
                                                 series.addPoint({x: x, y: y, color: 'red'}, true, true);
                                             }
                                             $('#speed').html(jsondata.reply_roundtriptime);
+                                            if(jsondata.reply_roundtriptime == 'L.o.S') {
+                                                playAudio();
+                                            } else {
+                                                stopAudio();
+                                            }
                                             $('#bg-mbps').attr('class', 'widget-content ' + jsondata.bg_reply_time);
                                         });
                                     }, 2000);
