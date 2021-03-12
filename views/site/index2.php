@@ -601,6 +601,9 @@ $user_id = \Yii::$app->user->identity->username;
                             <li>
                                 <?= Html::a('Stock Monitoring (Average) <span class="japanesse-word"></span>', ['/display-prd/stock-monitoring-avg']); ?>
                             </li>
+                            <li>
+                                <?= Html::a('Transaction Log <span class="japanesse-word"></span>', ['/trace-item-log']); ?>
+                            </li>
                         </ol>
                     </div>
                 </div>
