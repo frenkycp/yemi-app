@@ -95,8 +95,10 @@ $this->registerJs("$(document).ready(function() {
 print_r($data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
-$audio_url = Url::to('@web/uploads/AUDIO/industry_alarm_tone.wav');
+$audio_url = Url::to('@web/uploads/AUDIO/lobby.mp3');
 ?>
+<input type="hidden" name="" id="loss_start_time">
+<input type="hidden" name="" id="selisih">
 <audio id="myAudio" hidden="hidden">
     <source src="<?= $audio_url; ?>" type="audio/mpeg">
 </audio>
@@ -158,10 +160,25 @@ $audio_url = Url::to('@web/uploads/AUDIO/industry_alarm_tone.wav');
                                                 series.addPoint({x: x, y: y, color: 'red'}, true, true);
                                             }
                                             $('#speed').html(jsondata.reply_roundtriptime);
-                                            if(jsondata.reply_roundtriptime == 'L.o.S') {
-                                                playAudio();
+
+                                            var loss_start_time = new Date();
+                                            
+                                            if(jsondata.reply_roundtriptime >= 93) {
+                                                if($('#loss_start_time').val() == ''){
+                                                    $('#loss_start_time').val(loss_start_time);
+                                                }
+                                                var txt_loss_start_time = new Date($('#loss_start_time').val());
+                                                var loss_end_time = new Date();
+                                                var selisih = loss_end_time.getTime() - txt_loss_start_time.getTime();
+                                                selisih = Math.round(selisih / 1000);
+                                                $('#selisih').val(selisih);
+                                                if(selisih > 5 && selisih < 10){
+                                                    playAudio();
+                                                }
+                                                
                                             } else {
-                                                stopAudio();
+                                                $('#loss_start_time').val('');
+                                                //stopAudio();
                                             }
                                             $('#bg-mbps').attr('class', 'widget-content ' + jsondata.bg_reply_time);
                                         });

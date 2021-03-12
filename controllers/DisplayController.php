@@ -3659,12 +3659,15 @@ class DisplayController extends Controller
             }
         }
 
+        $last_update = date('Y-m-d H:i:s');
+
         $data = [
             'reply_roundtriptime' => $reply_roundtriptime,
             'speed_mbps' => $speed_mbps,
             'status' => $status,
             'bg_class' => $bg_class,
             'bg_reply_time' => $bg_reply_time,
+            'last_update' => $last_update,
         ];
         return json_encode($data, JSON_UNESCAPED_UNICODE);
     }
