@@ -99,6 +99,7 @@ $audio_url = Url::to('@web/uploads/AUDIO/lobby.mp3');
 ?>
 <input type="hidden" name="" id="loss_start_time">
 <input type="hidden" name="" id="selisih">
+<input type="hidden" name="" id="is_playing" value="0">
 <audio id="myAudio" hidden="hidden">
     <source src="<?= $audio_url; ?>" type="audio/mpeg">
 </audio>
@@ -163,7 +164,7 @@ $audio_url = Url::to('@web/uploads/AUDIO/lobby.mp3');
 
                                             var loss_start_time = new Date();
                                             
-                                            if(jsondata.reply_roundtriptime >= 93) {
+                                            if(jsondata.reply_roundtriptime == 'L.o.S') {
                                                 if($('#loss_start_time').val() == ''){
                                                     $('#loss_start_time').val(loss_start_time);
                                                 }
@@ -172,12 +173,13 @@ $audio_url = Url::to('@web/uploads/AUDIO/lobby.mp3');
                                                 var selisih = loss_end_time.getTime() - txt_loss_start_time.getTime();
                                                 selisih = Math.round(selisih / 1000);
                                                 $('#selisih').val(selisih);
-                                                if(selisih > 5 && selisih < 10){
+                                                if((selisih > 5 && $('#is_playing').val() == 0)){
+                                                    $('#is_playing').val(1);
                                                     playAudio();
                                                 }
-                                                
                                             } else {
                                                 $('#loss_start_time').val('');
+                                                $('#is_playing').val(0);
                                                 //stopAudio();
                                             }
                                             $('#bg-mbps').attr('class', 'widget-content ' + jsondata.bg_reply_time);
