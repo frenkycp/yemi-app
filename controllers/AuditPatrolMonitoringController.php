@@ -23,7 +23,7 @@ class AuditPatrolMonitoringController extends Controller
         ]);
         $model->addRule(['from_date', 'to_date'], 'required');
 
-        $model->from_date = date('Y-m-01');
+        $model->from_date = date('Y-m-01', strtotime(' -3 months'));
         $model->to_date = date('Y-m-t');
 
         if ($model->load($_GET)) {
@@ -33,10 +33,10 @@ class AuditPatrolMonitoringController extends Controller
         $tmp_data_patrol = AuditPatrolTbl::find()
         ->select([
         	'PATROL_DATE',
-        	'total_open' => 'SUM(CASE WHEN STATUS = \'O\' THEN 1 ELSE 0 END)',
-        	'total_close' => 'SUM(CASE WHEN STATUS = \'C\' THEN 1 ELSE 0 END)',
-        	'total_5s' => 'SUM(CASE WHEN TOPIC = \'5S\' THEN 1 ELSE 0 END)',
-        	'total_safety' => 'SUM(CASE WHEN TOPIC = \'Safety\' THEN 1 ELSE 0 END)',
+        	'PATROL_PRESIDR_OPEN' => 'SUM(CASE WHEN CATEGORY = 1 AND STATUS = \'O\' THEN 1 ELSE 0 END)',
+        	'PATROL_PRESIDR_CLOSE' => 'SUM(CASE WHEN CATEGORY = 1 AND STATUS = \'C\' THEN 1 ELSE 0 END)',
+        	'PATROL_GM_OPEN' => 'SUM(CASE WHEN CATEGORY = 2 AND STATUS = \'O\' THEN 1 ELSE 0 END)',
+        	'PATROL_GM_CLOSE' => 'SUM(CASE WHEN CATEGORY = 2 AND STATUS = \'C\' THEN 1 ELSE 0 END)',
         ])
         ->where([
         	'AND',
@@ -47,96 +47,90 @@ class AuditPatrolMonitoringController extends Controller
         ->orderBy('PATROL_DATE')
         ->all();
 
-        $begin = new \DateTime(date('Y-m-d', strtotime($model->from_date)));
-        $end = new \DateTime(date('Y-m-d', strtotime($model->to_date)));
+        $outstanding_data = AuditPatrolTbl::find()
+        ->where(['STATUS' => 'O'])
+        ->orderBy('PATROL_DATE DESC')
+        ->all();
 
-        $tmp_data_arr = [];
-        $tmp_total_open = $tmp_total_close = $tmp_total_5s = $tmp_total_safety = 0;
-        for($i = $begin; $i <= $end; $i->modify('+1 day')){
-        	$tgl = $i->format("Y-m-d");
-        	$post_date = (strtotime($tgl . " +7 hours") * 1000);
-        	$total_open = $total_close = $total_5s = $total_safety = null;
+        $tmp_data = $categories = $data = [];
+        foreach ($tmp_data_patrol as $value) {
+            $post_date = (strtotime($value->PATROL_DATE . " +7 hours") * 1000);
+            $categories[] = date('D, d M Y', strtotime($value->PATROL_DATE));
 
-        	foreach ($tmp_data_patrol as $value) {
-        		if (date('Y-m-d', strtotime($value->PATROL_DATE)) == $tgl) {
-        			$total_open = $value->total_open;
-        			$total_close = $value->total_close;
-        			$total_5s = $value->total_5s;
-        			$total_safety = $value->total_safety;
-
-        			$tmp_total_open += $value->total_open;
-        			$tmp_total_close += $value->total_close;
-        			$tmp_total_5s += $value->total_5s;
-        			$tmp_total_safety += $value->total_safety;
-        		}
-        	}
-
-        	$tmp_data_arr['open'][] = [
-        		'x' => $post_date,
-                'y' => $total_open == 0 ? null : (int)$total_open,
-        	];
-        	$tmp_data_arr['close'][] = [
-        		'x' => $post_date,
-                'y' => $total_close == 0 ? null : (int)$total_close,
-        	];
-        	$tmp_data_arr['5s'][] = [
-        		'x' => $post_date,
-                'y' => $total_5s == 0 ? null : (int)$total_5s,
-        	];
-        	$tmp_data_arr['safety'][] = [
-        		'x' => $post_date,
-                'y' => $total_safety == 0 ? null : (int)$total_safety,
-        	];
+            $tmp_data['presdir_open'][] = [
+                //'x' => $post_date,
+                'y' => $value->PATROL_PRESIDR_OPEN == 0 ? null : (int)$value->PATROL_PRESIDR_OPEN,
+            ];
+            $tmp_data['presdir_close'][] = [
+                //'x' => $post_date,
+                'y' => $value->PATROL_PRESIDR_CLOSE == 0 ? null : (int)$value->PATROL_PRESIDR_CLOSE,
+            ];
+            $tmp_data['gm_open'][] = [
+                //'x' => $post_date,
+                'y' => $value->PATROL_GM_OPEN == 0 ? null : (int)$value->PATROL_GM_OPEN,
+            ];
+            $tmp_data['gm_close'][] = [
+                //'x' => $post_date,
+                'y' => $value->PATROL_GM_CLOSE == 0 ? null : (int)$value->PATROL_GM_CLOSE,
+            ];
         }
 
-        $data['status'][] = [
-        	'name' => 'Completion Progress',
-        	'data' => [
-        		[
-	        		'name' => 'OPEN',
-	        		'y' => (int)$tmp_total_open,
-	        		'color' => \Yii::$app->params['bg-red'],
-	        	],
-	        	[
-	        		'name' => 'CLOSE',
-	        		'y' => (int)$tmp_total_close,
-	        		'color' => \Yii::$app->params['bg-green'],
-	        	],
-        	],
-        ];
-
-        $data['topic'][] = [
-        	'name' => 'Completion Progress',
-        	'data' => [
-        		[
-	        		'name' => '5S',
-	        		'y' => (int)$tmp_total_5s,
-	        		'color' => new JsExpression('Highcharts.getOptions().colors[0]'),
-	        	],
-	        	[
-	        		'name' => 'SAFETY',
-	        		'y' => (int)$tmp_total_safety,
-	        		'color' => new JsExpression('Highcharts.getOptions().colors[4]'),
-	        	],
-        	],
-        ];
-
-        $data['status_daily'] = [
-        	[
-        		'name' => 'OPEN',
-        		'data' => $tmp_data_arr['open'],
-        		'color' => \Yii::$app->params['bg-red'],
-        	],
-        	[
-        		'name' => 'CLOSE',
-        		'data' => $tmp_data_arr['close'],
-        		'color' => \Yii::$app->params['bg-green'],
-        	],
+        $data = [
+            [
+                'name' => 'Temuan Presdir Open',
+                'data' => $tmp_data['presdir_open'],
+                'color' => [
+                    'pattern' => [
+                        'path' => 'M 0 1.5 L 2.5 1.5 L 2.5 0 M 2.5 5 L 2.5 3.5 L 5 3.5',
+                        'color' => "#b22a00",
+                        'width' => 5,
+                        'height' => 5
+                    ]
+                ],
+            ],
+            [
+                'name' => 'Temuan Presdir Close',
+                'data' => $tmp_data['presdir_close'],
+                'color' => [
+                    'pattern' => [
+                        'path' => 'M 0 1.5 L 2.5 1.5 L 2.5 0 M 2.5 5 L 2.5 3.5 L 5 3.5',
+                        'color' => "#357a38",
+                        'width' => 5,
+                        'height' => 5
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Temuan GM Open',
+                'data' => $tmp_data['gm_open'],
+                'color' => [
+                    'pattern' => [
+                        'path' => 'M 0 1.5 L 2.5 1.5 L 2.5 0 M 2.5 5 L 2.5 3.5 L 5 3.5',
+                        'color' => "#ffea00 ",
+                        'width' => 5,
+                        'height' => 5
+                    ],
+                ],
+            ],
+            [
+                'name' => 'Temuan GM Close',
+                'data' => $tmp_data['gm_close'],
+                'color' => [
+                    'pattern' => [
+                        'path' => 'M 0 1.5 L 2.5 1.5 L 2.5 0 M 2.5 5 L 2.5 3.5 L 5 3.5',
+                        'color' => "#2c387e",
+                        'width' => 5,
+                        'height' => 5
+                    ],
+                ],
+            ],
         ];
 
 		return $this->render('index', [
 			'data' => $data,
 			'model' => $model,
+            'categories' => $categories,
+            'outstanding_data' => $outstanding_data,
 		]);
 	}
 }

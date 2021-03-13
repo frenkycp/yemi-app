@@ -447,8 +447,8 @@ return [
         2 => 'Ο'
     ],
     'audit_patrol_category' => [
-        1 => 'S-Up Patrol',
-        //2 => '5S Patrol'
+        1 => 'S-Up & HSE Patrol Presdir',
+        2 => '5S Patrol GM',
     ],
     'audit_patrol_topic' => [
         '5S' => '5S',

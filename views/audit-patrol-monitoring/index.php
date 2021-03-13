@@ -10,23 +10,37 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Audit Patrol Monitoring <span class="japanesse light-green"></span>',
-    'tab_title' => 'Audit Patrol Monitoring',
-    'breadcrumbs_title' => 'Audit Patrol Monitoring'
+    'page_title' => 'Patrol Monitoring <span class="japanesse light-green"></span>',
+    'tab_title' => 'Patrol Monitoring',
+    'breadcrumbs_title' => 'Patrol Monitoring'
 ];
-//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
+//$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title']; #3c3c3c
+$this->registerCss("
+    body, .content-wrapper {background-color: #3c3c3c;}
+");
 
 date_default_timezone_set('Asia/Jakarta');
+
+$this->registerCssFile('@web/css/dataTables.bootstrap.css');
+$this->registerJsFile('@web/js/jquery.dataTables.min.js');
+$this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
+
+$this->registerJs("$(document).ready(function() {
+    $('#outstanding').DataTable({
+        'pageLength': 10,
+        'order': [[ 1, 'desc' ]]
+    });
+});");
 
 ?>
 
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['audit-patrol-monitoring']),
+    'action' => Url::to(['index']),
 ]); ?>
 
-<div class="row" style="">
+<div class="row" style="color: white;">
     <div class="col-md-4">
         <?php echo '<label class="control-label">Select date range</label>';
         echo DatePicker::widget([
@@ -52,206 +66,140 @@ date_default_timezone_set('Asia/Jakarta');
 
 <?php ActiveForm::end(); ?>
 
-<div class="row">
-	<div class="col-sm-6">
-		<div class="panel panel-primary">
-			<div class="panel-body">
-				<?=
-                Highcharts::widget([
-                    'scripts' => [
-                        //'modules/exporting',
-                        //'themes/sand-signika',
-                        'themes/grid-light',
-                        'highcharts-3d',
-                    ],
-                    'options' => [
-                        'chart' => [
-                            'type' => 'pie',
-                            'options3d' => [
-					            'enabled' => true,
-					            'alpha' => 45,
-					            'beta' => 0
-					        ],
-                            'style' => [
-                                'fontFamily' => 'sans-serif',
-                            ],
-                            'height' => '300',
-                            'plotBackgroundColor' => null,
-                            'plotBorderWidth' => null,
-                            'plotShadow' => false,
-                        ],
-                        'title' => [
-                            'text' => 'Total Audit by Status'
-                        ],
-                        'credits' => [
-                            'enabled' =>false
-                        ],
-                        'tooltip' => [
-                            //'pointFormat' => '{series.name}: <b>{point.percentage:.2f}% ({point.y})</b>',
-                        ],
-                        'plotOptions' => [
-                            'pie' => [
-                                // 'allowPointSelect' => true,
-                                // 'cursor' => 'pointer',
-                                'depth' => 35,
-                                'dataLabels' => [
-                                    'enabled' => true,
-                                    'format' => '<b>{point.name}</b>: {point.percentage:.1f}% ({point.y})'
-                                ],
-                            ],
-                            /*'series' => [
-                                'cursor' => 'pointer',
-                                'point' => [
-                                    'events' => [
-                                        'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                    ]
-                                ]
-                            ],*/
-                        ],
-                        'series' => $data['status']
-                    ],
-                ]);
-                ?>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-6">
-		<div class="panel panel-primary">
-			<div class="panel-body">
-				<?=
-                Highcharts::widget([
-                    'scripts' => [
-                        //'modules/exporting',
-                        //'themes/sand-signika',
-                        'themes/grid-light',
-                        'highcharts-3d',
-                    ],
-                    'options' => [
-                        'chart' => [
-                            'type' => 'pie',
-                            'options3d' => [
-					            'enabled' => true,
-					            'alpha' => 45,
-					            'beta' => 0
-					        ],
-                            'style' => [
-                                'fontFamily' => 'sans-serif',
-                            ],
-                            'height' => '300',
-                            'plotBackgroundColor' => null,
-                            'plotBorderWidth' => null,
-                            'plotShadow' => false,
-                        ],
-                        'title' => [
-                            'text' => 'Total Audit by Category'
-                        ],
-                        'credits' => [
-                            'enabled' =>false
-                        ],
-                        'tooltip' => [
-                            //'pointFormat' => '{series.name}: <b>{point.percentage:.2f}% ({point.y})</b>',
-                        ],
-                        'plotOptions' => [
-                            'pie' => [
-                                // 'allowPointSelect' => true,
-                                // 'cursor' => 'pointer',
-                                'depth' => 35,
-                                'dataLabels' => [
-                                    'enabled' => true,
-                                    'format' => '<b>{point.name}</b>: {point.percentage:.1f}% ({point.y})'
-                                ],
-                            ],
-                            /*'series' => [
-                                'cursor' => 'pointer',
-                                'point' => [
-                                    'events' => [
-                                        'click' => new JsExpression('function(){ location.href = this.options.url; }'),
-                                    ]
-                                ]
-                            ],*/
-                        ],
-                        'series' => $data['topic']
-                    ],
-                ]);
-                ?>
-			</div>
-		</div>
-	</div>
-</div>
+<?=
+Highcharts::widget([
+    'scripts' => [
+        'highcharts-more',
+        //'modules/exporting',
+        //'themes/grid-light',
+        'modules/pattern-fill',
+        //'themes/dark-unica',
+    ],
+    'options' => [
+        'chart' => [
+            'type' => 'column',
+            'backgroundColor' => null,
+            'height' => '300',
+            'style' => [
+                'fontFamily' => 'sans-serif',
+            ],
+            'zoomType' => 'x'
+        ],
+        'title' => [
+            'text' => null,
+        ],
+        'xAxis' => [
+            'categories' => $categories,
+            'lineWidth' => 2,
+            'lineColor' => '#9e9e9e',
+            'gridLineWidth' => 1,
+            'labels' => [
+                'style' => [
+                    'color' => 'white',
+                ],
+            ],
+            //'lineWidth' => 1,
+        ],
+        'yAxis' => [
+            'title' => [
+                'text' => 'Total Temuan',
+                'style' => [
+                    'color' => 'white',
+                ],
+            ],
+            'lineWidth' => 2,
+            'lineColor' => '#fff',
+            'type' => 'linear',
+            'stackLabels' => [
+                'enabled' => true,
+                'style' => [
+                    'color' => new JsExpression("(Highcharts.theme && Highcharts.theme.textColor)")
+                ],
+            ],
+            'labels' => [
+                'style' => [
+                    'color' => 'white',
+                ],
+            ],
+        ],
+        'legend' => [
+            'enabled' => true,
+            'align' => 'right',
+            'verticalAlign' => 'top',
+            'floating' => false,
+            'borderWidth' => 1,
+            'shadow' => false,
+            'reverse' => true,
+            //'x' => -30,
+            //'y' => 10,
+            'itemStyle' => [
+                'color' => 'white',
+                'fontSize' => '12px',
+                'fontWeight' => 'bold'
+            ],
+        ],
+        'credits' => [
+            'enabled' => false
+        ],
+        'tooltip' => [
+            'enabled' => true,
+            //'valueSuffix' => ' ' . $um,
+            'shared' => true,
+            //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+        ],
+        'plotOptions' => [
+            'column' => [
+                'stacking' => 'normal',
+                'maxPointWidth' => 100,
+                'pointPadding' => 0.93,
+                'groupPadding' => 0.93,
+                'borderWidth' => 1,
+                'marker' => [
+                    'enabled' => false
+                ],
+                'dataLabels' => [
+                    'enabled' => true,
+                ],
+            ],
+            
+        ],
+        'series' => $data,
+    ],
+]);
+?>
 
-<div class="row">
-	<div class="col-sm-12">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<h3 class="panel-title">Daily Report Status</h3>
-			</div>
-			<div class="panel-body">
-				<?=
-		        Highcharts::widget([
-		            'scripts' => [
-		                'highcharts-more',
-		                //'modules/exporting',
-		                //'themes/sand-signika',
-		                'modules/solid-gauge',
-		                //'themes/dark-unica',
-		            ],
-		            'options' => [
-		                'chart' => [
-		                    'type' => 'column',
-		                    //'height' => '500',
-		                    'style' => [
-		                        'fontFamily' => 'sans-serif',
-		                    ],
-		                    'zoomType' => 'x'
-		                ],
-		                'title' => [
-		                    'text' => null,
-		                ],
-		                'xAxis' => [
-		                    'type' => 'datetime',
-		                    //'lineWidth' => 1,
-		                ],
-		                'yAxis' => [
-		                    'minorGridLineWidth' => 0,
-		                    'title' => [
-		                        'text' => null,
-		                    ],
-		                    'allowDecimals' => false,
-		                    /*'stackLabels' => [
-		                        'enabled' => true,
-		                    ],*/
-		                    //'min' => 0,
-		                    //'tickInterval' => 20
-		                ],
-		                'legend' => [
-		                    'enabled' => true,
-		                ],
-		                'credits' => [
-		                    'enabled' => false
-		                ],
-		                'tooltip' => [
-		                    'enabled' => true,
-		                    //'valueSuffix' => ' ' . $um,
-		                    'shared' => true,
-		                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
-		                ],
-		                'plotOptions' => [
-		                    'column' => [
-		                        'stacking' => 'normal',
-		                        'marker' => [
-		                            'enabled' => false
-		                        ],
-		                        'dataLabels' => [
-		                            'enabled' => true,
-		                        ],
-		                    ],
-		                    
-		                ],
-		                'series' => $data['status_daily'],
-		            ],
-		        ]);
-		        ?>
-			</div>
-		</div>
-	</div>
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <table class="table table-bordered dataTable" id="outstanding" style="font-size: 0.83vw;">
+            <thead style="font-size: 12px;">
+                <tr>
+                    <th class="text-center">Kategori Audit</th>
+                    <th class="text-center">Tanggal</th>
+                    <th class="text-center">Lokasi</th>
+                    <th class="text-center">Detail Lokasi</th>
+                    <th class="text-center">Auditor</th>
+                    <th class="text-center">Auditee</th>
+                    <th class="text-center">Note</th>
+                    <th class="text-center" style="min-width: 200px;">Penaganan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($outstanding_data as $value): ?>
+                    <tr>
+                        <td><?= \Yii::$app->params['audit_patrol_category'][$value->CATEGORY]; ?></td>
+                        <td class="text-center"><?= $value->PATROL_DATE; ?></td>
+                        <td><?= $value->CC_DESC; ?></td>
+                        <td><?= $value->LOC_DETAIL; ?></td>
+                        <td><?= $value->AUDITOR; ?></td>
+                        <td><?= $value->PIC_NAME; ?></td>
+                        <td><?= $value->DESCRIPTION; ?></td>
+                        <td class="text-center">
+                            <?= Html::a('<i class="fa fa-pencil-square-o"></i> Edit', ['/audit-patrol/update', 'ID' => $value->ID], ['class' => 'btn btn-primary']); ?>&nbsp;
+                            <?= Html::a('<i class="fa fa-thumbs-o-up"></i> Penaganan', ['/audit-patrol/solve', 'ID' => $value->ID], ['class' => 'btn btn-warning']); ?>
+                        </td>
+                    </tr>
+                <?php endforeach ?>
+            </tbody>
+        </table>
+    </div>
 </div>
