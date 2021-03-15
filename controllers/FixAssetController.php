@@ -639,9 +639,13 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 				$model->propose_scrap = 'N';
 				$model->status = 'OK';
 				$model->qr = $model->asset_id;
-				$tmp_location = AssetLocTbl::find($model->LOC)->one();
-				$model->location = $tmp_location->LOC_DESC;
-				$model->loc_type = $tmp_location->LOC_TYPE;
+				if ($model->LOC != '' && $model->LOC != null) {
+					$tmp_location = AssetLocTbl::find($model->LOC)->one();
+					$model->location = $tmp_location->LOC_DESC;
+					$model->loc_type = $tmp_location->LOC_TYPE;
+					$model->area = $tmp_location->LOC_AREA;
+				}
+				
 
 				$tmp_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->nik])->one();
 				$model->NAMA_KARYAWAN = $tmp_karyawan->NAMA_KARYAWAN;
