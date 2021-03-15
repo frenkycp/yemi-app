@@ -18,19 +18,10 @@ $this->title = [
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
-
 $gridColumns = [
-    /*[
-        'class' => 'yii\grid\ActionColumn',
-        'template' => $actionColumnTemplateString,
+    [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => '{update}',
         'buttons' => [
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -48,10 +39,9 @@ $gridColumns = [
             return Url::toRoute($params);
         },
         'contentOptions' => ['nowrap'=>'nowrap']
-    ],*/
+    ],
     [
-        'attribute' => 'qr',
-        'label' => 'QR Code',
+        'attribute' => 'asset_id',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'width' => '100px;',
@@ -62,24 +52,13 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'asset_id',
-        'label' => 'Mac/IMEI/Serial Number',
+        'attribute' => 'computer_name',
+        'label' => 'Asset Name',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'fixed_asst_account',
-        'label' => 'Fix Asset<br/>Code',
-        'encodeLabel' => false,
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px; min-width: 80px;'
         ],
     ],
     [
@@ -105,15 +84,7 @@ $gridColumns = [
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
-    [
-        'attribute' => 'computer_name',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
+
     [
         'attribute' => 'cur',
         'label' => 'Currency',
@@ -137,45 +108,23 @@ $gridColumns = [
         ],
     ],
     [
-        'attribute' => 'ip_address',
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'department_pic',
+        'attribute' => 'department_name',
         'label' => 'Department',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'filter' => $department_arr,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
         ],
     ],
     [
-        'attribute' => 'nik',
-        'label' => 'PIC NIK',
+        'attribute' => 'section_name',
+        'label' => 'Section',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'width' => '90px;',
-        'hidden' => true,
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'
-        ],
-    ],
-    [
-        'attribute' => 'project',
-        //'hAlign' => 'center',
-        'vAlign' => 'middle',
-        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('DISTINCT(project)')->where('project IS NOT NULL')->orderBy('project')->all(), 'project', 'project'),
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'font-size: 12px; min-width: 100px;'
         ],
     ],
     [
@@ -188,8 +137,16 @@ $gridColumns = [
             'style' => 'font-size: 12px;'
         ],
     ],
-    
-    
+    [
+        'attribute' => 'project',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => ArrayHelper::map(app\models\AssetTbl::find()->select('DISTINCT(project)')->where('project IS NOT NULL')->orderBy('project')->all(), 'project', 'project'),
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'font-size: 12px; min-width: 100px;'
+        ],
+    ],
 ];
 ?>
 <div class="giiant-crud asset-tbl-index">
