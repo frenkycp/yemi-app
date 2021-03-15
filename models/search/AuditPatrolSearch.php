@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['ID', 'CATEGORY'], 'integer'],
-            [['PATROL_PERIOD', 'PATROL_DATE', 'PATROL_DATETIME', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'DESCRIPTION', 'ACTION', 'AUDITOR', 'AUDITEE', 'PIC_ID', 'PIC_NAME', 'USER_ID', 'USER_NAME', 'IMAGE_BEFORE_1', 'IMAGE_AFTER_1', 'STATUS', 'CC_ID', 'CC_DESC'], 'safe'],
+            [['PATROL_PERIOD', 'PATROL_DATE', 'PATROL_DATETIME', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'DESCRIPTION', 'ACTION', 'AUDITOR', 'AUDITEE', 'PIC_ID', 'PIC_NAME', 'USER_ID', 'USER_NAME', 'IMAGE_BEFORE_1', 'IMAGE_AFTER_1', 'STATUS', 'CC_ID', 'CC_DESC', 'FLAG'], 'safe'],
 ];
 }
 
@@ -57,6 +57,7 @@ return $dataProvider;
 
 $query->andFilterWhere([
             'ID' => $this->ID,
+            'FLAG' => $this->FLAG,
             'CC_ID' => $this->CC_ID,
             'CC_DESC' => $this->CC_DESC,
             'PATROL_DATE' => $this->PATROL_DATE,

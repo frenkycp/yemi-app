@@ -18,10 +18,16 @@ $this->title = [
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
+$this->registerCss("
+    .btn-block {
+        margin: 3px 0px;
+    }
+");
+
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update} {action}',
+        'template' => '{update} {action} {delete_data}',
         'buttons' => [
             'update' => function($url, $model, $key){
                 $url = ['update', 'ID' => $model->ID];
@@ -29,7 +35,7 @@ $gridColumns = [
                     'title' => 'Edit',
                     'data-pjax' => '0',
                 ];
-                return Html::a('<button class="btn btn-success btn-sm"><i class="fa fa-edit"></i> EDIT</span></button>', $url, $options);
+                return Html::a('<button class="btn btn-success btn-sm btn-block"><i class="fa fa-edit"></i> EDIT</span></button>', $url, $options);
             },
             'action' => function($url, $model, $key){
                 $url = ['solve', 'ID' => $model->ID];
@@ -37,7 +43,17 @@ $gridColumns = [
                     'title' => 'Action',
                     'data-pjax' => '0',
                 ];
-                return Html::a('<button class="btn btn-warning btn-sm"><i class="fa fa-thumbs-o-up"></i> ACTION</span></button>', $url, $options);
+                return Html::a('<button class="btn btn-warning btn-sm btn-block"><i class="fa fa-thumbs-o-up"></i> ACTION</span></button>', $url, $options);
+            },
+            'delete_data' => function($url, $model, $key){
+                $options = [
+                    'data-pjax' => '0',
+                    'value' => Url::to(['delete-data', 'ID' => $model->ID]),
+                    'title' => 'Delete Patrol Data',
+                    'class' => 'showModalButton'
+                ];
+                
+                return Html::a('<button class="btn btn-danger btn-sm btn-block"><i class="fa fa-remove"></i> DELETE</span></button>', '#', $options);
             },
             'view' => function ($url, $model, $key) {
                 $options = [
@@ -48,7 +64,7 @@ $gridColumns = [
                 return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
             }
         ],
-        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 160px;']
+        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'width: 100px;']
     ],
     /*[
         'attribute' => 'CATEGORY',
@@ -163,11 +179,11 @@ $gridColumns = [
     ],
     [
         'attribute' => 'IMAGE_BEFORE_1',
-        'value' => function($model){
+        /*'value' => function($model){
             if ($model->IMAGE_BEFORE_1 != null) {
                 return Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_BEFORE_1, ['width'=>'250']);
             }
-        },
+        },*/
         'width' => '250',
         'mergeHeader' => true,
         'format' => 'html',
@@ -181,11 +197,11 @@ $gridColumns = [
     
     [
         'attribute' => 'IMAGE_AFTER_1',
-        'value' => function($model){
+        /*'value' => function($model){
             if ($model->IMAGE_AFTER_1 != null) {
                 return Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'250']);
             }
-        },
+        },*/
         'width' => '250',
         'mergeHeader' => true,
         'format' => 'html',

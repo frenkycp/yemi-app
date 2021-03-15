@@ -11,6 +11,7 @@ use app\models\CostCenter;
 use yii\web\UploadedFile;
 use yii\imagine\Image;
 use Imagine\Image\Box;
+use dmstr\bootstrap\Tabs;
 
 /**
 * This is the class for controller "AuditPatrolController".
@@ -22,6 +23,23 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
+
+    public function actionIndex()
+	{
+	    $searchModel  = new AuditPatrolSearch;
+	    $searchModel->FLAG = 1;
+	    $dataProvider = $searchModel->search($_GET);
+
+		Tabs::clearLocalStorage();
+
+		Url::remember();
+		\Yii::$app->session['__crudReturnUrl'] = null;
+
+		return $this->render('index', [
+			'dataProvider' => $dataProvider,
+		    'searchModel' => $searchModel,
+		]);
+	}
 
 	public function actionCreate()
 	{
@@ -79,6 +97,41 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 			$model->addError('_exception', $msg);
 		}
 		return $this->render('create', ['model' => $model]);
+	}
+
+	public function actionDeleteData($ID){
+		$model = $this->findModel($ID);
+
+		if ($model->load(\Yii::$app->request->post())) {
+			date_default_timezone_set('Asia/Jakarta');
+			$model->FLAG = 0;
+			$user_id = \Yii::$app->user->identity->username;
+			$model->DELETE_BY_ID = $model->DELETE_BY_NAME = $user_id;
+			$model->DELETE_DATETIME = date('Y-m-d H:i:s');
+
+			$tmp_user = Karyawan::find()
+			->where([
+				'OR',
+				['NIK' => $user_id],
+				['NIK_SUN_FISH' => $user_id]
+			])
+			->one();
+			if ($tmp_user) {
+				$model->DELETE_BY_NAME = $tmp_user->NAMA_KARYAWAN;
+			}
+
+			if ($model->save()) {
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($model->errors);
+			}
+
+			//return $this->redirect(Url::previous());
+		}
+
+		return $this->renderAjax('delete-data', [
+    		'model' => $model
+    	]);
 	}
 
 	public function actionSolve($ID){

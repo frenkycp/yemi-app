@@ -43,12 +43,16 @@ class AuditPatrolMonitoringController extends Controller
         	['>=', 'PATROL_DATE', $model->from_date],
         	['<=', 'PATROL_DATE', $model->to_date],
         ])
+        ->andWhere(['FLAG' => 1])
         ->groupBy('PATROL_DATE')
         ->orderBy('PATROL_DATE')
         ->all();
 
         $outstanding_data = AuditPatrolTbl::find()
-        ->where(['STATUS' => 'O'])
+        ->where([
+            'STATUS' => 'O',
+            'FLAG' => 1
+        ])
         ->orderBy('PATROL_DATE DESC')
         ->all();
 

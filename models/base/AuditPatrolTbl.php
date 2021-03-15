@@ -29,6 +29,10 @@ use Yii;
  * @property string $PIC_NAME
  * @property string $USER_ID
  * @property string $USER_NAME
+ * @property string $DELETE_BY_ID
+ * @property string $DELETE_BY_NAME
+ * @property string $DELETE_DATETIME
+ * @property string $DELETE_REMARK
  * @property string $IMAGE_BEFORE_1
  * @property string $IMAGE_BEFORE_2
  * @property string $IMAGE_BEFORE_3
@@ -36,6 +40,7 @@ use Yii;
  * @property string $IMAGE_AFTER_2
  * @property string $IMAGE_AFTER_3
  * @property string $STATUS
+ * @property integer $FLAG
  * @property string $aliasModel
  */
 abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
@@ -65,11 +70,11 @@ abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['PATROL_DATE', 'PATROL_DATETIME'], 'safe'],
-            [['CATEGORY'], 'integer'],
-            [['DESCRIPTION', 'ACTION', 'IMAGE_BEFORE_1', 'IMAGE_BEFORE_2', 'IMAGE_BEFORE_3', 'IMAGE_AFTER_1', 'IMAGE_AFTER_2', 'IMAGE_AFTER_3'], 'string'],
-            [['PATROL_PERIOD', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'PIC_ID', 'USER_ID'], 'string', 'max' => 50],
-            [['AUDITOR', 'AUDITEE', 'PIC_NAME', 'USER_NAME'], 'string', 'max' => 150],
+            [['PATROL_DATE', 'PATROL_DATETIME', 'DELETE_DATETIME'], 'safe'],
+            [['CATEGORY', 'FLAG'], 'integer'],
+            [['DESCRIPTION', 'ACTION', 'DELETE_REMARK', 'IMAGE_BEFORE_1', 'IMAGE_BEFORE_2', 'IMAGE_BEFORE_3', 'IMAGE_AFTER_1', 'IMAGE_AFTER_2', 'IMAGE_AFTER_3'], 'string'],
+            [['PATROL_PERIOD', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'PIC_ID', 'USER_ID', 'DELETE_BY_ID'], 'string', 'max' => 50],
+            [['AUDITOR', 'AUDITEE', 'PIC_NAME', 'USER_NAME', 'DELETE_BY_NAME'], 'string', 'max' => 150],
             [['STATUS'], 'string', 'max' => 1]
         ];
     }
@@ -100,6 +105,10 @@ abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
             'PIC_NAME' => 'Pic Name',
             'USER_ID' => 'User ID',
             'USER_NAME' => 'User Name',
+            'DELETE_BY_ID' => 'Delete By ID',
+            'DELETE_BY_NAME' => 'Delete By Name',
+            'DELETE_DATETIME' => 'Delete Datetime',
+            'DELETE_REMARK' => 'Delete Remark',
             'IMAGE_BEFORE_1' => 'Image Before 1',
             'IMAGE_BEFORE_2' => 'Image Before 2',
             'IMAGE_BEFORE_3' => 'Image Before 3',
@@ -107,6 +116,7 @@ abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
             'IMAGE_AFTER_2' => 'Image After 2',
             'IMAGE_AFTER_3' => 'Image After 3',
             'STATUS' => 'Status',
+            'FLAG' => 'Flag',
         ];
     }
 
