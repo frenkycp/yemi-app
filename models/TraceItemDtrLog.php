@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class TraceItemDtrLog extends BaseTraceItemDtrLog
 {
-    public $QTY;
+    public $QTY, $CRITICAL_CATEGORY;
 
     public function behaviors()
     {
@@ -31,5 +31,10 @@ class TraceItemDtrLog extends BaseTraceItemDtrLog
                 # custom validation rules
             ]
         );
+    }
+
+    public function getItemHdr()
+    {
+        return $this->hasOne(TraceItemHdr::className(), ['ITEM' => 'ITEM'])->one();
     }
 }

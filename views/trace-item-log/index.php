@@ -70,6 +70,14 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'CRITICAL_CATEGORY',
+        'value' => 'itemHdr.CRITICAL_CATEGORY',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+        ],
+    ],
+    [
         'attribute' => 'SERIAL_NO',
         'vAlign' => 'middle',
         'hAlign' => 'center',
