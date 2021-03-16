@@ -100,7 +100,7 @@ class DisplayLogController extends Controller
 
         }
 
-        $period_name = strtoupper(date('M Y', strtotime($model->period . '01')));
+        $period_name = (date('M\' Y', strtotime($model->period . '01')));
 
         $tmp_shipping_order = ShippingOrderNew01::find()
         ->select([
@@ -115,6 +115,17 @@ class DisplayLogController extends Controller
         ->groupBy('ETD')
         ->orderBy('ETD')
         ->all();
+
+        $tmp_last_update = ShipReservationDtr::find()->select([
+            'CREATE_TIME' => 'MAX(CREATE_TIME)',
+            'LAST_UPDATE' => 'MAX(LAST_UPDATE)',
+        ])->one();
+
+        if (strtotime($tmp_last_update->CREATE_TIME) > strtotime($tmp_last_update->LAST_UPDATE)) {
+            $last_update = date('d M Y H:i', strtotime($tmp_last_update->CREATE_TIME));
+        } else {
+            $last_update = date('d M Y H:i', strtotime($tmp_last_update->LAST_UPDATE));
+        }
 
         $tmp_confirm = $tmp_unconfirm = $tmp_rejected = $tmp_on_board = [];
         $total_plan = $total_confirm = $total_reject = $total_unconfirm = $total_etd_yemi = $total_on_board = 0;
@@ -208,6 +219,7 @@ class DisplayLogController extends Controller
 
         return $this->render('shipping-order-new', [
             'data' => $data,
+            'last_update' => $last_update,
             'model' => $model,
             'period_name' => $period_name,
             'tmp_shipping_order' => $tmp_shipping_order,

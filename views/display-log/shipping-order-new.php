@@ -263,6 +263,7 @@ echo '</pre>';*/
         <br/>
     </div>
     <div class="col-sm-9">
+        <b>Last Update : <?= $last_update; ?></b>
         <div class="panel panel-primary">
             <div class="panel-body no-padding">
                 <?php
@@ -280,7 +281,7 @@ echo '</pre>';*/
                                 'fontFamily' => 'sans-serif',
                             ],
                             'zoomType' => 'x',
-                            'height' => 612
+                            'height' => 593
                         ],
                         'title' => [
                             'text' => 'Shipping Booking Management List'
