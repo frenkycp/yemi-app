@@ -179,11 +179,11 @@ $gridColumns = [
     ],
     [
         'attribute' => 'IMAGE_BEFORE_1',
-        /*'value' => function($model){
+        'value' => function($model){
             if ($model->IMAGE_BEFORE_1 != null) {
                 return Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_BEFORE_1, ['width'=>'250']);
             }
-        },*/
+        },
         'width' => '250',
         'mergeHeader' => true,
         'format' => 'html',
@@ -197,11 +197,11 @@ $gridColumns = [
     
     [
         'attribute' => 'IMAGE_AFTER_1',
-        /*'value' => function($model){
+        'value' => function($model){
             if ($model->IMAGE_AFTER_1 != null) {
                 return Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'250']);
             }
-        },*/
+        },
         'width' => '250',
         'mergeHeader' => true,
         'format' => 'html',
