@@ -104,7 +104,7 @@ class ExpiredItemController extends \app\controllers\base\ExpiredItemController
             'content' => $msg
         ])
         ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
-        ->setTo(['frenky.purnama@music.yamaha.com;angga.adhitya@music.yamaha.com;fredy.agus@music.yamaha.com'])
+        ->setTo(['frenky.purnama@music.yamaha.com', 'angga.adhitya@music.yamaha.com','fredy.agus@music.yamaha.com'])
         //->setCc($set_to_cc_arr)
         ->setSubject('Scrap Request')
         ->send();
