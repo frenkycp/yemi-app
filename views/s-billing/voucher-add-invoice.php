@@ -16,6 +16,23 @@ $this->title = [
     'tab_title' => 'Add Invoice Number',
     'breadcrumbs_title' => 'Add Invoice Number'
 ];
+
+$this->registerJs("
+    function change(){
+        var selectValue = $('#supplier-id').val();            
+        $('#invoice_no').empty();
+        $.post( '" . \Yii::$app->urlManager->createUrl('s-billing/get-invoice-by-supplier?supplier_name=') . "'+selectValue,
+            function(data){
+                $('#invoice_no').html(data);
+            }
+        );
+    }
+    $(document).ready(function() {
+        $('#supplier-id').change(function(){
+            change();
+        });
+    });
+");
 ?>
 <div class="giiant-crud cuti-tbl-update">
 
@@ -42,10 +59,22 @@ $this->title = [
 
     <div class="">
         <div class="row">
+            <div class="col-sm-6">
+                <?= $form->field($model, 'supplier_name')->dropDownList($tmp_supplier_dropdown, [
+                    'id'=>'supplier-id',
+                    'prompt' => 'Select Supplier...'
+                ]); ?>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-sm-12">
                 <?= $form->field($model, 'invoice_no')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(app\models\SupplierBilling::find()->where(['stage' => 2])->andWhere('voucher_no IS NULL')->all(), 'no', 'invoice_no'),
-                    'options' => ['placeholder' => 'Select invoice ...'],
+                    'data' => [],
+                    'options' => [
+                        'placeholder' => 'Select invoice ...',
+                        'id' => 'invoice_no'
+                    ],
                     'pluginOptions' => [
                         'allowClear' => true,
                         'multiple' => true

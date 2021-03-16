@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SupplierBillingVoucher extends BaseSupplierBillingVoucher
 {
-    public $invoice_no, $base64_txt, $attachment_file;
+    public $invoice_no, $base64_txt, $attachment_file, $supplier_name;
 
     public function behaviors()
     {

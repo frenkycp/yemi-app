@@ -69,7 +69,8 @@ class ScrapRequestController extends \app\controllers\base\ScrapRequestControlle
 			if (!$trace_item_dtr->save()) {
 				return json_encode($trace_item_dtr->errors);
 			}
-			$this->confirmProcedure($model->SERIAL_NO, $model->CLOSE_BY_ID, $model->CLOSE_BY_NAME);
+			//$this->confirmProcedure($model->SERIAL_NO, $model->CLOSE_BY_ID, $model->CLOSE_BY_NAME);
+			$this->sendScrapConfirmEmail($model->SERIAL_NO);
 			return $this->redirect(Url::previous());
 		} else {
 			return json_encode($model->errors);
@@ -86,5 +87,35 @@ class ScrapRequestController extends \app\controllers\base\ScrapRequestControlle
 			':USER_DESC'=>$USER_DESC
 		];
 		$result = \Yii::$app->db_wsus->createCommand($sql, $params)->queryOne();
+	}
+
+	public function sendScrapConfirmEmail($SERIAL_NO)
+	{
+		$trace_item_dtr = TraceItemScrap::find()->where(['SERIAL_NO' => $SERIAL_NO])->one();
+		$msg = '
+        The following scrap request has been confirmed. Please order as requested below :
+        <ul>
+            <li>Part No. : ' . $trace_item_dtr->ITEM . '</li>
+            <li>Part Name : ' . $trace_item_dtr->ITEM_DESC . '</li>
+            <li>Supplier : ' . $trace_item_dtr->SUPPLIER_DESC . '</li>
+            <li>Qty : ' . $trace_item_dtr->QTY . '</li>
+            <li>UM : ' . $trace_item_dtr->UM . '</li>
+            <li>Request Expired Date (minimum) : ' . date('Y-m-d', strtotime($trace_item_dtr->LATEST_EXPIRED_DATE)) . '</li>
+            <li>Requestor ID : ' . $trace_item_dtr->USER_ID . '</li>
+            <li>Requestor Name : ' . $trace_item_dtr->USER_DESC . '</li>
+        </ul>
+        <br/>
+        Thanks & Best Regards,<br/>
+        MITA
+        ';
+
+        \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/html'], [
+            'content' => $msg
+        ])
+        ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
+        ->setTo(['frenky.purnama@music.yamaha.com;angga.adhitya@music.yamaha.com;fredy.agus@music.yamaha.com'])
+        //->setCc($set_to_cc_arr)
+        ->setSubject('Order Request')
+        ->send();
 	}
 }

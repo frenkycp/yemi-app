@@ -8,9 +8,26 @@ use yii\helpers\StringHelper;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use kartik\widgets\DateTimePicker;
+use kartik\depdrop\DepDrop;
 
 $this->title = Yii::t('models', 'Create Voucher');
 
+$this->registerJs("
+	function change(){
+		var selectValue = $('#supplier-id').val();            
+        $('#invoice_no').empty();
+		$.post( '" . \Yii::$app->urlManager->createUrl('s-billing/get-invoice-by-supplier?supplier_name=') . "'+selectValue,
+            function(data){
+                $('#invoice_no').html(data);
+            }
+        );
+	}
+	$(document).ready(function() {
+    	$('#supplier-id').change(function(){
+    		change();
+		});
+	});
+");
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -45,10 +62,22 @@ $this->title = Yii::t('models', 'Create Voucher');
 </div>
 
 <div class="row">
+	<div class="col-sm-6">
+		<?= $form->field($model, 'supplier_name')->dropDownList($tmp_supplier_dropdown, [
+			'id'=>'supplier-id',
+			'prompt' => 'Select Supplier...'
+		]); ?>
+	</div>
+</div>
+
+<div class="row">
 	<div class="col-sm-12">
 		<?= $form->field($model, 'invoice_no')->widget(Select2::classname(), [
-		    'data' => ArrayHelper::map(app\models\SupplierBilling::find()->where(['stage' => 2])->andWhere('voucher_no IS NULL')->all(), 'no', 'invoice_no'),
-		    'options' => ['placeholder' => 'Select invoice ...'],
+		    'data' => [],
+		    'options' => [
+		    	'placeholder' => 'Select invoice ...',
+		    	'id' => 'invoice_no'
+		    ],
 		    'pluginOptions' => [
 		        'allowClear' => true,
 		        'multiple' => true

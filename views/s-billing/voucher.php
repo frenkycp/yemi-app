@@ -37,7 +37,7 @@ $gridColumns = [
                     'data-confirm' => 'Handover...?',
                 ];
                 if ($model->handover_status == 'C') {
-                    return '<button class="btn btn-block btn-danger disabled btn-sm" title="Handover"><span class="fa fa-hand-paper-o"></span> Handover</button>';
+                    return '<button class="btn btn-block btn-success disabled btn-sm" title="Handover"><span class="fa fa-hand-paper-o"></span> Handover</button>';
                 }
                 return Html::a('<button class="btn btn-block btn-success btn-sm"><span class="fa fa-hand-paper-o"></span> Handover</button>', $url, $options);
             },

@@ -17,8 +17,6 @@ $this->title = [
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
 date_default_timezone_set('Asia/Jakarta');
-$user_id = \Yii::$app->user->identity->username;
-echo $user_id;
 ?>
 <?= Html::a('<i class="fa fa-arrow-circle-left"></i> Back', Url::previous(), ['class' => 'btn btn-warning', 'style' => 'margin-bottom: 10px;']); ?>
 <div class="panel panel-primary">

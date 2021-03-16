@@ -36,7 +36,7 @@ $gridColumns = [
                     'data-pjax' => '0',
                     'data-confirm' => 'Did you receive the document?',
                 ];
-                if ($model->stage != 1) {
+                if ($model->stage != 1 || $model->dihapus == 'Y') {
                     return '<button class="btn btn-block btn-success disabled btn-sm" title="Received"><span class="fa fa-sign-in"></span> Receive</button>';
                 }
                 return Html::a('<button class="btn btn-block btn-success btn-sm"><span class="fa fa-sign-in"></span> Receive</button>', $url, $options);
@@ -84,7 +84,7 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 100px;']
     ],
     [
-        'attribute' => 'dokumen',
+        'attribute' => 'docfile',
         'label' => 'Vendor<br/>Document',
         'encodeLabel' => false,
         'value' => function($model){
@@ -207,6 +207,16 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
+        'attribute' => 'dihapus',
+        'label' => 'Deleted',
+        'filter' => [
+            'Y' => 'Y',
+            'N' => 'N',
+        ],
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'remark',
         'vAlign' => 'middle',
     ],
@@ -239,11 +249,11 @@ $gridColumns = [
                 '{export}',
                 '{toggleData}',
             ],
-            /*'rowOptions' => function($model){
-                if ($model->Discontinue == 'Y') {
+            'rowOptions' => function($model){
+                if ($model->dihapus == 'Y') {
                     return ['class' => 'bg-danger'];
                 }
-            },*/
+            },
             // set export properties
             'export' => [
                 'fontAwesome' => true

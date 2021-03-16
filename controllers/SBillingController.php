@@ -6,6 +6,7 @@ use app\models\search\SBillingSearch;
 use app\models\search\SupplierBillingVoucherSearch;
 use yii\web\HttpException;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
 use app\models\Karyawan;
@@ -416,9 +417,69 @@ class SBillingController extends \app\controllers\base\SBillingController
 
         }
 
+        $tmp_supplier_dropdown = ArrayHelper::map(SupplierBilling::find()->select(['supplier_name'])->where([
+            'stage' => 2,
+            'open_close' => 'O'
+        ])->groupBy('supplier_name')->orderBy('supplier_name')->all(), 'supplier_name', 'supplier_name');
+
         return $this->render('create-voucher', [
             'model' => $model,
+            'tmp_supplier_dropdown' => $tmp_supplier_dropdown,
         ]);
+    }
+
+    public function actionSubcat() {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $supplier_name = $parents[0];
+
+                $tmp_data = SupplierBilling::find()->where([
+                    'supplier_name' => $supplier_name,
+                    'stage' => 2,
+                    'open_close' => 'O'
+                ])->all();
+
+                $data = [];
+                foreach ($tmp_data as $key => $value) {
+                    $data[] = [
+                        'id' => $value->no,
+                        'name' => $value->invoice_no
+                    ];
+                }
+                //$out = self::getSubCatList($supplier_name); 
+                // the getSubCatList function will query the database based on the
+                // cat_id and return an array like below:
+                // [
+                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
+                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
+                // ]
+                return ['output'=>$data, 'selected'=>''];
+            }
+        }
+        return ['output'=>$out, 'selected'=>''];
+    }
+        
+    public function actionGetInvoiceBySupplier($supplier_name)
+    {
+        if ($supplier_name != null) {
+            $tmp_data = SupplierBilling::find()->where([
+                'supplier_name' => $supplier_name,
+                'stage' => 2,
+                'open_close' => 'O'
+            ])->all();
+
+            if (count($tmp_data) > 0) {
+                foreach ($tmp_data as $key => $value) {
+                    echo "<option value='" . $value->no . "'>" . $value->invoice_no . "</option>";
+                }
+            } else {
+                echo "'<option>-</option>'";
+            }
+            
+        }
     }
 
 	public function actionRemark($no)
@@ -489,9 +550,9 @@ class SBillingController extends \app\controllers\base\SBillingController
         }
 
         $model = new \yii\base\DynamicModel([
-            'invoice_no'
+            'invoice_no', 'supplier_name'
         ]);
-        $model->addRule(['invoice_no'], 'required');
+        $model->addRule(['invoice_no', 'supplier_name'], 'required');
 
         date_default_timezone_set('Asia/Jakarta');
 
@@ -504,8 +565,14 @@ class SBillingController extends \app\controllers\base\SBillingController
             return $this->redirect(['voucher-detail', 'voucher_no' => $voucher_no]);
         }
 
+        $tmp_supplier_dropdown = ArrayHelper::map(SupplierBilling::find()->select(['supplier_name'])->where([
+            'stage' => 2,
+            'open_close' => 'O'
+        ])->andWhere('voucher_no IS NULL')->groupBy('supplier_name')->orderBy('supplier_name')->all(), 'supplier_name', 'supplier_name');
+
         return $this->renderAjax('voucher-add-invoice', [
-            'model' => $model
+            'model' => $model,
+            'tmp_supplier_dropdown' => $tmp_supplier_dropdown,
         ]);
     }
 }
