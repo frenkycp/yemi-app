@@ -11,7 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SupplierBillingVoucher extends BaseSupplierBillingVoucher
 {
-    public $invoice_no, $base64_txt, $attachment_file, $supplier_name;
+    public $invoice_no, $base64_txt, $attachment_file, $supplier_name, $total_amount, $currency;
 
     public function behaviors()
     {
@@ -32,5 +32,10 @@ class SupplierBillingVoucher extends BaseSupplierBillingVoucher
                 [['invoice_no'], 'required'],
             ]
         );
+    }
+
+    public function getBillingInvoice()
+    {
+        return $this->hasMany(SupplierBilling::className(), ['voucher_no' => 'voucher_no']);
     }
 }

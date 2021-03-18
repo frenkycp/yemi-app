@@ -291,7 +291,10 @@ class SBillingController extends \app\controllers\base\SBillingController
 
         $this->layout = 's-billing/main';
 
-        $invoice_data = SupplierBilling::find()->where(['voucher_no' => $voucher_no])->all();
+        $invoice_data = SupplierBilling::find()->where([
+            'voucher_no' => $voucher_no,
+            'dihapus' => 'N'
+        ])->all();
         $voucher_data = SupplierBillingVoucher::find()->where(['voucher_no' => $voucher_no])->one();
 
         return $this->render('voucher-detail', [
@@ -419,47 +422,14 @@ class SBillingController extends \app\controllers\base\SBillingController
 
         $tmp_supplier_dropdown = ArrayHelper::map(SupplierBilling::find()->select(['supplier_name'])->where([
             'stage' => 2,
-            'open_close' => 'O'
+            'open_close' => 'O',
+            'dihapus' => 'N'
         ])->groupBy('supplier_name')->orderBy('supplier_name')->all(), 'supplier_name', 'supplier_name');
 
         return $this->render('create-voucher', [
             'model' => $model,
             'tmp_supplier_dropdown' => $tmp_supplier_dropdown,
         ]);
-    }
-
-    public function actionSubcat() {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        $out = [];
-        if (isset($_POST['depdrop_parents'])) {
-            $parents = $_POST['depdrop_parents'];
-            if ($parents != null) {
-                $supplier_name = $parents[0];
-
-                $tmp_data = SupplierBilling::find()->where([
-                    'supplier_name' => $supplier_name,
-                    'stage' => 2,
-                    'open_close' => 'O'
-                ])->all();
-
-                $data = [];
-                foreach ($tmp_data as $key => $value) {
-                    $data[] = [
-                        'id' => $value->no,
-                        'name' => $value->invoice_no
-                    ];
-                }
-                //$out = self::getSubCatList($supplier_name); 
-                // the getSubCatList function will query the database based on the
-                // cat_id and return an array like below:
-                // [
-                //    ['id'=>'<sub-cat-id-1>', 'name'=>'<sub-cat-name1>'],
-                //    ['id'=>'<sub-cat_id_2>', 'name'=>'<sub-cat-name2>']
-                // ]
-                return ['output'=>$data, 'selected'=>''];
-            }
-        }
-        return ['output'=>$out, 'selected'=>''];
     }
         
     public function actionGetInvoiceBySupplier($supplier_name)
@@ -468,7 +438,8 @@ class SBillingController extends \app\controllers\base\SBillingController
             $tmp_data = SupplierBilling::find()->where([
                 'supplier_name' => $supplier_name,
                 'stage' => 2,
-                'open_close' => 'O'
+                'open_close' => 'O',
+                'dihapus' => 'N'
             ])->all();
 
             if (count($tmp_data) > 0) {

@@ -63,6 +63,23 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
+        'attribute' => 'supplier_name',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'currency',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+    ],
+    [
+        'attribute' => 'total_amount',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+        'mergeHeader' => true,
+    ],
+    [
         'attribute' => 'create_by_name',
         'vAlign' => 'middle',
     ],

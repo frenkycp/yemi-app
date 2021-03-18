@@ -18,7 +18,7 @@ class SupplierBillingVoucherSearch extends SupplierBillingVoucher
 public function rules()
 {
 return [
-[['voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status'], 'safe'],
+[['voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status', 'supplier_name'], 'safe'],
 ];
 }
 
@@ -40,7 +40,14 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = SupplierBillingVoucher::find();
+$query = SupplierBillingVoucher::find()
+->select([
+    'SUPPLIER_BILLING_VOUCHER.voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status', 'supplier_name' => 'SUPPLIER_BILLING.supplier_name', 'currency' => 'SUPPLIER_BILLING.cur', 'total_amount' => 'SUM(SUPPLIER_BILLING.amount)'
+])
+->joinWith('billingInvoice')
+->groupBy([
+    'SUPPLIER_BILLING_VOUCHER.voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status', 'SUPPLIER_BILLING.supplier_name', 'SUPPLIER_BILLING.cur'
+]);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -63,6 +70,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'voucher_no', $this->voucher_no])
             ->andFilterWhere(['like', 'create_by_id', $this->create_by_id])
+            ->andFilterWhere(['like', 'SUPPLIER_BILLING.supplier_name', $this->supplier_name])
             ->andFilterWhere(['like', 'create_by_name', $this->create_by_name])
             ->andFilterWhere(['like', 'update_by_id', $this->update_by_id])
             ->andFilterWhere(['like', 'update_by_name', $this->update_by_name])

@@ -1115,6 +1115,20 @@ class DisplayPrdController extends Controller
         ]);
     }
 
+    public function actionDataMonitoring($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = ClientStatus::find()
+        ->where(['visible' => 1])
+        ->all();
+
+        return $this->render('data-monitoring', [
+            'data' => $data,
+        ]);
+    }
+
     public function actionExpirationGetLog($SERIAL_NO)
     {
         $tmp_item = TraceItemDtr::findOne($SERIAL_NO);
