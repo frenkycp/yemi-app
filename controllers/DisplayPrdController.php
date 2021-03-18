@@ -35,6 +35,7 @@ use app\models\SmtAiOutputInsertPoint01;
 use app\models\SapSoPlanActual;
 use app\models\SernoOutput;
 use app\models\SapSoPrice;
+use app\models\DataMonitoringFa;
 
 class DisplayPrdController extends Controller
 {
@@ -1115,12 +1116,36 @@ class DisplayPrdController extends Controller
         ]);
     }
 
+    public function actionDataMonitoringData($value='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $this_time = date('Y-m-d H:i:s');
+
+        $tmp_data_client = DataMonitoringFa::find()
+        ->where(['visible' => 1])
+        ->all();
+
+        $tmp_status_arr = [];
+        foreach ($tmp_data_client as $key => $value) {
+            $tmp_new_class = 'client-widget bg-green';
+            if ($value->delay_second > 3600) {
+                $tmp_new_class = 'client-widget bg-red';
+            }
+
+            $tmp_status_arr[$value->line]['new_class'] = $tmp_new_class;
+            $tmp_status_arr[$value->line]['last_update'] = date('d M Y H:i:s', strtotime($value->lastupdated));
+        }
+
+        return $tmp_status_arr;
+    }
+
     public function actionDataMonitoring($value='')
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
-        $data = ClientStatus::find()
+        $data = DataMonitoringFa::find()
         ->where(['visible' => 1])
         ->all();
 

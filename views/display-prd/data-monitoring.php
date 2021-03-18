@@ -129,10 +129,11 @@ $script = "
     function update_data(){
         $.ajax({
             type: 'POST',
-            url: '" . Url::to(['network-status-data']) . "',
+            url: '" . Url::to(['data-monitoring-data']) . "',
             success: function(data){
                 $.each(data, function(index, val) {
                     $('#'+index).attr('class', val.new_class);
+                    $('#'+index).attr('title', 'Line : '+index+' (Last Update : '+val.last_update+')');
                 });
             },
             complete: function(){
@@ -161,20 +162,14 @@ $left_pos = 50;
         $top_pos = $value->top_pos;
         $left_pos = $value->left_pos;
 
-        $diff_s = strtotime($this_time) - strtotime($value->last_update);
-
         $icon_class = 'bg-green';
-        if ($value->reply_roundtriptime > 10) {
-            $icon_class = 'bg-yellow';
-        }
-
-        if ($diff_s > 60) {
+        if ($value->delay_second > 3600) {
             $icon_class = 'bg-red';
         }
 
         $icon_class .= ' client-widget';
         ?>
-        <div id="<?= $value->server_mac_address; ?>" title="<?= $value->server_name; ?>" class="<?= $icon_class; ?>" style="position: absolute; top: <?= $top_pos; ?>px; left: <?= $left_pos; ?>px; font-size: 20px;"></div>
+        <div id="<?= $value->line; ?>" title="<?= $value->line; ?>" class="<?= $icon_class; ?>" style="position: absolute; top: <?= $top_pos; ?>px; left: <?= $left_pos; ?>px; font-size: 20px;"></div>
     <?php endforeach ?>
 </div>
 
