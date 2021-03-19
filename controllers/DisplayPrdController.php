@@ -388,6 +388,8 @@ class DisplayPrdController extends Controller
         ->groupBy('period_plan')
         ->all();
 
+        $tmp_last_update = SapSoPlanActual::find()->select(['last_updated' => 'MAX(last_updated)'])->one();
+
         $output[$last_month_period] = SernoOutput::find()->select([
             'output' => 'SUM(output)'
         ])
@@ -434,6 +436,7 @@ class DisplayPrdController extends Controller
         return $this->render('sap-so-progress', [
             'last_month_data' => $last_month_data,
             'this_month_data' => $this_month_data,
+            'last_update' => $tmp_last_update->last_updated,
         ]);
     }
 

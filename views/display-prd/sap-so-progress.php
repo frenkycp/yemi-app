@@ -112,7 +112,7 @@ $css_string = "
         outline: 1px solid silver;
     }
     .progress-group {
-        padding-top: 50px;
+        padding-top: 20px;
     }
     .panel-title {
         font-size: 60px;
@@ -245,3 +245,4 @@ echo '</pre>';*/
         </div>
     </div>
 </div>
+<span style="color: white; font-size: 30px;">Last Update : <?= date('d M Y H:i:s', strtotime($last_update)); ?></span>
