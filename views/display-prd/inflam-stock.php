@@ -216,15 +216,24 @@ echo '</pre>';*/
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($detail_data as $key => $value): ?>
+        <?php
+        if (count($detail_data) > 0) { ?>
+            <?php foreach ($detail_data as $key => $value): ?>
+                <tr>
+                    <td class="text-center"><?= $value->SAFETY_CATEGORY_1; ?></td>
+                    <td class="text-center"><?= $value->ITEM; ?></td>
+                    <td class=""><?= $value->ITEM_DESC; ?></td>
+                    
+                    <td class="text-center"><?= $value->UM; ?></td>
+                    <td class="text-center"><?= number_format($value->NILAI_INVENTORY); ?></td>
+                </tr>
+            <?php endforeach ?>
+        <?php } else { ?>
             <tr>
-                <td class="text-center"><?= $value->SAFETY_CATEGORY_1; ?></td>
-                <td class="text-center"><?= $value->ITEM; ?></td>
-                <td class=""><?= $value->ITEM_DESC; ?></td>
-                
-                <td class="text-center"><?= $value->UM; ?></td>
-                <td class="text-center"><?= number_format($value->NILAI_INVENTORY); ?></td>
+                <td colspan="5">No data found...</td>
             </tr>
-        <?php endforeach ?>
+        <?php }
+        ?>
+        
     </tbody>
 </table>
