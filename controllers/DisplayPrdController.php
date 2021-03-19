@@ -36,9 +36,78 @@ use app\models\SapSoPlanActual;
 use app\models\SernoOutput;
 use app\models\SapSoPrice;
 use app\models\DataMonitoringFa;
+use app\models\TraceItemDtrView;
 
 class DisplayPrdController extends Controller
 {
+    public function actionInflamStock($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+
+        $model = new \yii\base\DynamicModel([
+            'location'
+        ]);
+        $model->addRule(['location'], 'required');
+
+        $data = [];
+        $detail_data = null;
+        if ($model->load($_GET)) {
+            $tmp_category_arr = TraceItemDtrView::find()->select('SAFETY_CATEGORY_1')->where('SAFETY_CATEGORY_1 IS NOT NULL')->groupBy('SAFETY_CATEGORY_1')->orderBy('SAFETY_CATEGORY_1')->all();
+
+            $tmp_data = TraceItemDtrView::find()
+            ->select([
+                'LOC_DESC', 'SAFETY_CATEGORY_1',
+                'TOTAL_KG' => 'SUM(CASE WHEN UM = \'KG\' THEN NILAI_INVENTORY ELSE 0 END)',
+                'TOTAL_L' => 'SUM(CASE WHEN UM = \'L\' THEN NILAI_INVENTORY ELSE 0 END)'
+            ])
+            ->where([
+                'AVAILABLE' => 'Y',
+                'LOC_DESC' => $model->location
+            ])
+            ->groupBy(['LOC_DESC', 'SAFETY_CATEGORY_1'])
+            ->all();
+
+            
+            foreach ($tmp_category_arr as $category_val) {
+                $category = $category_val->SAFETY_CATEGORY_1;
+                $total_kg = $total_l = 0;
+                foreach ($tmp_data as $data_val) {
+                    if ($data_val->SAFETY_CATEGORY_1 == $category) {
+                        $total_kg = $data_val->TOTAL_KG;
+                        $total_l = $data_val->TOTAL_L;
+                    }
+                }
+                $data[$category]['kg'] = $total_kg;
+                $data[$category]['l'] = $total_l;
+            }
+
+            $detail_data = TraceItemDtrView::find()
+            ->select([
+                'ITEM', 'ITEM_DESC', 'UM',
+                'NILAI_INVENTORY' => 'SUM(NILAI_INVENTORY)'
+            ])
+            ->where([
+                'AVAILABLE' => 'Y',
+                'LOC_DESC' => $model->location
+            ])
+            ->andWhere('SAFETY_CATEGORY_1 IS NOT NULL')
+            ->groupBy(['ITEM', 'ITEM_DESC', 'UM'])
+            ->orderBy('NILAI_INVENTORY DESC')
+            ->all();
+        }
+
+        $location_arr = ArrayHelper::map(TraceItemDtr::find()->select('LOC_DESC')->groupBy('LOC_DESC')->orderBy('LOC_DESC')->all(), 'LOC_DESC', 'LOC_DESC');
+
+        return $this->render('inflam-stock', [
+            'data' => $data,
+            'detail_data' => $detail_data,
+            'model' => $model,
+            'location_arr' => $location_arr,
+        ]);
+    }
+
     public function actionStockMonitoringAvg()
     {
         $this->layout = 'clean';
