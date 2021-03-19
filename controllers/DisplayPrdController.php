@@ -85,7 +85,7 @@ class DisplayPrdController extends Controller
 
             $detail_data = TraceItemDtrView::find()
             ->select([
-                'ITEM', 'ITEM_DESC', 'UM',
+                'ITEM', 'ITEM_DESC', 'UM', 'SAFETY_CATEGORY_1',
                 'NILAI_INVENTORY' => 'SUM(NILAI_INVENTORY)'
             ])
             ->where([
@@ -93,8 +93,8 @@ class DisplayPrdController extends Controller
                 'LOC_DESC' => $model->location
             ])
             ->andWhere('SAFETY_CATEGORY_1 IS NOT NULL')
-            ->groupBy(['ITEM', 'ITEM_DESC', 'UM'])
-            ->orderBy('NILAI_INVENTORY DESC')
+            ->groupBy(['ITEM', 'ITEM_DESC', 'UM', 'SAFETY_CATEGORY_1'])
+            ->orderBy('SAFETY_CATEGORY_1, NILAI_INVENTORY DESC')
             ->all();
         }
 

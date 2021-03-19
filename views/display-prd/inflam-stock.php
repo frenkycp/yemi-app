@@ -207,8 +207,10 @@ echo '</pre>';*/
 <table class="table summary-tbl summary-tbl-2">
     <thead>
         <tr>
+            <th class="text-center">Category</th>
             <th class="text-center">Part No.</th>
             <th class="">Description</th>
+            
             <th class="text-center">UM</th>
             <th class="text-center">Qty</th>
         </tr>
@@ -216,8 +218,10 @@ echo '</pre>';*/
     <tbody>
         <?php foreach ($detail_data as $key => $value): ?>
             <tr>
+                <td class="text-center"><?= $value->SAFETY_CATEGORY_1; ?></td>
                 <td class="text-center"><?= $value->ITEM; ?></td>
                 <td class=""><?= $value->ITEM_DESC; ?></td>
+                
                 <td class="text-center"><?= $value->UM; ?></td>
                 <td class="text-center"><?= number_format($value->NILAI_INVENTORY); ?></td>
             </tr>
