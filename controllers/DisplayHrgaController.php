@@ -51,9 +51,10 @@ class DisplayHrgaController extends Controller
             'cost_center_code', 'cost_center_name', 'total_mp' => 'COUNT(*)'
         ])
         ->where(['status' => 1])
-        ->andWhere([
+        ->andWhere('cost_center_code NOT IN (\'10\', \'110X\') AND PATINDEX(\'YE%\', Emp_no) > 0')
+        /*->andWhere([
             'cost_center_code' => ['130A', '200A', '240', '300', '310', '320', '330', '340A', '340M', '350', '360', '370', '371', '372']
-        ])
+        ])*/
         ->groupBy('cost_center_code, cost_center_name')
         ->orderBy('cost_center_name')
         ->all();
@@ -75,6 +76,19 @@ class DisplayHrgaController extends Controller
 
         $tmp_data = $data = [];
         $grandtotal_overtime = $grandtotal_mp = 0;
+        foreach ($mp_by_section as $mp_by_section_val) {
+            $is_found = false;
+            foreach ($section_arr as $section_name => $section_arr_val) {
+                if (in_array($mp_by_section_val->cost_center_code, $section_arr_val)) {
+                    $is_found = true;
+                }
+            }
+            if (!$is_found) {
+                $section_arr[$mp_by_section_val->cost_center_name][] = $mp_by_section_val->cost_center_code;
+            }
+        }
+
+        $tmp_data2 = [];
         foreach ($section_arr as $section => $array_val) {
             $tmp_total_mp = $tmp_total_ot = $avg_ot = 0;
             $tmp_cost_center = [];
@@ -97,6 +111,7 @@ class DisplayHrgaController extends Controller
             $grandtotal_mp += $tmp_total_mp;
             $grandtotal_overtime += $tmp_total_ot;
             $tmp_data[$section] = $avg_ot;
+            $tmp_data2[$section]['total_ot'] = round($tmp_total_ot / 60);
         }
 
         $avg_total = 0;
@@ -127,6 +142,7 @@ class DisplayHrgaController extends Controller
         return $this->render('overtime-monthly-avg', [
             'data_chart' => $data_chart,
             'tmp_data' => $tmp_data,
+            'tmp_data2' => $tmp_data2,
             'grandtotal_overtime' => $grandtotal_overtime,
             'grandtotal_mp' => $grandtotal_mp,
             'avg_total' => $avg_total,

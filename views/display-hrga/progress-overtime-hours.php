@@ -125,9 +125,10 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 $grand_total_hours = 0;
 foreach ($data as $key => $value) {
-    $total_hours = round(($value['total_ot'] / 60));
+    $total_hours = (($value['total_ot']));
     $grand_total_hours += $total_hours;
 }
+$grand_total_hours = round($grand_total_hours / 60);
 ?>
 <?php $form = ActiveForm::begin([
     'method' => 'get',

@@ -135,7 +135,7 @@ $this->registerJs($script, View::POS_HEAD );
 
 // echo $start_period . ' - ' . $end_period;
 /*echo '<pre>';
-print_r($tmp_data);
+print_r($tmp_data2);
 echo '</pre>';*/
 ?>
 
@@ -190,7 +190,7 @@ echo '</pre>';*/
                     'enabled' =>false
                 ],
                 'title' => [
-                    'text' => null
+                    'text' => 'Last Update : ' . date('d M Y H:i:s'),
                 ],
                 'subtitle' => [
                     'text' => null
@@ -199,7 +199,7 @@ echo '</pre>';*/
                     'categories' => $categories,
                     'labels' => [
                         'style' => [
-                            'fontSize' => '40px'
+                            'fontSize' => '30px'
                         ],
                     ],
                 ],
@@ -220,7 +220,7 @@ echo '</pre>';*/
                         'dataLabels' => [
                             'enabled' => true,
                             'style' => [
-                                'fontSize' => '60px'
+                                'fontSize' => '26px'
                             ],
                             'inside' => true,
                         ]
