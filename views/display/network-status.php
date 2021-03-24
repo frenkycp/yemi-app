@@ -173,7 +173,7 @@ $audio_url = Url::to('@web/uploads/AUDIO/lobby.mp3');
                                                 var selisih = loss_end_time.getTime() - txt_loss_start_time.getTime();
                                                 selisih = Math.round(selisih / 1000);
                                                 $('#selisih').val(selisih);
-                                                if((selisih > 5 && $('#is_playing').val() == 0)){
+                                                if((selisih > 5 && selisih < 20)){
                                                     $('#is_playing').val(1);
                                                     playAudio();
                                                 }
