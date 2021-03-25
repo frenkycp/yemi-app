@@ -103,6 +103,7 @@ class SBillingController extends \app\controllers\base\SBillingController
 		$this->layout = 's-billing/main';
 
 	    $searchModel  = new SBillingSearch;
+        $searchModel->dihapus = 'N';
 
         if(\Yii::$app->request->get('stage') !== null)
         {
@@ -187,6 +188,29 @@ class SBillingController extends \app\controllers\base\SBillingController
         return $this->redirect(Url::previous());
 	}
 
+    public function actionReject($no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = $this->findModel($no);
+        /*$model->stage = 2;
+        $model->doc_received_by = $session['s_billing_name'];
+        $model->doc_received_date = date('Y-m-d H:i:s');
+        $model->doc_received_stat = '1';
+
+        if (!$model->save()) {
+            return json_encode($model->errors);
+        }*/
+
+        \Yii::$app->getSession()->setFlash('success', 'Reject success...');
+
+        return $this->redirect(Url::previous());
+    }
+
 	public function actionHandover($voucher_no)
 	{
 		$session = \Yii::$app->session;
@@ -213,7 +237,7 @@ class SBillingController extends \app\controllers\base\SBillingController
             'doc_finance_handover_stat' => '1',
         ], ['voucher_no' => $voucher_no]);
 
-        \Yii::$app->getSession()->setFlash('success', 'Handover successfully...');
+        \Yii::$app->getSession()->setFlash('success', 'Handover success...');
 
         return $this->redirect(Url::previous());
 	}

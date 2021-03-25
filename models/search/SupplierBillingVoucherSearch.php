@@ -45,6 +45,7 @@ $query = SupplierBillingVoucher::find()
     'SUPPLIER_BILLING_VOUCHER.voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status', 'supplier_name' => 'SUPPLIER_BILLING.supplier_name', 'currency' => 'SUPPLIER_BILLING.cur', 'total_amount' => 'SUM(SUPPLIER_BILLING.amount)'
 ])
 ->joinWith('billingInvoice')
+->where(['dihapus' => 'N'])
 ->groupBy([
     'SUPPLIER_BILLING_VOUCHER.voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status', 'SUPPLIER_BILLING.supplier_name', 'SUPPLIER_BILLING.cur'
 ]);

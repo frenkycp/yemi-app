@@ -37,9 +37,102 @@ use app\models\SernoOutput;
 use app\models\SapSoPrice;
 use app\models\DataMonitoringFa;
 use app\models\TraceItemDtrView;
+use app\models\SapGrGiByLocLog;
+use app\models\TraceItemDtrLoc;
 
 class DisplayPrdController extends Controller
 {
+    public function actionInflamMap()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+
+        $category_arr = ['FLAMMABLE', 'HEALTH HAZARD'];
+
+        $loc_data = TraceItemDtrLoc::find()->where(['FLAG' => 1])->all();
+
+        $tmp_data = TraceItemDtrView::find()
+        ->select([
+            'LOC_DESC', 'SAFETY_CATEGORY_1',
+            'TOTAL_KG' => 'SUM(CASE WHEN UM = \'KG\' THEN NILAI_INVENTORY ELSE 0 END)',
+            'TOTAL_L' => 'SUM(CASE WHEN UM = \'L\' THEN NILAI_INVENTORY ELSE 0 END)'
+        ])
+        ->where([
+            'AVAILABLE' => 'Y',
+        ])
+        ->groupBy(['LOC_DESC', 'SAFETY_CATEGORY_1'])
+        ->all();
+
+        $tmp_data2 = [];
+        foreach ($tmp_data as $key => $value) {
+            $tmp_data2[$value->LOC_DESC][$value->SAFETY_CATEGORY_1] = [
+                'kg' => $value->TOTAL_KG,
+                'l' => $value->TOTAL_L
+            ];
+        }
+
+        $data_arr = [];
+        foreach ($loc_data as $loc_val) {
+            $data_arr[$loc_val->LOC_DESC]['location'] = [
+                'top' => $loc_val->TOP_POS,
+                'left' => $loc_val->LEFT_POS,
+            ];
+            foreach ($category_arr as $cat_val) {
+                $total_kg = $total_l = 0;
+                foreach ($tmp_data as $data_val) {
+                    if ($data_val->LOC_DESC == $loc_val->LOC_DESC && $data_val->SAFETY_CATEGORY_1 == $cat_val) {
+                        $total_kg = $data_val->TOTAL_KG;
+                        $total_l = $data_val->TOTAL_L;
+                    }
+                }
+                $data_arr[$loc_val->LOC_DESC]['qty'][] = [
+                    'kg' => $total_kg,
+                    'l' => $total_l
+                ];
+            }
+        }
+
+        return $this->render('inflam-map', [
+            'loc_data' => $loc_data,
+            'data_arr' => $data_arr,
+            'tmp_data2' => $tmp_data2,
+        ]);
+    }
+
+    public function actionScrapMonthly($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+
+        $model = new \yii\base\DynamicModel([
+            'location', 'fiscal_year'
+        ]);
+        $model->addRule(['location', 'fiscal_year'], 'required');
+        $model->location = 'ALL';
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($model->load($_GET)) { }
+
+        $tmp_location_for_dropdown = SapGrGiByLocLog::find()->select(['storage_loc', 'storage_loc_desc'])->groupBy(['storage_loc', 'storage_loc_desc'])->orderBy('storage_loc_desc')->all();
+        $location_dropdown = [
+            'ALL' => 'ALL LOCATIONS'
+        ];
+        foreach ($tmp_location_for_dropdown as $key => $value) {
+            $location_dropdown[$value->storage_loc] = $value->storage_loc_desc;
+        }
+
+        return $this->render('scrap-monthly', [
+            'model' => $model,
+            'tmp_location_for_dropdown' => $tmp_location_for_dropdown,
+        ]);
+    }
+
     public function actionInflamStock($value='')
     {
         $this->layout = 'clean';
