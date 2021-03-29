@@ -144,7 +144,7 @@ echo '</pre>';*/
         <?= strtoupper($period_text); ?>
     </div>
 </div>
-<div style="margin: auto; width: 900px; padding-top: 10px;" id="display-container">
+<div style="margin: auto; width: 900px; padding-top: 10px; display: none;" id="display-container">
     <div class="row">
         <div class="col-sm-12">
             <table class="table summary-tbl">
@@ -180,7 +180,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 650,
+                    'height' => 850,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],
@@ -206,7 +206,10 @@ echo '</pre>';*/
                 'yAxis' => [
                     'min' => 0,
                     'title' => [
-                        'text' => 'TOTAL HOURS'
+                        'text' => 'HOURS',
+                        'style' => [
+                            'fontSize' => '40px',
+                        ],
                     ],
                     'labels' => [
                         'style' => [
@@ -214,16 +217,24 @@ echo '</pre>';*/
                         ],
                     ],
                     'max' => 10,
+                    'stackLabels' => [
+                        'enabled' => true,
+                        'style' => [
+                            'fontSize' => '50px',
+                            'color' => 'white',
+                        ],
+                    ],
                 ],
                 'plotOptions' => [
                     'column' => [
-                        'dataLabels' => [
+                        'stacking' => 'normal',
+                        /*'dataLabels' => [
                             'enabled' => true,
                             'style' => [
                                 'fontSize' => '26px'
                             ],
                             'inside' => true,
-                        ]
+                        ]*/
                     ],
                     'series' => [
                         'pointPadding' => '0.1',

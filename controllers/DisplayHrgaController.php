@@ -52,9 +52,9 @@ class DisplayHrgaController extends Controller
         ])
         ->where(['status' => 1])
         ->andWhere('cost_center_code NOT IN (\'10\', \'110X\') AND PATINDEX(\'YE%\', Emp_no) > 0')
-        /*->andWhere([
+        ->andWhere([
             'cost_center_code' => ['130A', '200A', '240', '300', '310', '320', '330', '340A', '340M', '350', '360', '370', '371', '372']
-        ])*/
+        ])
         ->groupBy('cost_center_code, cost_center_name')
         ->orderBy('cost_center_name')
         ->all();
@@ -1190,6 +1190,7 @@ class DisplayHrgaController extends Controller
         ])
         ->andWhere('total_ot IS NOT NULL')
         ->andWhere(['NOT IN', 'cost_center', ['Board of Director']])
+        ->andWhere('PATINDEX(\'YE%\', Emp_no) > 0')
         ->groupBy('cost_center')
         ->orderBy('cost_center')
         ->all();
