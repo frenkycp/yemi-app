@@ -3,15 +3,14 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\SapGrGiByLocLog as BaseSapGrGiByLocLog;
+use \app\models\base\SupplierBillingVoucherView as BaseSupplierBillingVoucherView;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.sap_gr_gi_by_loc_log".
+ * This is the model class for table "db_owner.SUPPLIER_BILLING_VOUCHER_VIEW".
  */
-class SapGrGiByLocLog extends BaseSapGrGiByLocLog
+class SupplierBillingVoucherView extends BaseSupplierBillingVoucherView
 {
-    public $in_qty, $in_amt, $out_qty, $out_amt, $balance_qty, $balance_amt;
 
     public function behaviors()
     {

@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\SupplierBillingVoucher;
+use app\models\SupplierBillingVoucherView;
 
 /**
 * SupplierBillingVoucherSearch represents the model behind the search form about `app\models\SupplierBillingVoucher`.
 */
-class SupplierBillingVoucherSearch extends SupplierBillingVoucher
+class SupplierBillingVoucherSearch extends SupplierBillingVoucherView
 {
 /**
 * @inheritdoc
@@ -18,7 +18,7 @@ class SupplierBillingVoucherSearch extends SupplierBillingVoucher
 public function rules()
 {
 return [
-[['voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status', 'supplier_name'], 'safe'],
+[['voucher_period', 'create_time', 'voucher_no', 'handover_status', 'supplier_name', 'cur'], 'safe'],
 ];
 }
 
@@ -40,15 +40,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = SupplierBillingVoucher::find()
-->select([
-    'SUPPLIER_BILLING_VOUCHER.voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status', 'supplier_name' => 'SUPPLIER_BILLING.supplier_name', 'currency' => 'SUPPLIER_BILLING.cur', 'total_amount' => 'SUM(SUPPLIER_BILLING.amount)'
-])
-->joinWith('billingInvoice')
-->where(['dihapus' => 'N'])
-->groupBy([
-    'SUPPLIER_BILLING_VOUCHER.voucher_no', 'create_by_id', 'create_by_name', 'create_time', 'update_by_id', 'update_by_name', 'update_datetime', 'attachment', 'attached_by_id', 'attached_by_name', 'attached_time', 'handover_status', 'SUPPLIER_BILLING.supplier_name', 'SUPPLIER_BILLING.cur'
-]);
+$query = SupplierBillingVoucherView::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
@@ -63,21 +55,14 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'create_time' => $this->create_time,
-            'update_datetime' => $this->update_datetime,
-            'attached_time' => $this->attached_time,
+            'voucher_period' => $this->voucher_period,
             'handover_status' => $this->handover_status,
+            'cur' => $this->cur,
         ]);
 
         $query->andFilterWhere(['like', 'voucher_no', $this->voucher_no])
-            ->andFilterWhere(['like', 'create_by_id', $this->create_by_id])
-            ->andFilterWhere(['like', 'SUPPLIER_BILLING.supplier_name', $this->supplier_name])
-            ->andFilterWhere(['like', 'create_by_name', $this->create_by_name])
-            ->andFilterWhere(['like', 'update_by_id', $this->update_by_id])
-            ->andFilterWhere(['like', 'update_by_name', $this->update_by_name])
-            ->andFilterWhere(['like', 'attachment', $this->attachment])
-            ->andFilterWhere(['like', 'attached_by_id', $this->attached_by_id])
-            ->andFilterWhere(['like', 'attached_by_name', $this->attached_by_name]);
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),create_time,120)', $this->create_time])
+            ->andFilterWhere(['like', 'supplier_name', $this->supplier_name]);
 
 return $dataProvider;
 }

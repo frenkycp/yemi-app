@@ -72,7 +72,6 @@ $query->andFilterWhere([
             'NILAI_INVENTORY' => $this->NILAI_INVENTORY,
             'STD_PRICE' => $this->STD_PRICE,
             'STD_AMT' => $this->STD_AMT,
-            'LAST_UPDATE' => $this->LAST_UPDATE,
             'QTY_IN' => $this->QTY_IN,
             'QTY_OUT' => $this->QTY_OUT,
             'POST_DATE' => $this->POST_DATE,
@@ -80,6 +79,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'SERIAL_NO', $this->SERIAL_NO])
             ->andFilterWhere(['like', 'ITEM', $this->ITEM])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),LAST_UPDATE,120)', $this->LAST_UPDATE])
             ->andFilterWhere(['like', 'ITEM_DESC', $this->ITEM_DESC])
             ->andFilterWhere(['like', 'SUPPLIER', $this->SUPPLIER])
             ->andFilterWhere(['like', 'SUPPLIER_DESC', $this->SUPPLIER_DESC])
