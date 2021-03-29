@@ -168,7 +168,9 @@ echo '</pre>';*/
             <thead>
                 <tr>
                     <th class="text-center">Karyawan</th>
-                    <th class="text-center" width="120px">Temp</th>
+                    <th class="text-center">Shift</th>
+                    <th class="text-center">Temp.</th>
+                    <th class="text-center">Check<br/>Time</th>
                 </tr>
             </thead>
             <tbody>
@@ -177,7 +179,9 @@ echo '</pre>';*/
                     foreach ($temp_over_data as $key => $value) {
                         echo '<tr>
                             <td class="text-center temp-over" style="font-size: 24px;"><b>' . $value['nik'] . '<br/>' . $value['name'] . '</b></td>
+                            <td class="text-center temp-over" style="font-size: 24px;"><b>' . $value['shift'] . '</b></td>
                             <td class="text-center temp-over" style="font-size: 24px;"><b>' . $value['temperature'] . '</b></td>
+                            <td class="text-center temp-over" style="font-size: 24px;"><b>' . date('d M Y H:i', strtotime($value['last_update'])) . '</b></td>
                         </tr>';
                     }
                 } else {

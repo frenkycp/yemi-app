@@ -673,7 +673,9 @@ class DisplayHrgaController extends Controller
                     $temp_over_data[] = [
                         'nik' => $attendance_val['nik'],
                         'name' => $emp_name,
-                        'temperature' => $body_temp
+                        'temperature' => $body_temp,
+                        'last_update' => $last_update,
+                        'shift' => $emp_shift,
                     ];
                 }
 
