@@ -25,17 +25,26 @@ $grid_columns = [
         'attribute' => 'period',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'storage_loc',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'filter' => ArrayHelper::map(app\models\SapGrGiByLocLog::find()->select('storage_loc')->groupBy('storage_loc')->orderBy('storage_loc')->all(), 'storage_loc', 'storage_loc'),
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'material',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'min-width: 100px;'
+        ],
     ],
     [
         'attribute' => 'descriptions',
@@ -116,6 +125,28 @@ $grid_columns = [
         'contentOptions' => [
             'style' => 'min-width: 100px;'
         ],
+    ],
+    [
+        'attribute' => 'division',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'analyst',
+        'label' => 'Vendor Code',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'analyst_desc',
+        'label' => 'Vendor Name',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'model',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
     ],
 ];
 ?>
