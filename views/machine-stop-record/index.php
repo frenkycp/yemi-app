@@ -75,6 +75,22 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'CATEGORY',
+        'value' => function($model){
+            if ($model->CATEGORY != null) {
+                return \Yii::$app->params['machine_stop_category'][$model->CATEGORY];
+            }
+        },
+        'filter' => \Yii::$app->params['machine_stop_category'],
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'width' => '120px',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;',
+        ],
+    ],
+    [
         'attribute' => 'START_TIME',
         'value' => function($model){
             if ($model->START_TIME != null) {
@@ -168,6 +184,7 @@ $gridColumns = [
                         <th class="text-center">#</th>
                         <th class="text-center">Machine ID</th>
                         <th class="">Machine Name</th>
+                        <th class="text-center">Category</th>
                         <th class="text-center">Start Time</th>
                         <th class="text-center">Action</th>
                     </tr>
@@ -180,6 +197,7 @@ $gridColumns = [
                             <td class="text-center"><?= $no; ?></td>
                             <td class="text-center"><?= $value->MESIN_ID; ?></td>
                             <td class=""><?= $value->MESIN_DESC; ?></td>
+                            <td class="text-center"><?= \Yii::$app->params['machine_stop_category'][$value->CATEGORY]; ?></td>
                             <td class="text-center"><?= date('Y-m-d H:i', strtotime($value->START_TIME)); ?></td>
                             <td class="text-center" width="100px"><?= Html::a('END', ['end-time', 'ID' => $value->ID], ['class' => 'btn btn-block btn-primary btn-sm']); ?></td>
                         </tr>

@@ -12,7 +12,8 @@ use Yii;
  * @property integer $ID
  * @property string $MESIN_ID
  * @property string $MESIN_DESC
- * @property string $PERIOD
+ * @property integer $CATEGORY
+ * @property integer $PERIOD
  * @property string $POST_DATE
  * @property string $START_TIME
  * @property string $START_BY_ID
@@ -56,10 +57,9 @@ abstract class MachineStopRecord extends \yii\db\ActiveRecord
     {
         return [
             [['MESIN_DESC', 'START_BY_NAME', 'END_BY_NAME', 'CLOSING_BY_NAME', 'REMARK'], 'string'],
+            [['CATEGORY', 'PERIOD', 'TOTAL_DOWNTIME', 'STATUS'], 'integer'],
             [['POST_DATE', 'START_TIME', 'END_TIME', 'CLOSING_TIME'], 'safe'],
-            [['TOTAL_DOWNTIME', 'STATUS'], 'integer'],
-            [['MESIN_ID', 'START_BY_ID', 'END_BY_ID', 'CLOSING_BY_ID'], 'string', 'max' => 50],
-            [['PERIOD'], 'string', 'max' => 10]
+            [['MESIN_ID', 'START_BY_ID', 'END_BY_ID', 'CLOSING_BY_ID'], 'string', 'max' => 50]
         ];
     }
 
@@ -72,6 +72,7 @@ abstract class MachineStopRecord extends \yii\db\ActiveRecord
             'ID' => 'ID',
             'MESIN_ID' => 'Mesin ID',
             'MESIN_DESC' => 'Mesin Desc',
+            'CATEGORY' => 'Category',
             'PERIOD' => 'Period',
             'POST_DATE' => 'Post Date',
             'START_TIME' => 'Start Time',

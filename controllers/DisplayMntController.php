@@ -37,7 +37,10 @@ class DisplayMntController extends Controller
 	            $stopwatch = $total_hour . '<span style="font-size: 0.4em;"> hour</span> ' . $interval->i . '<span style="font-size: 0.4em;"> min</span>';
 	            
 	            $tbody_content .= '<tr>
-                    <td><span class="fa fa-gears" style=""></span> ' . $value->MESIN_DESC . '</td>
+                    <td>
+                    	<span class="fa fa-gears" style=""></span> ' . $value->MESIN_DESC . '<br/>
+                    	<small><span class="fa fa-info-circle" style=""></span> ' . \Yii::$app->params['machine_stop_category'][$value->CATEGORY] . '</small>
+                	</td>
                     <td class="machine-stop" style="background-color: red; border-radius: 10px; border: 2px solid white; letter-spacing: 5px;" width="400px"><span class="glyphicon glyphicon-time" style="font-size: 0.65em;"></span> <b><span>' . $stopwatch . '</span></b></td>
                 </tr>';
 	        }

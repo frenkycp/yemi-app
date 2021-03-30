@@ -185,7 +185,7 @@ echo '</pre>';*/
                         </tr>';
                     }
                 } else {
-                    echo '<td colspan="2" class="" style="font-weight: bold; padding-left: 10px;">Tidak ada suhu yang ≥ 37.5 &deg;C</td>';
+                    echo '<td colspan="4" class="" style="font-weight: bold; padding-left: 10px;">Tidak ada suhu yang ≥ 37.5 &deg;C</td>';
                 }
                 ?>
                 

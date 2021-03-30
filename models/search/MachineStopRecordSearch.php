@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['ID', 'STATUS'], 'integer'],
-            [['MESIN_ID', 'MESIN_DESC', 'START_TIME', 'START_BY_ID', 'START_BY_NAME', 'END_TIME', 'END_BY_ID', 'END_BY_NAME', 'CLOSING_TIME', 'CLOSING_BY_ID', 'CLOSING_BY_NAME', 'PERIOD', 'POST_DATE', 'REMARK'], 'safe'],
+            [['MESIN_ID', 'MESIN_DESC', 'START_TIME', 'START_BY_ID', 'START_BY_NAME', 'END_TIME', 'END_BY_ID', 'END_BY_NAME', 'CLOSING_TIME', 'CLOSING_BY_ID', 'CLOSING_BY_NAME', 'PERIOD', 'POST_DATE', 'REMARK', 'CATEGORY'], 'safe'],
 ];
 }
 
@@ -64,6 +64,7 @@ return $dataProvider;
 $query->andFilterWhere([
             'ID' => $this->ID,
             'START_TIME' => $this->START_TIME,
+            'CATEGORY' => $this->CATEGORY,
             'END_TIME' => $this->END_TIME,
             'CLOSING_TIME' => $this->CLOSING_TIME,
             'STATUS' => $this->STATUS,

@@ -82,7 +82,9 @@ if (count($tmp_open) > 0) {
         </div>
 
         <div class="row">
-            <div class="col-sm-8"></div>
+            <div class="col-sm-8">
+                <?= $form->field($model, 'CATEGORY')->dropDownList(\Yii::$app->params['machine_stop_category']); ?>
+            </div>
             <div class="col-sm-4">
                 <?= $model->isNewRecord || $model->STATUS == 0 ? '' : $form->field($model, 'END_TIME')->widget(DateTimePicker::classname(), [
                     'options' => ['placeholder' => 'Enter end time ...'],

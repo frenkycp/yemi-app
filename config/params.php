@@ -460,6 +460,11 @@ return [
         'WRONG PART' => 'WRONG PART',
         'NO PART NUMBER' => 'NO PART NUMBER',
     ],
+    'machine_stop_category' => [
+        1 => 'MACHINE TROUBLE',
+        2 => 'PLAN SHUTDOWN',
+        3 => 'PREVENTIVE MAINTENANCE'
+    ],
 ];
 
 function getYearArray()
