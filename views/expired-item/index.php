@@ -49,6 +49,11 @@ $columns = [
         'vAlign' => 'middle',
     ],
     [
+        'attribute' => 'LOT_NO',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
         'attribute' => 'ITEM',
         'hAlign' => 'center',
         'vAlign' => 'middle',

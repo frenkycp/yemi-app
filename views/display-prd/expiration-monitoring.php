@@ -292,6 +292,7 @@ echo '</pre>';*/
             <th class="text-center">Action</th>
             <th class="text-center">Item Category</th>
             <th class="text-center">Serial No.</th>
+            <th class="text-center">Lot No.</th>
             <th class="text-center">Part No.</th>
             <th class="">Description</th>
             <th class="">Location</th>
@@ -307,9 +308,9 @@ echo '</pre>';*/
             $action_scrap = '<span class="glyphicon glyphicon-trash disabled-link"></span>';
             if (strtotime(date('Y-m-d')) >= strtotime($value->EXPIRED_DATE)) {
                 $text_class = 'bg-red';
-                $tmp_scrap = TraceItemScrap::find()->where(['SERIAL_NO' => $value->SERIAL_NO])->one();
+                //$tmp_scrap = TraceItemScrap::find()->where(['SERIAL_NO' => $value->SERIAL_NO])->one();
 
-                if ($tmp_scrap) {
+                if ($value->SCRAP_REQUEST_STATUS != 0) {
                     $action_scrap = '<span class="glyphicon glyphicon-trash disabled-link" title="Scrap request has been made..."></span>';
                 } else {
                     $action_scrap = Html::a('<span class="glyphicon glyphicon-trash"></span>', ['/expired-item/scrap', 'SERIAL_NO' => $value->SERIAL_NO], [
@@ -331,7 +332,8 @@ echo '</pre>';*/
                         'class' => 'popupModal',
                     ];
                     $url = ['expiration-get-log', 'SERIAL_NO' => $value->SERIAL_NO];
-                    $tmp_count = app\models\TraceItemDtrLog::find()->where(['SERIAL_NO' => $value->SERIAL_NO])->count();
+                    $tmp_count = 1;
+                    //$tmp_count = app\models\TraceItemDtrLog::find()->where(['SERIAL_NO' => $value->SERIAL_NO])->count();
                     if ($tmp_count == 0) {
                         echo '<span class="glyphicon glyphicon-list-alt disabled-link"></span>';
                     } else {
@@ -342,6 +344,7 @@ echo '</pre>';*/
                 </td>
                 <td class="text-center"><?= $value->CATEGORY; ?></td>
                 <td class="text-center"><?= $value->SERIAL_NO; ?></td>
+                <td class="text-center"><?= $value->LOT_NO; ?></td>
                 <td class="text-center"><?= $value->ITEM; ?></td>
                 <td class=""><?= $value->ITEM_DESC; ?></td>
                 <td class=""><?= $value->LOC_DESC; ?></td>
