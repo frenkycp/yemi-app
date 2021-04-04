@@ -123,7 +123,7 @@ echo '</pre>';*/
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['temperature-daily']),
+    'action' => Url::to(['office-body-temp']),
 ]); ?>
 
 <div class="row" style="width: 300px; padding-top: 10px;">
