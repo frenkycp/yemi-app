@@ -426,6 +426,7 @@ return [
         1 => 'WAITING RECEIVED',
         2 => 'ON PROGRESS',
         3 => 'HANDOVER TO FINANCE',
+        4 => 'FINISH PAYMENT',
     ],
     'kd_flag_arr' => [
         'KD to HY' => 'KD to HY',
