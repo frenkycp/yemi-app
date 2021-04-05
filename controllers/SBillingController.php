@@ -72,7 +72,7 @@ class SBillingController extends \app\controllers\base\SBillingController
         if ($session->has('s_billing_user')) {
             return $this->redirect(['index']);
         }
-        $this->layout = 's-billing/main';
+        $this->layout = 's-billing/login';
 
         $model = new \yii\base\DynamicModel([
             'username', 'password'
