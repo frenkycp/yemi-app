@@ -31,6 +31,9 @@ $model_karyawan = Karyawan::find()->where([
             <li style="" class="<?= \Yii::$app->controller->id == 's-billing' && in_array(\Yii::$app->controller->action->id, ['voucher']) ? 'active' : ''; ?>">
                 <?= Html::a('<u>Voucher Data</u>', ['voucher']) ?>
             </li>
+            <li style="" class="<?= \Yii::$app->controller->id == 's-billing' && in_array(\Yii::$app->controller->action->id, ['waiting-payment']) ? 'active' : ''; ?>">
+                <?= Html::a('<u>Waiting Payment</u>', ['waiting-payment']) ?>
+            </li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->

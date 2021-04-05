@@ -8,6 +8,7 @@ use yii\web\HttpException;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
+use yii\web\Response;
 use dmstr\bootstrap\Tabs;
 use app\models\Karyawan;
 use app\models\SupplierBilling;
@@ -15,12 +16,55 @@ use app\models\SupplierBillingVoucher;
 use yii\web\UploadedFile;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use app\models\SupplierBillingVoucherView;
 
 /**
 * This is the class for controller "SBillingController".
 */
 class SBillingController extends \app\controllers\base\SBillingController
 {
+    public function actionFinishPayment()
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+        $nik = $session['s_billing_user'];
+        $this->layout = 's-billing/main';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $this_time = date('Y-m-d H:i:s');
+
+        $response = [];
+        if (\Yii::$app->request->isAjax) {
+            $response = [
+                'success' => true,
+                'message' => 'Payment finish...',
+            ];
+
+            \Yii::$app->response->format = Response::FORMAT_JSON;
+            $data_post = \Yii::$app->request->post();
+            $tmp_str_val = $data_post['value'];
+            $voucher_no_arr = explode('|', $tmp_str_val);
+            $transfer_date = $data_post['transfer_date'];
+
+            foreach ($voucher_no_arr as $voucher_no) {
+                SupplierBillingVoucher::updateAll([
+                    'payment_status' => 'C'
+                ], ['voucher_no' => $voucher_no]);
+
+                SupplierBilling::updateAll([
+                    'stage' => 4,
+                    'doc_finance_transfer_by' => $session['s_billing_name'],
+                    'doc_finance_transfer_input_date' => $this_time,
+                    'doc_finance_transfer_bank_date' => $transfer_date,
+                    'doc_finance_transfer_stat' => 1,
+                ], ['voucher_no' => $voucher_no]);
+            }
+            return $response;
+        }
+    }
+
 	public function actionLogin()
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -28,7 +72,7 @@ class SBillingController extends \app\controllers\base\SBillingController
         if ($session->has('s_billing_user')) {
             return $this->redirect(['index']);
         }
-        $this->layout = "iqa-inspection\login";
+        $this->layout = 's-billing/main';
 
         $model = new \yii\base\DynamicModel([
             'username', 'password'
@@ -117,9 +161,12 @@ class SBillingController extends \app\controllers\base\SBillingController
 		Url::remember();
 		\Yii::$app->session['__crudReturnUrl'] = null;
 
+        $supplier_dropdown = ArrayHelper::map(SupplierBilling::find()->select('supplier_name')->groupBy('supplier_name')->orderBy('supplier_name')->all(), 'supplier_name', 'supplier_name');
+
 		return $this->render('data', [
 			'dataProvider' => $dataProvider,
 		    'searchModel' => $searchModel,
+            'supplier_dropdown' => $supplier_dropdown,
 		]);
 	}
 
@@ -142,6 +189,35 @@ class SBillingController extends \app\controllers\base\SBillingController
         return $this->render('voucher', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
+        ]);
+    }
+
+    public function actionWaitingPayment()
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+        $this->layout = 's-billing/main';
+
+        $searchModel  = new SupplierBillingVoucherSearch;
+        $searchModel->handover_status = 'C';
+        $searchModel->payment_status = 'O';
+        $dataProvider = $searchModel->search($_GET);
+
+        $supplier_dropdown = ArrayHelper::map(SupplierBillingVoucherView::find()->select('supplier_name')->where([
+            'handover_status' => 'C'
+        ])->groupBy('supplier_name')->orderBy('supplier_name')->all(), 'supplier_name', 'supplier_name');
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('waiting-payment', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'supplier_dropdown' => $supplier_dropdown,
         ]);
     }
 

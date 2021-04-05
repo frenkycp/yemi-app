@@ -21,6 +21,7 @@ use Yii;
  * @property string $attached_by_name
  * @property string $attached_time
  * @property string $handover_status
+ * @property string $payment_status
  * @property string $aliasModel
  */
 abstract class SupplierBillingVoucher extends \yii\db\ActiveRecord
@@ -55,7 +56,7 @@ abstract class SupplierBillingVoucher extends \yii\db\ActiveRecord
             [['attachment'], 'string'],
             [['voucher_no', 'create_by_id', 'update_by_id', 'attached_by_id'], 'string', 'max' => 50],
             [['create_by_name', 'update_by_name', 'attached_by_name'], 'string', 'max' => 150],
-            [['handover_status'], 'string', 'max' => 1],
+            [['handover_status', 'payment_status'], 'string', 'max' => 1],
             [['voucher_no'], 'unique']
         ];
     }
@@ -78,6 +79,7 @@ abstract class SupplierBillingVoucher extends \yii\db\ActiveRecord
             'attached_by_name' => 'Attached By Name',
             'attached_time' => 'Attached Time',
             'handover_status' => 'Handover Status',
+            'payment_status' => 'Payment Status',
         ];
     }
 

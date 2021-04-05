@@ -20,14 +20,14 @@ date_default_timezone_set('Asia/Jakarta');
 
 $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, sans-serif; }
     td .btn {
-        margin: 0px 2px;
+        margin: 4px 0px;
     }
 ");
 
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{received}{remark}',
+        'template' => '{received} {reject} {remark}',
         'buttons' => [
             'received' => function($url, $model, $key){
                 $url = ['receive', 'no' => $model->no];
@@ -40,6 +40,18 @@ $gridColumns = [
                     return '<button class="btn btn-block btn-success disabled btn-sm" title="Received"><span class="fa fa-sign-in"></span> Receive</button>';
                 }
                 return Html::a('<button class="btn btn-block btn-success btn-sm"><span class="fa fa-sign-in"></span> Receive</button>', $url, $options);
+            },
+            'reject' => function($url, $model, $key){
+                $url = ['reject', 'no' => $model->no];
+                $options = [
+                    'title' => 'Reject',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to reject this document?',
+                ];
+                if ($model->stage != 1 || $model->dihapus == 'Y') {
+                    return '<button class="btn btn-block btn-danger disabled btn-sm" title="Reject"><span class="fa fa-undo"></span> Reject</button>';
+                }
+                return Html::a('<button class="btn btn-block btn-danger btn-sm"><span class="fa fa-undo"></span> Reject</button>', $url, $options);
             },
             'finished' => function($url, $model, $key){
                 $options = [
@@ -107,16 +119,33 @@ $gridColumns = [
     [
         'attribute' => 'supplier_name',
         'vAlign' => 'middle',
+        'filter' => $supplier_dropdown,
+        'filterType' => GridView::FILTER_SELECT2,
+        'filterWidgetOptions' => [
+            'options' => ['prompt' => ''],
+            'pluginOptions' => [
+                'allowClear' => true,
+            ],
+        ],
+        'contentOptions' => [
+            'style' => 'min-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'receipt_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'max-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'invoice_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'max-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'voucher_no',
@@ -129,6 +158,9 @@ $gridColumns = [
         'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'max-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'voucher_no_export',
@@ -140,26 +172,41 @@ $gridColumns = [
         'format' => 'html',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'max-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'delivery_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'max-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'tax_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'max-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'amount',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'max-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'cur',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'contentOptions' => [
+            'style' => 'max-width: 200px;'
+        ],
     ],
     [
         'attribute' => 'doc_upload_date',
@@ -206,7 +253,7 @@ $gridColumns = [
         'vAlign' => 'middle',
         'hAlign' => 'center',
     ],
-    [
+    /*[
         'attribute' => 'dihapus',
         'label' => 'Deleted',
         'filter' => [
@@ -215,7 +262,7 @@ $gridColumns = [
         ],
         'vAlign' => 'middle',
         'hAlign' => 'center',
-    ],
+    ],*/
     [
         'attribute' => 'remark',
         'vAlign' => 'middle',

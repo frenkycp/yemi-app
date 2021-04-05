@@ -58,6 +58,11 @@ $gridColumns = [
         'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'min-width: 100px;']
     ],
     [
+        'attribute' => 'voucher_period',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'voucher_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -68,20 +73,16 @@ $gridColumns = [
         //'hAlign' => 'center',
     ],
     [
-        'attribute' => 'currency',
+        'attribute' => 'cur',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
     ],
     [
-        'attribute' => 'total_amount',
+        'attribute' => 'amount',
         'vAlign' => 'middle',
         'hAlign' => 'center',
         'mergeHeader' => true,
-    ],
-    [
-        'attribute' => 'create_by_name',
-        'vAlign' => 'middle',
     ],
     [
         'attribute' => 'create_time',
@@ -105,6 +106,27 @@ $gridColumns = [
             'C' => 'CLOSE',
         ],
         'label' => 'Handover<br/>Status',
+        'encodeLabel' => false,
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'payment_status',
+        'value' => function($model){
+            if ($model->payment_status == 'C') {
+                return '<span class="label label-success">CLOSE</span>';
+            } elseif ($model->payment_status == 'O') {
+                return '<span class="label label-danger">OPEN</span>';
+            } else {
+                return '-';
+            }
+        },
+        'format' => 'html',
+        'filter' => [
+            'O' => 'OPEN',
+            'C' => 'CLOSE',
+        ],
+        'label' => 'Payment<br/>Status',
         'encodeLabel' => false,
         'vAlign' => 'middle',
         'hAlign' => 'center',

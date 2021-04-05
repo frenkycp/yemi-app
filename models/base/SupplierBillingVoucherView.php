@@ -17,6 +17,7 @@ use Yii;
  * @property string $cur
  * @property double $amount
  * @property integer $total_invoice
+ * @property string $payment_status
  * @property string $aliasModel
  */
 abstract class SupplierBillingVoucherView extends \yii\db\ActiveRecord
@@ -52,7 +53,7 @@ abstract class SupplierBillingVoucherView extends \yii\db\ActiveRecord
             [['total_invoice'], 'integer'],
             [['voucher_period'], 'string', 'max' => 4000],
             [['voucher_no'], 'string', 'max' => 50],
-            [['handover_status'], 'string', 'max' => 1],
+            [['handover_status', 'payment_status'], 'string', 'max' => 1],
             [['supplier_name'], 'string', 'max' => 255],
             [['cur'], 'string', 'max' => 10]
         ];
@@ -72,6 +73,7 @@ abstract class SupplierBillingVoucherView extends \yii\db\ActiveRecord
             'cur' => 'Cur',
             'amount' => 'Amount',
             'total_invoice' => 'Total Invoice',
+            'payment_status' => 'Payment Status',
         ];
     }
 

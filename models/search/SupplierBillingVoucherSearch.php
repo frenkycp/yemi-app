@@ -18,7 +18,7 @@ class SupplierBillingVoucherSearch extends SupplierBillingVoucherView
 public function rules()
 {
 return [
-[['voucher_period', 'create_time', 'voucher_no', 'handover_status', 'supplier_name', 'cur'], 'safe'],
+[['voucher_period', 'create_time', 'voucher_no', 'handover_status', 'supplier_name', 'cur', 'payment_status'], 'safe'],
 ];
 }
 
@@ -57,6 +57,7 @@ return $dataProvider;
 $query->andFilterWhere([
             'voucher_period' => $this->voucher_period,
             'handover_status' => $this->handover_status,
+            'payment_status' => $this->payment_status,
             'cur' => $this->cur,
         ]);
 
