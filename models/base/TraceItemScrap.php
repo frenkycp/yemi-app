@@ -10,6 +10,7 @@ use Yii;
  * This is the base-model class for table "db_owner.TRACE_ITEM_SCRAP".
  *
  * @property string $SERIAL_NO
+ * @property string $LOT_NO
  * @property string $ITEM
  * @property string $ITEM_DESC
  * @property string $SUPPLIER
@@ -59,7 +60,7 @@ abstract class TraceItemScrap extends \yii\db\ActiveRecord
             [['ITEM_DESC', 'SUPPLIER_DESC', 'USER_DESC', 'CLOSE_BY_NAME', 'REMARK'], 'string'],
             [['QTY'], 'number'],
             [['EXPIRED_DATE', 'LATEST_EXPIRED_DATE', 'USER_LAST_UPDATE', 'CLOSE_DATETIME'], 'safe'],
-            [['SERIAL_NO', 'ITEM', 'SUPPLIER', 'USER_ID', 'CLOSE_BY_ID'], 'string', 'max' => 50],
+            [['SERIAL_NO', 'LOT_NO', 'ITEM', 'SUPPLIER', 'USER_ID', 'CLOSE_BY_ID'], 'string', 'max' => 50],
             [['UM'], 'string', 'max' => 10],
             [['STATUS'], 'string', 'max' => 1],
             [['SERIAL_NO'], 'unique']
@@ -73,6 +74,7 @@ abstract class TraceItemScrap extends \yii\db\ActiveRecord
     {
         return [
             'SERIAL_NO' => 'Serial No',
+            'LOT_NO' => 'Lot No',
             'ITEM' => 'Item',
             'ITEM_DESC' => 'Item Desc',
             'SUPPLIER' => 'Supplier',

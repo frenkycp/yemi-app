@@ -18,7 +18,7 @@ class ScrapRequestSearch extends TraceItemScrap
 public function rules()
 {
 return [
-[['SERIAL_NO', 'ITEM', 'ITEM_DESC', 'SUPPLIER', 'SUPPLIER_DESC', 'UM', 'EXPIRED_DATE', 'LATEST_EXPIRED_DATE', 'USER_ID', 'USER_DESC', 'USER_LAST_UPDATE', 'STATUS', 'CLOSE_BY_ID', 'CLOSE_BY_NAME', 'CLOSE_DATETIME', 'REMARK'], 'safe'],
+[['SERIAL_NO', 'ITEM', 'ITEM_DESC', 'SUPPLIER', 'SUPPLIER_DESC', 'UM', 'EXPIRED_DATE', 'LATEST_EXPIRED_DATE', 'USER_ID', 'USER_DESC', 'USER_LAST_UPDATE', 'STATUS', 'CLOSE_BY_ID', 'CLOSE_BY_NAME', 'CLOSE_DATETIME', 'REMARK', 'LOT_NO'], 'safe'],
             [['QTY'], 'number'],
 ];
 }
@@ -65,6 +65,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'SERIAL_NO', $this->SERIAL_NO])
             ->andFilterWhere(['like', 'ITEM', $this->ITEM])
+            ->andFilterWhere(['like', 'LOT_NO', $this->LOT_NO])
             ->andFilterWhere(['like', 'ITEM_DESC', $this->ITEM_DESC])
             ->andFilterWhere(['like', 'SUPPLIER', $this->SUPPLIER])
             ->andFilterWhere(['like', 'SUPPLIER_DESC', $this->SUPPLIER_DESC])

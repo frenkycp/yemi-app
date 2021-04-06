@@ -466,6 +466,11 @@ return [
         2 => 'PLAN SHUTDOWN',
         3 => 'PREVENTIVE MAINTENANCE'
     ],
+    'expired_item_status' => [
+        0 => 'UNDER JUDGEMENT',
+        1 => 'REQUST WARRANTY LABEL',
+        2 => 'PO ISSUED'
+    ],
 ];
 
 function getYearArray()

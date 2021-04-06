@@ -57,9 +57,6 @@ return $dataProvider;
 }
 
 $query->andFilterWhere([
-            'RECEIVED_DATE' => $this->RECEIVED_DATE,
-            'MANUFACTURED_DATE' => $this->MANUFACTURED_DATE,
-            'EXPIRED_DATE' => $this->EXPIRED_DATE,
             'EXPIRED_REVISION_NO' => $this->EXPIRED_REVISION_NO,
             'LIFE_TIME' => $this->LIFE_TIME,
             'ISI_DALAM_KEMASAN' => $this->ISI_DALAM_KEMASAN,
@@ -72,6 +69,9 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'SERIAL_NO', $this->SERIAL_NO])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),EXPIRED_DATE,120)', $this->EXPIRED_DATE])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),RECEIVED_DATE,120)', $this->RECEIVED_DATE])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),MANUFACTURED_DATE,120)', $this->MANUFACTURED_DATE])
             ->andFilterWhere(['like', 'ITEM', $this->ITEM])
             ->andFilterWhere(['like', 'ITEM_DESC', $this->ITEM_DESC])
             ->andFilterWhere(['like', 'SUPPLIER', $this->SUPPLIER])

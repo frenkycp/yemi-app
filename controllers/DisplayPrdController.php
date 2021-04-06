@@ -39,6 +39,7 @@ use app\models\DataMonitoringFa;
 use app\models\TraceItemDtrView;
 use app\models\SapGrGiByLocLog;
 use app\models\TraceItemDtrLoc;
+use app\models\SensorTbl;
 
 class DisplayPrdController extends Controller
 {
@@ -51,6 +52,8 @@ class DisplayPrdController extends Controller
         $category_arr = ['FLAMMABLE', 'HEALTH HAZARD'];
 
         $loc_data = TraceItemDtrLoc::find()->where(['FLAG' => 1])->all();
+
+        $sensor_data_arr = ArrayHelper::map(SensorTbl::find()->all(), 'map_no', 'temparature');
 
         $tmp_data = TraceItemDtrView::find()
         ->select([
@@ -74,6 +77,11 @@ class DisplayPrdController extends Controller
 
         $data_arr = [];
         foreach ($loc_data as $loc_val) {
+            $tmp_suhu = '-';
+            if ($loc_val->MAP_NO != null && isset($sensor_data_arr[$loc_val->MAP_NO])) {
+                $tmp_suhu = $sensor_data_arr[$loc_val->MAP_NO];
+            }
+            $data_arr[$loc_val->LOC_DESC]['temperature'] = $tmp_suhu;
             $data_arr[$loc_val->LOC_DESC]['location'] = [
                 'top' => $loc_val->TOP_POS,
                 'left' => $loc_val->LEFT_POS,

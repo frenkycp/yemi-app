@@ -199,6 +199,11 @@ echo '</pre>';*/
                                 <td class="text-center"><?= number_format($value['qty'][0]['l']); ?> L</td>
                                 <td class="text-center"><?= number_format($value['qty'][1]['l']); ?> L</td>
                             </tr>
+                            <tr>
+                                <td colspan="2" style="background-color: cyan; font-weight: bold;" class="text-center">
+                                    Temp : <?= $value['temperature']; ?>&deg;C
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
