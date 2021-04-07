@@ -42,10 +42,16 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = TraceItemDtr::find()->where(['<', 'EXPIRED_DATE', date('Y-m-d')])->andWhere(['AVAILABLE' => 'Y']);
+$query = TraceItemDtr::find()->where(['<', 'EXPIRED_DATE', date('Y-m-d', strtotime(' +1 month'))])->andWhere(['AVAILABLE' => 'Y']);
 
 $dataProvider = new ActiveDataProvider([
-'query' => $query,
+      'query' => $query,
+      'sort' => [
+            'defaultOrder' => [
+                  //'cust_desc' => SORT_ASC,
+                  'EXPIRED_DATE' => SORT_ASC,
+            ]
+      ],
 ]);
 
 $this->load($params);

@@ -41,7 +41,7 @@ $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, san
 $this->registerJs("
     $(document).ready(function() {
         var tmp_qty = 0;
-        var transfer_date = $('#transfer_date').val();
+        
         var keys;
         function setTotalQty(){
             var total_qty = 0;
@@ -67,12 +67,13 @@ $this->registerJs("
         });
 
         $('#finish_payment_btn').click(function(){
+            var transfer_date = $('#transfer_date').val();
             if(tmp_qty == 0) {
                 //alert('KOSONG');
                 return false;
             }
             var strvalue = \"\";
-            $('#overlay-id').show();
+            
             $('input[name=\"selection[]\"]:checked').each(function() {
                 if(strvalue!=\"\")
                     strvalue = strvalue + \"|\"+this.value;
@@ -81,6 +82,7 @@ $this->registerJs("
             });
             //alert(strvalue);
             if (confirm('Are you sure to continue?')) {
+                $('#overlay-id').show();
                 $(this).attr('disabled', true).addClass('disabled');
                 $.post({
                     url: '" . Url::to(['finish-payment']) . "',

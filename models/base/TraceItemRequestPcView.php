@@ -7,7 +7,7 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.TRACE_ITEM_REQUEST_PC".
+ * This is the base-model class for table "db_owner.TRACE_ITEM_REQUEST_PC_VIEW".
  *
  * @property string $REQUEST_ID
  * @property string $LOT_NO
@@ -16,9 +16,15 @@ use Yii;
  * @property string $CREATE_BY_NAME
  * @property string $CREATE_DATETIME
  * @property string $PO_NO
+ * @property integer $STATUS
+ * @property string $ITEM
+ * @property string $ITEM_DESC
+ * @property string $SUPPLIER_DESC
+ * @property string $UM
+ * @property double $TOTAL_QTY
  * @property string $aliasModel
  */
-abstract class TraceItemRequestPc extends \yii\db\ActiveRecord
+abstract class TraceItemRequestPcView extends \yii\db\ActiveRecord
 {
 
 
@@ -28,7 +34,7 @@ abstract class TraceItemRequestPc extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.TRACE_ITEM_REQUEST_PC';
+        return 'db_owner.TRACE_ITEM_REQUEST_PC_VIEW';
     }
 
     /**
@@ -46,11 +52,14 @@ abstract class TraceItemRequestPc extends \yii\db\ActiveRecord
     {
         return [
             [['REQUEST_ID'], 'required'],
-            [['CATEGORY'], 'integer'],
+            [['CATEGORY', 'STATUS'], 'integer'],
             [['CREATE_DATETIME'], 'safe'],
+            [['TOTAL_QTY'], 'number'],
             [['REQUEST_ID', 'LOT_NO', 'CREATE_BY_ID', 'PO_NO'], 'string', 'max' => 50],
             [['CREATE_BY_NAME'], 'string', 'max' => 150],
-            [['REQUEST_ID'], 'unique']
+            [['ITEM'], 'string', 'max' => 13],
+            [['ITEM_DESC', 'SUPPLIER_DESC'], 'string', 'max' => 100],
+            [['UM'], 'string', 'max' => 5]
         ];
     }
 
@@ -67,6 +76,12 @@ abstract class TraceItemRequestPc extends \yii\db\ActiveRecord
             'CREATE_BY_NAME' => 'Create By Name',
             'CREATE_DATETIME' => 'Create Datetime',
             'PO_NO' => 'Po No',
+            'STATUS' => 'Status',
+            'ITEM' => 'Item',
+            'ITEM_DESC' => 'Item Desc',
+            'SUPPLIER_DESC' => 'Supplier Desc',
+            'UM' => 'Um',
+            'TOTAL_QTY' => 'Total Qty',
         ];
     }
 
