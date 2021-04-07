@@ -285,9 +285,12 @@ echo '</pre>';*/
                 if ($tmp_count > 0) {
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
+
+                $ppm_ai1 = $avg_output == 0 ? 0 : round(($avg_defect_ai / $avg_output) * 1000000, 2);
+                $ppm_ai2 = $total_output == 0 ? 0 : round(($total_defect_ai / $total_output) * 1000000, 2)
                 ?>
-                <td class="text-center"><?= round(($avg_defect_ai / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= round(($total_defect_ai / $total_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= $ppm_ai1; ?></td>
+                <td class="text-center"><?= $ppm_ai2; ?></td>
             </tr>
             <tr>
                 <td><span class="row-title">SMT <small>(ppm)</small></span></td>
@@ -312,9 +315,11 @@ echo '</pre>';*/
                 if ($tmp_count > 0) {
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
+                $ppm_smt1 = $avg_output == 0 ? 0 : round(($avg_defect_smt / $avg_output) * 1000000, 2);
+                $ppm_smt2 = $total_output == 0 ? 0 : round(($total_defect_smt / $total_output) * 1000000, 2)
                 ?>
-                <td class="text-center"><?= round(($avg_defect_smt / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= round(($total_defect_smt / $total_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= $ppm_smt1; ?></td>
+                <td class="text-center"><?= $ppm_smt2; ?></td>
             </tr>
             <tr>
                 <td><span class="row-title">MI <small>(ppm)</small></span></td>
@@ -339,9 +344,11 @@ echo '</pre>';*/
                 if ($tmp_count > 0) {
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
+                $ppm_mi1 = $avg_output == 0 ? 0 : round(($avg_defect_mi / $avg_output) * 1000000, 2);
+                $ppm_mi2 = $total_output == 0 ? 0 : round(($total_defect_mi / $total_output) * 1000000, 2);
                 ?>
-                <td class="text-center"><?= round(($avg_defect_mi / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= round(($total_defect_mi / $total_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= $ppm_mi1; ?></td>
+                <td class="text-center"><?= $ppm_mi2; ?></td>
             </tr>
             <tr>
                 <td><span class="row-title">Total <small>(ppm)</small></span></td>
@@ -366,8 +373,8 @@ echo '</pre>';*/
                     $tmp_avg = round($tmp_grandtotal / $tmp_count);
                 }
                 ?>
-                <td class="text-center"><?= round(($avg_defect_ai / $avg_output) * 1000000, 2) + round(($avg_defect_smt / $avg_output) * 1000000, 2) + round(($avg_defect_mi / $avg_output) * 1000000, 2); ?></td>
-                <td class="text-center"><?= round(($total_defect_ai / $total_output) * 1000000, 2) + round(($total_defect_smt / $total_output) * 1000000, 2) + round(($total_defect_mi / $total_output) * 1000000, 2); ?></td>
+                <td class="text-center"><?= $ppm_ai1 + $ppm_smt1 + $ppm_mi1; ?></td>
+                <td class="text-center"><?= $ppm_ai2 + $ppm_smt2 + $ppm_mi2; ?></td>
             </tr>
         </tbody>
     </table>

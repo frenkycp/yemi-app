@@ -62,7 +62,7 @@ class ExpiredItemController extends \app\controllers\base\ExpiredItemController
 				$new_request->REQUEST_ID = $tmp_request_id;
 				$new_request->LOT_NO = $lot_no;
 				$new_request->CATEGORY = $category;
-				$new_request->CREATE_BY_ID = $tmp_id;
+				$new_request->CREATE_BY_ID = $tmp_user->NIK_SUN_FISH;
 				$new_request->CREATE_BY_NAME = $tmp_name;
 				$new_request->CREATE_DATETIME = $last_update;
 				$new_request->PO_NO = $po_no;
