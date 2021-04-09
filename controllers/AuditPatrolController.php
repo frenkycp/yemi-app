@@ -99,6 +99,65 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 		return $this->render('create', ['model' => $model]);
 	}
 
+	public function sendEmail($model)
+	{
+		//$tmp_patrol = TraceItemScrap::find()->where(['SERIAL_NO' => $SERIAL_NO])->one();
+		$category = \Yii::$app->params['audit_patrol_category'][$model->CATEGORY];
+		$msg = '
+		<div style="text-align: center">
+			Patrol Presdir & General Manager<br/>
+			(Last Update : ' . date('d-M-Y H:i:s', strtotime($model->PATROL_DATETIME)) . ')<br/><br/>
+			<span style="font-size: 0.5em;">This is an automatic notification. Please do not reply to this address.</span><br/><br/>
+			Patrol Presdir & GM<br/><br/>
+			Permasalahan :<br/>
+			' . $model->DESCRIPTION . '<br/><br/>
+			Kategori : ' . $category . '<br/><br/>
+		</div>
+        <table>
+        	<thead>
+        		<tr>
+        			<th>Point</th>
+        			<th>Content</th>
+        		</tr>
+        	</thead>
+        	<tbody>
+        		<tr>
+        			<td>Auditor</td>
+        			<td>' . $model->AUDITOR . '</td>
+        		</tr>
+        		<tr>
+        			<td>Tanggal</td>
+        			<td>' . date('d F Y', strtotime($model->PATROL_DATE)) . '</td>
+        		</tr>
+        		<tr>
+        			<td>Lokasi</td>
+        			<td>' . $model->CC_DESC . '</td>
+        		</tr>
+        		<tr>
+        			<td>Detail Lokasi</td>
+        			<td>' . $model->LOC_DETAIL . '</td>
+        		</tr>
+        		<tr>
+        			<td>Auditee</td>
+        			<td>' . $model->PIC_NAME . '</td>
+        		</tr>
+        	</tbody>
+        </table>
+        <br/>
+        Thanks & Best Regards,<br/>
+        MITA
+        ';
+
+        \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/html'], [
+            'content' => $msg
+        ])
+        ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
+        ->setTo(['frenky.purnama@music.yamaha.com', 'angga.adhitya@music.yamaha.com','fredy.agus@music.yamaha.com'])
+        //->setCc($set_to_cc_arr)
+        ->setSubject('Order Request')
+        ->send();
+	}
+
 	public function actionDeleteData($ID){
 		$model = $this->findModel($ID);
 
@@ -136,17 +195,22 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 
 	public function actionSolve($ID){
 		$model = $this->findModel($ID);
+		$custom_model = new \yii\base\DynamicModel([
+            'ID', 'ACTION', 'upload_after_1'
+        ]);
+        $custom_model->addRule(['ID', 'ACTION', 'upload_after_1'], 'required');
+        $custom_model->ID = $ID;
 
-		if ($model->load($_POST)) {
+		if ($custom_model->load($_POST)) {
 			$model->STATUS = 'C';
 			if ($model->save()) {
-				$model->upload_after_1 = UploadedFile::getInstance($model, 'upload_after_1');
-				if ($model->upload_after_1) {
-					$new_filename_a1 = $model->ID . '_AFTER_1.' . $model->upload_after_1->extension;
+				$custom_model->upload_after_1 = UploadedFile::getInstance($custom_model, 'upload_after_1');
+				if ($custom_model->upload_after_1) {
+					$new_filename_a1 = $custom_model->ID . '_AFTER_1.' . $custom_model->upload_after_1->extension;
 					$filePath_a1 = \Yii::getAlias("@app/web/uploads/AUDIT_PATROL/") . $new_filename_a1;
-					$model->upload_after_1->saveAs($filePath_a1);
+					$custom_model->upload_after_1->saveAs($filePath_a1);
 					Image::getImagine()->open($filePath_a1)->thumbnail(new Box(1920, 1080))->save($filePath_a1 , ['quality' => 90]);
-					AuditPatrolTbl::UpdateAll(['IMAGE_AFTER_1' => $new_filename_a1], ['ID' => $model->ID]);
+					AuditPatrolTbl::UpdateAll(['IMAGE_AFTER_1' => $new_filename_a1], ['ID' => $custom_model->ID]);
 				}
 				
 				return $this->redirect(Url::previous());
@@ -154,6 +218,7 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 		} else {
 			return $this->render('solve', [
 				'model' => $model,
+				'custom_model' => $custom_model,
 			]);
 		}
 	}

@@ -25,10 +25,10 @@ $this->title = [
 
 <div class="panel panel-primary">
 	<div class="panel-body">
-		<?= $form->field($model, 'ACTION')->textInput(['maxlength' => true]) ?>
+		<?= $form->field($custom_model, 'ACTION')->textInput(['maxlength' => true]) ?>
 
 		<?php
-        echo $form->field($model, 'upload_after_1')->widget(\kartik\file\FileInput::className(), [
+        echo $form->field($custom_model, 'upload_after_1')->widget(\kartik\file\FileInput::className(), [
             'options' => ['accept' => 'image/*'],
             'pluginOptions' => [
                 'showCaption' => false,
@@ -45,12 +45,11 @@ $this->title = [
         ?>
 	</div>
 	<div class="panel-footer">
-        <?php echo $form->errorSummary($model); ?>
 
         <?= Html::submitButton(
         '<span class="glyphicon glyphicon-check"></span> Submit',
         [
-        'id' => 'save-' . $model->formName(),
+        'id' => 'save-' . $custom_model->formName(),
         'class' => 'btn btn-success'
         ]
         );
