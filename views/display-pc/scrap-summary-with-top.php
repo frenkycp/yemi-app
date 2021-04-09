@@ -77,6 +77,12 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
+    ol li {
+        font-weight:bold;
+    }
+    li > * {
+        font-weight:normal;
+    }
     .column-1 {width: 40%;}
     .column-2 {width: 30%;}
     .column-3 {width: 30%;}
@@ -132,9 +138,10 @@ echo '</pre>';*/
 <table class="table summary-tbl">
     <thead>
         <tr>
-            <th class="text-center">SLOC.</th>
-            <th class="text-center">Description</th>
-            <th class="text-center">Total Qty</th>
+            <th class="text-center" width="50px"></th>
+            <th class="text-center" width="120px">SLOC.</th>
+            <th class="" width="200px">Description</th>
+            <th class="text-center" width="110px">Total Amt (USD)</th>
             <th class="text-center">Top 5</th>
         </tr>
     </thead>
@@ -145,7 +152,8 @@ echo '</pre>';*/
             $tmp_top_scrap = ScrapSummaryView01::find()
             ->select([
                 'material', 'descriptions', 'model',
-                'in_qty' => 'SUM(receipt_qty)'
+                'in_qty' => 'SUM(receipt_qty)',
+                'in_amt' => 'SUM(receipt_amt)'
             ])
             ->where([
                 'period' => $model->period,
@@ -153,39 +161,42 @@ echo '</pre>';*/
                 'storage_loc_new' => $value->storage_loc_new
             ])
             ->groupBy(['material', 'descriptions', 'model'])
-            ->orderBy('in_qty DESC')
+            ->orderBy('in_amt DESC')
             ->limit(5)->all();
             $total_in_qty += $value->in_qty;
             $total_in_amt += $value->in_amt;
-            $total_out_qty += $value->out_qty;
-            $total_out_amt += $value->out_amt;
-            $total_balance_qty += $value->balance_qty;
             ?>
             <tr>
+                <td class="text-center"><?= Html::a('<i class="fa fa-info-circle"></i>', ['pc-scrap-data-grouping/index', 'period' => $model->period, 'storage_loc_new' => $value->storage_loc_new], ['target' => '_blank']); ?></td>
                 <td class="text-center"><?= $value->storage_loc_new; ?></td>
-                <td class="text-center"><?= $value->storage_loc_desc_new; ?></td>
-                <td class="text-center"><?= number_format($value->in_qty); ?></td>
+                <td class=""><?= $value->storage_loc_desc_new; ?></td>
+                <td class="text-center"><?= number_format($value->in_amt); ?></td>
                 <td>
-                    <table class="table">
-                        <tbody>
+                    <?php
+                    if (count($tmp_top_scrap) == 0) {
+                        echo '-';
+                    } else { ?>
+                        <ol style="margin-bottom: 0px;">
                             <?php foreach ($tmp_top_scrap as $top_scrap_val): ?>
-                                <tr>
-                                    <td class="text-center"><?= $top_scrap_val->material; ?></td>
+                                <li>
+                                    <div><span style="">$<?= number_format($top_scrap_val->in_amt) ?></span> (<?= $top_scrap_val->material; ?> - <?= $top_scrap_val->descriptions; ?>) | Model : [<?= $top_scrap_val->model; ?>]</div>
+                                </li>
+                                    <!-- <td class="text-center"><?= $top_scrap_val->material; ?></td>
                                     <td class=""><?= $top_scrap_val->descriptions; ?></td>
-                                    <td class="text-center"><?= number_format($top_scrap_val->in_qty); ?></td>
-                                    <td class=""><?= $top_scrap_val->model; ?></td>
-                                </tr>
+                                    <td class="text-center"><?= ($top_scrap_val->in_amt); ?></td>
+                                    <td class=""><?= $top_scrap_val->model; ?></td> -->
                             <?php endforeach ?>
-                        </tbody>
-                    </table>
+                        </ol>
+                    <?php }
+                    ?>
                 </td>
             </tr>
         <?php endforeach ?>
     </tbody>
     <tfoot>
         <tr>
-            <td class="text-center" colspan="2">Total</td>
-            <td class="text-center"><?= number_format($total_in_qty); ?></td>
+            <td class="text-center" colspan="3">Total</td>
+            <td class="text-center"><?= number_format($total_in_amt); ?></td>
             <td></td>
         </tr>
     </tfoot>

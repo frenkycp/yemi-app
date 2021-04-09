@@ -43,7 +43,7 @@ class DisplayPcController extends Controller
         ->where([
             'period' => $model->period,
             'scrap_centre' => 'Y'
-        ])->groupBy(['storage_loc_new', 'storage_loc_desc_new'])->orderBy('storage_loc_new')->all();
+        ])->groupBy(['storage_loc_new', 'storage_loc_desc_new'])->orderBy('in_amt DESC')->all();
 
         return $this->render('scrap-summary-with-top', [
             'data' => $tmp_data,
