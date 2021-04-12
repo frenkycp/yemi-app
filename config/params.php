@@ -448,8 +448,8 @@ return [
         2 => 'Ο'
     ],
     'audit_patrol_category' => [
-        1 => 'S-Up & HSE Patrol Presdir',
-        2 => '5S Patrol GM',
+        1 => 'S-Up & SHE Patrol Presdir',
+        2 => '5S & SHE Patrol GM',
     ],
     'audit_patrol_topic' => [
         '5S' => '5S',
