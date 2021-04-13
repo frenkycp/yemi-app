@@ -102,6 +102,15 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
+    .list-tbl {
+        width: 200px;
+        position: absolute;
+        left: 1690px;
+        top: 10px;
+    }
+    .list-tbl .box-danger {
+        background-color: #ffd8d3;
+    }
     .column-1 {width: 40%;}
     .column-2 {width: 30%;}
     .column-3 {width: 30%;}
@@ -131,10 +140,17 @@ $script = "
             type: 'POST',
             url: '" . Url::to(['data-monitoring-data']) . "',
             success: function(data){
+                $('#list').html('');
+                var tmp_text = '';
                 $.each(data, function(index, val) {
-                    $('#'+index).attr('class', val.new_class);
-                    $('#'+index).attr('title', 'Line : '+index+' (Last Update : '+val.last_update+')');
+                    $('#'+val.line).attr('class', val.new_class);
+                    $('#'+val.line).attr('title', 'Line : ' + val.line + ' (Last Update : ' + val.last_update + ')');
+                    if(val.delay_second > 3600) {
+                        tmp_text += '<li>Line : <b>' + val.line + '</b><br/>' + val.last_update + '</li>';
+                    }
+                    
                 });
+                $('#list').append(tmp_text);
             },
             complete: function(){
                 setTimeout(function(){update_data();}, 2000);
@@ -171,6 +187,25 @@ $left_pos = 50;
         ?>
         <div id="<?= $value->line; ?>" title="<?= $value->line; ?>" class="<?= $icon_class; ?>" style="position: absolute; top: <?= $top_pos; ?>px; left: <?= $left_pos; ?>px; font-size: 20px;"></div>
     <?php endforeach ?>
+</div>
+
+<div class="list-tbl">
+    <div class="box box-danger box-solid">
+        <div class="box-header">
+            <h3 class="box-title">Last Update</h3>
+        </div>
+        <div class="box-body no-padding">
+            <ol id="list">
+                <?php foreach ($data as $value):
+                    if ($value->delay_second > 3600) {
+                        echo '<li>Line : <b>' . $value->line . '</b><br/>' . date('d M\' Y H:i', strtotime($value->lastupdated)) . '</li>';
+                    }
+                    ?>
+                    
+                <?php endforeach ?>
+            </ol>
+        </div>
+    </div>
 </div>
 
 <div class="text-center" style="position: absolute; top: 30px; width: 100%; font-weight: bold; font-size: 40px;">

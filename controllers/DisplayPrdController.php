@@ -1297,17 +1297,23 @@ class DisplayPrdController extends Controller
 
         $tmp_data_client = DataMonitoringFa::find()
         ->where(['visible' => 1])
+        ->orderBy('delay_second DESC')
         ->all();
 
         $tmp_status_arr = [];
+        $index = 0;
         foreach ($tmp_data_client as $key => $value) {
             $tmp_new_class = 'client-widget bg-green';
             if ($value->delay_second > 3600) {
                 $tmp_new_class = 'client-widget bg-red';
             }
 
-            $tmp_status_arr[$value->line]['new_class'] = $tmp_new_class;
-            $tmp_status_arr[$value->line]['last_update'] = date('d M Y H:i:s', strtotime($value->lastupdated));
+            $tmp_status_arr[$index]['new_class'] = $tmp_new_class;
+            $tmp_status_arr[$index]['line'] = $value->line;
+            $tmp_status_arr[$index]['last_update'] = date('d M\' Y H:i', strtotime($value->lastupdated));
+            $tmp_status_arr[$index]['delay_second'] = $value->delay_second;
+
+            $index++;
         }
 
         return $tmp_status_arr;
@@ -1320,6 +1326,7 @@ class DisplayPrdController extends Controller
 
         $data = DataMonitoringFa::find()
         ->where(['visible' => 1])
+        ->orderBy('delay_second DESC')
         ->all();
 
         return $this->render('data-monitoring', [
