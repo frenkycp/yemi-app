@@ -36,11 +36,88 @@ use app\models\ShippingPeriod;
 use app\models\KlinikInput;
 use app\models\StoreInOutWsus;
 use app\models\MachineIotSingle;
+use app\models\MachineIotCurrent;
 use app\models\DrsView03;
 use app\models\ScanTemperature;
+use app\models\InjectionMoldingCount;
+use app\models\InjectionMoldingLog;
 
 class ProductionRestController extends Controller
 {
+    public function actionInjectionMoldingCount()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+
+        $master_data = InjectionMoldingCount::find()->all();
+        $today = date('Y-m-d');
+        $period = date('Ym');
+        $last_update = date('Y-m-d H:i:s');
+
+        foreach ($master_data as $master_data_val) {
+            $last_log = InjectionMoldingLog::find()->where([
+                'MACHINE_ID' => $master_data_val->MACHINE_ID
+            ])->orderBy('START_TIME DESC')->one();
+
+            $master_data = InjectionMoldingCount::find()->where(['MACHINE_ID' => $master_data_val->MACHINE_ID])->one();
+            $current_status = MachineIotCurrent::find()->where(['mesin_id' => $master_data_val->MACHINE_ID])->one();
+            if (!$last_log) {
+                $new_log = new InjectionMoldingLog;
+                $new_log->ID = strtotime($last_update) . '_' . $master_data_val->MACHINE_ID;
+                $new_log->POST_DATE = $today;
+                $new_log->PERIOD = $period;
+                $new_log->MACHINE_ID = $master_data_val->MACHINE_ID;
+                $new_log->MACHINE_DESC = $master_data_val->MACHINE_DESC;
+                $new_log->COLOR_STATUS = $current_status->status_warna;
+                $new_log->START_TIME = $last_update;
+
+                if (!$new_log->save()) {
+                    return json_encode($new_log->errors);
+                }
+
+                if ($current_status->status_warna == 'Green') {
+                    $master_data->TOTAL_COUNT++;
+                    $master_data->LAST_UPDATE = $last_update;
+                    if (!$master_data->save()) {
+                        return json_encode($master_data->errors);
+                    }
+                }
+            } else {
+                if ($current_status->status_warna != $last_log->COLOR_STATUS) {
+                    $last_log->END_TIME = $last_update;
+                    $last_log->TOTAL_TIME_SECOND = strtotime($last_log->END_TIME) - strtotime($last_log->START_TIME);
+                    if (!$last_log->save()) {
+                        return json_encode($last_log->errors);
+                    } else {
+                        $new_log = new InjectionMoldingLog;
+                        $new_log->ID = strtotime($last_update) . '_' . $master_data_val->MACHINE_ID;
+                        $new_log->POST_DATE = $today;
+                        $new_log->PERIOD = $period;
+                        $new_log->MACHINE_ID = $master_data_val->MACHINE_ID;
+                        $new_log->MACHINE_DESC = $master_data_val->MACHINE_DESC;
+                        $new_log->COLOR_STATUS = $current_status->status_warna;
+                        $new_log->START_TIME = $last_update;
+
+                        if (!$new_log->save()) {
+                            return json_encode($new_log->errors);
+                        }
+                    }
+
+                    if ($current_status->status_warna == 'Green') {
+                        
+                        $master_data->TOTAL_COUNT++;
+                        $master_data->LAST_UPDATE = $last_update;
+                        if (!$master_data->save()) {
+                            return json_encode($master_data->errors);
+                        }
+                    }
+                }
+            }
+        }
+
+        return [];
+    }
+
     public function actionRemoveAbnormalTemperature($post_date = '')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
