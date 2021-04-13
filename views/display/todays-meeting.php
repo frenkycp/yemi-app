@@ -155,7 +155,8 @@ if ($_GET['room_id'] == 6) {
     ");
 }
 
-if ($room_info->id == 6 || $room_info->id == 1) {
+/*if ($room_info->id == 6 || $room_info->id == 1) {*/
+if (false) {
     $script = "
         $(document).ready(function() {
             setupRefresh();
