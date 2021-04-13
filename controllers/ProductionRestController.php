@@ -36,7 +36,7 @@ use app\models\ShippingPeriod;
 use app\models\KlinikInput;
 use app\models\StoreInOutWsus;
 use app\models\MachineIotSingle;
-use app\models\MachineIotCurrent;
+use app\models\MachineIotCurrentMnt;
 use app\models\DrsView03;
 use app\models\ScanTemperature;
 use app\models\InjectionMoldingCount;
@@ -60,7 +60,7 @@ class ProductionRestController extends Controller
             ])->orderBy('START_TIME DESC')->one();
 
             $master_data = InjectionMoldingCount::find()->where(['MACHINE_ID' => $master_data_val->MACHINE_ID])->one();
-            $current_status = MachineIotCurrent::find()->where(['mesin_id' => $master_data_val->MACHINE_ID])->one();
+            $current_status = MachineIotCurrentMnt::find()->where(['mesin_id' => $master_data_val->MACHINE_ID])->one();
             if (!$last_log) {
                 $new_log = new InjectionMoldingLog;
                 $new_log->ID = strtotime($last_update) . '_' . $master_data_val->MACHINE_ID;
