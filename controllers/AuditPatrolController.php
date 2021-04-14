@@ -198,11 +198,19 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 		$custom_model = new \yii\base\DynamicModel([
             'ID', 'ACTION', 'upload_after_1'
         ]);
-        $custom_model->addRule(['ID', 'ACTION', 'upload_after_1'], 'required');
+
+        if ($model->IMAGE_AFTER_1 == null) {
+        	$custom_model->addRule(['ID', 'ACTION', 'upload_after_1'], 'required');
+        } else {
+        	$custom_model->addRule(['ID', 'ACTION'], 'required');
+        }
+        
         $custom_model->ID = $ID;
+        $custom_model->upload_after_1 = $model->IMAGE_AFTER_1;
 
 		if ($custom_model->load($_POST)) {
 			$model->STATUS = 'C';
+			$model->ACTION = $custom_model->ACTION;
 			if ($model->save()) {
 				$custom_model->upload_after_1 = UploadedFile::getInstance($custom_model, 'upload_after_1');
 				if ($custom_model->upload_after_1) {
