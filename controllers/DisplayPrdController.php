@@ -40,9 +40,69 @@ use app\models\TraceItemDtrView;
 use app\models\SapGrGiByLocLog;
 use app\models\TraceItemDtrLoc;
 use app\models\SensorTbl;
+use app\models\InjMachineTbl;
+use app\models\InjMouldingTbl;
 
 class DisplayPrdController extends Controller
 {
+    public function actionInjMouldingCountData($value='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $data_return = [];
+        $tmp_machine = InjMachineTbl::find()->all();
+        foreach ($tmp_machine as $key => $value) {
+            $moulding_name = '<i class="text-red">(NO MOULDING SET)</i>';
+            $last_update = '-';
+
+            if ($value->MOULDING_ID != null) {
+                $moulding_name = $value->MOULDING_NAME;
+                $last_update = date('d M Y H:i', strtotime($value->LAST_UPDATE));
+            }
+
+            $data_return[$value->MACHINE_ID] = [
+                'MACHINE_DESC' => $value->MACHINE_DESC,
+                'MOULDING_NAME' => $moulding_name,
+                'LAST_UPDATE' => $last_update,
+                'TOTAL_COUNT' => $value->TOTAL_COUNT,
+            ];
+        }
+
+        return $data_return;
+    }
+
+    public function actionInjMouldingCount($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = [];
+
+        $tmp_machine = InjMachineTbl::find()->all();
+
+        foreach ($tmp_machine as $key => $value) {
+            $moulding_name = '<i class="text-red">(NO MOULDING SET)</i>';
+            $current_count = 0;
+            $last_update = '-';
+            if ($value->MOULDING_ID != null) {
+                $tmp_moulding = InjMouldingTbl::findOne($value->MOULDING_ID);
+                $moulding_name = $value->MOULDING_NAME;
+                $current_count = $tmp_moulding->CURRENT_COUNT;
+                $last_update = $tmp_moulding->LAST_UPDATE;
+            }
+            $data[$value->MACHINE_ID] = [
+                'machine' => $value->MACHINE_DESC,
+                'moulding_name' => $moulding_name,
+                'current_count' => $current_count,
+                'last_update' => $last_update,
+            ];
+        }
+
+        return $this->render('inj-moulding-count', [
+            'data' => $data,
+        ]);
+    }
+
     public function actionInflamMap()
     {
         $this->layout = 'clean';
