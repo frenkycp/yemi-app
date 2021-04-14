@@ -79,12 +79,8 @@ class ProductionRestController extends Controller
                 }
 
                 if ($current_status->status_warna == 'Green') {
-                    $master_data->TOTAL_COUNT++;
-                    $master_data->LAST_UPDATE = $last_update;
-                    if (!$master_data->save()) {
-                        return json_encode($master_data->errors);
-                    }
 
+                    $tmp_total_count = 0;
                     if ($master_data_val->MOULDING_ID != null) {
                         $moulding = InjMouldingTbl::findOne($master_data_val->MOULDING_ID);
                         $moulding->TOTAL_COUNT++;
@@ -94,6 +90,13 @@ class ProductionRestController extends Controller
                         if (!$moulding->save()) {
                             return json_encode($moulding->errors);
                         }
+                        $tmp_total_count = $moulding->TOTAL_COUNT;
+                    }
+
+                    $master_data->TOTAL_COUNT = $tmp_total_count;
+                    $master_data->LAST_UPDATE = $last_update;
+                    if (!$master_data->save()) {
+                        return json_encode($master_data->errors);
                     }
                 }
             } else {
@@ -121,12 +124,7 @@ class ProductionRestController extends Controller
 
                     if ($current_status->status_warna == 'Green') {
                         
-                        $master_data->TOTAL_COUNT++;
-                        $master_data->LAST_UPDATE = $last_update;
-                        if (!$master_data->save()) {
-                            return json_encode($master_data->errors);
-                        }
-
+                        $tmp_total_count = 0;
                         if ($master_data_val->MOULDING_ID != null) {
                             $moulding = InjMouldingTbl::findOne($master_data_val->MOULDING_ID);
                             $moulding->TOTAL_COUNT++;
@@ -136,6 +134,13 @@ class ProductionRestController extends Controller
                             if (!$moulding->save()) {
                                 return json_encode($moulding->errors);
                             }
+                            $tmp_total_count = $moulding->TOTAL_COUNT;
+                        }
+
+                        $master_data->TOTAL_COUNT = $tmp_total_count;
+                        $master_data->LAST_UPDATE = $last_update;
+                        if (!$master_data->save()) {
+                            return json_encode($master_data->errors);
                         }
                     }
                 }
