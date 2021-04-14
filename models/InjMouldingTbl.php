@@ -3,13 +3,13 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\InjectionMoldingCount as BaseInjectionMoldingCount;
+use \app\models\base\InjMouldingTbl as BaseInjMouldingTbl;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "db_owner.INJECTION_MOLDING_COUNT".
+ * This is the model class for table "db_owner.INJ_MOULDING_TBL".
  */
-class InjectionMoldingCount extends BaseInjectionMoldingCount
+class InjMouldingTbl extends BaseInjMouldingTbl
 {
 
     public function behaviors()

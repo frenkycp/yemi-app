@@ -7,15 +7,19 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.INJECTION_MOLDING_COUNT".
+ * This is the base-model class for table "db_owner.INJ_MOULDING_TBL".
  *
+ * @property string $MOULDING_ID
+ * @property string $MOULDING_NAME
  * @property string $MACHINE_ID
  * @property string $MACHINE_DESC
  * @property integer $TOTAL_COUNT
+ * @property integer $CURRENT_COUNT
  * @property string $LAST_UPDATE
+ * @property string $COUNT_RESET_DATETIME
  * @property string $aliasModel
  */
-abstract class InjectionMoldingCount extends \yii\db\ActiveRecord
+abstract class InjMouldingTbl extends \yii\db\ActiveRecord
 {
 
 
@@ -25,7 +29,7 @@ abstract class InjectionMoldingCount extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.INJECTION_MOLDING_COUNT';
+        return 'db_owner.INJ_MOULDING_TBL';
     }
 
     /**
@@ -33,7 +37,7 @@ abstract class InjectionMoldingCount extends \yii\db\ActiveRecord
      */
     public static function getDb()
     {
-        return Yii::$app->get('db_iot');
+        return Yii::$app->get('db_sql_server');
     }
 
     /**
@@ -42,10 +46,13 @@ abstract class InjectionMoldingCount extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['TOTAL_COUNT'], 'integer'],
-            [['LAST_UPDATE'], 'safe'],
-            [['MACHINE_ID'], 'string', 'max' => 50],
-            [['MACHINE_DESC'], 'string', 'max' => 250]
+            [['MOULDING_ID'], 'required'],
+            [['TOTAL_COUNT', 'CURRENT_COUNT'], 'integer'],
+            [['LAST_UPDATE', 'COUNT_RESET_DATETIME'], 'safe'],
+            [['MOULDING_ID', 'MACHINE_ID'], 'string', 'max' => 50],
+            [['MOULDING_NAME'], 'string', 'max' => 150],
+            [['MACHINE_DESC'], 'string', 'max' => 250],
+            [['MOULDING_ID'], 'unique']
         ];
     }
 
@@ -55,10 +62,14 @@ abstract class InjectionMoldingCount extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'MOULDING_ID' => 'Moulding ID',
+            'MOULDING_NAME' => 'Moulding Name',
             'MACHINE_ID' => 'Machine ID',
             'MACHINE_DESC' => 'Machine Desc',
             'TOTAL_COUNT' => 'Total Count',
+            'CURRENT_COUNT' => 'Current Count',
             'LAST_UPDATE' => 'Last Update',
+            'COUNT_RESET_DATETIME' => 'Count Reset Datetime',
         ];
     }
 

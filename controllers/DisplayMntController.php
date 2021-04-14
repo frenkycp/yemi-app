@@ -89,7 +89,7 @@ class DisplayMntController extends Controller
 	            ->select(['mesin_id', 'mesin_nama'])
 	            ->where([
 	            	'area' => $cat_id,
-	            	'FORMAT(mesin_last_update, \'yyyyMM\')' => $period_arr,
+	            	//'FORMAT(mesin_last_update, \'yyyyMM\')' => $period_arr,
 	            ])
 	            ->andWhere(['>', 'down_time', 0])
 	            ->groupBy('mesin_id, mesin_nama')

@@ -39,8 +39,9 @@ use app\models\MachineIotSingle;
 use app\models\MachineIotCurrentMnt;
 use app\models\DrsView03;
 use app\models\ScanTemperature;
-use app\models\InjectionMoldingCount;
-use app\models\InjectionMoldingLog;
+use app\models\InjMachineTbl;
+use app\models\InjMouldingTbl;
+use app\models\InjMachineMouldingLog;
 
 class ProductionRestController extends Controller
 {
@@ -49,20 +50,20 @@ class ProductionRestController extends Controller
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         date_default_timezone_set('Asia/Jakarta');
 
-        $master_data = InjectionMoldingCount::find()->all();
+        $master_data = InjMachineTbl::find()->all();
         $today = date('Y-m-d');
         $period = date('Ym');
         $last_update = date('Y-m-d H:i:s');
 
         foreach ($master_data as $master_data_val) {
-            $last_log = InjectionMoldingLog::find()->where([
+            $last_log = InjMachineMouldingLog::find()->where([
                 'MACHINE_ID' => $master_data_val->MACHINE_ID
             ])->orderBy('START_TIME DESC')->one();
 
-            $master_data = InjectionMoldingCount::find()->where(['MACHINE_ID' => $master_data_val->MACHINE_ID])->one();
+            $master_data = InjMachineTbl::find()->where(['MACHINE_ID' => $master_data_val->MACHINE_ID])->one();
             $current_status = MachineIotCurrentMnt::find()->where(['mesin_id' => $master_data_val->MACHINE_ID])->one();
             if (!$last_log) {
-                $new_log = new InjectionMoldingLog;
+                $new_log = new InjMachineMouldingLog;
                 $new_log->ID = strtotime($last_update) . '_' . $master_data_val->MACHINE_ID;
                 $new_log->POST_DATE = $today;
                 $new_log->PERIOD = $period;
@@ -70,6 +71,8 @@ class ProductionRestController extends Controller
                 $new_log->MACHINE_DESC = $master_data_val->MACHINE_DESC;
                 $new_log->COLOR_STATUS = $current_status->status_warna;
                 $new_log->START_TIME = $last_update;
+                $new_log->MOULDING_ID = $master_data_val->MOULDING_ID;
+                $new_log->MOULDING_NAME = $master_data_val->MOULDING_NAME;
 
                 if (!$new_log->save()) {
                     return json_encode($new_log->errors);
@@ -81,6 +84,17 @@ class ProductionRestController extends Controller
                     if (!$master_data->save()) {
                         return json_encode($master_data->errors);
                     }
+
+                    if ($master_data_val->MOULDING_ID != null) {
+                        $moulding = InjMouldingTbl::findOne($master_data_val->MOULDING_ID);
+                        $moulding->TOTAL_COUNT++;
+                        $moulding->CURRENT_COUNT++;
+                        $moulding->LAST_UPDATE = $last_update;
+
+                        if (!$moulding->save()) {
+                            return json_encode($moulding->errors);
+                        }
+                    }
                 }
             } else {
                 if ($current_status->status_warna != $last_log->COLOR_STATUS) {
@@ -89,7 +103,7 @@ class ProductionRestController extends Controller
                     if (!$last_log->save()) {
                         return json_encode($last_log->errors);
                     } else {
-                        $new_log = new InjectionMoldingLog;
+                        $new_log = new InjMachineMouldingLog;
                         $new_log->ID = strtotime($last_update) . '_' . $master_data_val->MACHINE_ID;
                         $new_log->POST_DATE = $today;
                         $new_log->PERIOD = $period;
@@ -97,6 +111,8 @@ class ProductionRestController extends Controller
                         $new_log->MACHINE_DESC = $master_data_val->MACHINE_DESC;
                         $new_log->COLOR_STATUS = $current_status->status_warna;
                         $new_log->START_TIME = $last_update;
+                        $new_log->MOULDING_ID = $master_data_val->MOULDING_ID;
+                        $new_log->MOULDING_NAME = $master_data_val->MOULDING_NAME;
 
                         if (!$new_log->save()) {
                             return json_encode($new_log->errors);
@@ -109,6 +125,17 @@ class ProductionRestController extends Controller
                         $master_data->LAST_UPDATE = $last_update;
                         if (!$master_data->save()) {
                             return json_encode($master_data->errors);
+                        }
+
+                        if ($master_data_val->MOULDING_ID != null) {
+                            $moulding = InjMouldingTbl::findOne($master_data_val->MOULDING_ID);
+                            $moulding->TOTAL_COUNT++;
+                            $moulding->CURRENT_COUNT++;
+                            $moulding->LAST_UPDATE = $last_update;
+
+                            if (!$moulding->save()) {
+                                return json_encode($moulding->errors);
+                            }
                         }
                     }
                 }
