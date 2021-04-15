@@ -160,9 +160,98 @@ use app\models\MachineIotLogHour;
 use app\models\SapItemTbl;
 use app\models\EmpInterviewYubisashi;
 use app\models\VmsPlanActual;
+use app\models\SoPeriodPlanActual;
 
 class DisplayController extends Controller
 {
+    public function actionSoPrd()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $period_dropdown = ArrayHelper::map(SoPeriodPlanActual::find()->select('PERIOD')->groupBy('PERIOD')->orderBy('PERIOD DESC')->all(), 'PERIOD', 'PERIOD');
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $period_name = date('F Y', strtotime($model->period));
+        $tmp_bu_arr = \Yii::$app->params['bu_arr_production'];
+        $tmp_yesterday = SoPeriodPlanActual::find()->where(['PERIOD' => $model->period])->orderBy('BALANCE_QTY')->all();
+
+        $tmp_data_yesterday = $tmp_top_minus = [];
+        foreach ($tmp_bu_arr as $bu_val) {
+            $tmp_pct = $tmp_total_plan = $tmp_total_actual = $tmp_total_balance = 0;
+            foreach ($tmp_yesterday as $key => $value) {
+                $tmp_plan = $tmp_actual = $tmp_balance = 0;
+                if ($value->BU == $bu_val) {
+                    $tmp_plan = $value->PLAN_QTY;
+                    $tmp_actual = $value->ACTUAL_QTY;
+                    /*if ($tmp_actual > $tmp_plan) {
+                        $tmp_actual = $tmp_plan;
+                    }*/
+                    $tmp_balance = $value->BALANCE_QTY;;
+
+                    if (count($tmp_top_minus[$bu_val]) < 3 && $tmp_balance < 0) {
+                        if ($value->DESTINATION == null || $value->DESTINATION == '-') {
+                            $item_desc = $value->ITEM_DESC;
+                        } else {
+                            if (strpos($value->ITEM_DESC, '//' . $value->DESTINATION) === false) {
+                                $item_desc = $value->ITEM_DESC . ' // ' . $value->DESTINATION;
+                            } else {
+                                $item_desc = $value->ITEM_DESC;
+                            }
+                        }
+                        $tmp_top_minus[$bu_val][] = [
+                            'item' => $value->ITEM,
+                            'item_desc' => $item_desc,
+                            'balance' => $tmp_balance
+                        ];
+                    }
+                }
+                $tmp_total_plan += $tmp_plan;
+                $tmp_total_actual += $tmp_actual;
+                $tmp_total_balance += $tmp_balance;
+            }
+
+            if ($tmp_total_plan > 0) {
+                $tmp_pct = round(($tmp_total_actual / $tmp_total_plan) * 100);
+            }
+
+            $tmp_data_yesterday[$bu_val] = [
+                'plan' => $tmp_total_plan,
+                'actual' => $tmp_total_actual,
+                'balance' => $tmp_total_balance,
+                'pct' => $tmp_pct,
+            ];
+
+        }
+
+        foreach ($tmp_top_minus as $key => $value) {
+            if ($key != 'AV' && $key != 'PA' && count($value) == 3) {
+                unset($tmp_top_minus[$key][2]);
+            }
+        }
+
+        $tmp_last_update = SoPeriodPlanActual::find()->select(['ACT_QTY_LAST_UPDATE' => 'MAX(ACT_QTY_LAST_UPDATE)'])->one();
+
+        return $this->render('so-prd', [
+            'model' => $model,
+            'period_name' => $period_name,
+            'period_dropdown' => $period_dropdown,
+            'last_update' => date('d M\' Y H:i', strtotime($tmp_last_update->ACT_QTY_LAST_UPDATE)),
+            'tmp_top_minus' => $tmp_top_minus,
+            'tmp_top_minus_av' => $tmp_top_minus_av,
+            'tmp_top_minus_pa' => $tmp_top_minus_pa,
+            'tmp_data_yesterday' => $tmp_data_yesterday,
+        ]);
+    }
+
     public function actionIjazahProgressChart($value='')
     {
         $this->layout = 'clean';
