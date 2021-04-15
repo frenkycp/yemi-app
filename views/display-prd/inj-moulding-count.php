@@ -108,7 +108,7 @@ $script = "
     var chart;
 
     function setupRefresh() {
-      setTimeout(\"refreshPage();\", 600000); // milliseconds
+      setTimeout(\"refreshPage();\", 300000); // milliseconds
     }
 
     function update_data(){
@@ -156,12 +156,6 @@ echo '</pre>';*/
         <?php foreach ($data as $key => $value): ?>
             <tr>
                 <td class="text-center">
-                    <?= Html::a('<button style="margin-top: 5px;" class="btn btn-block btn-info btn-sm"><span class="fa fa-edit"></span> Remark</button>', '#', [
-                        'data-pjax' => '0',
-                        'value' => Url::to(['inj-moulding-change','machine_id' => $key]),
-                        'title' => 'Change Moulding',
-                        'class' => 'showModalButton'
-                    ]); ?>
                     <i class="fa fa-pencil disable" title="Change Moulding"></i> 
                     <i class="fa fa-refresh disable" title="Reset Count"></i>
                 </td>
