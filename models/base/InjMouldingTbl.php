@@ -14,9 +14,11 @@ use Yii;
  * @property string $MACHINE_ID
  * @property string $MACHINE_DESC
  * @property integer $TOTAL_COUNT
- * @property integer $CURRENT_COUNT
  * @property string $LAST_UPDATE
  * @property string $COUNT_RESET_DATETIME
+ * @property string $RESET_BY_ID
+ * @property string $RESET_BY_NAME
+ * @property integer $RESET_LAST_COUNT
  * @property string $aliasModel
  */
 abstract class InjMouldingTbl extends \yii\db\ActiveRecord
@@ -47,11 +49,11 @@ abstract class InjMouldingTbl extends \yii\db\ActiveRecord
     {
         return [
             [['MOULDING_ID'], 'required'],
-            [['TOTAL_COUNT', 'CURRENT_COUNT'], 'integer'],
+            [['TOTAL_COUNT', 'RESET_LAST_COUNT'], 'integer'],
             [['LAST_UPDATE', 'COUNT_RESET_DATETIME'], 'safe'],
-            [['MOULDING_ID', 'MACHINE_ID'], 'string', 'max' => 50],
+            [['MOULDING_ID', 'MACHINE_ID', 'RESET_BY_ID'], 'string', 'max' => 50],
             [['MOULDING_NAME'], 'string', 'max' => 150],
-            [['MACHINE_DESC'], 'string', 'max' => 250],
+            [['MACHINE_DESC', 'RESET_BY_NAME'], 'string', 'max' => 250],
             [['MOULDING_ID'], 'unique']
         ];
     }
@@ -67,9 +69,11 @@ abstract class InjMouldingTbl extends \yii\db\ActiveRecord
             'MACHINE_ID' => 'Machine ID',
             'MACHINE_DESC' => 'Machine Desc',
             'TOTAL_COUNT' => 'Total Count',
-            'CURRENT_COUNT' => 'Current Count',
             'LAST_UPDATE' => 'Last Update',
             'COUNT_RESET_DATETIME' => 'Count Reset Datetime',
+            'RESET_BY_ID' => 'Reset By ID',
+            'RESET_BY_NAME' => 'Reset By Name',
+            'RESET_LAST_COUNT' => 'Reset Last Count',
         ];
     }
 

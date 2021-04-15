@@ -45,6 +45,33 @@ use app\models\InjMouldingTbl;
 
 class DisplayPrdController extends Controller
 {
+    public function actionInjMouldingChange($machine_id)
+    {
+        $model = InjMachineTbl::findOne($machine_id);
+
+        if ($model->load(\Yii::$app->request->post())) {
+            $tmp_moulding = InjMouldingTbl::findOne($model->MOULDING_ID);
+            if (!$tmp_moulding) {
+                \Yii::$app->session->setFlash('danger', 'Moulding is not registered...!');
+                return $this->redirect(Url::previous());
+            } else {
+                $model->MOULDING_NAME = $tmp_moulding->MOULDING_NAME;
+                $model->TOTAL_COUNT = $tmp_moulding->TOTAL_COUNT;
+            }
+            if ($model->save()) {
+                return $this->redirect(Url::previous());
+            } else {
+                return json_encode($model->errors);
+            }
+
+            //return $this->redirect(Url::previous());
+        }
+
+        return $this->renderAjax('remark', [
+            'model' => $model
+        ]);
+    }
+
     public function actionInjMouldingCountData($value='')
     {
         date_default_timezone_set('Asia/Jakarta');
@@ -87,7 +114,7 @@ class DisplayPrdController extends Controller
             if ($value->MOULDING_ID != null) {
                 $tmp_moulding = InjMouldingTbl::findOne($value->MOULDING_ID);
                 $moulding_name = $value->MOULDING_NAME;
-                $current_count = $tmp_moulding->CURRENT_COUNT;
+                $current_count = $tmp_moulding->TOTAL_COUNT;
                 $last_update = $tmp_moulding->LAST_UPDATE;
             }
             $data[$value->MACHINE_ID] = [
