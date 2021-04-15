@@ -42,9 +42,46 @@ use app\models\ScanTemperature;
 use app\models\InjMachineTbl;
 use app\models\InjMouldingTbl;
 use app\models\InjMachineMouldingLog;
+use app\models\SoPeriodPlanActual;
 
 class ProductionRestController extends Controller
 {
+    public function actionUpdateSoProdPlanActual($value='')
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        date_default_timezone_set('Asia/Jakarta');
+
+        $last_month_period = date('Ym', strtotime('-1 month'));
+        $this_time = date('Y-m-d H:i:s');
+
+        $tmp_so_arr = SoPeriodPlanActual::find()->where(['>=', 'PERIOD', $last_month_period])->all();
+        $tmp_serno_arr = SernoOutput::find()->select([
+            'id',
+            'gmc',
+            'total_qty' => 'SUM(output)'
+        ])->where(['>=', 'id', $last_month_period])->groupBy('id, gmc')->all();
+
+        foreach ($tmp_so_arr as $so_val) {
+            foreach ($tmp_serno_arr as $serno_val) {
+                if ($so_val->ITEM == $serno_val->gmc && $so_val->PERIOD == $serno_val->id && $so_val->ACTUAL_QTY != $serno_val->total_qty) {
+                    $for_update = SoPeriodPlanActual::find()->where([
+                        'PERIOD' => $so_val->PERIOD,
+                        'ITEM' => $so_val->ITEM
+                    ])->one();
+                    $for_update->ACTUAL_QTY = $serno_val->total_qty;
+                    $for_update->BALANCE_QTY = $for_update->ACTUAL_QTY - $for_update->PLAN_QTY;
+                    $for_update->ACT_QTY_LAST_UPDATE = $this_time;
+                    $for_update->ACTUAL_AMT = $for_update->ACTUAL_QTY * $for_update->STANDARD_PRICE;
+                    $for_update->BALANCE_AMT = $for_update->ACTUAL_AMT - $for_update->PLAN_AMT;
+                    $for_update->save();
+                }
+            }
+        }
+
+        $total_s = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
+        return 'Total time : ' . $total_s;
+    }
+
     public function actionInjectionMoldingCount()
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -84,7 +121,7 @@ class ProductionRestController extends Controller
                     if ($master_data_val->MOULDING_ID != null) {
                         $moulding = InjMouldingTbl::findOne($master_data_val->MOULDING_ID);
                         $moulding->TOTAL_COUNT++;
-                        $moulding->CURRENT_COUNT++;
+                        //$moulding->CURRENT_COUNT++;
                         $moulding->LAST_UPDATE = $last_update;
 
                         if (!$moulding->save()) {
@@ -128,7 +165,7 @@ class ProductionRestController extends Controller
                         if ($master_data_val->MOULDING_ID != null) {
                             $moulding = InjMouldingTbl::findOne($master_data_val->MOULDING_ID);
                             $moulding->TOTAL_COUNT++;
-                            $moulding->CURRENT_COUNT++;
+                            //$moulding->CURRENT_COUNT++;
                             $moulding->LAST_UPDATE = $last_update;
 
                             if (!$moulding->save()) {
