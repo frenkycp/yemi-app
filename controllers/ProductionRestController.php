@@ -40,8 +40,8 @@ use app\models\MachineIotCurrentMnt;
 use app\models\DrsView03;
 use app\models\ScanTemperature;
 use app\models\InjMachineTbl;
-use app\models\InjMouldingTbl;
-use app\models\InjMachineMouldingLog;
+use app\models\InjMoldingTbl;
+use app\models\InjMachineMoldingLog;
 use app\models\SoPeriodPlanActual;
 
 class ProductionRestController extends Controller
@@ -93,23 +93,25 @@ class ProductionRestController extends Controller
         $last_update = date('Y-m-d H:i:s');
 
         foreach ($master_data as $master_data_val) {
-            $last_log = InjMachineMouldingLog::find()->where([
+            $last_log = InjMachineMoldingLog::find()->where([
                 'MACHINE_ID' => $master_data_val->MACHINE_ID
             ])->orderBy('START_TIME DESC')->one();
 
             $master_data = InjMachineTbl::find()->where(['MACHINE_ID' => $master_data_val->MACHINE_ID])->one();
             $current_status = MachineIotCurrentMnt::find()->where(['mesin_id' => $master_data_val->MACHINE_ID])->one();
             if (!$last_log) {
-                $new_log = new InjMachineMouldingLog;
+                $new_log = new InjMachineMoldingLog;
                 $new_log->ID = strtotime($last_update) . '_' . $master_data_val->MACHINE_ID;
                 $new_log->POST_DATE = $today;
                 $new_log->PERIOD = $period;
                 $new_log->MACHINE_ID = $master_data_val->MACHINE_ID;
                 $new_log->MACHINE_DESC = $master_data_val->MACHINE_DESC;
+                $new_log->ITEM = $master_data_val->ITEM;
+                $new_log->ITEM_DESC = $master_data_val->ITEM_DESC;
                 $new_log->COLOR_STATUS = $current_status->status_warna;
                 $new_log->START_TIME = $last_update;
-                $new_log->MOULDING_ID = $master_data_val->MOULDING_ID;
-                $new_log->MOULDING_NAME = $master_data_val->MOULDING_NAME;
+                $new_log->MOLDING_ID = $master_data_val->MOLDING_ID;
+                $new_log->MOLDING_NAME = $master_data_val->MOLDING_NAME;
 
                 if (!$new_log->save()) {
                     return json_encode($new_log->errors);
@@ -118,8 +120,8 @@ class ProductionRestController extends Controller
                 if ($current_status->status_warna == 'Green') {
 
                     $tmp_total_count = 0;
-                    if ($master_data_val->MOULDING_ID != null) {
-                        $moulding = InjMouldingTbl::findOne($master_data_val->MOULDING_ID);
+                    if ($master_data_val->MOLDING_ID != null) {
+                        $moulding = InjMoldingTbl::findOne($master_data_val->MOLDING_ID);
                         $moulding->TOTAL_COUNT++;
                         //$moulding->CURRENT_COUNT++;
                         $moulding->LAST_UPDATE = $last_update;
@@ -143,16 +145,18 @@ class ProductionRestController extends Controller
                     if (!$last_log->save()) {
                         return json_encode($last_log->errors);
                     } else {
-                        $new_log = new InjMachineMouldingLog;
+                        $new_log = new InjMachineMoldingLog;
                         $new_log->ID = strtotime($last_update) . '_' . $master_data_val->MACHINE_ID;
                         $new_log->POST_DATE = $today;
                         $new_log->PERIOD = $period;
                         $new_log->MACHINE_ID = $master_data_val->MACHINE_ID;
                         $new_log->MACHINE_DESC = $master_data_val->MACHINE_DESC;
+                        $new_log->ITEM = $master_data_val->ITEM;
+                        $new_log->ITEM_DESC = $master_data_val->ITEM_DESC;
                         $new_log->COLOR_STATUS = $current_status->status_warna;
                         $new_log->START_TIME = $last_update;
-                        $new_log->MOULDING_ID = $master_data_val->MOULDING_ID;
-                        $new_log->MOULDING_NAME = $master_data_val->MOULDING_NAME;
+                        $new_log->MOLDING_ID = $master_data_val->MOLDING_ID;
+                        $new_log->MOLDING_NAME = $master_data_val->MOLDING_NAME;
 
                         if (!$new_log->save()) {
                             return json_encode($new_log->errors);
@@ -162,8 +166,8 @@ class ProductionRestController extends Controller
                     if ($current_status->status_warna == 'Green') {
                         
                         $tmp_total_count = 0;
-                        if ($master_data_val->MOULDING_ID != null) {
-                            $moulding = InjMouldingTbl::findOne($master_data_val->MOULDING_ID);
+                        if ($master_data_val->MOLDING_ID != null) {
+                            $moulding = InjMoldingTbl::findOne($master_data_val->MOLDING_ID);
                             $moulding->TOTAL_COUNT++;
                             //$moulding->CURRENT_COUNT++;
                             $moulding->LAST_UPDATE = $last_update;

@@ -7,22 +7,24 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.INJ_MACHINE_MOULDING_LOG".
+ * This is the base-model class for table "db_owner.INJ_MACHINE_MOLDING_LOG".
  *
  * @property string $ID
  * @property string $POST_DATE
  * @property string $PERIOD
  * @property string $MACHINE_ID
  * @property string $MACHINE_DESC
- * @property string $MOULDING_ID
- * @property string $MOULDING_NAME
+ * @property string $MOLDING_ID
+ * @property string $MOLDING_NAME
+ * @property string $ITEM
+ * @property string $ITEM_DESC
  * @property string $COLOR_STATUS
  * @property string $START_TIME
  * @property string $END_TIME
  * @property integer $TOTAL_TIME_SECOND
  * @property string $aliasModel
  */
-abstract class InjMachineMouldingLog extends \yii\db\ActiveRecord
+abstract class InjMachineMoldingLog extends \yii\db\ActiveRecord
 {
 
 
@@ -32,7 +34,7 @@ abstract class InjMachineMouldingLog extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.INJ_MACHINE_MOULDING_LOG';
+        return 'db_owner.INJ_MACHINE_MOLDING_LOG';
     }
 
     /**
@@ -52,10 +54,10 @@ abstract class InjMachineMouldingLog extends \yii\db\ActiveRecord
             [['ID'], 'required'],
             [['POST_DATE', 'START_TIME', 'END_TIME'], 'safe'],
             [['TOTAL_TIME_SECOND'], 'integer'],
-            [['ID', 'MACHINE_ID', 'MOULDING_ID', 'COLOR_STATUS'], 'string', 'max' => 50],
+            [['ID', 'MACHINE_ID', 'MOLDING_ID', 'ITEM', 'COLOR_STATUS'], 'string', 'max' => 50],
             [['PERIOD'], 'string', 'max' => 10],
-            [['MACHINE_DESC'], 'string', 'max' => 250],
-            [['MOULDING_NAME'], 'string', 'max' => 150],
+            [['MACHINE_DESC', 'ITEM_DESC'], 'string', 'max' => 250],
+            [['MOLDING_NAME'], 'string', 'max' => 150],
             [['ID'], 'unique']
         ];
     }
@@ -71,8 +73,10 @@ abstract class InjMachineMouldingLog extends \yii\db\ActiveRecord
             'PERIOD' => 'Period',
             'MACHINE_ID' => 'Machine ID',
             'MACHINE_DESC' => 'Machine Desc',
-            'MOULDING_ID' => 'Moulding ID',
-            'MOULDING_NAME' => 'Moulding Name',
+            'MOLDING_ID' => 'Molding ID',
+            'MOLDING_NAME' => 'Molding Name',
+            'ITEM' => 'Item',
+            'ITEM_DESC' => 'Item Desc',
             'COLOR_STATUS' => 'Color Status',
             'START_TIME' => 'Start Time',
             'END_TIME' => 'End Time',

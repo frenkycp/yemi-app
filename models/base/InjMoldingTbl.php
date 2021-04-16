@@ -7,19 +7,19 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.INJ_MACHINE_TBL".
+ * This is the base-model class for table "db_owner.INJ_MOLDING_TBL".
  *
- * @property string $MACHINE_ID
- * @property string $MACHINE_DESC
  * @property string $MOLDING_ID
  * @property string $MOLDING_NAME
- * @property string $ITEM
- * @property string $ITEM_DESC
+ * @property string $MACHINE_ID
+ * @property string $MACHINE_DESC
  * @property integer $TOTAL_COUNT
+ * @property integer $TARGET_COUNT
+ * @property integer $MOLDING_STATUS
  * @property string $LAST_UPDATE
  * @property string $aliasModel
  */
-abstract class InjMachineTbl extends \yii\db\ActiveRecord
+abstract class InjMoldingTbl extends \yii\db\ActiveRecord
 {
 
 
@@ -29,7 +29,7 @@ abstract class InjMachineTbl extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.INJ_MACHINE_TBL';
+        return 'db_owner.INJ_MOLDING_TBL';
     }
 
     /**
@@ -46,13 +46,13 @@ abstract class InjMachineTbl extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['MACHINE_ID'], 'required'],
-            [['TOTAL_COUNT'], 'integer'],
+            [['MOLDING_ID'], 'required'],
+            [['TOTAL_COUNT', 'TARGET_COUNT', 'MOLDING_STATUS'], 'integer'],
             [['LAST_UPDATE'], 'safe'],
-            [['MACHINE_ID', 'MOLDING_ID', 'ITEM'], 'string', 'max' => 50],
-            [['MACHINE_DESC', 'ITEM_DESC'], 'string', 'max' => 250],
+            [['MOLDING_ID', 'MACHINE_ID'], 'string', 'max' => 50],
             [['MOLDING_NAME'], 'string', 'max' => 150],
-            [['MACHINE_ID'], 'unique']
+            [['MACHINE_DESC'], 'string', 'max' => 250],
+            [['MOLDING_ID'], 'unique']
         ];
     }
 
@@ -62,13 +62,13 @@ abstract class InjMachineTbl extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'MACHINE_ID' => 'Machine ID',
-            'MACHINE_DESC' => 'Machine Desc',
             'MOLDING_ID' => 'Molding ID',
             'MOLDING_NAME' => 'Molding Name',
-            'ITEM' => 'Item',
-            'ITEM_DESC' => 'Item Desc',
+            'MACHINE_ID' => 'Machine ID',
+            'MACHINE_DESC' => 'Machine Desc',
             'TOTAL_COUNT' => 'Total Count',
+            'TARGET_COUNT' => 'Target Count',
+            'MOLDING_STATUS' => 'Molding Status',
             'LAST_UPDATE' => 'Last Update',
         ];
     }

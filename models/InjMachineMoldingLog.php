@@ -3,13 +3,13 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\InjMachineMouldingLog as BaseInjMachineMouldingLog;
+use \app\models\base\InjMachineMoldingLog as BaseInjMachineMoldingLog;
 use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "db_owner.INJ_MACHINE_MOLDING_LOG".
  */
-class InjMachineMouldingLog extends BaseInjMachineMouldingLog
+class InjMachineMoldingLog extends BaseInjMachineMoldingLog
 {
 
     public function behaviors()
