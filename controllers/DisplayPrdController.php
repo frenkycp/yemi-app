@@ -41,34 +41,36 @@ use app\models\SapGrGiByLocLog;
 use app\models\TraceItemDtrLoc;
 use app\models\SensorTbl;
 use app\models\InjMachineTbl;
-use app\models\InjMouldingTbl;
+use app\models\InjMoldingTbl;
 
 class DisplayPrdController extends Controller
 {
-    public function actionInjMouldingChange($machine_id)
+    public function actionInjMoldingStatus($value='')
     {
-        $model = InjMachineTbl::findOne($machine_id);
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $data = [
+            'running' => [],
+            'ready' => [],
+            'maintenance' => [],
+        ];
 
-        if ($model->load(\Yii::$app->request->post())) {
-            $tmp_moulding = InjMouldingTbl::findOne($model->MOULDING_ID);
-            if (!$tmp_moulding) {
-                \Yii::$app->session->setFlash('danger', 'Moulding is not registered...!');
-                return $this->redirect(Url::previous());
+        $tmp_molding = InjMoldingTbl::find()->all();
+        foreach ($tmp_molding as $key => $value) {
+            if ($value->MOLDING_STATUS == 0) {
+                $data['ready'][] = $value;
+            } elseif ($value->MOLDING_STATUS == 1) {
+                $data['running'][] = $value;
             } else {
-                $model->MOULDING_NAME = $tmp_moulding->MOULDING_NAME;
-                $model->TOTAL_COUNT = $tmp_moulding->TOTAL_COUNT;
+                $data['maintenance'][] = $value;
             }
-            if ($model->save()) {
-                return $this->redirect(Url::previous());
-            } else {
-                return json_encode($model->errors);
-            }
-
-            //return $this->redirect(Url::previous());
         }
 
-        return $this->renderAjax('remark', [
-            'model' => $model
+        $loc_data_arr = ArrayHelper::map(InjMachineTbl::find()->all(), 'MACHINE_ID', 'MACHINE_ALIAS');
+
+        return $this->render('inj-molding-status', [
+            'data' => $data,
+            'loc_data_arr' => $loc_data_arr,
         ]);
     }
 
@@ -99,7 +101,7 @@ class DisplayPrdController extends Controller
         return $data_return;
     }
 
-    public function actionInjMouldingCount($value='')
+    public function actionInjMoldingCount($value='')
     {
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
@@ -108,24 +110,24 @@ class DisplayPrdController extends Controller
         $tmp_machine = InjMachineTbl::find()->all();
 
         foreach ($tmp_machine as $key => $value) {
-            $moulding_name = '<i class="text-red">(NO MOULDING SET)</i>';
+            $molding_name = '<i class="text-red">(NO MOLDING SET)</i>';
             $current_count = 0;
             $last_update = '-';
-            if ($value->MOULDING_ID != null) {
-                $tmp_moulding = InjMouldingTbl::findOne($value->MOULDING_ID);
-                $moulding_name = $value->MOULDING_NAME;
-                $current_count = $tmp_moulding->TOTAL_COUNT;
-                $last_update = $tmp_moulding->LAST_UPDATE;
+            if ($value->MOLDING_ID != null) {
+                $tmp_molding = InjMoldingTbl::findOne($value->MOLDING_ID);
+                $molding_name = $value->MOLDING_NAME;
+                $current_count = $tmp_molding->TOTAL_COUNT;
+                $last_update = $tmp_molding->LAST_UPDATE;
             }
             $data[$value->MACHINE_ID] = [
                 'machine' => $value->MACHINE_DESC,
-                'moulding_name' => $moulding_name,
+                'molding_name' => $molding_name,
                 'current_count' => $current_count,
                 'last_update' => $last_update,
             ];
         }
 
-        return $this->render('inj-moulding-count', [
+        return $this->render('inj-molding-count', [
             'data' => $data,
         ]);
     }
