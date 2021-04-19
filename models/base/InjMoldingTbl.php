@@ -15,6 +15,7 @@ use Yii;
  * @property string $MACHINE_DESC
  * @property integer $TOTAL_COUNT
  * @property integer $TARGET_COUNT
+ * @property double $SHOT_PCT
  * @property integer $MOLDING_STATUS
  * @property string $LAST_UPDATE
  * @property string $aliasModel
@@ -48,6 +49,7 @@ abstract class InjMoldingTbl extends \yii\db\ActiveRecord
         return [
             [['MOLDING_ID'], 'required'],
             [['TOTAL_COUNT', 'TARGET_COUNT', 'MOLDING_STATUS'], 'integer'],
+            [['SHOT_PCT'], 'number'],
             [['LAST_UPDATE'], 'safe'],
             [['MOLDING_ID', 'MACHINE_ID'], 'string', 'max' => 50],
             [['MOLDING_NAME'], 'string', 'max' => 150],
@@ -68,6 +70,7 @@ abstract class InjMoldingTbl extends \yii\db\ActiveRecord
             'MACHINE_DESC' => 'Machine Desc',
             'TOTAL_COUNT' => 'Total Count',
             'TARGET_COUNT' => 'Target Count',
+            'SHOT_PCT' => 'Shot Pct',
             'MOLDING_STATUS' => 'Molding Status',
             'LAST_UPDATE' => 'Last Update',
         ];

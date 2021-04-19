@@ -121,15 +121,19 @@ class ProductionRestController extends Controller
 
                     $tmp_total_count = 0;
                     if ($master_data_val->MOLDING_ID != null) {
-                        $moulding = InjMoldingTbl::findOne($master_data_val->MOLDING_ID);
-                        $moulding->TOTAL_COUNT++;
-                        //$moulding->CURRENT_COUNT++;
-                        $moulding->LAST_UPDATE = $last_update;
-
-                        if (!$moulding->save()) {
-                            return json_encode($moulding->errors);
+                        $molding = InjMoldingTbl::findOne($master_data_val->MOLDING_ID);
+                        $molding->TOTAL_COUNT++;
+                        $molding->SHOT_PCT = 0;
+                        if($molding->TARGET_COUNT > 0){
+                            $molding->SHOT_PCT = round(($molding->TOTAL_COUNT / $molding->TARGET_COUNT) * 100, 1);
                         }
-                        $tmp_total_count = $moulding->TOTAL_COUNT;
+                        //$molding->CURRENT_COUNT++;
+                        $molding->LAST_UPDATE = $last_update;
+
+                        if (!$molding->save()) {
+                            return json_encode($molding->errors);
+                        }
+                        $tmp_total_count = $molding->TOTAL_COUNT;
                     }
 
                     $master_data->TOTAL_COUNT = $tmp_total_count;
@@ -167,15 +171,19 @@ class ProductionRestController extends Controller
                         
                         $tmp_total_count = 0;
                         if ($master_data_val->MOLDING_ID != null) {
-                            $moulding = InjMoldingTbl::findOne($master_data_val->MOLDING_ID);
-                            $moulding->TOTAL_COUNT++;
-                            //$moulding->CURRENT_COUNT++;
-                            $moulding->LAST_UPDATE = $last_update;
-
-                            if (!$moulding->save()) {
-                                return json_encode($moulding->errors);
+                            $molding = InjMoldingTbl::findOne($master_data_val->MOLDING_ID);
+                            $molding->TOTAL_COUNT++;
+                            $molding->SHOT_PCT = 0;
+                            if($molding->TARGET_COUNT > 0){
+                                $molding->SHOT_PCT = round(($molding->TOTAL_COUNT / $molding->TARGET_COUNT) * 100, 1);
                             }
-                            $tmp_total_count = $moulding->TOTAL_COUNT;
+                            //$molding->CURRENT_COUNT++;
+                            $molding->LAST_UPDATE = $last_update;
+
+                            if (!$molding->save()) {
+                                return json_encode($molding->errors);
+                            }
+                            $tmp_total_count = $molding->TOTAL_COUNT;
                         }
 
                         $master_data->TOTAL_COUNT = $tmp_total_count;
