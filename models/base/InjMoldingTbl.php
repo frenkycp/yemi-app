@@ -18,6 +18,9 @@ use Yii;
  * @property double $SHOT_PCT
  * @property integer $MOLDING_STATUS
  * @property string $LAST_UPDATE
+ * @property string $UPDATE_BY_ID
+ * @property string $UPDATE_BY_NAME
+ * @property string $UPDATE_DATETIME
  * @property string $aliasModel
  */
 abstract class InjMoldingTbl extends \yii\db\ActiveRecord
@@ -50,10 +53,10 @@ abstract class InjMoldingTbl extends \yii\db\ActiveRecord
             [['MOLDING_ID'], 'required'],
             [['TOTAL_COUNT', 'TARGET_COUNT', 'MOLDING_STATUS'], 'integer'],
             [['SHOT_PCT'], 'number'],
-            [['LAST_UPDATE'], 'safe'],
-            [['MOLDING_ID', 'MACHINE_ID'], 'string', 'max' => 50],
+            [['LAST_UPDATE', 'UPDATE_DATETIME'], 'safe'],
+            [['MOLDING_ID', 'MACHINE_ID', 'UPDATE_BY_ID'], 'string', 'max' => 50],
             [['MOLDING_NAME'], 'string', 'max' => 150],
-            [['MACHINE_DESC'], 'string', 'max' => 250],
+            [['MACHINE_DESC', 'UPDATE_BY_NAME'], 'string', 'max' => 250],
             [['MOLDING_ID'], 'unique']
         ];
     }
@@ -73,6 +76,9 @@ abstract class InjMoldingTbl extends \yii\db\ActiveRecord
             'SHOT_PCT' => 'Shot Pct',
             'MOLDING_STATUS' => 'Molding Status',
             'LAST_UPDATE' => 'Last Update',
+            'UPDATE_BY_ID' => 'Update By ID',
+            'UPDATE_BY_NAME' => 'Update By Name',
+            'UPDATE_DATETIME' => 'Update Datetime',
         ];
     }
 

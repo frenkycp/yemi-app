@@ -10,6 +10,7 @@ use yii\web\HttpException;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
 use dmstr\bootstrap\Tabs;
+use app\models\Karyawan;
 
 class InjMoldingTblController extends \app\controllers\base\InjMoldingTblController
 {
@@ -18,7 +19,7 @@ class InjMoldingTblController extends \app\controllers\base\InjMoldingTblControl
         //apply role_action table for privilege (doesn't apply to super admin)
         return \app\models\Action::getAccess($this->id);
     }
-    
+
 	public function actionIndex()
 	{
 	    $searchModel  = new InjMoldingTblSearch;
@@ -54,10 +55,32 @@ class InjMoldingTblController extends \app\controllers\base\InjMoldingTblControl
 
 	public function actionUpdate($MOLDING_ID)
 	{
+		date_default_timezone_set('Asia/Jakarta');
 		$model = $this->findModel($MOLDING_ID);
 
-		if ($model->load($_POST) && $model->save()) {
-			return $this->redirect(Url::previous());
+		if ($model->load($_POST)) {
+			$tmp_id = \Yii::$app->user->identity->username;
+			$tmp_name = \Yii::$app->user->identity->name;
+			$model->UPDATE_BY_ID = $tmp_id;
+			$model->UPDATE_BY_NAME = $tmp_name;
+
+			$tmp_user = Karyawan::find()->where([
+				'OR',
+				['NIK' => $tmp_id],
+				['NIK_SUN_FISH' => $tmp_id]
+			])->one();
+
+			if ($tmp_user) {
+				$model->UPDATE_BY_ID = $tmp_user->NIK_SUN_FISH;
+				$model->UPDATE_BY_NAME = $tmp_user->NAMA_KARYAWAN;
+			}
+			$model->UPDATE_DATETIME = date('Y-m-d H:i:s');
+			if ($model->save()) {
+				return $this->redirect(Url::previous());
+			} else {
+				return json_encode($model->errors);
+			}
+			
 		} else {
 			return $this->render('update', [
 				'model' => $model,

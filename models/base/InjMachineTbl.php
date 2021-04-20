@@ -11,12 +11,16 @@ use Yii;
  *
  * @property string $MACHINE_ID
  * @property string $MACHINE_DESC
+ * @property string $MACHINE_ALIAS
  * @property string $MOLDING_ID
  * @property string $MOLDING_NAME
  * @property string $ITEM
  * @property string $ITEM_DESC
  * @property integer $TOTAL_COUNT
  * @property string $LAST_UPDATE
+ * @property string $UPDATE_BY_ID
+ * @property string $UPDATE_BY_NAME
+ * @property string $UPDATE_DATETIME
  * @property string $aliasModel
  */
 abstract class InjMachineTbl extends \yii\db\ActiveRecord
@@ -48,9 +52,9 @@ abstract class InjMachineTbl extends \yii\db\ActiveRecord
         return [
             [['MACHINE_ID'], 'required'],
             [['TOTAL_COUNT'], 'integer'],
-            [['LAST_UPDATE'], 'safe'],
-            [['MACHINE_ID', 'MOLDING_ID', 'ITEM'], 'string', 'max' => 50],
-            [['MACHINE_DESC', 'ITEM_DESC'], 'string', 'max' => 250],
+            [['LAST_UPDATE', 'UPDATE_DATETIME'], 'safe'],
+            [['MACHINE_ID', 'MACHINE_ALIAS', 'MOLDING_ID', 'ITEM', 'UPDATE_BY_ID'], 'string', 'max' => 50],
+            [['MACHINE_DESC', 'ITEM_DESC', 'UPDATE_BY_NAME'], 'string', 'max' => 250],
             [['MOLDING_NAME'], 'string', 'max' => 150],
             [['MACHINE_ID'], 'unique']
         ];
@@ -64,12 +68,16 @@ abstract class InjMachineTbl extends \yii\db\ActiveRecord
         return [
             'MACHINE_ID' => 'Machine ID',
             'MACHINE_DESC' => 'Machine Desc',
+            'MACHINE_ALIAS' => 'Machine Alias',
             'MOLDING_ID' => 'Molding ID',
             'MOLDING_NAME' => 'Molding Name',
             'ITEM' => 'Item',
             'ITEM_DESC' => 'Item Desc',
             'TOTAL_COUNT' => 'Total Count',
             'LAST_UPDATE' => 'Last Update',
+            'UPDATE_BY_ID' => 'Update By ID',
+            'UPDATE_BY_NAME' => 'Update By Name',
+            'UPDATE_DATETIME' => 'Update Datetime',
         ];
     }
 
