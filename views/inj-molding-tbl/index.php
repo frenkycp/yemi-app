@@ -145,7 +145,11 @@ $columns = [
                 '{export}',
                 '{toggleData}',
             ],
-            
+            'rowOptions' => function($model){
+                if ($model->MOLDING_STATUS == 2) {
+                    return ['class' => 'danger'];
+                }
+            },
             // set export properties
             'export' => [
                 'fontAwesome' => true

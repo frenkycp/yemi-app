@@ -57,8 +57,8 @@ class InjMachineTblController extends \app\controllers\base\InjMachineTblControl
 				$model->UPDATE_BY_ID = $tmp_user->NIK_SUN_FISH;
 				$model->UPDATE_BY_NAME = $tmp_user->NAMA_KARYAWAN;
 			}
-
 			$model->UPDATE_DATETIME = date('Y-m-d H:i:s');
+			
 			if ($old_molding_id != '' || $old_molding_id != null) {
                 $tmp_old_molding = InjMoldingTbl::findOne($old_molding_id);
                 $tmp_old_molding->MACHINE_ID = $tmp_old_molding->MACHINE_DESC = null;
