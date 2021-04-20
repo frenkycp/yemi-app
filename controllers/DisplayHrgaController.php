@@ -22,6 +22,7 @@ use app\models\ScanTemperature;
 use app\models\OfficeEmp;
 use app\models\DriverTbl;
 use app\models\KaryawanSuhuView;
+use app\models\HikTemperatureView;
 
 class DisplayHrgaController extends Controller
 {
@@ -594,6 +595,7 @@ class DisplayHrgaController extends Controller
         //$yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();
         $temperature_from_yesterday = ScanTemperature::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
         $temperature_from_yesterday2 = KaryawanSuhuView::find()->where(['>=', 'swipetime', $yesterday])->orderBy('swipetime')->all();
+        $temperature_from_yesterday3 = HikTemperatureView::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
 
         $total_check = $total_no_check = 0;
         $no_check_data = $temp_over_data = [];
@@ -644,7 +646,20 @@ class DisplayHrgaController extends Controller
                     }
                 }
             }
-            
+
+            if ($last_update == null) {
+                foreach ($temperature_from_yesterday3 as $temp_value) {
+                    if ($temp_value->NIK == $attendance_val['nik']
+                        && $body_temp == 0
+                        && $temp_value->Temp > 0
+                        && $temp_value->LAST_UPDATE > $start_time
+                        && $temp_value->LAST_UPDATE < $end_time
+                    ) {
+                        $body_temp = $temp_value->Temp;
+                        $last_update = $temp_value->LAST_UPDATE;
+                    }
+                }
+            }
 
             if ($last_update == null) {
                 if ($attend_judgement == 'P' && strpos($attendance_val['shiftdaily_code'], 'WFH') === false) {

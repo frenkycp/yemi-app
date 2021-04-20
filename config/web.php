@@ -148,6 +148,7 @@ $config = [
         'db_biostar_tna' => require(__DIR__ . '/db_biostar_tna.php'),
         'db_smt' => require(__DIR__ . '/db_smt.php'),
         'db_suhu' => require(__DIR__ . '/db_suhu.php'),
+        'db_hik' => require(__DIR__ . '/db_hik.php'),
     ],
     'params' => $params,
     'modules' => [

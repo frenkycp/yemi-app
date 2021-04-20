@@ -471,6 +471,11 @@ return [
         //1 => 'REQUST WARRANTY LABEL',
         2 => 'PO ISSUED'
     ],
+    'inj_molding_status_arr' => [
+        0 => 'READY',
+        1 => 'TERPASANG',
+        2 => 'PERIODIK'
+    ],
 ];
 
 function getYearArray()
