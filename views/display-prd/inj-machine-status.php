@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use app\models\TraceItemScrap;
 
 $this->title = [
-    'page_title' => 'Molding Maintenance Monitoring <span class="japanesse light-green"></span>',
-    'tab_title' => 'Molding Maintenance Monitoring',
-    'breadcrumbs_title' => 'Molding Maintenance Monitoring'
+    'page_title' => 'Injection Machine Monitoring <span class="japanesse light-green"></span>',
+    'tab_title' => 'Injection Machine Monitoring',
+    'breadcrumbs_title' => 'Injection Machine Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -103,9 +103,10 @@ $css_string = "
     }
     .panel-title {
         font-weight: bold;
+        font-size: 30px;
     }
     .panel {
-        margin-bottom: 5px;
+        //margin-bottom: 5px;
         margin-top: 5px;
     }
     .progress {
@@ -161,80 +162,48 @@ echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
 <br/>
-<?php foreach ($data as $category => $data_val): 
-    if ($category == 'running') {
-        $title = 'MOLDING TERPASANG';
-        $title_class = 'box-primary';
-        $bg_class = 'bg-light-blue-active';
-    } elseif ($category == 'ready') {
-        $title = 'MOLDING READY';
-        $title_class = 'box-success';
-        $bg_class = 'bg-green-active';
-    } else {
-        $title = 'MOLDING PERIODIK';
-        $title_class = 'box-warning';
-        $bg_class = 'bg-yellow-active';
-    }
-    ?>
-    <div class="box <?= $title_class; ?> box-solid" style="display: none;">
-        <div class="box-header text-center">
-            <h3 class="box-title"><?= $title; ?></h3>
-        </div>
-    </div>
-    <div class="<?= $bg_class; ?> text-center" style="width: 100%; font-size: 30px; padding: 5px;">
-        <?= $title; ?>
-    </div>
-    <div class="row">
-        <?php foreach ($data_val as $value): 
-            if ($value->MOLDING_STATUS == 0) {
-                $loc = 'STORAGE';
-            } elseif ($value->MOLDING_STATUS == 1) {
-                $loc = $loc_data_arr[$value->MACHINE_ID];
-            } else {
-                $loc = 'MAINTENANCE';
+<div class="row">
+    <?php foreach ($data_machine as $machine_val):
+        $total_shot = $shot_pct = 0;
+        foreach ($data_molding as $molding_val) {
+            if ($machine_val->MOLDING_ID == $molding_val->MOLDING_ID) {
+                $total_shot = $molding_val->TOTAL_COUNT;
+                $shot_pct = $molding_val->SHOT_PCT;
             }
+        }
 
-            $progress = 0;
-            if ($value->TARGET_COUNT > 0) {
-                $progress = round(($value->TOTAL_COUNT / $value->TARGET_COUNT) * 100, 2);
-            }
+        $shot_txt = '<i class="text-red">NO MOLDING SET</i>';
+        if ($machine_val->MOLDING_ID != null) {
+            $shot_txt = 'Shot ' . $machine_val->MOLDING_NAME . ' : <b>' . $total_shot . '</b>';
+        }
 
-            
-            if ($progress < 70) {
-                $progress_bar_class = ' progress-bar-green';
-            } elseif ($progress < 100) {
-                $progress_bar_class = ' progress-bar-yellow';
-            } else {
-                $progress_bar_class = ' progress-bar-red';
-            }
-            ?>
-            <div class="col-sm-2">
-                <div class=" panel panel-default">
-                    <div class="panel-heading text-center">
-                        <h3 class="panel-title"><?= $value->MOLDING_NAME; ?></h3>
+        $item_txt = '<i class="text-red">NO PART SET</i>';
+        if ($machine_val->ITEM != null) {
+            $item_txt = $machine_val->ITEM . ' - ' . $machine_val->ITEM_DESC;
+        }
+
+        if ($shot_pct < 70) {
+            $progress_bar_class = ' progress-bar-green';
+        } elseif ($shot_pct < 100) {
+            $progress_bar_class = ' progress-bar-yellow';
+        } else {
+            $progress_bar_class = ' progress-bar-red';
+        }
+        ?>
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h3 class="panel-title">MACHINE <?= $machine_val->MACHINE_ALIAS; ?></h3>
+                </div>
+                <div class="panel-body no-padding">
+                    <div class="progress" style="background-color: #cacaca;">
+                        <div class="progress-bar active progress-bar-striped<?= $progress_bar_class; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $shot_pct > 100 ? 100 : $shot_pct; ?>%;"></div>
                     </div>
-                    <div class="panel-body no-padding">
-                        <div class="progress" style="background-color: #cacaca;">
-                            <div class="progress-bar active progress-bar-striped<?= $progress_bar_class; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $progress > 100 ? 100 : $progress; ?>%; font-size: 11px;"></div>
-                        </div>
-                        <table class="table summary-tbl" style="">
-                            <tbody>
-                                <tr>
-                                    <td class="text-center" width="80px">SHOTS</td>
-                                    <td class="text-center" width="10px">:</td>
-                                    <td class="text-center"><?= number_format($value->TOTAL_COUNT); ?></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center" width="80px">LOC</td>
-                                    <td class="text-center" width="10px">:</td>
-                                    <td class="text-center"><?= $loc; ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <div class="text-center" style="letter-spacing: 2px; font-size: 20px;"><?= $shot_txt; ?></div>
+                    <hr style="margin: 5px; height: 2px;">
+                    <div class="text-center" style="margin-bottom: 5px; letter-spacing: 2px; font-size: 20px;"><?= $item_txt; ?></div>
                 </div>
             </div>
-        <?php endforeach ?>
-    </div>
-    <br/>
-<?php endforeach ?>
+        </div>
+    <?php endforeach ?>
+</div>

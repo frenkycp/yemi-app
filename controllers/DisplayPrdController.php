@@ -45,6 +45,20 @@ use app\models\InjMoldingTbl;
 
 class DisplayPrdController extends Controller
 {
+    public function actionInjMachineStatus($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data_machine = InjMachineTbl::find()->all();
+        $data_molding = InjMoldingTbl::find()->all();
+
+        return $this->render('inj-machine-status', [
+            'data_machine' => $data_machine,
+            'data_molding' => $data_molding,
+        ]);
+    }
+
     public function actionInjMoldingStatus($value='')
     {
         $this->layout = 'clean';
@@ -55,7 +69,7 @@ class DisplayPrdController extends Controller
             'maintenance' => [],
         ];
 
-        $tmp_molding = InjMoldingTbl::find()->all();
+        $tmp_molding = InjMoldingTbl::find()->orderBy('SHOT_PCT DESC, MOLDING_NAME')->all();
         foreach ($tmp_molding as $key => $value) {
             if ($value->MOLDING_STATUS == 0) {
                 $data['ready'][] = $value;
@@ -84,10 +98,14 @@ class DisplayPrdController extends Controller
         foreach ($tmp_machine as $key => $value) {
             $moulding_name = '<i class="text-red">(NO MOULDING SET)</i>';
             $last_update = '-';
+            $item = '<i class="text-red">(NO ITEM SET)</i>';
 
-            if ($value->MOULDING_ID != null) {
-                $moulding_name = $value->MOULDING_NAME;
+            if ($value->MOLDING_ID != null) {
+                $moulding_name = $value->MOLDING_NAME;
                 $last_update = date('d M Y H:i', strtotime($value->LAST_UPDATE));
+            }
+            if ($value->ITEM != null) {
+                $item = $value->ITEM_DESC;
             }
 
             $data_return[$value->MACHINE_ID] = [
@@ -95,6 +113,8 @@ class DisplayPrdController extends Controller
                 'MOULDING_NAME' => $moulding_name,
                 'LAST_UPDATE' => $last_update,
                 'TOTAL_COUNT' => $value->TOTAL_COUNT,
+                'ITEM' => $value->ITEM,
+                'ITEM_DESC' => $item,
             ];
         }
 
@@ -113,17 +133,23 @@ class DisplayPrdController extends Controller
             $molding_name = '<i class="text-red">(NO MOLDING SET)</i>';
             $current_count = 0;
             $last_update = '-';
+            $item = '<i class="text-red">(NO ITEM SET)</i>';
             if ($value->MOLDING_ID != null) {
                 $tmp_molding = InjMoldingTbl::findOne($value->MOLDING_ID);
                 $molding_name = $value->MOLDING_NAME;
                 $current_count = $tmp_molding->TOTAL_COUNT;
                 $last_update = $tmp_molding->LAST_UPDATE;
+                
+            }
+            if ($value->ITEM != null) {
+                $item = $value->ITEM_DESC;
             }
             $data[$value->MACHINE_ID] = [
                 'machine' => $value->MACHINE_DESC,
                 'molding_name' => $molding_name,
                 'current_count' => $current_count,
                 'last_update' => $last_update,
+                'item' => $item,
             ];
         }
 

@@ -5,6 +5,8 @@ namespace app\models;
 use Yii;
 use \app\models\base\InjMachineTbl as BaseInjMachineTbl;
 use yii\helpers\ArrayHelper;
+use app\models\InjMoldingTbl;
+use app\models\WipHdr;
 
 /**
  * This is the model class for table "db_owner.INJ_MACHINE_TBL".
@@ -30,5 +32,35 @@ class InjMachineTbl extends BaseInjMachineTbl
                 # custom validation rules
             ]
         );
+    }
+
+    public function beforeSave($insert){
+        date_default_timezone_set('Asia/Jakarta');
+        if(parent::beforeSave($insert)){
+            if ($this->MOLDING_ID != '' && $this->MOLDING_ID != null) {
+                $tmp_new_molding = InjMoldingTbl::findOne($this->MOLDING_ID);
+                $tmp_new_molding->MACHINE_ID = $this->MACHINE_ID;
+                $tmp_new_molding->MACHINE_DESC = $this->MACHINE_DESC;
+                $tmp_new_molding->MOLDING_STATUS = 1;
+                if (!$tmp_new_molding->save()) {
+                    return json_encode($tmp_new_molding->errors);
+                }
+
+                $this->TOTAL_COUNT = $tmp_new_molding->TOTAL_COUNT;
+                $this->MOLDING_NAME = $tmp_new_molding->MOLDING_NAME;
+            } else {
+                $this->MOLDING_ID = $this->MOLDING_NAME = null;
+                $this->TOTAL_COUNT = 0;
+            }
+            if ($this->ITEM != '' && $this->ITEM != null) {
+                $tmp_item = WipHdr::find()->where([
+                    'child' => $this->ITEM
+                ])->one();
+                $this->ITEM_DESC = $tmp_item->child_desc;
+            } else {
+                $this->ITEM = $this->ITEM_DESC = null;
+            }
+            return true;
+        }
     }
 }

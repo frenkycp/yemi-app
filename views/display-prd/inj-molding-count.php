@@ -121,6 +121,7 @@ $script = "
                     $('#moulding-' + index).html(data_val.MOULDING_NAME);
                     $('#count-' + index).html(data_val.TOTAL_COUNT);
                     $('#update-' + index).html(data_val.LAST_UPDATE);
+                    $('#item-' + index).html(data_val.ITEM_DESC);
                 });
             },
             complete: function(){
@@ -144,10 +145,10 @@ echo '</pre>';*/
 <table class="table summary-tbl">
     <thead>
         <tr>
-            <th class="text-center">Action</th>
             <th class="text-center">Machine ID</th>
             <th class="">Machine Name</th>
             <th class="">Current Moulding</th>
+            <th class="">Current Item</th>
             <th class="text-center">Count</th>
             <th class="text-center">Last Count</th>
         </tr>
@@ -155,14 +156,13 @@ echo '</pre>';*/
     <tbody>
         <?php foreach ($data as $key => $value): ?>
             <tr>
-                <td class="text-center">
-                    <i class="fa fa-pencil disable" title="Change Moulding"></i> 
-                    <i class="fa fa-refresh disable" title="Reset Count"></i>
-                </td>
                 <td class="text-center"><?= $key; ?></td>
                 <td class=""><?= $value['machine']; ?></td>
                 <td class="">
                     <span id="moulding-<?= $key; ?>"><?= $value['moulding_name']; ?></span>
+                </td>
+                <td class="">
+                    <span id="item-<?= $key; ?>"><?= $value['item']; ?></span>
                 </td>
                 <td class="text-center">
                     <span id="count-<?= $key; ?>"><?= number_format($value['current_count']); ?></span>
