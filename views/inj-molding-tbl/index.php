@@ -43,7 +43,7 @@ $columns = [
                     'class' => 'btn btn-warning btn-sm',
                     'data-confirm' => 'Are you sure to maintain this Molding?',
                 ];
-                if ($model->MOLDING_STATUS == 0) {
+                if ($model->MOLDING_STATUS != 1) {
                     return Html::a('<span class="glyphicon glyphicon-wrench"></span>', ['maintain', 'MOLDING_ID' => $model->MOLDING_ID], $options);
                 } else {
                     return '<span class="glyphicon glyphicon-wrench disabled btn btn-warning btn-sm"></span>';
