@@ -31,6 +31,12 @@ $gridColumns = [
         'headerOptions' => ['class' => 'kartik-sheet-style']
     ],
     [
+        'attribute' => 'BUDGET_ID',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        //'width'=>'100px',
+    ],
+    [
         'attribute' => 'PUR_LOC_DESC',
         'label' => 'VENDOR',
         //'hAlign' => 'center',
@@ -91,7 +97,18 @@ $gridColumns = [
         'vAlign' => 'middle',
         'pageSummary' => true,
         //'width'=>'100px',
-    ],[
+    ],
+    [
+        'attribute' => 'SIGN',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            'Y' => 'Y',
+            'N' => 'N',
+        ],
+        'width'=>'90px',
+    ],
+    [
         'attribute' => 'NAMA',
         'label' => 'BY',
         'hAlign' => 'center',
@@ -126,7 +143,7 @@ $gridColumns = [
     <div class="">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
-            //'filterModel' => $searchModel,
+            'filterModel' => $searchModel,
             'showPageSummary' => true,
             'columns' => $gridColumns,
             'hover' => true,
