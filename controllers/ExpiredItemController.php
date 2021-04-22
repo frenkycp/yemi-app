@@ -111,7 +111,7 @@ class ExpiredItemController extends \app\controllers\base\ExpiredItemController
         </ul>
         <br/>
         Please make sure that incoming item has expired date more than requested above.<br/>
-        Click ' . Html::a('HERE', 'http://localhost/yemi-app/web/expired-item-issued-po?REQUEST_ID=' . $request_id) . ' for more detail.
+        Click ' . Html::a('HERE', 'http://10.110.52.5:86/expired-item-issued-po?REQUEST_ID=' . $request_id) . ' for more detail.
         <br/>
         Thanks & Best Regards,<br/>
         MITA
@@ -121,7 +121,7 @@ class ExpiredItemController extends \app\controllers\base\ExpiredItemController
             'content' => $msg
         ])
         ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
-        ->setTo(['frenky.purnama@music.yamaha.com'/*, 'angga.adhitya@music.yamaha.com', 'fredy.agus@music.yamaha.com'*/])
+        ->setTo(['frenky.purnama@music.yamaha.com', 'angga.adhitya@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'hanik.lutfiah@music.yamaha.com', 'abdul.ghofur@music.yamaha.com'])
         //->setCc($set_to_cc_arr)
         ->setSubject('PO Issued for Expired Material')
         ->send();
