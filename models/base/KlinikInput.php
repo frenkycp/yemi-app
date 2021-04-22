@@ -35,6 +35,7 @@ use Yii;
  * @property double $sistolik
  * @property double $diastolik
  * @property double $temperature
+ * @property string $klinik_input_id
  * @property string $aliasModel
  */
 abstract class KlinikInput extends \yii\db\ActiveRecord
@@ -71,7 +72,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             [['nik', 'status_karyawan', 'nik_sun_fish'], 'string', 'max' => 20],
             [['nama', 'dept', 'anamnesa', 'root_cause', 'diagnosa', 'obat1', 'obat2', 'obat3', 'obat4', 'obat5', 'handleby'], 'string', 'max' => 255],
             [['CC_ID'], 'string', 'max' => 10],
-            [['section'], 'string', 'max' => 50],
+            [['section', 'klinik_input_id'], 'string', 'max' => 50],
             [['cost_center_name'], 'string', 'max' => 100],
             [['last_status'], 'string', 'max' => 30],
             [['pk'], 'unique']
@@ -110,6 +111,7 @@ abstract class KlinikInput extends \yii\db\ActiveRecord
             'sistolik' => 'Sistolik',
             'diastolik' => 'Diastolik',
             'temperature' => 'Temperature',
+            'klinik_input_id' => 'Klinik Input ID',
         ];
     }
 

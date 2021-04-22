@@ -8,12 +8,21 @@ use yii\helpers\StringHelper;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use kartik\widgets\TouchSpin;
+use app\models\HrgaDrugMaster;
+use app\models\HrgaDrugInOut;
+use app\models\KlinikObatLog;
 
 /**
 * @var yii\web\View $this
 * @var app\models\KlinikInput $model
 * @var yii\widgets\ActiveForm $form
 */
+
+$css_string = "
+    td .form-group {margin-bottom: 0px;}
+    .help-block {display: none;}
+";
+$this->registerCss($css_string);
 
 ?>
 
@@ -107,26 +116,86 @@ use kartik\widgets\TouchSpin;
                     <?= $form->field($model, 'diagnosa')->textInput(['maxlength' => true]); ?>
                 </div>
             </div>
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Obat</h3>
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-md-2">
-                            <?= $form->field($model, 'obat1')->textInput(['maxlength' => true]); ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $form->field($model, 'obat2')->textInput(['maxlength' => true]); ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $form->field($model, 'obat3')->textInput(['maxlength' => true]); ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $form->field($model, 'obat4')->textInput(['maxlength' => true]); ?>
-                        </div>
-                        <div class="col-md-2">
-                            <?= $form->field($model, 'obat5')->textInput(['maxlength' => true]); ?>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="panel panel-primary" style="margin-bottom: 0px;">
+                        <div class="panel-body no-padding">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">No.</th>
+                                        <th>Nama Obat</th>
+                                        <th class="text-center">Qty</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php
+                                    if ($model->isNewRecord) {
+                                        for ($i = 1; $i <= 5; $i++) { ?>
+                                            <tr>
+                                                <td class="text-center" width="60px"><?= $i; ?></td>
+                                                <td>
+                                                    <?= $form->field($model, 'nama_obat[]')->widget(Select2::classname(), [
+                                                        'data' => ArrayHelper::map(HrgaDrugMaster::find()->select([
+                                                            'drug_master_partnumb', 'drug_master_partname'
+                                                        ])->orderBy('drug_master_partname')
+                                                        ->all(), 'drug_master_partnumb', 'drug_master_partname'),
+                                                        'options' => [
+                                                            'placeholder' => 'Pilih obat...',
+                                                            'id' => 'nama-obat-' . $i,
+                                                        ],
+                                                        'pluginOptions' => [
+                                                            'allowClear' => true
+                                                        ],
+                                                    ])->label(false); ?>
+                                                </td>
+                                                <td class="text-center" width="110px">
+                                                    <?= $form->field($model, 'jumlah_obat[]')->textInput(['type' => 'number'])->label(false); ?>
+                                                </td>
+                                            </tr>
+                                        <?php }
+                                    } else {
+                                        if ($model->klinik_input_id != null) {
+                                            $tmp_in_out = KlinikObatLog::find()->where(['klinik_input_pk' => $model->klinik_input_id])->all();
+                                            if (count($tmp_in_out) > 0) {
+                                                $i = 0;
+                                                foreach ($tmp_in_out as $inout_val) { 
+                                                    $i++;
+                                                    ?>
+                                                    <tr>
+                                                        <td class="text-center" width="60px"><?= $i; ?></td>
+                                                        <td><?= $inout_val->part_desc; ?></td>
+                                                        <td class="text-center"><?= $inout_val->qty; ?></td>
+                                                    </tr>
+                                                <?php }
+                                            }
+                                        } else { ?>
+                                            <tr>
+                                                <td class="text-center">1</td>
+                                                <td colspan="2"><?= $model->obat1; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">2</td>
+                                                <td colspan="2"><?= $model->obat2; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">3</td>
+                                                <td colspan="2"><?= $model->obat3; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">4</td>
+                                                <td colspan="2"><?= $model->obat4; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="text-center">5</td>
+                                                <td colspan="2"><?= $model->obat5; ?></td>
+                                            </tr>
+                                        <?php }
+                                    }
+                                    ?>
+                                </tbody>
+                            </table>
+                            
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,9 @@ use app\models\KlinikInput;
 use app\models\KlinikHandle;
 use app\models\Karyawan;
 use app\models\CostCenter;
+use app\models\KlinikObatLog;
+use app\models\HrgaDrugMaster;
+use app\models\HrgaDrugInOut;
 use yii\helpers\Json;
 
 /**
@@ -22,10 +25,6 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
         return \app\models\Action::getAccess($this->id);
     }
 
-	/**
-	* Lists all KlinikInput models.
-	* @return mixed
-	*/
 	public function actionIndex()
 	{
 	    $searchModel  = new ClinicDataSearch;
@@ -77,25 +76,122 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 		]);
 	}
 
-	/**
-	* Creates a new KlinikInput model.
-	* If creation is successful, the browser will be redirected to the 'view' page.
-	* @return mixed
-	*/
+	public function actionDelete($pk)
+	{
+		try {
+			$for_delete = $this->findModel($pk);
+
+			$input_log = KlinikObatLog::find()->where([
+				'klinik_input_pk' => $for_delete->klinik_input_id
+			])->all();
+			if (count($input_log) > 0) {
+				HrgaDrugInOut::deleteAll(['klinik_input_id' => $for_delete->klinik_input_id]);
+				foreach ($input_log as $value) {
+					$master_obat = HrgaDrugMaster::find()->where(['drug_master_partnumb' => $value->part_no])->one();
+					$master_obat->stock_qty += $value->qty;
+					$master_obat->save();
+				}
+				KlinikObatLog::deleteAll(['klinik_input_pk' => $for_delete->klinik_input_id]);
+			}
+
+			$for_delete->delete();
+		} catch (\Exception $e) {
+			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
+			\Yii::$app->getSession()->addFlash('error', $msg);
+			return $this->redirect(Url::previous());
+		}
+
+		// TODO: improve detection
+		$isPivot = strstr('$pk',',');
+		if ($isPivot == true) {
+			return $this->redirect(Url::previous());
+		} elseif (isset(\Yii::$app->session['__crudReturnUrl']) && \Yii::$app->session['__crudReturnUrl'] != '/') {
+			Url::remember(null);
+			$url = \Yii::$app->session['__crudReturnUrl'];
+			\Yii::$app->session['__crudReturnUrl'] = null;
+
+			return $this->redirect($url);
+		} else {
+			return $this->redirect(['index']);
+		}
+	}
+
 	public function actionCreate()
 	{
 		date_default_timezone_set('Asia/Jakarta');
 		$model = new KlinikInput;
+		$total_obat = 0;
+		$todays_date = date('Y-m-d');
+		$todays_period = date('Ym');
+		$todays_datetime = date('Y-m-d H:i:s');
 
 		try {
 			if ($model->load($_POST)) {
+				$tmp_id = \Yii::$app->user->identity->username;
+				$tmp_name = \Yii::$app->user->identity->name;
+
+				$tmp_karyawan = Karyawan::find()->where([
+					'OR',
+					['NIK' => $tmp_id],
+					['NIK_SUN_FISH' => $tmp_id]
+				])->one();
+				if ($tmp_karyawan) {
+					$tmp_id = $tmp_karyawan->NIK_SUN_FISH;
+					$tmp_name = $tmp_karyawan->NAMA_KARYAWAN;
+				}
+				
 				$model->pk = date('Y-m-d H:i:s');
 				$model->masuk = date('H:i:s');
-				/*if ($model->opsi == 1) {
-					$model->keluar = date('H:i:s', strtotime('+10 minutes'));
-				} else {
-					$model->keluar = date('H:i:s', strtotime('+1 hour'));
-				}*/
+				$klinik_input_id = strtotime(date('Y-m-d H:i:s')) . '';
+				$model->klinik_input_id = $klinik_input_id;
+				$qty_arr = $_POST['KlinikInput']['jumlah_obat'];
+				
+				foreach ($_POST['KlinikInput']['nama_obat'] as $key => $value) {
+					if ($value != '' && $value != null) {
+						$tmp_obat = HrgaDrugMaster::find()->where([
+							'drug_master_partnumb' => $value
+						])->one();
+
+						$new_log = new KlinikObatLog;
+						$new_log->klinik_input_pk = $klinik_input_id;
+						$new_log->period = $todays_period;
+						$new_log->post_date = $todays_date;
+						$new_log->input_datetime = $todays_datetime;
+						$new_log->user_id = $tmp_id;
+						$new_log->user_name = $tmp_name;
+						$new_log->part_no = $value;
+						$new_log->part_desc = $tmp_obat->drug_master_partname;
+						$new_log->qty = $qty_arr[$key];
+
+						if (!$new_log->save()) {
+							return json_encode($new_log->errors);
+						}
+
+						$in_out = new HrgaDrugInOut;
+						$in_out->drug_in_out_date = $todays_date;
+						$in_out->drug_in_out_partnumb = $value;
+						$in_out->drug_in_out_partname = $tmp_obat->drug_master_partname;
+						$in_out->drug_in_out_qty = $qty_arr[$key];
+						$in_out->drug_in_out_unit = $tmp_obat->drug_master_unit_using;
+						$in_out->drug_in_out_userid_update = $tmp_id;
+						$in_out->drug_in_out_username_update = $tmp_name;
+						$in_out->drug_in_out_datetime_update = $todays_datetime;
+						$in_out->drug_in_out_note = 'OUT CLINIC';
+						$in_out->drug_out_clinic = 'Y';
+						$in_out->drug_in_out_status = 'OUT';
+						$in_out->klinik_input_id = $klinik_input_id;
+
+						if (!$in_out->save()) {
+							return json_encode($in_out->errors);
+						}
+
+						$tmp_obat->stock_qty -= $qty_arr[$key];
+						if (!$tmp_obat->save()) {
+							return json_encode($tmp_obat->errors);
+						}
+					}
+				}
+
 				if (in_array($model->CC_ID, ['250', '251'])) {
 					$model->dept = 'PDC';
 				}
@@ -126,7 +222,10 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 			$msg = (isset($e->errorInfo[2]))?$e->errorInfo[2]:$e->getMessage();
 			$model->addError('_exception', $msg);
 		}
-		return $this->render('create', ['model' => $model]);
+		return $this->render('create', [
+			'model' => $model,
+			'total_obat' => $total_obat,
+		]);
 	}
 
 	public function actionCheckOut()
