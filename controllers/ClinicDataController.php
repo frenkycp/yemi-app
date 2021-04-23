@@ -148,6 +148,10 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 				
 				foreach ($_POST['KlinikInput']['nama_obat'] as $key => $value) {
 					if ($value != '' && $value != null) {
+						$qty_obat = 0;
+						if ($qty_arr[$key] != '' && $qty_arr[$key] != null) {
+							$qty_obat = $qty_arr[$key];
+						}
 						$tmp_obat = HrgaDrugMaster::find()->where([
 							'drug_master_partnumb' => $value
 						])->one();
@@ -161,7 +165,7 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 						$new_log->user_name = $tmp_name;
 						$new_log->part_no = $value;
 						$new_log->part_desc = $tmp_obat->drug_master_partname;
-						$new_log->qty = $qty_arr[$key];
+						$new_log->qty = $qty_obat;
 
 						if (!$new_log->save()) {
 							return json_encode($new_log->errors);
@@ -171,7 +175,7 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 						$in_out->drug_in_out_date = $todays_date;
 						$in_out->drug_in_out_partnumb = $value;
 						$in_out->drug_in_out_partname = $tmp_obat->drug_master_partname;
-						$in_out->drug_in_out_qty = $qty_arr[$key];
+						$in_out->drug_in_out_qty = $qty_obat;
 						$in_out->drug_in_out_unit = $tmp_obat->drug_master_unit_using;
 						$in_out->drug_in_out_userid_update = $tmp_id;
 						$in_out->drug_in_out_username_update = $tmp_name;
@@ -185,7 +189,7 @@ class ClinicDataController extends \app\controllers\base\ClinicDataController
 							return json_encode($in_out->errors);
 						}
 
-						$tmp_obat->stock_qty -= $qty_arr[$key];
+						$tmp_obat->stock_qty -= $qty_obat;
 						if (!$tmp_obat->save()) {
 							return json_encode($tmp_obat->errors);
 						}
