@@ -7,7 +7,9 @@ use yii\web\Response;
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use yii\httpclient\Client;
 use dmstr\bootstrap\Tabs;
+
 use app\models\SernoOutput;
 use app\models\ShipReservationDtr;
 use app\models\WorkDayTbl;
@@ -37,6 +39,27 @@ class DisplayLogController extends Controller
 
         if ($model->load($_GET)) {
 
+        }
+
+        $client = new Client();
+        $tmp_response = [];
+        $response = $client->createRequest()
+            ->setMethod('POST')
+            ->setUrl('http://10.110.52.5:99/api/rest_server.php?bml&period=' . $model->period)
+            //->setData(['year' => $period_week_val['year'], 'week' => $tmp_week_no])
+            ->send();
+        if ($response->isOk) {
+            $tmp_response = $response->data['data1'];
+            // /print_r($tmp_response);
+            //$total_container = $response->data['data2']['total_cnt'];
+            //$newUserId = $response->data['id'];
+        }
+        //$new_plan = count($tmp_response);
+        $new_plan = 0;
+        if (count($tmp_response) > 0) {
+            foreach ($tmp_response as $key => $value) {
+                $new_plan++;
+            }
         }
 
         $tmp_data = ShippingOrderNew01::find()
@@ -82,6 +105,7 @@ class DisplayLogController extends Controller
             'data' => $data,
             'data_pct' => $data_pct,
             'model' => $model,
+            'new_plan' => $new_plan,
         ]);
     }
 
@@ -106,6 +130,7 @@ class DisplayLogController extends Controller
         ->select([
             'ETD',
             'TOTAL_CONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_NO_NEED_ANYMORE' => 'SUM(CASE WHEN STATUS = \'NO NEED ANYMORE\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_UNCONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_ON_BOARD' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ON_BOARD_STATUS = 1 THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
         ])
@@ -128,13 +153,18 @@ class DisplayLogController extends Controller
         }
 
         $tmp_confirm = $tmp_unconfirm = $tmp_rejected = $tmp_on_board = [];
-        $total_plan = $total_confirm = $total_reject = $total_unconfirm = $total_etd_yemi = $total_on_board = 0;
+        $total_plan = $total_confirm = $total_reject = $total_unconfirm = $total_etd_yemi = $total_on_board = $total_no_need = 0;
         foreach ($tmp_shipping_order as $order_value) {
             $post_date = (strtotime($order_value->ETD . " +7 hours") * 1000);
 
             $tmp_confirm[] = [
                 'x' => $post_date,
                 'y' => (int)$order_value->TOTAL_CONFIRMED == 0 ? null : (int)$order_value->TOTAL_CONFIRMED,
+            ];
+
+            $tmp_no_need[] = [
+                'x' => $post_date,
+                'y' => (int)$order_value->TOTAL_NO_NEED_ANYMORE == 0 ? null : (int)$order_value->TOTAL_NO_NEED_ANYMORE,
             ];
 
             $tmp_unconfirm[] = [
@@ -154,6 +184,7 @@ class DisplayLogController extends Controller
 
             $total_confirm += $order_value->TOTAL_CONFIRMED;
             $total_unconfirm += $order_value->TOTAL_UNCONFIRMED;
+            $total_no_need += $order_value->TOTAL_NO_NEED_ANYMORE;
             $total_on_board += $order_value->TOTAL_ON_BOARD;
 
             if ($order_value->ETD <= date('Y-m-d')) {
@@ -161,7 +192,7 @@ class DisplayLogController extends Controller
             }
         }
 
-        $total_plan = $total_confirm + $total_unconfirm;
+        $total_plan = $total_confirm + $total_unconfirm + $total_no_need;
 
         $data = [
             /*[
@@ -170,6 +201,12 @@ class DisplayLogController extends Controller
                 'color' => '#001F3F',
                 'stack' => 'etd_yemi'
             ],*/
+            [
+                'name' => 'NO NEED ANYMORE',
+                'data' => $tmp_no_need,
+                'color' => 'black',
+                'stack' => 'etd_yemi'
+            ],
             [
                 'name' => 'NOT CONFIRMED',
                 'data' => $tmp_unconfirm,
@@ -182,12 +219,14 @@ class DisplayLogController extends Controller
                 'color' => '#00a65a',
                 'stack' => 'etd_yemi'
             ],
+
             [
                 'name' => 'ETD PORT',
                 'data' => $tmp_on_board,
                 'color' => '#ff851b',
                 'stack' => 'etd_port'
             ],
+            
         ];
 
         $order_by_pod = ShippingOrderNew01::find()
@@ -195,6 +234,7 @@ class DisplayLogController extends Controller
             'POD',
             'TOTAL_CONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_UNCONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_NO_NEED_ANYMORE' => 'SUM(CASE WHEN STATUS = \'NO NEED ANYMORE\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
         ])
         ->where([
             'PERIOD' => $model->period,
@@ -207,10 +247,12 @@ class DisplayLogController extends Controller
             'confirm' => 0,
             'reject' => 0,
             'unconfirm' => 0,
+            'no_need' => 0,
         ];
 
         if ($total_plan > 0) {
             $pct_arr['confirm'] = round(($total_confirm / $total_plan) * 100, 2);
+            $pct_arr['no_need'] = round(($total_no_need / $total_plan) * 100, 2);
             $pct_arr['reject'] = round(($total_reject / $total_plan) * 100, 2);
             $pct_arr['unconfirm'] = round(($total_unconfirm / $total_plan) * 100, 2);
             $pct_arr['etd_yemi'] = round(($total_etd_yemi / $total_plan) * 100, 2);
@@ -226,6 +268,7 @@ class DisplayLogController extends Controller
             'total_plan' => $total_plan,
             'total_confirm' => $total_confirm,
             'total_unconfirm' => $total_unconfirm,
+            'total_no_need' => $total_no_need,
             'total_reject' => $total_reject,
             'total_etd_yemi' => $total_etd_yemi,
             'total_on_board' => $total_on_board,

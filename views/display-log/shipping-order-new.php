@@ -254,6 +254,20 @@ echo '</pre>';*/
 
         <div class="row">
             <div class="col-sm-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-black"><i class="fa fa-minus"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">NO NEED ANYMORE (PCS)</span>
+                        <span class="info-box-number"><?= number_format($total_no_need); ?> <span style="font-size: 0.6em;">(<?= $pct_arr['no_need']; ?>%)</span></span>
+                    </div>
+                <!-- /.info-box-content -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
                 <?= Html::a('<i class="fa fa-fw fa-list"></i> Booking List', ['ship-reservation-data/index', 'PERIOD' => $model->period], [
                     'class' => 'btn btn-primary btn-block btn-lg',
                     'target' => '_blank',
@@ -281,7 +295,7 @@ echo '</pre>';*/
                                 'fontFamily' => 'sans-serif',
                             ],
                             'zoomType' => 'x',
-                            'height' => 593
+                            'height' => 700
                         ],
                         'title' => [
                             'text' => 'Shipping Booking Management List'
