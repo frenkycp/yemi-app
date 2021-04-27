@@ -476,6 +476,40 @@ return [
         1 => 'TERPASANG',
         2 => 'PERIODIK'
     ],
+    'covid_patrol_auditor' => [
+        'Team 1' => 'Team 1',
+        'Team 2' => 'Team 2',
+        'Team 3' => 'Team 3',
+        'Team 4' => 'Team 4',
+        'Team 5' => 'Team 5',
+        'Team 6' => 'Team 6',
+        'Team 7' => 'Team 7',
+        'Team 8' => 'Team 8',
+        'Team 9' => 'Team 9',
+        'Team 10' => 'Team 10',
+    ],
+    'covid_patrol_category' => [
+        'Penggunaan APD (Masker / Faceshield)' => 'Penggunaan APD (Masker / Faceshield)',
+        'Physical Distance' => 'Physical Distance',
+        'Optimalisasi Sirkulasi Udara' => 'Optimalisasi Sirkulasi Udara',
+        'Cuci tangan/ Hand Sanitizer' => 'Cuci tangan/ Hand Sanitizer',
+        'Kondisi Partisi' => 'Kondisi Partisi',
+        'Lain-lain' => 'Lain-lain',
+    ],
+    'covid_patrol_loc' => [
+        'Lobby, Office, Meeting Room' => 'Lobby, Office, Meeting Room',
+        'Kantin & Smooking Area' => 'Kantin & Smooking Area',
+        'Final Assembly Gedung 1' => 'Final Assembly Gedung 1',
+        'Wood Working' => 'Wood Working',
+        'Painting' => 'Painting',
+        'WHP Gedung 1 & Intransit' => 'WHP Gedung 1 & Intransit',
+        'WHP Gedung 2' => 'WHP Gedung 2',
+        'FGS & PCB-SMT' => 'FGS & PCB-SMT',
+        'Wood Storage & Injection' => 'Wood Storage & Injection',
+        'SPU & PCB-MI' => 'SPU & PCB-MI',
+        'FA & WHP Gedung 2' => 'FA & WHP Gedung 2',
+        'SPC & WHP Gedung 2' => 'SPC & WHP Gedung 2',
+    ],
 ];
 
 function getYearArray()
