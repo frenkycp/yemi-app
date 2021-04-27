@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'S-Up Patrol Monitoring <span class="japanesse light-green"></span>',
-    'tab_title' => 'S-Up Patrol Monitoring',
-    'breadcrumbs_title' => 'S-Up Patrol Monitoring'
+    'page_title' => 'Covid Patrol Monitoring <span class="japanesse light-green"></span>',
+    'tab_title' => 'Covid Patrol Monitoring',
+    'breadcrumbs_title' => 'Covid Patrol Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title']; #3c3c3c
 $this->registerCss("
@@ -28,7 +28,7 @@ $this->registerJsFile('@web/js/dataTables.bootstrap.min.js');
 $this->registerJs("$(document).ready(function() {
     $('#outstanding').DataTable({
         'pageLength': 10,
-        'order': [[ 1, 'desc' ]]
+        'order': [[ 0, 'desc' ]]
     });
 });");
 
@@ -121,6 +121,7 @@ Highcharts::widget([
                     'color' => 'white',
                 ],
             ],
+            'allowDecimals' => false,
         ],
         'legend' => [
             'enabled' => true,
@@ -172,30 +173,28 @@ Highcharts::widget([
     <div class="panel-body">
         <table class="table table-bordered dataTable" id="outstanding" style="font-size: 0.83vw;">
             <thead style="font-size: 12px;">
-                <tr>
-                    <th class="text-center">Kategori Audit</th>
-                    <th class="text-center">Tanggal</th>
-                    <th class="text-center">Lokasi</th>
-                    <th class="text-center">Detail Lokasi</th>
-                    <th class="text-center">Auditor</th>
-                    <th class="text-center">Auditee</th>
-                    <th class="text-center">Note</th>
-                    <th class="text-center" style="min-width: 200px;">Penaganan</th>
+                <tr><th class="text-center">Tanggal</th>
+                    <th class="">Kategori</th>
+                    <th class="">Lokasi</th>
+                    <th class="">Auditor</th>
+                    <th class="">PIC</th>
+                    <th class="">Note</th>
+                    <th class="text-center" style="min-width: 150px;">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($outstanding_data as $value): ?>
                     <tr>
-                        <td><?= \Yii::$app->params['audit_patrol_category'][$value->CATEGORY]; ?></td>
                         <td class="text-center"><?= $value->PATROL_DATE; ?></td>
-                        <td><?= $value->CC_DESC; ?></td>
+                        <td><?= $value->TOPIC; ?></td>
+                        
                         <td><?= $value->LOC_DETAIL; ?></td>
                         <td><?= $value->AUDITOR; ?></td>
                         <td><?= $value->PIC_NAME; ?></td>
                         <td><?= $value->DESCRIPTION; ?></td>
                         <td class="text-center">
-                            <?= Html::a('<i class="fa fa-pencil-square-o"></i> Edit', ['/audit-patrol/update', 'ID' => $value->ID], ['class' => 'btn btn-primary']); ?>&nbsp;
-                            <?= Html::a('<i class="fa fa-thumbs-o-up"></i> Penaganan', ['/audit-patrol/solve', 'ID' => $value->ID], ['class' => 'btn btn-warning']); ?>
+                            <?= Html::a('<i class="fa fa-pencil-square-o"></i> Edit', ['/covid-patrol/update', 'ID' => $value->ID], ['class' => 'btn btn-primary']); ?>&nbsp;
+                            <?= Html::a('<i class="fa fa-thumbs-o-up"></i> Penaganan', ['/covid-patrol/solve', 'ID' => $value->ID], ['class' => 'btn btn-warning']); ?>
                         </td>
                     </tr>
                 <?php endforeach ?>

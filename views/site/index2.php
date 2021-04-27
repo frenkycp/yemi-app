@@ -272,6 +272,33 @@ $user_id = \Yii::$app->user->identity->username;
                         </ol>
                     </div>
                 </div>
+                <div class="panel panel-success">
+                    <div class="panel-heading text-center">AUDIT PATROL<br/><span class="japanesse-word"></span></div>
+                    <div class="list-group">
+                        <div class="list-group-item">
+                            <p>S-Up Patrol <span class="japanesse-word"></span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('S-Up Patrol Data <span class="japanesse-word"></span>', ['/audit-patrol']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('S-Up Patrol Monitoring <span class="japanesse-word"></span>', ['/audit-patrol-monitoring']); ?>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="list-group-item">
+                            <p>Covid Patrol <span class="japanesse-word"></span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('Covid Patrol Data <span class="japanesse-word"></span>', ['/covid-patrol']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('Covid Patrol Monitoring <span class="japanesse-word"></span>', ['/covid-patrol-monitoring']); ?>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
                 <div class="panel panel-success" style="<?= in_array($user_id, ['ura', '150826']) ? '' : 'display: none;'; ?>">
                     <div class="panel-heading text-center">*</div>
                     <div class="list-group-item">

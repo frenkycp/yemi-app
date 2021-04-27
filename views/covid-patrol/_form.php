@@ -13,8 +13,9 @@ use kartik\select2\Select2;
 * @var app\models\AuditPatrolTbl $model
 * @var yii\widgets\ActiveForm $form
 */
-$karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy('PIC_NAME')->all(), 'PIC_ID', 'PIC_NAME');
-/*$karyawan_dropdown = ArrayHelper::map(app\models\SunfishViewEmp::find()->select([
+
+//$karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy('PIC_NAME')->all(), 'PIC_ID', 'PIC_NAME');
+$karyawan_dropdown = ArrayHelper::map(app\models\SunfishViewEmp::find()->select([
     'Emp_no', 'Full_name'
 ])
 ->where([
@@ -23,8 +24,11 @@ $karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy
 ->andWhere('PATINDEX(\'YE%\', Emp_no) > 0')
 ->andWhere('PATINDEX(\'M%\', grade_code) = 0')
 ->andWhere('PATINDEX(\'D%\', grade_code) = 0')
-->all(), 'Emp_no', 'nikNama');*/
-
+->all(), 'Emp_no', 'nikNama');
+$tmp_patrol_category = \Yii::$app->params['covid_patrol_category'];
+//asort($tmp_patrol_category);
+$tmp_patrol_loc = \Yii::$app->params['covid_patrol_loc'];
+asort($tmp_patrol_loc);
 ?>
 
 <div class="audit-patrol-tbl-form">
@@ -52,7 +56,7 @@ $karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy
         <div class="panel panel-primary">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'PATROL_DATE')->widget(DatePicker::classname(), [
                             'options' => ['placeholder' => 'Enter date ...'],
                             'pluginOptions' => [
@@ -61,27 +65,17 @@ $karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy
                             ]
                         ]) ?>
                     </div>
-                </div>
-                
-
-                <div class="row">
-                    <div class="col-sm-4">
-                        <?= $form->field($model, 'AUDITOR')->textInput(['maxlength' => true]) ?>
+                    <div class="col-sm-3">
+                        <?= $form->field($model, 'AUDITOR')->dropDownList(\Yii::$app->params['covid_patrol_auditor']); ?>
                     </div>
-                    <div class="col-sm-4">
-                        <?= $form->field($model, 'CATEGORY')->dropDownList(\Yii::$app->params['audit_patrol_category'])->label('Patrol Type'); ?>
-                    </div>
-                    <div class="col-sm-4">
-                        <?= $form->field($model, 'TOPIC')->dropDownList(\Yii::$app->params['audit_patrol_topic'])->label('Patrol Category'); ?>
+                    <div class="col-sm-6">
+                        <?= $form->field($model, 'TOPIC')->dropDownList($tmp_patrol_category)->label('Patrol Category'); ?>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-5">
-                        <?= $form->field($model, 'CC_ID')->dropDownList(ArrayHelper::map(app\models\CostCenter::find()->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'))->label('Section'); ?>
-                    </div>
-                    <div class="col-sm-7">
-                        <?= $form->field($model, 'LOC_DETAIL')->textInput()->label('Location Detail'); ?>
+                    <div class="col-sm-6">
+                        <?= $form->field($model, 'LOC_DETAIL')->dropDownList($tmp_patrol_loc)->label('Location'); ?>
                     </div>
                 </div>
 
@@ -96,7 +90,7 @@ $karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy
                         'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
                         'browseLabel' =>  ' Select Photo',
                         'initialPreview' => $model->isNewRecord ? [] : [
-                            Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_BEFORE_1, ['width' => '100%'])
+                            Html::img('@web/uploads/COVID_PATROL/' . $model->IMAGE_BEFORE_1, ['width' => '100%'])
                         ],
                     ],
                 ])->label('Image Before');

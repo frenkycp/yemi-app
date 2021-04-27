@@ -6,7 +6,7 @@ use yii\web\Controller;
 use yii\web\JsExpression;
 use app\models\AuditPatrolTbl;
 
-class AuditPatrolMonitoringController extends Controller
+class CovidPatrolMonitoringController extends Controller
 {
 	public function behaviors()
     {
@@ -33,17 +33,18 @@ class AuditPatrolMonitoringController extends Controller
         $tmp_data_patrol = AuditPatrolTbl::find()
         ->select([
         	'PATROL_DATE',
-        	'PATROL_PRESIDR_OPEN' => 'SUM(CASE WHEN CATEGORY = 1 AND STATUS = \'O\' THEN 1 ELSE 0 END)',
-        	'PATROL_PRESIDR_CLOSE' => 'SUM(CASE WHEN CATEGORY = 1 AND STATUS = \'C\' THEN 1 ELSE 0 END)',
-        	'PATROL_GM_OPEN' => 'SUM(CASE WHEN CATEGORY = 2 AND STATUS = \'O\' THEN 1 ELSE 0 END)',
-        	'PATROL_GM_CLOSE' => 'SUM(CASE WHEN CATEGORY = 2 AND STATUS = \'C\' THEN 1 ELSE 0 END)',
+        	'total_open' => 'SUM(CASE WHEN STATUS = \'O\' THEN 1 ELSE 0 END)',
+        	'total_close' => 'SUM(CASE WHEN STATUS = \'C\' THEN 1 ELSE 0 END)',
         ])
         ->where([
         	'AND',
         	['>=', 'PATROL_DATE', $model->from_date],
         	['<=', 'PATROL_DATE', $model->to_date],
         ])
-        ->andWhere(['FLAG' => 1])
+        ->andWhere([
+            'FLAG' => 1,
+            'CATEGORY' => 3
+        ])
         ->groupBy('PATROL_DATE')
         ->orderBy('PATROL_DATE')
         ->all();
@@ -52,7 +53,7 @@ class AuditPatrolMonitoringController extends Controller
         ->where([
             'STATUS' => 'O',
             'FLAG' => 1,
-            'CATEGORY' => [1, 2],
+            'CATEGORY' => 3,
         ])
         ->orderBy('PATROL_DATE DESC')
         ->all();
@@ -62,28 +63,20 @@ class AuditPatrolMonitoringController extends Controller
             $post_date = (strtotime($value->PATROL_DATE . " +7 hours") * 1000);
             $categories[] = date('D, d M Y', strtotime($value->PATROL_DATE));
 
-            $tmp_data['presdir_open'][] = [
+            $tmp_data['total_open'][] = [
                 //'x' => $post_date,
-                'y' => $value->PATROL_PRESIDR_OPEN == 0 ? null : (int)$value->PATROL_PRESIDR_OPEN,
+                'y' => $value->total_open == 0 ? null : (int)$value->total_open,
             ];
-            $tmp_data['presdir_close'][] = [
+            $tmp_data['total_close'][] = [
                 //'x' => $post_date,
-                'y' => $value->PATROL_PRESIDR_CLOSE == 0 ? null : (int)$value->PATROL_PRESIDR_CLOSE,
-            ];
-            $tmp_data['gm_open'][] = [
-                //'x' => $post_date,
-                'y' => $value->PATROL_GM_OPEN == 0 ? null : (int)$value->PATROL_GM_OPEN,
-            ];
-            $tmp_data['gm_close'][] = [
-                //'x' => $post_date,
-                'y' => $value->PATROL_GM_CLOSE == 0 ? null : (int)$value->PATROL_GM_CLOSE,
+                'y' => $value->total_close == 0 ? null : (int)$value->total_close,
             ];
         }
 
         $data = [
             [
-                'name' => 'Temuan Presdir Open',
-                'data' => $tmp_data['presdir_open'],
+                'name' => 'Temuan Open',
+                'data' => $tmp_data['total_open'],
                 'color' => [
                     'pattern' => [
                         'path' => 'M 0 1.5 L 2.5 1.5 L 2.5 0 M 2.5 5 L 2.5 3.5 L 5 3.5',
@@ -94,8 +87,8 @@ class AuditPatrolMonitoringController extends Controller
                 ],
             ],
             [
-                'name' => 'Temuan Presdir Close',
-                'data' => $tmp_data['presdir_close'],
+                'name' => 'Temuan Close',
+                'data' => $tmp_data['total_close'],
                 'color' => [
                     'pattern' => [
                         'path' => 'M 0 1.5 L 2.5 1.5 L 2.5 0 M 2.5 5 L 2.5 3.5 L 5 3.5',
@@ -104,30 +97,6 @@ class AuditPatrolMonitoringController extends Controller
                         'height' => 5
                     ]
                 ]
-            ],
-            [
-                'name' => 'Temuan GM Open',
-                'data' => $tmp_data['gm_open'],
-                'color' => [
-                    'pattern' => [
-                        'path' => 'M 0 1.5 L 2.5 1.5 L 2.5 0 M 2.5 5 L 2.5 3.5 L 5 3.5',
-                        'color' => "#ffea00 ",
-                        'width' => 5,
-                        'height' => 5
-                    ],
-                ],
-            ],
-            [
-                'name' => 'Temuan GM Close',
-                'data' => $tmp_data['gm_close'],
-                'color' => [
-                    'pattern' => [
-                        'path' => 'M 0 1.5 L 2.5 1.5 L 2.5 0 M 2.5 5 L 2.5 3.5 L 5 3.5',
-                        'color' => "#2c387e",
-                        'width' => 5,
-                        'height' => 5
-                    ],
-                ],
             ],
         ];
 

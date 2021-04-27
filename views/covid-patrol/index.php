@@ -12,9 +12,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Audit Patrol Data <span class="japanesse text-green"></span>',
-    'tab_title' => 'Audit Patrol Data',
-    'breadcrumbs_title' => 'Audit Patrol Data'
+    'page_title' => 'Covid Patrol Data <span class="japanesse text-green"></span>',
+    'tab_title' => 'Covid Patrol Data',
+    'breadcrumbs_title' => 'Covid Patrol Data'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -23,6 +23,10 @@ $this->registerCss("
         margin: 3px 0px;
     }
 ");
+
+$tmp_patrol_category = \Yii::$app->params['covid_patrol_category'];
+$tmp_patrol_loc = \Yii::$app->params['covid_patrol_loc'];
+asort($tmp_patrol_loc);
 
 $gridColumns = [
     [
@@ -83,11 +87,8 @@ $gridColumns = [
     ],
     [
         'attribute' => 'TOPIC',
-        'value' => function($model){
-            return \Yii::$app->params['audit_patrol_topic'][$model->TOPIC];
-        },
         'label' => 'Patrol Category',
-        'filter' => \Yii::$app->params['audit_patrol_topic'],
+        'filter' => $tmp_patrol_category,
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
@@ -105,28 +106,20 @@ $gridColumns = [
         'vAlign' => 'middle',
     ],*/
     [
-        'attribute' => 'CC_ID',
-        'value' => 'CC_DESC',
-        'label' => 'Section',
-        'filter' => ArrayHelper::map(app\models\CostCenter::find()->orderBy('CC_DESC')->all(), 'CC_ID', 'CC_DESC'),
-        'hAlign' => 'center',
-        'vAlign' => 'middle',
-    ],
-    [
         'attribute' => 'LOC_DETAIL',
-        'label' => 'Location Detail',
+        'label' => 'Location',
+        'filter' => $tmp_patrol_loc,
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
     [
         'attribute' => 'AUDITOR',
-        'hidden' => true,
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
     [
         'attribute' => 'PIC_NAME',
-        'label' => 'Auditee',
+        'label' => 'PIC',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
@@ -181,7 +174,7 @@ $gridColumns = [
         'attribute' => 'IMAGE_BEFORE_1',
         'value' => function($model){
             if ($model->IMAGE_BEFORE_1 != null) {
-                return Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_BEFORE_1, ['width'=>'250', 'alt' => 'No Image Found...']);
+                return Html::img('@web/uploads/COVID_PATROL/' . $model->IMAGE_BEFORE_1, ['width'=>'250', 'alt' => 'No Image Found...']);
             }
         },
         'width' => '250',
@@ -199,7 +192,7 @@ $gridColumns = [
         'attribute' => 'IMAGE_AFTER_1',
         'value' => function($model){
             if ($model->IMAGE_AFTER_1 != null) {
-                return Html::img('@web/uploads/AUDIT_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'250', 'alt' => 'No Image Found...']);
+                return Html::img('@web/uploads/COVID_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'250', 'alt' => 'No Image Found...']);
             }
         },
         'width' => '250',
