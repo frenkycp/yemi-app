@@ -668,7 +668,8 @@ class DisplayHrgaController extends Controller
                         'nik' => $attendance_val['nik'],
                         'name' => $emp_name,
                         'shift' => $emp_shift,
-                        'attendance' => $attend_judgement_txt
+                        'attendance' => $attend_judgement_txt,
+                        'section' => $attendance_val['cost_center'],
                     ];
                     $total_no_check++;
                 } elseif ($attend_judgement == 'I') {
@@ -773,16 +774,14 @@ class DisplayHrgaController extends Controller
             ];
         }
 
-        $no_check_data2 = [
-            'Hadir' => [],
-            'Sakit' => [],
-            'Ijin' => [],
-            'Alpa' => [],
-            'Cuti' => [],
-        ];
+        $no_check_data2 = [];
 
         foreach ($no_check_data as $value) {
-            $no_check_data2[$value['attendance']][] = $value;
+            $no_check_data2[$value['section']][] = $value;
+        }
+
+        if (count($no_check_data2) > 0) {
+            ksort($no_check_data2);
         }
 
         $data_chart = [

@@ -200,7 +200,7 @@ echo '</pre>';*/
                     <th class="text-center" width="150px">ID</th>
                     <th class="text-center">Name</th>
                     <th class="text-center">Shift</th>
-                    <th class="text-center">Attendance</th>
+                    <th class="text-center">Section</th>
                 </tr>
             </thead>
             <tbody>
@@ -221,7 +221,7 @@ echo '</pre>';*/
                                     <td class="text-center" style="font-weight: bold;"><?= $value2['nik']; ?></td>
                                     <td class="text-center" style="font-weight: bold;"><?= $value2['name']; ?></td>
                                     <td class="text-center" style="font-weight: bold;"><?= $value2['shift']; ?></td>
-                                    <td class="text-center" style="font-weight: bold;"><?= $value2['attendance']; ?></td>
+                                    <td class="text-center" style="font-weight: bold;"><?= $value2['section']; ?></td>
                                 </tr>
                             <?php }
                         }

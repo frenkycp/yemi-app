@@ -28,6 +28,7 @@ class AuditPatrolController extends \app\controllers\base\AuditPatrolController
 	{
 	    $searchModel  = new AuditPatrolSearch;
 	    $searchModel->FLAG = 1;
+	    $searchModel->CATEGORY = 1;
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
