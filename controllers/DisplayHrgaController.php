@@ -23,9 +23,47 @@ use app\models\OfficeEmp;
 use app\models\DriverTbl;
 use app\models\KaryawanSuhuView;
 use app\models\HikTemperatureView;
+use app\models\AirMonitoringTbl;
+use app\models\AirMonitoringLogTbl;
 
 class DisplayHrgaController extends Controller
 {
+    public function actionAirVisualMonitoring()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $data = AirMonitoringTbl::find()->all();
+
+        $tmp_log = $data_log = [];
+        foreach ($data as $value) {
+            $begin = new \DateTime(date('Y-m-d 06:00:00'));
+            $end   = new \DateTime(date('Y-m-d 16:00:00'));
+
+            for($i = $begin; $i <= $end; $i->modify('+3 minutes')){
+                $date_time = $i->format("Y-m-d H:i:s");
+                $post_date = (strtotime($date_time . " +7 hours") * 1000);
+                $ppm = rand(600, 900);
+                $tmp_log[$value->deviceno][] = [
+                    'x' => $post_date,
+                    'y' => $ppm
+                ];
+            }
+
+            $data_log[$value->deviceno][] = [
+                'name' => $value->loc,
+                'data' => $tmp_log[$value->deviceno],
+                'showInLegend' => false,
+                'color' => '#911BEB',
+            ];
+        }
+
+        return $this->render('air-visual-monitoring', [
+            'data' => $data,
+            'data_log' => $data_log,
+        ]);
+    }
+
     public function actionOvertimeMonthlyAvg($value='')
     {
         $this->layout = 'clean';
