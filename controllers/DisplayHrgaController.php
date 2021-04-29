@@ -40,7 +40,22 @@ class DisplayHrgaController extends Controller
             $begin = new \DateTime(date('Y-m-d 06:00:00'));
             $end   = new \DateTime(date('Y-m-d 16:00:00'));
 
-            for($i = $begin; $i <= $end; $i->modify('+3 minutes')){
+            $tmp_log_arr = AirMonitoringLogTbl::find()->where([
+                'date' => date('Y-m-d'),
+                'deviceno' => $value->deviceno
+            ])->all();
+
+            if (count($tmp_log_arr) > 0) {
+                foreach ($tmp_log_arr as $log_val) {
+                    $post_date = (strtotime($log_val->postdate . " +7 hours") * 1000);
+                    $tmp_log[$value->deviceno][] = [
+                        'x' => $post_date,
+                        'y' => $log_val->co2_ppm
+                    ];
+                }
+            }
+
+            /*for($i = $begin; $i <= $end; $i->modify('+3 minutes')){
                 $date_time = $i->format("Y-m-d H:i:s");
                 $post_date = (strtotime($date_time . " +7 hours") * 1000);
                 $ppm = rand(600, 900);
@@ -48,7 +63,7 @@ class DisplayHrgaController extends Controller
                     'x' => $post_date,
                     'y' => $ppm
                 ];
-            }
+            }*/
 
             $data_log[$value->deviceno][] = [
                 'name' => $value->loc,

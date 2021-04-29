@@ -136,7 +136,29 @@ echo '</pre>';*/
                     <h3 class="panel-title"><?= $value->loc; ?></h3>
                 </div>
                 <div class="panel-body bg-black text-center">
-                    <div class="row" style="font-size: 50px; color: white;"><span class="text-yellow"><?= $value->co2_ppm; ?></span> <small style="font-size: 0.7em;">ppm</small></div>
+                    <div class="row" style="font-size: 50px; color: white;">
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-body bg-black" style="color: white !important;">
+                                    <span class="text-yellow"><?= $value->co2_ppm; ?></span> <small style="font-size: 0.7em;">ppm</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-body bg-black" style="color: white !important;">
+                                    <span class="text-yellow"><?= $value->temperature_c; ?></span> &deg;C
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="panel panel-default">
+                                <div class="panel-body bg-black" style="color: white !important;">
+                                    <span class="text-yellow"><?= $value->humidity_pct_rh; ?></span> %
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <?php
