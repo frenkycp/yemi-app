@@ -178,7 +178,7 @@ echo '</pre>';*/
                                         'backgroundColor' => '#000',
                                     ],
                                     'title' => [
-                                        'text' => null
+                                        'text' => 'Last Update : ' .date('d M\' Y H:i', strtotime( $value->postdate))
                                     ],
                                     'subtitle' => [
                                         'text' => ''

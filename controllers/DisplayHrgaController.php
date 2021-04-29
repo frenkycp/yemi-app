@@ -41,7 +41,7 @@ class DisplayHrgaController extends Controller
             $end   = new \DateTime(date('Y-m-d 16:00:00'));
 
             $tmp_log_arr = AirMonitoringLogTbl::find()->where([
-                'date' => date('Y-m-d'),
+                'date' => '2021-04-29',
                 'deviceno' => $value->deviceno
             ])->all();
 
