@@ -78,6 +78,7 @@ class CovidPatrolController extends \app\controllers\base\AuditPatrolController
 				])
 				->one();
 				if ($tmp_user) {
+					$model->USER_ID = $tmp_user->NIK_SUN_FISH;
 					$model->USER_NAME = $tmp_user->NAMA_KARYAWAN;
 				}
 
