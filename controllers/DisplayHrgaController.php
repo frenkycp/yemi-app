@@ -37,11 +37,11 @@ class DisplayHrgaController extends Controller
 
         $tmp_log = $data_log = [];
         foreach ($data as $value) {
-            $begin = new \DateTime(date('Y-m-d 06:00:00'));
-            $end   = new \DateTime(date('Y-m-d 16:00:00'));
+            /*$begin = new \DateTime(date('Y-m-d 06:00:00'));
+            $end   = new \DateTime(date('Y-m-d 16:00:00'));*/
 
             $tmp_log_arr = AirMonitoringLogTbl::find()->where([
-                'date' => '2021-04-29',
+                'date' => date('Y-m-d'),
                 'deviceno' => $value->deviceno
             ])->all();
 
