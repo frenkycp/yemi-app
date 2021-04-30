@@ -208,7 +208,7 @@ echo '</pre>';*/
                 $no = 0;
                 if ($total_no_check == 0) {
                     echo '<tr>
-                        <td colspan="4" style="font-weight: bold; padding-left: 5px;">Semua Karyawan Office Sudah Cek Suhu</td>
+                        <td colspan="5" style="font-weight: bold; padding-left: 5px;">Semua Karyawan Office Sudah Cek Suhu</td>
                     </tr>';
                 } else {
                     foreach ($no_check_data2 as $value){
