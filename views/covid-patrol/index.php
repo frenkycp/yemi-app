@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use kartik\grid\GridView;
+use kartik\export\ExportMenu;
 
 /**
 * @var yii\web\View $this
@@ -21,6 +22,10 @@ $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 $this->registerCss("
     .btn-block {
         margin: 3px 0px;
+    }
+    .img-before-after {
+        display: block;
+        width: 100%;
     }
 ");
 
@@ -174,36 +179,30 @@ $gridColumns = [
         'attribute' => 'IMAGE_BEFORE_1',
         'value' => function($model){
             if ($model->IMAGE_BEFORE_1 != null) {
-                return Html::img('@web/uploads/COVID_PATROL/' . $model->IMAGE_BEFORE_1, ['width'=>'250', 'alt' => 'No Image Found...']);
+                return Html::img('http://10.110.52.5:86/uploads/COVID_PATROL/' . $model->IMAGE_BEFORE_1, ['width'=>'170px', 'alt' => 'No Image Found...', 'class' => 'img-before-after']);
             }
         },
-        'width' => '250',
+        'width' => '170px',
         'mergeHeader' => true,
         'format' => 'html',
         'label' => 'Image Before',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'contentOptions' => [
-            'style' => 'min-width: 250px;'
-        ],
     ],
     
     [
         'attribute' => 'IMAGE_AFTER_1',
         'value' => function($model){
             if ($model->IMAGE_AFTER_1 != null) {
-                return Html::img('@web/uploads/COVID_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'250', 'alt' => 'No Image Found...']);
+                return Html::img('http://10.110.52.5:86/uploads/COVID_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'170px', 'alt' => 'No Image Found...', 'class' => 'img-before-after']);
             }
         },
-        'width' => '250',
+        'width' => '170px',
         'mergeHeader' => true,
         'format' => 'html',
         'label' => 'Image After',
         'hAlign' => 'center',
         'vAlign' => 'middle',
-        'contentOptions' => [
-            'style' => 'min-width: 250px;'
-        ],
     ],
 
 ];
@@ -217,6 +216,46 @@ $gridColumns = [
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
+<?php
+/*echo ExportMenu::widget([
+        'dataProvider' => $dataProvider,
+        'columns' => $gridColumns,
+        'onRenderDataCell' => function(PhpOffice\PhpSpreadsheet\Cell\Cell $cell, $content, $model, $key, $index, kartik\export\ExportMenu $widget) {
+            $column = $cell->getColumn();
+            $columnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($column) - 1;
+            $path = \Yii::$app->basePath . '\\web\\uploads\\COVID_PATROL\\' . $model->IMAGE_BEFORE_1;
+            $value = ($model->IMAGE_BEFORE_1);
+            if(file_exists($path)) {   // change the condition as you prefer
+                $firstRow = 2;  // skip header row
+                $imageName = "Image name";      // Add a name
+                $imageDescription = "Image description";    // Add a description
+                $padding = 5;
+                $imageWidth = 60;   // Image width
+                $imageHeight = 60;  // Image height
+                $cellID = $column . ($index + $firstRow);   // Get cell identifier
+                $worksheet = $cell->getWorksheet();
+                $worksheet->getRowDimension($index + $firstRow)->setRowHeight($imageHeight + ($padding * 2));
+                //$worksheet->getColumnDimension($column)->setAutoSize(false);
+                //$worksheet->getColumnDimension($column)->setWidth($imageWidth + ($padding * 2));
+                $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $drawing->setName($imageName);
+                $drawing->setDescription($imageDescription);
+                $drawing->setPath($value); // put your path and image here
+                $drawing->setCoordinates($cellID);
+                //$drawing->setOffsetX(200);
+                $drawing->setWidth($imageWidth);
+                $drawing->setHeight($imageHeight);
+                //$drawing->setWidthAndHeight($imageWidth, $imageHeight);
+                $drawing->setWorksheet($worksheet);
+
+            }
+        },
+        'dropdownOptions' => [
+            'label' => 'Export All',
+            'class' => 'btn btn-secondary'
+        ]
+    ]) . "<hr>\n";*/
+?>
 
     <div class="">
         <?= GridView::widget([

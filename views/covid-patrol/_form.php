@@ -27,8 +27,12 @@ $karyawan_dropdown = ArrayHelper::map(app\models\SunfishViewEmp::find()->select(
 ->all(), 'Emp_no', 'nikNama');
 $tmp_patrol_category = \Yii::$app->params['covid_patrol_category'];
 //asort($tmp_patrol_category);
-$tmp_patrol_loc = \Yii::$app->params['covid_patrol_loc'];
-asort($tmp_patrol_loc);
+$tmp_patrol_loc = ArrayHelper::map(app\models\CovidPatrolLoc::find()->all(), 'LOC_ID', 'LOC_NAME');
+
+$this->registerJs("$(document).ready(function() {
+    $('#loc_id').trigger('change');
+    $('#loading').hide();
+});");
 ?>
 
 <div class="audit-patrol-tbl-form">
@@ -53,8 +57,8 @@ asort($tmp_patrol_loc);
     ?>
 
     <div class="">
-        <div class="panel panel-primary">
-            <div class="panel-body">
+        <div class="box box-primary">
+            <div class="box-body">
                 <div class="row">
                     <div class="col-sm-3">
                         <?= $form->field($model, 'PATROL_DATE')->widget(DatePicker::classname(), [
@@ -75,7 +79,26 @@ asort($tmp_patrol_loc);
 
                 <div class="row">
                     <div class="col-sm-6">
-                        <?= $form->field($model, 'LOC_DETAIL')->dropDownList($tmp_patrol_loc)->label('Location'); ?>
+                        <?= $form->field($model, 'LOC_ID')->dropDownList($tmp_patrol_loc, [
+                            'id' => 'loc_id',
+                            'onchange' => '
+                                var loc_id = $(this).val();
+                                $("#loading").show();
+                                $.post( "' . Yii::$app->urlManager->createUrl('ajax-repository/covid-patrol-loc?LOC_ID=') . '"+loc_id, function(data) {
+                                    $("#loc_name").val(data.loc_name);
+                                    $("#loc_detail").val(data.loc_name);
+                                    $("#pic_id").val(data.pic_id);
+                                    $("#pic_name").val(data.pic_name);
+                                });
+                                $("#loading").hide();
+                            ',
+                        ])->label('Location'); ?>
+                        <?= $form->field($model, 'LOC_DESC')->hiddenInput(['id' => 'loc_name'])->label(false) ?>
+                        <?= $form->field($model, 'LOC_DETAIL')->hiddenInput(['id' => 'loc_detail'])->label(false) ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <?= $form->field($model, 'PIC_NAME')->textInput(['id' => 'pic_name', 'readonly' => true])->label('PIC Name') ?>
+                        <?= $form->field($model, 'PIC_ID')->hiddenInput(['id' => 'pic_id'])->label(false) ?>
                     </div>
                 </div>
 
@@ -97,17 +120,9 @@ asort($tmp_patrol_loc);
                 ?>
 
                 <?= $form->field($model, 'DESCRIPTION')->textInput() ?>
-
-                <?= $form->field($model, 'PIC_ID')->widget(Select2::classname(), [
-                    'data' => $karyawan_dropdown,
-                    'options' => [
-                        'placeholder' => '- SELECT PIC -',
-                        'id' => 'repair-pic-' . $i,
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                    ],
-                ])->label('PIC'); ?>
+            </div>
+            <div class="overlay" id="loading">
+                <i class="fa fa-refresh fa-spin"></i>
             </div>
             <div class="panel-footer">
                 <?php echo $form->errorSummary($model); ?>

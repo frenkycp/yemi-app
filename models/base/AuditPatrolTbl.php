@@ -72,9 +72,9 @@ abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
         return [
             [['PATROL_DATE', 'PATROL_DATETIME', 'DELETE_DATETIME'], 'safe'],
             [['CATEGORY', 'FLAG'], 'integer'],
-            [['DESCRIPTION', 'ACTION', 'DELETE_REMARK', 'IMAGE_BEFORE_1', 'IMAGE_BEFORE_2', 'IMAGE_BEFORE_3', 'IMAGE_AFTER_1', 'IMAGE_AFTER_2', 'IMAGE_AFTER_3'], 'string'],
+            [['TOPIC', 'DESCRIPTION', 'ACTION', 'DELETE_REMARK', 'IMAGE_BEFORE_1', 'IMAGE_BEFORE_2', 'IMAGE_BEFORE_3', 'IMAGE_AFTER_1', 'IMAGE_AFTER_2', 'IMAGE_AFTER_3'], 'string'],
             [['PATROL_PERIOD', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'LOC_ID', 'LOC_DESC', 'PIC_ID', 'USER_ID', 'DELETE_BY_ID'], 'string', 'max' => 50],
-            [['LOC_DETAIL', 'TOPIC', 'AUDITOR', 'AUDITEE', 'PIC_NAME', 'USER_NAME', 'DELETE_BY_NAME'], 'string', 'max' => 150],
+            [['LOC_DETAIL', 'AUDITOR', 'AUDITEE', 'PIC_NAME', 'USER_NAME', 'DELETE_BY_NAME'], 'string', 'max' => 150],
             [['STATUS'], 'string', 'max' => 1]
         ];
     }

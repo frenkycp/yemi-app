@@ -48,6 +48,10 @@ class CovidPatrolController extends \app\controllers\base\AuditPatrolController
 		$model = new AuditPatrolTbl;
 		$model->PATROL_DATE = date('Y-m-d');
 		$model->CATEGORY = 3;
+		$patrol_team_arr = \Yii::$app->params['covid_patrol_auditor'];
+		if (isset($patrol_team_arr[\Yii::$app->user->identity->name])) {
+			$model->AUDITOR = \Yii::$app->user->identity->name;
+		}
 		try {
 			if ($model->load($_POST)) {
 				$model->PATROL_PERIOD = date('Ym', strtotime($model->PATROL_DATE));
@@ -64,7 +68,8 @@ class CovidPatrolController extends \app\controllers\base\AuditPatrolController
 					$model->CC_GROUP = $tmp_cc->CC_GROUP;
 				}
 				
-				$model->USER_ID = $model->USER_NAME = \Yii::$app->user->identity->username;
+				$model->USER_ID = \Yii::$app->user->identity->username;
+				$model->USER_NAME = \Yii::$app->user->identity->name;
 				$tmp_user = Karyawan::find()
 				->where([
 					'OR',
