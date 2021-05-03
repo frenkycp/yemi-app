@@ -195,12 +195,12 @@ echo '</pre>';*/
                                         'plotLines' => [
                                             [
                                                 'color' => '#FBBB02',
-                                                'width' => 1,
+                                                'width' => 2,
                                                 'value' => 700
                                             ],
                                             [
                                                 'color' => '#EC4444',
-                                                'width' => 1,
+                                                'width' => 2,
                                                 'value' => 1000
                                             ],
                                         ],
