@@ -137,14 +137,14 @@ echo '</pre>';*/
                 </div>
                 <div class="panel-body bg-black text-center">
                     <div class="row" style="font-size: 80px; color: white;">
-                        <div class="col-sm-7">
+                        <div class="col-sm-12">
                             <div class="">
                                 <div class="panel-body bg-black no-padding" style="color: white !important;">
                                     <span class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 0.5em;">ppm</small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-5">
+                        <div class="col-sm-5" style="display: none;">
                             <div class="">
                                 <div class="panel-body bg-black no-padding" style="color: white !important;">
                                     <span class="text-yellow"><?= $value->humidity_pct_rh; ?></span><small style="font-size: 0.5em;">%</small>
