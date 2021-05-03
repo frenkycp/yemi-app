@@ -33,7 +33,7 @@ class DisplayHrgaController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
-        $data = AirMonitoringTbl::find()->all();
+        $data = AirMonitoringTbl::find()->orderBy('loc')->all();
 
         $tmp_log = $data_log = [];
         foreach ($data as $value) {
