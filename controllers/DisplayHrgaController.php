@@ -69,7 +69,8 @@ class DisplayHrgaController extends Controller
                 'name' => $value->loc,
                 'data' => $tmp_log[$value->deviceno],
                 'showInLegend' => false,
-                'color' => '#911BEB',
+                'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+                //'color' => '#911BEB',
             ];
         }
 

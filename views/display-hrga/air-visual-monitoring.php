@@ -83,7 +83,7 @@ $css_string = "
         font-size: 30px;
     }
     .text-yellow {
-        color: yellow !important;
+        //color: yellow !important;
         font-weight: bold;
         letter-spacing: 4px;
     }
@@ -167,7 +167,7 @@ echo '</pre>';*/
                                         'style' => [
                                             'fontFamily' => 'sans-serif',
                                         ],
-                                        'height' => 250,
+                                        'height' => 300,
                                         'backgroundColor' => '#000',
                                     ],
                                     'title' => [
