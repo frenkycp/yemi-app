@@ -20,6 +20,27 @@ use app\models\VisualPickingView;
 
 class DisplayPchController extends Controller
 {
+    public function actionRdrProgress($value='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date'], 'required');
+
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-t');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        return $this->render('rdr-progress', [
+            'model' => $model,
+        ]);
+    }
+
     public function getRemark($req_date, $analyst, $stage_id, $stat)
     {
         $data_arr = VisualPickingView::find()
@@ -471,6 +492,9 @@ class DisplayPchController extends Controller
             'SLIP_STAT' => 'USED',
             'PI_PERIOD' => $model->period,
         ])
+        ->andWhere(['<>', 'AREA', '-'])
+        ->andWhere(['<>', 'AREA', ''])
+        ->andWhere('AREA IS NOT NULL')
         //->andWhere(['<>', 'PIC', '-'])
         ->groupBy('AREA')
         ->orderBy('AREA')

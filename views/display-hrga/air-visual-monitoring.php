@@ -85,7 +85,7 @@ $css_string = "
     .text-yellow {
         color: yellow !important;
         font-weight: bold;
-        letter-spacing: 2px;
+        letter-spacing: 4px;
     }
     //tbody > tr > td { background: #33383d;}
     //.summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
@@ -136,25 +136,18 @@ echo '</pre>';*/
                     <h3 class="panel-title"><?= $value->loc; ?></h3>
                 </div>
                 <div class="panel-body bg-black text-center">
-                    <div class="row" style="font-size: 50px; color: white;">
-                        <div class="col-sm-4">
-                            <div class="panel panel-default">
-                                <div class="panel-body bg-black" style="color: white !important;">
-                                    <span class="text-yellow"><?= $value->co2_ppm; ?></span> <small style="font-size: 0.7em;">ppm</small>
+                    <div class="row" style="font-size: 80px; color: white;">
+                        <div class="col-sm-7">
+                            <div class="">
+                                <div class="panel-body bg-black no-padding" style="color: white !important;">
+                                    <span class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 0.5em;">ppm</small>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="panel panel-default">
-                                <div class="panel-body bg-black" style="color: white !important;">
-                                    <span class="text-yellow"><?= $value->temperature_c; ?></span> &deg;C
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="panel panel-default">
-                                <div class="panel-body bg-black" style="color: white !important;">
-                                    <span class="text-yellow"><?= $value->humidity_pct_rh; ?></span> %
+                        <div class="col-sm-5">
+                            <div class="">
+                                <div class="panel-body bg-black no-padding" style="color: white !important;">
+                                    <span class="text-yellow"><?= $value->humidity_pct_rh; ?></span><small style="font-size: 0.5em;">%</small>
                                 </div>
                             </div>
                         </div>
@@ -174,14 +167,14 @@ echo '</pre>';*/
                                         'style' => [
                                             'fontFamily' => 'sans-serif',
                                         ],
-                                        'height' => 300,
+                                        'height' => 250,
                                         'backgroundColor' => '#000',
                                     ],
                                     'title' => [
-                                        'text' => 'Last Update : ' .date('d M\' Y H:i', strtotime( $value->postdate))
+                                        'text' => ''
                                     ],
                                     'subtitle' => [
-                                        'text' => ''
+                                        'text' => 'Last Update : ' .date('d M\' Y H:i', strtotime( $value->postdate))
                                     ],
                                     'xAxis' => [
                                         'type' => 'datetime',
@@ -196,9 +189,22 @@ echo '</pre>';*/
                                         'title' => [
                                             'text' => 'CO2 Rate'
                                         ],
+                                        'gridLineWidth' => 0,
                                         'allowDecimals' => false,
                                         'tickInterval' => 100,
-                                        'plotBands' => [
+                                        'plotLines' => [
+                                            [
+                                                'color' => '#FBBB02',
+                                                'width' => 1,
+                                                'value' => 700
+                                            ],
+                                            [
+                                                'color' => '#EC4444',
+                                                'width' => 1,
+                                                'value' => 1000
+                                            ],
+                                        ],
+                                        /*'plotBands' => [
                                             [
                                                 'from' => 400,
                                                 'to' => 800,
@@ -214,7 +220,7 @@ echo '</pre>';*/
                                                 'to' => 2000,
                                                 'color' => '#EC4444',
                                             ],
-                                        ],
+                                        ],*/
                                         //'gridLineWidth' => 0,
                                     ],
                                     'credits' => [
