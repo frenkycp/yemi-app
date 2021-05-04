@@ -75,6 +75,12 @@ class InjMoldingTblController extends \app\controllers\base\InjMoldingTblControl
 				$model->UPDATE_BY_NAME = $tmp_user->NAMA_KARYAWAN;
 			}
 			$model->UPDATE_DATETIME = date('Y-m-d H:i:s');
+
+			if ($model->TOTAL_COUNT > $model->NEXT_MAINTENANCE) {
+				$multiply = ceil(($model->TOTAL_COUNT / $model->TARGET_COUNT));
+				$model->NEXT_MAINTENANCE = $multiply * $model->TARGET_COUNT;
+			}
+
 			if ($model->save()) {
 				return $this->redirect(Url::previous());
 			} else {
@@ -212,6 +218,7 @@ class InjMoldingTblController extends \app\controllers\base\InjMoldingTblControl
 			$model->STATUS = 'C';
 			if ($model->save()) {
 				$tmp_molding->MOLDING_STATUS = 0;
+				$tmp_molding->NEXT_MAINTENANCE = $tmp_molding->TOTAL_COUNT + $tmp_molding->TARGET_COUNT;
 				$tmp_molding->save();
 				return $this->redirect(Url::previous());
 			} else {
