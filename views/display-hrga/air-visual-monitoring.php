@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'Air Visual Monitoring <span class="japanesse light-green"></span>',
-    'tab_title' => 'Air Visual Monitoring',
-    'breadcrumbs_title' => 'Air Visual Monitoring'
+    'page_title' => 'AIR VISUAL MONITORING <span class="japanesse light-green"></span>',
+    'tab_title' => 'AIR VISUAL MONITORING',
+    'breadcrumbs_title' => 'AIR VISUAL MONITORING'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -22,7 +22,7 @@ date_default_timezone_set('Asia/Jakarta');
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 1em; text-align: center;}
+    .content-header {color: white; font-size: 1em; text-align: center; letter-spacing: 5px;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -85,13 +85,13 @@ $css_string = "
     .text-yellow {
         //color: yellow !important;
         font-weight: bold;
-        letter-spacing: 4px;
+        letter-spacing: 10px;
     }
     //tbody > tr > td { background: #33383d;}
     //.summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .icon-status {font-size : 3em;}
     .target, .actual {font-size: 4em !important;}
-    .bg-black {background-color: black; color: yellow !important;}
+    .bg-black {background-color: #000; color: yellow !important;}
     .total-nolog {font-size: 20em;}
     li, .panel-title, .box-title {letter-spacing: 1.2px;}";
 $this->registerCss($css_string);
@@ -136,7 +136,7 @@ echo '</pre>';*/
                     <h3 class="panel-title"><?= $value->loc; ?></h3>
                 </div>
                 <div class="panel-body bg-black text-center">
-                    <div class="row" style="font-size: 80px; color: white;">
+                    <div class="row" style="font-size: 130px; color: white;">
                         <div class="col-sm-12">
                             <div class="">
                                 <div class="panel-body bg-black no-padding" style="color: white !important;">
@@ -167,7 +167,7 @@ echo '</pre>';*/
                                         'style' => [
                                             'fontFamily' => 'sans-serif',
                                         ],
-                                        'height' => 300,
+                                        'height' => 200,
                                         'backgroundColor' => '#000',
                                     ],
                                     'title' => [
