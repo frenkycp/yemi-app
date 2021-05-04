@@ -299,7 +299,7 @@ $user_id = \Yii::$app->user->identity->username;
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-success" style="<?= in_array($user_id, ['ura', '150826']) ? '' : 'display: none;'; ?>">
+                <div class="panel panel-success" style="<?= in_array($user_id, ['ura', '150826', 'mgmt']) ? '' : 'display: none;'; ?>">
                     <div class="panel-heading text-center">*</div>
                     <div class="list-group-item">
                         <ol style="padding-left: 1em">
