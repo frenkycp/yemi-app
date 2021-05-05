@@ -21,7 +21,7 @@ class DprGmcEffDataController extends Controller
 	
 	public function actionIndex()
 	{
-		set_time_limit(600);
+		set_time_limit(1800);
 		$searchModel  = new DprGmcEffDataSearch;
 		$searchModel->proddate = date('Y-m-d');
     	if(\Yii::$app->request->get('proddate') !== null)
