@@ -194,14 +194,16 @@ echo '</pre>';*/
                                         'tickInterval' => 100,
                                         'plotLines' => [
                                             [
-                                                'color' => '#FBBB02',
+                                                'color' => 'yellow',
                                                 'width' => 2,
-                                                'value' => 700
+                                                'value' => 700,
+                                                'dashStyle' => 'dot'
                                             ],
                                             [
-                                                'color' => '#EC4444',
+                                                'color' => 'red',
                                                 'width' => 2,
-                                                'value' => 1000
+                                                'value' => 1000,
+                                                'dashStyle' => 'dot'
                                             ],
                                         ],
                                         /*'plotBands' => [
