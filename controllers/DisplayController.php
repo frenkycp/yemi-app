@@ -4421,6 +4421,7 @@ class DisplayController extends Controller
         return $this->render('ijazah-progress', [
             'period_arr' => $period_arr,
             'tmp_data_arr' => $tmp_data_arr,
+            'tmp_gmc_arr' => $tmp_gmc_arr,
             'model' => $model,
             'line_arr' => $line_arr,
             'tmp_work_day' => $tmp_work_day,
