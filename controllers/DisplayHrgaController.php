@@ -647,8 +647,8 @@ class DisplayHrgaController extends Controller
         //$tmp_office_emp = OfficeEmp::find()->all();
         //$today_temp = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->orderBy('LAST_UPDATE')->all();
         //$yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();
-        $temperature_from_yesterday = ScanTemperature::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
-        $temperature_from_yesterday2 = KaryawanSuhuView::find()->where(['>=', 'swipetime', $yesterday])->orderBy('swipetime')->all();
+        /*$temperature_from_yesterday = ScanTemperature::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
+        $temperature_from_yesterday2 = KaryawanSuhuView::find()->where(['>=', 'swipetime', $yesterday])->orderBy('swipetime')->all();*/
         $temperature_from_yesterday3 = HikTemperatureView::find()->where(['>=', 'POST_DATE', $yesterday])->orderBy('LAST_UPDATE')->all();
 
         $total_check = $total_no_check = 0;
@@ -659,7 +659,7 @@ class DisplayHrgaController extends Controller
             $emp_shift = $attendance_val['shift'];
             $emp_name = $attendance_val['name'];
 
-            $temp_data = $temperature_from_yesterday;
+            //$temp_data = $temperature_from_yesterday3;
             $start_time = $model->post_date . ' 05:00:00';
             $end_time = $model->post_date . ' 17:00:00';
             if ($emp_shift == 3) {
@@ -675,7 +675,7 @@ class DisplayHrgaController extends Controller
             $body_temp = 0;
             $last_update = null;
 
-            foreach ($temp_data as $temp_value) {
+            /*foreach ($temp_data as $temp_value) {
                 if ($temp_value->NIK == $attendance_val['nik']
                     && $body_temp == 0
                     && $temp_value->SUHU > 0
@@ -685,9 +685,9 @@ class DisplayHrgaController extends Controller
                     $body_temp = $temp_value->SUHU;
                     $last_update = $temp_value->LAST_UPDATE;
                 }
-            }
+            }*/
 
-            if ($last_update == null) {
+            /*if ($last_update == null) {
                 foreach ($temperature_from_yesterday2 as $temp_value) {
                     if ($temp_value->NIK == $attendance_val['nik']
                         && $body_temp == 0
@@ -699,21 +699,21 @@ class DisplayHrgaController extends Controller
                         $last_update = $temp_value->swipetime;
                     }
                 }
-            }
+            }*/
 
-            if ($last_update == null) {
-                foreach ($temperature_from_yesterday3 as $temp_value) {
-                    if ($temp_value->NIK == $attendance_val['nik']
-                        && $body_temp == 0
-                        && $temp_value->Temp > 0
-                        && $temp_value->LAST_UPDATE > $start_time
-                        && $temp_value->LAST_UPDATE < $end_time
-                    ) {
-                        $body_temp = $temp_value->Temp;
-                        $last_update = $temp_value->LAST_UPDATE;
-                    }
+            //if ($last_update == null) {
+            foreach ($temperature_from_yesterday3 as $temp_value) {
+                if ($temp_value->NIK == $attendance_val['nik']
+                    && $body_temp == 0
+                    && $temp_value->Temp > 0
+                    && $temp_value->LAST_UPDATE > $start_time
+                    && $temp_value->LAST_UPDATE < $end_time
+                ) {
+                    $body_temp = $temp_value->Temp;
+                    $last_update = $temp_value->LAST_UPDATE;
                 }
             }
+            //}
 
             if ($last_update == null) {
                 if ($attend_judgement == 'P' && strpos($attendance_val['shiftdaily_code'], 'WFH') === false) {
