@@ -3,13 +3,13 @@
 namespace app\models;
 
 use Yii;
-use \app\models\base\KlinikObatLog as BaseKlinikObatLog;
+use \app\models\base\HrgaDocTbl as BaseHrgaDocTbl;
 use yii\helpers\ArrayHelper;
 
 /**
- * This is the model class for table "tb_klinik_obat_log".
+ * This is the model class for table "db_owner.HRGA_DOC_TBL".
  */
-class KlinikObatLog extends BaseKlinikObatLog
+class HrgaDocTbl extends BaseHrgaDocTbl
 {
 
     public function behaviors()
@@ -30,10 +30,5 @@ class KlinikObatLog extends BaseKlinikObatLog
                 # custom validation rules
             ]
         );
-    }
-
-    public function getClinicData($value='')
-    {
-        return $this->hasOne(KlinikInput::className(), ['klinik_input_id' => 'klinik_input_pk']);
     }
 }

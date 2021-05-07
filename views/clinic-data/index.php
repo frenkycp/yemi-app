@@ -367,6 +367,28 @@ $gridColumns = [
         ],
     ],
     [
+        'attribute' => 'detail_obat',
+        'value' => function($model){
+            if (count($model->obatLog > 0)) {
+                $obat_desc = '';
+                foreach ($model->obatLog as $key => $value) {
+                    if ($obat_desc == '') {
+                        $obat_desc = $value->part_desc . ' (' . $value->qty . ')';
+                    } else {
+                        $obat_desc .= ', ' . $value->part_desc . ' (' . $value->qty . ')';
+                    }
+                }
+                return $obat_desc;
+            }
+        },
+        'mergeHeader' => true,
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'contentOptions' => [
+            'style' => 'font-size: 12px; min-width: 120px;'
+        ],
+    ],
+    [
         'attribute' => 'obat1',
         'hAlign' => 'center',
         'vAlign' => 'middle',

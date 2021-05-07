@@ -27,16 +27,6 @@ $gridColumns = [
         'hAlign' => 'center',
     ],
     [
-        'attribute' => 'user_id',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
-        'attribute' => 'user_name',
-        'vAlign' => 'middle',
-        'hAlign' => 'center',
-    ],
-    [
         'attribute' => 'part_no',
         'vAlign' => 'middle',
         'hAlign' => 'center',
@@ -44,12 +34,41 @@ $gridColumns = [
     [
         'attribute' => 'part_desc',
         'vAlign' => 'middle',
-        'hAlign' => 'center',
+        //'hAlign' => 'center',
     ],
     [
         'attribute' => 'qty',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'nik_sun_fish',
+        'label' => 'NIK',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'nama',
+        'label' => 'Name',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'cost_center_name',
+        'label' => 'Section',
+        'vAlign' => 'middle',
+        'filter' => app\models\SunfishViewEmp::instance()->getSectionDropdown(),
+        //'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'user_id',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'user_name',
+        'vAlign' => 'middle',
+        //'hAlign' => 'center',
     ],
 ];
 ?>

@@ -12,7 +12,7 @@ use app\models\SunfishViewEmp;
  */
 class KlinikInput extends BaseKlinikInput
 {
-    public $input_date, $masuk2, $keluar2, $total1, $total2, $total3, $jumlah_karyawan, $total_minutes, $total_visit, $nama_obat, $jumlah_obat;
+    public $input_date, $masuk2, $keluar2, $total1, $total2, $total3, $jumlah_karyawan, $total_minutes, $total_visit, $nama_obat, $jumlah_obat, $detail_obat;
 
     public function behaviors()
     {
@@ -69,5 +69,10 @@ class KlinikInput extends BaseKlinikInput
 
             return true;
         }
+    }
+
+    public function getObatLog($value='')
+    {
+        return $this->hasMany(KlinikObatLog::className(), ['klinik_input_pk' => 'klinik_input_id']);
     }
 }
