@@ -19,7 +19,7 @@ public function rules()
 {
 return [
             [['DRS_NO', 'NG_LOC', 'NG_LOC_DESC', 'ITEM', 'ITEM_DESC', 'UM', 'REASON_ID', 'REASON_DESC', 'REMARK', 'DRS_PUR_LOC', 'DRS_PUR_LOC_DESC', 'DRS_CURR', 'PIC_DELIVERY', 'DSR_STAT', 'DRS_USER_ID', 'DRS_USER_DESC', 'DEBIT_PUR_LOC', 'DEBIT_PUR_LOC_DESC', 'DEBIT_NO', 'DEBIT_URUT', 'DEBIT_CURR', 'DEBIT_STAT', 'DEBIT_REASON', 'DEBIT_REASON_DESC', 'DEBIT_NOTE', 'DEBIT_NOTE2', 'DEBIT_USER_ID', 'DEBIT_USER_DESC', 'DETAIL_NG', 'LOT_CODE'], 'string'],
-            [['DRS_DATE', 'DRS_LAST_UPDATE', 'DEBIT_DATE', 'DEBIT_LAST_UPDATE'], 'safe'],
+            [['DRS_DATE', 'DRS_LAST_UPDATE', 'DEBIT_DATE', 'DEBIT_LAST_UPDATE', 'REQUEST_STAGE', 'SUPPLEMENT_REQUEST'], 'safe'],
             [['NG_QTY', 'LOT_QTY', 'DRS_UNIT_PRICE', 'DRS_AMOUNT', 'DEBIT_QTY', 'DEBIT_PRICE', 'DEBIT_AMOUNT'], 'number']
 ];
 }
@@ -64,6 +64,8 @@ $query->andFilterWhere([
             'LOT_QTY' => $this->LOT_QTY,
             'REASON_ID' => $this->REASON_ID,
             'DRS_NO' => $this->DRS_NO,
+            'REQUEST_STAGE' => $this->REQUEST_STAGE,
+            'SUPPLEMENT_REQUEST' => $this->SUPPLEMENT_REQUEST,
         ]);
 
 $query->andFilterWhere(['like', 'CONVERT(VARCHAR(10),DRS_DATE,120)', $this->DRS_DATE])

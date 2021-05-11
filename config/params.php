@@ -511,6 +511,20 @@ return [
         'FA & WHP Gedung 2' => 'FA & WHP Gedung 2',
         'SPC & WHP Gedung 2' => 'SPC & WHP Gedung 2',
     ],
+    'she_patrol_category' => [
+    	'Fisika' => 'Fisika',
+    	'Kimia' => 'Kimia',
+    	'Biologi' => 'Biologi',
+    	'Ergonomi' => 'Ergonomi',
+    	'Psikologi' => 'Psikologi',
+    ],
+    'supplement_request_stage' => [
+        0 => 'No Request',
+        1 => 'Supplement Requested',
+        2 => 'PC Approved',
+        3 => 'WH Approved',
+        4 => 'Pulled Up'
+    ],
 ];
 
 function getYearArray()

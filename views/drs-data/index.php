@@ -24,6 +24,73 @@ $this->registerCss("");
 
 $gridColumns = [
     [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => '{request} {pc_approve} {wh_approve} {pulled_up}',
+        'buttons' => [
+            'request' => function($url, $model, $key){
+                $url = ['request', 'DRS_NO' => $model->DRS_NO];
+                $options = [
+                    'title' => 'Request Supplement',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to request supplement for this item...?',
+                    'class' => 'btn btn-success btn-sm btn-block'
+                ];
+                if ($model->REQUEST_STAGE == 0) {
+                    return Html::a('PRD. REQUEST', $url, $options);
+                } else {
+                    return '<button class="btn btn-success btn-sm btn-block disabled">PRD. REQUEST</button>';
+                }
+                
+            },
+            'pc_approve' => function($url, $model, $key){
+                $url = ['pc-approve', 'DRS_NO' => $model->DRS_NO];
+                $options = [
+                    'title' => 'PC Approve',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to approve this item...?',
+                    'class' => 'btn btn-success btn-sm btn-block'
+                ];
+                if ($model->REQUEST_STAGE == 1) {
+                    return Html::a('PC APPROVE', $url, $options);
+                } else {
+                    return '<button class="btn btn-success btn-sm btn-block disabled">PC APPROVE</button>';
+                }
+                
+            },
+            'wh_approve' => function($url, $model, $key){
+                $url = ['wh-approve', 'DRS_NO' => $model->DRS_NO];
+                $options = [
+                    'title' => 'WH Approve',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to approve this item...?',
+                    'class' => 'btn btn-success btn-sm btn-block'
+                ];
+                if ($model->REQUEST_STAGE == 2) {
+                    return Html::a('WH APPROVE', $url, $options);
+                } else {
+                    return '<button class="btn btn-success btn-sm btn-block disabled">WH APPROVE</button>';
+                }
+                
+            },
+            'pulled_up' => function($url, $model, $key){
+                $url = ['pulled-up', 'DRS_NO' => $model->DRS_NO];
+                $options = [
+                    'title' => 'Pulled Up',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to pull-up this item...?',
+                    'class' => 'btn btn-success btn-sm btn-block'
+                ];
+                if ($model->REQUEST_STAGE == 3) {
+                    return Html::a('PULLED UP', $url, $options);
+                } else {
+                    return '<button class="btn btn-success btn-sm btn-block disabled">PULLED UP</button>';
+                }
+                
+            },
+        ],
+        'contentOptions' => ['nowrap'=>'nowrap', 'style' => 'width: 100px;']
+    ],
+    [
         'attribute' => 'DRS_NO',
         'label' => 'DRS NO',
         'hAlign' => 'center',
@@ -506,6 +573,33 @@ $gridColumns = [
         'vAlign' => 'middle',
         'width' => '100px',
         'mergeHeader' => true,
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'SUPPLEMENT_REQUEST',
+        'filter' => [
+            'Y' => 'Y',
+            'N' => 'N',
+        ],
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px;'
+        ],
+    ],
+    [
+        'attribute' => 'REQUEST_STAGE',
+        'label' => 'Request Stage',
+        'value' => function($model){
+            return \Yii::$app->params['supplement_request_stage'][$model->REQUEST_STAGE];
+        },
+        'filter' => \Yii::$app->params['supplement_request_stage'],
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
         'filterInputOptions' => [
             'class' => 'form-control',
             'style' => 'text-align: center; font-size: 12px;'

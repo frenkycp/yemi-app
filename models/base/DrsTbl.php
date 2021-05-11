@@ -7,7 +7,7 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.DRS_VIEW_03".
+ * This is the base-model class for table "db_owner.DRS_TBL".
  *
  * @property string $DRS_NO
  * @property string $DRS_DATE
@@ -18,60 +18,73 @@ use Yii;
  * @property string $UM
  * @property double $NG_QTY
  * @property double $LOT_QTY
+ * @property double $NG_PERCENT
  * @property string $REASON_ID
  * @property string $REASON_DESC
  * @property string $REMARK
+ * @property string $DETAIL_NG
  * @property string $DRS_PUR_LOC
  * @property string $DRS_PUR_LOC_DESC
  * @property string $DRS_CURR
  * @property double $DRS_UNIT_PRICE
  * @property double $DRS_AMOUNT
  * @property string $PIC_DELIVERY
+ * @property string $PIC_NIP
+ * @property string $PIC_PHONE
+ * @property string $PIC
+ * @property string $RACK
+ * @property string $RACK_LOC
+ * @property string $IQA
  * @property string $DSR_STAT
  * @property string $DRS_USER_ID
  * @property string $DRS_USER_DESC
  * @property string $DRS_LAST_UPDATE
- * @property string $DEBIT_PUR_LOC
- * @property string $DEBIT_PUR_LOC_DESC
+ * @property string $WAREHOUSE_ID
+ * @property string $WAREHOUSE_DESC
+ * @property string $WAREHOUSE_UPDATE
  * @property string $DEBIT_NO
  * @property string $DEBIT_URUT
- * @property double $DEBIT_QTY
- * @property string $DEBIT_CURR
- * @property double $DEBIT_PRICE
- * @property double $DEBIT_AMOUNT
- * @property string $DEBIT_STAT
+ * @property integer $DEBIT_DTR
  * @property string $DEBIT_DATE
- * @property string $DEBIT_REASON
- * @property string $DEBIT_REASON_DESC
- * @property string $DEBIT_NOTE
- * @property string $DEBIT_NOTE2
+ * @property string $CURR
+ * @property double $UNIT_PRICE
+ * @property double $AMOUNT
+ * @property string $DEBIT_PUR_LOC
+ * @property string $DEBIT_PUR_LOC_DESC
+ * @property string $DEBIT_NOTE_STAT
  * @property string $DEBIT_USER_ID
  * @property string $DEBIT_USER_DESC
- * @property string $DEBIT_LAST_UPDATE
- * @property string $REFERENSI_NOTE
- * @property string $DETAIL_NG
+ * @property string $FCR_NO
+ * @property string $FCR_DATE
+ * @property string $FCR_RETURN_DATE
+ * @property string $FCR_PUR_LOC
+ * @property string $FCR_PUR_LOC_DESC
+ * @property string $FCR_MODEL
+ * @property string $FCR_STAT
+ * @property string $FCR_REMARK
  * @property string $LOT_CODE
  * @property string $DEBIT_DECISION
+ * @property string $REPLACE_DECISION
  * @property string $PROD_REQUEST_ID
  * @property string $PROD_REQUEST_NAME
  * @property string $PROD_REQUEST_DATETIME
  * @property string $PC_APPROVE_ID
  * @property string $PC_APPROVE_NAME
  * @property string $PC_APPROVE_DATETIME
+ * @property string $PC_APPROVE_STATUS
  * @property string $WH_APPROVE_ID
  * @property string $WH_APPROVE_NAME
  * @property string $WH_APPROVE_DATETIME
+ * @property string $WH_APPROVE_STATUS
  * @property string $PULLED_UP_ID
  * @property string $PULLED_UP_NAME
  * @property string $PULLED_UP_DATETIME
- * @property string $SUPPLEMENT_REQUEST
- * @property string $PC_APPROVE_STATUS
- * @property string $WH_APPROVE_STATUS
  * @property string $PULLED_UP_STATUS
+ * @property string $SUPPLEMENT_REQUEST
  * @property string $REQUEST_STATUS
  * @property string $aliasModel
  */
-abstract class DrsView03 extends \yii\db\ActiveRecord
+abstract class DrsTbl extends \yii\db\ActiveRecord
 {
 
 
@@ -81,7 +94,7 @@ abstract class DrsView03 extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.DRS_VIEW_03';
+        return 'db_owner.DRS_TBL';
     }
 
     /**
@@ -99,17 +112,20 @@ abstract class DrsView03 extends \yii\db\ActiveRecord
     {
         return [
             [['DRS_NO'], 'required'],
-            [['DRS_DATE', 'DRS_LAST_UPDATE', 'DEBIT_DATE', 'DEBIT_LAST_UPDATE', 'PROD_REQUEST_DATETIME', 'PC_APPROVE_DATETIME', 'WH_APPROVE_DATETIME', 'PULLED_UP_DATETIME'], 'safe'],
-            [['NG_QTY', 'LOT_QTY', 'DRS_UNIT_PRICE', 'DRS_AMOUNT', 'DEBIT_QTY', 'DEBIT_PRICE', 'DEBIT_AMOUNT'], 'number'],
-            [['DRS_NO', 'ITEM_DESC', 'REASON_DESC', 'DRS_PUR_LOC_DESC', 'PIC_DELIVERY', 'DRS_USER_DESC', 'DEBIT_PUR_LOC_DESC', 'DEBIT_REASON_DESC', 'DEBIT_USER_DESC', 'DEBIT_DECISION', 'PROD_REQUEST_ID', 'PC_APPROVE_ID', 'WH_APPROVE_ID', 'PULLED_UP_ID'], 'string', 'max' => 50],
-            [['NG_LOC', 'DRS_USER_ID', 'DEBIT_REASON', 'DEBIT_USER_ID'], 'string', 'max' => 10],
-            [['NG_LOC_DESC', 'DEBIT_NO'], 'string', 'max' => 30],
-            [['ITEM', 'DRS_PUR_LOC', 'DEBIT_PUR_LOC'], 'string', 'max' => 13],
-            [['UM', 'REASON_ID', 'DRS_CURR', 'DEBIT_URUT', 'DEBIT_CURR'], 'string', 'max' => 3],
+            [['DRS_DATE', 'DRS_LAST_UPDATE', 'WAREHOUSE_UPDATE', 'DEBIT_DATE', 'FCR_DATE', 'FCR_RETURN_DATE', 'PROD_REQUEST_DATETIME', 'PC_APPROVE_DATETIME', 'WH_APPROVE_DATETIME', 'PULLED_UP_DATETIME'], 'safe'],
+            [['NG_QTY', 'LOT_QTY', 'NG_PERCENT', 'DRS_UNIT_PRICE', 'DRS_AMOUNT', 'UNIT_PRICE', 'AMOUNT'], 'number'],
+            [['DEBIT_DTR'], 'integer'],
+            [['DRS_NO', 'ITEM_DESC', 'REASON_DESC', 'DRS_PUR_LOC_DESC', 'PIC_DELIVERY', 'DRS_USER_DESC', 'WAREHOUSE_DESC', 'DEBIT_PUR_LOC_DESC', 'DEBIT_USER_DESC', 'FCR_PUR_LOC_DESC', 'FCR_MODEL', 'FCR_REMARK', 'DEBIT_DECISION', 'REPLACE_DECISION', 'PROD_REQUEST_ID', 'PC_APPROVE_ID', 'WH_APPROVE_ID', 'PULLED_UP_ID'], 'string', 'max' => 50],
+            [['NG_LOC', 'DRS_USER_ID', 'WAREHOUSE_ID', 'DEBIT_USER_ID'], 'string', 'max' => 10],
+            [['NG_LOC_DESC', 'PIC', 'RACK', 'RACK_LOC', 'IQA', 'DEBIT_NO', 'FCR_NO'], 'string', 'max' => 30],
+            [['ITEM', 'DRS_PUR_LOC', 'DEBIT_PUR_LOC', 'FCR_PUR_LOC'], 'string', 'max' => 13],
+            [['UM', 'REASON_ID', 'DRS_CURR', 'DEBIT_URUT', 'CURR'], 'string', 'max' => 3],
             [['REMARK', 'DETAIL_NG', 'LOT_CODE'], 'string', 'max' => 255],
-            [['DSR_STAT', 'DEBIT_STAT', 'SUPPLEMENT_REQUEST', 'PC_APPROVE_STATUS', 'WH_APPROVE_STATUS', 'PULLED_UP_STATUS', 'REQUEST_STATUS'], 'string', 'max' => 1],
-            [['DEBIT_NOTE', 'DEBIT_NOTE2', 'REFERENSI_NOTE'], 'string', 'max' => 100],
-            [['PROD_REQUEST_NAME', 'PC_APPROVE_NAME', 'WH_APPROVE_NAME', 'PULLED_UP_NAME'], 'string', 'max' => 250]
+            [['PIC_NIP'], 'string', 'max' => 7],
+            [['PIC_PHONE'], 'string', 'max' => 15],
+            [['DSR_STAT', 'DEBIT_NOTE_STAT', 'FCR_STAT', 'PC_APPROVE_STATUS', 'WH_APPROVE_STATUS', 'PULLED_UP_STATUS', 'SUPPLEMENT_REQUEST', 'REQUEST_STATUS'], 'string', 'max' => 1],
+            [['PROD_REQUEST_NAME', 'PC_APPROVE_NAME', 'WH_APPROVE_NAME', 'PULLED_UP_NAME'], 'string', 'max' => 250],
+            [['DRS_NO'], 'unique']
         ];
     }
 
@@ -128,56 +144,69 @@ abstract class DrsView03 extends \yii\db\ActiveRecord
             'UM' => 'Um',
             'NG_QTY' => 'Ng Qty',
             'LOT_QTY' => 'Lot Qty',
+            'NG_PERCENT' => 'Ng Percent',
             'REASON_ID' => 'Reason ID',
             'REASON_DESC' => 'Reason Desc',
             'REMARK' => 'Remark',
+            'DETAIL_NG' => 'Detail Ng',
             'DRS_PUR_LOC' => 'Drs Pur Loc',
             'DRS_PUR_LOC_DESC' => 'Drs Pur Loc Desc',
             'DRS_CURR' => 'Drs Curr',
             'DRS_UNIT_PRICE' => 'Drs Unit Price',
             'DRS_AMOUNT' => 'Drs Amount',
             'PIC_DELIVERY' => 'Pic Delivery',
+            'PIC_NIP' => 'Pic Nip',
+            'PIC_PHONE' => 'Pic Phone',
+            'PIC' => 'Pic',
+            'RACK' => 'Rack',
+            'RACK_LOC' => 'Rack Loc',
+            'IQA' => 'Iqa',
             'DSR_STAT' => 'Dsr Stat',
             'DRS_USER_ID' => 'Drs User ID',
             'DRS_USER_DESC' => 'Drs User Desc',
             'DRS_LAST_UPDATE' => 'Drs Last Update',
-            'DEBIT_PUR_LOC' => 'Debit Pur Loc',
-            'DEBIT_PUR_LOC_DESC' => 'Debit Pur Loc Desc',
+            'WAREHOUSE_ID' => 'Warehouse ID',
+            'WAREHOUSE_DESC' => 'Warehouse Desc',
+            'WAREHOUSE_UPDATE' => 'Warehouse Update',
             'DEBIT_NO' => 'Debit No',
             'DEBIT_URUT' => 'Debit Urut',
-            'DEBIT_QTY' => 'Debit Qty',
-            'DEBIT_CURR' => 'Debit Curr',
-            'DEBIT_PRICE' => 'Debit Price',
-            'DEBIT_AMOUNT' => 'Debit Amount',
-            'DEBIT_STAT' => 'Debit Stat',
+            'DEBIT_DTR' => 'Debit Dtr',
             'DEBIT_DATE' => 'Debit Date',
-            'DEBIT_REASON' => 'Debit Reason',
-            'DEBIT_REASON_DESC' => 'Debit Reason Desc',
-            'DEBIT_NOTE' => 'Debit Note',
-            'DEBIT_NOTE2' => 'Debit Note2',
+            'CURR' => 'Curr',
+            'UNIT_PRICE' => 'Unit Price',
+            'AMOUNT' => 'Amount',
+            'DEBIT_PUR_LOC' => 'Debit Pur Loc',
+            'DEBIT_PUR_LOC_DESC' => 'Debit Pur Loc Desc',
+            'DEBIT_NOTE_STAT' => 'Debit Note Stat',
             'DEBIT_USER_ID' => 'Debit User ID',
             'DEBIT_USER_DESC' => 'Debit User Desc',
-            'DEBIT_LAST_UPDATE' => 'Debit Last Update',
-            'REFERENSI_NOTE' => 'Referensi Note',
-            'DETAIL_NG' => 'Detail Ng',
+            'FCR_NO' => 'Fcr No',
+            'FCR_DATE' => 'Fcr Date',
+            'FCR_RETURN_DATE' => 'Fcr Return Date',
+            'FCR_PUR_LOC' => 'Fcr Pur Loc',
+            'FCR_PUR_LOC_DESC' => 'Fcr Pur Loc Desc',
+            'FCR_MODEL' => 'Fcr Model',
+            'FCR_STAT' => 'Fcr Stat',
+            'FCR_REMARK' => 'Fcr Remark',
             'LOT_CODE' => 'Lot Code',
             'DEBIT_DECISION' => 'Debit Decision',
+            'REPLACE_DECISION' => 'Replace Decision',
             'PROD_REQUEST_ID' => 'Prod Request ID',
             'PROD_REQUEST_NAME' => 'Prod Request Name',
             'PROD_REQUEST_DATETIME' => 'Prod Request Datetime',
             'PC_APPROVE_ID' => 'Pc Approve ID',
             'PC_APPROVE_NAME' => 'Pc Approve Name',
             'PC_APPROVE_DATETIME' => 'Pc Approve Datetime',
+            'PC_APPROVE_STATUS' => 'Pc Approve Status',
             'WH_APPROVE_ID' => 'Wh Approve ID',
             'WH_APPROVE_NAME' => 'Wh Approve Name',
             'WH_APPROVE_DATETIME' => 'Wh Approve Datetime',
+            'WH_APPROVE_STATUS' => 'Wh Approve Status',
             'PULLED_UP_ID' => 'Pulled Up ID',
             'PULLED_UP_NAME' => 'Pulled Up Name',
             'PULLED_UP_DATETIME' => 'Pulled Up Datetime',
-            'SUPPLEMENT_REQUEST' => 'Supplement Request',
-            'PC_APPROVE_STATUS' => 'Pc Approve Status',
-            'WH_APPROVE_STATUS' => 'Wh Approve Status',
             'PULLED_UP_STATUS' => 'Pulled Up Status',
+            'SUPPLEMENT_REQUEST' => 'Supplement Request',
             'REQUEST_STATUS' => 'Request Status',
         ];
     }
