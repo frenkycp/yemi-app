@@ -60,6 +60,9 @@ $current_action = \Yii::$app->controller->action->id;
             <li >
                 <?= Html::a('<i class="fa fa-share"></i> <span>Information Center</span>', '//10.110.52.3/hr/karyawan'); ?>
             </li>
+            <li class="<?= \Yii::$app->controller->id == 'my-hr' && $current_action == 'coc-guide' ? 'active' : ''; ?>">
+                <?= Html::a('CoC Guide<sup class="" style="text-shadow: -1px -1px 0 #F00, 1px -1px 0 #F00, -1px 1px 0 #F00, 1px 1px 0 #F00;"><i>new</i></sup>', ['coc-guide']) ?>
+            </li>
           </ul>
         </div>
         <!-- /.navbar-collapse -->

@@ -31,6 +31,17 @@ class MyHrController extends Controller
     */
     public $enableCsrfValidation = false;
 
+    public function actionCocGuide($value='')
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('my_hr_user')) {
+            return $this->redirect(['login']);
+        }
+        $this->layout = 'my-hr';
+
+        return $this->render('coc-guide');
+    }
+
 	public function actionIndex()
 	{
         $session = \Yii::$app->session;
