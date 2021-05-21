@@ -101,6 +101,42 @@ class DrsDataController extends Controller
     	return $this->redirect(Url::previous());
     }
 
+    public function updateStock($model)
+    {
+    	$TAG_SLIP = '000000';
+		$SEQ_ID = 0;
+		$NO = '000';
+		$STATUS = 'SUPPLEMENT';
+
+		$params = [
+			':ITEM' => $model->ITEM,
+			':ITEM_DESC' => $model->ITEM_DESC,
+			':UM' => $model->UM,
+			':OUT_QTY' => $model->NG_QTY,
+			':TAG_SLIP' => $TAG_SLIP, //ok
+			':SEQ_ID' => $SEQ_ID, //ok
+			':SLIP_REF' => $model->DRS_NO,
+			':NO' => $NO, //ok
+			':LOC' => $model->NG_LOC,
+			':LOC_DESC' => $model->NG_LOC_DESC,
+			':POST_DATE' => $model->PULLED_UP_DATETIME,
+			':USER_ID' => $model->PULLED_UP_ID,
+			':USER_DESC' => $model->PULLED_UP_NAME,
+			':STATUS' => $STATUS, //ok
+			':NOTE' => $NOTE,
+		];
+		$sql = "{CALL MATERIAL_OUT_INTERFACE(:ITEM, :ITEM_DESC, :UM, :OUT_QTY, :TAG_SLIP, :SEQ_ID, :SLIP_REF, :NO, :LOC, :LOC_DESC, :POST_DATE, :USER_ID, :USER_DESC, :STATUS, :NOTE)}";
+
+		$error_msg = null;
+		try {
+		    $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
+		} catch (Exception $ex) {
+			$error_msg = $ex->getMessage();
+			//return $ex->getMessage();
+		}
+		return $error_msg;
+    }
+
     public function actionPulledUp($DRS_NO)
     {
     	date_default_timezone_set('Asia/Jakarta');
@@ -119,6 +155,12 @@ class DrsDataController extends Controller
     	if (!$model->save()) {
     		return json_encode($model->errors);
     	}
+
+    	$error_msg = $this->updateStock($model);
+		if ($error_msg != null) {
+			\Yii::$app->session->setFlash("danger", "Stock Update Error : " . $error_msg);
+		}
+		\Yii::$app->session->setFlash("success", "Stock Update...");
 
     	return $this->redirect(Url::previous());
     }
