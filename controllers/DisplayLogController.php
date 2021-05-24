@@ -66,8 +66,10 @@ class DisplayLogController extends Controller
         ->select([
             'TOTAL_CONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_UNCONFIRMED' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_NO_NEED_ANYMORE' => 'SUM(CASE WHEN STATUS = \'NO NEED ANYMORE\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_CONFIRMED_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_UNCONFIRMED_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING REQUESTED\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
+            'TOTAL_NO_NEED_ANYMORE_TEU' => 'SUM(CASE WHEN STATUS = \'NO NEED ANYMORE\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_ETD_YEMI' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ETD <= \'' . $today . '\' THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_ETD_YEMI_TEU' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ETD <= \'' . $today . '\' THEN ((CNT_40HC * 2) + (CNT_40 * 2) + CNT_20 + LCL) ELSE 0 END)',
             'TOTAL_ETD_SUB' => 'SUM(CASE WHEN STATUS = \'BOOKING CONFIRMED\' AND ON_BOARD_STATUS = 1 THEN (CNT_40HC + CNT_40 + CNT_20 + LCL) ELSE 0 END)',
@@ -81,8 +83,8 @@ class DisplayLogController extends Controller
         ->one();
 
         $data = [
-            'plan' => $tmp_data->TOTAL_CONFIRMED + $tmp_data->TOTAL_UNCONFIRMED,
-            'plan_teu' => $tmp_data->TOTAL_CONFIRMED_TEU + $tmp_data->TOTAL_UNCONFIRMED_TEU,
+            'plan' => $tmp_data->TOTAL_CONFIRMED + $tmp_data->TOTAL_UNCONFIRMED + $tmp_data->TOTAL_NO_NEED_ANYMORE,
+            'plan_teu' => $tmp_data->TOTAL_CONFIRMED_TEU + $tmp_data->TOTAL_UNCONFIRMED_TEU + $tmp_data->TOTAL_NO_NEED_ANYMORE_TEU,
             'confirmed' => $tmp_data->TOTAL_CONFIRMED,
             'confirmed_teu' => $tmp_data->TOTAL_CONFIRMED_TEU,
             'unconfirmed' => $tmp_data->TOTAL_UNCONFIRMED,
