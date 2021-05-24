@@ -42,9 +42,33 @@ use app\models\TraceItemDtrLoc;
 use app\models\SensorTbl;
 use app\models\InjMachineTbl;
 use app\models\InjMoldingTbl;
+use app\models\ShipPrdMonthlyResult;
 
 class DisplayPrdController extends Controller
 {
+    public function actionShipPrdMonthlyResult($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $data = ShipPrdMonthlyResult::find()->where(['PERIOD' => $model->period])->one();
+
+        return $this->render('ship-prd-monthly-result', [
+            'model' => $model,
+            'data' => $data,
+        ]);
+    }
+
     public function actionInjMachineStatus($value='')
     {
         $this->layout = 'clean';
