@@ -53,9 +53,10 @@ $css_string = "
         border:1px solid #8b8c8d;
         background-color: #518469;
         color: white;
-        font-size: 12px;
+        font-size: 16px;
         border-bottom: 7px solid #797979;
         vertical-align: middle;
+        font-weight: normal;
     }
      .tbl-header{
         border:1px solid #8b8c8d !important;
@@ -75,24 +76,6 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
-    #yesterday-tbl > tbody > tr > td{
-        border:1px solid #777474;
-        background: #000;
-        color: #FFF;
-        vertical-align: middle;
-        //padding: 10px 10px;
-        letter-spacing: 2px;
-        //height: 100px;
-    }
-    #popup-tbl > tfoot > tr > td {
-        font-weight: bold;
-        background-color: rgba(0, 0, 150, 0.3);
-    }
-    .panel-title {
-        font-size: 30px;
-    }
-    .label-tbl {padding-left: 20px !important;}
-    .text-red {color: #ff7564 !important;}
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
     .summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
@@ -195,7 +178,7 @@ echo '</pre>';*/
                     <th width="30%">Actual Shipping</th>
                     <th width="15%" class="text-center">Qty</th>
                     <th class="text-center">Amount</th>
-                    <th class="text-center">% achieve</th>
+                    <th width="20%" class="text-center">% achieve (Amt.)</th>
                 </tr>
             </thead>
             <tbody>
@@ -244,7 +227,7 @@ echo '</pre>';*/
         <table class="table summary-tbl">
             <thead>
                 <tr>
-                    <th width="30%">Production Target</th>
+                    <th width="30%">Production Target <small><i>(End of Month)</i></small></th>
                     <th width="15%" class="text-center">Qty</th>
                     <th class="text-center">Amount</th>
                 </tr>
@@ -273,7 +256,8 @@ echo '</pre>';*/
                     <th width="30%">Output Production</th>
                     <th width="15%" class="text-center">Qty</th>
                     <th class="text-center">Amount</th>
-                    <th class="text-center">% achieve</th>
+                    <th width="20%" class="text-center">% achieve (Qty)</th>
+                    <th width="20%" class="text-center">% achieve (Amt.)</th>
                 </tr>
             </thead>
             <tbody>
@@ -284,7 +268,20 @@ echo '</pre>';*/
                     <td class="text-center"><?php
                     $pct = 0;
                     if ($data->PRD_PLAN_ORI_AMT > 0) {
+                        $pct = round($data->PRD_ACT_ORI_QTY / $data->PRD_PLAN_ORI_QTY * 100, 1);
+                        if ($pct == 100 && $data->PRD_ACT_ORI_QTY < $data->PRD_PLAN_ORI_QTY) {
+                            $pct = round($data->PRD_ACT_ORI_QTY / $data->PRD_PLAN_ORI_QTY * 100, 2);
+                        }
+                    }
+                    echo $pct;
+                    ?></td>
+                    <td class="text-center"><?php
+                    $pct = 0;
+                    if ($data->PRD_PLAN_ORI_AMT > 0) {
                         $pct = round($data->PRD_ACT_ORI_AMT / $data->PRD_PLAN_ORI_AMT * 100, 1);
+                        if ($pct == 100 && $data->PRD_ACT_ORI_AMT < $data->PRD_ACT_ORI_AMT) {
+                            $pct = round($data->PRD_ACT_ORI_AMT / $data->PRD_ACT_ORI_AMT * 100, 2);
+                        }
                     }
                     echo $pct;
                     ?></td>
@@ -297,7 +294,22 @@ echo '</pre>';*/
                         <?php
                         $pct = 0;
                         if ($data->PRD_PLAN_ORI_AMT > 0) {
+                            $pct = round($data->PRD_ACT_DELAY_QTY / $data->PRD_PLAN_DELAY_QTY * 100, 1);
+                            if ($pct == 100 && $data->PRD_ACT_DELAY_QTY < $data->PRD_PLAN_DELAY_QTY) {
+                                $pct = round($data->PRD_ACT_DELAY_QTY / $data->PRD_PLAN_DELAY_QTY * 100, 2);
+                            }
+                        }
+                        echo $pct;
+                        ?>
+                    </td>
+                    <td class="text-center">
+                        <?php
+                        $pct = 0;
+                        if ($data->PRD_PLAN_ORI_AMT > 0) {
                             $pct = round($data->PRD_ACT_DELAY_AMT / $data->PRD_PLAN_DELAY_AMT * 100, 1);
+                            if ($pct == 100 && $data->PRD_ACT_DELAY_AMT < $data->PRD_PLAN_DELAY_AMT) {
+                                $pct = round($data->PRD_ACT_DELAY_AMT / $data->PRD_PLAN_DELAY_AMT * 100, 2);
+                            }
                         }
                         echo $pct;
                         ?>
@@ -311,7 +323,22 @@ echo '</pre>';*/
                         <?php
                         $pct = 0;
                         if ($data->PRD_PLAN_ORI_AMT > 0) {
+                            $pct = round($data->PRD_ACT_TOTAL_QTY / $data->PRD_PLAN_TOTAL_QTY * 100, 1);
+                            if ($pct == 100 && $data->PRD_ACT_TOTAL_QTY < $data->PRD_PLAN_TOTAL_QTY) {
+                                $pct = round($data->PRD_ACT_TOTAL_QTY / $data->PRD_PLAN_TOTAL_QTY * 100, 2);
+                            }
+                        }
+                        echo $pct;
+                        ?>
+                    </td>
+                    <td class="text-center">
+                        <?php
+                        $pct = 0;
+                        if ($data->PRD_PLAN_ORI_AMT > 0) {
                             $pct = round($data->PRD_ACT_TOTAL_AMT / $data->PRD_PLAN_TOTAL_AMT * 100, 1);
+                            if ($pct == 100 && $data->PRD_ACT_TOTAL_AMT < $data->PRD_PLAN_TOTAL_AMT) {
+                                $pct = round($data->PRD_ACT_TOTAL_AMT / $data->PRD_PLAN_TOTAL_AMT * 100, 2);
+                            }
                         }
                         echo $pct;
                         ?>

@@ -55,13 +55,13 @@ class DisplayPrdController extends Controller
             'period'
         ]);
         $model->addRule(['period'], 'required');
-        $model->period = date('Ym');
 
         if ($model->load($_GET)) {
-
+            $data = ShipPrdMonthlyResult::find()->where(['PERIOD' => $model->period])->one();
+        } else {
+            $data = ShipPrdMonthlyResult::find()->orderBy('PERIOD DESC')->one();
+            $model->period = $data->PERIOD;
         }
-
-        $data = ShipPrdMonthlyResult::find()->where(['PERIOD' => $model->period])->one();
 
         return $this->render('ship-prd-monthly-result', [
             'model' => $model,
