@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 use app\models\TraceItemScrap;
+use app\models\ShipPrdDelayInformation;
 
 $this->title = [
     'page_title' => 'Shipping & Production Monthly Result <span class="japanesse light-green"></span>',
@@ -34,6 +35,13 @@ $css_string = "
     .form-horizontal .control-label {padding-top: 0px;}
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
     .badge {font-weight: normal;}
+    .cause-category {
+        font-weight: bold;
+        font-size: 1.2em;
+    }
+    .text-red {
+        color: #d47575 !important;
+    }
 
     .summary-tbl{
         //border:1px solid #29B6F6;
@@ -46,7 +54,7 @@ $css_string = "
         color: #FFF;
         vertical-align: middle;
         padding: 10px 10px;
-        letter-spacing: 1.1px;
+        letter-spacing: 1.5px;
         //height: 100px;
     }
     .summary-tbl > thead > tr > th{
@@ -76,9 +84,15 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
+    .table-delay-info {
+        border-top: 0px !important;
+    }
+    .table {
+        letter-spacing: 1.5px;
+    }
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
-    .summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
+    //.summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .accumulation > td {
         background: #454B52 !important;
     }
@@ -131,11 +145,9 @@ echo '</pre>';*/
 
 <div class="row" style="padding-top: 10px;">
     <div class="col-md-2">
-        <?= $form->field($model, 'period')->textInput(); ?>
-    </div>
-    <div class="form-group">
-        <br/>
-        <?= Html::submitButton('GENERATE DATA', ['class' => 'btn btn-default', 'style' => 'margin-top: 5px;']); ?>
+        <?= $form->field($model, 'period')->textInput([
+            'onchange' => 'this.form.submit();',
+        ]); ?>
     </div>
     
 </div>
@@ -145,7 +157,7 @@ echo '</pre>';*/
 <div class="row" style="color: white;">
     <div class="col-md-6">
         <h3>Shipping Sales Report</h3>
-        Update Date : <br/>
+        Update Date : <?= $data->UPDATE_DATE == null ? '-' : date('d-F-y', strtotime($data->UPDATE_DATE)); ?><br/>
         <table class="table summary-tbl">
             <thead>
                 <tr>
@@ -220,10 +232,116 @@ echo '</pre>';*/
                 </tr>
             </tbody>
         </table>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Delay Shipment Information</h3>
+            </div>
+            <div class="panel-body" style="background-color: black;">
+                <?php
+                $delay_info = ShipPrdDelayInformation::find()
+                ->where([
+                    'PERIOD' => $model->period,
+                    'INF_CATEGORY' => 'S'
+                ])
+                ->all();
+
+                if (count($delay_info) == 0) {
+                    echo 'No Delay Information...';
+                } else {
+                    ?>
+                    <table class="table">
+                        <thead>
+                            <tr style="font-size: 1.2em;">
+                                <th width="10%"></th>
+                                <th width="25%"></th>
+                                <th>Qty</th>
+                                <th>Amount</th>
+                                <th>Containers</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="cause-category">1. Eksternal Cause</td>
+                            </tr>
+                            <?php
+                            $subtotal_qty1 = $subtotal_amt1 = $subtotal_container1 = 0;
+                            foreach ($delay_info as $key => $value) {
+                                if ($value->CAUSE_CATEGORY == 'EXT') {
+                                    $subtotal_qty1 += $value->QTY;
+                                    $subtotal_amt1 += $value->AMOUNT;
+
+                                    $total_container = '';
+                                    if ($value->CONTAINERS != null) {
+                                        $total_container = $value->CONTAINERS . ' TEU';
+                                        $subtotal_container1 += $value->CONTAINERS;
+                                    }
+                                    ?>
+                                    <tr>
+                                        <td class="table-delay-info"></td>
+                                        <td class="table-delay-info"><?= $value->CAUSE_DESC; ?></td>
+                                        <td class="table-delay-info"><?= number_format($value->QTY); ?></td>
+                                        <td class="table-delay-info"><?= number_format($value->AMOUNT); ?></td>
+                                        <td class="table-delay-info"><?= $total_container; ?></td>
+                                    </tr>
+                                <?php }
+                            }
+                            ?>
+                            <tr style="font-weight: bold;">
+                                <td class="table-delay-info"></td>
+                                <td class="">Subtotal</td>
+                                <td class=""><?= number_format($subtotal_qty1); ?></td>
+                                <td class=""><?= number_format($subtotal_amt1); ?></td>
+                                <td class=""><?= $subtotal_container1; ?> TEU</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="table-delay-info"></td>
+                            </tr>
+
+
+                            <tr>
+                                <td colspan="5" class="table-delay-info cause-category">2. Internal Cause</td>
+                            </tr>
+                            <?php
+                            $subtotal_qty2 = $subtotal_amt2 = $subtotal_container2 = 0;
+                            foreach ($delay_info as $key => $value) {
+                                if ($value->CAUSE_CATEGORY == 'INT') {
+                                    $subtotal_qty2 += $value->QTY;
+                                    $subtotal_amt2 += $value->AMOUNT;
+
+                                    $total_container = '';
+                                    if ($value->CONTAINERS != null) {
+                                        $total_container = $value->CONTAINERS . ' TEU';
+                                        $subtotal_container2 += $value->CONTAINERS;
+                                    }
+                                    ?>
+                                    <tr>
+                                        <td class="table-delay-info"></td>
+                                        <td class="table-delay-info"><?= $value->CAUSE_DESC; ?></td>
+                                        <td class="table-delay-info"><?= number_format($value->QTY); ?></td>
+                                        <td class="table-delay-info"><?= number_format($value->AMOUNT); ?></td>
+                                        <td class="table-delay-info"><?= $total_container; ?></td>
+                                    </tr>
+                                <?php }
+                            }
+                            ?>
+                            <tr style="font-weight: bold;">
+                                <td class="table-delay-info"></td>
+                                <td class="">Subtotal</td>
+                                <td class=""><?= number_format($subtotal_qty2); ?></td>
+                                <td class=""><?= number_format($subtotal_amt2); ?></td>
+                                <td class=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <?php }
+                ?>
+            </div>
+        </div>
     </div>
     <div class="col-md-6">
         <h3>Production Result</h3>
-        Update Date : <br/>
+        Update Date : <?= $data->UPDATE_DATE == null ? '-' : date('d-F-y', strtotime($data->UPDATE_DATE)); ?><br/>
         <table class="table summary-tbl">
             <thead>
                 <tr>
@@ -346,5 +464,49 @@ echo '</pre>';*/
                 </tr>
             </tbody>
         </table>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Delay Production Information</h3>
+            </div>
+            <div class="panel-body" style="background-color: black;">
+                <?php
+                $delay_info = ShipPrdDelayInformation::find()
+                ->where([
+                    'PERIOD' => $model->period,
+                    'INF_CATEGORY' => 'P'
+                ])
+                ->all();
+
+                if (count($delay_info) == 0) {
+                    echo 'No Delay Information...';
+                } else {
+                    ?>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="20%"></th>
+                                <th width="20%">Model</th>
+                                <th>Qty</th>
+                                <th>Amount</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($delay_info as $key => $value): ?>
+                                <tr>
+                                    <td class="table-delay-info"><?= $value->CAUSE_DESC; ?></td>
+                                    <td class="table-delay-info"><?= $value->MODEL_NAME; ?></td>
+                                    <td class="table-delay-info text-red">(<?= number_format($value->QTY); ?>)</td>
+                                    <td class="table-delay-info text-red">(<?= number_format($value->AMOUNT); ?>)</td>
+                                    <td class="table-delay-info"><?= $value->REASON; ?></td>
+                                </tr>
+                            <?php endforeach ?>
+                            
+                        </tbody>
+                    </table>
+                <?php }
+                ?>
+            </div>
+        </div>
     </div>
 </div>
