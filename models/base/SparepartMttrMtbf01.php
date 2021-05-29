@@ -43,6 +43,7 @@ use Yii;
  * @property string $PR_COST_DEP
  * @property integer $LAST_MONTH_MTTR
  * @property integer $LAST_MONTH_MTBF
+ * @property string $MACHINE_CATEGORY
  * @property string $aliasModel
  */
 abstract class SparepartMttrMtbf01 extends \yii\db\ActiveRecord
@@ -83,7 +84,7 @@ abstract class SparepartMttrMtbf01 extends \yii\db\ActiveRecord
             [['LOC', 'DEP', 'CATEGORY', 'USER_ID', 'MACHINE', 'ACCOUNT', 'PR_COST_DEP'], 'string', 'max' => 10],
             [['LOC_DESC'], 'string', 'max' => 30],
             [['PIC', 'PIC_DESC', 'DEP_DESC', 'USER_DESC', 'MACHINE_NAME'], 'string', 'max' => 50],
-            [['HIGH_RISK'], 'string', 'max' => 1],
+            [['HIGH_RISK', 'MACHINE_CATEGORY'], 'string', 'max' => 1],
             [['RACK'], 'string', 'max' => 255],
             [['ONHAND_STATUS_DESC', 'ONHAND_STATUS_BY_MTTR'], 'string', 'max' => 20],
             [['CURR'], 'string', 'max' => 3],
@@ -131,6 +132,7 @@ abstract class SparepartMttrMtbf01 extends \yii\db\ActiveRecord
             'PR_COST_DEP' => 'Pr Cost Dep',
             'LAST_MONTH_MTTR' => 'Last Month Mttr',
             'LAST_MONTH_MTBF' => 'Last Month Mtbf',
+            'MACHINE_CATEGORY' => 'Machine Category',
         ];
     }
 

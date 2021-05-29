@@ -119,6 +119,22 @@ $grid_column = [
         ],
     ],
     [
+        'attribute' => 'MACHINE_CATEGORY',
+        'encodeLabel' => false,
+        'label' => 'Kategori<br/>Mesin',
+        'filter' => [
+            'A' => 'A',
+            'B' => 'B',
+            'S' => 'S',
+        ],
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filterInputOptions' => [
+            'class' => 'form-control',
+            'style' => 'text-align: center; font-size: 12px; min-width: 100px;'
+        ],
+    ],
+    [
         'attribute' => 'CATEGORY',
         'label' => 'Kategori',
         'hAlign' => 'center',

@@ -18,7 +18,7 @@ class MntMinimumStockSearch extends SparepartMttrMtbf01
 public function rules()
 {
 return [
-[['ID_ITEM_LOC', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'LAST_UPDATE', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS', 'ONHAND_STATUS_DESC', 'ONHAND_STATUS_BY_MTTR'], 'safe']
+[['ID_ITEM_LOC', 'ITEM', 'ITEM_EQ_DESC_01', 'ITEM_EQ_UM', 'LOC', 'LOC_DESC', 'PIC', 'PIC_DESC', 'DEP', 'DEP_DESC', 'HIGH_RISK', 'CATEGORY', 'USER_ID', 'USER_DESC', 'LAST_UPDATE', 'MACHINE', 'MACHINE_NAME', 'RACK', 'ONHAND_STATUS', 'ONHAND_STATUS_DESC', 'ONHAND_STATUS_BY_MTTR', 'MACHINE_CATEGORY'], 'safe']
 ];
 }
 
@@ -64,6 +64,7 @@ $query->andFilterWhere([
             //'MIN_STOCK_QTY' => $this->MIN_STOCK_QTY,
             'LAST_UPDATE' => $this->LAST_UPDATE,
             'ONHAND_STATUS' => $this->ONHAND_STATUS,
+            'MACHINE_CATEGORY' => $this->MACHINE_CATEGORY,
             'ONHAND_STATUS_BY_MTTR' => $this->ONHAND_STATUS_BY_MTTR,
             //'ONHAND_STATUS_DESC' => $this->ONHAND_STATUS_DESC,
             'POST_DATE' => $this->POST_DATE,
