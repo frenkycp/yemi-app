@@ -358,6 +358,11 @@ echo '</pre>';*/
                 ?>
             </div>
         </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <?= Html::img('@web/uploads/SHIPPING & PRODUCTION/DELAY_SHIPPING_202105.png', ['alt' => 'My logo', 'width' => '100%']); ?>
+            </div>
+        </div>
     </div>
     <div class="col-md-6">
         <h3>Production Result</h3>
