@@ -164,6 +164,8 @@ echo '</pre>';*/
                     <th width="30%">Shipping Target</th>
                     <th width="15%" class="text-center">Qty</th>
                     <th class="text-center">Amount</th>
+                    <th class="text-center">Containers</th>
+                    <th width="20%" class="text-center"></th>
                 </tr>
             </thead>
             <tbody>
@@ -171,16 +173,22 @@ echo '</pre>';*/
                     <td>Original <?= $this_month; ?></td>
                     <td class="text-center"><?= number_format($data->SHIP_PLAN_ORI_QTY); ?></td>
                     <td class="text-center"><?= number_format($data->SHIP_PLAN_ORI_AMT); ?></td>
+                    <td class="text-center"><?= $data->SHIP_PLAN_ORI_CNT == null ? '' : number_format($data->SHIP_PLAN_ORI_CNT) . ' TEU'; ?></td>
+                    <td></td>
                 </tr>
                 <tr>
-                    <td>Back Order <?= $last_month; ?></td>
+                    <td>Back Order</td>
                     <td class="text-center"><?= number_format($data->SHIP_PLAN_BO_QTY); ?></td>
                     <td class="text-center"><?= number_format($data->SHIP_PLAN_BO_AMT); ?></td>
+                    <td class="text-center"><?= $data->SHIP_PLAN_BO_CNT == null ? '' : number_format($data->SHIP_PLAN_BO_CNT) . ' TEU'; ?></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td>Total</td>
                     <td class="text-center"><?= number_format($data->SHIP_PLAN_TOTAL_QTY); ?></td>
                     <td class="text-center"><?= number_format($data->SHIP_PLAN_TOTAL_AMT); ?></td>
+                    <td class="text-center"><?= $data->SHIP_PLAN_TOTAL_CNT == null ? '' : number_format($data->SHIP_PLAN_TOTAL_CNT) . ' TEU'; ?></td>
+                    <td></td>
                 </tr>
             </tbody>
         </table>
@@ -190,6 +198,7 @@ echo '</pre>';*/
                     <th width="30%">Actual Shipping</th>
                     <th width="15%" class="text-center">Qty</th>
                     <th class="text-center">Amount</th>
+                    <th class="text-center">Containers</th>
                     <th width="20%" class="text-center">% achieve (Amt.)</th>
                 </tr>
             </thead>
@@ -198,6 +207,7 @@ echo '</pre>';*/
                     <td>Original <?= $this_month; ?></td>
                     <td class="text-center"><?= number_format($data->SHIP_ACT_ORI_QTY); ?></td>
                     <td class="text-center"><?= number_format($data->SHIP_ACT_ORI_AMT); ?></td>
+                    <td class="text-center"><?= $data->SHIP_ACT_ORI_CNT == null ? '' : number_format($data->SHIP_ACT_ORI_CNT) . ' TEU'; ?></td>
                     <td class="text-center"><?php
                     $pct = 0;
                     if ($data->SHIP_PLAN_ORI_AMT > 0) {
@@ -207,9 +217,10 @@ echo '</pre>';*/
                     ?></td>
                 </tr>
                 <tr>
-                    <td>Back Order <?= $last_month; ?></td>
+                    <td>Back Order</td>
                     <td class="text-center"><?= number_format($data->SHIP_ACT_BO_QTY); ?></td>
                     <td class="text-center"><?= number_format($data->SHIP_ACT_BO_AMT); ?></td>
+                    <td class="text-center"><?= $data->SHIP_ACT_BO_CNT == null ? '' : number_format($data->SHIP_ACT_BO_CNT) . ' TEU'; ?></td>
                     <td class="text-center"><?php
                     $pct = 0;
                     if ($data->SHIP_PLAN_BO_AMT > 0) {
@@ -222,6 +233,7 @@ echo '</pre>';*/
                     <td>Total</td>
                     <td class="text-center"><?= number_format($data->SHIP_ACT_TOTAL_QTY); ?></td>
                     <td class="text-center"><?= number_format($data->SHIP_ACT_TOTAL_AMT); ?></td>
+                    <td class="text-center"><?= $data->SHIP_ACT_TOTAL_CNT == null ? '' : number_format($data->SHIP_ACT_TOTAL_CNT) . ' TEU'; ?></td>
                     <td class="text-center"><?php
                     $pct = 0;
                     if ($data->SHIP_PLAN_TOTAL_AMT > 0) {
@@ -365,7 +377,7 @@ echo '</pre>';*/
                     <td class="text-center"><?= number_format($data->PRD_PLAN_ORI_AMT); ?></td>
                 </tr>
                 <tr>
-                    <td>Delay <?= $last_month; ?></td>
+                    <td>Delay</td>
                     <td class="text-center"><?= number_format($data->PRD_PLAN_DELAY_QTY); ?></td>
                     <td class="text-center"><?= number_format($data->PRD_PLAN_DELAY_AMT); ?></td>
                 </tr>
@@ -413,7 +425,7 @@ echo '</pre>';*/
                     ?></td>
                 </tr>
                 <tr>
-                    <td>Delay <?= $last_month; ?></td>
+                    <td>Delay</td>
                     <td class="text-center"><?= number_format($data->PRD_ACT_DELAY_QTY); ?></td>
                     <td class="text-center"><?= number_format($data->PRD_ACT_DELAY_AMT); ?></td>
                     <td class="text-center">
