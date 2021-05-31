@@ -250,7 +250,7 @@ echo '</pre>';*/
                     echo 'No Delay Information...';
                 } else {
                     ?>
-                    <table class="table">
+                    <table class="table" style="margin-bottom: 0px;">
                         <thead>
                             <tr style="font-size: 1.2em;">
                                 <th width="10%"></th>
@@ -297,8 +297,6 @@ echo '</pre>';*/
                             <tr>
                                 <td colspan="5" class="table-delay-info"></td>
                             </tr>
-
-
                             <tr>
                                 <td colspan="5" class="table-delay-info cause-category">2. Internal Cause</td>
                             </tr>
@@ -331,6 +329,16 @@ echo '</pre>';*/
                                 <td class=""><?= number_format($subtotal_qty2); ?></td>
                                 <td class=""><?= number_format($subtotal_amt2); ?></td>
                                 <td class=""></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="table-delay-info"></td>
+                            </tr>
+                            <tr style="font-weight: bold;">
+                                <td class="table-delay-info"></td>
+                                <td class="table-delay-info">Total Delay</td>
+                                <td class="table-delay-info"><?= number_format($subtotal_qty1 + $subtotal_qty2); ?></td>
+                                <td class="table-delay-info"><?= number_format($subtotal_amt1 + $subtotal_amt2); ?></td>
+                                <td class="table-delay-info"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -481,7 +489,7 @@ echo '</pre>';*/
                     echo 'No Delay Information...';
                 } else {
                     ?>
-                    <table class="table">
+                    <table class="table" style="margin-bottom: 0px;">
                         <thead>
                             <tr>
                                 <th width="20%"></th>
