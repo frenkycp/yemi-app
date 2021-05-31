@@ -147,7 +147,9 @@ echo '</pre>';*/
     <div class="col-md-2">
         <?= $form->field($model, 'period')->textInput([
             'onchange' => 'this.form.submit();',
-        ]); ?>
+            'readonly' => true,
+            'class' => 'bg-black'
+        ])->label('Period : '); ?>
     </div>
     
 </div>
@@ -156,7 +158,7 @@ echo '</pre>';*/
 
 <div class="row" style="color: white;">
     <div class="col-md-6">
-        <h3>Shipping Sales Report</h3>
+        <h3 style="margin-top: 5px;">Shipping Sales Report</h3>
         Update Date : <?= $data->UPDATE_DATE == null ? '-' : date('d-F-y', strtotime($data->UPDATE_DATE)); ?><br/>
         <table class="table summary-tbl">
             <thead>
