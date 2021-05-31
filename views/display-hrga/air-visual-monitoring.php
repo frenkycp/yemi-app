@@ -121,7 +121,7 @@ $script = <<< JS
     });
 JS;
 $this->registerJs($script, View::POS_END );
-
+$last_update = date('d M\' Y H:i', strtotime( $value->postdate));
 
 /*echo '<pre>';
 print_r($tmp_belum_check);
@@ -132,28 +132,17 @@ echo '</pre>';*/
     <?php foreach ($data as $key => $value): ?>
         <div class="col-sm-6">
             <div class="panel panel-default">
-                <div class="panel-heading text-center bg-navy-active">
-                    <h3 class="panel-title"><?= $value->loc; ?></h3>
-                </div>
                 <div class="panel-body bg-black text-center">
-                    <div class="row" style="font-size: 130px; color: white;">
-                        <div class="col-sm-12">
-                            <div class="">
-                                <div class="panel-body bg-black no-padding" style="color: white !important;">
-                                    <span class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 0.5em;">ppm</small>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-5" style="display: none;">
-                            <div class="">
-                                <div class="panel-body bg-black no-padding" style="color: white !important;">
-                                    <span class="text-yellow"><?= $value->humidity_pct_rh; ?></span><small style="font-size: 0.5em;">%</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-4">
+                            <div class="">
+                                <div class="panel-body bg-black no-padding" style="color: silver !important;">
+                                    <span style="font-size: 2em;"><?= $value->loc; ?></span><br/>
+                                    <span style="font-size: 3em;" class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 1em; color: grey;">ppm</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
                             <?php
                             echo Highcharts::widget([
                                 'scripts' => [
@@ -167,14 +156,14 @@ echo '</pre>';*/
                                         'style' => [
                                             'fontFamily' => 'sans-serif',
                                         ],
-                                        'height' => 200,
+                                        'height' => 110,
                                         'backgroundColor' => '#000',
                                     ],
                                     'title' => [
-                                        'text' => ''
+                                        'text' => null,
                                     ],
                                     'subtitle' => [
-                                        'text' => 'Last Update : ' .date('d M\' Y H:i', strtotime( $value->postdate))
+                                        'text' => null,
                                     ],
                                     'xAxis' => [
                                         'type' => 'datetime',
@@ -191,7 +180,7 @@ echo '</pre>';*/
                                         ],
                                         'gridLineWidth' => 0,
                                         'allowDecimals' => false,
-                                        'tickInterval' => 100,
+                                        'tickInterval' => 200,
                                         'plotLines' => [
                                             [
                                                 'color' => 'yellow',
@@ -206,24 +195,9 @@ echo '</pre>';*/
                                                 'dashStyle' => 'dot'
                                             ],
                                         ],
-                                        /*'plotBands' => [
-                                            [
-                                                'from' => 400,
-                                                'to' => 800,
-                                                'color' => '#56FF5F',
-                                            ],
-                                            [
-                                                'from' => 800,
-                                                'to' => 1000,
-                                                'color' => '#FBBB02',
-                                            ],
-                                            [
-                                                'from' => 1000,
-                                                'to' => 2000,
-                                                'color' => '#EC4444',
-                                            ],
-                                        ],*/
-                                        //'gridLineWidth' => 0,
+                                        'labels' => [
+                                            'enabled' => false,
+                                        ],
                                     ],
                                     'credits' => [
                                         'enabled' =>false
