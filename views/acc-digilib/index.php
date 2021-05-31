@@ -36,7 +36,7 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-$tree_arr = [
+/*$tree_arr = [
     // single query fetch to render the tree
     // use the Product model you have in the previous step
     'query' => TreeAccDigilibExtend::find()->addOrderBy('root, lft'), 
@@ -62,9 +62,9 @@ $tree_arr = [
     'options' => [
     	'id' => 'tree-id'
     ],
-];
+];*/
 
-if (\Yii::$app->user->identity->role_id == 1) {
+//if (\Yii::$app->user->identity->role_id == 1) {
 	$tree_arr = [
 	    // single query fetch to render the tree
 	    // use the Product model you have in the previous step
@@ -93,6 +93,6 @@ if (\Yii::$app->user->identity->role_id == 1) {
 	    	'id' => 'tree-id'
 	    ],
 	];
-}
+//}
 
 echo TreeView::widget($tree_arr);
