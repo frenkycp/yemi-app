@@ -22,7 +22,7 @@ date_default_timezone_set('Asia/Jakarta');
 $css_string = "
     .form-control, .control-label {background-color: #000; color: white; border-color: white;}
     //.form-control {font-size: 30px; height: 52px;}
-    .content-header {color: white; font-size: 1em; text-align: center; letter-spacing: 5px;}
+    .content-header {color: white; font-size: 0.7em; text-align: center; letter-spacing: 5px;}
     //.box-body {background-color: #000;}
     .box-title {font-weight: bold;}
     //.box-header .box-title{font-size: 2em;}
@@ -36,6 +36,12 @@ $css_string = "
     .inner p {font-size: 18px;}
     .form-horizontal .control-label {padding-top: 0px;}
     .active a {background-color: #3c8dbc !important; font-size: 18px; color: white !important;}
+    .panel {
+        border-color: #313131;
+    }
+    .bg-black {
+        background-color: black !important;
+    }
 
     .summary-tbl{
         //border:1px solid #29B6F6;
@@ -129,114 +135,234 @@ echo '</pre>';*/
 ?>
 <br/>
 <div class="row">
-    <?php foreach ($data as $key => $value): ?>
-        <div class="col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-body bg-black text-center">
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="">
-                                <div class="panel-body bg-black no-padding" style="color: silver !important;">
-                                    <span style="font-size: 2em;"><?= $value->loc; ?></span><br/>
-                                    <span style="font-size: 3em;" class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 1em; color: grey;">ppm</small>
+    <div class="col-sm-6">
+        <?php foreach ($data as $key => $value): 
+            if ($value->group_no == 1) { ?>
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body bg-black text-center">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="">
+                                        <div class="panel-body bg-black no-padding" style="color: silver !important;">
+                                            <span style="font-size: 2em;"><?= $value->loc; ?></span><br/>
+                                            <span style="font-size: 3em;" class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 1em; color: grey;">ppm</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <?php
+                                    echo Highcharts::widget([
+                                        'scripts' => [
+                                            //'modules/exporting',
+                                            //'themes/sand-signika',
+                                            'themes/dark-unica',
+                                        ],
+                                        'options' => [
+                                            'chart' => [
+                                                'type' => 'line',
+                                                'style' => [
+                                                    'fontFamily' => 'sans-serif',
+                                                ],
+                                                'height' => 105,
+                                                'backgroundColor' => '#000',
+                                            ],
+                                            'title' => [
+                                                'text' => null,
+                                            ],
+                                            'subtitle' => [
+                                                'text' => null,
+                                            ],
+                                            'xAxis' => [
+                                                'type' => 'datetime',
+                                                //'categories' => $value['category'],
+                                            ],
+                                            'yAxis' => [
+                                                /*'stackLabels' => [
+                                                    'enabled' => true
+                                                ],*/
+                                                'min' => 400,
+                                                'max' => 1100,
+                                                'title' => [
+                                                    'text' => 'CO2 Rate'
+                                                ],
+                                                'gridLineWidth' => 0,
+                                                'allowDecimals' => false,
+                                                'tickInterval' => 200,
+                                                'plotLines' => [
+                                                    [
+                                                        'color' => 'yellow',
+                                                        'width' => 2,
+                                                        'value' => 700,
+                                                        'dashStyle' => 'dot'
+                                                    ],
+                                                    [
+                                                        'color' => 'red',
+                                                        'width' => 2,
+                                                        'value' => 1000,
+                                                        'dashStyle' => 'dot'
+                                                    ],
+                                                ],
+                                                'labels' => [
+                                                    'enabled' => false,
+                                                ],
+                                            ],
+                                            'credits' => [
+                                                'enabled' =>false
+                                            ],
+                                            'tooltip' => [
+                                                'enabled' => true,
+                                                //'xDateFormat' => '%A, %b %e %Y',
+                                                //'valueSuffix' => ' min'
+                                                //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                                            ],
+                                            'plotOptions' => [
+                                                'line' => [
+                                                    //'stacking' => 'normal',
+                                                    'dataLabels' => [
+                                                        'enabled' => false,
+                                                        //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
+                                                        //'color' => 'black',
+                                                        //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
+                                                        /*'style' => [
+                                                            'textOutline' => '0px',
+                                                            'fontWeight' => '0'
+                                                        ],*/
+                                                    ],
+                                                    //'borderWidth' => 1,
+                                                    //'borderColor' => $color,
+                                                ],
+                                                'series' => [
+                                                    'lineWidth' => 3
+                                                ],
+                                            ],
+                                            'series' => $data_log[$value->deviceno]
+                                        ],
+                                    ]);
+                                    ?>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-8">
-                            <?php
-                            echo Highcharts::widget([
-                                'scripts' => [
-                                    //'modules/exporting',
-                                    //'themes/sand-signika',
-                                    'themes/dark-unica',
-                                ],
-                                'options' => [
-                                    'chart' => [
-                                        'type' => 'line',
-                                        'style' => [
-                                            'fontFamily' => 'sans-serif',
+                    </div>
+                </div>
+            <?php }
+            ?>
+            
+        <?php endforeach ?>
+    </div>
+    <div class="col-sm-6">
+        <?php foreach ($data as $key => $value): 
+            if ($value->group_no == 2) { ?>
+                <div class="col-sm-12">
+                    <div class="panel panel-default">
+                        <div class="panel-body bg-black text-center">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="">
+                                        <div class="panel-body bg-black no-padding" style="color: silver !important;">
+                                            <span style="font-size: 2em;"><?= $value->loc; ?></span><br/>
+                                            <span style="font-size: 3em;" class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 1em; color: grey;">ppm</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8">
+                                    <?php
+                                    echo Highcharts::widget([
+                                        'scripts' => [
+                                            //'modules/exporting',
+                                            //'themes/sand-signika',
+                                            'themes/dark-unica',
                                         ],
-                                        'height' => 110,
-                                        'backgroundColor' => '#000',
-                                    ],
-                                    'title' => [
-                                        'text' => null,
-                                    ],
-                                    'subtitle' => [
-                                        'text' => null,
-                                    ],
-                                    'xAxis' => [
-                                        'type' => 'datetime',
-                                        //'categories' => $value['category'],
-                                    ],
-                                    'yAxis' => [
-                                        /*'stackLabels' => [
-                                            'enabled' => true
-                                        ],*/
-                                        'min' => 400,
-                                        'max' => 1100,
-                                        'title' => [
-                                            'text' => 'CO2 Rate'
-                                        ],
-                                        'gridLineWidth' => 0,
-                                        'allowDecimals' => false,
-                                        'tickInterval' => 200,
-                                        'plotLines' => [
-                                            [
-                                                'color' => 'yellow',
-                                                'width' => 2,
-                                                'value' => 700,
-                                                'dashStyle' => 'dot'
+                                        'options' => [
+                                            'chart' => [
+                                                'type' => 'line',
+                                                'style' => [
+                                                    'fontFamily' => 'sans-serif',
+                                                ],
+                                                'height' => 105,
+                                                'backgroundColor' => '#000',
                                             ],
-                                            [
-                                                'color' => 'red',
-                                                'width' => 2,
-                                                'value' => 1000,
-                                                'dashStyle' => 'dot'
+                                            'title' => [
+                                                'text' => null,
                                             ],
-                                        ],
-                                        'labels' => [
-                                            'enabled' => false,
-                                        ],
-                                    ],
-                                    'credits' => [
-                                        'enabled' =>false
-                                    ],
-                                    'tooltip' => [
-                                        'enabled' => true,
-                                        //'xDateFormat' => '%A, %b %e %Y',
-                                        //'valueSuffix' => ' min'
-                                        //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
-                                    ],
-                                    'plotOptions' => [
-                                        'line' => [
-                                            //'stacking' => 'normal',
-                                            'dataLabels' => [
-                                                'enabled' => false,
-                                                //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
-                                                //'color' => 'black',
-                                                //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
-                                                /*'style' => [
-                                                    'textOutline' => '0px',
-                                                    'fontWeight' => '0'
+                                            'subtitle' => [
+                                                'text' => null,
+                                            ],
+                                            'xAxis' => [
+                                                'type' => 'datetime',
+                                                //'categories' => $value['category'],
+                                            ],
+                                            'yAxis' => [
+                                                /*'stackLabels' => [
+                                                    'enabled' => true
                                                 ],*/
+                                                'min' => 400,
+                                                'max' => 1100,
+                                                'title' => [
+                                                    'text' => 'CO2 Rate'
+                                                ],
+                                                'gridLineWidth' => 0,
+                                                'allowDecimals' => false,
+                                                'tickInterval' => 200,
+                                                'plotLines' => [
+                                                    [
+                                                        'color' => 'yellow',
+                                                        'width' => 2,
+                                                        'value' => 700,
+                                                        'dashStyle' => 'dot'
+                                                    ],
+                                                    [
+                                                        'color' => 'red',
+                                                        'width' => 2,
+                                                        'value' => 1000,
+                                                        'dashStyle' => 'dot'
+                                                    ],
+                                                ],
+                                                'labels' => [
+                                                    'enabled' => false,
+                                                ],
                                             ],
-                                            //'borderWidth' => 1,
-                                            //'borderColor' => $color,
+                                            'credits' => [
+                                                'enabled' =>false
+                                            ],
+                                            'tooltip' => [
+                                                'enabled' => true,
+                                                //'xDateFormat' => '%A, %b %e %Y',
+                                                //'valueSuffix' => ' min'
+                                                //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                                            ],
+                                            'plotOptions' => [
+                                                'line' => [
+                                                    //'stacking' => 'normal',
+                                                    'dataLabels' => [
+                                                        'enabled' => false,
+                                                        //'format' => '{point.percentage:.0f}% ({point.qty:.0f})',
+                                                        //'color' => 'black',
+                                                        //'formatter' => new JsExpression('function(){ if(this.y != 0) { return this.y; } }'),
+                                                        /*'style' => [
+                                                            'textOutline' => '0px',
+                                                            'fontWeight' => '0'
+                                                        ],*/
+                                                    ],
+                                                    //'borderWidth' => 1,
+                                                    //'borderColor' => $color,
+                                                ],
+                                                'series' => [
+                                                    'lineWidth' => 3
+                                                ],
+                                            ],
+                                            'series' => $data_log[$value->deviceno]
                                         ],
-                                        'series' => [
-                                            'lineWidth' => 3
-                                        ],
-                                    ],
-                                    'series' => $data_log[$value->deviceno]
-                                ],
-                            ]);
-                            ?>
+                                    ]);
+                                    ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
-    <?php endforeach ?>
+            <?php }
+            ?>
+            
+        <?php endforeach ?>
+    </div>
 </div>
