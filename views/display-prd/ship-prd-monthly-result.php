@@ -105,6 +105,9 @@ $css_string = "
     hr {
         margin-bottom: 0px;
     }
+    h3 {
+        margin-top: 5px;
+    }
     .disabled-link {color: DarkGrey; cursor: not-allowed;}
     .expired-um {
         font-size: 60px;
@@ -158,7 +161,7 @@ echo '</pre>';*/
 
 <div class="row" style="color: white;">
     <div class="col-md-6">
-        <h3 style="margin-top: 5px;">Shipping Sales Report</h3>
+        <h3 style="">Shipping Sales Report</h3>
         Update Date : <?= $data->UPDATE_DATE == null ? '-' : date('d-F-y', strtotime($data->UPDATE_DATE)); ?><br/>
         <table class="table summary-tbl">
             <thead>
