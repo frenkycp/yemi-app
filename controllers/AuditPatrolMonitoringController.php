@@ -43,7 +43,10 @@ class AuditPatrolMonitoringController extends Controller
         	['>=', 'PATROL_DATE', $model->from_date],
         	['<=', 'PATROL_DATE', $model->to_date],
         ])
-        ->andWhere(['FLAG' => 1])
+        ->andWhere([
+            'FLAG' => 1,
+            'CATEGORY' => [1, 2]
+        ])
         ->groupBy('PATROL_DATE')
         ->orderBy('PATROL_DATE')
         ->all();
