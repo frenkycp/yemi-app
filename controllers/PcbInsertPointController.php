@@ -10,6 +10,12 @@ use app\models\PcbInsertPoint;
 
 class PcbInsertPointController extends \app\controllers\base\PcbInsertPointController
 {
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
+    
 	public function actionCreate()
 	{
 		$model = new PcbInsertPoint;
