@@ -88,7 +88,7 @@ $css_string = "
     .panel-title {
         font-size: 30px;
     }
-    .text-yellow {
+    .text-yellow, .text-green, .text-red {
         //color: yellow !important;
         font-weight: bold;
         letter-spacing: 10px;
@@ -137,6 +137,13 @@ echo '</pre>';*/
 <div class="row">
     <div class="col-sm-6">
         <?php foreach ($data as $key => $value): 
+            if ($value->co2_ppm <= 800) {
+                $txt_class = 'text-green';
+            } elseif ($value->co2_ppm <= 1000) {
+                $txt_class = 'text-yellow';
+            } else {
+                $txt_class = 'text-red';
+            }
             if ($value->group_no == 1) { ?>
                 <div class="col-sm-12">
                     <div class="panel panel-default">
@@ -146,7 +153,7 @@ echo '</pre>';*/
                                     <div class="">
                                         <div class="panel-body bg-black no-padding" style="color: silver !important;">
                                             <span style="font-size: 2em;"><?= $value->loc; ?></span><br/>
-                                            <span style="font-size: 3em;" class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 1em; color: grey;">ppm</small>
+                                            <span style="font-size: 3em;" class="<?= $txt_class; ?>"><?= $value->co2_ppm; ?></span><small style="font-size: 1em; color: grey;">ppm</small>
                                         </div>
                                     </div>
                                 </div>
@@ -193,7 +200,7 @@ echo '</pre>';*/
                                                     [
                                                         'color' => 'yellow',
                                                         'width' => 2,
-                                                        'value' => 700,
+                                                        'value' => 800,
                                                         'dashStyle' => 'dot'
                                                     ],
                                                     [
@@ -233,7 +240,7 @@ echo '</pre>';*/
                                                     //'borderColor' => $color,
                                                 ],
                                                 'series' => [
-                                                    'lineWidth' => 3
+                                                    'lineWidth' => 1
                                                 ],
                                             ],
                                             'series' => $data_log[$value->deviceno]
@@ -252,6 +259,13 @@ echo '</pre>';*/
     </div>
     <div class="col-sm-6">
         <?php foreach ($data as $key => $value): 
+            if ($value->co2_ppm <= 800) {
+                $txt_class = 'text-green';
+            } elseif ($value->co2_ppm <= 1000) {
+                $txt_class = 'text-yellow';
+            } else {
+                $txt_class = 'text-red';
+            }
             if ($value->group_no == 2) { ?>
                 <div class="col-sm-12">
                     <div class="panel panel-default">
@@ -261,7 +275,7 @@ echo '</pre>';*/
                                     <div class="">
                                         <div class="panel-body bg-black no-padding" style="color: silver !important;">
                                             <span style="font-size: 2em;"><?= $value->loc; ?></span><br/>
-                                            <span style="font-size: 3em;" class="text-yellow"><?= $value->co2_ppm; ?></span><small style="font-size: 1em; color: grey;">ppm</small>
+                                            <span style="font-size: 3em;" class="<?= $txt_class; ?>"><?= $value->co2_ppm; ?></span><small style="font-size: 1em; color: grey;">ppm</small>
                                         </div>
                                     </div>
                                 </div>
@@ -348,7 +362,7 @@ echo '</pre>';*/
                                                     //'borderColor' => $color,
                                                 ],
                                                 'series' => [
-                                                    'lineWidth' => 3
+                                                    'lineWidth' => 1
                                                 ],
                                             ],
                                             'series' => $data_log[$value->deviceno]
