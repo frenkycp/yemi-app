@@ -533,16 +533,19 @@ class SBillingController extends \app\controllers\base\SBillingController
     public function actionGetInvoiceBySupplier($supplier_name)
     {
         if ($supplier_name != null) {
-            $tmp_data = SupplierBilling::find()->where([
+            $tmp_data = SupplierBilling::find()
+            ->where([
                 'supplier_name' => $supplier_name,
                 'stage' => 2,
                 'open_close' => 'O',
                 'dihapus' => 'N'
-            ])->all();
+            ])
+            ->andWhere('voucher_no IS NULL')
+            ->all();
 
             if (count($tmp_data) > 0) {
                 foreach ($tmp_data as $key => $value) {
-                    echo "<option value='" . $value->no . "'>" . $value->invoice_no . "</option>";
+                    echo "<option value='" . $value->no . "'>Invoice No : " . $value->invoice_no . " || Upload Date : " . date('d M Y', strtotime($value->doc_upload_date)) . " (" . $value->cur . " " . $value->amount . ")</option>";
                 }
             } else {
                 echo "'<option>-</option>'";
