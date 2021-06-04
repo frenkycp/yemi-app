@@ -134,6 +134,13 @@ $gridColumns = [
     [
         'attribute' => 'attachment',
         'value' => function($model){
+            if ($model->attachment == null) {
+                return Html::a('<button class="btn btn-default btn-sm"><span class="fa fa-pencil"></span></button>', ['voucher-attachment-edit', 'voucher_no' => $model->voucher_no
+                ], [
+                    'title' => 'Update',
+                    'data-pjax' => '0',
+                ]);
+            }
             return Html::a('<button class="btn btn-default btn-sm"><span class="fa fa-download"></span></button>', ['voucher-attachment', 'voucher_no' => $model->voucher_no
             ], [
                 'title' => 'Download',

@@ -28,7 +28,7 @@ class SupplierBillingVoucher extends BaseSupplierBillingVoucher
         return ArrayHelper::merge(
             parent::rules(),
             [
-                [['attachment_file'], 'file', 'extensions' => ['pdf'], 'skipOnEmpty' => false],
+                [['attachment_file'], 'file', 'extensions' => ['pdf'], 'skipOnEmpty' => true],
                 [['invoice_no'], 'required'],
             ]
         );

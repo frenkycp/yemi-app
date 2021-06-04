@@ -485,32 +485,30 @@ class SBillingController extends \app\controllers\base\SBillingController
             if ($model->attachment_file) {
                 $tmp_data = file_get_contents($tmp_attachment->tempName);
                 $base64 = base64_encode($tmp_data);
+
+                $sql = "{CALL SUPPLIER_BILLING_VEFIFIKASI_REG(:voucher_no, :create_by_id, :create_by_name, :dokumen)}";
+                $params = [
+                    ':voucher_no' => $model->voucher_no,
+                    ':create_by_id' =>  $model->create_by_id,
+                    ':create_by_name' => $model->create_by_name,
+                    ':dokumen' => $base64,
+                ];
+
+                try {
+                    $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
+                    \Yii::$app->session->setFlash('success', "Voucher no. " . $model->voucher_no . " created successfully...");
+                } catch (Exception $ex) {
+                    \Yii::$app->session->setFlash('danger', "Error : $ex");
+                    return $this->render('create-voucher', [
+                        'model' => $model,
+                    ]);
+                }
+            } else {
+                if (!$model->save()) {
+                    return json_encode($model->errors);
+                }
             }
             
-            $sql = "{CALL SUPPLIER_BILLING_VEFIFIKASI_REG(:voucher_no, :create_by_id, :create_by_name, :dokumen)}";
-            $params = [
-                ':voucher_no' => $model->voucher_no,
-                ':create_by_id' =>  $model->create_by_id,
-                ':create_by_name' => $model->create_by_name,
-                ':dokumen' => $base64,
-            ];
-
-            try {
-                $result = \Yii::$app->db_wsus->createCommand($sql, $params)->execute();
-                \Yii::$app->session->setFlash('success', "Voucher no. " . $model->voucher_no . " created successfully...");
-            } catch (Exception $ex) {
-                \Yii::$app->session->setFlash('danger', "Error : $ex");
-                return $this->render('create-voucher', [
-                    'model' => $model,
-                ]);
-            }
-
-            
-
-            /*if (!$model->save()) {
-                return json_encode($model->errors);
-            }*/
-
             $no_arr = $model->invoice_no;
             foreach ($no_arr as $no_val) {
                 SupplierBilling::updateAll(['voucher_no' => $model->voucher_no], ['no' => $no_val]);
