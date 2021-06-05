@@ -525,6 +525,13 @@ return [
         3 => 'WH Approved',
         4 => 'Pulled Up'
     ],
+    'kadouritsu_loc_arr' => [
+        'WI01' => 'Mesin Injeksi Kecil',
+        'WI03' => 'Mesin Injeksi Medium',
+        'WI02' => 'Mesin Injeksi Besar',
+        'WM02' => 'Mesin AI',
+        'WM03' => 'Mesin SMT',
+    ],
 ];
 
 function getYearArray()
