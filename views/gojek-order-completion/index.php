@@ -35,6 +35,21 @@ print_r($fix_data);
 echo '</pre>';*/
 //echo Yii::$app->request->baseUrl;
 ?>
+<?php $form = ActiveForm::begin([
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['index']),
+]); ?>
+
+<div class="row">
+    <div class="col-sm-2">
+        <?= $form->field($model, 'period')->textInput([
+            'onchange'=>'this.form.submit()'
+        ]); ?>
+    </div>
+</div>
+
+<?php ActiveForm::end(); ?>
 <div class="box box-solid">
     <div class="box-header with-border">
         <h3 class="box-title">Last Update : <?= date('Y-m-d H:i:s'); ?></h3>
@@ -43,10 +58,10 @@ echo '</pre>';*/
         <div class="box-group" id="accordion">
         <?php
         foreach ($fix_data as $key => $value) {
-            $karyawan_aktif = app\models\Karyawan::find()->where([
+            /*$karyawan_aktif = app\models\Karyawan::find()->where([
                 'NIK' => strval($key),
                 //'TANGGAL' => date('Y-m-d')
-            ])->one();
+            ])->one();*/
             $last_update = date('Y-m-d H:i:s', strtotime($value['last_update']));
             if ($value['last_stage'] == 'DEPARTURE') {
                 $panel_class = ' box-success';
@@ -72,10 +87,16 @@ echo '</pre>';*/
                 $text_status = 'INACTIVE';
             }
 
-            if (($karyawan_aktif->KONTRAK_KE == 1 && $karyawan_aktif->K1_END < date('Y-m-d')) || $karyawan_aktif->KONTRAK_KE == 2 && $karyawan_aktif->K2_END < date('Y-m-d')) {
+            foreach ($tmp_sunfish_emp as $tmp_val) {
+                if ($tmp_val->Emp_no == $key && $tmp_val->status == 0) {
+                    $panel_class = ' box-default';
+                    $text_status = 'END CONTRACT';
+                }
+            }
+            /*if (($karyawan_aktif->KONTRAK_KE == 1 && $karyawan_aktif->K1_END < date('Y-m-d')) || $karyawan_aktif->KONTRAK_KE == 2 && $karyawan_aktif->K2_END < date('Y-m-d')) {
                 $panel_class = ' box-default';
                 $text_status = 'END CONTRACT';
-            }
+            }*/
             ?>
             <div class="panel box box-solid<?= $panel_class; ?>">
                 <div class="box-header with-border">

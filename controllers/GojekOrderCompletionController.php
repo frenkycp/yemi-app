@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use app\models\GojekOrderView01;
 use app\models\GojekTbl;
 use app\models\GojekOrderTbl;
+use app\models\SunfishViewEmp;
 use yii\helpers\ArrayHelper;
 
 class GojekOrderCompletionController extends Controller
@@ -24,6 +25,17 @@ class GojekOrderCompletionController extends Controller
 		date_default_timezone_set('Asia/Jakarta');
 		$data = [];
 		$categories = [];
+
+		$model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
 
 		$driver_arr = GojekTbl::find()
 		->where([
@@ -45,9 +57,32 @@ class GojekOrderCompletionController extends Controller
 		->groupBy('GOJEK_ID')
 		->all(), 'GOJEK_ID', 'total_point');
 
+		$tmp_order_data_arr = GojekOrderView01::find()
+		->select([
+			'GOJEK_ID',
+			'GOJEK_DESC',
+			'issued_date',
+			'stat_open' => 'SUM(CASE WHEN STAT = \'O\' THEN 1 ELSE 0 END)',
+			'stat_close' => 'SUM(CASE WHEN STAT = \'C\' THEN 1 ELSE 0 END)',
+			'stat_total' => 'COUNT(STAT)'
+		])
+		->where(['period' => $model->period])
+		->groupBy('GOJEK_ID, GOJEK_DESC, issued_date')
+		->orderBy('GOJEK_DESC, issued_date')
+		->all();
+
+		$tmp_nik_arr = [];
 		foreach ($driver_arr as $value) {
 			$nik = $value->GOJEK_ID;
-			$order_data_arr = GojekOrderView01::find()
+
+			$order_data_arr = [];
+			foreach ($tmp_order_data_arr as $tmp_value) {
+				if ($tmp_value->GOJEK_ID == $nik) {
+					$order_data_arr[] = $tmp_value;
+				}
+			}
+
+			/*$order_data_arr = GojekOrderView01::find()
 			->select([
 				'GOJEK_ID',
 				'GOJEK_DESC',
@@ -63,33 +98,36 @@ class GojekOrderCompletionController extends Controller
 			->groupBy('GOJEK_ID, GOJEK_DESC, issued_date')
 			->orderBy('GOJEK_DESC, issued_date')
 			->asArray()
-			->all();
+			->all();*/
 
 			if (count($order_data_arr) > 0) {
+				$tmp_nik_arr[] = $nik;
 				foreach ($order_data_arr as $order_data) {
-					$issued_date = (strtotime($order_data['issued_date'] . " +7 hours") * 1000);
+					$issued_date = (strtotime($order_data->issued_date . " +7 hours") * 1000);
 					$tmp_data[$nik]['open'][] = [
 						'x' => $issued_date,
-						'y' => $order_data['stat_open'] == 0 ? null : (int)$order_data['stat_open'],
-						'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'O']),
+						'y' => $order_data->stat_open == 0 ? null : (int)$order_data->stat_open,
+						'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data->issued_date, 'GOJEK_ID' => $order_data->GOJEK_ID, 'GOJEK_DESC' => $order_data->GOJEK_DESC, 'STAT' => 'O']),
 					];
 					$tmp_data[$nik]['close'][] = [
 						'x' => $issued_date,
-						'y' => $order_data['stat_close'] == 0 ? null : (int)$order_data['stat_close'],
-						'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data['issued_date'], 'GOJEK_ID' => $order_data['GOJEK_ID'], 'GOJEK_DESC' => $order_data['GOJEK_DESC'], 'STAT' => 'C']),
+						'y' => $order_data->stat_close == 0 ? null : (int)$order_data->stat_close,
+						'url' => Url::to(['get-remark', 'ISSUED_DATE' => $order_data->issued_date, 'GOJEK_ID' => $order_data->GOJEK_ID, 'GOJEK_DESC' => $order_data->GOJEK_DESC, 'STAT' => 'C']),
 					];
-					$tmp_data[$nik]['nama'] = $order_data['GOJEK_DESC'];
+					$tmp_data[$nik]['nama'] = $order_data->GOJEK_DESC;
+
+					$tmp_data[$nik]['last_stage'] = $value->STAGE;
+					$tmp_data[$nik]['from_loc'] = $value->from_loc;
+					$tmp_data[$nik]['to_loc'] = $value->to_loc;
+					$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
+					$tmp_data[$nik]['hadir'] = $value->HADIR;
 				}
-			} else {
+			}/* else {
 				$tmp_data[$nik]['open'] = null;
 				$tmp_data[$nik]['close'] = null;
 				$tmp_data[$nik]['nama'] = $value->GOJEK_DESC;
-			}
-			$tmp_data[$nik]['last_stage'] = $value->STAGE;
-			$tmp_data[$nik]['from_loc'] = $value->from_loc;
-			$tmp_data[$nik]['to_loc'] = $value->to_loc;
-			$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
-			$tmp_data[$nik]['hadir'] = $value->HADIR;
+			}*/
+			
 		}
 
 		$fix_data = [];
@@ -115,12 +153,18 @@ class GojekOrderCompletionController extends Controller
 			$fix_data[$key]['todays_point'] = isset($driver_point_arr[$key]) ? $driver_point_arr[$key] : 0;
 		}
 
+		$tmp_sunfish_emp = SunfishViewEmp::find()
+		->select(['Emp_no', 'status'])
+		->where(['Emp_no' => $tmp_nik_arr])
+		->all();
+
 		return $this->render('index', [
-			//'data' => $data,
+			'model' => $model,
 			'categories' => $categories,
 			'max_order' => $max_order,
 			'tmp_data' => $tmp_data,
 			'fix_data' => $fix_data,
+			'tmp_sunfish_emp' => $tmp_sunfish_emp,
 		]);
 	}
 

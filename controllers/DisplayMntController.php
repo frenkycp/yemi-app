@@ -15,9 +15,138 @@ use app\models\MttrMtbfDataView;
 use app\models\MesinCheckNg;
 use app\models\WorkDayTbl;
 use app\models\MachineStopRecord;
+use app\models\WipEffTbl;
+use app\models\WorkingDaysView;
 
 class DisplayMntController extends Controller
 {
+	public function actionMachineStopMonthlyReport($value='')
+	{
+		$this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'period'
+        ]);
+        $model->addRule(['period'], 'required');
+
+        $model->period = date('Ym');
+
+        if ($model->load($_GET)) {
+
+        }
+
+        return $this->render('machine-stop-monthly-report', [
+        	'model' => $model,
+        ]);
+	}
+
+	public function actionKadouritsu($value='')
+	{
+		$this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) { }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_wip_data = WipEffTbl::find()
+        ->select([
+        	'period', 'child_analyst',
+        	'total_nett' => 'SUM(lt_nett)',
+        	'total_dandori' => 'SUM(dandori)',
+        ])
+        ->where([
+        	'period' => $period_arr,
+        	'plan_stats' => 'C'
+        ])
+        ->groupBy('period, child_analyst')
+        ->all();
+
+        /*$working_day_arr = WorkingDaysView::find()
+        ->where(['period' => $period_arr])
+        //->andWhere(['<='])
+        ->all();*/
+
+        $working_day_arr = WorkDayTbl::find()
+        ->select([
+        	'period' => 'FORMAT(cal_date, \'yyyyMM\')',
+        	'total' => 'COUNT(cal_date)'
+        ])
+        ->where('holiday IS NULL')
+        ->andWhere(['FORMAT(cal_date, \'yyyyMM\')' => $period_arr])
+        ->andWhere(['<=', 'cal_date', date('Y-m-d')])
+        ->groupBy(['FORMAT(cal_date, \'yyyyMM\')'])
+        ->all();
+
+        $data = [];
+        $kadouritsu_loc_arr = \Yii::$app->params['kadouritsu_loc_arr'];
+        foreach ($kadouritsu_loc_arr as $loc_id => $loc_desc) {
+        	$data[$loc_id]['loc_desc'] = $loc_desc;
+        	foreach ($period_arr as $period_val) {
+        		$tmp_working_day = 0;
+        		foreach ($working_day_arr as $working_day_val) {
+        			if ($working_day_val->period == $period_val) {
+        				$tmp_working_day = $working_day_val->total;
+        			}
+        		}
+        		$net_operating_time = $tmp_working_day * 1440;
+
+        		$running_time = $total_dandori = 0;
+        		foreach ($tmp_wip_data as $wip_data_val) {
+        			if ($wip_data_val->period == $period_val && $wip_data_val->child_analyst == $loc_id) {
+        				$running_time = $wip_data_val->total_nett;
+        				$total_dandori = $wip_data_val->total_dandori;
+        			}
+        		}
+
+        		if ($loc_id != 'WM02') {
+        			$running_time = $running_time / 2;
+        			$total_dandori = $total_dandori / 2;
+        		}
+
+        		$tmp_kadouritsu = $ratio_dandori = 0;
+        		if ($net_operating_time > 0) {
+        			$tmp_kadouritsu = round(($running_time / $net_operating_time) * 100, 1);
+        			$ratio_dandori = round(($total_dandori / $net_operating_time) * 100, 1);
+        		}
+
+        		$data[$loc_id]['kadouritsu'][$period_val] = $tmp_kadouritsu;
+        		$data[$loc_id]['dandori'][$period_val] = $ratio_dandori;
+        	}
+        }
+
+        return $this->render('kadouritsu', [
+        	'model' => $model,
+        	'data' => $data,
+        	'period_arr' => $period_arr,
+        ]);
+	}
+
 	public function actionMachineStopTime()
 	{
 		\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;

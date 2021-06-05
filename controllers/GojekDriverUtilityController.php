@@ -28,6 +28,7 @@ class GojekDriverUtilityController extends Controller
 		->orderBy('GOJEK_DESC')->all();
 
 		$view_data_arr = GojekView02::find()
+		->where(['>', 'ISSUE_DATE', date('Y-m-d', strtotime("-1 month"))])
 		->orderBy('ISSUE_DATE ASC')
 		->all();
 
