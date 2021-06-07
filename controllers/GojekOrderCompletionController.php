@@ -66,7 +66,7 @@ class GojekOrderCompletionController extends Controller
 			'stat_close' => 'SUM(CASE WHEN STAT = \'C\' THEN 1 ELSE 0 END)',
 			'stat_total' => 'COUNT(STAT)'
 		])
-		->where(['period' => $model->period])
+		->where(['FORMAT(issued_date_ori, \'yyyyMM\')' => $model->period])
 		->groupBy('GOJEK_ID, GOJEK_DESC, issued_date')
 		->orderBy('GOJEK_DESC, issued_date')
 		->all();
@@ -116,18 +116,19 @@ class GojekOrderCompletionController extends Controller
 					];
 					$tmp_data[$nik]['nama'] = $order_data->GOJEK_DESC;
 
-					$tmp_data[$nik]['last_stage'] = $value->STAGE;
-					$tmp_data[$nik]['from_loc'] = $value->from_loc;
-					$tmp_data[$nik]['to_loc'] = $value->to_loc;
-					$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
-					$tmp_data[$nik]['hadir'] = $value->HADIR;
+					
 				}
-			}/* else {
+			} else {
 				$tmp_data[$nik]['open'] = null;
 				$tmp_data[$nik]['close'] = null;
 				$tmp_data[$nik]['nama'] = $value->GOJEK_DESC;
-			}*/
+			}
 			
+			$tmp_data[$nik]['last_stage'] = $value->STAGE;
+			$tmp_data[$nik]['from_loc'] = $value->from_loc;
+			$tmp_data[$nik]['to_loc'] = $value->to_loc;
+			$tmp_data[$nik]['last_update'] = $value->LAST_UPDATE;
+			$tmp_data[$nik]['hadir'] = $value->HADIR;
 		}
 
 		$fix_data = [];
