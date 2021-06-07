@@ -43,9 +43,45 @@ use app\models\SensorTbl;
 use app\models\InjMachineTbl;
 use app\models\InjMoldingTbl;
 use app\models\ShipPrdMonthlyResult;
+use app\models\search\SmtOutputMonthlySearch;
 
 class DisplayPrdController extends Controller
 {
+    public function actionSmtOutputMonthly($value='')
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        
+        $searchModel  = new SmtOutputMonthlySearch;
+
+        $searchModel->period = date('Ym');
+        if(\Yii::$app->request->get('period') !== null)
+        {
+            $searchModel->period = \Yii::$app->request->get('period');
+        }
+
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('smt-output-monthly', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
+    public function actionShipPrdReport($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        
+        return $this->render('ship-prd-report', [
+            'data' => $data,
+        ]);
+    }
+
     public function actionShipPrdMonthlyResult($value='')
     {
         $this->layout = 'clean';

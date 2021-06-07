@@ -29,6 +29,9 @@ use Yii;
  * @property double $working_time
  * @property double $operating_ratio
  * @property double $working_ratio
+ * @property double $TOTAL_POINT_FCA
+ * @property integer $POINT_SMT
+ * @property double $POINT_FCA
  * @property string $aliasModel
  */
 abstract class WipEffNew03 extends \yii\db\ActiveRecord
@@ -58,9 +61,14 @@ abstract class WipEffNew03 extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['child_analyst', 'child_analyst_desc', 'period', 'LINE', 'SMT_SHIFT', 'child_all', 'child_desc_all'], 'string'],
             [['post_date'], 'safe'],
-            [['qty_all', 'std_all', 'lt_std', 'lt_gross', 'planed_loss_minute', 'out_section_minute', 'dandori_minute', 'break_down_minute', 'operating_loss_minute', 'working_time', 'operating_ratio', 'working_ratio'], 'number']
+            [['qty_all', 'std_all', 'lt_std', 'lt_gross', 'planed_loss_minute', 'out_section_minute', 'dandori_minute', 'break_down_minute', 'operating_loss_minute', 'working_time', 'operating_ratio', 'working_ratio', 'TOTAL_POINT_FCA', 'POINT_FCA'], 'number'],
+            [['POINT_SMT'], 'integer'],
+            [['child_analyst', 'period'], 'string', 'max' => 6],
+            [['child_analyst_desc', 'child_desc_all'], 'string', 'max' => 50],
+            [['LINE'], 'string', 'max' => 13],
+            [['SMT_SHIFT'], 'string', 'max' => 20],
+            [['child_all'], 'string', 'max' => 15]
         ];
     }
 
@@ -75,7 +83,7 @@ abstract class WipEffNew03 extends \yii\db\ActiveRecord
             'period' => 'Period',
             'post_date' => 'Post Date',
             'LINE' => 'Line',
-            'SMT_SHIFT' => 'Smt  Shift',
+            'SMT_SHIFT' => 'Smt Shift',
             'child_all' => 'Child All',
             'child_desc_all' => 'Child Desc All',
             'qty_all' => 'Qty All',
@@ -90,6 +98,9 @@ abstract class WipEffNew03 extends \yii\db\ActiveRecord
             'working_time' => 'Working Time',
             'operating_ratio' => 'Operating Ratio',
             'working_ratio' => 'Working Ratio',
+            'TOTAL_POINT_FCA' => 'Total Point Fca',
+            'POINT_SMT' => 'Point Smt',
+            'POINT_FCA' => 'Point Fca',
         ];
     }
 
