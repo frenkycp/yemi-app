@@ -48,33 +48,25 @@ echo '</pre>';*/
 ?>
 
 <?php $form = ActiveForm::begin([
-    'method' => 'get'
+    'method' => 'get',
+    //'layout' => 'horizontal',
+    'action' => Url::to(['index']),
 ]); ?>
 
-    <div class="row">
-        <div class="col-md-2">
-            <?= $form->field($period_model, 'year')->dropDownList(
-                \Yii::$app->params['year_arr'],
-                [
-                    'onchange'=>'this.form.submit()'
-                ]
-            ) ?>
-        </div>
-        <div class="col-md-2">
-            <?= $form->field($period_model, 'month')->dropDownList(
-                $month_arr,
-                [
-                    'onchange'=>'this.form.submit()'
-                ]
-            ) ?>
-        </div>
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-2">
+        <?= $form->field($model, 'period')->textInput(
+            [
+                'onchange'=>'this.form.submit()'
+            ]
+        ); ?>
     </div>
-
-    <div class="form-group">
-        <?= '';Html::submitButton('Update Chart', ['class' => 'btn btn-primary']) ?>
-    </div>
+    
+    
+</div>
 
 <?php ActiveForm::end(); ?>
+
 <h4 class="box-title"><i class="fa fa-tag"></i> Last Update : <?= date('Y-m-d H:i:s') ?></h4>
 <div class="nav-tabs-custom">
     <ul class="nav nav-tabs">

@@ -22,53 +22,57 @@ class PartsMilkRunWeeklyController extends Controller
     	$data = [];
     	$trans_method = 'MRS';
 
-        $month_arr = [];
-
-        for ($month = 1; $month <= 12; $month++) {
-            $month_arr[date("m", mktime(0, 0, 0, $month, 10))] = date("F", mktime(0, 0, 0, $month, 10));
-        }
-
-        $period_model = new \yii\base\DynamicModel([
-            'year', 'month'
+        $model = new \yii\base\DynamicModel([
+            'period'
         ]);
+        $model->addRule(['period'], 'required');
+        $model->period = date('Ym');
 
-        $period_model->addRule(['year','month'], 'required')
-        ->addRule(['year', 'month'], 'string');
+        if ($model->load($_GET)) {
 
-        $period_model->month = date('m');
-        $period_model->year = date('Y');
-
-        if($period_model->load(\Yii::$app->request->get())){
-            // do somenthing with model
-            //return $this->redirect(['view']);
         }
 
-        $period = $period_model->year . $period_model->month;
+        $period = $model->period;
 
     	$global_condition = [
     		'TRANS_MTHD' => $trans_method,
             'PERIOD' => $period
 		];
 
-    	$week_arr = $this->getWeekArr($global_condition);
+        $booking_data_arr = BookingShipTrackView::find()
+        ->select([
+            'WEEK',
+            'DATE',
+            'total_open' => 'SUM(CASE WHEN STAT_02 = \'O\' AND STAT_ID NOT IN (3, 4) THEN ORDER_QTY ELSE 0 END)',
+            'total_open2' => 'SUM(CASE WHEN STAT_02 = \'O\' AND STAT_ID IN (3, 4) THEN ORDER_QTY ELSE 0 END)',
+            'total_close' => 'SUM(CASE WHEN STAT_02 = \'C\' THEN ORDER_QTY ELSE 0 END)'
+        ])
+        ->where($global_condition)
+        ->groupBy('WEEK, DATE')
+        ->orderBy('DATE ASC')
+        ->all();
+
+        $week_arr = [];
+        foreach ($booking_data_arr as $key => $value) {
+            if (!in_array($value->WEEK, $week_arr)) {
+                $week_arr[] = $value->WEEK;
+            }
+        }
+
+    	//$week_arr = $this->getWeekArr($global_condition);
     	$today = new \DateTime(date('Y-m-d'));
 		$this_week = $today->format("W");
 		if (!in_array($this_week, $week_arr)) {
 			$this_week = end($week_arr);
 		}
-    	
-    	$booking_data_arr = BookingShipTrackView::find()
-    	->select([
-    		'WEEK',
-    		'DATE',
-    		'total_open' => 'SUM(CASE WHEN STAT_02 = \'O\' AND STAT_ID NOT IN (3, 4) THEN ORDER_QTY ELSE 0 END)',
-            'total_open2' => 'SUM(CASE WHEN STAT_02 = \'O\' AND STAT_ID IN (3, 4) THEN ORDER_QTY ELSE 0 END)',
-    		'total_close' => 'SUM(CASE WHEN STAT_02 = \'C\' THEN ORDER_QTY ELSE 0 END)'
-    	])
-    	->where($global_condition)
-    	->groupBy('WEEK, DATE')
-    	->orderBy('DATE ASC')
-    	->all();
+
+        $detail_data_arr = BookingShipTrack02::find()
+        ->where([
+            'TRANS_MTHD' => $trans_method,
+            'PERIOD' => $period
+        ])
+        ->orderBy('BOOKING_ID ASC')
+        ->all();
 
     	foreach ($week_arr as $week_no) {
     		$tmp_category = [];
@@ -89,7 +93,7 @@ class PartsMilkRunWeeklyController extends Controller
                     $datetime2 = new \DateTime($booking_data->DATE);
                     $interval = $datetime1->diff($datetime2);
 
-                    if ($interval->format('%a') > 7) {
+                    if ($interval->format('%a') > 7 && $datetime2 < $datetime1) {
                         $open_qty = $open_qty2 = 0;
                     } else {
                         $open_qty3 = 0;
@@ -97,22 +101,23 @@ class PartsMilkRunWeeklyController extends Controller
 
     				$tmp_data_open[] = [
     					'y' => $open_qty == 0 ? null : $open_qty,
-    					//'y' => $open_qty == 0 ? null : $open_qty,
-    					'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID NOT IN (3, 4)', $booking_data->DATE, $trans_method, 0)
+                        'remark' => $this->getRemark('O1', $booking_data->DATE, $detail_data_arr)
+    					//'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID NOT IN (3, 4)', $booking_data->DATE, $trans_method, 0)
     				];
                     $tmp_data_open2[] = [
                         'y' => $open_qty2 == 0 ? null : $open_qty2,
-                        'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID IN (3, 4)', $booking_data->DATE, $trans_method, 0)
+                        'remark' => $this->getRemark('O2', $booking_data->DATE, $detail_data_arr)
+                        //'remark' => $this->getRemark('STAT_02 = \'O\' AND STAT_ID IN (3, 4)', $booking_data->DATE, $trans_method, 0)
                     ];
                     $tmp_data_open3[] = [
                         'y' => $open_qty3 == 0 ? null : $open_qty3,
-                        //'y' => $open_qty == 0 ? null : $open_qty,
-                        'remark' => $this->getRemark('STAT_02 = \'O\'', $booking_data->DATE, $trans_method, 0)
+                        'remark' => $this->getRemark('O3', $booking_data->DATE, $detail_data_arr)
+                        //'remark' => $this->getRemark('STAT_02 = \'O\'', $booking_data->DATE, $trans_method, 0)
                     ];
     				$tmp_data_close[] = [
     					'y' => $close_qty == 0 ? null : $close_qty,
-    					//'y' => $close_qty == 0 ? null : $close_qty,
-    					'remark' => $this->getRemark('STAT_02 = \'C\'', $booking_data->DATE, $trans_method, 0)
+    					'remark' => $this->getRemark('C', $booking_data->DATE, $detail_data_arr)
+    					//'remark' => $this->getRemark('STAT_02 = \'C\'', $booking_data->DATE, $trans_method, 0)
     				];
     			}
     		}
@@ -151,6 +156,7 @@ class PartsMilkRunWeeklyController extends Controller
     		'title' => $title,
     		'subtitle' => $subtitle,
     		'data' => $data,
+            'model' => $model,
     		'this_week' => $this_week,
             'period_model' => $period_model,
             'month_arr' => $month_arr
@@ -174,7 +180,79 @@ class PartsMilkRunWeeklyController extends Controller
     	return $return_arr;
     }
 
-    public function getRemark($bo_status, $date, $trans_method, $stat_id)
+    public function getRemark($bo_status, $date, $detail_data_arr)
+    {
+
+        $data = '<table class="table table-bordered table-striped table-hover">';
+        $data .= 
+        '<tr>
+            <th class="text-center">Booking ID</th>
+            <th>User Description</th>
+            <th class="text-center">Pickup Actual</th>
+            <th class="text-center" style="width:80px;">YEMI Arrival</th>
+            <th>Shipper</th>
+            <th class="text-center">Item</th>
+            <th>Item Description</th>
+            <th class="text-center">Order Qty</th>
+            <th class="text-center">Rcv Qty</th>
+            <th class="text-center">BO Qty</th>
+            <th>Status</th>
+        </tr>'
+        ;
+
+        foreach ($detail_data_arr as $value) {
+            if (date('Y-m-d', strtotime($value->PICKUP_ACTUAL)) == $date) {
+                $tambahkan = false;
+                if ($bo_status == 'O1') {
+                    if ($value->STAT_02 == 'O' && !in_array($value->STAT_ID, [3, 4])) {
+                        $tambahkan = true;
+                    }
+                } elseif ($bo_status == 'O2') {
+                    if ($value->STAT_02 == 'O' && in_array($value->STAT_ID, [3, 4])) {
+                        $tambahkan = true;
+                    }
+                } elseif ($bo_status == 'O3') {
+                    if ($value->STAT_02 == 'O') {
+                        $tambahkan = true;
+                    }
+                } elseif ($bo_status == 'C') {
+                    if ($value->STAT_02 == 'C') {
+                        $tambahkan = true;
+                    }
+                }
+
+                if ($tambahkan) {
+                    $yemi_arrival_date = $value->YEMI_ARRIVAL == null ? '-' : date('Y-m-d', strtotime($value->YEMI_ARRIVAL));
+                    $pickup_actual = '-';
+                    if (date('H:i:s', strtotime($value->PICKUP_ACTUAL)) != '00:00:00') {
+                        $pickup_actual = $value->PICKUP_ACTUAL;
+                    }
+                    $data .= '
+                    <tr>
+                        <td class="text-center">' . $value->BOOKING_ID . '</td>
+                        <td>' . $value->USER_DESC . '</td>
+                        <td class="text-center">' . $pickup_actual . '</td>
+                        <td class="text-center">' . $yemi_arrival_date . '</td>
+                        <td>' . $value->SHIPPER . '</td>
+                        <td class="text-center">' . $value['ITEM'] . '</td>
+                        <td>' . $value->ITEM_DESC . '</td>
+                        <td class="text-center">' . $value->ORDER_QTY . '</td>
+                        <td class="text-center">' . $value->RCV_QTY . '</td>
+                        <td class="text-center">' . abs($value->BO_QTY) . '</td>
+                        <td class="text-center">' . $value->STAT_ID_DESC . '</td>
+                    </tr>
+                    ';
+                }
+                
+            }
+            
+        }
+
+        $data .= '</table>';
+        return $data;
+    }
+
+    /*public function getRemark($bo_status, $date, $trans_method, $stat_id)
     {
     	$data_arr = BookingShipTrack02::find()
     	->where([
@@ -228,6 +306,6 @@ class PartsMilkRunWeeklyController extends Controller
 
 		$data .= '</table>';
 		return $data;
-    }
+    }*/
 
 }
