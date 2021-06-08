@@ -110,7 +110,7 @@ class NgFaController extends Controller
 	        		if ($tmp_image->saveAs($filePath)) {
 	                    Image::thumbnail($filePath, 50, 50)
     					->save($filePathThumbnail, ['quality' => 80]);
-    					Image::getImagine()->open($filePath)->thumbnail(new Box(1920, 1080))->save($filePath , ['quality' => 90]);
+    					Image::getImagine()->open($filePath)->thumbnail(new Box(1280, 720))->save($filePath , ['quality' => 90]);
     					//Image::getImagine()->open($filePath)->save($filePath, ['quality' => 25]);
 	                }
 
