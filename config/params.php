@@ -511,6 +511,11 @@ return [
         'FA & WHP Gedung 2' => 'FA & WHP Gedung 2',
         'SPC & WHP Gedung 2' => 'SPC & WHP Gedung 2',
     ],
+    'mis_patrol_category' => [
+        'Hardware' => 'Hardware',
+        'Software' => 'Software',
+        'Networking' => 'Networking',
+    ],
     'she_patrol_category' => [
     	'Fisika' => 'Fisika',
     	'Kimia' => 'Kimia',
