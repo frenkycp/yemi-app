@@ -13,9 +13,9 @@ use kartik\export\ExportMenu;
 */
 
 $this->title = [
-    'page_title' => 'Covid Patrol Data <span class="japanesse text-green"></span>',
-    'tab_title' => 'Covid Patrol Data',
-    'breadcrumbs_title' => 'Covid Patrol Data'
+    'page_title' => 'MIS Patrol Data <span class="japanesse text-green"></span>',
+    'tab_title' => 'MIS Patrol Data',
+    'breadcrumbs_title' => 'MIS Patrol Data'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -29,7 +29,7 @@ $this->registerCss("
     }
 ");
 
-$tmp_patrol_category = \Yii::$app->params['covid_patrol_category'];
+$tmp_patrol_category = \Yii::$app->params['mis_patrol_category'];
 $tmp_patrol_loc = ArrayHelper::map(app\models\CovidPatrolLoc::find()->all(), 'LOC_ID', 'LOC_NAME');
 
 $gridColumns = [
@@ -111,22 +111,20 @@ $gridColumns = [
     ],*/
     [
         'attribute' => 'LOC_ID',
+        'value' => 'LOC_DESC',
         'label' => 'Location',
-        'value' => function($model){
-            return $model->LOC_DETAIL;
-        },
         'filter' => $tmp_patrol_loc,
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
     [
-        'attribute' => 'AUDITOR',
+        'attribute' => 'LOC_DETAIL',
+        'label' => 'Location Detail',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
     [
-        'attribute' => 'PIC_NAME',
-        'label' => 'PIC',
+        'attribute' => 'AUDITOR',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
@@ -181,7 +179,7 @@ $gridColumns = [
         'attribute' => 'IMAGE_BEFORE_1',
         'value' => function($model){
             if ($model->IMAGE_BEFORE_1 != null) {
-                return Html::img('http://10.110.52.5:86/uploads/COVID_PATROL/' . $model->IMAGE_BEFORE_1, ['width'=>'170px', 'alt' => 'No Image Found...', 'class' => 'img-before-after']);
+                return Html::img('http://10.110.52.5:86/uploads/MIS_PATROL/' . $model->IMAGE_BEFORE_1, ['width'=>'170px', 'alt' => 'No Image Found...', 'class' => 'img-before-after']);
             }
         },
         'width' => '170px',
@@ -196,7 +194,7 @@ $gridColumns = [
         'attribute' => 'IMAGE_AFTER_1',
         'value' => function($model){
             if ($model->IMAGE_AFTER_1 != null) {
-                return Html::img('http://10.110.52.5:86/uploads/COVID_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'170px', 'alt' => 'No Image Found...', 'class' => 'img-before-after']);
+                return Html::img('http://10.110.52.5:86/uploads/MIS_PATROL/' . $model->IMAGE_AFTER_1, ['width'=>'170px', 'alt' => 'No Image Found...', 'class' => 'img-before-after']);
             }
         },
         'width' => '170px',
