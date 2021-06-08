@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class SmtOutputMonthlyInsertPoint02 extends BaseSmtOutputMonthlyInsertPoint02
 {
+    public $MOUNTING_RATIO;
 
     public function behaviors()
     {

@@ -12,9 +12,9 @@ use kartik\grid\GridView;
 */
 
 $this->title = [
-    'page_title' => 'Fixed  & MIS Assets Management <span class="japanesse light-green">(固定・MIS資産管理)</span>',
-    'tab_title' => 'Fixed  & MIS Assets Management',
-    'breadcrumbs_title' => 'Fixed  & MIS Assets Management'
+    'page_title' => 'SMT Mount Point <span class="japanesse light-green"></span>',
+    'tab_title' => 'SMT Mount Point',
+    'breadcrumbs_title' => 'SMT Mount Point'
 ];
 $this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -59,6 +59,10 @@ $gridColumns = [
     ],
     [
         'attribute' => 'working_time',
+        'value' => function($model)
+        {
+            return round($model->working_time, 2);
+        },
         'label' => 'Working Time<br/>(G)',
         'hAlign' => 'center',
         'vAlign' => 'middle',
@@ -81,6 +85,22 @@ $gridColumns = [
     ],
     [
         'attribute' => 'TOTAL_POINT_ALL',
+        'label' => 'Total Point<br/>(H)',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'mergeHeader' => true,
+        'encodeLabel' => false,
+    ],
+    [
+        'attribute' => 'MOUNTING_RATIO',
+        'value' => function($model){
+            $tmp_ratio = 0;
+            if ($model->TOTAL_POINT_ALL > 0) {
+                $tmp_ratio = round(($model->working_time - $model->planed_loss_minute - $model->out_section_minute) / $model->TOTAL_POINT_ALL, 3);
+            }
+            return $tmp_ratio;
+        },
+        'label' => '(G-E-F) / H',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'mergeHeader' => true,
