@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class HikTemperatureView extends BaseHikTemperatureView
 {
+    public $from_time, $to_time;
 
     public function behaviors()
     {

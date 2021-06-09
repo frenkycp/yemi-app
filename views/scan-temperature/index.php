@@ -20,56 +20,46 @@ date_default_timezone_set('Asia/Jakarta');
 
 $gridColumns = [
     [
+        'attribute' => 'PERIOD',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
+        'attribute' => 'POST_DATE',
+        'vAlign' => 'middle',
+        'hAlign' => 'center',
+    ],
+    [
         'attribute' => 'NIK',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px;'
-        ],
     ],
     [
-        'attribute' => 'Full_name',
+        'attribute' => 'PersonName',
         'vAlign' => 'middle',
         //'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px;'
-        ],
     ],
     [
-        'attribute' => 'cost_center_name',
-        'vAlign' => 'middle',
-        //'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px;'
-        ],
-    ],
-    [
-        'attribute' => 'swipetime',
+        'attribute' => 'Temp',
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px;'
-        ],
     ],
     [
-        'attribute' => 'temperature',
+        'attribute' => 'LAST_UPDATE',
+        'value' => function($model){
+            if ($model->LAST_UPDATE != null) {
+                return date('Y-m-d H:i:s', strtotime($model->LAST_UPDATE));
+            }
+        },
         'vAlign' => 'middle',
         'hAlign' => 'center',
-        'filterInputOptions' => [
-            'class' => 'form-control',
-            'style' => 'text-align: center; min-width: 80px;'
-        ],
     ],
 ];
 ?>
 <div class="giiant-crud scan-temperature-index">
 
     <?php
-             echo $this->render('_search', ['model' =>$searchModel]);
+            echo $this->render('_search', ['model' =>$searchModel]);
         ?>
 
     

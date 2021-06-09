@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\KaryawanSuhuView;
+use app\models\HikTemperatureView;
 
 /**
 * AbsensiTblSearch represents the model behind the search form about `app\models\AbsensiTbl`.
 */
-class KaryawanSuhuViewSearch extends KaryawanSuhuView
+class KaryawanSuhuViewSearch extends HikTemperatureView
 {
 /**
 * @inheritdoc
@@ -18,8 +18,7 @@ class KaryawanSuhuViewSearch extends KaryawanSuhuView
 public function rules()
 {
 return [
-[['sysid', 'emp_no', 'mac_no', 'port', 'iomode', 'verifymode', 'temperature', 'swipetime', 'NIK', 'Full_name', 'cost_center_name'], 'safe'],
-[['from_time', 'to_time'], 'required'],
+[['NIK', 'PERIOD', 'POST_DATE', 'PersonName', 'from_time', 'to_time'], 'safe'],
 ];
 }
 
@@ -41,10 +40,16 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = KaryawanSuhuView::find()->where('NIK IS NOT NULL');
+$query = HikTemperatureView::find()->where('NIK IS NOT NULL');
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+    'defaultOrder' => [
+        //'cust_desc' => SORT_ASC,
+        'LAST_UPDATE' => SORT_DESC,
+    ]
+],
 ]);
 
 $this->load($params);
@@ -55,22 +60,16 @@ if (!$this->validate()) {
 return $dataProvider;
 }
 
-/*$query->andFilterWhere([
-            'YEAR' => $this->YEAR,
-            'WEEK' => $this->WEEK,
-            'DATE' => $this->DATE,
-            'TOTAL_KARYAWAN' => $this->TOTAL_KARYAWAN,
-            'KEHADIRAN' => $this->KEHADIRAN,
-            'BONUS' => $this->BONUS,
-            'DISIPLIN' => $this->DISIPLIN,
-        ]);*/
+$query->andFilterWhere([
+            'PERIOD' => $this->PERIOD,
+            'POST_DATE' => $this->POST_DATE,
+        ]);
 
         $query->andFilterWhere(['like', 'NIK', $this->NIK])
-            ->andFilterWhere(['like', 'cost_center_name', $this->cost_center_name])
-            ->andFilterWhere(['like', 'Full_name', $this->Full_name]);
+            ->andFilterWhere(['like', 'PersonName', $this->PersonName]);
 
-            $query->andFilterWhere(['>=', 'swipetime', $this->from_time])
-            ->andFilterWhere(['<=', 'swipetime', $this->to_time]);
+        $query->andFilterWhere(['>=', 'LAST_UPDATE', $this->from_time])
+        ->andFilterWhere(['<=', 'LAST_UPDATE', $this->to_time]);
 
 return $dataProvider;
 }

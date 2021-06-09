@@ -20,6 +20,13 @@ class ScanTemperatureController extends \app\controllers\base\ScanTemperatureCon
     public function actionIndex()
 	{
 	    $searchModel  = new KaryawanSuhuViewSearch;
+
+	    /*$searchModel->POST_DATE = date('Y-m-d');
+	    if(\Yii::$app->request->get('POST_DATE') !== null)
+	    {
+	    	$searchModel->POST_DATE = \Yii::$app->request->get('POST_DATE');
+	    }*/
+
 	    $dataProvider = $searchModel->search($_GET);
 
 		Tabs::clearLocalStorage();
