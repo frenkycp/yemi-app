@@ -44,9 +44,79 @@ use app\models\InjMachineTbl;
 use app\models\InjMoldingTbl;
 use app\models\ShipPrdMonthlyResult;
 use app\models\search\SmtOutputMonthlySearch;
+use app\models\WipEffTbl;
 
 class DisplayPrdController extends Controller
 {
+    public function actionWipStandardTime($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $wip_location_arr = [
+            'WI01' => 'Small Injection',
+            'WI02' => '1600/850 Injection'
+        ];
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+        
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $wip_standard_time = WipEffTbl::find()
+        ->select([
+            'period', 'child_analyst', 'child_analyst_desc',
+            'lt_std' => 'SUM(lt_std)'
+        ])
+        ->where(['period' => $period_arr])
+        ->groupBy('period, child_analyst, child_analyst_desc')
+        ->orderBy('period')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($period_arr as $period_val) {
+            foreach ($wip_location_arr as $loc_id => $loc_desc) {
+                foreach ($wip_standard_time as $std_time_val) {
+                    if ($std_time_val->period == $period_val && $std_time_val->child_analyst == $loc_id) {
+                        $tmp_data[$period_val][$loc_desc]['std_time'] = $std_time_val->lt_std;
+                    }
+                }
+            }
+        }
+
+        return $this->render('wip-standard-time', [
+            'model' => $model,
+            'period_arr' => $period_arr,
+            'tmp_data' => $tmp_data,
+            'wip_location_arr' => $wip_location_arr,
+        ]);
+    }
+
     public function actionSmtOutputMonthly($value='')
     {
         date_default_timezone_set('Asia/Jakarta');
