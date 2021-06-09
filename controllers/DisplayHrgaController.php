@@ -643,7 +643,8 @@ class DisplayHrgaController extends Controller
 
         $yesterday = date('Y-m-d', strtotime($model->post_date . ' -1 day'));
 
-        $tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
+        //$tmp_attendance = SunfishAttendanceData::instance()->getDailyAttendanceRange($model->post_date, $model->post_date);
+        $tmp_attendance = SunfishAttendanceData::instance()->getDataForTemperature($model->post_date, $model->post_date);
         //$tmp_office_emp = OfficeEmp::find()->all();
         //$today_temp = ScanTemperature::find()->where(['POST_DATE' => $model->post_date])->orderBy('LAST_UPDATE')->all();
         //$yesterday_temp = ScanTemperature::find()->where(['POST_DATE' => $yesterday])->orderBy('LAST_UPDATE')->all();

@@ -187,6 +187,65 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
 
         return $data;
     }
+    public function getDataForTemperature($from_date, $to_date)
+    {
+        $return_data = [];
+        $tmp_data = $this::find()
+        ->select([
+            'shiftendtime' => 'CONVERT(DATE, shiftendtime)',
+            'VIEW_YEMI_ATTENDANCE.emp_no', 'VIEW_YEMI_ATTENDANCE.full_name', 'shiftdaily_code',
+            'start_date' => 'CONVERT(DATE, VIEW_YEMI_Emp_OrgUnit.start_date)',
+            'end_date' => 'CONVERT(DATE, VIEW_YEMI_Emp_OrgUnit.end_date)',
+            'shiftdaily_code', 'Attend_Code', 'attend_judgement', 'starttime', 'endtime', 'cost_center'
+        ])
+        ->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
+        ->where('PATINDEX(\'YE%\', VIEW_YEMI_ATTENDANCE.emp_no) > 0 AND shiftdaily_code <> \'OFF\'')
+        ->andWhere([
+            'AND',
+            ['>=', 'shiftendtime', $from_date . ' 00:00:00'],
+            ['<=', 'shiftendtime', $to_date . ' 23:59:59'],
+        ])
+        ->andWhere(['VIEW_YEMI_Emp_OrgUnit.status' => 1])
+        ->orderBy('shiftendtime, emp_no')
+        ->all();
+
+        foreach ($tmp_data as $value) {
+            if ($value->start_date <= $value->shiftendtime && ($value->end_date == null || $value->end_date >= $value->shiftendtime)) {
+                if (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_1') !== false
+                    || strpos(strtoupper($value->shiftdaily_code), 'SHIFT_08_17') !== false
+                    || strpos(strtoupper($value->shiftdaily_code), 'GARDENER') !== false) {
+                    $shift =  1;
+                } elseif (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_2') !== false || strpos(strtoupper($value->shiftdaily_code), 'MAINTENANCE') !== false) {
+                    $shift =  2;
+                } elseif (strpos(strtoupper($value->shiftdaily_code), 'SHIFT_3') !== false) {
+                    $shift =  3;
+                } else {
+                    $shift =  '-';
+                }
+
+                $attend_judgement = $value->attend_judgement;
+                if ($attend_judgement == 'CKX') {
+                    $attend_judgement = 'C';
+                } elseif ($attend_judgement == null || $attend_judgement == 'OFF') {
+                    $attend_judgement = 'A';
+                }
+
+                $data[$value->shiftendtime][] = [
+                    'nik' => $value->emp_no,
+                    'name' => $value->full_name,
+                    'shift' => $shift,
+                    'Attend_Code' => $value->Attend_Code,
+                    'shiftdaily_code' => $value->shiftdaily_code,
+                    'attend_judgement' => $attend_judgement,
+                    'starttime' => $value->starttime,
+                    'endtime' => $value->endtime,
+                    'cost_center' => $value->cost_center,
+                ];
+            }
+        }
+
+        return $data;
+    }
 
     public function getDailyAttendance($post_date)
     {
