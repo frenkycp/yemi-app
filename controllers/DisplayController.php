@@ -11349,9 +11349,9 @@ class DisplayController extends Controller
         ->one();
 
         $room_name = strtoupper($room_info->room_name);
-        if ($room_id == 1) {
+        /*if ($room_id == 1) {
             $room_name = strtoupper($room_info->room_name . ' ROOM');
-        }
+        }*/
 
         $tmp_data = MeetingEvent::find()
         ->where([
