@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'PT. YEMI Standard Time <span class="japanesse light-green"></span>',
-    'tab_title' => 'PT. YEMI Standard Time',
-    'breadcrumbs_title' => 'PT. YEMI Standard Time'
+    'page_title' => 'SMT Mounting Report <span class="japanesse light-green"></span>',
+    'tab_title' => 'SMT Mounting Report',
+    'breadcrumbs_title' => 'SMT Mounting Report'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -103,11 +103,11 @@ echo '</pre>';*/
 
 //echo Yii::$app->request->baseUrl;
 ?>
-<span style="font-size: 2em; font-weight: bold;"><u>PT. YEMI Standard Time</u></span><br/>
+<span style="font-size: 2em; font-weight: bold;"><u>SMT Mounting Report (Monthly)</u></span><br/>
 <?php $form = ActiveForm::begin([
     'method' => 'get',
     //'layout' => 'horizontal',
-    'action' => Url::to(['wip-standard-time']),
+    'action' => Url::to(['smt-ai-insert-point']),
 ]); ?>
 
 <div class="row">
@@ -125,20 +125,22 @@ echo '</pre>';*/
     <thead>
         <tr>
             <th class="text-center">PERIOD</th>
-            <?php foreach ($wip_location_arr as $key => $value): ?>
-                <th class="text-center"><?= $value; ?></th>
-            <?php endforeach ?>
+            <th class="text-center">Loss Time<br/>(Planned Loss)<br/>E</th>
+            <th class="text-center">Loss Time<br/>(Out Section)<br/>F</th>
+            <th class="text-center">Working Time<br/>(G)</th>
+            <th class="text-center">Total Point<br/>(H)</th>
+            <th class="text-center">H / (G-E-F)</th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($tmp_data as $period => $period_data): 
-            $period_name = date('M\'Y', strtotime($period . '01'));
-            ?>
+        <?php foreach ($tmp_data as $period_val => $data_val): ?>
             <tr>
-                <td class="text-center"><?= $period; ?></td>
-                <?php foreach ($period_data as $data_val): ?>
-                    <td class="text-center"><?= number_format($data_val['std_time']); ?></td>
-                <?php endforeach ?>
+                <td class="text-center"><?= date('M\'Y', strtotime($period_val . '01')); ?></td>
+                <td class="text-center"><?= number_format($data_val['planed_loss_minute']); ?></td>
+                <td class="text-center"><?= number_format($data_val['out_section_minute']); ?></td>
+                <td class="text-center"><?= number_format($data_val['working_time']); ?></td>
+                <td class="text-center"><?= number_format($data_val['TOTAL_POINT_ALL']); ?></td>
+                <td class="text-center"><?= number_format($data_val['ratio']); ?></td>
             </tr>
         <?php endforeach ?>
     </tbody>

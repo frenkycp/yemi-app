@@ -45,9 +45,83 @@ use app\models\InjMoldingTbl;
 use app\models\ShipPrdMonthlyResult;
 use app\models\search\SmtOutputMonthlySearch;
 use app\models\WipEffTbl;
+use app\models\SmtOutputMonthlyInsertPoint02;
 
 class DisplayPrdController extends Controller
 {
+    public function actionSmtMountingReport($value='')
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+
+        $tmp_report = SmtOutputMonthlyInsertPoint02::find()
+        ->select([
+            'period',
+            'planed_loss_minute' => 'SUM(planed_loss_minute)',
+            'out_section_minute' => 'SUM(out_section_minute)',
+            'working_time' => 'SUM(working_time)',
+            'TOTAL_POINT_ALL' => 'SUM(TOTAL_POINT_ALL)',
+        ])
+        ->groupBy('period')
+        ->orderBy('period')
+        ->all();
+        
+        $period_arr = $tmp_data = [];
+        foreach ($tmp_fiscal_period as $value) {
+            $period_arr[] = $value->PERIOD;
+            $tmp_data[$value->PERIOD] = [
+                'planed_loss_minute' => null,
+                'out_section_minute' => null,
+                'working_time' => null,
+                'TOTAL_POINT_ALL' => null,
+                'ratio' => null,
+            ];
+            foreach ($tmp_report as $report_val) {
+                if ($report_val->period == $value->PERIOD) {
+                    $tmp_data[$value->PERIOD]['planed_loss_minute'] = $report_val->planed_loss_minute;
+                    $tmp_data[$value->PERIOD]['out_section_minute'] = $report_val->out_section_minute;
+                    $tmp_data[$value->PERIOD]['working_time'] = $report_val->working_time;
+                    $tmp_data[$value->PERIOD]['TOTAL_POINT_ALL'] = $report_val->TOTAL_POINT_ALL;
+                    $pembagi = ($report_val->working_time - $report_val->planed_loss_minute - $report_val->out_section_minute);
+                    if ($pembagi > 0) {
+                        $tmp_data[$value->PERIOD]['ratio'] = round($report_val->TOTAL_POINT_ALL / $pembagi, 1);
+                    }
+                }
+            }
+        }
+
+        return $this->render('smt-mounting-report', [
+            'model' => $model,
+            'period_arr' => $period_arr,
+            'tmp_data' => $tmp_data,
+        ]);
+    }
+
     public function actionWipStandardTime($value='')
     {
         $this->layout = 'clean';
