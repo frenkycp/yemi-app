@@ -49,6 +49,24 @@ use app\models\SmtOutputMonthlyInsertPoint02;
 
 class DisplayPrdController extends Controller
 {
+    public function actionTest($value='')
+    {
+        $this->layout = 'clean';
+        $array = [
+            'FA' => [
+                '2020104' => 1,
+                '2020105' => 1,
+                '2020106' => 1,
+            ],
+            'SA' => [
+                '2020104' => 1,
+                '2020105' => 1,
+                '2020106' => 1,
+            ],
+        ];
+        return json_encode($array);
+    }
+
     public function actionSmtMountingReport($value='')
     {
         $this->layout = 'clean';
@@ -128,6 +146,12 @@ class DisplayPrdController extends Controller
         date_default_timezone_set('Asia/Jakarta');
 
         $wip_location_arr = [
+            'TEMP01' => 'FA',
+            'TEMP02' => 'SA',
+            'TEMP03' => 'WW',
+            'TEMP04' => 'PT',
+            'TEMP05' => 'PCB MI',
+            'TEMP06' => 'SPU',
             'WI01' => 'Small Injection',
             'WI02' => '1600/850 Injection'
         ];
@@ -175,6 +199,7 @@ class DisplayPrdController extends Controller
         $tmp_data = [];
         foreach ($period_arr as $period_val) {
             foreach ($wip_location_arr as $loc_id => $loc_desc) {
+                $tmp_data[$period_val][$loc_desc]['std_time'] = null;
                 foreach ($wip_standard_time as $std_time_val) {
                     if ($std_time_val->period == $period_val && $std_time_val->child_analyst == $loc_id) {
                         $tmp_data[$period_val][$loc_desc]['std_time'] = $std_time_val->lt_std;

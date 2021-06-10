@@ -118,9 +118,9 @@ echo '</pre>';*/
         ); ?>
     </div>
 </div>
-
+<br/>
 <?php ActiveForm::end(); ?>
-
+<span class="japanesse">加工工数（分）</span>
 <table class="table summary-tbl">
     <thead>
         <tr>
@@ -137,7 +137,7 @@ echo '</pre>';*/
             <tr>
                 <td class="text-center"><?= $period; ?></td>
                 <?php foreach ($period_data as $data_val): ?>
-                    <td class="text-center"><?= number_format($data_val['std_time']); ?></td>
+                    <td class="text-center"><?= $data_val['std_time'] == null ? '-' : number_format($data_val['std_time']); ?></td>
                 <?php endforeach ?>
             </tr>
         <?php endforeach ?>
