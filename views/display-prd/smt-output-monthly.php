@@ -96,11 +96,11 @@ $gridColumns = [
         'value' => function($model){
             $tmp_ratio = 0;
             if ($model->TOTAL_POINT_ALL > 0) {
-                $tmp_ratio = round(($model->working_time - $model->planed_loss_minute - $model->out_section_minute) / $model->TOTAL_POINT_ALL, 3);
+                $tmp_ratio = round($model->TOTAL_POINT_ALL / ($model->working_time - $model->planed_loss_minute - $model->out_section_minute), 3);
             }
             return $tmp_ratio;
         },
-        'label' => '(G-E-F) / H',
+        'label' => 'H / (G-E-F)',
         'hAlign' => 'center',
         'vAlign' => 'middle',
         'mergeHeader' => true,
