@@ -1528,7 +1528,7 @@ class DisplayPrdController extends Controller
             'defect_fct_ict' => 'SUM(CASE WHEN pcb_ng_found IN (\'FCT\', \'ICT\') THEN ng_qty ELSE 0 END)',
             'defect_mi' => 'SUM(CASE WHEN pcb_process = \'MI\' THEN ng_qty ELSE 0 END)',
             'defect_ai' => 'SUM(CASE WHEN pcb_process = \'AI\' THEN ng_qty ELSE 0 END)',
-            'defect_smt' => 'SUM(CASE WHEN pcb_process = \'SMT\' THEN ng_qty ELSE 0 END)',
+            'defect_smt' => 'SUM(CASE WHEN pcb_process = \'SMT\' AND pcb_ng_found IN (\'FCT\', \'ICT\') THEN ng_qty ELSE 0 END)',
         ])
         ->where([
             'period' => $period_arr,
