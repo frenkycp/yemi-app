@@ -73,7 +73,7 @@ print_r($tmp_data3);
 echo '</pre>';*/
 
 ?>
-
+<span style="color: white; font-size: 2em;">Total Stock : <?= number_format($grandtotal_stock); ?> pcs</span>
 <div class="row">
     <div class="col-md-12">
         <?php

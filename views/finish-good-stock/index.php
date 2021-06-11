@@ -13,7 +13,7 @@ if($day_stock > 1){
 }
 
 $this->title = [
-    'page_title' => 'Finish Goods Stock <span class="light-green japanesse">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> pcs (' . round($grand_total_kubikasi, 2) . ' m<sup>3</sup> &efDot; ' . $total_kontainer . ' containers &efDot; ' . $day_total . ')',
+    'page_title' => 'Finish Goods Stock <span class="light-green japanesse">(完成品在庫)</span> : <b>' . number_format($grand_total) . '</b> pcs (' . $day_total . ')',
     'tab_title' => 'Finish Goods Stock',
     'breadcrumbs_title' => 'Finish Goods Stock'
 ];
@@ -111,7 +111,7 @@ echo '</pre>';*/
                         'stacking' => 'normal',
                     ],
                     'series' => [
-                        'cursor' => 'pointer',
+                        /*'cursor' => 'pointer',
                         'point' => [
                             'events' => [
                                 'click' => new JsExpression("
@@ -121,29 +121,14 @@ echo '</pre>';*/
                                     }
                                 "),
                             ]
-                        ]
+                        ]*/
                     ]
                 ],
                 'series' => [
                     [
-                        'name' => 'FA - Under Inspection',
-                        'data' => $data[2],
-                        'color' => 'rgba(255, 150, 0, 1)',
-                    ],
-                    [
-                        'name' => 'FA - OK',
-                        'data' => $data[3],
-                        'color' => 'rgba(0, 255, 0, 1)',
-                    ],
-                    [
-                        'name' => 'Finish Good WH - Under Inspection',
+                        'name' => 'Finish Good Stock',
                         'data' => $data[0],
                         'color' => 'rgba(0, 200, 255, 1)',
-                    ],
-                    [
-                        'name' => 'Finish Good WH - OK',
-                        'data' => $data[1],
-                        'color' => 'rgba(0, 0, 255, 1)',
                     ],
                     
                     
@@ -165,7 +150,7 @@ echo '</pre>';*/
         yii\bootstrap\Modal::end();
         ?>
         <div class="well well-sm">
-            <h4 class="text-light-blue"><b> 1 container &efDot; 54 m<sup>3</sup></b></h4>
+            <h4 class="text-light-blue" style="display: none;"><b> 1 container &efDot; 54 m<sup>3</sup></b></h4>
             <h4 class="text-light-blue"><b> 1 day output &efDot; 5,000 pcs</b></h4>
         </div>
     </div>

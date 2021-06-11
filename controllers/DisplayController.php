@@ -11973,8 +11973,10 @@ class DisplayController extends Controller
         ->all();
 
         $tmp_data = $tmp_data2 = $tmp_data3 = $categories = [];
+        $grandtotal_stock = 0;
         foreach ($tmp_input_arr as $key => $value) {
             $tmp_title = $value->etd;
+            $grandtotal_stock += $value->stock_qty;
 
             /*if ($value->days_diff < $limit_over) {
                 $tmp_title = $value->days_diff;
@@ -12027,6 +12029,7 @@ class DisplayController extends Controller
 
         return $this->render('fgs-stock', [
             'data' => $data,
+            'grandtotal_stock' => $grandtotal_stock,
             'data_table' => $data_table,
             'table_column' => $table_column,
             'categories' => $categories

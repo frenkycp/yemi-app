@@ -25,7 +25,7 @@ class FinishGoodStockController extends Controller
     	$x_categories = [];
     	$remark = '';
 
-        $stock_arr = SernoInput::find()
+        /*$stock_arr = SernoInput::find()
         ->select([
             'dst' => 'tb_serno_output.dst',
             //'prod_output_qty' => 'SUM(CASE WHEN loct = 0 THEN 1 ELSE 0 END)',
@@ -41,13 +41,24 @@ class FinishGoodStockController extends Controller
         ->groupBy('tb_serno_output.dst')
         ->orderBy('stock_qty DESC')
         ->asArray()
+        ->all();*/
+
+        $stock_arr = SernoOutput::find()
+        ->select([
+            'dst', 'stock_qty' => 'SUM(output - loading)'
+        ])
+        ->where('etd >= CURDATE()')
+        ->andWhere(['<>', 'output', 'loading'])
+        ->groupBy('dst')
+        ->orderBy('stock_qty DESC')
+        ->asArray()
         ->all();
 
         $grand_total = 0;
         $grand_total_kubikasi = 0;
         $tmp_data = [];
 
-        $tmp_kubikasi_arr = SernoOutput::find()
+        /*$tmp_kubikasi_arr = SernoOutput::find()
         ->select([
             'gmc' => 'gmc',
             'dst',
@@ -56,7 +67,7 @@ class FinishGoodStockController extends Controller
         ->where(['>', 'output', 0])
         ->andWhere(['>=', 'etd', date('Y-m-d')])
         ->groupBy('gmc')
-        ->all();
+        ->all();*/
 
     	foreach ($stock_arr as $stock_data) {
     		$x_categories[] = $stock_data['dst'];
@@ -64,15 +75,20 @@ class FinishGoodStockController extends Controller
 
             $total_kubikasi = 0;
 
-            foreach ($tmp_kubikasi_arr as $value) {
+            /*foreach ($tmp_kubikasi_arr as $value) {
                 if ($value->dst == $stock_data['dst']) {
                     $gmc = $value->gmc;
                     $m3 = (float)$value->getItemM3()->VOLUME;
                     $total_kubikasi += (int)$value->stock_qty * $m3;
                 }
-            }
+            }*/
 
             $grand_total_kubikasi += $total_kubikasi;
+
+            $tmp_data[0][] = [
+                'y' => (int)$stock_data['stock_qty'],
+                'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 0]),
+            ];
 
             /*$tmp_data[0][] = [
                 'y' => (int)$stock_data['prod_output_qty'],
@@ -82,7 +98,7 @@ class FinishGoodStockController extends Controller
                 'y' => (int)$stock_data['in_transit_qty'],
                 'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1]),
             ];*/
-            $tmp_data[0][] = [
+            /*$tmp_data[0][] = [
                 'y' => (int)$stock_data['finish_goods_qty'],
                 'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 2, 'qa_ok' => '']),
             ];
@@ -97,7 +113,7 @@ class FinishGoodStockController extends Controller
             $tmp_data[3][] = [
                 'y' => (int)$stock_data['fa_output_ok_qty'],
                 'url' => Url::to(['get-remark', 'dst' => $stock_data['dst'], 'loct' => 1, 'qa_ok' => 'OK']),
-            ];
+            ];*/
     	}
 
         $total_kontainer = round($grand_total_kubikasi / 54, 1);

@@ -146,7 +146,9 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<?php foreach ($tmp_data as $model_name => $period_data_arr): 
+<?php
+$index_no = 0;
+foreach ($tmp_data as $model_name => $period_data_arr): 
     $tmp_total_ppm_arr = [];
     $avg_output = $avg_defect_fa = $avg_defect_fct_ict = $avg_defect_mi = $avg_defect_ai = $avg_defect_smt = $avg_ppm_fa = $avg_ppm_fct_ict = 0;
     $total_defect_fa = $total_defect_fct_ict = $total_defect_mi = $total_defect_ai = $total_defect_smt = $total_ppm_fa = $total_ppm_fct_ict = $total_output = 0;
@@ -155,7 +157,7 @@ echo '</pre>';*/
         <table class="table summary-tbl" style="margin-bottom: 0px;">
         <thead>
             <tr>
-                <th style="min-width: 230px;">PCB - <?= $model_name; ?> MODEL<?= isset($ppm_target_arr[$model_name]) ? ' => TARGET : ' . $ppm_target_arr[$model_name] . ' dppm' : ''; ?></th>
+                <th style="min-width: 230px;">PCB - <?= $model_name; ?> MODEL</th>
                 <?php foreach ($period_data_arr as $period => $period_data): ?>
                     <th class="text-center period-title">
                         <?= strtoupper(date('M\'Y', strtotime($period . '01'))); ?>
@@ -263,7 +265,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= number_format($tmp_grandtotal); ?></td>
             </tr>
             <tr>
-                <td><span class="row-title">AI <small>(ppm)</small></span></td>
+                <td><span class="row-title">AI <small>(ppm)</small></span><?= $index_no == 0 ? ' - Target : 0.25' : ''; ?></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -293,7 +295,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= $ppm_ai2; ?></td>
             </tr>
             <tr>
-                <td><span class="row-title">SMT <small>(ppm)</small></span></td>
+                <td><span class="row-title">SMT <small>(ppm)</small></span><?= $index_no == 0 ? ' - Target : 0.60' : ''; ?></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -322,7 +324,7 @@ echo '</pre>';*/
                 <td class="text-center"><?= $ppm_smt2; ?></td>
             </tr>
             <tr>
-                <td><span class="row-title">MI <small>(ppm)</small></span></td>
+                <td><span class="row-title">MI <small>(ppm)</small></span><?= $index_no == 0 ? ' - Target : 0.89' : ''; ?></td>
                 <?php
                 $tmp_grandtotal = $tmp_count = 0;
                 foreach ($period_data_arr as $period => $period_data):
@@ -380,4 +382,7 @@ echo '</pre>';*/
     </table>
     </div>
     <br/>
+    <?php
+    $index_no++;
+    ?>
 <?php endforeach ?>
