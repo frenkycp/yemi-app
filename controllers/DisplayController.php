@@ -11938,10 +11938,9 @@ class DisplayController extends Controller
             'total' => 'COUNT(CURDATE())'
         ])
         ->where([
-            'loct' => 2,
-            'tb_serno_input.adv' => 0
+            '>=', 'tb_serno_input.proddate', '2021-06-01'
         ])
-        ->andWhere(['<>', 'loct_time', '0000-00-00'])
+        ->andWhere(['!=', 'pk_loading', ''])
         ->groupBy('DATEDIFF(tb_serno_output.etd, CURDATE()), tb_serno_output.dst')
         ->having('days_diff > -1')
         ->orderBy('DATEDIFF(tb_serno_output.etd, CURDATE()) DESC, tb_serno_output.dst')
