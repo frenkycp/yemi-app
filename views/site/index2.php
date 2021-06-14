@@ -297,6 +297,18 @@ $user_id = \Yii::$app->user->identity->username;
                                 </li>
                             </ol>
                         </div>
+
+                        <div class="list-group-item">
+                            <p>SHE Patrol <span class="japanesse-word"></span></p>
+                            <ol style="padding-left: 1em">
+                                <li>
+                                    <?= Html::a('SHE Patrol Data <span class="japanesse-word"></span>', ['/she-patrol']); ?>
+                                </li>
+                                <li>
+                                    <?= Html::a('SHE Patrol Monitoring <span class="japanesse-word"></span>', ['/she-patrol-monitoring']); ?>
+                                </li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
                 <div class="panel panel-success" style="<?= in_array($user_id, ['ura', '150826', 'mgmt']) ? '' : 'display: none;'; ?>">

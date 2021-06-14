@@ -7,6 +7,7 @@ use yii\helpers\StringHelper;
 use yii\helpers\ArrayHelper;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
+use app\models\AuditPatrolTbl;
 
 /**
 * @var yii\web\View $this
@@ -14,9 +15,15 @@ use kartik\select2\Select2;
 * @var yii\widgets\ActiveForm $form
 */
 
-$tmp_patrol_category = \Yii::$app->params['covid_patrol_category'];
+$tmp_patrol_category = \Yii::$app->params['she_patrol_category'];
 //asort($tmp_patrol_category);
-$tmp_patrol_loc = ArrayHelper::map(app\models\CovidPatrolLoc::find()->all(), 'LOC_ID', 'LOC_NAME');
+if ($model->LOC_DESC != '' && $model->LOC_DESC != null) {
+    $tmp_patrol_loc = ArrayHelper::map(app\models\ShePatrolArea::find()->where(['NAME' => $model->LOC_DESC])->orderBy('DETAIL')->all(), 'ID', 'DETAIL');
+} else {
+    $tmp_patrol_loc = ArrayHelper::map(app\models\ShePatrolArea::find()->orderBy('DETAIL')->all(), 'ID', 'DETAIL');
+}
+
+$karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy('PIC_NAME')->all(), 'PIC_ID', 'PIC_NAME');
 
 $this->registerJs("$(document).ready(function() {
     $('#loc_id').trigger('change');
@@ -24,6 +31,7 @@ $this->registerJs("$(document).ready(function() {
 });");
 ?>
 
+<?= Html::a('Change Area', ['set-area'], ['class' => 'btn btn-primary btn-sm']); ?>
 <div class="audit-patrol-tbl-form">
 
     <?php $form = ActiveForm::begin([
@@ -45,7 +53,7 @@ $this->registerJs("$(document).ready(function() {
     );
     ?>
 
-    <div class="">
+    <div class="" style="margin-top: 5px;">
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row">
@@ -59,35 +67,43 @@ $this->registerJs("$(document).ready(function() {
                         ]) ?>
                     </div>
                     <div class="col-sm-3">
-                        <?= $form->field($model, 'AUDITOR')->dropDownList(\Yii::$app->params['covid_patrol_auditor']); ?>
+                        <?= $form->field($model, 'AUDITOR')->textInput(['readonly' => true]); ?>
                     </div>
                     <div class="col-sm-6">
-                        <?= $form->field($model, 'TOPIC')->dropDownList($tmp_patrol_category)->label('Patrol Category'); ?>
+                        <?= $form->field($model, 'TOPIC')->dropDownList($tmp_patrol_category)->label('Potential Hazard'); ?>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-3">
+                        <?= $form->field($model, 'LOC_DESC')->textInput(['readonly' => true])->label('Area'); ?>
+                    </div>
+                    <div class="col-sm-3">
                         <?= $form->field($model, 'LOC_ID')->dropDownList($tmp_patrol_loc, [
                             'id' => 'loc_id',
                             'onchange' => '
                                 var loc_id = $(this).val();
                                 $("#loading").show();
-                                $.post( "' . Yii::$app->urlManager->createUrl('ajax-repository/covid-patrol-loc?LOC_ID=') . '"+loc_id, function(data) {
-                                    $("#loc_name").val(data.loc_name);
+                                $.post( "' . Yii::$app->urlManager->createUrl('ajax-repository/she-patrol-loc?ID=') . '"+loc_id, function(data) {
                                     $("#loc_detail").val(data.loc_name);
-                                    $("#pic_id").val(data.pic_id);
-                                    $("#pic_name").val(data.pic_name);
                                 });
                                 $("#loading").hide();
                             ',
                         ])->label('Location'); ?>
-                        <?= $form->field($model, 'LOC_DESC')->hiddenInput(['id' => 'loc_name'])->label(false) ?>
+                        
                         <?= $form->field($model, 'LOC_DETAIL')->hiddenInput(['id' => 'loc_detail'])->label(false) ?>
                     </div>
                     <div class="col-sm-6">
-                        <?= $form->field($model, 'PIC_NAME')->textInput(['id' => 'pic_name', 'readonly' => true])->label('PIC Name') ?>
-                        <?= $form->field($model, 'PIC_ID')->hiddenInput(['id' => 'pic_id'])->label(false) ?>
+                        <?= $form->field($model, 'PIC_ID')->widget(Select2::classname(), [
+                            'data' => $karyawan_dropdown,
+                            'options' => [
+                                'placeholder' => '- SELECT PIC -',
+                                'id' => 'repair-pic-' . $i,
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                            ],
+                        ])->label('PIC'); ?>
                     </div>
                 </div>
 
@@ -110,7 +126,7 @@ $this->registerJs("$(document).ready(function() {
 
                 <?= $form->field($model, 'DESCRIPTION')->textInput() ?>
             </div>
-            <div class="overlay" id="loading">
+            <div class="overlay" id="loading" style="display: none;">
                 <i class="fa fa-refresh fa-spin"></i>
             </div>
             <div class="panel-footer">
@@ -127,8 +143,8 @@ $this->registerJs("$(document).ready(function() {
                 ?>
 
                 <?=             Html::a(
-                    'Cancel',
-                    \yii\helpers\Url::previous(),
+                    'All Data',
+                    \yii\helpers\Url::to(['she-patrol/index']),
                     ['class' => 'btn btn-warning']) ?>
             </div>
         </div>
@@ -143,3 +159,45 @@ $this->registerJs("$(document).ready(function() {
 
 </div>
 
+<?php
+$todays_data = AuditPatrolTbl::find()
+->where([
+    'CATEGORY' => 4,
+    'LOC_DESC' => $model->LOC_DESC,
+    'PATROL_DATE' => $model->PATROL_DATE
+])
+->orderBy('PATROL_DATETIME DESC')
+->all();
+?>
+
+
+<div class="panel panel-primary">
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Potential Hazard</th>
+                    <th>Location</th>
+                    <th>PIC</th>
+                    <th>Description</th>
+                    <th>Patrol Datetime</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if (count($todays_data) > 0) { ?>
+                    <?php foreach ($todays_data as $key => $value): ?>
+                        <tr>
+                            <td><?= $value->TOPIC; ?></td>
+                            <td><?= $value->LOC_DETAIL; ?></td>
+                            <td><?= $value->PIC_NAME; ?></td>
+                            <td><?= $value->DESCRIPTION; ?></td>
+                            <td><?= $value->PATROL_DATETIME; ?></td>
+                        </tr>
+                    <?php endforeach ?>
+                <?php }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>

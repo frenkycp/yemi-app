@@ -523,6 +523,15 @@ return [
     	'Ergonomi' => 'Ergonomi',
     	'Psikologi' => 'Psikologi',
     ],
+    'she_patrol_team' => [
+        'Team 1' => 'Team 1',
+        'Team 2' => 'Team 2',
+        'Team 3' => 'Team 3',
+        'Team 4' => 'Team 4',
+        'Team 5' => 'Team 5',
+        'Team 6' => 'Team 6',
+        'Team 7' => 'Team 7',
+    ],
     'supplement_request_stage' => [
         0 => 'No Request',
         1 => 'Supplement Requested',

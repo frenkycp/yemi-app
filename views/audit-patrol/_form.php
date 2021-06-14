@@ -13,7 +13,7 @@ use kartik\select2\Select2;
 * @var app\models\AuditPatrolTbl $model
 * @var yii\widgets\ActiveForm $form
 */
-$karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy('PIC_NAME')->all(), 'PIC_ID', 'PIC_NAME');
+$karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->where('MANAGER_ID IS NOT NULL')->orderBy('PIC_NAME')->all(), 'PIC_ID', 'PIC_NAME');
 /*$karyawan_dropdown = ArrayHelper::map(app\models\SunfishViewEmp::find()->select([
     'Emp_no', 'Full_name'
 ])

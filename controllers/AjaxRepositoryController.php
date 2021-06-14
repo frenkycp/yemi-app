@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
 
 use app\models\CovidPatrolLoc;
+use app\models\ShePatrolArea;
 
 class AjaxRepositoryController extends Controller
 {
@@ -24,6 +25,19 @@ class AjaxRepositoryController extends Controller
             'loc_name' => $tmp_data->LOC_NAME,
             'pic_id' => $tmp_data->PIC_ID,
             'pic_name' => $tmp_data->PIC_NAME,
+        ];
+        return $data;
+    }
+
+    public function actionShePatrolLoc($ID)
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        $tmp_data = ShePatrolArea::findOne($ID);
+
+        $data = [
+            'loc_name' => $tmp_data->DETAIL,
         ];
         return $data;
     }
