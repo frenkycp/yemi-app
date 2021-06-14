@@ -121,7 +121,7 @@ $gridColumns = [
     ],
     [
         'attribute' => 'AUDITOR',
-        'hidden' => true,
+        //'hidden' => true,
         //'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
