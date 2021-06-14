@@ -41,7 +41,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = AuditPatrolTbl::find();
+$query = AuditPatrolTbl::find()->where(['CATEGORY' => [1, 2]]);
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
