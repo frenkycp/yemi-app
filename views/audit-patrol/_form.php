@@ -66,7 +66,7 @@ $karyawan_dropdown = ArrayHelper::map(app\models\AuditPatrolPic::find()->orderBy
 
                 <div class="row">
                     <div class="col-sm-4">
-                        <?= $form->field($model, 'AUDITOR')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'AUDITOR')->dropDownList(\Yii::$app->params['s_up_patrol_auditor']); ?>
                     </div>
                     <div class="col-sm-4">
                         <?= $form->field($model, 'CATEGORY')->dropDownList(\Yii::$app->params['audit_patrol_category'])->label('Patrol Type'); ?>

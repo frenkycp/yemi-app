@@ -247,6 +247,20 @@ $grid_columns = [
         //'hAlign' => 'center'
     ],
     [
+        'attribute' => 'user_id',
+        'vAlign' => 'middle',
+        'hidden' => true,
+        //'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
+        'attribute' => 'user_desc',
+        'vAlign' => 'middle',
+        //'hidden' => true,
+        //'width' => '150px',
+        //'hAlign' => 'center'
+    ],
+    [
         'attribute' => 'repair_status',
         'label' => 'Status',
         //'width' => '100px',

@@ -537,6 +537,12 @@ return [
         'WM02' => 'Mesin AI',
         'WM03' => 'Mesin SMT',
     ],
+    's_up_patrol_auditor' => [
+        'Hiroshi Ura' => 'Hiroshi Ura',
+        'Briljan Gazalba' => 'Briljan Gazalba',
+        'Chikara Ute' => 'Chikara Ute',
+        'Ushio Okabe' => 'Ushio Okabe',
+    ],
 ];
 
 function getYearArray()
