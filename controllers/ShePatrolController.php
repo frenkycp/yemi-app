@@ -293,4 +293,14 @@ class ShePatrolController extends Controller
 			]);
 		}
 	}
+
+	protected function findModel($ID)
+	{
+	if (($model = AuditPatrolTbl::findOne($ID)) !== null) {
+	return $model;
+	} else {
+	throw new HttpException(404, 'The requested page does not exist.');
+	}
+	}
+	
 }

@@ -118,7 +118,7 @@ $this->registerJs("$(document).ready(function() {
                         'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
                         'browseLabel' =>  ' Select Photo',
                         'initialPreview' => $model->isNewRecord ? [] : [
-                            Html::img('@web/uploads/COVID_PATROL/' . $model->IMAGE_BEFORE_1, ['width' => '100%'])
+                            Html::img('@web/uploads/SHE_PATROL/' . $model->IMAGE_BEFORE_1, ['width' => '100%'])
                         ],
                     ],
                 ])->label('Image Before');
