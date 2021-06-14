@@ -18,8 +18,8 @@ class AuditPatrolSearch extends AuditPatrolTbl
 public function rules()
 {
 return [
-[['ID', 'CATEGORY'], 'integer'],
-            [['PATROL_PERIOD', 'PATROL_DATE', 'PATROL_DATETIME', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'DESCRIPTION', 'ACTION', 'AUDITOR', 'AUDITEE', 'PIC_ID', 'PIC_NAME', 'USER_ID', 'USER_NAME', 'IMAGE_BEFORE_1', 'IMAGE_AFTER_1', 'STATUS', 'CC_ID', 'CC_DESC', 'FLAG'], 'safe'],
+[['ID'], 'integer'],
+            [['PATROL_PERIOD', 'PATROL_DATE', 'PATROL_DATETIME', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'DESCRIPTION', 'ACTION', 'AUDITOR', 'AUDITEE', 'PIC_ID', 'PIC_NAME', 'USER_ID', 'USER_NAME', 'IMAGE_BEFORE_1', 'IMAGE_AFTER_1', 'STATUS', 'CC_ID', 'CC_DESC', 'FLAG', 'CATEGORY'], 'safe'],
 ];
 }
 
@@ -41,7 +41,7 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = AuditPatrolTbl::find()->where(['CATEGORY' => [1, 2]]);
+$query = AuditPatrolTbl::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
