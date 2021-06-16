@@ -24,7 +24,7 @@ class MntMachineIotController extends Controller
 		$this->layout = 'clean';
 		$group_arr = [
 			[
-				'MNT00694' => 'INJ-50',
+				'MNT00497' => 'INJ-50',
 				'MNT00428' => 'INJ-100',
 				'MNT00429' => 'INJ-125',
 				'MNT00430' => 'INJ-180',
