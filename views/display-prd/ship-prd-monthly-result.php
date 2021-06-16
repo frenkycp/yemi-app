@@ -363,7 +363,7 @@ echo '</pre>';*/
                 ?>
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="display: none;">
             <div class="col-sm-12">
                 <?= Html::img('@web/uploads/SHIPPING & PRODUCTION/DELAY_SHIPPING_202105.png', ['alt' => 'My logo', 'width' => '100%']); ?>
             </div>
@@ -442,7 +442,10 @@ echo '</pre>';*/
                         <?php
                         $pct = 0;
                         if ($data->PRD_PLAN_ORI_AMT > 0) {
-                            $pct = round($data->PRD_ACT_DELAY_QTY / $data->PRD_PLAN_DELAY_QTY * 100, 1);
+                            if ($data->PRD_PLAN_DELAY_QTY > 0) {
+                                $pct = round($data->PRD_ACT_DELAY_QTY / $data->PRD_PLAN_DELAY_QTY * 100, 1);
+                            }
+                            
                             if ($pct == 100 && $data->PRD_ACT_DELAY_QTY < $data->PRD_PLAN_DELAY_QTY) {
                                 $pct = round($data->PRD_ACT_DELAY_QTY / $data->PRD_PLAN_DELAY_QTY * 100, 2);
                             }
@@ -454,7 +457,10 @@ echo '</pre>';*/
                         <?php
                         $pct = 0;
                         if ($data->PRD_PLAN_ORI_AMT > 0) {
-                            $pct = round($data->PRD_ACT_DELAY_AMT / $data->PRD_PLAN_DELAY_AMT * 100, 1);
+                            if ($data->PRD_PLAN_DELAY_AMT * 100 > 0) {
+                                $pct = round($data->PRD_ACT_DELAY_AMT / $data->PRD_PLAN_DELAY_AMT * 100, 1);
+                            }
+                            
                             if ($pct == 100 && $data->PRD_ACT_DELAY_AMT < $data->PRD_PLAN_DELAY_AMT) {
                                 $pct = round($data->PRD_ACT_DELAY_AMT / $data->PRD_PLAN_DELAY_AMT * 100, 2);
                             }

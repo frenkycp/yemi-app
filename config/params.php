@@ -552,6 +552,12 @@ return [
         'Chikara Ute' => 'Chikara Ute',
         'Ushio Okabe' => 'Ushio Okabe',
     ],
+    'ship_carrier_flag' => [
+        'MAIN' => 1,
+        'SUB' => 2,
+        'BACK-UP' => 3,
+        'OTHER' => 4
+    ],
 ];
 
 function getYearArray()
