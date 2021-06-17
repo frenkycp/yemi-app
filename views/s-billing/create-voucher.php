@@ -63,10 +63,13 @@ $this->registerJs("
 
 <div class="row">
 	<div class="col-sm-6">
-		<?= $form->field($model, 'supplier_name')->dropDownList($tmp_supplier_dropdown, [
-			'id'=>'supplier-id',
-			'prompt' => 'Select Supplier...'
-		]); ?>
+		<?= $form->field($model, 'supplier_name')->widget(Select2::classname(), [
+            'data' => $tmp_supplier_dropdown,
+            'options' => [
+                'placeholder' => 'Select Supplier...',
+                'id' => 'supplier-id',
+            ],
+        ]); ?>
 	</div>
 </div>
 
