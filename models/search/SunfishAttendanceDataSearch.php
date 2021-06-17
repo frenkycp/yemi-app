@@ -41,10 +41,9 @@ return Model::scenarios();
 public function search($params)
 {
 $query = SunfishAttendanceData::find()
-->leftJoin('VIEW_YEMI_Emp_OrgUnit', 'VIEW_YEMI_Emp_OrgUnit.Emp_no = VIEW_YEMI_ATTENDANCE.emp_no')
-->where('PATINDEX(\'YE%\', UPPER(VIEW_YEMI_ATTENDANCE.emp_no)) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'');
+->where('PATINDEX(\'YE%\', UPPER(emp_no)) > 0 AND cost_center NOT IN (\'Expatriate\') AND shiftdaily_code <> \'OFF\'');
 $filter_shift = [
-	1 => 'PATINDEX(\'%SHIFT_1%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%GARDENER%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%SHIFT_08_17%\', UPPER(shiftdaily_code)) > 0',
+	1 => 'PATINDEX(\'%SHIFT_1%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%GARDENER%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%SHIFT_08_17%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%DRIVER%\', UPPER(shiftdaily_code)) > 0',
 	2 => '(PATINDEX(\'%SHIFT_2%\', UPPER(shiftdaily_code)) > 0 OR PATINDEX(\'%MAINTENANCE%\', UPPER(shiftdaily_code)) > 0)',
 	3 => 'PATINDEX(\'%SHIFT_3%\', UPPER(shiftdaily_code)) > 0'
 ];
@@ -82,7 +81,7 @@ $query->andFilterWhere([
         ]);
 
         $query->andFilterWhere(['like', 'CONVERT(VARCHAR(10), shiftendtime, 120)', $this->post_date])
-        ->andFilterWhere(['like', 'VIEW_YEMI_ATTENDANCE.emp_no', $this->emp_no])
+        ->andFilterWhere(['like', 'emp_no', $this->emp_no])
         ->andFilterWhere(['like', 'cost_center', $this->cost_center])
         ->andFilterWhere(['like', 'FORMAT(shiftendtime, \'yyyyMM\')', $this->period]);
 
