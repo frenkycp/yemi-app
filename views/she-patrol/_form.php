@@ -106,7 +106,10 @@ $this->registerJs("$(document).ready(function() {
                             <div class="panel-body" style="padding-bottom: 0px;">
                                 <div class="row">
                                     <div class="col-sm-4">
-                                        <?= $form->field($model, 'UNSAFE_CONDITION')->widget(CheckboxX::classname(), [
+                                        <?= $form->field($model, 'UNSAFE_CONDITION')->dropDownList([
+                                            0 => 'N',
+                                            1 => 'Y'
+                                        ]);/*$form->field($model, 'UNSAFE_CONDITION')->widget(CheckboxX::classname(), [
                                             'pluginOptions' => [
                                                 'threeState' => false
                                             ],
@@ -116,10 +119,13 @@ $this->registerJs("$(document).ready(function() {
                                                 'label' => 'Unsafe Condition',
                                                 'position' => CheckboxX::LABEL_LEFT
                                             ]
-                                        ])->label(false); ?>
+                                        ])->label(false);*/ ?>
                                     </div>
                                     <div class="col-md-4">
-                                        <?= $form->field($model, 'UNSAFE_ACTION')->widget(CheckboxX::classname(), [
+                                        <?= $form->field($model, 'UNSAFE_ACTION')->dropDownList([
+                                            0 => 'N',
+                                            1 => 'Y'
+                                        ]);/*$form->field($model, 'UNSAFE_ACTION')->widget(CheckboxX::classname(), [
                                             'pluginOptions' => [
                                                 'threeState' => false
                                             ],
@@ -129,10 +135,13 @@ $this->registerJs("$(document).ready(function() {
                                                 'label' => 'Unsafe Action',
                                                 'position' => CheckboxX::LABEL_LEFT
                                             ],
-                                        ])->label(false); ?>
+                                        ])->label(false);*/ ?>
                                     </div>
                                     <div class="col-md-4">
-                                        <?= $form->field($model, 'HOUSEKEEPING')->widget(CheckboxX::classname(), [
+                                        <?= $form->field($model, 'HOUSEKEEPING')->dropDownList([
+                                            0 => 'N',
+                                            1 => 'Y'
+                                        ])->label('5S/Housekeeping');/*$form->field($model, 'HOUSEKEEPING')->widget(CheckboxX::classname(), [
                                             'pluginOptions' => [
                                                 'threeState' => false
                                             ],
@@ -142,7 +151,7 @@ $this->registerJs("$(document).ready(function() {
                                                 'label' => '5S/Housekeeping',
                                                 'position' => CheckboxX::LABEL_LEFT
                                             ],
-                                        ])->label(false); ?>
+                                        ])->label(false);*/ ?>
                                     </div>
                                 </div>
                             </div>

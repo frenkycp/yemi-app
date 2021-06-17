@@ -20,6 +20,9 @@ use Yii;
  * @property string $LOC_DESC
  * @property string $LOC_DETAIL
  * @property integer $CATEGORY
+ * @property integer $UNSAFE_CONDITION
+ * @property integer $UNSAFE_ACTION
+ * @property integer $HOUSEKEEPING
  * @property string $TOPIC
  * @property string $DESCRIPTION
  * @property string $ACTION
@@ -71,10 +74,11 @@ abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
     {
         return [
             [['PATROL_DATE', 'PATROL_DATETIME', 'DELETE_DATETIME'], 'safe'],
-            [['CATEGORY', 'FLAG'], 'integer'],
-            [['TOPIC', 'DESCRIPTION', 'ACTION', 'DELETE_REMARK', 'IMAGE_BEFORE_1', 'IMAGE_BEFORE_2', 'IMAGE_BEFORE_3', 'IMAGE_AFTER_1', 'IMAGE_AFTER_2', 'IMAGE_AFTER_3'], 'string'],
+            [['CATEGORY', 'UNSAFE_CONDITION', 'UNSAFE_ACTION', 'HOUSEKEEPING', 'FLAG'], 'integer'],
+            [['DESCRIPTION', 'ACTION', 'DELETE_REMARK', 'IMAGE_BEFORE_1', 'IMAGE_BEFORE_2', 'IMAGE_BEFORE_3', 'IMAGE_AFTER_1', 'IMAGE_AFTER_2', 'IMAGE_AFTER_3'], 'string'],
             [['PATROL_PERIOD', 'CC_ID', 'CC_GROUP', 'CC_DESC', 'LOC_ID', 'LOC_DESC', 'PIC_ID', 'USER_ID', 'DELETE_BY_ID'], 'string', 'max' => 50],
             [['LOC_DETAIL', 'AUDITOR', 'AUDITEE', 'PIC_NAME', 'USER_NAME', 'DELETE_BY_NAME'], 'string', 'max' => 150],
+            [['TOPIC'], 'string', 'max' => 250],
             [['STATUS'], 'string', 'max' => 1]
         ];
     }
@@ -96,6 +100,9 @@ abstract class AuditPatrolTbl extends \yii\db\ActiveRecord
             'LOC_DESC' => 'Loc Desc',
             'LOC_DETAIL' => 'Loc Detail',
             'CATEGORY' => 'Category',
+            'UNSAFE_CONDITION' => 'Unsafe Condition',
+            'UNSAFE_ACTION' => 'Unsafe Action',
+            'HOUSEKEEPING' => 'Housekeeping',
             'TOPIC' => 'Topic',
             'DESCRIPTION' => 'Description',
             'ACTION' => 'Action',
