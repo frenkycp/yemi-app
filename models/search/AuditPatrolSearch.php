@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['ID'], 'integer'],
-            [['PATROL_PERIOD', 'PATROL_DATE', 'PATROL_DATETIME', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'DESCRIPTION', 'ACTION', 'AUDITOR', 'AUDITEE', 'PIC_ID', 'PIC_NAME', 'USER_ID', 'USER_NAME', 'IMAGE_BEFORE_1', 'IMAGE_AFTER_1', 'STATUS', 'CC_ID', 'CC_DESC', 'FLAG', 'CATEGORY'], 'safe'],
+            [['PATROL_PERIOD', 'PATROL_DATE', 'PATROL_DATETIME', 'LOC_ID', 'LOC_DESC', 'LOC_DETAIL', 'TOPIC', 'DESCRIPTION', 'ACTION', 'AUDITOR', 'AUDITEE', 'PIC_ID', 'PIC_NAME', 'USER_ID', 'USER_NAME', 'IMAGE_BEFORE_1', 'IMAGE_AFTER_1', 'STATUS', 'CC_ID', 'CC_DESC', 'FLAG', 'CATEGORY', 'UNSAFE_CONDITION', 'UNSAFE_ACTION', 'HOUSEKEEPING'], 'safe'],
 ];
 }
 
@@ -63,6 +63,9 @@ $query->andFilterWhere([
             'PATROL_DATE' => $this->PATROL_DATE,
             'PATROL_DATETIME' => $this->PATROL_DATETIME,
             'CATEGORY' => $this->CATEGORY,
+            'UNSAFE_CONDITION' => $this->UNSAFE_CONDITION,
+            'UNSAFE_ACTION' => $this->UNSAFE_ACTION,
+            'HOUSEKEEPING' => $this->HOUSEKEEPING,
         ]);
 
         $query->andFilterWhere(['like', 'PATROL_PERIOD', $this->PATROL_PERIOD])

@@ -8,7 +8,7 @@ use yii\helpers\Html;
 */
 
 $this->title = Yii::t('models', 'Create SHE Patrol');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'Create SHE Patrols'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('models', 'SHE Patrols Data'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="giiant-crud audit-patrol-tbl-create">

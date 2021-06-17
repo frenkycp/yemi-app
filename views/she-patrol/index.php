@@ -89,13 +89,13 @@ $gridColumns = [
         'hAlign' => 'center',
         'vAlign' => 'middle',
     ],
-    [
+    /*[
         'attribute' => 'TOPIC',
         'label' => 'Potential Hazard',
         'filter' => $tmp_patrol_category,
         //'hAlign' => 'center',
         'vAlign' => 'middle',
-    ],
+    ],*/
     [
         'attribute' => 'PATROL_DATE',
         'hAlign' => 'center',
@@ -131,6 +131,58 @@ $gridColumns = [
         'label' => 'PIC',
         //'hAlign' => 'center',
         'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'UNSAFE_CONDITION',
+        'value' => function($model){
+            if ($model->UNSAFE_CONDITION == 0) {
+                return '<i class="fa fa-close text-red"></i>';
+            } else {
+                return '<i class="fa fa-circle-o text-green"></i>';
+            }
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            1 => 'Y',
+            0 => 'N'
+        ],
+    ],
+    [
+        'attribute' => 'UNSAFE_ACTION',
+        'value' => function($model){
+            if ($model->UNSAFE_ACTION == 0) {
+                return '<i class="fa fa-close text-red"></i>';
+            } else {
+                return '<i class="fa fa-circle-o text-green"></i>';
+            }
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            1 => 'Y',
+            0 => 'N'
+        ],
+    ],
+    [
+        'attribute' => 'HOUSEKEEPING',
+        'value' => function($model){
+            if ($model->HOUSEKEEPING == 0) {
+                return '<i class="fa fa-close text-red"></i>';
+            } else {
+                return '<i class="fa fa-circle-o text-green"></i>';
+            }
+        },
+        'format' => 'html',
+        'label' => '5S/Housekeeping',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            1 => 'Y',
+            0 => 'N'
+        ],
     ],
     [
         'attribute' => 'STATUS',

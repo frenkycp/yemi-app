@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use app\models\AuditPatrolTbl;
+use kartik\checkbox\CheckboxX;
 
 /**
 * @var yii\web\View $this
@@ -69,12 +70,6 @@ $this->registerJs("$(document).ready(function() {
                     <div class="col-sm-3">
                         <?= $form->field($model, 'AUDITOR')->textInput(['readonly' => true]); ?>
                     </div>
-                    <div class="col-sm-6">
-                        <?= $form->field($model, 'TOPIC')->dropDownList($tmp_patrol_category)->label('Potential Hazard'); ?>
-                    </div>
-                </div>
-
-                <div class="row">
                     <div class="col-sm-3">
                         <?= $form->field($model, 'LOC_DESC')->textInput(['readonly' => true])->label('Area'); ?>
                     </div>
@@ -93,6 +88,66 @@ $this->registerJs("$(document).ready(function() {
                         
                         <?= $form->field($model, 'LOC_DETAIL')->hiddenInput(['id' => 'loc_detail'])->label(false) ?>
                     </div>
+                    <!-- <div class="col-sm-6">
+                        <?=  ''; /*$form->field($model, 'TOPIC')->dropDownList($tmp_patrol_category)->label('Potential Hazard');*/ ?>
+                    </div> -->
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">
+                                    Classification
+                                </h3>
+                            </div>
+                            <div class="panel-body" style="padding-bottom: 0px;">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <?= $form->field($model, 'UNSAFE_CONDITION')->widget(CheckboxX::classname(), [
+                                            'pluginOptions' => [
+                                                'threeState' => false
+                                            ],
+                                            'initInputType' => CheckboxX::INPUT_CHECKBOX,
+                                            'autoLabel' => true,
+                                            'labelSettings' => [
+                                                'label' => 'Unsafe Condition',
+                                                'position' => CheckboxX::LABEL_LEFT
+                                            ]
+                                        ])->label(false); ?>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?= $form->field($model, 'UNSAFE_ACTION')->widget(CheckboxX::classname(), [
+                                            'pluginOptions' => [
+                                                'threeState' => false
+                                            ],
+                                            'initInputType' => CheckboxX::INPUT_CHECKBOX,
+                                            'autoLabel' => true,
+                                            'labelSettings' => [
+                                                'label' => 'Unsafe Action',
+                                                'position' => CheckboxX::LABEL_LEFT
+                                            ],
+                                        ])->label(false); ?>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <?= $form->field($model, 'HOUSEKEEPING')->widget(CheckboxX::classname(), [
+                                            'pluginOptions' => [
+                                                'threeState' => false
+                                            ],
+                                            'initInputType' => CheckboxX::INPUT_CHECKBOX,
+                                            'autoLabel' => true,
+                                            'labelSettings' => [
+                                                'label' => '5S/Housekeeping',
+                                                'position' => CheckboxX::LABEL_LEFT
+                                            ],
+                                        ])->label(false); ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-sm-6">
                         <?= $form->field($model, 'PIC_ID')->widget(Select2::classname(), [
                             'data' => $karyawan_dropdown,
@@ -105,6 +160,7 @@ $this->registerJs("$(document).ready(function() {
                             ],
                         ])->label('PIC'); ?>
                     </div>
+                    
                 </div>
 
                 <?php
@@ -118,7 +174,7 @@ $this->registerJs("$(document).ready(function() {
                         'browseIcon' => '<i class="glyphicon glyphicon-camera"></i> ',
                         'browseLabel' =>  ' Select Photo',
                         'initialPreview' => $model->isNewRecord ? [] : [
-                            Html::img('@web/uploads/SHE_PATROL/' . $model->IMAGE_BEFORE_1, ['width' => '100%'])
+                            Html::img('@web/uploads/SHE_PATROL/' . $model->IMAGE_BEFORE_1, ['height' => '100%'])
                         ],
                     ],
                 ])->label('Image Before');
