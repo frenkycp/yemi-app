@@ -9,9 +9,9 @@ use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 
 $this->title = [
-    'page_title' => 'Production Efficiency <span class="japanesse light-green"></span>',
-    'tab_title' => 'Production Efficiency',
-    'breadcrumbs_title' => 'Production Efficiency'
+    'page_title' => 'TOTAL PRODUCTION EFFICIENCY <span class="japanesse light-green">(全体生産能率)</span>',
+    'tab_title' => 'TOTAL PRODUCTION EFFICIENCY',
+    'breadcrumbs_title' => 'TOTAL PRODUCTION EFFICIENCY'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -122,7 +122,7 @@ echo '</pre>';*/
 
 <?php ActiveForm::end(); ?>
 
-<div class="panel panel-primary">
+<div class="panel panel-default">
     <div class="panel-body no-padding">
         <?php
         echo Highcharts::widget([
