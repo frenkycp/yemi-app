@@ -16,7 +16,7 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed201
 $pluginAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/plugins');
 
 $sidebar_collapse_arr = [
-    'about-me', 'manufacture-flow', 'audit-patrol-monitoring', 'audit-patrol', 'covid-patrol', 'covid-patrol-monitoring', 'mis-patrol-monitoring'
+    'about-me', 'manufacture-flow', 'audit-patrol-monitoring', 'audit-patrol', 'covid-patrol', 'covid-patrol-monitoring', 'mis-patrol', 'mis-patrol-monitoring', 'she-patrol', 'she-patrol-monitoring'
 ];
 ?>
 <?php $this->beginPage() ?>
