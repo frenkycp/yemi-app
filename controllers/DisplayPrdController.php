@@ -8,6 +8,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
 use dmstr\bootstrap\Tabs;
+use yii\httpclient\Client;
 
 use app\models\PcPiVariance;
 use app\models\StoreOnhandWsus;
@@ -46,12 +47,104 @@ use app\models\ShipPrdMonthlyResult;
 use app\models\search\SmtOutputMonthlySearch;
 use app\models\WipEffTbl;
 use app\models\SmtOutputMonthlyInsertPoint02;
+use app\models\PrdMonthlyeFF04;
 
 class DisplayPrdController extends Controller
 {
-    public function actionTest($value='')
+    public function actionPrdEff()
     {
         $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'fiscal_year'
+        ]);
+        $model->addRule(['fiscal_year'], 'required');
+
+        $current_fiscal = FiscalTbl::find()->where([
+            'PERIOD' => date('Ym')
+        ])->one();
+        $model->fiscal_year = $current_fiscal->FISCAL;
+
+        if ($_GET['fiscal'] != null) {
+            $model->fiscal_year = $_GET['fiscal'];
+        }
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $tmp_fiscal_period = FiscalTbl::find()
+        ->where([
+            'FISCAL' => $model->fiscal_year
+        ])
+        ->orderBy('PERIOD')
+        ->all();
+
+        $period_arr = [];
+        foreach ($tmp_fiscal_period as $key => $value) {
+            $period_arr[] = $value->PERIOD;
+        }
+
+        $tmp_eff_data = PrdMonthlyeFF04::find()->where(['PERIOD' => $period_arr])->all();
+
+        $categories = $data_table = $tmp_data_chart = $data_chart = [];
+        foreach ($period_arr as $period_val) {
+            $categories[] = date('M\' y', strtotime($period_val . '01'));
+            $tmp_eff = $tmp_st = $tmp_wt = 0;
+            foreach ($tmp_eff_data as $eff_val) {
+                if ($eff_val->PERIOD == $period_val) {
+                    $tmp_eff = round($eff_val->TOTAL_EFF, 1);
+                    $tmp_st = round($eff_val->TOTAL_ST / 60);
+                    $tmp_wt = round($eff_val->TOTAL_WT / 60);
+                }
+            }
+            $tmp_data_chart[] = [
+                'y' => (float)$tmp_eff
+            ];
+
+            $data_table[$period_val] = [
+                'st' => $tmp_st,
+                'wt' => $tmp_wt,
+            ];
+        }
+
+        $data_chart = [
+            [
+                'name' => 'Efficiency',
+                'data' => $tmp_data_chart,
+                'showInLegend' => false,
+            ]
+        ];
+
+        return $this->render('prd-eff', [
+            'model' => $model,
+            'categories' => $categories,
+            'period_arr' => $period_arr,
+            'data_chart' => $data_chart,
+            'data_table' => $data_table,
+        ]);
+    }
+
+    public function actionTest($value='')
+    {
+        $tmp_data = null;
+        $client = new Client();
+        $response = $client->createRequest()
+            ->setMethod('POST')
+            ->setUrl('http://10.110.52.10/po/restapi/total?periode=198')
+            ->send();
+        if ($response->isOk) {
+            $tmp_data = $response->getData();
+        }
+
+        $data = [];
+        foreach ($tmp_data as $key => $value) {
+            $data[$key] = [];
+        }
+        return json_encode($data);
+        return count($tmp_data);
+        /*$this->layout = 'clean';
         $array = [
             'FA' => [
                 '2020104' => 1,
@@ -64,7 +157,7 @@ class DisplayPrdController extends Controller
                 '2020106' => 1,
             ],
         ];
-        return json_encode($array);
+        return json_encode($array);*/
     }
 
     public function actionSmtMountingReport($value='')
