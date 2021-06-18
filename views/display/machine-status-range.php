@@ -93,7 +93,8 @@ echo '</pre>';*/
 </div>
 
 <?php ActiveForm::end(); ?>
-<br/>
+
+<span style="color: white; font-size: 2em; margin-top: 5px;">AVG Operation Ratio : <?= $avg_range; ?><span style="font-size: 0.7em;">%</span></span>
 <div class="box box-primary box-solid">
     <div class="box-body">
         <div class="col-md-12">

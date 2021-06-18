@@ -12658,7 +12658,7 @@ class DisplayController extends Controller
         ->asArray()
         ->all();
 
-        $avg_arr = MachineIotLogHour::find()
+        /*$avg_arr = MachineIotLogHour::find()
         ->select([
             'period_shift',
             'hijau' => 'SUM(hijau)',
@@ -12669,6 +12669,7 @@ class DisplayController extends Controller
             'mesin_id' => $model->machine_id,
         ])
         ->andWhere(['>=', 'posting_shift', $model->from_date])
+        ->andWhere(['<=', 'posting_shift', $model->to_date])
         ->groupBy('period_shift')
         ->all();
 
@@ -12679,13 +12680,32 @@ class DisplayController extends Controller
                 $pct = round(($value->hijau / $value->hijau_biru) * 100);
             }
             $avg_arr_data[$value->period_shift] = $pct;
+        }*/
+
+        $tmp_avg_range_data = MachineIotLogHour::find()
+        ->select([
+            'hijau' => 'SUM(hijau)',
+            'kuning' => 'SUM(kuning)',
+            'hijau_biru' => 'SUM(hijau_biru)',
+            'total' => 'SUM(total)',
+        ])
+        ->where([
+            'mesin_id' => $model->machine_id,
+        ])
+        ->andWhere(['>=', 'posting_shift', $model->from_date])
+        ->andWhere(['<=', 'posting_shift', $model->to_date])
+        ->one();
+
+        $avg_range = 0;
+        if ($tmp_avg_range_data->total > 0) {
+            $avg_range = round((($tmp_avg_range_data->hijau + $tmp_avg_range_data->kuning) / $tmp_avg_range_data->total) * 100, 1);
         }
 
         $begin = new \DateTime($model->from_date);
         $end   = new \DateTime(date('Y-m-d', strtotime($model->to_date . ' +1 day')));
 
         $tmp_data_by_hours = [];
-        $tmp_avg_hijau = [];
+        //$tmp_avg_hijau = [];
 
         foreach ($iot_by_hours as $key => $value) {
             $jam = str_pad($value['jam'], 2, '0', STR_PAD_LEFT);
@@ -12693,7 +12713,7 @@ class DisplayController extends Controller
             $ymd_his = date('Y-m-d', strtotime($value['posting_date'])) . ' ' . $his;
             $proddate = (strtotime($ymd_his . " +7 hours") * 1000);
 
-            $avg_hijau_pct = $avg_arr_data[date('Ym', strtotime($value['posting_date']))];
+            //$avg_hijau_pct = $avg_arr_data[date('Ym', strtotime($value['posting_date']))];
 
             $total_putih = round($value['putih'] / 60, 1);
             $total_biru = round($value['biru'] / 60, 1);
@@ -12726,10 +12746,10 @@ class DisplayController extends Controller
                 'x' => $proddate,
                 'y' => $total_lost == 0 ? null : $total_lost
             ];
-            $tmp_avg_hijau[] = [
+            /*$tmp_avg_hijau[] = [
                 'x' => $proddate,
                 'y' => $avg_hijau_pct
-            ];
+            ];*/
             
         }
 
@@ -12774,7 +12794,7 @@ class DisplayController extends Controller
                 'color' => 'green',
                 'type' => 'column'
             ],
-            [
+            /*[
                 'name' => 'RUNNING [ AVG ]',
                 'data' => $tmp_avg_hijau,
                 'color' => 'rgba(0, 255, 10, 0.8)',
@@ -12785,7 +12805,7 @@ class DisplayController extends Controller
                 'tooltip' => [
                     'valueSuffix' => '%'
                 ],
-            ],
+            ],*/
         ];
 
         $machine_iot_util = MachineIotLogHour::find()
@@ -12888,6 +12908,8 @@ class DisplayController extends Controller
 
         return $this->render('machine-status-range', [
             'model' => $model,
+            'tmp_avg_range_data' => $tmp_avg_range_data,
+            'avg_range' => $avg_range,
             'posting_date' => $posting_date,
             'machine_id' => $machine_id,
             'categories' => $categories,

@@ -32,6 +32,17 @@ class ShipLiner extends BaseShipLiner
         );
     }
 
+    public function beforeSave($insert){
+        date_default_timezone_set('Asia/Jakarta');
+        if(parent::beforeSave($insert)){
+            if (isset(\Yii::$app->params['ship_carrier_flag'][$this->FLAG_DESC])) {
+                $this->FLAG_PRIORITY = \Yii::$app->params['ship_carrier_flag'][$this->FLAG_DESC];
+            }
+            
+            return true;
+        }
+    }
+
     public function getCarrierDesc($value='')
     {
         return $this->CARRIER . ' (' . $this->FLAG_DESC . ')';
