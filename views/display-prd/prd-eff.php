@@ -168,8 +168,9 @@ echo '</pre>';*/
                     'column' => [
                         'dataLabels' => [
                             'enabled' => true,
+                            'format' => '{y}%',
                             'style' => [
-                                'fontSize' => '36px'
+                                'fontSize' => '32px'
                             ],
                         ]
                     ],
