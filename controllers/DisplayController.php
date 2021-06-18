@@ -12698,7 +12698,7 @@ class DisplayController extends Controller
 
         $avg_range = 0;
         if ($tmp_avg_range_data->total > 0) {
-            $avg_range = round((($tmp_avg_range_data->hijau + $tmp_avg_range_data->kuning) / $tmp_avg_range_data->total) * 100, 1);
+            $avg_range = round((($tmp_avg_range_data->hijau_biru) / $tmp_avg_range_data->total) * 100, 1);
         }
 
         $begin = new \DateTime($model->from_date);
