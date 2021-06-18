@@ -30,6 +30,15 @@ $this->registerJs("$(document).ready(function() {
     $('#loc_id').trigger('change');
     $('#loading').hide();
 });");
+
+function getCheckboxIcon($value)
+{
+    if ($value == 0) {
+        return '<i class="fa fa-close text-red"></i>';
+    } else {
+        return '<i class="fa fa-circle-o text-green"></i>';
+    }
+}
 ?>
 
 <?= Html::a('Change Area', ['set-area'], ['class' => 'btn btn-primary btn-sm']); ?>
@@ -241,23 +250,29 @@ $todays_data = AuditPatrolTbl::find()
         <table class="table">
             <thead>
                 <tr>
-                    <th>Potential Hazard</th>
                     <th>Location</th>
                     <th>PIC</th>
+                    <th class="text-center">Unsafe Condition</th>
+                    <th class="text-center">Unsafe Action</th>
+                    <th class="text-center">5S/Housekeeping</th>
                     <th>Description</th>
-                    <th>Patrol Datetime</th>
+                    <th class="text-center">Patrol Datetime</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                if (count($todays_data) > 0) { ?>
+                if (count($todays_data) > 0) {
+
+                    ?>
                     <?php foreach ($todays_data as $key => $value): ?>
                         <tr>
-                            <td><?= $value->TOPIC; ?></td>
                             <td><?= $value->LOC_DETAIL; ?></td>
                             <td><?= $value->PIC_NAME; ?></td>
+                            <td class="text-center"><?= getCheckboxIcon($value->UNSAFE_CONDITION); ?></td>
+                            <td class="text-center"><?= getCheckboxIcon($value->UNSAFE_ACTION); ?></td>
+                            <td class="text-center"><?= getCheckboxIcon($value->HOUSEKEEPING); ?></td>
                             <td><?= $value->DESCRIPTION; ?></td>
-                            <td><?= $value->PATROL_DATETIME; ?></td>
+                            <td class="text-center"><?= $value->PATROL_DATETIME; ?></td>
                         </tr>
                     <?php endforeach ?>
                 <?php }
