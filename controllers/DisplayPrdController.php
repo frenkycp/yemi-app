@@ -101,7 +101,8 @@ class DisplayPrdController extends Controller
                     }
                     $tmp_st = $eff_val->TOTAL_ST;
                     $tmp_wt = $eff_val->TOTAL_WT;
-                    $tmp_wt -= $tmp_losstime;
+                    $tmp_wt -= $tmp_losstime; //loss time non production
+                    $tmp_wt -= $eff_val->TOTAL_WFH_TIME; //isoman (WFH)
                     if ($tmp_wt > 0) {
                         $tmp_eff = round($tmp_st / $tmp_wt * 100, 1);
                     }
