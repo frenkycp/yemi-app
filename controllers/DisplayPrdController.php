@@ -87,6 +87,7 @@ class DisplayPrdController extends Controller
         }
 
         $tmp_eff_data = PrdMonthlyeFF04::find()->where(['PERIOD' => $period_arr])->all();
+        $lost_time_non_prd = $this->actionGetLostTimeNonProduction($model->fiscal_year);
 
         $categories = $data_table = $tmp_data_chart = $data_chart = [];
         foreach ($period_arr as $period_val) {
@@ -94,9 +95,18 @@ class DisplayPrdController extends Controller
             $tmp_eff = $tmp_st = $tmp_wt = 0;
             foreach ($tmp_eff_data as $eff_val) {
                 if ($eff_val->PERIOD == $period_val) {
-                    $tmp_eff = round($eff_val->TOTAL_EFF, 1);
-                    $tmp_st = round($eff_val->TOTAL_ST / 60);
-                    $tmp_wt = round($eff_val->TOTAL_WT / 60);
+                    $tmp_losstime = 0;
+                    if (isset($lost_time_non_prd[$period_val])) {
+                        $tmp_losstime = $lost_time_non_prd[$period_val];
+                    }
+                    $tmp_st = $eff_val->TOTAL_ST;
+                    $tmp_wt = $eff_val->TOTAL_WT;
+                    $tmp_wt -= $tmp_losstime;
+                    if ($tmp_wt > 0) {
+                        $tmp_eff = round($tmp_st / $tmp_wt * 100, 1);
+                    }
+                    $tmp_st = round( $tmp_st/ 60);
+                    $tmp_wt = round($tmp_wt / 60);
                 }
             }
             $tmp_data_chart[] = [
@@ -126,38 +136,28 @@ class DisplayPrdController extends Controller
         ]);
     }
 
-    public function actionTest($value='')
+    public function actionGetLostTimeNonProduction($fiscal)
     {
         $tmp_data = null;
         $client = new Client();
         $response = $client->createRequest()
             ->setMethod('POST')
-            ->setUrl('http://10.110.52.10/po/restapi/total?periode=198')
+            ->setUrl('http://10.110.52.10/po/restapi/total?periode=' . $fiscal)
             ->send();
         if ($response->isOk) {
             $tmp_data = $response->getData();
         }
 
         $data = [];
-        foreach ($tmp_data as $key => $value) {
-            $data[$key] = [];
+        foreach ($tmp_data as $section_val => $value_arr) {
+            foreach ($value_arr[0] as $period_val => $value) {
+                if (!isset($data[$period_val])) {
+                    $data[$period_val] = 0;
+                }
+                $data[$period_val] += $value;
+            }
         }
-        return json_encode($data);
-        return count($tmp_data);
-        /*$this->layout = 'clean';
-        $array = [
-            'FA' => [
-                '2020104' => 1,
-                '2020105' => 1,
-                '2020106' => 1,
-            ],
-            'SA' => [
-                '2020104' => 1,
-                '2020105' => 1,
-                '2020106' => 1,
-            ],
-        ];
-        return json_encode($array);*/
+        return $data;
     }
 
     public function actionSmtMountingReport($value='')

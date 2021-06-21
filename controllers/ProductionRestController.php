@@ -84,11 +84,14 @@ class ProductionRestController extends Controller
         ];
         $tmp_data = [];
         foreach ($tmp_section_arr as $cost_center_code => $cost_center_name) {
-            $direct1 = $direct2 = $direct3 = $indirect1 = $indirect2 = $indirect3 = 0;
+            $direct1 = $direct2 = $direct3 = $indirect1 = $indirect2 = $indirect3 = $total_wfh = 0;
             $direct1_wt = $direct2_wt = $direct3_wt = $indirect1_wt = $indirect2_wt = $indirect3_wt = 0;
             if (count($tmp_sunfish) > 0) {
                 foreach ($tmp_sunfish as $value) {
                     if ($cost_center_name == $value['cost_center']) {
+                        if (strpos($value['Attend_Code'], 'STWFH') !== false) {
+                            $total_wfh++;
+                        }
                         if (strpos(strtoupper($value['shiftdaily_code']), 'SHIFT_1') !== false
                             || strpos(strtoupper($value['shiftdaily_code']), 'SHIFT_08_17') !== false
                             || strpos(strtoupper($value['shiftdaily_code']), 'GARDENER') !== false) {
@@ -138,6 +141,7 @@ class ProductionRestController extends Controller
             
             $tmp_data[$cost_center_code] = [
                 'cost_center_name' => $cost_center_name,
+                'total_wfh' => $total_wfh,
                 'shift1' => [
                     'direct_mp' => $direct1,
                     'direct_wt' => $direct1_wt,
@@ -186,6 +190,7 @@ class ProductionRestController extends Controller
             $tmp_server_data->SHIFT3_INDIRECT_WT = $value['shift3']['indirect_wt'];
 
             $tmp_server_data->LAST_UPDATE = $last_update;
+            $tmp_server_data->TOTAL_WFH = $value['total_wfh'];
 
             if (!$tmp_server_data->save()) {
                 return $tmp_server_data->errors;
