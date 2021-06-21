@@ -5,12 +5,12 @@ namespace app\models\search;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\MesinCheckResult;
+use app\models\MesinCheckResult01;
 
 /**
 * MesinCheckResultSearch represents the model behind the search form about `app\models\MesinCheckResult`.
 */
-class MesinCheckResultSearch extends MesinCheckResult
+class MesinCheckResultSearch extends MesinCheckResult01
 {
 /**
 * @inheritdoc
@@ -19,7 +19,7 @@ public function rules()
 {
 return [
 [['urutan', 'hasil_ok', 'hasil_ng', 'total_cek'], 'integer'],
-            [['location', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'mesin_last_update'], 'safe'],
+            [['location', 'post_date', 'area', 'mesin_id', 'mesin_nama', 'mesin_no', 'mesin_bagian', 'mesin_bagian_ket', 'mesin_status', 'mesin_catatan', 'mesin_periode', 'user_id', 'user_desc', 'mesin_last_update'], 'safe'],
 ];
 }
 
@@ -41,10 +41,19 @@ return Model::scenarios();
 */
 public function search($params)
 {
-$query = MesinCheckResult::find();
+$query = MesinCheckResult01::find();
 
 $dataProvider = new ActiveDataProvider([
 'query' => $query,
+'sort' => [
+    'defaultOrder' => [
+        //'cust_desc' => SORT_ASC,
+        'post_date' => SORT_DESC,
+        'mesin_id' => SORT_ASC,
+        'mesin_periode' => SORT_ASC,
+        'mesin_no' => SORT_ASC,
+    ]
+],
 ]);
 
 $this->load($params);
@@ -64,6 +73,7 @@ $query->andFilterWhere([
 
         $query->andFilterWhere(['like', 'location', $this->location])
             ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),mesin_last_update,120)', $this->mesin_last_update])
+            ->andFilterWhere(['like', 'CONVERT(VARCHAR(10),post_date,120)', $this->post_date])
             ->andFilterWhere(['like', 'area', $this->area])
             ->andFilterWhere(['like', 'mesin_id', $this->mesin_id])
             ->andFilterWhere(['like', 'mesin_nama', $this->mesin_nama])

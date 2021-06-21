@@ -7,8 +7,9 @@ namespace app\models\base;
 use Yii;
 
 /**
- * This is the base-model class for table "db_owner.MESIN_CHECK_RESULT".
+ * This is the base-model class for table "db_owner.MESIN_CHECK_RESULT_01".
  *
+ * @property string $post_date
  * @property integer $urutan
  * @property string $location
  * @property string $area
@@ -28,7 +29,7 @@ use Yii;
  * @property integer $total_cek
  * @property string $aliasModel
  */
-abstract class MesinCheckResult extends \yii\db\ActiveRecord
+abstract class MesinCheckResult01 extends \yii\db\ActiveRecord
 {
 
 
@@ -38,7 +39,7 @@ abstract class MesinCheckResult extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'db_owner.MESIN_CHECK_RESULT';
+        return 'db_owner.MESIN_CHECK_RESULT_01';
     }
 
     /**
@@ -55,8 +56,8 @@ abstract class MesinCheckResult extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['post_date', 'mesin_last_update'], 'safe'],
             [['mesin_catatan'], 'string'],
-            [['mesin_last_update'], 'safe'],
             [['hasil_ok', 'hasil_ng', 'total_cek'], 'integer'],
             [['location', 'area', 'user_desc'], 'string', 'max' => 50],
             [['mesin_id', 'mesin_status', 'user_id'], 'string', 'max' => 10],
@@ -72,6 +73,7 @@ abstract class MesinCheckResult extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'post_date' => 'Post Date',
             'urutan' => 'Urutan',
             'location' => 'Location',
             'area' => 'Area',

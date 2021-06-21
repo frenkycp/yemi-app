@@ -100,7 +100,7 @@ class DisplayPrdController extends Controller
                 }
             }
             $tmp_data_chart[] = [
-                'y' => (float)$tmp_eff
+                'y' => $tmp_eff == 0 ? null : (float)$tmp_eff
             ];
 
             $data_table[$period_val] = [

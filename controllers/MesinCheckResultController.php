@@ -7,5 +7,9 @@ namespace app\controllers;
 */
 class MesinCheckResultController extends \app\controllers\base\MesinCheckResultController
 {
-
+	public function behaviors()
+    {
+        //apply role_action table for privilege (doesn't apply to super admin)
+        return \app\models\Action::getAccess($this->id);
+    }
 }

@@ -2,25 +2,107 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
+use kartik\grid\GridView;
+use kartik\export\ExportMenu;
 
 /**
 * @var yii\web\View $this
 * @var yii\data\ActiveDataProvider $dataProvider
-    * @var app\models\search\MesinCheckResultSearch $searchModel
+    * @var app\models\search\CutiTblSearch $searchModel
 */
 
-$this->title = Yii::t('models', 'Mesin Check Results');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = [
+    'page_title' => 'Preventive Result Data <span class="japanesse text-green"></span>',
+    'tab_title' => 'Preventive Result Data',
+    'breadcrumbs_title' => 'Preventive Result Data'
+];
+$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
-if (isset($actionColumnTemplates)) {
-$actionColumnTemplate = implode(' ', $actionColumnTemplates);
-    $actionColumnTemplateString = $actionColumnTemplate;
-} else {
-Yii::$app->view->params['pageButtons'] = Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']);
-    $actionColumnTemplateString = "{view} {update} {delete}";
-}
-$actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTemplateString.'</div>';
+$mesin_periode_arr = [
+    '1-HARI' => '1-HARI',
+    '1-BULAN' => '1-BULAN',
+    '2-BULAN' => '2-BULAN',
+    '3-BULAN' => '3-BULAN',
+    '6-BULAN' => '6-BULAN',
+    '12-BULAN' => '12-BULAN',
+];
+
+$gridColumns = [
+    [
+        'attribute' => 'post_date',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'mesin_id',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'mesin_nama',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'mesin_periode',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => $mesin_periode_arr,
+    ],
+    [
+        'attribute' => 'mesin_no',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'mesin_bagian',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'mesin_bagian_ket',
+        //'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'mesin_status',
+        'value' => function($model){
+            if ($model->mesin_status == 'OK') {
+                return '<span class="label bg-green">OK</span>';
+            } else {
+                return '<span class="label bg-red">NG</span>';
+            }
+        },
+        'format' => 'html',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+        'filter' => [
+            'OK' => 'OK',
+            'NG' => 'NG',
+        ],
+    ],
+    [
+        'attribute' => 'mesin_catatan',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'user_id',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'user_desc',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+    [
+        'attribute' => 'mesin_last_update',
+        'hAlign' => 'center',
+        'vAlign' => 'middle',
+    ],
+];
 ?>
 <div class="giiant-crud mesin-check-result-index">
 
@@ -31,96 +113,37 @@ $actionColumnTemplateString = '<div class="action-buttons">'.$actionColumnTempla
     
     <?php \yii\widgets\Pjax::begin(['id'=>'pjax-main', 'enableReplaceState'=> false, 'linkSelector'=>'#pjax-main ul.pagination a, th a', 'clientOptions' => ['pjax:success'=>'function(){alert("yo")}']]) ?>
 
-    <h1>
-        <?= Yii::t('models', 'Mesin Check Results') ?>
-        <small>
-            List
-        </small>
-    </h1>
-    <div class="clearfix crud-navigation">
-        <div class="pull-left">
-            <?= Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'New', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
-
-        <div class="pull-right">
-
-                        
-            <?= 
-            \yii\bootstrap\ButtonDropdown::widget(
-            [
-            'id' => 'giiant-relations',
-            'encodeLabel' => false,
-            'label' => '<span class="glyphicon glyphicon-paperclip"></span> ' . 'Relations',
-            'dropdown' => [
-            'options' => [
-            'class' => 'dropdown-menu-right'
-            ],
-            'encodeLabels' => false,
-            'items' => [
-
-]
-            ],
-            'options' => [
-            'class' => 'btn-default'
-            ]
-            ]
-            );
-            ?>
-        </div>
-    </div>
-
-    <hr />
-
     <div class="table-responsive">
         <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'pager' => [
-        'class' => yii\widgets\LinkPager::className(),
-        'firstPageLabel' => 'First',
-        'lastPageLabel' => 'Last',
-        ],
-                    'filterModel' => $searchModel,
-                'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
-        'headerRowOptions' => ['class'=>'x'],
-        'columns' => [
-                [
-            'class' => 'yii\grid\ActionColumn',
-            'template' => $actionColumnTemplateString,
-            'buttons' => [
-                'view' => function ($url, $model, $key) {
-                    $options = [
-                        'title' => Yii::t('cruds', 'View'),
-                        'aria-label' => Yii::t('cruds', 'View'),
-                        'data-pjax' => '0',
-                    ];
-                    return Html::a('<span class="glyphicon glyphicon-file"></span>', $url, $options);
-                }
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => $gridColumns,
+            //'hover' => true,
+            //'condensed' => true,
+            'striped' => false,
+            'pager' => [
+                'firstPageLabel' => 'First',
+                'lastPageLabel'  => 'Last'
             ],
-            'urlCreator' => function($action, $model, $key, $index) {
-                // using the column name as key, not mapping to 'id' like the standard generator
-                $params = is_array($key) ? $key : [$model->primaryKey()[0] => (string) $key];
-                $params[0] = \Yii::$app->controller->id ? \Yii::$app->controller->id . '/' . $action : $action;
-                return Url::toRoute($params);
-            },
-            'contentOptions' => ['nowrap'=>'nowrap']
-        ],
-			'location',
-			'area',
-			'mesin_id',
-			'mesin_nama',
-			'mesin_no',
-			'mesin_bagian',
-			'mesin_bagian_ket',
-			/*'mesin_status',*/
-			/*'mesin_catatan',*/
-			'mesin_periode',
-			/*'user_id',*/
-			/*'user_desc',*/
-			'mesin_last_update',
-			/*'hasil_ok',*/
-			/*'hasil_ng',*/
-			/*'total_cek',*/
-        ],
+            'showPageSummary' => true,
+            //'floatHeader'=>true,
+            //'floatHeaderOptions'=>['scrollingTop'=>'50'],
+            'containerOptions' => ['style' => 'overflow: auto;'], // only set when $responsive = false
+            'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+            'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+            'pjax' => true, // pjax is set to always true for this demo
+            'toolbar' =>  [
+                //Html::a('<span class="glyphicon glyphicon-plus"></span> ' . 'Add', ['set-area'], ['class' => 'btn btn-success']),
+                '{export}',
+                '{toggleData}',
+            ],
+            // set export properties
+            'export' => [
+                'fontAwesome' => true
+            ],
+            'panel' => [
+                'type' => GridView::TYPE_PRIMARY,
+            ],
         ]); ?>
     </div>
 
