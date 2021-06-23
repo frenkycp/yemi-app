@@ -195,7 +195,7 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
-<table class="table summary-tbl">
+<table class="table summary-tbl" style="margin-bottom: 0px;">
     <thead>
         <tr>
             <th></th>
@@ -219,3 +219,4 @@ echo '</pre>';*/
         </tr>
     </tbody>
 </table>
+<span style="color: silver; font-size: 1.5em;">Last Update : <?= date('Y-m-d H:i'); ?></span>
