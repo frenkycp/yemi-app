@@ -327,6 +327,9 @@ $user_id = \Yii::$app->user->identity->username;
                             <li>
                                 <?= Html::a('Production Progress <span class="japanesse-word">(生産進捗)</span> VMS (N-1)', ['/display/vms-vs-flo'], ['target' => '_blank']); ?>
                             </li>
+                            <li>
+                                <?= Html::a('TOTAL PRODUCTION EFFICIENCY <span class="japanesse-word">(全体生産能率)</span>', ['/display-prd/prd-eff'], ['target' => '_blank']); ?>
+                            </li>
                         </ol>
                     </div>
                 </div>
