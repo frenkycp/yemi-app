@@ -8,6 +8,7 @@ use yii\helpers\ArrayHelper;
 use yii\bootstrap\ActiveForm;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
+use app\models\TemperatureOverAction;
 
 $this->title = [
     'page_title' => 'Employee Body Temp. Monitoring <span class="japanesse light-green">社員の体温管理</span>',
@@ -79,6 +80,14 @@ $css_string = "
         background-color: red;
         color: white;
     }
+    .bg-green {
+        background-color: #8bd78f !important;
+        color: black !important;
+    }
+    .bg-red {
+        background-color: red !important;
+        color: white !important;
+    }
     //tbody > tr > td { background: #33383d;}
     //.summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
     .icon-status {font-size : 3em;}
@@ -92,7 +101,7 @@ $script = <<< JS
     window.onload = setupRefresh;
 
     function setupRefresh() {
-      setTimeout("refreshPage();", 300000); // milliseconds
+      setTimeout("refreshPage();", 120000); // milliseconds
     }
     function refreshPage() {
        window.location = location.href;
@@ -170,22 +179,57 @@ echo '</pre>';*/
                     <th class="text-center">Karyawan</th>
                     <th class="text-center">Shift</th>
                     <th class="text-center">Temp.</th>
-                    <th class="text-center">Check<br/>Time</th>
+                    <th class="text-center" width="100px">Check<br/>Time</th>
+                    <th class="text-center">Status</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
                 if (count($temp_over_data) > 0) {
                     foreach ($temp_over_data as $key => $value) {
+                        $status = 0;
+                        $new_temperature = $value['temperature'];
+                        foreach ($tmp_over_action as $action_val) {
+                            if ($model->post_date == $action_val->POST_DATE && $action_val->EMP_ID == $value['nik']) {
+                                $status = $action_val->NEXT_ACTION;
+                                $new_temperature = $action_val->NEW_TEMPERATURE;
+                            }
+                        }
+
+                        if ($status == 0) {
+                            $status_str = Html::a('CHECKING PROCESS',
+                                [
+                                    'temperature-over-action/add',
+                                    'post_date' => $model->post_date,
+                                    'emp_id' => $value['nik'],
+                                    'emp_name' => $value['name'],
+                                    'shift' => $value['shift'],
+                                    'old_temp' => $value['temperature'],
+                                    'check_time' => $value['last_update']
+                                ], [
+                                    'style' => 'color: inherit; text-decoration: inherit;',
+                                    'target' => '_blank'
+                                ]);
+                            $bg_class = ' temp-over';
+                        } else {
+                            if ($status == 1) {
+                                $status_str = 'CHECKED : ' . $new_temperature . '<br/>KEMBALI BEKERJA';
+                                $bg_class = ' bg-green';
+                            } else {
+                                $status_str = 'CHECKED : ' . $new_temperature . '<br/>DIPULANGKAN';
+                                $bg_class = ' bg-red';
+                            }
+                        }
                         echo '<tr>
                             <td class="text-center temp-over" style="font-size: 24px;"><b>' . $value['nik'] . '<br/>' . $value['name'] . '</b></td>
                             <td class="text-center temp-over" style="font-size: 24px;"><b>' . $value['shift'] . '</b></td>
                             <td class="text-center temp-over" style="font-size: 24px;"><b>' . $value['temperature'] . '</b></td>
-                            <td class="text-center temp-over" style="font-size: 24px;"><b>' . date('d M Y H:i', strtotime($value['last_update'])) . '</b></td>
+                            <td class="text-center temp-over" style=""><b>' . date('d M Y H:i', strtotime($value['last_update'])) . '</b></td>
+                            <td class="text-center' . $bg_class . '" style="font-size: 24px;"><b>' . $status_str . '</b></td>
                         </tr>';
                     }
                 } else {
-                    echo '<td colspan="4" class="" style="font-weight: bold; padding-left: 10px;">Tidak ada suhu yang ≥ 37.5 &deg;C</td>';
+                    echo '<td colspan="5" class="" style="font-weight: bold; padding-left: 10px;">Tidak ada suhu yang ≥ 37.5 &deg;C</td>';
                 }
                 ?>
                 

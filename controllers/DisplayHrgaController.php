@@ -25,6 +25,7 @@ use app\models\KaryawanSuhuView;
 use app\models\HikTemperatureView;
 use app\models\AirMonitoringTbl;
 use app\models\AirMonitoringLogTbl;
+use app\models\TemperatureOverAction;
 
 class DisplayHrgaController extends Controller
 {
@@ -631,6 +632,11 @@ class DisplayHrgaController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
         $model = new \yii\base\DynamicModel([
             'post_date',
         ]);
@@ -654,7 +660,7 @@ class DisplayHrgaController extends Controller
 
         $total_check = $total_no_check = 0;
         $no_check_data = $temp_over_data = [];
-        $temp_category_total = [];
+        $temp_category_total = $temp_over_nik_arr = [];
         foreach ($tmp_attendance[$model->post_date] as $attendance_val) {
             $attend_judgement = $attendance_val['attend_judgement'];
             $emp_shift = $attendance_val['shift'];
@@ -748,6 +754,7 @@ class DisplayHrgaController extends Controller
                         'last_update' => $last_update,
                         'shift' => $emp_shift,
                     ];
+                    $temp_over_nik_arr[] = $attendance_val['nik'];
                 }
 
                 $tmp_category_data = [
@@ -776,6 +783,11 @@ class DisplayHrgaController extends Controller
                 }*/
             }
         }
+
+        $tmp_over_action = TemperatureOverAction::find()->where([
+            'EMP_ID' => $temp_over_nik_arr,
+            'POST_DATE' => $model->post_date
+        ])->all();
 
         if (count($temp_category_total) > 0) {
             ksort($temp_category_total);
@@ -849,6 +861,7 @@ class DisplayHrgaController extends Controller
 
         return $this->render('office-body-temp', [
             'model' => $model,
+            'tmp_over_action' => $tmp_over_action,
             'total_check' => $total_check,
             'total_no_check' => $total_no_check,
             'no_check_data' => $no_check_data,

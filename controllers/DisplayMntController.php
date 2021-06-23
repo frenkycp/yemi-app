@@ -17,9 +17,163 @@ use app\models\WorkDayTbl;
 use app\models\MachineStopRecord;
 use app\models\WipEffTbl;
 use app\models\WorkingDaysView;
+use app\models\MachineKadouritsu;
+use app\models\MachineIotLogHour;
 
 class DisplayMntController extends Controller
 {
+	public function actionKadouritsuGetMachine($loc_id)
+	{
+		$tmp_machine = MachineKadouritsu::find()->where(['LOC_ID' => $loc_id])->orderBy('MACHINE_NAME')->all();
+
+		if (count($tmp_machine) > 0) {
+			echo '<option value="ALL">ALL MACHINE</option>';
+            foreach ($tmp_machine as $key => $value) {
+                echo "<option value='" . $value->MACHINE_ID . "'>" . $value->MACHINE_ID . " - " . $value->MACHINE_NAME . "</option>";
+            }
+        } else {
+            echo "'<option>-</option>'";
+        }
+	}
+
+	public function actionKadouritsuDaily($value='')
+	{
+		$this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $model = new \yii\base\DynamicModel([
+            'location', 'from_date', 'to_date', 'machine'
+        ]);
+        $model->addRule(['from_date', 'to_date','location', 'machine'], 'required');
+
+        $model->from_date = date('Y-m-01');
+        $model->to_date = date('Y-m-d');
+
+        $loc_dropdown = [
+        	'WI01' => 'INJ. SMALL',
+        	'WI02' => 'INJ. LARGE',
+        	'WM02' => 'AUTO INSERT',
+        	'WM03' => 'SMT',
+        ];
+
+        $list_machine = $machine_arr = $tmp_kadouritsu1 = $tmp_kadouritsu2 = $chart_kadouritsu = $tmp_sougyouritsu_arr = $chart_sougyouritsu = $tmp_data_machine = [];
+        $machine_dropdown = [];
+        if ($model->load($_GET)) {
+        	$machine_dropdown = [
+        		'ALL' => 'ALL MACHINE'
+        	];
+        	$tmp_machine = MachineKadouritsu::find()->where(['LOC_ID' => $model->location])->orderBy('MACHINE_NAME')->all();
+    		foreach ($tmp_machine as $tmp_val) {
+    			$machine_arr[] = $tmp_val->MACHINE_ID;
+    			$machine_dropdown[$tmp_val->MACHINE_ID] = $tmp_val->MACHINE_NAME;
+    			$tmp_data_machine[$tmp_val->MACHINE_ID] = [
+    				'name' => $tmp_val->MACHINE_NAME,
+    				'merah' => 0,
+    				'kuning' => 0,
+    				'hijau' => 0,
+    				'biru' => 0,
+    				'putih' => 0,
+    				'lost_data' => 0,
+    			];
+    		}
+
+        	if ($model->machine != 'ALL') {
+        		$machine_arr = [$model->machine];
+        	}
+
+        	$working_day_total = WorkDayTbl::find()
+        	->where([
+	            'AND',
+	            ['>=', 'cal_date', $model->from_date],
+	            ['<=', 'cal_date', $model->to_date]
+	        ])
+	        ->andWhere('holiday IS NULL')
+        	->count();
+
+        	$total_time_calendar = $working_day_total * 60 * 24;
+
+        	$log_hour = MachineIotLogHour::find()
+        	->select([
+        		'mesin_id', 'mesin_description', 'posting_date',
+        		'merah' => 'SUM(merah / 60)',
+        		'kuning' => 'SUM(kuning / 60)',
+        		'hijau' => 'SUM(hijau / 60)',
+        		'biru' => 'SUM(biru / 60)',
+        		'putih' => 'SUM(putih / 60)',
+        		'lost_data' => 'SUM(lost_data / 60)',
+        	])
+        	->where([
+	            'AND',
+	            ['>=', 'posting_date', $model->from_date],
+	            ['<=', 'posting_date', $model->to_date]
+	        ])
+	        ->andWhere([
+	        	'mesin_id' => $machine_arr
+	        ])
+	        ->groupBy(['mesin_id', 'mesin_description', 'posting_date'])
+	        ->orderBy('posting_date')
+        	->all();
+
+        	foreach ($log_hour as $log_val) {
+        		$tmp_kadouritsu1[date('Y-m-d', strtotime($log_val->posting_date))]['merah'] += $log_val->merah;
+        		$tmp_kadouritsu1[date('Y-m-d', strtotime($log_val->posting_date))]['hijau'] += $log_val->hijau;
+        		$tmp_kadouritsu1[date('Y-m-d', strtotime($log_val->posting_date))]['kuning'] += $log_val->kuning;
+        		$tmp_kadouritsu1[date('Y-m-d', strtotime($log_val->posting_date))]['biru'] += $log_val->biru;
+        		$tmp_kadouritsu1[date('Y-m-d', strtotime($log_val->posting_date))]['putih'] += $log_val->putih;
+        		$tmp_kadouritsu1[date('Y-m-d', strtotime($log_val->posting_date))]['lost_data'] += $log_val->lost_data;
+
+        		$tmp_data_machine[$log_val->mesin_id]['merah'] += $log_val->merah;
+        		$tmp_data_machine[$log_val->mesin_id]['hijau'] += $log_val->hijau;
+        		$tmp_data_machine[$log_val->mesin_id]['kuning'] += $log_val->kuning;
+        		$tmp_data_machine[$log_val->mesin_id]['biru'] += $log_val->biru;
+        		$tmp_data_machine[$log_val->mesin_id]['putih'] += $log_val->putih;
+        		$tmp_data_machine[$log_val->mesin_id]['lost_data'] += $log_val->lost_data;
+        	}
+
+        	foreach ($tmp_kadouritsu1 as $post_date_val => $value) {
+        		$post_date = (strtotime($post_date_val . " +7 hours") * 1000);
+        		$penyebut = $value['hijau'] + $value['biru'] + $value['merah'];
+        		$tmp_kadouritsu = 0;
+        		if ($penyebut > 0) {
+        			$tmp_kadouritsu = round(($value['hijau'] / $penyebut) * 100, 1);
+        		}
+        		$tmp_kadouritsu2[] = [
+                    'x' => $post_date,
+                    'y' => (float)$tmp_kadouritsu,
+                ];
+
+        		$penyebut2 = 60 * 24;
+        		$tmp_sougyouritsu = round(($penyebut / $penyebut2) * 100, 1);
+
+        		$tmp_sougyouritsu_arr[] = [
+                    'x' => $post_date,
+                    'y' => (float)$tmp_sougyouritsu,
+                ];
+        	}
+
+        	$chart_kadouritsu[] = [
+        		'name' => 'Kadouritsu',
+        		'data' => $tmp_kadouritsu2,
+        		'color' => new JsExpression('Highcharts.getOptions().colors[0]')
+        	];
+
+        	$chart_sougyouritsu[] = [
+        		'name' => 'Sougyouritsu',
+        		'data' => $tmp_sougyouritsu_arr,
+        		'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+        	];
+        }
+
+        return $this->render('kadouritsu-daily', [
+        	'model' => $model,
+        	'machine_dropdown' => $machine_dropdown,
+        	'loc_dropdown' => $loc_dropdown,
+        	'chart_kadouritsu' => $chart_kadouritsu,
+        	'chart_sougyouritsu' => $chart_sougyouritsu,
+        	'tmp_data_machine' => $tmp_data_machine,
+        ]);
+	}
+
 	public function actionMachineStopMonthlyReport($value='')
 	{
 		$this->layout = 'clean';
