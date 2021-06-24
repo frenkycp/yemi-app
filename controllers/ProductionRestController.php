@@ -53,9 +53,9 @@ class ProductionRestController extends Controller
         date_default_timezone_set('Asia/Jakarta');
 
         $this_time = date('Y-m-d H:i:s');
-        $today = date('Y-m-d');
+        $today = date('Y-m-d', strtotime(' -1 day'));
         if ($period == '') {
-            $period = date('Ym');
+            $period = date('Ym', strtotime($today));
         }
 
         $tmp_sunfish = SunfishAttendanceData::find()
