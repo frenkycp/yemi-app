@@ -36,35 +36,7 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-/*$tree_arr = [
-    // single query fetch to render the tree
-    // use the Product model you have in the previous step
-    'query' => TreeAccDigilibExtend::find()->addOrderBy('root, lft'), 
-    'headingOptions' => ['label' => 'Menu'],
-    'fontAwesome' => true,     // optional
-    'isAdmin' => false,         // optional (toggle to enable admin mode)
-    'displayValue' => 1,        // initial display value
-    'softDelete' => true,       // defaults to true
-    'cacheSettings' => [        
-        'enableCache' => true   // defaults to true
-    ],
-    'topRootAsHeading' => true,
-    'mainTemplate' => '<div class="row">
-	    <div class="col-sm-12">
-	        {wrapper}
-	    </div>
-	</div>',
-	'wrapperTemplate' => '
-		{header}
-		{tree}
-	',
-    'rootOptions' => ['label'=>'<span class="text-primary">Accounting Digital Library</span>'],
-    'options' => [
-    	'id' => 'tree-id'
-    ],
-];*/
-
-//if (\Yii::$app->user->identity->role_id == 1) {
+if (\Yii::$app->user->identity->role_id == 1 || \Yii::$app->user->identity->role_id == 37) {
 	$tree_arr = [
 	    // single query fetch to render the tree
 	    // use the Product model you have in the previous step
@@ -93,6 +65,34 @@ $this->registerJs($script, View::POS_HEAD );
 	    	'id' => 'tree-id'
 	    ],
 	];
-//}
+} else {
+	$tree_arr = [
+	    // single query fetch to render the tree
+	    // use the Product model you have in the previous step
+	    'query' => TreeAccDigilibExtend::find()->addOrderBy('root, lft'), 
+	    'headingOptions' => ['label' => 'Menu'],
+	    'fontAwesome' => true,     // optional
+	    'isAdmin' => false,         // optional (toggle to enable admin mode)
+	    'displayValue' => 1,        // initial display value
+	    'softDelete' => true,       // defaults to true
+	    'cacheSettings' => [        
+	        'enableCache' => true   // defaults to true
+	    ],
+	    'topRootAsHeading' => true,
+	    'mainTemplate' => '<div class="row">
+		    <div class="col-sm-12">
+		        {wrapper}
+		    </div>
+		</div>',
+		'wrapperTemplate' => '
+			{header}
+			{tree}
+		',
+	    'rootOptions' => ['label'=>'<span class="text-primary">Accounting Digital Library</span>'],
+	    'options' => [
+	    	'id' => 'tree-id'
+	    ],
+	];
+}
 
 echo TreeView::widget($tree_arr);
