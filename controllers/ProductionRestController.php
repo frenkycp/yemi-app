@@ -44,6 +44,7 @@ use app\models\InjMoldingTbl;
 use app\models\InjMachineMoldingLog;
 use app\models\SoPeriodPlanActual;
 use app\models\SunfishWorkingTime;
+use app\models\SunfishWorkingTimeDaily;
 
 class ProductionRestController extends Controller
 {
@@ -66,6 +67,7 @@ class ProductionRestController extends Controller
         ->andWhere(['<>', 'shiftdaily_code', 'OFF'])
         ->andWhere(['<=', 'start_date', date('Y-m-20', strtotime($period . '01'))])
         ->andWhere(['<=', 'CAST(shiftendtime AS date)', $today])
+        ->orderBy('shiftendtime')
         ->asArray()
         ->all();
 
@@ -83,14 +85,41 @@ class ProductionRestController extends Controller
             '300' => 'Wood Working',
         ];
         $tmp_data = [];
+        $tmp_daily_record = [];
         foreach ($tmp_section_arr as $cost_center_code => $cost_center_name) {
             $direct1 = $direct2 = $direct3 = $indirect1 = $indirect2 = $indirect3 = $total_wfh = 0;
             $direct1_wt = $direct2_wt = $direct3_wt = $indirect1_wt = $indirect2_wt = $indirect3_wt = 0;
+            
             if (count($tmp_sunfish) > 0) {
                 foreach ($tmp_sunfish as $value) {
+                    $tgl = date('Y-m-d', strtotime($value['shiftendtime']));
+                    if (!isset($tmp_daily_record[$cost_center_code][$tgl])) {
+                        $tmp_daily_record[$cost_center_code][$tgl] = [
+                            'name' => $cost_center_name,
+                            'direct1' => 0,
+                            'direct2' => 0,
+                            'direct3' => 0,
+                            'direct1_wt' => 0,
+                            'direct2_wt' => 0,
+                            'direct3_wt' => 0,
+                            'indirect1' => 0,
+                            'indirect2' => 0,
+                            'indirect3' => 0,
+                            'indirect1_wt' => 0,
+                            'indirect2_wt' => 0,
+                            'indirect3_wt' => 0,
+                            'total_wfh' => 0,
+                            'clinic_visit' => 0,
+                            'clinic_bed_rest' => 0,
+                            'clinic_lactation' => 0,
+                            'chorei_syuurei' => 0,
+                            'mp_intake' => 0,
+                        ];
+                    }
                     if ($cost_center_name == $value['cost_center']) {
                         if (strpos($value['Attend_Code'], 'STWFH') !== false) {
                             $total_wfh++;
+                            $tmp_daily_record[$cost_center_code][$tgl]['total_wfh']++;
                         }
                         if (strpos(strtoupper($value['shiftdaily_code']), 'SHIFT_1') !== false
                             || strpos(strtoupper($value['shiftdaily_code']), 'SHIFT_08_17') !== false
@@ -102,9 +131,13 @@ class ProductionRestController extends Controller
                             if ($value['jobstatusname_en'] == 'Direct') {
                                 $direct1++;
                                 $direct1_wt += $working_time;
+                                $tmp_daily_record[$cost_center_code][$tgl]['direct1']++;
+                                $tmp_daily_record[$cost_center_code][$tgl]['direct1_wt'] += $working_time;
                             } elseif ($value['jobstatusname_en'] == 'Indirect') {
                                 $indirect1++;
                                 $indirect1_wt += $working_time;
+                                $tmp_daily_record[$cost_center_code][$tgl]['indirect1']++;
+                                $tmp_daily_record[$cost_center_code][$tgl]['indirect1_wt'] += $working_time;
                             }
                         } elseif (strpos(strtoupper($value['shiftdaily_code']), 'SHIFT_2') !== false || strpos(strtoupper($value['shiftdaily_code']), 'MAINTENANCE') !== false) {
                             $working_time =  450;
@@ -114,9 +147,13 @@ class ProductionRestController extends Controller
                             if ($value['jobstatusname_en'] == 'Direct') {
                                 $direct2++;
                                 $direct2_wt += $working_time;
+                                $tmp_daily_record[$cost_center_code][$tgl]['direct2']++;
+                                $tmp_daily_record[$cost_center_code][$tgl]['direct2_wt'] += $working_time;
                             } elseif ($value['jobstatusname_en'] == 'Indirect') {
                                 $indirect2++;
                                 $indirect2_wt += $working_time;
+                                $tmp_daily_record[$cost_center_code][$tgl]['indirect2']++;
+                                $tmp_daily_record[$cost_center_code][$tgl]['indirect2_wt'] += $working_time;
                             }
                         } elseif (strpos(strtoupper($value['shiftdaily_code']), 'SHIFT_3') !== false) {
                             $working_time =  420;
@@ -126,9 +163,13 @@ class ProductionRestController extends Controller
                             if ($value['jobstatusname_en'] == 'Direct') {
                                 $direct3++;
                                 $direct3_wt += $working_time;
+                                $tmp_daily_record[$cost_center_code][$tgl]['direct3']++;
+                                $tmp_daily_record[$cost_center_code][$tgl]['direct3_wt'] += $working_time;
                             } elseif ($value['jobstatusname_en'] == 'Indirect') {
                                 $indirect3++;
                                 $indirect3_wt += $working_time;
+                                $tmp_daily_record[$cost_center_code][$tgl]['indirect3']++;
+                                $tmp_daily_record[$cost_center_code][$tgl]['indirect3_wt'] += $working_time;
                             }
                         } else {
                             $working_time =  0;
@@ -197,11 +238,49 @@ class ProductionRestController extends Controller
             }
         }
 
-        return $tmp_data;
+        foreach ($tmp_daily_record as $cost_center_code => $daily_record_arr) {
+            foreach ($daily_record_arr as $tgl => $arr_val) {
+                $id = date('Ymd', strtotime($tgl)) . '_' . $cost_center_code;
+                $daily_record = SunfishWorkingTimeDaily::find()->where(['ID' => $id])->one();
+                if (!$daily_record) {
+                    $daily_record = new SunfishWorkingTimeDaily;
+                    $daily_record->ID = $id;
+                    $daily_record->PERIOD = $period;
+                    $daily_record->POST_DATE = $tgl;
+                    $daily_record->COST_CENTER_CODE = '' . $cost_center_code;
+                    $daily_record->COST_CENTER_NAME = $arr_val['name'];
+                }
+                $daily_record->MP_DIRECT_1 = $arr_val['direct1'];
+                $daily_record->MP_DIRECT_2 = $arr_val['direct2'];
+                $daily_record->MP_DIRECT_3 = $arr_val['direct3'];
+                $daily_record->MPT_DIRECT_1 = $arr_val['direct1_wt'];
+                $daily_record->MPT_DIRECT_2 = $arr_val['direct2_wt'];
+                $daily_record->MPT_DIRECT_3 = $arr_val['direct3_wt'];
+                $daily_record->MP_INDIRECT_1 = $arr_val['indirect1'];
+                $daily_record->MP_INDIRECT_2 = $arr_val['indirect2'];
+                $daily_record->MP_INDIRECT_3 = $arr_val['indirect3'];
+                $daily_record->MPT_INDIRECT_1 = $arr_val['indirect1_wt'];
+                $daily_record->MPT_INDIRECT_2 = $arr_val['indirect2_wt'];
+                $daily_record->MPT_INDIRECT_3 = $arr_val['indirect3_wt'];
+                $daily_record->TOTAL_WFH = $arr_val['total_wfh'];
+                $daily_record->LAST_UPDATE = $this_time;
+
+                if (!$daily_record->save()) {
+                    return $daily_record->errors;
+                }
+            }
+        }
 
         $total_s = strtotime(date('Y-m-d H:i:s')) - strtotime($this_time);
         return 'Total time : ' . $total_s;
+
+        return $tmp_daily_record;
+
+        return $tmp_data;
+
+        
     }
+
     public function actionUpdateSoProdPlanActual($value='')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
