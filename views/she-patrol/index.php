@@ -30,7 +30,6 @@ $this->registerCss("
 ");
 
 $tmp_patrol_category = \Yii::$app->params['she_patrol_category'];
-$tmp_patrol_loc = ArrayHelper::map(app\models\CovidPatrolLoc::find()->all(), 'LOC_ID', 'LOC_NAME');
 
 $gridColumns = [
     [

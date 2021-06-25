@@ -6,7 +6,7 @@ use yii\web\Controller;
 use yii\web\JsExpression;
 use app\models\AuditPatrolTbl;
 
-class ShePatrolMonitoringController extends Controller
+class ShePatrolMonitoringController extends \app\controllers\base\AuditPatrolController
 {
 	public function behaviors()
     {
@@ -107,4 +107,42 @@ class ShePatrolMonitoringController extends Controller
             'outstanding_data' => $outstanding_data,
 		]);
 	}
+
+    public function actionSolve($ID){
+        $model = $this->findModel($ID);
+        $custom_model = new \yii\base\DynamicModel([
+            'ID', 'ACTION', 'upload_after_1'
+        ]);
+
+        if ($model->IMAGE_AFTER_1 == null) {
+            $custom_model->addRule(['ID', 'ACTION', 'upload_after_1'], 'required');
+        } else {
+            $custom_model->addRule(['ID', 'ACTION'], 'required');
+        }
+        
+        $custom_model->ID = $ID;
+        $custom_model->upload_after_1 = $model->IMAGE_AFTER_1;
+
+        if ($custom_model->load($_POST)) {
+            $model->STATUS = 'C';
+            $model->ACTION = $custom_model->ACTION;
+            if ($model->save()) {
+                $custom_model->upload_after_1 = UploadedFile::getInstance($custom_model, 'upload_after_1');
+                if ($custom_model->upload_after_1) {
+                    $new_filename_a1 = $custom_model->ID . '_SHE_PATROL_AFTER_1.' . $custom_model->upload_after_1->extension;
+                    $filePath_a1 = \Yii::getAlias("@app/web/uploads/SHE_PATROL/") . $new_filename_a1;
+                    $custom_model->upload_after_1->saveAs($filePath_a1);
+                    Image::getImagine()->open($filePath_a1)->thumbnail(new Box(1280, 720))->save($filePath_a1 , ['quality' => 90]);
+                    AuditPatrolTbl::UpdateAll(['IMAGE_AFTER_1' => $new_filename_a1], ['ID' => $custom_model->ID]);
+                }
+                
+                return $this->redirect(Url::previous());
+            }
+        } else {
+            return $this->render('solve', [
+                'model' => $model,
+                'custom_model' => $custom_model,
+            ]);
+        }
+    }
 }

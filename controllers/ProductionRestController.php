@@ -355,36 +355,6 @@ class ProductionRestController extends Controller
         return [];
     }
 
-    public function actionRemoveAbnormalTemperature($post_date = '')
-    {
-        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-        date_default_timezone_set('Asia/Jakarta');
-        if ($post_date == '') {
-            $post_date = date('Y-m-d');
-        }
-
-        $tmp_abnormal = ScanTemperature::find()
-        ->where([
-            'POST_DATE' => $post_date
-        ])
-        ->andWhere(['<', 'SUHU', 35])
-        ->all();
-
-        $total_update = 0;
-        foreach ($tmp_abnormal as $abnormal_data) {
-            $tmp_model = ScanTemperature::findOne($abnormal_data->SEQ);
-            $rand_temperature = (mt_rand(36 * 10,36.8 * 10) / 10);
-            $tmp_model->SUHU = $rand_temperature;
-
-            if (!$tmp_model->save()) {
-                return json_encode($tmp_model->errors);
-            }
-            $total_update++;
-        }
-
-        return 'Total Update : ' . $total_update . ' data(s)';
-    }
-
     public function actionGetDrsData($from_date, $to_date)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
