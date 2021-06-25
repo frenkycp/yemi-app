@@ -10,9 +10,9 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 
 $this->title = [
-    'page_title' => 'OEE RECORDING',
-    'tab_title' => 'OEE RECORDING',
-    'breadcrumbs_title' => 'OEE RECORDING'
+    'page_title' => 'Kadouritsu Monitoring',
+    'tab_title' => 'Kadouritsu Monitoring',
+    'breadcrumbs_title' => 'Kadouritsu Monitoring'
 ];
 //$this->params['breadcrumbs'][] = $this->title['breadcrumbs_title'];
 
@@ -168,6 +168,7 @@ echo '</pre>';*/
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_1" data-toggle="tab">Kadouritsu</a></li>
         <li><a href="#tab_2" data-toggle="tab">Sougyouritsu</a></li>
+        <li><a href="#tab_3" data-toggle="tab">Dandori</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_1">
@@ -248,7 +249,7 @@ echo '</pre>';*/
                             'enabled' => false
                         ],
                         //'allowDecimals' => false,
-                        'max' => 100,
+                        //'max' => 100,
                         'min' => 0,
                         //'tickInterval' => 20
                     ],
@@ -266,6 +267,54 @@ echo '</pre>';*/
             ]);
             ?>
         </div>
+        <div class="tab-pane" id="tab_3">
+            <?=
+            Highcharts::widget([
+                'scripts' => [
+                    //'themes/dark-unica',
+                    'themes/grid-light',
+                ],
+                'options' => [
+                    'chart' => [
+                        'type' => 'column',
+                        'style' => [
+                            'fontFamily' => 'sans-serif',
+                        ],
+                        'height' => 300,
+                        'zoomType' => 'x'
+                    ],
+                    /*'time' => [
+                        'useUTC' => false
+                    ],*/
+                    'title' => [
+                        'text' => null
+                    ],
+                    'xAxis' => [
+                        'type' => 'datetime',
+                    ],
+                    'yAxis' => [
+                        'title' => [
+                            'enabled' => false
+                        ],
+                        //'allowDecimals' => false,
+                        //'max' => 100,
+                        'min' => 0,
+                        //'tickInterval' => 20
+                    ],
+                    'legend' => [
+                        'enabled' => false
+                    ],
+                    'credits' => [
+                        'enabled' => false
+                    ],
+                    'exporting' => [
+                        'enabled' => false
+                    ],
+                    'series' => $chart_dandori,
+                ],
+            ]);
+            ?>
+        </div>
     </div>
 </div>
 
@@ -273,17 +322,29 @@ echo '</pre>';*/
     <thead>
         <tr>
             <th class="">Machine</th>
-            <th class="text-center">Process Time</th>
-            <th class="text-center">Setup Time</th>
-            <th class="text-center">Trouble</th>
-            <th class="text-center">Idle</th>
-            <th class="text-center">Off</th>
-            <th class="text-center">Kadouritsu</th>
+            <th class="text-center">Total Calendar Day<br/>(b)</th>
+            <th class="text-center">Process Time<br/>(c)</th>
+            <th class="text-center">Setup Time<br/>(d)</th>
+            <th class="text-center">Trouble<br/>(e)</th>
+            <th class="text-center">Idle<br/>(f)</th>
+            <th class="text-center">Off<br/>(g)</th>
+            <!-- <th class="text-center">Total Time Input<br/>h=(c+d+e+f+g)</th> -->
+            <th class="text-center">Total Time Calendar<br/>j=(b*60*24)</th>
+            <th class="text-center">Kadouritsu<br/>k=(c/(c+d+e))</th>
+            <th class="text-center">Sougyouritsu<br/>l=((c+d+e) / j)</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($tmp_data_machine as $machine_id => $data_val):
+            $total_time_calendar  = $total_days * 60 * 24;
+            $total_time_input = $data_val['hijau'] + $data_val['biru'] + $data_val['merah'] + $data_val['kuning'] + $data_val['putih'] + $data_val['lost_data'];
             $tmp_penyebut = $data_val['hijau'] + $data_val['biru'] + $data_val['merah'];
+
+            $tmp_sougyouritsu = 0;
+            if ($total_time_calendar > 0) {
+                $tmp_sougyouritsu = round(($tmp_penyebut / $total_time_calendar) * 100, 2);
+            }
+            
             $tmp_kadouritsu = 0;
             if ($tmp_penyebut > 0) {
                 $tmp_kadouritsu = round($data_val['hijau'] / $tmp_penyebut * 100, 2);
@@ -291,12 +352,16 @@ echo '</pre>';*/
             ?>
             <tr>
                 <td class=""><?= $data_val['name']; ?></td>
+                <td class="text-center"><?= number_format($total_days); ?></td>
                 <td class="text-center bg-green"><?= number_format($data_val['hijau']); ?></td>
                 <td class="text-center bg-teal"><?= number_format($data_val['biru']); ?></td>
                 <td class="text-center bg-red"><?= number_format($data_val['merah']); ?></td>
                 <td class="text-center bg-yellow"><?= number_format($data_val['kuning']); ?></td>
                 <td class="text-center bg-black"><?= number_format($data_val['putih']); ?></td>
+                <td class="text-center"><?= number_format($total_time_calendar); ?></td>
+                <!-- <td class="text-center bg-purple"><?= '';//number_format($total_time_input); ?></td> -->
                 <td class="text-center"><?= ($tmp_kadouritsu); ?></td>
+                <td class="text-center"><?= ($tmp_sougyouritsu); ?></td>
             </tr>
         <?php endforeach ?>
     </tbody>

@@ -56,9 +56,14 @@ class DisplayMntController extends Controller
         	'WM03' => 'SMT',
         ];
 
+        $datetime1 = new \DateTime($model->from_date);
+        $datetime2 = new \DateTime($model->to_date);
+        $total_days = $datetime2->diff($datetime1)->format('%a') + 1;
+
         $list_machine = $machine_arr = $tmp_kadouritsu1 = $tmp_kadouritsu2 = $chart_kadouritsu = $tmp_sougyouritsu_arr = $chart_sougyouritsu = $tmp_data_machine = [];
-        $machine_dropdown = [];
+        $machine_dropdown = $chart_dandori = [];
         if ($model->load($_GET)) {
+        	$chart_dandori = $this->getDailyDandoriRatio($model->from_date, $model->to_date, $model->location);
         	$machine_dropdown = [
         		'ALL' => 'ALL MACHINE'
         	];
@@ -128,6 +133,11 @@ class DisplayMntController extends Controller
         		$tmp_data_machine[$log_val->mesin_id]['biru'] += $log_val->biru;
         		$tmp_data_machine[$log_val->mesin_id]['putih'] += $log_val->putih;
         		$tmp_data_machine[$log_val->mesin_id]['lost_data'] += $log_val->lost_data;
+        		
+        	}
+        	$calendar_day = count($tmp_kadouritsu1);
+        	foreach ($tmp_data_machine as $key => $value) {
+        		$tmp_data_machine[$key]['calendar_day'] = $calendar_day;
         	}
 
         	foreach ($tmp_kadouritsu1 as $post_date_val => $value) {
@@ -166,12 +176,71 @@ class DisplayMntController extends Controller
 
         return $this->render('kadouritsu-daily', [
         	'model' => $model,
+        	'total_days' => $total_days,
         	'machine_dropdown' => $machine_dropdown,
         	'loc_dropdown' => $loc_dropdown,
         	'chart_kadouritsu' => $chart_kadouritsu,
         	'chart_sougyouritsu' => $chart_sougyouritsu,
+        	'chart_dandori' => $chart_dandori,
         	'tmp_data_machine' => $tmp_data_machine,
         ]);
+	}
+
+	public function getWorkingDay($start_date, $end_date)
+	{
+		$total_working_day = WorkDayTbl::find()
+		->where([
+			'AND',
+			['>=', 'cal_date', $start_date],
+			['<=', 'cal_date', $end_date],
+		])
+		->andWhere('holiday IS NULL')
+		->count();
+
+		return $total_working_day;
+	}
+
+	public function getDailyDandoriRatio($start_date, $end_date, $loc_id)
+	{
+		$tmp_wip_data = WipEffTbl::find()
+        ->select([
+        	'post_date',
+        	'total_dandori' => 'SUM(dandori)',
+        ])
+        ->where([
+        	'plan_stats' => 'C',
+        	'child_analyst' => $loc_id
+        ])
+        ->andWhere([
+        	'AND',
+        	['>=', 'post_date', $start_date],
+        	['<=', 'post_date', $end_date]
+        ])
+        ->groupBy('post_date')
+        ->orderBy('post_date')
+        ->all();
+
+        $tmp_data = [];
+        foreach ($tmp_wip_data as $key => $value) {
+        	$post_date = (strtotime($value->post_date . " +7 hours") * 1000);
+        	$total_dandori = $value->total_dandori;
+        	if ($loc_id != 'WM02') {
+    			$total_dandori = $total_dandori / 2;
+    		}
+        	$tmp_ratio_dandori = round(($total_dandori / 1440) * 100, 1);
+        	$tmp_data[] = [
+                'x' => $post_date,
+                'y' => (float)$tmp_ratio_dandori,
+            ];
+        }
+
+        $data[] = [
+        	'name' => 'Kadouritsu',
+    		'data' => $tmp_data,
+    		'color' => new JsExpression('Highcharts.getOptions().colors[2]')
+        ];
+
+        return $data;
 	}
 
 	public function actionMachineStopMonthlyReport($value='')
