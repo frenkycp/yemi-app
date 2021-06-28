@@ -45,6 +45,7 @@ use app\models\InjMachineMoldingLog;
 use app\models\SoPeriodPlanActual;
 use app\models\SunfishWorkingTime;
 use app\models\SunfishWorkingTimeDaily;
+use app\models\ClinicDailyVisitBySection;
 
 class ProductionRestController extends Controller
 {
@@ -241,8 +242,18 @@ class ProductionRestController extends Controller
             }
         }
 
+        $clinic_visit = ClinicDailyVisitBySection::find()->where(['period' => $period])->all();
+
         foreach ($tmp_daily_record as $cost_center_code => $daily_record_arr) {
             foreach ($daily_record_arr as $tgl => $arr_val) {
+                $tmp_total_visit = $tmp_total_bedrest = $tmp_total_lactation = 0;
+                foreach ($clinic_visit as $clinic_visit_val) {
+                    if ($clinic_visit_val->cost_center_code == $cost_center_code && $clinic_visit_val->post_date == $tgl) {
+                        $tmp_total_visit = $clinic_visit_val->total_clinic_visit;
+                        $tmp_total_bedrest = $clinic_visit_val->total_bed_rest;
+                        $tmp_total_lactation = $clinic_visit_val->total_lactation;
+                    }
+                }
                 $id = date('Ymd', strtotime($tgl)) . '_' . $cost_center_code;
                 $daily_record = SunfishWorkingTimeDaily::find()->where(['ID' => $id])->one();
                 $total_mp = $arr_val['direct1'] + $arr_val['direct2'] + $arr_val['direct3'] + $arr_val['indirect1'] + $arr_val['indirect2'] + $arr_val['indirect3'];
@@ -273,9 +284,16 @@ class ProductionRestController extends Controller
                 $daily_record->CHOREI_SYUUREI = $total_chorei_shurei;
                 $daily_record->TOTAL_MP_INTAKE = $arr_val['mp_intake'];
                 $daily_record->MP_INTAKE_TIME = $arr_val['mp_intake'] * 2 * 460;
-                $daily_record->LAST_UPDATE = $this_time;
 
-                
+                $daily_record->CLINIC_VISIT = $tmp_total_visit;
+                $daily_record->CLINIC_BED_REST = $tmp_total_bedrest;
+                $daily_record->CLINIC_LACTATION = $tmp_total_lactation;
+
+                $daily_record->CLINIC_VISIT_TIME = $tmp_total_visit * 10;
+                $daily_record->CLINIC_BED_REST_TIME = $tmp_total_bedrest * 60;
+                $daily_record->CLINIC_LACTATION_TIME = $tmp_total_lactation * 60;
+
+                $daily_record->LAST_UPDATE = $this_time;
 
                 if (!$daily_record->save()) {
                     return $daily_record->errors;
