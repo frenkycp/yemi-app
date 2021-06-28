@@ -41,12 +41,14 @@ $this->registerCss($css_string);
             <div class="row">
                 <div class="col-md-4">
                     <?= $form->field($model, 'nik_sun_fish')->widget(Select2::classname(), [
-                        'data' => ArrayHelper::map(app\models\KARYAWAN::find()->select([
-                            'NIK_SUN_FISH', 'NAMA_KARYAWAN'
+                        'data' => ArrayHelper::map(app\models\SunfishViewEmp::find()->select([
+                            'Emp_no', 'Full_name'
                         ])
-                        ->all(), 'NIK_SUN_FISH', 'nikSunfishNama'),
+                        ->where(['status' => 1])
+                        ->andWhere(['<>', 'cost_center_code', '10'])
+                        ->all(), 'Emp_no', 'nikNama'),
                         'options' => [
-                            'placeholder' => 'Select NIK ...',
+                            'placeholder' => 'Select NIK ...',  
                             'onchange' => '
                                 $("#btn-submit").attr("disabled", true);
                                 $.post( "' . Yii::$app->urlManager->createUrl('clinic-data/emp-info?nik=') . '"+$(this).val(), function( data ) {

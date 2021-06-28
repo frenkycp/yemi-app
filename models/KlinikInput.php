@@ -64,6 +64,7 @@ class KlinikInput extends BaseKlinikInput
 
             $tmp_sunfish_data = SunfishViewEmp::find()->where(['Emp_no' => $this->nik_sun_fish])->one();
             if ($tmp_sunfish_data) {
+                $this->cost_center_code = $tmp_sunfish_data->cost_center_code;
                 $this->cost_center_name = $tmp_sunfish_data->cost_center_name;
             }
 
