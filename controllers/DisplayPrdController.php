@@ -48,9 +48,31 @@ use app\models\search\SmtOutputMonthlySearch;
 use app\models\WipEffTbl;
 use app\models\SmtOutputMonthlyInsertPoint02;
 use app\models\PrdMonthlyeFF04;
+use app\models\search\PrdEffPtSearch;
+use app\models\PrdDailyEff04;
+use app\models\WorkDayTbl;
 
 class DisplayPrdController extends Controller
 {
+    public function actionPrdEffPt()
+    {
+        $this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+
+        $searchModel  = new PrdEffPtSearch;
+        $dataProvider = $searchModel->search($_GET);
+
+        Tabs::clearLocalStorage();
+
+        Url::remember();
+        \Yii::$app->session['__crudReturnUrl'] = null;
+
+        return $this->render('prd-eff-pt', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+    }
+
     public function actionPrdEff()
     {
         $this->layout = 'clean';
@@ -61,8 +83,11 @@ class DisplayPrdController extends Controller
         ]);
         $model->addRule(['fiscal_year'], 'required');
 
+        $tmp_workday = WorkDayTbl::find()->where(['<', 'cal_date', date('Y-m-d')])->andWhere('holiday IS NULL')->orderBy('cal_date DESC')->one();
+        $tmp_period = date('Ym', strtotime($tmp_workday->cal_date));
+
         $current_fiscal = FiscalTbl::find()->where([
-            'PERIOD' => date('Ym')
+            'PERIOD' => $tmp_period
         ])->one();
         $model->fiscal_year = $current_fiscal->FISCAL;
 
@@ -128,12 +153,38 @@ class DisplayPrdController extends Controller
             ]
         ];
 
+        $eff_daily_get_data = PrdDailyEff04::find()
+        ->where(['PERIOD' => $tmp_period])
+        ->andWhere('holiday IS NULL')
+        ->all();
+
+        $tmp_daily_chart = $daily_chart = [];
+        $max_daily = 100;
+        foreach ($eff_daily_get_data as $value) {
+            $post_date = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
+            if ($value->TOTAL_EFF > $max_daily) {
+                $max_daily = round($value->TOTAL_EFF);
+            }
+            $tmp_daily_chart[] = [
+                'x' => $post_date,
+                'y' => (float)round($value->TOTAL_EFF, 1),
+            ];
+        }
+        $daily_chart[] = [
+            'name' => 'Daily Efficiency',
+            'data' => $tmp_daily_chart,
+            'color' => new JsExpression('Highcharts.getOptions().colors[1]'),
+            'showInLegend' => false,
+        ];
+
         return $this->render('prd-eff', [
             'model' => $model,
             'categories' => $categories,
             'period_arr' => $period_arr,
             'data_chart' => $data_chart,
             'data_table' => $data_table,
+            'daily_chart' => $daily_chart,
+            'max_daily' => $max_daily,
         ]);
     }
 

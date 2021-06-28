@@ -121,6 +121,9 @@ class ProductionRestController extends Controller
                             $total_wfh++;
                             $tmp_daily_record[$cost_center_code][$tgl]['total_wfh']++;
                         }
+                        if (date('Y-m-d', strtotime($value['start_date'])) == date('Y-m-d', strtotime($value['shiftstarttime']))) {
+                            $tmp_daily_record[$cost_center_code][$tgl]['mp_intake']++;
+                        }
                         if (strpos(strtoupper($value['shiftdaily_code']), 'SHIFT_1') !== false
                             || strpos(strtoupper($value['shiftdaily_code']), 'SHIFT_08_17') !== false
                             || strpos(strtoupper($value['shiftdaily_code']), 'GARDENER') !== false) {
@@ -242,6 +245,9 @@ class ProductionRestController extends Controller
             foreach ($daily_record_arr as $tgl => $arr_val) {
                 $id = date('Ymd', strtotime($tgl)) . '_' . $cost_center_code;
                 $daily_record = SunfishWorkingTimeDaily::find()->where(['ID' => $id])->one();
+                $total_mp = $arr_val['direct1'] + $arr_val['direct2'] + $arr_val['direct3'] + $arr_val['indirect1'] + $arr_val['indirect2'] + $arr_val['indirect3'];
+                $total_chorei_shurei = $total_mp * 10;
+
                 if (!$daily_record) {
                     $daily_record = new SunfishWorkingTimeDaily;
                     $daily_record->ID = $id;
@@ -263,7 +269,13 @@ class ProductionRestController extends Controller
                 $daily_record->MPT_INDIRECT_2 = $arr_val['indirect2_wt'];
                 $daily_record->MPT_INDIRECT_3 = $arr_val['indirect3_wt'];
                 $daily_record->TOTAL_WFH = $arr_val['total_wfh'];
+                $daily_record->TOTAL_WFH_TIME = $arr_val['total_wfh'] * 480;
+                $daily_record->CHOREI_SYUUREI = $total_chorei_shurei;
+                $daily_record->TOTAL_MP_INTAKE = $arr_val['mp_intake'];
+                $daily_record->MP_INTAKE_TIME = $arr_val['mp_intake'] * 2 * 460;
                 $daily_record->LAST_UPDATE = $this_time;
+
+                
 
                 if (!$daily_record->save()) {
                     return $daily_record->errors;

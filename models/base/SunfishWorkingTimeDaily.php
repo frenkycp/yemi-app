@@ -27,12 +27,18 @@ use Yii;
  * @property integer $MPT_INDIRECT_2
  * @property integer $MPT_INDIRECT_3
  * @property integer $TOTAL_WFH
+ * @property integer $TOTAL_WFH_TIME
  * @property integer $CLINIC_VISIT
  * @property integer $CLINIC_BED_REST
  * @property integer $CLINIC_LACTATION
+ * @property integer $CLINIC_VISIT_TIME
+ * @property integer $CLINIC_BED_REST_TIME
+ * @property integer $CLINIC_LACTATION_TIME
  * @property integer $CHOREI_SYUUREI
  * @property integer $MONHTLY_CHOREI
  * @property integer $TOTAL_MP_INTAKE
+ * @property integer $MP_INTAKE_TIME
+ * @property string $LAST_UPDATE
  * @property string $aliasModel
  */
 abstract class SunfishWorkingTimeDaily extends \yii\db\ActiveRecord
@@ -62,8 +68,8 @@ abstract class SunfishWorkingTimeDaily extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['POST_DATE'], 'safe'],
-            [['MP_DIRECT_1', 'MP_DIRECT_2', 'MP_DIRECT_3', 'MPT_DIRECT_1', 'MPT_DIRECT_2', 'MPT_DIRECT_3', 'MP_INDIRECT_1', 'MP_INDIRECT_2', 'MP_INDIRECT_3', 'MPT_INDIRECT_1', 'MPT_INDIRECT_2', 'MPT_INDIRECT_3', 'TOTAL_WFH', 'CLINIC_VISIT', 'CLINIC_BED_REST', 'CLINIC_LACTATION', 'CHOREI_SYUUREI', 'MONHTLY_CHOREI', 'TOTAL_MP_INTAKE'], 'integer'],
+            [['POST_DATE', 'LAST_UPDATE'], 'safe'],
+            [['MP_DIRECT_1', 'MP_DIRECT_2', 'MP_DIRECT_3', 'MPT_DIRECT_1', 'MPT_DIRECT_2', 'MPT_DIRECT_3', 'MP_INDIRECT_1', 'MP_INDIRECT_2', 'MP_INDIRECT_3', 'MPT_INDIRECT_1', 'MPT_INDIRECT_2', 'MPT_INDIRECT_3', 'TOTAL_WFH', 'TOTAL_WFH_TIME', 'CLINIC_VISIT', 'CLINIC_BED_REST', 'CLINIC_LACTATION', 'CLINIC_VISIT_TIME', 'CLINIC_BED_REST_TIME', 'CLINIC_LACTATION_TIME', 'CHOREI_SYUUREI', 'MONHTLY_CHOREI', 'TOTAL_MP_INTAKE', 'MP_INTAKE_TIME'], 'integer'],
             [['ID', 'COST_CENTER_CODE', 'COST_CENTER_NAME'], 'string', 'max' => 50],
             [['PERIOD'], 'string', 'max' => 10]
         ];
@@ -93,12 +99,18 @@ abstract class SunfishWorkingTimeDaily extends \yii\db\ActiveRecord
             'MPT_INDIRECT_2' => 'Mpt Indirect 2',
             'MPT_INDIRECT_3' => 'Mpt Indirect 3',
             'TOTAL_WFH' => 'Total Wfh',
+            'TOTAL_WFH_TIME' => 'Total Wfh Time',
             'CLINIC_VISIT' => 'Clinic Visit',
             'CLINIC_BED_REST' => 'Clinic Bed Rest',
             'CLINIC_LACTATION' => 'Clinic Lactation',
+            'CLINIC_VISIT_TIME' => 'Clinic Visit Time',
+            'CLINIC_BED_REST_TIME' => 'Clinic Bed Rest Time',
+            'CLINIC_LACTATION_TIME' => 'Clinic Lactation Time',
             'CHOREI_SYUUREI' => 'Chorei Syuurei',
             'MONHTLY_CHOREI' => 'Monhtly Chorei',
             'TOTAL_MP_INTAKE' => 'Total Mp Intake',
+            'MP_INTAKE_TIME' => 'Mp Intake Time',
+            'LAST_UPDATE' => 'Last Update',
         ];
     }
 

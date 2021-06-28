@@ -180,6 +180,7 @@ class SunfishAttendanceData extends BaseSunfishAttendanceData
                     'attend_judgement' => $attend_judgement,
                     'starttime' => $value['starttime'],
                     'endtime' => $value['endtime'],
+                    'start_date' => $value['start_date'],
                     'cost_center' => $value['cost_center'],
                 ];
             }

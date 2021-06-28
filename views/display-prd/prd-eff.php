@@ -123,6 +123,9 @@ echo '</pre>';*/
 <?php ActiveForm::end(); ?>
 
 <div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Monthly Efficiency</h3>
+    </div>
     <div class="panel-body no-padding">
         <?php
         echo Highcharts::widget([
@@ -134,7 +137,7 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    //'height' => 820,
+                    'height' => 320,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],
@@ -195,6 +198,69 @@ echo '</pre>';*/
         ?>
     </div>
 </div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Daily Efficiency (Last Period)</h3>
+    </div>
+    <div class="panel-body no-padding">
+        <?=
+        Highcharts::widget([
+            'scripts' => [
+                'highcharts-more',
+                //'modules/exporting',
+                //'themes/sand-signika',
+                //'modules/solid-gauge',
+                'themes/dark-unica',
+            ],
+            'options' => [
+                'chart' => [
+                    'type' => 'column',
+                    'height' => 320,
+                    'style' => [
+                        'fontFamily' => 'sans-serif',
+                    ],
+                    'zoomType' => 'x',
+                    'backgroundColor' => 'black',
+                ],
+                'title' => [
+                    'text' => null,
+                ],
+                'xAxis' => [
+                    'type' => 'datetime',
+                ],
+                'yAxis' => [
+                    'minorGridLineWidth' => 0,
+                    'title' => [
+                        'text' => $um,
+                    ],
+                ],
+                'legend' => [
+                    'enabled' => true,
+                ],
+                'credits' => [
+                    'enabled' => false
+                ],
+                'tooltip' => [
+                    'enabled' => true,
+                    //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
+                ],
+                'plotOptions' => [
+                    'column' => [
+                        //'stacking' => 'normal',
+                        'dataLabels' => [
+                            'enabled' => true,
+                        ],
+                    ],
+                    
+                ],
+                'series' => $daily_chart,
+            ],
+        ]);
+        ?>
+    </div>
+</div>
+
 <table class="table summary-tbl" style="margin-bottom: 0px;">
     <thead>
         <tr>
