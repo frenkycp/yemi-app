@@ -102,9 +102,9 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-echo '<pre>';
+/*echo '<pre>';
 print_r($tmp_daily_eff_data);
-echo '</pre>';
+echo '</pre>';*/
 
 //echo Yii::$app->request->baseUrl;
 ?>
