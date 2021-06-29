@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  */
 class EmpPermitTbl extends BaseEmpPermitTbl
 {
+    public $TOTAL_OPEN;
 
     public function behaviors()
     {

@@ -46,9 +46,82 @@ use app\models\SoPeriodPlanActual;
 use app\models\SunfishWorkingTime;
 use app\models\SunfishWorkingTimeDaily;
 use app\models\ClinicDailyVisitBySection;
+use app\models\EmpPermitTbl;
 
 class ProductionRestController extends Controller
 {
+    public function actionSendEmpPermitOutstanding()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        date_default_timezone_set('Asia/Jakarta');
+        $today = date('Y-m-d');
+
+        $tmp_today = WorkDayTbl::find()
+        ->where([
+            'FORMAT(cal_date, \'yyyy-MM-dd\')' => $today
+        ])
+        ->one();
+
+        if ($tmp_today->holiday == 'Y') {
+            return [
+                'message' => 'Today is holiday...'
+            ];
+        }
+
+        $tmp_open = EmpPermitTbl::find()
+        ->select([
+            'POST_DATE', 'TOTAL_OPEN' => 'SUM(CASE WHEN STATUS = \'O\' THEN 1 ELSE 0 END)'
+        ])
+        ->where([
+            'STATUS' => 'O',
+            'FLAG' => 1
+        ])->groupBy('POST_DATE')->orderBy('POST_DATE')->all();
+
+        $data_table = '<span style="font-size: 20px;">
+            <b><u>Employee Permit (Outstanding) Summary</u></b>
+        </span><br/>
+        <table class="summary-tbl">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 100px;">Date</th>
+                    <th class="text-center" style="width: 100px;">Total Open</th>
+                </tr>
+            </thead>
+            <tbody>
+                ';
+        
+        foreach ($tmp_open as $value) {
+            $data_table .= '<tr>
+                <td class="text-center">' . date('d M Y', strtotime($value->POST_DATE)) . '</td>
+                <td class="text-center">' . number_format($value->TOTAL_OPEN) . '</td>
+            </tr>';
+        }
+
+        $data_table .= '</tbody>
+        </table>
+        <br/><br/>
+        Thanks & Best Regards,<br/>
+        YEMI - MIS
+        ';
+
+        \Yii::$app->mailer2->compose(['html' => '@app/mail/layouts/html'], [
+            'content' => $data_table
+        ])
+        //->attach(\Yii::$app->basePath. '\web\uploads\temp\\' . $excel_filename)
+        ->setFrom(['yemi.pch@gmail.com' => 'YEMI - MIS'])
+        ->setTo(['frenky.purnama@music.yamaha.com'])
+        //->setTo(['gazalba.briljan@music.yamaha.com', 'hemy.mardianah@music.yamaha.com', 'fredy.agus@music.yamaha.com', 'handayani.ari@music.yamaha.com'])
+        //->setCc('frenky.purnama@music.yamaha.com')
+        ->setSubject('Employee Permit (Outstanding) Summary')
+        ->send();
+
+        return [
+            'status' => 'OK',
+            'message' => 'Email has been sent...'
+        ];
+    }
+
     public function actionSunfishWorkingTime($period = '')
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -65,7 +138,7 @@ class ProductionRestController extends Controller
             'FORMAT(shiftendtime, \'yyyyMM\')' => $period,
             'attend_judgement' => 'P'
         ])
-        ->andWhere(['<>', 'shiftdaily_code', 'OFF'])
+        //->andWhere(['<>', 'shiftdaily_code', 'OFF'])
         ->andWhere(['<=', 'start_date', date('Y-m-20', strtotime($period . '01'))])
         ->andWhere(['<=', 'CAST(shiftendtime AS date)', $today])
         ->orderBy('shiftendtime')
@@ -176,7 +249,26 @@ class ProductionRestController extends Controller
                                 $tmp_daily_record[$cost_center_code][$tgl]['indirect3_wt'] += $working_time;
                             }
                         } else {
-                            $working_time =  0;
+                            if (strpos(strtoupper($value['Attend_Code']), 'PRSOFF') !== false) {
+                                $working_time =  0;
+                                if($value['total_ot'] != null){
+                                    $working_time += $value['total_ot'];
+                                }
+                                if ($value['jobstatusname_en'] == 'Direct') {
+                                    $direct1++;
+                                    $direct1_wt += $working_time;
+                                    $tmp_daily_record[$cost_center_code][$tgl]['direct1']++;
+                                    $tmp_daily_record[$cost_center_code][$tgl]['direct1_wt'] += $working_time;
+                                } elseif ($value['jobstatusname_en'] == 'Indirect') {
+                                    $indirect1++;
+                                    $indirect1_wt += $working_time;
+                                    $tmp_daily_record[$cost_center_code][$tgl]['indirect1']++;
+                                    $tmp_daily_record[$cost_center_code][$tgl]['indirect1_wt'] += $working_time;
+                                }
+                            } else {
+                                $working_time =  0;
+                            }
+                            
                         }
 
 
