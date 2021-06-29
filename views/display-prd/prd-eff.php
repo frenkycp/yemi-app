@@ -75,6 +75,9 @@ $css_string = "
         letter-spacing: 1.1px;
         //height: 100px;
     }
+    .panel-body {
+        background-color: black;
+    }
     .desc-number {color: white; text-shadow: -1px -1px 0 #0F0}
     //tbody > tr > td { background: #33383d;}
     //.summary-tbl > tbody > tr:nth-child(odd) > td {background: #454B52;}
@@ -99,20 +102,20 @@ $script = "
 ";
 $this->registerJs($script, View::POS_HEAD );
 
-/*echo '<pre>';
-print_r($period_arr);
-echo '</pre>';*/
+echo '<pre>';
+print_r($tmp_daily_eff_data);
+echo '</pre>';
 
 //echo Yii::$app->request->baseUrl;
 ?>
 <?php $form = ActiveForm::begin([
     'method' => 'get',
-    //'layout' => 'horizontal',
+    'layout' => 'horizontal',
     'action' => Url::to(['prd-eff']),
 ]); ?>
 
 <div class="row" style="margin-top: 5px;">
-    <div class="col-sm-2">
+    <div class="col-sm-3">
         <?= $form->field($model, 'fiscal_year')->dropDownList(ArrayHelper::map(app\models\FiscalTbl::find()->select('FISCAL')->groupBy('FISCAL')->orderBy('FISCAL DESC')->all(), 'FISCAL', 'FISCAL'), [
                 'onchange'=>'this.form.submit()'
             ]
@@ -137,11 +140,12 @@ echo '</pre>';*/
             'options' => [
                 'chart' => [
                     'type' => 'column',
-                    'height' => 320,
+                    'height' => 300,
                     'style' => [
                         'fontFamily' => 'sans-serif'
                     ],
-                    'backgroundColor' => 'black'
+                    'backgroundColor' => 'black',
+                    'marginRight' => 30,
                 ],
                 'credits' => [
                     'enabled' =>false
@@ -201,7 +205,7 @@ echo '</pre>';*/
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Daily Efficiency (Last Period)</h3>
+        <h3 class="panel-title">Daily Efficiency (<?= $period_str; ?>)</h3>
     </div>
     <div class="panel-body no-padding">
         <?=
@@ -215,13 +219,14 @@ echo '</pre>';*/
             ],
             'options' => [
                 'chart' => [
-                    'type' => 'column',
-                    'height' => 320,
+                    'type' => 'spline',
+                    'height' => 300,
                     'style' => [
                         'fontFamily' => 'sans-serif',
                     ],
                     'zoomType' => 'x',
                     'backgroundColor' => 'black',
+                    'marginRight' => 30,
                 ],
                 'title' => [
                     'text' => null,
@@ -234,6 +239,7 @@ echo '</pre>';*/
                     'title' => [
                         'text' => $um,
                     ],
+                    'min' => 50,
                 ],
                 'legend' => [
                     'enabled' => true,
@@ -246,7 +252,7 @@ echo '</pre>';*/
                     //'formatter' => new JsExpression('function(){ return "Percentage : " + this.y + "%<br/>" + "Qty : " + Math.round(this.point.qty) + " item"; }'),
                 ],
                 'plotOptions' => [
-                    'column' => [
+                    'spline' => [
                         //'stacking' => 'normal',
                         'dataLabels' => [
                             'enabled' => true,

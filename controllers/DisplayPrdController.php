@@ -84,7 +84,9 @@ class DisplayPrdController extends Controller
         $model->addRule(['fiscal_year'], 'required');
 
         $tmp_workday = WorkDayTbl::find()->where(['<', 'cal_date', date('Y-m-d')])->andWhere('holiday IS NULL')->orderBy('cal_date DESC')->one();
-        $tmp_period = date('Ym', strtotime($tmp_workday->cal_date));
+        $date_reference = $tmp_workday->cal_date;
+        $tmp_period = date('Ym', strtotime($date_reference));
+        $period_str = date('F Y', strtotime($date_reference));
 
         $current_fiscal = FiscalTbl::find()->where([
             'PERIOD' => $tmp_period
@@ -111,7 +113,67 @@ class DisplayPrdController extends Controller
             $period_arr[] = $value->PERIOD;
         }
 
-        $tmp_eff_data = PrdMonthlyeFF04::find()->where(['PERIOD' => $period_arr])->all();
+        $eff_daily_get_data = PrdDailyEff04::find()
+        ->where(['PERIOD' => $tmp_period])
+        //->andWhere('holiday IS NULL')
+        ->all();
+
+        $tmp_daily_chart = $avg_arr = $daily_chart = [];
+        $max_daily = 100;
+
+        $begin = new \DateTime(date('Y-m-01', strtotime($date_reference)));
+        $end = new \DateTime(date('Y-m-t', strtotime($date_reference)));
+
+        $tmp_daily_eff_data = [];
+        for($i = $begin; $i <= $end; $i->modify('+1 day')){
+            $tgl = $i->format("Y-m-d");
+            if ($tgl <= date('Y-m-d')) {
+                $tmp_daily_eff_data[$tgl] = [
+                    'total_st' => 0,
+                    'total_wt' => 0
+                ];
+                foreach ($eff_daily_get_data as $value) {
+                    if ($tgl == $value->VMS_DATE) {
+                        $tmp_daily_eff_data[$tgl] = [
+                            'total_st' => $value->TOTAL_ST,
+                            'total_wt' => $value->TOTAL_WORKING_TIME_NETT
+                        ];
+                    }
+                }
+            }
+        }
+
+        $tmp_st = $tmp_wt = 0;
+        $daily_eff_arr = [];
+        foreach ($tmp_daily_eff_data as $tgl => $value) {
+            $tmp_eff = 0;
+            $tmp_st += $value['total_st'];
+            $tmp_wt += $value['total_wt'];
+            if ($tmp_wt > 0) {
+                $tmp_eff = round(($tmp_st / $tmp_wt) * 100, 1);
+            }
+            $daily_eff_arr[$tgl] = $tmp_eff;
+        }
+
+        foreach ($daily_eff_arr as $vms_date => $value) {
+            $post_date = (strtotime($vms_date . " +7 hours") * 1000);
+            /*if ($value->TOTAL_EFF > $max_daily) {
+                $max_daily = round($value->TOTAL_EFF);
+            }*/
+            $avg_arr[] = $value;
+            $tmp_daily_chart[] = [
+                'x' => $post_date,
+                'y' => (float)round($value, 1),
+            ];
+        }
+
+        $daily_average = array_sum($avg_arr)/count($avg_arr);
+
+        $tmp_eff_data = PrdDailyEff04::find()
+        ->select([
+            'PERIOD', 'TOTAL_ST' => 'SUM(TOTAL_ST)', 'TOTAL_WORKING_TIME_NETT' => 'SUM(TOTAL_WORKING_TIME_NETT)'
+        ])
+        ->where(['PERIOD' => $period_arr])->groupBy('PERIOD')->orderBy('PERIOD')->all();
         $lost_time_non_prd = $this->actionGetLostTimeNonProduction($model->fiscal_year);
 
         $categories = $data_table = $tmp_data_chart = $data_chart = [];
@@ -125,14 +187,17 @@ class DisplayPrdController extends Controller
                         $tmp_losstime = $lost_time_non_prd[$period_val];
                     }
                     $tmp_st = $eff_val->TOTAL_ST;
-                    $tmp_wt = $eff_val->TOTAL_WT;
-                    $tmp_wt -= $tmp_losstime; //loss time non production
-                    $tmp_wt -= $eff_val->TOTAL_WFH_TIME; //isoman (WFH)
+                    $tmp_wt = $eff_val->TOTAL_WORKING_TIME_NETT;
+                    
                     if ($tmp_wt > 0) {
                         $tmp_eff = round($tmp_st / $tmp_wt * 100, 1);
                     }
-                    $tmp_st = round( $tmp_st/ 60);
+                    $tmp_st = round($tmp_st / 60);
                     $tmp_wt = round($tmp_wt / 60);
+
+                    if ($period_val == $tmp_period) {
+                        //$tmp_eff = round($daily_average, 1);
+                    }
                 }
             }
             $tmp_data_chart[] = [
@@ -153,23 +218,6 @@ class DisplayPrdController extends Controller
             ]
         ];
 
-        $eff_daily_get_data = PrdDailyEff04::find()
-        ->where(['PERIOD' => $tmp_period])
-        ->andWhere('holiday IS NULL')
-        ->all();
-
-        $tmp_daily_chart = $daily_chart = [];
-        $max_daily = 100;
-        foreach ($eff_daily_get_data as $value) {
-            $post_date = (strtotime($value->VMS_DATE . " +7 hours") * 1000);
-            if ($value->TOTAL_EFF > $max_daily) {
-                $max_daily = round($value->TOTAL_EFF);
-            }
-            $tmp_daily_chart[] = [
-                'x' => $post_date,
-                'y' => (float)round($value->TOTAL_EFF, 1),
-            ];
-        }
         $daily_chart[] = [
             'name' => 'Daily Efficiency',
             'data' => $tmp_daily_chart,
@@ -185,6 +233,9 @@ class DisplayPrdController extends Controller
             'data_table' => $data_table,
             'daily_chart' => $daily_chart,
             'max_daily' => $max_daily,
+            'daily_average' => $daily_average,
+            'period_str' => $period_str,
+            'daily_eff_arr' => $daily_eff_arr,
         ]);
     }
 
