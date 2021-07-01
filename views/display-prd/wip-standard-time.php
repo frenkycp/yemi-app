@@ -98,7 +98,7 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($lt_non_prd);
+print_r($lt_tp_arr);
 echo '</pre>';*/
 
 //echo Yii::$app->request->baseUrl;

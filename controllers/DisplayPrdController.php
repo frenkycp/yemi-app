@@ -52,6 +52,7 @@ use app\models\search\PrdEffPtSearch;
 use app\models\PrdDailyEff04;
 use app\models\WorkDayTbl;
 use app\models\PrdMonthlyEff03;
+use app\models\PrdLosstimeTpEs;
 
 class DisplayPrdController extends Controller
 {
@@ -392,6 +393,58 @@ class DisplayPrdController extends Controller
             //'PCB-SMT AI' => 'SMT',
         ];
 
+        $tmp_lt_tp = PrdLosstimeTpEs::find()
+        ->select([
+            'PERIOD',
+            'ST_FA' => 'SUM(ST_FA * QTY)',
+            'ST_SA' => 'SUM(ST_SA * QTY)',
+            'ST_WW' => 'SUM(ST_WW * QTY)',
+            'ST_PTG' => 'SUM(ST_PTG * QTY)',
+            'ST_PCB_MI' => 'SUM(ST_PCB_MI * QTY)',
+            'ST_SPU' => 'SUM(ST_SPU * QTY)',
+            'ST_INJ_SMALL' => 'SUM(ST_INJ_SMALL * QTY)',
+            'ST_INJ_MEDIUM' => 'SUM(ST_INJ_MEDIUM * QTY)',
+            'ST_INJ_LARGE' => 'SUM(ST_INJ_LARGE * QTY)',
+        ])
+        ->where([
+            'PERIOD' => $period_arr
+        ])
+        ->groupBy('PERIOD')
+        ->orderBy('PERIOD')
+        ->all();
+
+        $lt_tp_arr = [];
+        foreach ($period_arr as $period_val) {
+            $lt_tp_arr[$period_val] = [
+                'FA' => 0,
+                'SA' => 0,
+                'WW' => 0,
+                'PT' => 0,
+                'PCB MI' => 0,
+                'SPU' => 0,
+                'Small Injection' => 0,
+                'Medium Injection' => 0,
+                '1600/850 Injection' => 0,
+                //'SMT' => 0,
+            ];
+            foreach ($tmp_lt_tp as $lt_value) {
+                if ($lt_value->PERIOD == $period_val) {
+                    $lt_tp_arr[$period_val] = [
+                        'FA' => $lt_value->ST_FA,
+                        'SA' => $lt_value->ST_SA,
+                        'WW' => $lt_value->ST_WW,
+                        'PT' => $lt_value->ST_PTG,
+                        'PCB MI' => $lt_value->ST_PCB_MI,
+                        'SPU' => $lt_value->ST_SPU,
+                        'Small Injection' => $lt_value->ST_INJ_SMALL,
+                        'Medium Injection' => $lt_value->ST_INJ_MEDIUM,
+                        '1600/850 Injection' => $lt_value->ST_INJ_LARGE,
+                        //'SMT' => $lt_value->,
+                    ];
+                }
+            }
+        }
+
         $client = new Client();
         $tmp_response = [];
         $lt_non_prd = [];
@@ -416,6 +469,7 @@ class DisplayPrdController extends Controller
                         } else {
                             $lt_non_prd[$period_val][$loc_desc] = 0;
                         }
+                        $lt_non_prd[$period_val][$loc_desc] += $lt_tp_arr[$period_val][$loc_desc];
                     }
                 }
             }
@@ -492,6 +546,7 @@ class DisplayPrdController extends Controller
             'tmp_response' => $tmp_response,
             'lt_non_prd' => $lt_non_prd,
             'lt_isoman' => $lt_isoman,
+            'lt_tp_arr' => $lt_tp_arr,
             'tmp_api_arr' => $tmp_api_arr,
         ]);
     }
