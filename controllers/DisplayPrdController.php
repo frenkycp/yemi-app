@@ -51,6 +51,7 @@ use app\models\PrdMonthlyeFF04;
 use app\models\search\PrdEffPtSearch;
 use app\models\PrdDailyEff04;
 use app\models\WorkDayTbl;
+use app\models\PrdMonthlyEff03;
 
 class DisplayPrdController extends Controller
 {
@@ -341,17 +342,6 @@ class DisplayPrdController extends Controller
         $this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
 
-        $wip_location_arr = [
-            'TEMP01' => 'FA',
-            'TEMP02' => 'SA',
-            'TEMP03' => 'WW',
-            'TEMP04' => 'PT',
-            'TEMP05' => 'PCB MI',
-            'TEMP06' => 'SPU',
-            'WI01' => 'Small Injection',
-            'WI02' => '1600/850 Injection'
-        ];
-
         $model = new \yii\base\DynamicModel([
             'fiscal_year'
         ]);
@@ -382,24 +372,112 @@ class DisplayPrdController extends Controller
             $period_arr[] = $value->PERIOD;
         }
 
-        $wip_standard_time = WipEffTbl::find()
-        ->select([
-            'period', 'child_analyst', 'child_analyst_desc',
-            'lt_std' => 'SUM(lt_std)'
+        $tmp_std = PrdMonthlyEff03::find()
+        ->where([
+            'PERIOD' => $period_arr
         ])
-        ->where(['period' => $period_arr])
-        ->groupBy('period, child_analyst, child_analyst_desc')
-        ->orderBy('period')
         ->all();
 
-        $tmp_data = [];
-        foreach ($period_arr as $period_val) {
-            foreach ($wip_location_arr as $loc_id => $loc_desc) {
-                $tmp_data[$period_val][$loc_desc]['std_time'] = null;
-                foreach ($wip_standard_time as $std_time_val) {
-                    if ($std_time_val->period == $period_val && $std_time_val->child_analyst == $loc_id) {
-                        $tmp_data[$period_val][$loc_desc]['std_time'] = $std_time_val->lt_std;
+        $std_data_arr = [];
+        $tmp_wip_arr = [
+            'FA' => 'FA',
+            'SA' => 'SA',
+            'WW' => 'WW',
+            'PTG' => 'PT',
+            'PCB-MI' => 'PCB MI',
+            'SPU' => 'SPU',
+            'Injection Small' => 'Small Injection',
+            'Injection Medium' => 'Medium Injection',
+            'Injection Besar' => '1600/850 Injection',
+            //'PCB-SMT AI' => 'SMT',
+        ];
+
+        $client = new Client();
+        $tmp_response = [];
+        $lt_non_prd = [];
+        $response = $client->createRequest()
+            ->setMethod('POST')
+            ->setUrl('http://10.110.52.10/po/restapi/total?periode=' . $model->fiscal_year)
+            //->setData(['year' => $period_week_val['year'], 'week' => $tmp_week_no])
+            ->send();
+        if ($response->isOk) {
+            $tmp_response = $response->data;
+            if (count($tmp_response) > 0) {
+                $tmp_api_arr = [];
+                foreach ($tmp_response as $loc_api => $period_data) {
+                    foreach ($period_data[0] as $period => $value) {
+                        $tmp_api_arr[$period][$loc_api] = $value;
                     }
+                }
+                foreach ($period_arr as $period_val) {
+                    foreach ($tmp_wip_arr as $loc_api => $loc_desc) {
+                        if (isset($tmp_api_arr[$period_val][$loc_api])) {
+                            $lt_non_prd[$period_val][$loc_desc] = $tmp_api_arr[$period_val][$loc_api];
+                        } else {
+                            $lt_non_prd[$period_val][$loc_desc] = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        $client = new Client();
+        $tmp_response = [];
+        $lt_isoman = [];
+        $response = $client->createRequest()
+            ->setMethod('POST')
+            ->setUrl('http://10.110.52.10/po/restapi/total_isoman?periode=' . $model->fiscal_year)
+            //->setData(['year' => $period_week_val['year'], 'week' => $tmp_week_no])
+            ->send();
+        if ($response->isOk) {
+            $tmp_response = $response->data;
+            if (count($tmp_response) > 0) {
+                $tmp_api_arr = [];
+                foreach ($tmp_response as $loc_api => $period_data) {
+                    foreach ($period_data[0] as $period => $value) {
+                        $tmp_api_arr[$period][$loc_api] = $value;
+                    }
+                }
+                foreach ($period_arr as $period_val) {
+                    foreach ($tmp_wip_arr as $loc_api => $loc_desc) {
+                        if (isset($tmp_api_arr[$period_val][$loc_api])) {
+                            $lt_isoman[$period_val][$loc_desc] = $tmp_api_arr[$period_val][$loc_api];
+                        } else {
+                            $lt_isoman[$period_val][$loc_desc] = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($period_arr as $period_val) {
+            $std_data_arr[$period_val] = [
+                'FA' => 0,
+                'SA' => 0,
+                'WW' => 0,
+                'PT' => 0,
+                'PCB MI' => 0,
+                'SPU' => 0,
+                'Small Injection' => 0,
+                'Medium Injection' => 0,
+                '1600/850 Injection' => 0,
+                //'SMT' => 0,
+            ];
+
+            foreach ($tmp_std as $std_val) {
+                if ($std_val->PERIOD == $period_val) {
+                    $std_data_arr[$period_val] = [
+                        'FA' => $std_val->TOTAL_ST_FA,
+                        'SA' => $std_val->TOTAL_ST_SA,
+                        'WW' => $std_val->TOTAL_ST_WW,
+                        'PT' => $std_val->TOTAL_ST_PTG,
+                        'PCB MI' => $std_val->TOTAL_ST_PCBM,
+                        'SPU' => $std_val->TOTAL_ST_SPU,
+                        'Small Injection' => $std_val->TOTAL_ST_INJ_SMALL,
+                        'Medium Injection' => $std_val->TOTAL_ST_INJ_MEDIUM,
+                        '1600/850 Injection' => $std_val->TOTAL_ST_INJ_BIG,
+                        //'SMT' => $std_val->TOTAL_ST_SMT,
+                    ];
                 }
             }
         }
@@ -409,6 +487,12 @@ class DisplayPrdController extends Controller
             'period_arr' => $period_arr,
             'tmp_data' => $tmp_data,
             'wip_location_arr' => $wip_location_arr,
+            'std_data_arr' => $std_data_arr,
+            'tmp_wip_arr' => $tmp_wip_arr,
+            'tmp_response' => $tmp_response,
+            'lt_non_prd' => $lt_non_prd,
+            'lt_isoman' => $lt_isoman,
+            'tmp_api_arr' => $tmp_api_arr,
         ]);
     }
 

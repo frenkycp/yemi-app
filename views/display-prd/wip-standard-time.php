@@ -98,7 +98,7 @@ $script = "
 $this->registerJs($script, View::POS_HEAD );
 
 /*echo '<pre>';
-print_r($period_arr);
+print_r($lt_non_prd);
 echo '</pre>';*/
 
 //echo Yii::$app->request->baseUrl;
@@ -125,19 +125,67 @@ echo '</pre>';*/
     <thead>
         <tr>
             <th class="text-center">PERIOD</th>
-            <?php foreach ($wip_location_arr as $key => $value): ?>
+            <?php foreach ($tmp_wip_arr as $key => $value): ?>
                 <th class="text-center"><?= $value; ?></th>
             <?php endforeach ?>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($tmp_data as $period => $period_data): 
+        <?php foreach ($std_data_arr as $period => $period_data): 
             $period_name = date('M\'Y', strtotime($period . '01'));
             ?>
             <tr>
                 <td class="text-center"><?= $period; ?></td>
-                <?php foreach ($period_data as $data_val): ?>
-                    <td class="text-center"><?= $data_val['std_time'] == null ? '-' : number_format($data_val['std_time']); ?></td>
+                <?php foreach ($tmp_wip_arr as $key => $value): ?>
+                    <td class="text-center"><?= $period_data[$value] == null ? '-' : number_format($period_data[$value]); ?></td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+<span class="japanesse">除外時間 (分）</span>
+<table class="table summary-tbl">
+    <thead>
+        <tr>
+            <th class="text-center">PERIOD</th>
+            <?php foreach ($tmp_wip_arr as $key => $value): ?>
+                <th class="text-center"><?= $value; ?></th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($lt_non_prd as $period => $period_data): 
+            $period_name = date('M\'Y', strtotime($period . '01'));
+            ?>
+            <tr>
+                <td class="text-center"><?= $period; ?></td>
+                <?php foreach ($tmp_wip_arr as $key => $value): ?>
+                    <td class="text-center"><?= $period_data[$value] == null ? '-' : number_format($period_data[$value]); ?></td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+<span class="japanesse">自宅待機時間 (分）</span>
+<table class="table summary-tbl">
+    <thead>
+        <tr>
+            <th class="text-center">PERIOD</th>
+            <?php foreach ($tmp_wip_arr as $key => $value): ?>
+                <th class="text-center"><?= $value; ?></th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($lt_isoman as $period => $period_data): 
+            $period_name = date('M\'Y', strtotime($period . '01'));
+            ?>
+            <tr>
+                <td class="text-center"><?= $period; ?></td>
+                <?php foreach ($tmp_wip_arr as $key => $value): ?>
+                    <td class="text-center"><?= $period_data[$value] == null ? '-' : number_format($period_data[$value]); ?></td>
                 <?php endforeach ?>
             </tr>
         <?php endforeach ?>
