@@ -19,9 +19,21 @@ use app\models\WipEffTbl;
 use app\models\WorkingDaysView;
 use app\models\MachineKadouritsu;
 use app\models\MachineIotLogHour;
+use app\models\SensorTbl;
 
 class DisplayMntController extends Controller
 {
+	public function actionSuctionFlow($value='')
+	{
+		$this->layout = 'clean';
+
+		$data = SensorTbl::find()->where('flow IS NOT NULL')->all();
+
+        return $this->render('suction-flow', [
+            'data' => $data,
+        ]);
+	}
+
 	public function actionKadouritsuGetMachine($loc_id)
 	{
 		$tmp_machine = MachineKadouritsu::find()->where(['LOC_ID' => $loc_id])->orderBy('MACHINE_NAME')->all();
