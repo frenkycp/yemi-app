@@ -27,7 +27,7 @@ class DisplayMntController extends Controller
 	{
 		$this->layout = 'clean';
 
-		$data = SensorTbl::find()->where('flow IS NOT NULL')->all();
+		$data = SensorTbl::find()->where(['map_no' => [55, 56, 57, 58]])->all();
 
         return $this->render('suction-flow', [
             'data' => $data,

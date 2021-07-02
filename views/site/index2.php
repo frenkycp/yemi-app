@@ -540,6 +540,7 @@ $user_id = \Yii::$app->user->identity->username;
                                     <li><?= Html::a('Noise <span class="japanesse-word">雑音</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=3']); ?></li>
                                     <li><?= Html::a('Air Pressure <span class="japanesse-word">圧縮気</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=5']); ?></li>
                                     <li><?= Html::a('Power Consumption <span class="japanesse-word">電気消費量</span> <span class="text-red"><b>*IoT</b></span>', ['/display/temp-humidity-control?category=4']); ?></li>
+                                    <li><?= Html::a('Suction Flow <span class="japanesse-word"></span> <span class="text-red"><b>*IoT</b></span>', ['/display-mnt/suction-flow']); ?></li>
                                 </ol>
                                 <li style="font-weight: bold;">Abnormal Control</li>
                                 <ol style="padding-left: 1em; margin-bottom: 5px;">

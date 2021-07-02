@@ -72,7 +72,7 @@ echo '</pre>';*/
     <?php
     foreach ($data as $key => $value) {
         $temp_class = ' bg-green-active';
-        $params_val = number_format($value->flow);
+        $params_val = round($value->flow / 100, 2);
 
         $widget_class = 'temp-widget';
 
