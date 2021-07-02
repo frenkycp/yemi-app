@@ -549,8 +549,8 @@ class DisplayMntController extends Controller
 	{
 		$this->layout = 'clean';
         date_default_timezone_set('Asia/Jakarta');
-        $limit_mttr = 122;
-        $limit_mtbf = 7500;
+        $limit_mttr = 175;
+        $limit_mtbf = 12521;
 
         $model = new \yii\base\DynamicModel([
             'fiscal_year', 'area', 'machine'
