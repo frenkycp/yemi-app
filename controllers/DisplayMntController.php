@@ -20,9 +20,76 @@ use app\models\WorkingDaysView;
 use app\models\MachineKadouritsu;
 use app\models\MachineIotLogHour;
 use app\models\SensorTbl;
+use app\models\SensorLog;
 
 class DisplayMntController extends Controller
 {
+	public function actionSuctionFlowChart($value='')
+	{
+		$this->layout = 'clean';
+        date_default_timezone_set('Asia/Jakarta');
+        $model = new \yii\base\DynamicModel([
+            'map_no', 'from_date', 'to_date'
+        ]);
+        $model->addRule(['from_date', 'to_date','map_no'], 'required');
+
+        $model->from_date = date('Y-m-01', strtotime(date('Y-m-d')));
+        $model->to_date = date('Y-m-t', strtotime(date('Y-m-d')));
+        $data = $tmp_data_suction = [];
+
+        $model->map_no = $_GET['map_no'];
+
+        if ($model->load($_GET)) {
+
+        }
+
+        $data_dummy = SensorLog::find()
+        ->where([
+            'AND',
+            ['>=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->from_date . ' 00:00:01'))],
+            ['<=', 'system_date_time', date('Y-m-d H:i:s', strtotime($model->to_date . ' 24:00:00'))]
+        ])
+        ->andWhere(['map_no' => $model->map_no])
+        ->orderBy('system_date_time')
+        ->asArray()
+        ->all();
+
+        foreach ($data_dummy as $value) {
+            $proddate = (strtotime($value['system_date_time'] . " +7 hours") * 1000);
+            if ($value['flow'] > 0) {
+                $tmp_data_suction[] = [
+                    'x' => $proddate,
+                    'y' => round($value['flow'] / 100, 2)
+                ];
+            }
+            
+        }
+
+        $data = [
+            'suction_flow' => [
+                [
+                    'name' => 'SUCTION FLOW',
+                    'data' => $tmp_data_suction,
+                    'color' => new JsExpression('Highcharts.getOptions().colors[1]')
+                    //'color' => 'white'
+                ],
+            ],
+        ];
+
+        $sensor_data = SensorTbl::find()
+        ->where([
+            'map_no' => $model->map_no
+        ])
+        ->one();
+
+        return $this->render('suction-flow-chart', [
+            'data' => $data,
+            'model' => $model,
+            'sensor_data' => $sensor_data,
+        ]);
+	}
+	
+
 	public function actionSuctionFlow($value='')
 	{
 		$this->layout = 'clean';

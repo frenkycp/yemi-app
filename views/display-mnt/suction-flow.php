@@ -77,7 +77,7 @@ echo '</pre>';*/
         $widget_class = 'temp-widget';
 
         $content = '<div class="' . $widget_class . ' text-center' . $temp_class . '" style="position: absolute; top: ' . $value->top_pos . 'px; left: ' . $value->left_pos . 'px;"><div style="padding: 0px 4px;">' . $params_val . '</div></div>';
-        echo $params_val == null ? '' : Html::a($content, ['#'], ['title' => strtoupper($value->area)]);
+        echo Html::a($content, ['suction-flow-chart', 'map_no' => $value->map_no], ['title' => strtoupper($value->area)]);
         
     }
     ?>
