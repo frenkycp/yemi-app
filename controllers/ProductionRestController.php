@@ -50,6 +50,72 @@ use app\models\EmpPermitTbl;
 
 class ProductionRestController extends Controller
 {
+    public function actionBreakTimeCountDown()
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+        date_default_timezone_set('Asia/Jakarta');
+        $this_time = date('Y-m-d H:i:s');
+        $now = new \DateTime($this_time);
+        $today_name = strtoupper($now->format('D'));
+
+        $break_time_arr = [
+            1 => [
+                'start' => date('Y-m-d 09:30:00'),
+                'end' => date('Y-m-d 09:40:00'),
+            ],
+            2 => [
+                'start' => date('Y-m-d 12:15:00'),
+                'end' => date('Y-m-d 12:55:00'),
+            ],
+            2 => [
+                'start' => date('Y-m-d 14:30:00'),
+                'end' => date('Y-m-d 14:40:00'),
+            ],
+        ];
+
+        if ($today_name == 'FRI') {
+            $break_time_arr = [
+                1 => [
+                    'start' => date('Y-m-d 09:30:00'),
+                    'end' => date('Y-m-d 09:40:00'),
+                ],
+                2 => [
+                    'start' => date('Y-m-d 12:15:00'),
+                    'end' => date('Y-m-d 13:25:00'),
+                ],
+                2 => [
+                    'start' => date('Y-m-d 14:50:00'),
+                    'end' => date('Y-m-d 15:00:00'),
+                ],
+            ];
+        }
+
+        $data = [
+            'breaktime' => 0,
+            'server_time' => date('H:i:s', strtotime($this_time)),
+            'start_time' => null,
+            'end_time' => null,
+            'countdown' => null,
+        ];
+
+        foreach ($break_time_arr as $key => $value) {
+            $start_time = $value['start'];
+            $end_time = $value['end'];
+            if (strtotime($this_time) >= strtotime($start_time) && strtotime($this_time) <= strtotime($end_time)) {
+                $data['breaktime'] = 1;
+                $data['start_time'] = date('H:i', strtotime($start_time));
+                $data['end_time'] = date('H:i', strtotime($end_time));
+                $datetime1 = $now;
+                $datetime2 = new \DateTime($value['end']);
+                $interval = $datetime1->diff($datetime2);
+                $data['countdown'] = $interval->format('%I:%S');
+            }
+        }
+
+        return $data;
+    }
+
     public function actionSendEmpPermitOutstanding()
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
