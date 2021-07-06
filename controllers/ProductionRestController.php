@@ -68,7 +68,7 @@ class ProductionRestController extends Controller
                 'start' => date('Y-m-d 12:15:00'),
                 'end' => date('Y-m-d 12:55:00'),
             ],
-            2 => [
+            3 => [
                 'start' => date('Y-m-d 14:30:00'),
                 'end' => date('Y-m-d 14:40:00'),
             ],
@@ -84,7 +84,7 @@ class ProductionRestController extends Controller
                     'start' => date('Y-m-d 12:15:00'),
                     'end' => date('Y-m-d 13:25:00'),
                 ],
-                2 => [
+                3 => [
                     'start' => date('Y-m-d 14:50:00'),
                     'end' => date('Y-m-d 15:00:00'),
                 ],

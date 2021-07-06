@@ -640,7 +640,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 				$model->status = 'OK';
 				$model->qr = $model->asset_id;
 				if ($model->LOC != '' && $model->LOC != null) {
-					$tmp_location = AssetLocTbl::find($model->LOC)->one();
+					$tmp_location = AssetLocTbl::find()->where(['LOC' => $model->LOC])->one();
 					$model->location = $tmp_location->LOC_DESC;
 					$model->loc_type = $tmp_location->LOC_TYPE;
 					$model->area = $tmp_location->LOC_AREA;
@@ -650,7 +650,7 @@ class FixAssetController extends \app\controllers\base\FixAssetController
 				$tmp_karyawan = Karyawan::find()->where(['NIK_SUN_FISH' => $model->nik])->one();
 				$model->NAMA_KARYAWAN = $tmp_karyawan->NAMA_KARYAWAN;
 
-				$tmp_cc = CostCenter::find($model->cost_centre)->one();
+				$tmp_cc = CostCenter::find()->where(['CC_ID' => $model->cost_centre])->one();
 				$model->department_name = $tmp_cc->CC_GROUP;
 				$model->section_name = $tmp_cc->CC_DESC;
 				$model->department_pic = $tmp_cc->CC_ID;
