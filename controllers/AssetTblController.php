@@ -9,6 +9,7 @@ use app\models\search\AssetTblSearch;
 use app\models\AssetTbl;
 use app\models\AssetLocTbl;
 use app\models\CostCenter;
+use app\models\Karyawan;
 
 /**
 * This is the class for controller "AssetTblController".
@@ -58,6 +59,15 @@ class AssetTblController extends \app\controllers\base\AssetTblController
 			date_default_timezone_set('Asia/Jakarta');
 			$model->qr = $model->asset_id;
 			$model->LAST_UPDATE = date('Y-m-d H:i:s');
+
+			$tmp_karyawan = Karyawan::find()->where([
+				'OR',
+				['NIK_SUN_FISH' => $model->nik],
+				['NIK' => $model->nik]
+			])->one();
+			if ($tmp_karyawan) {
+				$model->NAMA_KARYAWAN = $tmp_karyawan->NAMA_KARYAWAN;
+			}
 
 			if ($model->LOC != '' && $model->LOC != null) {
 				$tmp_asset_loc = AssetLocTbl::find()->where(['LOC' => $model->LOC])->one();
