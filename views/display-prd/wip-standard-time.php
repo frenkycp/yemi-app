@@ -144,7 +144,7 @@ echo '</pre>';*/
     </tbody>
 </table>
 
-<span class="japanesse">除外時間 (分）</span>
+<span class="japanesse">除外時間 (分） - Loss Time Non Production & Trial/ES</span>
 <table class="table summary-tbl">
     <thead>
         <tr>
@@ -156,6 +156,30 @@ echo '</pre>';*/
     </thead>
     <tbody>
         <?php foreach ($lt_non_prd as $period => $period_data): 
+            $period_name = date('M\'Y', strtotime($period . '01'));
+            ?>
+            <tr>
+                <td class="text-center"><?= $period; ?></td>
+                <?php foreach ($tmp_wip_arr as $key => $value): ?>
+                    <td class="text-center"><?= $period_data[$value] == null ? '-' : number_format($period_data[$value]); ?></td>
+                <?php endforeach ?>
+            </tr>
+        <?php endforeach ?>
+    </tbody>
+</table>
+
+<span class="japanesse">除外時間 (分） - Trial/ES</span>
+<table class="table summary-tbl">
+    <thead>
+        <tr>
+            <th class="text-center">PERIOD</th>
+            <?php foreach ($tmp_wip_arr as $key => $value): ?>
+                <th class="text-center"><?= $value; ?></th>
+            <?php endforeach ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($lt_tp_arr as $period => $period_data): 
             $period_name = date('M\'Y', strtotime($period . '01'));
             ?>
             <tr>
