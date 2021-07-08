@@ -53,6 +53,7 @@ use app\models\PrdDailyEff04;
 use app\models\WorkDayTbl;
 use app\models\PrdMonthlyEff03;
 use app\models\PrdLosstimeTpEs;
+use app\models\SunfishWorkingTimeDaily;
 
 class DisplayPrdController extends Controller
 {
@@ -392,6 +393,18 @@ class DisplayPrdController extends Controller
             'Injection Besar' => '1600/850 Injection',
             //'PCB-SMT AI' => 'SMT',
         ];
+        $tmp_wip_arr2 = [
+            '320' => 'FA',
+            '310' => 'SA',
+            '300' => 'WW',
+            '330' => 'PT',
+            '340M' => 'PCB MI',
+            '350' => 'SPU',
+            '370' => 'Small Injection',
+            '372' => 'Medium Injection',
+            '371' => '1600/850 Injection',
+            //'PCB-SMT AI' => 'SMT',
+        ];
 
         $tmp_lt_tp = PrdLosstimeTpEs::find()
         ->select([
@@ -475,29 +488,22 @@ class DisplayPrdController extends Controller
             }
         }
 
-        $client = new Client();
-        $tmp_response = [];
+        $tmp_isoman_data = SunfishWorkingTimeDaily::find()
+        ->select([
+            'PERIOD', 'COST_CENTER_CODE', 'COST_CENTER_NAME',
+            'TOTAL_WFH' => 'SUM(TOTAL_WFH)',
+            'TOTAL_WFH_TIME' => 'SUM(TOTAL_WFH_TIME)'
+        ])
+        ->groupBy(['PERIOD', 'COST_CENTER_CODE', 'COST_CENTER_NAME'])
+        ->all();
         $lt_isoman = [];
-        $response = $client->createRequest()
-            ->setMethod('POST')
-            ->setUrl('http://10.110.52.10/po/restapi/total_isoman?periode=' . $model->fiscal_year)
-            //->setData(['year' => $period_week_val['year'], 'week' => $tmp_week_no])
-            ->send();
-        if ($response->isOk) {
-            $tmp_response = $response->data;
-            if (count($tmp_response) > 0) {
-                $tmp_api_arr = [];
-                foreach ($tmp_response as $loc_api => $period_data) {
-                    foreach ($period_data[0] as $period => $value) {
-                        $tmp_api_arr[$period][$loc_api] = $value;
-                    }
-                }
-                foreach ($period_arr as $period_val) {
-                    foreach ($tmp_wip_arr as $loc_api => $loc_desc) {
-                        if (isset($tmp_api_arr[$period_val][$loc_api])) {
-                            $lt_isoman[$period_val][$loc_desc] = $tmp_api_arr[$period_val][$loc_api];
-                        } else {
-                            $lt_isoman[$period_val][$loc_desc] = 0;
+        if (count($tmp_isoman_data) > 0) {
+            foreach ($period_arr as $period_val) {
+                foreach ($tmp_wip_arr2 as $loc_id => $loc_desc) {
+                    $lt_isoman[$period_val][$loc_desc] = 0;
+                    foreach ($tmp_isoman_data as $isoman_value) {
+                        if ($isoman_value->PERIOD == $period_val && $isoman_value->COST_CENTER_CODE == $loc_id) {
+                            $lt_isoman[$period_val][$loc_desc] = $isoman_value->TOTAL_WFH_TIME;
                         }
                     }
                 }
