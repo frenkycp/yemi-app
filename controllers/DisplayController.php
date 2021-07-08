@@ -4751,7 +4751,12 @@ class DisplayController extends Controller
 
         if (isset($data2[$model->post_date])) {
             foreach ($data2[$model->post_date] as $key => $value) {
-                $tmp_today_arr[$value['attend_judgement']][$value['shift']]++;
+                if ($model->post_date == date('Y-m-d') && strtotime(date('Y-m-d H:i:s')) < strtotime(date('Y-m-d 14:30:00')) && $value['attend_judgement'] == 'A' && $value['shift'] == 2) {
+                    
+                } else {
+                    $tmp_today_arr[$value['attend_judgement']][$value['shift']]++;
+                }
+                
                 $total_plan_arr[$value['shift']]++;
                 //$tmp_today_arr[$value['attend_judgement']]['total_plan']++;
             }
