@@ -273,16 +273,49 @@ class SBillingController extends \app\controllers\base\SBillingController
         date_default_timezone_set('Asia/Jakarta');
 
         $model = $this->findModel($no);
-        /*$model->stage = 2;
-        $model->doc_received_by = $session['s_billing_name'];
-        $model->doc_received_date = date('Y-m-d H:i:s');
-        $model->doc_received_stat = '1';
+        
+        $model->stage = 1;
+        $model->doc_received_by = null;
+        $model->doc_received_date = null;
+        $model->doc_received_stat = '0';
+
+        $model->reject_by_id = $session['s_billing_user'];
+        $model->reject_by_name = $session['s_billing_name'];
+        $model->reject_datetime = date('Y-m-d H:i:s');
 
         if (!$model->save()) {
             return json_encode($model->errors);
-        }*/
+        }
 
         \Yii::$app->getSession()->setFlash('success', 'Reject success...');
+
+        return $this->redirect(Url::previous());
+    }
+
+    public function actionRejectVoucher($voucher_no)
+    {
+        $session = \Yii::$app->session;
+        if (!$session->has('s_billing_user')) {
+            return $this->redirect(['login']);
+        }
+        date_default_timezone_set('Asia/Jakarta');
+
+        SupplierBillingVoucher::updateAll([
+            'handover_status' => 'O',
+            'reject_by_id' => $session['s_billing_user'],
+            'reject_by_name' => $session['s_billing_name'],
+            'reject_datetime' => date('Y-m-d H:i:s')
+        ], ['voucher_no' => $voucher_no]);
+
+        SupplierBilling::updateAll([
+            'stage' => 2,
+            'open_close' => 'O',
+            'doc_finance_handover_by' => null,
+            'doc_finance_handover_date' => null,
+            'doc_finance_handover_stat' => null,
+        ], ['voucher_no' => $voucher_no]);
+
+        \Yii::$app->getSession()->setFlash('success', 'Handover success...');
 
         return $this->redirect(Url::previous());
     }

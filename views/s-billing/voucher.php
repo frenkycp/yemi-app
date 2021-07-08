@@ -27,7 +27,7 @@ $this->registerCss("h1 .japanesse { font-family: 'MS PGothic', Osaka, Arial, san
 $gridColumns = [
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{handover}{detail}',
+        'template' => '{handover} {detail} {reject_v}',
         'buttons' => [
             'handover' => function($url, $model, $key){
                 $url = ['handover', 'voucher_no' => $model->voucher_no];
@@ -48,6 +48,18 @@ $gridColumns = [
                     'data-pjax' => '0',
                 ];
                 return Html::a('<button style="margin-top: 5px;" class="btn btn-block btn-info btn-sm"><span class="fa fa-search-plus"></span> Detail</button>', $url, $options);
+            },
+            'reject_v' => function($url, $model, $key){
+                $url = ['reject-voucher', 'voucher_no' => $model->voucher_no];
+                $options = [
+                    'title' => 'Reject Voucher',
+                    'data-pjax' => '0',
+                    'data-confirm' => 'Are you sure to reject this voucher...?',
+                ];
+                if ($model->handover_status == 'O') {
+                    return '<button style="margin-top: 5px;" class="btn btn-block btn-danger disabled btn-sm" title="Reject Voucher"><span class="fa fa-close"></span> Reject</button>';
+                }
+                return Html::a('<button style="margin-top: 5px;" class="btn btn-block btn-danger btn-sm"><span class="fa fa-close"></span> Reject</button>', $url, $options);
             },
         ],
         'urlCreator' => function($action, $model, $key, $index) {
@@ -82,6 +94,7 @@ $gridColumns = [
         'attribute' => 'amount',
         'vAlign' => 'middle',
         'hAlign' => 'center',
+        'format' => ['decimal', 2],
         'mergeHeader' => true,
     ],
     [

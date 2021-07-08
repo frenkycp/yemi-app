@@ -44,12 +44,12 @@ $gridColumns = [
             'reject' => function($url, $model, $key){
                 $url = ['reject', 'no' => $model->no];
                 $options = [
-                    'title' => 'Reject',
+                    'title' => 'Reject Invoice',
                     'data-pjax' => '0',
                     'data-confirm' => 'Are you sure to reject this document?',
                 ];
-                if ($model->stage != 1 || $model->dihapus == 'Y') {
-                    return '<button class="btn btn-block btn-danger disabled btn-sm" title="Reject"><span class="fa fa-undo"></span> Reject</button>';
+                if ($model->stage != 2 || $model->dihapus == 'Y') {
+                    return '<button class="btn btn-block btn-danger disabled btn-sm" title="Reject Invoice"><span class="fa fa-undo"></span> Reject</button>';
                 }
                 return Html::a('<button class="btn btn-block btn-danger btn-sm"><span class="fa fa-undo"></span> Reject</button>', $url, $options);
             },
