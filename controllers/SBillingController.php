@@ -278,6 +278,7 @@ class SBillingController extends \app\controllers\base\SBillingController
         $model->doc_received_by = null;
         $model->doc_received_date = null;
         $model->doc_received_stat = '0';
+        $model->voucher_no = null;
 
         $model->reject_by_id = $session['s_billing_user'];
         $model->reject_by_name = $session['s_billing_name'];
