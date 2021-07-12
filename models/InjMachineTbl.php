@@ -7,6 +7,7 @@ use \app\models\base\InjMachineTbl as BaseInjMachineTbl;
 use yii\helpers\ArrayHelper;
 use app\models\InjMoldingTbl;
 use app\models\WipHdr;
+use app\models\SapItemTbl;
 
 /**
  * This is the model class for table "db_owner.INJ_MACHINE_TBL".
@@ -53,10 +54,10 @@ class InjMachineTbl extends BaseInjMachineTbl
                 $this->TOTAL_COUNT = 0;
             }
             if ($this->ITEM != '' && $this->ITEM != null) {
-                $tmp_item = WipHdr::find()->where([
-                    'child' => $this->ITEM
+                $tmp_item = SapItemTbl::find()->where([
+                    'material' => $this->ITEM
                 ])->one();
-                $this->ITEM_DESC = $tmp_item->child_desc;
+                $this->ITEM_DESC = $tmp_item->material_description;
             } else {
                 $this->ITEM = $this->ITEM_DESC = null;
             }

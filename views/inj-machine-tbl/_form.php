@@ -70,12 +70,11 @@ $this->registerCss($css_string);
             </div>
             <div class="col-sm-9">
                 <?= $form->field($model, 'ITEM')->widget(Select2::classname(), [
-                    'data' => ArrayHelper::map(app\models\WipHdr::find()
-                        ->select(['child', 'child_desc'])
-                        ->where(['child_analyst' => ['WI01', 'WI02', 'WI03']])
-                        ->groupBy('child, child_desc')
-                        ->orderBy('child_desc')
-                        ->all(), 'child', 'description'),
+                    'data' => ArrayHelper::map(app\models\SapItemTbl::find()
+                        ->select(['material', 'material_description'])
+                        ->where(['sloc' => ['WI01', 'WI02', 'WI03']])
+                        ->orderBy('material_description')
+                        ->all(), 'material', 'fullDescription'),
                         'options' => [
                             'placeholder' => 'Select Item',
                         ],
